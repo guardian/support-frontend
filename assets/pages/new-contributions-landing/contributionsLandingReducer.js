@@ -42,7 +42,7 @@ type FormState = {
   selectedAmounts: { [Contrib]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
-  done: boolean,
+  paymentComplete: boolean,
   guestAccountCreationToken: ?string,
 };
 
@@ -100,7 +100,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     showOtherAmount: false,
     selectedAmounts: initialAmount,
     isWaiting: false,
-    done: false,
+    paymentComplete: false,
     guestAccountCreationToken: null,
   };
 
@@ -111,6 +111,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
           ...state,
           contributionType: action.contributionType,
           showOtherAmount: false,
+          paymentMethod: action.paymentMethodToSelect,
           formData: { ...state.formData },
         };
 
@@ -162,13 +163,13 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         };
 
       case 'PAYMENT_FAILURE':
-        return { ...state, done: false, error: action.error };
+        return { ...state, paymentComplete: false, error: action.error };
 
       case 'PAYMENT_WAITING':
-        return { ...state, done: false, isWaiting: action.isWaiting };
+        return { ...state, paymentComplete: false, isWaiting: action.isWaiting };
 
       case 'PAYMENT_SUCCESS':
-        return { ...state, done: true };
+        return { ...state, paymentComplete: true };
 
       case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
         return { ...state, formData: { ...state.formData, checkoutFormHasBeenSubmitted: true } };

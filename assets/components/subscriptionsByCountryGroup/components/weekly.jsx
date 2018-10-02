@@ -8,10 +8,22 @@ import { type HeadingSize } from 'components/heading/heading';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 
+import { sendTrackingEventsOnClick, type ComponentAbTest } from 'helpers/subscriptions';
+
+
+// ----- Types ----- //
+
+type PropTypes = {
+  headingSize: HeadingSize,
+  url: string,
+  subheading: string,
+  abTest: ComponentAbTest | null,
+};
+
 
 // ----- Component ----- //
 
-function Weekly(props: { headingSize: HeadingSize, url: string, subheading: string }) {
+function Weekly(props: PropTypes) {
 
   return (
     <SubscriptionBundle
@@ -34,12 +46,20 @@ function Weekly(props: { headingSize: HeadingSize, url: string, subheading: stri
           url: props.url,
           accessibilityHint: 'Proceed to buy a subscription to The Guardian Weekly',
           modifierClasses: ['border'],
+          onClick: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', props.abTest),
         },
       ]}
     />
   );
 
 }
+
+
+// ----- Default Props ----- //
+
+Weekly.defaultProps = {
+  abTest: null,
+};
 
 
 // ----- Exports ----- //

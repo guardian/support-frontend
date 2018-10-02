@@ -27,6 +27,7 @@ import SvgUser from 'components/svgs/user';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import Signout from 'components/signout/signout';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -54,7 +55,7 @@ import {
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  done: boolean,
+  paymentComplete: boolean,
   error: CheckoutFailureReason | null,
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
@@ -68,6 +69,7 @@ type PropTypes = {|
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
+  isSignedIn: boolean,
   paymentHandler: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
@@ -83,26 +85,25 @@ type PropTypes = {|
   currency: IsoCurrency,
 |};
 
-type FormValueType = string | null;
-
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
-const getCheckoutFormValue = (formValue: FormValueType, userValue: FormValueType): FormValueType =>
+const getCheckoutFormValue = (formValue: string | null, userValue: string | null): string | null =>
   (formValue === null ? userValue : formValue);
 
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
-  done: state.page.form.done,
+  paymentComplete: state.page.form.paymentComplete,
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
   firstName: getCheckoutFormValue(state.page.form.formData.firstName, state.page.user.firstName),
   lastName: getCheckoutFormValue(state.page.form.formData.lastName, state.page.user.lastName),
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
-  state: state.page.form.formData.state || state.page.user.stateField,
+  state: state.page.form.formData.state,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
+  isSignedIn: state.page.user.isSignedIn,
   paymentHandler: state.page.form.paymentHandler,
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
@@ -160,6 +161,7 @@ const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat
 
 const checkFirstName: string => boolean = isNotEmpty;
 const checkLastName: string => boolean = isNotEmpty;
+const checkState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
 const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 // ----- Event handlers ----- //
@@ -214,6 +216,7 @@ function ContributionForm(props: PropTypes) {
     lastName,
     email,
     state,
+    isSignedIn,
     checkoutFormHasBeenSubmitted,
   } = props;
 
@@ -227,7 +230,7 @@ function ContributionForm(props: PropTypes) {
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input);
 
-  return props.done ?
+  return props.paymentComplete ?
     <Redirect to={thankYouRoute} />
     : (
       <div className="gu-content__content">
@@ -240,6 +243,23 @@ function ContributionForm(props: PropTypes) {
             countryGroupDetails={selectedCountryGroupDetails}
             checkOtherAmount={checkOtherAmount}
           />
+          <NewContributionTextInput
+            id="contributionEmail"
+            name="contribution-email"
+            label="Email address"
+            value={email}
+            type="email"
+            autoComplete="email"
+            placeholder="example@domain.com"
+            icon={<SvgEnvelope />}
+            onInput={props.updateEmail}
+            isValid={checkEmail(email)}
+            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide a valid email address"
+            required
+            disabled={isSignedIn}
+          />
+          <Signout isSignedIn={isSignedIn} />
           <NewContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
@@ -268,22 +288,13 @@ function ContributionForm(props: PropTypes) {
             errorMessage="Please provide your last name"
             required
           />
-          <NewContributionTextInput
-            id="contributionEmail"
-            name="contribution-email"
-            label="Email address"
-            value={email}
-            type="email"
-            autoComplete="email"
-            placeholder="example@domain.com"
-            icon={<SvgEnvelope />}
-            onInput={props.updateEmail}
-            isValid={checkEmail(email)}
+          <NewContributionState
+            onChange={props.updateState}
+            selectedState={state}
+            isValid={checkState(state)}
             checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-            errorMessage="Please provide a valid email address"
-            required
+            errorMessage="Please provide a state"
           />
-          <NewContributionState onChange={props.updateState} value={state} />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}

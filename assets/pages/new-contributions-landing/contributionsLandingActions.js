@@ -25,7 +25,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import { type State, type UserFormData } from './contributionsLandingReducer';
 
 export type Action =
-  | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib }
+  | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib, paymentMethodToSelect: PaymentMethod }
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'UPDATE_FIRST_NAME', firstName: string }
   | { type: 'UPDATE_LAST_NAME', lastName: string }
@@ -42,8 +42,8 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'PAYMENT_SUCCESS' };
 
-const updateContributionType = (contributionType: Contrib): Action =>
-  ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType });
+const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action =>
+  ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType, paymentMethodToSelect });
 
 const updatePaymentMethod = (paymentMethod: PaymentMethod): Action =>
   ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });

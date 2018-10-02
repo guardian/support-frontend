@@ -7,7 +7,7 @@ import cats.implicits._
 import com.google.common.net.InetAddresses
 import com.gu.identity.play.{IdMinimalUser, IdUser}
 import config.Identity
-import models.identity.UserIdWithGuestAccountToken
+import models.identity.{CookiesResponse, UserIdWithGuestAccountToken}
 import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.{GuestRegistrationResponse, UserResponse}
 import monitoring.SafeLogger
@@ -15,7 +15,6 @@ import monitoring.SafeLogger._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -78,6 +77,23 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
+  def setPasswordGuest(
+    password: String,
+    guestAccountRegistrationToken: String
+  )(implicit ec: ExecutionContext): EitherT[Future, String, CookiesResponse] = {
+    val payload = Json.obj("password" -> password)
+    val headers =
+      List("X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
+    val urlParameters = List("validate-email" -> "0")
+    request(s"guest/password")
+      .addHttpHeaders(headers: _*)
+      .withQueryStringParameters(urlParameters: _*)
+      .put(payload)
+      .attemptT
+      .leftMap(_.toString)
+      .subflatMap(resp => (resp.json \ "cookies").validate[CookiesResponse].asEither.leftMap(_.mkString(",")))
+  }
+
   private def getHeaders(request: RequestHeader): List[(String, String)] = List(
     "X-GU-ID-Client-Access-Token" -> Some(s"Bearer $apiClientToken"),
     "X-GU-ID-FOWARDED-SC-GU-U" -> request.cookies.get("SC_GU_U").map(_.value),
@@ -109,7 +125,9 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     }
   }
 
-  def createUserIdFromEmailUser(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
+  def createUserIdFromEmailUser(
+    email: String
+  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
     val body = CreateGuestAccountRequestBody.fromEmail(email)
     execute(
       wsClient.url(s"$apiUrl/guest")
@@ -124,7 +142,9 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
       }
   }
 
-  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
+  def getOrCreateUserIdFromEmail(
+    email: String
+  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
     getUserIdFromEmail(email).leftFlatMap(_ => createUserIdFromEmailUser(email))
   }
 
@@ -157,5 +177,9 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
+  def setPasswordGuest(
+    password: String,
+    guestAccountRegistrationToken: String
+  )(implicit ec: ExecutionContext): EitherT[Future, String, CookiesResponse]
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
 }

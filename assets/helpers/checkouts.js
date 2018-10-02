@@ -75,6 +75,15 @@ function getValidPaymentMethods(
     .filter(paymentMethod => switchIsOn(switches, toPaymentMethodSwitchNaming(paymentMethod)));
 }
 
+function getPaymentMethodToSelect(
+  contributionType: Contrib,
+  allSwitches: Switches,
+  countryId: IsoCountry,
+) {
+  const validPaymentMethods = getValidPaymentMethods(contributionType, allSwitches, countryId);
+  return validPaymentMethods[0] || 'None';
+}
+
 function getPaymentMethodFromSession(): ?PaymentMethod {
   const pm: ?string = storage.getSession('paymentMethod');
   if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal') {
@@ -112,6 +121,7 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 export {
   getAmount,
   getValidPaymentMethods,
+  getPaymentMethodToSelect,
   getPaymentMethodFromSession,
   getPaymentDescription,
   getPaymentLabel,
