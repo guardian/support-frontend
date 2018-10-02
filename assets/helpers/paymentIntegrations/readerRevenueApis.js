@@ -16,11 +16,23 @@ import { type UsState, type CaState, type IsoCountry } from 'helpers/internation
 import { pollUntilPromise, logPromise } from 'helpers/promise';
 import { fetchJson } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
-import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 
 import * as cookie from 'helpers/cookie';
 
 // ----- Types ----- //
+
+// Data that should be posted to the payment API to get a url for the PayPal UI
+// where the user is redirected to so that they can authorize the payment.
+// https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
+export type CreatePaypalPaymentData = {|
+  currency: IsoCurrency,
+  amount: number,
+  // Specifies the url that PayPal should make a GET request to, should the user authorize the payment.
+  // Path of url should be /paypal/rest/return (see routes file)
+  returnURL: string,
+  // Specifies the url that PayPal should make a GET request to, should the user not authorize the payment.
+  cancelURL: string,
+|}
 
 // Data that should be posted to the payment API to create a Stripe charge.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/stripe/StripeChargeData.scala#L82
