@@ -77,7 +77,7 @@ type PropTypes = {|
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
-const getCheckoutFormValue = <A>(formValue: A | null, userValue: A | null): A | null =>
+const getCheckoutFormValue = (formValue: string | null, userValue: string | null): string | null =>
   (formValue === null ? userValue : formValue);
 
 /* eslint-enable react/no-unused-prop-types */
