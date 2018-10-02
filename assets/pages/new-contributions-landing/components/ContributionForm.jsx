@@ -168,7 +168,7 @@ const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
-    // Sets the checkoutFormHasBeenSubmitted to true
+    // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     if (!(event.target: any).checkValidity()) {
