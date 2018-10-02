@@ -123,17 +123,8 @@ const setupRegularPayment = (data: PaymentFields) =>
   };
 
 const executeStripeOneOffPayment = (data: StripeOneOffPaymentFields) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
-    const state = getState();
-
-    // Why no mention of PayPal?
-    // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
-    // endpoint, after PayPal redirects the browser back to our site.
-    if (state.page.form.paymentMethod === 'Stripe') {
-      dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
-    } else {
-      dispatch(paymentFailure(`Invalid payment method ${state.page.form.paymentMethod}`));
-    }
+  (dispatch: Dispatch<Action>): void => {
+    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
   };
 
 const handleCreateOneOffPayPalPaymentResponse =
@@ -217,7 +208,9 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
 
     switch (state.page.form.contributionType) {
       case 'ONE_OFF':
-        // With PayPal one off
+        // Why no mention of PayPal?
+        // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
+        // endpoint, after PayPal redirects the browser back to our site.
         if (state.page.form.paymentMethod === 'Stripe') {
           dispatch(executeStripeOneOffPayment(makeStripeOneOffPaymentData(paymentAuthorisation, state)));
         }
