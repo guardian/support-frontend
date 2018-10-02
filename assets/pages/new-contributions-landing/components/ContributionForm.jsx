@@ -16,10 +16,10 @@ import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAbsoluteURL } from 'helpers/url';
 import { routes } from 'helpers/routes';
-import type { CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';

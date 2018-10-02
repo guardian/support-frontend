@@ -11,15 +11,17 @@ import {
   type PaymentResult,
   type PaymentDetails,
   type StripeOneOffPaymentFields,
+  PaymentSuccess,
+  postRegularPaymentRequest,
+} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import {
+  postOneOffStripeExecutePaymentRequest,
+  postOneOffPayPalCreatePaymentRequest,
   type PaymentApiResponse,
   type PayPalApiError,
   type PayPalPaymentSuccess,
-  PaymentSuccess,
-  postOneOffStripeExecutePaymentRequest,
-  postRegularPaymentRequest,
-  postOneOffPayPalCreatePaymentRequest,
-} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/payPalPaymentAPICheckout';
+  type CreatePaypalPaymentData,
+} from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import { type State, type UserFormData } from './contributionsLandingReducer';
