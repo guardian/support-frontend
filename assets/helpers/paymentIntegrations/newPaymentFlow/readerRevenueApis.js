@@ -44,7 +44,7 @@ export type RegularPaymentFields =
   RegularStripePaymentFields |
   RegularDirectDebitPaymentFields;
 
-export type RegularFields = {|
+export type RegularPaymentRequest = {|
   firstName: string,
   lastName: string,
   country: IsoCountry,
@@ -155,7 +155,7 @@ function checkRegularStatus(
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
 function postRegularPaymentRequest(
-  data: RegularFields,
+  data: RegularPaymentRequest,
   participations: Participations,
   csrf: CsrfState,
   setGuestAccountCreationToken: (string) => void,

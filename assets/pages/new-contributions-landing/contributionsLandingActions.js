@@ -5,7 +5,7 @@
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
 import { type Amount, type Contrib } from 'helpers/contributions';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
-import type { RegularFields } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
   regularPaymentFieldsFromAuthorisation,
@@ -102,7 +102,7 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
     });
   };
 
-const setupRegularPayment = (data: RegularFields) =>
+const setupRegularPayment = (data: RegularPaymentRequest) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
@@ -171,7 +171,7 @@ const makeStripeOneOffPaymentData = (token: PaymentAuthorisation, state: State):
   ),
 });
 
-const makeRegularPaymentData = (authorisation: PaymentAuthorisation, state: State): RegularFields => ({
+const makeRegularPaymentRequest = (authorisation: PaymentAuthorisation, state: State): RegularPaymentRequest => ({
   firstName: state.page.form.formData.firstName || '',
   lastName: state.page.form.formData.lastName || '',
   country: state.common.internationalisation.countryId,
@@ -204,7 +204,7 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
 
       case 'ANNUAL':
       case 'MONTHLY':
-        dispatch(setupRegularPayment(makeRegularPaymentData(paymentAuthorisation, state)));
+        dispatch(setupRegularPayment(makeRegularPaymentRequest(paymentAuthorisation, state)));
         return;
 
       default:
