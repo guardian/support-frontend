@@ -1,0 +1,87 @@
+.component-invest-introduction {
+  background: gu-colour(campaign-blue);
+  font-family: $gu-headline;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 32px;
+  overflow: hidden;
+  position: relative;
+
+  @include mq($from: tablet) {
+    height: 368px;
+  }
+
+  @include mq($from: desktop) {
+    height: 448px;
+  }
+
+  @include mq($from: leftCol) {
+    height: 550px;
+  }
+
+  .component-grid-picture {
+    position: relative;
+    z-index: 1;
+    @include mq($from: tablet) {
+      left: -82px;
+    }
+    @include mq($from: desktop) {
+      left: -102px;
+    }
+    @include mq($from: leftCol) {
+      left: -130px;
+    }
+  }
+
+  .component-highlights {
+    z-index: 2;
+    position: relative;
+    display: block;
+    margin-left: 18px;
+    @include mq($from: tablet) {
+      top: -375px;
+    }
+    @include mq($from: desktop) {
+      top: -450px;
+    }
+    @include mq($from: leftCol) {
+      top: -558px;
+    }
+  }
+}
+
+.component-invest-introduction__content {
+  margin: 0 auto;
+  @include mq($from: tablet) {
+    width: gu-breakpoint(tablet);
+  }
+
+  @include mq($from: desktop) {
+    width: gu-breakpoint(desktop);
+  }
+
+  @include mq($from: leftCol) {
+    width: gu-breakpoint(leftCol);
+  }
+
+  @include mq($from: wide) {
+    width: gu-breakpoint(wide);
+  }
+}
+
+.component-highlights__highlight--invest-heading{
+  font-size: 50px;
+  line-height: 56px;
+}
+
+.component-highlights__highlight--invest-sub-heading{
+  @include mq($from: tablet) {
+    margin-top: 203px;
+  }
+  @include mq($from: desktop) {
+    margin-top: 283px;
+  }
+  @include mq($from: leftCol) {
+    margin-top: 383px;
+  }
+}

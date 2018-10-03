@@ -13,7 +13,7 @@
 @import '~components/headers/simpleHeader/simpleHeader';
 @import '~components/highlights/highlights';
 @import '~components/introduction/introduction';
-@import '~components/introduction/circlesIntroduction';
+@import '~components/introduction/investIntroduction';
 @import '~components/legal/contribLegal/contribLegal';
 @import '~components/pageSection/pageSection';
 @import '~components/patronsEvents/patronsEvents';
@@ -28,10 +28,6 @@
 // ----- Page-Specific Styles ----- //
 
 #subscriptions-landing-page {
-
-  .component-subscriptions-by-country-group {
-    @include multiline-top-border;
-  }
 
   .component-cta-link--android {
     margin-top: $gu-v-spacing;
