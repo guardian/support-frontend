@@ -11,6 +11,7 @@ export const isNotEmpty: string => boolean = input => !!input && input.trim() !=
 export const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
 export const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
 export const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
+export const maxTwoDecimals: string => boolean = input => new RegExp('^\\d+.?\\d{0,2}$').test(input);
 
 export const checkFirstName: string => boolean = isNotEmpty;
 export const checkLastName: string => boolean = isNotEmpty;

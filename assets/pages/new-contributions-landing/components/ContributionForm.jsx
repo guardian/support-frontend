@@ -32,6 +32,7 @@ import {
   isNotEmpty,
   isSmallerOrEqual,
   isLargerOrEqual,
+  maxTwoDecimals,
   emailRegexPattern,
 } from '../formValidation';
 
@@ -181,7 +182,8 @@ function ContributionForm(props: PropTypes) {
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
-    && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input);
+    && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
+    && maxTwoDecimals(input);
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.onWaiting(true);
