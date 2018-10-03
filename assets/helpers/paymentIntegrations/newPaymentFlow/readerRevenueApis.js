@@ -17,28 +17,22 @@ import trackConversion from 'helpers/tracking/conversions';
 
 // ----- Types ----- //
 
-
 type RegularContribution = {|
   amount: number,
   currency: string,
   billingPeriod: BillingPeriod,
 |};
 
-// TODO: can we do away with these types and use the PaymentAuthorisation here?
-// and thus do away with getPaymentFields and paymentDetailsFromAuthorisation
-// (would probably require backend renaming)
-export type RegularPayPalPaymentFields = {| baid: string |};
+type RegularPayPalPaymentFields = {| baid: string |};
 
-export type RegularStripePaymentFields = {| stripeToken: string |};
+type RegularStripePaymentFields = {| stripeToken: string |};
 
-export type RegularDirectDebitPaymentFields = {|
+type RegularDirectDebitPaymentFields = {|
   accountHolderName: string,
   sortCode: string,
   accountNumber: string,
 |};
 
-// TODO: rename this type and its constituent types since the below structure is a bit baffling
-// PaymentFields: {contributionType, fields: {...other stuff, paymentFields: RegularPaymentFields}}
 export type RegularPaymentFields =
   RegularPayPalPaymentFields |
   RegularStripePaymentFields |
@@ -56,7 +50,6 @@ export type RegularPaymentRequest = {|
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
 |};
-
 
 export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string |};
 export type PayPalAuthorisation = {| paymentMethod: 'PayPal', token: string |};
