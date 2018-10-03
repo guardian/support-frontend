@@ -3,6 +3,7 @@ import { type PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { logPromise } from 'helpers/promise';
+import { logException } from 'helpers/logger';
 import { fetchJson, postRequestOptions } from 'helpers/fetch';
 import * as cookie from 'helpers/cookie';
 import { addQueryParamsToURL } from 'helpers/url';
@@ -125,10 +126,10 @@ function getPayPalResult(res: Object): PaymentApiResponse<PayPalApiError, PayPal
   if (res.error && res.error.message) {
     return { type: 'error', error: { message: res.error.message } };
   }
-  // This should never be returned.
-  // If it is, then something has gone wrong!
-  // TODO: alert on this error being returned
-  return unknownError(`unable to deserialize response from payment API: ${JSON.stringify(res)}`);
+
+  const err = `unable to deserialize response from payment API: ${JSON.stringify(res)}`;
+  logException(err);
+  return unknownError(err);
 }
 
 type CreatePaymentResponse = Promise<PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>>
