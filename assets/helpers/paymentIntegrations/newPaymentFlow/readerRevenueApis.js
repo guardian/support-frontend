@@ -80,6 +80,23 @@ const MAX_POLLS = 10;
 
 // ----- Functions ----- //
 
+function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
+  switch (authorisation.paymentMethod) {
+    case 'Stripe':
+      return { stripeToken: authorisation.token };
+    case 'PayPal':
+      return { baid: authorisation.token };
+    case 'DirectDebit':
+      return {
+        accountHolderName: authorisation.accountHolderName,
+        sortCode: authorisation.sortCode,
+        accountNumber: authorisation.accountNumber,
+      };
+    // TODO: what is a sane way to handle such cases?
+    default:
+      throw new Error('If Flow works, this cannot happen');
+  }
+}
 
 /**
  * Process the response for a regular payment from the recurring contribution endpoint.
@@ -134,24 +151,6 @@ function checkRegularStatus(
         return Promise.resolve(handleCompletion(json));
     }
   };
-}
-
-function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
-  switch (authorisation.paymentMethod) {
-    case 'Stripe':
-      return { stripeToken: authorisation.token };
-    case 'PayPal':
-      return { baid: authorisation.token };
-    case 'DirectDebit':
-      return {
-        accountHolderName: authorisation.accountHolderName,
-        sortCode: authorisation.sortCode,
-        accountNumber: authorisation.accountNumber,
-      };
-    // TODO: what is a sane way to handle such cases?
-    default:
-      throw new Error('If Flow works, this cannot happen');
-  }
 }
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
