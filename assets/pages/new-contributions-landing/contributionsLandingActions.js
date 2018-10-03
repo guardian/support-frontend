@@ -137,7 +137,7 @@ const executeStripeOneOffPayment = (data: StripeChargeData) =>
 const handleCreateOneOffPayPalPaymentResponse =
   (paymentResult: Promise<PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>>) =>
     (dispatch: Dispatch<Action>, getState: () => State): void => {
-      paymentResult.then((result) => {
+      paymentResult.then((result: PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>) => {
         const state = getState();
 
         const acquisitionData = derivePaymentApiAcquisitionData(
@@ -155,8 +155,10 @@ const handleCreateOneOffPayPalPaymentResponse =
         if (result.type === 'success') {
           window.location.href = result.data.approvalUrl;
         }
-        // TODO: handle error
-        // dispatch(paymentFailure('No payment method selected'));
+
+        // For PayPal create payment errors, the Payment API passes through the
+        // error from PayPal's API which we don't want to expose to the user.
+        dispatch(paymentFailure('There was an error with your payment'));
       });
     };
 
