@@ -111,8 +111,7 @@ function getPaymentResultFromOneOffStripeResponse(json: Object): Promise<Payment
 function postOneOffStripeExecutePaymentRequest(data: StripeChargeData): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
-    // TODO: do we really need to 'include' credentials since Payment API is unauthenticated?
-    postRequestOptions(data, 'include', null),
+    postRequestOptions(data, 'omit', null),
   ).then(getPaymentResultFromOneOffStripeResponse));
 }
 
@@ -137,9 +136,7 @@ type CreatePaymentResponse = Promise<PaymentApiResponse<PayPalApiError, PayPalPa
 function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): CreatePaymentResponse {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
-    // TODO: if we remove the PaymentFields type then we can just pass the data through
-    // TODO: do we really need to 'include' credentials since Payment API is unauthenticated?
-    postRequestOptions(data, 'include', null),
+    postRequestOptions(data, 'omit', null),
   )).then(getPayPalResult).catch(err => unknownError(`error creating a PayPal payment: ${err}`));
 }
 
