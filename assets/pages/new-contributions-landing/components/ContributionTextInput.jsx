@@ -27,7 +27,7 @@ type PropTypes = {
   min: number | void,
   max: number | void,
   step: number | void,
-  pattern: string,
+  pattern: string | void,
   disabled: boolean,
 };
 

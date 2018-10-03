@@ -42,7 +42,7 @@ class IdentityController(
       .fold(
         err => {
           SafeLogger.error(scrub"Failed to set password: ${err.toString}")
-          InternalServerError(err.asJson)
+          InternalServerError
         },
         cookies => {
           SafeLogger.info("Successfully set password")
