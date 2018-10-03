@@ -7,9 +7,8 @@ import { type Amount, type Contrib } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import {
   type PaymentAuthorisation,
-  type PaymentFields,
   type PaymentResult,
-  type PaymentDetails,
+  type RegularPaymentFields,
   PaymentSuccess,
   postRegularPaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -24,6 +23,7 @@ import {
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+import type { RegularFields } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type State, type UserFormData } from './contributionsLandingReducer';
 
 export type Action =
@@ -98,7 +98,7 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
     });
   };
 
-const setupRegularPayment = (data: PaymentFields) =>
+const setupRegularPayment = (data: RegularFields) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
@@ -167,7 +167,7 @@ const makeStripeOneOffPaymentData = (token: PaymentAuthorisation, state: State):
   ),
 });
 
-function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): PaymentDetails {
+function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
   switch (authorisation.paymentMethod) {
     case 'Stripe': return { stripeToken: authorisation.token };
     case 'PayPal': return { baid: authorisation.token };
@@ -181,24 +181,21 @@ function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): P
   }
 }
 
-const makeRegularPaymentData = (authorisation: PaymentAuthorisation, state: State): PaymentFields => ({
-  contributionType: 'regular',
-  fields: {
-    firstName: state.page.form.formData.firstName || '',
-    lastName: state.page.form.formData.lastName || '',
-    country: state.common.internationalisation.countryId,
-    state: state.page.form.formData.state,
-    email: state.page.form.formData.email || '',
-    contribution: {
-      amount: getAmount(state),
-      currency: state.common.internationalisation.currencyId,
-      billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
-    },
-    paymentFields: paymentDetailsFromAuthorisation(authorisation),
-    ophanIds: getOphanIds(),
-    referrerAcquisitionData: state.common.referrerAcquisitionData,
-    supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
+const makeRegularPaymentData = (authorisation: PaymentAuthorisation, state: State): RegularFields => ({
+  firstName: state.page.form.formData.firstName || '',
+  lastName: state.page.form.formData.lastName || '',
+  country: state.common.internationalisation.countryId,
+  state: state.page.form.formData.state,
+  email: state.page.form.formData.email || '',
+  contribution: {
+    amount: getAmount(state),
+    currency: state.common.internationalisation.currencyId,
+    billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
   },
+  paymentFields: paymentDetailsFromAuthorisation(authorisation),
+  ophanIds: getOphanIds(),
+  referrerAcquisitionData: state.common.referrerAcquisitionData,
+  supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
 });
 
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>

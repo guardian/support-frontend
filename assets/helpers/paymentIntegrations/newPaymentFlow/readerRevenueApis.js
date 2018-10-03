@@ -13,7 +13,6 @@ import { type UsState, type CaState, type IsoCountry } from 'helpers/internation
 import { pollUntilPromise, logPromise } from 'helpers/promise';
 import { fetchJson, getRequestOptions, postRequestOptions } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
-import type { CreatePaypalPaymentData, StripeChargeData } from './oneOffContributions';
 
 
 // ----- Types ----- //
@@ -28,41 +27,35 @@ type RegularContribution = {|
 // TODO: can we do away with these types and use the PaymentAuthorisation here?
 // and thus do away with getPaymentFields and paymentDetailsFromAuthorisation
 // (would probably require backend renaming)
-export type PayPalDetails = {| baid: string |};
+export type RegularPayPalPaymentFields = {| baid: string |};
 
-export type StripeDetails = {| stripeToken: string |};
+export type RegularStripePaymentFields = {| stripeToken: string |};
 
-export type DirectDebitDetails = {|
+export type RegularDirectDebitPaymentFields = {|
   accountHolderName: string,
   sortCode: string,
   accountNumber: string,
 |};
 
 // TODO: rename this type and its constituent types since the below structure is a bit baffling
-// PaymentFields: {contributionType, fields: {...other stuff, paymentFields: PaymentDetails}}
-export type PaymentDetails = PayPalDetails | StripeDetails | DirectDebitDetails;
+// PaymentFields: {contributionType, fields: {...other stuff, paymentFields: RegularPaymentFields}}
+export type RegularPaymentFields =
+  RegularPayPalPaymentFields |
+  RegularStripePaymentFields |
+  RegularDirectDebitPaymentFields;
 
-type RegularFields = {|
+export type RegularFields = {|
   firstName: string,
   lastName: string,
   country: IsoCountry,
   state: UsState | CaState | null,
   email: string,
   contribution: RegularContribution,
-  paymentFields: PaymentDetails,
+  paymentFields: RegularPaymentFields,
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
 |};
-
-// TODO: why is contributionType required?
-export type StripeOneOffPaymentFields = {| contributionType: 'oneoff', fields: StripeChargeData |};
-export type PayPalOneOffPaymentFields = {| contributionType: 'oneoff', fields: CreatePaypalPaymentData |};
-export type RegularPaymentFields = {| contributionType: 'regular', fields: RegularFields |};
-
-// TODO: is this union type required?
-// It is a type of an argument passed to postRequestOptions(), but this could just be an object (?)
-export type PaymentFields = StripeOneOffPaymentFields | PayPalOneOffPaymentFields | RegularPaymentFields;
 
 
 export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string |};
@@ -146,14 +139,14 @@ function checkRegularStatus(
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
 function postRegularPaymentRequest(
-  data: PaymentFields,
+  data: RegularFields,
   participations: Participations,
   csrf: CsrfState,
   setGuestAccountCreationToken: (string) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
-    postRequestOptions(data.fields, 'same-origin', csrf),
+    postRequestOptions(data, 'same-origin', csrf),
   ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken)));
 }
 
