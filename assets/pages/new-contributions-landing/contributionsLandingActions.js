@@ -2,28 +2,32 @@
 
 // ----- Imports ----- //
 
-import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
+import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
 import { type Amount, type Contrib } from 'helpers/contributions';
-import { type UsState, type CaState } from 'helpers/internationalisation/country';
+import { type CaState, type UsState } from 'helpers/internationalisation/country';
+import type { RegularFields } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
+  regularPaymentFieldsFromAuthorisation,
   type PaymentResult,
-  type RegularPaymentFields,
   PaymentSuccess,
   postRegularPaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import {
-  postOneOffStripeExecutePaymentRequest,
-  postOneOffPayPalCreatePaymentRequest,
+  type CreatePaypalPaymentData,
   type PaymentApiResponse,
   type PayPalApiError,
   type PayPalPaymentSuccess,
-  type CreatePaypalPaymentData,
+  postOneOffPayPalCreatePaymentRequest,
+  postOneOffStripeExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
-import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
+import {
+  derivePaymentApiAcquisitionData,
+  getOphanIds,
+  getSupportAbTests
+} from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
-import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
-import type { RegularFields } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type State, type UserFormData } from './contributionsLandingReducer';
 
 export type Action =
@@ -167,20 +171,6 @@ const makeStripeOneOffPaymentData = (token: PaymentAuthorisation, state: State):
   ),
 });
 
-function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
-  switch (authorisation.paymentMethod) {
-    case 'Stripe': return { stripeToken: authorisation.token };
-    case 'PayPal': return { baid: authorisation.token };
-    case 'DirectDebit': return {
-      accountHolderName: authorisation.accountHolderName,
-      sortCode: authorisation.sortCode,
-      accountNumber: authorisation.accountNumber,
-    };
-    // TODO: what is a sane way to handle such cases?
-    default: throw new Error('If Flow works, this cannot happen');
-  }
-}
-
 const makeRegularPaymentData = (authorisation: PaymentAuthorisation, state: State): RegularFields => ({
   firstName: state.page.form.formData.firstName || '',
   lastName: state.page.form.formData.lastName || '',
@@ -192,7 +182,7 @@ const makeRegularPaymentData = (authorisation: PaymentAuthorisation, state: Stat
     currency: state.common.internationalisation.currencyId,
     billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
   },
-  paymentFields: paymentDetailsFromAuthorisation(authorisation),
+  paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
   ophanIds: getOphanIds(),
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),

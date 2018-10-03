@@ -1,16 +1,16 @@
 // @flow
 import { routes } from 'helpers/routes';
 import {
-  type ReferrerAcquisitionData,
-  type OphanIds,
   type AcquisitionABTest,
+  type OphanIds,
+  type ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/contributions';
 import { type Participations } from 'helpers/abTests/abtest';
-import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
-import { pollUntilPromise, logPromise } from 'helpers/promise';
+import { type CaState, type IsoCountry, type UsState } from 'helpers/internationalisation/country';
+import { logPromise, pollUntilPromise } from 'helpers/promise';
 import { fetchJson, getRequestOptions, postRequestOptions } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
 
@@ -136,6 +136,23 @@ function checkRegularStatus(
   };
 }
 
+function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
+  switch (authorisation.paymentMethod) {
+    case 'Stripe':
+      return { stripeToken: authorisation.token };
+    case 'PayPal':
+      return { baid: authorisation.token };
+    case 'DirectDebit':
+      return {
+        accountHolderName: authorisation.accountHolderName,
+        sortCode: authorisation.sortCode,
+        accountNumber: authorisation.accountNumber,
+      };
+    // TODO: what is a sane way to handle such cases?
+    default:
+      throw new Error('If Flow works, this cannot happen');
+  }
+}
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
 function postRegularPaymentRequest(
@@ -152,5 +169,6 @@ function postRegularPaymentRequest(
 
 export {
   postRegularPaymentRequest,
+  regularPaymentFieldsFromAuthorisation,
   PaymentSuccess,
 };
