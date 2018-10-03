@@ -146,6 +146,10 @@ const handleCreateOneOffPayPalPaymentResponse =
           state.common.optimizeExperiments,
         );
 
+        // We've only created a payment at this point, and the user has to get through
+        // the PayPal flow on their site before we can actually try and execute the payment.
+        // So we drop a cookie which will be used by the /paypal/rest/return endpoint
+        // that the user returns to from PayPal, if payment is successful.
         cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
 
         if (result.type === 'success') {
