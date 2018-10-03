@@ -12,55 +12,12 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult } from './readerRevenueApis';
 
-function paymentApiEndpointWithMode(url: string) {
-  if (cookie.get('_test_username')) {
-    return addQueryParamsToURL(
-      url,
-      { mode: 'test' },
-    );
-  }
-
-  return url;
-}
-
-// Data that should be posted to the payment API to create a Stripe charge.
-// https://github.com/guardian/payment-api/blob/master/src/main/scala/model/stripe/StripeChargeData.scala#L82
-// TODO: are we deprecating signed-in email?
-export type StripeChargeData = {|
-  paymentData: {
-    currency: IsoCurrency,
-    amount: number,
-    token: string,
-    email: string
-  },
-  acquisitionData: PaymentAPIAcquisitionData,
-|};
-
-
-// Data that should be posted to the payment API to get a url for the PayPal UI
-// where the user is redirected to so that they can authorize the payment.
-// https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
-export type CreatePaypalPaymentData = {|
-  currency: IsoCurrency,
-  amount: number,
-  // Specifies the url that PayPal should make a GET request to, should the user authorize the payment.
-  // Path of url should be /paypal/rest/return (see routes file)
-  returnURL: string,
-  // Specifies the url that PayPal should make a GET request to, should the user not authorize the payment.
-  cancelURL: string,
-|}
+// ----- Types ----- //
 
 type UnexpectedError = {|
   type: 'unexpectedError',
   error: string,
 |}
-
-function unexpectedError(message: string): UnexpectedError {
-  return {
-    type: 'unexpectedError',
-    error: message,
-  };
-}
 
 type PaymentApiError<E> = {|
   type: 'error',
@@ -93,6 +50,53 @@ export type PayPalApiError = {|
 |}
 
 export type CreatePayPalPaymentResponse = PaymentApiResponse<PayPalApiError, CreatePayPalPaymentSuccess>;
+
+// Data that should be posted to the payment API to create a Stripe charge.
+// https://github.com/guardian/payment-api/blob/master/src/main/scala/model/stripe/StripeChargeData.scala#L82
+// TODO: are we deprecating signed-in email?
+export type StripeChargeData = {|
+  paymentData: {
+    currency: IsoCurrency,
+    amount: number,
+    token: string,
+    email: string
+  },
+  acquisitionData: PaymentAPIAcquisitionData,
+|};
+
+
+// Data that should be posted to the payment API to get a url for the PayPal UI
+// where the user is redirected to so that they can authorize the payment.
+// https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
+export type CreatePaypalPaymentData = {|
+  currency: IsoCurrency,
+  amount: number,
+  // Specifies the url that PayPal should make a GET request to, should the user authorize the payment.
+  // Path of url should be /paypal/rest/return (see routes file)
+  returnURL: string,
+  // Specifies the url that PayPal should make a GET request to, should the user not authorize the payment.
+  cancelURL: string,
+|}
+
+// ----- Functions ----- //
+
+function unexpectedError(message: string): UnexpectedError {
+  return {
+    type: 'unexpectedError',
+    error: message,
+  };
+}
+
+function paymentApiEndpointWithMode(url: string) {
+  if (cookie.get('_test_username')) {
+    return addQueryParamsToURL(
+      url,
+      { mode: 'test' },
+    );
+  }
+
+  return url;
+}
 
 // Object is expected to have structure:
 // { type: "error", error: { failureReason: string } }, or
