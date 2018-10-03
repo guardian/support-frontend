@@ -50,15 +50,14 @@ export type CreatePaypalPaymentData = {|
   cancelURL: string,
 |}
 
-// TODO: is unknown error a decent name?
-type UnknownError = {|
-  type: 'unknownError',
+type UnexpectedError = {|
+  type: 'unexpectedError',
   error: string,
 |}
 
-function unknownError(message: string): UnknownError {
+function unexpectedError(message: string): UnexpectedError {
   return {
-    type: 'unknownError',
+    type: 'unexpectedError',
     error: message,
   };
 }
@@ -73,13 +72,12 @@ type PaymentApiSuccess<A> = {|
   data: A,
 |}
 
-export type PaymentApiResponse<E, A> = UnknownError | PaymentApiError<E> | PaymentApiSuccess<A>
+export type PaymentApiResponse<E, A> = UnexpectedError | PaymentApiError<E> | PaymentApiSuccess<A>
 
 // Models a PayPal payment being successfully created.
 // The user should be redirected to the approvalUrl so that they can authorize the payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentSuccess.scala
-// TODO: this should really be named something like CreatePayPalPaymentSuccess in the payment API
-export type PayPalPaymentSuccess = {|
+export type CreatePayPalPaymentSuccess = {|
   // For brevity, unneeded fields are omitted
   approvalUrl: string,
   // paymentId: string,
@@ -94,11 +92,12 @@ export type PayPalApiError = {|
   message: string,
 |}
 
+export type CreatePayPalPaymentResponse = PaymentApiResponse<PayPalApiError, CreatePayPalPaymentSuccess>;
 
 // Object is expected to have structure:
 // { type: "error", error: { failureReason: string } }, or
 // { type: "success", data: { currency: string, amount: number } }
-function getPaymentResultFromOneOffStripeResponse(json: Object): Promise<PaymentResult> {
+function paymentResultFromObject(json: Object): Promise<PaymentResult> {
   if (json.error) {
     const failureReason: CheckoutFailureReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
@@ -112,13 +111,13 @@ function postOneOffStripeExecutePaymentRequest(data: StripeChargeData): Promise<
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
     postRequestOptions(data, 'omit', null),
-  ).then(getPaymentResultFromOneOffStripeResponse));
+  ).then(paymentResultFromObject));
 }
 
 // Object is expected to have structure:
 // { type: "error", error: PayPalApiError }, or
 // { type: "success", data: PaypalPaymentSuccess }
-function getPayPalResult(res: Object): PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess> {
+function createPayPalPaymentResponseFromObject(res: Object): CreatePayPalPaymentResponse {
   if (res.data && res.data.approvalUrl) {
     return { type: 'success', data: { approvalUrl: res.data.approvalUrl } };
   }
@@ -128,16 +127,15 @@ function getPayPalResult(res: Object): PaymentApiResponse<PayPalApiError, PayPal
 
   const err = `unable to deserialize response from payment API: ${JSON.stringify(res)}`;
   logException(err);
-  return unknownError(err);
+  return unexpectedError(err);
 }
 
-type CreatePaymentResponse = Promise<PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>>
-
-function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): CreatePaymentResponse {
+function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Promise<CreatePayPalPaymentResponse> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
     postRequestOptions(data, 'omit', null),
-  )).then(getPayPalResult).catch(err => unknownError(`error creating a PayPal payment: ${err}`));
+  )).then(createPayPalPaymentResponseFromObject)
+    .catch(err => unexpectedError(`error creating a PayPal payment: ${err}`));
 }
 
 export {

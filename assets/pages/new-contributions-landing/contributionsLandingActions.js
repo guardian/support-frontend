@@ -18,7 +18,7 @@ import {
   type CreatePaypalPaymentData,
   type PaymentApiResponse,
   type PayPalApiError,
-  type PayPalPaymentSuccess,
+  type CreatePayPalPaymentSuccess,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
@@ -135,9 +135,9 @@ const executeStripeOneOffPayment = (data: StripeChargeData) =>
   };
 
 const handleCreateOneOffPayPalPaymentResponse =
-  (paymentResult: Promise<PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>>) =>
+  (paymentResult: Promise<CreatePayPalPaymentResponse>) =>
     (dispatch: Dispatch<Action>, getState: () => State): void => {
-      paymentResult.then((result: PaymentApiResponse<PayPalApiError, PayPalPaymentSuccess>) => {
+      paymentResult.then((result: CreatePayPalPaymentResponse) => {
         const state = getState();
 
         const acquisitionData = derivePaymentApiAcquisitionData(
