@@ -115,7 +115,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     isWaiting: false,
     paymentComplete: false,
     guestAccountCreationToken: null,
-    thankYouPageStage: 'setPassword',
+    thankYouPageStage: 'thankYou',
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {

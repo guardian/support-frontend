@@ -14,8 +14,10 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type UsState, type CaState, type IsoCountry } from 'helpers/internationalisation/country';
 import { pollUntilPromise, logPromise } from 'helpers/promise';
+import { logException } from 'helpers/logger';
 import { fetchJson } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
+
 
 import * as cookie from 'helpers/cookie';
 import { type ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
@@ -113,13 +115,14 @@ function getRequestOptions(
   };
 }
 
-/** Builds a `RequestInit` object for use with POST requests using the Fetch API */
-function postRequestOptions(
-  data: PaymentFields,
+/** Builds a `RequestInit` object for the Fetch API */
+function requestOptions(
+  body: string,
   credentials: Credentials,
+  method: string,
   csrf: CsrfState | null,
 ): Object {
-  return { ...getRequestOptions(credentials, csrf), method: 'POST', body: JSON.stringify(data.fields) };
+  return { ...getRequestOptions(credentials, csrf), method, body };
 }
 
 /** Process the response for a one-off payment from the payment API */
@@ -204,7 +207,7 @@ function getOneOffStripeEndpoint() {
 function postOneOffStripeRequest(data: PaymentFields): Promise<PaymentResult> {
   return logPromise(fetchJson(
     getOneOffStripeEndpoint(),
-    postRequestOptions(data, 'include', null),
+    requestOptions(JSON.stringify(data.fields), 'include', 'POST', null),
   ).then(checkOneOffStatus));
 }
 
@@ -218,12 +221,36 @@ function postRegularPaymentRequest(
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
-    postRequestOptions(data, 'same-origin', csrf),
+    requestOptions(JSON.stringify(data.fields), 'same-origin', 'POST', csrf),
   ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage)));
+}
+
+function setPasswordGuest(
+  password: string,
+  guestAccountRegistrationToken: string,
+  csrf: CsrfState,
+): Promise<boolean> {
+
+  const body = JSON.stringify({ password, guestAccountRegistrationToken });
+  return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestOptions(body, 'same-origin', 'PUT', csrf)))
+    .then((response) => {
+      if (response.status === 200) {
+        return true;
+      }
+      logException('/contribute/set-password-guest endpoint returned an error');
+      return false;
+
+    })
+    .catch(() => {
+      logException('Error while trying to interact with /contribute/set-password-guest');
+      return false;
+    });
 }
 
 export {
   postOneOffStripeRequest,
   postRegularPaymentRequest,
   PaymentSuccess,
+  requestOptions,
+  setPasswordGuest,
 };

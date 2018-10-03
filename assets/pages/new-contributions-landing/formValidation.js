@@ -7,7 +7,7 @@
 // for compatibility with Stripe
 export const emailRegexPattern = '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
-export const isNotEmpty: string => boolean = input => input.trim() !== '';
+export const isNotEmpty: string => boolean = input => !!input && input.trim() !== '';
 export const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
 export const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
 export const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;

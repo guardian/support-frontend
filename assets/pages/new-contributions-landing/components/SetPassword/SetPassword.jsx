@@ -8,7 +8,7 @@ import { type Dispatch } from 'redux';
 
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { setPasswordGuest } from 'helpers/setPassword';
+import { setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -108,7 +108,8 @@ function SetPassword(props: PropTypes) {
             isValid={checkEmail(props.email)}
             pattern={emailRegexPattern}
             icon={<SvgEnvelope />}
-            autoComplete="on"
+            autoComplete="email"
+            type="email"
             errorMessage="Please enter a valid email address"
             required
             disabled
@@ -138,7 +139,7 @@ function SetPassword(props: PropTypes) {
           <ButtonWithRightArrow
             componentClassName={classNameWithModifiers('form__submit', ['no-thanks'])}
             buttonClassName={classNameWithModifiers('form__submit-button', ['no-thanks'])}
-            accessibilityHintId="accessibility-hint-create-account"
+            accessibilityHintId="accessibility-hint-no-thanks"
             type="button"
             buttonCopy="No, thank you"
             onClick={() => props.setThankYouPageStage('thankYou')}
