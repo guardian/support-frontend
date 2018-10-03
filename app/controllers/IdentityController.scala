@@ -28,10 +28,10 @@ class IdentityController(
     val result = identityService.sendConsentPreferencesEmail(request.body.email)
     result.map { res =>
       if (res) {
-        SafeLogger.info("Successfully sent consents preferences email")
+        SafeLogger.info(s"Successfully sent consents preferences email for ${request.body.email}")
         Ok
       } else {
-        SafeLogger.error(scrub"Failed to send consents preferences email")
+        SafeLogger.error(scrub"Failed to send consents preferences email for ${request.body.email}")
         InternalServerError
       }
     }
@@ -42,11 +42,11 @@ class IdentityController(
       .setPasswordGuest(request.body.password, request.body.guestAccountRegistrationToken)
       .fold(
         err => {
-          SafeLogger.error(scrub"Failed to set password: ${err.toString}")
+          SafeLogger.error(scrub"Failed to set password using guest account registration token ${request.body.guestAccountRegistrationToken}: ${err.toString}")
           InternalServerError
         },
         cookies => {
-          SafeLogger.info("Successfully set passwrod")
+          SafeLogger.info(s"Successfully set password using guest account registration token ${request.body.guestAccountRegistrationToken}")
           Ok.withCookies(CookiesResponse.getCookies(cookies, guardianDomain): _*)
         }
       )

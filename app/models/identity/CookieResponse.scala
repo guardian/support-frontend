@@ -1,12 +1,14 @@
 package models.identity
 
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, Seconds}
 import play.api.libs.json.{Json, Reads}
 import play.api.mvc.Cookie
 
 import scala.concurrent.ExecutionContext
 
-case class CookieResponse(key: String, value: String, sessionCookie: Option[Boolean] = None)
+case class CookieResponse(key: String, value: String, sessionCookie: Option[Boolean] = None) {
+  val isSessionCookie = sessionCookie.getOrElse(false)
+}
 
 case class CookiesResponse(expiresAt: DateTime, values: List[CookieResponse])
 
@@ -19,8 +21,10 @@ object CookiesResponse {
 
   def getCookies(cookiesResponse: CookiesResponse, guardianDomain: String)(implicit executionContext: ExecutionContext): List[Cookie] = {
     cookiesResponse.values.map { cookie =>
+      val maxAge = Some(Seconds.secondsBetween(DateTime.now, cookiesResponse.expiresAt).getSeconds)
       val secureHttpOnly = cookie.key.startsWith("SC_")
-      Cookie(cookie.key, cookie.value, None, "/", Some(guardianDomain), secureHttpOnly, secureHttpOnly)
+      val cookieMaxAgeOpt = maxAge.filterNot(_ => cookie.isSessionCookie)
+      Cookie(cookie.key, cookie.value, cookieMaxAgeOpt, "/", Some(guardianDomain), secureHttpOnly, secureHttpOnly)
     }
   }
 }
