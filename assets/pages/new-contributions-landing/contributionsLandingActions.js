@@ -25,9 +25,10 @@ import {
 import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
-  getSupportAbTests
+  getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
+import * as cookie from 'helpers/cookie';
 import { type State, type UserFormData } from './contributionsLandingReducer';
 
 export type Action =
@@ -138,8 +139,16 @@ const handleCreateOneOffPayPalPaymentResponse =
     (dispatch: Dispatch<Action>, getState: () => State): void => {
       paymentResult.then((result) => {
         const state = getState();
+
+        const acquisitionData = derivePaymentApiAcquisitionData(
+          state.common.referrerAcquisitionData,
+          state.common.abParticipations,
+          state.common.optimizeExperiments,
+        );
+
+        cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
+
         if (result.type === 'success') {
-          trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
           window.location.href = result.data.approvalUrl;
         }
         // TODO: handle error
