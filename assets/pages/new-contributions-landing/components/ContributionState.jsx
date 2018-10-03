@@ -20,7 +20,7 @@ type PropTypes = {
   onChange: (Event => void) | false,
   errorMessage: string | null,
   isValid: boolean,
-  checkoutFormHasBeenSubmitted: boolean,
+  formHasBeenSubmitted: boolean,
 };
 
 const mapStateToProps = (state: State) => ({
@@ -59,7 +59,7 @@ const renderStatesField = (
 );
 
 function ContributionState(props: PropTypes) {
-  const showError = !props.isValid && props.checkoutFormHasBeenSubmitted;
+  const showError = !props.isValid && props.formHasBeenSubmitted;
   switch (props.countryGroupId) {
     case 'UnitedStates':
       return renderStatesField(usStates, props.selectedState, props.onChange, showError, props.errorMessage);

@@ -6,10 +6,7 @@ import React from 'react';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities';
 
-// ----- Types ----- //
-
 // ----- Render ----- //
-
 
 function CreateAccountButton() {
 

@@ -27,6 +27,7 @@ type PropTypes = {
   min: number | void,
   max: number | void,
   step: number | void,
+  pattern: string,
   disabled: boolean,
 };
 
@@ -55,6 +56,7 @@ function NewContributionTextInput(props: PropTypes) {
           value={props.value}
           min={props.min}
           max={props.max}
+          pattern={props.pattern}
           step={props.step}
           disabled={props.disabled}
         />
@@ -83,6 +85,7 @@ NewContributionTextInput.defaultProps = {
   max: undefined,
   min: undefined,
   step: undefined,
+  pattern: undefined,
   disabled: false,
   formHasBeenSubmitted: false,
   isValid: true,

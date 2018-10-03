@@ -21,12 +21,14 @@ const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
 });
 
-
+// TODO: change landing page copy if password has/hasn't been set
 const thankYouPageStage: {
   [ThankYouPageStage]: React$Element<*>,
 } = {
   setPassword: (<SetPassword />),
   thankYou: (<ContributionThankYou />),
+  thankYouPasswordSet: (<ContributionThankYou />),
+  thankYouPasswordNotSet: (<ContributionThankYou />),
 };
 
 

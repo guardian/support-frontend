@@ -46,7 +46,8 @@ class IdentityController(
         },
         cookies => {
           SafeLogger.info("Successfully set password")
-          Ok(cookies.asJson)
+          // TODO: add cookies to response header
+          Ok
         }
       )
   }

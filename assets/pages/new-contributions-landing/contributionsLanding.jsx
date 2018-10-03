@@ -76,7 +76,7 @@ const router = (
             );
             return (
               <Page
-                classModifiersc={['contribution-thankyou']}
+                classModifiers={['contribution-thankyou']}
                 header={<NewHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >

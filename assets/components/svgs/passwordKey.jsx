@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-// A padlock icon used to signify that checkouts are secure.
 export default function SvgPasswordKey() {
 
   return (

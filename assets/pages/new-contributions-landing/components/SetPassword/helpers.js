@@ -37,7 +37,6 @@ function setPasswordGuest(
     });
 }
 
-
 // ----- Exports ----- //
 
 export { setPasswordGuest };

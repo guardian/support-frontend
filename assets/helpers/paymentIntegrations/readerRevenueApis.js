@@ -166,7 +166,6 @@ function checkRegularStatus(
   };
 
   return (json) => {
-    console.log(json);
     if (json.guestAccountCreationToken) {
       setGuestAccountCreationToken(json.guestAccountCreationToken);
       setThankYouPageStage('setPassword');
