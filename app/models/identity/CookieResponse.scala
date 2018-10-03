@@ -1,9 +1,10 @@
 package models.identity
 
-import com.gu.identity.model.LiftJsonConfig
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{Json, Reads}
+import play.api.mvc.Cookie
+
+import scala.concurrent.ExecutionContext
 
 case class CookieResponse(key: String, value: String, sessionCookie: Option[Boolean] = None)
 
@@ -15,4 +16,11 @@ object CookiesResponse {
       DateTime.parse(dtString)))
   implicit val readsCookieResponse: Reads[CookieResponse] = Json.reads[CookieResponse]
   implicit val readsCookiesResponse: Reads[CookiesResponse] = Json.reads[CookiesResponse]
+
+  def getCookies(cookiesResponse: CookiesResponse, guardianDomain: String)(implicit executionContext: ExecutionContext): List[Cookie] = {
+    cookiesResponse.values.map { cookie =>
+      val secureHttpOnly = cookie.key.startsWith("SC_")
+      Cookie(cookie.key, cookie.value, None, "/", Some(guardianDomain), secureHttpOnly, secureHttpOnly)
+    }
+  }
 }

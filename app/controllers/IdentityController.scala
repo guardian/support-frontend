@@ -9,15 +9,16 @@ import monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
 import services.IdentityService
-import codecs.CirceDecoders._
 import cats.implicits._
+import models.identity.CookiesResponse
 
 import scala.concurrent.ExecutionContext
 
 class IdentityController(
     identityService: IdentityService,
     components: ControllerComponents,
-    actionRefiners: CustomActionBuilders
+    actionRefiners: CustomActionBuilders,
+    guardianDomain: String
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
@@ -45,9 +46,8 @@ class IdentityController(
           InternalServerError
         },
         cookies => {
-          SafeLogger.info("Successfully set password")
-          // TODO: add cookies to response header
-          Ok
+          SafeLogger.info("Successfully set passwrod")
+          Ok.withCookies(CookiesResponse.getCookies(cookies, guardianDomain): _*)
         }
       )
   }
