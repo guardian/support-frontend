@@ -46,7 +46,7 @@ private[services] class GAService(implicit client: OkHttpClient)
 
       // The GA conversion event
       "t" -> "event",
-      "ec" -> conversionCategory, //Event Category
+      "ec" -> conversionCategory.name, //Event Category
       "ea" -> productName, //Event Action
       "el" -> acquisition.paymentFrequency.name, //Event Label
       "ev" -> acquisition.amount.toInt.toString, //Event Value is an Integer
@@ -56,7 +56,7 @@ private[services] class GAService(implicit client: OkHttpClient)
       "tcc" -> acquisition.promoCode.getOrElse(""), // Transaction coupon.
       "pa" -> "purchase", //This is a purchase
       "pr1nm" -> productName, // Product Name
-      "pr1ca" -> conversionCategory, // Product category
+      "pr1ca" -> conversionCategory.description, // Product category
       "pr1pr" -> acquisition.amount.toString, // Product Price
       "pr1qt" -> "1", // Product Quantity
       "pr1cc" -> acquisition.promoCode.getOrElse(""), // Product coupon code.
@@ -73,14 +73,14 @@ private[services] class GAService(implicit client: OkHttpClient)
     acquisition.printOptions.map(_.product.name).getOrElse(acquisition.product.name)
 
   private[services] def getConversionCategory(acquisition: Acquisition) =
-    acquisition.printOptions.map(p => ConversionCategory.PrintConversion.name)
+    acquisition.printOptions.map(p => ConversionCategory.PrintConversion)
       .getOrElse(getDigitalConversionCategory(acquisition))
 
   private[services] def getDigitalConversionCategory(acquisition: Acquisition) =
     acquisition.product match {
       case _: Product.RecurringContribution.type |
-           _: Product.Contribution.type => ConversionCategory.ContributionConversion.name
-      case _ => ConversionCategory.DigitalConversion.name
+           _: Product.Contribution.type => ConversionCategory.ContributionConversion
+      case _ => ConversionCategory.DigitalConversion
     }
 
   private[services] def buildOptimizeTestsPayload(maybeTests: Option[AbTestInfo]) = {
