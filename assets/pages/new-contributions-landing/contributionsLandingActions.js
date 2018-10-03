@@ -16,9 +16,7 @@ import {
 import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
-  type PaymentApiResponse,
-  type PayPalApiError,
-  type CreatePayPalPaymentSuccess,
+  type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
