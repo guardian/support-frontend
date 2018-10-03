@@ -9,7 +9,7 @@ import { addQueryParamsToURL } from 'helpers/url';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 import { PaymentSuccess } from './readerRevenueApis';
-import type { PaymentResult, StripeOneOffPaymentFields } from './readerRevenueApis';
+import type { PaymentResult } from './readerRevenueApis';
 
 function paymentApiEndpointWithMode(url: string) {
   if (cookie.get('_test_username')) {
@@ -35,8 +35,6 @@ export type StripeChargeData = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
-
-export type OneOffPayPalCreatePaymentData = {|currency: string, amount: string|};
 
 // Data that should be posted to the payment API to get a url for the PayPal UI
 // where the user is redirected to so that they can authorize the payment.
@@ -109,11 +107,11 @@ function getPaymentResultFromOneOffStripeResponse(json: Object): Promise<Payment
 
 // Sends a one-off payment request to the payment API and standardises the result
 // https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
-function postOneOffStripeExecutePaymentRequest(data: StripeOneOffPaymentFields): Promise<PaymentResult> {
+function postOneOffStripeExecutePaymentRequest(data: StripeChargeData): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
     // TODO: do we really need to 'include' credentials since Payment API is unauthenticated?
-    postRequestOptions(data.fields, 'include', null),
+    postRequestOptions(data, 'include', null),
   ).then(getPaymentResultFromOneOffStripeResponse));
 }
 

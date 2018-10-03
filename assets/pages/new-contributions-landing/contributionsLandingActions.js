@@ -10,7 +10,6 @@ import {
   type PaymentFields,
   type PaymentResult,
   type PaymentDetails,
-  type StripeOneOffPaymentFields,
   PaymentSuccess,
   postRegularPaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -24,6 +23,7 @@ import {
 } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
+import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import { type State, type UserFormData } from './contributionsLandingReducer';
 
 export type Action =
@@ -124,7 +124,7 @@ const setupRegularPayment = (data: PaymentFields) =>
     }
   };
 
-const executeStripeOneOffPayment = (data: StripeOneOffPaymentFields) =>
+const executeStripeOneOffPayment = (data: StripeChargeData) =>
   (dispatch: Dispatch<Action>): void => {
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
   };
@@ -153,21 +153,18 @@ const getAmount = (state: State) =>
     ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
-const makeStripeOneOffPaymentData = (token: PaymentAuthorisation, state: State): StripeOneOffPaymentFields => ({
-  contributionType: 'oneoff',
-  fields: {
-    paymentData: {
-      currency: state.common.internationalisation.currencyId,
-      amount: getAmount(state),
-      token: token.paymentMethod === 'Stripe' ? token.token : '',
-      email: state.page.form.formData.email || '',
-    },
-    acquisitionData: derivePaymentApiAcquisitionData(
-      state.common.referrerAcquisitionData,
-      state.common.abParticipations,
-      state.common.optimizeExperiments,
-    ),
+const makeStripeOneOffPaymentData = (token: PaymentAuthorisation, state: State): StripeChargeData => ({
+  paymentData: {
+    currency: state.common.internationalisation.currencyId,
+    amount: getAmount(state),
+    token: token.paymentMethod === 'Stripe' ? token.token : '',
+    email: state.page.form.formData.email || '',
   },
+  acquisitionData: derivePaymentApiAcquisitionData(
+    state.common.referrerAcquisitionData,
+    state.common.abParticipations,
+    state.common.optimizeExperiments,
+  ),
 });
 
 function paymentDetailsFromAuthorisation(authorisation: PaymentAuthorisation): PaymentDetails {
