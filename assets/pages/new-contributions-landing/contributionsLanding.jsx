@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
+import { isDetailsSupported, polyfillDetails } from 'helpers/details';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -23,6 +24,9 @@ import { NewContributionForm } from './components/ContributionForm';
 import { NewContributionThanks } from './components/ContributionThanks';
 import { NewContributionBackground } from './components/ContributionBackground';
 
+if (!isDetailsSupported) {
+  polyfillDetails();
+}
 
 // ----- Redux Store ----- //
 

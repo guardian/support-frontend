@@ -107,6 +107,10 @@ header[role="banner"] {
   height: 14px;
 }
 
+.countryGroups summary {
+  list-style: none;
+}
+
 .countryGroups summary:hover,
 .countryGroups summary:focus {
   box-shadow: 0 0 0 3px gu-colour(news-garnett-highlight);
