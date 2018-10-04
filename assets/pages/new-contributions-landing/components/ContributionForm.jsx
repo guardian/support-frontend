@@ -19,7 +19,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAbsoluteURL } from 'helpers/url';
-import { routes } from 'helpers/routes';
+import { routes, payPalCancelUrl } from 'helpers/routes';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -37,7 +37,6 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 import { type State } from '../contributionsLandingReducer';
-import { payPalCancelUrl } from '../../contributions-landing/pagesVersions/horizontalLayoutLandingPage';
 
 
 import {
