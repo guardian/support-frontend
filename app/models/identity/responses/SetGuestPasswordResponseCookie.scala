@@ -21,7 +21,8 @@ object SetGuestPasswordResponseCookies {
   implicit val readsCookieResponse: Reads[SetGuestPasswordResponseCookie] = Json.reads[SetGuestPasswordResponseCookie]
   implicit val readsCookiesResponse: Reads[SetGuestPasswordResponseCookies] = Json.reads[SetGuestPasswordResponseCookies]
 
-  def getCookies(setPasswordResponse: SetGuestPasswordResponseCookies, guardianDomain: String)(implicit executionContext: ExecutionContext): List[PlayCookie] = {
+  def getCookies(setPasswordResponse: SetGuestPasswordResponseCookies, guardianDomain: String)
+                (implicit executionContext: ExecutionContext): List[PlayCookie] = {
     setPasswordResponse.values.map { cookie =>
       val maxAge = Some(Seconds.secondsBetween(DateTime.now, setPasswordResponse.expiresAt).getSeconds)
       val secureHttpOnly = cookie.key.startsWith("SC_")
