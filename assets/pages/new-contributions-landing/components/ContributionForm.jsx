@@ -34,7 +34,7 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
   emailRegexPattern,
-} from '../formValidation';
+} from 'helpers/formValidation';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
