@@ -10,7 +10,6 @@ import {
   type PaymentAuthorisation,
   regularPaymentFieldsFromAuthorisation,
   type PaymentResult,
-  PaymentSuccess,
   postRegularPaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
@@ -38,7 +37,7 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler } }
+  | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler } }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -92,8 +91,8 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
-const isPaymentReady = (paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler }): Action =>
-  ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandler: paymentHandler || null });
+const isPaymentReady = (paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler }): Action =>
+  ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandlers: paymentHandlers || null });
 
 
 const getAmount = (state: State) =>
@@ -138,6 +137,10 @@ const regularPaymentRequestFromAuthorisation = (
   supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
 });
 
+// A PaymentResult represents the end state of the checkout process,
+// standardised across payment methods & contribution types.
+// This will execute at the end of every checkout, with the exception
+// of PayPal one-off where this happens on the backend after the user is redirected to our site.
 const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     paymentResult.then((result) => {
@@ -183,36 +186,19 @@ const onCreateOneOffPayPalPaymentResponse =
       });
     };
 
+// The steps for one-off payment can be summarised as follows:
+// 1. Create a payment
+// 2. Authorise a payment
+// 3. Execute a payment (money is actually taken at this point)
+//
+// For PayPal: we do 1 clientside, they do 2, we do 3 but serverside
+// For Stripe: they do 1 & 2, we do 3 clientside.
+//
+// So from the clientside perspective, for one-off we just see "create payment" for PayPal
+// and "execute payment" for Stripe, and these are not synonymous.
 const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
   (dispatch: Dispatch<Action>): void => {
     dispatch(onCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
-  };
-
-const setupRegularPayment = (data: RegularPaymentRequest) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
-    const state = getState();
-
-    switch (state.page.form.paymentMethod) {
-      case 'Stripe':
-      case 'DirectDebit':
-        dispatch(onPaymentResult(postRegularPaymentRequest(
-          data,
-          state.common.abParticipations,
-          state.page.csrf,
-          (token: string) => dispatch(setGuestAccountCreationToken(token)),
-          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
-        )));
-        return;
-
-      case 'PayPal':
-        // TODO
-        dispatch(onPaymentResult(Promise.resolve(PaymentSuccess)));
-        return;
-
-      case 'None':
-      default:
-        dispatch(paymentFailure('No payment method selected'));
-    }
   };
 
 const executeStripeOneOffPayment = (data: StripeChargeData) =>
@@ -220,28 +206,60 @@ const executeStripeOneOffPayment = (data: StripeChargeData) =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
   };
 
+function recurringPaymentAuthorisationHandler(
+  dispatch: Dispatch<Action>,
+  state: State,
+  paymentAuthorisation: PaymentAuthorisation,
+): void {
+  const request = regularPaymentRequestFromAuthorisation(paymentAuthorisation, state);
+
+  dispatch(onPaymentResult(postRegularPaymentRequest(
+    request,
+    state.common.abParticipations,
+    state.page.csrf,
+    (token: string) => dispatch(setGuestAccountCreationToken(token)),
+    (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+  )));
+}
+
+const recurringPaymentAuthorisationHandlers: {
+  [PaymentMethod]: (Dispatch<Action>, State, PaymentAuthorisation) => void
+} = {
+  // These are all the same because there's a single endpoint in
+  // support-frontend which handles all requests to create a recurring payment
+  PayPal: recurringPaymentAuthorisationHandler,
+  Stripe: recurringPaymentAuthorisationHandler,
+  DirectDebit: recurringPaymentAuthorisationHandler,
+};
+
+const paymentAuthorisationHandlers: {
+  [Contrib]: {
+    [PaymentMethod]: (Dispatch<Action>, State, PaymentAuthorisation) => void
+  }
+} = {
+  ONE_OFF: {
+    PayPal: () => {
+      // No handler required.
+      // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
+      // endpoint, after PayPal redirects the browser back to our site.
+    },
+    Stripe: (dispatch: Dispatch<Action>, state: State, paymentAuthorisation: PaymentAuthorisation): void => {
+      dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
+    },
+  },
+  ANNUAL: recurringPaymentAuthorisationHandlers,
+  MONTHLY: recurringPaymentAuthorisationHandlers,
+};
+
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
 
-    switch (state.page.form.contributionType) {
-      case 'ONE_OFF':
-        // Why no mention of PayPal?
-        // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
-        // endpoint, after PayPal redirects the browser back to our site.
-        if (state.page.form.paymentMethod === 'Stripe') {
-          dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
-        }
-        return;
-
-      case 'ANNUAL':
-      case 'MONTHLY':
-        dispatch(setupRegularPayment(regularPaymentRequestFromAuthorisation(paymentAuthorisation, state)));
-        return;
-
-      default:
-        dispatch(paymentFailure(`Invalid contribute type ${state.page.form.contributionType}`));
-    }
+    paymentAuthorisationHandlers[state.page.form.contributionType][state.page.form.paymentMethod](
+      dispatch,
+      state,
+      paymentAuthorisation,
+    );
   };
 
 
