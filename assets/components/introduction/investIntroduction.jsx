@@ -14,32 +14,32 @@ function InvestIntroduction() {
   return (
     <section className="component-invest-introduction">
       <div className="component-invest-introduction__content">
-      <GridPicture
-        sources={[
-          {
-            gridId: 'investHeaderMobile',
-            srcSizes: [140, 500, 1000, 1875],
-            sizes: '100vw',
-            media: '(max-width: 659px)',
-          },
-          {
-            gridId: 'investHeaderDesktop',
-            srcSizes: [140, 500, 1000, 2000],
-            sizes: '(min-width: 1140px) 1500px, (min-width: 980px) 1200px, (min-width: 740px) 1000px, (min-width: 660px) 800px, 100vw',
-            media: '(min-width: 660px)',
-          },
-        ]}
-        fallback="investHeaderDesktop"
-        fallbackSize={2000}
-        fallbackImgType="jpg"
-      />
         <Highlights
           highlights={['You invest,', 'we investigate']}
           headingSize={1}
           modifierClasses={['invest-heading']}
         />
+        <GridPicture
+          sources={[
+            {
+              gridId: 'investHeaderMobile',
+              srcSizes: [140, 500, 1000, 1875],
+              sizes: '500px',
+              media: '(max-width: 659px)',
+            },
+            {
+              gridId: 'investHeaderDesktop',
+              srcSizes: [140, 500, 1000, 2000],
+              sizes: '(min-width: 1140px) 1500px, (min-width: 980px) 1200px, (min-width: 740px) 1000px, (min-width: 660px) 800px, 100vw',
+              media: '(min-width: 660px)',
+            },
+          ]}
+          fallback="investHeaderDesktop"
+          fallbackSize={2000}
+          fallbackImgType="jpg"
+        />
         <Highlights
-          highlights={['Subscriptions from The Guardian']}
+          highlights={['Subscriptions from the Guardian']}
           headingSize={2}
           modifierClasses={['invest-sub-heading']}
         />

@@ -1,31 +1,26 @@
 .component-invest-introduction {
   background: gu-colour(campaign-blue);
-  font-family: $gu-headline;
-  font-weight: bold;
-  font-size: 28px;
-  line-height: 32px;
-  overflow: hidden;
-  position: relative;
-
-  @include mq($from: tablet) {
-    height: 368px;
-  }
-
-  @include mq($from: desktop) {
-    height: 448px;
-  }
-
-  @include mq($from: leftCol) {
-    height: 550px;
-  }
+  overflow-y: hidden;
 
   .component-grid-picture {
+    margin: 0 auto;
     position: relative;
     z-index: 1;
+    top: -193px;
+    @include mq($from: mobileLandscape) {
+      top: -154px;
+      left: 18px;
+    }
+    @include mq($from: phablet) {
+      top: -66px;
+      left: -64px;
+    }
     @include mq($from: tablet) {
+      top: -156px;
       left: -82px;
     }
     @include mq($from: desktop) {
+      top: -145px;
       left: -102px;
     }
     @include mq($from: leftCol) {
@@ -34,54 +29,73 @@
   }
 
   .component-highlights {
+    font-family: $gu-headline;
+    font-weight: bold;
     z-index: 2;
-    position: relative;
     display: block;
-    margin-left: 18px;
-    @include mq($from: tablet) {
-      top: -375px;
+
+    @include mq($from: mobileLandscape) {
+      margin-left: 18px;
     }
-    @include mq($from: desktop) {
-      top: -450px;
-    }
-    @include mq($from: leftCol) {
-      top: -558px;
-    }
+  }
+
+  .component-highlights__highlight {
+    padding: 6px 8px;
   }
 }
 
-.component-invest-introduction__content {
-  margin: 0 auto;
+.component-highlights--invest-heading{
+  font-size: 34px;
+  line-height: 36px;
+  position: relative;
   @include mq($from: tablet) {
+    font-size: 50px;
+    line-height: 58px;
+  }
+}
+
+.component-highlights--invest-sub-heading{
+  font-size: 24px;
+  line-height: 26px;
+  position: absolute;
+  bottom: 0;
+  margin-top: -139px;
+  @include mq($from: tablet) {
+    font-size: 28px;
+    line-height: 32px;
+  }
+}
+
+
+.component-invest-introduction__content {
+  width: 100%;
+  position: relative;
+  height: 300px;
+  margin: 0 auto;
+  @include mq($from: mobileLandscape) {
+    height: 340px;
+    width: gu-breakpoint(mobileLandscape);
+  }
+  @include mq($from: phablet) {
+    height: 340px;
+    width: gu-breakpoint(phablet);
+  }
+  @include mq($from: tablet) {
+    height: 368px;
     width: gu-breakpoint(tablet);
   }
 
   @include mq($from: desktop) {
+    height: 448px;
     width: gu-breakpoint(desktop);
   }
 
   @include mq($from: leftCol) {
+    height: 550px;
     width: gu-breakpoint(leftCol);
   }
 
   @include mq($from: wide) {
     width: gu-breakpoint(wide);
-  }
-}
-
-.component-highlights__highlight--invest-heading{
-  font-size: 50px;
-  line-height: 56px;
-}
-
-.component-highlights__highlight--invest-sub-heading{
-  @include mq($from: tablet) {
-    margin-top: 203px;
-  }
-  @include mq($from: desktop) {
-    margin-top: 283px;
-  }
-  @include mq($from: leftCol) {
-    margin-top: 383px;
   }
 }
