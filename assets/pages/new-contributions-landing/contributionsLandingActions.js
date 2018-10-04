@@ -84,6 +84,49 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const isPaymentReady = (paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler }): Action =>
   ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandler: paymentHandler || null });
 
+
+const getAmount = (state: State) =>
+  parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
+    ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
+    : state.page.form.selectedAmounts[state.page.form.contributionType].value);
+
+const stripeChargeDataFromAuthorisation = (
+  authorisation: PaymentAuthorisation,
+  state: State,
+): StripeChargeData => ({
+  paymentData: {
+    currency: state.common.internationalisation.currencyId,
+    amount: getAmount(state),
+    token: authorisation.paymentMethod === 'Stripe' ? authorisation.token : '',
+    email: state.page.form.formData.email || '',
+  },
+  acquisitionData: derivePaymentApiAcquisitionData(
+    state.common.referrerAcquisitionData,
+    state.common.abParticipations,
+    state.common.optimizeExperiments,
+  ),
+});
+
+const regularPaymentRequestFromAuthorisation = (
+  authorisation: PaymentAuthorisation,
+  state: State,
+): RegularPaymentRequest => ({
+  firstName: state.page.form.formData.firstName || '',
+  lastName: state.page.form.formData.lastName || '',
+  country: state.common.internationalisation.countryId,
+  state: state.page.form.formData.state,
+  email: state.page.form.formData.email || '',
+  contribution: {
+    amount: getAmount(state),
+    currency: state.common.internationalisation.currencyId,
+    billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
+  },
+  paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
+  ophanIds: getOphanIds(),
+  referrerAcquisitionData: state.common.referrerAcquisitionData,
+  supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
+});
+
 const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     paymentResult.then((result) => {
@@ -165,49 +208,6 @@ const executeStripeOneOffPayment = (data: StripeChargeData) =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
   };
 
-
-const getAmount = (state: State) =>
-  parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
-    ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
-    : state.page.form.selectedAmounts[state.page.form.contributionType].value);
-
-const stripeChargeDataFromAuthorisation = (
-  authorisation: PaymentAuthorisation,
-  state: State,
-): StripeChargeData => ({
-  paymentData: {
-    currency: state.common.internationalisation.currencyId,
-    amount: getAmount(state),
-    token: authorisation.paymentMethod === 'Stripe' ? authorisation.token : '',
-    email: state.page.form.formData.email || '',
-  },
-  acquisitionData: derivePaymentApiAcquisitionData(
-    state.common.referrerAcquisitionData,
-    state.common.abParticipations,
-    state.common.optimizeExperiments,
-  ),
-});
-
-const regularPaymentRequestFromAuthorisation = (
-  authorisation: PaymentAuthorisation,
-  state: State,
-): RegularPaymentRequest => ({
-  firstName: state.page.form.formData.firstName || '',
-  lastName: state.page.form.formData.lastName || '',
-  country: state.common.internationalisation.countryId,
-  state: state.page.form.formData.state,
-  email: state.page.form.formData.email || '',
-  contribution: {
-    amount: getAmount(state),
-    currency: state.common.internationalisation.currencyId,
-    billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
-  },
-  paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
-  ophanIds: getOphanIds(),
-  referrerAcquisitionData: state.common.referrerAcquisitionData,
-  supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
-});
-
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
@@ -231,6 +231,7 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
         dispatch(paymentFailure(`Invalid contribute type ${state.page.form.contributionType}`));
     }
   };
+
 
 export {
   updateContributionType,
