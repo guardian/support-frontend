@@ -32,7 +32,7 @@ function requestOptions(
   data: Object,
   credentials: Credentials,
   method: 'POST' | 'PUT' | 'PATCH',
-  csrf: CsrfState | null = null,
+  csrf: CsrfState | null,
 ): Object {
   return { ...getRequestOptions(credentials, csrf), method, body: JSON.stringify(data) };
 }
