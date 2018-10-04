@@ -10,6 +10,7 @@ import play.api.mvc._
 import play.api.libs.circe.Circe
 import services.IdentityService
 import cats.implicits._
+import config.Configuration.GuardianDomain
 import models.identity.responses.SetGuestPasswordResponseCookies
 
 import scala.concurrent.ExecutionContext
@@ -18,7 +19,7 @@ class IdentityController(
     identityService: IdentityService,
     components: ControllerComponents,
     actionRefiners: CustomActionBuilders,
-    guardianDomain: String
+    guardianDomain: GuardianDomain
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 

@@ -1,5 +1,6 @@
 package models.identity.responses
 
+import config.Configuration.GuardianDomain
 import org.joda.time.{DateTime, Seconds}
 import play.api.libs.json.{Json, Reads}
 import play.api.mvc.{Cookie => PlayCookie}
@@ -21,13 +22,13 @@ object SetGuestPasswordResponseCookies {
   implicit val readsCookieResponse: Reads[SetGuestPasswordResponseCookie] = Json.reads[SetGuestPasswordResponseCookie]
   implicit val readsCookiesResponse: Reads[SetGuestPasswordResponseCookies] = Json.reads[SetGuestPasswordResponseCookies]
 
-  def getCookies(setPasswordResponse: SetGuestPasswordResponseCookies, guardianDomain: String)
+  def getCookies(setPasswordResponse: SetGuestPasswordResponseCookies, guardianDomain: GuardianDomain)
                 (implicit executionContext: ExecutionContext): List[PlayCookie] = {
     setPasswordResponse.values.map { cookie =>
       val maxAge = Some(Seconds.secondsBetween(DateTime.now, setPasswordResponse.expiresAt).getSeconds)
       val secureHttpOnly = cookie.key.startsWith("SC_")
       val cookieMaxAgeOpt = maxAge.filterNot(_ => cookie.isSessionCookie)
-      PlayCookie(cookie.key, cookie.value, cookieMaxAgeOpt, "/", Some(guardianDomain), secureHttpOnly, secureHttpOnly)
+      PlayCookie(cookie.key, cookie.value, cookieMaxAgeOpt, "/", Some(guardianDomain.value), secureHttpOnly, secureHttpOnly)
     }
   }
 }
