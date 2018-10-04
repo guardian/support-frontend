@@ -3,7 +3,8 @@ package services
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
-import models.identity.{CookiesResponse, UserIdWithGuestAccountToken}
+import models.identity.UserIdWithGuestAccountToken
+import models.identity.responses.SetGuestPasswordResponseCookies
 import monitoring.SafeLogger
 import play.api.mvc.RequestHeader
 import org.joda.time.DateTime
@@ -27,9 +28,9 @@ class StubIdentityService extends IdentityService {
   def setPasswordGuest(
     password: String,
     guestAccountRegistrationToken: String
-  )(implicit ec: ExecutionContext): EitherT[Future, String, CookiesResponse] = {
+  )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies] = {
     SafeLogger.info("Stubbed identity service active. Returning true (Successful response from Identity Consent API) ")
-    EitherT.rightT[Future, String](CookiesResponse(DateTime.now(), List.empty))
+    EitherT.rightT[Future, String](SetGuestPasswordResponseCookies(DateTime.now(), List.empty))
   }
 
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {

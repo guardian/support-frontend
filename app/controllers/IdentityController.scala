@@ -10,7 +10,7 @@ import play.api.mvc._
 import play.api.libs.circe.Circe
 import services.IdentityService
 import cats.implicits._
-import models.identity.CookiesResponse
+import models.identity.responses.SetGuestPasswordResponseCookies
 
 import scala.concurrent.ExecutionContext
 
@@ -45,9 +45,9 @@ class IdentityController(
           SafeLogger.error(scrub"Failed to set password using guest account registration token ${request.body.guestAccountRegistrationToken}: ${err.toString}")
           InternalServerError
         },
-        cookies => {
+        cookiesFromResponse => {
           SafeLogger.info(s"Successfully set password using guest account registration token ${request.body.guestAccountRegistrationToken}")
-          Ok.withCookies(CookiesResponse.getCookies(cookies, guardianDomain): _*)
+          Ok.withCookies(SetGuestPasswordResponseCookies.getCookies(cookiesFromResponse, guardianDomain): _*)
         }
       )
   }

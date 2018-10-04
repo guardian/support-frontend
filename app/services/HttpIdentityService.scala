@@ -7,14 +7,15 @@ import cats.implicits._
 import com.google.common.net.InetAddresses
 import com.gu.identity.play.{IdMinimalUser, IdUser}
 import config.Identity
-import models.identity.{CookiesResponse, UserIdWithGuestAccountToken}
+import models.identity.UserIdWithGuestAccountToken
 import models.identity.requests.CreateGuestAccountRequestBody
-import models.identity.responses.{GuestRegistrationResponse, UserResponse}
+import models.identity.responses.{GuestRegistrationResponse, SetGuestPasswordResponseCookies, UserResponse}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
+
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -80,7 +81,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
   def setPasswordGuest(
     password: String,
     guestAccountRegistrationToken: String
-  )(implicit ec: ExecutionContext): EitherT[Future, String, CookiesResponse] = {
+  )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies] = {
     val payload = Json.obj("password" -> password)
     val headers =
       List("X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
@@ -91,7 +92,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
       .put(payload)
       .attemptT
       .leftMap(_.toString)
-      .subflatMap(resp => (resp.json \ "cookies").validate[CookiesResponse].asEither.leftMap(_.mkString(",")))
+      .subflatMap(resp => (resp.json \ "cookies").validate[SetGuestPasswordResponseCookies].asEither.leftMap(_.mkString(",")))
   }
 
   private def getHeaders(request: RequestHeader): List[(String, String)] = List(
@@ -180,6 +181,6 @@ trait IdentityService {
   def setPasswordGuest(
     password: String,
     guestAccountRegistrationToken: String
-  )(implicit ec: ExecutionContext): EitherT[Future, String, CookiesResponse]
+  )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies]
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
 }
