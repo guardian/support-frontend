@@ -130,17 +130,6 @@ const getAmount = (props: PropTypes) =>
     ? props.otherAmount
     : props.selectedAmounts[props.contributionType].value);
 
-const isNotEmpty: string => boolean = input => input.trim() !== '';
-const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
-const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
-const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
-const maxTwoDecimals: string => boolean = input => new RegExp('^\\d+\\.?\\d{0,2}$').test(input);
-
-const checkFirstName: string => boolean = isNotEmpty;
-const checkLastName: string => boolean = isNotEmpty;
-const checkState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
-const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
-
 // ----- Event handlers ----- //
 
 function onSubmit(props: PropTypes): Event => void {
