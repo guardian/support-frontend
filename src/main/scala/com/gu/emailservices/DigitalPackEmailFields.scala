@@ -57,7 +57,7 @@ case class DigitalPackEmailFields(
       "MandateID" -> directDebitMandateId.getOrElse("")
     )
     case _: CreditCardReferenceTransaction => List("Default payment method" -> "Credit/Debit Card")
-    case _ => Seq("Default payment method" -> "PayPal")
+    case _: PayPalReferenceTransaction => Seq("Default payment method" -> "PayPal")
   }
 
   override val fields = List(
