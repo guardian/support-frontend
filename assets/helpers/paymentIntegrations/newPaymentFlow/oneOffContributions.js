@@ -4,7 +4,7 @@ import { type PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { logPromise } from 'helpers/promise';
 import { logException } from 'helpers/logger';
-import { fetchJson, postRequestOptions } from 'helpers/fetch';
+import { fetchJson, requestOptions } from 'helpers/fetch';
 import * as cookie from 'helpers/cookie';
 import { addQueryParamsToURL } from 'helpers/url';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -114,7 +114,7 @@ function paymentResultFromObject(json: Object): Promise<PaymentResult> {
 function postOneOffStripeExecutePaymentRequest(data: StripeChargeData): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
-    postRequestOptions(data, 'omit', null),
+    requestOptions(data, 'omit', 'POST'),
   ).then(paymentResultFromObject));
 }
 
@@ -137,7 +137,7 @@ function createPayPalPaymentResponseFromObject(res: Object): CreatePayPalPayment
 function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Promise<CreatePayPalPaymentResponse> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
-    postRequestOptions(data, 'omit', null),
+    requestOptions(data, 'omit', 'POST'),
   )).then(createPayPalPaymentResponseFromObject)
     .catch(err => unexpectedError(`error creating a PayPal payment: ${err}`));
 }

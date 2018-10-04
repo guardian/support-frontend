@@ -11,9 +11,11 @@ import { type BillingPeriod } from 'helpers/contributions';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type CaState, type IsoCountry, type UsState } from 'helpers/internationalisation/country';
 import { logPromise, pollUntilPromise } from 'helpers/promise';
-import { fetchJson, getRequestOptions, postRequestOptions } from 'helpers/fetch';
+import { logException } from 'helpers/logger';
+import { fetchJson, getRequestOptions, requestOptions } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
 
+import { type ThankYouPageStage } from '../../../pages/new-contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -103,6 +105,7 @@ function checkRegularStatus(
   participations: Participations,
   csrf: CsrfState,
   setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
 ): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
     switch (json.status) {
@@ -127,6 +130,7 @@ function checkRegularStatus(
   return (json) => {
     if (json.guestAccountCreationToken) {
       setGuestAccountCreationToken(json.guestAccountCreationToken);
+      setThankYouPageStage('setPassword');
     }
     switch (json.status) {
       case 'pending':
@@ -152,15 +156,39 @@ function postRegularPaymentRequest(
   participations: Participations,
   csrf: CsrfState,
   setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     routes.recurringContribCreate,
-    postRequestOptions(data, 'same-origin', csrf),
-  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken)));
+    requestOptions(data, 'same-origin', 'POST', csrf),
+  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage)));
+}
+
+function setPasswordGuest(
+  password: string,
+  guestAccountRegistrationToken: string,
+  csrf: CsrfState,
+): Promise<boolean> {
+
+  const data = { password, guestAccountRegistrationToken };
+  return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestOptions(data, 'same-origin', 'PUT', csrf)))
+    .then((response) => {
+      if (response.status === 200) {
+        return true;
+      }
+      logException('/contribute/set-password-guest endpoint returned an error');
+      return false;
+
+    })
+    .catch(() => {
+      logException('Error while trying to interact with /contribute/set-password-guest');
+      return false;
+    });
 }
 
 export {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
   PaymentSuccess,
+  setPasswordGuest,
 };

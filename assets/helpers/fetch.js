@@ -27,13 +27,14 @@ function getRequestOptions(
   };
 }
 
-/** Builds a `RequestInit` object for use with POST requests using the Fetch API */
-function postRequestOptions(
+/** Builds a `RequestInit` object for the Fetch API */
+function requestOptions(
   data: Object,
   credentials: Credentials,
-  csrf: CsrfState | null,
+  method: 'POST' | 'PUT' | 'PATCH',
+  csrf: CsrfState | null = null,
 ): Object {
-  return { ...getRequestOptions(credentials, csrf), method: 'POST', body: JSON.stringify(data) };
+  return { ...getRequestOptions(credentials, csrf), method, body: JSON.stringify(data) };
 }
 
-export { fetchJson, getRequestOptions, postRequestOptions };
+export { fetchJson, getRequestOptions, requestOptions };

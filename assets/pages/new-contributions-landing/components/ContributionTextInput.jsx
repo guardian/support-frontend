@@ -18,7 +18,7 @@ type PropTypes = {
   value: string | null,
   errorMessage: string | null,
   isValid: boolean,
-  checkoutFormHasBeenSubmitted: boolean,
+  formHasBeenSubmitted: boolean,
   onInput: (Event => void) | void,
   required?: boolean,
   autoCapitalize: 'off' | 'none' | 'on' | 'sentences' | 'words',
@@ -27,13 +27,15 @@ type PropTypes = {
   min: number | void,
   max: number | void,
   step: number | void,
+  pattern: string | void,
   disabled: boolean,
 };
 
 // ----- Render ----- //
 
 function NewContributionTextInput(props: PropTypes) {
-  const showError = !props.isValid && props.checkoutFormHasBeenSubmitted;
+  const showError = !props.isValid && props.formHasBeenSubmitted;
+  const modifiersArray = showError ? ['invalid', props.id] : [props.id];
 
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
@@ -43,7 +45,7 @@ function NewContributionTextInput(props: PropTypes) {
       <span className="form__input-with-icon">
         <input
           id={props.id}
-          className={classNameWithModifiers('form__input', showError ? ['invalid'] : [])}
+          className={classNameWithModifiers('form__input', modifiersArray)}
           type={props.type}
           autoCapitalize={props.autoCapitalize}
           autoComplete={props.autoComplete}
@@ -54,6 +56,7 @@ function NewContributionTextInput(props: PropTypes) {
           value={props.value}
           min={props.min}
           max={props.max}
+          pattern={props.pattern}
           step={props.step}
           disabled={props.disabled}
         />
@@ -82,7 +85,10 @@ NewContributionTextInput.defaultProps = {
   max: undefined,
   min: undefined,
   step: undefined,
+  pattern: undefined,
   disabled: false,
+  formHasBeenSubmitted: false,
+  isValid: true,
 };
 
 export { NewContributionTextInput };

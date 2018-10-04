@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
+import { isDetailsSupported, polyfillDetails } from 'helpers/details';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -20,9 +21,12 @@ import { NewHeader } from 'components/headers/new-header/Header';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { NewContributionForm } from './components/ContributionForm';
-import { NewContributionThanks } from './components/ContributionThanks';
+import ContributionThankYouContainer from './components/ContributionThankYouContainer';
 import { NewContributionBackground } from './components/ContributionBackground';
 
+if (!isDetailsSupported) {
+  polyfillDetails();
+}
 
 // ----- Redux Store ----- //
 
@@ -80,7 +84,7 @@ const router = (
                 header={<NewHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
-                <NewContributionThanks />
+                <ContributionThankYouContainer />
                 <NewContributionBackground />
               </Page>
             );
