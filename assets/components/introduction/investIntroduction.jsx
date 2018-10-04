@@ -24,12 +24,14 @@ function InvestIntroduction() {
             {
               gridId: 'investHeaderMobile',
               srcSizes: [140, 500, 1000, 1875],
+              imgType: 'jpg',
               sizes: '500px',
               media: '(max-width: 659px)',
             },
             {
               gridId: 'investHeaderDesktop',
               srcSizes: [140, 500, 1000, 2000],
+              imgType: 'jpg',
               sizes: '(min-width: 1140px) 1500px, (min-width: 980px) 1200px, (min-width: 740px) 1000px, (min-width: 660px) 800px, 100vw',
               media: '(min-width: 660px)',
             },
@@ -39,7 +41,7 @@ function InvestIntroduction() {
           fallbackImgType="jpg"
         />
         <Highlights
-          highlights={['Subscriptions from the Guardian']}
+          highlights={['Support the Guardian']}
           headingSize={2}
           modifierClasses={['invest-sub-heading']}
         />
