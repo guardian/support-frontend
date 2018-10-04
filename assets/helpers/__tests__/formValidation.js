@@ -19,6 +19,10 @@ describe('formValidation', () => {
       expect(maxTwoDecimals('3.2')).toEqual(true);
     });
 
+    it('should return true for decimal point and no decimal places', () => {
+      expect(maxTwoDecimals('3.')).toEqual(true);
+    });
+
     it('should return true for two dp', () => {
       expect(maxTwoDecimals('3.22')).toEqual(true);
     });
@@ -30,5 +34,14 @@ describe('formValidation', () => {
     it('should return false for invalid number', () => {
       expect(maxTwoDecimals('3e22')).toEqual(false);
     });
+
+    it('should return false for empty string', () => {
+      expect(maxTwoDecimals('')).toEqual(false);
+    });
+
+    it('should return false for empty string', () => {
+      expect(maxTwoDecimals('-12')).toEqual(false);
+    });
+
   });
 });
