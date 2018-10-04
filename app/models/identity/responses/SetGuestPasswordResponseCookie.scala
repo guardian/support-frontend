@@ -7,12 +7,13 @@ import play.api.mvc.{Cookie => PlayCookie}
 
 import scala.concurrent.ExecutionContext
 
-// Models a cookie from the cookies field of a successful response from the set guest password identity endpoint
+// Models a cookie from the cookies field of a successful response from the set guest password endpoint
+// of the identity api
 case class SetGuestPasswordResponseCookie(key: String, value: String, sessionCookie: Option[Boolean] = None) {
   val isSessionCookie = sessionCookie.getOrElse(false)
 }
 
-// Models the cookies field of a successful response from the set guest password identity endpoint
+// Models the cookies field of a successful response from the set guest password endpoint of the identity api
 case class SetGuestPasswordResponseCookies(expiresAt: DateTime, values: List[SetGuestPasswordResponseCookie])
 
 object SetGuestPasswordResponseCookies {
