@@ -54,6 +54,7 @@ function ContributionSubmit(props: PropTypes) {
     return (
       <div className="form__submit">
         {showPayPalExpressButton ? (
+          // TODO PayPal recurring
           <button disabled={props.isWaiting}>PayPal Express Button</button>
         ) : (
           <button disabled={props.isWaiting} className="form__submit-button" type="submit">

@@ -77,7 +77,7 @@ type PropTypes = {|
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
   isSignedIn: boolean,
-  paymentHandler: { [PaymentMethod]: PaymentHandler | null },
+  paymentHandlers: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
@@ -111,7 +111,7 @@ const mapStateToProps = (state: State) => ({
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
   isSignedIn: state.page.user.isSignedIn,
-  paymentHandler: state.page.form.paymentHandler,
+  paymentHandlers: state.page.form.paymentHandlers,
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
@@ -143,6 +143,40 @@ const getAmount = (props: PropTypes) =>
 
 // ----- Event handlers ----- //
 
+function openStripePopup(props: PropTypes) {
+  if (props.paymentHandlers.Stripe) {
+    openDialogBox(props.paymentHandlers.Stripe, getAmount(props), props.email);
+  }
+}
+
+const formHandlersForRecurring: {[PaymentMethod]: (props: PropTypes) => void} = {
+  PayPal: () => { /* TODO PayPal recurring */ },
+  Stripe: openStripePopup,
+  DirectDebit: (props: PropTypes) => { props.openDirectDebitPopUp(); },
+};
+
+const formHandlers: {
+  [Contrib]: {
+    [PaymentMethod]: (props: PropTypes) => void
+  }
+} = {
+  ONE_OFF: {
+    PayPal: (props: PropTypes) => {
+      props.setPaymentIsWaiting(true);
+      props.createOneOffPayPalPayment({
+        currency: props.currency,
+        amount: getAmount(props),
+        returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+        // TODO: use new cancel url
+        cancelURL: payPalCancelUrl(props.countryGroupId),
+      });
+    },
+    Stripe: openStripePopup,
+  },
+  ANNUAL: formHandlersForRecurring,
+  MONTHLY: formHandlersForRecurring,
+};
+
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
@@ -151,39 +185,8 @@ function onSubmit(props: PropTypes): Event => void {
     if (!(event.target: any).checkValidity()) {
       return;
     }
-    const amount = getAmount(props);
-    const { email } = props;
 
-    if (props.paymentHandler) {
-      switch (props.paymentMethod) {
-        case 'DirectDebit':
-          props.openDirectDebitPopUp();
-          break;
-
-        case 'PayPal':
-          if (props.contributionType === 'ONE_OFF') {
-            // Displays the processing transaction, please wait screen
-            props.setPaymentIsWaiting(true);
-            props.createOneOffPayPalPayment({
-              currency: props.currency,
-              amount,
-              returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
-              // TODO: use new cancel url
-              cancelURL: payPalCancelUrl(props.countryGroupId),
-            });
-          } else {
-            // TODO
-          }
-          break;
-
-        case 'Stripe':
-        default:
-          if (props.paymentHandler.Stripe) {
-            openDialogBox(props.paymentHandler.Stripe, amount, email);
-          }
-          break;
-      }
-    }
+    formHandlers[props.contributionType][props.paymentMethod](props);
   };
 }
 
