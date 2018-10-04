@@ -80,7 +80,7 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
   isDirectDebitPopUpOpen: boolean,
-  createOneOffPayPalPayment: () => void,
+  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   currency: IsoCurrency,
 |};
 
@@ -120,36 +120,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
-  // Not intended to be called by component.
-  // Only used to implement createOneOffPayPalPayment in mergeProps()
-  _createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
 });
 
-
-// TODO: some type-safety
-const getAmount = (props: Object) =>
-  parseFloat(props.selectedAmounts[props.contributionType] === 'other'
-    ? props.otherAmount
-    : props.selectedAmounts[props.contributionType].value);
-
-
-const mergeProps = (stateProps, dispatchProps, ownProps) => ({
-  ...stateProps,
-  ...dispatchProps,
-  ...ownProps,
-  // TODO: is it a good idea putting this function here?
-  // Allows the component to create a payment without having to think directly about what arguments are required.
-  createOneOffPayPalPayment: () => {
-    /* eslint-disable no-underscore-dangle */
-    dispatchProps._createOneOffPayPalPayment({
-      currency: stateProps.currency,
-      amount: getAmount(stateProps),
-      returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
-      // TODO: use new cancel url
-      cancelURL: payPalCancelUrl(stateProps.countryGroupId),
-    });
-  },
-});
 
 // ----- Functions ----- //
 
@@ -162,6 +135,14 @@ const checkFirstName: string => boolean = isNotEmpty;
 const checkLastName: string => boolean = isNotEmpty;
 const checkState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
 const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
+
+// TODO: we've got this and a similar function in contributionLandingActions
+// I think a better model would be to represent the amount as a number in
+// the state, and use this logic to keep it in sync with the view-level selectedAmounts and otherAmounts.
+const getAmount = (props: PropTypes) =>
+  parseFloat(props.selectedAmounts[props.contributionType] === 'other'
+    ? props.otherAmount
+    : props.selectedAmounts[props.contributionType].value);
 
 // ----- Event handlers ----- //
 
@@ -186,8 +167,13 @@ function onSubmit(props: PropTypes): Event => void {
           if (props.contributionType === 'ONE_OFF') {
             // Displays the processing transaction, please wait screen
             props.setPaymentIsWaiting(true);
-            // Hey Joe - this didn't appear to be working with amount type other, but as seemed to of fixed itself (?)
-            props.createOneOffPayPalPayment();
+            props.createOneOffPayPalPayment({
+              currency: props.currency,
+              amount,
+              returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+              // TODO: use new cancel url
+              cancelURL: payPalCancelUrl(props.countryGroupId),
+            });
           } else {
             // TODO
           }
@@ -310,6 +296,6 @@ ContributionForm.defaultProps = {
   error: null,
 };
 
-const NewContributionForm = connect(mapStateToProps, mapDispatchToProps, mergeProps)(ContributionForm);
+const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
 
 export { NewContributionForm };
