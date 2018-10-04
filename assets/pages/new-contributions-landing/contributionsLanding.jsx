@@ -21,7 +21,7 @@ import { NewHeader } from 'components/headers/new-header/Header';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { NewContributionForm } from './components/ContributionForm';
-import { NewContributionThanks } from './components/ContributionThanks';
+import ContributionThankYouContainer from './components/ContributionThankYouContainer';
 import { NewContributionBackground } from './components/ContributionBackground';
 
 if (!isDetailsSupported) {
@@ -84,7 +84,7 @@ const router = (
                 header={<NewHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
-                <NewContributionThanks />
+                <ContributionThankYouContainer />
                 <NewContributionBackground />
               </Page>
             );

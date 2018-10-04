@@ -16,7 +16,7 @@ import {
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { derivePaymentApiAcquisitionData, getSupportAbTests, getOphanIds } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
-import { type State, type UserFormData } from './contributionsLandingReducer';
+import { type State, type UserFormData, type ThankYouPageStage } from './contributionsLandingReducer';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib, paymentMethodToSelect: PaymentMethod }
@@ -24,6 +24,7 @@ export type Action =
   | { type: 'UPDATE_FIRST_NAME', firstName: string }
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
+  | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
   | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler } }
@@ -33,7 +34,9 @@ export type Action =
   | { type: 'PAYMENT_FAILURE', error: string }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
+  | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
+  | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'PAYMENT_SUCCESS' };
 
 const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action =>
@@ -48,6 +51,8 @@ const updateLastName = (lastName: string): Action => ({ type: 'UPDATE_LAST_NAME'
 
 const updateEmail = (email: string): Action => ({ type: 'UPDATE_EMAIL', email });
 
+const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
+
 const updateUserFormData = (userFormData: UserFormData): Action => ({ type: 'UPDATE_USER_FORM_DATA', userFormData });
 
 const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
@@ -59,6 +64,9 @@ const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Acti
 
 const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' });
 
+const setPasswordHasBeenSubmitted = (): Action => ({ type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' });
+
+
 const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
 
 const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
@@ -69,6 +77,9 @@ const paymentFailure = (error: string): Action => ({ type: 'PAYMENT_FAILURE', er
 
 const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
   ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
+
+const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
+  ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
 const isPaymentReady = (paymentReady: boolean, paymentHandler: ?{ [PaymentMethod]: PaymentHandler }): Action =>
   ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandler: paymentHandler || null });
@@ -101,7 +112,8 @@ const setupRegularPayment = (data: PaymentFields) =>
           data,
           state.common.abParticipations,
           state.page.csrf,
-          token => dispatch(setGuestAccountCreationToken(token)),
+          (token: string) => dispatch(setGuestAccountCreationToken(token)),
+          (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
         )));
         return;
 
@@ -228,4 +240,7 @@ export {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   setGuestAccountCreationToken,
+  setThankYouPageStage,
+  setPasswordHasBeenSubmitted,
+  updatePassword,
 };

@@ -13,7 +13,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
 import { config, type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
-import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
 import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
@@ -24,6 +23,17 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import Signout from 'components/signout/signout';
+
+import {
+  checkFirstName,
+  checkLastName,
+  checkState,
+  checkEmail,
+  isNotEmpty,
+  isSmallerOrEqual,
+  isLargerOrEqual,
+  emailRegexPattern,
+} from '../formValidation';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -119,15 +129,6 @@ const getAmount = (props: PropTypes) =>
     ? props.otherAmount
     : props.selectedAmounts[props.contributionType].value);
 
-const isNotEmpty: string => boolean = input => input.trim() !== '';
-const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
-const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
-const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
-
-const checkFirstName: string => boolean = isNotEmpty;
-const checkLastName: string => boolean = isNotEmpty;
-const checkState: (string | null) => boolean = s => typeof s === 'string' && isNotEmpty(s);
-const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
 
 // ----- Event handlers ----- //
 
@@ -177,15 +178,15 @@ function ContributionForm(props: PropTypes) {
     checkoutFormHasBeenSubmitted,
   } = props;
 
-  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
-    props.onWaiting(true);
-    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
-  };
-
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input);
+
+  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
+    props.onWaiting(true);
+    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
+  };
 
   return props.paymentComplete ?
     <Redirect to={thankYouRoute} />
@@ -211,7 +212,8 @@ function ContributionForm(props: PropTypes) {
             icon={<SvgEnvelope />}
             onInput={props.updateEmail}
             isValid={checkEmail(email)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            pattern={emailRegexPattern}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide a valid email address"
             required
             disabled={isSignedIn}
@@ -227,7 +229,7 @@ function ContributionForm(props: PropTypes) {
             autoCapitalize="words"
             onInput={props.updateFirstName}
             isValid={checkFirstName(firstName)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your first name"
             required
           />
@@ -241,7 +243,7 @@ function ContributionForm(props: PropTypes) {
             autoCapitalize="words"
             onInput={props.updateLastName}
             isValid={checkLastName(lastName)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your last name"
             required
           />
@@ -249,7 +251,7 @@ function ContributionForm(props: PropTypes) {
             onChange={props.updateState}
             selectedState={state}
             isValid={checkState(state)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide a state"
           />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
