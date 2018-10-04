@@ -101,6 +101,39 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
     });
   };
 
+const onCreateOneOffPayPalPaymentResponse =
+  (paymentResult: Promise<CreatePayPalPaymentResponse>) =>
+    (dispatch: Dispatch<Action>, getState: () => State): void => {
+      paymentResult.then((result: CreatePayPalPaymentResponse) => {
+        const state = getState();
+
+        const acquisitionData = derivePaymentApiAcquisitionData(
+          state.common.referrerAcquisitionData,
+          state.common.abParticipations,
+          state.common.optimizeExperiments,
+        );
+
+        // We've only created a payment at this point, and the user has to get through
+        // the PayPal flow on their site before we can actually try and execute the payment.
+        // So we drop a cookie which will be used by the /paypal/rest/return endpoint
+        // that the user returns to from PayPal, if payment is successful.
+        cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
+
+        if (result.type === 'success') {
+          window.location.href = result.data.approvalUrl;
+        }
+
+        // For PayPal create payment errors, the Payment API passes through the
+        // error from PayPal's API which we don't want to expose to the user.
+        dispatch(paymentFailure('There was an error with your payment'));
+      });
+    };
+
+const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
+  (dispatch: Dispatch<Action>): void => {
+    dispatch(onCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
+  };
+
 const setupRegularPayment = (data: RegularPaymentRequest) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     const state = getState();
@@ -132,49 +165,20 @@ const executeStripeOneOffPayment = (data: StripeChargeData) =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
   };
 
-const handleCreateOneOffPayPalPaymentResponse =
-  (paymentResult: Promise<CreatePayPalPaymentResponse>) =>
-    (dispatch: Dispatch<Action>, getState: () => State): void => {
-      paymentResult.then((result: CreatePayPalPaymentResponse) => {
-        const state = getState();
-
-        const acquisitionData = derivePaymentApiAcquisitionData(
-          state.common.referrerAcquisitionData,
-          state.common.abParticipations,
-          state.common.optimizeExperiments,
-        );
-
-        // We've only created a payment at this point, and the user has to get through
-        // the PayPal flow on their site before we can actually try and execute the payment.
-        // So we drop a cookie which will be used by the /paypal/rest/return endpoint
-        // that the user returns to from PayPal, if payment is successful.
-        cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
-
-        if (result.type === 'success') {
-          window.location.href = result.data.approvalUrl;
-        }
-
-        // For PayPal create payment errors, the Payment API passes through the
-        // error from PayPal's API which we don't want to expose to the user.
-        dispatch(paymentFailure('There was an error with your payment'));
-      });
-    };
-
-const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
-  (dispatch: Dispatch<Action>): void => {
-    dispatch(handleCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
-  };
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
     ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
     : state.page.form.selectedAmounts[state.page.form.contributionType].value);
 
-const makeStripeOneOffPaymentData = (token: PaymentAuthorisation, state: State): StripeChargeData => ({
+const stripeChargeDataFromAuthorisation = (
+  authorisation: PaymentAuthorisation,
+  state: State,
+): StripeChargeData => ({
   paymentData: {
     currency: state.common.internationalisation.currencyId,
     amount: getAmount(state),
-    token: token.paymentMethod === 'Stripe' ? token.token : '',
+    token: authorisation.paymentMethod === 'Stripe' ? authorisation.token : '',
     email: state.page.form.formData.email || '',
   },
   acquisitionData: derivePaymentApiAcquisitionData(
@@ -184,7 +188,10 @@ const makeStripeOneOffPaymentData = (token: PaymentAuthorisation, state: State):
   ),
 });
 
-const makeRegularPaymentRequest = (authorisation: PaymentAuthorisation, state: State): RegularPaymentRequest => ({
+const regularPaymentRequestFromAuthorisation = (
+  authorisation: PaymentAuthorisation,
+  state: State,
+): RegularPaymentRequest => ({
   firstName: state.page.form.formData.firstName || '',
   lastName: state.page.form.formData.lastName || '',
   country: state.common.internationalisation.countryId,
@@ -211,13 +218,13 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
         // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
         // endpoint, after PayPal redirects the browser back to our site.
         if (state.page.form.paymentMethod === 'Stripe') {
-          dispatch(executeStripeOneOffPayment(makeStripeOneOffPaymentData(paymentAuthorisation, state)));
+          dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
         }
         return;
 
       case 'ANNUAL':
       case 'MONTHLY':
-        dispatch(setupRegularPayment(makeRegularPaymentRequest(paymentAuthorisation, state)));
+        dispatch(setupRegularPayment(regularPaymentRequestFromAuthorisation(paymentAuthorisation, state)));
         return;
 
       default:
