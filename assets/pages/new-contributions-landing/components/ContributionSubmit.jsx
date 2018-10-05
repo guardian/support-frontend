@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
-import { getPaymentDescription} from 'helpers/checkouts';
+import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
