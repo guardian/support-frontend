@@ -13,8 +13,12 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
 import { config, type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
-import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getAbsoluteURL } from 'helpers/url';
+import { routes, payPalCancelUrl } from 'helpers/routes';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -52,6 +56,7 @@ import {
   updateState,
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
+  createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 
 // ----- Types ----- //
@@ -77,12 +82,14 @@ type PropTypes = {|
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
-  onWaiting: boolean => void,
+  setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
-  isDirectDebitPopUpOpen: boolean
+  isDirectDebitPopUpOpen: boolean,
+  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
+  currency: IsoCurrency,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -108,6 +115,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
+  currency: state.common.internationalisation.currencyId,
 });
 
 
@@ -116,24 +124,28 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
-  onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
+  setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
+  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
 });
 
 // ----- Functions ----- //
 
+// TODO: we've got this and a similar function in contributionLandingActions
+// I think a better model would be to represent the amount as a number in
+// the state, and use this logic to keep it in sync with the view-level selectedAmounts and otherAmounts.
 const getAmount = (props: PropTypes) =>
   parseFloat(props.selectedAmounts[props.contributionType] === 'other'
     ? props.otherAmount
     : props.selectedAmounts[props.contributionType].value);
 
-
 // ----- Event handlers ----- //
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
+    // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     if (!(event.target: any).checkValidity()) {
@@ -149,7 +161,19 @@ function onSubmit(props: PropTypes): Event => void {
           break;
 
         case 'PayPal':
-          // TODO
+          if (props.contributionType === 'ONE_OFF') {
+            // Displays the processing transaction, please wait screen
+            props.setPaymentIsWaiting(true);
+            props.createOneOffPayPalPayment({
+              currency: props.currency,
+              amount,
+              returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+              // TODO: use new cancel url
+              cancelURL: payPalCancelUrl(props.countryGroupId),
+            });
+          } else {
+            // TODO
+          }
           break;
 
         case 'Stripe':
@@ -178,15 +202,15 @@ function ContributionForm(props: PropTypes) {
     checkoutFormHasBeenSubmitted,
   } = props;
 
+  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
+    props.setPaymentIsWaiting(true);
+    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
+  };
+
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input);
-
-  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
-    props.onWaiting(true);
-    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
-  };
 
   return props.paymentComplete ?
     <Redirect to={thankYouRoute} />

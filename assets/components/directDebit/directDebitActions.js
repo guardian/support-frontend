@@ -1,7 +1,7 @@
 // @flow
 
 import * as storage from 'helpers/storage';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 import { checkAccount } from './helpers/ajax';
 

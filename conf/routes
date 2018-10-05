@@ -93,6 +93,10 @@ GET  /paypal/cancel                                 controllers.PayPalRegular.ca
 
 # ----- PayPal (One-off Endpoints) ----- #
 
+# For PayPal one-off create a payment by sending a request to the payment API directly.
+# <payment-api-host>/contribute/one-off/paypal/create-payment
+# This requires return and cancel urls depending on whether the user authorized the payment or not.
+# https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
 GET  /paypal/rest/return                                controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String)
 GET  /paypal/rest/cancel                                controllers.PayPalOneOff.cancelURL
 GET  /paypal/rest/error                                 controllers.PayPalOneOff.paypalError

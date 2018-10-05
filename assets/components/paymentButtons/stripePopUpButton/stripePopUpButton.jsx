@@ -12,7 +12,7 @@ import {
   setupStripeCheckout,
   openDialogBox,
 } from 'helpers/paymentIntegrations/stripeCheckout';
-import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 
 // ---- Types ----- //
