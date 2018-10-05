@@ -39,31 +39,28 @@ export type AllContributionTypes<T> = RegularContributionTypes<T> & {
 export type RegularContributionType = $Keys<RegularContributionTypes<null>>;
 export type Contrib = $Keys<AllContributionTypes<null>>;
 
-export type AllContributionTypesAndPaymentMethods<T> = AllContributionTypes<AllPaymentMethods<T>>;
+export type PaymentMatrix<T> = AllContributionTypes<AllPaymentMethods<T>>;
 
 export const logInvalidCombination = (contributionType: Contrib, paymentMethod: PaymentMethod) => {
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
 };
 
-export const baseHandlers: AllContributionTypesAndPaymentMethods<() => void> = {
+const recurringBaseHandler = (contributionType: RegularContributionType) => ({
+  Stripe: () => {},
+  PayPal: () => {},
+  DirectDebit: () => {},
+  None: () => { logInvalidCombination(contributionType, 'None'); },
+});
+
+export const baseHandlers: PaymentMatrix<() => void> = {
   ONE_OFF: {
     Stripe: () => {},
     PayPal: () => {},
     DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
     None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
-  MONTHLY: {
-    Stripe: () => {},
-    PayPal: () => {},
-    DirectDebit: () => {},
-    None: () => { logInvalidCombination('MONTHLY', 'None'); },
-  },
-  ANNUAL: {
-    Stripe: () => {},
-    PayPal: () => {},
-    DirectDebit: () => {},
-    None: () => { logInvalidCombination('ANNUAL', 'None'); },
-  },
+  MONTHLY: recurringBaseHandler('MONTHLY'),
+  ANNUAL: recurringBaseHandler('ANNUAL'),
 };
 
 export type BillingPeriod = 'Monthly' | 'Annual';

@@ -15,7 +15,7 @@ import {
   config,
   type Contrib,
   type Amount,
-  type AllContributionTypesAndPaymentMethods,
+  type PaymentMatrix,
   type PaymentMethod,
   baseHandlers,
 } from 'helpers/contributions';
@@ -158,13 +158,16 @@ function openStripePopup(props: PropTypes) {
   }
 }
 
-const formHandlersForRecurring: {[PaymentMethod]: (props: PropTypes) => void} = {
+// Bizarrely, adding a type to this object means the type-checking on the
+// formHandlers is no longer accurate.
+// (Flow thinks it's OK when it's missing required properties).
+const formHandlersForRecurring = {
   PayPal: () => { /* TODO PayPal recurring */ },
   Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => { props.openDirectDebitPopUp(); },
 };
 
-const formHandlers: AllContributionTypesAndPaymentMethods<PropTypes => void> = {
+const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
     ...baseHandlers.ONE_OFF,
     Stripe: openStripePopup,
@@ -179,7 +182,7 @@ const formHandlers: AllContributionTypesAndPaymentMethods<PropTypes => void> = {
       });
     },
   },
-  MONTHLY: { ...baseHandlers.MONTHLY, ...formHandlersForRecurring },
+  MONTHLY: { ...baseHandlers.MONTHLY, formHandlersForRecurring },
   ANNUAL: { ...baseHandlers.ANNUAL, formHandlersForRecurring },
 };
 

@@ -7,7 +7,12 @@ import { connect } from 'react-redux';
 
 import { type PaymentHandler, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
 import { type Switches } from 'helpers/settings';
-import { type Contrib, type PaymentMethod } from 'helpers/contributions';
+import {
+  type Contrib,
+  type PaymentMethod,
+  type PaymentMatrix,
+  baseHandlers,
+} from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
@@ -70,23 +75,21 @@ function initialiseStripeCheckout(props: PropTypes) {
     .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
 }
 
-const recurringPaymentMethodInitialisers: {[PaymentMethod]: (props: PropTypes) => void} = {
+// Bizarrely, adding a type to this object means the type-checking on the
+// paymentMethodInitialisers is no longer accurate.
+// (Flow thinks it's OK when it's missing required properties).
+const recurringPaymentMethodInitialisers = {
   PayPal: () => { /* TODO PayPal recurring */ },
   Stripe: initialiseStripeCheckout,
-  DirectDebit: () => { /* no initialisation required */ },
 };
 
-const paymentMethodInitialisers: {
-  [Contrib]: {
-    [PaymentMethod]: (props: PropTypes) => void
-  }
-} = {
+const paymentMethodInitialisers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
-    PayPal: () => { /* no initialisation required */ },
+    ...baseHandlers.ONE_OFF,
     Stripe: initialiseStripeCheckout,
   },
-  ANNUAL: recurringPaymentMethodInitialisers,
-  MONTHLY: recurringPaymentMethodInitialisers,
+  ANNUAL: { ...baseHandlers.ANNUAL, ...recurringPaymentMethodInitialisers },
+  MONTHLY: { ...baseHandlers.MONTHLY, ...recurringPaymentMethodInitialisers },
 };
 
 
