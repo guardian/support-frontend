@@ -33,6 +33,7 @@ import {
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import { type OptimizeExperiments, getOptimizeExperiments } from 'helpers/tracking/optimize';
+import storeReferrer from 'helpers/tracking/awin';
 
 import { type Action } from './pageActions';
 
@@ -69,6 +70,7 @@ function doNotTrack(): boolean {
 function analyticsInitialisation(participations: Participations): void {
   if (!(doNotTrack())) {
     googleTagManager.init(participations);
+    storeReferrer();
   }
   // Logging.
   logger.init();
