@@ -61,7 +61,11 @@ function initialiseStripeCheckout(props: PropTypes) {
     isTestUser,
   } = props;
 
-  // TODO IMPORTANT: we pass the contributionType to
+  // TODO IMPORTANT: we need to initialise Stripe separately for one-off and recurring
+  // I think this requires us to make
+  // paymentHandlers: { [PaymentMethod]: PaymentHandler | null }
+  // into
+  // paymentHandlers: { [Contrib]: {[PaymentMethod]: PaymentHandler | null }}
   setupStripeCheckout(onPaymentAuthorisation, contributionType, currency, isTestUser)
     .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
 }
