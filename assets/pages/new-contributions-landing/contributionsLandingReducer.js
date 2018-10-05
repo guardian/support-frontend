@@ -24,8 +24,6 @@ export type UserFormData = {
   email: string | null,
 }
 
-
-
 export type ThankYouPageStageMap<T> = {
   setPassword: T,
   thankYou: T,
