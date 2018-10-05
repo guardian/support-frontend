@@ -54,14 +54,15 @@ export default function ContributionsThankYouPage(props: PropTypes) {
 function BodyCopy(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
     return <ContributionsSurveySection />;
-  } else if (props.directDebit) {
-    return (
-      <div className="component-direct-debit-details__container">
-        <DirectDebitDetails {...props.directDebit} />
-        <ContributionsSurveySection />
-      </div>
-    );
-  } else {
-    return <EmailConfirmation />;
+  } else { // recurring
+    if (props.directDebit) {
+      return (
+        <div className="component-direct-debit-details__container">
+          <DirectDebitDetails {...props.directDebit} />
+          <ContributionsSurveySection/>
+        </div>
+      );
+    }
+    return <EmailConfirmation/>;
   }
 }
