@@ -1,7 +1,7 @@
 package com.gu.emailservices
 
 import com.gu.i18n.Currency
-import com.gu.support.workers.model.{BillingPeriod, DirectDebitPaymentMethod, PaymentMethod}
+import com.gu.support.workers.model._
 import org.joda.time.DateTime
 import com.gu.salesforce.Salesforce.SfContactId
 
@@ -14,12 +14,12 @@ case class ContributionEmailFields(
     name: String,
     billingPeriod: BillingPeriod,
     sfContactId: SfContactId,
-    paymentMethod: Option[PaymentMethod] = None,
+    paymentMethod: PaymentMethod,
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 
   val paymentFields = paymentMethod match {
-    case Some(dd: DirectDebitPaymentMethod) => List(
+    case dd: DirectDebitPaymentMethod => List(
       "account name" -> dd.bankTransferAccountName,
       "account number" -> mask(dd.bankTransferAccountNumber),
       "sort code" -> hyphenate(dd.bankCode),
@@ -27,7 +27,8 @@ case class ContributionEmailFields(
       "first payment date" -> formatDate(created.plusDays(10)),
       "payment method" -> "Direct Debit"
     )
-    case _ => Nil
+    case _: PayPalReferenceTransaction => List("payment method" -> "paypal")
+    case _: CreditCardReferenceTransaction => List("payment method" -> "card")
   }
 
   override val fields = List(

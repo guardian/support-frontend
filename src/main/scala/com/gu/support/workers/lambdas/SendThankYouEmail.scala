@@ -52,7 +52,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           name = state.user.firstName,
           billingPeriod = state.product.billingPeriod,
           sfContactId = SfContactId(state.salesForceContact.Id),
-          paymentMethod = Some(state.paymentMethod),
+          paymentMethod = state.paymentMethod,
           directDebitMandateId = directDebitMandateId
         )
         case d: DigitalPack => DigitalPackEmailFields(
