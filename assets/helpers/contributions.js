@@ -38,29 +38,42 @@ export type Contrib = $Keys<AllContributionTypes<null>>;
 
 export type AllContributionTypesAndPaymentMethods<T> = AllContributionTypes<AllPaymentMethods<T>>;
 
-// const baseHandlers: AllContributionTypesAndPaymentMethods<() => void> = {
-//   ONE_OFF: {
-//     Stripe: () => {},
-//     PayPal: () => {},
-//     DirectDebit: () => {},
-//     None: () => {},
-//   },
-//   MONTHLY: {
-//     Stripe: () => {},
-//     PayPal: () => {},
-//     DirectDebit: () => {},
-//     None: () => {},
-//   },
-//   ANNUAL: {
-//     Stripe: () => {},
-//     PayPal: () => {},
-//     DirectDebit: () => {},
-//     None: () => {},
-//   },
-// };
-
 export const logInvalidCombination = (contributionType: Contrib, paymentMethod: PaymentMethod) => {
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
+};
+
+const baseHandlers: AllContributionTypesAndPaymentMethods<() => void> = {
+  ONE_OFF: {
+    Stripe: () => {},
+    PayPal: () => {},
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
+    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
+  },
+  MONTHLY: {
+    Stripe: () => {},
+    PayPal: () => {},
+    DirectDebit: () => {},
+    None: () => { logInvalidCombination('MONTHLY', 'None'); },
+  },
+  ANNUAL: {
+    Stripe: () => {},
+    PayPal: () => {},
+    DirectDebit: () => {},
+    None: () => { logInvalidCombination('ANNUAL', 'None'); },
+  },
+};
+
+// Unfortunately, object spread syntax doesn't work for nested objects
+// So you need to mix in and override ONE_OFF, MONTHLY and ANNUAL separately
+const oneOff = {
+  ...baseHandlers.ONE_OFF,
+  Stripe: () => { /* actual implementation */ },
+  PayPal: () => { /* actual implementation */ },
+};
+
+const allTheHandlers = {
+  ONE_OFF: oneOff,
+  // etc...
 };
 
 export type BillingPeriod = 'Monthly' | 'Annual';
