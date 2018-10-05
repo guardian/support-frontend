@@ -15,11 +15,11 @@ import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-
 import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient, StatusResponse}
 import services.{IdentityService, MembersDataService, TestUserService}
-import admin.{Settings, SettingsSurrogateKeySyntax, SettingsProvider}
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import config.Configuration.GuardianDomain
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +34,7 @@ class RegularContributions(
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
-    guardianDomain: String,
+    guardianDomain: GuardianDomain,
     settingsProvider: SettingsProvider
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 

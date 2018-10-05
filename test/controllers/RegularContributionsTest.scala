@@ -18,7 +18,6 @@ import play.api.Environment
 import assets.AssetsResolver
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-
 import services.stepfunctions.RegularContributionsClient
 import services.{HttpIdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
@@ -26,6 +25,7 @@ import com.gu.support.config._
 import fixtures.TestCSRFComponents
 import admin.SwitchState.On
 import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
+import config.Configuration.GuardianDomain
 
 class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
@@ -117,7 +117,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         stripeConfigProvider,
         payPalConfigProvider,
         stubControllerComponents(),
-        guardianDomain = ".thegulocal.com",
+        guardianDomain = GuardianDomain(".thegulocal.com"),
         settingsProvider
       )
     }

@@ -89,7 +89,8 @@ trait Controllers {
   lazy val identityController = new IdentityController(
     identityService,
     controllerComponents,
-    actionRefiners
+    actionRefiners,
+    appConfig.guardianDomain
   )
 
   lazy val directDebitController = new DirectDebit(

@@ -9,15 +9,17 @@ import monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
 import services.IdentityService
-import codecs.CirceDecoders._
 import cats.implicits._
+import config.Configuration.GuardianDomain
+import models.identity.responses.SetGuestPasswordResponseCookies
 
 import scala.concurrent.ExecutionContext
 
 class IdentityController(
     identityService: IdentityService,
     components: ControllerComponents,
-    actionRefiners: CustomActionBuilders
+    actionRefiners: CustomActionBuilders,
+    guardianDomain: GuardianDomain
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
@@ -27,10 +29,10 @@ class IdentityController(
     val result = identityService.sendConsentPreferencesEmail(request.body.email)
     result.map { res =>
       if (res) {
-        SafeLogger.info("Successfully sent consents preferences email")
+        SafeLogger.info(s"Successfully sent consents preferences email for ${request.body.email}")
         Ok
       } else {
-        SafeLogger.error(scrub"Failed to send consents preferences email")
+        SafeLogger.error(scrub"Failed to send consents preferences email for ${request.body.email}")
         InternalServerError
       }
     }
@@ -41,13 +43,12 @@ class IdentityController(
       .setPasswordGuest(request.body.password, request.body.guestAccountRegistrationToken)
       .fold(
         err => {
-          SafeLogger.error(scrub"Failed to set password: ${err.toString}")
+          SafeLogger.error(scrub"Failed to set password using guest account registration token ${request.body.guestAccountRegistrationToken}: ${err.toString}")
           InternalServerError
         },
-        cookies => {
-          SafeLogger.info("Successfully set password")
-          // TODO: add cookies to response header
-          Ok
+        cookiesFromResponse => {
+          SafeLogger.info(s"Successfully set password using guest account registration token ${request.body.guestAccountRegistrationToken}")
+          Ok.withCookies(SetGuestPasswordResponseCookies.getCookies(cookiesFromResponse, guardianDomain): _*)
         }
       )
   }

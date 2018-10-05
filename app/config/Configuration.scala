@@ -5,7 +5,7 @@ import cats.syntax.either._
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
-
+import config.Configuration.GuardianDomain
 import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
 import services.stepfunctions.StateMachineArn
@@ -23,7 +23,7 @@ class Configuration {
 
   lazy val aws = new AwsConfig(config.getConfig("aws"))
 
-  lazy val guardianDomain = config.getString("guardianDomain")
+  lazy val guardianDomain = GuardianDomain(config.getString("guardianDomain"))
 
   lazy val supportUrl = config.getString("support.url")
 
@@ -44,4 +44,8 @@ class Configuration {
   lazy val settingsSource: SettingsSource = SettingsSource.fromConfig(config).valueOr(throw _)
 
   lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
+}
+
+object Configuration {
+  case class GuardianDomain(value: String)
 }
