@@ -43,7 +43,7 @@ type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   paymentReady: boolean,
-  paymentHandler: {
+  paymentHandlers: {
     [PaymentMethod]: PaymentHandler | null
   },
   selectedAmounts: { [Contrib]: Amount | 'other' },
@@ -87,7 +87,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'None',
-    paymentHandler: {
+    paymentHandlers: {
       Stripe: null,
       DirectDebit: null,
       PayPal: null,
@@ -133,11 +133,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'UPDATE_PAYMENT_READY':
-        return action.paymentHandler
+        return action.paymentHandlers
           ? {
             ...state,
             paymentReady: action.paymentReady,
-            paymentHandler: { ...state.paymentHandler, ...action.paymentHandler },
+            paymentHandlers: { ...state.paymentHandlers, ...action.paymentHandlers },
           }
           : { ...state, paymentReady: action.paymentReady };
 

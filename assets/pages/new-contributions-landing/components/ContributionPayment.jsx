@@ -28,7 +28,7 @@ type PropTypes = {
   currency: IsoCurrency,
   paymentMethod: PaymentMethod,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-  paymentHandler: { [PaymentMethod]: PaymentHandler | null },
+  paymentHandlers: { [PaymentMethod]: PaymentHandler | null },
   updatePaymentMethod: PaymentMethod => Action,
   isPaymentReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,
   isTestUser: boolean,
@@ -41,7 +41,7 @@ const mapStateToProps = (state: State) => ({
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
-  paymentHandler: state.page.form.paymentHandler,
+  paymentHandlers: state.page.form.paymentHandlers,
   isTestUser: state.page.user.isTestUser || false,
   switches: state.common.settings.switches,
 });
@@ -53,37 +53,38 @@ const mapDispatchToProps = {
 
 // ----- Logic ----- //
 
-function setupPaymentMethod(props: PropTypes): void {
+function initialiseStripeCheckout(props: PropTypes) {
   const {
-    paymentMethod,
     onPaymentAuthorisation,
-    paymentHandler,
     contributionType,
     currency,
     isTestUser,
   } = props;
 
-  if (!paymentHandler[paymentMethod]) {
-    props.isPaymentReady(false);
-
-    switch (paymentMethod) {
-      case 'DirectDebit':
-        // TODO
-        break;
-
-      case 'PayPal':
-        // TODO
-        break;
-
-      case 'Stripe':
-        setupStripeCheckout(onPaymentAuthorisation, contributionType, currency, isTestUser)
-          .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
-        break;
-
-      default: break;
-    }
-  }
+  // TODO IMPORTANT: we pass the contributionType to
+  setupStripeCheckout(onPaymentAuthorisation, contributionType, currency, isTestUser)
+    .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
 }
+
+const recurringPaymentMethodInitialisers: {[PaymentMethod]: (props: PropTypes) => void} = {
+  PayPal: () => { /* TODO PayPal recurring */ },
+  Stripe: initialiseStripeCheckout,
+  DirectDebit: () => { /* no initialisation required */ },
+};
+
+const paymentMethodInitialisers: {
+  [Contrib]: {
+    [PaymentMethod]: (props: PropTypes) => void
+  }
+} = {
+  ONE_OFF: {
+    PayPal: () => { /* no initialisation required */ },
+    Stripe: initialiseStripeCheckout,
+  },
+  ANNUAL: recurringPaymentMethodInitialisers,
+  MONTHLY: recurringPaymentMethodInitialisers,
+};
+
 
 // ----- Render ----- //
 
@@ -92,7 +93,13 @@ function ContributionPayment(props: PropTypes) {
   const paymentMethods: PaymentMethod[] =
     getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
 
-  setupPaymentMethod(props);
+  // This means a particular payment method will only be initialised
+  // once its tab becomes active. If the tab is the default one selected,
+  // its payment methods will be initialised on page load.
+  const uninitialisedPaymentMethods = paymentMethods.filter(paymentMethod => !props.paymentHandlers[paymentMethod]);
+  uninitialisedPaymentMethods.forEach((paymentMethod) => {
+    paymentMethodInitialisers[props.contributionType][paymentMethod](props);
+  });
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
