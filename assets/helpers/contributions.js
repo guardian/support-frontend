@@ -11,27 +11,32 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
+import type {PaymentMethod} from "./checkouts";
+import {logException} from "./logger";
 
 // ----- Types ----- //
 
 export type RegularContributionType = 'ANNUAL' | 'MONTHLY';
 export type Contrib = RegularContributionType | 'ONE_OFF';
 
-export type AllOneOffPaymentMethods<T> = {
-  Stripe: T,
-  PayPal: T,
-}
-
-export type AllRecurringPaymentMethods<T> = {
+export type AllPaymentMethods<T> = {
   Stripe: T,
   PayPal: T,
   DirectDebit: T,
 }
 
-export type AllContributionTypesAndPaymentMethods<T> = {
-  ONE_OFF: AllOneOffPaymentMethods<T>,
-  MONTHLY: AllRecurringPaymentMethods<T>,
-  ANNUAL: AllRecurringPaymentMethods<T>,
+export type AllContributionTypes<T> = {
+  ONE_OFF: T,
+  MONTHLY: T,
+  ANNUAL: T,
+};
+
+export type AllContributionTypesAndPaymentMethods<T> = AllContributionTypes<AllPaymentMethods<T>>;
+
+
+
+export const logInvalidCombination = (contributionType: Contrib, paymentMethod: PaymentMethod) => {
+  logException(`Invalid combination of contribution type ${ContributionType} and payment method ${paymentMethod}`);
 };
 
 export type BillingPeriod = 'Monthly' | 'Annual';

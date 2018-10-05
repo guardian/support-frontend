@@ -11,7 +11,13 @@ import { type UsState, type CaState } from 'helpers/internationalisation/country
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
-import { config, type Contrib, type Amount } from 'helpers/contributions';
+import {
+  config,
+  logInvalidCombination,
+  type Contrib,
+  type Amount,
+  type AllContributionTypesAndPaymentMethods
+} from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -27,6 +33,7 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import Signout from 'components/signout/signout';
+
 
 import {
   checkFirstName,
@@ -58,6 +65,7 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
+
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -153,13 +161,10 @@ const formHandlersForRecurring: {[PaymentMethod]: (props: PropTypes) => void} = 
   PayPal: () => { /* TODO PayPal recurring */ },
   Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => { props.openDirectDebitPopUp(); },
+  None: () => { logInvalidCombination('', 'NONE') }
 };
 
-const formHandlers: {
-  [Contrib]: {
-    [PaymentMethod]: (props: PropTypes) => void
-  }
-} = {
+const formHandlers: AllContributionTypesAndPaymentMethods<PropTypes => void> = {
   ONE_OFF: {
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);
@@ -172,6 +177,8 @@ const formHandlers: {
       });
     },
     Stripe: openStripePopup,
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit') }
+    None: () => { logInvalidCombination('ONE_OFF', 'None') }
   },
   ANNUAL: formHandlersForRecurring,
   MONTHLY: formHandlersForRecurring,
@@ -185,6 +192,7 @@ function onSubmit(props: PropTypes): Event => void {
     if (!(event.target: any).checkValidity()) {
       return;
     }
+
 
     formHandlers[props.contributionType][props.paymentMethod](props);
   };
