@@ -12,12 +12,12 @@ import ContributionsSurvey from './contributionsSurvey';
 
 export default function ContributionsSurveySection() {
 
-    return (
-        <div className="component-contributions-survey-section">
-            <PageSection modifierClass="component-contributions-survey-section">
-                <ContributionsSurvey />
-            </PageSection>
-        </div>
-    );
+  return (
+    <div className="component-contributions-survey-section">
+      <PageSection modifierClass="component-contributions-survey-section">
+        <ContributionsSurvey />
+      </PageSection>
+    </div>
+  );
 
 }

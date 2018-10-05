@@ -10,18 +10,18 @@ import CtaLink from '../ctaLink/ctaLink';
 
 export default function ContributionsSurvey() {
 
-    return (
-        <div className="component-contributions-survey">
-            <p>
-                Please tell us about your contribution to The Guardian by filling out this short form.
-            </p>
-            <CtaLink
-                text="Share your thoughts"
-                url="https://www.surveymonkey.co.uk/r/CM6NPH2"
-                accessibilityHint="Please tell us about your contribution to The Guardian by filling out this short form."
-                modifierClasses={['survey']}
-            />
-        </div>
-    );
+  return (
+    <div className="component-contributions-survey">
+      <p>
+        Please tell us about your contribution to The Guardian by filling out this short form.
+      </p>
+      <CtaLink
+        text="Share your thoughts"
+        url="https://www.surveymonkey.co.uk/r/CM6NPH2"
+        accessibilityHint="Please tell us about your contribution to The Guardian by filling out this short form."
+        modifierClasses={['survey']}
+      />
+    </div>
+  );
 
 }

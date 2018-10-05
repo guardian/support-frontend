@@ -62,6 +62,6 @@ function BodyCopy(props: PropTypes) {
       </div>
     );
   } else {
-    return <EmailConfirmation/>;
+    return <EmailConfirmation />;
   }
 }
