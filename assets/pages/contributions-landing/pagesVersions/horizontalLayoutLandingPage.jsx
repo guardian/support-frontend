@@ -6,21 +6,21 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import type { Store } from 'redux';
 
-import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
-import { getOrigin } from 'helpers/url';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { payPalCancelUrl } from 'helpers/routes';
 import Page from 'components/page/page';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import Footer from 'components/footer/footer';
 import Contribute from 'components/contribute/contribute';
-
 // React components connected to redux store
-import CountrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
-
+import CountrySwitcherHeaderContainer
+  from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 // Page-specific react components connected to redux store
 import ContributionSelectionContainer from '../containers/contributionSelectionContainer';
 import ContributionPaymentCtasContainer from '../containers/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from '../containers/payPalContributionButtonContainer';
-import ContributionAwarePaymentLogosContainer from '../containers/contributionAwarePaymentLogosContainer';
+import ContributionAwarePaymentLogosContainer
+  from '../containers/contributionAwarePaymentLogosContainer';
 
 
 // ----- Types ----- //
@@ -72,10 +72,6 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
   '/contribute',
   ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
 );
-
-function payPalCancelUrl(cgId: CountryGroupId): string {
-  return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
-}
 
 
 // ----- Render ----- //

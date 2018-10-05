@@ -118,9 +118,10 @@ function ContributionAmount(props: PropTypes) {
           icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value)}
           isValid={props.checkOtherAmount(props.otherAmount || '')}
-          checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+          formHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"
+          step={0.01}
           min={min}
           max={max}
           autoFocus

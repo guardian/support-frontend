@@ -43,14 +43,18 @@ function ContributionSubmit(props: PropTypes) {
   // if all payment methods are switched off, do not display the button
   if (props.paymentMethod !== 'None') {
     const frequency = getFrequency(props.contributionType);
-    const otherAmount = props.otherAmount ? { value: props.otherAmount, spoken: '', isDefault: false } : null;
+    const otherAmount = props.otherAmount ? {
+      value: props.otherAmount,
+      spoken: '',
+      isDefault: false,
+    } : null;
     const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
-    const showPayPalButton = props.paymentMethod === 'PayPal';
+    const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
 
     return (
       <div className="form__submit">
-        {showPayPalButton ? (
-          <button disabled={props.isWaiting}>Pay with PayPal, bro</button>
+        {showPayPalExpressButton ? (
+          <button disabled={props.isWaiting}>PayPal Express Button</button>
         ) : (
           <button disabled={props.isWaiting} className="form__submit-button" type="submit">
             Contribute&nbsp;

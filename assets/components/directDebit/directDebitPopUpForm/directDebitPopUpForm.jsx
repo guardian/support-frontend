@@ -15,7 +15,7 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import SvgCross from 'components/svgs/cross';
 
 import type { Phase } from 'components/directDebit/directDebitActions';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 // ---- Types ----- //
 

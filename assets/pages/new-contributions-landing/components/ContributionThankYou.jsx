@@ -26,9 +26,9 @@ const mapStateToProps = state => ({
 
 // ----- Render ----- //
 
-function ContributionThanks(props: PropTypes) {
+function ContributionThankYou(props: PropTypes) {
   return (
-    <div className="gu-content__content">
+    <div className="thank-you__container">
       <h1 className="header">Thank you for a valuable contribution</h1>
 
       {props.contributionType !== 'ONE_OFF' ? (
@@ -63,7 +63,4 @@ function ContributionThanks(props: PropTypes) {
   );
 }
 
-const NewContributionThanks = connect(mapStateToProps)(ContributionThanks);
-
-
-export { NewContributionThanks };
+export default connect(mapStateToProps)(ContributionThankYou);

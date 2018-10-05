@@ -13,9 +13,12 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
 import { config, type Contrib, type Amount } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
-import { emailRegexPattern } from 'helpers/checkoutForm/checkoutForm';
-import { openDialogBox } from 'helpers/paymentIntegrations/newStripeCheckout';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getAbsoluteURL } from 'helpers/url';
+import { routes, payPalCancelUrl } from 'helpers/routes';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -24,6 +27,17 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import Signout from 'components/signout/signout';
+
+import {
+  checkFirstName,
+  checkLastName,
+  checkState,
+  checkEmail,
+  isNotEmpty,
+  isSmallerOrEqual,
+  isLargerOrEqual,
+  emailRegexPattern,
+} from '../formValidation';
 
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
@@ -42,6 +56,7 @@ import {
   updateState,
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
+  createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 
 // ----- Types ----- //
@@ -67,19 +82,19 @@ type PropTypes = {|
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
-  onWaiting: boolean => void,
+  setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
-  isDirectDebitPopUpOpen: boolean
+  isDirectDebitPopUpOpen: boolean,
+  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
+  currency: IsoCurrency,
 |};
-
-type FormValueType = string | null;
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
-const getCheckoutFormValue = (formValue: FormValueType, userValue: FormValueType): FormValueType =>
+const getCheckoutFormValue = (formValue: string | null, userValue: string | null): string | null =>
   (formValue === null ? userValue : formValue);
 
 /* eslint-enable react/no-unused-prop-types */
@@ -91,7 +106,7 @@ const mapStateToProps = (state: State) => ({
   firstName: getCheckoutFormValue(state.page.form.formData.firstName, state.page.user.firstName),
   lastName: getCheckoutFormValue(state.page.form.formData.lastName, state.page.user.lastName),
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
-  state: state.page.form.formData.state || state.page.user.stateField,
+  state: state.page.form.formData.state,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
@@ -100,6 +115,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
+  currency: state.common.internationalisation.currencyId,
 });
 
 
@@ -108,32 +124,28 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
-  onWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
+  setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
+  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
 });
 
 // ----- Functions ----- //
 
+// TODO: we've got this and a similar function in contributionLandingActions
+// I think a better model would be to represent the amount as a number in
+// the state, and use this logic to keep it in sync with the view-level selectedAmounts and otherAmounts.
 const getAmount = (props: PropTypes) =>
   parseFloat(props.selectedAmounts[props.contributionType] === 'other'
     ? props.otherAmount
     : props.selectedAmounts[props.contributionType].value);
 
-const isNotEmpty: string => boolean = input => input.trim() !== '';
-const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
-const isLargerOrEqual: (number, string) => boolean = (min, input) => min <= parseFloat(input);
-const isSmallerOrEqual: (number, string) => boolean = (max, input) => parseFloat(input) <= max;
-
-const checkFirstName: string => boolean = isNotEmpty;
-const checkLastName: string => boolean = isNotEmpty;
-const checkEmail: string => boolean = input => isNotEmpty(input) && isValidEmail(input);
-
 // ----- Event handlers ----- //
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
+    // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     if (!(event.target: any).checkValidity()) {
@@ -149,7 +161,19 @@ function onSubmit(props: PropTypes): Event => void {
           break;
 
         case 'PayPal':
-          // TODO
+          if (props.contributionType === 'ONE_OFF') {
+            // Displays the processing transaction, please wait screen
+            props.setPaymentIsWaiting(true);
+            props.createOneOffPayPalPayment({
+              currency: props.currency,
+              amount,
+              returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+              // TODO: use new cancel url
+              cancelURL: payPalCancelUrl(props.countryGroupId),
+            });
+          } else {
+            // TODO
+          }
           break;
 
         case 'Stripe':
@@ -179,7 +203,7 @@ function ContributionForm(props: PropTypes) {
   } = props;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
-    props.onWaiting(true);
+    props.setPaymentIsWaiting(true);
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
@@ -212,7 +236,8 @@ function ContributionForm(props: PropTypes) {
             icon={<SvgEnvelope />}
             onInput={props.updateEmail}
             isValid={checkEmail(email)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            pattern={emailRegexPattern}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide a valid email address"
             required
             disabled={isSignedIn}
@@ -228,7 +253,7 @@ function ContributionForm(props: PropTypes) {
             autoCapitalize="words"
             onInput={props.updateFirstName}
             isValid={checkFirstName(firstName)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your first name"
             required
           />
@@ -242,11 +267,17 @@ function ContributionForm(props: PropTypes) {
             autoCapitalize="words"
             onInput={props.updateLastName}
             isValid={checkLastName(lastName)}
-            checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your last name"
             required
           />
-          <NewContributionState onChange={props.updateState} value={state} />
+          <NewContributionState
+            onChange={props.updateState}
+            selectedState={state}
+            isValid={checkState(state)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide a state"
+          />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
           <NewContributionSubmit />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}

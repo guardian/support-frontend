@@ -6,6 +6,8 @@
 @import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 @import '~components/directDebit/directDebitForm/directDebitForm';
 @import '~components/errorMessage/errorMessage';
+@import '~components/ctaLink/ctaLink';
+@import 'components/SetPassword/setPassword';
 
 body {
   min-height: 100vh;
@@ -105,6 +107,10 @@ header[role="banner"] {
   padding: 0 $gu-v-spacing;
   width: 14px;
   height: 14px;
+}
+
+.countryGroups summary {
+  list-style: none;
 }
 
 .countryGroups summary:hover,
@@ -725,7 +731,7 @@ form {
 }
 
 .form__input::placeholder,
-.form__placeholder {
+.form__input--placeholder {
   color: gu-colour(garnett-neutral-2);
 }
 
@@ -910,7 +916,7 @@ form {
   fill: gu-colour(garnett-neutral-5);
 }
 
-.svg-subscribe {
+.svg-subscribe, .svg-lock {
   width: 23px;
   height: 20px;
   fill: currentColor;

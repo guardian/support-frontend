@@ -8,7 +8,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import GridImage from 'components/gridImage/gridImage';
 
 import { classNameWithModifiers } from 'helpers/utilities';
-
+import type { ImageType } from 'helpers/theGrid';
 
 // ----- Props ----- //
 
@@ -21,6 +21,7 @@ type PropTypes = {
   ctaText: string,
   ctaUrl: string,
   ctaAccessibilityHint: string,
+  imgType?: ImageType,
 };
 
 
@@ -36,6 +37,7 @@ export default function OtherProduct(props: PropTypes) {
           srcSizes={[1000, 500, 140]}
           sizes="(max-width: 480px) 90vw, (max-width: 660px) 400px, 270px"
           altText={props.imgAlt}
+          imgType={props.imgType}
         />
       </div>
       <h2 className="component-other-product__heading">{props.heading}</h2>
@@ -55,4 +57,5 @@ export default function OtherProduct(props: PropTypes) {
 
 OtherProduct.defaultProps = {
   modifierClass: '',
+  imgType: 'jpg',
 };

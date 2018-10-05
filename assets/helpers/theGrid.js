@@ -33,6 +33,7 @@ export const imageCatalogue: {
   premiumTierAU: '4b6fd9805c7d0a88b4b71a683c4b46279a410b9d/0_0_1610_1120',
   dailyEdition: '168cab5197d7b4c5d9e05eb3ff2801b2929f2995/0_0_644_448',
   windrush: '4addd475d3af57d908fa87124e556ab96fddb2e7/0_0_370_370',
+  windrushGreyscale: '8637bed472263161e35de986b463ed0c3675987d/0_0_830_830',
   zuck: 'e6142101bc909caee866be05ced677c54e9d3b4e/0_0_374_374',
   digitalSubscriptionHeaderDesktop: '01f9a081d0f78cb057ca585725f2742bed5a98fb/0_0_4045_1945',
   digitalSubscriptionHeaderDesktopAU: 'f46b1e2c498ac4f1ebec1b2620b6e80583e4348f/0_0_4045_1945',

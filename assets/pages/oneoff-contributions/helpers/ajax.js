@@ -14,7 +14,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
-import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { checkoutError, paymentSuccessful } from '../oneoffContributionsActions';
 
 // ----- Setup ----- //

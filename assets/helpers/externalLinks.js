@@ -34,6 +34,7 @@ export type SubsUrls = {
 // ----- Setup ----- //
 
 const subsUrl = 'https://subscribe.theguardian.com';
+const patronsUrl = 'https://patrons.theguardian.com';
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const iOSAppUrl = 'https://itunes.apple.com/app/the-guardian/id409128287?mt=8';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
@@ -42,7 +43,6 @@ const dailyEditionUrl = 'https://itunes.apple.com/app/guardian-observer-daily-ed
 const memUrls: {
   [MemProduct]: string,
 } = {
-  patrons: 'https://membership.theguardian.com/patrons',
   events: 'https://membership.theguardian.com/events',
 };
 
@@ -113,6 +113,14 @@ function getMemLink(product: MemProduct, intCmp: ?string): string {
 
   return `${memUrls[product]}?${params.toString()}`;
 
+}
+
+function getPatronsLink(intCmp: ?string): string {
+
+  const params = new URLSearchParams();
+  params.append('INTCMP', intCmp || defaultIntCmp);
+
+  return `${patronsUrl}?${params.toString()}`;
 }
 
 function buildParamString(
@@ -213,6 +221,7 @@ function getDigitalCheckout(
 export {
   getSubsLinks,
   getMemLink,
+  getPatronsLink,
   getDigitalCheckout,
   iOSAppUrl,
   androidAppUrl,

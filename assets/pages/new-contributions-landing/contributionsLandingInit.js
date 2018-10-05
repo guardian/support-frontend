@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 import { type Store, type Dispatch } from 'redux';
-import { getValidPaymentMethods } from 'helpers/checkouts';
+import { getPaymentMethodToSelect } from 'helpers/checkouts';
 import {
   updatePaymentMethod,
   updateUserFormData,
@@ -13,23 +13,20 @@ import { type Action } from './contributionsLandingActions';
 // ----- Functions ----- //
 
 
-function initialisePaymentMethod(state, dispatch) {
+function initialisePaymentMethod(state: State, dispatch: Dispatch<Action>) {
   const { contributionType } = state.page.form;
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
 
-  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
+  const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
 
-  if (validPaymentMethods[0]) {
-    dispatch(updatePaymentMethod(validPaymentMethods[0]));
-  } else {
-    dispatch(updatePaymentMethod('None'));
-  }
+  dispatch(updatePaymentMethod(paymentMethodToSelect));
 }
 
 
 const init = (store: Store<State, Action, Dispatch<Action>>) => {
   const { dispatch } = store;
+
   const state = store.getState();
   initialisePaymentMethod(state, dispatch);
 
