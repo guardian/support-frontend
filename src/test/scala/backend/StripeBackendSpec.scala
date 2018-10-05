@@ -166,7 +166,7 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
 
         // But email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l))).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l), mockitoEq(PaymentProvider.Stripe))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
         val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, countrySubdivisionCode)
@@ -185,7 +185,7 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         // And email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l))).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l), mockitoEq(PaymentProvider.Stripe))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
         val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, countrySubdivisionCode)

@@ -2,6 +2,7 @@ package model.email
 
 import io.circe.syntax._
 import io.circe.generic.JsonCodec
+import model.PaymentProvider
 
 /*
  * Variable name capitalisation due to the expected JSON structure
@@ -40,10 +41,11 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec case class SubscriberAttributesSqsMessage(
   EmailAddress: String,
-  edition: String
+  edition: String,
+  `payment method`: String
 )
 
-case class ContributorRow(email: String, currency: String, identityId: Long) {
+case class ContributorRow(email: String, currency: String, identityId: Long, paymentMethodName: PaymentProvider) {
   def edition: String = currency match {
     case "GBP" => "uk"
     case "USD" => "us"
@@ -59,7 +61,8 @@ case class ContributorRow(email: String, currency: String, identityId: Long) {
         ContactAttributes = ContactAttributesSqsMessage(
           SubscriberAttributes = SubscriberAttributesSqsMessage(
             EmailAddress = email,
-            edition = edition
+            edition = edition,
+            `payment method` = paymentMethodName.name
           )
         )
       ),

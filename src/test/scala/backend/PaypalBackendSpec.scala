@@ -223,7 +223,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
 
         // But email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l))).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l), mockitoEq(PaymentProvider.Paypal))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
         val result = paypalBackend invokePrivate postPaymentTasks(enrichedPaymentMock, mockAcquisitionData, countrySubdivisionCode)
@@ -241,7 +241,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         // And email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l))).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l), mockitoEq(PaymentProvider.Paypal))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
         val errors = BackendError.MultipleErrors(List(

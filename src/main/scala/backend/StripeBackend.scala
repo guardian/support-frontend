@@ -121,7 +121,7 @@ class StripeBackend(
       .leftMap(BackendError.fromDatabaseError)
 
   private def sendThankYouEmail(email: String, data: StripeChargeData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] =
-    emailService.sendThankYouEmail(email, data.paymentData.currency.toString, identityId)
+    emailService.sendThankYouEmail(email, data.paymentData.currency.toString, identityId, PaymentProvider.Stripe)
       .leftMap(BackendError.fromEmailError)
 
 }

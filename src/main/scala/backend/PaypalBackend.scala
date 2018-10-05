@@ -190,7 +190,7 @@ class PaypalBackend(
       .leftMap(BackendError.fromDatabaseError)
 
   private def sendThankYouEmail(email: String, currency: String, identityId: Long): EitherT[Future, BackendError, SendMessageResult] =
-    emailService.sendThankYouEmail(email, currency, identityId)
+    emailService.sendThankYouEmail(email, currency, identityId, PaymentProvider.Paypal)
       .leftMap(BackendError.fromEmailError)
 
   private def currencyFromPayment(p: Payment): EitherT[Future, BackendError, String] =

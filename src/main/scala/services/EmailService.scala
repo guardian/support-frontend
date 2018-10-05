@@ -7,7 +7,7 @@ import com.amazonaws.services.sqs.model.{SendMessageRequest, _}
 import com.typesafe.scalalogging.StrictLogging
 import conf.EmailConfig
 import model.email.ContributorRow
-import model.{DefaultThreadPool, InitializationError, InitializationResult}
+import model.{DefaultThreadPool, InitializationError, InitializationResult, PaymentProvider}
 
 import scala.concurrent.Future
 
@@ -15,22 +15,27 @@ class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: 
 
   val thankYouQueueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
 
-  def sendThankYouEmail(email: String, currency: String, identityId: Long): EitherT[Future, EmailService.Error, SendMessageResult] = {
-    sendEmailToQueue(thankYouQueueUrl, ContributorRow(email, currency, identityId))
-  }
-
   /*
    * No need to provide an AsyncHandler as the process is fire and forget and it's not required any action if the message
    * cannot be process by the subscriber.
    */
-  private def sendEmailToQueue(queueUrl: String, row: ContributorRow): EitherT[Future, EmailService.Error, SendMessageResult] = {
+  def sendThankYouEmail(
+    email: String,
+    currency: String,
+    identityId: Long,
+    paymentProvider: PaymentProvider
+  ): EitherT[Future, EmailService.Error, SendMessageResult] = {
+
+    val contributorRowJson = ContributorRow(email, currency, identityId, paymentProvider).toJsonContributorRowSqsMessage
+
     EitherT(Future {
-      sqsClient.sendMessageAsync(new SendMessageRequest(queueUrl, row.toJsonContributorRowSqsMessage)).get
+      sqsClient.sendMessageAsync(new SendMessageRequest(thankYouQueueUrl, contributorRowJson)).get
     }.map(Right.apply).recover {
       case err: Throwable => Left(EmailService.Error(err))
       case _ => Left(EmailService.Error(new Exception("Unknown error while sending message to SQS.")))
     })
   }
+
 }
 
 object EmailService {

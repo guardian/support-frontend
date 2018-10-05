@@ -1,6 +1,7 @@
 package model.email
 
 import io.circe.parser._
+import model.PaymentProvider
 import org.scalatest.{FlatSpec, Matchers}
 
 class ContributorRowTest extends FlatSpec with Matchers {
@@ -14,7 +15,8 @@ class ContributorRowTest extends FlatSpec with Matchers {
         |    "ContactAttributes" : {
         |      "SubscriberAttributes" : {
         |        "EmailAddress" : "email@email.email",
-        |        "edition" : "uk"
+        |        "edition" : "uk",
+        |        "payment method": "paypal"
         |      }
         |    }
         |  },
@@ -23,7 +25,7 @@ class ContributorRowTest extends FlatSpec with Matchers {
         |}""".stripMargin
     )
 
-    val Right(result) =  parse(ContributorRow("email@email.email", "GBP", 123l).toJsonContributorRowSqsMessage)
+    val Right(result) =  parse(ContributorRow("email@email.email", "GBP", 123l, PaymentProvider.Paypal).toJsonContributorRowSqsMessage)
     result shouldBe expected
   }
 }

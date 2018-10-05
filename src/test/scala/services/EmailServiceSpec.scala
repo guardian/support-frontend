@@ -3,7 +3,7 @@ package services
 import com.amazonaws.services.sqs.AmazonSQSAsync
 import com.amazonaws.services.sqs.model.{GetQueueUrlResult, SendMessageResult}
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
-import model.DefaultThreadPool
+import model.{DefaultThreadPool, PaymentProvider}
 import org.scalatest.Matchers
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -52,7 +52,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    val emailResult = emailService.sendThankYouEmail("email@email.com", "GBP", identityId)
+    val emailResult = emailService.sendThankYouEmail("email@email.com", "GBP", identityId, PaymentProvider.Paypal)
     whenReady(emailResult.value) { result =>
       result shouldBe Right(new SendMessageResult)
     }
@@ -84,7 +84,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    whenReady(emailService.sendThankYouEmail("email@email.com", "GBP", identityId).value) { result =>
+    whenReady(emailService.sendThankYouEmail("email@email.com", "GBP", identityId, PaymentProvider.Paypal).value) { result =>
       result.fold(
         error => {
           // TODO: understand how this java.lang.Exception bit gets added
