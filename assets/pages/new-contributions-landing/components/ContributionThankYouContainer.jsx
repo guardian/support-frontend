@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type ThankYouPageStageMatrix, type ThankYouPageStage } from '../contributionsLandingReducer';
+import { type ThankYouPageStageMap, type ThankYouPageStage } from '../contributionsLandingReducer';
 import ContributionThankYou from './ContributionThankYou';
 import SetPassword from './SetPassword/SetPassword';
 
@@ -22,7 +22,7 @@ const mapStateToProps = state => ({
 });
 
 // TODO: change landing page copy if password has/hasn't been set
-const thankYouPageStage: ThankYouPageStageMatrix<React$Element<*>> = {
+const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
   setPassword: (<SetPassword />),
   thankYou: (<ContributionThankYou />),
   thankYouPasswordSet: (<ContributionThankYou />),

@@ -26,14 +26,14 @@ export type UserFormData = {
 
 
 
-export type ThankYouPageStageMatrix<T> = {
+export type ThankYouPageStageMap<T> = {
   setPassword: T,
   thankYou: T,
   thankYouPasswordSet: T,
   thankYouPasswordNotSet: T
 }
 
-export type ThankYouPageStage = $Keys<ThankYouPageStageMatrix<null>>
+export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 
 type FormData = UserFormData & {
   otherAmounts: {
