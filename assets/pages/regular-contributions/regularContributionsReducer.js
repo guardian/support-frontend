@@ -12,7 +12,7 @@ import { directDebitReducer as directDebit } from 'components/directDebit/direct
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import type { CommonState } from 'helpers/page/page';
-import type { PaymentMethod } from 'helpers/checkouts';
+import type { PaymentMethod } from 'helpers/contributions';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type RegularContributionType } from 'helpers/contributions';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';

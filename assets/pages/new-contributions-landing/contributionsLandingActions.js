@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
-import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
-import { type Amount, type Contrib } from 'helpers/contributions';
+import { type PaymentHandler } from 'helpers/checkouts';
+import { type Amount, baseHandlers, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
@@ -222,9 +222,10 @@ function recurringPaymentAuthorisationHandler(
   )));
 }
 
-const recurringPaymentAuthorisationHandlers: {
-  [PaymentMethod]: (Dispatch<Action>, State, PaymentAuthorisation) => void
-} = {
+// Bizarrely, adding a type to this object means the type-checking on the
+// paymentAuthorisationHandlers is no longer accurate.
+// (Flow thinks it's OK when it's missing required properties).
+const recurringPaymentAuthorisationHandlers = {
   // These are all the same because there's a single endpoint in
   // support-frontend which handles all requests to create a recurring payment
   PayPal: recurringPaymentAuthorisationHandler,
@@ -232,12 +233,9 @@ const recurringPaymentAuthorisationHandlers: {
   DirectDebit: recurringPaymentAuthorisationHandler,
 };
 
-const paymentAuthorisationHandlers: {
-  [Contrib]: {
-    [PaymentMethod]: (Dispatch<Action>, State, PaymentAuthorisation) => void
-  }
-} = {
+const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, PaymentAuthorisation) => void> = {
   ONE_OFF: {
+    ...baseHandlers.ONE_OFF,
     PayPal: () => {
       // No handler required.
       // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
@@ -247,8 +245,8 @@ const paymentAuthorisationHandlers: {
       dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
     },
   },
-  ANNUAL: recurringPaymentAuthorisationHandlers,
-  MONTHLY: recurringPaymentAuthorisationHandlers,
+  ANNUAL: { ...baseHandlers.ANNUAL, ...recurringPaymentAuthorisationHandlers },
+  MONTHLY: { ...baseHandlers.MONTHLY, ...recurringPaymentAuthorisationHandlers },
 };
 
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>

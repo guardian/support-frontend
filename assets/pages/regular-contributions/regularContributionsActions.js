@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { PaymentMethod } from 'helpers/checkouts';
+import type { PaymentMethod } from 'helpers/contributions';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 
 

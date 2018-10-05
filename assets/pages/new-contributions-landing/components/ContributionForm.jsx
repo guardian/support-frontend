@@ -10,8 +10,15 @@ import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/inter
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
-import { config, type Contrib, type Amount } from 'helpers/contributions';
+import { type PaymentHandler } from 'helpers/checkouts';
+import {
+  config,
+  type Contrib,
+  type Amount,
+  type PaymentMatrix,
+  type PaymentMethod,
+  baseHandlers,
+} from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -27,6 +34,7 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import Signout from 'components/signout/signout';
+
 
 import {
   checkFirstName,
@@ -58,6 +66,7 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
+
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -149,18 +158,19 @@ function openStripePopup(props: PropTypes) {
   }
 }
 
-const formHandlersForRecurring: {[PaymentMethod]: (props: PropTypes) => void} = {
+// Bizarrely, adding a type to this object means the type-checking on the
+// formHandlers is no longer accurate.
+// (Flow thinks it's OK when it's missing required properties).
+const formHandlersForRecurring = {
   PayPal: () => { /* TODO PayPal recurring */ },
   Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => { props.openDirectDebitPopUp(); },
 };
 
-const formHandlers: {
-  [Contrib]: {
-    [PaymentMethod]: (props: PropTypes) => void
-  }
-} = {
+const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
+    ...baseHandlers.ONE_OFF,
+    Stripe: openStripePopup,
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);
       props.createOneOffPayPalPayment({
@@ -171,10 +181,9 @@ const formHandlers: {
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
-    Stripe: openStripePopup,
   },
-  ANNUAL: formHandlersForRecurring,
-  MONTHLY: formHandlersForRecurring,
+  MONTHLY: { ...baseHandlers.MONTHLY, formHandlersForRecurring },
+  ANNUAL: { ...baseHandlers.ANNUAL, formHandlersForRecurring },
 };
 
 function onSubmit(props: PropTypes): Event => void {
@@ -185,7 +194,6 @@ function onSubmit(props: PropTypes): Event => void {
     if (!(event.target: any).checkValidity()) {
       return;
     }
-
     formHandlers[props.contributionType][props.paymentMethod](props);
   };
 }
