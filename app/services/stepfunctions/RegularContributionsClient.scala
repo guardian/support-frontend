@@ -8,8 +8,8 @@ import cats.data.EitherT
 import cats.implicits._
 import RegularContributionsClient._
 import com.gu.support.workers.model._
-import io.circe.generic.semiauto.deriveDecoder
-import io.circe.Decoder
+import io.circe.generic.semiauto.{deriveDecoder}
+import io.circe.{Decoder}
 import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
@@ -21,7 +21,6 @@ import com.gu.support.workers.model.Status
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
-
 import scala.util.{Failure, Success, Try}
 
 object CreateRegularContributorRequest {
@@ -75,15 +74,6 @@ class RegularContributionsClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
-  def getPaymentMethodType(payment: PaymentFields): String = {
-    payment match {
-      case p: PayPalPaymentFields => "Paypal"
-      case s: StripePaymentFields => "Stripe"
-      case d: DirectDebitPaymentFields => "Direct-debit"
-      case _ => "Unknown"
-    }
-  }
-
   def createContributor(request: CreateRegularContributorRequest, user: User, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
@@ -102,8 +92,7 @@ class RegularContributionsClient(
         StateMachineFailure: RegularContributionError
       },
       { success =>
-        val paymentMethod = getPaymentMethodType(createPaymentMethodState.paymentFields)
-        SafeLogger.info(s"[$requestId] Creating regular $paymentMethod contribution for ${user.id} in country ${request.country.alpha2} ($success)")
+        SafeLogger.info(s"[$requestId] Creating regular contribution for ${user.id} ($success)")
         underlying.jobIdFromArn(success.arn).map { jobId =>
           StatusResponse(
             status = Status.Pending,
@@ -128,14 +117,13 @@ class RegularContributionsClient(
       SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}")
       statusResponse
     }
-    underlying.history(jobId).map(ss => ss.head.getLambdaFunctionSucceededEventDetails)
+
     underlying.history(jobId).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
         StateMachineFailure: RegularContributionError
       },
       { events =>
-        SafeLogger.info(s"support Url is: $supportUrl")
         val trackingUri = supportUrl + statusCall(jobId).url
         val detailedHistory = events.map(event => Try(event.getStateExitedEventDetails))
         respondToClient(StepFunctionExecutionStatus.checkoutStatus(detailedHistory, stateWrapper, trackingUri))
