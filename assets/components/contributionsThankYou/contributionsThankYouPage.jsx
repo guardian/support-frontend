@@ -14,6 +14,7 @@ import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import EmailConfirmation from './emailConfirmation';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
 import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
+import ContributionsSurveySection from '../survey/contributionsSurveySection';
 
 // ---- Types ----- //
 
@@ -52,11 +53,15 @@ export default function ContributionsThankYouPage(props: PropTypes) {
 
 function BodyCopy(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
-    return null;
+    return <ContributionsSurveySection />;
   } else if (props.directDebit) {
     return (
-      <DirectDebitDetails {...props.directDebit} />
+      <div className="component-direct-debit-details__container">
+        <DirectDebitDetails {...props.directDebit} />
+        <ContributionsSurveySection />
+      </div>
     );
+  } else {
+    return <EmailConfirmation/>;
   }
-  return <EmailConfirmation />;
 }

@@ -1,0 +1,34 @@
+.component-contributions-survey {
+  .component-cta-link {
+    margin-bottom: $gu-v-spacing * 3;
+    margin-top: $gu-v-spacing * 2;
+
+    @include mq($from: mobileMedium) {
+      width: 300px;
+    }
+  }
+
+  .component-cta-link--survey {
+    background-color: gu-colour(news-garnett-highlight);
+    color: gu-colour(garnett-neutral-1);
+
+    &:hover {
+      background-color: darken(gu-colour(news-garnett-highlight), 5%);
+    }
+
+    .svg-arrow-right-straight { fill: gu-colour(garnett-neutral-1) }
+
+  }
+
+  @include mq($from: desktop) {
+    padding-left: $gu-h-spacing;
+  }
+}
+
+.component-contributions-survey-section {
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+
+  .component-contributions-survey {
+    padding-top: $gu-v-spacing / 2;
+  }
+}
