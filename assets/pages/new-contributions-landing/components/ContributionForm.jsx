@@ -10,13 +10,14 @@ import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/inter
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
+import { type PaymentHandler } from 'helpers/checkouts';
 import {
   config,
   logInvalidCombination,
   type Contrib,
   type Amount,
-  type AllContributionTypesAndPaymentMethods
+  type AllContributionTypesAndPaymentMethods,
+  type PaymentMethod,
 } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
@@ -161,7 +162,7 @@ const formHandlersForRecurring: {[PaymentMethod]: (props: PropTypes) => void} = 
   PayPal: () => { /* TODO PayPal recurring */ },
   Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => { props.openDirectDebitPopUp(); },
-  None: () => { logInvalidCombination('', 'NONE') }
+  None: () => { logInvalidCombination('MONTHLY', 'None'); },
 };
 
 const formHandlers: AllContributionTypesAndPaymentMethods<PropTypes => void> = {
@@ -177,8 +178,8 @@ const formHandlers: AllContributionTypesAndPaymentMethods<PropTypes => void> = {
       });
     },
     Stripe: openStripePopup,
-    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit') }
-    None: () => { logInvalidCombination('ONE_OFF', 'None') }
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
+    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
   ANNUAL: formHandlersForRecurring,
   MONTHLY: formHandlersForRecurring,

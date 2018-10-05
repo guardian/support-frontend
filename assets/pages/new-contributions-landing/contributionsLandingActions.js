@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
-import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
-import { type Amount, type Contrib } from 'helpers/contributions';
+import { type PaymentHandler } from 'helpers/checkouts';
+import { type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {

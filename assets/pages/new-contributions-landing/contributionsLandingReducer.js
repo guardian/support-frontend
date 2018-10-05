@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 
 import { combineReducers } from 'redux';
-import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
-import { amounts, type Amount, type Contrib } from 'helpers/contributions';
+import { type PaymentHandler } from 'helpers/checkouts';
+import { amounts, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';

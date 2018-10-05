@@ -3,40 +3,64 @@
 // ----- Imports ----- //
 
 import { roundDp } from 'helpers/utilities';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { currencies } from 'helpers/internationalisation/currency';
-import { spokenCurrencies } from 'helpers/internationalisation/currency';
-
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { Radio } from 'components/radioToggle/radioToggle';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
+import type { Radio } from 'components/radioToggle/radioToggle';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
-import type {PaymentMethod} from "./checkouts";
-import {logException} from "./logger";
+import { logException } from 'helpers/logger';
 
 // ----- Types ----- //
-
-export type RegularContributionType = 'ANNUAL' | 'MONTHLY';
-export type Contrib = RegularContributionType | 'ONE_OFF';
 
 export type AllPaymentMethods<T> = {
   Stripe: T,
   PayPal: T,
   DirectDebit: T,
+  None: T,
 }
 
-export type AllContributionTypes<T> = {
-  ONE_OFF: T,
+// We need to supply the type parameter, but we're only using the keys
+// so it's irrelevant - so we supply null
+export type PaymentMethod = $Keys<AllPaymentMethods<null>>;
+
+export type RegularContributionTypes<T> = {
   MONTHLY: T,
   ANNUAL: T,
+}
+
+export type AllContributionTypes<T> = RegularContributionTypes<T> & {
+  ONE_OFF: T,
 };
+
+export type RegularContributionType = $Keys<RegularContributionTypes<null>>;
+export type Contrib = $Keys<AllContributionTypes<null>>;
 
 export type AllContributionTypesAndPaymentMethods<T> = AllContributionTypes<AllPaymentMethods<T>>;
 
-
+// const baseHandlers: AllContributionTypesAndPaymentMethods<() => void> = {
+//   ONE_OFF: {
+//     Stripe: () => {},
+//     PayPal: () => {},
+//     DirectDebit: () => {},
+//     None: () => {},
+//   },
+//   MONTHLY: {
+//     Stripe: () => {},
+//     PayPal: () => {},
+//     DirectDebit: () => {},
+//     None: () => {},
+//   },
+//   ANNUAL: {
+//     Stripe: () => {},
+//     PayPal: () => {},
+//     DirectDebit: () => {},
+//     None: () => {},
+//   },
+// };
 
 export const logInvalidCombination = (contributionType: Contrib, paymentMethod: PaymentMethod) => {
-  logException(`Invalid combination of contribution type ${ContributionType} and payment method ${paymentMethod}`);
+  logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
 };
 
 export type BillingPeriod = 'Monthly' | 'Annual';

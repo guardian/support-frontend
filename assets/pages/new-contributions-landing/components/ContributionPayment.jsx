@@ -5,9 +5,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type PaymentMethod, type PaymentHandler, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
+import { type PaymentHandler, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
 import { type Switches } from 'helpers/settings';
-import { type Contrib } from 'helpers/contributions';
+import { type Contrib, type PaymentMethod } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
