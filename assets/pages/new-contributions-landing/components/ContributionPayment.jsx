@@ -81,6 +81,7 @@ function initialiseStripeCheckout(props: PropTypes) {
 const recurringPaymentMethodInitialisers = {
   PayPal: () => { /* TODO PayPal recurring */ },
   Stripe: initialiseStripeCheckout,
+  DirectDebit: () => { /* no initialisation required */ },
 };
 
 const paymentMethodInitialisers: PaymentMatrix<PropTypes => void> = {
