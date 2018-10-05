@@ -13,7 +13,7 @@ import { logException } from 'helpers/logger';
 
 // ----- Types ----- //
 
-export type AllPaymentMethods<T> = {
+export type PaymentMethodMap<T> = {
   Stripe: T,
   PayPal: T,
   DirectDebit: T,
@@ -25,21 +25,21 @@ export type AllPaymentMethods<T> = {
 // https://flow.org/en/docs/types/utilities/#toc-keys
 // We need to supply the type parameter, but we're only using the keys
 // so it's irrelevant - so we supply null
-export type PaymentMethod = $Keys<AllPaymentMethods<null>>;
+export type PaymentMethod = $Keys<PaymentMethodMap<null>>;
 
-export type RegularContributionTypes<T> = {
+export type RegularContributionTypeMap<T> = {
   MONTHLY: T,
   ANNUAL: T,
 }
 
-export type AllContributionTypes<T> = RegularContributionTypes<T> & {
+export type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
   ONE_OFF: T,
 };
 
-export type RegularContributionType = $Keys<RegularContributionTypes<null>>;
-export type Contrib = $Keys<AllContributionTypes<null>>;
+export type RegularContributionType = $Keys<RegularContributionTypeMap<null>>;
+export type Contrib = $Keys<ContributionTypeMap<null>>;
 
-export type PaymentMatrix<T> = AllContributionTypes<AllPaymentMethods<T>>;
+export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
 export const logInvalidCombination = (contributionType: Contrib, paymentMethod: PaymentMethod) => {
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
