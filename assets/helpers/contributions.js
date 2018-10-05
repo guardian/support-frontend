@@ -17,6 +17,23 @@ import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefin
 export type RegularContributionType = 'ANNUAL' | 'MONTHLY';
 export type Contrib = RegularContributionType | 'ONE_OFF';
 
+export type AllOneOffPaymentMethods<T> = {
+  Stripe: T,
+  PayPal: T,
+}
+
+export type AllRecurringPaymentMethods<T> = {
+  Stripe: T,
+  PayPal: T,
+  DirectDebit: T,
+}
+
+export type AllContributionTypesAndPaymentMethods<T> = {
+  ONE_OFF: AllOneOffPaymentMethods<T>,
+  MONTHLY: AllRecurringPaymentMethods<T>,
+  ANNUAL: AllRecurringPaymentMethods<T>,
+};
+
 export type BillingPeriod = 'Monthly' | 'Annual';
 
 export type Amount = { value: string, spoken: string, isDefault: boolean };
