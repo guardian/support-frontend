@@ -5,15 +5,12 @@
 import React from 'react';
 
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
-import { displayDigitalPackBenefitCopy } from 'helpers/subscriptions';
-
 import { type HeadingSize } from 'components/heading/heading';
 import { type SubsUrls } from 'helpers/externalLinks';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
-import PremiumTier from './premiumTier';
-import DigitalPack from './digitalPack';
-import Weekly from './weekly';
+import DigitalPack from 'components/subscriptionBundles/digitalPack';
+import PremiumTier from 'components/subscriptionBundles/premiumTier';
+import Weekly from 'components/subscriptionBundles/weekly';
 
 
 // ----- Component ----- //
@@ -27,15 +24,22 @@ function InternationalSection(props: {
 
   return (
     <ThreeSubscriptions>
-      <PremiumTier headingSize={props.headingSize} referrer={props.appReferrer} subheading="7-day free trial" />
-      <DigitalPack
+      <PremiumTier
         headingSize={props.headingSize}
-        url={props.subsLinks.DigitalPack}
-        subheading="14-day free trial"
-        gridId="digitalCircleInternational"
-        copy={displayDigitalPackBenefitCopy(props.countryGroupId)}
+        referrer={props.appReferrer}
+        subheading="7-day free trial"
       />
-      <Weekly headingSize={props.headingSize} subheading="&nbsp;" url={props.subsLinks.GuardianWeekly} />
+      <DigitalPack
+        countryGroupId={props.countryGroupId}
+        subheading="14-day free trial"
+        url={props.subsLinks.DigitalPack}
+        gridId="digitalCirclePink"
+      />
+      <Weekly
+        headingSize={props.headingSize}
+        subheading="&nbsp;"
+        url={props.subsLinks.GuardianWeekly}
+      />
     </ThreeSubscriptions>
   );
 

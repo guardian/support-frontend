@@ -5,46 +5,48 @@
 import React from 'react';
 
 import { type HeadingSize } from 'components/heading/heading';
-import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 
-import { type ImageId } from 'helpers/theGrid';
 import { sendTrackingEventsOnClick, type ComponentAbTest } from 'helpers/subscriptions';
+import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
+
+
+// ----- Types ----- //
+
+type PropTypes = {
+  headingSize: HeadingSize,
+  url: string,
+  subheading: string,
+  abTest: ComponentAbTest | null,
+};
 
 
 // ----- Component ----- //
 
-function DigitalPack(props: {
-  headingSize: HeadingSize,
-  url: string,
-  subheading: string,
-  copy: string,
-  gridId: ImageId,
-  abTest: ComponentAbTest | null,
-}) {
+function Weekly(props: PropTypes) {
 
   return (
     <SubscriptionBundle
-      modifierClass="digital"
-      heading="Digital Pack"
+      modifierClass="weekly"
+      heading="Guardian&nbsp;Weekly"
       subheading={props.subheading}
       headingSize={props.headingSize}
       benefits={{
         list: false,
-        copy: props.copy,
+        copy: 'A weekly, global newspaper from The Guardian, with free delivery worldwide',
       }}
       gridImage={{
-        gridId: props.gridId,
-        altText: 'digital subscription',
+        gridId: 'weeklyCircle',
+        altText: 'weekly subscription',
         ...gridImageProperties,
       }}
       ctas={[
         {
           text: 'Find out more',
           url: props.url,
-          accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
+          accessibilityHint: 'Proceed to buy a subscription to The Guardian Weekly',
           modifierClasses: ['border'],
-          onClick: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', props.abTest),
+          onClick: sendTrackingEventsOnClick('weekly_cta', 'GuardianWeekly', props.abTest),
         },
       ]}
     />
@@ -55,11 +57,11 @@ function DigitalPack(props: {
 
 // ----- Default Props ----- //
 
-DigitalPack.defaultProps = {
+Weekly.defaultProps = {
   abTest: null,
 };
 
 
 // ----- Exports ----- //
 
-export default DigitalPack;
+export default Weekly;
