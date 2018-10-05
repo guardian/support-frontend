@@ -24,7 +24,16 @@ export type UserFormData = {
   email: string | null,
 }
 
-export type ThankYouPageStage = 'setPassword' | 'thankYou' | 'thankYouPasswordSet' | 'thankYouPasswordNotSet';
+
+
+export type ThankYouPageStageMatrix<T> = {
+  setPassword: T,
+  thankYou: T,
+  thankYouPasswordSet: T,
+  thankYouPasswordNotSet: T
+}
+
+export type ThankYouPageStage = $Keys<ThankYouPageStageMatrix<null>>
 
 type FormData = UserFormData & {
   otherAmounts: {
