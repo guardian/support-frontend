@@ -8,4 +8,5 @@ class StringsConfig {
   val supportLandingDescription = config.getString("supportLanding.description")
   val contributionsLandingDescription = config.getString("contributionsLanding.description")
   val subscriptionsLandingDescription = config.getString("subscriptionsLanding.description")
+  val digitalPackLandingDescription = config.getString("digitalPackLanding.description")
 }

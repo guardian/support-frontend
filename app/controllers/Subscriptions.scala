@@ -63,11 +63,12 @@ class Subscriptions(
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
-    val title = "Support the Guardian | Digital Subscription"
+    val title = "Support the Guardian | Digital Pack Subscription"
     val id = "digital-subscription-landing-page-" + countryCode
     val js = "digitalSubscriptionLandingPage.js"
     val css = "digitalSubscriptionLandingPageStyles.css"
-    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+    val description = Some(stringsConfig.digitalPackLandingDescription)
+    Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
   }
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
