@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import { classNameWithModifiers } from 'helpers/utilities';
 import ReactDOM from 'react-dom';
 import React from 'react';
 
@@ -27,6 +28,7 @@ type PropTypes = {|
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
   formClassName: string,
+  show: boolean,
 |};
 
 
@@ -74,9 +76,11 @@ function Button(props: PropTypes) {
 
 
   const PayPalButton = window.paypal.Button.driver('react', { React, ReactDOM });
-
+  const className = props.show ? 'component-paypal-button-checkout' : classNameWithModifiers('component-paypal-button-checkout', ['hidden']);
   return (
-    <div id="component-paypal-button-checkout" className="component-paypal-button-checkout">
+    <div id="component-paypal-button-checkout"
+         className={className}
+    >
       <PayPalButton {...payPalOptions} />
     </div>
   );

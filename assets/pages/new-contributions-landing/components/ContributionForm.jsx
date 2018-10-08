@@ -206,7 +206,8 @@ function onSubmit(props: PropTypes): Event => void {
     if (!(event.target: any).checkValidity()) {
       return;
     }
-    formHandlers[props.contributionType][props.paymentMethod](props);
+    const a = formHandlers;
+    a[props.contributionType][props.paymentMethod](props);
   };
 }
 

@@ -2,12 +2,12 @@
 
 // ----- Imports ----- //
 
-import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFow';
+import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
+import { classNameWithModifiers } from 'helpers/utilities';
 import { setPayPalHasLoaded } from 'pages/new-contributions-landing/contributionsLandingActions';
-import { formClassName } from 'pages/regular-contributions/components/formFields';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -34,6 +34,7 @@ type PropTypes = {
   csrf: CsrfState,
   whenUnableToOpen: () => void,
   payPalSwitchStatus: Status,
+  payPalHasLoaded: boolean,
 };
 
 const mapStateToProps = (state: State) =>
@@ -46,6 +47,7 @@ const mapStateToProps = (state: State) =>
     otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
     currencyId: state.common.internationalisation.currencyId,
     csrf: state.page.csrf,
+    payPalHasLoaded: state.page.form.payPalHasLoaded,
     payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   });
 
@@ -72,7 +74,11 @@ function ContributionSubmit(props: PropTypes) {
     } : null;
     const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
     const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
-    const formClassName = '.form--contribution';
+    const formClassName = 'form--contribution';
+    const formSubmitClassName = showPayPalExpressButton
+      ? classNameWithModifiers("form__submit-button",  ['hidden'])
+      : "form__submit-button";
+
     return (
       <div className="form__submit">
        <PayPalExpressButton
@@ -86,8 +92,12 @@ function ContributionSubmit(props: PropTypes) {
           canOpen={() => formIsValid(formClassName)}
           formClassName={formClassName}
           whenUnableToOpen={props.whenUnableToOpen}
+          show={showPayPalExpressButton}
         />
-        <button disabled={props.isWaiting} className="form__submit-button" type="submit">
+        <button
+          disabled={props.isWaiting}
+          className={formSubmitClassName}
+          type="submit">
           Contribute&nbsp;
           {amount ? formatAmount(
             currencies[props.currency],
