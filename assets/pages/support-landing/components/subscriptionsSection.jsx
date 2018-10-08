@@ -6,20 +6,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getSubsLinks } from 'helpers/externalLinks';
-import { getCampaign } from 'helpers/tracking/acquisitions';
+import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getDigitalBenefits, getPaperBenefits, getPaperDigitalBenefits } from 'helpers/flashSale';
-import { displayPrice } from 'helpers/subscriptions';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
-import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
-import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
-
+import DigitalPack from 'components/subscriptionBundles/digitalPack';
+import Paper from 'components/subscriptionBundles/paper';
+import PaperDigital from 'components/subscriptionBundles/paperDigital';
 import type { State } from '../supportLandingReducer';
-
 
 // ----- Types ----- //
 
@@ -60,65 +56,22 @@ function SubscriptionsSection(props: PropTypes) {
 
   return (
     <ThreeSubscriptions>
-      <SubscriptionBundle
-        modifierClass="digital"
-        heading="Digital"
-        subheading={displayPrice('DigitalPack', props.countryGroupId)}
-        benefits={{ list: true, benefits: getDigitalBenefits() }}
-        gridImage={{
-          gridId: 'digitalCircle',
-          altText: 'digital subscription',
-          ...gridImageProperties,
-        }}
-        headingSize={3}
-        ctas={[
-          {
-            text: 'Start your 14 day trial',
-            url: subsLinks.DigitalPack,
-            accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
-            modifierClasses: ['digital', 'border'],
-          },
-        ]}
+      <DigitalPack
+        url={subsLinks.DigitalPack}
+        countryGroupId={props.countryGroupId}
+        gridId="digitalCirclePink"
+        abTest={props.abParticipations}
       />
-      <SubscriptionBundle
-        modifierClass="paper"
-        heading="Paper"
-        subheading={`from ${displayPrice('Paper', props.countryGroupId)}`}
-        benefits={{ list: true, benefits: getPaperBenefits() }}
-        gridImage={{
-          gridId: 'paperCircle',
-          altText: 'paper subscription',
-          ...gridImageProperties,
-        }}
-        headingSize={3}
-        ctas={[
-          {
-            text: 'Get a paper subscription',
-            url: subsLinks.Paper,
-            accessibilityHint: 'Proceed to paper subscription options',
-            modifierClasses: ['paper', 'border'],
-          },
-        ]}
+      <Paper
+        url={subsLinks.Paper}
+        countryGroupId={props.countryGroupId}
+        abTest={props.abParticipations}
       />
-      <SubscriptionBundle
-        modifierClass="paper-digital"
-        heading="Paper+Digital"
-        subheading={`from ${displayPrice('PaperAndDigital', props.countryGroupId)}`}
-        benefits={{ list: true, benefits: getPaperDigitalBenefits() }}
-        gridImage={{
-          gridId: 'paperDigitalCircle',
-          altText: 'paper + digital subscription',
-          ...gridImageProperties,
-        }}
-        headingSize={3}
-        ctas={[
-          {
-            text: 'Get a paper+digital subscription',
-            url: subsLinks.PaperAndDigital,
-            accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
-            modifierClasses: ['paper-digital', 'border'],
-          },
-        ]}
+      <PaperDigital
+        url={subsLinks.PaperAndDigital}
+        countryGroupId={props.countryGroupId}
+        abTest={props.abParticipations}
+        gridId="paperDigitalCircleOrange"
       />
     </ThreeSubscriptions>
   );
