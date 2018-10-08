@@ -35,11 +35,13 @@ function DigitalSection(props: PropTypes) {
         headingSize={props.headingSize}
         referrer={props.appReferrer}
         subheading={displayPrice('PremiumTier', props.countryGroupId)}
+        abTest={props.abTest}
       />
       <DailyEdition
         headingSize={props.headingSize}
         countryGroupId={props.countryGroupId}
         appReferrer={props.appReferrer}
+        abTest={props.abTest}
       />
       <DigitalPack
         countryGroupId={props.countryGroupId}
