@@ -92,6 +92,7 @@ function setup(
   onPaymentAuthorisation: string => void,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
+  formClassName: string,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {

@@ -106,7 +106,7 @@ function paymentResultFromObject(json: Object): Promise<PaymentResult> {
     const failureReason: CheckoutFailureReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
-  return Promise.resolve(PaymentSuccess);
+  return Promise.resolve({ paymentStatus: 'failure', error: 'lol' });
 }
 
 // Sends a one-off payment request to the payment API and standardises the result

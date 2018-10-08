@@ -26,6 +26,7 @@ type PropTypes = {|
   switchStatus: Status,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
+  formClassName: string,
 |};
 
 
@@ -68,7 +69,7 @@ function Button(props: PropTypes) {
     onPaymentAuthorisation,
     props.canOpen,
     props.whenUnableToOpen,
-    'regular-contrib__checkout-form',
+    props.formClassName,
   );
 
 

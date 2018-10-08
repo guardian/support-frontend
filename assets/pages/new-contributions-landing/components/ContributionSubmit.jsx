@@ -2,6 +2,12 @@
 
 // ----- Imports ----- //
 
+import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFow';
+import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { Status } from 'helpers/settings';
+import { setPayPalHasLoaded } from 'pages/new-contributions-landing/contributionsLandingActions';
+import { formClassName } from 'pages/regular-contributions/components/formFields';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -10,6 +16,7 @@ import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
+import { Dispatch } from "redux";
 
 import { formatAmount } from './ContributionAmount';
 import { type State } from '../contributionsLandingReducer';
@@ -23,6 +30,10 @@ type PropTypes = {
   isWaiting: boolean,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
+  currencyId: IsoCurrency,
+  csrf: CsrfState,
+  whenUnableToOpen: () => void,
+  payPalSwitchStatus: Status,
 };
 
 const mapStateToProps = (state: State) =>
@@ -33,7 +44,18 @@ const mapStateToProps = (state: State) =>
     paymentMethod: state.page.form.paymentMethod,
     selectedAmounts: state.page.form.selectedAmounts,
     otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
+    currencyId: state.common.internationalisation.currencyId,
+    csrf: state.page.csrf,
+    payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   });
+
+function mapDispatchToProps(dispatch: Dispatch<*>) {
+  return {
+    payPalSetHasLoaded: () => {
+      dispatch(setPayPalHasLoaded());
+    },
+  };
+}
 
 // ----- Render ----- //
 
@@ -50,31 +72,38 @@ function ContributionSubmit(props: PropTypes) {
     } : null;
     const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
     const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
-
+    const formClassName = '.form--contribution';
     return (
       <div className="form__submit">
-        {showPayPalExpressButton ? (
-          // TODO PayPal recurring
-          <button disabled={props.isWaiting}>PayPal Express Button</button>
-        ) : (
-          <button disabled={props.isWaiting} className="form__submit-button" type="submit">
-            Contribute&nbsp;
-            {amount ? formatAmount(
-              currencies[props.currency],
-              spokenCurrencies[props.currency],
-              amount,
-              false,
-            ) : null}&nbsp;
-            {frequency ? `${frequency} ` : null}
-            {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
-            <SvgArrowRight />
-          </button>
-        )}
+       <PayPalExpressButton
+          amount={amount}
+          currencyId={props.currencyId}
+          csrf={props.csrf}
+          onPaymentAuthorisation={() => alert("worked")}
+          hasLoaded={props.payPalHasLoaded}
+          setHasLoaded={props.payPalSetHasLoaded}
+          switchStatus={props.payPalSwitchStatus}
+          canOpen={() => formIsValid(formClassName)}
+          formClassName={formClassName}
+          whenUnableToOpen={props.whenUnableToOpen}
+        />
+        <button disabled={props.isWaiting} className="form__submit-button" type="submit">
+          Contribute&nbsp;
+          {amount ? formatAmount(
+            currencies[props.currency],
+            spokenCurrencies[props.currency],
+            amount,
+            false,
+          ) : null}&nbsp;
+          {frequency ? `${frequency} ` : null}
+          {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
+          <SvgArrowRight />
+        </button>
       </div>
     );
   }
 }
 
-const NewContributionSubmit = connect(mapStateToProps)(ContributionSubmit);
+const NewContributionSubmit = connect(mapStateToProps, mapDispatchToProps)(ContributionSubmit);
 
 export { NewContributionSubmit };

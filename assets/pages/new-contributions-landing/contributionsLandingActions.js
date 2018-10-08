@@ -96,6 +96,8 @@ const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
 const isPaymentReady = (paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler }): Action =>
   ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandlers: paymentHandlers || null });
 
+const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
+
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
@@ -295,4 +297,5 @@ export {
   setPasswordHasBeenSubmitted,
   updatePassword,
   createOneOffPayPalPayment,
+  setPayPalHasLoaded,
 };
