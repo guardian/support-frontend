@@ -12,11 +12,11 @@ import { setPasswordGuest } from 'helpers/paymentIntegrations/newPaymentFlow/rea
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
+import { checkEmail, emailRegexPattern } from 'helpers/formValidation';
 
 import { NewContributionTextInput } from '../ContributionTextInput';
 import { type ThankYouPageStage } from '../../contributionsLandingReducer';
 import { setThankYouPageStage, setPasswordHasBeenSubmitted, updatePassword, type Action } from '../../contributionsLandingActions';
-import { checkEmail, emailRegexPattern } from '../../formValidation';
 import { ButtonWithRightArrow } from '../ButtonWithRightArrow';
 
 // ----- Types ----- //
