@@ -5,8 +5,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, type Amount, type Contrib } from 'helpers/contributions';
-import { getPaymentDescription, type PaymentMethod } from 'helpers/checkouts';
+import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
+import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
@@ -54,6 +54,7 @@ function ContributionSubmit(props: PropTypes) {
     return (
       <div className="form__submit">
         {showPayPalExpressButton ? (
+          // TODO PayPal recurring
           <button disabled={props.isWaiting}>PayPal Express Button</button>
         ) : (
           <button disabled={props.isWaiting} className="form__submit-button" type="submit">

@@ -3,17 +3,15 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/url';
+import type { Contrib, PaymentMethod } from 'helpers/contributions';
 import { getMinContribution, parseContribution, validateContribution } from 'helpers/contributions';
 import * as storage from 'helpers/storage';
 import { type Switches, type SwitchObject } from 'helpers/settings';
-import type { Contrib } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
-
-export type PaymentMethod = 'DirectDebit' | 'PayPal' | 'Stripe' | 'None';
 
 export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe';
 

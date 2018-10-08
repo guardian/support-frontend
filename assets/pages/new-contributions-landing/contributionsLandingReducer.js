@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 
 import { combineReducers } from 'redux';
-import { type PaymentMethod, type PaymentHandler } from 'helpers/checkouts';
-import { amounts, type Amount, type Contrib } from 'helpers/contributions';
+import { type PaymentHandler } from 'helpers/checkouts';
+import { amounts, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -50,7 +50,7 @@ type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   paymentReady: boolean,
-  paymentHandler: {
+  paymentHandlers: {
     [PaymentMethod]: PaymentHandler | null
   },
   selectedAmounts: { [Contrib]: Amount | 'other' },
@@ -94,7 +94,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'None',
-    paymentHandler: {
+    paymentHandlers: {
       Stripe: null,
       DirectDebit: null,
       PayPal: null,
@@ -140,11 +140,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'UPDATE_PAYMENT_READY':
-        return action.paymentHandler
+        return action.paymentHandlers
           ? {
             ...state,
             paymentReady: action.paymentReady,
-            paymentHandler: { ...state.paymentHandler, ...action.paymentHandler },
+            paymentHandlers: { ...state.paymentHandlers, ...action.paymentHandlers },
           }
           : { ...state, paymentReady: action.paymentReady };
 

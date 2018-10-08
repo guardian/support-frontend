@@ -18,7 +18,7 @@ import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { PaymentMethod } from 'helpers/checkouts';
+import type { PaymentMethod } from 'helpers/contributions';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 

@@ -62,8 +62,17 @@ export type DirectDebitAuthorisation = {|
   accountNumber: string
 |};
 
+// Represents an authorisation to execute payments with a given payment method.
+// This will generally be supplied by third-party code (Stripe, PayPal, GoCardless).
+// It applies both to one-off payments, where it is sent to the Payment API which
+// immediately executes the payment, and recurring, where it ultimately ends up in Zuora
+// which uses it to execute payments in the future.
 export type PaymentAuthorisation = StripeAuthorisation | PayPalAuthorisation | DirectDebitAuthorisation;
 
+// Represents the end state of the checkout process,
+// standardised across payment methods & contribution types.
+// The only method/type combination which will not make use of this PayPal one-off,
+// because the end of that checkout happens on the backend after the user is redirected to our site.
 export type PaymentResult
   = {| paymentStatus: 'success' |}
   | {| paymentStatus: 'failure', error: CheckoutFailureReason |};

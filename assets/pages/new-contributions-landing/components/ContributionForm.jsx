@@ -10,8 +10,15 @@ import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/inter
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type PaymentHandler, type PaymentMethod } from 'helpers/checkouts';
-import { config, type Contrib, type Amount } from 'helpers/contributions';
+import { type PaymentHandler } from 'helpers/checkouts';
+import {
+  config,
+  type Contrib,
+  type Amount,
+  type PaymentMatrix,
+  type PaymentMethod,
+  baseHandlers,
+} from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -27,6 +34,7 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import Signout from 'components/signout/signout';
+
 
 import {
   checkFirstName,
@@ -60,6 +68,7 @@ import {
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 
+
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
@@ -78,7 +87,7 @@ type PropTypes = {|
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
   isSignedIn: boolean,
-  paymentHandler: { [PaymentMethod]: PaymentHandler | null },
+  paymentHandlers: { [PaymentMethod]: PaymentHandler | null },
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
@@ -112,7 +121,7 @@ const mapStateToProps = (state: State) => ({
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
   isSignedIn: state.page.user.isSignedIn,
-  paymentHandler: state.page.form.paymentHandler,
+  paymentHandlers: state.page.form.paymentHandlers,
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
@@ -144,6 +153,40 @@ const getAmount = (props: PropTypes) =>
 
 // ----- Event handlers ----- //
 
+function openStripePopup(props: PropTypes) {
+  if (props.paymentHandlers.Stripe) {
+    openDialogBox(props.paymentHandlers.Stripe, getAmount(props), props.email);
+  }
+}
+
+// Bizarrely, adding a type to this object means the type-checking on the
+// formHandlers is no longer accurate.
+// (Flow thinks it's OK when it's missing required properties).
+const formHandlersForRecurring = {
+  PayPal: () => { /* TODO PayPal recurring */ },
+  Stripe: openStripePopup,
+  DirectDebit: (props: PropTypes) => { props.openDirectDebitPopUp(); },
+};
+
+const formHandlers: PaymentMatrix<PropTypes => void> = {
+  ONE_OFF: {
+    ...baseHandlers.ONE_OFF,
+    Stripe: openStripePopup,
+    PayPal: (props: PropTypes) => {
+      props.setPaymentIsWaiting(true);
+      props.createOneOffPayPalPayment({
+        currency: props.currency,
+        amount: getAmount(props),
+        returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+        // TODO: use new cancel url
+        cancelURL: payPalCancelUrl(props.countryGroupId),
+      });
+    },
+  },
+  MONTHLY: { ...baseHandlers.MONTHLY, formHandlersForRecurring },
+  ANNUAL: { ...baseHandlers.ANNUAL, formHandlersForRecurring },
+};
+
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
@@ -152,39 +195,7 @@ function onSubmit(props: PropTypes): Event => void {
     if (!(event.target: any).checkValidity()) {
       return;
     }
-    const amount = getAmount(props);
-    const { email } = props;
-
-    if (props.paymentHandler) {
-      switch (props.paymentMethod) {
-        case 'DirectDebit':
-          props.openDirectDebitPopUp();
-          break;
-
-        case 'PayPal':
-          if (props.contributionType === 'ONE_OFF') {
-            // Displays the processing transaction, please wait screen
-            props.setPaymentIsWaiting(true);
-            props.createOneOffPayPalPayment({
-              currency: props.currency,
-              amount,
-              returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
-              // TODO: use new cancel url
-              cancelURL: payPalCancelUrl(props.countryGroupId),
-            });
-          } else {
-            // TODO
-          }
-          break;
-
-        case 'Stripe':
-        default:
-          if (props.paymentHandler.Stripe) {
-            openDialogBox(props.paymentHandler.Stripe, amount, email);
-          }
-          break;
-      }
-    }
+    formHandlers[props.contributionType][props.paymentMethod](props);
   };
 }
 

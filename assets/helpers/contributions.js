@@ -3,19 +3,65 @@
 // ----- Imports ----- //
 
 import { roundDp } from 'helpers/utilities';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { currencies } from 'helpers/internationalisation/currency';
-import { spokenCurrencies } from 'helpers/internationalisation/currency';
-
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { Radio } from 'components/radioToggle/radioToggle';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
+import type { Radio } from 'components/radioToggle/radioToggle';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
+import { logException } from 'helpers/logger';
 
 // ----- Types ----- //
 
-export type RegularContributionType = 'ANNUAL' | 'MONTHLY';
-export type Contrib = RegularContributionType | 'ONE_OFF';
+export type PaymentMethodMap<T> = {
+  Stripe: T,
+  PayPal: T,
+  DirectDebit: T,
+  None: T,
+}
+
+// This lets us create a union type from the object keys,
+// avoiding the need to specify them separately and keep them in sync!
+// https://flow.org/en/docs/types/utilities/#toc-keys
+// We need to supply the type parameter, but we're only using the keys
+// so it's irrelevant - so we supply null
+export type PaymentMethod = $Keys<PaymentMethodMap<null>>;
+
+export type RegularContributionTypeMap<T> = {
+  MONTHLY: T,
+  ANNUAL: T,
+}
+
+export type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
+  ONE_OFF: T,
+};
+
+export type RegularContributionType = $Keys<RegularContributionTypeMap<null>>;
+export type Contrib = $Keys<ContributionTypeMap<null>>;
+
+export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
+
+export const logInvalidCombination = (contributionType: Contrib, paymentMethod: PaymentMethod) => {
+  logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
+};
+
+const recurringBaseHandler = (contributionType: RegularContributionType) => ({
+  Stripe: () => {},
+  PayPal: () => {},
+  DirectDebit: () => {},
+  None: () => { logInvalidCombination(contributionType, 'None'); },
+});
+
+export const baseHandlers: PaymentMatrix<() => void> = {
+  ONE_OFF: {
+    Stripe: () => {},
+    PayPal: () => {},
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
+    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
+  },
+  MONTHLY: recurringBaseHandler('MONTHLY'),
+  ANNUAL: recurringBaseHandler('ANNUAL'),
+};
 
 export type BillingPeriod = 'Monthly' | 'Annual';
 
