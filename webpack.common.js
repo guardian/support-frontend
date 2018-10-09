@@ -5,6 +5,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
+const cssnano = require('cssnano');
 
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
@@ -101,7 +102,11 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
+              plugins: [
+                pxtorem({ propList: ['*'] }),
+                autoprefixer(),
+                minimizeCss ? cssnano : false,
+              ],
             },
           },
           {
