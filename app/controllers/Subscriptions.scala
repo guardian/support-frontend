@@ -69,7 +69,7 @@ class Subscriptions(
     val js = "digitalSubscriptionLandingPage.js"
     val css = "digitalSubscriptionLandingPageStyles.css"
     val description = Some(stringsConfig.digitalPackLandingDescription)
-    val canonicalLink = Some(s"${supportUrl}/${countryCode}/subscribe/digital")
+    val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink(countryCode))
 
     Ok(views.html.main(title, id, js, css, description, canonicalLink)).withSettingsSurrogateKey
   }
@@ -96,4 +96,8 @@ class Subscriptions(
       val css = "digitalSubscriptionCheckoutPageStyles.css"
       Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
     }
+
+  def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
+    s"${supportUrl}/${countryCode}/subscribe/digital"
+
 }
