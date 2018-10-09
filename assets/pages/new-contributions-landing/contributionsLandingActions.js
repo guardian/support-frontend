@@ -42,7 +42,7 @@ export type Action =
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
-  | { type: 'PAYMENT_FAILURE', paymentError: string }
+  | { type: 'PAYMENT_FAILURE', paymentError: CheckoutFailureReason }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
@@ -187,7 +187,7 @@ const onCreateOneOffPayPalPaymentResponse =
         // For PayPal create payment errors, the Payment API passes through the
         // error from PayPal's API which we don't want to expose to the user.
         dispatch(paymentFailure('unknown'));
-        dispatch(setPaymentIsWaiting(false));
+        dispatch(paymentWaiting(false));
       });
     };
 
