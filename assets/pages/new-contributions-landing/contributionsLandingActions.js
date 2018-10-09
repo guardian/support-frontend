@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type PaymentHandler } from 'helpers/checkouts';
 import { type Amount, baseHandlers, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
@@ -41,7 +42,7 @@ export type Action =
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
-  | { type: 'PAYMENT_FAILURE', error: string }
+  | { type: 'PAYMENT_FAILURE', paymentError: string }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
@@ -83,7 +84,7 @@ const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
-const paymentFailure = (error: string): Action => ({ type: 'PAYMENT_FAILURE', error });
+const paymentFailure = (paymentError: CheckoutFailureReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
 
 const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
   ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
@@ -152,8 +153,11 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
           dispatch(paymentSuccess());
           break;
 
+        case 'failure':
         default:
           dispatch(paymentFailure(result.error));
+          dispatch(paymentWaiting(false));
+
       }
     });
   };
@@ -182,7 +186,8 @@ const onCreateOneOffPayPalPaymentResponse =
 
         // For PayPal create payment errors, the Payment API passes through the
         // error from PayPal's API which we don't want to expose to the user.
-        dispatch(paymentFailure('There was an error with your payment'));
+        dispatch(paymentFailure('unknown'));
+        dispatch(setPaymentIsWaiting(false));
       });
     };
 

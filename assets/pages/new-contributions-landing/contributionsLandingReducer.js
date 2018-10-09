@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
 import { type PaymentHandler } from 'helpers/checkouts';
 import { amounts, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
@@ -58,6 +59,7 @@ type FormState = {
   formData: FormData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
+  paymentError: CheckoutFailureReason | null,
   guestAccountCreationToken: ?string,
   thankYouPageStage: ThankYouPageStage,
 };
@@ -121,6 +123,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     selectedAmounts: initialAmount,
     isWaiting: false,
     paymentComplete: false,
+    paymentError: null,
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
   };
@@ -190,7 +193,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         };
 
       case 'PAYMENT_FAILURE':
-        return { ...state, paymentComplete: false, error: action.error };
+        return { ...state, paymentComplete: false, paymentError: action.paymentError };
 
       case 'PAYMENT_WAITING':
         return { ...state, paymentComplete: false, isWaiting: action.isWaiting };
