@@ -5,10 +5,12 @@
 import React from 'react';
 
 import {
-  iOSAppUrl,
+  getIosAppUrl,
   androidAppUrl,
-  dailyEditionUrl,
+  getDailyEditionUrl,
 } from 'helpers/externalLinks';
+
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CtaLink from 'components/ctaLink/ctaLink';
@@ -16,7 +18,9 @@ import CtaLink from 'components/ctaLink/ctaLink';
 
 // ----- Component ----- //
 
-function AppsSection() {
+function AppsSection(props: {
+  countryGroupId: CountryGroupId,
+}) {
 
   return (
     <div className="apps-section">
@@ -34,7 +38,7 @@ function AppsSection() {
           <CtaLink
             text="Download from the App Store"
             accessibilityHint="Click to download the app on the Apple App Store"
-            url={iOSAppUrl}
+            url={getIosAppUrl(props.countryGroupId)}
           />
           <CtaLink
             text="Download from Google Play"
@@ -56,7 +60,7 @@ function AppsSection() {
           <CtaLink
             text="Download the Daily Tablet edition"
             accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
-            url={dailyEditionUrl}
+            url={getDailyEditionUrl(props.countryGroupId)}
           />
         </div>
       </LeftMarginSection>

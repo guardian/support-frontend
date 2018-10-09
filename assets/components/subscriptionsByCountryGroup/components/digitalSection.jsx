@@ -36,6 +36,7 @@ function DigitalSection(props: PropTypes) {
         referrer={props.appReferrer}
         subheading={displayPrice('PremiumTier', props.countryGroupId)}
         abTest={props.abTest}
+        countryGroupId={props.countryGroupId}
       />
       <DailyEdition
         headingSize={props.headingSize}

@@ -8,10 +8,11 @@ import { type HeadingSize } from 'components/heading/heading';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 
-import { androidAppUrl, iOSAppUrl } from 'helpers/externalLinks';
+import { androidAppUrl, getIosAppUrl } from 'helpers/externalLinks';
 import { addQueryParamsToURL } from 'helpers/url';
 import trackAppStoreLink from 'components/subscriptionBundles/appCtaTracking';
 import type { ComponentAbTest } from 'helpers/subscriptions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Component ----- //
@@ -21,6 +22,7 @@ function PremiumTier(props: {
   subheading: string,
   referrer: string,
   abTest: ComponentAbTest | null,
+  countryGroupId: CountryGroupId
 }) {
 
   return (
@@ -41,7 +43,7 @@ function PremiumTier(props: {
       ctas={[
         {
           text: 'Buy in the App Store',
-          url: addQueryParamsToURL(iOSAppUrl, { referrer: props.referrer }),
+          url: addQueryParamsToURL(getIosAppUrl(props.countryGroupId), { referrer: props.referrer }),
           accessibilityHint: 'Proceed to buy the premium app in the app store',
           modifierClasses: ['border', 'ios'],
           onClick: trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', props.abTest),
