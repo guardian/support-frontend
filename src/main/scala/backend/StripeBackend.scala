@@ -13,6 +13,7 @@ import conf._
 import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
+import model.email.ContributorRow
 import model.stripe.{StripeApiError, StripeChargeData, StripeChargeSuccess, StripeRefundHook}
 import play.api.libs.ws.WSClient
 import services._
@@ -120,9 +121,18 @@ class StripeBackend(
     databaseService.flagContributionAsRefunded(stripePaymentId)
       .leftMap(BackendError.fromDatabaseError)
 
-  private def sendThankYouEmail(email: String, data: StripeChargeData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] =
-    emailService.sendThankYouEmail(email, data.paymentData.currency.toString, identityId, PaymentProvider.Stripe)
-      .leftMap(BackendError.fromEmailError)
+  private def sendThankYouEmail(email: String, data: StripeChargeData, identityId: Long): EitherT[Future, BackendError, SendMessageResult] = {
+    val contributorRow = ContributorRow(
+      email,
+      data.paymentData.currency.toString,
+      identityId,
+      PaymentProvider.Stripe,
+      None,
+      data.paymentData.amount
+    )
+
+    emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
+  }
 
 }
 

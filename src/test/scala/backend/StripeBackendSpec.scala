@@ -6,11 +6,11 @@ import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.OphanServiceError
 import com.stripe.model.{Charge, Event, ExternalAccount}
+import model.email.ContributorRow
 import model.paypal.PaypalApiError
 import model.stripe.{StripeApiError, _}
 import model.{AcquisitionData, _}
 import org.mockito.Matchers._
-import org.mockito.Matchers.{eq => mockitoEq}
 import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
@@ -166,7 +166,7 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
 
         // But email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l), mockitoEq(PaymentProvider.Stripe))).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(ContributorRow("email@email.com", "USD", 1l, PaymentProvider.Stripe, None, BigDecimal(12)))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
         val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, countrySubdivisionCode)
@@ -185,7 +185,7 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         // And email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l), mockitoEq(PaymentProvider.Stripe))).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(ContributorRow("email@email.com", "USD", 1l, PaymentProvider.Stripe, None, BigDecimal(12)))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
         val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, countrySubdivisionCode)

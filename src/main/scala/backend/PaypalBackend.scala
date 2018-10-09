@@ -6,7 +6,6 @@ import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
@@ -15,12 +14,13 @@ import conf.ConfigLoader._
 import model._
 import model.acquisition.PaypalAcquisition
 import model.db.ContributionData
+import model.email.ContributorRow
 import model.paypal._
 import services._
 import util.EnvironmentBasedBuilder
-
 import scala.concurrent.Future
 import scala.collection.JavaConverters._
+import scala.util.Try
 
 class PaypalBackend(
     paypalService: PaypalService,
@@ -132,8 +132,8 @@ class PaypalBackend(
 
       val sendThankYouEmailResult = for {
         identityId <- identityIdM
-        currency <- currencyFromPayment(payment)
-        _ <- sendThankYouEmail(email, currency, identityId)
+        contributorRow <- contributorRowFromPayment(email, identityId, payment)
+        _ <- emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
       } yield ()
 
       BackendError.combineResults(
@@ -189,16 +189,27 @@ class PaypalBackend(
     databaseService.flagContributionAsRefunded(paypalPaymentId)
       .leftMap(BackendError.fromDatabaseError)
 
-  private def sendThankYouEmail(email: String, currency: String, identityId: Long): EitherT[Future, BackendError, SendMessageResult] =
-    emailService.sendThankYouEmail(email, currency, identityId, PaymentProvider.Paypal)
-      .leftMap(BackendError.fromEmailError)
+  private def contributorRowFromPayment(email: String, identityId: Long, payment: Payment): EitherT[Future, BackendError, ContributorRow] = {
 
-  private def currencyFromPayment(p: Payment): EitherT[Future, BackendError, String] =
-    Either.catchNonFatal(p.getTransactions.asScala.head.getAmount.getCurrency)
-      .leftMap(error => {
-        logger.error("Could not get currency from payment object in PayPal SDK", error)
-        BackendError.fromPaypalAPIError(PaypalApiError.fromThrowable(error))
-      }).toEitherT
+    def errorMessage(details: String) = s"contributorRowFromPayment unable to extract contributorRow, $details"
+
+    val firstName = for {
+      payer <- Option(payment.getPayer)
+      info <- Option(payer.getPayerInfo)
+      firstName <- Option(info.getFirstName)
+    } yield firstName
+
+    val contributorRow = for {
+      transactions <- Option(payment.getTransactions).toRight(s"unable to get Transactions for $identityId")
+      transaction <- transactions.asScala.headOption.toRight(s"no transactions found for $identityId")
+      amount <- Try(BigDecimal(transaction.getAmount.getTotal)).toEither.leftMap(e => s"unable to extract amount for $identityId ${e.getMessage}")
+    } yield {
+      ContributorRow(email, transaction.getAmount.getCurrency, identityId, PaymentProvider.Paypal, firstName, amount)
+    }
+
+    contributorRow.left.foreach(message => logger.error(errorMessage(message)))
+    EitherT.fromEither[Future](contributorRow.leftMap(message => BackendError.fromPaypalAPIError(PaypalApiError.fromString(errorMessage(message)))))
+  }
 
 }
 

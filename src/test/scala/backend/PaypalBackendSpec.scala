@@ -8,8 +8,8 @@ import com.gu.acquisition.model.errors.OphanServiceError
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
 import model.paypal._
 import model._
+import model.email.ContributorRow
 import org.mockito.Matchers._
-import org.mockito.Matchers.{eq => mockitoEq}
 import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
@@ -114,6 +114,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     when(payer.getPayerInfo).thenReturn(payerInfo)
     when(payerInfo.getCountryCode).thenReturn("uk")
     when(payerInfo.getEmail).thenReturn("email@email.com")
+    when(payerInfo.getFirstName).thenReturn("Peter")
     ()
   }
 }
@@ -223,7 +224,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
 
         // But email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l), mockitoEq(PaymentProvider.Paypal))).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1l, PaymentProvider.Paypal, Some("Peter"), BigDecimal(2)))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
         val result = paypalBackend invokePrivate postPaymentTasks(enrichedPaymentMock, mockAcquisitionData, countrySubdivisionCode)
@@ -241,7 +242,7 @@ class PaypalBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
         // And email fails
-        when(mockEmailService.sendThankYouEmail(any(), anyString(), mockitoEq(1l), mockitoEq(PaymentProvider.Paypal))).thenReturn(emailResponseError)
+        when(mockEmailService.sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1l, PaymentProvider.Paypal, Some("Peter"), BigDecimal(2)))).thenReturn(emailResponseError)
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
         val errors = BackendError.MultipleErrors(List(

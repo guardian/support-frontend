@@ -1,5 +1,8 @@
 package model.email
 
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.util.Date
 import io.circe.syntax._
 import io.circe.generic.JsonCodec
 import model.PaymentProvider
@@ -42,16 +45,35 @@ import model.PaymentProvider
 @JsonCodec case class SubscriberAttributesSqsMessage(
   EmailAddress: String,
   edition: String,
-  `payment method`: String
+  `payment method`: String,
+  currency: String,
+  amount: String,
+  first_name: Option[String],
+  date_of_payment: String
 )
 
-case class ContributorRow(email: String, currency: String, identityId: Long, paymentMethodName: PaymentProvider) {
+case class ContributorRow(
+  email: String,
+  currency: String,
+  identityId: Long,
+  paymentMethod: PaymentProvider,
+  firstName: Option[String],
+  amount: BigDecimal
+) {
   def edition: String = currency match {
     case "GBP" => "uk"
     case "USD" => "us"
     case "AUD" => "au"
     case _ => "international"
   }
+
+  val currencyGlyph: String = currency match {
+    case "GBP" => "£"
+    case "EUR" => "€"
+    case _ => "$"
+  }
+
+  def formattedDate: String = new SimpleDateFormat("d MMMM yyyy").format(Date.from(Instant.now))
 
   def toJsonContributorRowSqsMessage: String = {
     ContributorRowSqsMessage(
@@ -62,7 +84,11 @@ case class ContributorRow(email: String, currency: String, identityId: Long, pay
           SubscriberAttributes = SubscriberAttributesSqsMessage(
             EmailAddress = email,
             edition = edition,
-            `payment method` = paymentMethodName.name
+            `payment method` = paymentMethod.name,
+            currency = currencyGlyph,
+            amount = amount.setScale(2).toString,
+            first_name = firstName,
+            date_of_payment = formattedDate
           )
         )
       ),

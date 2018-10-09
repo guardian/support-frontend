@@ -16,7 +16,11 @@ class ContributorRowTest extends FlatSpec with Matchers {
         |      "SubscriberAttributes" : {
         |        "EmailAddress" : "email@email.email",
         |        "edition" : "uk",
-        |        "payment method": "paypal"
+        |        "payment method": "paypal",
+        |        "first_name": "Peter",
+        |        "amount": "5.10",
+        |        "currency": "£",
+        |        "date_of_payment": "9 October 2018"
         |      }
         |    }
         |  },
@@ -25,7 +29,7 @@ class ContributorRowTest extends FlatSpec with Matchers {
         |}""".stripMargin
     )
 
-    val Right(result) =  parse(ContributorRow("email@email.email", "GBP", 123l, PaymentProvider.Paypal).toJsonContributorRowSqsMessage)
+    val Right(result) =  parse(ContributorRow("email@email.email", "GBP", 123l, PaymentProvider.Paypal, Some("Peter"), BigDecimal(5.1)).toJsonContributorRowSqsMessage)
     result shouldBe expected
   }
 }

@@ -11,6 +11,7 @@ import org.scalatest.FlatSpec
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import java.util.concurrent.CompletableFuture
+import model.email.ContributorRow
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
 import scala.collection.JavaConverters._
@@ -52,7 +53,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    val emailResult = emailService.sendThankYouEmail("email@email.com", "GBP", identityId, PaymentProvider.Paypal)
+    val emailResult = emailService.sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1l, PaymentProvider.Paypal, None, BigDecimal(2)))
     whenReady(emailResult.value) { result =>
       result shouldBe Right(new SendMessageResult)
     }
@@ -84,7 +85,7 @@ class EmailServiceSpec extends FlatSpec with Matchers with MockitoSugar with Sca
 
     when(sqsClient.sendMessageAsync(any())).thenReturn(javaFuture)
 
-    whenReady(emailService.sendThankYouEmail("email@email.com", "GBP", identityId, PaymentProvider.Paypal).value) { result =>
+    whenReady(emailService.sendThankYouEmail(ContributorRow("email@email.com", "GBP", 1l, PaymentProvider.Paypal, None, BigDecimal(2))).value) { result =>
       result.fold(
         error => {
           // TODO: understand how this java.lang.Exception bit gets added
