@@ -90,7 +90,7 @@ class Application(
       mainJsBundle = "supportLandingPage.js",
       mainStyleBundle = "supportLandingPageStyles.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
-      description = Some(stringsConfig.supportLandingDescription)
+      description = stringsConfig.supportLandingDescription
     )).withSettingsSurrogateKey
   }
 
@@ -98,7 +98,7 @@ class Application(
     implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       title = "Support the Guardian | Make a Contribution",
-      description = Some(stringsConfig.contributionsLandingDescription),
+      description = stringsConfig.contributionsLandingDescription,
       mainId = s"contributions-landing-page-$countryCode",
       mainJsBundle = "contributionsLandingPage.js",
       mainStyleBundle = "contributionsLandingPageStyles.css",

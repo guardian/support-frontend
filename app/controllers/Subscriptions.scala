@@ -57,7 +57,7 @@ class Subscriptions(
         id,
         js,
         "subscriptionsLandingPageStyles.css",
-        description = Some(stringsConfig.subscriptionsLandingDescription)
+        description = stringsConfig.subscriptionsLandingDescription
       )).withSettingsSurrogateKey
     }
   }
@@ -68,7 +68,7 @@ class Subscriptions(
     val id = "digital-subscription-landing-page-" + countryCode
     val js = "digitalSubscriptionLandingPage.js"
     val css = "digitalSubscriptionLandingPageStyles.css"
-    val description = Some(stringsConfig.digitalPackLandingDescription)
+    val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
