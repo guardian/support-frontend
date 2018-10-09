@@ -69,9 +69,15 @@ class Subscriptions(
     val js = "digitalSubscriptionLandingPage.js"
     val css = "digitalSubscriptionLandingPageStyles.css"
     val description = Some(stringsConfig.digitalPackLandingDescription)
-    val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink(countryCode))
+    val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
+    val hrefLangLinks = Map(
+      "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
+      "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),
+      "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
+      "en" -> buildCanonicalDigitalSubscriptionLink("int")
+    )
 
-    Ok(views.html.main(title, id, js, css, description, canonicalLink)).withSettingsSurrogateKey
+    Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
   }
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")

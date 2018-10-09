@@ -8,6 +8,7 @@
 	mainStyleBundle: String,
 	description: Option[String] = None,
 	canonicalLink: Option[String] = None,
+	hrefLangLinks: Map[String, String] = Map(),
 	styles: Html = Html(""),
 	scripts: Html = Html("")
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
@@ -25,7 +26,11 @@
 	}
 
 	@if(canonicalLink.isDefined) {
-		<link rel="canonical" href="@canonicalLink">
+		<link rel="canonical" href="@canonicalLink" />
+	}
+
+	@for((lang, link) <- hrefLangLinks){
+		<link rel="alternate" href="@link" hreflang="@lang" />
 	}
 
 	@settingsScript(settings)
