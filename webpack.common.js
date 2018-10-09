@@ -95,9 +95,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            options: {
-              minimize: minimizeCss,
-            },
           },
           {
             loader: 'postcss-loader',
