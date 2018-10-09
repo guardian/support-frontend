@@ -64,8 +64,6 @@
     "redux-thunk": "^2.3.0",
     "seedrandom": "^2.4.3",
     "uuid": "^3.2.1"
-  },
-  "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
