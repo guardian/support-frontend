@@ -16,7 +16,8 @@ class Subscriptions(
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
-    settingsProvider: SettingsProvider
+    settingsProvider: SettingsProvider,
+    supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -68,7 +69,9 @@ class Subscriptions(
     val js = "digitalSubscriptionLandingPage.js"
     val css = "digitalSubscriptionLandingPageStyles.css"
     val description = Some(stringsConfig.digitalPackLandingDescription)
-    Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
+    val canonicalLink = Some(s"${supportUrl}/${countryCode}/subscribe/digital")
+
+    Ok(views.html.main(title, id, js, css, description, canonicalLink)).withSettingsSurrogateKey
   }
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")

@@ -7,6 +7,7 @@
 	mainJsBundle: String,
 	mainStyleBundle: String,
 	description: Option[String] = None,
+	canonicalLink: Option[String] = None,
 	styles: Html = Html(""),
 	scripts: Html = Html("")
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
@@ -21,6 +22,10 @@
 	@if(description.isDefined) {
 		<meta name="description" content="@description" />
 		<meta property="og:description" content="@description" />
+	}
+
+	@if(canonicalLink.isDefined) {
+		<link rel="canonical" href="@canonicalLink">
 	}
 
 	@settingsScript(settings)
