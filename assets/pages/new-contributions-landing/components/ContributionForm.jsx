@@ -73,7 +73,7 @@ import {
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   paymentComplete: boolean,
-  error: CheckoutFailureReason | null,
+  paymentError: CheckoutFailureReason | null,
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
   selectedCountryGroupDetails: CountryMetaData,
@@ -126,6 +126,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
   currency: state.common.internationalisation.currencyId,
+  paymentError: state.page.form.paymentError,
 });
 
 
@@ -231,7 +232,6 @@ function ContributionForm(props: PropTypes) {
       <div className="gu-content__content">
         <h1 className="header">{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
-        <PaymentFailureMessage checkoutFailureReason={props.error} />
         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
           <NewContributionType />
           <NewContributionAmount
@@ -292,7 +292,10 @@ function ContributionForm(props: PropTypes) {
             errorMessage="Please provide a state"
           />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
-          <NewContributionSubmit />
+          <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
+          <NewContributionSubmit
+            whenUnableToOpen={props.setCheckoutFormHasBeenSubmitted}
+          />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
         <DirectDebitPopUpForm
@@ -302,10 +305,6 @@ function ContributionForm(props: PropTypes) {
       </div>
     );
 }
-
-ContributionForm.defaultProps = {
-  error: null,
-};
 
 const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
 
