@@ -20,13 +20,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
 
-	@if(description.isDefined) {
-		<meta name="description" content="@description" />
-		<meta property="og:description" content="@description" />
+	@description.map { definedDescription =>
+		<meta name="description" content="haha@definedDescription" />
+		<meta property="og:description" content="@definedDescription" />
 	}
 
-	@if(canonicalLink.isDefined) {
-		<link rel="canonical" href="@canonicalLink" />
+	@canonicalLink.map { definedCanonicalLink =>
+		<link rel="canonical" href="@definedCanonicalLink" />
 	}
 
 	@for((lang, link) <- hrefLangLinks){
