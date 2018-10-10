@@ -5,6 +5,7 @@
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { loadPayPalExpress } from 'helpers/paymentIntegrations/payPalExpressCheckout';
+import { NewContributionFormContainer } from 'pages/new-contributions-landing/components/ContributionFormContainer';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router';
@@ -61,21 +62,6 @@ const formClassName = 'form--contribution';
 
 loadPayPalExpress().then( x => {
 
-const payPaypalExpressButton = (
-  <PayPalExpressButton
-    amount={5}
-    currencyId={"USD"}
-    csrf={csrf}
-    onPaymentAuthorisation={() => alert("worked")}
-    hasLoaded={payPalHasLoaded}
-    setHasLoaded={() => {}}
-    switchStatus={payPalSwitchStatus}
-    canOpen={() => formIsValid(formClassName)}
-    formClassName={formClassName}
-    whenUnableToOpen={() => {}}
-    show={true}
-    />
-  );
 
 const router = (
   <BrowserRouter>
@@ -90,10 +76,9 @@ const router = (
               header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
-              <NewContributionForm
+              <NewContributionFormContainer
                 selectedCountryGroupDetails={selectedCountryGroupDetails}
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`}
-                payPalExpressButton={payPaypalExpressButton}
               />
 
 

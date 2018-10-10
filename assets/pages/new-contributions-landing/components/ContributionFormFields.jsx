@@ -118,6 +118,7 @@ function FormFields(props: PropTypes) {
     lastName,
     email,
     isSignedIn,
+    state,
     checkoutFormHasBeenSubmitted,
   } = props;
   return (

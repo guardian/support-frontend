@@ -115,12 +115,6 @@ const mapStateToProps = (state: State) => ({
   paymentComplete: state.page.form.paymentComplete,
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
-  firstName: getCheckoutFormValue(state.page.form.formData.firstName, state.page.user.firstName),
-  lastName: getCheckoutFormValue(state.page.form.formData.lastName, state.page.user.lastName),
-  email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
-  state: state.page.form.formData.state,
-  selectedAmounts: state.page.form.selectedAmounts,
-  otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
   isSignedIn: state.page.user.isSignedIn,
   paymentHandlers: state.page.form.paymentHandlers,
@@ -167,9 +161,6 @@ function ContributionFormContainer(props: PropTypes) {
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
-        />
-        <NewContributionSubmit
-          whenUnableToOpen={props.setCheckoutFormHasBeenSubmitted}
         />
         {props.payPalExpressButton}
       </div>
