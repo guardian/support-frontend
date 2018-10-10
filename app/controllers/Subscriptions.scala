@@ -16,7 +16,8 @@ class Subscriptions(
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
-    settingsProvider: SettingsProvider
+    settingsProvider: SettingsProvider,
+    supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -56,18 +57,27 @@ class Subscriptions(
         id,
         js,
         "subscriptionsLandingPageStyles.css",
-        description = Some(stringsConfig.subscriptionsLandingDescription)
+        description = stringsConfig.subscriptionsLandingDescription
       )).withSettingsSurrogateKey
     }
   }
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
-    val title = "Support the Guardian | Digital Subscription"
+    val title = "Support the Guardian | Digital Pack Subscription"
     val id = "digital-subscription-landing-page-" + countryCode
     val js = "digitalSubscriptionLandingPage.js"
     val css = "digitalSubscriptionLandingPageStyles.css"
-    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+    val description = stringsConfig.digitalPackLandingDescription
+    val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
+    val hrefLangLinks = Map(
+      "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
+      "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),
+      "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
+      "en" -> buildCanonicalDigitalSubscriptionLink("int")
+    )
+
+    Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
   }
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
@@ -92,4 +102,8 @@ class Subscriptions(
       val css = "digitalSubscriptionCheckoutPageStyles.css"
       Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
     }
+
+  def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
+    s"${supportUrl}/${countryCode}/subscribe/digital"
+
 }
