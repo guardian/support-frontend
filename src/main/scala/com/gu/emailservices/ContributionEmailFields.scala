@@ -27,8 +27,8 @@ case class ContributionEmailFields(
       "first payment date" -> formatDate(created.plusDays(10)),
       "payment method" -> "Direct Debit"
     )
-    case _: PayPalReferenceTransaction => List("payment method" -> "paypal")
-    case _: CreditCardReferenceTransaction => List("payment method" -> "card")
+    case _: PayPalReferenceTransaction => List("payment method" -> "PayPal")
+    case _: CreditCardReferenceTransaction => List("payment method" -> "credit / debit card")
   }
 
   override val fields = List(
