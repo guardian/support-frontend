@@ -48,10 +48,10 @@ const subscriptionPrices: {
     International: 19.99,
   },
   GuardianWeekly: {
-    GBPCountries: 30,
-    UnitedStates: 60,
-    AUDCountries: 78,
-    International: 65,
+    GBPCountries: 37.50,
+    UnitedStates: 75,
+    AUDCountries: 97.50,
+    International: 81.30,
   },
   Paper: {
     GBPCountries: 10.36,
