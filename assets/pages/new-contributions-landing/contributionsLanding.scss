@@ -944,7 +944,7 @@ form {
 /* PayPal Express Button */
 
 .component-paypal-button-checkout {
-  margin-top: 20px;
+  margin-top: -$gu-v-spacing;
 
   width: 100%;
 }

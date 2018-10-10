@@ -78,12 +78,7 @@ type PropTypes = {|
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
   selectedCountryGroupDetails: CountryMetaData,
-  contributionType: Contrib,
   thankYouRoute: string,
-  firstName: string,
-  lastName: string,
-  email: string,
-  state: UsState | CaState | null,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
@@ -95,12 +90,11 @@ type PropTypes = {|
   updateState: Event => void,
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
-  checkoutFormHasBeenSubmitted: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   openDirectDebitPopUp: () => void,
   isDirectDebitPopUpOpen: boolean,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
-  currency: IsoCurrency,
+  currencyId: IsoCurrency,
   payPalExpressButton: Node,
 |};
 
@@ -112,22 +106,22 @@ const getCheckoutFormValue = (formValue: string | null, userValue: string | null
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
+  csrf: state.page.csrf,
+  payPalHasLoaded: state.page.form.payPalHasLoaded,
+  payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
+  currencyId: state.common.internationalisation.currencyId,
+  paymentMethod: state.page.form.paymentMethod,
   paymentComplete: state.page.form.paymentComplete,
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
-  paymentMethod: state.page.form.paymentMethod,
   isSignedIn: state.page.user.isSignedIn,
   paymentHandlers: state.page.form.paymentHandlers,
-  contributionType: state.page.form.contributionType,
-  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
-  currency: state.common.internationalisation.currencyId,
   csrf: state.page.csrf,
   payPalHasLoaded: state.page.form.payPalHasLoaded,
   payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   paymentMethod: state.page.form.paymentMethod,
 });
-
 
 const mapDispatchToProps = (dispatch: Function) => ({
 
@@ -150,6 +144,10 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
+  const showPayPalExpressButton = props.paymentMethod === 'PayPal';
+  const formClassName = 'form--contribution';
+
+
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
@@ -162,7 +160,18 @@ function ContributionFormContainer(props: PropTypes) {
           onPaymentAuthorisation={onPaymentAuthorisation}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
         />
-        {props.payPalExpressButton}
+        <PayPalExpressButton
+          currencyId={props.currencyId}
+          csrf={props.csrf}
+          onPaymentAuthorisation={onPaymentAuthorisation}
+          hasLoaded={props.payPalHasLoaded}
+          setHasLoaded={props.payPalSetHasLoaded}
+          switchStatus={props.payPalSwitchStatus}
+          canOpen={() => formIsValid(formClassName)}
+          formClassName={formClassName}
+          whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
+          show={showPayPalExpressButton}
+        />
       </div>
     );
 }

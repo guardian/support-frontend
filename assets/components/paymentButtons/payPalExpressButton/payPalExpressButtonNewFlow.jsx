@@ -49,10 +49,10 @@ function PayPalExpressButton(props: PropTypes) {
 
 function Button(props: PropTypes) {
 
-  /*if (!props.hasLoaded) {
+  if (!props.hasLoaded) {
     loadPayPalExpress().then(props.setHasLoaded);
     return null;
-  }*/
+  }
 
   console.log('Here');
 
@@ -66,7 +66,6 @@ function Button(props: PropTypes) {
   };
 
   const payPalOptions = setup(
-    props.amount,
     props.currencyId,
     props.csrf,
     onPaymentAuthorisation,

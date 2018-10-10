@@ -2,8 +2,6 @@
 
 // ----- Imports ----- //
 
-import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -16,7 +14,6 @@ import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-import { Dispatch } from "redux";
 
 import { formatAmount } from './ContributionAmount';
 import { type State } from '../contributionsLandingReducer';
@@ -33,9 +30,6 @@ type PropTypes = {
   currencyId: IsoCurrency,
   csrf: CsrfState,
   whenUnableToOpen: () => void,
-  payPalSwitchStatus: Status,
-  payPalHasLoaded: boolean,
-  payPalExpressButton: Node,
 };
 
 const mapStateToProps = (state: State) =>
@@ -49,13 +43,6 @@ const mapStateToProps = (state: State) =>
     currencyId: state.common.internationalisation.currencyId,
   });
 
-function mapDispatchToProps(dispatch: Dispatch<*>) {
-  return {
-    payPalSetHasLoaded: () => {
-      dispatch(setPayPalHasLoaded());
-    },
-  };
-}
 
 // ----- Render ----- //
 
@@ -99,6 +86,6 @@ function ContributionSubmit(props: PropTypes) {
   }
 }
 
-const NewContributionSubmit = connect(mapStateToProps, mapDispatchToProps)(ContributionSubmit);
+const NewContributionSubmit = connect(mapStateToProps)(ContributionSubmit);
 
 export { NewContributionSubmit };

@@ -48,7 +48,6 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
 }
 
 function setupPayment(
-  amountToPay: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
 ) {
@@ -57,7 +56,7 @@ function setupPayment(
   return (resolve, reject) => {
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
-      amount: document.quer(),
+      amount: 5,
       billingPeriod: 'monthly',
       currency: currencyId,
     };
@@ -86,7 +85,6 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
 }
 
 function setup(
-  amount: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
   onPaymentAuthorisation: string => void,
@@ -135,7 +133,7 @@ function setup(
     },
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(amount, currencyId, csrf),
+    payment: setupPayment(currencyId, csrf),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize,
