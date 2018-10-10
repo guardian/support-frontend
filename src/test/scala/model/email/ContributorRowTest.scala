@@ -1,13 +1,17 @@
 package model.email
 
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.util.Date
 import io.circe.parser._
 import model.PaymentProvider
 import org.scalatest.{FlatSpec, Matchers}
 
 class ContributorRowTest extends FlatSpec with Matchers {
   it should "serialize to json" in {
+    val formattedDate = new SimpleDateFormat("d MMMM yyyy").format(Date.from(Instant.now))
     val Right(expected) = parse(
-      """
+      s"""
         |{
         |  "To" : {
         |    "Address" : "email@email.email",
@@ -16,11 +20,11 @@ class ContributorRowTest extends FlatSpec with Matchers {
         |      "SubscriberAttributes" : {
         |        "EmailAddress" : "email@email.email",
         |        "edition" : "uk",
-        |        "payment method": "paypal",
+        |        "payment method": "PayPal",
         |        "first_name": "Peter",
         |        "amount": "5.10",
         |        "currency": "£",
-        |        "date_of_payment": "9 October 2018"
+        |        "date_of_payment": "$formattedDate"
         |      }
         |    }
         |  },
