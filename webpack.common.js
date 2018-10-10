@@ -102,7 +102,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
               plugins: [
                 pxtorem({ propList: ['*'] }),
                 autoprefixer(),
-                minimizeCss ? cssnano : false,
+                ...(minimizeCss ? cssnano : []),
               ],
             },
           },
