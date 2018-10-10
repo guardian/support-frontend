@@ -11,7 +11,7 @@ import {
   type Contrib,
   type PaymentMethod,
   type PaymentMatrix,
-  baseHandlers,
+  logInvalidCombination,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
@@ -20,6 +20,7 @@ import { setupStripeCheckout } from 'helpers/paymentIntegrations/newPaymentFlow/
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
+import { logException } from 'helpers/logger';
 
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updatePaymentMethod, isPaymentReady } from '../contributionsLandingActions';
@@ -86,11 +87,23 @@ const recurringPaymentMethodInitialisers = {
 
 const paymentMethodInitialisers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
-    ...baseHandlers.ONE_OFF,
     Stripe: initialiseStripeCheckout,
+    PayPal: () => {
+      // PayPal one-off payments involve a call to PayPal's API (via the Payment API)
+      // and a clientside redirect. No third-party JS needed.
+      logException('Paypal one-off does not require initialisation');
+    },
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
+    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
-  ANNUAL: { ...baseHandlers.ANNUAL, ...recurringPaymentMethodInitialisers },
-  MONTHLY: { ...baseHandlers.MONTHLY, ...recurringPaymentMethodInitialisers },
+  ANNUAL: {
+    ...recurringPaymentMethodInitialisers,
+    None: () => { logInvalidCombination('ANNUAL', 'None'); },
+  },
+  MONTHLY: {
+    ...recurringPaymentMethodInitialisers,
+    None: () => { logInvalidCombination('MONTHLY', 'None'); },
+  },
 };
 
 

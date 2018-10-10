@@ -17,7 +17,7 @@ import {
   type Amount,
   type PaymentMatrix,
   type PaymentMethod,
-  baseHandlers,
+  logInvalidCombination,
 } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
@@ -166,12 +166,13 @@ function openStripePopup(props: PropTypes) {
 const formHandlersForRecurring = {
   PayPal: () => { /* TODO PayPal recurring */ },
   Stripe: openStripePopup,
-  DirectDebit: (props: PropTypes) => { props.openDirectDebitPopUp(); },
+  DirectDebit: (props: PropTypes) => {
+    props.openDirectDebitPopUp();
+  },
 };
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
-    ...baseHandlers.ONE_OFF,
     Stripe: openStripePopup,
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);
@@ -183,10 +184,19 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
+    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
-  MONTHLY: { ...baseHandlers.MONTHLY, formHandlersForRecurring },
-  ANNUAL: { ...baseHandlers.ANNUAL, formHandlersForRecurring },
+  ANNUAL: {
+    ...formHandlersForRecurring,
+    None: () => { logInvalidCombination('ANNUAL', 'None'); },
+  },
+  MONTHLY: {
+    ...formHandlersForRecurring,
+    None: () => { logInvalidCombination('MONTHLY', 'None'); },
+  },
 };
+
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
