@@ -4,6 +4,7 @@
 
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { NewContributionForm } from 'pages/new-contributions-landing/components/ContributionForm';
 import { ContributionFormFields } from 'pages/new-contributions-landing/components/ContributionFormFields';
 import { setPayPalHasLoaded } from 'pages/new-contributions-landing/contributionsLandingActions';
 import React from 'react';
@@ -63,10 +64,6 @@ import { type State } from '../contributionsLandingReducer';
 
 import {
   paymentWaiting,
-  updateFirstName,
-  updateLastName,
-  updateEmail,
-  updateState,
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
@@ -139,10 +136,7 @@ const mapStateToProps = (state: State) => ({
 
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
-  updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
-  updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
-  updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
+
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
@@ -153,122 +147,39 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
-// ----- Functions ----- //
-
-// TODO: we've got this and a similar function in contributionLandingActions
-// I think a better model would be to represent the amount as a number in
-// the state, and use this logic to keep it in sync with the view-level selectedAmounts and otherAmounts.
-const getAmount = (props: PropTypes) =>
-  parseFloat(props.selectedAmounts[props.contributionType] === 'other'
-    ? props.otherAmount
-    : props.selectedAmounts[props.contributionType].value);
-
-// ----- Event handlers ----- //
-
-function openStripePopup(props: PropTypes) {
-  if (props.paymentHandlers.Stripe) {
-    openDialogBox(props.paymentHandlers.Stripe, getAmount(props), props.email);
-  }
-}
-
-// Bizarrely, adding a type to this object means the type-checking on the
-// formHandlers is no longer accurate.
-// (Flow thinks it's OK when it's missing required properties).
-const formHandlersForRecurring = {
-  PayPal: () => { /* TODO PayPal recurring */ },
-  Stripe: openStripePopup,
-  DirectDebit: (props: PropTypes) => {
-    props.openDirectDebitPopUp();
-  },
-};
-
-const formHandlers: PaymentMatrix<PropTypes => void> = {
-  ONE_OFF: {
-    ...baseHandlers.ONE_OFF,
-    Stripe: openStripePopup,
-    PayPal: (props: PropTypes) => {
-      props.setPaymentIsWaiting(true);
-      props.createOneOffPayPalPayment({
-        currency: props.currency,
-        amount: getAmount(props),
-        returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
-        // TODO: use new cancel url
-        cancelURL: payPalCancelUrl(props.countryGroupId),
-      });
-    },
-  },
-  MONTHLY: { ...baseHandlers.MONTHLY, formHandlersForRecurring },
-  ANNUAL: { ...baseHandlers.ANNUAL, formHandlersForRecurring },
-};
-
-function onSubmit(props: PropTypes): Event => void {
-  return (event) => {
-    // Causes errors to be displayed against payment fields
-    props.setCheckoutFormHasBeenSubmitted();
-    event.preventDefault();
-    if (!(event.target: any).checkValidity()) {
-      return;
-    }
-    formHandlers[props.contributionType][props.paymentMethod](props);
-  };
-}
-
 // ----- Render ----- //
 
-function ContributionForm(props: PropTypes) {
-  const {
-    countryGroupId,
-    selectedCountryGroupDetails,
-    thankYouRoute,
-  } = props;
+function ContributionFormContainer(props: PropTypes) {
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.setPaymentIsWaiting(true);
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const checkOtherAmount: string => boolean = input =>
-    isNotEmpty(input)
-    && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
-    && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
-    && maxTwoDecimals(input);
-
-  const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
-  const formClassName = 'form--contribution';
-
-
   return props.paymentComplete ?
-    <Redirect to={thankYouRoute} />
+    <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content">
-        <h1 className="header">{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
-        <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
+        <h1 className="header">{countryGroupSpecificDetails[props.countryGroupId].headerCopy}</h1>
+        <p className="blurb">{countryGroupSpecificDetails[props.countryGroupId].contributeCopy}</p>
         <PaymentFailureMessage checkoutFailureReason={props.error} />
-        <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-          <NewContributionType />
-          <NewContributionAmount
-            countryGroupDetails={selectedCountryGroupDetails}
-            checkOtherAmount={checkOtherAmount}
-          />
-          <ContributionFormFields />
-          <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
-          <NewContributionSubmit
-            whenUnableToOpen={props.setCheckoutFormHasBeenSubmitted}
-          />
-          {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
-        </form>
+        <NewContributionForm />
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
         />
+        <NewContributionSubmit
+          whenUnableToOpen={props.setCheckoutFormHasBeenSubmitted}
+        />
+        {props.payPalExpressButton}
       </div>
     );
 }
 
-ContributionForm.defaultProps = {
+ContributionFormContainer.defaultProps = {
   error: null,
 };
 
-const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
+const NewContributionFormContainer = connect(mapStateToProps, mapDispatchToProps)(ContributionFormContainer);
 
-export { NewContributionForm };
+export { NewContributionFormContainer };

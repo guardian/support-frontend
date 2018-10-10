@@ -79,7 +79,6 @@ function ContributionSubmit(props: PropTypes) {
 
     return (
       <div className="form__submit">
-        {props.payPalExpressButton}
         <button
           disabled={props.isWaiting}
           className={formSubmitClassName}

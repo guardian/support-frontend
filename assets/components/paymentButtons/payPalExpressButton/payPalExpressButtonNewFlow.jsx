@@ -18,7 +18,6 @@ import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPayment
 // ---- Types ----- //
 
 type PropTypes = {|
-  amount: number,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   csrf: CsrfState,
   currencyId: IsoCurrency,
