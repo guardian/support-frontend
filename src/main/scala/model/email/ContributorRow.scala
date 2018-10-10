@@ -3,9 +3,11 @@ package model.email
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
+
 import io.circe.syntax._
 import io.circe.generic.JsonCodec
 import model.PaymentProvider
+import model.PaymentProvider.{Paypal, Stripe}
 
 /*
  * Variable name capitalisation due to the expected JSON structure
@@ -60,20 +62,25 @@ case class ContributorRow(
   firstName: Option[String],
   amount: BigDecimal
 ) {
-  def edition: String = currency match {
+  private def edition: String = currency match {
     case "GBP" => "uk"
     case "USD" => "us"
     case "AUD" => "au"
     case _ => "international"
   }
 
-  val currencyGlyph: String = currency match {
+  private val currencyGlyph: String = currency match {
     case "GBP" => "£"
     case "EUR" => "€"
     case _ => "$"
   }
 
-  def formattedDate: String = new SimpleDateFormat("d MMMM yyyy").format(Date.from(Instant.now))
+  private def formattedDate: String = new SimpleDateFormat("d MMMM yyyy").format(Date.from(Instant.now))
+
+  private def renderPaymentMethod: String = paymentMethod match {
+    case Stripe => "credit / debit card"
+    case Paypal => "PayPal"
+  }
 
   def toJsonContributorRowSqsMessage: String = {
     ContributorRowSqsMessage(
@@ -84,7 +91,7 @@ case class ContributorRow(
           SubscriberAttributes = SubscriberAttributesSqsMessage(
             EmailAddress = email,
             edition = edition,
-            `payment method` = paymentMethod.name,
+            `payment method` = renderPaymentMethod,
             currency = currencyGlyph,
             amount = amount.setScale(2).toString,
             first_name = firstName,
