@@ -64,6 +64,11 @@ function mapDispatchToProps(dispatch: Dispatch<*>) {
 
 function ContributionSubmit(props: PropTypes) {
 
+  const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
+  const formSubmitClassName = showPayPalExpressButton
+    ? classNameWithModifiers("form__submit-button",  ['hidden'])
+    : "form__submit-button";
+
   // if all payment methods are switched off, do not display the button
   if (props.paymentMethod !== 'None') {
     const frequency = getFrequency(props.contributionType);
@@ -73,27 +78,9 @@ function ContributionSubmit(props: PropTypes) {
       isDefault: false,
     } : null;
     const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
-    const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
-    const formClassName = 'form--contribution';
-    const formSubmitClassName = showPayPalExpressButton
-      ? classNameWithModifiers("form__submit-button",  ['hidden'])
-      : "form__submit-button";
 
     return (
       <div className="form__submit">
-       <PayPalExpressButton
-          amount={amount}
-          currencyId={props.currencyId}
-          csrf={props.csrf}
-          onPaymentAuthorisation={() => alert("worked")}
-          hasLoaded={props.payPalHasLoaded}
-          setHasLoaded={props.payPalSetHasLoaded}
-          switchStatus={props.payPalSwitchStatus}
-          canOpen={() => formIsValid(formClassName)}
-          formClassName={formClassName}
-          whenUnableToOpen={props.whenUnableToOpen}
-          show={showPayPalExpressButton}
-        />
         <button
           disabled={props.isWaiting}
           className={formSubmitClassName}

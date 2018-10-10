@@ -946,9 +946,7 @@ form {
 .component-paypal-button-checkout {
   margin-top: 20px;
 
-  @include mq($from: mobileMedium) {
-    width: 304px;
-  }
+  width: 100%;
 }
 
 .component-paypal-button-checkout--hidden {

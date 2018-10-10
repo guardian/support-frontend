@@ -50,10 +50,10 @@ function PayPalExpressButton(props: PropTypes) {
 
 function Button(props: PropTypes) {
 
-  if (!props.hasLoaded) {
+  /*if (!props.hasLoaded) {
     loadPayPalExpress().then(props.setHasLoaded);
     return null;
-  }
+  }*/
 
   const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
     paymentMethod: 'PayPal',

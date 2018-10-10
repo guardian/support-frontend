@@ -126,6 +126,10 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
   currency: state.common.internationalisation.currencyId,
+  csrf: state.page.csrf,
+  payPalHasLoaded: state.page.form.payPalHasLoaded,
+  payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
+  paymentMethod: state.page.form.paymentMethod,
   paymentError: state.page.form.paymentError,
 });
 
@@ -140,6 +144,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  payPalSetHasLoaded: () => {
+    dispatch(setPayPalHasLoaded());
+  },
 });
 
 // ----- Functions ----- //
@@ -236,6 +243,10 @@ function ContributionForm(props: PropTypes) {
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
     && maxTwoDecimals(input);
+
+  const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
+  const formClassName = 'form--contribution';
+
 
   return props.paymentComplete ?
     <Redirect to={thankYouRoute} />

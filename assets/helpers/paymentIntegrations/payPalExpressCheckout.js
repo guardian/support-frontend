@@ -57,7 +57,7 @@ function setupPayment(
   return (resolve, reject) => {
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
-      amount: amountToPay,
+      amount: document.quer(),
       billingPeriod: 'monthly',
       currency: currencyId,
     };
