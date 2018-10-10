@@ -41,7 +41,7 @@ function InvestIntroduction() {
           fallbackImgType="jpg"
         />
         <Highlights
-          highlights={['Support the Guardian']}
+          highlights={['Subscribe to the Guardian']}
           headingSize={2}
           modifierClasses={['invest-sub-heading']}
         />

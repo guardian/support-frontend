@@ -23,7 +23,7 @@ function InternationalSection(props: {
 }) {
 
   return (
-    <ThreeSubscriptions>
+    <ThreeSubscriptions heading="">
       <PremiumTier
         headingSize={props.headingSize}
         referrer={props.appReferrer}
