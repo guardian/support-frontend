@@ -35,6 +35,7 @@ type PropTypes = {
   whenUnableToOpen: () => void,
   payPalSwitchStatus: Status,
   payPalHasLoaded: boolean,
+  payPalExpressButton: Node,
 };
 
 const mapStateToProps = (state: State) =>
@@ -46,9 +47,6 @@ const mapStateToProps = (state: State) =>
     selectedAmounts: state.page.form.selectedAmounts,
     otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
     currencyId: state.common.internationalisation.currencyId,
-    csrf: state.page.csrf,
-    payPalHasLoaded: state.page.form.payPalHasLoaded,
-    payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   });
 
 function mapDispatchToProps(dispatch: Dispatch<*>) {
@@ -81,6 +79,7 @@ function ContributionSubmit(props: PropTypes) {
 
     return (
       <div className="form__submit">
+        {props.payPalExpressButton}
         <button
           disabled={props.isWaiting}
           className={formSubmitClassName}

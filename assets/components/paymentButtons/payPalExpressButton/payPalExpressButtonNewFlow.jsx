@@ -55,6 +55,8 @@ function Button(props: PropTypes) {
     return null;
   }*/
 
+  console.log('Here');
+
   const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
     paymentMethod: 'PayPal',
     token,

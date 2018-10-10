@@ -61,6 +61,22 @@ const formClassName = 'form--contribution';
 
 loadPayPalExpress().then( x => {
 
+const payPaypalExpressButton = (
+  <PayPalExpressButton
+    amount={5}
+    currencyId={"USD"}
+    csrf={csrf}
+    onPaymentAuthorisation={() => alert("worked")}
+    hasLoaded={payPalHasLoaded}
+    setHasLoaded={() => {}}
+    switchStatus={payPalSwitchStatus}
+    canOpen={() => formIsValid(formClassName)}
+    formClassName={formClassName}
+    whenUnableToOpen={() => {}}
+    show={true}
+    />
+  );
+
 const router = (
   <BrowserRouter>
     <Provider store={store}>
@@ -77,20 +93,11 @@ const router = (
               <NewContributionForm
                 selectedCountryGroupDetails={selectedCountryGroupDetails}
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`}
+                payPalExpressButton={payPaypalExpressButton}
               />
-              <PayPalExpressButton
-                amount={5}
-                currencyId={"USD"}
-                csrf={csrf}
-                onPaymentAuthorisation={() => alert("worked")}
-                hasLoaded={payPalHasLoaded}
-                setHasLoaded={() => {}}
-                switchStatus={payPalSwitchStatus}
-                canOpen={() => formIsValid(formClassName)}
-                formClassName={formClassName}
-                whenUnableToOpen={() => {}}
-                show={true}
-              />
+              
+
+
               <NewContributionBackground />
             </Page>
           )}

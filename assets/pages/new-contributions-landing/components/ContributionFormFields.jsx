@@ -4,7 +4,6 @@
 
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
-import { ContributionFormFields } from 'pages/new-contributions-landing/components/ContributionFormFields';
 import { setPayPalHasLoaded } from 'pages/new-contributions-landing/contributionsLandingActions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -21,7 +20,7 @@ import {
   type Amount,
   type PaymentMatrix,
   type PaymentMethod,
-  logInvalidCombination,
+  baseHandlers,
 } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
@@ -77,7 +76,7 @@ import {
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   paymentComplete: boolean,
-  paymentError: CheckoutFailureReason | null,
+  error: CheckoutFailureReason | null,
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
   selectedCountryGroupDetails: CountryMetaData,
@@ -104,6 +103,7 @@ type PropTypes = {|
   isDirectDebitPopUpOpen: boolean,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   currency: IsoCurrency,
+  payPalExpressButton: Node,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -134,7 +134,6 @@ const mapStateToProps = (state: State) => ({
   payPalHasLoaded: state.page.form.payPalHasLoaded,
   payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   paymentMethod: state.page.form.paymentMethod,
-  paymentError: state.page.form.paymentError,
 });
 
 
@@ -184,6 +183,7 @@ const formHandlersForRecurring = {
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
+    ...baseHandlers.ONE_OFF,
     Stripe: openStripePopup,
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);
@@ -195,19 +195,10 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
-    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
-    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
-  ANNUAL: {
-    ...formHandlersForRecurring,
-    None: () => { logInvalidCombination('ANNUAL', 'None'); },
-  },
-  MONTHLY: {
-    ...formHandlersForRecurring,
-    None: () => { logInvalidCombination('MONTHLY', 'None'); },
-  },
+  MONTHLY: { ...baseHandlers.MONTHLY, formHandlersForRecurring },
+  ANNUAL: { ...baseHandlers.ANNUAL, formHandlersForRecurring },
 };
-
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
@@ -217,17 +208,24 @@ function onSubmit(props: PropTypes): Event => void {
     if (!(event.target: any).checkValidity()) {
       return;
     }
-    formHandlers[props.contributionType][props.paymentMethod](props);
+    const a = formHandlers;
+    a[props.contributionType][props.paymentMethod](props);
   };
 }
 
 // ----- Render ----- //
 
-function ContributionFormContainer(props: PropTypes) {
+function ContributionForm(props: PropTypes) {
   const {
     countryGroupId,
     selectedCountryGroupDetails,
     thankYouRoute,
+    firstName,
+    lastName,
+    email,
+    state,
+    isSignedIn,
+    checkoutFormHasBeenSubmitted,
   } = props;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
@@ -251,17 +249,70 @@ function ContributionFormContainer(props: PropTypes) {
       <div className="gu-content__content">
         <h1 className="header">{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
+        <PaymentFailureMessage checkoutFailureReason={props.error} />
         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
           <NewContributionType />
           <NewContributionAmount
             countryGroupDetails={selectedCountryGroupDetails}
             checkOtherAmount={checkOtherAmount}
           />
-          <ContributionFormFields />
+          <NewContributionTextInput
+            id="contributionEmail"
+            name="contribution-email"
+            label="Email address"
+            value={email}
+            type="email"
+            autoComplete="email"
+            placeholder="example@domain.com"
+            icon={<SvgEnvelope />}
+            onInput={props.updateEmail}
+            isValid={checkEmail(email)}
+            pattern={emailRegexPattern}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide a valid email address"
+            required
+            disabled={isSignedIn}
+          />
+          <Signout isSignedIn={isSignedIn} />
+          <NewContributionTextInput
+            id="contributionFirstName"
+            name="contribution-fname"
+            label="First name"
+            value={firstName}
+            icon={<SvgUser />}
+            autoComplete="given-name"
+            autoCapitalize="words"
+            onInput={props.updateFirstName}
+            isValid={checkFirstName(firstName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your first name"
+            required
+          />
+          <NewContributionTextInput
+            id="contributionLastName"
+            name="contribution-lname"
+            label="Last name"
+            value={lastName}
+            icon={<SvgUser />}
+            autoComplete="family-name"
+            autoCapitalize="words"
+            onInput={props.updateLastName}
+            isValid={checkLastName(lastName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your last name"
+            required
+          />
+          <NewContributionState
+            onChange={props.updateState}
+            selectedState={state}
+            isValid={checkState(state)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide a state"
+          />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
-          <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
           <NewContributionSubmit
             whenUnableToOpen={props.setCheckoutFormHasBeenSubmitted}
+            payPalExpressButton={props.payPalExpressButton}
           />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
@@ -273,10 +324,10 @@ function ContributionFormContainer(props: PropTypes) {
     );
 }
 
-ContributionFormContainer.defaultProps = {
+ContributionForm.defaultProps = {
   error: null,
 };
 
-const NewContributionFormContainer = connect(mapStateToProps, mapDispatchToProps)(ContributionFormContainer);
+const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
 
-export { NewContributionFormContainer };
+export { NewContributionForm };
