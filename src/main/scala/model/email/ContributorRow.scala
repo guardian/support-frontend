@@ -72,6 +72,9 @@ case class ContributorRow(
   private val currencyGlyph: String = currency match {
     case "GBP" => "£"
     case "EUR" => "€"
+    case "AUD" => "AU$"
+    case "CAD" => "CA$"
+    case "NZD" => "NZ$"
     case _ => "$"
   }
 
