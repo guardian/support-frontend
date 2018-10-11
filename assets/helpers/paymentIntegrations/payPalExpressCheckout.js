@@ -54,6 +54,7 @@ function setupPayment(
   const csrfToken = csrf.token;
 
   return (resolve, reject) => {
+    console.log('setupPayment');
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
       amount: amountToPay,
@@ -111,9 +112,17 @@ function setup(
       });
   };
 
-  // function addFormChangeListeners(handler: () => void) {
-  //   formInputs(formClassName).forEach(input => input.addEventListener('change', handler));
-  // }
+  function addFormChangeListener(handler: () => void) {
+    const form = document.querySelector(`.${formClassName}`);
+    if (form instanceof HTMLElement) {
+      // Thanks to event bubbling, we can just listen on the form element.
+      // This means that we'll get change events even from form elements which
+      // aren't in the DOM at the time this handler is bound.
+      form.addEventListener('change', handler);
+    } else {
+      logException(`No form found with class ${formClassName}`);
+    }
+  }
 
   function toggleButton(actions): void {
     return canOpen() ? actions.enable() : actions.disable();
@@ -121,7 +130,7 @@ function setup(
 
   const payPalOptions: Object = {
     // TODO: default value is just to not break existing flow.
-    // let's make a copy of this file instead
+    // maybe just make a copy of this file instead?
     env: getPayPalEnvironment(isTestUser) || window.guardian.payPalEnvironment,
 
     // TODO: I think Iona also wanted a different colour for this, so another reason to copy-paste
@@ -132,8 +141,7 @@ function setup(
 
     validate(actions) {
       toggleButton(actions);
-
-      // addFormChangeListeners(() => toggleButton(actions));
+      addFormChangeListener(() => toggleButton(actions));
     },
 
     onClick() {
