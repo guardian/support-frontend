@@ -16,7 +16,6 @@ import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 
@@ -97,7 +96,6 @@ function ContributionFormContainer(props: PropTypes) {
       <div className="gu-content__content">
         <h1 className="header">{countryGroupSpecificDetails[props.countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[props.countryGroupId].contributeCopy}</p>
-        <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
         <NewContributionForm
           selectedCountryGroupDetails={selectedCountryGroupDetails}
         />
