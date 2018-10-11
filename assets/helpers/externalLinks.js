@@ -36,9 +36,7 @@ export type SubsUrls = {
 const subsUrl = 'https://subscribe.theguardian.com';
 const patronsUrl = 'https://patrons.theguardian.com';
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
-const iOSAppUrl = 'https://itunes.apple.com/app/the-guardian/id409128287?mt=8';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
-const dailyEditionUrl = 'https://itunes.apple.com/app/guardian-observer-daily-edition/id452707806?mt=8';
 
 const memUrls: {
   [MemProduct]: string,
@@ -216,6 +214,37 @@ function getDigitalCheckout(
 }
 
 
+function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
+  const groupFromId = countryGroups[cgId];
+  if (groupFromId) {
+    switch (groupFromId.supportInternationalisationId.toLowerCase()) {
+      case 'uk':
+        return 'gb';
+      case 'int':
+        return 'us';
+      case 'eu':
+        return 'us';
+      default:
+        return groupFromId.supportInternationalisationId.toLowerCase();
+    }
+  } else {
+    return 'us';
+  }
+}
+
+function getAppleStoreUrl(product: string, countryGroupId: CountryGroupId) {
+  const appStoreCountryCode = convertCountryGroupIdToAppStoreCountryCode(countryGroupId);
+  return `https://itunes.apple.com/${appStoreCountryCode}/app/${product}?mt=8`;
+}
+
+function getIosAppUrl(countryGroupId: CountryGroupId) {
+  return getAppleStoreUrl('the-guardian/id409128287', countryGroupId);
+}
+
+function getDailyEditionUrl(countryGroupId: CountryGroupId) {
+  return getAppleStoreUrl('guardian-observer-daily-edition/id452707806', countryGroupId);
+}
+
 // ----- Exports ----- //
 
 export {
@@ -223,7 +252,7 @@ export {
   getMemLink,
   getPatronsLink,
   getDigitalCheckout,
-  iOSAppUrl,
+  getIosAppUrl,
   androidAppUrl,
-  dailyEditionUrl,
+  getDailyEditionUrl,
 };

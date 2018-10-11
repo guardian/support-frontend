@@ -28,6 +28,7 @@ function InternationalSection(props: {
         headingSize={props.headingSize}
         referrer={props.appReferrer}
         subheading="7-day free trial"
+        countryGroupId={props.countryGroupId}
       />
       <DigitalPack
         countryGroupId={props.countryGroupId}
