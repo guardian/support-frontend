@@ -256,9 +256,6 @@ function ContributionFormContainer(props: PropTypes) {
     );
 }
 
-ContributionFormContainer.defaultProps = {
-  error: null,
-};
 
 const NewContributionFormContainer = connect(mapStateToProps, mapDispatchToProps)(ContributionFormContainer);
 
