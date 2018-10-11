@@ -8,6 +8,7 @@ import * as storage from 'helpers/storage';
 import { formInputs } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { Contrib } from 'helpers/contributions';
 
 // ----- Functions ----- //
 
@@ -75,6 +76,10 @@ function setupPayment(
   };
 }
 
+function getPayPalEnvironment(isTestUser: boolean): string {
+  return isTestUser ? window.guardian.payPalEnvironment.uat : window.guardian.payPalEnvironment.default;
+}
+
 function createAgreement(payPalData: Object, csrf: CsrfState) {
   const body = { token: payPalData.paymentToken };
   const csrfToken = csrf.token;
@@ -91,6 +96,7 @@ function setup(
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
   formClassName: string,
+  isTestUser: boolean,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {
@@ -105,16 +111,20 @@ function setup(
       });
   };
 
-  function addFormChangeListeners(handler: () => void) {
-    formInputs(formClassName).forEach(input => input.addEventListener('change', handler));
-  }
+  // function addFormChangeListeners(handler: () => void) {
+  //   formInputs(formClassName).forEach(input => input.addEventListener('change', handler));
+  // }
 
   function toggleButton(actions): void {
     return canOpen() ? actions.enable() : actions.disable();
   }
 
   const payPalOptions: Object = {
-    env: window.guardian.payPalEnvironment,
+    // TODO: default value is just to not break existing flow.
+    // let's make a copy of this file instead
+    env: getPayPalEnvironment(isTestUser) || window.guardian.payPalEnvironment,
+
+    // TODO: I think Iona also wanted a different colour for this, so another reason to copy-paste
     style: { color: 'blue', size: 'responsive', label: 'pay' },
 
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
@@ -123,7 +133,7 @@ function setup(
     validate(actions) {
       toggleButton(actions);
 
-      addFormChangeListeners(() => toggleButton(actions));
+      // addFormChangeListeners(() => toggleButton(actions));
     },
 
     onClick() {

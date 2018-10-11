@@ -28,6 +28,7 @@ type PropTypes = {|
   whenUnableToOpen: () => void,
   formClassName: string,
   show: boolean,
+  isTestUser: boolean,
 |};
 
 
@@ -72,6 +73,7 @@ function Button(props: PropTypes) {
     props.canOpen,
     props.whenUnableToOpen,
     props.formClassName,
+    props.isTestUser,
   );
 
 

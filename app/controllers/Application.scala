@@ -5,11 +5,10 @@ import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
-import com.gu.support.config.StripeConfigProvider
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.identity.play.IdUser
 import config.StringsConfig
 import play.api.mvc._
-
 import services.{IdentityService, PaymentAPIService}
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck
@@ -25,6 +24,7 @@ class Application(
     components: ControllerComponents,
     oneOffStripeConfigProvider: StripeConfigProvider,
     regularStripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider
@@ -125,6 +125,8 @@ class Application(
       oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
       regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
       regularUatStripeConfig = regularStripeConfigProvider.get(true),
+      regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+      regularUatPayPalConfig = payPalConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser

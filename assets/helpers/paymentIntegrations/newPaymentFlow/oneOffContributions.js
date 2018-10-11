@@ -88,6 +88,7 @@ function unexpectedError(message: string): UnexpectedError {
 }
 
 function paymentApiEndpointWithMode(url: string) {
+  // TODO don't replicate test user logic (it's already in user.js)
   if (cookie.get('_test_username')) {
     return addQueryParamsToURL(
       url,

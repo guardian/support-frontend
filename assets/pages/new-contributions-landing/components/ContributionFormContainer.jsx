@@ -40,7 +40,6 @@ type PropTypes = {|
   payPalSwitchStatus: Status,
   paymentError: CheckoutFailureReason | null,
   currencyId: IsoCurrency,
-  paymentMethod: PaymentMethod,
   countryGroupId: CountryGroupId,
   isDirectDebitPopUpOpen: boolean,
   thankYouRoute: string,
@@ -50,6 +49,7 @@ type PropTypes = {|
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
+  isTestUser: boolean,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -61,9 +61,9 @@ const mapStateToProps = (state: State) => ({
   payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   paymentError: state.page.form.paymentError,
   currencyId: state.common.internationalisation.currencyId,
-  paymentMethod: state.page.form.paymentMethod,
   countryGroupId: state.common.internationalisation.countryGroupId,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
+  isTestUser: state.page.user.isTestUser,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -85,7 +85,7 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const showPayPalExpressButton = props.paymentMethod === 'PayPal';
+  const showPayPalExpressButton = true;
   const formClassName = 'form--contribution';
   const selectedCountryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
@@ -114,6 +114,7 @@ function ContributionFormContainer(props: PropTypes) {
           formClassName={formClassName}
           whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
           show={showPayPalExpressButton}
+          isTestUser={props.isTestUser}
         />
       </div>
     );
