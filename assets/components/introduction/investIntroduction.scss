@@ -15,11 +15,11 @@
       left: -64px;
     }
     @include mq($from: tablet) {
-      top: -156px;
+      top: -140px;
       left: -82px;
     }
     @include mq($from: desktop) {
-      top: -145px;
+      top: -129px;
       left: -102px;
     }
     @include mq($from: leftCol) {
@@ -47,6 +47,11 @@
   font-size: 34px;
   line-height: 36px;
   position: relative;
+
+  .component-highlights__highlight {
+    padding: 0 8px 4px;
+  }
+
   @include mq($from: tablet) {
     font-size: 50px;
     line-height: 58px;
