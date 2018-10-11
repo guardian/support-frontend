@@ -184,8 +184,8 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       });
     },
   },
-  MONTHLY: { ...baseHandlers.MONTHLY, formHandlersForRecurring },
-  ANNUAL: { ...baseHandlers.ANNUAL, formHandlersForRecurring },
+  MONTHLY: { ...baseHandlers.MONTHLY, ...formHandlersForRecurring },
+  ANNUAL: { ...baseHandlers.ANNUAL, ...formHandlersForRecurring },
 };
 
 function onSubmit(props: PropTypes): Event => void {
