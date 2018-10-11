@@ -2,8 +2,9 @@
 
 // ----- Imports ----- //
 
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type PaymentHandler } from 'helpers/checkouts';
-import { type Amount, baseHandlers, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
+import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
@@ -24,6 +25,7 @@ import {
   getOphanIds,
   getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
+import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import * as cookie from 'helpers/cookie';
 import { type State, type UserFormData, type ThankYouPageStage } from './contributionsLandingReducer';
@@ -41,7 +43,7 @@ export type Action =
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
-  | { type: 'PAYMENT_FAILURE', error: string }
+  | { type: 'PAYMENT_FAILURE', paymentError: CheckoutFailureReason }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
@@ -83,7 +85,7 @@ const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
-const paymentFailure = (error: string): Action => ({ type: 'PAYMENT_FAILURE', error });
+const paymentFailure = (paymentError: CheckoutFailureReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
 
 const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
   ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
@@ -152,8 +154,11 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
           dispatch(paymentSuccess());
           break;
 
+        case 'failure':
         default:
           dispatch(paymentFailure(result.error));
+          dispatch(paymentWaiting(false));
+
       }
     });
   };
@@ -182,7 +187,8 @@ const onCreateOneOffPayPalPaymentResponse =
 
         // For PayPal create payment errors, the Payment API passes through the
         // error from PayPal's API which we don't want to expose to the user.
-        dispatch(paymentFailure('There was an error with your payment'));
+        dispatch(paymentFailure('unknown'));
+        dispatch(paymentWaiting(false));
       });
     };
 
@@ -235,18 +241,25 @@ const recurringPaymentAuthorisationHandlers = {
 
 const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, PaymentAuthorisation) => void> = {
   ONE_OFF: {
-    ...baseHandlers.ONE_OFF,
     PayPal: () => {
-      // No handler required.
       // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
       // endpoint, after PayPal redirects the browser back to our site.
+      logException('Paypal one-off has no authorisation handler');
     },
     Stripe: (dispatch: Dispatch<Action>, state: State, paymentAuthorisation: PaymentAuthorisation): void => {
       dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
     },
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
+    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
-  ANNUAL: { ...baseHandlers.ANNUAL, ...recurringPaymentAuthorisationHandlers },
-  MONTHLY: { ...baseHandlers.MONTHLY, ...recurringPaymentAuthorisationHandlers },
+  ANNUAL: {
+    ...recurringPaymentAuthorisationHandlers,
+    None: () => { logInvalidCombination('ANNUAL', 'None'); },
+  },
+  MONTHLY: {
+    ...recurringPaymentAuthorisationHandlers,
+    None: () => { logInvalidCombination('MONTHLY', 'None'); },
+  },
 };
 
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>

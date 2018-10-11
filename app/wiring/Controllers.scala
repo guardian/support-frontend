@@ -25,7 +25,8 @@ trait Controllers {
     assetsResolver,
     controllerComponents,
     stringsConfig,
-    settingsProvider
+    settingsProvider,
+    appConfig.supportUrl
   )
 
   lazy val regularContributionsController = new RegularContributions(

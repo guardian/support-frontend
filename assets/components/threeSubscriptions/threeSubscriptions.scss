@@ -52,6 +52,7 @@
   .component-subscription-bundle__description {
     line-height: 20px;
     margin-bottom: $gu-v-spacing;
+    flex-grow: 1;
 
     @include mq($from: phablet, $until: leftCol) {
       margin-left: 1.5 * $gu-h-spacing;

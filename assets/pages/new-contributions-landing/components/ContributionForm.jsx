@@ -17,7 +17,7 @@ import {
   type Amount,
   type PaymentMatrix,
   type PaymentMethod,
-  baseHandlers,
+  logInvalidCombination,
 } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
@@ -73,7 +73,7 @@ import {
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   paymentComplete: boolean,
-  error: CheckoutFailureReason | null,
+  paymentError: CheckoutFailureReason | null,
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
   selectedCountryGroupDetails: CountryMetaData,
@@ -126,6 +126,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
   currency: state.common.internationalisation.currencyId,
+  paymentError: state.page.form.paymentError,
 });
 
 
@@ -165,12 +166,13 @@ function openStripePopup(props: PropTypes) {
 const formHandlersForRecurring = {
   PayPal: () => { /* TODO PayPal recurring */ },
   Stripe: openStripePopup,
-  DirectDebit: (props: PropTypes) => { props.openDirectDebitPopUp(); },
+  DirectDebit: (props: PropTypes) => {
+    props.openDirectDebitPopUp();
+  },
 };
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
   ONE_OFF: {
-    ...baseHandlers.ONE_OFF,
     Stripe: openStripePopup,
     PayPal: (props: PropTypes) => {
       props.setPaymentIsWaiting(true);
@@ -182,10 +184,19 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
+    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
-  MONTHLY: { ...baseHandlers.MONTHLY, formHandlersForRecurring },
-  ANNUAL: { ...baseHandlers.ANNUAL, formHandlersForRecurring },
+  ANNUAL: {
+    ...formHandlersForRecurring,
+    None: () => { logInvalidCombination('ANNUAL', 'None'); },
+  },
+  MONTHLY: {
+    ...formHandlersForRecurring,
+    None: () => { logInvalidCombination('MONTHLY', 'None'); },
+  },
 };
+
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
@@ -231,7 +242,6 @@ function ContributionForm(props: PropTypes) {
       <div className="gu-content__content">
         <h1 className="header">{countryGroupSpecificDetails[countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[countryGroupId].contributeCopy}</p>
-        <PaymentFailureMessage checkoutFailureReason={props.error} />
         <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
           <NewContributionType />
           <NewContributionAmount
@@ -292,7 +302,10 @@ function ContributionForm(props: PropTypes) {
             errorMessage="Please provide a state"
           />
           <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
-          <NewContributionSubmit />
+          <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
+          <NewContributionSubmit
+            whenUnableToOpen={props.setCheckoutFormHasBeenSubmitted}
+          />
           {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </form>
         <DirectDebitPopUpForm
@@ -302,10 +315,6 @@ function ContributionForm(props: PropTypes) {
       </div>
     );
 }
-
-ContributionForm.defaultProps = {
-  error: null,
-};
 
 const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
 

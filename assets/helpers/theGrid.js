@@ -27,7 +27,7 @@ export const imageCatalogue: {
   paperCircle: 'c462d60f2962b745b1e206d5ede998dfb166a8ed/0_0_825_825',
   paperDigitalCircleOrange: 'd94c0f9bade09487b9afca5ee8149efb33f34ccf/0_0_825_825',
   paperDigitalCirclePink: '69d90e5d6fca261a227e47b311f80807b123c87b/0_0_825_825',
-  weeklyCircle: '13cfdcba3f0738b2ed54cad21d43ca87b4cb7855/0_0_825_825',
+  weeklyCircle: 'c18004dcf5cfd8c97b4b0f2fd9c6ff7e2497d309/0_0_1640_1630',
   premiumTier: 'fb0c788ddee28f8e0e66d814595cf81d6aa21ec6/0_0_644_448',
   premiumTierAU: '4b6fd9805c7d0a88b4b71a683c4b46279a410b9d/0_0_1610_1120',
   dailyEdition: '168cab5197d7b4c5d9e05eb3ff2801b2929f2995/0_0_644_448',
