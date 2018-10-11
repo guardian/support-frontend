@@ -26,7 +26,6 @@
 @import '~components/legal/contribLegal/contribLegal';
 @import '~components/payPalContributionButton/payPalContributionButton';
 @import '~components/switchable/errorComponents/paymentError';
-@import 'components/paymentButtons/payPalExpressButton/payPalExpressButton.scss';
 
 // ----- Page Specific Styles ----- //
 
@@ -43,7 +42,6 @@
     margin-top: $gu-v-spacing;
   }
 
-
 }
 
 #contributions-landing-page-us {
@@ -56,4 +54,3 @@
     }
   }
 }
-

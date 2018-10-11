@@ -66,6 +66,8 @@ function Button(props: PropTypes) {
   };
 
   const payPalOptions = setup(
+    // hardcoding for now, as tying the value to the state causes a re-rendering of the button.
+    5,
     props.currencyId,
     props.csrf,
     onPaymentAuthorisation,

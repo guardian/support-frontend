@@ -171,7 +171,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
-        case 'UPDATE_USER_FORM_DATA':
+      case 'UPDATE_USER_FORM_DATA':
         return { ...state, formData: { ...state.formData, ...action.userFormData } };
 
       case 'SET_PAYPAL_HAS_LOADED':

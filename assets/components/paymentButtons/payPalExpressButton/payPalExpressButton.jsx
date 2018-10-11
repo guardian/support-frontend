@@ -61,6 +61,8 @@ function Button(props: PropTypes) {
     props.onPaymentAuthorisation(tokenToAuthorisation(token));
   };
 
+  const regularContributionsFormClassName = 'regular-contrib__checkout-form';
+
   const payPalOptions = setup(
     props.amount,
     props.currencyId,
@@ -68,7 +70,7 @@ function Button(props: PropTypes) {
     onPaymentAuthorisation,
     props.canOpen,
     props.whenUnableToOpen,
-    'regular-contrib__checkout-form',
+    regularContributionsFormClassName,
   );
 
 

@@ -8,8 +8,6 @@ import * as storage from 'helpers/storage';
 import { formInputs } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { formClassName } from '../../pages/regular-contributions/components/formFields';
-
 
 // ----- Functions ----- //
 
@@ -48,6 +46,7 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
 }
 
 function setupPayment(
+  amountToPay: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
 ) {
@@ -56,7 +55,7 @@ function setupPayment(
   return (resolve, reject) => {
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
-      amount: 5,
+      amount: amountToPay,
       billingPeriod: 'monthly',
       currency: currencyId,
     };
@@ -85,6 +84,7 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
 }
 
 function setup(
+  amount: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
   onPaymentAuthorisation: string => void,
@@ -133,7 +133,7 @@ function setup(
     },
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(currencyId, csrf),
+    payment: setupPayment(amount, currencyId, csrf),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize,
