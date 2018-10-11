@@ -13,12 +13,12 @@ import { logException } from 'helpers/logger';
 
 // ----- Types ----- //
 
-export type PaymentMethodMap<T> = {
+export type PaymentMethodMap<T> = {|
   Stripe: T,
   PayPal: T,
   DirectDebit: T,
   None: T,
-}
+|};
 
 // This lets us create a union type from the object keys,
 // avoiding the need to specify them separately and keep them in sync!
@@ -27,14 +27,15 @@ export type PaymentMethodMap<T> = {
 // so it's irrelevant - so we supply null
 export type PaymentMethod = $Keys<PaymentMethodMap<null>>;
 
-export type RegularContributionTypeMap<T> = {
+export type RegularContributionTypeMap<T> = {|
   MONTHLY: T,
   ANNUAL: T,
-}
+|};
 
-export type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
+export type ContributionTypeMap<T> = {|
+  ...RegularContributionTypeMap<T>,
   ONE_OFF: T,
-};
+|};
 
 export type RegularContributionType = $Keys<RegularContributionTypeMap<null>>;
 export type Contrib = $Keys<ContributionTypeMap<null>>;
@@ -43,24 +44,6 @@ export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
 export const logInvalidCombination = (contributionType: Contrib, paymentMethod: PaymentMethod) => {
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
-};
-
-const recurringBaseHandler = (contributionType: RegularContributionType) => ({
-  Stripe: () => {},
-  PayPal: () => {},
-  DirectDebit: () => {},
-  None: () => { logInvalidCombination(contributionType, 'None'); },
-});
-
-export const baseHandlers: PaymentMatrix<() => void> = {
-  ONE_OFF: {
-    Stripe: () => {},
-    PayPal: () => {},
-    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
-    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
-  },
-  MONTHLY: recurringBaseHandler('MONTHLY'),
-  ANNUAL: recurringBaseHandler('ANNUAL'),
 };
 
 export type BillingPeriod = 'Monthly' | 'Annual';
