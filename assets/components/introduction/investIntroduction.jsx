@@ -4,7 +4,7 @@
 
 import React from 'react';
 import Highlights from 'components/highlights/highlights';
-import GridPicture from '../gridPicture/gridPicture';
+import GridPicture from 'components/gridPicture/gridPicture';
 
 
 // ----- Component ----- //
@@ -50,15 +50,6 @@ function InvestIntroduction() {
   );
 
 }
-
-
-// ----- Default Props ----- //
-
-InvestIntroduction.defaultProps = {
-  highlights: null,
-  modifierClasses: [],
-  highlightsHeadingSize: 2,
-};
 
 
 // ----- Exports ----- //

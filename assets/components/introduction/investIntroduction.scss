@@ -1,11 +1,10 @@
 .component-invest-introduction {
-  background: gu-colour(campaign-blue);
+  background: gu-colour(live-garnett-sport2);
   overflow-y: hidden;
 
   .component-grid-picture {
     margin: 0 auto;
     position: relative;
-    z-index: 1;
     top: -193px;
     @include mq($from: mobileLandscape) {
       top: -154px;
