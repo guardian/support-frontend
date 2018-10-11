@@ -2,10 +2,6 @@
 
 // ----- Imports ----- //
 
-import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
-import { loadPayPalExpress } from 'helpers/paymentIntegrations/payPalExpressCheckout';
-import { NewContributionFormContainer } from 'pages/new-contributions-landing/components/ContributionFormContainer';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router';
@@ -15,7 +11,6 @@ import { isDetailsSupported, polyfillDetails } from 'helpers/details';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import * as user from 'helpers/user/user';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
@@ -24,7 +19,7 @@ import { NewHeader } from 'components/headers/new-header/Header';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
-import { NewContributionForm } from './components/ContributionForm';
+import { NewContributionFormContainer } from './components/ContributionFormContainer';
 import ContributionThankYouContainer from './components/ContributionThankYouContainer';
 import { NewContributionBackground } from './components/ContributionBackground';
 
@@ -45,7 +40,6 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 // ----- Internationalisation ----- //
 
-const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 const selectedCountryGroup = countryGroups[countryGroupId];
 
 // ----- Render ----- //
@@ -68,7 +62,6 @@ const router = (
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
               <NewContributionFormContainer
-                selectedCountryGroupDetails={selectedCountryGroupDetails}
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`}
               />
               <NewContributionBackground />

@@ -3,18 +3,14 @@
 // ----- Imports ----- //
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { Status } from 'helpers/settings';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { setPayPalHasLoaded } from 'pages/new-contributions-landing/contributionsLandingActions';
 import React from 'react';
 import { connect } from 'react-redux';
 
 import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
-
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-
 import { formatAmount } from './ContributionAmount';
 import { type State } from '../contributionsLandingReducer';
 
@@ -29,7 +25,6 @@ type PropTypes = {
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  whenUnableToOpen: () => void,
 };
 
 const mapStateToProps = (state: State) =>
@@ -41,6 +36,7 @@ const mapStateToProps = (state: State) =>
     selectedAmounts: state.page.form.selectedAmounts,
     otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
     currencyId: state.common.internationalisation.currencyId,
+    csrf: state.page.csrf,
   });
 
 
@@ -51,8 +47,8 @@ function ContributionSubmit(props: PropTypes) {
 
   const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
   const formSubmitClassName = showPayPalExpressButton
-    ? classNameWithModifiers("form__submit-button",  ['hidden'])
-    : "form__submit-button";
+    ? classNameWithModifiers('form__submit-button', ['hidden'])
+    : 'form__submit-button';
 
   // if all payment methods are switched off, do not display the button
   if (props.paymentMethod !== 'None') {
@@ -69,7 +65,8 @@ function ContributionSubmit(props: PropTypes) {
         <button
           disabled={props.isWaiting}
           className={formSubmitClassName}
-          type="submit">
+          type="submit"
+        >
           Contribute&nbsp;
           {amount ? formatAmount(
             currencies[props.currency],

@@ -80,9 +80,7 @@ function Button(props: PropTypes) {
   const PayPalButton = window.paypal.Button.driver('react', { React, ReactDOM });
   const className = props.show ? 'component-paypal-button-checkout' : classNameWithModifiers('component-paypal-button-checkout', ['hidden']);
   return (
-    <div id="component-paypal-button-checkout"
-         className={className}
-    >
+    <div id="component-paypal-button-checkout" className={className}>
       <PayPalButton {...payPalOptions} />
     </div>
   );

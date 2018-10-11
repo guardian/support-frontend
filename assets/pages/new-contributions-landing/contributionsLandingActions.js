@@ -49,7 +49,9 @@ export type Action =
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
+  | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'PAYMENT_SUCCESS' };
+
 
 const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action =>
   ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType, paymentMethodToSelect });

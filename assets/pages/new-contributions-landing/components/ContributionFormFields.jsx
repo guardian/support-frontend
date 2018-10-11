@@ -2,73 +2,30 @@
 
 // ----- Imports ----- //
 
-import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
-import { setPayPalHasLoaded } from 'pages/new-contributions-landing/contributionsLandingActions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
-
-import { countryGroupSpecificDetails, type CountryMetaData } from 'helpers/internationalisation/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { classNameWithModifiers } from 'helpers/utilities';
-import { type PaymentHandler } from 'helpers/checkouts';
-import {
-  config,
-  type Contrib,
-  type Amount,
-  type PaymentMatrix,
-  type PaymentMethod,
-  baseHandlers,
-} from 'helpers/contributions';
-import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
-import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { getAbsoluteURL } from 'helpers/url';
-import { routes, payPalCancelUrl } from 'helpers/routes';
-
-import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
-import ProgressMessage from 'components/progressMessage/progressMessage';
-import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import Signout from 'components/signout/signout';
-
 
 import {
   checkFirstName,
   checkLastName,
   checkState,
   checkEmail,
-  isNotEmpty,
-  isSmallerOrEqual,
-  isLargerOrEqual,
-  maxTwoDecimals,
   emailRegexPattern,
 } from 'helpers/formValidation';
 
-import { NewContributionType } from './ContributionType';
-import { NewContributionAmount } from './ContributionAmount';
-import { NewContributionPayment } from './ContributionPayment';
 import { NewContributionState } from './ContributionState';
-import { NewContributionSubmit } from './ContributionSubmit';
 import { NewContributionTextInput } from './ContributionTextInput';
-
 import { type State } from '../contributionsLandingReducer';
 
 import {
-  paymentWaiting,
   updateFirstName,
   updateLastName,
   updateEmail,
   updateState,
-  onThirdPartyPaymentAuthorised,
-  setCheckoutFormHasBeenSubmitted,
-  createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 
 
@@ -79,6 +36,7 @@ type PropTypes = {|
   lastName: string,
   email: string,
   state: UsState | CaState | null,
+  checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
   updateFirstName: Event => void,
   updateLastName: Event => void,
