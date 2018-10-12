@@ -49,6 +49,7 @@ type PropTypes = {
   countryGroup: CountryGroupId,
   country: IsoCountry,
   isSignedIn: boolean,
+  stateField: UsState | CaState,
 };
 
 // ----- Map State/Props ----- //
@@ -64,6 +65,7 @@ function mapStateToProps(state: State) {
     countryGroup: state.common.internationalisation.countryGroupId,
     country: state.common.internationalisation.countryId,
     isSignedIn: state.page.user.isSignedIn,
+    stateField: state.page.user.stateField,
   };
 
 }
@@ -92,7 +94,11 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | Checkou
 
 // ----- Functions ----- //
 
-function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaState) => void) {
+function stateDropdown(
+  countryGroup: CountryGroupId,
+  stateUpdate: (UsState | CaState) => void,
+  stateField: UsState | CaState,
+) {
 
   if (countryGroup !== 'UnitedStates' && countryGroup !== 'Canada') {
     return null;
@@ -101,7 +107,7 @@ function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaS
   const stateLabel = countryGroup === 'Canada' ? 'province/territory' : 'state';
 
   const options: SelectOption[] = Object.keys(states).map((stateCode: UsState | CaState) =>
-    ({ value: stateCode, text: states[stateCode] }));
+    ({ value: stateCode, text: states[stateCode], selected: stateCode === stateField }));
 
   return (<SelectInput
     id="qa-state-dropdown"
@@ -192,7 +198,7 @@ function NameForm(props: PropTypes) {
         errorMessage="Please enter a last name."
         required
       />
-      {stateDropdown(props.countryGroup, props.stateUpdate)}
+      {stateDropdown(props.countryGroup, props.stateUpdate, props.stateField)}
       {countriesDropdown(props.countryGroup, props.countryUpdate, props.country)}
       <p className="component-your-details__info">
         <small>All fields are required.</small>
