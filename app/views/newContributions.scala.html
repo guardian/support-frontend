@@ -16,6 +16,7 @@
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
   idUser: Option[IdUser],
+  visitToken: VisitToken
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
 
 @scripts = {
@@ -57,6 +58,7 @@
     window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
     window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
     window.guardian.csrf = { token: "@CSRF.getToken.value" };
+    window.guardian.visitToken = "@visitToken.value";
   </script>
 }
 
