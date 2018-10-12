@@ -4,7 +4,6 @@
 
 import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
-import * as storage from 'helpers/storage';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
@@ -23,15 +22,6 @@ function loadPayPalExpress(): Promise<void> {
 
 // ----- Auxiliary Functions -----//
 
-function handleSetupResponse(response: Object) {
-  let resp = null;
-  if (response.status === 200) {
-    resp = response.json();
-  }
-
-  return resp;
-}
-
 function payPalRequestData(bodyObj: Object, csrfToken: string) {
 
   const body = JSON.stringify(bodyObj);
@@ -45,33 +35,12 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
 }
 
 function setupPayment(
-  amountToPay: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
+  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 ) {
-  const csrfToken = csrf.token;
-
   return (resolve, reject) => {
-    console.log('setupPayment');
-    storage.setSession('paymentMethod', 'PayPal');
-    const requestBody = {
-      amount: amountToPay,
-      billingPeriod: 'monthly',
-      currency: currencyId,
-    };
-
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
-      .then(handleSetupResponse)
-      .then((token) => {
-        if (token) {
-          resolve(token.token);
-        } else {
-          logException('PayPal token came back blank');
-        }
-      }).catch((err) => {
-        logException(err.message);
-        reject(err);
-      });
+    processRecurringPayPalPayment(resolve, reject, currencyId, csrf);
   };
 }
 
@@ -88,7 +57,6 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
 }
 
 function setup(
-  amount: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
   onPaymentAuthorisation: string => void,
@@ -96,6 +64,7 @@ function setup(
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
+  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {
@@ -149,7 +118,7 @@ function setup(
     },
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(amount, currencyId, csrf),
+    payment: setupPayment(currencyId, csrf, processRecurringPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize,
@@ -164,4 +133,5 @@ function setup(
 export {
   setup,
   loadPayPalExpress,
+  payPalRequestData,
 };

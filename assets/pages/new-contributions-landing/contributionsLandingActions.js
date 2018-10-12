@@ -8,6 +8,7 @@ import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, t
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalExpressCheckout';
 import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -200,6 +201,42 @@ const onCreateOneOffPayPalPaymentResponse =
       });
     };
 
+function handleRecurringPayPalSetupResponse(response: Object) {
+  let resp = null;
+  if (response.status === 200) {
+    resp = response.json();
+  }
+
+  return resp;
+}
+
+const processRecurringPayPalPayment = (resolve: Function, reject: Function, currencyId: IsoCurrency, csrf: Csrf) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const csrfToken = csrf.token;
+    const amount = getAmount(state);
+    storage.setSession('paymentMethod', 'PayPal');
+    const requestBody = {
+      amount,
+      billingPeriod: 'monthly',
+      currency: currencyId,
+    };
+
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+      .then(handleRecurringPayPalSetupResponse)
+      .then((token) => {
+        if (token) {
+          resolve(token.token);
+        } else {
+          logException('PayPal token came back blank');
+        }
+      }).catch((err) => {
+        logException(err.message);
+        reject(err);
+      });
+
+  };
+
 // The steps for one-off payment can be summarised as follows:
 // 1. Create a payment
 // 2. Authorise a payment
@@ -281,63 +318,6 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
     );
   };
 
-function handleSetupResponse(response: Object) {
-  let resp = null;
-  if (response.status === 200) {
-    resp = response.json();
-  }
-
-  return resp;
-}
-
-
-function payPalRequestData(bodyObj: Object, csrfToken: string) {
-
-  const body = JSON.stringify(bodyObj);
-
-  return {
-    credentials: 'include',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
-    body,
-  };
-}
-
-const processPayPalPayment = (resolve: Function, reject: Function, currencyId: IsoCurrency, csrf: Csrf) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
-    const state = getState();
-    const selectedAmounts = state.page.form.selectedAmounts;
-    const contributionType = state.page.form.contributionType;
-    const otherAmount = state.page.form.formData.otherAmounts[contributionType].amount;
-    const csrfToken = csrf.token;
-    const amount = selectedAmounts[contributionType] === 'other' ? otherAmount : selectedAmounts[contributionType];
-    console.log('setupPayment');
-    storage.setSession('paymentMethod', 'PayPal');
-    const requestBody = {
-      amount,
-      billingPeriod: 'monthly',
-      currency: currencyId,
-    };
-
-    console.log(payPalRequestData(requestBody, csrfToken || ''));
-
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
-      .then(handleSetupResponse)
-      .then((token) => {
-        if (token) {
-          resolve(token.token);
-        } else {
-          logException('PayPal token came back blank');
-        }
-      }).catch((err) => {
-      logException(err.message);
-      reject(err);
-    });
-
-  };
-
-
-
 export {
   updateContributionType,
   updatePaymentMethod,
@@ -360,5 +340,5 @@ export {
   updatePassword,
   createOneOffPayPalPayment,
   setPayPalHasLoaded,
-  processPayPalPayment,
+  processRecurringPayPalPayment,
 };

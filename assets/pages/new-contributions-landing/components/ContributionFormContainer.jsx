@@ -4,6 +4,7 @@
 
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import type { Contrib, PaymentMethod } from 'helpers/contributions';
 import type { Csrf as CsrfState, Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import React from 'react';
@@ -11,7 +12,6 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type PaymentMethod } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
@@ -28,7 +28,7 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
-  processPayPalPayment,
+  processRecurringPayPalPayment,
 } from '../contributionsLandingActions';
 
 
@@ -51,7 +51,9 @@ type PropTypes = {|
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
   isTestUser: boolean,
-  processPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  paymentMethod: PaymentMethod,
+  contributionType: Contrib,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -66,6 +68,8 @@ const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
   isTestUser: state.page.user.isTestUser,
+  paymentMethod: state.page.form.paymentMethod,
+  contributionType: state.page.form.contributionType,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -76,7 +80,12 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   payPalSetHasLoaded: () => { dispatch(setPayPalHasLoaded()); },
-  processPayPalPayment: (resolve: Function, reject: Function, currencyId: IsoCurrency, csrf: Csrf) => { dispatch(processPayPalPayment(resolve, reject, currencyId, csrf)); },
+  processRecurringPayPalPayment: (
+    resolve: Function,
+    reject: Function,
+    currencyId: IsoCurrency,
+    csrf: Csrf,
+  ) => { dispatch(processRecurringPayPalPayment(resolve, reject, currencyId, csrf)); },
 });
 
 // ----- Render ----- //
@@ -88,7 +97,8 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const showPayPalExpressButton = true;
+  const showPayPalExpressButton =
+    props.paymentMethod === 'PayPal' && (props.contributionType === 'MONTHLY' || props.contributionType ==='ANNUAL');
   const formClassName = 'form--contribution';
   const selectedCountryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
@@ -118,7 +128,7 @@ function ContributionFormContainer(props: PropTypes) {
           whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
           show={showPayPalExpressButton}
           isTestUser={props.isTestUser}
-          processPayPalPayment={props.processPayPalPayment}
+          processRecurringPayPalPayment={props.processRecurringPayPalPayment}
         />
       </div>
     );

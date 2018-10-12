@@ -10,7 +10,7 @@ import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
+import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/newPaymentFlow/payPalExpressCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -29,7 +29,7 @@ type PropTypes = {|
   formClassName: string,
   show: boolean,
   isTestUser: boolean,
-  processPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 |};
 
 
@@ -66,8 +66,6 @@ function Button(props: PropTypes) {
   };
 
   const payPalOptions = setup(
-    // hardcoding for now, as tying the value to the state causes a re-rendering of the button.
-    5,
     props.currencyId,
     props.csrf,
     onPaymentAuthorisation,
@@ -75,7 +73,7 @@ function Button(props: PropTypes) {
     props.whenUnableToOpen,
     props.formClassName,
     props.isTestUser,
-    props.processPayPalPayment,
+    props.processRecurringPayPalPayment,
   );
 
 
