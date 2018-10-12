@@ -2,8 +2,6 @@
 
 // ----- Imports ----- //
 
-import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import type { Contrib, PaymentMethod } from 'helpers/contributions';
 import type { Csrf as CsrfState, Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
@@ -97,11 +95,7 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const showPayPalExpressButton =
-    props.paymentMethod === 'PayPal' && (props.contributionType === 'MONTHLY' || props.contributionType ==='ANNUAL');
-  const formClassName = 'form--contribution';
   const selectedCountryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
-
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
@@ -115,20 +109,6 @@ function ContributionFormContainer(props: PropTypes) {
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
-        />
-        <PayPalExpressButton
-          currencyId={props.currencyId}
-          csrf={props.csrf}
-          onPaymentAuthorisation={onPaymentAuthorisation}
-          hasLoaded={props.payPalHasLoaded}
-          setHasLoaded={props.payPalSetHasLoaded}
-          switchStatus={props.payPalSwitchStatus}
-          canOpen={() => formIsValid(formClassName)}
-          formClassName={formClassName}
-          whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
-          show={showPayPalExpressButton}
-          isTestUser={props.isTestUser}
-          processRecurringPayPalPayment={props.processRecurringPayPalPayment}
         />
       </div>
     );

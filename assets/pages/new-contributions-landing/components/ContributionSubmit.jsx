@@ -13,6 +13,20 @@ import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internat
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import { formatAmount } from './ContributionAmount';
 import { type State } from '../contributionsLandingReducer';
+import PayPalExpressButton
+  from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
+import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import {
+  onThirdPartyPaymentAuthorised,
+  paymentWaiting,
+  setCheckoutFormHasBeenSubmitted,
+  setPayPalHasLoaded
+} from '../contributionsLandingActions';
+import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import type { CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+
+
 
 // ----- Types ----- //
 
@@ -25,6 +39,12 @@ type PropTypes = {
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
+  setPaymentIsWaiting: boolean => void,
+  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
+  setCheckoutFormHasBeenSubmitted: () => void,
+  payPalSetHasLoaded: () => void,
+  payPalHasLoaded: boolean,
+  isTestUser: boolean,
 };
 
 const mapStateToProps = (state: State) =>
@@ -37,7 +57,16 @@ const mapStateToProps = (state: State) =>
     otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
     currencyId: state.common.internationalisation.currencyId,
     csrf: state.page.csrf,
+    payPalHasLoaded: state.page.form.payPalHasLoaded,
+    isTestUser: state.page.user.isTestUser,
   });
+
+const mapDispatchToProps = (dispatch: Function) => ({
+  setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
+  onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
+  payPalSetHasLoaded: () => { dispatch(setPayPalHasLoaded()); },
+  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
+});
 
 
 // ----- Render ----- //
@@ -45,10 +74,11 @@ const mapStateToProps = (state: State) =>
 
 function ContributionSubmit(props: PropTypes) {
 
-  const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
-  const formSubmitClassName = showPayPalExpressButton
-    ? classNameWithModifiers('form__submit-button', ['hidden'])
-    : 'form__submit-button';
+  // TODO: this is also in ContributionFormContainer. refactor
+  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
+    props.setPaymentIsWaiting(true);
+    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
+  };
 
   // if all payment methods are switched off, do not display the button
   if (props.paymentMethod !== 'None') {
@@ -59,30 +89,47 @@ function ContributionSubmit(props: PropTypes) {
       isDefault: false,
     } : null;
     const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
+    const formClassName = 'form--contribution';
+    const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
 
     return (
       <div className="form__submit">
-        <button
-          disabled={props.isWaiting}
-          className={formSubmitClassName}
-          type="submit"
-        >
-          Contribute&nbsp;
-          {amount ? formatAmount(
-            currencies[props.currency],
-            spokenCurrencies[props.currency],
-            amount,
-            false,
-          ) : null}&nbsp;
-          {frequency ? `${frequency} ` : null}
-          {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
-          <SvgArrowRight />
-        </button>
+        {showPayPalExpressButton ? (
+          <PayPalExpressButton
+            currencyId={props.currencyId}
+            csrf={props.csrf}
+            onPaymentAuthorisation={onPaymentAuthorisation}
+            hasLoaded={props.payPalHasLoaded}
+            setHasLoaded={props.payPalSetHasLoaded}
+            canOpen={() => formIsValid(formClassName)}
+            formClassName={formClassName}
+            whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
+            show={showPayPalExpressButton}
+            isTestUser={props.isTestUser}
+          />
+        ) : (
+          <button
+            disabled={props.isWaiting}
+            className="form__submit-button"
+            type="submit"
+          >
+            Contribute&nbsp;
+            {amount ? formatAmount(
+              currencies[props.currency],
+              spokenCurrencies[props.currency],
+              amount,
+              false,
+            ) : null}&nbsp;
+            {frequency ? `${frequency} ` : null}
+            {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
+            <SvgArrowRight />
+          </button>
+        )}
       </div>
     );
   }
 }
 
-const NewContributionSubmit = connect(mapStateToProps)(ContributionSubmit);
+const NewContributionSubmit = connect(mapStateToProps, mapDispatchToProps)(ContributionSubmit);
 
 export { NewContributionSubmit };
