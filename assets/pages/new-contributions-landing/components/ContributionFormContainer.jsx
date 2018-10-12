@@ -39,6 +39,7 @@ type PropTypes = {|
   paymentComplete: boolean,
   payPalSwitchStatus: Status,
   paymentError: CheckoutFailureReason | null,
+  paymentMethod: PaymentMethod,
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   isDirectDebitPopUpOpen: boolean,
@@ -60,6 +61,7 @@ const mapStateToProps = (state: State) => ({
   paymentComplete: state.page.form.paymentComplete,
   payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   paymentError: state.page.form.paymentError,
+  paymentMethod: state.page.form.paymentMethod,
   currencyId: state.common.internationalisation.currencyId,
   countryGroupId: state.common.internationalisation.countryGroupId,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
@@ -85,7 +87,7 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const showPayPalExpressButton = true;
+  const showPayPalExpressButton = props.paymentMethod === 'PayPal';
   const formClassName = 'form--contribution';
   const selectedCountryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
