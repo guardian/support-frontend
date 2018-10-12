@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpressCheckout';
+import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/newPaymentFlow/payPalExpressCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -25,6 +25,7 @@ type PropTypes = {|
   formClassName: string,
   show: boolean,
   isTestUser: boolean,
+  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 |};
 
 
@@ -46,6 +47,7 @@ function PayPalExpressButton(props: PropTypes) {
         whenUnableToOpen={props.whenUnableToOpen}
         formClassName={props.formClassName}
         isTestUser={props.isTestUser}
+        processRecurringPayPalPayment={props.processRecurringPayPalPayment}
       />
     </div>
   );
@@ -62,6 +64,7 @@ type IframeButtonPropTypes = {|
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
+  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 |};
 
 // ----- Auxiliary Components ----- //
@@ -97,8 +100,6 @@ class IframeButton extends React.Component<IframeButtonPropTypes> {
     };
 
     const payPalOptions = setup(
-      // hardcoding for now, as tying the value to the state causes a re-rendering of the button.
-      5,
       this.props.currencyId,
       this.props.csrf,
       onPaymentAuthorisation,
@@ -106,6 +107,7 @@ class IframeButton extends React.Component<IframeButtonPropTypes> {
       this.props.whenUnableToOpen,
       this.props.formClassName,
       this.props.isTestUser,
+      this.props.processRecurringPayPalPayment,
     );
 
     return React.createElement(

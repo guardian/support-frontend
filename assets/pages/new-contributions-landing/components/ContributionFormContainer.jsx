@@ -2,8 +2,7 @@
 
 // ----- Imports ----- //
 
-import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import type { Contrib, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import React from 'react';
@@ -11,7 +10,6 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type PaymentMethod } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
@@ -39,7 +37,6 @@ type PropTypes = {|
   paymentComplete: boolean,
   payPalSwitchStatus: Status,
   paymentError: CheckoutFailureReason | null,
-  paymentMethod: PaymentMethod,
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   isDirectDebitPopUpOpen: boolean,
@@ -51,6 +48,8 @@ type PropTypes = {|
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
   isTestUser: boolean,
+  paymentMethod: PaymentMethod,
+  contributionType: Contrib,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -61,15 +60,15 @@ const mapStateToProps = (state: State) => ({
   paymentComplete: state.page.form.paymentComplete,
   payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   paymentError: state.page.form.paymentError,
-  paymentMethod: state.page.form.paymentMethod,
   currencyId: state.common.internationalisation.currencyId,
   countryGroupId: state.common.internationalisation.countryGroupId,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
   isTestUser: state.page.user.isTestUser,
+  paymentMethod: state.page.form.paymentMethod,
+  contributionType: state.page.form.contributionType,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
@@ -87,10 +86,7 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const showPayPalExpressButton = props.paymentMethod === 'PayPal';
-  const formClassName = 'form--contribution';
   const selectedCountryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
-
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
@@ -104,19 +100,6 @@ function ContributionFormContainer(props: PropTypes) {
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}
           isPopUpOpen={props.isDirectDebitPopUpOpen}
-        />
-        <PayPalExpressButton
-          currencyId={props.currencyId}
-          csrf={props.csrf}
-          onPaymentAuthorisation={onPaymentAuthorisation}
-          hasLoaded={props.payPalHasLoaded}
-          setHasLoaded={props.payPalSetHasLoaded}
-          switchStatus={props.payPalSwitchStatus}
-          canOpen={() => formIsValid(formClassName)}
-          formClassName={formClassName}
-          whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
-          show={showPayPalExpressButton}
-          isTestUser={props.isTestUser}
         />
       </div>
     );

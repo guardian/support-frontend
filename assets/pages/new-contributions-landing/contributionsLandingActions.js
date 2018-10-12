@@ -5,7 +5,10 @@
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type PaymentHandler } from 'helpers/checkouts';
 import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalExpressCheckout';
 import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -20,6 +23,8 @@ import {
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+import { routes } from 'helpers/routes';
+import * as storage from 'helpers/storage';
 import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
@@ -196,6 +201,42 @@ const onCreateOneOffPayPalPaymentResponse =
       });
     };
 
+function handleRecurringPayPalSetupResponse(response: Object) {
+  let resp = null;
+  if (response.status === 200) {
+    resp = response.json();
+  }
+
+  return resp;
+}
+
+const processRecurringPayPalPayment = (resolve: Function, reject: Function, currencyId: IsoCurrency, csrf: Csrf) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const csrfToken = csrf.token;
+    const amount = getAmount(state);
+    storage.setSession('paymentMethod', 'PayPal');
+    const requestBody = {
+      amount,
+      billingPeriod: 'monthly',
+      currency: currencyId,
+    };
+
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+      .then(handleRecurringPayPalSetupResponse)
+      .then((token) => {
+        if (token) {
+          resolve(token.token);
+        } else {
+          logException('PayPal token came back blank');
+        }
+      }).catch((err) => {
+        logException(err.message);
+        reject(err);
+      });
+
+  };
+
 // The steps for one-off payment can be summarised as follows:
 // 1. Create a payment
 // 2. Authorise a payment
@@ -277,7 +318,6 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
     );
   };
 
-
 export {
   updateContributionType,
   updatePaymentMethod,
@@ -300,4 +340,5 @@ export {
   updatePassword,
   createOneOffPayPalPayment,
   setPayPalHasLoaded,
+  processRecurringPayPalPayment,
 };
