@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { classNameWithModifiers } from 'helpers/utilities';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -11,21 +10,19 @@ import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'hel
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-import { formatAmount } from './ContributionAmount';
-import { type State } from '../contributionsLandingReducer';
 import PayPalExpressButton
   from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type State } from '../contributionsLandingReducer';
+import { formatAmount } from './ContributionAmount';
 import {
   onThirdPartyPaymentAuthorised,
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
-  setPayPalHasLoaded
+  setPayPalHasLoaded,
+  processRecurringPayPalPayment,
 } from '../contributionsLandingActions';
-import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
-import type { CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
-
 
 
 // ----- Types ----- //
@@ -42,6 +39,7 @@ type PropTypes = {
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
+  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
   payPalSetHasLoaded: () => void,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
@@ -66,6 +64,12 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   payPalSetHasLoaded: () => { dispatch(setPayPalHasLoaded()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
+  processRecurringPayPalPayment: (
+    resolve: Function,
+    reject: Function,
+    currencyId: IsoCurrency,
+    csrf: CsrfState,
+  ) => { dispatch(processRecurringPayPalPayment(resolve, reject, currencyId, csrf)); },
 });
 
 
@@ -106,6 +110,7 @@ function ContributionSubmit(props: PropTypes) {
             whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
             show={showPayPalExpressButton}
             isTestUser={props.isTestUser}
+            processRecurringPayPalPayment={props.processRecurringPayPalPayment}
           />
         ) : (
           <button

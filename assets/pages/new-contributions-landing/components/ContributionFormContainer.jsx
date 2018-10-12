@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { Contrib, PaymentMethod } from 'helpers/contributions';
-import type { Csrf as CsrfState, Csrf } from 'helpers/csrf/csrfReducer';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -26,7 +26,6 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
-  processRecurringPayPalPayment,
 } from '../contributionsLandingActions';
 
 
@@ -49,7 +48,6 @@ type PropTypes = {|
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
   isTestUser: boolean,
-  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
   paymentMethod: PaymentMethod,
   contributionType: Contrib,
 |};
@@ -71,19 +69,12 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   payPalSetHasLoaded: () => { dispatch(setPayPalHasLoaded()); },
-  processRecurringPayPalPayment: (
-    resolve: Function,
-    reject: Function,
-    currencyId: IsoCurrency,
-    csrf: Csrf,
-  ) => { dispatch(processRecurringPayPalPayment(resolve, reject, currencyId, csrf)); },
 });
 
 // ----- Render ----- //
