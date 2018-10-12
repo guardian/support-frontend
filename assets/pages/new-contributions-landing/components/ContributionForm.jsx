@@ -176,6 +176,7 @@ function onSubmit(props: PropTypes): Event => void {
 
 function ContributionForm(props: PropTypes) {
 
+  // TODO: consolidate!
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.setPaymentIsWaiting(true);
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
