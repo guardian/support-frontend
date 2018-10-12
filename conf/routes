@@ -97,9 +97,11 @@ GET  /paypal/cancel                                 controllers.PayPalRegular.ca
 # <payment-api-host>/contribute/one-off/paypal/create-payment
 # This requires return and cancel urls depending on whether the user authorized the payment or not.
 # https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
-GET  /paypal/rest/return                                controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String)
+GET  /paypal/rest/return                                controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, country: Option[String] = None)
 GET  /paypal/rest/cancel                                controllers.PayPalOneOff.cancelURL
 GET  /paypal/rest/error                                 controllers.PayPalOneOff.paypalError
+
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return.new   controllers.PayPalOneOff.newReturnURL(paymentId: String, PayerID: String, country: String)
 
 # ----- Direct Debit ----- #
 

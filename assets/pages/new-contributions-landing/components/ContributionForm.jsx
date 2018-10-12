@@ -25,7 +25,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAbsoluteURL } from 'helpers/url';
-import { routes, payPalCancelUrl } from 'helpers/routes';
+import { routes, payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -179,7 +179,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       props.createOneOffPayPalPayment({
         currency: props.currency,
         amount: getAmount(props),
-        returnURL: getAbsoluteURL(routes.payPalRestReturnURL),
+        returnURL: payPalReturnUrl(props.countryGroupId),
         // TODO: use new cancel url
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
