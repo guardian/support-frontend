@@ -29,6 +29,7 @@ type PropTypes = {|
   formClassName: string,
   show: boolean,
   isTestUser: boolean,
+  processPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 |};
 
 
@@ -74,6 +75,7 @@ function Button(props: PropTypes) {
     props.whenUnableToOpen,
     props.formClassName,
     props.isTestUser,
+    props.processPayPalPayment,
   );
 
 

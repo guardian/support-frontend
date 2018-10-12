@@ -4,7 +4,7 @@
 
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { Csrf as CsrfState, Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -28,6 +28,7 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  processPayPalPayment,
 } from '../contributionsLandingActions';
 
 
@@ -50,6 +51,7 @@ type PropTypes = {|
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
   isTestUser: boolean,
+  processPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -74,6 +76,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   payPalSetHasLoaded: () => { dispatch(setPayPalHasLoaded()); },
+  processPayPalPayment: (resolve: Function, reject: Function, currencyId: IsoCurrency, csrf: Csrf) => { dispatch(processPayPalPayment(resolve, reject, currencyId, csrf)); },
 });
 
 // ----- Render ----- //
@@ -115,6 +118,7 @@ function ContributionFormContainer(props: PropTypes) {
           whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
           show={showPayPalExpressButton}
           isTestUser={props.isTestUser}
+          processPayPalPayment={props.processPayPalPayment}
         />
       </div>
     );

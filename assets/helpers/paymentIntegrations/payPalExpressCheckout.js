@@ -50,30 +50,10 @@ function setupPayment(
   amountToPay: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
+  processPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void
 ) {
-  const csrfToken = csrf.token;
-
   return (resolve, reject) => {
-    console.log('setupPayment');
-    storage.setSession('paymentMethod', 'PayPal');
-    const requestBody = {
-      amount: amountToPay,
-      billingPeriod: 'monthly',
-      currency: currencyId,
-    };
-
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
-      .then(handleSetupResponse)
-      .then((token) => {
-        if (token) {
-          resolve(token.token);
-        } else {
-          logException('PayPal token came back blank');
-        }
-      }).catch((err) => {
-        logException(err.message);
-        reject(err);
-      });
+    processPayPalPayment(resolve, reject, currencyId, csrf);
   };
 }
 
@@ -98,6 +78,7 @@ function setup(
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
+  processPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {
@@ -151,7 +132,7 @@ function setup(
     },
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(amount, currencyId, csrf),
+    payment: setupPayment(amount, currencyId, csrf, processPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize,
