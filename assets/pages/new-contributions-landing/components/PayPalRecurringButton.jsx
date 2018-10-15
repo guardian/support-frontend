@@ -12,47 +12,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
-// ---- Types ----- //
-
-type PropTypes = {|
-  onPaymentAuthorisation: PaymentAuthorisation => void,
-  csrf: CsrfState,
-  currencyId: IsoCurrency,
-  hasLoaded: boolean,
-  setHasLoaded: () => void,
-  canOpen: () => boolean,
-  whenUnableToOpen: () => void,
-  formClassName: string,
-  show: boolean,
-  isTestUser: boolean,
-  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
-|};
-
-
-// ----- Component ----- //
-
-function PayPalExpressButton(props: PropTypes) {
-  console.log('button container render');
-
-  const className = props.show ? 'component-paypal-button-checkout' : classNameWithModifiers('component-paypal-button-checkout', ['hidden']);
-  return (
-    <div id="component-paypal-button-checkout" className={className}>
-      <IframeButton
-        onPaymentAuthorisation={props.onPaymentAuthorisation}
-        csrf={props.csrf}
-        currencyId={props.currencyId}
-        hasLoaded={props.hasLoaded}
-        setHasLoaded={props.setHasLoaded}
-        canOpen={props.canOpen}
-        whenUnableToOpen={props.whenUnableToOpen}
-        formClassName={props.formClassName}
-        isTestUser={props.isTestUser}
-        processRecurringPayPalPayment={props.processRecurringPayPalPayment}
-      />
-    </div>
-  );
-
-}
 
 type IframeButtonPropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
@@ -117,6 +76,43 @@ class IframeButton extends React.Component<IframeButtonPropTypes> {
   }
 }
 
-// ----- Export ----- //
+// ---- Types ----- //
 
-export default PayPalExpressButton;
+type PropTypes = {|
+  onPaymentAuthorisation: PaymentAuthorisation => void,
+  csrf: CsrfState,
+  currencyId: IsoCurrency,
+  hasLoaded: boolean,
+  setHasLoaded: () => void,
+  canOpen: () => boolean,
+  whenUnableToOpen: () => void,
+  formClassName: string,
+  show: boolean,
+  isTestUser: boolean,
+  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+|};
+
+
+// ----- Component ----- //
+
+export function PayPalRecurringButton(props: PropTypes) {
+  console.log('button container render');
+
+  const className = props.show ? 'component-paypal-button-checkout' : classNameWithModifiers('component-paypal-button-checkout', ['hidden']);
+  return (
+    <div id="component-paypal-button-checkout" className={className}>
+      <IframeButton
+        onPaymentAuthorisation={props.onPaymentAuthorisation}
+        csrf={props.csrf}
+        currencyId={props.currencyId}
+        hasLoaded={props.hasLoaded}
+        setHasLoaded={props.setHasLoaded}
+        canOpen={props.canOpen}
+        whenUnableToOpen={props.whenUnableToOpen}
+        formClassName={props.formClassName}
+        isTestUser={props.isTestUser}
+        processRecurringPayPalPayment={props.processRecurringPayPalPayment}
+      />
+    </div>
+  );
+}

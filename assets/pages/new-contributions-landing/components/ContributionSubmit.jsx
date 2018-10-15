@@ -10,12 +10,11 @@ import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'hel
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-import PayPalExpressButton
-  from 'components/paymentButtons/payPalExpressButton/payPalExpressButtonNewFlow';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
+import { PayPalRecurringButton } from './PayPalRecurringButton';
 import {
   onThirdPartyPaymentAuthorised,
   paymentWaiting,
@@ -94,12 +93,12 @@ function ContributionSubmit(props: PropTypes) {
     } : null;
     const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
     const formClassName = 'form--contribution';
-    const showPayPalExpressButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
+    const showPayPalRecurringButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
 
     return (
       <div className="form__submit">
-        {showPayPalExpressButton ? (
-          <PayPalExpressButton
+        {showPayPalRecurringButton ? (
+          <PayPalRecurringButton
             currencyId={props.currencyId}
             csrf={props.csrf}
             onPaymentAuthorisation={onPaymentAuthorisation}
@@ -108,7 +107,7 @@ function ContributionSubmit(props: PropTypes) {
             canOpen={() => formIsValid(formClassName)}
             formClassName={formClassName}
             whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
-            show={showPayPalExpressButton}
+            show={showPayPalRecurringButton}
             isTestUser={props.isTestUser}
             processRecurringPayPalPayment={props.processRecurringPayPalPayment}
           />
