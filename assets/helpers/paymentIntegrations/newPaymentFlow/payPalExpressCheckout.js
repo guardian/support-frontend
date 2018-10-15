@@ -110,6 +110,7 @@ function setup(
       // TODO: if we stored actions.enable and actions.disable in the state somewhere,
       // we could trigger the enable/disable from a redux action rather than bypassing
       // things with our own change handler.
+      console.log('validate');
       toggleButton(actions);
       addFormChangeListener(() => toggleButton(actions));
     },

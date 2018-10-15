@@ -26,6 +26,10 @@ function classNameWithModifiers(className: string, modifiers: Array<?string>): s
     .reduce((acc, modifier) => `${acc} ${className}--${modifier}`, className);
 }
 
+function hiddenIf(shouldHide: boolean, className: string): string {
+  return shouldHide ? classNameWithModifiers(className, ['hidden']) : className;
+}
+
 // Generates a key handler that only trigger a function if the
 // CarriageReturnCode and SpaceCode are pressed
 function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) {
@@ -81,6 +85,7 @@ export {
   descending,
   roundDp,
   classNameWithModifiers,
+  hiddenIf,
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,

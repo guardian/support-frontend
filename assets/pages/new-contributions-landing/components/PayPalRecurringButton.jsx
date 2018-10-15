@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { classNameWithModifiers } from 'helpers/utilities';
 import ReactDOM from 'react-dom';
 import React from 'react';
 
@@ -13,7 +12,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 
-type IframeButtonPropTypes = {|
+type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   csrf: CsrfState,
   currencyId: IsoCurrency,
@@ -28,18 +27,28 @@ type IframeButtonPropTypes = {|
 
 // ----- Auxiliary Components ----- //
 
-class IframeButton extends React.Component<IframeButtonPropTypes> {
-  // This is a special sort of component. Since every time PayPal's code is called to create
-  // the iframe button we end up with a different id, React will always update the DOM even
-  // when nothing has substantively changed. We really just want the render code to execute
-  // twice ever: once to call loadPayPalExpress(), and once to create the iframe element.
-  // (Really, this should be just once, but for that we need to move loadPayPalExpress out
-  // of here where it doesn't belong).
-  shouldComponentUpdate(nextProps) {
+// Q. Why is this a class rather than a function?
+// A. Because we need to override shouldComponentUpdate.
+//
+// Q. Why do you need to override shouldComponentUpdate? Isn't that dangerous?
+// A. We want to bypass React's normal decision-making about whether to re-render
+// this particular component, because it uses some third-party code we can't control and
+// which behaves in a very specific way.
+//
+// When we use PayPal's JS library via window.paypal.Button.driver, it renders a button inside
+// an iframe. Each time this code is called, the iframe ends up with a different id,
+// so React will always try and update the DOM even when nothing has substantively changed.
+//
+// We don't want this to happen, for two reasons.
+// 1. Loading this iframe is an expensive operation which causes an obvious visual re-render
+// 2. We don't want to have to re-bind handlers which interact with the iframe
+//    (e.g. the handler bound in addFormChangeListener inside setup)
+export class PayPalRecurringButton extends React.Component<PropTypes> {
+  shouldComponentUpdate(nextProps: PropTypes) {
     return (this.props.hasLoaded !== nextProps.hasLoaded);
   }
 
-  props: IframeButtonPropTypes;
+  props: PropTypes;
 
   render() {
     console.log('iframe button render');
@@ -69,50 +78,10 @@ class IframeButton extends React.Component<IframeButtonPropTypes> {
       this.props.processRecurringPayPalPayment,
     );
 
+    // This element contains an iframe which contains the actual button
     return React.createElement(
       window.paypal.Button.driver('react', { React, ReactDOM }),
       payPalOptions,
     );
   }
-}
-
-// ---- Types ----- //
-
-type PropTypes = {|
-  onPaymentAuthorisation: PaymentAuthorisation => void,
-  csrf: CsrfState,
-  currencyId: IsoCurrency,
-  hasLoaded: boolean,
-  setHasLoaded: () => void,
-  canOpen: () => boolean,
-  whenUnableToOpen: () => void,
-  formClassName: string,
-  show: boolean,
-  isTestUser: boolean,
-  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
-|};
-
-
-// ----- Component ----- //
-
-export function PayPalRecurringButton(props: PropTypes) {
-  console.log('button container render');
-
-  const className = props.show ? 'component-paypal-button-checkout' : classNameWithModifiers('component-paypal-button-checkout', ['hidden']);
-  return (
-    <div id="component-paypal-button-checkout" className={className}>
-      <IframeButton
-        onPaymentAuthorisation={props.onPaymentAuthorisation}
-        csrf={props.csrf}
-        currencyId={props.currencyId}
-        hasLoaded={props.hasLoaded}
-        setHasLoaded={props.setHasLoaded}
-        canOpen={props.canOpen}
-        whenUnableToOpen={props.whenUnableToOpen}
-        formClassName={props.formClassName}
-        isTestUser={props.isTestUser}
-        processRecurringPayPalPayment={props.processRecurringPayPalPayment}
-      />
-    </div>
-  );
 }
