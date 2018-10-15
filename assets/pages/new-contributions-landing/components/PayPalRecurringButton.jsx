@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/newPaymentFlow/payPalExpressCheckout';
+import { loadPayPalExpress, getPayPalOptions } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -65,21 +65,19 @@ export class PayPalRecurringButton extends React.Component<PropTypes> {
       this.props.onPaymentAuthorisation(tokenToAuthorisation(token));
     };
 
-    const payPalOptions = setup(
-      this.props.currencyId,
-      this.props.csrf,
-      onPaymentAuthorisation,
-      this.props.canOpen,
-      this.props.whenUnableToOpen,
-      this.props.formClassName,
-      this.props.isTestUser,
-      this.props.processRecurringPayPalPayment,
-    );
-
     // This element contains an iframe which contains the actual button
     return React.createElement(
       window.paypal.Button.driver('react', { React, ReactDOM }),
-      payPalOptions,
+      getPayPalOptions(
+        this.props.currencyId,
+        this.props.csrf,
+        onPaymentAuthorisation,
+        this.props.canOpen,
+        this.props.whenUnableToOpen,
+        this.props.formClassName,
+        this.props.isTestUser,
+        this.props.processRecurringPayPalPayment,
+      ),
     );
   }
 }

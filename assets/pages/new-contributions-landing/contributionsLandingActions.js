@@ -8,7 +8,7 @@ import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, t
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalExpressCheckout';
+import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -201,15 +201,6 @@ const onCreateOneOffPayPalPaymentResponse =
       });
     };
 
-function handleRecurringPayPalSetupResponse(response: Object) {
-  let resp = null;
-  if (response.status === 200) {
-    resp = response.json();
-  }
-
-  return resp;
-}
-
 const processRecurringPayPalPayment = (resolve: Function, reject: Function, currencyId: IsoCurrency, csrf: Csrf) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
@@ -223,7 +214,7 @@ const processRecurringPayPalPayment = (resolve: Function, reject: Function, curr
     };
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
-      .then(handleRecurringPayPalSetupResponse)
+      .then(response => (response.ok ? response.json() : null))
       .then((token) => {
         if (token) {
           resolve(token.token);

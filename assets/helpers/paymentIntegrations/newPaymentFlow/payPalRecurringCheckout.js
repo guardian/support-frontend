@@ -56,7 +56,7 @@ function createAgreement(payPalData: Object, csrf: CsrfState) {
     .then(response => response.json());
 }
 
-function setup(
+function getPayPalOptions(
   currencyId: IsoCurrency,
   csrf: CsrfState,
   onPaymentAuthorisation: string => void,
@@ -65,37 +65,13 @@ function setup(
   formClassName: string,
   isTestUser: boolean,
   processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
-): Promise<Object> {
-
-  const handleBaId = (baid: Object) => {
-    onPaymentAuthorisation(baid.token);
-  };
-
-  const onAuthorize = (data) => {
-    createAgreement(data, csrf)
-      .then(handleBaId)
-      .catch((err) => {
-        logException(err.message);
-      });
-  };
-
-  function addFormChangeListener(handler: () => void) {
-    const form = document.querySelector(`.${formClassName}`);
-    if (form instanceof HTMLElement) {
-      // Thanks to event bubbling, we can just listen on the form element.
-      // This means that we'll get change events even from form elements which
-      // aren't in the DOM at the time this handler is bound.
-      form.addEventListener('change', handler);
-    } else {
-      logException(`No form found with class ${formClassName}`);
-    }
-  }
+): Object {
 
   function toggleButton(actions): void {
     return canOpen() ? actions.enable() : actions.disable();
   }
 
-  const payPalOptions: Object = {
+  return {
     env: getPayPalEnvironment(isTestUser),
 
     style: { color: 'blue', size: 'responsive', label: 'pay' },
@@ -109,7 +85,16 @@ function setup(
       // things with our own change handler.
       console.log('validate');
       toggleButton(actions);
-      addFormChangeListener(() => toggleButton(actions));
+
+      const form = document.querySelector(`.${formClassName}`);
+      if (form instanceof HTMLElement) {
+        // Thanks to event bubbling, we can just listen on the form element.
+        // This means that we'll get change events even from form elements which
+        // aren't in the DOM at the time this handler is bound.
+        form.addEventListener('change', () => toggleButton(actions));
+      } else {
+        logException(`No form found with class ${formClassName}`);
+      }
     },
 
     onClick() {
@@ -122,17 +107,23 @@ function setup(
     payment: setupPayment(currencyId, csrf, processRecurringPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
-    onAuthorize,
+    onAuthorize: (data) => {
+      createAgreement(data, csrf)
+        .then((baid: Object) => {
+          onPaymentAuthorisation(baid.token);
+        })
+        .catch((err) => {
+          logException(err.message);
+        });
+    },
   };
-
-  return payPalOptions;
 }
 
 
 // ----- Exports ----- //
 
 export {
-  setup,
+  getPayPalOptions,
   loadPayPalExpress,
   payPalRequestData,
 };
