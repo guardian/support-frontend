@@ -7,6 +7,13 @@ import com.gu.acquisition.services.AnalyticsService.RequestData
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3._
 import ophan.thrift.event.{AbTestInfo, Acquisition, Product}
+import GAService.clientIdPattern
+
+import scala.util.matching.Regex
+
+private[services] object GAService{
+  val clientIdPattern: Regex = raw"GA\d\.\d\.(\d+)\..*".r
+}
 
 private[services] class GAService(implicit client: OkHttpClient)
   extends AnalyticsService with LazyLogging {
@@ -24,7 +31,7 @@ private[services] class GAService(implicit client: OkHttpClient)
     val goExp = buildOptimizeTestsPayload(acquisition.abTests)
 
     // clientId cannot be empty or the call will fail
-    val clientId = if (gaData.clientId != "") gaData.clientId else transactionId
+    val clientId = sanitiseClientId(gaData.clientId)
     val productName = getProductName(submission.acquisition)
     val conversionCategory = getConversionCategory(submission.acquisition)
     val body = Map(
@@ -67,6 +74,14 @@ private[services] class GAService(implicit client: OkHttpClient)
       .filter { case (key, value) => value != "" }
       .map { case (key, value) => s"$key=$value" }
       .mkString("&")
+  }
+
+  private[services] def sanitiseClientId(maybeId: String) = {
+    maybeId match {
+      case clientIdPattern(id) => id // If we have a full _ga cookie string extract the client id
+      case "" => UUID.randomUUID().toString // If the provided value is blank we need to create one
+      case _ => maybeId // Otherwise assume that the caller has passed in the client id correctly
+    }
   }
 
   private[services] def getProductName(acquisition: Acquisition) =
