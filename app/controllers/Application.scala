@@ -1,5 +1,7 @@
 package controllers
 
+import java.security.SecureRandom
+
 import actions.CustomActionBuilders
 import assets.AssetsResolver
 import cats.data.EitherT
@@ -109,13 +111,14 @@ class Application(
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: Settings = settingsProvider.settings()
+    val visitToken = VisitToken(new SecureRandom())
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(newContributions(countryCode, None)),
-      user => Ok(newContributions(countryCode, user))
+      _ => Ok(newContributions(countryCode, None, visitToken)),
+      user => Ok(newContributions(countryCode, user, visitToken))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
+  private def newContributions(countryCode: String, idUser: Option[IdUser], visitToken: VisitToken)(implicit request: RequestHeader, settings: Settings) = {
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
@@ -127,7 +130,8 @@ class Application(
       regularUatStripeConfig = regularStripeConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      idUser = idUser
+      idUser = idUser,
+      visitToken = visitToken
     )
   }
 
@@ -145,4 +149,10 @@ class Application(
     request =>
       Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
+}
+
+case class VisitToken(value: String) extends AnyVal
+object VisitToken {
+  def apply(rand: SecureRandom): VisitToken =
+    new VisitToken(s"${rand.nextLong.toHexString}")
 }

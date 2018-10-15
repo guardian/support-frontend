@@ -137,6 +137,7 @@ const regularPaymentRequestFromAuthorisation = (
   ophanIds: getOphanIds(),
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
+  visitToken: state.page.visitToken.token,
 });
 
 // A PaymentResult represents the end state of the checkout process,
