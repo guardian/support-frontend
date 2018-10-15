@@ -1,6 +1,6 @@
 package controllers
 
-import java.time.{LocalDateTime, ZoneOffset}
+import java.security.SecureRandom
 
 import actions.CustomActionBuilders
 import assets.AssetsResolver
@@ -111,7 +111,7 @@ class Application(
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: Settings = settingsProvider.settings()
-    val visitToken = VisitToken(LocalDateTime.now())
+    val visitToken = VisitToken(new SecureRandom())
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
       _ => Ok(newContributions(countryCode, None, visitToken)),
       user => Ok(newContributions(countryCode, user, visitToken))
@@ -153,6 +153,6 @@ class Application(
 
 case class VisitToken(value: String) extends AnyVal
 object VisitToken {
-  def apply(seed: LocalDateTime): VisitToken =
-    new VisitToken(s"${seed.toEpochSecond(ZoneOffset.UTC)}")
+  def apply(rand: SecureRandom): VisitToken =
+    new VisitToken(s"${rand.nextLong.toHexString}")
 }
