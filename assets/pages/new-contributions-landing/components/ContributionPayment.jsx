@@ -21,6 +21,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 import { logException } from 'helpers/logger';
+import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updatePaymentMethod, isPaymentReady } from '../contributionsLandingActions';
@@ -122,30 +123,35 @@ function ContributionPayment(props: PropTypes) {
     paymentMethodInitialisers[props.contributionType][paymentMethod](props);
   });
 
+  const noPaymentMethodsErrorMessage = <PaymentFailureMessage classModifiers={['no-valid-payments']} errorHeading="Payment methods are unavailable" checkoutFailureReason="all_payment_methods_unavailable" />;
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
       <legend className="form__legend">Payment method</legend>
 
-      <ul className="form__radio-group-list">
-        {paymentMethods.map(paymentMethod => (
-          <li className="form__radio-group-item">
-            <input
-              id={`contributionPayment-${paymentMethod}`}
-              className="form__radio-group-input"
-              name="contributionPayment"
-              type="radio"
-              value={paymentMethod}
-              onChange={() => props.updatePaymentMethod(paymentMethod)}
-              checked={props.paymentMethod === paymentMethod}
-            />
-            <label htmlFor={`contributionPayment-${paymentMethod}`} className="form__radio-group-label">
-              <span className="radio-ui" />
-              <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
-              {paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCard />)}
-            </label>
-          </li>
-        ))}
-      </ul>
+      { paymentMethods.length ?
+        <ul className="form__radio-group-list">
+          {paymentMethods.map(paymentMethod => (
+            <li className="form__radio-group-item">
+              <input
+                id={`contributionPayment-${paymentMethod}`}
+                className="form__radio-group-input"
+                name="contributionPayment"
+                type="radio"
+                value={paymentMethod}
+                onChange={() => props.updatePaymentMethod(paymentMethod)}
+                checked={props.paymentMethod === paymentMethod}
+              />
+              <label htmlFor={`contributionPayment-${paymentMethod}`} className="form__radio-group-label">
+                <span className="radio-ui" />
+                <span className="radio-ui__label">{ getPaymentLabel(paymentMethod) }</span>
+                { paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCardi />) }
+              </label>
+            </li>
+          ))}
+        </ul>
+        : noPaymentMethodsErrorMessage
+      }
     </fieldset>
   );
 }
