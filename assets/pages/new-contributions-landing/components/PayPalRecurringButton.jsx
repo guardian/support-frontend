@@ -25,7 +25,6 @@ type PropTypes = {|
   processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 |};
 
-// ----- Auxiliary Components ----- //
 
 // Q. Why is this a class rather than a function?
 // A. Because we need to override shouldComponentUpdate.
@@ -51,7 +50,6 @@ export class PayPalRecurringButton extends React.Component<PropTypes> {
   props: PropTypes;
 
   render() {
-    console.log('iframe button render');
     if (!this.props.hasLoaded) {
       // TODO: move this into some initialisation code rather than render
       loadPayPalExpress().then(this.props.setHasLoaded);
