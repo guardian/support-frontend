@@ -10,6 +10,7 @@ export type CheckoutFailureReason =
   'payment_method_unacceptable' |
   'payment_provider_unavailable' |
   'payment_recently_taken' |
+  'all_payment_methods_unavailable' |
   'unknown';
 
 // ----- Functions ----- //

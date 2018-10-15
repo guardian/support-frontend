@@ -145,7 +145,7 @@ function ContributionPayment(props: PropTypes) {
               <label htmlFor={`contributionPayment-${paymentMethod}`} className="form__radio-group-label">
                 <span className="radio-ui" />
                 <span className="radio-ui__label">{ getPaymentLabel(paymentMethod) }</span>
-                { paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCardi />) }
+                { paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCard />) }
               </label>
             </li>
           ))}
