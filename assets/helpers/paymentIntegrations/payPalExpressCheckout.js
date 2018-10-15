@@ -71,9 +71,9 @@ function setupPayment(
           logException('PayPal token came back blank');
         }
       }).catch((err) => {
-      logException(err.message);
-      reject(err);
-    });
+        logException(err.message);
+        reject(err);
+      });
   };
 }
 
