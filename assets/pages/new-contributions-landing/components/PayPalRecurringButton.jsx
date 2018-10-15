@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { loadPayPalExpress, getPayPalOptions } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
+import { getPayPalOptions } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -17,7 +17,6 @@ type PropTypes = {|
   csrf: CsrfState,
   currencyId: IsoCurrency,
   hasLoaded: boolean,
-  setHasLoaded: () => void,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
   formClassName: string,
@@ -50,9 +49,8 @@ export class PayPalRecurringButton extends React.Component<PropTypes> {
   props: PropTypes;
 
   render() {
+    // hasLoaded determines whether window.paypal is available
     if (!this.props.hasLoaded) {
-      // TODO: move this into some initialisation code rather than render
-      loadPayPalExpress().then(this.props.setHasLoaded);
       return null;
     }
 

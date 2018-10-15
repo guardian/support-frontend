@@ -20,7 +20,6 @@ import {
   onThirdPartyPaymentAuthorised,
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
-  setPayPalHasLoaded,
   setupRecurringPayPalPayment,
 } from '../contributionsLandingActions';
 
@@ -40,7 +39,6 @@ type PropTypes = {
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
   setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
-  payPalSetHasLoaded: () => void,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
 };
@@ -62,7 +60,6 @@ const mapStateToProps = (state: State) =>
 const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
-  payPalSetHasLoaded: () => { dispatch(setPayPalHasLoaded()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   setupRecurringPayPalPayment: (
     resolve: Function,
@@ -110,7 +107,6 @@ function ContributionSubmit(props: PropTypes) {
             csrf={props.csrf}
             currencyId={props.currencyId}
             hasLoaded={props.payPalHasLoaded}
-            setHasLoaded={props.payPalSetHasLoaded}
             canOpen={() => formIsValid(formClassName)}
             whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
             formClassName={formClassName}

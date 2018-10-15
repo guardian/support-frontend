@@ -9,7 +9,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Functions ----- //
 
-function loadPayPalExpress(): Promise<void> {
+function loadPayPalRecurring(): Promise<void> {
   return new Promise((resolve) => {
     const script = document.createElement('script');
     script.onload = resolve;
@@ -124,6 +124,6 @@ function getPayPalOptions(
 
 export {
   getPayPalOptions,
-  loadPayPalExpress,
+  loadPayPalRecurring,
   payPalRequestData,
 };

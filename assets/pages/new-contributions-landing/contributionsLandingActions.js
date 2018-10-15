@@ -100,7 +100,7 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
-const isPaymentReady = (paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler }): Action =>
+const setPaymentIsReady = (paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler }): Action =>
   ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandlers: paymentHandlers || null });
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
@@ -321,7 +321,7 @@ export {
   updateEmail,
   updateState,
   updateUserFormData,
-  isPaymentReady,
+  setPaymentIsReady,
   selectAmount,
   updateOtherAmount,
   paymentFailure,

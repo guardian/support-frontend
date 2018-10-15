@@ -23,7 +23,7 @@ import SvgPayPal from 'components/svgs/paypal';
 import { logException } from 'helpers/logger';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, updatePaymentMethod, isPaymentReady } from '../contributionsLandingActions';
+import { type Action, updatePaymentMethod, setPaymentIsReady } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -36,7 +36,7 @@ type PropTypes = {
   onPaymentAuthorisation: PaymentAuthorisation => void,
   paymentHandlers: { [PaymentMethod]: PaymentHandler | null },
   updatePaymentMethod: PaymentMethod => Action,
-  isPaymentReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,
+  setPaymentIsReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,
   isTestUser: boolean,
   switches: Switches,
 };
@@ -54,7 +54,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = {
   updatePaymentMethod,
-  isPaymentReady,
+  setPaymentIsReady,
 };
 
 // ----- Logic ----- //
@@ -73,7 +73,7 @@ function initialiseStripeCheckout(props: PropTypes) {
   // into
   // paymentHandlers: { [Contrib]: {[PaymentMethod]: PaymentHandler | null }}
   setupStripeCheckout(onPaymentAuthorisation, contributionType, currency, isTestUser)
-    .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
+    .then((handler: PaymentHandler) => props.setPaymentIsReady(true, { Stripe: handler }));
 }
 
 // Bizarrely, adding a type to this object means the type-checking on the
