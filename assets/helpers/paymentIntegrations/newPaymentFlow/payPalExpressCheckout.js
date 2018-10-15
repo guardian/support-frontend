@@ -96,11 +96,8 @@ function setup(
   }
 
   const payPalOptions: Object = {
-    // TODO: default value is just to not break existing flow.
-    // maybe just make a copy of this file instead?
-    env: getPayPalEnvironment(isTestUser) || window.guardian.payPalEnvironment,
+    env: getPayPalEnvironment(isTestUser),
 
-    // TODO: I think Iona also wanted a different colour for this, so another reason to copy-paste
     style: { color: 'blue', size: 'responsive', label: 'pay' },
 
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
