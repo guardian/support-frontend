@@ -40,7 +40,7 @@ type PropTypes = {|
 // We don't want this to happen, for two reasons.
 // 1. Loading this iframe is an expensive operation which causes an obvious visual re-render
 // 2. We don't want to have to re-bind handlers which interact with the iframe
-//    (e.g. the handler bound in addFormChangeListener inside setup)
+//    (e.g. the handler bound in getPayPalOptions)
 export class PayPalRecurringButton extends React.Component<PropTypes> {
   shouldComponentUpdate(nextProps: PropTypes) {
     return (this.props.hasLoaded !== nextProps.hasLoaded);
