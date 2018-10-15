@@ -22,7 +22,7 @@ type PropTypes = {|
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
-  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 |};
 
 
@@ -76,7 +76,7 @@ export class PayPalRecurringButton extends React.Component<PropTypes> {
         this.props.whenUnableToOpen,
         this.props.formClassName,
         this.props.isTestUser,
-        this.props.processRecurringPayPalPayment,
+        this.props.setupRecurringPayPalPayment,
       ),
     );
   }

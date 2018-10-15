@@ -21,7 +21,7 @@ import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   setPayPalHasLoaded,
-  processRecurringPayPalPayment,
+  setupRecurringPayPalPayment,
 } from '../contributionsLandingActions';
 
 
@@ -39,7 +39,7 @@ type PropTypes = {
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
-  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
   payPalSetHasLoaded: () => void,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
@@ -64,12 +64,12 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   payPalSetHasLoaded: () => { dispatch(setPayPalHasLoaded()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
-  processRecurringPayPalPayment: (
+  setupRecurringPayPalPayment: (
     resolve: Function,
     reject: Function,
     currencyId: IsoCurrency,
     csrf: CsrfState,
-  ) => { dispatch(processRecurringPayPalPayment(resolve, reject, currencyId, csrf)); },
+  ) => { dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf)); },
 });
 
 
@@ -115,7 +115,7 @@ function ContributionSubmit(props: PropTypes) {
             whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
             formClassName={formClassName}
             isTestUser={props.isTestUser}
-            processRecurringPayPalPayment={props.processRecurringPayPalPayment}
+            setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
           />
         </div>
         <button

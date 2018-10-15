@@ -201,33 +201,6 @@ const onCreateOneOffPayPalPaymentResponse =
       });
     };
 
-const processRecurringPayPalPayment = (resolve: Function, reject: Function, currencyId: IsoCurrency, csrf: Csrf) =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
-    const csrfToken = csrf.token;
-    const amount = getAmount(state);
-    storage.setSession('paymentMethod', 'PayPal');
-    const requestBody = {
-      amount,
-      billingPeriod: 'monthly',
-      currency: currencyId,
-    };
-
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
-      .then(response => (response.ok ? response.json() : null))
-      .then((token) => {
-        if (token) {
-          resolve(token.token);
-        } else {
-          logException('PayPal token came back blank');
-        }
-      }).catch((err) => {
-        logException(err.message);
-        reject(err);
-      });
-
-  };
-
 // The steps for one-off payment can be summarised as follows:
 // 1. Create a payment
 // 2. Authorise a payment
@@ -246,6 +219,37 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
 const executeStripeOneOffPayment = (data: StripeChargeData) =>
   (dispatch: Dispatch<Action>): void => {
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
+  };
+
+// This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
+// It happens when the user clicks the recurring PayPal button,
+// before the PayPal popup in which they authorise the payment appears.
+// It should probably be called createOneOffPayPalPayment but it's called setupPayment
+// on the backend so pending a far-reaching rename, I'll keep the terminology consistent with the backend.
+const setupRecurringPayPalPayment = (resolve: Function, reject: Function, currency: IsoCurrency, csrf: Csrf) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const csrfToken = csrf.token;
+    const amount = getAmount(state);
+    storage.setSession('paymentMethod', 'PayPal');
+    const requestBody = {
+      amount,
+      billingPeriod: 'monthly',
+      currency,
+    };
+
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+      .then(response => (response.ok ? response.json() : null))
+      .then((token) => {
+        if (token) {
+          resolve(token.token);
+        } else {
+          logException('PayPal token came back blank');
+        }
+      }).catch((err) => {
+        logException(err.message);
+        reject(err);
+      });
   };
 
 function recurringPaymentAuthorisationHandler(
@@ -331,5 +335,5 @@ export {
   updatePassword,
   createOneOffPayPalPayment,
   setPayPalHasLoaded,
-  processRecurringPayPalPayment,
+  setupRecurringPayPalPayment,
 };

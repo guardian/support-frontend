@@ -37,10 +37,10 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
 function setupPayment(
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 ) {
   return (resolve, reject) => {
-    processRecurringPayPalPayment(resolve, reject, currencyId, csrf);
+    setupRecurringPayPalPayment(resolve, reject, currencyId, csrf);
   };
 }
 
@@ -64,7 +64,7 @@ function getPayPalOptions(
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
-  processRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
 ): Object {
 
   function toggleButton(actions): void {
@@ -104,7 +104,7 @@ function getPayPalOptions(
     },
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(currencyId, csrf, processRecurringPayPalPayment),
+    payment: setupPayment(currencyId, csrf, setupRecurringPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize: (data) => {
