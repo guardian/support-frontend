@@ -86,7 +86,7 @@ type PropTypes = {|
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
   isSignedIn: boolean,
-  paymentHandlers: { [PaymentMethod]: PaymentHandler | null },
+  paymentHandlers: PaymentMatrix<PaymentHandler | null>,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
@@ -154,8 +154,8 @@ const getAmount = (props: PropTypes) =>
 // ----- Event handlers ----- //
 
 function openStripePopup(props: PropTypes) {
-  if (props.paymentHandlers.Stripe) {
-    openDialogBox(props.paymentHandlers.Stripe, getAmount(props), props.email);
+  if (props.paymentHandlers[props.contributionType] && props.paymentHandlers[props.contributionType].Stripe) {
+    openDialogBox(props.paymentHandlers[props.contributionType].Stripe, getAmount(props), props.email);
   }
 }
 

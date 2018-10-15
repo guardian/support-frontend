@@ -5,7 +5,7 @@
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
 import { type PaymentHandler } from 'helpers/checkouts';
-import { amounts, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
+import { amounts, type Amount, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import visitToken from 'helpers/visitToken/reducer';
 import { type CommonState } from 'helpers/page/page';
@@ -53,9 +53,7 @@ type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   paymentReady: boolean,
-  paymentHandlers: {
-    [PaymentMethod]: PaymentHandler | null
-  },
+  paymentHandlers: PaymentMatrix<PaymentMethod | null>,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
@@ -100,10 +98,24 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     contributionType: 'MONTHLY',
     paymentMethod: 'None',
     paymentHandlers: {
-      Stripe: null,
-      DirectDebit: null,
-      PayPal: null,
-      None: null,
+      ONE_OFF: {
+        Stripe: null,
+        DirectDebit: null,
+        PayPal: null,
+        None: null,
+      },
+      MONTHLY: {
+        Stripe: null,
+        DirectDebit: null,
+        PayPal: null,
+        None: null,
+      },
+      ANNUAL: {
+        Stripe: null,
+        DirectDebit: null,
+        PayPal: null,
+        None: null,
+      },
     },
     paymentReady: false,
     formData: {

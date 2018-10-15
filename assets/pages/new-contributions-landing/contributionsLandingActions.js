@@ -39,7 +39,7 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler } }
+  | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandlers: ?{ [Contrib] : { [PaymentMethod]: PaymentHandler } } }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -93,7 +93,7 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
-const isPaymentReady = (paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler }): Action =>
+const isPaymentReady = (paymentReady: boolean, paymentHandlers: ?{ [Contrib] : { [PaymentMethod]: PaymentHandler }}): Action =>
   ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandlers: paymentHandlers || null });
 
 

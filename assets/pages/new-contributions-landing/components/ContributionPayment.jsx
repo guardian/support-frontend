@@ -35,9 +35,9 @@ type PropTypes = {
   currency: IsoCurrency,
   paymentMethod: PaymentMethod,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-  paymentHandlers: { [PaymentMethod]: PaymentHandler | null },
+  paymentHandlers: PaymentMatrix<PaymentHandler | null>,
   updatePaymentMethod: PaymentMethod => Action,
-  isPaymentReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,
+  isPaymentReady: (boolean, ?{ [Contrib]: { [PaymentMethod]: PaymentHandler }}) => Action,
   isTestUser: boolean,
   switches: Switches,
 };
@@ -118,7 +118,7 @@ function ContributionPayment(props: PropTypes) {
   // This means a particular payment method will only be initialised
   // once its tab becomes active. If the tab is the default one selected,
   // its payment methods will be initialised on page load.
-  const uninitialisedPaymentMethods = paymentMethods.filter(paymentMethod => !props.paymentHandlers[paymentMethod]);
+  const uninitialisedPaymentMethods = paymentMethods.filter(paymentMethod => !props.paymentHandlers[props.contributionType][paymentMethod]);
   uninitialisedPaymentMethods.forEach((paymentMethod) => {
     paymentMethodInitialisers[props.contributionType][paymentMethod](props);
   });
