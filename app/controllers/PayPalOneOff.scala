@@ -58,9 +58,16 @@ class PayPalOneOff(
     }
   }
 
-  def resultFromPaypalSuccess(success: PayPalSuccess)(implicit request: RequestHeader): Result = {
+  def resultFromPaypalSuccess(success: PayPalSuccess, country: Option[String])(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
-    val redirect = Redirect("/contribute/one-off/thankyou")
+
+    val redirect = Redirect {
+      country match {
+        case Some(c) => s"/$c/thankyou.new"
+        case None => "/contribute/one-off/thankyou"
+      }
+    }
+
     success.email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
       redirect
@@ -70,7 +77,10 @@ class PayPalOneOff(
     })
   }
 
-  def returnURL(paymentId: String, PayerID: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  //TODO - remove once old paypal return route has been removed
+  def newReturnURL(paymentId: String, PayerID: String, country: String): Action[AnyContent] = returnURL(paymentId, PayerID, Some(country))
+
+  def returnURL(paymentId: String, PayerID: String, country: Option[String] = None): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
 
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
@@ -104,7 +114,7 @@ class PayPalOneOff(
 
     emailForUser(request.user)
       .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser))
-      .fold(resultFromPaymentAPIError, resultFromPaypalSuccess)
+      .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country))
   }
 
   def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>

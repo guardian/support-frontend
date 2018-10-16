@@ -30,6 +30,10 @@ function payPalCancelUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
 }
 
+function payPalReturnUrl(cgId: CountryGroupId): string {
+  return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/paypal/rest/return.new`;
+}
+
 // ----- Exports ----- //
 
-export { routes, payPalCancelUrl };
+export { routes, payPalCancelUrl, payPalReturnUrl };
