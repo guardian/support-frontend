@@ -3,14 +3,12 @@ package com.gu.acquisition.services
 import java.util.UUID
 
 import com.gu.acquisition.model._
+import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
 import com.gu.acquisition.services.AnalyticsService.RequestData
+import com.gu.acquisition.services.GAService.clientIdPattern
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3._
 import ophan.thrift.event.{AbTestInfo, Acquisition, Product}
-import GAService.clientIdPattern
-import cats.data.EitherT
-import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
 
 import scala.util.matching.Regex
 
@@ -27,7 +25,6 @@ private[services] class GAService(implicit client: OkHttpClient)
   private[services] def buildBody(submission: AcquisitionSubmission): Either[BuildError, RequestBody] = {
     buildPayload(submission).map{
       payload =>
-        logger.info(s"GA Payload: $payload")
         RequestBody.create(null, payload)
     }
   }

@@ -34,7 +34,7 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
     currency = "GBP",
     amount = 24.86,
     paymentProvider = Some(PaymentProvider.Stripe),
-    campaignCode = Some(Set("FAKE_ACQUISITION_EVENT")),
+    campaignCode = Some(Set("FAKE_ACQUISITION_EVENT1", "FAKE_ACQUISITION_EVENT2")),
     abTests = Some(AbTestInfo(Set(AbTest("test_name", "variant_name"), AbTest("second_test", "control")))),
     countryCode = Some("US"),
     referrerPageViewId = None,
@@ -75,15 +75,18 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
       service.sanitiseClientId("1234567") shouldEqual Right("1234567")
     }
     "build a correct payload" in {
-      service.buildPayload(submission).map{
-        payload =>
-          val payloadMap = payloadAsMap(payload)
-          payloadMap.get("ec") shouldEqual Some("PrintConversion")
-          payloadMap.get("ea") shouldEqual Some("GuardianWeekly")
-          payloadMap.get("cu") shouldEqual Some("GBP")
-          payloadMap.get("cid") shouldEqual Some("1633795050")
-          payloadMap.get("pr1ca") shouldEqual Some("PrintSubscription")
-      }.isRight shouldBe true
+      val maybePayload = service.buildPayload(submission)
+      maybePayload.isRight shouldBe true
+
+      logger.info(maybePayload.right.get)
+      val payloadMap = payloadAsMap(maybePayload.right.get)
+      payloadMap.get("ec") shouldEqual Some("PrintConversion")
+      payloadMap.get("ea") shouldEqual Some("GuardianWeekly")
+      payloadMap.get("cu") shouldEqual Some("GBP")
+      payloadMap.get("cid") shouldEqual Some("1633795050")
+      payloadMap.get("cd12") shouldEqual Some("FAKE_ACQUISITION_EVENT1,FAKE_ACQUISITION_EVENT2")
+      payloadMap.get("pr1ca") shouldEqual Some("PrintSubscription")
+
     }
 
     "build a correct ABTest payload" in {
