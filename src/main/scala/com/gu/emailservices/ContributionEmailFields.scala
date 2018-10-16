@@ -35,7 +35,7 @@ case class ContributionEmailFields(
     "EmailAddress" -> email,
     "created" -> created.toString,
     "amount" -> amount.toString,
-    "currency" -> currency.glyph,
+    "currency" -> currency.identifier,
     "edition" -> edition,
     "name" -> name,
     "product" -> s"${billingPeriod.toString.toLowerCase}-contribution"
