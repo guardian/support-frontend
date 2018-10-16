@@ -24,8 +24,7 @@ import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripe
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { getAbsoluteURL } from 'helpers/url';
-import { routes, payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
+import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import SvgEnvelope from 'components/svgs/envelope';
