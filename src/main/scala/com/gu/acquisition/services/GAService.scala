@@ -25,7 +25,11 @@ private[services] class GAService(implicit client: OkHttpClient)
   private val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")
 
   private[services] def buildBody(submission: AcquisitionSubmission): Either[BuildError, RequestBody] = {
-    buildPayload(submission).map(payload => RequestBody.create(null, payload))
+    buildPayload(submission).map{
+      payload =>
+        logger.info(s"GA Payload: $payload")
+        RequestBody.create(null, payload)
+    }
   }
 
   private[services] def buildPayload(submission: AcquisitionSubmission, transactionId: Option[String] = None): Either[BuildError, String] = {
@@ -47,7 +51,7 @@ private[services] class GAService(implicit client: OkHttpClient)
           "ua" -> gaData.clientUserAgent.getOrElse(""), // User Agent Override
 
           // Custom Dimensions
-          "cd12" -> acquisition.campaignCode.map(_.mkString(",")), // Campaign code
+          "cd12" -> acquisition.campaignCode.map(_.mkString(",")).getOrElse(""), // Campaign code
           "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
           "cd17" -> acquisition.paymentProvider.getOrElse(""), // Payment method
 
