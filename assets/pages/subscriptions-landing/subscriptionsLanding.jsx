@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
 import FooterContainer from 'components/footer/footerContainer';
-import CirclesIntroduction from 'components/introduction/circlesIntroduction';
+import InvestIntroduction from 'components/introduction/investIntroduction';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
@@ -35,12 +35,7 @@ const content = (
       header={<SimpleHeader />}
       footer={<FooterContainer disclaimer privacyPolicy />}
     >
-      <CirclesIntroduction
-        headings={['Help us deliver the', 'independent journalism', 'the world needs']}
-        highlights={['Support The Guardian']}
-        modifierClasses={['compact']}
-        highlightsHeadingSize={2}
-      />
+      <InvestIntroduction />
       <SubscriptionsByCountryGroup id={supporterSectionId} headingSize={3} appMedium="subscribe_landing_page" />
       <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport

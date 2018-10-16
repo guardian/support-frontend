@@ -23,11 +23,12 @@ function InternationalSection(props: {
 }) {
 
   return (
-    <ThreeSubscriptions>
+    <ThreeSubscriptions heading="">
       <PremiumTier
         headingSize={props.headingSize}
         referrer={props.appReferrer}
         subheading="7-day free trial"
+        countryGroupId={props.countryGroupId}
       />
       <DigitalPack
         countryGroupId={props.countryGroupId}

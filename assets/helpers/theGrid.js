@@ -27,7 +27,7 @@ export const imageCatalogue: {
   paperCircle: 'c462d60f2962b745b1e206d5ede998dfb166a8ed/0_0_825_825',
   paperDigitalCircleOrange: 'd94c0f9bade09487b9afca5ee8149efb33f34ccf/0_0_825_825',
   paperDigitalCirclePink: '69d90e5d6fca261a227e47b311f80807b123c87b/0_0_825_825',
-  weeklyCircle: 'c18004dcf5cfd8c97b4b0f2fd9c6ff7e2497d309/0_0_1640_1630',
+  weeklyCircle: '1be07b6ab77eccd128c720d013e5436e6e8eca61/0_0_2210_2210',
   premiumTier: 'fb0c788ddee28f8e0e66d814595cf81d6aa21ec6/0_0_644_448',
   premiumTierAU: '4b6fd9805c7d0a88b4b71a683c4b46279a410b9d/0_0_1610_1120',
   dailyEdition: '168cab5197d7b4c5d9e05eb3ff2801b2929f2995/0_0_644_448',
@@ -43,6 +43,8 @@ export const imageCatalogue: {
   digitalSubscriptionPromotionPopUpHeader: 'd0322e698dc8b30337feefd3294c8b82882c353b/0_0_2770_1410',
   digitalPackBenefitsMobile: 'bd335622063afd12463bf286a2058008b5f05efc/0_0_1729_1505',
   digitalPackBenefitsDesktop: 'cb3028a5f9aaf0a1b46ba1594e90b9d3a0b2ad3e/0_0_3750_2000',
+  investHeaderMobile: '91edfca98faf743fed826a1efc03ed0bf133625b/0_0_1875_1560',
+  investHeaderDesktop: '60c2488def35887fe1d786fcb7cd9c8ff4c48735/0_0_7200_2645',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

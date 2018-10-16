@@ -146,6 +146,7 @@ const regularPaymentRequestFromAuthorisation = (
   ophanIds: getOphanIds(),
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
+  visitToken: state.page.visitToken.token,
 });
 
 // A PaymentResult represents the end state of the checkout process,
@@ -192,12 +193,12 @@ const onCreateOneOffPayPalPaymentResponse =
 
         if (result.type === 'success') {
           window.location.href = result.data.approvalUrl;
+        } else {
+          // For PayPal create payment errors, the Payment API passes through the
+          // error from PayPal's API which we don't want to expose to the user.
+          dispatch(paymentFailure('unknown'));
+          dispatch(paymentWaiting(false));
         }
-
-        // For PayPal create payment errors, the Payment API passes through the
-        // error from PayPal's API which we don't want to expose to the user.
-        dispatch(paymentFailure('unknown'));
-        dispatch(paymentWaiting(false));
       });
     };
 

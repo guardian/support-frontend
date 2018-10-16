@@ -6,7 +6,7 @@ import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 import { addQueryParamsToURL } from 'helpers/url';
-import { dailyEditionUrl } from 'helpers/externalLinks';
+import { getDailyEditionUrl } from 'helpers/externalLinks';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ComponentAbTest } from 'helpers/subscriptions';
 import { displayPrice } from 'helpers/subscriptions';
@@ -19,6 +19,7 @@ export default function DailyEdition(props: {
   countryGroupId: CountryGroupId,
   appReferrer: string,
   abTest: ComponentAbTest | null,
+  countryGroupId: CountryGroupId,
 }) {
   return (
     <SubscriptionBundle
@@ -38,7 +39,7 @@ export default function DailyEdition(props: {
       ctas={[
         {
           text: 'Buy in the App Store',
-          url: addQueryParamsToURL(dailyEditionUrl, { referrer: props.appReferrer }),
+          url: addQueryParamsToURL(getDailyEditionUrl(props.countryGroupId), { referrer: props.appReferrer }),
           accessibilityHint: 'Proceed to buy the daily edition app for iPad in the app store',
           modifierClasses: ['border'],
           onClick: trackAppStoreLink('daily_edition_ios_cta', 'DailyEdition', props.abTest),

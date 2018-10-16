@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import SubscriptionsThankYou from 'components/subscriptionsThankYou/subscriptionsThankYou';
 
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 import { type Stage } from '../digitalSubscriptionCheckoutReducer';
 import AppsSection from './appsSection';
 
@@ -16,6 +18,7 @@ import AppsSection from './appsSection';
 
 type PropTypes = {
   stage: Stage;
+  countryGroupId: CountryGroupId;
 };
 
 
@@ -25,6 +28,7 @@ function mapStateToProps(state): PropTypes {
 
   return {
     stage: state.page.stage,
+    countryGroupId: state.page.countryGroupId,
   };
 
 }
@@ -39,7 +43,9 @@ function CheckoutStage(props: PropTypes) {
     case 'thankyou':
       return (
         <SubscriptionsThankYou>
-          <AppsSection />
+          <AppsSection
+            countryGroupId={props.countryGroupId}
+          />
         </SubscriptionsThankYou>
       );
 
