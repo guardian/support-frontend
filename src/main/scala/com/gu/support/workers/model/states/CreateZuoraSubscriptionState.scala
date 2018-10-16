@@ -10,5 +10,6 @@ case class CreateZuoraSubscriptionState(
   product: ProductType,
   paymentMethod: PaymentMethod,
   salesForceContact: SalesforceContactRecord,
-  acquisitionData: Option[AcquisitionData]
+  acquisitionData: Option[AcquisitionData],
+  readAccess: ReadAccess
 ) extends StepFunctionUserState
