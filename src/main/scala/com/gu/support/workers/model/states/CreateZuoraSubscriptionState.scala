@@ -11,5 +11,9 @@ case class CreateZuoraSubscriptionState(
   paymentMethod: PaymentMethod,
   salesForceContact: SalesforceContactRecord,
   acquisitionData: Option[AcquisitionData],
-  accessScopeWithinIdentityId: AccessScopeWithinIdentityId
-) extends StepFunctionUserState
+  scopeToken: Option[String]
+) extends StepFunctionUserState {
+
+  def accessScope: AccessScope = AccessScope.fromRaw(scopeToken)
+
+}

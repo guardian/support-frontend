@@ -10,5 +10,9 @@ case class CreateSalesforceContactState(
   product: ProductType,
   paymentMethod: PaymentMethod,
   acquisitionData: Option[AcquisitionData],
-  accessScopeWithinIdentityId: AccessScopeWithinIdentityId
-) extends StepFunctionUserState
+  scopeToken: Option[String]
+) extends StepFunctionUserState {
+
+  def accessScope: AccessScope = AccessScope.fromRaw(scopeToken)
+
+}
