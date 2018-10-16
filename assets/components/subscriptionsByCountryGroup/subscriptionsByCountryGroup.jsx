@@ -7,18 +7,15 @@ import { connect } from 'react-redux';
 
 import { type HeadingSize } from 'components/heading/heading';
 
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
 import { type CommonState } from 'helpers/page/page';
 import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getSubsLinks } from 'helpers/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getAppReferrer } from 'helpers/tracking/appStores';
-import { type ComponentAbTest } from 'helpers/subscriptions';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
-
-import FeaturedProductTest from './components/featuredProductTest';
+import FeaturedDigitalPack from 'components/featuredDigitalPack/featuredDigitalPack';
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
 import InternationalSection from './components/internationalSection';
@@ -80,26 +77,21 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
   if (countryGroupId === 'GBPCountries') {
     return (
       <div className={className} {...otherProps}>
-        <FeaturedProductTest
-          countryGroupId="GBPCountries"
-          digitalPackUrl={subsLinks.DigitalPack}
-          digitalSection={(abTest: ComponentAbTest | null) => (
-            <DigitalSection
-              headingSize={headingSize}
-              subsLinks={subsLinks}
-              countryGroupId={countryGroupId}
-              appReferrer={appReferrer}
-              abTest={abTest}
-            />
-          )}
-          paperSection={(abTest: ComponentAbTest | null) => (
-            <PaperSection
-              headingSize={headingSize}
-              subsLinks={subsLinks}
-              countryGroupId={countryGroupId}
-              abTest={abTest}
-            />
-          )}
+        <FeaturedDigitalPack
+          headingSize={3}
+          countryGroupId={props.countryGroupId}
+          url={subsLinks.DigitalPack}
+        />
+        <DigitalSection
+          headingSize={headingSize}
+          subsLinks={subsLinks}
+          countryGroupId={countryGroupId}
+          appReferrer={appReferrer}
+        />
+        <PaperSection
+          headingSize={headingSize}
+          subsLinks={subsLinks}
+          countryGroupId={countryGroupId}
         />
       </div>
     );
