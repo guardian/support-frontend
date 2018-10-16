@@ -72,6 +72,7 @@ type PropTypes = {|
   openDirectDebitPopUp: () => void,
   setCheckoutFormHasBeenSubmitted: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -176,12 +177,6 @@ function onSubmit(props: PropTypes): Event => void {
 
 function ContributionForm(props: PropTypes) {
 
-  // TODO: consolidate!
-  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
-    props.setPaymentIsWaiting(true);
-    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
-  };
-
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
@@ -196,9 +191,9 @@ function ContributionForm(props: PropTypes) {
         checkOtherAmount={checkOtherAmount}
       />
       <ContributionFormFields />
-      <NewContributionPayment onPaymentAuthorisation={onPaymentAuthorisation} />
+      <NewContributionPayment onPaymentAuthorisation={props.onPaymentAuthorisation} />
       <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
-      <NewContributionSubmit />
+      <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
   );

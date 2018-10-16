@@ -41,6 +41,7 @@ type PropTypes = {
   setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
+  onPaymentAuthorisation: PaymentAuthorisation => void,
 };
 
 const mapStateToProps = (state: State) =>
@@ -75,12 +76,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 function ContributionSubmit(props: PropTypes) {
 
-  // TODO: this is also in ContributionFormContainer. refactor
-  const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
-    props.setPaymentIsWaiting(true);
-    props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
-  };
-
   // if all payment methods are switched off, do not display the button
   if (props.paymentMethod !== 'None') {
     const frequency = getFrequency(props.contributionType);
@@ -103,7 +98,7 @@ function ContributionSubmit(props: PropTypes) {
           className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
         >
           <PayPalRecurringButton
-            onPaymentAuthorisation={onPaymentAuthorisation}
+            onPaymentAuthorisation={props.onPaymentAuthorisation}
             csrf={props.csrf}
             currencyId={props.currencyId}
             hasLoaded={props.payPalHasLoaded}

@@ -88,7 +88,7 @@ function unexpectedError(message: string): UnexpectedError {
 }
 
 function paymentApiEndpointWithMode(url: string) {
-  if (cookie.get('_test_username')) {s
+  if (cookie.get('_test_username')) {
     return addQueryParamsToURL(
       url,
       { mode: 'test' },

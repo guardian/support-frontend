@@ -95,6 +95,7 @@ function ContributionFormContainer(props: PropTypes) {
         <h1 className="header">{countryGroupSpecificDetails[props.countryGroupId].headerCopy}</h1>
         <p className="blurb">{countryGroupSpecificDetails[props.countryGroupId].contributeCopy}</p>
         <NewContributionForm
+          onPaymentAuthorisation={onPaymentAuthorisation}
           selectedCountryGroupDetails={selectedCountryGroupDetails}
         />
         <DirectDebitPopUpForm
