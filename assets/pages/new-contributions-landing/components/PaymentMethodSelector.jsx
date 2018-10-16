@@ -109,7 +109,7 @@ const paymentMethodInitialisers: PaymentMatrix<PropTypes => void> = {
 
 // ----- Render ----- //
 
-function ContributionPayment(props: PropTypes) {
+function PaymentMethodSelector(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
     getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
@@ -130,15 +130,15 @@ function ContributionPayment(props: PropTypes) {
         {paymentMethods.map(paymentMethod => (
           <li className="form__radio-group-item">
             <input
-              id={`contributionPayment-${paymentMethod}`}
+              id={`paymentMethodSelector-${paymentMethod}`}
               className="form__radio-group-input"
-              name="contributionPayment"
+              name="paymentMethodSelector"
               type="radio"
               value={paymentMethod}
               onChange={() => props.updatePaymentMethod(paymentMethod)}
               checked={props.paymentMethod === paymentMethod}
             />
-            <label htmlFor={`contributionPayment-${paymentMethod}`} className="form__radio-group-label">
+            <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
               <span className="radio-ui" />
               <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
               {paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCard />)}
@@ -150,6 +150,6 @@ function ContributionPayment(props: PropTypes) {
   );
 }
 
-const NewContributionPayment = connect(mapStateToProps, mapDispatchToProps)(ContributionPayment);
+const NewPaymentMethodSelector = connect(mapStateToProps, mapDispatchToProps)(PaymentMethodSelector);
 
-export { NewContributionPayment };
+export { NewPaymentMethodSelector };

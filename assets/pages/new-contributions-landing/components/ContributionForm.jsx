@@ -39,7 +39,7 @@ import {
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
-import { NewContributionPayment } from './ContributionPayment';
+import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
 
 
@@ -191,7 +191,7 @@ function ContributionForm(props: PropTypes) {
         checkOtherAmount={checkOtherAmount}
       />
       <ContributionFormFields />
-      <NewContributionPayment onPaymentAuthorisation={props.onPaymentAuthorisation} />
+      <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
       <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
