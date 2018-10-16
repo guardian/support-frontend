@@ -10,5 +10,5 @@ case class CreatePaymentMethodState(
   product: ProductType,
   paymentFields: PaymentFields,
   acquisitionData: Option[AcquisitionData],
-  readAccess: ReadAccess
+  accessScopeWithinIdentityId: AccessScopeWithinIdentityId
 ) extends StepFunctionUserState

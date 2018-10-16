@@ -10,5 +10,5 @@ case class CreateSalesforceContactState(
   product: ProductType,
   paymentMethod: PaymentMethod,
   acquisitionData: Option[AcquisitionData],
-  readAccess: ReadAccess
+  accessScopeWithinIdentityId: AccessScopeWithinIdentityId
 ) extends StepFunctionUserState

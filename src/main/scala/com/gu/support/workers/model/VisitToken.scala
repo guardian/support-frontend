@@ -1,5 +1,7 @@
 package com.gu.support.workers.model
 
-sealed trait ReadAccess
-case class ReadAccessByVisitToken(value: String) extends ReadAccess
-case object ReadAccessByIdentityId extends ReadAccess
+sealed trait AccessScopeWithinIdentityId
+case class AccessScopeByToken(scopeToken: ScopeToken) extends AccessScopeWithinIdentityId
+case object AccessScopeNoRestriction extends AccessScopeWithinIdentityId
+
+case class ScopeToken(value: String) extends AnyVal
