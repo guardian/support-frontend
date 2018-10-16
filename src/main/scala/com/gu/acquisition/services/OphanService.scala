@@ -1,5 +1,6 @@
 package com.gu.acquisition.services
 
+import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
 import com.gu.acquisition.model.{AcquisitionSubmission, SyntheticPageviewId}
 import com.gu.acquisition.services.AnalyticsService.RequestData
 import okhttp3._
@@ -18,7 +19,7 @@ private [acquisition] class OphanService(implicit client: OkHttpClient)
       .map { case (name, value) => name + "=" + value }
       .mkString(";")
 
-  override def buildRequest(submission: AcquisitionSubmission): RequestData = {
+  override def buildRequest(submission: AcquisitionSubmission): Either[BuildError, RequestData] = {
     import com.gu.acquisition.instances.acquisition._
     import io.circe.syntax._
     import submission._
@@ -34,7 +35,7 @@ private [acquisition] class OphanService(implicit client: OkHttpClient)
       .addHeader("Cookie", cookieValue(ophanIds.visitId, ophanIds.browserId))
       .build()
 
-    RequestData(request, submission)
+    Right(RequestData(request, submission))
   }
 
 

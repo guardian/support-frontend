@@ -37,13 +37,15 @@ class OphanServiceSpec extends WordSpecLike with Matchers {
 
       def checkRequest() = {
 
-        val request = service.buildRequest(submission).request
+        service.buildRequest(submission).map {
+          requestData =>
+            val request = requestData.request
+            request.method shouldEqual "GET"
+            request.header("Cookie") shouldEqual "vsid=visitId;bwid=browserId"
 
-        request.method shouldEqual "GET"
-        request.header("Cookie") shouldEqual "vsid=visitId;bwid=browserId"
-
-        request.url().url().toString shouldEqual
-          "https://ophan.theguardian.com/a.gif?viewId=pageviewId&acquisition={%22product%22:%22CONTRIBUTION%22,%22paymentFrequency%22:%22ONE_OFF%22,%22currency%22:%22GBP%22,%22amount%22:20.0,%22paymentProvider%22:%22STRIPE%22,%22campaignCode%22:[%22FAKE_ACQUISITION_EVENT%22],%22abTests%22:{%22tests%22:[{%22name%22:%22test_name%22,%22variant%22:%22variant_name%22}]},%22countryCode%22:%22US%22}"
+            request.url().url().toString shouldEqual
+              "https://ophan.theguardian.com/a.gif?viewId=pageviewId&acquisition={%22product%22:%22CONTRIBUTION%22,%22paymentFrequency%22:%22ONE_OFF%22,%22currency%22:%22GBP%22,%22amount%22:20.0,%22paymentProvider%22:%22STRIPE%22,%22campaignCode%22:[%22FAKE_ACQUISITION_EVENT%22],%22abTests%22:{%22tests%22:[{%22name%22:%22test_name%22,%22variant%22:%22variant_name%22}]},%22countryCode%22:%22US%22}"
+        }
       }
 
       // Check request is as expected
