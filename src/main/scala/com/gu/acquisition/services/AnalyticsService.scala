@@ -3,9 +3,10 @@ package com.gu.acquisition.services
 import java.io.IOException
 
 import cats.data.EitherT
+import cats.instances._
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.acquisition.model.errors.AnalyticsServiceError.{NetworkFailure, ResponseUnsuccessful}
+import com.gu.acquisition.model.errors.AnalyticsServiceError.{BuildError, NetworkFailure, ResponseUnsuccessful}
 import com.gu.acquisition.services.AnalyticsService.RequestData
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import okhttp3._
@@ -15,7 +16,7 @@ import scala.util.control.NonFatal
 
 private [acquisition] abstract class AnalyticsService(implicit client: OkHttpClient) {
 
-  protected def buildRequest(submission: AcquisitionSubmission): RequestData
+  protected def buildRequest(submission: AcquisitionSubmission): Either[BuildError, RequestData]
 
   private def executeRequest(data: RequestData): EitherT[Future, AnalyticsServiceError, AcquisitionSubmission] = {
 
@@ -52,7 +53,7 @@ private [acquisition] abstract class AnalyticsService(implicit client: OkHttpCli
     import cats.syntax.either._
     import AcquisitionSubmissionBuilder.ops._
 
-    a.asAcquisitionSubmission.toEitherT.map(buildRequest).flatMap(executeRequest)
+    a.asAcquisitionSubmission.flatMap(buildRequest).toEitherT.flatMap(executeRequest)
   }
 
 }
