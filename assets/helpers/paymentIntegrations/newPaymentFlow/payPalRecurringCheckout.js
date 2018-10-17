@@ -7,6 +7,13 @@ import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
+// ----- Types ----- //
+
+export type PayPalButtonToggler = {
+  enable: () => void,
+  disable: () => void
+};
+
 // ----- Functions ----- //
 
 function loadPayPalRecurring(): Promise<void> {
@@ -20,17 +27,12 @@ function loadPayPalRecurring(): Promise<void> {
   });
 }
 
-// ----- Auxiliary Functions -----//
-
 function payPalRequestData(bodyObj: Object, csrfToken: string) {
-
-  const body = JSON.stringify(bodyObj);
-
   return {
     credentials: 'include',
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
-    body,
+    body: JSON.stringify(bodyObj),
   };
 }
 
