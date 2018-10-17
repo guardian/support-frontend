@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 import React from 'react';
-import GridImage, { type GridImg } from 'components/gridImage/gridImage';
+import GridImage from 'components/gridImage/gridImage';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 export default function AdFreeSection() {
@@ -16,7 +16,7 @@ export default function AdFreeSection() {
             <div className="component-ad-free__copy">
               <h2 className="component-ad-free__header">Ad-free on all your devices</h2>
               <p>
-                Avoid the adverts and read  without interruptions when you're signed in on your apps and theguardian.com
+                {`Avoid the adverts and read without interruptions when you're signed in on your apps and theguardian.com`}
               </p>
             </div>
             <GridImage
