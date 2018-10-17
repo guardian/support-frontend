@@ -10,8 +10,15 @@
 
 }
 
-.gu-content__content .component-payment-failure-message {
-  width: auto;
+.gu-content__content {
+  .component-payment-failure-message {
+    width: auto;
+    background-color: transparent;
+  }
+
+  .component-payment-failure-message--no-valid-payments {
+    padding: 0;
+  }
 }
 
 .svg-exclamation-alternate {
