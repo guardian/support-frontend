@@ -227,7 +227,12 @@ const executeStripeOneOffPayment = (data: StripeChargeData) =>
 // before the PayPal popup in which they authorise the payment appears.
 // It should probably be called createOneOffPayPalPayment but it's called setupPayment
 // on the backend so pending a far-reaching rename, I'll keep the terminology consistent with the backend.
-const setupRecurringPayPalPayment = (resolve: Function, reject: Function, currency: IsoCurrency, csrf: Csrf) =>
+const setupRecurringPayPalPayment = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: Csrf,
+) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
     const csrfToken = csrf.token;
@@ -241,13 +246,13 @@ const setupRecurringPayPalPayment = (resolve: Function, reject: Function, curren
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
       .then(response => (response.ok ? response.json() : null))
-      .then((token) => {
+      .then((token: {token: string} | null) => {
         if (token) {
           resolve(token.token);
         } else {
           logException('PayPal token came back blank');
         }
-      }).catch((err) => {
+      }).catch((err: Error) => {
         logException(err.message);
         reject(err);
       });

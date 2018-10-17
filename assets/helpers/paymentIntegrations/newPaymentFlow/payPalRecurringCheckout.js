@@ -39,7 +39,7 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
 function setupPayment(
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
 ) {
   return (resolve, reject) => {
     setupRecurringPayPalPayment(resolve, reject, currencyId, csrf);
@@ -68,7 +68,7 @@ function getPayPalOptions(
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
-  setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
 ): Object {
 
   function toggleButton(actions): void {

@@ -21,7 +21,7 @@ type PropTypes = {|
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
-  setupRecurringPayPalPayment: (Function, Function, IsoCurrency, CsrfState) => void,
+  setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
 |};
 
 
