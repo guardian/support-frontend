@@ -60,8 +60,8 @@ const content = (
         countryGroupId={countryGroupId}
       />
       <ProductBlock countryGroupId={countryGroupId} />
-      <IndependentJournalismSection />
       <AdFreeSection />
+      <IndependentJournalismSection />
       <PromotionPopUp />
     </Page>
   </Provider>
