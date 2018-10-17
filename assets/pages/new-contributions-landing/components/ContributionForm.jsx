@@ -86,7 +86,7 @@ type PropTypes = {|
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
   isSignedIn: boolean,
-  paymentHandlers: PaymentMatrix<PaymentHandler | null>,
+  thirdPartyPaymentLibraries: PaymentMatrix<PaymentHandler | null>,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
@@ -120,7 +120,7 @@ const mapStateToProps = (state: State) => ({
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
   isSignedIn: state.page.user.isSignedIn,
-  paymentHandlers: state.page.form.paymentHandlers,
+  thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
   contributionType: state.page.form.contributionType,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
@@ -154,8 +154,8 @@ const getAmount = (props: PropTypes) =>
 // ----- Event handlers ----- //
 
 function openStripePopup(props: PropTypes) {
-  if (props.paymentHandlers[props.contributionType] && props.paymentHandlers[props.contributionType].Stripe) {
-    openDialogBox(props.paymentHandlers[props.contributionType].Stripe, getAmount(props), props.email);
+  if (props.thirdPartyPaymentLibraries[props.contributionType] && props.thirdPartyPaymentLibraries[props.contributionType].Stripe) {
+    openDialogBox(props.thirdPartyPaymentLibraries[props.contributionType].Stripe, getAmount(props), props.email);
   }
 }
 

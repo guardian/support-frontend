@@ -39,7 +39,7 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandlers: ?{ [Contrib] : { [PaymentMethod]: PaymentHandler } } }
+  | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, thirdPartyPaymentLibraries: ?{ [Contrib] : { [PaymentMethod]: PaymentHandler } } }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -94,8 +94,7 @@ const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
 const isPaymentReady = (paymentReady: boolean, paymentHandlers: ?{ [Contrib] : { [PaymentMethod]: PaymentHandler }}): Action =>
-  ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandlers: paymentHandlers || null });
-
+  ({ type: 'UPDATE_PAYMENT_READY', paymentReady, thirdPartyPaymentLibraries: paymentHandlers || null });
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'

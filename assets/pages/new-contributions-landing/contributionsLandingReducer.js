@@ -4,7 +4,6 @@
 
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
-import { type PaymentHandler } from 'helpers/checkouts';
 import { amounts, type Amount, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import visitToken from 'helpers/visitToken/reducer';
@@ -53,7 +52,7 @@ type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   paymentReady: boolean,
-  paymentHandlers: PaymentMatrix<PaymentMethod | null>,
+  thirdPartyPaymentLibraries: PaymentMatrix<Object>,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
@@ -97,24 +96,24 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'None',
-    paymentHandlers: {
+    thirdPartyPaymentLibraries: {
       ONE_OFF: {
-        Stripe: null,
-        DirectDebit: null,
-        PayPal: null,
-        None: null,
+        Stripe: {},
+        DirectDebit: {},
+        PayPal: {},
+        None: {},
       },
       MONTHLY: {
-        Stripe: null,
-        DirectDebit: null,
-        PayPal: null,
-        None: null,
+        Stripe: {},
+        DirectDebit: {},
+        PayPal: {},
+        None: {},
       },
       ANNUAL: {
-        Stripe: null,
-        DirectDebit: null,
-        PayPal: null,
-        None: null,
+        Stripe: {},
+        DirectDebit: {},
+        PayPal: {},
+        None: {},
       },
     },
     paymentReady: false,
@@ -158,11 +157,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'UPDATE_PAYMENT_READY':
-        return action.paymentHandlers
+        return action.thirdPartyPaymentLibraries
           ? {
             ...state,
             paymentReady: action.paymentReady,
-            paymentHandlers: { ...state.paymentHandlers, ...action.paymentHandlers },
+            thirdPartyPaymentLibraries: { ...state.thirdPartyPaymentLibraries, ...action.thirdPartyPaymentLibraries },
           }
           : { ...state, paymentReady: action.paymentReady };
 
