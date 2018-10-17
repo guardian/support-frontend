@@ -27,13 +27,21 @@
   }
 }
 
-.component-ad-free__copy {
+.component-ad-free__col {
   width: 100%;
-  font-size: 16px;
-  line-height: 1.25;
   padding-right: 40px;
   @include mq($from: leftCol) {
     width: 440px;
+  }
+}
+
+
+.component-ad-free__copy {
+  font-size: 16px;
+  line-height: 1.25;
+  display: block;
+  @include mq($from: leftCol) {
+    width: 60%;
   }
 }
 
