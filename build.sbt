@@ -4,9 +4,7 @@ name := "support-models"
 
 organization := "com.gu"
 
-scalaVersion := "2.11.8"
-
-crossScalaVersions := Seq(scalaVersion.value, "2.12.4")
+scalaVersion := "2.12.7"
 
 scmInfo := Some(ScmInfo(
   url("https://github.com/guardian/support-models"),
@@ -21,13 +19,9 @@ resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
 libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9" % "provided",
-  scalaVersion {
-    case "2.11.8" => "com.gu" %% "acquisition-event-producer" % "2.0.1"
-    case "2.12.4" => "com.gu" %% "acquisition-event-producer-play26" % "4.0.3"
-  }.value
+  "com.gu" %% "acquisition-event-producer-play26" % "4.0.3"
 )
 
-releaseCrossBuild := true
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
