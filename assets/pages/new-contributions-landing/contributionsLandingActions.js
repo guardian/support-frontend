@@ -5,7 +5,10 @@
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type PaymentHandler } from 'helpers/checkouts';
 import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -20,6 +23,8 @@ import {
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
 } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+import { routes } from 'helpers/routes';
+import * as storage from 'helpers/storage';
 import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
@@ -49,7 +54,9 @@ export type Action =
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
+  | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'PAYMENT_SUCCESS' };
+
 
 const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action =>
   ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType, paymentMethodToSelect });
@@ -93,11 +100,13 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
-const isPaymentReady = (
+const setPaymentIsReady = (
   paymentReady: boolean,
   paymentHandlers: ?{ [Contrib]: { [PaymentMethod]: PaymentHandler }},
 ): Action =>
   ({ type: 'UPDATE_PAYMENT_READY', paymentReady, thirdPartyPaymentLibraries: paymentHandlers || null });
+
+const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
@@ -215,6 +224,42 @@ const executeStripeOneOffPayment = (data: StripeChargeData) =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
   };
 
+// This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
+// It happens when the user clicks the recurring PayPal button,
+// before the PayPal popup in which they authorise the payment appears.
+// It should probably be called createOneOffPayPalPayment but it's called setupPayment
+// on the backend so pending a far-reaching rename, I'll keep the terminology consistent with the backend.
+const setupRecurringPayPalPayment = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: Csrf,
+) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const csrfToken = csrf.token;
+    const amount = getAmount(state);
+    storage.setSession('paymentMethod', 'PayPal');
+    const requestBody = {
+      amount,
+      billingPeriod: 'monthly',
+      currency,
+    };
+
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+      .then(response => (response.ok ? response.json() : null))
+      .then((token: {token: string} | null) => {
+        if (token) {
+          resolve(token.token);
+        } else {
+          logException('PayPal token came back blank');
+        }
+      }).catch((err: Error) => {
+        logException(err.message);
+        reject(err);
+      });
+  };
+
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
   state: State,
@@ -276,7 +321,6 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
     );
   };
 
-
 export {
   updateContributionType,
   updatePaymentMethod,
@@ -285,7 +329,7 @@ export {
   updateEmail,
   updateState,
   updateUserFormData,
-  isPaymentReady,
+  setPaymentIsReady,
   selectAmount,
   updateOtherAmount,
   paymentFailure,
@@ -298,4 +342,6 @@ export {
   setPasswordHasBeenSubmitted,
   updatePassword,
   createOneOffPayPalPayment,
+  setPayPalHasLoaded,
+  setupRecurringPayPalPayment,
 };

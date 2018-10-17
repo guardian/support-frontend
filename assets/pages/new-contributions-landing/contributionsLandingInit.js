@@ -3,15 +3,19 @@
 // ----- Imports ----- //
 import { type Store, type Dispatch } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentHandler, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
 import {
+  type Action,
+  paymentWaiting,
+  onThirdPartyPaymentAuthorised,
+  setPaymentIsReady,
   updatePaymentMethod,
   updateUserFormData,
+  setPayPalHasLoaded,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
-import { type Action, paymentWaiting, onThirdPartyPaymentAuthorised, isPaymentReady } from './contributionsLandingActions';
-
 
 // ----- Functions ----- //
 
@@ -28,7 +32,7 @@ function selectDefaultPaymentMethod(state: State, dispatch: Dispatch<Action>) {
 function initialiseStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser, dispatch) {
 
   setupStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser)
-    .then((handler: PaymentHandler) => dispatch(isPaymentReady(true, { [contributionType]: { Stripe: handler } })));
+    .then((handler: PaymentHandler) => dispatch(setPaymentIsReady(true, { [contributionType]: { Stripe: handler } })));
 }
 
 function initialisePaymentMethods(state: State, dispatch: Function) {
@@ -57,6 +61,8 @@ const init = (store: Store<State, Action, Dispatch<Action>>) => {
   const state = store.getState();
   selectDefaultPaymentMethod(state, dispatch);
   initialisePaymentMethods(state, dispatch);
+
+  loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 
   const { firstName, lastName, email } = state.page.user;
   dispatch(updateUserFormData({ firstName, lastName, email }));

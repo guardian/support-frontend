@@ -61,6 +61,7 @@ type FormState = {
   paymentError: CheckoutFailureReason | null,
   guestAccountCreationToken: ?string,
   thankYouPageStage: ThankYouPageStage,
+  payPalHasLoaded: boolean,
 };
 
 type PageState = {
@@ -140,6 +141,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     paymentError: null,
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
+    payPalHasLoaded: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -185,6 +187,10 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'UPDATE_USER_FORM_DATA':
         return { ...state, formData: { ...state.formData, ...action.userFormData } };
+
+      case 'SET_PAYPAL_HAS_LOADED':
+        return { ...state, payPalHasLoaded: true };
+
 
       case 'SELECT_AMOUNT':
         return {

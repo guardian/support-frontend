@@ -21,7 +21,7 @@ import SvgPayPal from 'components/svgs/paypal';
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, updatePaymentMethod, isPaymentReady } from '../contributionsLandingActions';
+import { type Action, updatePaymentMethod, setPaymentIsReady } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -34,7 +34,7 @@ type PropTypes = {
   onPaymentAuthorisation: PaymentAuthorisation => void,
   thirdPartyPaymentLibraries: PaymentMatrix<PaymentHandler | null>,
   updatePaymentMethod: PaymentMethod => Action,
-  isPaymentReady: (boolean, ?{ [Contrib]: { [PaymentMethod]: PaymentHandler }}) => Action,
+  setPaymentIsReady: (boolean, ?{ [Contrib]: { [PaymentMethod]: PaymentHandler }}) => Action,
   isTestUser: boolean,
   switches: Switches,
 };
@@ -52,12 +52,12 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = {
   updatePaymentMethod,
-  isPaymentReady,
+  setPaymentIsReady,
 };
 
 // ----- Render ----- //
 
-function ContributionPayment(props: PropTypes) {
+function PaymentMethodSelector(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
     getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
@@ -73,28 +73,29 @@ function ContributionPayment(props: PropTypes) {
           {paymentMethods.map(paymentMethod => (
             <li className="form__radio-group-item">
               <input
-                id={`contributionPayment-${paymentMethod}`}
+                id={`paymentMethodSelector-${paymentMethod}`}
                 className="form__radio-group-input"
-                name="contributionPayment"
+                name="paymentMethodSelector"
                 type="radio"
                 value={paymentMethod}
                 onChange={() => props.updatePaymentMethod(paymentMethod)}
                 checked={props.paymentMethod === paymentMethod}
               />
-              <label htmlFor={`contributionPayment-${paymentMethod}`} className="form__radio-group-label">
+              <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
                 <span className="radio-ui" />
-                <span className="radio-ui__label">{ getPaymentLabel(paymentMethod) }</span>
-                { paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCard />) }
+                <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
+                {paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCard />)}
               </label>
             </li>
           ))}
         </ul>
         : noPaymentMethodsErrorMessage
       }
+
     </fieldset>
   );
 }
 
-const NewContributionPayment = connect(mapStateToProps, mapDispatchToProps)(ContributionPayment);
+const NewPaymentMethodSelector = connect(mapStateToProps, mapDispatchToProps)(PaymentMethodSelector);
 
-export { NewContributionPayment };
+export { NewPaymentMethodSelector };
