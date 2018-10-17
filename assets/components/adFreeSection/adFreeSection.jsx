@@ -44,7 +44,7 @@ export default function AdFreeSection(props: PropTypes) {
           <Heading size={getSubHeaderSize(headingSize)} className="component-ad-free-section__badge">New</Heading>
           <div className="component-ad-free-section__wrapper">
             <div className="component-ad-free-section__col">
-              <Heading size={headingSize} className="component-ad-free-section__header">Ad-free on all your devices</Heading>
+              <Heading size={headingSize} className="component-ad-free-section__header">No ads, no interruptions</Heading>
               <p className="component-ad-free-section__copy">
                 Avoid the adverts and read without interruptions
                 when you&#39;re signed in on your apps and theguardian.com
