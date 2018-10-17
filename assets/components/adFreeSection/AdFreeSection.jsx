@@ -20,7 +20,6 @@ export default function AdFreeSection() {
               </p>
             </div>
             <GridImage
-              classModifiers={['component-ad-free__image']}
               gridId="adFreePromotionCircles"
               srcSizes={[1000, 500, 140]}
               sizes="(max-width: 740px) 100vw, 400px"
