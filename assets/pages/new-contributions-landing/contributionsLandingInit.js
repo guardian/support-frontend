@@ -33,7 +33,7 @@ function initialisePaymentMethods(state: State, dispatch: Dispatch<Action>) {
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
       dispatch(paymentWaiting(true));
-      onThirdPartyPaymentAuthorised(paymentAuthorisation)(dispatch, () => state)
+      dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation))
   };
 
   ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach(contribType => {
