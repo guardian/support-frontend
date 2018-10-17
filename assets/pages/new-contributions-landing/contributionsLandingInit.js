@@ -11,18 +11,6 @@ import { type Action, paymentWaiting, onThirdPartyPaymentAuthorised, isPaymentRe
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { setupStripeCheckout } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentHandler, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
-import { type PaymentMatrix, type Contrib, logInvalidCombination } from 'helpers/contributions';
-import { logException,} from 'helpers/logger';
-import type {IsoCountry} from "../../helpers/internationalisation/country";
-
-
-
-type args = {
-  onPaymentAuthorisation: PaymentAuthorisation => void,
-  contributionType: Contrib,
-  currencyId: IsoCountry,
-  isTestUser: boolean,
-}
 
 // ----- Functions ----- //
 
