@@ -1,14 +1,12 @@
 .component-ad-free {
   font-family: $gu-text-egyptian-web;
-  @include mq($from: desktop) {
-    border-left: 1px solid gu-colour(garnett-neutral-4);
-  }
 }
 
 .component-ad-free__content {
   box-sizing: border-box;
   padding-left: 10px;
   padding-right: 10px;
+  padding-top: 2px;
   width: 100%;
   position: relative;
 }
@@ -19,7 +17,7 @@
   font-weight: bold;
   line-height: 1.12;
   font-family: $gu-headline;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: gu-colour(news-garnett-highlight);
 
   @include mq($from: leftCol) {
@@ -60,13 +58,13 @@
 .component-ad-free__badge {
   background: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
   font-family: $gu-headline;
   display: inline-block;
   padding: 0 10px 1px;
   top: -24px;
-  left: -80px;
+  left: -84px;
   position: absolute;
-  transform: rotate(-4deg);
+  transform: rotate(-12deg);
 }
