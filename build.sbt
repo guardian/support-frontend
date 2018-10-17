@@ -34,7 +34,10 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % "test",
   "org.mockito" % "mockito-all" % "1.10.19" % "test",
   "org.typelevel" %% "cats-core" % "0.9.0",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
+  // This is required to force aws libraries to use the latest version of jackson
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
+  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7",
+  "com.fasterxml.jackson.core" % "jackson-core" % "2.9.7",
   "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
