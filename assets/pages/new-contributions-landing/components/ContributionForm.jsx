@@ -154,8 +154,9 @@ const getAmount = (props: PropTypes) =>
 // ----- Event handlers ----- //
 
 function openStripePopup(props: PropTypes) {
-  if (props.thirdPartyPaymentLibraries[props.contributionType] && props.thirdPartyPaymentLibraries[props.contributionType].Stripe) {
-    openDialogBox(props.thirdPartyPaymentLibraries[props.contributionType].Stripe, getAmount(props), props.email);
+  const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
+  if (paymentLibraries && paymentLibraries.Stripe) {
+    openDialogBox(paymentLibraries.Stripe, getAmount(props), props.email);
   }
 }
 
