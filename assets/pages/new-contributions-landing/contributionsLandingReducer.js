@@ -163,7 +163,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
           ? {
             ...state,
             paymentReady: action.paymentReady,
-            thirdPartyPaymentLibraries: { ...state.thirdPartyPaymentLibraries, ...action.thirdPartyPaymentLibraries },
+            thirdPartyPaymentLibraries: {
+              ONE_OFF: {...state.thirdPartyPaymentLibraries.ONE_OFF, ...action.thirdPartyPaymentLibraries.ONE_OFF},
+              MONTHLY: {...state.thirdPartyPaymentLibraries.MONTHLY, ...action.thirdPartyPaymentLibraries.MONTHLY},
+              ANNUAL: {...state.thirdPartyPaymentLibraries.ANNUAL, ...action.thirdPartyPaymentLibraries.ANNUAL},
+            }
           }
           : { ...state, paymentReady: action.paymentReady };
 

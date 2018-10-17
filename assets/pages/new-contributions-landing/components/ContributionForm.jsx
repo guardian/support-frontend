@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type PaymentHandler } from 'helpers/checkouts';
+import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   config,
   type Contrib,
@@ -60,7 +60,7 @@ type PropTypes = {|
   email: string,
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
-  thirdPartyPaymentLibraries: PaymentMatrix<PaymentHandler | null>,
+  thirdPartyPaymentLibraries: PaymentMatrix<ThirdPartyPaymentLibrary | null>,
   contributionType: Contrib,
   currency: IsoCurrency,
   paymentError: CheckoutFailureReason | null,

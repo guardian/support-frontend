@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
-import { type PaymentHandler } from 'helpers/checkouts';
+import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
@@ -44,7 +44,7 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, thirdPartyPaymentLibraries: ?{ [Contrib]: { [PaymentMethod]: PaymentHandler } } }
+  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibrary: ?{ [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -100,11 +100,10 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
-const setPaymentIsReady = (
-  paymentReady: boolean,
-  paymentHandlers: ?{ [Contrib]: { [PaymentMethod]: PaymentHandler }},
+const setThirdPartyPaymentLibrary = (
+  thirdPartyPaymentLibrary: ?{ [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary }},
 ): Action =>
-  ({ type: 'UPDATE_PAYMENT_READY', paymentReady, thirdPartyPaymentLibraries: paymentHandlers || null });
+  ({ type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibrary: thirdPartyPaymentLibrary || null });
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
@@ -329,7 +328,7 @@ export {
   updateEmail,
   updateState,
   updateUserFormData,
-  setPaymentIsReady,
+  setThirdPartyPaymentLibrary,
   selectAmount,
   updateOtherAmount,
   paymentFailure,

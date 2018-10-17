@@ -5,12 +5,12 @@ import { type Store, type Dispatch } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { type PaymentHandler, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
+import { type ThirdPartyPaymentLibrary, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
 import {
   type Action,
   paymentWaiting,
   onThirdPartyPaymentAuthorised,
-  setPaymentIsReady,
+  setThirdPartyPaymentLibrary,
   updatePaymentMethod,
   updateUserFormData,
   setPayPalHasLoaded,
@@ -32,13 +32,12 @@ function selectDefaultPaymentMethod(state: State, dispatch: Dispatch<Action>) {
 function initialiseStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser, dispatch) {
 
   setupStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser)
-    .then((handler: PaymentHandler) => dispatch(setPaymentIsReady(true, { [contributionType]: { Stripe: handler } })));
+    .then((handler: ThirdPartyPaymentLibrary) => dispatch(setThirdPartyPaymentLibrary(true, { [contributionType]: { Stripe: handler } })));
 }
 
 function initialisePaymentMethods(state: State, dispatch: Function) {
-  const { countryId } = state.common.internationalisation;
+  const { countryId, currencyId } = state.common.internationalisation;
   const { switches } = state.common.settings;
-  const { currencyId } = state.common.internationalisation;
   const { isTestUser } = state.page.user;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {

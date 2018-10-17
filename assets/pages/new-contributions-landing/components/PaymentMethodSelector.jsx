@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type PaymentHandler, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
+import { type ThirdPartyPaymentLibrary, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
 import { type Switches } from 'helpers/settings';
 import {
   type Contrib,
@@ -21,7 +21,7 @@ import SvgPayPal from 'components/svgs/paypal';
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, updatePaymentMethod, setPaymentIsReady } from '../contributionsLandingActions';
+import { type Action, updatePaymentMethod, setThirdPartyPaymentLibrary } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -32,9 +32,9 @@ type PropTypes = {
   currency: IsoCurrency,
   paymentMethod: PaymentMethod,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-  thirdPartyPaymentLibraries: PaymentMatrix<PaymentHandler | null>,
+  thirdPartyPaymentLibraries: PaymentMatrix<ThirdPartyPaymentLibrary | null>,
   updatePaymentMethod: PaymentMethod => Action,
-  setPaymentIsReady: (boolean, ?{ [Contrib]: { [PaymentMethod]: PaymentHandler }}) => Action,
+  setThirdPartyPaymentLibrary: (?{ [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
   isTestUser: boolean,
   switches: Switches,
 };
@@ -52,7 +52,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = {
   updatePaymentMethod,
-  setPaymentIsReady,
+  setThirdPartyPaymentLibrary,
 };
 
 // ----- Render ----- //
