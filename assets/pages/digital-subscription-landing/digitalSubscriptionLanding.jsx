@@ -60,7 +60,7 @@ const content = (
         countryGroupId={countryGroupId}
       />
       <ProductBlock countryGroupId={countryGroupId} />
-      <AdFreeSection />
+      <AdFreeSection headingSize={2} />
       <IndependentJournalismSection />
       <PromotionPopUp />
     </Page>

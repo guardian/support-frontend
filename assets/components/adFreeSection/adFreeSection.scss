@@ -1,8 +1,8 @@
-.component-ad-free {
+.component-ad-free-section {
   font-family: $gu-text-egyptian-web;
 }
 
-.component-ad-free__content {
+.component-ad-free-section__content {
   box-sizing: border-box;
   padding-left: 10px;
   padding-right: 10px;
@@ -11,7 +11,7 @@
   position: relative;
 }
 
-.component-ad-free__header {
+.component-ad-free-section__header {
   width: 100%;
   font-size: 26px;
   font-weight: bold;
@@ -27,7 +27,7 @@
   }
 }
 
-.component-ad-free__col {
+.component-ad-free-section__col {
   width: 100%;
   padding-right: 40px;
   @include mq($from: leftCol) {
@@ -35,7 +35,7 @@
   }
 }
 
-.component-ad-free__copy {
+.component-ad-free-section__copy {
   font-size: 16px;
   line-height: 1.25;
   display: block;
@@ -44,14 +44,14 @@
   }
 }
 
-.component-ad-free__wrapper {
+.component-ad-free-section__wrapper {
   position: relative;
   @include mq($from: tablet) {
     display: flex;
   }
 }
 
-.component-ad-free .component-grid-image {
+.component-ad-free-section .component-grid-image {
   height: 100%;
   width: 100%;
   margin-top: 10px;
@@ -62,7 +62,7 @@
   }
 }
 
-.component-ad-free__badge {
+.component-ad-free-section__badge {
   background: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
   font-size: 26px;

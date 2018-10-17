@@ -4,19 +4,32 @@
 import React from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import Heading, {type HeadingSize} from 'components/heading/heading';
 
-export default function AdFreeSection() {
+
+// ---- Types ----- //
+
+type PropTypes = {
+  headingSize: HeadingSize,
+};
+
+
+// ----- Component ----- //
+
+export default function AdFreeSection(props: PropTypes) {
+
+  const {headingSize} = props;
 
   return (
-    <LeftMarginSection modifierClasses={['blue']}>
-      <div className="component-ad-free">
-        <div className="component-ad-free__content">
-          <h3 className="component-ad-free__badge">New</h3>
-          <div className="component-ad-free__wrapper">
-            <div className="component-ad-free__col">
-              <h2 className="component-ad-free__header">Ad-free on all your devices</h2>
-              <p className="component-ad-free__copy">
-                {'Avoid the adverts and read without interruptions when you\'re signed in on your apps and theguardian.com'}
+    <div className="component-ad-free-section">
+      <LeftMarginSection modifierClasses={['blue']}>
+        <div className="component-ad-free-section__content">
+          <Heading size={headingSize+1} className="component-ad-free-section__badge">New</Heading>
+          <div className="component-ad-free-section__wrapper">
+            <div className="component-ad-free-section__col">
+              <Heading size={headingSize} className="component-ad-free-section__header">Ad-free on all your devices</Heading>
+              <p className="component-ad-free-section__copy">
+                Avoid the adverts and read without interruptions when you&#39;re signed in on your apps and theguardian.com
               </p>
             </div>
             <GridImage
@@ -27,7 +40,7 @@ export default function AdFreeSection() {
             />
           </div>
         </div>
-      </div>
-    </LeftMarginSection>
+      </LeftMarginSection>
+    </div>
   );
 }
