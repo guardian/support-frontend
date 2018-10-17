@@ -61,7 +61,7 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-generic-extras" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
-      "net.databinder.dispatch" %% "dispatch-core" % "0.13.3",
+      "org.dispatchhttp" %% "dispatch-core" % "0.14.0",
       "org.scala-stm" %% "scala-stm" % "0.8",
       "io.sentry" % "sentry-logback" % "1.7.4",
       "com.google.code.findbugs" % "jsr305" % "3.0.2"
