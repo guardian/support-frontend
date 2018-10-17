@@ -33,17 +33,27 @@
   width: 100%;
   font-size: 16px;
   line-height: 1.25;
-  padding-right: 18px;
+  padding-right: 40px;
   @include mq($from: leftCol) {
-    width: 620px;
+    width: 440px;
   }
 }
 
 .component-ad-free__wrapper {
-  display: flex;
   position: relative;
-  @include mq($until: leftCol) {
-    padding-bottom: 220px;
+  @include mq($from: tablet) {
+    display: flex;
+  }
+}
+
+.component-ad-free .component-grid-image {
+  height: 100%;
+  width: 100%;
+  margin-top: 10px;
+  display: block;
+  @include mq($from: tablet) {
+    width: 400px;
+    margin-right: 40px;
   }
 }
 
