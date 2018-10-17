@@ -10,6 +10,7 @@ export type CheckoutFailureReason =
   'payment_method_unacceptable' |
   'payment_provider_unavailable' |
   'payment_recently_taken' |
+  'all_payment_methods_unavailable' |
   'unknown';
 
 // ----- Functions ----- //
@@ -26,6 +27,8 @@ function appropriateErrorMessage(checkoutFailureReason: ?CheckoutFailureReason):
       return 'The transaction was unsuccessful and you have not been charged. Please use a different card or choose another payment method.';
     case 'payment_provider_unavailable':
       return 'The transaction was unsuccessful. This does not mean there’s anything wrong with your card, and you have not been charged. Please try using an alternative payment method.';
+    case 'all_payment_methods_unavailable':
+      return 'Sorry, our payment methods are unavailable at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your contribution or consider another type of contribution from the tabs above. Thank you.';
     default:
       return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
   }
