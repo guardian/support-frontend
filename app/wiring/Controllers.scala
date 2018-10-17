@@ -15,6 +15,7 @@ trait Controllers {
     controllerComponents,
     appConfig.oneOffStripeConfigProvider,
     appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
     paymentAPIService,
     stringsConfig,
     settingsProvider
