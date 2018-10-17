@@ -24,7 +24,7 @@ import { logException } from 'helpers/logger';
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 
 import { type State } from '../contributionsLandingReducer';
-import { type Action, updatePaymentMethod, isPaymentReady } from '../contributionsLandingActions';
+import { type Action, updatePaymentMethod, setPaymentIsReady } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -37,7 +37,7 @@ type PropTypes = {
   onPaymentAuthorisation: PaymentAuthorisation => void,
   paymentHandlers: { [PaymentMethod]: PaymentHandler | null },
   updatePaymentMethod: PaymentMethod => Action,
-  isPaymentReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,
+  setPaymentIsReady: (boolean, ?{ [PaymentMethod]: PaymentHandler }) => Action,
   isTestUser: boolean,
   switches: Switches,
 };
@@ -55,7 +55,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = {
   updatePaymentMethod,
-  isPaymentReady,
+  setPaymentIsReady,
 };
 
 // ----- Logic ----- //
@@ -74,7 +74,7 @@ function initialiseStripeCheckout(props: PropTypes) {
   // into
   // paymentHandlers: { [Contrib]: {[PaymentMethod]: PaymentHandler | null }}
   setupStripeCheckout(onPaymentAuthorisation, contributionType, currency, isTestUser)
-    .then((handler: PaymentHandler) => props.isPaymentReady(true, { Stripe: handler }));
+    .then((handler: PaymentHandler) => props.setPaymentIsReady(true, { Stripe: handler }));
 }
 
 // Bizarrely, adding a type to this object means the type-checking on the
@@ -110,7 +110,7 @@ const paymentMethodInitialisers: PaymentMatrix<PropTypes => void> = {
 
 // ----- Render ----- //
 
-function ContributionPayment(props: PropTypes) {
+function PaymentMethodSelector(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
     getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
@@ -134,28 +134,29 @@ function ContributionPayment(props: PropTypes) {
           {paymentMethods.map(paymentMethod => (
             <li className="form__radio-group-item">
               <input
-                id={`contributionPayment-${paymentMethod}`}
+                id={`paymentMethodSelector-${paymentMethod}`}
                 className="form__radio-group-input"
-                name="contributionPayment"
+                name="paymentMethodSelector"
                 type="radio"
                 value={paymentMethod}
                 onChange={() => props.updatePaymentMethod(paymentMethod)}
                 checked={props.paymentMethod === paymentMethod}
               />
-              <label htmlFor={`contributionPayment-${paymentMethod}`} className="form__radio-group-label">
+              <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
                 <span className="radio-ui" />
-                <span className="radio-ui__label">{ getPaymentLabel(paymentMethod) }</span>
-                { paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCard />) }
+                <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
+                {paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCard />)}
               </label>
             </li>
           ))}
         </ul>
         : noPaymentMethodsErrorMessage
       }
+
     </fieldset>
   );
 }
 
-const NewContributionPayment = connect(mapStateToProps, mapDispatchToProps)(ContributionPayment);
+const NewPaymentMethodSelector = connect(mapStateToProps, mapDispatchToProps)(PaymentMethodSelector);
 
-export { NewContributionPayment };
+export { NewPaymentMethodSelector };

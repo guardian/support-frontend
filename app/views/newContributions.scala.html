@@ -13,6 +13,8 @@
   oneOffUatStripeConfig: StripeConfig,
   regularDefaultStripeConfig: StripeConfig,
   regularUatStripeConfig: StripeConfig,
+  regularDefaultPayPalConfig: PayPalConfig,
+  regularUatPayPalConfig: PayPalConfig,
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
   idUser: Option[IdUser],
@@ -50,10 +52,14 @@
         default: "@oneOffDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
         uat: "@oneOffUatStripeConfig.forCurrency(Some(AUD)).publicKey"
       },
-      REGULAR: {        
+      REGULAR: {
         default: "@regularDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
         uat: "@regularUatStripeConfig.forCurrency(Some(AUD)).publicKey"
       }
+    };
+    window.guardian.payPalEnvironment = {
+      default: "@regularDefaultPayPalConfig.payPalEnvironment",
+      uat: "@regularUatPayPalConfig.payPalEnvironment"
     };
     window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
     window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";

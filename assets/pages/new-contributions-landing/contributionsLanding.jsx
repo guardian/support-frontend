@@ -11,7 +11,6 @@ import { isDetailsSupported, polyfillDetails } from 'helpers/details';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import * as user from 'helpers/user/user';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
@@ -20,7 +19,7 @@ import { NewHeader } from 'components/headers/new-header/Header';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
-import { NewContributionForm } from './components/ContributionForm';
+import { NewContributionFormContainer } from './components/ContributionFormContainer';
 import ContributionThankYouContainer from './components/ContributionThankYouContainer';
 import { NewContributionBackground } from './components/ContributionBackground';
 
@@ -41,13 +40,13 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 // ----- Internationalisation ----- //
 
-const selectedCountryGroupDetails = countryGroupSpecificDetails[countryGroupId];
 const selectedCountryGroup = countryGroups[countryGroupId];
 
 // ----- Render ----- //
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
+
 
 const router = (
   <BrowserRouter>
@@ -62,8 +61,7 @@ const router = (
               header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
-              <NewContributionForm
-                selectedCountryGroupDetails={selectedCountryGroupDetails}
+              <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`}
               />
               <NewContributionBackground />

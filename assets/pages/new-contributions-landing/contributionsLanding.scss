@@ -769,6 +769,10 @@ form {
   }
 }
 
+.form__submit-button--hidden {
+  display: none;
+}
+
 .form__radio-group--contribution-amount,
 .form__field--contribution-other-amount,
 .form__field--contribution-fname,
@@ -934,4 +938,15 @@ form {
   color: inherit;
   display: block;
   text-align: right;
+}
+
+
+/* PayPal Express Button */
+
+.component-paypal-button-checkout {
+  width: 100%;
+}
+
+.component-paypal-button-checkout--hidden {
+  display: none;
 }
