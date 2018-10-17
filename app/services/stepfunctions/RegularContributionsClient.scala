@@ -40,7 +40,7 @@ case class CreateRegularContributorRequest(
     email: String,
     scopeToken: Option[String]
 ) {
-  def maybeScopeToken: Option[ScopeToken] = scopeToken.map(ScopeToken.apply)
+  def maybeScopeToken: Option[ScopeToken] = scopeToken.filter(_.length > 0).map(ScopeToken.apply)
 }
 
 object RegularContributionsClient {
