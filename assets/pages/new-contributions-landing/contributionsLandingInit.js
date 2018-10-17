@@ -25,7 +25,7 @@ function selectDefaultPaymentMethod(state: State, dispatch: Dispatch<Action>) {
   dispatch(updatePaymentMethod(paymentMethodToSelect));
 }
 
-function initialisePaymentMethods(state: State, dispatch: Dispatch<Action>) {
+function initialisePaymentMethods(state: State, dispatch: Function) {
   const {countryId} = state.common.internationalisation;
   const {switches} = state.common.settings;
   const {currencyId } = state.common.internationalisation;

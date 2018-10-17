@@ -263,7 +263,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, Paym
 };
 
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
+  (dispatch: Function, getState: () => State): void => {
   const state = getState();
 
     paymentAuthorisationHandlers[state.page.form.contributionType][state.page.form.paymentMethod](
