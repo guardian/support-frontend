@@ -13,6 +13,7 @@ import config.StringsConfig
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import com.gu.support.workers.model.AccessScope.ScopeToken
 import utils.BrowserCheck
 import utils.RequestCountry._
 
@@ -111,14 +112,14 @@ class Application(
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: Settings = settingsProvider.settings()
-    val visitToken = VisitToken(new SecureRandom())
+    val scopeToken = CreateScopeToken(new SecureRandom())
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(newContributions(countryCode, None, visitToken)),
-      user => Ok(newContributions(countryCode, user, visitToken))
+      _ => Ok(newContributions(countryCode, None, scopeToken)),
+      user => Ok(newContributions(countryCode, user, scopeToken))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def newContributions(countryCode: String, idUser: Option[IdUser], visitToken: VisitToken)(implicit request: RequestHeader, settings: Settings) = {
+  private def newContributions(countryCode: String, idUser: Option[IdUser], scopeToken: ScopeToken)(implicit request: RequestHeader, settings: Settings) = {
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
@@ -133,7 +134,7 @@ class Application(
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser,
-      visitToken = visitToken
+      scopeToken = scopeToken
     )
   }
 
@@ -153,8 +154,7 @@ class Application(
   }
 }
 
-case class VisitToken(value: String) extends AnyVal
-object VisitToken {
-  def apply(rand: SecureRandom): VisitToken =
-    new VisitToken(s"${rand.nextLong.toHexString}")
+object CreateScopeToken {
+  def apply(rand: SecureRandom): ScopeToken =
+    ScopeToken(s"${rand.nextLong.toHexString}")
 }

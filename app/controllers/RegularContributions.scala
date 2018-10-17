@@ -19,6 +19,8 @@ import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient, StatusResponse}
 import services.{IdentityService, MembersDataService, TestUserService}
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import cats.data.EitherT
+import com.gu.support.workers.model.AccessScope.{AccessScopeByToken, AccessScopeNoRestriction}
 import config.Configuration.GuardianDomain
 import views.html.recurringContributions
 
@@ -113,8 +115,8 @@ class RegularContributions(
     SafeLogger.info(s"[${request.uuid}] User ${fullUser.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
 
     val result = for {
-      user <- identityService.getUser(fullUser)
-      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
+      user <- identityService.getUser(fullUser) // FIXME also need to check they are email verified before using AccessScopeNoRestriction
+      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid, AccessScopeNoRestriction).leftMap(_.toString)
     } yield response
 
     result.fold(
@@ -133,7 +135,8 @@ class RegularContributions(
     val result = for {
       userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email)
       user <- identityService.getUser(IdMinimalUser(userIdWithOptionalToken.userId, None))
-      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
+      scopeToken <- EitherT(Future.successful(request.body.maybeScopeToken.toRight("no read access token for anonymous user")))
+      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid, AccessScopeByToken(scopeToken)).leftMap(_.toString)
     } yield StatusResponse.fromStatusResponseAndToken(response, userIdWithOptionalToken.guestAccountRegistrationToken)
 
     result.fold(

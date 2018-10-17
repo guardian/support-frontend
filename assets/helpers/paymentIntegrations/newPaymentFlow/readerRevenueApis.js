@@ -51,7 +51,7 @@ export type RegularPaymentRequest = {|
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
-  visitToken: ?string,
+  scopeToken: ?string,
 |};
 
 export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string |};
