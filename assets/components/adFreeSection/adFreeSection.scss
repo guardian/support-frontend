@@ -1,0 +1,48 @@
+.component-ad-free {
+  font-family: $gu-headline;
+  @include mq($from: desktop) {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+  }
+}
+
+.component-ad-free__content {
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.component-ad-free__header {
+  width: 100%;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.12;
+  color: gu-colour(news-garnett-highlight);
+
+  @include mq($from: leftCol) {
+    width: 620px;
+    font-size: 36px;
+    line-height: 1.17;
+  }
+}
+
+.component-ad-free__copy {
+  width: 100%;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.18;
+  padding-right: 18px;
+  @include mq($from: leftCol) {
+    width: 620px;
+    font-size: 36px;
+    line-height: 1.11;
+  }
+}
+
+.component-ad-free__wrapper {
+  display: flex;
+  position: relative;
+  @include mq($until: leftCol) {
+    padding-bottom: 220px;
+  }
+}
