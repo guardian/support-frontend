@@ -14,11 +14,14 @@
         paymentApiStripeEndpoint: String,
         paymentApiPayPalEndpoint: String,
         idUser: Option[IdUser]
-)(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
+)(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings, flash: Flash)
 
 @scripts = {
     <script type="text/javascript">
         window.guardian = window.guardian || {};
+        @flash.get("email").map { email =>
+            window.guardian.email = "@email";
+        }
         @idUser.map { user =>
             window.guardian.user = {
                 id: "@user.id",
