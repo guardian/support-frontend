@@ -36,7 +36,7 @@
 
   .apps-section {
     .component-left-margin-section__content {
-      padding: 2px ($gu-h-spacing / 2) 0;
+      padding: 2px ($gu-h-spacing / 2) $gu-v-spacing * 2;
       box-sizing: border-box;
 
       @include mq($from: tablet) {
@@ -54,7 +54,7 @@
       margin-bottom: $gu-v-spacing;
 
       @include mq($from: mobileLandscape) {
-        width: 300px;
+        width: 355px;
       }
 
       &:hover {
@@ -74,17 +74,6 @@
     }
   }
 
-  .apps-section__ctas {
-    margin-bottom: $gu-v-spacing * 2;
-
-    @include mq($from: tablet) {
-      display: inline-block;
-      vertical-align: top;
-      margin-top: $gu-v-spacing;
-      margin-left: $gu-h-spacing;
-    }
-  }
-
   .apps-section__heading {
     font-size: 22px;
     line-height: 1.18;
@@ -93,30 +82,27 @@
 
     @include mq($from: tablet) {
       font-size: 28px;
-      width: 300px;
     }
 
     @include mq($from: desktop) {
       font-size: 36px;
-      width: 250px;
     }
   }
 
   .apps-section__copy {
-    font-size: 14px;
-    line-height: 1.43;
+    font-size: 16px;
+    line-height: 1.25;
     font-family: $gu-headline;
     color: gu-colour(media-garnett-main-1);
     margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
 
-    @include mq($from: tablet) {
-      display: inline-block;
-      width: 300px;
-      vertical-align: top;
+    @include mq($from: phablet) {
+      width: 620px;
     }
   }
 
   .apps-section__strong {
     font-weight: bold;
   }
+
 }

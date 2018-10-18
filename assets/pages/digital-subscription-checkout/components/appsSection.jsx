@@ -26,7 +26,7 @@ function AppsSection(props: {
     <div className="apps-section">
       <LeftMarginSection>
         <h2 className="apps-section__heading">
-          Have you downloaded the app?
+          Get started with premium app
         </h2>
         <p className="apps-section__copy">
           <strong className="apps-section__strong">
@@ -45,20 +45,8 @@ function AppsSection(props: {
             accessibilityHint="Click to download the app on the Google Play store"
             url={androidAppUrl}
           />
-        </div>
-        <h2 className="apps-section__heading">
-          ...and the Daily Tablet edition?
-        </h2>
-        <p className="apps-section__copy">
-          <strong className="apps-section__strong">
-            If you&#39;re an iPad user
-          </strong>, you can access our award-winning journalism in a format tailored
-          to this screen size. Our articles will be available to read offline, and updated
-          daily, first thing in the morning.
-        </p>
-        <div className="apps-section__ctas">
           <CtaLink
-            text="Download the Daily Tablet edition"
+            text="Download the iPad Edition"
             accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
             url={getDailyEditionUrl(props.countryGroupId)}
           />
