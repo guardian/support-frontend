@@ -16,6 +16,7 @@ import type { DirectDebitState } from 'components/directDebit/directDebitReducer
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
+import * as storage from 'helpers/storage';
 
 import { type Action } from './contributionsLandingActions';
 
@@ -110,7 +111,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     formData: {
       firstName: null,
       lastName: null,
-      email: null,
+      email: storage.getSession('email') || null,
       otherAmounts: {
         ONE_OFF: { amount: null },
         MONTHLY: { amount: null },

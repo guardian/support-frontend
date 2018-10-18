@@ -1,0 +1,77 @@
+.component-ad-free-section {
+  font-family: $gu-text-egyptian-web;
+}
+
+.component-ad-free-section__content {
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  width: 100%;
+  position: relative;
+}
+
+.component-ad-free-section__header {
+  width: 100%;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.12;
+  font-family: $gu-headline;
+  margin-bottom: 8px;
+  color: gu-colour(news-garnett-highlight);
+
+  @include mq($from: leftCol) {
+    width: 620px;
+    font-size: 36px;
+    line-height: 1.17;
+  }
+}
+
+.component-ad-free-section__col {
+  width: 100%;
+  padding-right: 40px;
+  @include mq($from: leftCol) {
+    width: 440px;
+  }
+}
+
+.component-ad-free-section__copy {
+  font-size: 16px;
+  line-height: 1.25;
+  display: block;
+  @include mq($from: leftCol) {
+    width: 90%;
+  }
+}
+
+.component-ad-free-section__wrapper {
+  position: relative;
+  @include mq($from: tablet) {
+    display: flex;
+  }
+}
+
+.component-ad-free-section .component-grid-image {
+  height: 100%;
+  width: 100%;
+  margin-top: 10px;
+  display: block;
+  @include mq($from: tablet) {
+    width: 400px;
+    margin-right: 40px;
+  }
+}
+
+.component-ad-free-section__badge {
+  background: gu-colour(news-garnett-highlight);
+  color: gu-colour(garnett-neutral-1);
+  font-size: 26px;
+  font-weight: bold;
+  font-family: $gu-headline;
+  display: inline-block;
+  padding: 0 10px 1px;
+  top: 0px;
+  left: -92px;
+  position: absolute;
+  transform: rotate(-12deg);
+}
