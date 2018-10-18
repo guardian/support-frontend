@@ -40,7 +40,7 @@
   line-height: 1.25;
   display: block;
   @include mq($from: leftCol) {
-    width: 60%;
+    width: 90%;
   }
 }
 
@@ -70,7 +70,7 @@
   font-family: $gu-headline;
   display: inline-block;
   padding: 0 10px 1px;
-  top: -24px;
+  top: 0px;
   left: -92px;
   position: absolute;
   transform: rotate(-12deg);
