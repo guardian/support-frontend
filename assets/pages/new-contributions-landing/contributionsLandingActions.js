@@ -69,6 +69,9 @@ const updateFirstName = (firstName: string): Action => ({ type: 'UPDATE_FIRST_NA
 const updateLastName = (lastName: string): Action => ({ type: 'UPDATE_LAST_NAME', lastName });
 
 const updateEmail = (email: string): Action => {
+  // PayPal one-off redirects away from the site before hitting the thank you page
+  // so we need to store the email in the storage so that it is available on the
+  // thank you page in all scenarios.
   storage.setSession('gu.email', email);
   return ({ type: 'UPDATE_EMAIL', email });
 };
