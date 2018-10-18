@@ -903,10 +903,20 @@ form {
 }
 
 .button--newsletter {
-  color: #29a05f;
+  color: #ffffff;
+  background-color: #22834D;
+
+  &:enabled {
+    cursor: pointer;
+  }
 }
 
-.button--newsletter .svg-subscribe {
+.button--newsletter__subscribed {
+  color: #22834D;
+  background-color: transparent;
+}
+
+.button--newsletter .svg-subscribe, .button--newsletter .svg-subscribed {
   margin-right: 10px;
 }
 
