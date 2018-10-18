@@ -12,6 +12,13 @@
   }
 }
 
+.component-left-margin-section--blue {
+  color: #ffffff;
+  .component-left-margin-section__content {
+    background: gu-colour(sport-garnett-feature);
+  }
+}
+
 .component-left-margin-section__content {
   flex-grow: 1;
 

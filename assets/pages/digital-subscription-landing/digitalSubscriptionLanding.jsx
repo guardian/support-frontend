@@ -13,6 +13,7 @@ import Page from 'components/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
+import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
@@ -59,6 +60,7 @@ const content = (
         countryGroupId={countryGroupId}
       />
       <ProductBlock countryGroupId={countryGroupId} />
+      <AdFreeSection headingSize={2} />
       <IndependentJournalismSection />
       <PromotionPopUp />
     </Page>
