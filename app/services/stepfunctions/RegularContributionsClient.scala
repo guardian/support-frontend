@@ -80,7 +80,8 @@ class RegularContributionsClient(
 
   def createContributor(
     request: CreateRegularContributorRequest,
-    user: User, requestId: UUID,
+    user: User,
+    requestId: UUID,
     accessScope: AccessScope
   ): EitherT[Future, RegularContributionError, StatusResponse] = {
     val createPaymentMethodState = CreatePaymentMethodState(

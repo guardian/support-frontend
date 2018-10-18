@@ -9,7 +9,7 @@ export type SessionId = ?string;
 
 // ----- Setup ----- //
 
-function getOrderId(keyName) {
+function getAndStoreId(keyName) {
   let value = storage.getSession(keyName);
   if (value === null) {
     value = uuidv4();
@@ -18,7 +18,7 @@ function getOrderId(keyName) {
   return value;
 }
 
-const initialState: SessionId = getOrderId('sessionId');
+const initialState: SessionId = getAndStoreId('sessionId');
 
 // ----- Reducer ----- //
 
