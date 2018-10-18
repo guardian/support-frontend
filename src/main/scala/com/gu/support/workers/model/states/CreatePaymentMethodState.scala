@@ -10,9 +10,9 @@ case class CreatePaymentMethodState(
   product: ProductType,
   paymentFields: PaymentFields,
   acquisitionData: Option[AcquisitionData],
-  scopeToken: Option[String]
+  sessionId: Option[String]
 ) extends StepFunctionUserState {
 
-  def accessScope: AccessScope = AccessScope.fromRaw(scopeToken)
+  def accessScope: AccessScope = AccessScope.fromRaw(sessionId)
 
 }
