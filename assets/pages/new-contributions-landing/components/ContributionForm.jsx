@@ -2,14 +2,13 @@
 
 // ----- Imports ----- //
 
-import type { Amount } from 'helpers/contributions';
+import { type Amount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import type { CountryMetaData } from 'helpers/internationalisation/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   config,
   type Contrib,
@@ -60,7 +59,7 @@ type PropTypes = {|
   email: string,
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
-  thirdPartyPaymentLibraries: PaymentMatrix<ThirdPartyPaymentLibrary | null>,
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   contributionType: Contrib,
   currency: IsoCurrency,
   paymentError: CheckoutFailureReason | null,

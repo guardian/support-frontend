@@ -10,7 +10,7 @@ import { type Switches } from 'helpers/settings';
 import {
   type Contrib,
   type PaymentMethod,
-  type PaymentMatrix,
+  type ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type IsoCountry } from 'helpers/internationalisation/country';
@@ -32,7 +32,7 @@ type PropTypes = {
   currency: IsoCurrency,
   paymentMethod: PaymentMethod,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-  thirdPartyPaymentLibraries: PaymentMatrix<ThirdPartyPaymentLibrary | null>,
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   updatePaymentMethod: PaymentMethod => Action,
   setThirdPartyPaymentLibrary: (?{ [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
   isTestUser: boolean,
