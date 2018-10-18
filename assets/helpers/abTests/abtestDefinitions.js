@@ -29,8 +29,7 @@ export const existingContributionsFlowTests: Tests = {
         size: 1,
       },
     },
-    // TODO: turn to false
-    isActive: true,
+    isActive: false,
     independent: true,
     seed: 4,
   },
@@ -48,8 +47,7 @@ export const newContributionsFlowTests: Tests = {
         size: 1,
       },
     },
-    // TODO: turn to false
-    isActive: true,
+    isActive: false,
     independent: true,
     seed: 5,
   },
