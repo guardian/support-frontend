@@ -5,7 +5,8 @@ import type { Tests } from './abtest';
 
 export type AnnualContributionsTestVariant = 'control' | 'annual' | 'annualHigherAmounts' | 'notintest';
 
-
+// Participations in these tests are only assigned
+// to browsers landing on pages/contributions-landing/contributionsLanding.jsx
 export const existingContributionsFlowTests: Tests = {
   annualContributionsRoundTwo: {
     variants: ['control', 'annual', 'annualHigherAmounts'],
@@ -20,6 +21,7 @@ export const existingContributionsFlowTests: Tests = {
     seed: 3,
   },
   newPaymentFlow: {
+    // 100% of people will be put in this variant
     variants: ['control'],
     audiences: {
       ALL: {
@@ -34,8 +36,11 @@ export const existingContributionsFlowTests: Tests = {
   },
 };
 
+// Participations in these tests are only assigned
+// to browsers landing on pages/new-contributions-landing/contributionsLanding.jsx
 export const newContributionsFlowTests: Tests = {
   newPaymentFlow: {
+    // 100% of people will be put in this variant
     variants: ['newPaymentFlow'],
     audiences: {
       ALL: {
@@ -50,8 +55,7 @@ export const newContributionsFlowTests: Tests = {
   },
 };
 
-export const allTests: Tests = {
-  ...existingContributionsFlowTests,
-  ...newContributionsFlowTests,
-  // add any other tests here
+export const tests: Tests = {
+  // Participations in these tests will be assigned on all pages
+  // EXCEPT the existing & new contributions landing pages
 };

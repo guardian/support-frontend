@@ -10,10 +10,19 @@ import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { allTests } from './abtestDefinitions';
+import {
+  existingContributionsFlowTests,
+  newContributionsFlowTests,
+  tests,
+} from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
+const allTests = {
+  ...tests,
+  ...existingContributionsFlowTests,
+  ...newContributionsFlowTests,
+};
 
 type TestId = $Keys<typeof allTests>;
 
