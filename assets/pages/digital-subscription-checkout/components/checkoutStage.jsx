@@ -11,7 +11,7 @@ import SubscriptionsThankYou from 'components/subscriptionsThankYou/subscription
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { type Stage } from '../digitalSubscriptionCheckoutReducer';
-import AppsSection from './appsSection';
+import ThankYouContent from './thankYouContent';
 
 
 // ----- Types ----- //
@@ -43,9 +43,7 @@ function CheckoutStage(props: PropTypes) {
     case 'thankyou':
       return (
         <SubscriptionsThankYou>
-          <AppsSection
-            countryGroupId={props.countryGroupId}
-          />
+          <ThankYouContent countryGroupId={props.countryGroupId} />
         </SubscriptionsThankYou>
       );
 

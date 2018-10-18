@@ -32,9 +32,9 @@
     }
   }
 
-  // ----- Apps
+  // ----- Thank You
 
-  .apps-section {
+  .thank-you-content {
     .component-left-margin-section__content {
       padding: 2px ($gu-h-spacing / 2) $gu-v-spacing * 2;
       box-sizing: border-box;
@@ -74,7 +74,13 @@
     }
   }
 
-  .apps-section__heading {
+  .component-left-margin-section--thank-you-emails {
+    .component-left-margin-section__content {
+      border-top: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .thank-you-content__heading {
     font-size: 22px;
     line-height: 1.18;
     font-weight: 300;
@@ -86,10 +92,11 @@
 
     @include mq($from: desktop) {
       font-size: 36px;
+      width: 470px;
     }
   }
 
-  .apps-section__copy {
+  .thank-you-content__copy {
     font-size: 16px;
     line-height: 1.25;
     font-family: $gu-headline;
@@ -97,11 +104,11 @@
     margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
 
     @include mq($from: phablet) {
-      width: 620px;
+      width: 560px;
     }
   }
 
-  .apps-section__strong {
+  .thank-you-content__strong {
     font-weight: bold;
   }
 
