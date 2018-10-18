@@ -6,7 +6,7 @@ import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
 import { amounts, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
-import visitToken from 'helpers/visitToken/reducer';
+import sessionId from 'helpers/sessionId/reducer';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
@@ -14,7 +14,7 @@ import { createUserReducer, type User as UserState } from 'helpers/user/userRedu
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type VisitToken as VisitTokenState } from 'helpers/visitToken/reducer';
+import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
 import * as storage from 'helpers/storage';
 
 import { type Action } from './contributionsLandingActions';
@@ -69,7 +69,7 @@ type PageState = {
   user: UserState,
   csrf: CsrfState,
   directDebit: DirectDebitState,
-  visitToken: VisitTokenState,
+  sessionId: SessionIdState,
 };
 
 export type State = {
@@ -251,7 +251,7 @@ function initReducer(countryGroupId: CountryGroupId) {
     user: createUserReducer(countryGroupId),
     directDebit,
     csrf,
-    visitToken,
+    sessionId,
   });
 }
 
