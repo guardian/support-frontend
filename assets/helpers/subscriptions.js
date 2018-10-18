@@ -90,12 +90,6 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
-function displayDigitalPackBenefitCopy(countryGroupId: CountryGroupId): string {
-  return countryGroupId === 'GBPCountries'
-    ? 'The premium app and the daily edition iPad app in one pack, plus ad-free reading on all your devices'
-    : 'The premium app and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices';
-}
-
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
 
   switch (product) {
@@ -150,5 +144,4 @@ export {
   sendTrackingEventsOnClick,
   displayPrice,
   getProductPrice,
-  displayDigitalPackBenefitCopy,
 };

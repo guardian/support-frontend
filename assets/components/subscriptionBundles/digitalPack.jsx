@@ -5,16 +5,51 @@
 import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
+import { inOfferPeriod } from 'helpers/flashSale';
 
 import { type ImageId } from 'helpers/theGrid';
 import {
   type ComponentAbTest,
-  displayDigitalPackBenefitCopy,
   displayPrice,
   sendTrackingEventsOnClick,
 } from 'helpers/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
+
+function getFlashSaleCopy(countryGroupId: CountryGroupId) {
+  if (countryGroupId === 'GBPCountries') {
+    return {
+      subHeading: <span>£5.99/month<br />(save 50%)</span>,
+      description:
+      // eslint-disable-next-line react/jsx-indent
+        <span>Ad-free reading on all devices, including the Premium App and Daily Edition iPad app.
+          <strong>Free 14 day trial, then save 50% for three months.</strong>
+        </span>,
+
+    };
+  }
+  return {
+    subHeading: 'Save 50% for three months',
+    description: 'The Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. Free 14 day trial, then save 50% for three months.',
+  };
+}
+
+function getCopy(countryGroupId: CountryGroupId) {
+  if (inOfferPeriod('DigitalPack')) {
+    return getFlashSaleCopy(countryGroupId);
+  }
+
+  if (countryGroupId === 'GBPCountries') {
+    return {
+      subHeading: displayPrice('DigitalPack', countryGroupId),
+      description: 'The premium app and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
+    };
+  }
+  return {
+    subHeading: '14-day free trial',
+    description: 'The premium app and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
+  };
+}
 
 // ----- Component ----- //
 
@@ -22,19 +57,18 @@ function DigitalPack(props: {
   countryGroupId: CountryGroupId,
   url: string,
   gridId: ImageId,
-  subheading?: string | null,
   abTest: ComponentAbTest | null,
 }) {
-  const subHeadingCopy = props.subheading || displayPrice('DigitalPack', props.countryGroupId);
+  const copy = getCopy(props.countryGroupId);
   return (
     <SubscriptionBundle
       modifierClass="digital"
       heading="Digital Pack"
-      subheading={subHeadingCopy}
+      subheading={copy.subHeading}
       headingSize={3}
       benefits={{
         list: false,
-        copy: displayDigitalPackBenefitCopy(props.countryGroupId),
+        copy: copy.description,
       }}
       gridImage={{
         gridId: props.gridId,
@@ -60,7 +94,6 @@ function DigitalPack(props: {
 
 DigitalPack.defaultProps = {
   abTest: null,
-  subheading: null,
 };
 
 

@@ -32,7 +32,6 @@ function InternationalSection(props: {
       />
       <DigitalPack
         countryGroupId={props.countryGroupId}
-        subheading="14-day free trial"
         url={props.subsLinks.DigitalPack}
         gridId="digitalCirclePink"
       />
