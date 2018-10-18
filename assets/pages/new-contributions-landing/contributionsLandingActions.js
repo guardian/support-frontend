@@ -68,7 +68,10 @@ const updateFirstName = (firstName: string): Action => ({ type: 'UPDATE_FIRST_NA
 
 const updateLastName = (lastName: string): Action => ({ type: 'UPDATE_LAST_NAME', lastName });
 
-const updateEmail = (email: string): Action => ({ type: 'UPDATE_EMAIL', email });
+const updateEmail = (email: string): Action => {
+  storage.setSession('gu.email', email);
+  return ({ type: 'UPDATE_EMAIL', email });
+};
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
