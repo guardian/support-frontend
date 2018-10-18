@@ -46,6 +46,12 @@ export const logInvalidCombination = (contributionType: Contrib, paymentMethod: 
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
 };
 
+export type ThirdPartyPaymentLibraries = {
+  ONE_OFF: { Stripe: Object },
+  MONTHLY: { Stripe: Object, PayPal: Object },
+  ANNUAL: { Stripe: Object, PayPal: Object },
+};
+
 export type BillingPeriod = 'Monthly' | 'Annual';
 
 export type Amount = { value: string, spoken: string, isDefault: boolean };

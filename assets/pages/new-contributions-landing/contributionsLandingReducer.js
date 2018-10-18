@@ -4,8 +4,7 @@
 
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
-import { type PaymentHandler } from 'helpers/checkouts';
-import { amounts, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
+import { amounts, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import visitToken from 'helpers/visitToken/reducer';
 import { type CommonState } from 'helpers/page/page';
@@ -53,10 +52,7 @@ type SetPasswordData = {
 type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
-  paymentReady: boolean,
-  paymentHandlers: {
-    [PaymentMethod]: PaymentHandler | null
-  },
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
@@ -101,13 +97,19 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'None',
-    paymentHandlers: {
-      Stripe: null,
-      DirectDebit: null,
-      PayPal: null,
-      None: null,
+    thirdPartyPaymentLibraries: {
+      ONE_OFF: {
+        Stripe: {},
+      },
+      MONTHLY: {
+        Stripe: {},
+        PayPal: {},
+      },
+      ANNUAL: {
+        Stripe: {},
+        PayPal: {},
+      },
     },
-    paymentReady: false,
     formData: {
       firstName: null,
       lastName: null,
@@ -149,13 +151,23 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'UPDATE_PAYMENT_READY':
-        return action.paymentHandlers
-          ? {
-            ...state,
-            paymentReady: action.paymentReady,
-            paymentHandlers: { ...state.paymentHandlers, ...action.paymentHandlers },
-          }
-          : { ...state, paymentReady: action.paymentReady };
+        return {
+          ...state,
+          thirdPartyPaymentLibraries: {
+            ONE_OFF: {
+              ...state.thirdPartyPaymentLibraries.ONE_OFF,
+              ...action.thirdPartyPaymentLibraryByContrib.ONE_OFF,
+            },
+            MONTHLY: {
+              ...state.thirdPartyPaymentLibraries.MONTHLY,
+              ...action.thirdPartyPaymentLibraryByContrib.MONTHLY,
+            },
+            ANNUAL: {
+              ...state.thirdPartyPaymentLibraries.ANNUAL,
+              ...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
+            },
+          },
+        };
 
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };

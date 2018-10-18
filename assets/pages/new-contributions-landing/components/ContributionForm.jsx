@@ -2,14 +2,13 @@
 
 // ----- Imports ----- //
 
-import type { Amount } from 'helpers/contributions';
+import { type Amount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import type { CountryMetaData } from 'helpers/internationalisation/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { type PaymentHandler } from 'helpers/checkouts';
 import {
   config,
   type Contrib,
@@ -60,7 +59,7 @@ type PropTypes = {|
   email: string,
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
-  paymentHandlers: { [PaymentMethod]: PaymentHandler | null },
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   contributionType: Contrib,
   currency: IsoCurrency,
   paymentError: CheckoutFailureReason | null,
@@ -87,7 +86,7 @@ const mapStateToProps = (state: State) => ({
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   paymentMethod: state.page.form.paymentMethod,
-  paymentHandlers: state.page.form.paymentHandlers,
+  thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
   contributionType: state.page.form.contributionType,
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
@@ -117,8 +116,9 @@ const getAmount = (props: PropTypes) =>
 // ----- Event handlers ----- //
 
 function openStripePopup(props: PropTypes) {
-  if (props.paymentHandlers.Stripe) {
-    openDialogBox(props.paymentHandlers.Stripe, getAmount(props), props.email);
+  const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
+  if (paymentLibraries && paymentLibraries.Stripe) {
+    openDialogBox(paymentLibraries.Stripe, getAmount(props), props.email);
   }
 }
 

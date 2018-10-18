@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
-import { type PaymentHandler } from 'helpers/checkouts';
+import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
@@ -44,7 +44,7 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler } }
+  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [Contrib]: {[PaymentMethod]: ThirdPartyPaymentLibrary}} }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -106,11 +106,17 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
-const setPaymentIsReady = (paymentReady: boolean, paymentHandlers: ?{ [PaymentMethod]: PaymentHandler }): Action =>
-  ({ type: 'UPDATE_PAYMENT_READY', paymentReady, paymentHandlers: paymentHandlers || null });
+const setThirdPartyPaymentLibrary =
+  (thirdPartyPaymentLibraryByContrib: {
+    [Contrib]: {
+      [PaymentMethod]: ThirdPartyPaymentLibrary
+    }
+  }): Action => ({
+    type: 'UPDATE_PAYMENT_READY',
+    thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
+  });
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
-
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
@@ -315,7 +321,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, Paym
 };
 
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
+  (dispatch: Function, getState: () => State): void => {
     const state = getState();
 
     paymentAuthorisationHandlers[state.page.form.contributionType][state.page.form.paymentMethod](
@@ -333,7 +339,7 @@ export {
   updateEmail,
   updateState,
   updateUserFormData,
-  setPaymentIsReady,
+  setThirdPartyPaymentLibrary,
   selectAmount,
   updateOtherAmount,
   paymentFailure,
