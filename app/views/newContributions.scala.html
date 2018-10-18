@@ -4,6 +4,7 @@
 @import helper.CSRF
 @import com.gu.i18n.Currency.AUD
 @import admin.Settings
+@import com.gu.support.workers.model.AccessScope.SessionId
 @(
   title: String,
   id: String,
@@ -17,8 +18,7 @@
   regularUatPayPalConfig: PayPalConfig,
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
-  idUser: Option[IdUser],
-  visitToken: VisitToken
+  idUser: Option[IdUser]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
 
 @scripts = {
@@ -64,7 +64,6 @@
     window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
     window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
     window.guardian.csrf = { token: "@CSRF.getToken.value" };
-    window.guardian.visitToken = "@visitToken.value";
   </script>
 }
 

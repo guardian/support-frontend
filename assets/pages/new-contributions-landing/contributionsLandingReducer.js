@@ -4,10 +4,9 @@
 
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
-import { type PaymentHandler } from 'helpers/checkouts';
-import { amounts, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
+import { amounts, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
-import visitToken from 'helpers/visitToken/reducer';
+import sessionId from 'helpers/sessionId/reducer';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
@@ -15,7 +14,8 @@ import { createUserReducer, type User as UserState } from 'helpers/user/userRedu
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type VisitToken as VisitTokenState } from 'helpers/visitToken/reducer';
+import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
+import * as storage from 'helpers/storage';
 
 import { type Action } from './contributionsLandingActions';
 
@@ -52,10 +52,7 @@ type SetPasswordData = {
 type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
-  paymentReady: boolean,
-  paymentHandlers: {
-    [PaymentMethod]: PaymentHandler | null
-  },
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
@@ -72,7 +69,7 @@ type PageState = {
   user: UserState,
   csrf: CsrfState,
   directDebit: DirectDebitState,
-  visitToken: VisitTokenState,
+  sessionId: SessionIdState,
 };
 
 export type State = {
@@ -100,17 +97,23 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   const initialState: FormState = {
     contributionType: 'MONTHLY',
     paymentMethod: 'None',
-    paymentHandlers: {
-      Stripe: null,
-      DirectDebit: null,
-      PayPal: null,
-      None: null,
+    thirdPartyPaymentLibraries: {
+      ONE_OFF: {
+        Stripe: {},
+      },
+      MONTHLY: {
+        Stripe: {},
+        PayPal: {},
+      },
+      ANNUAL: {
+        Stripe: {},
+        PayPal: {},
+      },
     },
-    paymentReady: false,
     formData: {
       firstName: null,
       lastName: null,
-      email: null,
+      email: storage.getSession('email') || null,
       otherAmounts: {
         ONE_OFF: { amount: null },
         MONTHLY: { amount: null },
@@ -148,13 +151,23 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'UPDATE_PAYMENT_READY':
-        return action.paymentHandlers
-          ? {
-            ...state,
-            paymentReady: action.paymentReady,
-            paymentHandlers: { ...state.paymentHandlers, ...action.paymentHandlers },
-          }
-          : { ...state, paymentReady: action.paymentReady };
+        return {
+          ...state,
+          thirdPartyPaymentLibraries: {
+            ONE_OFF: {
+              ...state.thirdPartyPaymentLibraries.ONE_OFF,
+              ...action.thirdPartyPaymentLibraryByContrib.ONE_OFF,
+            },
+            MONTHLY: {
+              ...state.thirdPartyPaymentLibraries.MONTHLY,
+              ...action.thirdPartyPaymentLibraryByContrib.MONTHLY,
+            },
+            ANNUAL: {
+              ...state.thirdPartyPaymentLibraries.ANNUAL,
+              ...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
+            },
+          },
+        };
 
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };
@@ -238,7 +251,7 @@ function initReducer(countryGroupId: CountryGroupId) {
     user: createUserReducer(countryGroupId),
     directDebit,
     csrf,
-    visitToken,
+    sessionId,
   });
 }
 

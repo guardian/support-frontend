@@ -8,12 +8,13 @@ import cats.data.EitherT
 import cats.implicits._
 import RegularContributionsClient._
 import com.gu.support.workers.model._
-import io.circe.generic.semiauto.{deriveDecoder}
-import io.circe.{Decoder}
+import io.circe.generic.semiauto.deriveDecoder
+import io.circe.Decoder
 import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
+import com.gu.support.workers.model.AccessScope.SessionId
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
 import play.api.mvc.Call
@@ -36,8 +37,11 @@ case class CreateRegularContributorRequest(
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
     supportAbTests: Set[AbTest],
-    email: String
-)
+    email: String,
+    sessionId: Option[String]
+) {
+  def maybeSessionId: Option[SessionId] = sessionId.filter(_.length > 0).map(SessionId.apply)
+}
 
 object RegularContributionsClient {
   sealed trait RegularContributionError
@@ -74,7 +78,12 @@ class RegularContributionsClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
-  def createContributor(request: CreateRegularContributorRequest, user: User, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
+  def createContributor(
+    request: CreateRegularContributorRequest,
+    user: User,
+    requestId: UUID,
+    accessScope: AccessScope
+  ): EitherT[Future, RegularContributionError, StatusResponse] = {
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
@@ -84,7 +93,8 @@ class RegularContributionsClient(
         ophanIds = request.ophanIds,
         referrerAcquisitionData = request.referrerAcquisitionData,
         supportAbTests = request.supportAbTests
-      ))
+      )),
+      sessionId = accessScope.toOption
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>

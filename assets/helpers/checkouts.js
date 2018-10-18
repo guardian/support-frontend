@@ -17,7 +17,7 @@ export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe';
 
 type StripeHandler = { open: Function, close: Function };
 
-export type PaymentHandler = StripeHandler;
+export type ThirdPartyPaymentLibrary = StripeHandler;
 
 // ----- Functions ----- //
 
