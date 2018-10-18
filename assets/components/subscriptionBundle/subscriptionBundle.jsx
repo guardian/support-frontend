@@ -14,6 +14,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import type { HeadingSize } from 'components/heading/heading';
 import type { ListItem } from 'components/featureList/featureList';
 import type { GridImg } from 'components/gridImage/gridImage';
+import type { Node } from 'react';
 
 
 // ----- Props ----- //
@@ -31,13 +32,13 @@ type Benefits = {
   benefits: ListItem[],
 } | {
   list: false,
-  copy: string,
+  copy: Node,
 };
 
 type PropTypes = {
   modifierClass?: string,
   heading: string,
-  subheading: string,
+  subheading: Node,
   benefits: Benefits,
   gridImage: GridImg,
   headingSize: HeadingSize,

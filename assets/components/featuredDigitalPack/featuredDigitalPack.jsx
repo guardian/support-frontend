@@ -8,7 +8,7 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
 import SvgCircle from 'components/svgs/circle';
-import { inOfferPeriod } from 'helpers/flashSale';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 import {
   displayPrice,
@@ -34,16 +34,16 @@ type Copy = {
 }
 
 function getCopy(country: CountryGroupId): Copy {
-  if (inOfferPeriod('DigitalPack')) {
+  if (flashSaleIsActive('DigitalPack')) {
     return {
-      heading: 'Digital pack sale',
+      heading: 'Digital Pack sale',
       subHeading: 'Save 50% for three months',
       description: 'Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. £5.99 for your first three months.',
     };
   }
   return {
-    heading: 'Digital pack 14-day free trial',
-    subHeading: 'What\'s in the Digital pack?',
+    heading: 'Digital Pack 14-day free trial',
+    subHeading: 'What\'s in the Digital Pack?',
     description: 'Read the Guardian ad-free on all devices plus get all the\n' +
     'benefits of the Premium App and Daily Edition iPad app for\n' +
     `just ${displayPrice('DigitalPack', country)}`,

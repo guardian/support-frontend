@@ -7,7 +7,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
-import { getDiscountedPrice } from './flashSale';
 
 
 // ----- Types ------ //
@@ -79,9 +78,7 @@ const defaultBillingPeriods: {
 // ----- Functions ----- //
 
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  const price = subscriptionPrices[product][countryGroupId];
-  const discounted = getDiscountedPrice(product, price);
-  return Number.isInteger(discounted) ? discounted.toString() : discounted.toFixed(2);
+  return subscriptionPrices[product][countryGroupId].toFixed(2);
 }
 
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {

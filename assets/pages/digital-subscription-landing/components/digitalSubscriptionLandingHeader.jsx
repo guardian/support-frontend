@@ -14,11 +14,10 @@ import GridPicture, {
 import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
+import { displayPrice } from 'helpers/subscriptions';
+import { flashSaleIsActive } from 'helpers/flashSale';
 import CtaSwitch from './ctaSwitch';
-
-import { getPageTitle } from '../helpers/promotions';
-
+import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
 // ----- Types ----- //
 
@@ -131,6 +130,22 @@ function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
 }
 
+function getFlashSaleTitle(country: CountryGroupId): string {
+  if (country === 'GBPCountries') {
+    return `£5.99 for three months, then ${displayPrice('DigitalPack', country)}`;
+  }
+  return `Save 50% for three months, then ${displayPrice('DigitalPack', country)}`;
+}
+
+function getPageTitle(country: CountryGroupId): string {
+  if (showUpgradeMessage()) {
+    return 'Upgrade your subscription to Paper+Digital now';
+  }
+  if (flashSaleIsActive('DigitalPack')) {
+    return getFlashSaleTitle(country);
+  }
+  return `14-day free trial and then ${displayPrice('DigitalPack', country)}`;
+}
 
 // ----- Component ----- //
 
