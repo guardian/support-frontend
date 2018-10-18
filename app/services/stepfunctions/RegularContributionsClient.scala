@@ -14,7 +14,7 @@ import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
-import com.gu.support.workers.model.AccessScope.ScopeToken
+import com.gu.support.workers.model.AccessScope.SessionId
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
 import play.api.mvc.Call
@@ -38,9 +38,9 @@ case class CreateRegularContributorRequest(
     referrerAcquisitionData: ReferrerAcquisitionData,
     supportAbTests: Set[AbTest],
     email: String,
-    scopeToken: Option[String]
+    sessionId: Option[String]
 ) {
-  def maybeScopeToken: Option[ScopeToken] = scopeToken.filter(_.length > 0).map(ScopeToken.apply)
+  def maybeSessionId: Option[SessionId] = sessionId.filter(_.length > 0).map(SessionId.apply)
 }
 
 object RegularContributionsClient {
@@ -93,7 +93,7 @@ class RegularContributionsClient(
         referrerAcquisitionData = request.referrerAcquisitionData,
         supportAbTests = request.supportAbTests
       )),
-      scopeToken = accessScope.toOption
+      sessionId = accessScope.toOption
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
