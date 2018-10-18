@@ -44,7 +44,7 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibrary: ?{ [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
+  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [Contrib]: {[PaymentMethod]: ThirdPartyPaymentLibrary}} }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -100,10 +100,15 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
-const setThirdPartyPaymentLibrary = (
-  thirdPartyPaymentLibrary: ?{ [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary }},
-): Action =>
-  ({ type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibrary: thirdPartyPaymentLibrary || null });
+const setThirdPartyPaymentLibrary =
+  (thirdPartyPaymentLibraryByContrib: {
+    [Contrib]: {
+      [PaymentMethod]: ThirdPartyPaymentLibrary
+    }
+  }): Action => ({
+    type: 'UPDATE_PAYMENT_READY',
+    thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
+  });
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 

@@ -30,9 +30,9 @@ function selectDefaultPaymentMethod(state: State, dispatch: Dispatch<Action>) {
 }
 
 function initialiseStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser, dispatch) {
-
   setupStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser)
-    .then((handler: ThirdPartyPaymentLibrary) => dispatch(setThirdPartyPaymentLibrary(true, { [contributionType]: { Stripe: handler } })));
+    .then((handler: ThirdPartyPaymentLibrary) =>
+      dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: handler } })));
 }
 
 function initialisePaymentMethods(state: State, dispatch: Function) {
@@ -46,12 +46,13 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
   };
 
   ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
-    getValidPaymentMethods(contribType, switches, countryId).forEach((paymentMethod) => {
-      if (paymentMethod === 'Stripe') {
-        initialiseStripeCheckout(onPaymentAuthorisation, contribType, currencyId, !!isTestUser, dispatch);
-      }
-    });
+    const validPayments = getValidPaymentMethods(contribType, switches, countryId);
+    if (validPayments.includes('Stripe')) {
+      initialiseStripeCheckout(onPaymentAuthorisation, contribType, currencyId, !!isTestUser, dispatch);
+    }
   });
+
+  loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 }
 
 const init = (store: Store<State, Action, Dispatch<Action>>) => {
@@ -61,11 +62,8 @@ const init = (store: Store<State, Action, Dispatch<Action>>) => {
   selectDefaultPaymentMethod(state, dispatch);
   initialisePaymentMethods(state, dispatch);
 
-  loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
-
   const { firstName, lastName, email } = state.page.user;
   dispatch(updateUserFormData({ firstName, lastName, email }));
-
 
 };
 

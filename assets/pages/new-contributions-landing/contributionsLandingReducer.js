@@ -4,7 +4,7 @@
 
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
-import { amounts, type Amount, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
+import { amounts, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import visitToken from 'helpers/visitToken/reducer';
 import { type CommonState } from 'helpers/page/page';
@@ -51,8 +51,7 @@ type SetPasswordData = {
 type FormState = {
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
-  paymentReady: boolean,
-  thirdPartyPaymentLibraries: PaymentMatrix<Object>,
+  thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   selectedAmounts: { [Contrib]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
@@ -100,24 +99,16 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
         Stripe: {},
-        DirectDebit: {},
-        PayPal: {},
-        None: {},
       },
       MONTHLY: {
         Stripe: {},
-        DirectDebit: {},
         PayPal: {},
-        None: {},
       },
       ANNUAL: {
         Stripe: {},
-        DirectDebit: {},
         PayPal: {},
-        None: {},
       },
     },
-    paymentReady: false,
     formData: {
       firstName: null,
       lastName: null,
@@ -159,17 +150,23 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, paymentMethod: action.paymentMethod };
 
       case 'UPDATE_PAYMENT_READY':
-        return action.thirdPartyPaymentLibraries
-          ? {
-            ...state,
-            paymentReady: action.paymentReady,
-            thirdPartyPaymentLibraries: {
-              ONE_OFF: {...state.thirdPartyPaymentLibraries.ONE_OFF, ...action.thirdPartyPaymentLibraries.ONE_OFF},
-              MONTHLY: {...state.thirdPartyPaymentLibraries.MONTHLY, ...action.thirdPartyPaymentLibraries.MONTHLY},
-              ANNUAL: {...state.thirdPartyPaymentLibraries.ANNUAL, ...action.thirdPartyPaymentLibraries.ANNUAL},
-            }
-          }
-          : { ...state, paymentReady: action.paymentReady };
+        return {
+          ...state,
+          thirdPartyPaymentLibraries: {
+            ONE_OFF: {
+              ...state.thirdPartyPaymentLibraries.ONE_OFF,
+              ...action.thirdPartyPaymentLibraryByContrib.ONE_OFF,
+            },
+            MONTHLY: {
+              ...state.thirdPartyPaymentLibraries.MONTHLY,
+              ...action.thirdPartyPaymentLibraryByContrib.MONTHLY,
+            },
+            ANNUAL: {
+              ...state.thirdPartyPaymentLibraries.ANNUAL,
+              ...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
+            },
+          },
+        };
 
       case 'UPDATE_FIRST_NAME':
         return { ...state, formData: { ...state.formData, firstName: action.firstName } };
