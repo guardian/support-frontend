@@ -18,6 +18,8 @@ import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
 import * as storage from 'helpers/storage';
 
 import { type Action } from './contributionsLandingActions';
+import type { State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
+import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 
 // ----- Types ----- //
 
@@ -70,6 +72,7 @@ type PageState = {
   csrf: CsrfState,
   directDebit: DirectDebitState,
   sessionId: SessionIdState,
+  marketingConsent: MarketingConsentState,
 };
 
 export type State = {
@@ -252,6 +255,7 @@ function initReducer(countryGroupId: CountryGroupId) {
     directDebit,
     csrf,
     sessionId,
+    marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
 }
 

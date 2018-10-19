@@ -9,8 +9,7 @@ import { type Contrib, getSpokenType } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-import SvgSubscribe from 'components/svgs/subscribe';
-import SvgNewsletters from 'components/svgs/newsletters';
+import MarketingConsent from '../components/marketingConsent';
 
 // ----- Types ----- //
 
@@ -39,19 +38,7 @@ function ContributionThankYou(props: PropTypes) {
         </section>
       ) : null}
 
-      <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
-        <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
-        <p>
-          Get related news and offers – whether you are a subscriber, member,
-          contributor or would like to become one.
-        </p>
-        <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
-          <SvgSubscribe />
-          Sign me up
-        </a>
-        <p className="confirmation__meta"><small>You can stop these at any time.</small></p>
-        <SvgNewsletters />
-      </section>
+      <MarketingConsent />
 
       <div className={classNameWithModifiers('confirmation', ['backtothegu'])}>
         <a className={classNameWithModifiers('button', ['wob'])} href="https://www.theguardian.com">

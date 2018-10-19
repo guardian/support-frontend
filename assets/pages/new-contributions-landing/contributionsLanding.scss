@@ -903,10 +903,24 @@ form {
 }
 
 .button--newsletter {
-  color: #29a05f;
+  color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(green-dark);
+
+  &:enabled {
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(90%);
+    }
+  }
 }
 
-.button--newsletter .svg-subscribe {
+.button--newsletter__subscribed {
+  color: gu-colour(green-dark);
+  background-color: transparent;
+}
+
+.button--newsletter .svg-subscribe, .button--newsletter .svg-subscribed {
   margin-right: 10px;
 }
 
