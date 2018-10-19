@@ -1,6 +1,6 @@
 .component-heading-block {
   background-color: gu-colour(garnett-neutral-1);
-  color: #fff;
+  color: gu-colour(news-garnett-highlight);
 }
 
 .component-heading-block__heading {
@@ -8,28 +8,21 @@
   font-family: $gu-headline;
   font-weight: bold;
   line-height: 1.12;
-  padding: 0 ($gu-h-spacing / 2) ($gu-v-spacing * 2);
-
-  @include mq($from: mobileMedium) {
-    width: 350px;
-  }
+  padding: 8px ($gu-h-spacing / 2) $gu-v-spacing;
 
   @include mq($from: tablet) {
     font-size: 32px;
-    width: 500px;
   }
 
   @include mq($from: desktop) {
-    font-size: 36px;
+    font-size: 42px;
   }
 }
 
 .component-heading-block__banner {
-  border-top: 1px solid gu-colour(sport-garnett-media-main-1);
-  padding: 4px ($gu-h-spacing / 2) 8px;
-  vertical-align: middle;
-  font-size: 14px;
+  border-top: 1px solid #fff;
+  padding: 8px ($gu-h-spacing / 2) $gu-v-spacing;
+  font-size: 16px;
   line-height: 1;
   font-family: $gu-headline;
-  font-style: italic;
 }
