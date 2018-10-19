@@ -556,7 +556,7 @@ form {
 .form__radio-group-list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 12px 0 0 0;
 }
 
 .form__radio-group-input {
@@ -625,8 +625,7 @@ form {
 .form__radio-group--buttons .form__radio-group-label {
   align-items: center;
   display: flex;
-  margin-bottom: 8px;
-  padding: 9px 0;
+  padding: 6px 0;
 }
 
 .form__radio-group--buttons .form__radio-group-input:checked + .form__radio-group-label {
