@@ -43,15 +43,15 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     FutureHandlerResult(getEmailState(state, subscription.accountNumber), requestInfo.appendMessage(message))
   }
 
-  def mapHead[A, B](f: SubscribeRequest => Future[List[B]]): SubscribeItem => Future[B] = { subscribeItem =>
-    f(SubscribeRequest(List(subscribeItem))) flatMap {
-      case b :: Nil => Future.successful(b)
-      case other => Future.failed(new RuntimeException(s"didn't get a single response item, got: $other"))
+  def singleSubscribe[RESULT](multiSubscribe: SubscribeRequest => Future[List[RESULT]]): SubscribeItem => Future[RESULT] = { subscribeItem =>
+    multiSubscribe(SubscribeRequest(List(subscribeItem))) flatMap {
+      case result :: Nil => Future.successful(result)
+      case results => Future.failed(new RuntimeException(s"didn't get a single response item, got: $results"))
     }
   }
 
   def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
-    mapHead(services.zuoraService.subscribe)(buildSubscribeRequest(state))
+    singleSubscribe(services.zuoraService.subscribe)(buildSubscribeRequest(state))
       .map(response =>
         HandlerResult(getEmailState(state, response.domainAccountNumber), requestInfo))
 
