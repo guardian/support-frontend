@@ -98,7 +98,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   // ----- Initial state ----- //
 
   const initialState: FormState = {
-    contributionType: 'ONE_OFF',
+    contributionType: 'MONTHLY',
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
