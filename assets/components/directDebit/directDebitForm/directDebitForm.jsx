@@ -215,7 +215,7 @@ function AccountHolderNameInput(props: {phase: Phase, value: string, onChange: F
   return (
     <div className="component-direct-debit-form__account-holder-name">
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
-        Name
+        Account name
       </label>
       {props.phase === 'entry' ? editable : locked}
     </div>
