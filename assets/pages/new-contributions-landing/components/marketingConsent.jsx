@@ -54,7 +54,11 @@ function MarketingConsent(props: PropTypes) {
         contributor or would like to become one.
       </p>
 
-      {props.confirmOptIn === null ?
+      {props.confirmOptIn === true ?
+        <button disabled="disabled" className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}>
+          <SvgSubscribed />
+          Signed up
+        </button> :
         <button
           className={classNameWithModifiers('button', ['newsletter'])}
           onClick={
@@ -63,10 +67,6 @@ function MarketingConsent(props: PropTypes) {
         >
           <SvgSubscribe />
           Sign me up
-        </button> :
-        <button disabled="disabled" className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}>
-          <SvgSubscribed />
-          Signed up
         </button>
       }
 
