@@ -18,8 +18,8 @@ import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
 import * as storage from 'helpers/storage';
 
 import { type Action } from './contributionsLandingActions';
-import type {State as MarketingConsentState} from "../../components/marketingConsent/marketingConsentReducer";
-import {marketingConsentReducerFor} from "../../components/marketingConsent/marketingConsentReducer";
+import type { State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
+import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 
 // ----- Types ----- //
 

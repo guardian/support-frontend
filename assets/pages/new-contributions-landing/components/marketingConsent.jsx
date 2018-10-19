@@ -3,16 +3,16 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
 import SvgNewsletters from 'components/svgs/newsletters';
-import type {Dispatch} from "redux";
-import type {Action} from "../../../helpers/user/userActions";
-import type {Csrf as CsrfState} from "../../../helpers/csrf/csrfReducer";
-import {sendMarketingPreferencesToIdentity} from "../../../components/marketingConsent/helpers";
-import connect from "react-redux/es/connect/connect";
+import type { Dispatch } from 'redux';
+import type { Action } from '../../../helpers/user/userActions';
+import type { Csrf as CsrfState } from '../../../helpers/csrf/csrfReducer';
+import { sendMarketingPreferencesToIdentity } from '../../../components/marketingConsent/helpers';
 
 // ----- Types ----- //
 
@@ -55,16 +55,17 @@ function MarketingConsent(props: PropTypes) {
       </p>
 
       {props.confirmOptIn === null ?
-        <button className={classNameWithModifiers('button', ['newsletter'])}
+        <button
+          className={classNameWithModifiers('button', ['newsletter'])}
           onClick={
             () => props.onClick(props.email, props.csrf)
           }
         >
-          <SvgSubscribe/>
+          <SvgSubscribe />
           Sign me up
         </button> :
-        <button disabled='disabled' className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}>
-          <SvgSubscribed/>
+        <button disabled="disabled" className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}>
+          <SvgSubscribed />
           Signed up
         </button>
       }
