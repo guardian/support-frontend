@@ -70,7 +70,14 @@ function MarketingConsent(props: PropTypes) {
         </button>
       }
 
-      <p className="confirmation__meta"><small>You can stop these at any time.</small></p>
+      <p className="confirmation__meta">
+        <small>
+          { props.confirmOptIn === true ?
+            'We\'ll be in touch. Check your inbox for a confirmation link.' :
+            'You can stop these at any time.'
+          }
+        </small>
+      </p>
       <SvgNewsletters />
     </section>
   );
