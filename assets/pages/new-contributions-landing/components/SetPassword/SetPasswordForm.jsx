@@ -11,12 +11,16 @@ import { setPasswordGuest } from 'helpers/paymentIntegrations/newPaymentFlow/rea
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
+import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { checkEmail, emailRegexPattern } from 'helpers/formValidation';
 
 import { NewContributionTextInput } from '../ContributionTextInput';
 import { type ThankYouPageStage } from '../../contributionsLandingReducer';
-import { setThankYouPageStage, setPasswordHasBeenSubmitted, updatePassword, type Action } from '../../contributionsLandingActions';
+import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../../contributionsLandingActions';
 import { ButtonWithRightArrow } from '../ButtonWithRightArrow';
+
+const passwordErrorHeading = 'Account set up failure';
+const passwordErrorMessage = 'Sorry, we are unable to register you at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your registration. Thank you.';
 
 // ----- Types ----- //
 
@@ -30,6 +34,8 @@ type PropTypes = {
   passwordHasBeenSubmitted: boolean,
   updatePassword: (Event) => void,
   csrf: CsrfState,
+  passwordError: boolean,
+  setPasswordError: (boolean) => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -42,6 +48,7 @@ const mapStateToProps = state => ({
   passwordHasBeenSubmitted: state.page.form.setPasswordData.passwordHasBeenSubmitted,
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
   csrf: state.page.csrf,
+  passwordError: state.page.form.setPasswordData.passwordError,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -56,6 +63,9 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
       if (event.target instanceof HTMLInputElement) {
         dispatch(updatePassword(event.target.value));
       }
+    },
+    setPasswordError: (passwordError: boolean) => {
+      dispatch(setPasswordError(passwordError));
     },
   };
 }
@@ -77,6 +87,8 @@ function onSubmit(props: PropTypes): Event => void {
       .then((response) => {
         if (response === true) {
           props.setThankYouPageStage('thankYouPasswordSet');
+        } else {
+          props.setPasswordError(true);
         }
       });
   };
@@ -134,6 +146,12 @@ function SetPasswordForm(props: PropTypes) {
           onClick={() => { props.setThankYouPageStage('thankYouPasswordDeclinedToSet'); }}
         />
       </form>
+      {props.passwordError === true ?
+        <div className="component-password-failure-message component-payment-failure-message">
+          <SvgExclamationAlternate /><span className="component-payment-failure-message__error-heading">{passwordErrorHeading}</span>
+          <span className="component-payment-failure-message__small-print">{passwordErrorMessage}</span>
+        </div> : null
+      }
     </div>
   );
 
