@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ThankYouPageStageMap, type ThankYouPageStage } from '../contributionsLandingReducer';
@@ -14,24 +15,26 @@ import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   thankYouPageStage: ThankYouPageStage,
+  paymentMethod: PaymentMethod,
 };
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
+  paymentMethod: state.page.form.paymentMethod,
 });
-
-// TODO: change landing page copy if password has/hasn't been set
-const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
-  setPassword: (<SetPassword />),
-  thankYou: (<ContributionThankYou />),
-  thankYouPasswordSet: (<ContributionThankYouPasswordSet />),
-};
-
 
 // ----- Render ----- //
 
 function ContributionThankYouContainer(props: PropTypes) {
+
+  const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
+    setPassword: (<SetPassword />),
+    thankYou: (<ContributionThankYou showDirectDebitCopy={props.paymentMethod === 'DirectDebit'} />),
+    thankYouPasswordDeclinedToSet: (<ContributionThankYou showDirectDebitCopy={false} />),
+    thankYouPasswordSet: (<ContributionThankYouPasswordSet />),
+  };
+
 
   return (
     <div className="gu-content__content">

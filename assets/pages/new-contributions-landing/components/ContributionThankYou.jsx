@@ -14,6 +14,7 @@ import { ButtonWithRightArrow } from '../components/ButtonWithRightArrow';
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   contributionType: Contrib,
+  showDirectDebitCopy: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -21,17 +22,29 @@ const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
 });
 
+
 // ----- Render ----- //
 
 function ContributionThankYou(props: PropTypes) {
+
+  const directDebitHeaderSuffix =
+    props.showDirectDebitCopy
+      ? 'Your Direct Debit has been set up.'
+      : '';
+
+  const directDebitMessageSuffix =
+    props.showDirectDebitCopy
+      ? 'This will appear as \'Guardian Media Group\' on your bank statements'
+      : '';
+
   return (
     <div className="thank-you__container">
-      <h1 className="header">Thank you for a valuable contribution</h1>
+      <h1 className="header">{`Thank you for a valuable contribution. ${directDebitHeaderSuffix}`}</h1>
 
       {props.contributionType !== 'ONE_OFF' ? (
         <section className="confirmation">
           <p className="confirmation__message">
-            Look out for an email confirming your {getSpokenType(props.contributionType)} recurring payment.
+            {`Look out for an email confirming your ${getSpokenType(props.contributionType)} recurring payment. ${directDebitMessageSuffix}`}
           </p>
         </section>
       ) : null}

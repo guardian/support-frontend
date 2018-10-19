@@ -131,7 +131,7 @@ function SetPasswordForm(props: PropTypes) {
           accessibilityHintId="accessibility-hint-no-thanks"
           type="button"
           buttonCopy="No, thank you"
-          onClick={() => { props.setThankYouPageStage('thankYou'); }}
+          onClick={() => { props.setThankYouPageStage('thankYouPasswordDeclinedToSet'); }}
         />
       </form>
     </div>

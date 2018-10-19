@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { classNameWithModifiers } from 'helpers/utilities';
 import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -29,13 +28,13 @@ function SetPassword(props: PropTypes) {
   if (props.paymentMethod === 'DirectDebit') {
     return (
       <div className="set-password__content">
-        <h1 className="header">Thank you for a valuable contribution. Your Direct Debit has been set up</h1>
-        <section className={classNameWithModifiers('confirmation__message', ['direct-debit'])}>
-          <p>{'Look out for an email confirming you montcty recurring payment. This will appear as \'Guardian Media Group\' on your bank statements'}</p>
+        <h1 className="header">Thank you for a valuable contribution. Your Direct Debit has been set up.</h1>
+        <section className="confirmation">
+          <p className="confirmation__message">{'Look out for an email confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements.'}</p>
         </section>
         <section className="set-password">
-          <h3 className="confirmation__title">Set up a free account to manage your payments</h3>
-          <p>
+          <h3 className="set-password__title">Set up a free account to manage your payments</h3>
+          <p className="set-password__message">
             As a contributor, being signed in means you will no longer see the “Since you’re here …” messages asking you
             to support our journalism.
           </p>

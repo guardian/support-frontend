@@ -33,6 +33,7 @@ export type ThankYouPageStageMap<T> = {
   setPassword: T,
   thankYou: T,
   thankYouPasswordSet: T,
+  thankYouPasswordDeclinedToSet: T,
 }
 
 export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
