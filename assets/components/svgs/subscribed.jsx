@@ -18,7 +18,7 @@ export default function SvgSubscribed() {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M1.11252 8.87163L0 10.0127L5.56258 18H6.09102L22 1.11252L20.8875 0L6.09102 13.7496L1.11252 8.87163Z"
-        fill="#2D8530"
+        fill="#236925"
       />
     </svg>
   );

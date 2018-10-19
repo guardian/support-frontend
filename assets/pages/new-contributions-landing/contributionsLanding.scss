@@ -904,19 +904,19 @@ form {
 
 .button--newsletter {
   color: gu-colour(garnett-neutral-5);
-  background-color: #22834D;
+  background-color: gu-colour(green-dark);
 
   &:enabled {
     cursor: pointer;
 
     &:hover {
-      background-color: #206B44;
+      filter: brightness(90%);
     }
   }
 }
 
 .button--newsletter__subscribed {
-  color: #22834D;
+  color: gu-colour(green-dark);
   background-color: transparent;
 }
 
