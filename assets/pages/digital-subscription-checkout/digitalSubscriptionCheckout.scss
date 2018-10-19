@@ -47,7 +47,7 @@
     .component-cta-link {
       background-color: transparent;
       border: 1px solid gu-colour(garnett-neutral-1);
-      height: $cta-height;
+      height: $cta-height - 2;
       box-sizing: border-box;
       line-height: $cta-height - 2;
       color: gu-colour(garnett-neutral-1);
