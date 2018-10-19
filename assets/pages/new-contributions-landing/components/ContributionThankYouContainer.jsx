@@ -4,9 +4,10 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { type ThankYouPageStage } from '../contributionsLandingReducer';
+import { type ThankYouPageStageMap, type ThankYouPageStage } from '../contributionsLandingReducer';
 import ContributionThankYou from './ContributionThankYou';
 import SetPassword from './SetPassword/SetPassword';
+import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';
 
 // ----- Types ----- //
 
@@ -18,10 +19,14 @@ type PropTypes = {
 
 const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
-  passwordHasBeenSet: state.page.form.setPasswordData,
-  paymentMethod: state.page.form.paymentMethod,
 });
 
+// TODO: change landing page copy if password has/hasn't been set
+const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
+  setPassword: (<SetPassword />),
+  thankYou: (<ContributionThankYou />),
+  thankYouPasswordSet: (<ContributionThankYouPasswordSet />),
+};
 
 
 // ----- Render ----- //
@@ -30,7 +35,7 @@ function ContributionThankYouContainer(props: PropTypes) {
 
   return (
     <div className="gu-content__content">
-      {props.thankYouPageStage === 'setPassword' ? <SetPassword /> : <ContributionThankYou />}
+      {thankYouPageStage[props.thankYouPageStage]}
     </div>
   );
 }

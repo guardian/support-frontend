@@ -37,7 +37,6 @@ import {
   type State,
   type UserFormData,
   type ThankYouPageStage,
-  type PasswordHasBeenSetState
 } from './contributionsLandingReducer';
 
 export type Action =
@@ -60,7 +59,6 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
-  | { type: 'SET_PASSWORD_HAS_BEEN_SET', passwordHasBeenSetState: PasswordHasBeenSetState}
   | { type: 'PAYMENT_SUCCESS' };
 
 
@@ -96,9 +94,6 @@ const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Acti
 const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' });
 
 const setPasswordHasBeenSubmitted = (): Action => ({ type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' });
-
-const setPasswordHasBeenSet = (passwordHasBeenSetState: PasswordHasBeenSetState): Action =>
-  ({ type: 'SET_PASSWORD_HAS_BEEN_SET', passwordHasBeenSetState });
 
 const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
 
@@ -358,7 +353,6 @@ export {
   setGuestAccountCreationToken,
   setThankYouPageStage,
   setPasswordHasBeenSubmitted,
-  setPasswordHasBeenSet,
   updatePassword,
   createOneOffPayPalPayment,
   setPayPalHasLoaded,

@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 
-import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { setPasswordGuest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
@@ -15,8 +14,8 @@ import SvgEnvelope from 'components/svgs/envelope';
 import { checkEmail, emailRegexPattern } from 'helpers/formValidation';
 
 import { NewContributionTextInput } from '../ContributionTextInput';
-import { type ThankYouPageStage, type PasswordHasBeenSetState } from '../../contributionsLandingReducer';
-import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordHasBeenSet, updatePassword, type Action } from '../../contributionsLandingActions';
+import { type ThankYouPageStage } from '../../contributionsLandingReducer';
+import { setThankYouPageStage, setPasswordHasBeenSubmitted, updatePassword, type Action } from '../../contributionsLandingActions';
 import { ButtonWithRightArrow } from '../ButtonWithRightArrow';
 
 // ----- Types ----- //
@@ -28,7 +27,6 @@ type PropTypes = {
   guestAccountCreationToken: string,
   setThankYouPageStage: (ThankYouPageStage) => void,
   setPasswordHasBeenSubmitted: () => void,
-  setPasswordHasBeenSet: (PasswordHasBeenSetState) => void,
   passwordHasBeenSubmitted: boolean,
   updatePassword: (Event) => void,
   csrf: CsrfState,
@@ -54,9 +52,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     setPasswordHasBeenSubmitted: () => {
       dispatch(setPasswordHasBeenSubmitted());
     },
-    setPasswordHasBeenSet: (passwordHasBeenSetState: PasswordHasBeenSetState) => {
-      dispatch(setPasswordHasBeenSet(passwordHasBeenSetState));
-    },
     updatePassword: (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
         dispatch(updatePassword(event.target.value));
@@ -81,8 +76,7 @@ function onSubmit(props: PropTypes): Event => void {
     setPasswordGuest(props.password, props.guestAccountCreationToken, props.csrf)
       .then((response) => {
         if (response === true) {
-          props.setPasswordHasBeenSet('set');
-          props.setThankYouPageStage('thankYou');
+          props.setThankYouPageStage('thankYouPasswordSet');
         }
       });
   };
@@ -137,10 +131,7 @@ function SetPasswordForm(props: PropTypes) {
           accessibilityHintId="accessibility-hint-no-thanks"
           type="button"
           buttonCopy="No, thank you"
-          onClick={() => {
-            props.setPasswordHasBeenSet('declinedToSet');
-            props.setThankYouPageStage('thankYou');
-          }}
+          onClick={() => { props.setThankYouPageStage('thankYou'); }}
         />
       </form>
     </div>

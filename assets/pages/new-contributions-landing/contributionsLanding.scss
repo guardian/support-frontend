@@ -863,6 +863,14 @@ form {
   margin: ($gu-v-spacing / 2) 0 $gu-v-spacing;
 }
 
+.confirmation__message--direct-debit {
+  margin: 0 -10px;
+  padding: 0 10px $gu-v-spacing;
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+}
+
+
+
 .confirmation p {
   margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
 }
