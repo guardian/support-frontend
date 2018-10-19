@@ -4,10 +4,8 @@
 
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
-
-import SvgArrowRight from 'components/svgs/arrowRightStraight';
-import SvgSubscribe from 'components/svgs/subscribe';
-import SvgNewsletters from 'components/svgs/newsletters';
+import MarketingConsent from '../components/MarketingConsent';
+import { ButtonWithRightArrow } from '../components/ButtonWithRightArrow';
 
 // ----- Render ----- //
 
@@ -21,28 +19,15 @@ function ContributionThankYouPasswordSet() {
           preferences.
         </p>
       </section>
-      <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
-        <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
-        <p>
-          Get related news and offers – whether you are a subscriber, member,
-          contributor or would like to become one.
-        </p>
-        <a className={classNameWithModifiers('button', ['newsletter'])} href="/subscribe">
-          <SvgSubscribe />
-          Sign me up
-        </a>
-        <p className="confirmation__meta">
-          <small>You can stop these at any time.</small>
-        </p>
-        <SvgNewsletters />
-      </section>
-
-      <div className={classNameWithModifiers('confirmation', ['backtothegu'])}>
-        <a className={classNameWithModifiers('button', ['wob'])} href="https://www.theguardian.com">
-          Return to The Guardian&nbsp;
-          <SvgArrowRight />
-        </a>
-      </div>
+      <MarketingConsent />
+      <ButtonWithRightArrow
+        componentClassName={classNameWithModifiers('confirmation', ['backtothegu'])}
+        buttonClassName={classNameWithModifiers('button', ['wob'])}
+        accessibilityHintId="accessibility-hint-return-to-guardian"
+        type="button"
+        href="https://www.theguardian.com"
+        buttonCopy="Return to The Guardian&nbsp;"
+      />
     </div>
   );
 }
