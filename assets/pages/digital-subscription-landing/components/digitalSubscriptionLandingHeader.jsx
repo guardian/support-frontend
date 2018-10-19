@@ -130,26 +130,39 @@ function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
 }
 
-function getFlashSaleTitle(country: CountryGroupId): string {
+function getFlashSaleCopy(country: CountryGroupId) {
   if (country === 'GBPCountries') {
-    return `£5.99 for three months, then ${displayPrice('DigitalPack', country)}`;
+    return {
+      heading: 'Digital Pack Sale',
+      subHeading: `£5.99 for three months, then ${displayPrice('DigitalPack', country)}`,
+    };
   }
-  return `Save 50% for three months, then ${displayPrice('DigitalPack', country)}`;
+  return {
+    heading: 'Digital Pack Sale',
+    subHeading: `Save 50% for three months, then ${displayPrice('DigitalPack', country)}`,
+  };
 }
 
-function getPageTitle(country: CountryGroupId): string {
+function getCopy(country: CountryGroupId) {
   if (showUpgradeMessage()) {
-    return 'Upgrade your subscription to Paper+Digital now';
+    return {
+      heading: 'Digital Pack',
+      subHeading: 'Upgrade your subscription to Paper+Digital now',
+    };
   }
   if (flashSaleIsActive('DigitalPack')) {
-    return getFlashSaleTitle(country);
+    return getFlashSaleCopy(country);
   }
-  return `14-day free trial and then ${displayPrice('DigitalPack', country)}`;
+  return {
+    heading: 'Digital Pack',
+    subHeading: `14-day free trial and then ${displayPrice('DigitalPack', country)}`,
+  };
 }
 
 // ----- Component ----- //
 
 export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
+  const copy = getCopy(props.countryGroupId);
   return (
     <div className="digital-subscription-landing-header">
       <LeftMarginSection modifierClasses={['header-block', 'grey']}>
@@ -160,11 +173,11 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         </div>
         <div className="digital-subscription-landing-header__wrapper">
           <h1 className="digital-subscription-landing-header__product">
-            Digital Pack
+            {copy.heading}
           </h1>
           <div className="digital-subscription-landing-header__title">
             <p className="digital-subscription-landing-header__title-copy">
-              {getPageTitle(props.countryGroupId)}
+              {copy.subHeading}
             </p>
           </div>
         </div>

@@ -36,7 +36,7 @@ type Copy = {
 function getCopy(country: CountryGroupId): Copy {
   if (flashSaleIsActive('DigitalPack')) {
     return {
-      heading: 'Digital Pack sale',
+      heading: 'Digital Pack Sale',
       subHeading: 'Save 50% for three months',
       description: 'Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. £5.99 for your first three months.',
     };

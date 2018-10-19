@@ -23,7 +23,7 @@ function getFlashSaleCopy(countryGroupId: CountryGroupId) {
       description:
       // eslint-disable-next-line react/jsx-indent
         <span>Ad-free reading on all devices, including the Premium App and Daily Edition iPad app.
-          <strong>Free 14 day trial, then save 50% for three months.</strong>
+          <strong> Free 14 day trial, then save 50% for three months.</strong>
         </span>,
 
     };
