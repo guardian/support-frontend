@@ -624,15 +624,12 @@ form {
 
 .form__radio-group--buttons .form__radio-group-label {
   align-items: center;
-  border: 1px solid gu-colour(neutral-4);
-  border-radius: 20px;
   display: flex;
   margin-bottom: 8px;
   padding: 9px 0;
 }
 
 .form__radio-group--buttons .form__radio-group-input:checked + .form__radio-group-label {
-  border-color: gu-colour(sport-garnett-media-main-1);
   font-weight: bold;
 }
 
