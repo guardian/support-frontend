@@ -53,8 +53,6 @@ header[role="banner"] {
 }
 
 .countryGroups {
-  background: gu-colour(garnett-neutral-5);
-  border: 1px solid gu-colour(garnett-neutral-4);
   font-family: $gu-text-sans-web;
   margin-top: $gu-v-spacing;
   max-width: 355px;
@@ -65,9 +63,7 @@ header[role="banner"] {
 // Safari doesn't respect styles applied to <summary> so we need this wrapper div
 .countryGroups__summary-wrapper {
   align-items: center;
-  color: gu-colour(garnett-neutral-2);
   display: flex;
-  fill: currentColor;
   height: 40px;
   outline: none;
   transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
@@ -75,10 +71,6 @@ header[role="banner"] {
 
 .countryGroups:not([open]) > :not(summary) {
   display: none;
-}
-
-.countryGroups__label {
-  flex: 1;
 }
 
 .countryGroups .icon {
@@ -108,11 +100,12 @@ header[role="banner"] {
 
 .countryGroups summary {
   list-style: none;
+  outline: none;
 }
 
 .countryGroups summary:hover,
 .countryGroups summary:focus {
-  box-shadow: 0 0 0 3px gu-colour(news-garnett-highlight);
+  box-shadow: none;
   color: inherit;
 }
 
@@ -124,6 +117,8 @@ header[role="banner"] {
   list-style: none;
   margin: 0;
   padding: 0;
+  background: gu-colour(garnett-neutral-5);
+  border: 1px solid gu-colour(garnett-neutral-4);
 }
 
 .countryGroups__item > a {
@@ -136,7 +131,7 @@ header[role="banner"] {
 
 .countryGroups__item > a:hover,
 .countryGroups__item > a:focus {
-  background: gu-colour(news-garnett-highlight);
+  background: gu-colour(garnett-neutral-3);
   font-weight: bold;
 }
 
@@ -283,10 +278,6 @@ header[role="banner"] {
     top: $gu-v-spacing * 2;
   }
 
-  .countryGroups__item .icon {
-    margin-left: -40px;
-  }
-
   .gu-content__content {
     border-color: gu-colour(garnett-neutral-4);
     border-style: none solid;
@@ -428,7 +419,7 @@ header[role="banner"] {
     }
 
     .countryGroups {
-      grid-column: 2 / 8;
+      grid-column: 4 / 8;
       grid-row: 1;
     }
 
