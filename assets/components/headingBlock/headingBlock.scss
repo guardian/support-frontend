@@ -10,12 +10,18 @@
   line-height: 1.12;
   padding: 8px ($gu-h-spacing / 2) $gu-v-spacing;
 
+  @include mq($from: mobileMedium) {
+    width: 350px;
+  }
+
   @include mq($from: tablet) {
     font-size: 32px;
+    width: 400px;
   }
 
   @include mq($from: desktop) {
     font-size: 42px;
+    width: 500px;
   }
 }
 

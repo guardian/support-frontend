@@ -7,14 +7,12 @@ import React, { type Node } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import CtaLink from 'components/ctaLink/ctaLink';
-import SvgSubsThankYouHeroMobile from 'components/svgs/subsThankYouHeroMobile';
-import SvgSubsThankYouHeroTablet from 'components/svgs/subsThankYouHeroTablet';
-import SvgSubsThankYouHeroDesktop from 'components/svgs/subsThankYouHeroDesktop';
 
 
 // ----- Types ----- //
 
 type PropTypes = {|
+  heading: string,
   children: Node,
 |};
 
@@ -25,15 +23,10 @@ function SubscriptionsThankYou(props: PropTypes) {
 
   return (
     <div className="component-subscriptions-thank-you">
-      <div className="component-subscriptions-thank-you__hero">
-        <SvgSubsThankYouHeroMobile />
-        <SvgSubsThankYouHeroTablet />
-        <SvgSubsThankYouHeroDesktop />
-      </div>
       <LeftMarginSection>
-        <HeadingBlock heading="Thank you for subscribing">
+        <HeadingBlock heading={props.heading}>
           <p className="component-subscriptions-thank-you__heading-banner">
-            Check your email for confirmation
+            We have sent you an email confirmation
           </p>
         </HeadingBlock>
       </LeftMarginSection>

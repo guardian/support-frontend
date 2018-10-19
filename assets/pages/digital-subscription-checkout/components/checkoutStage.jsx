@@ -42,7 +42,7 @@ function CheckoutStage(props: PropTypes) {
 
     case 'thankyou':
       return (
-        <SubscriptionsThankYou>
+        <SubscriptionsThankYou heading="Your Digital Pack Subscription is now live">
           <ThankYouContent countryGroupId={props.countryGroupId} />
         </SubscriptionsThankYou>
       );

@@ -1,22 +1,11 @@
 .component-subscriptions-thank-you {
-  .svg-subs-thank-you-hero-mobile {
-    display: block;
-    width: 480px;
-    position: relative;
-    left: calc((100vw - 480px)/2);
-
-    @include mq($from: phablet) {
-      display: none;
-    }
-  }
-
   .svg-subs-thank-you-hero-tablet {
     display: none;
     width: 980px;
     position: relative;
     left: calc((100vw - 980px)/2);
 
-    @include mq($from: phablet, $until: desktop) {
+    @include mq($from: tablet, $until: desktop) {
       display: block;
     }
   }

@@ -36,7 +36,7 @@
 
   .thank-you-content {
     .component-left-margin-section__content {
-      padding: 2px ($gu-h-spacing / 2) $gu-v-spacing * 2;
+      padding: 2px ($gu-h-spacing / 2) $gu-v-spacing;
       box-sizing: border-box;
 
       @include mq($from: tablet) {
@@ -46,7 +46,7 @@
 
     .component-cta-link {
       background-color: transparent;
-      border: 1px solid gu-colour(garnett-neutral-1);
+      border: 1px solid gu-colour(garnett-neutral-4);
       height: $cta-height - 2;
       box-sizing: border-box;
       line-height: $cta-height - 2;
@@ -59,6 +59,8 @@
 
       &:hover {
         background-color: gu-colour(garnett-neutral-1);
+        border-color: gu-colour(garnett-neutral-1);
+        transition: border-color .3s;
         color: #fff;
 
         .svg-arrow-right-straight {
@@ -74,7 +76,7 @@
     }
   }
 
-  .component-left-margin-section--thank-you-emails {
+  .component-left-margin-section--thank-you-apps, .component-left-margin-section--thank-you-emails {
     .component-left-margin-section__content {
       border-top: 1px solid gu-colour(garnett-neutral-4);
     }
@@ -96,6 +98,22 @@
     }
   }
 
+  .thank-you-content__subheading {
+    font-size: 20px;
+    line-height: 1.18;
+    font-weight: 300;
+    font-family: $gu-headline;
+    margin: ($gu-v-spacing * 2) 0 $gu-v-spacing;
+
+    @include mq($from: tablet) {
+      font-size: 22px;
+    }
+
+    @include mq($from: desktop) {
+      font-size: 28px;
+    }
+  }
+
   .thank-you-content__copy {
     font-size: 16px;
     line-height: 1.25;
@@ -106,6 +124,11 @@
     @include mq($from: phablet) {
       width: 560px;
     }
+  }
+
+  .thank-you-content__copy--free-trial {
+    font-style: italic;
+    margin: 0;
   }
 
   .thank-you-content__strong {
