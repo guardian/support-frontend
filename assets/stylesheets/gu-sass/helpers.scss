@@ -61,6 +61,15 @@
   }
 }
 
+@mixin multiline-bottom-border {
+  &:after {
+    @include multiline(4, gu-colour(garnett-neutral-4));
+    background-color: #fff;
+    display: block;
+    content: '';
+  }
+}
+
 // Helper to create the dropped line used to separate the title in page sections.
 @mixin dropline {
   @include mq($from: desktop) {
