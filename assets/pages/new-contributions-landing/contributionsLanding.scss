@@ -743,13 +743,15 @@ form {
   border-radius: 20px;
   display: inline-flex;
   padding: 9px 20px;
+  flex: 1;
+  justify-content: space-between;
 
   &:enabled {
     cursor: pointer;
 
     &:hover,
     &:focus {
-      background: #e5ce00;
+      filter: brightness(90%);
     }
   }
 }
