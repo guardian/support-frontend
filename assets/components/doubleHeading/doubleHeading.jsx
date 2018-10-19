@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import type { Node } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 
@@ -11,7 +12,7 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 
 type PropTypes = {
   heading: string,
-  subheading?: string,
+  subheading?: Node,
   headingSize: HeadingSize,
   modifierClass?: string,
 };

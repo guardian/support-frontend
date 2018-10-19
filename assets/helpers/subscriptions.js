@@ -7,7 +7,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
-import { getDiscountedPrice } from './flashSale';
 
 
 // ----- Types ------ //
@@ -79,21 +78,13 @@ const defaultBillingPeriods: {
 // ----- Functions ----- //
 
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  const price = subscriptionPrices[product][countryGroupId];
-  const discounted = getDiscountedPrice(product, price);
-  return Number.isInteger(discounted) ? discounted.toString() : discounted.toFixed(2);
+  return subscriptionPrices[product][countryGroupId].toFixed(2);
 }
 
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = getProductPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
-}
-
-function displayDigitalPackBenefitCopy(countryGroupId: CountryGroupId): string {
-  return countryGroupId === 'GBPCountries'
-    ? 'The premium app and the daily edition iPad app in one pack, plus ad-free reading on all your devices'
-    : 'The premium app and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices';
 }
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
@@ -150,5 +141,4 @@ export {
   sendTrackingEventsOnClick,
   displayPrice,
   getProductPrice,
-  displayDigitalPackBenefitCopy,
 };

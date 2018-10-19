@@ -6,19 +6,19 @@ import React from 'react';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
-  type PropTypes as GridPictureProps,
   type GridImage,
   type GridSlot,
+  type PropTypes as GridPictureProps,
   type Source as GridSource,
 } from 'components/gridPicture/gridPicture';
 import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
+import { displayPrice } from 'helpers/subscriptions';
+import { currencies, detect } from 'helpers/internationalisation/currency';
+import { flashSaleIsActive, getDiscountedPrice } from 'helpers/flashSale';
 import CtaSwitch from './ctaSwitch';
-
-import { getPageTitle } from '../helpers/promotions';
-
+import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
 // ----- Types ----- //
 
@@ -131,10 +131,34 @@ function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
 }
 
+function getFlashSaleCopy(countryGroupId: CountryGroupId) {
+  const currency = currencies[detect(countryGroupId)].glyph;
+  return {
+    heading: 'Digital Pack Sale',
+    subHeading: `${currency}${getDiscountedPrice('DigitalPack', countryGroupId)} for three months, then ${displayPrice('DigitalPack', countryGroupId)}`,
+  };
+}
+
+function getCopy(country: CountryGroupId) {
+  if (showUpgradeMessage()) {
+    return {
+      heading: 'Digital Pack',
+      subHeading: 'Upgrade your subscription to Paper+Digital now',
+    };
+  }
+  if (flashSaleIsActive('DigitalPack')) {
+    return getFlashSaleCopy(country);
+  }
+  return {
+    heading: 'Digital Pack',
+    subHeading: `14-day free trial and then ${displayPrice('DigitalPack', country)}`,
+  };
+}
 
 // ----- Component ----- //
 
 export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
+  const copy = getCopy(props.countryGroupId);
   return (
     <div className="digital-subscription-landing-header">
       <LeftMarginSection modifierClasses={['header-block', 'grey']}>
@@ -145,11 +169,11 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         </div>
         <div className="digital-subscription-landing-header__wrapper">
           <h1 className="digital-subscription-landing-header__product">
-            Digital Pack
+            {copy.heading}
           </h1>
           <div className="digital-subscription-landing-header__title">
             <p className="digital-subscription-landing-header__title-copy">
-              {getPageTitle(props.countryGroupId)}
+              {copy.subHeading}
             </p>
           </div>
         </div>
