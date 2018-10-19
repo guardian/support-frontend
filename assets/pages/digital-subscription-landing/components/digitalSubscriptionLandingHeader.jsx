@@ -6,16 +6,17 @@ import React from 'react';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
-  type PropTypes as GridPictureProps,
   type GridImage,
   type GridSlot,
+  type PropTypes as GridPictureProps,
   type Source as GridSource,
 } from 'components/gridPicture/gridPicture';
 import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { displayPrice } from 'helpers/subscriptions';
-import { flashSaleIsActive } from 'helpers/flashSale';
+import { currencies, detect } from 'helpers/internationalisation/currency';
+import { flashSaleIsActive, getDiscountedPrice } from 'helpers/flashSale';
 import CtaSwitch from './ctaSwitch';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
@@ -130,16 +131,11 @@ function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
 }
 
-function getFlashSaleCopy(country: CountryGroupId) {
-  if (country === 'GBPCountries') {
-    return {
-      heading: 'Digital Pack Sale',
-      subHeading: `£5.99 for three months, then ${displayPrice('DigitalPack', country)}`,
-    };
-  }
+function getFlashSaleCopy(countryGroupId: CountryGroupId) {
+  const currency = currencies[detect(countryGroupId)].glyph;
   return {
     heading: 'Digital Pack Sale',
-    subHeading: `Save 50% for three months, then ${displayPrice('DigitalPack', country)}`,
+    subHeading: `${currency}${getDiscountedPrice('DigitalPack', countryGroupId)} for three months, then ${displayPrice('DigitalPack', countryGroupId)}`,
   };
 }
 

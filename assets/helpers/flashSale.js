@@ -1,6 +1,9 @@
 // @flow
 
 import { getQueryParameter } from 'helpers/url';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getProductPrice } from 'helpers/subscriptions';
+
 import type { SubscriptionProduct } from './subscriptions';
 
 // Which products are included in the current sale?
@@ -16,11 +19,28 @@ function flashSaleIsActive(product: SubscriptionProduct): boolean {
   return (now > startTime && now < endTime && included) || (included && getQueryParameter('flash_sale') === 'true');
 }
 
-// Promo codes
-const promoCodes = {
+type PriceList = {
+  [CountryGroupId]: number
+}
+
+type SaleDetails = {
+  [SubscriptionProduct]: {
+    promoCode: string,
+    intcmp: string,
+    prices?: PriceList,
+  },
+};
+
+const saleDetails: SaleDetails = {
   DigitalPack: {
     promoCode: 'DDPO80X',
     intcmp: '',
+    prices: {
+      GBPCountries: 6,
+      UnitedStates: 10,
+      AUDCountries: 10.75,
+      International: 10,
+    },
   },
   Paper: {
     promoCode: 'GFS80G',
@@ -44,21 +64,29 @@ const promoCodes = {
   },
 };
 
+function getDiscountedPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  if (flashSaleIsActive(product) && saleDetails[product].prices && saleDetails[product].prices[countryGroupId]) {
+    return saleDetails[product].prices[countryGroupId].toString();
+  }
+  return getProductPrice(product, countryGroupId);
+}
+
 function getPromoCode(product: SubscriptionProduct, defaultCode: string): string {
   if (flashSaleIsActive(product)) {
-    return promoCodes[product].promoCode;
+    return saleDetails[product].promoCode;
   }
   return defaultCode;
 }
 
 function getIntcmp(product: SubscriptionProduct, intcmp: ?string, defaultIntcmp: string): string {
   if (flashSaleIsActive(product)) {
-    return promoCodes[product].intcmp || intcmp || defaultIntcmp;
+    return saleDetails[product].intcmp || intcmp || defaultIntcmp;
   }
   return intcmp || defaultIntcmp;
 }
 
 export {
+  getDiscountedPrice,
   flashSaleIsActive,
   getPromoCode,
   getIntcmp,

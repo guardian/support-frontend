@@ -8,7 +8,7 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
 import SvgCircle from 'components/svgs/circle';
-import { flashSaleIsActive } from 'helpers/flashSale';
+import { flashSaleIsActive, getDiscountedPrice } from 'helpers/flashSale';
 
 import {
   displayPrice,
@@ -38,7 +38,8 @@ function getCopy(country: CountryGroupId): Copy {
     return {
       heading: 'Digital Pack Sale',
       subHeading: 'Save 50% for three months',
-      description: 'Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. £5.99 for your first three months.',
+      description: `Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. 
+      £${getDiscountedPrice('DigitalPack', 'GBPCountries')} for your first three months.`,
     };
   }
   return {
