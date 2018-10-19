@@ -10,10 +10,11 @@ import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.errors.MockServicesCreator
-import com.gu.support.workers.lambdas.CreateZuoraSubscription
+import com.gu.support.workers.lambdas.{CreateZuoraSubscription, IdentityId}
 import com.gu.support.workers.model.states.SendThankYouEmailState
-import com.gu.support.workers.model.{Annual, BillingPeriod, Monthly}
+import com.gu.support.workers.model.{Annual, Monthly}
 import com.gu.test.tags.annotations.IntegrationTest
+import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
 import com.gu.zuora.ZuoraService
 import com.gu.zuora.model.SubscribeRequest
 import org.mockito.Matchers.any
@@ -62,19 +63,22 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
 
   val realService = new ZuoraService(zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
 
-  val mockService = {
-    val z = mock[ZuoraService]
+  val mockZuoraService = {
+    val mockZuora = mock[ZuoraService]
     // Need to return None from the Zuora service `getRecurringSubscription`
     // method or the subscribe step gets skipped
-    when(z.getRecurringSubscription(any[String], any[BillingPeriod]))
-      .thenReturn(Future.successful(None))
-    when(z.subscribe(any[SubscribeRequest]))
+    // if these methods weren't coupled into one class then we could pass them separately and avoid reflection
+    when(mockZuora.getAccountFields(any[IdentityId]))
+      .thenReturn(Future.successful(Nil))
+    when(mockZuora.getSubscriptions(any[ZuoraAccountNumber]))
+      .thenReturn(Future.successful(Nil))
+    when(mockZuora.subscribe(any[SubscribeRequest]))
       .thenAnswer((invocation: InvocationOnMock) => realService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
-    z
+    mockZuora
   }
 
   val mockServiceProvider = mockServices(
     s => s.zuoraService,
-    mockService
+    mockZuoraService
   )
 }

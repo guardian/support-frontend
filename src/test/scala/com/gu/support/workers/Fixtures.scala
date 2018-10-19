@@ -122,7 +122,7 @@ object Fixtures {
       }
     """
 
-  def createPayPalPaymentMethodContributionJson(currency: Currency = GBP) =
+  def createPayPalPaymentMethodContributionJson(currency: Currency = GBP): String =
     s"""{
           $requestIdJson,
           $userJson,
@@ -131,12 +131,13 @@ object Fixtures {
           "acquisitionData": $acquisitionData
         }"""
 
-  def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5) =
+  def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5): String =
     s"""{
           $requestIdJson,
           $userJson,
           "product": ${contribution(amount = amount, billingPeriod = billingPeriod)},
-          "paymentFields": $stripeJson
+          "paymentFields": $stripeJson,
+          "sessionId": "testingToken"
         }"""
 
   val oldSchemaContributionJson =
@@ -173,7 +174,7 @@ object Fixtures {
           }
         """
 
-  def thankYouEmailJson(product: String = contribution()) =
+  def thankYouEmailJson(product: String = contribution()): String =
     s"""{
        |  $requestIdJson,
        |  $userJson,

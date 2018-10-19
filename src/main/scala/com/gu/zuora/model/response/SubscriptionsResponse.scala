@@ -19,12 +19,7 @@ object RatePlan {
 
 case class SubscriptionsResponse(subscriptions: List[Subscription])
 
-case class Subscription(accountNumber: String, status: String, ratePlans: List[RatePlan]) {
-  def isActive: Boolean = status == "Active"
-  def hasContributorPlan(config: ZuoraConfig, billingPeriod: BillingPeriod): Boolean = {
-    ratePlans.exists(_.productRatePlanId == config.contributionConfig(billingPeriod).productRatePlanId)
-  }
-}
+case class Subscription(accountNumber: String, status: String, ratePlans: List[RatePlan])
 
 case class RatePlan(productId: String, productName: String, productRatePlanId: String)
 

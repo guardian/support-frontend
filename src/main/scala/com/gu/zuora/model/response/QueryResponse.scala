@@ -23,6 +23,6 @@ case class AccountQueryResponse(records: List[AccountRecord])
 
 case class PaymentMethodQueryResponse(records: List[PaymentMethodRecord])
 
-case class AccountRecord(AccountNumber: String)
+case class AccountRecord(AccountNumber: String, CreatedSessionId__c: String)
 
 case class PaymentMethodRecord(DefaultPaymentMethodId: String)
