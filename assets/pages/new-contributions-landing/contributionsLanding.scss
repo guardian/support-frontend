@@ -54,7 +54,7 @@ header[role="banner"] {
 
 .countryGroups {
   font-family: $gu-text-sans-web;
-  margin-top: $gu-v-spacing;
+  margin-top: 30px;
   max-width: 355px;
   padding: 0;
   width: 100%;
@@ -96,6 +96,7 @@ header[role="banner"] {
   padding: 0 $gu-v-spacing;
   width: 14px;
   height: 14px;
+  fill: gu-colour(garnett-neutral-1);
 }
 
 .countryGroups summary {
