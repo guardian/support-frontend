@@ -908,6 +908,10 @@ form {
 
   &:enabled {
     cursor: pointer;
+
+    &:hover {
+      background-color: #206B44;
+    }
   }
 }
 
