@@ -4,7 +4,7 @@
 import { type Store, type Dispatch } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
-import { setupStripeCheckout } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type ThirdPartyPaymentLibrary, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
 import {
   type Action,
@@ -30,9 +30,9 @@ function selectDefaultPaymentMethod(state: State, dispatch: Dispatch<Action>) {
 }
 
 function initialiseStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser, dispatch) {
-  setupStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser)
-    .then((handler: ThirdPartyPaymentLibrary) =>
-      dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: handler } })));
+  const library: ThirdPartyPaymentLibrary =
+    setupStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser);
+  dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
 
 function initialisePaymentMethods(state: State, dispatch: Function) {
@@ -45,11 +45,13 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation));
   };
 
-  ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
-    const validPayments = getValidPaymentMethods(contribType, switches, countryId);
-    if (validPayments.includes('Stripe')) {
-      initialiseStripeCheckout(onPaymentAuthorisation, contribType, currencyId, !!isTestUser, dispatch);
-    }
+  loadStripe().then(() => {
+    ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
+      const validPayments = getValidPaymentMethods(contribType, switches, countryId);
+      if (validPayments.includes('Stripe')) {
+        initialiseStripeCheckout(onPaymentAuthorisation, contribType, currencyId, !!isTestUser, dispatch);
+      }
+    });
   });
 
   loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));

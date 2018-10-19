@@ -60,24 +60,22 @@ function setupStripeCheckout(
   contributionType: Contrib,
   currency: IsoCurrency,
   isTestUser: boolean,
-): Promise<Object> {
-  return loadStripe().then(() => {
-    const handleToken = (token) => {
-      onPaymentAuthorisation({ paymentMethod: 'Stripe', token: token.id });
-    };
+): Object {
+  const handleToken = (token) => {
+    onPaymentAuthorisation({ paymentMethod: 'Stripe', token: token.id });
+  };
 
-    const stripeKey = getStripeKey(contributionType, currency, isTestUser);
+  const stripeKey = getStripeKey(contributionType, currency, isTestUser);
 
-    return window.StripeCheckout.configure({
-      name: 'Guardian',
-      description: 'Please enter your card details.',
-      allowRememberMe: false,
-      key: stripeKey,
-      image: 'https://uploads.guim.co.uk/2018/01/15/gu.png',
-      locale: 'auto',
-      currency,
-      token: handleToken,
-    });
+  return window.StripeCheckout.configure({
+    name: 'Guardian',
+    description: 'Please enter your card details.',
+    allowRememberMe: false,
+    key: stripeKey,
+    image: 'https://uploads.guim.co.uk/2018/01/15/gu.png',
+    locale: 'auto',
+    currency,
+    token: handleToken,
   });
 }
 
@@ -90,6 +88,7 @@ function openDialogBox(stripeHandler: Object, amount: number, email: string) {
 }
 
 export {
+  loadStripe,
   setupStripeCheckout,
   openDialogBox,
   getStripeKey,
