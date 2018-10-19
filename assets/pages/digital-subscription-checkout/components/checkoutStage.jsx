@@ -6,7 +6,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import SubscriptionsThankYou from 'components/subscriptionsThankYou/subscriptionsThankYou';
+import ReturnSection from 'components/returnSection/returnSection';
+import HeadingBlock from 'components/headingBlock/headingBlock';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -42,9 +43,13 @@ function CheckoutStage(props: PropTypes) {
 
     case 'thankyou':
       return (
-        <SubscriptionsThankYou heading="Your Digital Pack Subscription is now live">
+        <div>
+          <HeadingBlock heading="Your Digital Pack Subscription is now live">
+            <p>We have sent you an email confirmation</p>
+          </HeadingBlock>
           <ThankYouContent countryGroupId={props.countryGroupId} />
-        </SubscriptionsThankYou>
+          <ReturnSection />
+        </div>
       );
 
     case 'checkout':
