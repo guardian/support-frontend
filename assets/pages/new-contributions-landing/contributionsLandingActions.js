@@ -33,7 +33,12 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import * as cookie from 'helpers/cookie';
-import { type State, type UserFormData, type ThankYouPageStage } from './contributionsLandingReducer';
+import {
+  type State,
+  type UserFormData,
+  type ThankYouPageStage,
+  type PasswordHasBeenSetState
+} from './contributionsLandingReducer';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib, paymentMethodToSelect: PaymentMethod }
@@ -55,6 +60,7 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
+  | { type: 'SET_PASSWORD_HAS_BEEN_SET', passwordHasBeenSetState: PasswordHasBeenSetState}
   | { type: 'PAYMENT_SUCCESS' };
 
 
@@ -91,6 +97,8 @@ const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FOR
 
 const setPasswordHasBeenSubmitted = (): Action => ({ type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' });
 
+const setPasswordHasBeenSet = (passwordHasBeenSetState: PasswordHasBeenSetState): Action =>
+  ({ type: 'SET_PASSWORD_HAS_BEEN_SET', passwordHasBeenSetState });
 
 const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
 
@@ -350,6 +358,7 @@ export {
   setGuestAccountCreationToken,
   setThankYouPageStage,
   setPasswordHasBeenSubmitted,
+  setPasswordHasBeenSet,
   updatePassword,
   createOneOffPayPalPayment,
   setPayPalHasLoaded,

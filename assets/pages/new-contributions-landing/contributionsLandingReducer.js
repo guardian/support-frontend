@@ -32,8 +32,6 @@ export type UserFormData = {
 export type ThankYouPageStageMap<T> = {
   setPassword: T,
   thankYou: T,
-  thankYouPasswordSet: T,
-  thankYouPasswordNotSet: T
 }
 
 export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
@@ -49,7 +47,10 @@ type FormData = UserFormData & {
 type SetPasswordData = {
   password: string,
   passwordHasBeenSubmitted: boolean,
+  passwordHasBeenSet: PasswordHasBeenSetState,
 }
+
+export type PasswordHasBeenSetState = 'unset' | 'set' | 'declinedToSet';
 
 type FormState = {
   contributionType: Contrib,
@@ -128,6 +129,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     setPasswordData: {
       password: '',
       passwordHasBeenSubmitted: false,
+      passwordHasBeenSet: 'unset',
     },
     showOtherAmount: false,
     selectedAmounts: initialAmount,
@@ -186,6 +188,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'SET_PASSWORD_HAS_BEEN_SUBMITTED':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordHasBeenSubmitted: true } };
+
+      case 'SET_PASSWORD_HAS_BEEN_SET':
+        return { ...state, setPasswordData: { ...state.setPasswordData, passwordHasBeenSet: action.passwordHasBeenSetState } };
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
