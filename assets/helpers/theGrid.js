@@ -46,8 +46,8 @@ export const imageCatalogue: {
   investHeaderMobile: '91edfca98faf743fed826a1efc03ed0bf133625b/0_0_1875_1560',
   investHeaderDesktop: '60c2488def35887fe1d786fcb7cd9c8ff4c48735/0_0_7200_2645',
   adFreePromotionCircles: 'c95a636dd5388d9fd81a487c5929812e6f6962a1/0_0_1815_705',
-  digitalPackFlashSaleDesktop: '98aeafa79206299470b9f5732f1b58d09ee61df7/0_0_1027_940',
-  digitalPackFlashSaleMobile: 'cfca5b28178e7c1ca6d04e6bcc02b30653a50f07/0_0_467_470',
+  digitalPackFlashSaleDesktop: '496362ba165e8291991d6ec75725a4a57254adf1/0_0_1388_949',
+  digitalPackFlashSaleMobile: '2dfb17d45d092baefa3301db8be0634815462941/0_0_717_470',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
