@@ -39,7 +39,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
         modifierClasses={['compact']}
       />
       <div className="multiline-divider" />
-      <BodyCopy {...props} />
+      {props.contributionType !== 'ONE_OFF' ? <BodyCopy {...props} /> : null}
       {props.marketingConsent}
       <QuestionsContact countryGroupId={props.countryGroupId} />
       <SpreadTheWord />
@@ -51,16 +51,14 @@ export default function ContributionsThankYouPage(props: PropTypes) {
 // ----- Auxiliary Components ----- //
 
 function BodyCopy(props: PropTypes) {
-  if (props.contributionType !== 'ONE_OFF') {
-    if (props.directDebit) {
-      return (
-        <div className="component-direct-debit-details__container">
-          <DirectDebitDetails {...props.directDebit} />
-        </div>
-      );
-    } else {
-      // recurring non-DD
-      return <EmailConfirmation />;
-    }
+  // recurring
+  if (props.directDebit) {
+    return (
+      <div className="component-direct-debit-details__container">
+        <DirectDebitDetails {...props.directDebit} />
+      </div>
+    );
   }
+  // recurring non-DD
+  return <EmailConfirmation />;
 }

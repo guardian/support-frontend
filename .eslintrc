@@ -36,7 +36,6 @@
     "import/no-extraneous-dependencies": "off",
     "padded-blocks": "off",
     "import/prefer-default-export": "off",
-    "no-else-return": 0,
     "jsx-a11y/label-has-for": [ 2, {
       "components": [ "Label" ],
       "required": {
