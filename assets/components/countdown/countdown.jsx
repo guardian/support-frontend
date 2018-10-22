@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 
 // ---- Types ----- //
 type CountdownTime = {
-  t: number,
+  unixTimeLeft: number,
   days: number,
   hours: number,
   minutes: number,
@@ -32,15 +32,15 @@ const addLeadingZeros = (value: number): string => {
 };
 
 const calculateCountdown = (endDate: number[]): CountdownTime => {
-  const t = new Date(...endDate).getTime() - Date.now();
+  const unixTimeLeft = new Date(...endDate).getTime() - Date.now();
 
-  const seconds = Math.floor((t / 1000) % 60);
-  const minutes = Math.floor((t / 1000 / 60) % 60);
-  const hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-  const days = Math.floor(t / (1000 * 60 * 60 * 24));
+  const seconds = Math.floor((unixTimeLeft / 1000) % 60);
+  const minutes = Math.floor((unixTimeLeft / 1000 / 60) % 60);
+  const hours = Math.floor((unixTimeLeft / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(unixTimeLeft / (1000 * 60 * 60 * 24));
 
   return {
-    t, seconds, minutes, hours, days,
+    unixTimeLeft, seconds, minutes, hours, days,
   };
 };
 
@@ -59,7 +59,7 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
   componentDidMount(): void {
     this.interval = setInterval(() => {
       const date = calculateCountdown(this.props.date);
-      if (date.t > 0) { this.setState({ countdown: date }); } else { this.stop(); }
+      if (date.unixTimeLeft >= 0) { this.setState({ countdown: date }); } else { this.stop(); }
     }, 1000);
   }
 
