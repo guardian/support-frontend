@@ -100,7 +100,7 @@ object GetSubscription {
       DomainSubscription(
         ZuoraAccountNumber(subscription.accountNumber),
         ZuoraIsActive(subscription.status == "Active"),
-        subscription.ratePlans //.map(DomainRatePlan.fromWire)
+        subscription.ratePlans //this can be changed to map to a DomainRatePlan if necessary
       )
   }
 }
