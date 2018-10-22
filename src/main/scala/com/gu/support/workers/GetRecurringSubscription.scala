@@ -22,13 +22,9 @@ object GetRecurringSubscription {
     billingPeriod: BillingPeriod
   )(implicit ec: ExecutionContext): Future[Option[DomainSubscription]] = {
 
-    val productRatePlanId = Option(zuoraService.config).map(_.contributionConfig(billingPeriod).productRatePlanId)
+    val productRatePlanId: RatePlanId = zuoraService.config.contributionConfig(billingPeriod).productRatePlanId
 
-    def hasContributorPlan(sub: DomainSubscription): Boolean =
-      productRatePlanId match {
-        case Some(productRatePlanId) => GetRecurringSubscription.hasContributorPlan(productRatePlanId, sub.ratePlans)
-        case None => false
-      }
+    val hasContributorPlan: List[RatePlan] => Boolean = GetRecurringSubscription.hasContributorPlan(productRatePlanId)
 
     def isInScope(domainAccount: DomainAccount): Boolean = {
       val inScope = GetRecurringSubscription.isInAccessScope(accessScope, domainAccount.maybeCreatedSessionId)
@@ -40,8 +36,8 @@ object GetRecurringSubscription {
       accountIds <- zuoraService.getAccountFields(identityId)
       inScopeAccountIds = accountIds.filter(isInScope).map(_.accountNumber)
       subscriptions <- inScopeAccountIds.map(zuoraService.getSubscriptions).combineAll
-      maybeRecentCont = subscriptions.find(sub => hasContributorPlan(sub) && sub.isActive.value)
-    } yield maybeRecentCont
+      maybeRecentContributor = subscriptions.find(sub => hasContributorPlan(sub.ratePlans) && sub.isActive.value)
+    } yield maybeRecentContributor
   }
 
   def isInAccessScope(accessScope: AccessScope, maybeCreatedSessionId: Option[SessionId]): Boolean = {
@@ -52,7 +48,7 @@ object GetRecurringSubscription {
     }
   }
 
-  def hasContributorPlan(ratePlanId: RatePlanId, ratePlans: List[RatePlan]): Boolean =
+  def hasContributorPlan(ratePlanId: RatePlanId)(ratePlans: List[RatePlan]): Boolean =
     ratePlans.exists(_.productRatePlanId == ratePlanId)
 
 }
