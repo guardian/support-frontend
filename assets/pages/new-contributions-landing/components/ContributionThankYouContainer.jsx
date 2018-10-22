@@ -7,7 +7,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { type ThankYouPageStageMap, type ThankYouPageStage } from '../contributionsLandingReducer';
 import ContributionThankYou from './ContributionThankYou';
-import SetPassword from './SetPassword/SetPassword';
+import ContributionThankYouSetPassword from './ContributionThankYouSetPassword';
 import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';
 
 // ----- Types ----- //
@@ -29,7 +29,7 @@ const mapStateToProps = state => ({
 function ContributionThankYouContainer(props: PropTypes) {
 
   const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
-    setPassword: (<SetPassword />),
+    thankYouSetPassword: (<ContributionThankYouSetPassword />),
     thankYou: (<ContributionThankYou showDirectDebitCopy={props.paymentMethod === 'DirectDebit'} />),
     thankYouPasswordDeclinedToSet: (<ContributionThankYou showDirectDebitCopy={false} />),
     thankYouPasswordSet: (<ContributionThankYouPasswordSet />),

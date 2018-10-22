@@ -5,13 +5,14 @@
 import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import SetPasswordForm from './SetPasswordForm';
+import SetPasswordForm from './SetPassword/SetPasswordForm';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   paymentMethod: PaymentMethod,
+  passwordFailed: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -20,11 +21,12 @@ type PropTypes = {
 
 const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
+  passwordFailed: state.page.form.passwordFailed,
 });
 
 // ----- Render ----- //
 
-function SetPassword(props: PropTypes) {
+function ContributionThankYouSetPassword(props: PropTypes) {
   if (props.paymentMethod === 'DirectDebit') {
     return (
       <div className="set-password__content">
@@ -57,4 +59,4 @@ function SetPassword(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps)(SetPassword);
+export default connect(mapStateToProps)(ContributionThankYouSetPassword);
