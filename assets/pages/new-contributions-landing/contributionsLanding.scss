@@ -20,10 +20,6 @@ body {
   overflow: hidden;
 }
 
-.gu-content--contribution-form {
-  background: #f1f8fc;
-}
-
 .gu-content--contribution-thankyou {
   background: gu-colour(news-garnett-highlight);
 }
@@ -46,8 +42,8 @@ header[role="banner"] {
 }
 
 .glogo {
-  width: 69px;
-  height: 69px;
+  width: 60px;
+  height: 60px;
   position: relative;
 }
 
@@ -57,8 +53,6 @@ header[role="banner"] {
 }
 
 .countryGroups {
-  background: gu-colour(garnett-neutral-5);
-  border: 1px solid gu-colour(garnett-neutral-4);
   font-family: $gu-text-sans-web;
   margin-top: $gu-v-spacing;
   max-width: 355px;
@@ -69,9 +63,7 @@ header[role="banner"] {
 // Safari doesn't respect styles applied to <summary> so we need this wrapper div
 .countryGroups__summary-wrapper {
   align-items: center;
-  color: gu-colour(garnett-neutral-2);
   display: flex;
-  fill: currentColor;
   height: 40px;
   outline: none;
   transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
@@ -79,10 +71,6 @@ header[role="banner"] {
 
 .countryGroups:not([open]) > :not(summary) {
   display: none;
-}
-
-.countryGroups__label {
-  flex: 1;
 }
 
 .countryGroups .icon {
@@ -112,11 +100,12 @@ header[role="banner"] {
 
 .countryGroups summary {
   list-style: none;
+  outline: none;
 }
 
 .countryGroups summary:hover,
 .countryGroups summary:focus {
-  box-shadow: 0 0 0 3px gu-colour(news-garnett-highlight);
+  box-shadow: none;
   color: inherit;
 }
 
@@ -128,6 +117,8 @@ header[role="banner"] {
   list-style: none;
   margin: 0;
   padding: 0;
+  background: gu-colour(garnett-neutral-5);
+  border: 1px solid gu-colour(garnett-neutral-4);
 }
 
 .countryGroups__item > a {
@@ -140,7 +131,7 @@ header[role="banner"] {
 
 .countryGroups__item > a:hover,
 .countryGroups__item > a:focus {
-  background: gu-colour(news-garnett-highlight);
+  background: gu-colour(garnett-neutral-3);
   font-weight: bold;
 }
 
@@ -177,7 +168,7 @@ body {
 .header {
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   color: gu-colour(garnett-neutral-1);
-  font: bold 32px/1.15 $gu-headline;
+  font: bold 36px/1.15 $gu-headline;
   margin: 0 -10px;
   padding: 0 10px $gu-v-spacing;
 }
@@ -190,7 +181,7 @@ button {
 }
 
 .blurb {
-  font: 100 16px/1.25 $gu-headline;
+  font: 100 17px/1.25 $gu-text-egyptian-web;
   margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
 }
 
@@ -285,10 +276,6 @@ header[role="banner"] {
 
   .glogo {
     top: $gu-v-spacing * 2;
-  }
-
-  .countryGroups__item .icon {
-    margin-left: -40px;
   }
 
   .gu-content__content {
@@ -432,7 +419,7 @@ header[role="banner"] {
     }
 
     .countryGroups {
-      grid-column: 2 / 8;
+      grid-column: 4 / 8;
       grid-row: 1;
     }
 
@@ -554,6 +541,14 @@ form {
   padding: 0;
 }
 
+.form__radio-group--contribution-type {
+  @include multiline-bottom-border;
+}
+
+.form__radio-group--contribution-type:after {
+  margin: 0 -10px;
+}
+
 .form__legend--radio-group {
   display: none;
 }
@@ -574,12 +569,12 @@ form {
 
 .form__radio-group--tabs .form__radio-group-list {
   display: flex;
+  margin: 0 -10px;
 }
 
 .form__radio-group--tabs .form__radio-group-item {
   border-top: 1px solid gu-colour(neutral-4);
   flex: 1;
-  margin: 0 -10px;
 }
 
 .form__radio-group--tabs .form__radio-group-item + .form__radio-group-item {
@@ -588,17 +583,11 @@ form {
 
 .form__radio-group--tabs .form__radio-group-input + .form__radio-group-label {
   display: block;
-  padding: 4px 10px 4px;
+  padding: 4px 10px 10px;
 }
 
 .form__radio-group--tabs .form__radio-group-input:checked + .form__radio-group-label {
-  background: gu-colour(garnett-neutral-5);
-  color: gu-colour(sport-garnett-media-main-1);
-}
-
-.form__radio-group--tabs .form__radio-group-input:not(:checked) + .form__radio-group-label {
-  background: gu-colour(garnett-neutral-3);
-  color: gu-colour(garnett-neutral-2);
+  background: gu-colour(news-garnett-highlight);
 }
 
 .form__radio-group--pills .form__radio-group-list {
@@ -615,7 +604,7 @@ form {
 }
 
 .form__radio-group--pills .form__radio-group-input + .form__radio-group-label {
-  border: solid 1px gu-colour(sport-garnett-media-main-1);
+  border: solid 1px gu-colour(news-garnett-highlight);
   border-radius: 25px;
   box-sizing: border-box;
   display: flex;
@@ -626,8 +615,7 @@ form {
 }
 
 .form__radio-group--pills .form__radio-group-input:checked + .form__radio-group-label {
-  background: gu-colour(sport-garnett-media-main-1);
-  color: gu-colour(garnett-neutral-5);
+  background: gu-colour(news-garnett-highlight);
 }
 
 .form__radio-group--buttons .form__radio-group-item + .form__radio-group-item {
@@ -636,15 +624,12 @@ form {
 
 .form__radio-group--buttons .form__radio-group-label {
   align-items: center;
-  border: 1px solid gu-colour(neutral-4);
-  border-radius: 20px;
   display: flex;
   margin-bottom: 8px;
   padding: 9px 0;
 }
 
 .form__radio-group--buttons .form__radio-group-input:checked + .form__radio-group-label {
-  border-color: gu-colour(sport-garnett-media-main-1);
   font-weight: bold;
 }
 
@@ -758,13 +743,15 @@ form {
   border-radius: 20px;
   display: inline-flex;
   padding: 9px 20px;
+  flex: 1;
+  justify-content: space-between;
 
   &:enabled {
     cursor: pointer;
 
     &:hover,
     &:focus {
-      background: #e5ce00;
+      filter: brightness(90%);
     }
   }
 }
@@ -783,6 +770,7 @@ form {
 .form__field--contribution-email,
 .form__field--contribution-state {
   margin-top: 24px;
+  color: gu-colour(garnett-neutral-2);
 }
 
 .form__radio-group--contribution-pay {
@@ -903,10 +891,24 @@ form {
 }
 
 .button--newsletter {
-  color: #29a05f;
+  color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(green-dark);
+
+  &:enabled {
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(90%);
+    }
+  }
 }
 
-.button--newsletter .svg-subscribe {
+.button--newsletter__subscribed {
+  color: gu-colour(green-dark);
+  background-color: transparent;
+}
+
+.button--newsletter .svg-subscribe, .button--newsletter .svg-subscribed {
   margin-right: 10px;
 }
 
