@@ -32,7 +32,7 @@ function ContributionThankYouSetPassword(props: PropTypes) {
       <div className="set-password__content">
         <h1 className="header">Thank you for a valuable contribution. Your Direct Debit has been set up.</h1>
         <section className="confirmation">
-          <p className="confirmation__message">{'Look out for an email confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements.'}</p>
+          <p className="confirmation__message">{'Look out for an email within three business days confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements.'}</p>
         </section>
         <section className="set-password">
           <h3 className="set-password__title">Set up a free account to manage your payments</h3>
