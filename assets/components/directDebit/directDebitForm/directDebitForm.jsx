@@ -317,7 +317,9 @@ function PaymentButton(props: {
 function LegalNotice(props: { countryGroupId: CountryGroupId }) {
   return (
     <div className="component-direct-debit-form__legal-notice">
-      <p><strong>Payments by GoCardless</strong> <a href="https://gocardless.com/legal/privacy/" target="_blank" rel="noopener noreferrer">read the GoCardless privacy notice.</a>
+      <p>
+        <strong>Payments by GoCardless </strong>
+        <a href="https://gocardless.com/legal/privacy/" target="_blank" rel="noopener noreferrer">read the GoCardless privacy notice.</a>
       </p>
       <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
         payment schedule, due date, frequency and amount will be sent to you within three working
