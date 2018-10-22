@@ -215,7 +215,7 @@ function AccountHolderNameInput(props: {phase: Phase, value: string, onChange: F
   return (
     <div className="component-direct-debit-form__account-holder-name">
       <label htmlFor="account-holder-name-input" className="component-direct-debit-form__field-label">
-        Name
+        Account name
       </label>
       {props.phase === 'entry' ? editable : locked}
     </div>
@@ -317,6 +317,10 @@ function PaymentButton(props: {
 function LegalNotice(props: { countryGroupId: CountryGroupId }) {
   return (
     <div className="component-direct-debit-form__legal-notice">
+      <p>
+        <strong>Payments by GoCardless </strong>
+        <a href="https://gocardless.com/legal/privacy/" target="_blank" rel="noopener noreferrer">read the GoCardless privacy notice.</a>
+      </p>
       <p><strong>Advance notice</strong> The details of your Direct Debit instruction including
         payment schedule, due date, frequency and amount will be sent to you within three working
         days. All the normal Direct Debit safeguards and guarantees apply.
