@@ -14,6 +14,7 @@
 @import '~components/customerService/customerService';
 @import '~components/headingBlock/headingBlock';
 @import '~components/returnSection/returnSection';
+@import '~components/productHero/productHero';
 
 
 // ----- Page-Specific Styles ----- //
@@ -30,6 +31,13 @@
     @include mq($from: leftCol) {
       overflow-x: visible;
     }
+  }
+
+  // ----- Heading
+
+  .component-heading-block {
+    // Makes sure the circle SVGs stay behind the heading.
+    position: relative;
   }
 
   // ----- Thank You

@@ -8,10 +8,11 @@ import { connect } from 'react-redux';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import ReturnSection from 'components/returnSection/returnSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
+import ProductHero from 'components/productHero/productHero';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { type Stage } from '../digitalSubscriptionCheckoutReducer';
+import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
 
 
@@ -25,11 +26,11 @@ type PropTypes = {|
 
 // ----- State/Props Maps ----- //
 
-function mapStateToProps(state): PropTypes {
+function mapStateToProps(state: State): PropTypes {
 
   return {
     stage: state.page.stage,
-    countryGroupId: state.page.countryGroupId,
+    countryGroupId: state.common.internationalisation.countryGroupId,
   };
 
 }
@@ -44,6 +45,7 @@ function CheckoutStage(props: PropTypes) {
     case 'thankyou':
       return (
         <div>
+          <ProductHero countryGroupId={props.countryGroupId} />
           <HeadingBlock heading="Your Digital Pack Subscription is now live">
             <p>We have sent you an email confirmation</p>
           </HeadingBlock>
