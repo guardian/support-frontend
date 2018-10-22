@@ -54,7 +54,7 @@ header[role="banner"] {
 
 .countryGroups {
   font-family: $gu-text-sans-web;
-  margin-top: 30px;
+  margin-top: $gu-v-spacing * 2.5;
   max-width: 355px;
   padding: 0;
   width: 100%;
@@ -90,6 +90,7 @@ header[role="banner"] {
 .countryGroups .svg-checkmark {
   width: 18px;
   height: 14px;
+  fill: gu-colour(news-garnett-main-1);
 }
 
 .countryGroups .svg-globe {
@@ -122,12 +123,31 @@ header[role="banner"] {
   border: 1px solid gu-colour(garnett-neutral-4);
 }
 
+.countryGroups__item:first-child > a {
+  &:before {
+    content: none;
+  }
+}
+
 .countryGroups__item > a {
   color: inherit;
   display: flex;
-  padding: 0 40px;
+  padding: 0 15px;
   line-height: 40px;
   text-decoration: none;
+  justify-content: space-between;
+  position: relative;
+
+
+  &:before {
+    content: '';
+    border-top: 1px solid gu-colour(garnett-neutral-4);
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 15px;
+    right: 0;
+  }
 }
 
 .countryGroups__item > a:hover,
@@ -420,7 +440,7 @@ header[role="banner"] {
     }
 
     .countryGroups {
-      grid-column: 4 / 8;
+      grid-column: 4 / 7;
       grid-row: 1;
     }
 
