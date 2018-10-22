@@ -7,7 +7,6 @@ import React from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import {
-  type PropTypes as GridPictureProps,
   type GridImage,
   type GridSlot,
   type Source as GridSource,
@@ -16,22 +15,29 @@ import SvgCirclesLeft from 'components/svgs/circlesLeft';
 import SvgCirclesRight from 'components/svgs/circlesRight';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type ImageId as GridId } from 'helpers/theGrid';
+import { type ImageId as GridId, type ImageType } from 'helpers/theGrid';
 
 
 // ----- Types ----- //
 
-type PropTypes = {
-  countryGroupId: CountryGroupId,
-};
-
-type GridImages = {
+export type GridImages = {
   breakpoints: {
     mobile: GridImage,
     tablet: GridImage,
     desktop: GridImage,
   },
   fallback: GridId,
+};
+
+export type ImagesByCountry = {
+  [CountryGroupId]: GridImages,
+};
+
+type PropTypes = {
+  countryGroupId: CountryGroupId,
+  imagesByCountry: ImagesByCountry,
+  altText: string,
+  fallbackImgType: ImageType,
 };
 
 type GridSlots = {
@@ -42,55 +48,6 @@ type GridSlots = {
 
 
 // ----- Setup ----- //
-
-const defaultImages: GridImages = {
-  breakpoints: {
-    mobile: {
-      gridId: 'digitalSubscriptionHeaderMobile',
-      srcSizes: [342, 684, 1200],
-      imgType: 'png',
-    },
-    tablet: {
-      gridId: 'digitalSubscriptionHeaderTablet',
-      srcSizes: [500, 1000, 2000],
-      imgType: 'png',
-    },
-    desktop: {
-      gridId: 'digitalSubscriptionHeaderDesktop',
-      srcSizes: [500, 1000, 2000, 4045],
-      imgType: 'png',
-    },
-  },
-  fallback: 'digitalSubscriptionHeaderDesktop',
-};
-
-const gridImagesByCountry: {
-  [CountryGroupId]: GridImages,
-} = {
-  GBPCountries: defaultImages,
-  UnitedStates: defaultImages,
-  International: defaultImages,
-  AUDCountries: {
-    breakpoints: {
-      mobile: {
-        gridId: 'digitalSubscriptionHeaderMobileAU',
-        srcSizes: [310, 620, 1088],
-        imgType: 'png',
-      },
-      tablet: {
-        gridId: 'digitalSubscriptionHeaderTabletAU',
-        srcSizes: [500, 1000, 2000],
-        imgType: 'png',
-      },
-      desktop: {
-        gridId: 'digitalSubscriptionHeaderDesktopAU',
-        srcSizes: [500, 1000, 2000, 4045],
-        imgType: 'png',
-      },
-    },
-    fallback: 'digitalSubscriptionHeaderDesktopAU',
-  },
-};
 
 const gridSlots: GridSlots = {
   mobile: {
@@ -108,11 +65,11 @@ const gridSlots: GridSlots = {
 };
 
 
-// ----- Functions ----- //
+// ----- Component ----- //
 
-function gridPicture(cgId: CountryGroupId): GridPictureProps {
+function ProductHero(props: PropTypes) {
 
-  const gridImages: GridImages = gridImagesByCountry[cgId];
+  const gridImages: GridImages = props.imagesByCountry[props.countryGroupId];
 
   const sources: GridSource[] = [
     { ...gridSlots.mobile, ...gridImages.breakpoints.mobile },
@@ -120,27 +77,18 @@ function gridPicture(cgId: CountryGroupId): GridPictureProps {
     { ...gridSlots.desktop, ...gridImages.breakpoints.desktop },
   ];
 
-  return {
-    sources,
-    fallback: gridImages.fallback,
-    fallbackSize: 500,
-    altText: 'digital subscription',
-    fallbackImgType: 'png',
-  };
-
-}
-
-
-// ----- Component ----- //
-
-function ProductHero(props: PropTypes) {
-
   return (
     <div className="component-product-hero">
       <LeftMarginSection>
         <SvgCirclesLeft />
         <SvgCirclesRight />
-        <GridPicture {...gridPicture(props.countryGroupId)} />
+        <GridPicture
+          sources={sources}
+          fallback={gridImages.fallback}
+          fallbackSize={500}
+          altText={props.altText}
+          fallbackImgType={props.fallbackImgType}
+        />
       </LeftMarginSection>
     </div>
   );
