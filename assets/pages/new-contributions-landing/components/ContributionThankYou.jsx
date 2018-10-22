@@ -54,7 +54,7 @@ function ContributionThankYou(props: PropTypes) {
         buttonClassName={classNameWithModifiers('button', ['wob'])}
         accessibilityHintId="accessibility-hint-return-to-guardian"
         type="button"
-        href="https://www.theguardian.com"
+        url="https://www.theguardian.com"
         buttonCopy="Return to The Guardian&nbsp;"
       />
     </div>
