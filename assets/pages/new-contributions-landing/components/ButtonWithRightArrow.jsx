@@ -11,7 +11,7 @@ type PropTypes = {
   type: string,
   accessibilityHintId: string,
   buttonCopy: string,
-  url?: ?string,
+  url: ?string,
   onClick: () => void,
 };
 // ----- Render ----- //

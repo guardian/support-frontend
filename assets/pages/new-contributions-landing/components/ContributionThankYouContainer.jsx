@@ -29,9 +29,9 @@ const mapStateToProps = state => ({
 function ContributionThankYouContainer(props: PropTypes) {
 
   const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
-    thankYouSetPassword: (<ContributionThankYouSetPassword />),
     thankYou: (<ContributionThankYou showDirectDebitCopy={props.paymentMethod === 'DirectDebit'} />),
-    thankYouPasswordDeclinedToSet: (<ContributionThankYou showDirectDebitCopy={false} />),
+    thankYouSetPassword: (<ContributionThankYouSetPassword />),
+    thankYouPasswordDeclinedToSet: (<ContributionThankYou />),
     thankYouPasswordSet: (<ContributionThankYouPasswordSet />),
   };
 

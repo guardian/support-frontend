@@ -14,6 +14,7 @@ import { ButtonWithRightArrow } from '../components/ButtonWithRightArrow';
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   contributionType: Contrib,
+  // wil be true when this is the first thank you page a Direct Debit recurring contributor sees
   showDirectDebitCopy: boolean,
 };
 /* eslint-enable react/no-unused-prop-types */
@@ -60,5 +61,9 @@ function ContributionThankYou(props: PropTypes) {
     </div>
   );
 }
+
+ContributionThankYou.defaultProps = {
+  showDirectDebitCopy: false,
+};
 
 export default connect(mapStateToProps)(ContributionThankYou);
