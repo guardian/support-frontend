@@ -51,14 +51,16 @@ export default function ContributionsThankYouPage(props: PropTypes) {
 // ----- Auxiliary Components ----- //
 
 function BodyCopy(props: PropTypes) {
-  // recurring
-  if (props.directDebit) {
-    return (
-      <div className="component-direct-debit-details__container">
-        <DirectDebitDetails {...props.directDebit} />
-      </div>
-    );
+  if (props.contributionType !== 'ONE_OFF') {
+    if (props.directDebit) {
+      return (
+        <div className="component-direct-debit-details__container">
+          <DirectDebitDetails {...props.directDebit} />
+        </div>
+      );
+    } else {
+      // recurring non-DD
+      return <EmailConfirmation />;
+    }
   }
-  // recurring non-DD
-  return <EmailConfirmation />;
 }
