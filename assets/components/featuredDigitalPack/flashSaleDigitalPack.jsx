@@ -68,8 +68,8 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
                 media: '(min-width: 739px)',
               },
             ]}
-            fallback="digitalPackBenefitsDesktop"
-            fallbackSize={796}
+            fallback="digitalPackFlashSaleDesktop"
+            fallbackSize={500}
             altText="ad-free, live and discover, and the daily edition"
             fallbackImgType="png"
           />
