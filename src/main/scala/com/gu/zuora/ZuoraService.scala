@@ -83,7 +83,7 @@ object GetAccountForIdentity {
     def fromWireAccount(accountRecord: AccountRecord): DomainAccount =
       DomainAccount(
         ZuoraAccountNumber(accountRecord.AccountNumber),
-        Some(accountRecord.CreatedSessionId__c).filter(_.length > 0).map(SessionId.apply)
+        accountRecord.CreatedSessionId__c.filter(_.length > 0).map(SessionId.apply)
       )
 
   }
