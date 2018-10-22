@@ -12,6 +12,7 @@ import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
 import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.ZuoraConfig.RatePlanId
 import com.gu.zuora.model._
+import com.gu.zuora.model.response.SubscribeResponseAccount
 import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +44,9 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     FutureHandlerResult(getEmailState(state, subscription.accountNumber), requestInfo.appendMessage(message))
   }
 
-  def singleSubscribe[RESULT](multiSubscribe: SubscribeRequest => Future[List[RESULT]]): SubscribeItem => Future[RESULT] = { subscribeItem =>
+  def singleSubscribe(
+    multiSubscribe: SubscribeRequest => Future[List[SubscribeResponseAccount]]
+  ): SubscribeItem => Future[SubscribeResponseAccount] = { subscribeItem =>
     multiSubscribe(SubscribeRequest(List(subscribeItem))) flatMap {
       case result :: Nil => Future.successful(result)
       case results => Future.failed(new RuntimeException(s"didn't get a single response item, got: $results"))
