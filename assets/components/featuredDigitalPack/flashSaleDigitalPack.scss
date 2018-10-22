@@ -1,0 +1,114 @@
+.component-flash-sale-featured-digital-pack{
+  position: relative;
+  background: gu-colour(garnett-neutral-3);
+  display: flex;
+
+  @include mq($from: tablet) {
+    width: 100%;
+    padding-left: 18%;
+  }
+
+  @include mq($from: desktop) {
+    width: 100%;
+    padding-left: 20%;
+  }
+
+  .component-cta-link {
+    background-color: gu-colour(news-garnett-highlight);
+    color: gu-colour(garnett-neutral-1);
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    padding-left: 18px;
+    margin-top: $gu-v-spacing * 2;
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-1);
+      height: 22px;
+      top: 9px;
+      left: calc(100% - 32px);
+    }
+
+    &:hover {
+      background-color: darken(gu-colour(news-garnett-highlight), 5%);
+    }
+
+    @include mq($from: tablet) {
+      margin-top: $gu-v-spacing * 3;
+    }
+  }
+
+  .component-grid-picture__image {
+    width: 200px;
+    display: block;
+
+    @include mq($from: mobileLandscape) {
+      width: 240px;
+    }
+
+    @include mq($from: tablet) {
+      margin-top: 30px;
+      width: 450px;
+    }
+
+  }
+}
+
+.component-flash-sale-featured-digital-pack__description {
+  @extend .gu-content-margin;
+
+  min-height: 430px;
+  @include mq($from: tablet) {
+    flex: 0 440px;
+    margin: 10px 0 20px;
+    padding-right: 0;
+    padding-left: 25px;
+  }
+}
+
+.component-flash-sale-featured-digital-pack__image {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+
+  @include mq($from: tablet) {
+    position: initial;
+    display: flex;
+    flex-direction: column-reverse;
+    flex-grow: 1;
+  }
+}
+
+.component-flash-sale-featured-digital-pack__title {
+  font-size: 48px;
+  line-height: 48px;
+  font-family: $gu-headline;
+  font-weight: bold;
+  @include mq($from: tablet) {
+    font-size: 64px;
+    line-height: 60px;
+  }
+}
+
+.component-flash-sale-featured-digital-pack__heading {
+  color: gu-colour(lifestyle-garnett-main-1);
+}
+
+.component-flash-sale-featured-digital-pack__subheading{
+  margin-bottom: 12px;
+}
+
+.component-flash-sale-featured-digital-pack__copy {
+  font-size: 14px;
+  line-height: 1.41;
+  margin-top: $gu-v-spacing / 2;
+  @include mq($from: tablet) {
+    max-width: 250px;
+  }
+}
+
+.component-cta-link--flash-sale {
+  z-index: 1;
+}

@@ -26,29 +26,30 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
     <section className="component-flash-sale-featured-digital-pack">
       <div className="component-flash-sale-featured-digital-pack__description">
         <Heading
-          className="component-flash-sale-featured-digital-pack__heading"
+          className="component-flash-sale-featured-digital-pack__heading component-flash-sale-featured-digital-pack__title"
           size={props.headingSize}
         >
           50% off
         </Heading>
         <Heading
-          className="component-flash-sale-featured-digital-pack__subheading"
+          className="component-flash-sale-featured-digital-pack__subheading component-flash-sale-featured-digital-pack__title"
           size={props.headingSize}
         >
           Screen time well spent
         </Heading>
         <p className="component-flash-sale-featured-digital-pack__copy">
           Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
-          £${getDiscountedPrice('DigitalPack', 'GBPCountries')} for your first three months.
+          £{getDiscountedPrice('DigitalPack', 'GBPCountries')} for your first three months.
         </p>
         <CtaLink
           text="Subscribe now"
           url={props.url}
           accessibilityHint="Buy now"
+          modifierClasses={['flash-sale']}
           onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
         />
       </div>
-      <div className="component-featured-digital-pack__image">
+      <div className="component-flash-sale-featured-digital-pack__image">
         <GridPicture
           sources={[
             {
@@ -56,14 +57,14 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
               srcSizes: [467],
               imgType: 'png',
               sizes: '90vw',
-              media: '(max-width: 659px)',
+              media: '(max-width: 739px)',
             },
             {
               gridId: 'digitalPackFlashSaleDesktop',
               srcSizes: [140, 500, 1000, 1027],
               imgType: 'png',
               sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw, 90vw',
-              media: '(min-width: 660px)',
+              media: '(min-width: 739px)',
             },
           ]}
           fallback="digitalPackBenefitsDesktop"
