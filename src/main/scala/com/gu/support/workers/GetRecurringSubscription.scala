@@ -1,6 +1,7 @@
 package com.gu.support.workers
 
 import cats.implicits._
+import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.lambdas.IdentityId
 import com.gu.support.workers.model.AccessScope.{AccessScopeBySessionId, AccessScopeNoRestriction, SessionId}
 import com.gu.support.workers.model.{AccessScope, BillingPeriod}
@@ -29,8 +30,11 @@ object GetRecurringSubscription {
         case None => false
       }
 
-    def isInScope(domainAccount: DomainAccount): Boolean =
-      GetRecurringSubscription.isInAccessScope(accessScope, domainAccount.maybeCreatedSessionId)
+    def isInScope(domainAccount: DomainAccount): Boolean = {
+      val inScope = GetRecurringSubscription.isInAccessScope(accessScope, domainAccount.maybeCreatedSessionId)
+      SafeLogger.info(s"isInScope $inScope when using access scope $accessScope to check account $domainAccount")
+      inScope
+    }
 
     for {
       accountIds <- zuoraService.getAccountFields(identityId)
