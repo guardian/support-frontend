@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 
 // ---- Types ----- //
 type PropTypes = {
-  date: string
+  date: number[]
 };
 
 type StateTypes = {
@@ -58,8 +58,8 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
     this.stop();
   }
 
-  calculateCountdown(endDate: string): CountdownTime {
-    const t = Date.parse(new Date(endDate)) - Date.parse(new Date());
+  calculateCountdown(endDate: number[]): CountdownTime {
+    const t = Date.parse(new Date(...endDate)) - Date.parse(new Date());
 
     const seconds = Math.floor((t / 1000) % 60);
     const minutes = Math.floor((t / 1000 / 60) % 60);
@@ -76,9 +76,11 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
   render() {
     const { days, hours, minutes, seconds } = this.state;
 
+    const units = days > 0 ? [days, hours, minutes] : [hours, minutes, seconds];
+
     return (
       <time className={this.props.className}>
-        {[days, hours, minutes, seconds].map(addLeadingZeros).join(':')}
+        {units.map(addLeadingZeros).join(':')}
       </time>
     );
   }
