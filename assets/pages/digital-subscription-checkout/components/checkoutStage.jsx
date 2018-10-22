@@ -22,8 +22,8 @@ import ThankYouContent from './thankYouContent';
 // ----- Types ----- //
 
 type PropTypes = {|
-  stage: Stage;
-  countryGroupId: CountryGroupId;
+  stage: Stage,
+  countryGroupId: CountryGroupId,
 |};
 
 
