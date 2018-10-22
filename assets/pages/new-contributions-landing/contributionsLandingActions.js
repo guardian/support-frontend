@@ -59,6 +59,7 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
+  | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' };
 
 
@@ -108,6 +109,8 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
+
+const setHasSeenDirectDebitThankYouCopy = (): Action => ({ type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' });
 
 const setThirdPartyPaymentLibrary =
   (thirdPartyPaymentLibraryByContrib: {
@@ -357,4 +360,5 @@ export {
   createOneOffPayPalPayment,
   setPayPalHasLoaded,
   setupRecurringPayPalPayment,
+  setHasSeenDirectDebitThankYouCopy,
 };

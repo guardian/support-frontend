@@ -63,6 +63,7 @@ type FormState = {
   paymentError: CheckoutFailureReason | null,
   guestAccountCreationToken: ?string,
   thankYouPageStage: ThankYouPageStage,
+  hasSeenDirectDebitThankYouPageCopy: boolean,
   payPalHasLoaded: boolean,
 };
 
@@ -137,6 +138,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
+    hasSeenDirectDebitThankYouPageCopy: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -228,6 +230,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
         return { ...state, formData: { ...state.formData, checkoutFormHasBeenSubmitted: true } };
+
+      case 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY':
+        return { ...state, hasSeenDirectDebitThankYouPageCopy: true };
 
       case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
         return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };

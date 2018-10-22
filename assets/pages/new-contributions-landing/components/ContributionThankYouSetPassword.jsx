@@ -2,9 +2,11 @@
 
 // ----- Imports ----- //
 
-import type { PaymentMethod } from 'helpers/contributions';
+import { type Dispatch } from 'redux';
 import React from 'react';
+import type { PaymentMethod } from 'helpers/contributions';
 import { connect } from 'react-redux';
+import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 import SetPasswordForm from './SetPassword/SetPasswordForm';
 
 // ----- Types ----- //
@@ -13,6 +15,8 @@ import SetPasswordForm from './SetPassword/SetPasswordForm';
 type PropTypes = {
   paymentMethod: PaymentMethod,
   passwordFailed: boolean,
+  hasSeenDirectDebitThankYouCopy: boolean,
+  setHasSeenDirectDebitThankYouCopy: () => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
@@ -22,12 +26,22 @@ type PropTypes = {
 const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   passwordFailed: state.page.form.passwordFailed,
+  hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
 });
+
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+  return {
+    setHasSeenDirectDebitThankYouCopy: () => {
+      dispatch(setHasSeenDirectDebitThankYouCopy());
+    },
+  };
+}
 
 // ----- Render ----- //
 
 function ContributionThankYouSetPassword(props: PropTypes) {
-  if (props.paymentMethod === 'DirectDebit') {
+  if (props.paymentMethod === 'DirectDebit' && !props.hasSeenDirectDebitThankYouCopy) {
+    props.setHasSeenDirectDebitThankYouCopy();
     return (
       <div className="set-password__content">
         <h1 className="header">Thank you for a valuable contribution. Your Direct Debit has been set up.</h1>
@@ -59,4 +73,4 @@ function ContributionThankYouSetPassword(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps)(ContributionThankYouSetPassword);
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionThankYouSetPassword);

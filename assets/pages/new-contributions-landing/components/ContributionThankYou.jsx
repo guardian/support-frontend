@@ -2,41 +2,53 @@
 
 // ----- Imports ----- //
 
+import { type Dispatch } from 'redux';
+import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type Contrib, getSpokenType } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import MarketingConsent from '../components/MarketingConsent';
 import { ButtonWithRightArrow } from '../components/ButtonWithRightArrow';
+import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
   contributionType: Contrib,
-  // wil be true when this is the first thank you page a Direct Debit recurring contributor sees
-  showDirectDebitCopy: boolean,
+  paymentMethod: PaymentMethod,
+  hasSeenDirectDebitThankYouCopy: boolean,
+  setHasSeenDirectDebitThankYouCopy: () => void,
 };
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
+  paymentMethod: state.page.form.paymentMethod,
+  hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
 });
 
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+  return {
+    setHasSeenDirectDebitThankYouCopy: () => {
+      dispatch(setHasSeenDirectDebitThankYouCopy());
+    },
+  };
+}
 
 // ----- Render ----- //
 
 function ContributionThankYou(props: PropTypes) {
 
-  const directDebitHeaderSuffix =
-    props.showDirectDebitCopy
-      ? 'Your Direct Debit has been set up.'
-      : '';
+  let directDebitHeaderSuffix = '';
+  let directDebitMessageSuffix = '';
 
-  const directDebitMessageSuffix =
-    props.showDirectDebitCopy
-      ? 'This will appear as \'Guardian Media Group\' on your bank statements'
-      : '';
+  if (props.paymentMethod === 'DirectDebit' && !props.hasSeenDirectDebitThankYouCopy) {
+    directDebitHeaderSuffix = 'Your Direct Debit has been set up.';
+    directDebitMessageSuffix = 'This will appear as \'Guardian Media Group\' on your bank statements';
+    props.setHasSeenDirectDebitThankYouCopy();
+  }
 
   return (
     <div className="thank-you__container">
@@ -62,8 +74,5 @@ function ContributionThankYou(props: PropTypes) {
   );
 }
 
-ContributionThankYou.defaultProps = {
-  showDirectDebitCopy: false,
-};
 
-export default connect(mapStateToProps)(ContributionThankYou);
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionThankYou);
