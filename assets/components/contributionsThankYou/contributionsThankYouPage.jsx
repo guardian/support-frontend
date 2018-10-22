@@ -39,7 +39,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
         modifierClasses={['compact']}
       />
       <div className="multiline-divider" />
-      {props.contributionType !== 'ONE_OFF' ? <BodyCopy {...props} /> : null}
+      {props.contributionType !== 'ONE_OFF' ? <RecurringContribBodyCopy {...props} /> : null}
       {props.marketingConsent}
       <QuestionsContact countryGroupId={props.countryGroupId} />
       <SpreadTheWord />
@@ -50,7 +50,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function BodyCopy(props: PropTypes) {
+function RecurringContribBodyCopy(props: PropTypes) {
   // recurring
   if (props.directDebit) {
     return (
