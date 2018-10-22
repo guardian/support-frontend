@@ -9,6 +9,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
 import SvgNewsletters from 'components/svgs/newsletters';
+import SvgInformation from 'components/svgs/information';
 import type { Dispatch } from 'redux';
 import type { Action } from '../../../helpers/user/userActions';
 import type { Csrf as CsrfState } from '../../../helpers/csrf/csrfReducer';
@@ -74,7 +75,10 @@ function MarketingConsent(props: PropTypes) {
         <small>
           { props.confirmOptIn === true ?
             'We\'ll be in touch. Check your inbox for a confirmation link.' :
-            'You can stop these at any time.'
+            <div>
+              <SvgInformation />
+              <span className="information__message">You can unsubscribe at any time</span>
+            </div>
           }
         </small>
       </p>
