@@ -11,7 +11,6 @@ type PropTypes = {
   type: string,
   accessibilityHintId: string,
   buttonCopy: string,
-  url: ?string,
   onClick: () => void,
 };
 // ----- Render ----- //
@@ -20,17 +19,16 @@ function ButtonWithRightArrow(props: PropTypes) {
 
   return (
     <div className={props.componentClassName}>
-      <a
+      <button
         className={props.buttonClassName}
         type={props.type}
-        href={props.url}
         aria-describedby={props.accessibilityHintId}
         onClick={props.onClick}
       >
         {props.buttonCopy}
         <p id={props.accessibilityHintId} className="accessibility-hint">{props.buttonCopy}</p>
         <SvgArrowRight />
-      </a>
+      </button>
     </div>
   );
 }
@@ -39,7 +37,6 @@ function ButtonWithRightArrow(props: PropTypes) {
 
 ButtonWithRightArrow.defaultProps = {
   onClick: () => undefined,
-  url: null,
 };
 
 export { ButtonWithRightArrow };

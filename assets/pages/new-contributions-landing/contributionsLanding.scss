@@ -917,6 +917,10 @@ form {
   margin-bottom: $gu-v-spacing + 20px;
   padding-bottom: $gu-v-spacing;
   padding-top: $gu-v-spacing;
+
+  & > a {
+    font-size: 16px;
+  }
 }
 
 .confirmation__meta {
