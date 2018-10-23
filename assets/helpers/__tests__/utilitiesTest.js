@@ -10,6 +10,7 @@ import {
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
+  addLeadingZeros
 } from '../utilities';
 
 
@@ -17,7 +18,7 @@ import {
 
 // Returns a mocked keypress event.
 function getMockedKeypress(key: number) {
-  return { keyCode: key, preventDefault: () => {} };
+  return { keyCode: key, preventDefault: () => { } };
 }
 
 
@@ -145,6 +146,20 @@ describe('utilities', () => {
     it('should produce the correct fallbacks on failure to parse', () => {
       expect(parseBoolean('notaboolean', true)).toBe(true);
       expect(parseBoolean('notaboolean', false)).toBe(false);
+    });
+
+  });
+
+  describe('addLeadingZeros', () => {
+
+    it('should fill in a smaller number', () => {
+      expect(addLeadingZeros(2, 2)).toBe('02');
+      expect(addLeadingZeros(12, 3)).toBe('012');
+    });
+
+    it('should not fill in larger numbers', () => {
+      expect(addLeadingZeros(20, 2)).toBe('20');
+      expect(addLeadingZeros(120, 3)).toBe('120');
     });
 
   });

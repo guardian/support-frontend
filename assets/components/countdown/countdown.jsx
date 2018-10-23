@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 import React, { Component } from 'react';
+import { addLeadingZeros } from 'helpers/utilities'
 
 
 // ---- Types ----- //
@@ -23,14 +24,6 @@ type StateTypes = {
 
 
 // ---- Helpers ----- //
-const addLeadingZeros = (value: number, length: number = 2): string => {
-  let valueStr = String(value);
-  while (valueStr.length < length) {
-    valueStr = `0${valueStr}`;
-  }
-  return valueStr;
-};
-
 const calculateCountdown = (endDate: number): CountdownTime => {
   const unixTimeLeft = endDate - Date.now();
 

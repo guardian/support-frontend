@@ -32,7 +32,7 @@ function hiddenIf(shouldHide: boolean, className: string): string {
 
 // Generates a key handler that only trigger a function if the
 // CarriageReturnCode and SpaceCode are pressed
-function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) {
+function clickSubstituteKeyPressHandler(handler?: () => void = () => { }) {
   return (event: Object) => {
     const CarriageReturnCode = 13;
     const SpaceCode = 32;
@@ -77,6 +77,15 @@ function deserialiseJsonObject(serialised: string): ?Object {
 
 }
 
+// Adds leading zeros
+function addLeadingZeros(value: number, length: number = 2): string {
+  let valueStr = String(value);
+  while (valueStr.length < length) {
+    valueStr = `0${valueStr}`;
+  }
+  return valueStr;
+};
+
 
 // ----- Exports ----- //
 
@@ -89,4 +98,5 @@ export {
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
+  addLeadingZeros,
 };
