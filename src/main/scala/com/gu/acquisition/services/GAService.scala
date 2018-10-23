@@ -13,7 +13,7 @@ import ophan.thrift.event.{AbTestInfo, Acquisition, Product}
 import scala.util.matching.Regex
 
 private[services] object GAService {
-  val clientIdPattern: Regex = raw"GA\d\.\d\.(\d+)\..*".r
+  val clientIdPattern: Regex = raw"GA\d\.\d\.(\d+\.\d+)".r
 }
 
 private[services] class GAService(implicit client: OkHttpClient)
