@@ -14,6 +14,6 @@ case class CreateZuoraSubscriptionState(
   sessionId: Option[String]
 ) extends StepFunctionUserState {
 
-  def accessScope: AccessScope = AccessScope.fromRaw(sessionId)
+  def accountAccessScope: AccountAccessScope = AccountAccessScope.fromWire(sessionId)
 
 }

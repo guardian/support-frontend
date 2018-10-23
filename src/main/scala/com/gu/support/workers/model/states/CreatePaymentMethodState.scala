@@ -11,8 +11,4 @@ case class CreatePaymentMethodState(
   paymentFields: PaymentFields,
   acquisitionData: Option[AcquisitionData],
   sessionId: Option[String]
-) extends StepFunctionUserState {
-
-  def accessScope: AccessScope = AccessScope.fromRaw(sessionId)
-
-}
+) extends StepFunctionUserState
