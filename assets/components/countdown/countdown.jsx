@@ -14,25 +14,25 @@ type CountdownTime = {
 }
 
 type PropTypes = {
-  date: number[]
+  to: number
 };
 
 type StateTypes = {
-  countdown: CountdownTime
+  time: CountdownTime
 }
 
 
 // ---- Helpers ----- //
-const addLeadingZeros = (value: number): string => {
+const addLeadingZeros = (value: number, length: number = 2): string => {
   let valueStr = String(value);
-  while (valueStr.length < 2) {
+  while (valueStr.length < length) {
     valueStr = `0${valueStr}`;
   }
   return valueStr;
 };
 
-const calculateCountdown = (endDate: number[]): CountdownTime => {
-  const unixTimeLeft = new Date(...endDate).getTime() - Date.now();
+const calculateCountdown = (endDate: number): CountdownTime => {
+  const unixTimeLeft = endDate - Date.now();
 
   const seconds = Math.floor((unixTimeLeft / 1000) % 60);
   const minutes = Math.floor((unixTimeLeft / 1000 / 60) % 60);
@@ -52,14 +52,14 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
     super(props);
 
     this.state = {
-      countdown: calculateCountdown(this.props.date),
+      time: calculateCountdown(this.props.to),
     };
   }
 
   componentDidMount(): void {
     this.interval = setInterval(() => {
-      const date = calculateCountdown(this.props.date);
-      if (date.unixTimeLeft >= 0) { this.setState({ countdown: date }); } else { this.stop(); }
+      const time = calculateCountdown(this.props.to);
+      if (time.unixTimeLeft >= 0) { this.setState({ time }); } else { this.stop(); }
     }, 1000);
   }
 
@@ -76,7 +76,7 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
   render() {
     const {
       days, hours, minutes, seconds,
-    } = this.state.countdown;
+    } = this.state.time;
 
     const units = days > 0 ? [days, hours, minutes] : [hours, minutes, seconds];
 
