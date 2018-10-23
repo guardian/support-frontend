@@ -1,4 +1,5 @@
-.component-featured-digital-pack {
+.component-featured-digital-pack{
+  @extend .gu-content-margin;
   @include mq($from: desktop) {
     width: gu-breakpoint(desktop);
     margin: 0 auto;
