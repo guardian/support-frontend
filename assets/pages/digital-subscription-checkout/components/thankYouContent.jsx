@@ -92,6 +92,9 @@ function EmailsSection() {
         </strong> on the ways to read and support our journalism. Already a member,
         subscriber or contributor, opt in here to receive your regular emails and updates.
       </p>
+      <p className="thank-you-content__copy thank-you-content__copy--small">
+        <small>You can unsubscribe at any time by going to the preference centre</small>
+      </p>
     </LeftMarginSection>
   );
 

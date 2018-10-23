@@ -140,6 +140,11 @@
     }
   }
 
+  .thank-you-content__copy--small {
+    font-family: $gu-text-sans-web;
+    color: gu-colour(garnett-neutral-6);
+  }
+
   .thank-you-content__copy--free-trial {
     font-style: italic;
     margin: 0;
