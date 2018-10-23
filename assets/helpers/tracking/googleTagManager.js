@@ -191,12 +191,14 @@ function successfulConversion(participations: Participations) {
 }
 
 function gaEvent(gaEventData: GaEventData) {
-  window.googleTagManagerDataLayer.push({
-    event: 'GAEvent',
-    eventCategory: gaEventData.category,
-    eventAction: gaEventData.action,
-    eventLabel: gaEventData.label,
-  });
+  if (window.googleTagManagerDataLayer) {
+    window.googleTagManagerDataLayer.push({
+      event: 'GAEvent',
+      eventCategory: gaEventData.category,
+      eventAction: gaEventData.action,
+      eventLabel: gaEventData.label,
+    });
+  }
 }
 
 function appStoreCtaClick() {

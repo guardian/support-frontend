@@ -77,6 +77,15 @@ function deserialiseJsonObject(serialised: string): ?Object {
 
 }
 
+// Adds leading zeros
+function addLeadingZeros(value: number, length: number = 2): string {
+  let valueStr = String(value);
+  while (valueStr.length < length) {
+    valueStr = `0${valueStr}`;
+  }
+  return valueStr;
+}
+
 
 // ----- Exports ----- //
 
@@ -89,4 +98,5 @@ export {
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
+  addLeadingZeros,
 };

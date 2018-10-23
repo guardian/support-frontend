@@ -49,6 +49,7 @@ type FormData = UserFormData & {
 type SetPasswordData = {
   password: string,
   passwordHasBeenSubmitted: boolean,
+  passwordError: boolean,
 }
 
 type FormState = {
@@ -129,6 +130,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     setPasswordData: {
       password: '',
       passwordHasBeenSubmitted: false,
+      passwordError: false,
     },
     showOtherAmount: false,
     selectedAmounts: initialAmount,
@@ -188,6 +190,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'SET_PASSWORD_HAS_BEEN_SUBMITTED':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordHasBeenSubmitted: true } };
+
+      case 'SET_PASSWORD_ERROR':
+        return { ...state, setPasswordData: { ...state.setPasswordData, passwordError: action.passwordError } };
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
