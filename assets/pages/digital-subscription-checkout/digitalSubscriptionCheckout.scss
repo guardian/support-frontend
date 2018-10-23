@@ -35,6 +35,12 @@
 
   // ----- Heading
 
+  .component-product-hero {
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
+
   .component-heading-block {
     // Makes sure the circle SVGs stay behind the heading.
     position: relative;
