@@ -70,9 +70,9 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
 
   "A GAService" should {
     "get the correct Client ID" in {
-      service.sanitiseClientId("GA1.1.1633795050.1537436107") shouldEqual Right("1633795050")
+      service.sanitiseClientId("GA1.1.1633795050.1537436107") shouldEqual Right("1633795050.1537436107")
       service.sanitiseClientId("").isLeft shouldBe true
-      service.sanitiseClientId("1234567") shouldEqual Right("1234567")
+      service.sanitiseClientId("1633795050.1537436107") shouldEqual Right("1633795050.1537436107")
     }
     "build a correct payload" in {
       val maybePayload = service.buildPayload(submission)
