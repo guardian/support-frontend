@@ -15,9 +15,9 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   headingSize: HeadingSize,
-};
+|};
 
 // ----- Component ----- //
 

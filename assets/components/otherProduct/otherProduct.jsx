@@ -12,7 +12,7 @@ import type { ImageType } from 'helpers/theGrid';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   modifierClass?: string,
   gridImg: string,
   imgAlt: string,
@@ -22,7 +22,7 @@ type PropTypes = {
   ctaUrl: string,
   ctaAccessibilityHint: string,
   imgType?: ImageType,
-};
+|};
 
 
 // ----- Component ----- //

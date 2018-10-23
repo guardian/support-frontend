@@ -10,10 +10,10 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   ctaUrl: string,
   headingSize: HeadingSize,
-};
+|};
 
 
 // ----- Component ----- //

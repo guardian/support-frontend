@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ThankYouPageStageMap, type ThankYouPageStage } from '../contributionsLandingReducer';
@@ -13,15 +12,13 @@ import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   thankYouPageStage: ThankYouPageStage,
-  paymentMethod: PaymentMethod,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
-  paymentMethod: state.page.form.paymentMethod,
 });
 
 // ----- Render ----- //
@@ -29,7 +26,7 @@ const mapStateToProps = state => ({
 function ContributionThankYouContainer(props: PropTypes) {
 
   const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
-    thankYou: (<ContributionThankYou showDirectDebitCopy={props.paymentMethod === 'DirectDebit'} />),
+    thankYou: (<ContributionThankYou />),
     thankYouSetPassword: (<ContributionThankYouSetPassword />),
     thankYouPasswordDeclinedToSet: (<ContributionThankYou />),
     thankYouPasswordSet: (<ContributionThankYouPasswordSet />),

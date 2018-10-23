@@ -21,7 +21,7 @@ import { ButtonWithRightArrow } from '../ButtonWithRightArrow';
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   email: string,
   password: string,
   guestAccountCreationToken: string,
@@ -30,7 +30,7 @@ type PropTypes = {
   passwordHasBeenSubmitted: boolean,
   updatePassword: (Event) => void,
   csrf: CsrfState,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 

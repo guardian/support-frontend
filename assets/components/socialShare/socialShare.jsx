@@ -14,9 +14,7 @@ import SvgTwitter from 'components/svgs/twitter';
 
 type Platform = 'facebook' | 'twitter';
 
-type PropTypes = {
-  name: Platform,
-};
+type PropTypes = {| name: Platform |};
 
 type SocialMedia = {
   link: string,

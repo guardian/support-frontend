@@ -24,7 +24,7 @@ type InputType = 'text'
                | 'url'
                | 'tel';
 
-type PropTypes = {
+type PropTypes = {|
   id: string,
   type: InputType,
   labelText: string,
@@ -39,7 +39,7 @@ type PropTypes = {
   required: boolean,
   pattern?: string,
   type: ?string,
-};
+|};
 
 
 // ----- Component ----- //

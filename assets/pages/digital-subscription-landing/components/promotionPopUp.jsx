@@ -13,12 +13,12 @@ import { type Action, closePopUp } from './promotionPopUpActions';
 import { expandOption, type PromotionOptions } from './promotionPopUpActions';
 import { type State } from './promotionPopUpReducer';
 
-type PropTypes = {
+type PropTypes = {|
   isPopUpOpen: boolean,
   expandedOption: PromotionOptions,
   closePopUpDialog: () => void,
   expandOption: (option: PromotionOptions) => void,
-}
+|}
 
 // ----- Map State/Props ----- //
 

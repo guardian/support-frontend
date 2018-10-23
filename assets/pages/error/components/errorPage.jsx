@@ -15,12 +15,12 @@ import { contributionsEmail } from 'helpers/legal';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   errorCode: string,
   headings: string[],
   copy: string,
   reportLink?: boolean,
-};
+|};
 
 
 // ----- Component ----- //

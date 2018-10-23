@@ -17,12 +17,12 @@ import { sendMarketingPreferencesToIdentity } from '../../../components/marketin
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
   onClick: (?string, CsrfState) => void,
-};
+|};
 
 const mapStateToProps = state => ({
   confirmOptIn: state.page.marketingConsent.confirmOptIn,

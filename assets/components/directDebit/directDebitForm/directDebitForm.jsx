@@ -31,7 +31,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
@@ -50,7 +50,7 @@ type PropTypes = {
   editDirectDebitClicked: () => void,
   confirmDirectDebitClicked: (onPaymentAuthorisation: PaymentAuthorisation => void) => void,
   countryGroupId: CountryGroupId,
-};
+|};
 
 
 // ----- Map State/Props ----- //

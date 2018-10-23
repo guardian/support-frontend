@@ -10,7 +10,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   onFocus: (string, CountryGroupId) => void,
   onInput: (string, CountryGroupId) => void,
   countryGroupId: CountryGroupId,
@@ -19,7 +19,7 @@ type PropTypes = {
   onKeyPress: ?(event: Object) => void,
   ariaDescribedBy: ?string,
   labelText?: ?string,
-};
+|};
 
 
 // ----- Functions ----- //

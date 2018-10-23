@@ -37,7 +37,7 @@ import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelecto
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   stateUpdate: (value: UsState | CaState) => void,
   countryUpdate: (value: string) => void,
   firstName: UserFormFieldAttribute,
@@ -50,7 +50,7 @@ type PropTypes = {
   country: IsoCountry,
   isSignedIn: boolean,
   stateField: UsState | CaState,
-};
+|};
 
 // ----- Map State/Props ----- //
 

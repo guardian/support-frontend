@@ -35,7 +35,7 @@ type Benefits = {
   copy: Node,
 };
 
-type PropTypes = {
+type PropTypes = {|
   modifierClass?: string,
   heading: string,
   subheading: Node,
@@ -43,7 +43,7 @@ type PropTypes = {
   gridImage: GridImg,
   headingSize: HeadingSize,
   ctas: BundleCta[],
-};
+|};
 
 
 // ----- Component ----- //

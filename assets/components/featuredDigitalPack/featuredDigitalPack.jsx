@@ -20,12 +20,12 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   headingSize: HeadingSize,
   countryGroupId: CountryGroupId,
   url: string,
   abTest: ComponentAbTest | null,
-};
+|};
 
 type Copy = {
   heading: string,

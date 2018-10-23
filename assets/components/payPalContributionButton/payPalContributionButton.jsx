@@ -22,7 +22,7 @@ import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
@@ -36,7 +36,7 @@ type PropTypes = {
   switchStatus: Status,
   cancelURL: string,
   optimizeExperiments: OptimizeExperiments,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 

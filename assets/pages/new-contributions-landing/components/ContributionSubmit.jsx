@@ -26,7 +26,7 @@ import {
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
@@ -42,7 +42,7 @@ type PropTypes = {
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-};
+|};
 
 const mapStateToProps = (state: State) =>
   ({

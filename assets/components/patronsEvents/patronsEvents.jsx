@@ -11,9 +11,9 @@ import { getMemLink, getPatronsLink } from 'helpers/externalLinks';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   campaignCode?: ?string,
-};
+|};
 
 
 // ----- Component ----- //

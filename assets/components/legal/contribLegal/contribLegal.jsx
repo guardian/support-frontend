@@ -11,9 +11,9 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
     countryGroupId: CountryGroupId,
-};
+|};
 
 
 // ----- Component ----- //

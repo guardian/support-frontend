@@ -10,11 +10,11 @@ import DisplayName from 'components/displayName/displayName';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   name: string,
   isSignedIn: boolean,
   children: Node,
-};
+|};
 
 // ----- Component ----- //
 

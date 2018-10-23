@@ -13,7 +13,7 @@ import type { Node } from 'react';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   text: string,
   accessibilityHint: string,
   url?: ?string,
@@ -22,7 +22,7 @@ type PropTypes = {
   id?: ?string,
   svg?: Node,
   modifierClasses: Array<?string>,
-};
+|};
 
 // ----- Component ----- //
 

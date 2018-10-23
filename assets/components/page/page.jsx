@@ -8,13 +8,13 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   id: ?string,
   header: Node,
   footer: Node,
   children: Node,
   classModifiers: Array<?string>
-};
+|};
 
 
 // ----- Component ----- //

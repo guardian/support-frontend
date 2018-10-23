@@ -36,7 +36,7 @@ const content = (
       footer={<FooterContainer disclaimer privacyPolicy />}
     >
       <InvestIntroduction />
-      <SubscriptionsByCountryGroup id={supporterSectionId} headingSize={3} appMedium="subscribe_landing_page" />
+      <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
       <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}

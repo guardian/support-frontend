@@ -5,7 +5,7 @@
 import React from 'react';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
-type PropTypes = {
+type PropTypes = {|
   componentClassName: string,
   buttonClassName: string,
   type: string,
@@ -13,7 +13,7 @@ type PropTypes = {
   buttonCopy: string,
   url: ?string,
   onClick: () => void,
-};
+|};
 // ----- Render ----- //
 
 function ButtonWithRightArrow(props: PropTypes) {

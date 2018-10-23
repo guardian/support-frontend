@@ -10,12 +10,12 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   heading: string,
   subheading?: Node,
   headingSize: HeadingSize,
   modifierClass?: string,
-};
+|};
 
 
 // ----- Component ----- //

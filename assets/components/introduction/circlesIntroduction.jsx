@@ -14,12 +14,12 @@ import { type HeadingSize } from 'components/heading/heading';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   headings: string[],
   highlights?: ?string[],
   modifierClasses: Array<?string>,
   highlightsHeadingSize: HeadingSize,
-};
+|};
 
 
 // ----- Component ----- //

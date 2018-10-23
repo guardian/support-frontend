@@ -21,7 +21,7 @@ export type Radio = {
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */
 
-type PropTypes = {
+type PropTypes = {|
   name: string,
   radios: Radio[],
   checked: ?string,
@@ -29,7 +29,7 @@ type PropTypes = {
   modifierClass?: ?string,
   accessibilityHint?: ?string,
   countryGroupId: CountryGroupId,
-};
+|};
 
 /* eslint-enable react/no-unused-prop-types */
 
