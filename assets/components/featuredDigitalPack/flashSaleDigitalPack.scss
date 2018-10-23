@@ -3,9 +3,12 @@
   background: gu-colour(garnett-neutral-3);
 
   .component-flash-sale-countdown {
-    margin-top: $gu-v-spacing;
-    @include mq($from: phablet) {
-      margin-top: $gu-v-spacing * 2;
+    position: absolute;
+    bottom: 0;
+    margin-top: $gu-v-spacing * 2;
+    background: gu-colour(garnett-neutral-3);
+    @include mq($from: tablet) {
+      position: relative;
     }
   }
 
@@ -36,8 +39,12 @@
   }
 
   .component-grid-picture__image {
-    width: 240px;
+    width: 180px;
     display: block;
+
+    @include mq($from: mobileMedium) {
+      width: 240px;
+    }
 
     @include mq($from: phablet) {
       width: 360px;
@@ -87,13 +94,14 @@
 
 .component-flash-sale-featured-digital-pack__description {
   @extend .gu-content-margin;
+  position: relative;
 
   min-height: 430px;
   @include mq($from: tablet) {
     flex: 0 440px;
     margin: 10px 0 0;
     padding-right: 0;
-    padding-left: 22px;
+    padding-left: 20px;
   }
 }
 
@@ -140,5 +148,9 @@
 }
 
 .component-cta-link--flash-sale {
+  z-index: 2;
+}
+
+.component-flash-sale-countdown {
   z-index: 1;
 }
