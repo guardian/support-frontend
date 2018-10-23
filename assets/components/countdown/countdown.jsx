@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 import React, { Component } from 'react';
-import { addLeadingZeros } from 'helpers/utilities'
+import { addLeadingZeros } from 'helpers/utilities';
 
 
 // ---- Types ----- //

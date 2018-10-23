@@ -84,7 +84,7 @@ function addLeadingZeros(value: number, length: number = 2): string {
     valueStr = `0${valueStr}`;
   }
   return valueStr;
-};
+}
 
 
 // ----- Exports ----- //

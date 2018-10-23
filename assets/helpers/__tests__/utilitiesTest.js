@@ -10,7 +10,7 @@ import {
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
-  addLeadingZeros
+  addLeadingZeros,
 } from '../utilities';
 
 
