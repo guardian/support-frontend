@@ -96,16 +96,18 @@ class Application(
     )).withSettingsSurrogateKey
   }
 
-  def contributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def oldOrNewContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+    type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: Settings = settingsProvider.settings()
-    Ok(views.html.main(
-      title = "Support the Guardian | Make a Contribution",
-      description = stringsConfig.contributionsLandingDescription,
-      mainId = s"contributions-landing-page-$countryCode",
-      mainJsBundle = "contributionsLandingPage.js",
-      mainStyleBundle = "contributionsLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    )).withSettingsSurrogateKey
+    val experiments = settings.switches.experiments
+    if (experiments.get("newPaymentFlow").exists(_.isParticipating)) {
+      request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+        _ => Ok(newContributions(countryCode, None)),
+        user => Ok(newContributions(countryCode, user))
+      ).map(_.withSettingsSurrogateKey)
+    } else {
+      Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey)
+    }
   }
 
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
@@ -115,6 +117,17 @@ class Application(
       _ => Ok(newContributions(countryCode, None)),
       user => Ok(newContributions(countryCode, user))
     ).map(_.withSettingsSurrogateKey)
+  }
+
+  private def oldContributions(countryCode: String)(implicit request: RequestHeader, settings: Settings) = {
+    views.html.main(
+      title = "Support the Guardian | Make a Contribution",
+      description = stringsConfig.contributionsLandingDescription,
+      mainId = s"contributions-landing-page-$countryCode",
+      mainJsBundle = "contributionsLandingPage.js",
+      mainStyleBundle = "contributionsLandingPageStyles.css",
+      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
+    )
   }
 
   private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
