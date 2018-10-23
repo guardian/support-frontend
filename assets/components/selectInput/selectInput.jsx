@@ -13,13 +13,13 @@ export type SelectOption = {
   selected?: boolean,
 };
 
-type PropTypes = {
+type PropTypes = {|
   options: SelectOption[],
   onChange: (string) => void,
   required: boolean,
   id: string,
   label: string,
-};
+|};
 
 
 // ----- Component ----- //

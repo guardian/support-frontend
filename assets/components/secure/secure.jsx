@@ -11,9 +11,9 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   modifierClasses: Array<?string>,
-};
+|};
 
 
 // ----- Component ----- //

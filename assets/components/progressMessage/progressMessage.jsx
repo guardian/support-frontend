@@ -7,9 +7,9 @@ import AnimatedDots from 'components/spinners/animatedDots';
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   message: string[],
-};
+|};
 
 
 // ----- Component ----- //

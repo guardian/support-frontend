@@ -14,9 +14,9 @@ import SvgSubsThankYouHeroDesktop from 'components/svgs/subsThankYouHeroDesktop'
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   children: Node,
-};
+|};
 
 
 // ----- Component ----- //

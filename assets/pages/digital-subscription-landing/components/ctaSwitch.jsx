@@ -16,7 +16,7 @@ import { showUpgradeMessage } from '../helpers/upgradePromotion';
 function CtaSwitch(props: { referringCta: string }) {
 
   if (showUpgradeMessage()) {
-    return <FindOutMoreCta referringCta={props.referringCta} />;
+    return <FindOutMoreCta />;
   }
 
   return (

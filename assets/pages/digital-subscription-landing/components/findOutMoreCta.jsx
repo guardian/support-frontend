@@ -9,9 +9,9 @@ import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { type Action, openPopUp } from './promotionPopUpActions';
 
 
-type PropTypes = {
+type PropTypes = {|
   openPopUpDialog: () => void,
-}
+|}
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {

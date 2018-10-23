@@ -26,7 +26,7 @@ import { type Action, updatePaymentMethod, setThirdPartyPaymentLibrary } from '.
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   countryId: IsoCountry,
   contributionType: Contrib,
   currency: IsoCurrency,
@@ -37,7 +37,7 @@ type PropTypes = {
   setThirdPartyPaymentLibrary: (?{ [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
   isTestUser: boolean,
   switches: Switches,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({

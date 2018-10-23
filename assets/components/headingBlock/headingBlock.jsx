@@ -7,10 +7,10 @@ import React, { type Node } from 'react';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   heading: string,
   children: Node,
-};
+|};
 
 
 // ----- Component ----- //

@@ -9,11 +9,11 @@ import SvgExclamation from 'components/svgs/exclamation';
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   showError?: boolean,
   message: ?string,
   svg?: Node,
-};
+|};
 
 
 // ----- Component ----- //

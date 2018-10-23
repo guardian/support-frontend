@@ -25,10 +25,10 @@ import ContributionAwarePaymentLogosContainer
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   store: Store<*, *, *>,
   countryGroupId: CountryGroupId,
-};
+|};
 
 // ----- Internationalisation ----- //
 

@@ -21,14 +21,14 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   isPopUpOpen: boolean,
   openDirectDebitPopUp: () => void,
   switchStatus: Status,
   whenUnableToOpen: () => void,
   canOpen: () => boolean,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 

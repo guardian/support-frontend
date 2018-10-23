@@ -16,10 +16,10 @@ import AppsSection from './appsSection';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   stage: Stage;
   countryGroupId: CountryGroupId;
-};
+|};
 
 
 // ----- State/Props Maps ----- //

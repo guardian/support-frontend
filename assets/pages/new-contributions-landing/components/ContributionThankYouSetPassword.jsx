@@ -12,12 +12,12 @@ import SetPasswordForm from './SetPassword/SetPasswordForm';
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   paymentMethod: PaymentMethod,
   passwordFailed: boolean,
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 

@@ -17,12 +17,12 @@ import type { CountryGroupId } from '../../helpers/internationalisation/countryG
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   contributionType: Contrib,
   directDebit: ?DirectDebit,
   countryGroupId: CountryGroupId,
   marketingConsent: Node,
-};
+|};
 
 
 // ----- Component ----- //

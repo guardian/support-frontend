@@ -99,7 +99,7 @@ function FormFields(props: PropTypes) {
         required
         disabled={isSignedIn}
       />
-      <Signout isSignedIn={isSignedIn} />
+      <Signout isSignedIn />
       <NewContributionTextInput
         id="contributionFirstName"
         name="contribution-fname"

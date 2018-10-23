@@ -16,12 +16,12 @@ import { type Action, updateContributionType } from '../contributionsLandingActi
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   contributionType: Contrib,
   countryId: IsoCountry,
   switches: Switches,
   onSelectContributionType: (Contrib, Switches, IsoCountry) => void,
-};
+|};
 
 const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,

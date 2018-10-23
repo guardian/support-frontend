@@ -15,12 +15,12 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributions
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
-};
+  |};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({

@@ -20,12 +20,12 @@ import FlashSaleDigitalPack from './flashSaleDigitalPack';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   headingSize: HeadingSize,
   countryGroupId: CountryGroupId,
   url: string,
   abTest: ComponentAbTest | null,
-};
+|};
 
 // ----- Components ----- //
 

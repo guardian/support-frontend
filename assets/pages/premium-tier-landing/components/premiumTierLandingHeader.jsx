@@ -20,9 +20,9 @@ import PriceCtaContainer from './priceCtaContainer';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   countryGroupId: CountryGroupId
-};
+|};
 
 type GridImages = {
   breakpoints: {

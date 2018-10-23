@@ -8,7 +8,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   id: string,
   name: string,
   label: string,
@@ -29,7 +29,7 @@ type PropTypes = {
   step: number | void,
   pattern: string | void,
   disabled: boolean,
-};
+|};
 
 // ----- Render ----- //
 

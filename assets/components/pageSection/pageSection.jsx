@@ -11,12 +11,12 @@ import type { Node } from 'react';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   modifierClass?: string,
   heading?: string,
   headingChildren?: Node,
   children?: Node,
-};
+|};
 
 
 // ----- Component ----- //

@@ -13,12 +13,12 @@ import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   headingSize: HeadingSize,
   url: string,
   subheading: string,
   abTest: ComponentAbTest | null,
-};
+|};
 
 
 // ----- Component ----- //

@@ -7,11 +7,11 @@ import React from 'react';
 import PageSection from 'components/pageSection/pageSection';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 
-type PropTypes = {
+type PropTypes = {|
   accountHolderName: string,
   accountNumber: string,
   sortCodeArray: string[],
-}
+|}
 
 function mask(s: string): string {
   return `******${s.substring(6)}`;

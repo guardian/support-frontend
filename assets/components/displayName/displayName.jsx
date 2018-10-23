@@ -8,10 +8,10 @@ import SvgUser from 'components/svgs/user';
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   name: string,
   isSignedIn: boolean,
-};
+|};
 
 
 // ----- Component ----- //

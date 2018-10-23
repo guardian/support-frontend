@@ -9,9 +9,9 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   headingSize: HeadingSize,
-};
+|};
 
 
 // ----- Component ----- //

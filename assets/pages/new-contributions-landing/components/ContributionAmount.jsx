@@ -21,7 +21,7 @@ import { NewContributionTextInput } from './ContributionTextInput';
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
@@ -31,7 +31,7 @@ type PropTypes = {
   checkOtherAmount: string => boolean,
   updateOtherAmount: string => void,
   checkoutFormHasBeenSubmitted: boolean,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
@@ -131,11 +131,6 @@ function ContributionAmount(props: PropTypes) {
     </fieldset>
   );
 }
-
-ContributionAmount.defaultProps = {
-  amount: null,
-  showOther: false,
-};
 
 const NewContributionAmount = connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
 

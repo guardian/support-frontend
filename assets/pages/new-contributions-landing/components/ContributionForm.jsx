@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import { type Amount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
-import type { CountryMetaData } from 'helpers/internationalisation/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -64,7 +63,6 @@ type PropTypes = {|
   currency: IsoCurrency,
   paymentError: CheckoutFailureReason | null,
   selectedAmounts: { [Contrib]: Amount | 'other' },
-  selectedCountryGroupDetails: CountryMetaData,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
@@ -91,7 +89,6 @@ const mapStateToProps = (state: State) => ({
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
   selectedAmounts: state.page.form.selectedAmounts,
-
 });
 
 
@@ -186,7 +183,6 @@ function ContributionForm(props: PropTypes) {
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <NewContributionType />
       <NewContributionAmount
-        countryGroupDetails={props.selectedCountryGroupDetails}
         checkOtherAmount={checkOtherAmount}
       />
       <ContributionFormFields />

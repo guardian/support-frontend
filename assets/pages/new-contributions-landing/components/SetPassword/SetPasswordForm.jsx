@@ -25,7 +25,7 @@ const passwordErrorMessage = 'Sorry, we are unable to register you at this time.
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   email: string,
   password: string,
   guestAccountCreationToken: string,
@@ -36,7 +36,7 @@ type PropTypes = {
   csrf: CsrfState,
   passwordError: boolean,
   setPasswordError: (boolean) => void,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 

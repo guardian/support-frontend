@@ -10,7 +10,7 @@ import { getBaseDomain } from 'helpers/url';
 
 type PropTypes = {
   returnUrl?: string,
-  isSignedIn: boolean
+  isSignedIn: boolean,
 };
 
 

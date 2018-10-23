@@ -21,7 +21,7 @@ import { type Stage } from '../helpers/checkoutForm/checkoutFormReducer';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   amount: number,
   currencyId: IsoCurrency,
   contributionType: ContributionType,
@@ -32,7 +32,7 @@ type PropTypes = {
   onNextButtonClick: () => void,
   onBackClick: () => void,
   stage: Stage,
-};
+|};
 
 // ----- Component ----- //
 
