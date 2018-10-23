@@ -7,7 +7,7 @@ export type AnnualContributionsTestVariant = 'control' | 'annual' | 'annualHighe
 
 // Participations in these tests are only assigned
 // to browsers landing on pages/contributions-landing/contributionsLanding.jsx
-export const existingContributionsFlowTests: Tests = {
+export const oldContributionsFlowTests: Tests = {
   annualContributionsRoundTwo: {
     variants: ['control', 'annual', 'annualHigherAmounts'],
     audiences: {

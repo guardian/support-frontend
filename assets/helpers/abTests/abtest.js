@@ -11,7 +11,7 @@ import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-  existingContributionsFlowTests,
+  oldContributionsFlowTests,
   newContributionsFlowTests,
   tests,
 } from 'helpers/abTests/abtestDefinitions';
@@ -20,7 +20,7 @@ import {
 // ----- Types ----- //
 const allTests = {
   ...tests,
-  ...existingContributionsFlowTests,
+  ...oldContributionsFlowTests,
   ...newContributionsFlowTests,
 };
 
