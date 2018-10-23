@@ -7,7 +7,7 @@ import com.gu.monitoring.SafeLogger._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.GetRecurringSubscription
 import com.gu.support.workers.lambdas.IdentityId
-import com.gu.support.workers.model.AccessScope.{AccessScopeBySessionId, AccessScopeNoRestriction, SessionId}
+import com.gu.support.workers.model.AccountAccessScope.{SessionAccess, AuthenticatedAccess, SessionId}
 import com.gu.support.workers.model.Monthly
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
@@ -52,25 +52,25 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "be able to find a monthly recurring subscription" in {
-    GetRecurringSubscription(uatService, AccessScopeNoRestriction, IdentityId("30001758").get, Monthly).map {
+    GetRecurringSubscription(uatService, AuthenticatedAccess, IdentityId("30001758").get, Monthly).map {
       _.flatMap(_.ratePlans.headOption.map(_.productName)) should be(Some("Contributor"))
     }
   }
 
   it should "ignore a monthly recurring subscription with wrong session id" in {
-    GetRecurringSubscription(uatService, AccessScopeBySessionId(SessionId("testZuora")), IdentityId("30001758").get, Monthly).map {
+    GetRecurringSubscription(uatService, SessionAccess(SessionId("testZuora")), IdentityId("30001758").get, Monthly).map {
       _.flatMap(_.ratePlans.headOption) should be(None)
     }
   }
 
   it should "ignore active subscriptions which do not have a recurring contributor plan" in {
-    GetRecurringSubscription(uatService, AccessScopeNoRestriction, IdentityId("18390845").get, Monthly).map {
+    GetRecurringSubscription(uatService, AuthenticatedAccess, IdentityId("18390845").get, Monthly).map {
       _ should be(None)
     }
   }
 
   it should "ignore cancelled recurring contributions" in {
-    GetRecurringSubscription(uatService, AccessScopeNoRestriction, IdentityId("30001780").get, Monthly).map {
+    GetRecurringSubscription(uatService, AuthenticatedAccess, IdentityId("30001780").get, Monthly).map {
       _ should be(None)
     }
   }

@@ -5,7 +5,7 @@ import cats.implicits._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.workers.lambdas.IdentityId
-import com.gu.support.workers.model.AccessScope.SessionId
+import com.gu.support.workers.model.AccountAccessScope.SessionId
 import com.gu.zuora.GetAccountForIdentity.{DomainAccount, ZuoraAccountNumber}
 import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.model.response._

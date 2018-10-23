@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import com.gu.i18n.Currency.GBP
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.AccessScope._
+import com.gu.support.workers.model.AccountAccessScope._
 import com.gu.support.workers.model._
 import com.gu.support.workers.model.states.CreatePaymentMethodState
 import com.gu.zuora.encoding.CustomCodecs._
@@ -50,9 +50,8 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     val maybeState = decode[CreatePaymentMethodState](createPayPalPaymentMethodContributionJson())
 
     val fieldsToTest = maybeState.map(state =>
-      (state.accessScope, state.product, state.paymentFields))
+      (state.product, state.paymentFields))
     fieldsToTest should be(Right(
-      AccessScopeNoRestriction,
       Contribution(5, GBP, Monthly),
       PayPalPaymentFields(validBaid)
     ))
@@ -62,9 +61,8 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   it should "be able to decode a contribution with Stripe payment fields" in {
     val maybeState = decode[CreatePaymentMethodState](createStripePaymentMethodContributionJson())
     val fieldsToTest = maybeState.map(state =>
-      (state.accessScope, state.product, state.paymentFields))
+      (state.product, state.paymentFields))
     fieldsToTest should be(Right(
-      AccessScopeBySessionId(SessionId("testingToken")),
       Contribution(5, GBP, Monthly),
       StripePaymentFields(stripeToken)
     ))

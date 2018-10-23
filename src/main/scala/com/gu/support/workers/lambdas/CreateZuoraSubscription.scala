@@ -31,7 +31,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     services: Services
   ): FutureHandlerResult = for {
     identityId <- Future.fromTry(IdentityId(state.user.id))
-    maybeDomainSubscription <- GetRecurringSubscription(services.zuoraService, state.accessScope, identityId, state.product.billingPeriod)
+    maybeDomainSubscription <- GetRecurringSubscription(services.zuoraService, state.accountAccessScope, identityId, state.product.billingPeriod)
     thankYouState <- maybeDomainSubscription match {
       case Some(domainSubscription) => skipSubscribe(state, requestInfo, domainSubscription)
       case None => subscribe(state, requestInfo, services)

@@ -3,8 +3,8 @@ package com.gu.support.workers
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.lambdas.IdentityId
-import com.gu.support.workers.model.AccessScope.{AccessScopeBySessionId, AccessScopeNoRestriction, SessionId}
-import com.gu.support.workers.model.{AccessScope, BillingPeriod}
+import com.gu.support.workers.model.AccountAccessScope.{SessionAccess, AuthenticatedAccess, SessionId}
+import com.gu.support.workers.model.{AccountAccessScope, BillingPeriod}
 import com.gu.zuora.GetAccountForIdentity.{CreatedInSession, DomainAccount, ExistingContributionSessionId}
 import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.ZuoraConfig.RatePlanId
@@ -17,7 +17,7 @@ object GetRecurringSubscription {
 
   def apply(
     zuoraService: ZuoraService,
-    accessScope: AccessScope,
+    accessScope: AccountAccessScope,
     identityId: IdentityId,
     billingPeriod: BillingPeriod
   )(implicit ec: ExecutionContext): Future[Option[DomainSubscription]] = {
@@ -54,10 +54,10 @@ object GetRecurringSubscription {
 
 object IsAccountAccessAllowed {
 
-  def apply(accessScope: AccessScope, existingAccountSessionId: ExistingContributionSessionId): Boolean = {
+  def apply(accessScope: AccountAccessScope, existingAccountSessionId: ExistingContributionSessionId): Boolean = {
     (accessScope, existingAccountSessionId) match {
-      case (AccessScopeNoRestriction, _) => true
-      case (AccessScopeBySessionId(currentSessionId), CreatedInSession(existingSubSession)) if currentSessionId == existingSubSession => true
+      case (AuthenticatedAccess, _) => true
+      case (SessionAccess(currentSessionId), CreatedInSession(existingSubSession)) if currentSessionId == existingSubSession => true
       case _ => false
     }
   }
