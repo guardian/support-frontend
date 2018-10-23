@@ -80,7 +80,7 @@ object GetAccountForIdentity {
   case object NotCreatedInSession extends ExistingContributionSessionId
   case class CreatedInSession(sessionId: SessionId) extends ExistingContributionSessionId
 
-  case class DomainAccount(accountNumber: ZuoraAccountNumber, existingContributionSessionId: ExistingContributionSessionId)
+  case class DomainAccount(accountNumber: ZuoraAccountNumber, existingAccountSessionId: ExistingContributionSessionId)
 
   object DomainAccount {
 

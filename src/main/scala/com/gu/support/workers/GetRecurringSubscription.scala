@@ -26,13 +26,13 @@ object GetRecurringSubscription {
 
     val hasContributorPlan: List[RatePlan] => Boolean = GetRecurringSubscription.hasContributorPlan(productRatePlanId)
 
-    def isInScope(domainAccount: DomainAccount): Boolean =
-      IsSubscriptionAccessAllowed(accessScope, domainAccount.existingContributionSessionId)
+    def isAccountAccessAllowed(domainAccount: DomainAccount): Boolean =
+      IsAccountAccessAllowed(accessScope, domainAccount.existingAccountSessionId)
         .withLogging(s"isInScope, access scope: $accessScope, account: $domainAccount")
 
     for {
       accountIds <- zuoraService.getAccountFields(identityId)
-      inScopeAccountIds = accountIds.filter(isInScope).map(_.accountNumber)
+      inScopeAccountIds = accountIds.filter(isAccountAccessAllowed).map(_.accountNumber)
       subscriptions <- inScopeAccountIds.map(zuoraService.getSubscriptions).combineAll
       maybeRecentContributor = subscriptions.find(sub => hasContributorPlan(sub.ratePlans) && sub.isActive.value)
     } yield maybeRecentContributor
@@ -52,10 +52,10 @@ object GetRecurringSubscription {
 
 }
 
-object IsSubscriptionAccessAllowed {
+object IsAccountAccessAllowed {
 
-  def apply(accessScope: AccessScope, existingContributionSessionId: ExistingContributionSessionId): Boolean = {
-    (accessScope, existingContributionSessionId) match {
+  def apply(accessScope: AccessScope, existingAccountSessionId: ExistingContributionSessionId): Boolean = {
+    (accessScope, existingAccountSessionId) match {
       case (AccessScopeNoRestriction, _) => true
       case (AccessScopeBySessionId(currentSessionId), CreatedInSession(existingSubSession)) if currentSessionId == existingSubSession => true
       case _ => false
