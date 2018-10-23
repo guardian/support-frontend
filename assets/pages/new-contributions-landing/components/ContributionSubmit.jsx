@@ -17,8 +17,6 @@ import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
 import {
-  onThirdPartyPaymentAuthorised,
-  paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   setupRecurringPayPalPayment,
 } from '../contributionsLandingActions';
@@ -35,8 +33,6 @@ type PropTypes = {
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  setPaymentIsWaiting: boolean => void,
-  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
   setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
   payPalHasLoaded: boolean,
@@ -59,8 +55,6 @@ const mapStateToProps = (state: State) =>
   });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   setupRecurringPayPalPayment: (
     resolve: Function,
