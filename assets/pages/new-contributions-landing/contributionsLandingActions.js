@@ -56,6 +56,7 @@ export type Action =
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
+  | { type: 'SET_PASSWORD_ERROR', passwordError: boolean }
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
@@ -95,6 +96,8 @@ const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Acti
 const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' });
 
 const setPasswordHasBeenSubmitted = (): Action => ({ type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' });
+
+const setPasswordError = (passwordError: boolean): Action => ({ type: 'SET_PASSWORD_ERROR', passwordError });
 
 const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
 
@@ -356,6 +359,7 @@ export {
   setGuestAccountCreationToken,
   setThankYouPageStage,
   setPasswordHasBeenSubmitted,
+  setPasswordError,
   updatePassword,
   createOneOffPayPalPayment,
   setPayPalHasLoaded,
