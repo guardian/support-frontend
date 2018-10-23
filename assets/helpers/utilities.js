@@ -32,7 +32,7 @@ function hiddenIf(shouldHide: boolean, className: string): string {
 
 // Generates a key handler that only trigger a function if the
 // CarriageReturnCode and SpaceCode are pressed
-function clickSubstituteKeyPressHandler(handler?: () => void = () => { }) {
+function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) {
   return (event: Object) => {
     const CarriageReturnCode = 13;
     const SpaceCode = 32;
