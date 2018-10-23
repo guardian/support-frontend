@@ -18,12 +18,13 @@ import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLa
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
-import promotionPopUpReducer from './components/promotionPopUpReducer';
-
+import FlashCountdownContainer from './components/flashSaleCountdown';
+import { initReducer, afterInit } from './digitalSubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(promotionPopUpReducer);
+const store = pageInit(initReducer(), true);
+afterInit(store);
 
 // ----- Internationalisation ----- //
 
