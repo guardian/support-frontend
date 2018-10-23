@@ -83,7 +83,7 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
       payloadMap.get("ec") shouldEqual Some("PrintConversion")
       payloadMap.get("ea") shouldEqual Some("GuardianWeekly")
       payloadMap.get("cu") shouldEqual Some("GBP")
-      payloadMap.get("cid") shouldEqual Some("1633795050")
+      payloadMap.get("cid") shouldEqual Some("1633795050.1537436107")
       payloadMap.get("cd12") shouldEqual Some("FAKE_ACQUISITION_EVENT1,FAKE_ACQUISITION_EVENT2")
       payloadMap.get("pr1ca") shouldEqual Some("PrintSubscription")
 
