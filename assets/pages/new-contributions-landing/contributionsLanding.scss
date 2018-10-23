@@ -170,7 +170,7 @@ body {
   color: gu-colour(garnett-neutral-1);
   font: bold 36px/1.15 $gu-headline;
   margin: 0 -10px;
-  padding: 0 10px $gu-v-spacing;
+  padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
 }
 
 input,
@@ -845,7 +845,7 @@ form {
   display: none;
 }
 
-.confirmation {
+.confirmation, .marketing-permissions {
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   font-weight: 300;
   margin: 0 -10px;
@@ -860,11 +860,37 @@ form {
 
 .confirmation__message {
   font: 300 22px/1.2 $gu-headline;
-  margin: ($gu-v-spacing / 2) 0 $gu-v-spacing;
+  margin: ($gu-v-spacing / 4) 0 $gu-v-spacing * 2;
 }
 
-.confirmation p {
-  margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
+.confirmation__message--direct-debit {
+  margin-left: -10px;
+  margin-right: -10px;
+  padding: 0 10px $gu-v-spacing;
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+}
+
+.marketing-permissions__message, .set-password__message {
+  font-family: $gu-text-egyptian-web;
+  letter-spacing: -0.5px;
+  margin-bottom: 24px;
+  line-height: 20px;
+}
+
+.set-password__message {
+  margin-bottom: 0;
+}
+
+.marketing-permissions__title, .set-password__title {
+  font-family: $gu-text-egyptian-web;
+  letter-spacing: -0.5px;
+  font-weight: 900;
+  font-size: 17px;
+  margin: ($gu-v-spacing / 3) 0;
+}
+
+.confirmation--backtothegu {
+  border-bottom: 0;
 }
 
 .confirmation--backtothegu {

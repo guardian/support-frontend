@@ -11,6 +11,7 @@ type PropTypes = {
   type: string,
   accessibilityHintId: string,
   buttonCopy: string,
+  url: ?string,
   onClick: () => void,
 };
 // ----- Render ----- //
@@ -22,6 +23,7 @@ function ButtonWithRightArrow(props: PropTypes) {
       <button
         className={props.buttonClassName}
         type={props.type}
+        href={props.url}
         aria-describedby={props.accessibilityHintId}
         onClick={props.onClick}
       >
@@ -37,6 +39,7 @@ function ButtonWithRightArrow(props: PropTypes) {
 
 ButtonWithRightArrow.defaultProps = {
   onClick: () => undefined,
+  url: null,
 };
 
 export { ButtonWithRightArrow };
