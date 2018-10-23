@@ -85,12 +85,9 @@ function getIntcmp(product: SubscriptionProduct, intcmp: ?string, defaultIntcmp:
   return intcmp || defaultIntcmp;
 }
 
-function getEndTime(): number { return new Date(2018, 9, 24, 14, 30, 0).getTime(); }
-
 export {
   getDiscountedPrice,
   flashSaleIsActive,
   getPromoCode,
   getIntcmp,
-  getEndTime,
 };

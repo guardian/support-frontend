@@ -3,12 +3,18 @@
 // ----- Imports ----- //
 
 import type { Action, PromotionOptions } from './promotionPopUpActions';
+import type { CommonState } from '../../../helpers/page/page';
 
 // ----- Setup ----- //
 
 export type FindOutMoreState = {
   isPopUpOpen: boolean,
   expandedOption: PromotionOptions,
+};
+
+export type State = {
+  common: CommonState,
+  page: FindOutMoreState,
 };
 
 const initialState: FindOutMoreState = {
