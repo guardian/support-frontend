@@ -50,7 +50,7 @@ type PropTypes = {|
 function ContributionSelection(props: PropTypes) {
 
   const modifierClassArray = [getContributionTypeClassName(props.contributionType)];
-  if (props.annualTestVariant === 'annual' || props.annualTestVariant === 'annualHigherAmounts') {
+  if (props.annualTestVariant === 'annualAmountsA' || props.annualTestVariant === 'annualAmountsB') {
     modifierClassArray.push('annual-test');
   }
 

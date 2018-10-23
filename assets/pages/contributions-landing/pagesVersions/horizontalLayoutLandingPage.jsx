@@ -78,8 +78,8 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 
 const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => {
   const annualContributeCopy = 'Make a recurring commitment to support The Guardian long term or a single contribution as and when you feel like it – choose the option that suits you best.';
-  const annualTestVariant = props.store && props.store.getState().common.abParticipations.annualContributionsRoundTwo;
-  const copyText = annualTestVariant === 'annual' || annualTestVariant === 'annualHigherAmounts'
+  const annualTestVariant = props.store && props.store.getState().common.abParticipations.annualContributionsRoundThree;
+  const copyText = annualTestVariant === 'annualAmountsA' || annualTestVariant === 'annualAmountsB'
     ? annualContributeCopy
     : countryGroupSpecificDetails[props.countryGroupId].contributeCopy;
 
