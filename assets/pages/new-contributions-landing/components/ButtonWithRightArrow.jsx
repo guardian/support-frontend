@@ -20,7 +20,7 @@ function ButtonWithRightArrow(props: PropTypes) {
 
   return (
     <div className={props.componentClassName}>
-      <button
+      <a
         className={props.buttonClassName}
         type={props.type}
         href={props.url}
@@ -30,7 +30,7 @@ function ButtonWithRightArrow(props: PropTypes) {
         {props.buttonCopy}
         <p id={props.accessibilityHintId} className="accessibility-hint">{props.buttonCopy}</p>
         <SvgArrowRight />
-      </button>
+      </a>
     </div>
   );
 }
