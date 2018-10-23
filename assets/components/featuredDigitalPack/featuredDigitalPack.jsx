@@ -8,7 +8,7 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
 import SvgCircle from 'components/svgs/circle';
-import { flashSaleIsActive, getDiscountedPrice } from 'helpers/flashSale';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 import {
   displayPrice,
@@ -16,7 +16,7 @@ import {
   type ComponentAbTest,
 } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
+import FlashSaleDigitalPack from './flashSaleDigitalPack';
 
 // ----- Types ----- //
 
@@ -27,35 +27,12 @@ type PropTypes = {
   abTest: ComponentAbTest | null,
 };
 
-type Copy = {
-  heading: string,
-  subHeading: string,
-  description: string,
-}
-
-function getCopy(country: CountryGroupId): Copy {
-  if (flashSaleIsActive('DigitalPack')) {
-    return {
-      heading: 'Digital Pack Sale',
-      subHeading: 'Save 50% for three months',
-      description: `Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. 
-      £${getDiscountedPrice('DigitalPack', 'GBPCountries')} for your first three months.`,
-    };
-  }
-  return {
-    heading: 'Digital Pack 14-day free trial',
-    subHeading: 'What\'s in the Digital Pack?',
-    description: 'Read the Guardian ad-free on all devices plus get all the\n' +
-    'benefits of the Premium App and Daily Edition iPad app for\n' +
-    `just ${displayPrice('DigitalPack', country)}`,
-  };
-}
-
-
 // ----- Components ----- //
 
 function FeaturedDigitalPack(props: PropTypes) {
-  const copy = getCopy(props.countryGroupId);
+  if (flashSaleIsActive('DigitalPack')) {
+    return FlashSaleDigitalPack(props);
+  }
   return (
     <section className="component-featured-digital-pack">
       <div className="component-featured-digital-pack__description">
@@ -63,16 +40,18 @@ function FeaturedDigitalPack(props: PropTypes) {
           className="component-featured-digital-pack__heading"
           size={props.headingSize}
         >
-          {copy.heading}
+          Digital Pack 14-day free trial
         </Heading>
         <Heading
           className="component-featured-digital-pack__subheading"
           size={props.headingSize}
         >
-          {copy.subHeading}
+          What&#39;s in the Digital pack?
         </Heading>
         <p className="component-featured-digital-pack__copy">
-          {copy.description}
+          Read the Guardian ad-free on all devices plus get all the
+          benefits of the Premium App and Daily Edition iPad app for
+          just {displayPrice('DigitalPack', props.countryGroupId)}
         </p>
         <CtaLink
           text="Buy now"
