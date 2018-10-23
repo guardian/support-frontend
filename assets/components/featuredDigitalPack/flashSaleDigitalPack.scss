@@ -2,6 +2,13 @@
   position: relative;
   background: gu-colour(garnett-neutral-3);
 
+  .component-flash-sale-countdown {
+    margin-top: $gu-v-spacing;
+    @include mq($from: phablet) {
+      margin-top: $gu-v-spacing * 2;
+    }
+  }
+
   .component-cta-link {
     background-color: gu-colour(news-garnett-highlight);
     color: gu-colour(garnett-neutral-1);
@@ -84,9 +91,9 @@
   min-height: 430px;
   @include mq($from: tablet) {
     flex: 0 440px;
-    margin: 10px 0 20px;
+    margin: 10px 0 0;
     padding-right: 0;
-    padding-left: 25px;
+    padding-left: 22px;
   }
 }
 

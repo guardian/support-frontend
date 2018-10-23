@@ -7,6 +7,7 @@ import React from 'react';
 import Heading from 'components/heading/heading';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
+import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
 import { getDiscountedPrice } from 'helpers/flashSale';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import type { ComponentAbTest } from 'helpers/subscriptions';
@@ -49,6 +50,7 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
             modifierClasses={['flash-sale']}
             onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
           />
+          <FlashSaleCountdown />
         </div>
         <div className="component-flash-sale-featured-digital-pack__image">
           <GridPicture

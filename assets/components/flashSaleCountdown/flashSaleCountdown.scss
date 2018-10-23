@@ -1,6 +1,6 @@
 .component-flash-sale-countdown__chip {
   font-family: $gu-text-sans-web;
-  font-size: 18px;
+  font-size: 14px;
   padding: 6px 10px 4px;
   display: inline-block;
 }
@@ -11,7 +11,7 @@
   font-weight: 800;
   /*This fixed width is set to prevent the counter from shifting sizes slightly when the time changes, as the font doesn't have monospaced numbers.*/
   .component-countdown__time {
-    min-width: 24px;
+    min-width: 1.33em;
     display: inline-block;
     text-align: center;
   }
