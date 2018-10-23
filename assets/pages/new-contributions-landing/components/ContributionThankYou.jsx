@@ -7,8 +7,8 @@ import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type Contrib, getSpokenType } from 'helpers/contributions';
-import MarketingConsent from '../components/MarketingConsent';
 import CtaLink from 'components/ctaLink/ctaLink';
+import MarketingConsent from '../components/MarketingConsent';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 
 // ----- Types ----- //
