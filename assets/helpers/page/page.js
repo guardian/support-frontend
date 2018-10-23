@@ -140,7 +140,7 @@ function statelessInit() {
 
 // Enables redux devtools extension and optional redux-thunk.
 /* eslint-disable no-underscore-dangle */
-function storeEnhancer<S, A>(thunk: boolean): StoreEnhancer<S, A> | typeof undefined {
+function storeEnhancer(thunk: boolean) {
 
   if (thunk) {
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

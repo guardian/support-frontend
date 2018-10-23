@@ -312,6 +312,8 @@ function PaymentButton(props: {
       </span>
     );
   }
+
+  return null;
 }
 
 function LegalNotice(props: { countryGroupId: CountryGroupId }) {

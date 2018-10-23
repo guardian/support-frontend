@@ -128,6 +128,8 @@ function ContributionSubmit(props: PropTypes) {
       </div>
     );
   }
+
+  return null;
 }
 
 const NewContributionSubmit = connect(mapStateToProps, mapDispatchToProps)(ContributionSubmit);
