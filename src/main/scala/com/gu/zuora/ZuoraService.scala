@@ -76,14 +76,21 @@ object GetAccountForIdentity {
 
   case class ZuoraAccountNumber(value: String)
 
-  case class DomainAccount(accountNumber: ZuoraAccountNumber, maybeCreatedSessionId: Option[SessionId])
+  sealed trait ExistingContributionSessionId
+  case object NotCreatedInSession extends ExistingContributionSessionId
+  case class CreatedInSession(sessionId: SessionId) extends ExistingContributionSessionId
+
+  case class DomainAccount(accountNumber: ZuoraAccountNumber, existingContributionSessionId: ExistingContributionSessionId)
 
   object DomainAccount {
 
     def fromWireAccount(accountRecord: AccountRecord): DomainAccount =
       DomainAccount(
         ZuoraAccountNumber(accountRecord.AccountNumber),
-        accountRecord.CreatedSessionId__c.filter(_.length > 0).map(SessionId.apply)
+        accountRecord.CreatedSessionId__c.filter(_.length > 0).map(SessionId.apply) match {
+          case None => NotCreatedInSession
+          case Some(sessionId) => CreatedInSession(sessionId)
+        }
       )
 
   }

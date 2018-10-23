@@ -5,7 +5,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.lambdas.IdentityId
 import com.gu.support.workers.model.AccessScope.{AccessScopeBySessionId, AccessScopeNoRestriction, SessionId}
 import com.gu.support.workers.model.{AccessScope, BillingPeriod}
-import com.gu.zuora.GetAccountForIdentity.DomainAccount
+import com.gu.zuora.GetAccountForIdentity.{CreatedInSession, DomainAccount, ExistingContributionSessionId}
 import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.ZuoraConfig.RatePlanId
 import com.gu.zuora.ZuoraService
@@ -26,11 +26,9 @@ object GetRecurringSubscription {
 
     val hasContributorPlan: List[RatePlan] => Boolean = GetRecurringSubscription.hasContributorPlan(productRatePlanId)
 
-    def isInScope(domainAccount: DomainAccount): Boolean = {
-      val inScope = GetRecurringSubscription.isInAccessScope(accessScope, domainAccount.maybeCreatedSessionId)
-      SafeLogger.info(s"isInScope $inScope when using access scope $accessScope to check account $domainAccount")
-      inScope
-    }
+    def isInScope(domainAccount: DomainAccount): Boolean =
+      IsSubscriptionAccessAllowed(accessScope, domainAccount.existingContributionSessionId)
+        .withLogging(s"isInScope, access scope: $accessScope, account: $domainAccount")
 
     for {
       accountIds <- zuoraService.getAccountFields(identityId)
@@ -40,15 +38,28 @@ object GetRecurringSubscription {
     } yield maybeRecentContributor
   }
 
-  def isInAccessScope(accessScope: AccessScope, maybeCreatedSessionId: Option[SessionId]): Boolean = {
-    (accessScope, maybeCreatedSessionId) match {
+  def hasContributorPlan(ratePlanId: RatePlanId)(ratePlans: List[RatePlan]): Boolean =
+    ratePlans.exists(_.productRatePlanId == ratePlanId)
+
+  implicit class LogImplicit[A](op: A) {
+
+    def withLogging(message: String): A = {
+      SafeLogger.info(s"$message: result: $op")
+      op
+    }
+
+  }
+
+}
+
+object IsSubscriptionAccessAllowed {
+
+  def apply(accessScope: AccessScope, existingContributionSessionId: ExistingContributionSessionId): Boolean = {
+    (accessScope, existingContributionSessionId) match {
       case (AccessScopeNoRestriction, _) => true
-      case (AccessScopeBySessionId(currentSessionId), Some(existingSubSession)) if currentSessionId == existingSubSession => true
+      case (AccessScopeBySessionId(currentSessionId), CreatedInSession(existingSubSession)) if currentSessionId == existingSubSession => true
       case _ => false
     }
   }
-
-  def hasContributorPlan(ratePlanId: RatePlanId)(ratePlans: List[RatePlan]): Boolean =
-    ratePlans.exists(_.productRatePlanId == ratePlanId)
 
 }
