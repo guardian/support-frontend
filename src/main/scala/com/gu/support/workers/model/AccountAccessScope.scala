@@ -4,7 +4,7 @@ sealed trait AccountAccessScope
 
 object AccountAccessScope {
 
-  def fromWire(maybeSessionId: Option[String]): AccountAccessScope =
+  def fromInput(maybeSessionId: Option[String]): AccountAccessScope =
     maybeSessionId match {
       case Some(value) => SessionAccess(SessionId(value))
       case None => AuthenticatedAccess
