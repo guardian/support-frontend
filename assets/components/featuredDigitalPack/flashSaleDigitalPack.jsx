@@ -24,19 +24,19 @@ type PropTypes = {
 export default function FlashSaleDigitalPack(props: PropTypes) {
   return (
     <section className="component-flash-sale-featured-digital-pack">
-      <div className="component-flash-sale-featured-digital-pack__content component-page-section__content">
+      <div className="component-flash-sale-featured-digital-pack__content">
         <div className="component-flash-sale-featured-digital-pack__description">
           <Heading
-            className="component-flash-sale-featured-digital-pack__heading component-flash-sale-featured-digital-pack__title"
+            className="component-flash-sale-featured-digital-pack__heading"
             size={props.headingSize}
           >
-            50% off
+            Digital Pack Sale
           </Heading>
           <Heading
-            className="component-flash-sale-featured-digital-pack__subheading component-flash-sale-featured-digital-pack__title"
+            className="component-flash-sale-featured-digital-pack__subheading"
             size={props.headingSize}
           >
-            Screen time well spent
+            Save 50% for three months
           </Heading>
           <p className="component-flash-sale-featured-digital-pack__copy">
             Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
@@ -64,8 +64,8 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
                 gridId: 'digitalPackFlashSaleDesktop',
                 srcSizes: [140, 500, 1000, 1388],
                 imgType: 'png',
-                sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw, 90vw',
-                media: '(min-width: 739px)',
+                sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+                media: '(min-width: 740px)',
               },
             ]}
             fallback="digitalPackFlashSaleDesktop"

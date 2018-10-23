@@ -29,25 +29,27 @@
   }
 
   .component-grid-picture__image {
-    width: 260px;
+    width: 240px;
     display: block;
 
     @include mq($from: phablet) {
-      width: 440px;
+      width: 360px;
     }
 
     @include mq($from: tablet) {
       margin-top: 30px;
-      width: 450px;
+      width: 400px;
     }
 
     @include mq($from: desktop) {
-      margin-top: 30px;
-      width: 480px;
+      width: 440px;
     }
 
     @include mq($from: leftCol) {
-      margin-top: 30px;
+      width: 500px;
+    }
+
+    @include mq($from: wide) {
       width: 580px;
     }
 
@@ -55,6 +57,8 @@
 }
 
 .component-flash-sale-featured-digital-pack__content {
+  @extend .gu-content-margin;
+
   display: flex;
 
   @include mq($from: tablet) {
@@ -99,16 +103,23 @@
   font-family: $gu-headline;
   font-weight: bold;
   @include mq($from: tablet) {
-    font-size: 64px;
+    font-size: 58px;
     line-height: 60px;
+  }
+  @include mq($from: leftCol) {
+    font-size: 60px;
+    line-height: 62px;
   }
 }
 
 .component-flash-sale-featured-digital-pack__heading {
+  @extend .component-flash-sale-featured-digital-pack__title;
   color: gu-colour(lifestyle-garnett-main-1);
+  margin-top: 8px;
 }
 
 .component-flash-sale-featured-digital-pack__subheading{
+  @extend .component-flash-sale-featured-digital-pack__title;
   margin-bottom: 12px;
 }
 

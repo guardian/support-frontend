@@ -66,7 +66,7 @@ const saleDetails: SaleDetails = {
 
 function getDiscountedPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   if (flashSaleIsActive(product) && saleDetails[product].prices && saleDetails[product].prices[countryGroupId]) {
-    return saleDetails[product].prices[countryGroupId].toString();
+    return `${saleDetails[product].prices[countryGroupId]}/month`;
   }
   return getProductPrice(product, countryGroupId);
 }
