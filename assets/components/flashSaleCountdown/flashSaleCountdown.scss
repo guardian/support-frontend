@@ -1,0 +1,22 @@
+.component-flash-sale-countdown__chip {
+  font-family: $gu-text-sans-web;
+  font-size: 18px;
+  padding: 6px 10px 4px;
+  display: inline-block;
+}
+
+.component-flash-sale-countdown__chip--time {
+  background: gu-colour(sport-garnett-feature);
+  color: #fff;
+  font-weight: 800;
+  /*This fixed width is set to prevent the counter from shifting sizes slightly when the time changes, as the font doesn't have monospaced numbers.*/
+  .component-countdown__time {
+    min-width: 24px;
+    display: inline-block;
+    text-align: center;
+  }
+}
+
+.component-flash-sale-countdown__chip--help {
+  color: gu-colour(sport-garnett-feature);
+}

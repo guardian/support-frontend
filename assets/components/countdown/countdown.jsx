@@ -71,11 +71,16 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
       days, hours, minutes, seconds,
     } = this.state.time;
 
-    const units = days > 0 ? [days, hours, minutes] : [hours, minutes, seconds];
+    const units = days > 0 ? [days, hours, minutes, seconds] : [hours, minutes, seconds];
 
     return (
-      <time>
-        {units.map(addLeadingZeros).join(':')}
+      <time className="component-countdown">
+        {units.map((unit, index) => (
+          <span>
+            <span className="component-countdown__time">{addLeadingZeros(unit, 2)}</span>
+            {index < units.length - 1 && ':'}
+          </span>
+        ))}
       </time>
     );
   }
