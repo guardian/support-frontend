@@ -27,6 +27,7 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
     <section className="component-flash-sale-featured-digital-pack">
       <div className="component-flash-sale-featured-digital-pack__content">
         <div className="component-flash-sale-featured-digital-pack__description">
+          <FlashSaleCountdown />
           <Heading
             className="component-flash-sale-featured-digital-pack__heading"
             size={props.headingSize}
@@ -50,7 +51,6 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
             modifierClasses={['flash-sale']}
             onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
           />
-          <FlashSaleCountdown />
         </div>
         <div className="component-flash-sale-featured-digital-pack__image">
           <GridPicture
