@@ -1,13 +1,11 @@
 .component-flash-sale-countdown {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 20px;
   font-family: $gu-text-egyptian-web;
   overflow: hidden;
-}
-
-.component-flash-sale-countdown__chip {
-  display: block;
-  float: left;
+  @include mq($from: mobileLandscape) {
+    font-size: 16px;
+  }
 }
 
 .component-flash-sale-countdown .component-countdown__chip {
@@ -19,12 +17,17 @@
   }
 }
 
+.component-flash-sale-countdown .component-countdown__chip--legend {
+  font-style: italic;
+  padding-top: $gu-v-spacing / 4 + 20;
+}
+
 .component-flash-sale-countdown .component-countdown__time {
   font-weight: 800;
   display: block;
 }
 
-.component-countdown__chip--legend {
-  font-style: italic;
-  padding-top: $gu-v-spacing / 4 + 20;
+.component-flash-sale-countdown .component-countdown {
+  display: flex;
+  justify-content: flex-start;
 }
