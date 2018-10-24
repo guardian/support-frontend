@@ -35,7 +35,7 @@ function FlashSaleDigitalPack(props: PropTypes) {
             className="component-flash-sale-featured-digital-pack__heading"
             size={props.headingSize}
           >
-            Digital Pack Sale
+            Digital Pack
           </Heading>
           <Heading
             className="component-flash-sale-featured-digital-pack__subheading"

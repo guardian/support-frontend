@@ -30,33 +30,37 @@
 
   .component-flash-sale-featured-digital-pack__countdownbox {
     border-left: 1px solid gu-colour(garnett-neutral-4);
-    padding: 0 5px 20px;
+    padding: 0 5px 80px;
 
-    .component-flash-sale-countdown {
-      margin: 0 -5px;
-      color: #bb3b80;
-      width: 600%;
-      .component-countdown {
-        background: darken(gu-colour(garnett-neutral-3), 5%);
-        border-top: 1px solid gu-colour(garnett-neutral-4);
-        border-bottom: 1px solid gu-colour(garnett-neutral-4);
-      }
-      .component-countdown__chip {
-        border-color: rgba(250,250,250,.2);
-      }
-    }  
+    @include mq($from: tablet) {
+      padding-bottom: 20px;
+    }
   }
 
+  .component-flash-sale-featured-digital-pack__countdownbox .component-flash-sale-countdown {
+    margin: 0 -5px;
+    color: #bb3b80;
+    width: 600%;
+    .component-countdown {
+      background: darken(gu-colour(garnett-neutral-3), 5%);
+      border-top: 1px solid gu-colour(garnett-neutral-4);
+      border-bottom: 1px solid gu-colour(garnett-neutral-4);
+    }
+    .component-countdown__chip {
+      border-color: rgba(250,250,250,.2);
+    }
+  }
+  
   .component-grid-picture__image {
     width: 180px;
     display: block;
 
     @include mq($from: mobileMedium) {
-      width: 240px;
+      width: 220px;
     }
 
     @include mq($from: phablet) {
-      width: 360px;
+      width: 340px;
     }
 
     @include mq($from: tablet) {
@@ -105,7 +109,7 @@
   @extend .gu-content-margin;
   position: relative;
 
-  @include mq($from: tablet) {
+  @include mq($from: desktop) {
     flex: 0 460px;
     margin: 10px 0 0;
     padding-right: 0;
@@ -146,7 +150,9 @@
   font-size: 14px;
   line-height: 1.41;
   margin-top: $gu-v-spacing / 2;
-  @include mq($from: tablet) {
+  z-index: 1;
+  position: relative;
+  @include mq($from: phablet) {
     max-width: 250px;
   }
 }
