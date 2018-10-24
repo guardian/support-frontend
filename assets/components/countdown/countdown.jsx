@@ -75,7 +75,7 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
 
     return (
       <time className="component-countdown">
-        {units.map((unit) => { return unit > 0 ? unit : 0 }).map((unit, index) => (
+        {units.map(unit => (unit > 0 ? unit : 0)).map((unit, index) => (
           <span>
             <span className="component-countdown__time">{addLeadingZeros(unit, 2)}</span>
             {index < units.length - 1 && ':'}
