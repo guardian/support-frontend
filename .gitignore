@@ -4,6 +4,7 @@
 .idea_modules
 *.sublime-project
 *.sublime-workspace
+.vscode
 
 node_modules
 npm-debug.log
