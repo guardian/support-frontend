@@ -7,9 +7,8 @@ import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type Contrib, getSpokenType } from 'helpers/contributions';
-import { classNameWithModifiers } from 'helpers/utilities';
+import CtaLink from 'components/ctaLink/ctaLink';
 import MarketingConsent from '../components/MarketingConsent';
-import { ButtonWithRightArrow } from '../components/ButtonWithRightArrow';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 
 // ----- Types ----- //
@@ -62,14 +61,14 @@ function ContributionThankYou(props: PropTypes) {
         </section>
       ) : null}
       <MarketingConsent />
-      <ButtonWithRightArrow
-        componentClassName={classNameWithModifiers('confirmation', ['backtothegu'])}
-        buttonClassName={classNameWithModifiers('button', ['wob'])}
-        accessibilityHintId="accessibility-hint-return-to-guardian"
-        type="button"
-        url="https://www.theguardian.com"
-        buttonCopy="Return to The Guardian&nbsp;"
-      />
+      <div className="confirmation confirmation--backtothegu">
+        <CtaLink
+          modifierClasses={['backtothegu']}
+          accessibilityHint="accessibility-hint-return-to-guardian"
+          url="https://www.theguardian.com"
+          text="Return to The Guardian&nbsp;"
+        />
+      </div>
     </div>
   );
 }
