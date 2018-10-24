@@ -4,7 +4,7 @@
 
   .component-flash-sale-countdown {
     @include mq($from: tablet) {
-      margin-top: $gu-v-spacing * -1;
+      margin-top: -10px;
     }
     background: gu-colour(garnett-neutral-3);
   }
