@@ -86,9 +86,9 @@ export type State = {
 
 function createFormReducer(countryGroupId: CountryGroupId) {
   const amountsForCountry: { [Contrib]: Amount[] } = {
-    ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId],
-    MONTHLY: amounts('notintest').MONTHLY[countryGroupId],
-    ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
+    ONE_OFF: amounts('control').ONE_OFF[countryGroupId],
+    MONTHLY: amounts('control').MONTHLY[countryGroupId],
+    ANNUAL: amounts('control').ANNUAL[countryGroupId],
   };
 
   const initialAmount: { [Contrib]: Amount | 'other' } = {
