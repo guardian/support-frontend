@@ -38,7 +38,7 @@ const content = (
       header={<SimpleHeader />}
       footer={<FooterContainer disclaimer privacyPolicy />}
     >
-      {header}
+      { header }
       <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
       <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport
