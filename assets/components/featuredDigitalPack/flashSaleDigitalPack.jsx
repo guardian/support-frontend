@@ -7,6 +7,8 @@ import React from 'react';
 import Heading from 'components/heading/heading';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
+import { currencies, detect } from 'helpers/internationalisation/currency';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getDiscountedPrice } from 'helpers/flashSale';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import type { ComponentAbTest } from 'helpers/subscriptions';
@@ -17,11 +19,13 @@ import type { HeadingSize } from 'components/heading/heading';
 type PropTypes = {
   headingSize: HeadingSize,
   url: string,
+  countryGroupId: CountryGroupId,
   abTest: ComponentAbTest | null,
 };
 
 
-export default function FlashSaleDigitalPack(props: PropTypes) {
+function FlashSaleDigitalPack(props: PropTypes) {
+  const currency = currencies[detect(props.countryGroupId)].glyph;
   return (
     <section className="component-flash-sale-featured-digital-pack">
       <div className="component-flash-sale-featured-digital-pack__content">
@@ -40,7 +44,7 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
           </Heading>
           <p className="component-flash-sale-featured-digital-pack__copy">
             Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
-            £{getDiscountedPrice('DigitalPack', 'GBPCountries')} for your first three months.
+            {' '}{currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
           </p>
           <CtaLink
             text="Subscribe now"
@@ -79,3 +83,14 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
   );
 }
 
+
+// ----- Default Props ----- //
+
+FlashSaleDigitalPack.defaultProps = {
+  abTest: null,
+};
+
+
+// ----- Export ----- //
+
+export default FlashSaleDigitalPack;
