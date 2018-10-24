@@ -33,7 +33,7 @@ class Application(
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider,
-    guardianDomain: GuardianDomain,
+    guardianDomain: GuardianDomain
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging with ServersideAbTestCookie {
 
   import actionRefiners._
@@ -114,7 +114,7 @@ class Application(
           Ok(newContributions(countryCode, None))
         },
         user => Ok(newContributions(countryCode, user))
-      ).map(_.withSettingsSurrogateKey.withServersideAbTestCookie)
+      ).map(result => result.withSettingsSurrogateKey.withServersideAbTestCookie)
     } else {
       Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey.withServersideAbTestCookie)
     }
