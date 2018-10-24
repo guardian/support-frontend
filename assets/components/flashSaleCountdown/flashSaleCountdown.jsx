@@ -15,7 +15,7 @@ export default () => (
       <Countdown to={getEndTime()} />
     </span>
     <span className="component-flash-sale-countdown__chip component-flash-sale-countdown__chip--help">
-      Until flash sale ends
+      until sale ends
     </span>
   </div>
 );

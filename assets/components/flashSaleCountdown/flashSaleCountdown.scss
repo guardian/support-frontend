@@ -1,25 +1,30 @@
 .component-flash-sale-countdown {
-  font-size: 14px;
+  font-size: 16px;
+  background: gu-colour(garnett-neutral-1);
+  color: #fff;
+  line-height: 20px;
+  font-family: $gu-text-egyptian-web;
+  overflow: hidden;
 }
 
 .component-flash-sale-countdown__chip {
-  font-family: $gu-text-sans-web;
-  padding: 6px 10px 4px;
-  display: inline-block;
+  display: block;
+  float: left;
 }
 
-.component-flash-sale-countdown__chip--time {
-  background: gu-colour(sport-garnett-feature);
-  color: #fff;
+.component-flash-sale-countdown .component-countdown__chip {
+  display: inline-block;
+  border-right: 1px solid #fff;
+  padding: $gu-v-spacing / 4 $gu-h-spacing / 4 $gu-v-spacing / 2;
+}
+
+.component-flash-sale-countdown .component-countdown__time {
   font-weight: 800;
-  /*This fixed width is set to prevent the counter from shifting sizes slightly when the time changes, as the font doesn't have monospaced numbers.*/
-  .component-countdown__time {
-    min-width: 1.33em;
-    display: inline-block;
-    text-align: center;
-  }
+  display: block;
 }
 
 .component-flash-sale-countdown__chip--help {
-  color: gu-colour(sport-garnett-feature);
+  font-style: italic;
+  padding-top: $gu-v-spacing / 4 + 20;
+  padding-left: $gu-h-spacing / 4;
 }
