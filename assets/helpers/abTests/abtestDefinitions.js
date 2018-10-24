@@ -9,7 +9,7 @@ export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA';
 // to browsers landing on pages/contributions-landing/contributionsLanding.jsx
 export const oldContributionsFlowTests: Tests = {
   annualContributionsRoundThree: {
-    variants: ['annualAmountsA', 'annualAmountsB'],
+    variants: ['control', 'annualAmountsA'],
     audiences: {
       ALL: {
         offset: 0,
