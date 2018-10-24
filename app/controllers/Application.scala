@@ -13,6 +13,7 @@ import config.StringsConfig
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import com.typesafe.scalalogging.StrictLogging
 import utils.BrowserCheck
 import utils.RequestCountry._
 
@@ -30,7 +31,7 @@ class Application(
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging {
 
   import actionRefiners._
 
@@ -102,7 +103,10 @@ class Application(
     val experiments = settings.switches.experiments
     if (experiments.get("newPaymentFlow").exists(_.isParticipating)) {
       request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-        _ => Ok(newContributions(countryCode, None)),
+        err => {
+          logger.error(s"Error fetching user from identity: $err")
+          Ok(newContributions(countryCode, None))
+        },
         user => Ok(newContributions(countryCode, user))
       ).map(_.withSettingsSurrogateKey)
     } else {
