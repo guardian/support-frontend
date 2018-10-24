@@ -163,7 +163,7 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
   return (
     <div className="digital-subscription-landing-header">
       <LeftMarginSection modifierClasses={['header-block', 'grey']}>
-        <FlashSaleCountdown />
+        {flashSaleIsActive('DigitalPack') && <FlashSaleCountdown />}
         <CirclesLeft />
         <CirclesRight />
         <div className="digital-subscription-landing-header__picture">
