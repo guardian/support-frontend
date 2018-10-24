@@ -43,18 +43,20 @@ function FlashSaleDigitalPack(props: PropTypes) {
           >
             Save 50% for three months
           </Heading>
-          <p className="component-flash-sale-featured-digital-pack__copy">
-            Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
-            {' '}{currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
-          </p>
-          <FlashSaleCountdown />
-          <CtaLink
-            text="Subscribe now"
-            url={props.url}
-            accessibilityHint="Buy now"
-            modifierClasses={['flash-sale']}
-            onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
-          />
+          <div className="component-flash-sale-featured-digital-pack__countdownbox">
+            <FlashSaleCountdown />
+            <p className="component-flash-sale-featured-digital-pack__copy">
+              Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
+              {' '}{currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
+            </p>
+            <CtaLink
+              text="Subscribe now"
+              url={props.url}
+              accessibilityHint="Buy now"
+              modifierClasses={['flash-sale']}
+              onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
+            />
+          </div>
         </div>
         <div className="component-flash-sale-featured-digital-pack__image">
           <GridPicture
