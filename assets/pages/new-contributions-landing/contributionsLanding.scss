@@ -910,22 +910,19 @@ form {
 }
 
 .confirmation--backtothegu {
-  border-bottom: 0;
-}
-
-.confirmation--backtothegu {
   margin-bottom: $gu-v-spacing + 20px;
   padding-bottom: $gu-v-spacing;
   padding-top: $gu-v-spacing;
-
-  & > a {
-    font-size: 16px;
-  }
+  border-bottom: 0;
 }
 
 .confirmation__meta {
   font-family: $gu-text-sans-web;
   font-size: 12px;
+}
+
+.component-cta-link--backtothegu {
+  font-size: 16px;
 }
 
 .button {
