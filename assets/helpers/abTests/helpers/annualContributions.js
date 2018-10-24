@@ -126,6 +126,6 @@ export const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVaria
 export function setInitialAmountsForAnnualVariants(store: Store<*, *, *>) {
   const annualTestVariant = store.getState().common.abParticipations.annualContributionsRoundThree;
   const { countryGroupId } = store.getState().common.internationalisation;
-  const amount = annualTestVariant === 'control' ? Control.defaults[countryGroupId] : VariantA.defaults[countryGroupId];
+  const amount = annualTestVariant === 'annualAmountsA' ? VariantA.defaults[countryGroupId] : Control.defaults[countryGroupId];
   store.dispatch(contributionSelectionActionsFor('CONTRIBUTE_SECTION').setAmountForContributionType('ANNUAL', amount));
 }

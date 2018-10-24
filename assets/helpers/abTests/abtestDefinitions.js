@@ -3,7 +3,7 @@ import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
-export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA';
+export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
 
 // Participations in these tests are only assigned
 // to browsers landing on pages/contributions-landing/contributionsLanding.jsx
