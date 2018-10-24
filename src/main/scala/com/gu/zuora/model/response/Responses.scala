@@ -3,6 +3,7 @@ package com.gu.zuora.model.response
 import com.gu.support.workers.encoding.Helpers.{capitalizingCodec, deriveCodec}
 import com.gu.support.workers.encoding.{Codec, ErrorJson}
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
+import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
 import io.circe.parser._
 import io.circe.syntax._
 
@@ -31,7 +32,7 @@ object ZuoraErrorResponse {
 }
 
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
-    extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
+  extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
 
   override def toString: String = this.errors.toString()
   def toRetryNone: RetryNone = new RetryNone(message = this.asJson.noSpaces, cause = this)
@@ -90,7 +91,11 @@ case class SubscribeResponseAccount(
   invoiceNumber: String,
   invoiceId: String,
   success: Boolean
-) extends ZuoraResponse
+) extends ZuoraResponse {
+
+  def domainAccountNumber: ZuoraAccountNumber = ZuoraAccountNumber(accountNumber)
+
+}
 
 object InvoiceResult {
   implicit val codec: Codec[InvoiceResult] = capitalizingCodec

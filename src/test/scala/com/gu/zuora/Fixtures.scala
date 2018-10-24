@@ -103,7 +103,18 @@ object Fixtures {
 
   val date = new LocalDate(2017, 5, 4)
 
-  def account(currency: Currency = GBP, paymentGateway: PaymentGateway = StripeGatewayDefault) = Account(salesforceAccountId, currency, salesforceAccountId, salesforceId, identityId, paymentGateway)
+  def account(
+    currency: Currency = GBP,
+    paymentGateway: PaymentGateway = StripeGatewayDefault
+  ): Account = Account(
+    salesforceAccountId,
+    currency,
+    salesforceAccountId,
+    salesforceId,
+    identityId,
+    paymentGateway,
+    None
+  )
 
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
@@ -124,9 +135,15 @@ object Fixtures {
     Subscription(date, date, date)
   )
 
-  def creditCardSubscriptionRequest(currency: Currency = GBP) = SubscribeRequest(List(SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())))
+  def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
+    SubscribeRequest(List(
+      SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+    ))
 
-  def directDebitSubscriptionRequest = SubscribeRequest(List(SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())))
+  def directDebitSubscriptionRequest: SubscribeRequest =
+    SubscribeRequest(List(
+      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+    ))
 
   val invalidMonthlySubsData = SubscriptionData(
     List(

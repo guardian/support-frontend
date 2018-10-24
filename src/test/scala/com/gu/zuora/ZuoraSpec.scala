@@ -5,9 +5,13 @@ import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.okhttp.RequestRunners
+import com.gu.support.workers.GetRecurringSubscription
+import com.gu.support.workers.lambdas.IdentityId
+import com.gu.support.workers.model.AccountAccessScope.{SessionAccess, AuthenticatedAccess, SessionId}
 import com.gu.support.workers.model.Monthly
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
+import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
 import com.gu.zuora.model.SubscribeRequest
 import com.gu.zuora.model.response.ZuoraErrorResponse
 import org.scalatest.{AsyncFlatSpec, Matchers}
@@ -28,18 +32,19 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve account ids from an Identity id" in {
-    uatService.getAccountIds("30001758").map {
+    uatService.getAccountFields(IdentityId("30001758").get).map {
       response =>
         response.nonEmpty should be(true)
     }
   }
 
   it should "be resistant to 'ZOQL injection'" in {
-    a[NumberFormatException] should be thrownBy uatService.getAccountIds("30000701' or status = 'Active")
+    // try https://github.com/guardian/zuora-auto-cancel/blob/master/lib/zuora/src/main/scala/com/gu/util/zuora/SafeQueryBuilder.scala
+    IdentityId("30000701' or status = 'Active") should be(None)
   }
 
   it should "retrieve subscriptions from an account id" in {
-    uatService.getSubscriptions("A00071408").map {
+    uatService.getSubscriptions(ZuoraAccountNumber("A00071408")).map {
       response =>
         response.nonEmpty should be(true)
         response.head.ratePlans.head.productRatePlanId should be(zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId)
@@ -47,24 +52,26 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "be able to find a monthly recurring subscription" in {
-    uatService.getRecurringSubscription("30001758", Monthly).map {
-      response =>
-        response.isDefined should be(true)
-        response.get.ratePlans.head.productName should be("Contributor")
+    GetRecurringSubscription(uatService, AuthenticatedAccess, IdentityId("30001758").get, Monthly).map {
+      _.flatMap(_.ratePlans.headOption.map(_.productName)) should be(Some("Contributor"))
+    }
+  }
+
+  it should "ignore a monthly recurring subscription with wrong session id" in {
+    GetRecurringSubscription(uatService, SessionAccess(SessionId("testZuora")), IdentityId("30001758").get, Monthly).map {
+      _.flatMap(_.ratePlans.headOption) should be(None)
     }
   }
 
   it should "ignore active subscriptions which do not have a recurring contributor plan" in {
-    uatService.getRecurringSubscription("18390845", Monthly).map {
-      response =>
-        response.isDefined should be(false)
+    GetRecurringSubscription(uatService, AuthenticatedAccess, IdentityId("18390845").get, Monthly).map {
+      _ should be(None)
     }
   }
 
   it should "ignore cancelled recurring contributions" in {
-    uatService.getRecurringSubscription("30001780", Monthly).map {
-      response =>
-        response.isDefined should be(false)
+    GetRecurringSubscription(uatService, AuthenticatedAccess, IdentityId("30001780").get, Monthly).map {
+      _ should be(None)
     }
   }
 

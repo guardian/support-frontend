@@ -3,6 +3,7 @@ package com.gu.support.workers.lambdas
 import com.gu.i18n.Currency.GBP
 import com.gu.support.workers.Fixtures.{validBaid, _}
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.model.AccountAccessScope._
 import com.gu.support.workers.model._
 import com.gu.support.workers.model.states.CreatePaymentMethodState
 import com.gu.zuora.encoding.CustomCodecs._
@@ -46,31 +47,25 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
   }
 
   "CreatePaymentMethodStateDecoder" should "be able to decode a contribution with PayPal payment fields" in {
-    val state = decode[CreatePaymentMethodState](createPayPalPaymentMethodContributionJson())
-    state.isRight should be(true)
-    val result = state.right.get
-    result.product match {
-      case contribution: Contribution => contribution.amount should be(5)
-      case _ => fail()
-    }
-    result.paymentFields match {
-      case paypal: PayPalPaymentFields => paypal.baid should be(validBaid)
-      case _ => fail()
-    }
+    val maybeState = decode[CreatePaymentMethodState](createPayPalPaymentMethodContributionJson())
+
+    val fieldsToTest = maybeState.map(state =>
+      (state.product, state.paymentFields))
+    fieldsToTest should be(Right(
+      Contribution(5, GBP, Monthly),
+      PayPalPaymentFields(validBaid)
+    ))
 
   }
 
   it should "be able to decode a contribution with Stripe payment fields" in {
-    val state = decode[CreatePaymentMethodState](createStripePaymentMethodContributionJson())
-    val result = state.right.get
-    result.product match {
-      case contribution: Contribution => contribution.amount should be(5)
-      case _ => fail()
-    }
-    result.paymentFields match {
-      case stripe: StripePaymentFields => stripe.stripeToken should be(stripeToken)
-      case _ => fail()
-    }
+    val maybeState = decode[CreatePaymentMethodState](createStripePaymentMethodContributionJson())
+    val fieldsToTest = maybeState.map(state =>
+      (state.product, state.paymentFields))
+    fieldsToTest should be(Right(
+      Contribution(5, GBP, Monthly),
+      StripePaymentFields(stripeToken)
+    ))
   }
 
   it should "be able to decode a DigtalBundle with PayPal payment fields" in {

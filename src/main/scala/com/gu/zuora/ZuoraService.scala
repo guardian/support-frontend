@@ -4,7 +4,10 @@ import cats.data.OptionT
 import cats.implicits._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.support.workers.model.BillingPeriod
+import com.gu.support.workers.lambdas.IdentityId
+import com.gu.support.workers.model.AccountAccessScope.SessionId
+import com.gu.zuora.GetAccountForIdentity.{DomainAccount, ZuoraAccountNumber}
+import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.model.response._
 import com.gu.zuora.model.{QueryData, SubscribeRequest}
 import io.circe
@@ -14,7 +17,7 @@ import io.circe.syntax._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit ec: ExecutionContext)
+class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: Option[String] = None)(implicit ec: ExecutionContext)
     extends WebServiceHelper[ZuoraErrorResponse] {
 
   override val wsUrl: String = baseUrl.getOrElse(config.url)
@@ -27,24 +30,22 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
   def getAccount(accountNumber: String): Future[GetAccountResponse] =
     get[GetAccountResponse](s"accounts/$accountNumber", authHeaders)
 
-  def getAccountIds(identityId: String): Future[List[String]] = {
-    val queryData = QueryData(s"select AccountNumber from account where IdentityId__c = '${identityId.toLong}'")
-    postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(_.AccountNumber))
+  def getAccountFields(identityId: IdentityId): Future[List[DomainAccount]] = {
+    // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
+    val queryData = QueryData(s"select AccountNumber, CreatedSessionId__c from account where IdentityId__c = '${identityId.value}'")
+    postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromWireAccount))
   }
 
-  def getSubscriptions(accountId: String): Future[List[Subscription]] =
-    get[SubscriptionsResponse](s"subscriptions/accounts/$accountId", authHeaders).map(_.subscriptions)
+  def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[DomainSubscription]] =
+    get[SubscriptionsResponse](s"subscriptions/accounts/${accountNumber.value}", authHeaders).map { subscriptionsResponse =>
+      subscriptionsResponse.subscriptions.map(DomainSubscription.fromWireSubscription)
+    }
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     postJson[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson, authHeaders)
 
-  def getRecurringSubscription(identityId: String, billingPeriod: BillingPeriod): Future[Option[Subscription]] =
-    for {
-      accountIds <- getAccountIds(identityId)
-      subscriptions <- accountIds.map(getSubscriptions).combineAll
-    } yield subscriptions.find(sub => sub.hasContributorPlan(config, billingPeriod) && sub.isActive)
-
   def getDefaultPaymentMethodId(accountNumber: String): Future[Option[String]] = {
+    // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
     val queryData = QueryData(s"select defaultPaymentMethodId from Account where AccountNumber = '$accountNumber'")
     postJson[PaymentMethodQueryResponse](s"action/query", queryData.asJson, authHeaders)
       .map(r => Some(r.records.head.DefaultPaymentMethodId))
@@ -69,4 +70,44 @@ class ZuoraService(config: ZuoraConfig, client: FutureHttpClient, baseUrl: Optio
     //a ZuoraErrorResponse but actually it returns a list of those.
     decode[List[ZuoraErrorResponse]](responseBody).map(_.head)
 
+}
+
+object GetAccountForIdentity {
+
+  case class ZuoraAccountNumber(value: String)
+
+  sealed trait ExistingContributionSessionId
+  case object NotCreatedInSession extends ExistingContributionSessionId
+  case class CreatedInSession(sessionId: SessionId) extends ExistingContributionSessionId
+
+  case class DomainAccount(accountNumber: ZuoraAccountNumber, existingAccountSessionId: ExistingContributionSessionId)
+
+  object DomainAccount {
+
+    def fromWireAccount(accountRecord: AccountRecord): DomainAccount =
+      DomainAccount(
+        ZuoraAccountNumber(accountRecord.AccountNumber),
+        accountRecord.CreatedSessionId__c.filter(_.length > 0).map(SessionId.apply) match {
+          case None => NotCreatedInSession
+          case Some(sessionId) => CreatedInSession(sessionId)
+        }
+      )
+
+  }
+
+}
+
+object GetSubscription {
+
+  case class ZuoraIsActive(value: Boolean) extends AnyVal
+
+  case class DomainSubscription(accountNumber: ZuoraAccountNumber, isActive: ZuoraIsActive, ratePlans: List[RatePlan])
+  object DomainSubscription {
+    def fromWireSubscription(subscription: Subscription): DomainSubscription =
+      DomainSubscription(
+        ZuoraAccountNumber(subscription.accountNumber),
+        ZuoraIsActive(subscription.status == "Active"),
+        subscription.ratePlans //this can be changed to map to a DomainRatePlan if necessary
+      )
+  }
 }
