@@ -18,11 +18,6 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
 
-// ----- Setup ----- //
-
-const supporterSectionId = 'supporter-options';
-
-
 // ----- Redux Store ----- //
 
 const store = pageInit();
@@ -42,7 +37,7 @@ const content = (
       <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
       <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport
-        ctaUrl={`#${supporterSectionId}`}
+        ctaUrl="#top"
         headingSize={2}
       />
     </Page>
