@@ -42,7 +42,7 @@ export default function FlashSaleDigitalPack(props: PropTypes) {
           </Heading>
           <p className="component-flash-sale-featured-digital-pack__copy">
             Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
-            {currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
+            {' '}{currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
           </p>
           <CtaLink
             text="Subscribe now"
