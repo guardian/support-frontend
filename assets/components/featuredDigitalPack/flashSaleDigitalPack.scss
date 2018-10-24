@@ -2,12 +2,6 @@
   position: relative;
   background: gu-colour(garnett-neutral-3);
 
-  .component-flash-sale-countdown {
-    @include mq($from: tablet) {
-      margin-top: -10px;
-    }
-  }
-
   .component-cta-link {
     background-color: gu-colour(news-garnett-highlight);
     color: gu-colour(garnett-neutral-1);
@@ -32,6 +26,23 @@
     &:hover {
       background-color: darken(gu-colour(news-garnett-highlight), 5%);
     }
+  }
+
+  .component-flash-sale-featured-digital-pack__countdownbox {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+    padding: 0 5px 20px;
+
+    .component-flash-sale-countdown {
+      margin: 0 -5px;
+      .component-countdown {
+        background: darken(gu-colour(garnett-neutral-3), 5%);
+        border-bottom: 1.5px solid gu-colour(garnett-neutral-4);
+        display: inline-block;
+      }
+      .component-countdown__chip {
+        border-color: gu-colour(garnett-neutral-4);
+      }
+    }  
   }
 
   .component-grid-picture__image {
@@ -95,9 +106,9 @@
   min-height: 430px;
   @include mq($from: tablet) {
     flex: 0 440px;
-    margin: 10px 0 20px;
+    margin: 10px 0 0;
     padding-right: 0;
-    padding-left: 25px;
+    padding-left: 21px;
   }
 }
 
