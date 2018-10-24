@@ -1,7 +1,5 @@
 .component-flash-sale-countdown {
   font-size: 16px;
-  background: gu-colour(garnett-neutral-1);
-  color: #fff;
   line-height: 20px;
   font-family: $gu-text-egyptian-web;
   overflow: hidden;
@@ -14,8 +12,11 @@
 
 .component-flash-sale-countdown .component-countdown__chip {
   display: inline-block;
-  border-right: 1px solid #fff;
   padding: $gu-v-spacing / 4 $gu-h-spacing / 4 $gu-v-spacing / 2;
+  
+  &:not(:last-child) {
+    border-right: 1px solid currentColor;
+  }
 }
 
 .component-flash-sale-countdown .component-countdown__time {
@@ -23,8 +24,7 @@
   display: block;
 }
 
-.component-flash-sale-countdown__chip--help {
+.component-countdown__chip--legend {
   font-style: italic;
   padding-top: $gu-v-spacing / 4 + 20;
-  padding-left: $gu-h-spacing / 4;
 }

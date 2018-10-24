@@ -15,7 +15,8 @@ type CountdownTime = {
 }
 
 type PropTypes = {
-  to: number
+  to: number,
+  legend?: string
 };
 
 type StateTypes = {
@@ -73,6 +74,8 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
       days, hours, minutes, seconds,
     } = this.state.time;
 
+    const { legend } = this.props;
+
     const units = days > 0 ? { 'days': days, 'hrs': hours, 'mins': minutes, 'secs': seconds } : { 'hrs': hours, 'mins': minutes, 'secs': seconds };
 
     return (
@@ -83,6 +86,11 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
             <span className="component-countdown__description">{description}</span>
           </span>
         ))}
+        {legend &&
+          <span className="component-countdown__chip component-countdown__chip--legend">
+            <span className="component-countdown__description">{legend}</span>
+          </span>
+        }
       </time>
     );
   }

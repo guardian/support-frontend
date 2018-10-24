@@ -12,10 +12,7 @@ import { getEndTime } from 'helpers/flashSale';
 export default () => (
   <div className="component-flash-sale-countdown">
     <span className="component-flash-sale-countdown__chip component-flash-sale-countdown__chip--time">
-      <Countdown to={getEndTime()} />
-    </span>
-    <span className="component-flash-sale-countdown__chip component-flash-sale-countdown__chip--help">
-      until sale ends
+      <Countdown legend="until sale ends" to={getEndTime()} />
     </span>
   </div>
 );
