@@ -100,7 +100,6 @@ const VariantA = {
 };
 
 export const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVariant) => {
-  console.log(annualTestVariant)
   if (annualTestVariant === 'annualAmountsA') {
     return {
       GBPCountries: VariantA.standard,
