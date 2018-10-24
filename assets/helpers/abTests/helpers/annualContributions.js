@@ -122,10 +122,10 @@ export const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVaria
   };
 };
 
-//For the old payment flow only
+// For the old payment flow only
 export function setInitialAmountsForAnnualVariants(store: Store<*, *, *>) {
   const annualTestVariant = store.getState().common.abParticipations.annualContributionsRoundThree;
-  const countryGroupId = store.getState().common.internationalisation.countryGroupId;
+  const { countryGroupId } = store.getState().common.internationalisation.countryGroupId;
   const amount = annualTestVariant === 'annualAmountsA' ? VariantA.defaults[countryGroupId] : VariantB.defaults[countryGroupId];
   store.dispatch(contributionSelectionActionsFor('CONTRIBUTE_SECTION').setAmountForContributionType('ANNUAL', amount));
 }
