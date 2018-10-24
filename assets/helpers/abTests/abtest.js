@@ -10,13 +10,21 @@ import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
-import { tests } from './abtestDefinitions';
+import {
+  oldContributionsFlowTests,
+  newContributionsFlowTests,
+  tests,
+} from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
+const allTests = {
+  ...tests,
+  ...oldContributionsFlowTests,
+  ...newContributionsFlowTests,
+};
 
-type TestId = $Keys<typeof tests>;
+type TestId = $Keys<typeof allTests>;
 
 type OphanABEvent = {
   variantName: string,
@@ -229,7 +237,7 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
   });
 };
 
-const init = (country: IsoCountry, countryGroupId: CountryGroupId, abTests: Tests = tests): Participations => {
+const init = (country: IsoCountry, countryGroupId: CountryGroupId, abTests: Tests): Participations => {
 
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);

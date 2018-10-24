@@ -1,0 +1,56 @@
+.component-product-hero {
+  .component-left-margin-section__content {
+    position: relative;
+  }
+
+  .component-grid-picture__image {
+    display: block;
+    margin: ($gu-v-spacing * 2) auto 0;
+    position: relative;
+
+    @include mq($from: tablet) {
+      margin-top: $gu-v-spacing * 3;
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: 10px;
+    }
+  }
+
+  .svg-circles-left {
+    position: absolute;
+    width: 150px;
+    top: 250px;
+    left: calc(50% - 199px);
+
+    @include mq($from: tablet) {
+      display: block;
+      width: 370px;
+      left: 10%;
+      top: 90px;
+    }
+
+    @include mq($from: leftCol) {
+      left: -150px;
+    }
+  }
+
+  .svg-circles-right {
+    position: absolute;
+    width: 150px;
+    top: 250px;
+    left: calc(99px + 50%);
+
+    @include mq($from: tablet) {
+      display: block;
+      width: 200px;
+      left: 65%;
+      top: 200px;
+    }
+
+    @include mq($from: leftCol) {
+      top: 250px;
+      left: 792px;
+    }
+  }
+}

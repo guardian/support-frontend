@@ -8,6 +8,7 @@ import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
 import { isDetailsSupported, polyfillDetails } from 'helpers/details';
+import { newContributionsFlowTests } from 'helpers/abTests/abtestDefinitions';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -31,7 +32,11 @@ if (!isDetailsSupported) {
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = pageInit(initReducer(countryGroupId), true);
+const store = pageInit(
+  initReducer(countryGroupId),
+  true,
+  newContributionsFlowTests,
+);
 
 user.init(store.dispatch);
 formInit(store);

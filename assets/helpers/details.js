@@ -2,7 +2,7 @@
 
 const isDetailsSupported: boolean = ('open' in document.createElement('details'));
 
-function toggleDetailsState(details: HTMLDetailsElement) {
+function toggleDetailsState(details: Element) {
   if (details.hasAttribute('open')) {
     details.removeAttribute('open');
   } else {
@@ -16,7 +16,8 @@ function handleEvent(event: UIEvent) {
   while (targetNode.nodeName.toLowerCase() !== 'summary' && targetNode !== document && targetNode.parentElement) {
     targetNode = targetNode.parentElement;
   }
-  if (targetNode.nodeName.toLowerCase() === 'summary' && targetNode.parentElement instanceof HTMLDetailsElement) {
+
+  if (targetNode.nodeName.toLowerCase() === 'summary' && targetNode.parentElement && targetNode.parentElement.nodeName.toLowerCase() === 'details') {
     toggleDetailsState(targetNode.parentElement);
   }
 }

@@ -15,7 +15,8 @@ import thunkMiddleware from 'redux-thunk';
 import type { Store } from 'redux';
 
 import * as abTest from 'helpers/abTests/abtest';
-import type { Participations } from 'helpers/abTests/abtest';
+import { tests } from 'helpers/abTests/abtestDefinitions';
+import type { Participations, Tests } from 'helpers/abTests/abtest';
 import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -134,7 +135,7 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
 function statelessInit() {
   const country: IsoCountry = detectCountry();
   const countryGroupId: CountryGroupId = detectCountryGroup();
-  const participations: Participations = abTest.init(country, countryGroupId);
+  const participations: Participations = abTest.init(country, countryGroupId, tests);
   analyticsInitialisation(participations);
 }
 
@@ -158,12 +159,13 @@ function storeEnhancer<S, A>(thunk: boolean): StoreEnhancer<S, A> | typeof undef
 function init<S, A>(
   pageReducer: Reducer<S, A> | null = null,
   thunk?: boolean = false,
+  abTests: Tests = tests,
 ): Store<*, *, *> {
 
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const countryId: IsoCountry = detectCountry();
   const currencyId: IsoCurrency = detectCurrency(countryGroupId);
-  const participations: Participations = abTest.init(countryId, countryGroupId);
+  const participations: Participations = abTest.init(countryId, countryGroupId, abTests);
   const { settings } = window.guardian;
   analyticsInitialisation(participations);
 
