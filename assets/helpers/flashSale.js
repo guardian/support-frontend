@@ -3,6 +3,7 @@
 import { getQueryParameter } from 'helpers/url';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getProductPrice } from 'helpers/subscriptions';
+import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
 
 import type { SubscriptionProduct } from './subscriptions';
 

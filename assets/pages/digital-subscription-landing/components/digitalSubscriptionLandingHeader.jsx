@@ -4,6 +4,7 @@
 
 import React from 'react';
 
+import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
   type GridImage,
@@ -162,6 +163,7 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
   return (
     <div className="digital-subscription-landing-header">
       <LeftMarginSection modifierClasses={['header-block', 'grey']}>
+        <FlashSaleCountdown />
         <CirclesLeft />
         <CirclesRight />
         <div className="digital-subscription-landing-header__picture">
