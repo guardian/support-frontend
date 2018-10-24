@@ -19,7 +19,7 @@ const numbersInWords = {
 };
 /* eslint-enable  quote-props */
 
-const VariantA = {
+const Control = {
   defaults: {
     GBPCountries: '100',
     UnitedStates: '100',
@@ -52,7 +52,7 @@ const VariantA = {
   ],
 };
 
-const VariantB = {
+const VariantA = {
   defaults: {
     GBPCountries: '100',
     UnitedStates: '75',
@@ -100,32 +100,33 @@ const VariantB = {
 };
 
 export const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVariant) => {
-  if (annualTestVariant === 'annualAmountsB') {
+  if (annualTestVariant === 'annualAmountsA') {
     return {
-      GBPCountries: VariantB.standard,
-      UnitedStates: VariantB.us,
-      AUDCountries: VariantB.australia,
-      EURCountries: VariantB.standard,
-      International: VariantB.international,
-      NZDCountries: VariantB.newZealand,
-      Canada: VariantB.standard,
+      GBPCountries: VariantA.standard,
+      UnitedStates: VariantA.us,
+      AUDCountries: VariantA.australia,
+      EURCountries: VariantA.standard,
+      International: VariantA.international,
+      NZDCountries: VariantA.newZealand,
+      Canada: VariantA.standard,
     };
   }
   return {
-    GBPCountries: VariantA.standard,
-    UnitedStates: VariantA.standard,
-    AUDCountries: VariantA.australia,
-    EURCountries: VariantA.standard,
-    International: VariantA.standard,
-    NZDCountries: VariantA.newZealand,
-    Canada: VariantA.standard,
+    GBPCountries: Control.standard,
+    UnitedStates: Control.standard,
+    AUDCountries: Control.australia,
+    EURCountries: Control.standard,
+    International: Control.standard,
+    NZDCountries: Control.newZealand,
+    Canada: Control.standard,
   };
 };
 
 // For the old payment flow only
 export function setInitialAmountsForAnnualVariants(store: Store<*, *, *>) {
   const annualTestVariant = store.getState().common.abParticipations.annualContributionsRoundThree;
-  const { countryGroupId } = store.getState().common.internationalisation.countryGroupId;
-  const amount = annualTestVariant === 'annualAmountsA' ? VariantA.defaults[countryGroupId] : VariantB.defaults[countryGroupId];
+  const { countryGroupId } = store.getState().common.internationalisation;
+  console.log(annualTestVariant, countryGroupId)
+  const amount = annualTestVariant === 'control' ? Control.defaults[countryGroupId] : VariantA.defaults[countryGroupId];
   store.dispatch(contributionSelectionActionsFor('CONTRIBUTE_SECTION').setAmountForContributionType('ANNUAL', amount));
 }

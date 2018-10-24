@@ -454,7 +454,7 @@ function getContributionTypeRadios(
     accessibilityHint: 'Make a regular annual contribution',
   };
 
-  return annualTestVariant === 'annualAmountsA' || annualTestVariant === 'annualAmountsB'
+  return annualTestVariant === 'control' || annualTestVariant === 'annualAmountsA'
     ? [oneOff, monthly, annual]
     : [monthly, oneOff];
 
