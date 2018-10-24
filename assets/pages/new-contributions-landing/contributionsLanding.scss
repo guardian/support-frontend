@@ -67,6 +67,11 @@ header[role="banner"] {
   height: 40px;
   outline: none;
   transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
+
+  // this is to fix IE bug where events on svgs don't bubble up
+  & svg {
+    pointer-events: none;
+  }
 }
 
 .countryGroups:not([open]) > :not(summary) {
