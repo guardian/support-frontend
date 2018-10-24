@@ -89,11 +89,11 @@
   }
 
   @include mq($from: desktop) {
-    padding-left: 190px;
+    padding-left: 186px;
   }
 
   @include mq($from: leftCol) {
-    padding-left: 220px;
+    padding-left: 218px;
   }
 
   @include mq($from: wide) {
