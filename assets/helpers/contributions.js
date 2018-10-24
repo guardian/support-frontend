@@ -432,33 +432,25 @@ function getAmountA11yHint(
 
 }
 
-function getContributionTypeRadios(
-  countryGroupId: CountryGroupId,
-  annualTestVariant: AnnualContributionsTestVariant,
-) {
-
-  const oneOff = {
+const contributionTypeRadios = [
+  {
     value: 'ONE_OFF',
     text: 'Single',
     accessibilityHint: 'Make a single contribution',
     id: 'qa-one-off-toggle',
-  };
-  const monthly = {
+  },
+  {
     value: 'MONTHLY',
     text: 'Monthly',
     accessibilityHint: 'Make a regular monthly contribution',
-  };
-  const annual = {
+  },
+  {
     value: 'ANNUAL',
     text: 'Annually',
     accessibilityHint: 'Make a regular annual contribution',
-  };
+  },
+];
 
-  return annualTestVariant === 'control' || annualTestVariant === 'annualAmountsA'
-    ? [oneOff, monthly, annual]
-    : [monthly, oneOff];
-
-}
 
 function getContributionAmountRadios(
   contributionType: Contrib,
@@ -491,7 +483,7 @@ export {
   getSpokenType,
   getFrequency,
   getCustomAmountA11yHint,
-  getContributionTypeRadios,
+  contributionTypeRadios,
   getContributionAmountRadios,
   parseRegularContributionType,
 };

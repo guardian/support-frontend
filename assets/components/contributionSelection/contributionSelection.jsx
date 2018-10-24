@@ -11,7 +11,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import {
   errorMessage as contributionsErrorMessage,
   getContributionTypeClassName,
-  getContributionTypeRadios,
+  contributionTypeRadios,
   getContributionAmountRadios,
   getCustomAmountA11yHint,
 } from 'helpers/contributions';
@@ -50,19 +50,14 @@ type PropTypes = {|
 function ContributionSelection(props: PropTypes) {
 
   const modifierClassArray = [getContributionTypeClassName(props.contributionType)];
-  if (props.annualTestVariant === 'control' || props.annualTestVariant === 'annualAmountsA') {
-    modifierClassArray.push('annual-test');
-  }
+  modifierClassArray.push('annual-test');
 
   return (
     <div className={classNameWithModifiers('component-contribution-selection', modifierClassArray)}>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
-          radios={getContributionTypeRadios(
-            props.countryGroupId,
-            props.annualTestVariant,
-          )}
+          radios={contributionTypeRadios}
           checked={props.contributionType}
           toggleAction={props.setContributionType}
           countryGroupId={props.countryGroupId}
