@@ -99,6 +99,11 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
 
   return (
     <div className={className} {...otherProps}>
+      <FeaturedDigitalPack
+        headingSize={3}
+        countryGroupId={props.countryGroupId}
+        url={subsLinks.DigitalPack}
+      />
       <InternationalSection
         headingSize={headingSize}
         subsLinks={subsLinks}
