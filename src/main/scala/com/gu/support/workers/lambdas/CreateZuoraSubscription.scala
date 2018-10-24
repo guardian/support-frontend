@@ -6,6 +6,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.GetRecurringSubscription
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.model.AccountAccessScope.{AuthenticatedAccess, SessionAccess, SessionId}
 import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers.model.{Contribution, DigitalPack, RequestInfo}
 import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
@@ -129,7 +130,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     state.salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
     state.salesForceContact.Id,
     state.user.id,
-    PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency)
+    PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
+    state.accountAccessScope match {
+      case SessionAccess(SessionId(value)) => Some(value)
+      case AuthenticatedAccess => None
+    }
   )
 }
 
