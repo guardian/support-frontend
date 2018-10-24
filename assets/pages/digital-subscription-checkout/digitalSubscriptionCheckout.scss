@@ -136,7 +136,7 @@
   }
 
   .thank-you-content__copy--small {
-    font-family: $gu-text-sans-web;
+    font-family: $gu-text-egyptian-web;
     color: gu-colour(garnett-neutral-6);
   }
 
@@ -147,6 +147,10 @@
 
   .thank-you-content__strong {
     font-weight: bold;
+  }
+
+  .thank-you-content__link {
+    color: gu-colour(garnett-neutral-6);
   }
 
 }

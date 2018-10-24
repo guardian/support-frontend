@@ -8,6 +8,7 @@ import {
   getIosAppUrl,
   androidAppUrl,
   getDailyEditionUrl,
+  emailPreferencesUrl,
 } from 'helpers/externalLinks';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -97,7 +98,9 @@ function EmailsSection() {
         and Guardian Weekly on the ways to read and support our journalism.
       </p>
       <p className="thank-you-content__copy thank-you-content__copy--small">
-        <small>You can unsubscribe at any time by going to the preference centre</small>
+        <small>
+          You can unsubscribe at any time by going to the <a className="thank-you-content__link" href={emailPreferencesUrl}>preference centre</a>
+        </small>
       </p>
     </LeftMarginSection>
   );
