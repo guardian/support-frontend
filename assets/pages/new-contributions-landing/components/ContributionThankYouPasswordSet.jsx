@@ -3,9 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { classNameWithModifiers } from 'helpers/utilities';
+import CtaLink from 'components/ctaLink/ctaLink';
 import MarketingConsent from '../components/MarketingConsent';
-import { ButtonWithRightArrow } from '../components/ButtonWithRightArrow';
 
 // ----- Render ----- //
 
@@ -20,14 +19,14 @@ function ContributionThankYouPasswordSet() {
         </p>
       </section>
       <MarketingConsent />
-      <ButtonWithRightArrow
-        componentClassName={classNameWithModifiers('confirmation', ['backtothegu'])}
-        buttonClassName={classNameWithModifiers('button', ['wob'])}
-        accessibilityHintId="accessibility-hint-return-to-guardian"
-        type="button"
-        url="https://www.theguardian.com"
-        buttonCopy="Return to The Guardian&nbsp;"
-      />
+      <div className="confirmation confirmation--backtothegu">
+        <CtaLink
+          modifierClasses={['backtothegu']}
+          accessibilityHint="accessibility-hint-return-to-guardian"
+          url="https://www.theguardian.com"
+          text="Return to The Guardian&nbsp;"
+        />
+      </div>
     </div>
   );
 }
