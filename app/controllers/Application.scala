@@ -12,8 +12,10 @@ import com.gu.identity.play.IdUser
 import config.StringsConfig
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import admin.{ServersideAbTest, Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import com.typesafe.scalalogging.StrictLogging
+import config.Configuration.GuardianDomain
+import cookies.ServersideAbTestCookie
 import utils.BrowserCheck
 import utils.RequestCountry._
 
@@ -30,8 +32,9 @@ class Application(
     payPalConfigProvider: PayPalConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
-    settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging {
+    settingsProvider: SettingsProvider,
+    guardianDomain: GuardianDomain,
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging with ServersideAbTestCookie {
 
   import actionRefiners._
 
@@ -100,17 +103,20 @@ class Application(
   def oldOrNewContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: Settings = settingsProvider.settings()
+    implicit val participation: ServersideAbTest.Participation = ServersideAbTest.getParticipation
+    implicit val gd: GuardianDomain = guardianDomain
+
     val experiments = settings.switches.experiments
-    if (experiments.get("newPaymentFlow").exists(_.isParticipating)) {
+    if (experiments.get("newPaymentFlow").exists(_.isInVariant(participation))) {
       request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
         err => {
           logger.error(s"Error fetching user from identity: $err")
           Ok(newContributions(countryCode, None))
         },
         user => Ok(newContributions(countryCode, user))
-      ).map(_.withSettingsSurrogateKey)
+      ).map(_.withSettingsSurrogateKey.withServersideAbTestCookie)
     } else {
-      Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey)
+      Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey.withServersideAbTestCookie)
     }
   }
 

@@ -79,22 +79,17 @@ object SettingsSource {
 }
 
 case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])
-case class ExperimentSwitch(name: String, description: String, segment: Segment, state: SwitchState) {
+case class ExperimentSwitch(name: String, description: String, state: SwitchState) {
   def isOn: Boolean = state == SwitchState.On
 
-  private def checkHeader(segment: Segment, group: Group)(implicit request: RequestHeader): Boolean =
-    request.headers.get("X-GU-Experiment").exists(_.contains(s"${segment.name}-${group.name}"))
-
-  private def inVariant(implicit request: RequestHeader): Boolean = checkHeader(segment, Group.Variant)
-  private def inControl(implicit request: RequestHeader): Boolean = checkHeader(segment, Group.Control)
-
-  def canRun(implicit request: RequestHeader): Boolean = isOn
-  def isParticipating(implicit request: RequestHeader): Boolean = canRun && inVariant
-  def isControl(implicit request: RequestHeader): Boolean = canRun && inControl
-  def value(implicit request: RequestHeader): Group = (isParticipating, isControl) match {
-    case (true, _) => Group.Variant
-    case (_, true) => Group.Control
-    case _ => Group.Unknown
+  def canRun: Boolean = isOn
+  def isInVariant(participation: ServersideAbTest.Participation): Boolean = participation match {
+    case ServersideAbTest.Variant if canRun => true
+    case _ => false
+  }
+  def isInControl(participation: ServersideAbTest.Participation): Boolean = participation match {
+    case ServersideAbTest.Control if canRun => true
+    case _ => false
   }
 }
 
@@ -115,7 +110,6 @@ object ExperimentSwitch {
     ExperimentSwitch(
       config.getString("name"),
       config.getString("description"),
-      Segment.fromConfig(config, "segment"),
       SwitchState.fromConfig(config, "state")
     )
 }
