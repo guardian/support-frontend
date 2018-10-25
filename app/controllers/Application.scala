@@ -131,6 +131,11 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
+  def oldContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    Ok(oldContributions(countryCode)).withSettingsSurrogateKey
+  }
+
   private def oldContributions(countryCode: String)(implicit request: RequestHeader, settings: Settings) = {
     views.html.main(
       title = "Support the Guardian | Make a Contribution",

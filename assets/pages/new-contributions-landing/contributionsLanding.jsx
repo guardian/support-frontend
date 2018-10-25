@@ -54,7 +54,7 @@ const router = (
       <div>
         <Route
           exact
-          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute(.new)?"
           render={() => (
             <Page
               classModifiers={['contribution-form']}
