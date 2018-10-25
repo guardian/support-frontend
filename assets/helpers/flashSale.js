@@ -7,7 +7,7 @@ import { getProductPrice } from 'helpers/subscriptions';
 import type { SubscriptionProduct } from './subscriptions';
 
 // Get end time
-function getEndTime(): number { return new Date(2018, 10, 5, 0, 0).getTime();; }
+function getEndTime(): number { return new Date(2018, 10, 5, 0, 0).getTime(); }
 
 // Which products are included in the current sale?
 const includedProducts: SubscriptionProduct[] = ['DigitalPack'];

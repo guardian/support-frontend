@@ -43,7 +43,7 @@ function FlashSaleDigitalPack(props: PropTypes) {
           >
             Save 50% for three months
           </Heading>
-          <div className="component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--active">
+          <div className="component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--hidden">
             <FlashSaleCountdown />
             <p className="component-flash-sale-featured-digital-pack__copy">
               Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
