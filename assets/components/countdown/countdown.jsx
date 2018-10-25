@@ -38,11 +38,15 @@ const calculateCountdown = (endDate: number): CountdownTime => {
   };
 };
 
-const nonNegative = (number: number): number => (number > 0 ? number : 0);
+const nonNegative = number => (number > 0 ? number : 0);
 
 
 // ----- Component ----- //
 class Countdown extends Component<PropTypes, StateTypes> {
+
+  static defaultProps = {
+    legend: null,
+  };
 
   constructor(props: PropTypes) {
     super(props);
@@ -97,9 +101,5 @@ class Countdown extends Component<PropTypes, StateTypes> {
     );
   }
 }
-
-Countdown.defaultProps = {
-  legend: null,
-};
 
 export default Countdown;
