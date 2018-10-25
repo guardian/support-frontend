@@ -38,7 +38,7 @@ const calculateCountdown = (endDate: number): CountdownTime => {
   };
 };
 
-const nonNegative = (number: number): number => number > 0 ? number : 0;
+const nonNegative = (number: number): number => (number > 0 ? number : 0);
 
 
 // ----- Component ----- //
@@ -76,7 +76,9 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
 
     const { legend } = this.props;
 
-    const units = days > 0 ? { 'days': days, 'hrs': hours, 'mins': minutes, 'secs': seconds } : { 'hrs': hours, 'mins': minutes, 'secs': seconds };
+    const units = days > 0 ? {
+      days, hrs: hours, mins: minutes, secs: seconds,
+    } : { hrs: hours, mins: minutes, secs: seconds };
 
     return (
       <time className="component-countdown">
