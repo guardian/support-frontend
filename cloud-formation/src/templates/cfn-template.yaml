@@ -131,6 +131,7 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub State Machine Failure in ${Stage} (Monthly Contributions Sign-Ups)
       AlarmDescription: The Monthly Contributions state machine failed during execution - please investigate.
       MetricName: ExecutionsFailed
@@ -151,6 +152,7 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub Monthly Contributions Sign-Up Timeout in ${Stage}
       AlarmDescription: An execution of the Monthly Contributions state machine has taken an excessively long time to complete
       MetricName: ExecutionsTimedOut
