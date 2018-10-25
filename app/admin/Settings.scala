@@ -83,7 +83,8 @@ case class ExperimentSwitch(name: String, description: String, state: SwitchStat
   def isOn: Boolean = state == SwitchState.On
 
   def canRun: Boolean = isOn
-  def isInVariant(participation: ServersideAbTest.Participation): Boolean = participation match {
+  def isInVariant(participation: ServersideAbTest.Participation): Boolean =
+  participation == ServersideAbTest.Variant && canRun
     case ServersideAbTest.Variant if canRun => true
     case _ => false
   }
