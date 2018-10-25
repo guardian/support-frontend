@@ -3,13 +3,13 @@ import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
-export type AnnualContributionsTestVariant = 'control' | 'annual' | 'annualHigherAmounts' | 'notintest';
+export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
 
 // Participations in these tests are only assigned
 // to browsers landing on pages/contributions-landing/contributionsLanding.jsx
 export const oldContributionsFlowTests: Tests = {
-  annualContributionsRoundTwo: {
-    variants: ['control', 'annual', 'annualHigherAmounts'],
+  annualContributionsRoundThree: {
+    variants: ['control', 'annualAmountsA'],
     audiences: {
       ALL: {
         offset: 0,
@@ -38,6 +38,18 @@ export const oldContributionsFlowTests: Tests = {
 // Participations in these tests are only assigned
 // to browsers landing on pages/new-contributions-landing/contributionsLanding.jsx
 export const newContributionsFlowTests: Tests = {
+  annualContributionsRoundThree: {
+    variants: ['control', 'annualAmountsA'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 3,
+  },
   newPaymentFlow: {
     // 100% of people will be put in this variant
     variants: ['newPaymentFlow'],
