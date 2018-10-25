@@ -6,13 +6,16 @@ import { getProductPrice } from 'helpers/subscriptions';
 
 import type { SubscriptionProduct } from './subscriptions';
 
+// Get end time
+function getEndTime(): number { return new Date(2018, 10, 5, 0, 0).getTime(); }
+
 // Which products are included in the current sale?
 const includedProducts: SubscriptionProduct[] = ['DigitalPack'];
 
 function flashSaleIsActive(product: SubscriptionProduct): boolean {
   // Days are 1 based, months are 0 based
   const startTime = new Date(2018, 9, 22, 0, 0).getTime(); // 22nd Oct 2018
-  const endTime = new Date(2018, 10, 5, 0, 0).getTime(); // include all of 4th Nov 2018
+  const endTime = getEndTime(); // include all of 4th Nov 2018
   const now = Date.now();
   const included = includedProducts.includes(product);
 
@@ -84,8 +87,6 @@ function getIntcmp(product: SubscriptionProduct, intcmp: ?string, defaultIntcmp:
   }
   return intcmp || defaultIntcmp;
 }
-
-function getEndTime(): number { return new Date(2018, 9, 24, 14, 30, 0).getTime(); }
 
 export {
   getDiscountedPrice,

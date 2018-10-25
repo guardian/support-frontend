@@ -7,6 +7,7 @@ import React from 'react';
 import Heading from 'components/heading/heading';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
+import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getDiscountedPrice } from 'helpers/flashSale';
@@ -34,7 +35,7 @@ function FlashSaleDigitalPack(props: PropTypes) {
             className="component-flash-sale-featured-digital-pack__heading"
             size={props.headingSize}
           >
-            Digital Pack Sale
+            Digital Pack
           </Heading>
           <Heading
             className="component-flash-sale-featured-digital-pack__subheading"
@@ -42,17 +43,20 @@ function FlashSaleDigitalPack(props: PropTypes) {
           >
             Save 50% for three months
           </Heading>
-          <p className="component-flash-sale-featured-digital-pack__copy">
-            Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
-            {' '}{currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
-          </p>
-          <CtaLink
-            text="Subscribe now"
-            url={props.url}
-            accessibilityHint="Buy now"
-            modifierClasses={['flash-sale']}
-            onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
-          />
+          <div className="component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--hidden">
+            <FlashSaleCountdown />
+            <p className="component-flash-sale-featured-digital-pack__copy">
+              Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
+              {' '}{currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
+            </p>
+            <CtaLink
+              text="Subscribe now"
+              url={props.url}
+              accessibilityHint="Buy now"
+              modifierClasses={['flash-sale']}
+              onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
+            />
+          </div>
         </div>
         <div className="component-flash-sale-featured-digital-pack__image">
           <GridPicture
@@ -79,7 +83,7 @@ function FlashSaleDigitalPack(props: PropTypes) {
           />
         </div>
       </div>
-    </section>
+    </section >
   );
 }
 

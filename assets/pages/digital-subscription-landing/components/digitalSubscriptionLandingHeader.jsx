@@ -4,6 +4,7 @@
 
 import React from 'react';
 
+import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
   type GridImage,
@@ -177,6 +178,11 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             </p>
           </div>
         </div>
+        {flashSaleIsActive('DigitalPack') &&
+          <div className="digital-subscription-landing-header__countdown digital-subscription-landing-header__countdown--hidden">
+            <FlashSaleCountdown />
+          </div>
+        }
         <CtaSwitch referringCta="support_digipack_page_header" />
       </LeftMarginSection>
     </div>
