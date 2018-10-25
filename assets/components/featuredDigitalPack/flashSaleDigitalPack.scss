@@ -29,12 +29,16 @@
   }
 
   .component-flash-sale-featured-digital-pack__countdownbox {
-    border-left: 1px solid gu-colour(garnett-neutral-4);
-    padding: 0 5px 80px;
+    padding: 0 0 80px;
 
     @include mq($from: tablet) {
       padding-bottom: 20px;
     }
+  }
+
+  .component-flash-sale-featured-digital-pack__countdownbox--active {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+    padding-left: 5px;
   }
 
   .component-flash-sale-featured-digital-pack__countdownbox .component-flash-sale-countdown {
@@ -139,11 +143,17 @@
   @extend .component-flash-sale-featured-digital-pack__title;
   color: gu-colour(lifestyle-garnett-main-1);
   margin-top: 8px;
+  @include mq($from: phablet) {
+    max-width: 350px;
+  }
 }
 
 .component-flash-sale-featured-digital-pack__subheading{
   @extend .component-flash-sale-featured-digital-pack__title;
   margin-bottom: 12px;
+  @include mq($from: phablet) {
+    max-width: 350px;
+  }
 }
 
 .component-flash-sale-featured-digital-pack__copy {
