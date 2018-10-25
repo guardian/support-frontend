@@ -235,10 +235,8 @@ header[role="banner"] {
 @include mq($from: mobile, $until: tablet) {
   .header {
     border: 0;
-    position: absolute;
-    top: 0;
     left: 10px;
-    width: 290px;
+    width: 100%;
   }
 
   .glogo {
@@ -252,8 +250,7 @@ header[role="banner"] {
   }
 
   .gu-content__bg {
-    height: 280px;
-    position: relative;
+    display: none;
   }
 
   .gu-content__bg .svg-contributions-bg-desktop {
