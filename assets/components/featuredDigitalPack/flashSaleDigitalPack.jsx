@@ -27,7 +27,6 @@ type PropTypes = {
 
 function FlashSaleDigitalPack(props: PropTypes) {
   const currency = currencies[detect(props.countryGroupId)].glyph;
-  const hasCountdown = true;
   return (
     <section className="component-flash-sale-featured-digital-pack">
       <div className="component-flash-sale-featured-digital-pack__content">
@@ -44,11 +43,8 @@ function FlashSaleDigitalPack(props: PropTypes) {
           >
             Save 50% for three months
           </Heading>
-          <div className={
-            `component-flash-sale-featured-digital-pack__countdownbox
-            ${hasCountdown ? ' component-flash-sale-featured-digital-pack__countdownbox--active' : ''}`}
-          >
-            {hasCountdown && <FlashSaleCountdown />}
+          <div className="component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--active">
+            <FlashSaleCountdown />
             <p className="component-flash-sale-featured-digital-pack__copy">
               Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
               {' '}{currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
