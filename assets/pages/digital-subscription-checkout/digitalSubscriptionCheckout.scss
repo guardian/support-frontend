@@ -83,11 +83,40 @@
         top: 30%;
       }
     }
+
+    .svg-information {
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 5px;
+    }
+
+    .svg-newsletters {
+      display: block;
+
+      @include mq($from: tablet) {
+        width: 50%;
+        margin-left: calc(50% + 10px);
+      }
+
+      @include mq($from: wide) {
+        width: 40%;
+        display: inline-block;
+        margin-left: 0;
+        vertical-align: top;
+        padding-top: $gu-v-spacing * 2;
+      }
+    }
   }
 
   .component-left-margin-section--thank-you-apps, .component-left-margin-section--thank-you-emails {
     .component-left-margin-section__content {
       border-top: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .component-left-margin-section--thank-you-emails {
+    .component-left-margin-section__content {
+      padding-bottom: 0;
     }
   }
 
@@ -135,9 +164,18 @@
     }
   }
 
+  .thank-you-content__email-copy {
+    @include mq($from: wide) {
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
   .thank-you-content__copy--small {
     font-family: $gu-text-egyptian-web;
     color: gu-colour(garnett-neutral-6);
+    display: inline-block;
+    vertical-align: top;
   }
 
   .thank-you-content__copy--italic {
