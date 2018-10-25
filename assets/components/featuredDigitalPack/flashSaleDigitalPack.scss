@@ -32,10 +32,6 @@
     border-left: 1px solid gu-colour(garnett-neutral-4);
     padding-left: 5px;
     padding-bottom: 70px;
-
-    @include mq($from: tablet) {
-      padding-bottom: 20px;
-    }
   }
 
   .component-flash-sale-featured-digital-pack__countdownbox .component-flash-sale-countdown {
