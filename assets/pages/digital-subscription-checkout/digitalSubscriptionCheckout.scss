@@ -45,7 +45,7 @@
     background-color: #fff;
 
     .component-left-margin-section__content {
-      padding: 2px ($gu-h-spacing / 2) $gu-v-spacing;
+      padding: 2px ($gu-h-spacing / 2) ($gu-v-spacing * 2);
       box-sizing: border-box;
 
       @include mq($from: tablet) {
@@ -180,7 +180,7 @@
 
   .thank-you-content__copy--italic {
     font-style: italic;
-    margin-top: 0;
+    margin: 0;
   }
 
   .thank-you-content__strong {
