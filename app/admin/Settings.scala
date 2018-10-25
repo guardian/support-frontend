@@ -82,14 +82,11 @@ case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, direct
 case class ExperimentSwitch(name: String, description: String, state: SwitchState) {
   def isOn: Boolean = state == SwitchState.On
 
-  def isInVariant(participation: ServersideAbTest.Participation): Boolean = participation match {
-    case ServersideAbTest.Variant if isOn => true
-    case _ => false
-  }
-  def isInControl(participation: ServersideAbTest.Participation): Boolean = participation match {
-    case ServersideAbTest.Control if isOn => true
-    case _ => false
-  }
+  def isInVariant(participation: ServersideAbTest.Participation): Boolean =
+    participation == ServersideAbTest.Variant && isOn
+
+  def isInControl(participation: ServersideAbTest.Participation): Boolean =
+    participation == ServersideAbTest.Control && isOn
 }
 
 object PaymentMethodsSwitch {
