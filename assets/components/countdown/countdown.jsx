@@ -42,7 +42,7 @@ const nonNegative = (number: number): number => (number > 0 ? number : 0);
 
 
 // ----- Component ----- //
-export default class Countdown extends Component<PropTypes, StateTypes> {
+class Countdown extends Component<PropTypes, StateTypes> {
 
   constructor(props: PropTypes) {
     super(props);
@@ -97,3 +97,9 @@ export default class Countdown extends Component<PropTypes, StateTypes> {
     );
   }
 }
+
+Countdown.defaultProps = {
+  legend: null,
+};
+
+export default Countdown;
