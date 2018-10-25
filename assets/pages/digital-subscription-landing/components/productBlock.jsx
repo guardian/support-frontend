@@ -88,11 +88,25 @@ const appImages: {
   },
 };
 
+function getDailyEditionCopy(countryGroupId: CountryGroupId) {
+  if (countryGroupId === 'GBPCountries') {
+    return {
+      description: 'Every issue of The Guardian and Observer, designed for your iPad and available offline',
+      onTheGoText: 'Your complete daily newspaper, beautifully designed for your iPad',
+    };
+  }
+  return {
+    description: 'Every issue of The Guardian and Observer UK newspapers, designed for your iPad and available offline',
+    onTheGoText: 'Your complete daily UK newspaper, beautifully designed for your iPad',
+  };
+
+}
+
 
 // ----- Component ----- //
 
 function ProductBlock(props: PropTypes) {
-
+  const dailyEditionCopy = getDailyEditionCopy(props.countryGroupId);
   return (
     <div className="product-block">
       <LeftMarginSection>
@@ -120,11 +134,11 @@ function ProductBlock(props: PropTypes) {
           }}
           companionSvg={<SvgPennyFarthingCircles />}
           heading="iPad daily edition"
-          description="Every issue of The Guardian and Observer, designed for your iPad and available offline"
+          description={dailyEditionCopy.description}
           features={[
             {
               heading: 'On-the-go reading',
-              text: 'Your complete daily newspaper, beautifully designed for your iPad',
+              text: dailyEditionCopy.onTheGoText,
             },
             {
               heading: 'Every supplement',
