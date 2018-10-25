@@ -38,7 +38,7 @@ const calculateCountdown = (endDate: number): CountdownTime => {
   };
 };
 
-const nonNegative = number => (number > 0 ? number : 0);
+const nonNegative = (number: number): number => (number > 0 ? number : 0);
 
 
 // ----- Component ----- //
@@ -88,7 +88,7 @@ class Countdown extends Component<PropTypes, StateTypes> {
       <time className="component-countdown">
         {Object.entries(units).map(([description, time]) => (
           <span className="component-countdown__chip">
-            <span className="component-countdown__time">{addLeadingZeros(nonNegative(time), 2)}</span>
+            <span className="component-countdown__time">{addLeadingZeros(nonNegative(parseInt(time, 10)), 2)}</span>
             <span className="component-countdown__description">{description}</span>
           </span>
         ))}
