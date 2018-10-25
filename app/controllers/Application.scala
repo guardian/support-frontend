@@ -113,7 +113,10 @@ class Application(
           logger.error(s"Error fetching user from identity: $err")
           Ok(newContributions(countryCode, None))
         },
-        user => Ok(newContributions(countryCode, user))
+      val maybeUser = request.user.traverse[Attempt, IdUser](identityService.getUser(_)).leftMap(
+          logger.error(s"Error fetching user from identity: $err")
+      ).toOption
+      Ok(newContributions(countryCode, maybeUser).withSettingsSurrogateKey.withServersideAbTestCookie
       ).map(result => result.withSettingsSurrogateKey.withServersideAbTestCookie)
     } else {
       Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey.withServersideAbTestCookie)
