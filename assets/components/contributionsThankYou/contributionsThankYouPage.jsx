@@ -14,6 +14,7 @@ import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import EmailConfirmation from './emailConfirmation';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
 import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
+import ContributionsSurveySection from '../survey/contributionsSurveySection';
 
 // ---- Types ----- //
 
@@ -39,7 +40,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
         modifierClasses={['compact']}
       />
       <div className="multiline-divider" />
-      {props.contributionType !== 'ONE_OFF' ? <RecurringContribBodyCopy {...props} /> : null}
+      <BodyCopy {...props} />
       {props.marketingConsent}
       <QuestionsContact countryGroupId={props.countryGroupId} />
       <SpreadTheWord />
@@ -50,12 +51,16 @@ export default function ContributionsThankYouPage(props: PropTypes) {
 
 // ----- Auxiliary Components ----- //
 
-function RecurringContribBodyCopy(props: PropTypes) {
+function BodyCopy(props: PropTypes) {
+  if (props.contributionType === 'ONE_OFF') {
+    return <ContributionsSurveySection />;
+  }
   // recurring
   if (props.directDebit) {
     return (
       <div className="component-direct-debit-details__container">
         <DirectDebitDetails {...props.directDebit} />
+        <ContributionsSurveySection />
       </div>
     );
   }
