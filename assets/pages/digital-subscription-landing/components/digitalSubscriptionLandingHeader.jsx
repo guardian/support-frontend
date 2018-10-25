@@ -178,9 +178,11 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             </p>
           </div>
         </div>
-        <div className="digital-subscription-landing-header__countdown digital-subscription-landing-header__countdown--hidden">
-          {flashSaleIsActive('DigitalPack') && <FlashSaleCountdown />}
-        </div>
+        {flashSaleIsActive('DigitalPack') &&
+          <div className="digital-subscription-landing-header__countdown digital-subscription-landing-header__countdown--hidden">
+            <FlashSaleCountdown />
+          </div>
+        }
         <CtaSwitch referringCta="support_digipack_page_header" />
       </LeftMarginSection>
     </div>
