@@ -80,18 +80,19 @@ class Countdown extends Component<PropTypes, StateTypes> {
 
     const { legend } = this.props;
 
-    const units = days > 0 ? {
-      days, hrs: hours, mins: minutes, secs: seconds,
-    } : { hrs: hours, mins: minutes, secs: seconds };
+    const chip = (description: string, time: number) => (
+      <span className="component-countdown__chip">
+        <span className="component-countdown__time">{addLeadingZeros(nonNegative((time)), 2)}</span>
+        <span className="component-countdown__description">{description}</span>
+      </span>
+    );
 
     return (
       <time className="component-countdown">
-        {Object.entries(units).map(([description, time]) => (
-          <span className="component-countdown__chip">
-            <span className="component-countdown__time">{addLeadingZeros(nonNegative(parseInt(time, 10)), 2)}</span>
-            <span className="component-countdown__description">{description}</span>
-          </span>
-        ))}
+        {days > 0 && chip('days', days)}
+        {chip('hrs', hours)}
+        {chip('mins', minutes)}
+        {chip('secs', seconds)}
         {legend &&
           <span className="component-countdown__chip component-countdown__chip--legend">
             <span className="component-countdown__description">{legend}</span>
