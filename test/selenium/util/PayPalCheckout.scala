@@ -46,10 +46,6 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
     elementIsClickable(emailInput)
   }
 
-  def switchToPayPalPage(): Unit = {
-    switchFrame(container)
-  }
-
   def acceptPayPalPaymentPage(): Unit = {
     pageDoesNotHaveElement(id("preloaderSpinner"))
     pageDoesNotHaveElement(id("spinner"))

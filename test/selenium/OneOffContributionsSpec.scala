@@ -20,7 +20,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
   feature("Sign up for a one-off contribution") {
 
-    scenario("One-off contribution sign-up with Stripe - GBP") {
+    scenario("One-off contribution sign-up with Stripe - AUD") {
 
       val stripePayment = 22.55
       val currency = "AUD"
@@ -60,48 +60,6 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       assert(oneOffContributionThankYou.pageHasLoaded)
     }
 
-    scenario("One-off contribution sign-up with PayPal - USD") {
-
-      val testUser = new TestUser(driverConfig)
-      val landingPage = ContributionsLanding("us")
-      val payPalCheckout = new PayPalCheckout
-      val oneOffContributionThankYou = new OneOffContributionThankYou
-      val expectedPayment = "50.00"
-
-      Given("that a test user goes to the contributions landing page")
-      goTo(landingPage)
-      assert(landingPage.pageHasLoaded)
-
-      When("he/she selects to make a one-time contribution")
-      landingPage.clickOneOff
-
-      And("he/she selects to contribute via PayPal")
-      landingPage.clickContributePayPalButton
-
-      Then("they should be redirected to PayPal Checkout")
-      assert(payPalCheckout.initialPageHasLoaded)
-      payPalCheckout.handleGuestRegistrationPage()
-      assert(payPalCheckout.loginContainerHasLoaded)
-
-      Given("that the user fills in their PayPal credentials correctly")
-      payPalCheckout.enterLoginDetails()
-
-      When("the user clicks 'Log In'")
-      payPalCheckout.logIn
-
-      Then("the payment summary appears")
-      assert(payPalCheckout.payPalSummaryHasLoaded)
-
-      Given("that the summary displays the correct details")
-      assert(payPalCheckout.payPalSummaryHasCorrectDetails(expectedPayment))
-
-      When("that the user agrees to payment")
-      payPalCheckout.acceptPayPalPaymentPage
-
-      Then("the thankyou page should display")
-      assert(oneOffContributionThankYou.pageHasLoaded)
-
-    }
   }
 
 }
