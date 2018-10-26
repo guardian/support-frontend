@@ -67,6 +67,10 @@ const saleDetails: SaleDetails = {
   },
 };
 
+function getCountdownAbTestParticipation(): boolean {
+  return getQueryParameter('ab_timer') === 'variant';
+}
+
 function getDiscountedPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   if (flashSaleIsActive(product) && saleDetails[product].prices && saleDetails[product].prices[countryGroupId]) {
     return `${saleDetails[product].prices[countryGroupId]}/month`;
@@ -93,5 +97,6 @@ export {
   flashSaleIsActive,
   getPromoCode,
   getIntcmp,
+  getCountdownAbTestParticipation,
   getEndTime,
 };

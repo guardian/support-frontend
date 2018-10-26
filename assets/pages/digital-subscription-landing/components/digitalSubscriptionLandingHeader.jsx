@@ -17,7 +17,7 @@ import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLa
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { displayPrice } from 'helpers/subscriptions';
 import { currencies, detect } from 'helpers/internationalisation/currency';
-import { flashSaleIsActive, getDiscountedPrice } from 'helpers/flashSale';
+import { flashSaleIsActive, getDiscountedPrice, getCountdownAbTestParticipation } from 'helpers/flashSale';
 import CtaSwitch from './ctaSwitch';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
@@ -178,8 +178,8 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             </p>
           </div>
         </div>
-        {flashSaleIsActive('DigitalPack') &&
-          <div className="digital-subscription-landing-header__countdown digital-subscription-landing-header__countdown--hidden">
+        {flashSaleIsActive('DigitalPack') && getCountdownAbTestParticipation() &&
+          <div className="digital-subscription-landing-header__countdown">
             <FlashSaleCountdown />
           </div>
         }
