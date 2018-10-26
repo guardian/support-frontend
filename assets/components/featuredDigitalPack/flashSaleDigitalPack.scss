@@ -1,5 +1,6 @@
 .component-flash-sale-featured-digital-pack{
   position: relative;
+  overflow: hidden;
   background: gu-colour(garnett-neutral-3);
 
   .component-cta-link {
@@ -41,7 +42,8 @@
   .component-flash-sale-featured-digital-pack__countdownbox .component-flash-sale-countdown {
     margin: 0 -5px;
     color: #bb3b80;
-    width: 600%;
+    width: 130%;
+    display: inline-block;
     .component-countdown {
       background: darken(gu-colour(garnett-neutral-3), 5%);
       border-top: 1px solid gu-colour(garnett-neutral-4);
