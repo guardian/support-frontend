@@ -82,6 +82,23 @@ const updateEmail = (email: string): Action => {
   return ({ type: 'UPDATE_EMAIL', email });
 };
 
+const checkIfEmailHasPassword = (email: string) =>
+  (dispatch: Dispatch<Action>): void => {
+    // while a request is in-flight, we have to assume that sign-in is required
+    // otherwise someone might be able to submit the form while we're waiting for this request to complete
+    // (but what about when the change event is triggered from someone clicking the submit button?
+    //  it would block the submission and they'd need to click again once the request was done... not ideal)
+    setSignInIsRequired(true);
+    fetch(`endpoint?email=${encodeURIComponent(email)}`).then((emailHasPassword: boolean) => {
+      if (emailHasPassword) {
+        dispatch(setSignInIsRequired(true));
+      } else {
+        // we must check this value before attempting to submit the form
+        dispatch(setSignInIsRequired(false));
+      }
+    });
+  };
+
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
 const updateUserFormData = (userFormData: UserFormData): Action => ({ type: 'UPDATE_USER_FORM_DATA', userFormData });
@@ -365,4 +382,5 @@ export {
   setPayPalHasLoaded,
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
+  checkIfEmailHasPassword,
 };

@@ -66,6 +66,7 @@ type FormState = {
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouPageCopy: boolean,
   payPalHasLoaded: boolean,
+  isSignInRequired: boolean,
 };
 
 type PageState = {
@@ -141,6 +142,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
     hasSeenDirectDebitThankYouPageCopy: false,
+    // since we don't know until the user has entered an email,
+    // we assume the most restrictive case
+    isSignInRequired: true,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {

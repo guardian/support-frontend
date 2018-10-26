@@ -26,6 +26,7 @@ import {
   updateLastName,
   updateEmail,
   updateState,
+  checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
 
 
@@ -38,10 +39,12 @@ type PropTypes = {|
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
+  isSignInRequired: boolean,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
+  checkIfEmailHasPassword: Event => void,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -58,6 +61,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   state: state.page.form.formData.state,
   isSignedIn: state.page.user.isSignedIn,
+  isSignInRequired: state.page.form.isSignInRequired,
 });
 
 
@@ -66,6 +70,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
+  checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 
 
@@ -92,6 +97,7 @@ function FormFields(props: PropTypes) {
         placeholder="example@domain.com"
         icon={<SvgEnvelope />}
         onInput={props.updateEmail}
+        onChange={props.checkIfEmailHasPassword}
         isValid={checkEmail(email)}
         pattern={emailRegexPattern}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
@@ -100,6 +106,7 @@ function FormFields(props: PropTypes) {
         disabled={isSignedIn}
       />
       <Signout isSignedIn />
+      <MustSignIn isSignInRequired />
       <NewContributionTextInput
         id="contributionFirstName"
         name="contribution-fname"

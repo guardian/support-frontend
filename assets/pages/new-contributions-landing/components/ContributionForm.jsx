@@ -159,6 +159,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
 
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
+    console.log('submit!');
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
