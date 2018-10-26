@@ -6,12 +6,12 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class AccountAccessScopeCodecTest extends FlatSpec with Matchers {
 
-  it should "for backwards compatibility, deserialise when it's not specified to no restriction" in {
+  it should "understand that no session id means the identity user is authenticated" in {
     val actual = AccountAccessScope.fromInput(None)
     actual should be(AuthenticatedAccess)
   }
 
-  it should "deserialise when it's got a value to token scope" in {
+  it should "where a session id is specified, allow access by that session id" in {
     val actual = AccountAccessScope.fromInput(Some("hello"))
     actual should be(SessionAccess(SessionId("hello")))
   }
