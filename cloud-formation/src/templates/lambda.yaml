@@ -5,7 +5,7 @@
     {{> environmentVariables}}
     FunctionName: !Sub ${Stack}-{{name}}Lambda-${Stage}
     Handler: "com.gu.support.workers.lambdas.{{name}}::handleRequest"
-    MemorySize: {{memorySize}}{{^memorySize}}512{{/memorySize}}
+    MemorySize: {{memorySize}}{{^memorySize}}1536{{/memorySize}}
     Role: !GetAtt [ LambdaExecutionRole, Arn ]
     Code:
       S3Bucket: support-workers-dist
