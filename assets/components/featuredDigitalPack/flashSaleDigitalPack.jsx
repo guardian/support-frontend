@@ -10,7 +10,7 @@ import GridPicture from 'components/gridPicture/gridPicture';
 import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getDiscountedPrice } from 'helpers/flashSale';
+import { getDiscountedPrice, getCountdownAbTestParticipation } from 'helpers/flashSale';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import type { ComponentAbTest } from 'helpers/subscriptions';
 import type { HeadingSize } from 'components/heading/heading';
@@ -27,6 +27,7 @@ type PropTypes = {
 
 function FlashSaleDigitalPack(props: PropTypes) {
   const currency = currencies[detect(props.countryGroupId)].glyph;
+  const timerClassName = getCountdownAbTestParticipation() ? 'component-flash-sale-featured-digital-pack__countdownbox' : 'component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--hidden';
   return (
     <section className="component-flash-sale-featured-digital-pack">
       <div className="component-flash-sale-featured-digital-pack__content">
@@ -43,7 +44,7 @@ function FlashSaleDigitalPack(props: PropTypes) {
           >
             Save 50% for three months
           </Heading>
-          <div className="component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--hidden">
+          <div className={timerClassName}>
             <FlashSaleCountdown />
             <p className="component-flash-sale-featured-digital-pack__copy">
               Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
