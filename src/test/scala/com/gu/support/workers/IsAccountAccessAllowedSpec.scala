@@ -4,13 +4,13 @@ import com.gu.support.workers.model.AccountAccessScope.{SessionAccess, Authentic
 import com.gu.zuora.GetAccountForIdentity.{CreatedInSession, NotCreatedInSession}
 import org.scalatest.{FlatSpec, Matchers}
 
-class GetRecurringSubscriptionIsInAccountAccessScopeSpec extends FlatSpec with Matchers {
+class IsAccountAccessAllowedSpec extends FlatSpec with Matchers {
 
-  it should "allow access to unlabelled accounts where there is no restriction" in {
+  it should "allow access to unlabelled accounts when we have authenticated access" in {
     IsAccountAccessAllowed(AuthenticatedAccess, NotCreatedInSession) should be(true)
   }
 
-  it should "allow access to labelled accounts where there is no restriction" in {
+  it should "allow access to labelled accounts when we have authenticated access" in {
     IsAccountAccessAllowed(AuthenticatedAccess, CreatedInSession(SessionId("existing"))) should be(true)
   }
 

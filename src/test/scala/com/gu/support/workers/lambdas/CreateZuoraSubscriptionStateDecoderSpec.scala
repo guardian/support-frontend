@@ -28,7 +28,7 @@ class CreateZuoraSubscriptionStateDecoderSpec extends FlatSpec with Matchers wit
     }
         }"""
 
-  "CreateZuoraSubscriptionStateDecoder" should "be able to decode allowed access scope" in {
+  "CreateZuoraSubscriptionStateDecoder" should "be able to decode authenticated access scope" in {
     val maybeState = decode[CreateZuoraSubscriptionState](json(false))
 
     val fieldsToTest = maybeState.map(state =>
