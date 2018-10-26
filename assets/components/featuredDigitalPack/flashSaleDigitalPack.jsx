@@ -27,7 +27,7 @@ type PropTypes = {
 
 function FlashSaleDigitalPack(props: PropTypes) {
   const currency = currencies[detect(props.countryGroupId)].glyph;
-  const timerClassName = getCountdownAbTestParticipation() ? "component-flash-sale-featured-digital-pack__countdownbox" : "component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--hidden";
+  const timerClassName = getCountdownAbTestParticipation() ? 'component-flash-sale-featured-digital-pack__countdownbox' : 'component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--hidden';
   return (
     <section className="component-flash-sale-featured-digital-pack">
       <div className="component-flash-sale-featured-digital-pack__content">
