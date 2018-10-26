@@ -6,6 +6,8 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type ThirdPartyPaymentLibrary, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
+import { amounts, type Amount, type Contrib } from 'helpers/contributions';
+import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import {
   type Action,
   paymentWaiting,
@@ -14,6 +16,7 @@ import {
   updatePaymentMethod,
   updateUserFormData,
   setPayPalHasLoaded,
+  selectAmount,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 
@@ -57,12 +60,22 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
   loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 }
 
+function initialiseSelectedAnnualAmount(state: State, dispatch: Function) {
+  const { countryGroupId } = state.common.internationalisation;
+  const annualTestVariant: AnnualContributionsTestVariant = state.common.abParticipations.annualContributionsRoundThree;
+
+  const annualAmounts: Amount[] = amounts(annualTestVariant).ANNUAL[countryGroupId];
+
+  dispatch(selectAmount(annualAmounts.find(amount => amount.isDefault) || annualAmounts[0], 'ANNUAL'));
+}
+
 const init = (store: Store<State, Action, Dispatch<Action>>) => {
   const { dispatch } = store;
 
   const state = store.getState();
   selectDefaultPaymentMethod(state, dispatch);
   initialisePaymentMethods(state, dispatch);
+  initialiseSelectedAnnualAmount(state, dispatch);
 
   const { firstName, lastName, email } = state.page.user;
   dispatch(updateUserFormData({ firstName, lastName, email }));
