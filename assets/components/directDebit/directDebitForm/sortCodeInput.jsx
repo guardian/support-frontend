@@ -58,7 +58,9 @@ function SortCodeField(props: {
       id="sort-code-field"
       value={props.value}
       onChange={props.onChange}
-      type="text"
+      type="tel"
+      pattern="[0-9][0-9]"
+      minLength={2}
       maxLength={2}
       className="component-direct-debit-form__sort-code-field focus-target"
     />
