@@ -10,6 +10,7 @@ import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import {
   oldContributionsFlowTests,
   newContributionsFlowTests,
@@ -52,6 +53,7 @@ type BreakpointRange = {|
 
 export type Participations = {
   [TestId]: string,
+  annualContributionsRoundThree: AnnualContributionsTestVariant
 }
 
 type OphanABPayload = {
