@@ -33,10 +33,12 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import * as cookie from 'helpers/cookie';
+import { fetchJson, getRequestOptions } from 'helpers/fetch';
 import {
   type State,
   type UserFormData,
   type ThankYouPageStage,
+  type IdentityResponse,
 } from './contributionsLandingReducer';
 
 export type Action =
@@ -61,7 +63,10 @@ export type Action =
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
-  | { type: 'PAYMENT_SUCCESS' };
+  | { type: 'PAYMENT_SUCCESS' }
+  | { type: 'SET_SIGN_IN_REQUIRED', isSignInRequired: boolean }
+  | { type: 'SET_IDENTITY_REQUEST_PENDING', isIdentityRequestPending: boolean }
+  | { type: 'SET_LAST_IDENTITY_RESPONSE', lastIdentityResponse: IdentityResponse };
 
 
 const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action =>
@@ -81,23 +86,6 @@ const updateEmail = (email: string): Action => {
   storage.setSession('gu.email', email);
   return ({ type: 'UPDATE_EMAIL', email });
 };
-
-const checkIfEmailHasPassword = (email: string) =>
-  (dispatch: Dispatch<Action>): void => {
-    // while a request is in-flight, we have to assume that sign-in is required
-    // otherwise someone might be able to submit the form while we're waiting for this request to complete
-    // (but what about when the change event is triggered from someone clicking the submit button?
-    //  it would block the submission and they'd need to click again once the request was done... not ideal)
-    setSignInIsRequired(true);
-    fetch(`endpoint?email=${encodeURIComponent(email)}`).then((emailHasPassword: boolean) => {
-      if (emailHasPassword) {
-        dispatch(setSignInIsRequired(true));
-      } else {
-        // we must check this value before attempting to submit the form
-        dispatch(setSignInIsRequired(false));
-      }
-    });
-  };
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
@@ -143,6 +131,47 @@ const setThirdPartyPaymentLibrary =
   });
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
+
+const setisSignInRequired = (isSignInRequired: boolean): Action => ({
+  type: 'SET_SIGN_IN_REQUIRED',
+  isSignInRequired,
+});
+
+const setIdentityRequestPending = (isIdentityRequestPending: boolean): Action => ({
+  type: 'SET_IDENTITY_REQUEST_PENDING',
+  isIdentityRequestPending,
+});
+
+const setLastIdentityResponse = (lastIdentityResponse: IdentityResponse): Action => ({
+  type: 'SET_LAST_IDENTITY_RESPONSE',
+  lastIdentityResponse,
+});
+
+const checkIfEmailHasPassword = (email: string) =>
+  (dispatch: Dispatch<Action>, getState: () => State): void => {
+    const state = getState();
+    dispatch(setIdentityRequestPending(true));
+    fetchJson(
+      `/dummy/${encodeURIComponent(email)}`,
+      getRequestOptions('same-origin', state.page.csrf),
+    ).then(({ userType }) => {
+      dispatch(setIdentityRequestPending(false));
+      if (typeof userType !== 'string') {
+        throw new Error('userType string was not present in response');
+      }
+      dispatch(setLastIdentityResponse('success'));
+
+      if (userType === 'current') {
+        dispatch(setisSignInRequired(true));
+      } else {
+        dispatch(setisSignInRequired(false));
+      }
+    }).catch((err: Error) => {
+      logException(`Error checking if email has password. ${err.message}`);
+      dispatch(setIdentityRequestPending(false));
+      dispatch(setLastIdentityResponse('failure'));
+    });
+  };
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
@@ -383,4 +412,6 @@ export {
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
+  setisSignInRequired,
+  setIdentityRequestPending,
 };

@@ -19,7 +19,8 @@ import {
 
 import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
-import { type State } from '../contributionsLandingReducer';
+import { MustSignIn } from './MustSignIn';
+import { type State, type IdentityResponse } from '../contributionsLandingReducer';
 
 import {
   updateFirstName,
@@ -40,6 +41,8 @@ type PropTypes = {|
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
   isSignInRequired: boolean,
+  isIdentityRequestPending: boolean,
+  lastIdentityResponse: IdentityResponse,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
@@ -62,6 +65,8 @@ const mapStateToProps = (state: State) => ({
   state: state.page.form.formData.state,
   isSignedIn: state.page.user.isSignedIn,
   isSignInRequired: state.page.form.isSignInRequired,
+  isIdentityRequestPending: state.page.form.isIdentityRequestPending,
+  lastIdentityResponse: state.page.form.lastIdentityResponse,
 });
 
 
@@ -70,7 +75,10 @@ const mapDispatchToProps = (dispatch: Function) => ({
   updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
   updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
   updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
-  checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
+  checkIfEmailHasPassword: (event) => {
+    // hey
+    dispatch(checkIfEmailHasPassword(event.target.value));
+  },
 });
 
 
@@ -106,7 +114,11 @@ function FormFields(props: PropTypes) {
         disabled={isSignedIn}
       />
       <Signout isSignedIn />
-      <MustSignIn isSignInRequired />
+      <MustSignIn
+        isSignInRequired={props.isSignInRequired}
+        isIdentityRequestPending={props.isIdentityRequestPending}
+        lastIdentityResponse={props.lastIdentityResponse}
+      />
       <NewContributionTextInput
         id="contributionFirstName"
         name="contribution-fname"

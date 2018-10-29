@@ -15,9 +15,20 @@ import services.{IdentityService, PaymentAPIService}
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck
 import utils.RequestCountry._
+import io.circe.syntax._
+import play.api.libs.circe.Circe
+import actions.CustomActionBuilders
+import io.circe.Json
+import io.circe.syntax._
+import models.CheckBankAccountDetails
+import play.api.libs.circe.Circe
+import play.api.mvc._
+import services.paypal.PayPalBillingDetails.codec
+import services.{GoCardlessServiceProvider, TestUserService}
 
 import scala.concurrent.{ExecutionContext, Future}
 import monitoring.SafeLogger
+import play.utils.UriEncoding
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -30,7 +41,7 @@ class Application(
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with Circe {
 
   import actionRefiners._
 
@@ -148,5 +159,15 @@ class Application(
   def removeTrailingSlash(path: String): Action[AnyContent] = CachedAction() {
     request =>
       Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
+  }
+
+  def dummy(email: String): Action[AnyContent] = NoCacheAction() { implicit request =>
+    val eml = UriEncoding.decodePath(email, "UTF-8")
+    println(email)
+    println(eml)
+    if (eml == "has@password.com")
+      Ok(Map("userType" -> "current").asJson)
+    else
+      Ok(Map("userType" -> "new").asJson)
   }
 }

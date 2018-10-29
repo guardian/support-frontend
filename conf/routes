@@ -1,5 +1,7 @@
 # ----- System ----- #
 
+GET  /dummy/*email                                  controllers.Application.dummy(email)
+
 GET /healthcheck                                    controllers.Application.healthcheck
 
 # ----- Unsupported Browsers ----- #
