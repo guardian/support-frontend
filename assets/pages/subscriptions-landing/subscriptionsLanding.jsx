@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
 import FooterContainer from 'components/footer/footerContainer';
-import InvestIntroduction from 'components/introduction/investIntroduction';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
@@ -34,7 +33,7 @@ const content = (
     >
       {flashSaleIsActive('DigitalPack') ? (<FlashSaleDigitalPack
         headingSize={3}
-      />) : <InvestIntroduction />}
+      />) : null}
       <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
       <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport
