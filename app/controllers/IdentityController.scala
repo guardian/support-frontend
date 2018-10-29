@@ -12,8 +12,9 @@ import services.IdentityService
 import cats.implicits._
 import config.Configuration.GuardianDomain
 import models.identity.responses.SetGuestPasswordResponseCookies
+import codecs.CirceDecoders._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class IdentityController(
     identityService: IdentityService,
@@ -51,6 +52,26 @@ class IdentityController(
           Ok.withCookies(SetGuestPasswordResponseCookies.getCookies(cookiesFromResponse, guardianDomain): _*)
         }
       )
+  }
+
+  def getUserType(maybeEmail: Option[String]): Action[AnyContent] = PrivateAction.async { implicit request =>
+    maybeEmail.fold {
+      SafeLogger.error(scrub"No email provided")
+      Future.successful(InternalServerError.asInstanceOf[Result])
+    } { email =>
+      identityService
+        .getUserType(email)
+        .fold(
+          err => {
+            SafeLogger.error(scrub"Failed to retrieve user type for ${email}: ${err.toString}")
+            InternalServerError
+          },
+          response => {
+            SafeLogger.info(s"Successfully retrieved user type for ${email}")
+            Ok(response.asJson)
+          }
+        )
+    }
   }
 }
 
