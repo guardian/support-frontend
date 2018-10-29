@@ -69,7 +69,7 @@ const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
 // ----- Campaigns ----- //
 
-const campaigns : {
+const campaigns: {
   [string]: string[],
 } = {
   seven_fifty_middle: [

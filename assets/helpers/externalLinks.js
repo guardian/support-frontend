@@ -52,7 +52,7 @@ const defaultPromos: PromoCodes = {
   PaperAndDigital: getPromoCode('PaperAndDigital', 'GXX83X'),
 };
 
-const customPromos : {
+const customPromos: {
   [Campaign]: PromoCodes,
 } = {
   seven_fifty_middle: {
