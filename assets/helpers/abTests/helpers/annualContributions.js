@@ -2,7 +2,6 @@
 
 import { type Store } from 'redux';
 import { contributionSelectionActionsFor } from 'components/contributionSelection/contributionSelectionActions';
-import type { AnnualContributionsTestVariant } from '../abtestDefinitions';
 
 /* eslint-disable quote-props */
 const numbersInWords = {
@@ -99,7 +98,7 @@ const VariantA = {
   ],
 };
 
-export const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVariant) => {
+export const getAnnualAmounts = (annualTestVariant: string) => {
   if (annualTestVariant === 'annualAmountsA') {
     return {
       GBPCountries: VariantA.standard,
