@@ -69,6 +69,8 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
+  isSignInRequired: boolean,
+  isIdentityRequestPending: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -89,6 +91,8 @@ const mapStateToProps = (state: State) => ({
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
   selectedAmounts: state.page.form.selectedAmounts,
+  isSignInRequired: state.page.form.isSignInRequired,
+  isIdentityRequestPending: state.page.form.isIdentityRequestPending,
 });
 
 
@@ -162,7 +166,7 @@ function onSubmit(props: PropTypes): Event => void {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-    if (!(event.target: any).checkValidity()) {
+    if (!(event.target: any).checkValidity() || props.isSignInRequired || props.isIdentityRequestPending) {
       return;
     }
     formHandlers[props.contributionType][props.paymentMethod](props);

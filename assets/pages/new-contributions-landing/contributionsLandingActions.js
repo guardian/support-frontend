@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import { checkEmail } from 'helpers/formValidation';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
@@ -160,10 +161,13 @@ const setLastIdentityResponse = (lastIdentityResponse: IdentityResponse): Action
 
 const checkIfEmailHasPassword = (email: string) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
+    if (!checkEmail(email)) {
+      return;
+    }
     const state = getState();
     dispatch(setIdentityRequestPending(true));
     fetchJson(
-      `/dummy/${encodeURIComponent(email)}`,
+      `${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
       getRequestOptions('same-origin', state.page.csrf),
     ).then(({ userType }) => {
       dispatch(setIdentityRequestPending(false));
