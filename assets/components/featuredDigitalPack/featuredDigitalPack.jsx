@@ -8,7 +8,6 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
 import SvgCircle from 'components/svgs/circle';
-import { flashSaleIsActive } from 'helpers/flashSale';
 
 import {
   displayPrice,
@@ -16,7 +15,6 @@ import {
   type ComponentAbTest,
 } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import FlashSaleDigitalPack from './flashSaleDigitalPack';
 
 // ----- Types ----- //
 
