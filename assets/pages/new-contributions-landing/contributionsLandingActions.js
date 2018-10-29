@@ -64,11 +64,22 @@ export type Action =
   | { type: 'PAYMENT_SUCCESS' };
 
 
-const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action =>
-  ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType, paymentMethodToSelect });
+const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action => {
+  // PayPal one-off redirects away from the site before hitting the thank you page
+  // so we need to store the contrib type & payment method in the storage so that it is available on the
+  // thank you page in all scenarios.
+  storage.setSession('contributionType', contributionType);
+  storage.setSession('paymentMethod', paymentMethodToSelect);
+  return ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType, paymentMethodToSelect });
+};
 
-const updatePaymentMethod = (paymentMethod: PaymentMethod): Action =>
-  ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
+const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
+  // PayPal one-off redirects away from the site before hitting the thank you page
+  // so we need to store the payment method in the storage so that it is available on the
+  // thank you page in all scenarios.
+  storage.setSession('paymentMethod', paymentMethod);
+  return ({type: 'UPDATE_PAYMENT_METHOD', paymentMethod});
+};
 
 const updateFirstName = (firstName: string): Action => ({ type: 'UPDATE_FIRST_NAME', firstName });
 

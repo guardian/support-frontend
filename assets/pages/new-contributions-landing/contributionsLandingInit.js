@@ -5,7 +5,7 @@ import { type Store, type Dispatch } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { type ThirdPartyPaymentLibrary, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
+import { type ThirdPartyPaymentLibrary, getValidPaymentMethods, getPaymentMethodFromSession, } from 'helpers/checkouts';
 import { amounts, type Amount } from 'helpers/contributions';
 import {
   type Action,
@@ -26,7 +26,13 @@ function selectDefaultPaymentMethod(state: State, dispatch: Dispatch<Action>) {
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
 
-  const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+  const paymentMethodFromSession = getPaymentMethodFromSession();
+  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
+
+  const paymentMethodToSelect =
+    paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
+      ? paymentMethodFromSession
+      : validPaymentMethods[0] || 'None';
 
   dispatch(updatePaymentMethod(paymentMethodToSelect));
 }
