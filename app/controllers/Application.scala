@@ -162,10 +162,7 @@ class Application(
   }
 
   def dummy(email: String): Action[AnyContent] = NoCacheAction() { implicit request =>
-    val eml = UriEncoding.decodePath(email, "UTF-8")
-    println(email)
-    println(eml)
-    if (eml == "has@password.com")
+    if (email == "has@password.com")
       Ok(Map("userType" -> "current").asJson)
     else
       Ok(Map("userType" -> "new").asJson)
