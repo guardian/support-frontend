@@ -33,6 +33,10 @@ class StubIdentityService extends IdentityService {
     EitherT.rightT[Future, String](SetGuestPasswordResponseCookies(DateTime.now(), List.empty))
   }
 
+  def getUserType(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, GetUserTypeResponse] = {
+    EitherT.rightT[Future, String](GetUserTypeResponse("guest"))
+  }
+
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
     EitherT.rightT[Future, String](UserIdWithGuestAccountToken("123456", None))
   }
