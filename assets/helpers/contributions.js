@@ -220,7 +220,7 @@ const defaultMonthlyAmount = [
   { value: '30', spoken: numbersInWords['30'], isDefault: false },
 ];
 
-const amounts = (annualTestVariant: AnnualContributionsTestVariant) => ({
+const amounts = (annualTestVariant: string) => ({
   ONE_OFF: {
     GBPCountries: defaultOneOffAmount,
     UnitedStates: defaultOneOffAmount,

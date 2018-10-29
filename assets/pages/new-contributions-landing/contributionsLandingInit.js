@@ -6,8 +6,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type ThirdPartyPaymentLibrary, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
-import { amounts, type Amount, type Contrib } from 'helpers/contributions';
-import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
+import { amounts, type Amount } from 'helpers/contributions';
 import {
   type Action,
   paymentWaiting,
@@ -62,7 +61,7 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
 
 function initialiseSelectedAnnualAmount(state: State, dispatch: Function) {
   const { countryGroupId } = state.common.internationalisation;
-  const annualTestVariant: AnnualContributionsTestVariant = state.common.abParticipations.annualContributionsRoundThree;
+  const annualTestVariant = state.common.abParticipations.annualContributionsRoundThree;
 
   const annualAmounts: Amount[] = amounts(annualTestVariant).ANNUAL[countryGroupId];
 
