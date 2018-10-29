@@ -78,7 +78,7 @@ const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
   // so we need to store the payment method in the storage so that it is available on the
   // thank you page in all scenarios.
   storage.setSession('paymentMethod', paymentMethod);
-  return ({type: 'UPDATE_PAYMENT_METHOD', paymentMethod});
+  return ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
 };
 
 const updateFirstName = (firstName: string): Action => ({ type: 'UPDATE_FIRST_NAME', firstName });

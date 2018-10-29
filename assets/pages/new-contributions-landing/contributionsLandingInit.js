@@ -5,7 +5,7 @@ import { type Store, type Dispatch } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { type ThirdPartyPaymentLibrary, getValidPaymentMethods, getPaymentMethodFromSession, } from 'helpers/checkouts';
+import { type ThirdPartyPaymentLibrary, getValidPaymentMethods, getPaymentMethodFromSession } from 'helpers/checkouts';
 import { amounts, type Amount } from 'helpers/contributions';
 import {
   type Action,
