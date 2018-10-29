@@ -17,6 +17,9 @@ import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { ComponentAbTest } from 'helpers/subscriptions';
 import type { HeadingSize } from 'components/heading/heading';
+import { type Participations } from 'helpers/abTests/abtest';
+import { type OptimizeExperiments } from 'helpers/tracking/optimize';
+import { type CommonState } from 'helpers/page/page';
 
 // ----- Types ----- //
 
