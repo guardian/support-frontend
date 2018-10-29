@@ -57,7 +57,7 @@ class IdentityController(
   def getUserType(maybeEmail: Option[String]): Action[AnyContent] = PrivateAction.async { implicit request =>
     maybeEmail.fold {
       SafeLogger.error(scrub"No email provided")
-      Future.successful(InternalServerError.asInstanceOf[Result])
+      Future.successful(BadRequest("No email provided"))
     } { email =>
       identityService
         .getUserType(email)
