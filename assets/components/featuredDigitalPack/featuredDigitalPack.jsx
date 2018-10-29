@@ -30,9 +30,6 @@ type PropTypes = {|
 // ----- Components ----- //
 
 function FeaturedDigitalPack(props: PropTypes) {
-  if (flashSaleIsActive('DigitalPack')) {
-    return FlashSaleDigitalPack(props);
-  }
   return (
     <section className="component-featured-digital-pack">
       <div className="component-featured-digital-pack__description">

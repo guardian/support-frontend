@@ -13,6 +13,7 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
 import WhySupportVideoContainer from 'components/whySupportVideo/whySupportVideoContainer';
 import { flashSaleIsActive } from 'helpers/flashSale';
+import FlashSaleDigitalPack from 'components/featuredDigitalPack/flashSaleDigitalPack';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -25,15 +26,15 @@ const store = pageInit();
 
 // ----- Render ----- //
 
-const header = flashSaleIsActive('DigitalPack') ? null : <InvestIntroduction />;
-
 const content = (
   <Provider store={store}>
     <Page
       header={<SimpleHeader />}
       footer={<FooterContainer disclaimer privacyPolicy />}
     >
-      { header }
+      {flashSaleIsActive('DigitalPack') ? (<FlashSaleDigitalPack
+        headingSize={3}
+      />) : <InvestIntroduction />}
       <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
       <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport

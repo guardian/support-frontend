@@ -17,7 +17,6 @@ import { type Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { flashSaleIsActive } from 'helpers/flashSale';
 import FeaturedDigitalPack from 'components/featuredDigitalPack/featuredDigitalPack';
-import FlashSaleDigitalPack from 'components/featuredDigitalPack/flashSaleDigitalPack';
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
 import InternationalSection from './components/internationalSection';
@@ -79,11 +78,6 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
   if (countryGroupId === 'GBPCountries') {
     return (
       <div className={className} {...otherProps}>
-        <FeaturedDigitalPack
-          headingSize={3}
-          countryGroupId={props.countryGroupId}
-          url={subsLinks.DigitalPack}
-        />
         <DigitalSection
           headingSize={headingSize}
           subsLinks={subsLinks}
@@ -101,13 +95,6 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
 
   return (
     <div className={className} {...otherProps}>
-      {flashSaleIsActive('DigitalPack') &&
-        <FlashSaleDigitalPack
-          headingSize={3}
-          countryGroupId={props.countryGroupId}
-          url={subsLinks.DigitalPack}
-        />
-      }
       <InternationalSection
         headingSize={headingSize}
         subsLinks={subsLinks}
