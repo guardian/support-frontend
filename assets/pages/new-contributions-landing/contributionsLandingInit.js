@@ -63,9 +63,11 @@ function initialiseSelectedAnnualAmount(state: State, dispatch: Function) {
   const { countryGroupId } = state.common.internationalisation;
   const annualTestVariant = state.common.abParticipations.annualContributionsRoundThree;
 
-  const annualAmounts: Amount[] = amounts(annualTestVariant).ANNUAL[countryGroupId];
+  if (annualTestVariant) {
+    const annualAmounts: Amount[] = amounts(annualTestVariant).ANNUAL[countryGroupId];
 
-  dispatch(selectAmount(annualAmounts.find(amount => amount.isDefault) || annualAmounts[0], 'ANNUAL'));
+    dispatch(selectAmount(annualAmounts.find(amount => amount.isDefault) || annualAmounts[0], 'ANNUAL'));
+  }
 }
 
 const init = (store: Store<State, Action, Dispatch<Action>>) => {
