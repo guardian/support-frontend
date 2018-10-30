@@ -11,7 +11,7 @@ import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { tests } from './abtestDefinitions';
+import { tests, type NewPaymentFlowTestVariant } from './abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -254,7 +254,8 @@ const getVariantsAsString = (participation: Participations): string => {
 const getNewPaymentFlowTestParticipation = (): ?Participations => {
   const npfVariant = cookie.get('gu.serverside.ab.test');
   if (npfVariant) {
-    return { 'newPaymentFlow' : npfVariant }
+    const variant: NewPaymentFlowTestVariant = npfVariant === "Variant" ? 'newPaymentFlow' : 'control';
+    return { 'newPaymentFlow' : variant }
   }
 };
 
