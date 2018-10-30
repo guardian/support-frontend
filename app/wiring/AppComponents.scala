@@ -20,7 +20,8 @@ trait AppComponents extends PlayComponents
   with ActionBuilders
   with Assets
   with GoogleAuth
-  with HttpFiltersComponents {
+  with HttpFiltersComponents
+  with Monitoring {
   self: BuiltInComponentsFromContext =>
 
   override lazy val httpErrorHandler = new CustomHttpErrorHandler(

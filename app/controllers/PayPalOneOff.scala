@@ -12,9 +12,10 @@ import cats.data.EitherT
 import cats.implicits._
 import monitoring.SafeLogger
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import services.{IdentityService, PaymentAPIService, TestUserService}
+import com.gu.tip.Tip
 
 class PayPalOneOff(
     actionBuilders: CustomActionBuilders,
@@ -23,7 +24,8 @@ class PayPalOneOff(
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
-    settingsProvider: SettingsProvider
+    settingsProvider: SettingsProvider,
+    tipMonitoring: Tip
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
@@ -60,14 +62,15 @@ class PayPalOneOff(
 
   def resultFromPaypalSuccess(success: PayPalSuccess, country: Option[String])(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
-
     val redirect = Redirect {
       country match {
         case Some(c) => s"/$c/thankyou.new"
         case None => "/contribute/one-off/thankyou"
       }
     }
-
+    val countryCookie = request.cookies.get("GU_country")
+    val countryFromCookie = countryCookie.map(_.value).getOrElse("Unknown")
+    tipMonitoring.verify(s"${country.getOrElse(countryFromCookie)} One-off PayPal contribution")
     success.email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
       redirect
