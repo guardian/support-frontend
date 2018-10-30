@@ -12,10 +12,11 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
 import WhySupportVideoContainer from 'components/whySupportVideo/whySupportVideoContainer';
 import { flashSaleIsActive } from 'helpers/flashSale';
-import FlashSaleDigitalPack from 'components/featuredDigitalPack/flashSaleDigitalPack';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+
+import FlashSaleDigitalPack from './components/flashSaleDigitalPack';
 
 
 // ----- Redux Store ----- //
