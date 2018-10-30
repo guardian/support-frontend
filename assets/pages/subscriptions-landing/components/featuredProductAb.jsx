@@ -2,22 +2,22 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import CtaLink from 'components/ctaLink/ctaLink';
-import GridPicture from 'components/gridPicture/gridPicture';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { type ComponentAbTest, type SubscriptionProduct } from 'helpers/subscriptions';
+import { type ComponentAbTest } from 'helpers/subscriptions';
 import type { HeadingSize } from 'components/heading/heading';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { type CommonState } from 'helpers/page/page';
 import FeaturedProductHero from 'components/featuredProductHero/featuredProductHero';
-import { getQueryParameter } from 'helpers/url';
+
+import { getProduct, type Product } from './featuredProducts';
 
 // ----- Types ----- //
 
@@ -30,37 +30,6 @@ type PropTypes = {|
   optimizeExperiments: OptimizeExperiments,
 |};
 
-type Product = {|
-  name: SubscriptionProduct,
-  headingText: string,
-  bodyText: string,
-  link: string,
-  image: Node,
-|}
-
-const dpImage = (
-  <GridPicture
-    sources={[
-      {
-        gridId: 'digitalPackFlashSaleMobile',
-        srcSizes: [140, 500, 717],
-        imgType: 'png',
-        sizes: '90vw',
-        media: '(max-width: 739px)',
-      },
-      {
-        gridId: 'digitalPackFlashSaleDesktop',
-        srcSizes: [140, 500, 1000, 1388],
-        imgType: 'png',
-        sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
-        media: '(min-width: 740px)',
-      },
-    ]}
-    fallback="digitalPackFlashSaleDesktop"
-    fallbackSize={500}
-    altText="ad-free, live and discover, and the daily edition"
-    fallbackImgType="png"
-  />);
 
 function mapStateToProps(state: { common: CommonState }) {
 
@@ -102,46 +71,9 @@ function FeaturedProductAb(props: PropTypes) {
     optimizeExperiments,
   );
 
-  const products: {DigitalPack: Product, Paper: Product, GuardianWeekly: Product} = {
-    DigitalPack: {
-      name: 'DigitalPack',
-      headingText: 'Digital Pack',
-      bodyText: 'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper',
-      link: subsLinks.DigitalPack,
-      image: dpImage,
-    },
-    Paper: {
-      name: 'Paper',
-      headingText: 'Print Subscription',
-      bodyText: 'Save on The Guardian and The Observer retail price all year round.',
-      link: subsLinks.Paper,
-      image: dpImage,
-    },
-    GuardianWeekly: {
-      name: 'GuardianWeekly',
-      headingText: 'Guardian Weekly',
-      bodyText: 'Our new, weekly magazine with free delivery worldwide',
-      link: subsLinks.GuardianWeekly,
-      image: dpImage,
-    },
-  };
+  const product = getProduct(subsLinks);
 
-  function getProduct(): ?Product {
-    switch (getQueryParameter('ab_product')) {
-      case 'DigitalPack':
-        return products.DigitalPack;
-      case 'Paper':
-        return products.Paper;
-      case 'GuardianWeekly':
-        return products.GuardianWeekly;
-      default:
-        return null;
-    }
-  }
-
-  const product = getProduct();
-
-  return product && (
+  return product ? (
     <FeaturedProductHero
       headingText={product.headingText}
       bodyText={product.bodyText}
@@ -149,9 +81,8 @@ function FeaturedProductAb(props: PropTypes) {
       cta={getCta(product)}
       headingSize={headingSize}
       product={product.name}
-    />
+    />) : null;
 
-  );
 }
 
 
