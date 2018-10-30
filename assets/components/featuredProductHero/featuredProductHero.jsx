@@ -4,6 +4,8 @@
 
 import React, { type Node } from 'react';
 
+import { classNameWithModifiers } from 'helpers/utilities';
+
 import Heading from 'components/heading/heading';
 import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
 import type { HeadingSize } from 'components/heading/heading';
@@ -32,7 +34,8 @@ export default function FeaturedProductHero(props: PropTypes) {
     image,
   } = props;
 
-  const timerClassName = hasTimer ? 'component-featured-product-hero__countdownbox' : 'component-featured-product-hero__countdownbox component-featured-product-hero__countdownbox--hidden';
+  const timerClassName = classNameWithModifiers('component-featured-product-hero__countdownbox', hasTimer ? [] : ['hidden']);
+
   return (
     <section className="component-featured-product-hero">
       <div className="component-featured-product-hero__content">
@@ -63,7 +66,7 @@ export default function FeaturedProductHero(props: PropTypes) {
           {image}
         </div>
       </div>
-    </section >
+    </section>
   );
 }
 
