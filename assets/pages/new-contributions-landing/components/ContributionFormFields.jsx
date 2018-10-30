@@ -119,6 +119,7 @@ function FormFields(props: PropTypes) {
         isIdentityRequestPending={props.isIdentityRequestPending}
         lastIdentityResponse={props.lastIdentityResponse}
         contributionType={props.contributionType}
+        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
       />
       <NewContributionTextInput
         id="contributionFirstName"

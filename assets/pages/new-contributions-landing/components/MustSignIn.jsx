@@ -15,7 +15,8 @@ type PropTypes = {|
   isSignInRequired: boolean,
   isIdentityRequestPending: boolean,
   lastIdentityResponse: IdentityResponse,
-  contributionType: Contrib
+  contributionType: Contrib,
+  checkoutFormHasBeenSubmitted: boolean,
 |};
 
 
@@ -34,7 +35,7 @@ function buildUrl(returnUrl: ?string): string {
 
 export const MustSignIn = (props: PropTypes) => {
 
-  if (props.contributionType === 'ONE_OFF') {
+  if (props.contributionType === 'ONE_OFF' || !props.checkoutFormHasBeenSubmitted) {
     return null;
   }
 
