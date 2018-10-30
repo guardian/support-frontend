@@ -71,7 +71,7 @@ function FeaturedProductAb(props: PropTypes) {
     optimizeExperiments,
   );
 
-  const product = getProduct(subsLinks);
+  const product = getProduct(subsLinks, countryGroupId);
 
   return product ? (
     <FeaturedProductHero

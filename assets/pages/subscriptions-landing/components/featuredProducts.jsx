@@ -6,6 +6,7 @@ import React, { type Node } from 'react';
 import { type SubsUrls } from 'helpers/externalLinks';
 import { getQueryParameter } from 'helpers/url';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import GridPicture from 'components/gridPicture/gridPicture';
 
@@ -46,11 +47,16 @@ const dpImage = (
   />);
 
 
-const getProducts = (subsLinks: SubsUrls): {DigitalPack: Product, Paper: Product, GuardianWeekly: Product} => ({
+const getProducts = (
+  subsLinks: SubsUrls,
+  countryGroupId: CountryGroupId,
+): {DigitalPack: Product, Paper: Product, GuardianWeekly: Product} => ({
   DigitalPack: {
     name: 'DigitalPack',
     headingText: 'Digital Pack',
-    bodyText: 'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper',
+    bodyText: (countryGroupId === 'GBPCountries') ?
+      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper' :
+      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper',
     link: subsLinks.DigitalPack,
     image: dpImage,
   },
@@ -70,14 +76,14 @@ const getProducts = (subsLinks: SubsUrls): {DigitalPack: Product, Paper: Product
   },
 });
 
-const getProduct = (subsLinks: SubsUrls): ?Product => {
+const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Product => {
   switch (getQueryParameter('ab_product')) {
     case 'DigitalPack':
-      return getProducts(subsLinks).DigitalPack;
+      return getProducts(subsLinks, countryGroupId).DigitalPack;
     case 'Paper':
-      return getProducts(subsLinks).Paper;
+      return getProducts(subsLinks, countryGroupId).Paper;
     case 'GuardianWeekly':
-      return getProducts(subsLinks).GuardianWeekly;
+      return getProducts(subsLinks, countryGroupId).GuardianWeekly;
     default:
       return null;
   }
