@@ -21,7 +21,7 @@ import {
 import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
 import { MustSignIn } from './MustSignIn';
-import { type State, type IdentityResponse } from '../contributionsLandingReducer';
+import { type State, type UserTypeFromIdentityResponse } from '../contributionsLandingReducer';
 
 import {
   updateFirstName,
@@ -41,9 +41,7 @@ type PropTypes = {|
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
-  isSignInRequired: boolean,
-  isIdentityRequestPending: boolean,
-  lastIdentityResponse: IdentityResponse,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
@@ -66,9 +64,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   state: state.page.form.formData.state,
   isSignedIn: state.page.user.isSignedIn,
-  isSignInRequired: state.page.form.isSignInRequired,
-  isIdentityRequestPending: state.page.form.isIdentityRequestPending,
-  lastIdentityResponse: state.page.form.lastIdentityResponse,
+  userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
 });
 
@@ -115,9 +111,8 @@ function FormFields(props: PropTypes) {
       />
       <Signout isSignedIn />
       <MustSignIn
-        isSignInRequired={props.isSignInRequired}
-        isIdentityRequestPending={props.isIdentityRequestPending}
-        lastIdentityResponse={props.lastIdentityResponse}
+        isSignedIn={props.isSignedIn}
+        userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
         contributionType={props.contributionType}
         checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
       />

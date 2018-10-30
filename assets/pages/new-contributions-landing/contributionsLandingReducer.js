@@ -52,8 +52,13 @@ type SetPasswordData = {
   passwordError: boolean,
 }
 
-// null indicates no response has been received yet
-export type IdentityResponse = 'success' | 'failure' | null;
+export type UserType = 'new' | 'guest' | 'current';
+
+export type UserTypeFromIdentityResponse =
+  UserType
+  | 'noRequestSent'
+  | 'requestPending'
+  | 'requestFailed';
 
 type FormState = {
   contributionType: Contrib,
@@ -69,9 +74,7 @@ type FormState = {
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouPageCopy: boolean,
   payPalHasLoaded: boolean,
-  isSignInRequired: boolean,
-  isIdentityRequestPending: boolean,
-  lastIdentityResponse: IdentityResponse,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 };
 
 type PageState = {
@@ -147,9 +150,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
     hasSeenDirectDebitThankYouPageCopy: false,
-    isSignInRequired: false,
-    isIdentityRequestPending: false,
-    lastIdentityResponse: null,
+    userTypeFromIdentityResponse: 'noRequestSent',
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -203,14 +204,8 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'SET_PASSWORD_ERROR':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordError: action.passwordError } };
 
-      case 'SET_SIGN_IN_REQUIRED':
-        return { ...state, isSignInRequired: action.isSignInRequired };
-
-      case 'SET_IDENTITY_REQUEST_PENDING':
-        return { ...state, isIdentityRequestPending: action.isIdentityRequestPending };
-
-      case 'SET_LAST_IDENTITY_RESPONSE':
-        return { ...state, lastIdentityResponse: action.lastIdentityResponse };
+      case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
+        return { ...state, userTypeFromIdentityResponse: action.userTypeFromIdentityResponse };
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };

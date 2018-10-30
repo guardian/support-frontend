@@ -6,15 +6,14 @@
 import type { Contrib } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
-import type { IdentityResponse } from '../contributionsLandingReducer';
+import type { UserTypeFromIdentityResponse } from '../contributionsLandingReducer';
 
 // ---- Types ----- //
 
 type PropTypes = {|
   returnUrl?: string,
-  isSignInRequired: boolean,
-  isIdentityRequestPending: boolean,
-  lastIdentityResponse: IdentityResponse,
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   contributionType: Contrib,
   checkoutFormHasBeenSubmitted: boolean,
 |};
@@ -35,11 +34,11 @@ function buildUrl(returnUrl: ?string): string {
 
 export const MustSignIn = (props: PropTypes) => {
 
-  if (props.contributionType === 'ONE_OFF' || !props.checkoutFormHasBeenSubmitted) {
+  if (props.contributionType === 'ONE_OFF' || !props.checkoutFormHasBeenSubmitted || props.isSignedIn) {
     return null;
   }
 
-  if (props.isIdentityRequestPending) {
+  if (props.userTypeFromIdentityResponse === 'requestPending') {
     return (
       <a className="component-signout" href={buildUrl(props.returnUrl)}>
         PENDING
@@ -47,7 +46,7 @@ export const MustSignIn = (props: PropTypes) => {
     );
   }
 
-  if (props.lastIdentityResponse === 'failure') {
+  if (props.userTypeFromIdentityResponse === 'requestFailed') {
     return (
       <a className="component-signout" href={buildUrl(props.returnUrl)}>
         FAILED IDENTITY REQUEST
@@ -55,7 +54,7 @@ export const MustSignIn = (props: PropTypes) => {
     );
   }
 
-  if (props.isSignInRequired) {
+  if (props.userTypeFromIdentityResponse === 'current') {
     return (
       <a className="component-signout" href={buildUrl(props.returnUrl)}>
         YOU MUST SIGN IN

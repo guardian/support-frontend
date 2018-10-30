@@ -45,7 +45,8 @@ import {
   type State,
   type UserFormData,
   type ThankYouPageStage,
-  type IdentityResponse,
+  type UserTypeFromIdentityResponse,
+  type UserType,
 } from './contributionsLandingReducer';
 
 export type Action =
@@ -71,9 +72,7 @@ export type Action =
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
-  | { type: 'SET_SIGN_IN_REQUIRED', isSignInRequired: boolean }
-  | { type: 'SET_IDENTITY_REQUEST_PENDING', isIdentityRequestPending: boolean }
-  | { type: 'SET_LAST_IDENTITY_RESPONSE', lastIdentityResponse: IdentityResponse };
+  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse };
 
 
 const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action => {
@@ -150,19 +149,9 @@ const setThirdPartyPaymentLibrary =
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
-const setisSignInRequired = (isSignInRequired: boolean): Action => ({
-  type: 'SET_SIGN_IN_REQUIRED',
-  isSignInRequired,
-});
-
-const setIdentityRequestPending = (isIdentityRequestPending: boolean): Action => ({
-  type: 'SET_IDENTITY_REQUEST_PENDING',
-  isIdentityRequestPending,
-});
-
-const setLastIdentityResponse = (lastIdentityResponse: IdentityResponse): Action => ({
-  type: 'SET_LAST_IDENTITY_RESPONSE',
-  lastIdentityResponse,
+const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): Action => ({
+  type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
+  userTypeFromIdentityResponse,
 });
 
 const checkIfEmailHasPassword = (email: string) =>
@@ -171,26 +160,18 @@ const checkIfEmailHasPassword = (email: string) =>
     if (!checkEmail(email)) {
       return;
     }
-    dispatch(setIdentityRequestPending(true));
+    dispatch(setUserTypeFromIdentityResponse('requestPending'));
     fetchJson(
       `${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
       getRequestOptions('same-origin', state.page.csrf),
-    ).then(({ userType }) => {
-      dispatch(setIdentityRequestPending(false));
-      if (typeof userType !== 'string') {
+    ).then((resp: { userType: UserType }) => {
+      if (typeof resp.userType !== 'string') {
         throw new Error('userType string was not present in response');
       }
-      dispatch(setLastIdentityResponse('success'));
-
-      if (userType === 'current') {
-        dispatch(setisSignInRequired(true));
-      } else {
-        dispatch(setisSignInRequired(false));
-      }
+      dispatch(setUserTypeFromIdentityResponse(resp.userType));
     }).catch((err: Error) => {
       logException(`Error checking if email has password. ${err.message}`);
-      dispatch(setIdentityRequestPending(false));
-      dispatch(setLastIdentityResponse('failure'));
+      dispatch(setUserTypeFromIdentityResponse('requestFailed'));
     });
   };
 
@@ -441,6 +422,5 @@ export {
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
-  setisSignInRequired,
-  setIdentityRequestPending,
+  setUserTypeFromIdentityResponse,
 };
