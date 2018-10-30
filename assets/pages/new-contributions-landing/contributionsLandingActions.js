@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { checkEmail } from 'helpers/formValidation';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
@@ -13,6 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
@@ -40,13 +40,11 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import * as cookie from 'helpers/cookie';
-import { fetchJson, getRequestOptions } from 'helpers/fetch';
 import {
   type State,
   type UserFormData,
   type ThankYouPageStage,
   type UserTypeFromIdentityResponse,
-  type UserType,
 } from './contributionsLandingReducer';
 
 export type Action =
@@ -157,22 +155,15 @@ const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeF
 const checkIfEmailHasPassword = (email: string) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
-    if (!checkEmail(email)) {
-      return;
-    }
-    dispatch(setUserTypeFromIdentityResponse('requestPending'));
-    fetchJson(
-      `${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
-      getRequestOptions('same-origin', state.page.csrf),
-    ).then((resp: { userType: UserType }) => {
-      if (typeof resp.userType !== 'string') {
-        throw new Error('userType string was not present in response');
-      }
-      dispatch(setUserTypeFromIdentityResponse(resp.userType));
-    }).catch((err: Error) => {
-      logException(`Error checking if email has password. ${err.message}`);
-      dispatch(setUserTypeFromIdentityResponse('requestFailed'));
-    });
+    const { csrf } = state.page;
+    const { isSignedIn } = state.page.user;
+
+    getUserTypeFromIdentity(
+      email,
+      isSignedIn,
+      csrf,
+      (userType: UserTypeFromIdentityResponse) => dispatch(setUserTypeFromIdentityResponse(userType)),
+    );
   };
 
 const getAmount = (state: State) =>
