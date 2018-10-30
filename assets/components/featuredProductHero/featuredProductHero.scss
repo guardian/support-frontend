@@ -132,6 +132,14 @@
     padding-right: 0;
     padding-left: 21px;
   }
+
+  @include mq($from: leftCol) {
+    min-height: 350px;
+  }
+
+  @include mq($from: wide) {
+    min-height: 400px;
+  }
 }
 
 .component-featured-product-hero__image {
