@@ -2,6 +2,9 @@
 
 // ----- Imports ----- //
 import { type Contrib as ContributionType } from 'helpers/contributions';
+import type { Contrib } from 'helpers/contributions';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/38abd1ca6d17237950c82b1483057c5c39929cb4/framework/src/play/
@@ -45,13 +48,35 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
   return [];
 };
 
-export const formIsValid = (formClassName: string) => {
-  const form = document.querySelector(`.${formClassName}`);
-  if (form && form instanceof HTMLFormElement) {
-    return form.checkValidity();
+// Takes either a form element, or the HTML class of the form
+export const formIsValid = (form: Object | string) => {
+
+  // JONNY: i think it's fine to pass it as an object, as you are checking
+  // that it is an instance of HTMLFormElement below
+
+  let formElement;
+
+  if (typeof form === 'string') {
+    formElement = document.querySelector(`.${form}`);
+  } else {
+    formElement = form;
   }
+
+  if (formElement && formElement instanceof HTMLFormElement) {
+    return formElement.checkValidity();
+  }
+
   return false;
 };
+
+export function checkoutFormShouldSubmit(
+  contributionType: Contrib,
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  form: Object | string,
+) {
+  return formIsValid(form) && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
+}
 
 export function getTitle(contributionType: ContributionType): string {
 

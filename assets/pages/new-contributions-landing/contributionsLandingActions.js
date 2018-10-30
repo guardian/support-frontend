@@ -40,11 +40,12 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
 import * as cookie from 'helpers/cookie';
 import {
-type State,
-type UserFormData,
-type ThankYouPageStage,
+  type State,
+  type UserFormData,
+  type ThankYouPageStage,
 } from './contributionsLandingReducer';
 
 export type Action =
@@ -152,6 +153,45 @@ const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeF
   userTypeFromIdentityResponse,
 });
 
+const togglePayPalButtonAndSetUserTypeFromIdentityResponse = (
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse
+) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const shouldEnable = checkoutFormShouldSubmit(
+      state.page.form.contributionType,
+      state.page.user.isSignedIn,
+      userTypeFromIdentityResponse,
+      // TODO: use the actual form state rather than re-fetching from DOM
+      'form--contribution',
+    );
+    if (shouldEnable && window.enablePayPalButton) {
+      window.enablePayPalButton();
+    } else if (window.disablePayPalButton) {
+      window.disablePayPalButton();
+    }
+
+    dispatch(setUserTypeFromIdentityResponse(userTypeFromIdentityResponse));
+  };
+
+const togglePayPalButton = (userType: UserTypeFromIdentityResponse) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const shouldEnable = checkoutFormShouldSubmit(
+      state.page.form.contributionType,
+      state.page.user.isSignedIn,
+      userType,
+      // TODO: use the actual form state rather than re-fetching from DOM
+      'form--contribution',
+    );
+    if (shouldEnable && window.enablePayPalButton) {
+      window.enablePayPalButton();
+    } else if (window.disablePayPalButton) {
+      window.disablePayPalButton();
+    }
+  };
+
+
 const checkIfEmailHasPassword = (email: string) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
@@ -162,7 +202,8 @@ const checkIfEmailHasPassword = (email: string) =>
       email,
       isSignedIn,
       csrf,
-      (userType: UserTypeFromIdentityResponse) => dispatch(setUserTypeFromIdentityResponse(userType)),
+      (userType: UserTypeFromIdentityResponse) =>
+        dispatch(togglePayPalButtonAndSetUserTypeFromIdentityResponse(userType)),
     );
   };
 
@@ -413,5 +454,5 @@ export {
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
-  setUserTypeFromIdentityResponse,
+  togglePayPalButtonAndSetUserTypeFromIdentityResponse,
 };

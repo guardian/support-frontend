@@ -12,7 +12,7 @@ import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internat
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { hiddenIf } from 'helpers/utilities';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { checkoutFormShouldSubmit, formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
@@ -96,7 +96,7 @@ function ContributionSubmit(props: PropTypes) {
             csrf={props.csrf}
             currencyId={props.currencyId}
             hasLoaded={props.payPalHasLoaded}
-            canOpen={() => formIsValid(formClassName)}
+            canOpen={() => checkoutFormShouldSubmit(formClassName)}
             whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
             formClassName={formClassName}
             isTestUser={props.isTestUser}

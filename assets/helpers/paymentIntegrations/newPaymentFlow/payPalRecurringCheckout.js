@@ -92,6 +92,9 @@ function getPayPalOptions(
         return;
       }
 
+      window.enablePayPalButton = actions.enable;
+      window.disablePayPalButton = actions.disable;
+
       validateCalled = true;
       toggleButton(actions);
 
