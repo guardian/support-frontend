@@ -89,5 +89,5 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
   }
 };
 
-export { getProduct };
+export { getProduct, getProducts };
 export type { Product };
