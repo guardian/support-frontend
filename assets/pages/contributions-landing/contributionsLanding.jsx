@@ -6,8 +6,9 @@ import React from 'react';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { oldContributionsFlowTests } from 'helpers/abTests/abtestDefinitions';
+import { detect } from 'helpers/internationalisation/countryGroup';
+
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { setInitialAmountsForAnnualVariants } from 'helpers/abTests/helpers/annualContributions';
 import HorizontalLandingLayout from './pagesVersions/horizontalLayoutLandingPage';
@@ -19,11 +20,7 @@ import { createPageReducerFor } from './contributionsLandingReducer';
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = pageInit(
-  createPageReducerFor(countryGroupId),
-  false,
-  oldContributionsFlowTests,
-);
+const store = pageInit(createPageReducerFor(countryGroupId));
 
 
 const reactElementId: {
