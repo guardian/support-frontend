@@ -6,7 +6,7 @@
 import type { Contrib } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
-import type { UserTypeFromIdentityResponse } from '../contributionsLandingReducer';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 // ---- Types ----- //
 
