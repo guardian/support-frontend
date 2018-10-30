@@ -230,11 +230,12 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
 };
 
 const init = (country: IsoCountry, countryGroupId: CountryGroupId, abTests: Tests = tests): Participations => {
-
+ 
+  const newPaymentFlowParticipation: ?Participations = getNewPaymentFlowTestParticipation(); 
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
+  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations, newPaymentFlowParticipation));
   trackABOphan(participations, false);
 
   return participations;
@@ -249,6 +250,14 @@ const getVariantsAsString = (participation: Participations): string => {
 
   return variants.join('; ');
 };
+
+const getNewPaymentFlowTestParticipation = (): ?Participations => {
+  const npfVariant = cookie.get('gu.serverside.ab.test');
+  if (npfVariant) {
+    return { 'newPaymentFlow' : npfVariant }
+  }
+};
+
 
 const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
 
