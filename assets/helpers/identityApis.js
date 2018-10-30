@@ -1,6 +1,5 @@
 // @flow
 
-
 // ----- Imports ----- //
 import { getRequestOptions } from 'helpers/fetch';
 import { logPromise } from 'helpers/promise';
@@ -8,10 +7,15 @@ import { routes } from 'helpers/routes';
 import { fetchJson } from 'helpers/fetch';
 import { checkEmail } from 'helpers/formValidation';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import {
-  type UserTypeFromIdentityResponse,
-  type UserType,
-} from '../pages/new-contributions-landing/contributionsLandingReducer';
+
+// ----- Types     ----- //
+type UserType = 'new' | 'guest' | 'current';
+
+export type UserTypeFromIdentityResponse =
+  UserType
+  | 'noRequestSent'
+  | 'requestPending'
+  | 'requestFailed';
 
 // ----- Functions ----- //
 

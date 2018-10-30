@@ -39,12 +39,12 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import * as cookie from 'helpers/cookie';
 import {
-  type State,
-  type UserFormData,
-  type ThankYouPageStage,
-  type UserTypeFromIdentityResponse,
+type State,
+type UserFormData,
+type ThankYouPageStage,
 } from './contributionsLandingReducer';
 
 export type Action =

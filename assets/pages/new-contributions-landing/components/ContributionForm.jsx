@@ -32,6 +32,7 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
@@ -39,7 +40,7 @@ import { NewContributionAmount } from './ContributionAmount';
 import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
 
-import { type State, type UserTypeFromIdentityResponse } from '../contributionsLandingReducer';
+import { type State } from '../contributionsLandingReducer';
 
 import {
   paymentWaiting,

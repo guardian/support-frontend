@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
 import { amounts, parseContrib, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -11,14 +11,15 @@ import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
 import * as storage from 'helpers/storage';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { type Action } from './contributionsLandingActions';
-import type { State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
+import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 
 // ----- Types ----- //
@@ -51,14 +52,6 @@ type SetPasswordData = {
   passwordHasBeenSubmitted: boolean,
   passwordError: boolean,
 }
-
-export type UserType = 'new' | 'guest' | 'current';
-
-export type UserTypeFromIdentityResponse =
-  UserType
-  | 'noRequestSent'
-  | 'requestPending'
-  | 'requestFailed';
 
 type FormState = {
   contributionType: Contrib,

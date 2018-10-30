@@ -17,11 +17,12 @@ import {
   checkEmail,
   emailRegexPattern,
 } from 'helpers/formValidation';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
 import { MustSignIn } from './MustSignIn';
-import { type State, type UserTypeFromIdentityResponse } from '../contributionsLandingReducer';
+import { type State } from '../contributionsLandingReducer';
 
 import {
   updateFirstName,
