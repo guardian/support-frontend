@@ -161,10 +161,4 @@ class Application(
       Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
 
-  def dummy(email: String): Action[AnyContent] = NoCacheAction() { implicit request =>
-    if (email == "has@password.com")
-      Ok(Map("userType" -> "current").asJson)
-    else
-      Ok(Map("userType" -> "new").asJson)
-  }
 }
