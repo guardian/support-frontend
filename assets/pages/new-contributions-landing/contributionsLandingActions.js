@@ -5,7 +5,13 @@
 import { checkEmail } from 'helpers/formValidation';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
-import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
+import {
+  type Amount,
+  logInvalidCombination,
+  type Contrib,
+  type PaymentMethod,
+  type PaymentMatrix
+} from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -51,7 +57,7 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [Contrib]: {[PaymentMethod]: ThirdPartyPaymentLibrary}} }
+  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -161,10 +167,10 @@ const setLastIdentityResponse = (lastIdentityResponse: IdentityResponse): Action
 
 const checkIfEmailHasPassword = (email: string) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
+    const state = getState();
     if (!checkEmail(email)) {
       return;
     }
-    const state = getState();
     dispatch(setIdentityRequestPending(true));
     fetchJson(
       `${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
@@ -328,7 +334,7 @@ const setupRecurringPayPalPayment = (
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
       .then(response => (response.ok ? response.json() : null))
-      .then((token: {token: string} | null) => {
+      .then((token: { token: string } | null) => {
         if (token) {
           resolve(token.token);
         } else {
@@ -377,16 +383,24 @@ const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, Paym
     Stripe: (dispatch: Dispatch<Action>, state: State, paymentAuthorisation: PaymentAuthorisation): void => {
       dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
     },
-    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
-    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
+    DirectDebit: () => {
+      logInvalidCombination('ONE_OFF', 'DirectDebit');
+    },
+    None: () => {
+      logInvalidCombination('ONE_OFF', 'None');
+    },
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
-    None: () => { logInvalidCombination('ANNUAL', 'None'); },
+    None: () => {
+      logInvalidCombination('ANNUAL', 'None');
+    },
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
-    None: () => { logInvalidCombination('MONTHLY', 'None'); },
+    None: () => {
+      logInvalidCombination('MONTHLY', 'None');
+    },
   },
 };
 

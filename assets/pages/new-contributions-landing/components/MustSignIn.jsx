@@ -3,6 +3,7 @@
 
 // ----- Imports ----- //
 
+import type { Contrib } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
 import type { IdentityResponse } from '../contributionsLandingReducer';
@@ -14,6 +15,7 @@ type PropTypes = {|
   isSignInRequired: boolean,
   isIdentityRequestPending: boolean,
   lastIdentityResponse: IdentityResponse,
+  contributionType: Contrib
 |};
 
 
@@ -31,6 +33,11 @@ function buildUrl(returnUrl: ?string): string {
 // ----- Component ----- //
 
 export const MustSignIn = (props: PropTypes) => {
+
+  if (props.contributionType === 'ONE_OFF') {
+    return null;
+  }
+
   if (props.isIdentityRequestPending) {
     return (
       <a className="component-signout" href={buildUrl(props.returnUrl)}>

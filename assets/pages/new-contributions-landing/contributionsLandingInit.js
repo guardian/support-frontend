@@ -16,6 +16,7 @@ import {
   updateUserFormData,
   setPayPalHasLoaded,
   selectAmount,
+  checkIfEmailHasPassword
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 
@@ -85,6 +86,7 @@ const init = (store: Store<State, Action, Dispatch<Action>>) => {
   initialiseSelectedAnnualAmount(state, dispatch);
 
   const { firstName, lastName, email } = state.page.user;
+  dispatch(checkIfEmailHasPassword(email))
   dispatch(updateUserFormData({ firstName, lastName, email }));
 
 };

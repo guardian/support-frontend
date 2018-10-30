@@ -166,7 +166,10 @@ function onSubmit(props: PropTypes): Event => void {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-    if (!(event.target: any).checkValidity() || props.isSignInRequired || props.isIdentityRequestPending) {
+    if (
+      !(event.target: any).checkValidity() ||
+      (props.contributionType !== 'ONE_OFF' && (props.isSignInRequired || props.isIdentityRequestPending))
+    ) {
       return;
     }
     formHandlers[props.contributionType][props.paymentMethod](props);

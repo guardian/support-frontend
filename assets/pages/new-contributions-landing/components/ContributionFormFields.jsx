@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { type Contrib } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
@@ -48,6 +49,7 @@ type PropTypes = {|
   updateEmail: Event => void,
   updateState: Event => void,
   checkIfEmailHasPassword: Event => void,
+  contributionType: Contrib,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -67,6 +69,7 @@ const mapStateToProps = (state: State) => ({
   isSignInRequired: state.page.form.isSignInRequired,
   isIdentityRequestPending: state.page.form.isIdentityRequestPending,
   lastIdentityResponse: state.page.form.lastIdentityResponse,
+  contributionType: state.page.form.contributionType,
 });
 
 
@@ -115,6 +118,7 @@ function FormFields(props: PropTypes) {
         isSignInRequired={props.isSignInRequired}
         isIdentityRequestPending={props.isIdentityRequestPending}
         lastIdentityResponse={props.lastIdentityResponse}
+        contributionType={props.contributionType}
       />
       <NewContributionTextInput
         id="contributionFirstName"
