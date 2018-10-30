@@ -1,34 +1,21 @@
 package controllers
 
-import java.security.SecureRandom
-
 import actions.CustomActionBuilders
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.identity.play.IdUser
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import config.StringsConfig
+import monitoring.SafeLogger
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck
 import utils.RequestCountry._
-import io.circe.syntax._
-import play.api.libs.circe.Circe
-import actions.CustomActionBuilders
-import io.circe.Json
-import io.circe.syntax._
-import models.CheckBankAccountDetails
-import play.api.libs.circe.Circe
-import play.api.mvc._
-import services.paypal.PayPalBillingDetails.codec
-import services.{GoCardlessServiceProvider, TestUserService}
 
 import scala.concurrent.{ExecutionContext, Future}
-import monitoring.SafeLogger
-import play.utils.UriEncoding
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -41,7 +28,7 @@ class Application(
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with Circe {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
