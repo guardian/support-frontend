@@ -20,7 +20,7 @@ export const tests: Tests = {
     seed: 3,
   },
   newPaymentFlow: {
-    variants: [ 'control', 'newPaymentFlow'],
+    variants: ['control', 'newPaymentFlow'],
     audiences: {
       ALL: {
         offset: 0,

@@ -229,16 +229,28 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
   });
 };
 
+const getNewPaymentFlowTestParticipation = (): ?Participations => {
+  const npfVariant = cookie.get('gu.serverside.ab.test');
+  if (npfVariant) {
+    const variant: NewPaymentFlowTestVariant = npfVariant === 'Variant' ? 'newPaymentFlow' : 'control';
+    return { newPaymentFlow: variant };
+  }
+
+  return {};
+};
+
 const init = (country: IsoCountry, countryGroupId: CountryGroupId, abTests: Tests = tests): Participations => {
- 
-  const newPaymentFlowParticipation: ?Participations = getNewPaymentFlowTestParticipation(); 
+  // this is to assign the correct variant while npf server side test runs
+  const newPaymentFlowParticipation: ?Participations = getNewPaymentFlowTestParticipation();
+
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
+  const participationsWithServerSideNPFVariant = { ...participations, ...newPaymentFlowParticipation };
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations, newPaymentFlowParticipation));
-  trackABOphan(participations, false);
+  setLocalStorageParticipations(Object.assign({}, participationsWithServerSideNPFVariant, urlParticipations));
+  trackABOphan(participationsWithServerSideNPFVariant, false);
 
-  return participations;
+  return participationsWithServerSideNPFVariant;
 };
 
 const getVariantsAsString = (participation: Participations): string => {
@@ -250,15 +262,6 @@ const getVariantsAsString = (participation: Participations): string => {
 
   return variants.join('; ');
 };
-
-const getNewPaymentFlowTestParticipation = (): ?Participations => {
-  const npfVariant = cookie.get('gu.serverside.ab.test');
-  if (npfVariant) {
-    const variant: NewPaymentFlowTestVariant = npfVariant === "Variant" ? 'newPaymentFlow' : 'control';
-    return { 'newPaymentFlow' : variant }
-  }
-};
-
 
 const getCurrentParticipations = (): Participations => getLocalStorageParticipation();
 
