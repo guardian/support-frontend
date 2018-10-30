@@ -10,7 +10,7 @@ import {
   logInvalidCombination,
   type Contrib,
   type PaymentMethod,
-  type PaymentMatrix
+  type PaymentMatrix,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
@@ -166,7 +166,7 @@ const setLastIdentityResponse = (lastIdentityResponse: IdentityResponse): Action
 });
 
 const checkIfEmailHasPassword = (email: string) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
+  (dispatch: Function, getState: () => State): void => {
     const state = getState();
     if (!checkEmail(email)) {
       return;
