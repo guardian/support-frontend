@@ -39,8 +39,7 @@ import { NewContributionAmount } from './ContributionAmount';
 import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
 
-
-import { type State } from '../contributionsLandingReducer';
+import { type State, type IdentityResponse } from '../contributionsLandingReducer';
 
 import {
   paymentWaiting,
@@ -71,6 +70,7 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   isSignInRequired: boolean,
   isIdentityRequestPending: boolean,
+  lastIdentityResponse: IdentityResponse,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -93,6 +93,8 @@ const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   isSignInRequired: state.page.form.isSignInRequired,
   isIdentityRequestPending: state.page.form.isIdentityRequestPending,
+  lastIdentityResponse: state.page.form.lastIdentityResponse,
+
 });
 
 
@@ -162,13 +164,16 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
 
 
 function onSubmit(props: PropTypes): Event => void {
+
+  const userMayNeedToSignIn = props.isSignInRequired || props.isIdentityRequestPending || props.lastIdentityResponse !== 'success';
+
   return (event) => {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     if (
       !(event.target: any).checkValidity() ||
-      (props.contributionType !== 'ONE_OFF' && (props.isSignInRequired || props.isIdentityRequestPending))
+      (props.contributionType !== 'ONE_OFF' && userMayNeedToSignIn)
     ) {
       return;
     }
