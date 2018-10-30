@@ -104,8 +104,8 @@ function CheckoutStage(props: PropTypes) {
             altText="digital subscription"
             fallbackImgType="png"
           />
-          <HeadingBlock heading="Your Digital Pack Subscription is now live">
-            <p>We have sent you an email confirmation</p>
+          <HeadingBlock heading="Your Digital Pack subscription is now live">
+            <p>Thank you for supporting our journalism</p>
           </HeadingBlock>
           <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />

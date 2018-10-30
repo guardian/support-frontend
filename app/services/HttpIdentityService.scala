@@ -12,7 +12,7 @@ import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.{GuestRegistrationResponse, SetGuestPasswordResponseCookies, UserResponse}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
 
@@ -55,6 +55,12 @@ object IdentityService {
   }
 }
 
+case class GetUserTypeResponse(userType: String)
+
+object GetUserTypeResponse {
+  implicit val readsGetUserTypeResponse: Reads[GetUserTypeResponse] = Json.reads[GetUserTypeResponse]
+}
+
 class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {
 
   import IdentityServiceEnrichers._
@@ -76,6 +82,16 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
         SafeLogger.error(scrub"Failed to update the user's marketing preferences $e")
         false
     }
+  }
+
+  def getUserType(
+    email: String
+  )(implicit ec: ExecutionContext): EitherT[Future, String, GetUserTypeResponse] = {
+    request(s"user/type/$email")
+      .get
+      .attemptT
+      .leftMap(_.toString)
+      .subflatMap(resp => resp.json.validate[GetUserTypeResponse].asEither.leftMap(_.mkString(",")))
   }
 
   def setPasswordGuest(
@@ -178,6 +194,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
+  def getUserType(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, GetUserTypeResponse]
   def setPasswordGuest(
     password: String,
     guestAccountRegistrationToken: String

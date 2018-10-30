@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Heading from 'components/heading/heading';
 import CtaLink from 'components/ctaLink/ctaLink';
@@ -12,21 +13,58 @@ import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getDiscountedPrice, getCountdownAbTestParticipation } from 'helpers/flashSale';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { getSubsLinks } from 'helpers/externalLinks';
+import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { ComponentAbTest } from 'helpers/subscriptions';
 import type { HeadingSize } from 'components/heading/heading';
+import { type Participations } from 'helpers/abTests/abtest';
+import { type OptimizeExperiments } from 'helpers/tracking/optimize';
+import { type CommonState } from 'helpers/page/page';
 
 // ----- Types ----- //
 
 type PropTypes = {
   headingSize: HeadingSize,
-  url: string,
   countryGroupId: CountryGroupId,
   abTest: ComponentAbTest | null,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  abParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
 };
+
+function mapStateToProps(state: { common: CommonState }) {
+
+  return {
+    countryGroupId: state.common.internationalisation.countryGroupId,
+    referrerAcquisitionData: state.common.referrerAcquisitionData,
+    abParticipations: state.common.abParticipations,
+    optimizeExperiments: state.common.optimizeExperiments,
+  };
+
+}
 
 
 function FlashSaleDigitalPack(props: PropTypes) {
-  const currency = currencies[detect(props.countryGroupId)].glyph;
+
+  const {
+    countryGroupId,
+    headingSize,
+    referrerAcquisitionData,
+    abParticipations,
+    abTest,
+    optimizeExperiments,
+  } = props;
+
+  const subsLinks = getSubsLinks(
+    countryGroupId,
+    referrerAcquisitionData.campaignCode,
+    getCampaign(referrerAcquisitionData),
+    referrerAcquisitionData,
+    abParticipations,
+    optimizeExperiments,
+  );
+
+  const currency = currencies[detect(countryGroupId)].glyph;
   const timerClassName = getCountdownAbTestParticipation() ? 'component-flash-sale-featured-digital-pack__countdownbox' : 'component-flash-sale-featured-digital-pack__countdownbox component-flash-sale-featured-digital-pack__countdownbox--hidden';
   return (
     <section className="component-flash-sale-featured-digital-pack">
@@ -34,13 +72,13 @@ function FlashSaleDigitalPack(props: PropTypes) {
         <div className="component-flash-sale-featured-digital-pack__description">
           <Heading
             className="component-flash-sale-featured-digital-pack__heading"
-            size={props.headingSize}
+            size={headingSize}
           >
             Digital Pack
           </Heading>
           <Heading
             className="component-flash-sale-featured-digital-pack__subheading"
-            size={props.headingSize}
+            size={headingSize}
           >
             Save 50% for three months
           </Heading>
@@ -48,14 +86,14 @@ function FlashSaleDigitalPack(props: PropTypes) {
             <FlashSaleCountdown />
             <p className="component-flash-sale-featured-digital-pack__copy">
               Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app.
-              {' '}{currency}{getDiscountedPrice('DigitalPack', props.countryGroupId)} for your first three months.
+              {' '}{currency}{getDiscountedPrice('DigitalPack', countryGroupId)} for your first three months.
             </p>
             <CtaLink
               text="Subscribe now"
-              url={props.url}
+              url={subsLinks.DigitalPack}
               accessibilityHint="Buy now"
               modifierClasses={['flash-sale']}
-              onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', props.abTest)}
+              onClick={sendTrackingEventsOnClick('featured_digipack_cta', 'DigitalPack', abTest)}
             />
           </div>
         </div>
@@ -98,4 +136,5 @@ FlashSaleDigitalPack.defaultProps = {
 
 // ----- Export ----- //
 
-export default FlashSaleDigitalPack;
+export default connect(mapStateToProps)(FlashSaleDigitalPack);
+

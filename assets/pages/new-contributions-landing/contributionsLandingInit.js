@@ -5,7 +5,8 @@ import { type Store, type Dispatch } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { type ThirdPartyPaymentLibrary, getPaymentMethodToSelect, getValidPaymentMethods } from 'helpers/checkouts';
+import { type ThirdPartyPaymentLibrary, getValidPaymentMethods, getPaymentMethodFromSession } from 'helpers/checkouts';
+import { amounts, type Amount } from 'helpers/contributions';
 import {
   type Action,
   paymentWaiting,
@@ -14,6 +15,7 @@ import {
   updatePaymentMethod,
   updateUserFormData,
   setPayPalHasLoaded,
+  selectAmount,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 
@@ -24,7 +26,13 @@ function selectDefaultPaymentMethod(state: State, dispatch: Dispatch<Action>) {
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
 
-  const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+  const paymentMethodFromSession = getPaymentMethodFromSession();
+  const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
+
+  const paymentMethodToSelect =
+    paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
+      ? paymentMethodFromSession
+      : validPaymentMethods[0] || 'None';
 
   dispatch(updatePaymentMethod(paymentMethodToSelect));
 }
@@ -57,12 +65,24 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
   loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 }
 
+function initialiseSelectedAnnualAmount(state: State, dispatch: Function) {
+  const { countryGroupId } = state.common.internationalisation;
+  const annualTestVariant = state.common.abParticipations.annualContributionsRoundThree;
+
+  if (annualTestVariant) {
+    const annualAmounts: Amount[] = amounts(annualTestVariant).ANNUAL[countryGroupId];
+
+    dispatch(selectAmount(annualAmounts.find(amount => amount.isDefault) || annualAmounts[0], 'ANNUAL'));
+  }
+}
+
 const init = (store: Store<State, Action, Dispatch<Action>>) => {
   const { dispatch } = store;
 
   const state = store.getState();
   selectDefaultPaymentMethod(state, dispatch);
   initialisePaymentMethods(state, dispatch);
+  initialiseSelectedAnnualAmount(state, dispatch);
 
   const { firstName, lastName, email } = state.page.user;
   dispatch(updateUserFormData({ firstName, lastName, email }));

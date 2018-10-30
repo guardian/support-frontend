@@ -54,7 +54,10 @@ GET  /contribute/recurring/pending                  controllers.RegularContribut
 # this endpoint should be removed once identity remove
 # the need for a client token
 POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
-PUT  /contribute/set-password-guest                 controllers.IdentityController.setPasswordGuest
+
+# ------ Identity ------ #
+PUT /identity/set-password-guest                 controllers.IdentityController.setPasswordGuest
+GET /identity/get-user-type                      controllers.IdentityController.getUserType(maybeEmail: Option[String])
 
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm()
