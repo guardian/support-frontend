@@ -8,7 +8,7 @@ import { type Contrib as ContributionType } from 'helpers/contributions';
 // src/main/scala/play/api/data/validation/Validation.scala#L80
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
-export const emailRegexPattern = '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
+export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
 export function patternIsValid(value: string, pattern: string): boolean {
   const regex = new RegExp(pattern);
