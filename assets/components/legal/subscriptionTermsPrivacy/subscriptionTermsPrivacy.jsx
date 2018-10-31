@@ -5,7 +5,7 @@
 import React from 'react';
 
 import { subscriptionsTermsLinks, privacyLink } from 'helpers/legal';
-import { type SubscriptionProduct } from '../../../helpers/subscriptions';
+import { type SubscriptionProduct } from 'helpers/subscriptions';
 
 // ---- Types ----- //
 
