@@ -12,6 +12,7 @@ import { init as pageInit } from 'helpers/page/page';
 import Page from 'components/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import CustomerService from 'components/customerService/customerService';
+import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
@@ -19,7 +20,6 @@ import IndependentJournalismSection from './components/independentJournalismSect
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
 import promotionPopUpReducer from './components/promotionPopUpReducer';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 
 // ----- Redux Store ----- //

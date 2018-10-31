@@ -13,11 +13,11 @@ import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
+import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
+import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 import reducer from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
-import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 
 // ----- Redux Store ----- //
