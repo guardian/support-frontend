@@ -11,7 +11,6 @@ import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from
 // ---- Types ----- //
 
 type PropTypes = {|
-  returnUrl?: string,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   contributionType: Contrib,
@@ -22,9 +21,9 @@ type PropTypes = {|
 // ----- Functions ----- //
 
 // Build signout URL from given return URL or current location.
-function buildUrl(returnUrl: ?string): string {
+function buildUrl(): string {
 
-  const encodedReturn = encodeURIComponent(returnUrl || window.location);
+  const encodedReturn = encodeURIComponent(window.location);
 
   return `https://profile.${getBaseDomain()}/signin?returnUrl=${encodedReturn}`;
 
@@ -44,21 +43,21 @@ export const MustSignIn = (props: PropTypes) => {
   switch (props.userTypeFromIdentityResponse) {
     case 'requestPending':
       return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+        <a className="component-signout" href={buildUrl()}>
           PENDING
         </a>
       );
 
     case 'requestFailed':
       return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+        <a className="component-signout" href={buildUrl()}>
           FAILED IDENTITY REQUEST
         </a>
       );
 
     case 'current':
       return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+        <a className="component-signout" href={buildUrl()}>
           YOU MUST SIGN IN
         </a>
       );
@@ -67,11 +66,4 @@ export const MustSignIn = (props: PropTypes) => {
       return null;
   }
 
-};
-
-
-// ----- Default Props ----- //
-
-MustSignIn.defaultProps = {
-  returnUrl: '',
 };

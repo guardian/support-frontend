@@ -25,7 +25,6 @@ export function emptyInputField(input: ?string): boolean {
 export type UserFormFieldAttribute = {
   id: string,
   value: string,
-  shouldValidate: boolean,
 }
 
 export function formFieldIsValid(id: string) {
@@ -36,8 +35,8 @@ export function formFieldIsValid(id: string) {
   return false;
 }
 
-export function shouldShowError(field: UserFormFieldAttribute): boolean {
-  return field.shouldValidate && !formFieldIsValid(field.id);
+export function shouldShowError(field: UserFormFieldAttribute, checkoutFormHasBeenSubmitted: boolean): boolean {
+  return checkoutFormHasBeenSubmitted && !formFieldIsValid(field.id);
 }
 
 export const formInputs = (formClassName: string): Array<HTMLInputElement> => {

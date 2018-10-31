@@ -28,7 +28,8 @@ type PropTypes = {|
   id: string,
   type: InputType,
   labelText: string,
-  onChange: (name: string) => void,
+  onChange: (string) => void,
+  onInput: (string) => void,
   value: string,
   placeholder: string,
   autocomplete?: AutoComplete,
@@ -61,6 +62,7 @@ export default function TextInput(props: PropTypes) {
         type={props.type}
         pattern={props.pattern}
         id={props.id}
+        onInput={event => props.onInput(event.target.value || '')}
         onChange={event => props.onChange(event.target.value || '')}
         value={props.value}
         placeholder={props.placeholder}
@@ -87,4 +89,6 @@ TextInput.defaultProps = {
   autocapitalize: 'off',
   modifierClasses: [],
   pattern: '.*',
+  onChange: () => {},
+  onInput: () => {},
 };
