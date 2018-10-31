@@ -19,7 +19,6 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import ContributionsGuestCheckoutContainer from './components/contributionsGuestCheckoutContainer';
-import MarketingConsentContainer from './components/marketingConsentContainer';
 import reducer from './regularContributionsReducer';
 import FormFields, { formClassName, setShouldValidateFunctions } from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
@@ -90,18 +89,14 @@ const router = (
           exact
           path={routes.recurringContribThankyou}
           component={() => (
-            <ContributionsThankYouContainer
-              marketingConsent={<MarketingConsentContainer />}
-            />
+            <ContributionsThankYouContainer />
           )}
         />
         <Route
           exact
           path={routes.recurringContribPending}
           component={() => (
-            <ContributionsThankYouContainer
-              marketingConsent={<MarketingConsentContainer />}
-            />
+            <ContributionsThankYouContainer />
           )}
         />
       </div>

@@ -17,8 +17,6 @@ import { set as setCookie } from 'helpers/cookie';
 
 import ContributionsThankYouPage from 'components/contributionsThankYou/contributionsThankYouPage';
 
-import MarketingConsentContainer from './components/marketingConsentContainer';
-
 import reducer from './oneOffContributionsReducer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
@@ -66,7 +64,6 @@ const router = (
                 contributionType="ONE_OFF"
                 directDebit={null}
                 countryGroupId={countryGroupId}
-                marketingConsent={<MarketingConsentContainer />}
               />);
           }
           }

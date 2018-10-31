@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
+import React from 'react';
 
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
@@ -11,6 +11,7 @@ import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import { type Contrib } from 'helpers/contributions';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import MarketingConsent from 'components/marketingConsent/marketingConsent';
 import EmailConfirmation from './emailConfirmation';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
 import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
@@ -22,7 +23,6 @@ type PropTypes = {|
   contributionType: Contrib,
   directDebit: ?DirectDebit,
   countryGroupId: CountryGroupId,
-  marketingConsent: Node,
 |};
 
 
@@ -41,7 +41,11 @@ export default function ContributionsThankYouPage(props: PropTypes) {
       />
       <div className="multiline-divider" />
       <BodyCopy {...props} />
-      {props.marketingConsent}
+      <MarketingConsent
+        context="CONTRIBUTIONS_THANK_YOU"
+        checkboxLabelTitle="Subscriptions, membership and supporting The&nbsp;Guardian"
+        checkboxLabelCopy="Get related news and offers - whether you are a subscriber, member, supporter or would like to become one."
+      />
       <QuestionsContact countryGroupId={props.countryGroupId} />
       <SpreadTheWord />
     </Page>
