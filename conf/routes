@@ -36,10 +36,11 @@ GET  /monthly-contributions                         controllers.Application.cont
 
 # ----- Contributions ----- #
 
-GET  /contribute                                    controllers.Application.contributeGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.new controllers.Application.newContributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou.new controllers.Application.newContributionsLanding(country: String)
+GET  /contribute                                        controllers.Application.contributeGeoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.oldOrNewContributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.old  controllers.Application.oldContributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.new  controllers.Application.newContributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou.new    controllers.Application.newContributionsLanding(country: String)
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
 GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormMaybeAuthenticated()
