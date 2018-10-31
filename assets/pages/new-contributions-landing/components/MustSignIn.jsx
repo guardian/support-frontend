@@ -28,7 +28,7 @@ function buildUrl(email: string): string {
   const encodedReturn = encodeURIComponent(window.location);
   const encodedEmail = encodeURIComponent(email);
 
-  return `https://profile.${getBaseDomain()}/signin?returnUrl=${encodedReturn}&email=${encodedEmail}`;
+  return `https://profile.${getBaseDomain()}/signin/current?returnUrl=${encodedReturn}&email=${encodedEmail}`;
 
 }
 
