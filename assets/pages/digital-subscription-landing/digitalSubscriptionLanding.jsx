@@ -19,6 +19,7 @@ import IndependentJournalismSection from './components/independentJournalismSect
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
 import promotionPopUpReducer from './components/promotionPopUpReducer';
+import SubscriptionFaq from '../../components/subscriptionFaq/subscriptionFaq';
 
 
 // ----- Redux Store ----- //
@@ -54,7 +55,11 @@ const content = (
   <Provider store={store}>
     <Page
       header={<CountrySwitcherHeader />}
-      footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
+      footer={
+        <Footer>
+          <CustomerService selectedCountryGroup={countryGroupId} />
+          <SubscriptionFaq subscriptionProduct="DigitalPack" />
+        </Footer>}
     >
       <DigitalSubscriptionLandingHeader
         countryGroupId={countryGroupId}

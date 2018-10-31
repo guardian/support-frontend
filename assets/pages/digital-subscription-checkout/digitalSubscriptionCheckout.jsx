@@ -16,6 +16,8 @@ import CustomerService from 'components/customerService/customerService';
 
 import reducer from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
+import SubscriptionTermsPrivacy from '../../components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
+import SubscriptionFaq from '../../components/subscriptionFaq/subscriptionFaq';
 
 
 // ----- Redux Store ----- //
@@ -43,7 +45,12 @@ const content = (
   <Provider store={store}>
     <Page
       header={<SimpleHeader />}
-      footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
+      footer={
+        <Footer>
+          <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
+          <CustomerService selectedCountryGroup={countryGroupId} />
+          <SubscriptionFaq subscriptionProduct="DigitalPack" />
+        </Footer>}
     >
       <CheckoutStage />
     </Page>

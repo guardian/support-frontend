@@ -28,9 +28,18 @@
   }
 }
 
+
 .component-footer__privacy-policy-text, .component-footer__copyright {
   font-weight: 400;
   display: block;
   padding: 3px 0;
   color: gu-colour(neutral-4);
+}
+
+.component-terms-privacy {
+  color: gu-colour(neutral-4);
+  a {
+    text-decoration: none;
+
+  }
 }
