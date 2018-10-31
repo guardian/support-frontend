@@ -41,31 +41,32 @@ export const MustSignIn = (props: PropTypes) => {
     return null;
   }
 
-  if (props.userTypeFromIdentityResponse === 'requestPending') {
-    return (
-      <a className="component-signout" href={buildUrl(props.returnUrl)}>
-        PENDING
-      </a>
-    );
+  switch (props.userTypeFromIdentityResponse) {
+    case 'requestPending':
+      return (
+        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+          PENDING
+        </a>
+      );
+
+    case 'requestFailed':
+      return (
+        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+          FAILED IDENTITY REQUEST
+        </a>
+      );
+
+    case 'current':
+      return (
+        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+          YOU MUST SIGN IN
+        </a>
+      );
+
+    default:
+      return null;
   }
 
-  if (props.userTypeFromIdentityResponse === 'requestFailed') {
-    return (
-      <a className="component-signout" href={buildUrl(props.returnUrl)}>
-        FAILED IDENTITY REQUEST
-      </a>
-    );
-  }
-
-  if (props.userTypeFromIdentityResponse === 'current') {
-    return (
-      <a className="component-signout" href={buildUrl(props.returnUrl)}>
-        YOU MUST SIGN IN
-      </a>
-    );
-  }
-
-  return null;
 };
 
 
