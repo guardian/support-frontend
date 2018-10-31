@@ -10,6 +10,16 @@
 
 }
 
+.component-payment-failure-message--invalid_form_mobile {
+  padding-top: $gu-v-spacing;
+  padding-bottom: 0;
+  margin-bottom: -$gu-v-spacing;
+
+  @include mq($from: tablet) {
+    display: none;
+  }
+}
+
 .gu-content__content {
   .component-payment-failure-message {
     width: auto;
