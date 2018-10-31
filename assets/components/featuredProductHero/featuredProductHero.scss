@@ -1,3 +1,8 @@
+@mixin with-colour($color) {
+  & .component-featured-product-hero__heading,
+  & .component-flash-sale-countdown, {
+    color: gu-colour($color);
+  }}
 
 .component-featured-product-hero {
   position: relative;
@@ -42,7 +47,6 @@
 
   .component-featured-product-hero__countdownbox .component-flash-sale-countdown {
     margin: 0 -5px;
-    color: #bb3b80;
     width: 130%;
     display: inline-block;
     .component-countdown {
@@ -128,6 +132,14 @@
     padding-right: 0;
     padding-left: 21px;
   }
+
+  @include mq($from: leftCol) {
+    min-height: 350px;
+  }
+
+  @include mq($from: wide) {
+    min-height: 400px;
+  }
 }
 
 .component-featured-product-hero__image {
@@ -150,7 +162,6 @@
 
 .component-featured-product-hero__heading {
   @extend .component-featured-product-hero__title;
-  color: gu-colour(lifestyle-garnett-main-1);
   margin-top: 8px;
   @include mq($from: phablet) {
     max-width: 350px;
@@ -178,4 +189,14 @@
 
 .component-cta-link--flash-sale {
   z-index: 1;
+}
+
+.component-featured-product-hero--digital-pack {
+  @include with-colour(lifestyle-garnett-main-1);
+}
+.component-featured-product-hero--paper {
+  @include with-colour(sport-garnett-media-main-1);
+}
+.component-featured-product-hero--guardian-weekly {
+  @include with-colour(opinion-garnett-main-1);
 }

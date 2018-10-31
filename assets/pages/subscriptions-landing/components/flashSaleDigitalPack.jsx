@@ -108,6 +108,7 @@ function FlashSaleDigitalPack(props: PropTypes) {
       cta={cta}
       headingSize={headingSize}
       hasTimer={getCountdownAbTestParticipation()}
+      product="DigitalPack"
     />
 
   );
