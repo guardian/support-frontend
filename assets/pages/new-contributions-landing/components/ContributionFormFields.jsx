@@ -30,6 +30,7 @@ import {
   updateEmail,
   updateState,
   checkIfEmailHasPassword,
+  updateFormValue,
 } from '../contributionsLandingActions';
 
 
@@ -69,12 +70,11 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
 });
 
-
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
-  updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
-  updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
-  updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
+  updateFirstName: (event) => { dispatch(updateFormValue<string>(updateFirstName, event.target.value)); },
+  updateLastName: (event) => { dispatch(updateFormValue<string>(updateLastName, event.target.value)); },
+  updateEmail: (event) => { dispatch(updateFormValue<string>(updateEmail, event.target.value)); },
+  updateState: (event) => { dispatch(updateFormValue<UsState | CaState | null>(updateState, event.target.value === '' ? null : event.target.value)); },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 

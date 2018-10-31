@@ -16,7 +16,7 @@ import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
-import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
+import { type Action, selectAmount, updateFormValue, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
@@ -47,9 +47,9 @@ const mapStateToProps = state => ({
   annualTestVariant: state.common.abParticipations.annualContributionsRoundThree,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: Function) => ({
   selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
-  updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
+  updateOtherAmount: (amount) => { dispatch(updateFormValue<string>(updateOtherAmount, amount)); },
 });
 
 // ----- Render ----- //

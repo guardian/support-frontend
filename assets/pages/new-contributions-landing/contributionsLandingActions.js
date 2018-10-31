@@ -153,30 +153,10 @@ const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeF
   userTypeFromIdentityResponse,
 });
 
-const togglePayPalButtonAndSetUserTypeFromIdentityResponse = (
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse
-) =>
+const togglePayPalButton = (userTypeFromIdentityResponse?: UserTypeFromIdentityResponse) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
-    const shouldEnable = checkoutFormShouldSubmit(
-      state.page.form.contributionType,
-      state.page.user.isSignedIn,
-      userTypeFromIdentityResponse,
-      // TODO: use the actual form state rather than re-fetching from DOM
-      'form--contribution',
-    );
-    if (shouldEnable && window.enablePayPalButton) {
-      window.enablePayPalButton();
-    } else if (window.disablePayPalButton) {
-      window.disablePayPalButton();
-    }
-
-    dispatch(setUserTypeFromIdentityResponse(userTypeFromIdentityResponse));
-  };
-
-const togglePayPalButton = (userType: UserTypeFromIdentityResponse) =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
+    const userType = userTypeFromIdentityResponse || state.page.form.userTypeFromIdentityResponse;
     const shouldEnable = checkoutFormShouldSubmit(
       state.page.form.contributionType,
       state.page.user.isSignedIn,
@@ -185,12 +165,27 @@ const togglePayPalButton = (userType: UserTypeFromIdentityResponse) =>
       'form--contribution',
     );
     if (shouldEnable && window.enablePayPalButton) {
+      console.log("enabling paypal");
       window.enablePayPalButton();
     } else if (window.disablePayPalButton) {
+      console.log("disable paypal");
       window.disablePayPalButton();
     }
   };
 
+const togglePayPalButtonAndSetUserTypeFromIdentityResponse =
+  (userTypeFromIdentityResponse: UserTypeFromIdentityResponse) =>
+    (dispatch: Function): void => {
+      dispatch(togglePayPalButton(userTypeFromIdentityResponse));
+      dispatch(setUserTypeFromIdentityResponse(userTypeFromIdentityResponse));
+    };
+
+function updateFormValue<T>(updateFormValueState: T => Action, value: T) {
+  return (dispatch: Function): void => {
+    dispatch(updateFormValueState(value));
+    dispatch(togglePayPalButton());
+  };
+}
 
 const checkIfEmailHasPassword = (email: string) =>
   (dispatch: Function, getState: () => State): void => {
@@ -455,4 +450,6 @@ export {
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
   togglePayPalButtonAndSetUserTypeFromIdentityResponse,
+  togglePayPalButton,
+  updateFormValue,
 };
