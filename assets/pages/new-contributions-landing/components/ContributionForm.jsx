@@ -177,14 +177,11 @@ function onSubmit(props: PropTypes): Event => void {
     )) {
       trackCheckoutSubmitAttempt(componentId, 'allowed');
       formHandlers[props.contributionType][props.paymentMethod](props);
-    } else if (canContributeWithoutSigningIn(
-      props.contributionType,
-      props.isSignedIn,
-      props.userTypeFromIdentityResponse,
-    )) {
-      trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
-    } else {
+    } else if (props.userTypeFromIdentityResponse === 'current' && props.contributionType !== 'ONE_OFF') {
       trackCheckoutSubmitAttempt(componentId, 'blocked-because-sign-in-required');
+    } else {
+      trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
+      // add user type
     }
   };
 }
