@@ -78,7 +78,13 @@ function getPayPalOptions(
   return {
     env: getPayPalEnvironment(isTestUser),
 
-    style: { color: 'blue', size: 'responsive', label: 'pay' },
+    style: {
+      color: 'blue',
+      size: 'responsive',
+      label: 'pay',
+      layout: 'horizontal',
+      fundingicons: false,
+    },
 
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
     commit: true,
@@ -98,6 +104,10 @@ function getPayPalOptions(
       validateCalled = true;
       toggleButton(actions);
 
+    },
+
+    funding: {
+      disallowed: [window.paypal.FUNDING.CREDIT],
     },
 
     onClick() {
