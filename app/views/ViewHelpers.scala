@@ -13,7 +13,7 @@ object ViewHelpers {
     settings
       .asJson
       .pretty(Printer.spaces2.copy(dropNullValues = true))
-  def showTweakedHeader = {
+  def showTweakedHeader: Boolean = {
     val now = DateTime.now().withZone(DateTimeZone.UTC)
     val threshold = DateTime.parse("2018-11-07T06:00:00").withZone(DateTimeZone.UTC)
     now.isAfter(threshold)
