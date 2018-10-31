@@ -7,7 +7,6 @@ import type { Contrib } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import ProgressMessage from 'components/progressMessage/progressMessage';
 import AnimatedDots from 'components/spinners/animatedDots';
 
 // ---- Types ----- //
