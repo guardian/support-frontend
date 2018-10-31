@@ -107,7 +107,7 @@ class Application(
 
     val experiments = settings.switches.experiments
     if (experiments.get("newPaymentFlow").exists(_.isInVariant(participation))) {
-      SafeLogger.info("Serving new contribution landing page")
+      SafeLogger.info("SERVENEW: Serving new contribution landing page")
       request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
         err => {
           SafeLogger.error(scrub"Error fetching user from identity: $err")
@@ -116,7 +116,7 @@ class Application(
         user => Ok(newContributions(countryCode, user))
       ).map(result => result.withSettingsSurrogateKey.withServersideAbTestCookie)
     } else {
-      SafeLogger.info("Serving old contributions landing page")
+      SafeLogger.info("SERVEOLD: Serving old contributions landing page")
       Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey.withServersideAbTestCookie)
     }
   }
