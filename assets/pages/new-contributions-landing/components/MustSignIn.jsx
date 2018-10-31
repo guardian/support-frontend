@@ -8,6 +8,7 @@ import React from 'react';
 import { getBaseDomain } from 'helpers/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import AnimatedDots from 'components/spinners/animatedDots';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 // ---- Types ----- //
 
@@ -53,17 +54,15 @@ export const MustSignIn = (props: PropTypes) => {
     case 'requestFailed':
       return (
         <div className="form__error">
-          There was an unexpected errror. Please refresh the page and try again
+          There was an unexpected error. Please refresh the page and try again
         </div>
       );
 
     case 'current':
       return (
-        <div className="form__error">
-          <span>You already have a Guardian account. Please </span>
-          <a href={buildUrl(props.returnUrl)}>sign in</a>
-          <span> or use another email address.</span>
-        </div>
+        <a className={classNameWithModifiers('form__error', ['sign-in'])} href={buildUrl(props.returnUrl)}>
+            You already have a Guardian account. Please <span className="underline">sign in</span> or use another email address.
+        </a>
       );
 
     default:

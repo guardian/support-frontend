@@ -130,7 +130,7 @@ function openStripePopup(props: PropTypes) {
 
 const formHandlersForRecurring = {
   PayPal: () => {
-    // we don't get an onSubmit event for PayPal reurring, so there
+    // we don't get an onSubmit event for PayPal recurring, so there
     // is no need to handle anything here
   },
   Stripe: openStripePopup,
