@@ -7,6 +7,8 @@ import type { Contrib } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import AnimatedDots from 'components/spinners/animatedDots';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 // ---- Types ----- //
 
@@ -43,22 +45,22 @@ export const MustSignIn = (props: PropTypes) => {
   switch (props.userTypeFromIdentityResponse) {
     case 'requestPending':
       return (
-        <a className="component-signout" href={buildUrl()}>
-          PENDING
-        </a>
+        <div className="form__error">
+          <AnimatedDots />
+        </div>
       );
 
     case 'requestFailed':
       return (
-        <a className="component-signout" href={buildUrl()}>
-          FAILED IDENTITY REQUEST
-        </a>
+        <div className="form__error">
+          There was an unexpected error. Please refresh the page and try again
+        </div>
       );
 
     case 'current':
       return (
-        <a className="component-signout" href={buildUrl()}>
-          YOU MUST SIGN IN
+        <a className={classNameWithModifiers('form__error', ['sign-in'])} href={buildUrl()}>
+            You already have a Guardian account. Please <span className="underline">sign in</span> or use another email address.
         </a>
       );
 
