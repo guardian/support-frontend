@@ -47,6 +47,7 @@ import {
   type UserFormData,
   type ThankYouPageStage,
 } from './contributionsLandingReducer';
+import type { User } from 'helpers/user/userReducer';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib, paymentMethodToSelect: PaymentMethod }
@@ -153,14 +154,13 @@ const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeF
   userTypeFromIdentityResponse,
 });
 
-const togglePayPalButton = (userTypeFromIdentityResponse?: UserTypeFromIdentityResponse) =>
+const togglePayPalButton = () =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
-    const userType = userTypeFromIdentityResponse || state.page.form.userTypeFromIdentityResponse;
     const shouldEnable = checkoutFormShouldSubmit(
       state.page.form.contributionType,
       state.page.user.isSignedIn,
-      userType,
+      state.page.form.userTypeFromIdentityResponse,
       // TODO: use the actual form state rather than re-fetching from DOM
       'form--contribution',
     );
@@ -171,16 +171,9 @@ const togglePayPalButton = (userTypeFromIdentityResponse?: UserTypeFromIdentityR
     }
   };
 
-const togglePayPalButtonAndSetUserTypeFromIdentityResponse =
-  (userTypeFromIdentityResponse: UserTypeFromIdentityResponse) =>
-    (dispatch: Function): void => {
-      dispatch(togglePayPalButton(userTypeFromIdentityResponse));
-      dispatch(setUserTypeFromIdentityResponse(userTypeFromIdentityResponse));
-    };
-
-function updateFormValue<T>(updateFormValueState: T => Action, value: T) {
+function setStateValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {
   return (dispatch: Function): void => {
-    dispatch(updateFormValueState(value));
+    dispatch(setStateValue(value));
     dispatch(togglePayPalButton());
   };
 }
@@ -196,7 +189,7 @@ const checkIfEmailHasPassword = (email: string) =>
       isSignedIn,
       csrf,
       (userType: UserTypeFromIdentityResponse) =>
-        dispatch(togglePayPalButtonAndSetUserTypeFromIdentityResponse(userType)),
+        dispatch(setStateValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
     );
   };
 
@@ -447,7 +440,6 @@ export {
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
-  togglePayPalButtonAndSetUserTypeFromIdentityResponse,
   togglePayPalButton,
-  updateFormValue,
+  setStateValueAndTogglePayPal,
 };

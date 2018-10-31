@@ -15,7 +15,7 @@ import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
-import { selectAmount, updateFormValue, updateOtherAmount } from '../contributionsLandingActions';
+import { selectAmount, setStateValueAndTogglePayPal, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
@@ -48,7 +48,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
-  updateOtherAmount: (amount) => { dispatch(updateFormValue<string>(updateOtherAmount, amount)); },
+  updateOtherAmount: (amount) => { dispatch(setStateValueAndTogglePayPal<string>(updateOtherAmount, amount)); },
 });
 
 // ----- Render ----- //

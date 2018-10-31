@@ -30,7 +30,7 @@ import {
   updateEmail,
   updateState,
   checkIfEmailHasPassword,
-  updateFormValue,
+  setStateValueAndTogglePayPal,
 } from '../contributionsLandingActions';
 
 
@@ -71,10 +71,10 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateFirstName: (event) => { dispatch(updateFormValue<string>(updateFirstName, event.target.value)); },
-  updateLastName: (event) => { dispatch(updateFormValue<string>(updateLastName, event.target.value)); },
-  updateEmail: (event) => { dispatch(updateFormValue<string>(updateEmail, event.target.value)); },
-  updateState: (event) => { dispatch(updateFormValue<UsState | CaState | null>(updateState, event.target.value === '' ? null : event.target.value)); },
+  updateFirstName: (event) => { dispatch(setStateValueAndTogglePayPal<string>(updateFirstName, event.target.value)); },
+  updateLastName: (event) => { dispatch(setStateValueAndTogglePayPal<string>(updateLastName, event.target.value)); },
+  updateEmail: (event) => { dispatch(setStateValueAndTogglePayPal<string>(updateEmail, event.target.value)); },
+  updateState: (event) => { dispatch(setStateValueAndTogglePayPal<UsState | CaState | null>(updateState, event.target.value === '' ? null : event.target.value)); },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 
