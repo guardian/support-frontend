@@ -61,7 +61,6 @@ const checkIfEmailHasPassword = (email: string) =>
       isSignedIn,
       csrf,
       (userType: UserTypeFromIdentityResponse) => {
-        console.log("about to dispatch");
         dispatch(setUserTypeFromIdentityResponse(userType));
       },
     );

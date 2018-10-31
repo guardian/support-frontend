@@ -17,8 +17,7 @@ import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
-import { type Action as CheckoutAction } from '../helpers/checkoutForm/checkoutFormActions';
-import { setFullNameShouldValidate, setEmailShouldValidate } from '../helpers/checkoutForm/checkoutFormActions';
+import { type Action as CheckoutAction, setCheckoutFormHasBeenSubmitted } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
 import { type State } from '../oneOffContributionsReducer';
 import { formClassName } from './formFields';
@@ -28,7 +27,6 @@ import { formClassName } from './formFields';
 type PropTypes = {|
   dispatch: Function,
   email: string,
-  setShouldValidateFunctions: Array<() => void>,
   checkoutFailureReason: ?CheckoutFailureReason,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -39,6 +37,7 @@ type PropTypes = {|
   stripeSwitchStatus: Status,
   paymentComplete: boolean,
   optimizeExperiments: OptimizeExperiments,
+  setCheckoutFormHasBeenSubmitted: () => void,
 |};
 
 
@@ -65,10 +64,9 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps(dispatch: Dispatch<CheckoutAction>) {
   return {
     dispatch,
-    setShouldValidateFunctions: [
-      () => dispatch(setFullNameShouldValidate(true)),
-      () => dispatch(setEmailShouldValidate(true)),
-    ],
+    setCheckoutFormHasBeenSubmitted: () => {
+      dispatch(setCheckoutFormHasBeenSubmitted());
+    },
   };
 }
 
@@ -98,7 +96,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
           props.optimizeExperiments,
         )}
         canOpen={() => formIsValid(formClassName)}
-        whenUnableToOpen={() => props.setShouldValidateFunctions.forEach(f => f())}
+        whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
         currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}

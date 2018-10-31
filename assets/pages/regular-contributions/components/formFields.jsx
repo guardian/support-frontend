@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import TextInput from 'components/textInput/textInput';
 import SelectInput from 'components/selectInput/selectInput';
 
@@ -13,28 +12,25 @@ import {
   setLastName,
   setEmail,
   setStateField,
-  type Action as UserAction,
 } from 'helpers/user/userActions';
-import { setCountry, type Action as PageAction } from 'helpers/page/pageActions';
+import { setCountry } from 'helpers/page/pageActions';
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { Contrib } from 'helpers/contributions';
 import {
   type UserFormFieldAttribute,
   shouldShowError,
   emailRegexPattern,
 } from 'helpers/checkoutForm/checkoutForm';
-import {
-  type Action as CheckoutAction,
-  setEmailShouldValidate,
-  setFirstNameShouldValidate,
-  setLastNameShouldValidate,
-} from '../helpers/checkoutForm/checkoutFormActions';
+import { setCheckoutFormHasBeenSubmitted } from '../helpers/checkoutForm/checkoutFormActions';
 import { checkIfEmailHasPassword } from '../regularContributionsActions';
 import { type State } from '../regularContributionsReducer';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
+import { MustSignIn } from '../../new-contributions-landing/components/MustSignIn';
 
 
 // ----- Types ----- //
@@ -53,6 +49,10 @@ type PropTypes = {|
   country: IsoCountry,
   isSignedIn: boolean,
   stateField: UsState | CaState,
+  checkoutFormHasBeenSubmitted: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  checkoutFormHasBeenSubmitted: boolean,
+  contributionType: Contrib,
 |};
 
 // ----- Map State/Props ----- //
@@ -69,6 +69,9 @@ function mapStateToProps(state: State) {
     country: state.common.internationalisation.countryId,
     isSignedIn: state.page.user.isSignedIn,
     stateField: state.page.user.stateField,
+    checkoutFormHasBeenSubmitted: state.page.checkoutForm.checkoutFormHasBeenSubmitted,
+    userTypeFromIdentityResponse: state.page.regularContrib.userTypeFromIdentityResponse,
+    contributionType: state.page.regularContrib.contributionType,
   };
 
 }
@@ -154,9 +157,7 @@ function countriesDropdown(
 export const formClassName = 'regular-contrib__checkout-form';
 
 export const setShouldValidateFunctions = [
-  setFirstNameShouldValidate,
-  setLastNameShouldValidate,
-  setEmailShouldValidate,
+  setCheckoutFormHasBeenSubmitted,
 ];
 
 
@@ -167,20 +168,30 @@ function NameForm(props: PropTypes) {
     <form className={formClassName}>
       {
         !props.isSignedIn ? (
-          <TextInput
-            id="email"
-            value={props.email.value}
-            labelText="Email"
-            placeholder="Email"
-            onInput={props.setEmail}
-            onChange={props.checkIfEmailHasPassword}
-            modifierClasses={['email']}
-            showError={shouldShowError(props.email)}
-            errorMessage="Please enter a valid email address."
-            type="email"
-            pattern={emailRegexPattern}
-            required
-          />
+          <div className="email-input">
+            <TextInput
+              id="email"
+              value={props.email.value}
+              labelText="Email"
+              placeholder="Email"
+              onInput={props.setEmail}
+              onChange={props.checkIfEmailHasPassword}
+              modifierClasses={['email']}
+              showError={shouldShowError(props.email, props.checkoutFormHasBeenSubmitted)}
+              errorMessage="Please enter a valid email address."
+              type="email"
+              pattern={emailRegexPattern}
+              required
+            />
+            {/* TODO: style this properly */ }
+            <MustSignIn
+              returnUrl=""
+              contributionType={props.contributionType}
+              isSignedIn={props.isSignedIn}
+              userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
+              checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+            />
+          </div>
         ) : null
       }
       <TextInput
@@ -190,7 +201,7 @@ function NameForm(props: PropTypes) {
         value={props.firstName.value}
         onInput={props.setFirstName}
         modifierClasses={['first-name']}
-        showError={shouldShowError(props.firstName)}
+        showError={shouldShowError(props.firstName, props.checkoutFormHasBeenSubmitted)}
         errorMessage="Please enter a first name."
         required
       />
@@ -201,7 +212,7 @@ function NameForm(props: PropTypes) {
         value={props.lastName.value}
         onInput={props.setLastName}
         modifierClasses={['last-name']}
-        showError={shouldShowError(props.lastName)}
+        showError={shouldShowError(props.lastName, props.checkoutFormHasBeenSubmitted)}
         errorMessage="Please enter a last name."
         required
       />

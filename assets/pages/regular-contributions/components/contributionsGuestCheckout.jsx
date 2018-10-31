@@ -20,7 +20,6 @@ import { getTitle } from 'helpers/checkoutForm/checkoutForm';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { Contrib } from 'helpers/contributions';
 import { type Stage } from '../helpers/checkoutForm/checkoutFormReducer';
-import { MustSignIn } from 'pages/new-contributions-landing/components/MustSignIn';
 
 // ----- Types ----- //
 
@@ -84,13 +83,6 @@ export default function ContributionsCheckout(props: PropTypes) {
                 modifierClasses={['form-navigation', 'continue']}
               />
             </div>
-            <MustSignIn
-              returnUrl=""
-              contributionType={props.contributionType}
-              isSignedIn={props.isSignedIn}
-              userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
-              checkoutFormHasBeenSubmitted
-            />
           </YourDetails>
         );
 
