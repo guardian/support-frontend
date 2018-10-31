@@ -19,12 +19,12 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
   phase: Phase,
-};
+|};
 
 
 // ----- Map State/Props ----- //

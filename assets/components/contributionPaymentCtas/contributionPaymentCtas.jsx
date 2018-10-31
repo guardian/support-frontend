@@ -27,22 +27,22 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   contributionType: ContributionType,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   countryGroupId: CountryGroupId,
   currencyId: IsoCurrency,
   isDisabled: boolean,
-  PayPalButton: React$ComponentType<{
+  PayPalButton: React$ComponentType<{|
     buttonText?: string,
     onClick?: ?(void => void),
     additionalClass?: string,
     switchStatus?: Status,
-  }>,
+  |}>,
   error: ?string,
   resetError: void => void,
-};
+|};
 
 
 // ----- Heading ----- //

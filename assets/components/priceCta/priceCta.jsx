@@ -31,7 +31,7 @@ function PriceCta(props: PropTypes) {
         text={props.ctaText}
         url={props.url}
         accessibilityHint={`${props.ctaText} for only ${props.price} per month`}
-        ctaId="price-cta"
+        id="price-cta"
       />
       {withSecondary ? <p className="component-price-cta__secondary">{props.secondaryCopy}</p> : null}
     </div>

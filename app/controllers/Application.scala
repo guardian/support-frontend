@@ -1,26 +1,25 @@
 package controllers
 
-import java.security.SecureRandom
-
 import actions.CustomActionBuilders
+import admin.{ServersideAbTest, Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.identity.play.IdUser
-import config.StringsConfig
-import play.api.mvc._
-import services.{IdentityService, PaymentAPIService}
-import admin.{ServersideAbTest, Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
+import config.StringsConfig
 import cookies.ServersideAbTestCookie
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
+import play.api.mvc._
+import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
 
 import scala.concurrent.{ExecutionContext, Future}
-import monitoring.SafeLogger
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -108,16 +107,16 @@ class Application(
 
     val experiments = settings.switches.experiments
     if (experiments.get("newPaymentFlow").exists(_.isInVariant(participation))) {
-      logger.info("Serving new contribution landing page")
+      SafeLogger.info("Serving new contribution landing page")
       request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
         err => {
-          logger.error(s"Error fetching user from identity: $err")
+          SafeLogger.error(scrub"Error fetching user from identity: $err")
           Ok(newContributions(countryCode, None))
         },
         user => Ok(newContributions(countryCode, user))
       ).map(result => result.withSettingsSurrogateKey.withServersideAbTestCookie)
     } else {
-      logger.info("Serving old contributions landing page")
+      SafeLogger.info("Serving old contributions landing page")
       Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey.withServersideAbTestCookie)
     }
   }

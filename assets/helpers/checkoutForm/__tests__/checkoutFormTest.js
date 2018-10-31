@@ -28,7 +28,7 @@ describe('checkoutForm', () => {
     });
 
     it('should return false if there is no dot in the domain', () => {
-      expect(patternIsValid('test@gu', emailRegexPattern)).toEqual(false);
+      expect(patternIsValid('test@guuuuuuuuuu', emailRegexPattern)).toEqual(false);
     });
 
     it('should return true for test@gu.co.uk', () => {

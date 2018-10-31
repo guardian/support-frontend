@@ -25,15 +25,15 @@ import ContributionAwarePaymentLogosContainer
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   store: Store<*, *, *>,
   countryGroupId: CountryGroupId,
-};
+|};
 
 // ----- Internationalisation ----- //
 
 const defaultHeaderCopy = ['Help us deliver the', 'independent journalism', 'the world needs'];
-const defaultContributeCopy = 'Make a monthly commitment to support The Guardian long term or a single contribution as and when you feel like it – choose the option that suits you best.';
+const defaultContributeCopy = 'Make a recurring commitment to support The Guardian long term or a single contribution as and when you feel like it – choose the option that suits you best.';
 
 const countryGroupSpecificDetails: {
   [CountryGroupId]: {headerCopy: string[], contributeCopy: string}
@@ -77,11 +77,7 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 // ----- Render ----- //
 
 const HorizontalLayoutLandingPage: (PropTypes) => React.Node = (props: PropTypes) => {
-  const annualContributeCopy = 'Make a recurring commitment to support The Guardian long term or a single contribution as and when you feel like it – choose the option that suits you best.';
-  const annualTestVariant = props.store && props.store.getState().common.abParticipations.annualContributionsRoundTwo;
-  const copyText = annualTestVariant === 'annual' || annualTestVariant === 'annualHigherAmounts'
-    ? annualContributeCopy
-    : countryGroupSpecificDetails[props.countryGroupId].contributeCopy;
+  const copyText = countryGroupSpecificDetails[props.countryGroupId].contributeCopy;
 
   return (
     <Provider store={props.store}>

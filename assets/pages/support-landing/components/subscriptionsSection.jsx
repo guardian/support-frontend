@@ -19,12 +19,12 @@ import type { State } from '../supportLandingReducer';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   referrerAcquisitionData: ReferrerAcquisitionData,
   countryGroupId: CountryGroupId,
   abParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
-};
+|};
 
 
 // ----- State Maps ----- //

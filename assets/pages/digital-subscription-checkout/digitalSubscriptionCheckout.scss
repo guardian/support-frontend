@@ -13,7 +13,8 @@
 @import '~components/leftMarginSection/leftMarginSection';
 @import '~components/customerService/customerService';
 @import '~components/headingBlock/headingBlock';
-@import '~components/subscriptionsThankYou/subscriptionsThankYou';
+@import '~components/returnSection/returnSection';
+@import '~components/productHero/productHero';
 
 
 // ----- Page-Specific Styles ----- //
@@ -23,20 +24,28 @@
 #digital-subscription-checkout-page-us,
 #digital-subscription-checkout-page-au {
 
-  // ----- General
+  // ----- Heading
 
-  .component-left-margin-section__content {
-    overflow-x: hidden;
-    @include mq($from: leftCol) {
-      overflow-x: visible;
+  .component-product-hero {
+    @include mq($until: tablet) {
+      display: none;
     }
   }
 
-  // ----- Apps
+  .component-heading-block {
+    // Makes sure the circle SVGs stay behind the heading.
+    position: relative;
+  }
 
-  .apps-section {
+  // ----- Thank You
+
+  .thank-you-content {
+    // Makes sure the circle SVGs stay behind the heading.
+    position: relative;
+    background-color: #fff;
+
     .component-left-margin-section__content {
-      padding: 2px ($gu-h-spacing / 2) 0;
+      padding: 2px ($gu-h-spacing / 2) ($gu-v-spacing * 2);
       box-sizing: border-box;
 
       @include mq($from: tablet) {
@@ -46,19 +55,21 @@
 
     .component-cta-link {
       background-color: transparent;
-      border: 1px solid gu-colour(garnett-neutral-1);
-      height: $cta-height;
+      border: 1px solid gu-colour(garnett-neutral-4);
+      height: $cta-height - 2;
       box-sizing: border-box;
       line-height: $cta-height - 2;
       color: gu-colour(garnett-neutral-1);
       margin-bottom: $gu-v-spacing;
 
       @include mq($from: mobileLandscape) {
-        width: 300px;
+        width: 355px;
       }
 
       &:hover {
         background-color: gu-colour(garnett-neutral-1);
+        border-color: gu-colour(garnett-neutral-1);
+        transition: border-color .3s;
         color: #fff;
 
         .svg-arrow-right-straight {
@@ -72,20 +83,44 @@
         top: 30%;
       }
     }
-  }
 
-  .apps-section__ctas {
-    margin-bottom: $gu-v-spacing * 2;
-
-    @include mq($from: tablet) {
+    .svg-information {
       display: inline-block;
       vertical-align: top;
-      margin-top: $gu-v-spacing;
-      margin-left: $gu-h-spacing;
+      margin-right: 5px;
+    }
+
+    .svg-newsletters {
+      display: block;
+
+      @include mq($from: tablet) {
+        width: 50%;
+        margin-left: calc(50% + 10px);
+      }
+
+      @include mq($from: wide) {
+        width: 40%;
+        display: inline-block;
+        margin-left: 0;
+        vertical-align: top;
+        padding-top: $gu-v-spacing * 2;
+      }
     }
   }
 
-  .apps-section__heading {
+  .component-left-margin-section--thank-you-apps, .component-left-margin-section--thank-you-emails {
+    .component-left-margin-section__content {
+      border-top: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .component-left-margin-section--thank-you-emails {
+    .component-left-margin-section__content {
+      padding-bottom: 0;
+    }
+  }
+
+  .thank-you-content__heading {
     font-size: 22px;
     line-height: 1.18;
     font-weight: 300;
@@ -93,30 +128,67 @@
 
     @include mq($from: tablet) {
       font-size: 28px;
-      width: 300px;
     }
 
     @include mq($from: desktop) {
       font-size: 36px;
-      width: 250px;
+      width: 470px;
     }
   }
 
-  .apps-section__copy {
-    font-size: 14px;
-    line-height: 1.43;
+  .thank-you-content__subheading {
+    font-size: 20px;
+    line-height: 1.18;
+    font-weight: 300;
     font-family: $gu-headline;
-    color: gu-colour(media-garnett-main-1);
-    margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
+    margin: ($gu-v-spacing * 2) 0 $gu-v-spacing;
 
     @include mq($from: tablet) {
+      font-size: 22px;
+    }
+
+    @include mq($from: desktop) {
+      font-size: 28px;
+    }
+  }
+
+  .thank-you-content__copy {
+    font-size: 17px;
+    line-height: 1.25;
+    font-family: $gu-headline;
+    color: gu-colour(media-garnett-main-1);
+    margin: $gu-v-spacing 0;
+
+    @include mq($from: phablet) {
+      width: 560px;
+    }
+  }
+
+  .thank-you-content__email-copy {
+    @include mq($from: wide) {
       display: inline-block;
-      width: 300px;
       vertical-align: top;
     }
   }
 
-  .apps-section__strong {
+  .thank-you-content__copy--small {
+    font-family: $gu-text-egyptian-web;
+    color: gu-colour(garnett-neutral-6);
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .thank-you-content__copy--italic {
+    font-style: italic;
+    margin: 0;
+  }
+
+  .thank-you-content__strong {
     font-weight: bold;
   }
+
+  .thank-you-content__link {
+    color: gu-colour(garnett-neutral-6);
+  }
+
 }

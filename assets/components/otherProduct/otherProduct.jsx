@@ -12,7 +12,7 @@ import type { ImageType } from 'helpers/theGrid';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   modifierClass?: string,
   gridImg: string,
   imgAlt: string,
@@ -22,7 +22,7 @@ type PropTypes = {
   ctaUrl: string,
   ctaAccessibilityHint: string,
   imgType?: ImageType,
-};
+|};
 
 
 // ----- Component ----- //
@@ -34,7 +34,7 @@ export default function OtherProduct(props: PropTypes) {
       <div className="component-other-product__image">
         <GridImage
           gridId={props.gridImg}
-          srcSizes={[1000, 500, 140]}
+          srcSizes={[500, 140]}
           sizes="(max-width: 480px) 90vw, (max-width: 660px) 400px, 270px"
           altText={props.imgAlt}
           imgType={props.imgType}

@@ -14,10 +14,10 @@ export type ListItem =
   | {| heading: Node |}
   | {| text: string |};
 
-type PropTypes = {
+type PropTypes = {|
   modifierClass?: string,
   listItems: ListItem[],
-};
+|};
 
 
 // ----- Component ----- //

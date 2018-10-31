@@ -21,7 +21,7 @@ import { getTitle } from 'helpers/checkoutForm/checkoutForm';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   amount: number,
   currencyId: IsoCurrency,
   contributionType: ContributionType,
@@ -29,7 +29,7 @@ type PropTypes = {
   isSignedIn: boolean,
   form: Node,
   payment: Node,
-};
+|};
 
 // ----- Component ----- //
 

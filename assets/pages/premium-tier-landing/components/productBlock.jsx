@@ -17,9 +17,9 @@ import PriceCtaContainer from './priceCtaContainer';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   countryGroupId: CountryGroupId,
-};
+|};
 
 
 // ----- Setup ----- //
@@ -170,7 +170,6 @@ function Product(props: {
         <h3 className="product-block__product-heading">{props.heading}</h3>
         <p className="product-block__product-description">{props.description}</p>
         <FeatureList
-          headingSize={4}
           listItems={props.features}
         />
       </div>

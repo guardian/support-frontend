@@ -12,13 +12,12 @@ import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internat
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { hiddenIf } from 'helpers/utilities';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
 import {
-  onThirdPartyPaymentAuthorised,
-  paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   setupRecurringPayPalPayment,
 } from '../contributionsLandingActions';
@@ -26,7 +25,7 @@ import {
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   contributionType: Contrib,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
@@ -35,14 +34,14 @@ type PropTypes = {
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  setPaymentIsWaiting: boolean => void,
-  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
   setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-};
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+|};
 
 const mapStateToProps = (state: State) =>
   ({
@@ -56,11 +55,11 @@ const mapStateToProps = (state: State) =>
     csrf: state.page.csrf,
     payPalHasLoaded: state.page.form.payPalHasLoaded,
     isTestUser: state.page.user.isTestUser,
+    isSignedIn: state.page.user.isSignedIn,
+    userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   setupRecurringPayPalPayment: (
     resolve: Function,
@@ -102,7 +101,14 @@ function ContributionSubmit(props: PropTypes) {
             csrf={props.csrf}
             currencyId={props.currencyId}
             hasLoaded={props.payPalHasLoaded}
-            canOpen={() => formIsValid(formClassName)}
+            canOpen={() =>
+              checkoutFormShouldSubmit(
+                props.contributionType,
+                props.isSignedIn,
+                props.userTypeFromIdentityResponse,
+                getForm(formClassName),
+              )
+            }
             whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
             formClassName={formClassName}
             isTestUser={props.isTestUser}
@@ -128,6 +134,8 @@ function ContributionSubmit(props: PropTypes) {
       </div>
     );
   }
+
+  return null;
 }
 
 const NewContributionSubmit = connect(mapStateToProps, mapDispatchToProps)(ContributionSubmit);

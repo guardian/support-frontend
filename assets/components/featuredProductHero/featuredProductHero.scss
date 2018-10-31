@@ -1,0 +1,202 @@
+@mixin with-colour($color) {
+  & .component-featured-product-hero__heading,
+  & .component-flash-sale-countdown, {
+    color: gu-colour($color);
+  }}
+
+.component-featured-product-hero {
+  position: relative;
+  overflow: hidden;
+  background: gu-colour(garnett-neutral-3);
+
+  .component-cta-link {
+    background-color: gu-colour(news-garnett-highlight);
+    color: gu-colour(garnett-neutral-1);
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    padding-left: 18px;
+    margin-top: $gu-v-spacing;
+
+    @include mq($from: phablet) {
+      margin-top: $gu-v-spacing * 2;
+    }
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-1);
+      height: 22px;
+      top: 9px;
+      left: calc(100% - 32px);
+    }
+
+    &:hover {
+      background-color: darken(gu-colour(news-garnett-highlight), 5%);
+    }
+  }
+
+  .component-featured-product-hero__countdownbox {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+    padding-left: 5px;
+    padding-bottom: 120px;
+
+    @include mq($from: tablet) {
+      padding-bottom: 70px;
+    }
+  }
+
+  .component-featured-product-hero__countdownbox .component-flash-sale-countdown {
+    margin: 0 -5px;
+    width: 130%;
+    display: inline-block;
+    .component-countdown {
+      background: darken(gu-colour(garnett-neutral-3), 5%);
+      border-top: 1px solid gu-colour(garnett-neutral-4);
+      border-bottom: 1px solid gu-colour(garnett-neutral-4);
+    }
+    .component-countdown__chip {
+      border-color: gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .component-featured-product-hero__countdownbox--hidden {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .component-featured-product-hero__countdownbox--hidden .component-flash-sale-countdown {
+    display: none;
+  }
+  
+  .component-grid-picture__image {
+    width: 180px;
+    display: block;
+
+    @include mq($from: mobileMedium) {
+      width: 220px;
+    }
+
+    @include mq($from: phablet) {
+      width: 340px;
+    }
+
+    @include mq($from: tablet) {
+      margin-top: 30px;
+      width: 400px;
+    }
+
+    @include mq($from: desktop) {
+      width: 440px;
+    }
+
+    @include mq($from: leftCol) {
+      width: 500px;
+    }
+
+    @include mq($from: wide) {
+      width: 580px;
+    }
+
+  }
+}
+
+.component-featured-product-hero__content {
+  @extend .gu-content-margin;
+
+  display: flex;
+
+  @include mq($from: tablet) {
+    position: relative;
+  }
+
+  @include mq($from: desktop) {
+    padding-left: 186px;
+  }
+
+  @include mq($from: leftCol) {
+    padding-left: 218px;
+  }
+
+  @include mq($from: wide) {
+    padding-left: 250px;
+  }
+}
+
+.component-featured-product-hero__description {
+  @extend .gu-content-margin;
+  position: relative;
+
+  @include mq($from: desktop) {
+    flex: 0 460px;
+    margin: 10px 0 0;
+    padding-right: 0;
+    padding-left: 21px;
+  }
+
+  @include mq($from: leftCol) {
+    min-height: 350px;
+  }
+
+  @include mq($from: wide) {
+    min-height: 400px;
+  }
+}
+
+.component-featured-product-hero__image {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.component-featured-product-hero__title {
+  font-size: 48px;
+  line-height: 48px;
+  font-family: $gu-headline;
+  font-weight: bold;
+  @include mq($from: tablet) {
+    font-size: 54px;
+    line-height: 58px;
+  }
+}
+
+.component-featured-product-hero__heading {
+  @extend .component-featured-product-hero__title;
+  margin-top: 8px;
+  @include mq($from: phablet) {
+    max-width: 350px;
+  }
+}
+
+.component-featured-product-hero__subheading{
+  @extend .component-featured-product-hero__title;
+  margin-bottom: 12px;
+  @include mq($from: phablet) {
+    max-width: 350px;
+  }
+}
+
+.component-featured-product-hero__copy {
+  font-size: 14px;
+  line-height: 1.41;
+  margin-top: $gu-v-spacing / 2;
+  z-index: 1;
+  position: relative;
+  @include mq($from: phablet) {
+    max-width: 250px;
+  }
+}
+
+.component-cta-link--flash-sale {
+  z-index: 1;
+}
+
+.component-featured-product-hero--digital-pack {
+  @include with-colour(lifestyle-garnett-main-1);
+}
+.component-featured-product-hero--paper {
+  @include with-colour(sport-garnett-media-main-1);
+}
+.component-featured-product-hero--guardian-weekly {
+  @include with-colour(opinion-garnett-main-1);
+}

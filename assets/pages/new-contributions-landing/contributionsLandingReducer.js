@@ -2,23 +2,24 @@
 
 // ----- Imports ----- //
 
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
-import { amounts, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { amounts, parseContrib, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import sessionId from 'helpers/sessionId/reducer';
 import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
 import * as storage from 'helpers/storage';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { type Action } from './contributionsLandingActions';
-import type { State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
+import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 
 // ----- Types ----- //
@@ -30,10 +31,10 @@ export type UserFormData = {
 }
 
 export type ThankYouPageStageMap<T> = {
-  setPassword: T,
+  thankYouSetPassword: T,
   thankYou: T,
   thankYouPasswordSet: T,
-  thankYouPasswordNotSet: T
+  thankYouPasswordDeclinedToSet: T,
 }
 
 export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
@@ -49,6 +50,7 @@ type FormData = UserFormData & {
 type SetPasswordData = {
   password: string,
   passwordHasBeenSubmitted: boolean,
+  passwordError: boolean,
 }
 
 type FormState = {
@@ -63,7 +65,9 @@ type FormState = {
   paymentError: CheckoutFailureReason | null,
   guestAccountCreationToken: ?string,
   thankYouPageStage: ThankYouPageStage,
+  hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 };
 
 type PageState = {
@@ -98,7 +102,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   // ----- Initial state ----- //
 
   const initialState: FormState = {
-    contributionType: 'MONTHLY',
+    contributionType: parseContrib(storage.getSession('contributionType'), 'MONTHLY'),
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
@@ -128,6 +132,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     setPasswordData: {
       password: '',
       passwordHasBeenSubmitted: false,
+      passwordError: false,
     },
     showOtherAmount: false,
     selectedAmounts: initialAmount,
@@ -137,6 +142,8 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
+    hasSeenDirectDebitThankYouCopy: false,
+    userTypeFromIdentityResponse: 'noRequestSent',
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -187,6 +194,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'SET_PASSWORD_HAS_BEEN_SUBMITTED':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordHasBeenSubmitted: true } };
 
+      case 'SET_PASSWORD_ERROR':
+        return { ...state, setPasswordData: { ...state.setPasswordData, passwordError: action.passwordError } };
+
+      case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
+        return { ...state, userTypeFromIdentityResponse: action.userTypeFromIdentityResponse };
+
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
@@ -229,13 +242,16 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
         return { ...state, formData: { ...state.formData, checkoutFormHasBeenSubmitted: true } };
 
+      case 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY':
+        return { ...state, hasSeenDirectDebitThankYouCopy: true };
+
       case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
         return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };
 
-      // Don't allow the stage to be set to setPassword unless both an email and
+      // Don't allow the stage to be set to thankYouSetPassword unless both an email and
       // guest registration token is present
       case 'SET_THANK_YOU_PAGE_STAGE':
-        if ((action.thankYouPageStage === 'setPassword')
+        if ((action.thankYouPageStage === 'thankYouSetPassword')
           && (!state.guestAccountCreationToken || !state.formData.email)) {
           return { ...state, thankYouPageStage: 'thankYou' };
         }

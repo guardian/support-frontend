@@ -13,9 +13,9 @@ import ContribLegal from '../contribLegal/contribLegal';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   countryGroupId: CountryGroupId,
-};
+|};
 
 
 // ----- Component ----- //

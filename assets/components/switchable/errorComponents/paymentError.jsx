@@ -9,10 +9,10 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   paymentMethod: string,
   modifierClass: string,
-};
+|};
 
 
 // ----- Component ----- //

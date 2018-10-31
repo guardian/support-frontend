@@ -140,7 +140,7 @@ function checkRegularStatus(
   return (json) => {
     if (json.guestAccountCreationToken) {
       setGuestAccountCreationToken(json.guestAccountCreationToken);
-      setThankYouPageStage('setPassword');
+      setThankYouPageStage('thankYouSetPassword');
     }
     switch (json.status) {
       case 'pending':

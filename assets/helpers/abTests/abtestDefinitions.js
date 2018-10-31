@@ -3,11 +3,11 @@ import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
-export type AnnualContributionsTestVariant = 'control' | 'annual' | 'annualHigherAmounts' | 'notintest';
+export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
 
 export const tests: Tests = {
-  annualContributionsRoundTwo: {
-    variants: ['control', 'annual', 'annualHigherAmounts'],
+  annualContributionsRoundThree: {
+    variants: ['control', 'annualAmountsA'],
     audiences: {
       ALL: {
         offset: 0,

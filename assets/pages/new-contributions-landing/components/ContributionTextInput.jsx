@@ -8,7 +8,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   id: string,
   name: string,
   label: string,
@@ -20,6 +20,7 @@ type PropTypes = {
   isValid: boolean,
   formHasBeenSubmitted: boolean,
   onInput: (Event => void) | void,
+  onChange?: (Event => void),
   required?: boolean,
   autoCapitalize: 'off' | 'none' | 'on' | 'sentences' | 'words',
   autoComplete: 'off' | 'on' | 'name' | 'given-name' | 'family-name' | 'email',
@@ -29,7 +30,7 @@ type PropTypes = {
   step: number | void,
   pattern: string | void,
   disabled: boolean,
-};
+|};
 
 // ----- Render ----- //
 
@@ -53,6 +54,7 @@ function NewContributionTextInput(props: PropTypes) {
           required={props.required}
           placeholder={props.placeholder}
           onInput={props.onInput}
+          onChange={props.onChange}
           value={props.value}
           min={props.min}
           max={props.max}
@@ -78,6 +80,7 @@ NewContributionTextInput.defaultProps = {
   placeholder: false,
   required: false,
   onInput: undefined,
+  onChange: () => {},
   value: null,
   autoCapitalize: 'none',
   autoComplete: 'on',

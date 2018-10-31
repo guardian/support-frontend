@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { type Contrib } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
@@ -16,9 +17,11 @@ import {
   checkEmail,
   emailRegexPattern,
 } from 'helpers/formValidation';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
+import { MustSignIn } from './MustSignIn';
 import { type State } from '../contributionsLandingReducer';
 
 import {
@@ -26,6 +29,8 @@ import {
   updateLastName,
   updateEmail,
   updateState,
+  checkIfEmailHasPassword,
+  setValueAndTogglePayPal,
 } from '../contributionsLandingActions';
 
 
@@ -38,10 +43,13 @@ type PropTypes = {|
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
+  checkIfEmailHasPassword: Event => void,
+  contributionType: Contrib,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -58,14 +66,16 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   state: state.page.form.formData.state,
   isSignedIn: state.page.user.isSignedIn,
+  userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+  contributionType: state.page.form.contributionType,
 });
 
-
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
-  updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
-  updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
-  updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
+  updateFirstName: (event) => { dispatch(setValueAndTogglePayPal<string>(updateFirstName, event.target.value)); },
+  updateLastName: (event) => { dispatch(setValueAndTogglePayPal<string>(updateLastName, event.target.value)); },
+  updateEmail: (event) => { dispatch(setValueAndTogglePayPal<string>(updateEmail, event.target.value)); },
+  updateState: (event) => { dispatch(setValueAndTogglePayPal<UsState | CaState | null>(updateState, event.target.value === '' ? null : event.target.value)); },
+  checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 
 
@@ -92,6 +102,7 @@ function FormFields(props: PropTypes) {
         placeholder="example@domain.com"
         icon={<SvgEnvelope />}
         onInput={props.updateEmail}
+        onChange={props.checkIfEmailHasPassword}
         isValid={checkEmail(email)}
         pattern={emailRegexPattern}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
@@ -99,7 +110,13 @@ function FormFields(props: PropTypes) {
         required
         disabled={isSignedIn}
       />
-      <Signout isSignedIn={isSignedIn} />
+      <Signout isSignedIn />
+      <MustSignIn
+        isSignedIn={props.isSignedIn}
+        userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
+        contributionType={props.contributionType}
+        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+      />
       <NewContributionTextInput
         id="contributionFirstName"
         name="contribution-fname"

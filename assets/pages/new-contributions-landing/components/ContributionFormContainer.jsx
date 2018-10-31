@@ -39,7 +39,6 @@ type PropTypes = {|
   paymentError: CheckoutFailureReason | null,
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
-  isDirectDebitPopUpOpen: boolean,
   thankYouRoute: string,
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
@@ -62,7 +61,6 @@ const mapStateToProps = (state: State) => ({
   paymentError: state.page.form.paymentError,
   currencyId: state.common.internationalisation.currencyId,
   countryGroupId: state.common.internationalisation.countryGroupId,
-  isDirectDebitPopUpOpen: state.page.directDebit.isPopUpOpen,
   isTestUser: state.page.user.isTestUser,
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
@@ -86,8 +84,6 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const selectedCountryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
-
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
@@ -96,11 +92,9 @@ function ContributionFormContainer(props: PropTypes) {
         <p className="blurb">{countryGroupSpecificDetails[props.countryGroupId].contributeCopy}</p>
         <NewContributionForm
           onPaymentAuthorisation={onPaymentAuthorisation}
-          selectedCountryGroupDetails={selectedCountryGroupDetails}
         />
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}
-          isPopUpOpen={props.isDirectDebitPopUpOpen}
         />
       </div>
     );

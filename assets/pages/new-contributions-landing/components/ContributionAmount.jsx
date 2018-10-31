@@ -4,24 +4,24 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 
 import { config, amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
+import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
-import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
+import { selectAmount, setValueAndTogglePayPal, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: Contrib,
@@ -31,7 +31,9 @@ type PropTypes = {
   checkOtherAmount: string => boolean,
   updateOtherAmount: string => void,
   checkoutFormHasBeenSubmitted: boolean,
-};
+  annualTestVariant: AnnualContributionsTestVariant,
+|};
+
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
@@ -41,11 +43,12 @@ const mapStateToProps = state => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  annualTestVariant: state.common.abParticipations.annualContributionsRoundThree,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: Function) => ({
   selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
-  updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
+  updateOtherAmount: (amount) => { dispatch(setValueAndTogglePayPal<string>(updateOtherAmount, amount)); },
 });
 
 // ----- Render ----- //
@@ -84,7 +87,7 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
 
 
 function ContributionAmount(props: PropTypes) {
-  const validAmounts: Amount[] = amounts('notintest')[props.contributionType][props.countryGroupId];
+  const validAmounts: Amount[] = amounts(props.annualTestVariant)[props.contributionType][props.countryGroupId];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString(), spoken: '', isDefault: false }, false);
@@ -131,11 +134,6 @@ function ContributionAmount(props: PropTypes) {
     </fieldset>
   );
 }
-
-ContributionAmount.defaultProps = {
-  amount: null,
-  showOther: false,
-};
 
 const NewContributionAmount = connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
 

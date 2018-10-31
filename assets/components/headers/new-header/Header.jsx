@@ -14,9 +14,9 @@ import SvgRoundel from 'components/svgs/roundel';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   selectedCountryGroup: ?CountryGroup,
-};
+|};
 
 // ----- Render ----- //
 

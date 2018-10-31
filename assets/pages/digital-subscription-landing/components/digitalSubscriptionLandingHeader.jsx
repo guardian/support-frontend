@@ -4,6 +4,7 @@
 
 import React from 'react';
 
+import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
   type GridImage,
@@ -16,15 +17,15 @@ import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLa
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { displayPrice } from 'helpers/subscriptions';
 import { currencies, detect } from 'helpers/internationalisation/currency';
-import { flashSaleIsActive, getDiscountedPrice } from 'helpers/flashSale';
+import { flashSaleIsActive, getDiscountedPrice, getCountdownAbTestParticipation } from 'helpers/flashSale';
 import CtaSwitch from './ctaSwitch';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   countryGroupId: CountryGroupId,
-};
+|};
 
 type GridImages = {
   breakpoints: {
@@ -177,6 +178,11 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             </p>
           </div>
         </div>
+        {flashSaleIsActive('DigitalPack') && getCountdownAbTestParticipation() &&
+          <div className="digital-subscription-landing-header__countdown">
+            <FlashSaleCountdown />
+          </div>
+        }
         <CtaSwitch referringCta="support_digipack_page_header" />
       </LeftMarginSection>
     </div>

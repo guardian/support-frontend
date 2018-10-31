@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import { type Amount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
-import type { CountryMetaData } from 'helpers/internationalisation/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -33,13 +32,14 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
+import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
 import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
-
 
 import { type State } from '../contributionsLandingReducer';
 
@@ -64,13 +64,14 @@ type PropTypes = {|
   currency: IsoCurrency,
   paymentError: CheckoutFailureReason | null,
   selectedAmounts: { [Contrib]: Amount | 'other' },
-  selectedCountryGroupDetails: CountryMetaData,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
   setCheckoutFormHasBeenSubmitted: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  isSignedIn: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -91,7 +92,8 @@ const mapStateToProps = (state: State) => ({
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
   selectedAmounts: state.page.form.selectedAmounts,
-
+  userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+  isSignedIn: state.page.user.isSignedIn,
 });
 
 
@@ -159,16 +161,20 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   },
 };
 
-
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-    if (!(event.target: any).checkValidity()) {
-      return;
+
+    if (checkoutFormShouldSubmit(
+      props.contributionType,
+      props.isSignedIn,
+      props.userTypeFromIdentityResponse,
+      event.target,
+    )) {
+      formHandlers[props.contributionType][props.paymentMethod](props);
     }
-    formHandlers[props.contributionType][props.paymentMethod](props);
   };
 }
 
@@ -186,7 +192,6 @@ function ContributionForm(props: PropTypes) {
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <NewContributionType />
       <NewContributionAmount
-        countryGroupDetails={props.selectedCountryGroupDetails}
         checkOtherAmount={checkOtherAmount}
       />
       <ContributionFormFields />

@@ -14,11 +14,11 @@ import { type Contrib as ContributionType } from 'helpers/contributions';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   contributionType: ContributionType,
   amount: number,
   currencyId: IsoCurrency,
-};
+|};
 
 
 // ----- Setup ----- //

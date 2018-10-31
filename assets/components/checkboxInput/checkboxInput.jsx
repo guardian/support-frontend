@@ -7,13 +7,13 @@ import * as React from 'react';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   id: ?string,
   onChange: (preference: boolean) => void,
   checked: boolean,
   labelTitle?: string,
   labelCopy?: string,
-};
+|};
 
 
 // ----- Component ----- //

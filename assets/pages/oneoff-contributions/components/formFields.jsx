@@ -23,13 +23,13 @@ import { type State } from '../oneOffContributionsReducer';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   fullName: UserFormFieldAttribute,
   email: UserFormFieldAttribute,
   setFullName: (string) => void,
   setEmail: (string) => void,
   isSignedIn: boolean,
-};
+|};
 
 // ----- Map State/Props ----- //
 

@@ -4,7 +4,6 @@
 
 import React from 'react';
 
-import SvgContributionsBgMobile from 'components/svgs/contributionsBgMobile';
 import SvgContributionsBgDesktop from 'components/svgs/contributionsBgDesktop';
 
 // ----- Render ----- //
@@ -12,7 +11,6 @@ import SvgContributionsBgDesktop from 'components/svgs/contributionsBgDesktop';
 function NewContributionBackground() {
   return (
     <div className="gu-content__bg">
-      <SvgContributionsBgMobile />
       <SvgContributionsBgDesktop />
     </div>
   );

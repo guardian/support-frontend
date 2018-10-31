@@ -9,10 +9,10 @@ import PageSection from 'components/pageSection/pageSection';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   children: [React$Node, React$Node, React$Node],
   heading: string,
-};
+|};
 
 
 // ----- Component ----- //

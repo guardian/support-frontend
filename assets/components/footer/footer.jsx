@@ -11,12 +11,12 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   privacyPolicy: boolean,
   disclaimer: boolean,
   countryGroupId: CountryGroupId,
   children: Node,
-};
+|};
 
 
 // ----- Functions ----- //

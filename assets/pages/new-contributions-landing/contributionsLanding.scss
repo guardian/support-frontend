@@ -54,7 +54,7 @@ header[role="banner"] {
 
 .countryGroups {
   font-family: $gu-text-sans-web;
-  margin-top: $gu-v-spacing;
+  margin-top: $gu-v-spacing * 2.5;
   max-width: 355px;
   padding: 0;
   width: 100%;
@@ -67,6 +67,11 @@ header[role="banner"] {
   height: 40px;
   outline: none;
   transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
+
+  // this is to fix IE bug where events on svgs don't bubble up
+  & svg {
+    pointer-events: none;
+  }
 }
 
 .countryGroups:not([open]) > :not(summary) {
@@ -90,12 +95,14 @@ header[role="banner"] {
 .countryGroups .svg-checkmark {
   width: 18px;
   height: 14px;
+  fill: gu-colour(news-garnett-main-1);
 }
 
 .countryGroups .svg-globe {
   padding: 0 $gu-v-spacing;
   width: 14px;
   height: 14px;
+  fill: gu-colour(garnett-neutral-1);
 }
 
 .countryGroups summary {
@@ -121,12 +128,31 @@ header[role="banner"] {
   border: 1px solid gu-colour(garnett-neutral-4);
 }
 
+.countryGroups__item:first-child > a {
+  &:before {
+    content: none;
+  }
+}
+
 .countryGroups__item > a {
   color: inherit;
   display: flex;
-  padding: 0 40px;
+  padding: 0 15px;
   line-height: 40px;
   text-decoration: none;
+  justify-content: space-between;
+  position: relative;
+
+
+  &:before {
+    content: '';
+    border-top: 1px solid gu-colour(garnett-neutral-4);
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 15px;
+    right: 0;
+  }
 }
 
 .countryGroups__item > a:hover,
@@ -170,7 +196,7 @@ body {
   color: gu-colour(garnett-neutral-1);
   font: bold 36px/1.15 $gu-headline;
   margin: 0 -10px;
-  padding: 0 10px $gu-v-spacing;
+  padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
 }
 
 input,
@@ -209,11 +235,14 @@ header[role="banner"] {
 @include mq($from: mobile, $until: tablet) {
   .header {
     border: 0;
-    position: absolute;
-    top: 0;
     left: 10px;
-    width: 290px;
+    width: 100%;
   }
+
+  .thank-you__container .header {
+    background-color: gu-colour(news-garnett-highlight);
+  }
+
 
   .glogo {
     top: 10px;
@@ -226,8 +255,7 @@ header[role="banner"] {
   }
 
   .gu-content__bg {
-    height: 280px;
-    position: relative;
+    display: none;
   }
 
   .gu-content__bg .svg-contributions-bg-desktop {
@@ -419,7 +447,7 @@ header[role="banner"] {
     }
 
     .countryGroups {
-      grid-column: 4 / 8;
+      grid-column: 4 / 7;
       grid-row: 1;
     }
 
@@ -556,7 +584,7 @@ form {
 .form__radio-group-list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: $gu-v-spacing 0 0 0;
 }
 
 .form__radio-group-input {
@@ -625,8 +653,7 @@ form {
 .form__radio-group--buttons .form__radio-group-label {
   align-items: center;
   display: flex;
-  margin-bottom: 8px;
-  padding: 9px 0;
+  padding: $gu-v-spacing/2 0;
 }
 
 .form__radio-group--buttons .form__radio-group-input:checked + .form__radio-group-label {
@@ -845,7 +872,7 @@ form {
   display: none;
 }
 
-.confirmation {
+.confirmation, .marketing-permissions {
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   font-weight: 300;
   margin: 0 -10px;
@@ -860,22 +887,49 @@ form {
 
 .confirmation__message {
   font: 300 22px/1.2 $gu-headline;
-  margin: ($gu-v-spacing / 2) 0 $gu-v-spacing;
+  margin: ($gu-v-spacing / 4) 0 $gu-v-spacing * 2;
 }
 
-.confirmation p {
-  margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
+.confirmation__message--direct-debit {
+  margin-left: -10px;
+  margin-right: -10px;
+  padding: 0 10px $gu-v-spacing;
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+}
+
+.marketing-permissions__message, .set-password__message {
+  font-family: $gu-text-egyptian-web;
+  letter-spacing: -0.5px;
+  margin-bottom: 24px;
+  line-height: 20px;
+}
+
+.set-password__message {
+  margin-bottom: 0;
+}
+
+.marketing-permissions__title, .set-password__title {
+  font-family: $gu-text-egyptian-web;
+  letter-spacing: -0.5px;
+  font-weight: 900;
+  font-size: 17px;
+  margin: ($gu-v-spacing / 3) 0;
 }
 
 .confirmation--backtothegu {
   margin-bottom: $gu-v-spacing + 20px;
   padding-bottom: $gu-v-spacing;
   padding-top: $gu-v-spacing;
+  border-bottom: 0;
 }
 
 .confirmation__meta {
   font-family: $gu-text-sans-web;
   font-size: 12px;
+}
+
+.component-cta-link--backtothegu {
+  font-size: 16px;
 }
 
 .button {
@@ -956,4 +1010,8 @@ form {
 .information__message {
   vertical-align: top;
   padding-left: 5px;
+}
+
+.component-password-failure-message {
+  padding: 0 $gu-h-spacing $gu-v-spacing;
 }

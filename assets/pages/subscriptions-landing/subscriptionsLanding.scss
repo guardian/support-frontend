@@ -7,13 +7,12 @@
 
 @import '~components/ctaLink/ctaLink';
 @import '~components/doubleHeading/doubleHeading';
-@import '~components/featuredDigitalPack/featuredDigitalPack';
+@import '~components/featuredProductHero/featuredProductHero';
 @import '~components/featureList/featureList';
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
 @import '~components/highlights/highlights';
 @import '~components/introduction/introduction';
-@import '~components/introduction/investIntroduction';
 @import '~components/legal/contribLegal/contribLegal';
 @import '~components/pageSection/pageSection';
 @import '~components/patronsEvents/patronsEvents';
@@ -23,6 +22,7 @@
 @import '~components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
 @import '~components/whySupport/whySupport';
 @import '~components/whySupportVideo/whySupportVideo';
+@import '~components/flashSaleCountdown/flashSaleCountdown';
 
 
 // ----- Page-Specific Styles ----- //
@@ -33,7 +33,6 @@
     margin-top: $gu-v-spacing;
   }
 
-  // As a test we are tweaking the layout of the US product bundles
   .component-subscriptions-by-country-group--us .component-double-heading__subheading {
     font-size: 24px;
   }

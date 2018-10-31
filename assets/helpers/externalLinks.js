@@ -13,6 +13,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
+import { getBaseDomain } from 'helpers/url';
 
 import { getPromoCode, getIntcmp } from './flashSale';
 import type { SubscriptionProduct } from './subscriptions';
@@ -37,6 +38,7 @@ const subsUrl = 'https://subscribe.theguardian.com';
 const patronsUrl = 'https://patrons.theguardian.com';
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
+const emailPreferencesUrl = `https://profile.${getBaseDomain()}/email-prefs`;
 
 const memUrls: {
   [MemProduct]: string,
@@ -50,7 +52,7 @@ const defaultPromos: PromoCodes = {
   PaperAndDigital: getPromoCode('PaperAndDigital', 'GXX83X'),
 };
 
-const customPromos : {
+const customPromos: {
   [Campaign]: PromoCodes,
 } = {
   seven_fifty_middle: {
@@ -255,4 +257,5 @@ export {
   getIosAppUrl,
   androidAppUrl,
   getDailyEditionUrl,
+  emailPreferencesUrl,
 };

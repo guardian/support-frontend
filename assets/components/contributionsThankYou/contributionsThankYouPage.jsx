@@ -18,12 +18,12 @@ import ContributionsSurveySection from '../survey/contributionsSurveySection';
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   contributionType: Contrib,
   directDebit: ?DirectDebit,
   countryGroupId: CountryGroupId,
   marketingConsent: Node,
-};
+|};
 
 
 // ----- Component ----- //

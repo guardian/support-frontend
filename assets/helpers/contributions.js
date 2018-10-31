@@ -10,6 +10,7 @@ import { currencies, spokenCurrencies } from 'helpers/internationalisation/curre
 import type { Radio } from 'components/radioToggle/radioToggle';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
+import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
 
 // ----- Types ----- //
 
@@ -219,52 +220,7 @@ const defaultMonthlyAmount = [
   { value: '30', spoken: numbersInWords['30'], isDefault: false },
 ];
 
-const annualAmountLow = [
-  { value: '25', spoken: numbersInWords['25'], isDefault: false },
-  { value: '50', spoken: numbersInWords['50'], isDefault: true },
-  { value: '100', spoken: numbersInWords['100'], isDefault: false },
-  { value: '250', spoken: numbersInWords['250'], isDefault: false },
-];
-
-const annualAmountMedium = [
-  { value: '50', spoken: numbersInWords['50'], isDefault: false },
-  { value: '100', spoken: numbersInWords['100'], isDefault: true },
-  { value: '250', spoken: numbersInWords['250'], isDefault: false },
-  { value: '500', spoken: numbersInWords['500'], isDefault: false },
-];
-
-
-const annualAmountHigh = [
-  { value: '100', spoken: numbersInWords['100'], isDefault: false },
-  { value: '250', spoken: numbersInWords['250'], isDefault: true },
-  { value: '500', spoken: numbersInWords['500'], isDefault: false },
-  { value: '750', spoken: numbersInWords['750'], isDefault: false },
-];
-
-const getAnnualAmounts = (annualTestVariant: AnnualContributionsTestVariant) => {
-  if (annualTestVariant === 'annualHigherAmounts') {
-    return {
-      GBPCountries: annualAmountMedium,
-      UnitedStates: annualAmountMedium,
-      AUDCountries: annualAmountHigh,
-      EURCountries: annualAmountMedium,
-      International: annualAmountMedium,
-      NZDCountries: annualAmountHigh,
-      Canada: annualAmountMedium,
-    };
-  }
-  return {
-    GBPCountries: annualAmountLow,
-    UnitedStates: annualAmountLow,
-    AUDCountries: annualAmountMedium,
-    EURCountries: annualAmountLow,
-    International: annualAmountLow,
-    NZDCountries: annualAmountMedium,
-    Canada: annualAmountLow,
-  };
-};
-
-const amounts = (annualTestVariant: AnnualContributionsTestVariant) => ({
+const amounts = (annualTestVariant: string) => ({
   ONE_OFF: {
     GBPCountries: defaultOneOffAmount,
     UnitedStates: defaultOneOffAmount,
@@ -476,33 +432,25 @@ function getAmountA11yHint(
 
 }
 
-function getContributionTypeRadios(
-  countryGroupId: CountryGroupId,
-  annualTestVariant: AnnualContributionsTestVariant,
-) {
-
-  const oneOff = {
+const contributionTypeRadios = [
+  {
     value: 'ONE_OFF',
     text: 'Single',
     accessibilityHint: 'Make a single contribution',
     id: 'qa-one-off-toggle',
-  };
-  const monthly = {
+  },
+  {
     value: 'MONTHLY',
     text: 'Monthly',
     accessibilityHint: 'Make a regular monthly contribution',
-  };
-  const annual = {
+  },
+  {
     value: 'ANNUAL',
     text: 'Annually',
     accessibilityHint: 'Make a regular annual contribution',
-  };
+  },
+];
 
-  return annualTestVariant === 'annual' || annualTestVariant === 'annualHigherAmounts'
-    ? [oneOff, monthly, annual]
-    : [monthly, oneOff];
-
-}
 
 function getContributionAmountRadios(
   contributionType: Contrib,
@@ -535,7 +483,7 @@ export {
   getSpokenType,
   getFrequency,
   getCustomAmountA11yHint,
-  getContributionTypeRadios,
+  contributionTypeRadios,
   getContributionAmountRadios,
   parseRegularContributionType,
 };

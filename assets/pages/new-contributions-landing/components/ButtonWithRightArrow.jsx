@@ -5,14 +5,14 @@
 import React from 'react';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 
-type PropTypes = {
+type PropTypes = {|
   componentClassName: string,
   buttonClassName: string,
   type: string,
   accessibilityHintId: string,
   buttonCopy: string,
   onClick: () => void,
-};
+|};
 // ----- Render ----- //
 
 function ButtonWithRightArrow(props: PropTypes) {

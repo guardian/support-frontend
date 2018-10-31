@@ -92,18 +92,12 @@ function getPayPalOptions(
         return;
       }
 
+      window.enablePayPalButton = actions.enable;
+      window.disablePayPalButton = actions.disable;
+
       validateCalled = true;
       toggleButton(actions);
 
-      const form = document.querySelector(`.${formClassName}`);
-      if (form instanceof HTMLElement) {
-        // Thanks to event bubbling, we can just listen on the form element.
-        // This means that we'll get change events even from form elements which
-        // aren't in the DOM at the time this handler is bound.
-        form.addEventListener('change', () => toggleButton(actions));
-      } else {
-        logException(`No form found with class ${formClassName}`);
-      }
     },
 
     onClick() {

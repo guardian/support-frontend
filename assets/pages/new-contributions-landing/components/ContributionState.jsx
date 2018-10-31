@@ -14,14 +14,14 @@ import SvgGlobe from 'components/svgs/globe';
 import { type State } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
-type PropTypes = {
+type PropTypes = {|
   countryGroupId: CountryGroupId,
   selectedState: CaState | UsState | null,
   onChange: (Event => void) | false,
   errorMessage: string | null,
   isValid: boolean,
   formHasBeenSubmitted: boolean,
-};
+|};
 
 const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,

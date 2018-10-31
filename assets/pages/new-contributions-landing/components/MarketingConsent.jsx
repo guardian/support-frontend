@@ -17,12 +17,12 @@ import { sendMarketingPreferencesToIdentity } from '../../../components/marketin
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
   onClick: (?string, CsrfState) => void,
-};
+|};
 
 const mapStateToProps = state => ({
   confirmOptIn: state.page.marketingConsent.confirmOptIn,
@@ -48,9 +48,9 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 function MarketingConsent(props: PropTypes) {
   return (
-    <section className={classNameWithModifiers('confirmation', ['newsletter'])}>
-      <h3 className="confirmation__title">Subscriptions, membership and contributions</h3>
-      <p>
+    <section className={classNameWithModifiers('marketing-permissions', ['newsletter'])}>
+      <h3 className="marketing-permissions__title">Subscriptions, membership and contributions</h3>
+      <p className="marketing-permissions__message">
         Get related news and offers – whether you are a subscriber, member,
         contributor or would like to become one.
       </p>
