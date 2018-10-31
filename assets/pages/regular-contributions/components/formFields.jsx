@@ -185,7 +185,6 @@ function NameForm(props: PropTypes) {
             />
             {/* TODO: style this properly */ }
             <MustSignIn
-              returnUrl=""
               contributionType={props.contributionType}
               isSignedIn={props.isSignedIn}
               userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
