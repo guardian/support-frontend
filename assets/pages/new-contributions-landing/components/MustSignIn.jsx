@@ -42,25 +42,20 @@ export const MustSignIn = (props: PropTypes) => {
   }
 
   switch (props.userTypeFromIdentityResponse) {
-    case 'requestPending':
-      return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
-          PENDING
-        </a>
-      );
-
     case 'requestFailed':
       return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
-          FAILED IDENTITY REQUEST
-        </a>
+        <div className="form__error">
+          There was an unexpected errror. Please refresh the page and try again
+        </div>
       );
 
     case 'current':
       return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
-          YOU MUST SIGN IN
-        </a>
+        <div className="form__error">
+          <span>You already have a Guardian account. Please </span>
+          <a href={buildUrl(props.returnUrl)}>sign in</a>
+          <span> or use another email address.</span>
+        </div>
       );
 
     default:
