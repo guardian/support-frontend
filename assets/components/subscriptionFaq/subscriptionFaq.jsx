@@ -43,7 +43,7 @@ function SubscriptionFaq(props: PropTypes) {
           <div className="component-subscription-faq__text">
             You may also find help in our
             <a className="component-subscription-faq__href" href={faqLink(props)}> Frequently Asked Questions</a> and
-            in the
+            in the&nbsp;
             <a className="component-subscription-faq__href" href={subscriptionsTermsLinks.DigitalPack}>
             Digital Pack terms and conditions
             </a>.
