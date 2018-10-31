@@ -73,7 +73,7 @@ function NameForm(props: PropTypes) {
             value={props.email.value}
             labelText="Email"
             placeholder="Email"
-            onChange={props.setEmail}
+            onInput={props.setEmail}
             modifierClasses={['email']}
             showError={shouldShowError(props.email, props.checkoutFormHasBeenSubmitted)}
             errorMessage="Please enter a valid email address."
@@ -88,7 +88,7 @@ function NameForm(props: PropTypes) {
         placeholder="Full name"
         labelText="Full name"
         value={props.fullName.value}
-        onChange={props.setFullName}
+        onInput={props.setFullName}
         modifierClasses={['name']}
         showError={shouldShowError(props.fullName, props.checkoutFormHasBeenSubmitted)}
         errorMessage="Please enter your name."
