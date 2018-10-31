@@ -51,7 +51,6 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
 export const getForm: string => Object | null =
   (formName: string) => document.querySelector(`.${formName}`);
 
-// Takes either a form element, or the HTML class of the form
 export const formElementIsValid = (formElement: Object | null) => {
   if (formElement && formElement instanceof HTMLFormElement) {
     return formElement.checkValidity();
