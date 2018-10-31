@@ -13,7 +13,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 // ---- Types ----- //
 
 type PropTypes = {|
-  returnUrl?: string,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   contributionType: Contrib,
@@ -24,9 +23,9 @@ type PropTypes = {|
 // ----- Functions ----- //
 
 // Build signout URL from given return URL or current location.
-function buildUrl(returnUrl: ?string): string {
+function buildUrl(): string {
 
-  const encodedReturn = encodeURIComponent(returnUrl || window.location);
+  const encodedReturn = encodeURIComponent(window.location);
 
   return `https://profile.${getBaseDomain()}/signin?returnUrl=${encodedReturn}`;
 
@@ -60,7 +59,7 @@ export const MustSignIn = (props: PropTypes) => {
 
     case 'current':
       return (
-        <a className={classNameWithModifiers('form__error', ['sign-in'])} href={buildUrl(props.returnUrl)}>
+        <a className={classNameWithModifiers('form__error', ['sign-in'])} href={buildUrl()}>
             You already have a Guardian account. Please <span className="underline">sign in</span> or use another email address.
         </a>
       );
@@ -69,11 +68,4 @@ export const MustSignIn = (props: PropTypes) => {
       return null;
   }
 
-};
-
-
-// ----- Default Props ----- //
-
-MustSignIn.defaultProps = {
-  returnUrl: '',
 };

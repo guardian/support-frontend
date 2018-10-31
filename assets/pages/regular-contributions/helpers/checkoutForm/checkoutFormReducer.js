@@ -5,32 +5,17 @@ import { type Action } from './checkoutFormActions';
 
 // ----- Types ----- //
 
-
-export type CheckoutFormAttribute = {
-  shouldValidate: boolean;
-}
-
 export type Stage = 'checkout' | 'payment'
 
 export type RegularContributionsCheckoutFormState = {
-  email: CheckoutFormAttribute,
-  firstName: CheckoutFormAttribute,
-  lastName: CheckoutFormAttribute,
+  checkoutFormHasBeenSubmitted: boolean,
   stage: Stage,
 };
 
 // ----- Setup ----- //
 
 const initialState: RegularContributionsCheckoutFormState = {
-  email: {
-    shouldValidate: false,
-  },
-  firstName: {
-    shouldValidate: false,
-  },
-  lastName: {
-    shouldValidate: false,
-  },
+  checkoutFormHasBeenSubmitted: false,
   stage: 'checkout',
 };
 
@@ -43,14 +28,8 @@ function checkoutFormReducer(
 ): RegularContributionsCheckoutFormState {
 
   switch (action.type) {
-    case 'SET_FIRST_NAME_SHOULD_VALIDATE':
-      return { ...state, firstName: { ...state.firstName, shouldValidate: action.shouldValidate } };
-
-    case 'SET_LAST_NAME_SHOULD_VALIDATE':
-      return { ...state, lastName: { ...state.lastName, shouldValidate: action.shouldValidate } };
-
-    case 'SET_EMAIL_SHOULD_VALIDATE':
-      return { ...state, email: { ...state.email, shouldValidate: action.shouldValidate } };
+    case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
+      return { ...state, checkoutFormHasBeenSubmitted: true };
 
     case 'SET_STAGE':
       return { ...state, stage: action.stage };

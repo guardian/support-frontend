@@ -116,7 +116,13 @@ function setup(
 
   const payPalOptions: Object = {
     env: window.guardian.payPalEnvironment,
-    style: { color: 'blue', size: 'responsive', label: 'pay' },
+    style: {
+      color: 'blue',
+      size: 'responsive',
+      label: 'pay',
+      layout: 'horizontal',
+      fundingicons: false,
+    },
 
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
     commit: true,
@@ -131,6 +137,10 @@ function setup(
       if (!canOpen()) {
         whenUnableToOpen();
       }
+    },
+
+    funding: {
+      disallowed: [window.paypal.FUNDING.CREDIT],
     },
 
     // This function is called when user clicks the PayPal button.
