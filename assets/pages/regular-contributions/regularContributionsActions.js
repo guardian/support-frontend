@@ -1,9 +1,11 @@
 // @flow
 
 // ----- Imports ----- //
-
 import type { PaymentMethod } from 'helpers/contributions';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { State } from './regularContributionsReducer';
 
 
 // ----- Types ----- //
@@ -14,7 +16,8 @@ export type Action =
   | { type: 'CHECKOUT_ERROR', checkoutFailureReason: CheckoutFailureReason }
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
-  | { type: 'CREATING_CONTRIBUTOR' };
+  | { type: 'CREATING_CONTRIBUTOR' }
+  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse };
 
 // ----- Actions ----- //
 
@@ -51,4 +54,5 @@ export {
   setPayPalHasLoaded,
   creatingContributor,
   setGuestAccountCreationToken,
+  checkIfEmailHasPassword,
 };

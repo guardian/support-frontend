@@ -70,7 +70,7 @@ function mapStateToProps(state: State) {
 
 }
 
-function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | CheckoutAction>) {
+function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | CheckoutAction | >) {
 
   return {
     stateUpdate: (value: UsState | CaState) => {
@@ -88,6 +88,9 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | Checkou
     setEmail: (email: string) => {
       dispatch(setEmail(email));
     },
+    checkIfEmailHasPassword: (email: string) => {
+      dispatch(checkIfEmailHasPassword(email));
+    }
   };
 }
 
@@ -166,7 +169,8 @@ function NameForm(props: PropTypes) {
             value={props.email.value}
             labelText="Email"
             placeholder="Email"
-            onChange={props.setEmail}
+            onInput={props.setEmail}
+            onChange={props.checkIfEmailHasPassword}
             modifierClasses={['email']}
             showError={shouldShowError(props.email)}
             errorMessage="Please enter a valid email address."
@@ -181,7 +185,7 @@ function NameForm(props: PropTypes) {
         labelText="First name"
         placeholder="First name"
         value={props.firstName.value}
-        onChange={props.setFirstName}
+        onInput={props.setFirstName}
         modifierClasses={['first-name']}
         showError={shouldShowError(props.firstName)}
         errorMessage="Please enter a first name."
@@ -192,7 +196,7 @@ function NameForm(props: PropTypes) {
         labelText="Last name"
         placeholder="Last name"
         value={props.lastName.value}
-        onChange={props.setLastName}
+        onInput={props.setLastName}
         modifierClasses={['last-name']}
         showError={shouldShowError(props.lastName)}
         errorMessage="Please enter a last name."
