@@ -33,7 +33,8 @@ import {
   maxTwoDecimals,
 } from 'helpers/formValidation';
 import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
@@ -166,6 +167,7 @@ function onSubmit(props: PropTypes): Event => void {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
+    const componentId = `${props.paymentMethod}-${props.contributionType}-submit`;
 
     if (checkoutFormShouldSubmit(
       props.contributionType,
@@ -173,7 +175,16 @@ function onSubmit(props: PropTypes): Event => void {
       props.userTypeFromIdentityResponse,
       event.target,
     )) {
+      trackCheckoutSubmitAttempt(componentId, 'allowed');
       formHandlers[props.contributionType][props.paymentMethod](props);
+    } else if (canContributeWithoutSigningIn(
+      props.contributionType,
+      props.isSignedIn,
+      props.userTypeFromIdentityResponse,
+    )) {
+      trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
+    } else {
+      trackCheckoutSubmitAttempt(componentId, 'blocked-because-sign-in-required');
     }
   };
 }
