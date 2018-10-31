@@ -1,9 +1,11 @@
 package com.gu.acquisition.services
 
+import cats.implicits._
 import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import okhttp3.OkHttpClient
 import ophan.thrift.event._
 import org.scalatest.{Matchers, WordSpecLike}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class OphanServiceSpec extends WordSpecLike with Matchers {
 

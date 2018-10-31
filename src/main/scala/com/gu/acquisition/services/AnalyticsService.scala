@@ -3,7 +3,6 @@ package com.gu.acquisition.services
 import java.io.IOException
 
 import cats.data.EitherT
-import cats.instances._
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.errors.AnalyticsServiceError.{BuildError, NetworkFailure, ResponseUnsuccessful}
@@ -16,7 +15,7 @@ import scala.util.control.NonFatal
 
 private [acquisition] abstract class AnalyticsService(implicit client: OkHttpClient) {
 
-  protected def buildRequest(submission: AcquisitionSubmission): Either[BuildError, RequestData]
+  protected def buildRequest(submission: AcquisitionSubmission)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestData]
 
   private def executeRequest(data: RequestData): EitherT[Future, AnalyticsServiceError, AcquisitionSubmission] = {
 
@@ -46,14 +45,16 @@ private [acquisition] abstract class AnalyticsService(implicit client: OkHttpCli
     EitherT(p.future)
   }
 
-  def submit[A : AcquisitionSubmissionBuilder](a: A)(
-    implicit ec: ExecutionContext): EitherT[Future, AnalyticsServiceError, AcquisitionSubmission] = {
+  def submit[A : AcquisitionSubmissionBuilder](a: A)(implicit ec: ExecutionContext): EitherT[Future, AnalyticsServiceError, AcquisitionSubmission] = {
 
-    import cats.instances.future._
-    import cats.syntax.either._
     import AcquisitionSubmissionBuilder.ops._
+    import cats.instances.future._
 
-    a.asAcquisitionSubmission.flatMap(buildRequest).toEitherT.flatMap(executeRequest)
+    for {
+      submission <- EitherT.fromEither(a.asAcquisitionSubmission)
+      request <- buildRequest(submission)
+      result <- executeRequest(request)
+    } yield result
   }
 
 }
