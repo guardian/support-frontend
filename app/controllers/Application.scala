@@ -1,23 +1,21 @@
 package controllers
 
-import java.security.SecureRandom
-
 import actions.CustomActionBuilders
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.identity.play.IdUser
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import config.StringsConfig
+import monitoring.SafeLogger
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck
 import utils.RequestCountry._
 
 import scala.concurrent.{ExecutionContext, Future}
-import monitoring.SafeLogger
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -149,4 +147,5 @@ class Application(
     request =>
       Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
+
 }

@@ -4,8 +4,15 @@
 
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
-import { type Amount, logInvalidCombination, type Contrib, type PaymentMethod, type PaymentMatrix } from 'helpers/contributions';
+import {
+  type Amount,
+  logInvalidCombination,
+  type Contrib,
+  type PaymentMethod,
+  type PaymentMatrix,
+} from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
@@ -32,6 +39,8 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
 import * as cookie from 'helpers/cookie';
 import {
   type State,
@@ -48,7 +57,7 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [Contrib]: {[PaymentMethod]: ThirdPartyPaymentLibrary}} }
+  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
@@ -61,7 +70,8 @@ export type Action =
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
-  | { type: 'PAYMENT_SUCCESS' };
+  | { type: 'PAYMENT_SUCCESS' }
+  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse };
 
 
 const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action => {
@@ -137,6 +147,50 @@ const setThirdPartyPaymentLibrary =
   });
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
+
+const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): Action => ({
+  type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
+  userTypeFromIdentityResponse,
+});
+
+const togglePayPalButton = () =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const shouldEnable = checkoutFormShouldSubmit(
+      state.page.form.contributionType,
+      state.page.user.isSignedIn,
+      state.page.form.userTypeFromIdentityResponse,
+      // TODO: use the actual form state rather than re-fetching from DOM
+      getForm('form--contribution'),
+    );
+    if (shouldEnable && window.enablePayPalButton) {
+      window.enablePayPalButton();
+    } else if (window.disablePayPalButton) {
+      window.disablePayPalButton();
+    }
+  };
+
+function setValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {
+  return (dispatch: Function): void => {
+    dispatch(setStateValue(value));
+    dispatch(togglePayPalButton());
+  };
+}
+
+const checkIfEmailHasPassword = (email: string) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const { csrf } = state.page;
+    const { isSignedIn } = state.page.user;
+
+    getUserTypeFromIdentity(
+      email,
+      isSignedIn,
+      csrf,
+      (userType: UserTypeFromIdentityResponse) =>
+        dispatch(setValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
+    );
+  };
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
@@ -278,7 +332,7 @@ const setupRecurringPayPalPayment = (
 
     fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
       .then(response => (response.ok ? response.json() : null))
-      .then((token: {token: string} | null) => {
+      .then((token: { token: string } | null) => {
         if (token) {
           resolve(token.token);
         } else {
@@ -327,16 +381,24 @@ const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, Paym
     Stripe: (dispatch: Dispatch<Action>, state: State, paymentAuthorisation: PaymentAuthorisation): void => {
       dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
     },
-    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
-    None: () => { logInvalidCombination('ONE_OFF', 'None'); },
+    DirectDebit: () => {
+      logInvalidCombination('ONE_OFF', 'DirectDebit');
+    },
+    None: () => {
+      logInvalidCombination('ONE_OFF', 'None');
+    },
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
-    None: () => { logInvalidCombination('ANNUAL', 'None'); },
+    None: () => {
+      logInvalidCombination('ANNUAL', 'None');
+    },
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
-    None: () => { logInvalidCombination('MONTHLY', 'None'); },
+    None: () => {
+      logInvalidCombination('MONTHLY', 'None');
+    },
   },
 };
 
@@ -376,4 +438,7 @@ export {
   setPayPalHasLoaded,
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
+  checkIfEmailHasPassword,
+  togglePayPalButton,
+  setValueAndTogglePayPal,
 };

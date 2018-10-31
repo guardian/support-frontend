@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
 import { amounts, parseContrib, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -11,14 +11,15 @@ import { type CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
+import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
 import * as storage from 'helpers/storage';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { type Action } from './contributionsLandingActions';
-import type { State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
+import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 
 // ----- Types ----- //
@@ -66,6 +67,7 @@ type FormState = {
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 };
 
 type PageState = {
@@ -141,6 +143,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     thankYouPageStage: 'thankYou',
     payPalHasLoaded: false,
     hasSeenDirectDebitThankYouCopy: false,
+    userTypeFromIdentityResponse: 'noRequestSent',
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -193,6 +196,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'SET_PASSWORD_ERROR':
         return { ...state, setPasswordData: { ...state.setPasswordData, passwordError: action.passwordError } };
+
+      case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
+        return { ...state, userTypeFromIdentityResponse: action.userTypeFromIdentityResponse };
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
