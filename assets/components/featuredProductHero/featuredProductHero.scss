@@ -127,11 +127,10 @@
   position: relative;
 
   @include mq($from: tablet) {
-    flex: 0 0 380px;
+    flex: 0 0 400px;
   }
 
   @include mq($from: desktop) {
-    flex: 0 0 460px;
     margin: 10px 0 0;
     padding-right: 0;
     padding-left: 21px;
@@ -151,6 +150,12 @@
   z-index: 10;
   bottom: 0;
   right: 0;
+  @include mq($from: tablet, $until: leftCol) {
+    left: -5%;
+  }
+  @include mq($from: leftCol) {
+    left: 5%;
+  }
   @include mq($until: tablet) {
     position: absolute;
   }
