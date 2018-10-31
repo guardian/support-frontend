@@ -46,6 +46,30 @@ const dpImage = (
     fallbackImgType="png"
   />);
 
+const weeklyImage = (
+  <GridPicture
+    sources={[
+        {
+          gridId: 'guardianWeeklyHeroDesktop',
+          srcSizes: [140, 500, 717],
+          imgType: 'png',
+          sizes: '90vw',
+          media: '(max-width: 739px)',
+        },
+        {
+          gridId: 'guardianWeeklyHeroDesktop',
+          srcSizes: [140, 500, 1000, 1080],
+          imgType: 'png',
+          sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+          media: '(min-width: 740px)',
+        },
+      ]}
+    fallback="guardianWeeklyHeroDesktop"
+    fallbackSize={500}
+    altText=""
+    fallbackImgType="png"
+  />);
+
 
 const getProducts = (
   subsLinks: SubsUrls,
@@ -72,7 +96,7 @@ const getProducts = (
     headingText: 'Guardian Weekly',
     bodyText: 'Our new, weekly magazine with free delivery worldwide',
     link: subsLinks.GuardianWeekly,
-    image: dpImage,
+    image: weeklyImage,
   },
 });
 
