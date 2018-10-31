@@ -2,6 +2,9 @@
 
 // ----- Imports ----- //
 import { type Contrib as ContributionType } from 'helpers/contributions';
+import type { Contrib } from 'helpers/contributions';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
@@ -45,13 +48,27 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
   return [];
 };
 
-export const formIsValid = (formClassName: string) => {
-  const form = document.querySelector(`.${formClassName}`);
-  if (form && form instanceof HTMLFormElement) {
-    return form.checkValidity();
+export const getForm: string => Object | null =
+  (formName: string) => document.querySelector(`.${formName}`);
+
+export const formElementIsValid = (formElement: Object | null) => {
+  if (formElement && formElement instanceof HTMLFormElement) {
+    return formElement.checkValidity();
   }
   return false;
 };
+
+export const formIsValid = (formName: string) => formElementIsValid(getForm(formName));
+
+export function checkoutFormShouldSubmit(
+  contributionType: Contrib,
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  form: Object | null,
+) {
+  return formElementIsValid(form)
+    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
+}
 
 export function getTitle(contributionType: ContributionType): string {
 

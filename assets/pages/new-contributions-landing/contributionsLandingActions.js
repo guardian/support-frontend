@@ -40,6 +40,7 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
 import * as cookie from 'helpers/cookie';
 import {
   type State,
@@ -152,6 +153,30 @@ const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeF
   userTypeFromIdentityResponse,
 });
 
+const togglePayPalButton = () =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const shouldEnable = checkoutFormShouldSubmit(
+      state.page.form.contributionType,
+      state.page.user.isSignedIn,
+      state.page.form.userTypeFromIdentityResponse,
+      // TODO: use the actual form state rather than re-fetching from DOM
+      getForm('form--contribution'),
+    );
+    if (shouldEnable && window.enablePayPalButton) {
+      window.enablePayPalButton();
+    } else if (window.disablePayPalButton) {
+      window.disablePayPalButton();
+    }
+  };
+
+function setValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {
+  return (dispatch: Function): void => {
+    dispatch(setStateValue(value));
+    dispatch(togglePayPalButton());
+  };
+}
+
 const checkIfEmailHasPassword = (email: string) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
@@ -162,7 +187,8 @@ const checkIfEmailHasPassword = (email: string) =>
       email,
       isSignedIn,
       csrf,
-      (userType: UserTypeFromIdentityResponse) => dispatch(setUserTypeFromIdentityResponse(userType)),
+      (userType: UserTypeFromIdentityResponse) =>
+        dispatch(setValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
     );
   };
 
@@ -413,5 +439,6 @@ export {
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
-  setUserTypeFromIdentityResponse,
+  togglePayPalButton,
+  setValueAndTogglePayPal,
 };

@@ -6,7 +6,7 @@
 import type { Contrib } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 // ---- Types ----- //
 
@@ -34,35 +34,39 @@ function buildUrl(returnUrl: ?string): string {
 
 export const MustSignIn = (props: PropTypes) => {
 
-  if (props.contributionType === 'ONE_OFF' || !props.checkoutFormHasBeenSubmitted || props.isSignedIn) {
+  if (
+    canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
+    || !props.checkoutFormHasBeenSubmitted
+  ) {
     return null;
   }
 
-  if (props.userTypeFromIdentityResponse === 'requestPending') {
-    return (
-      <a className="component-signout" href={buildUrl(props.returnUrl)}>
-        PENDING
-      </a>
-    );
+  switch (props.userTypeFromIdentityResponse) {
+    case 'requestPending':
+      return (
+        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+          PENDING
+        </a>
+      );
+
+    case 'requestFailed':
+      return (
+        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+          FAILED IDENTITY REQUEST
+        </a>
+      );
+
+    case 'current':
+      return (
+        <a className="component-signout" href={buildUrl(props.returnUrl)}>
+          YOU MUST SIGN IN
+        </a>
+      );
+
+    default:
+      return null;
   }
 
-  if (props.userTypeFromIdentityResponse === 'requestFailed') {
-    return (
-      <a className="component-signout" href={buildUrl(props.returnUrl)}>
-        FAILED IDENTITY REQUEST
-      </a>
-    );
-  }
-
-  if (props.userTypeFromIdentityResponse === 'current') {
-    return (
-      <a className="component-signout" href={buildUrl(props.returnUrl)}>
-        YOU MUST SIGN IN
-      </a>
-    );
-  }
-
-  return null;
 };
 
 

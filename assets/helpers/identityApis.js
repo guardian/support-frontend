@@ -7,6 +7,7 @@ import { routes } from 'helpers/routes';
 import { fetchJson } from 'helpers/fetch';
 import { checkEmail } from 'helpers/formValidation';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { Contrib } from 'helpers/contributions';
 
 // ----- Types     ----- //
 type UserType = 'new' | 'guest' | 'current';
@@ -57,4 +58,16 @@ function getUserTypeFromIdentity(
     });
 }
 
-export { getUserTypeFromIdentity };
+function canContributeWithoutSigningIn(
+  contributionType: Contrib,
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+) {
+  return contributionType === 'ONE_OFF'
+    || isSignedIn
+    || userTypeFromIdentityResponse === 'guest'
+    || userTypeFromIdentityResponse === 'new';
+}
+
+
+export { getUserTypeFromIdentity, canContributeWithoutSigningIn };
