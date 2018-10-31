@@ -49,6 +49,7 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  setFormIsValid,
 } from '../contributionsLandingActions';
 
 
@@ -73,6 +74,8 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   isSignedIn: boolean,
+  setFormIsValid: boolean => void,
+  formIsValid: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -95,6 +98,7 @@ const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   isSignedIn: state.page.user.isSignedIn,
+  formIsValid: state.page.form.formIsValid,
 });
 
 
@@ -104,6 +108,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setFormIsValid: (isValid) => { dispatch(setFormIsValid(isValid)); },
 });
 
 // ----- Functions ----- //
@@ -183,6 +188,7 @@ function onSubmit(props: PropTypes): Event => void {
       } else {
         trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${props.userTypeFromIdentityResponse}`);
       }
+      props.setFormIsValid(true);
       formHandlers[props.contributionType][props.paymentMethod](props);
     } else if (!formElementIsValid(event.target)) {
       trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
@@ -192,6 +198,8 @@ function onSubmit(props: PropTypes): Event => void {
       props.userTypeFromIdentityResponse,
     )) {
       trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${props.userTypeFromIdentityResponse}`);
+    } else {
+      props.setFormIsValid(false);
     }
   };
 }
@@ -199,12 +207,15 @@ function onSubmit(props: PropTypes): Event => void {
 // ----- Render ----- //
 
 function ContributionForm(props: PropTypes) {
-
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
     && maxTwoDecimals(input);
+
+  const invalidFormErrorMessageOnMobile = (
+    <PaymentFailureMessage classModifiers={['invalid_form_mobile']} errorHeading="Invalid fields" checkoutFailureReason="invalid_form_mobile" />
+  );
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
@@ -215,6 +226,7 @@ function ContributionForm(props: PropTypes) {
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
       <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
+      {!props.formIsValid ? invalidFormErrorMessageOnMobile : null}
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
