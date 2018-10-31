@@ -26,8 +26,9 @@ type PropTypes = {|
 // Build signout URL from given return URL or current location.
 function buildUrl(email: string): string {
   const encodedReturn = encodeURIComponent(window.location);
+  const encodedEmail = encodeURIComponent(email);
 
-  return `https://profile.${getBaseDomain()}/signin?returnUrl=${encodedReturn}&email=${email}`;
+  return `https://profile.${getBaseDomain()}/signin?returnUrl=${encodedReturn}&email=${encodedEmail}`;
 
 }
 
