@@ -32,7 +32,7 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
+import { checkoutFormShouldSubmit, formElementIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
@@ -168,6 +168,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
+    console.log('onSubmit');
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     const componentId = `${props.paymentMethod}-${props.contributionType}-submit`;
@@ -178,13 +179,21 @@ function onSubmit(props: PropTypes): Event => void {
       props.userTypeFromIdentityResponse,
       event.target,
     )) {
-      trackCheckoutSubmitAttempt(componentId, 'allowed');
+      trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${props.userTypeFromIdentityResponse}`);
       formHandlers[props.contributionType][props.paymentMethod](props);
-    } else if (props.userTypeFromIdentityResponse === 'current' && props.contributionType !== 'ONE_OFF') {
-      trackCheckoutSubmitAttempt(componentId, 'blocked-because-sign-in-required');
-    } else {
+    } else if (!formElementIsValid(event.target)) {
       trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
-      // add user type
+    } else if (!canContributeWithoutSigningIn(
+      props.contributionType,
+      props.isSignedIn,
+      props.userTypeFromIdentityResponse,
+    )) {
+      trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${props.userTypeFromIdentityResponse}`)
+    } else {
+      console.log('ha');
+      console.log(props.contributionType);
+      console.log(props.isSignedIn);
+      console.log(props.userTypeFromIdentityResponse);
     }
   };
 }
