@@ -8,7 +8,6 @@ import { fetchJson } from 'helpers/fetch';
 import { checkEmail } from 'helpers/formValidation';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Contrib } from 'helpers/contributions';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 
 // ----- Types     ----- //
 type UserType = 'new' | 'guest' | 'current';

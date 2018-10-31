@@ -6,7 +6,7 @@
 import type { Contrib } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 // ---- Types ----- //
 
@@ -34,7 +34,10 @@ function buildUrl(returnUrl: ?string): string {
 
 export const MustSignIn = (props: PropTypes) => {
 
-  if (props.contributionType === 'ONE_OFF' || !props.checkoutFormHasBeenSubmitted || props.isSignedIn) {
+  if (
+    canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
+    || !props.checkoutFormHasBeenSubmitted
+  ) {
     return null;
   }
 
