@@ -19,7 +19,7 @@ import IndependentJournalismSection from './components/independentJournalismSect
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
 import promotionPopUpReducer from './components/promotionPopUpReducer';
-import SubscriptionFaq from '../../components/subscriptionFaq/subscriptionFaq';
+import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 
 // ----- Redux Store ----- //

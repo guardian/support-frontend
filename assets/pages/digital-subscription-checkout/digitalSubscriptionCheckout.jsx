@@ -16,8 +16,8 @@ import CustomerService from 'components/customerService/customerService';
 
 import reducer from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
-import SubscriptionTermsPrivacy from '../../components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-import SubscriptionFaq from '../../components/subscriptionFaq/subscriptionFaq';
+import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
+import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 
 // ----- Redux Store ----- //
