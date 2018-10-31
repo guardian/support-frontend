@@ -47,7 +47,6 @@ import {
   type UserFormData,
   type ThankYouPageStage,
 } from './contributionsLandingReducer';
-import type { User } from 'helpers/user/userReducer';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib, paymentMethodToSelect: PaymentMethod }
@@ -171,7 +170,7 @@ const togglePayPalButton = () =>
     }
   };
 
-function setStateValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {
+function setValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {
   return (dispatch: Function): void => {
     dispatch(setStateValue(value));
     dispatch(togglePayPalButton());
@@ -189,7 +188,7 @@ const checkIfEmailHasPassword = (email: string) =>
       isSignedIn,
       csrf,
       (userType: UserTypeFromIdentityResponse) =>
-        dispatch(setStateValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
+        dispatch(setValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
     );
   };
 
@@ -441,5 +440,5 @@ export {
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
   togglePayPalButton,
-  setStateValueAndTogglePayPal,
+  setValueAndTogglePayPal,
 };
