@@ -27,10 +27,12 @@ import {
   emailRegexPattern,
 } from 'helpers/checkoutForm/checkoutForm';
 import {
-  type Action as CheckoutAction, setEmailShouldValidate,
+  type Action as CheckoutAction,
+  setEmailShouldValidate,
   setFirstNameShouldValidate,
   setLastNameShouldValidate,
 } from '../helpers/checkoutForm/checkoutFormActions';
+import { checkIfEmailHasPassword } from '../regularContributionsActions';
 import { type State } from '../regularContributionsReducer';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
 
@@ -46,6 +48,7 @@ type PropTypes = {|
   setFirstName: (string) => void,
   setLastName: (string) => void,
   setEmail: (string) => void,
+  checkIfEmailHasPassword: (string) => void,
   countryGroup: CountryGroupId,
   country: IsoCountry,
   isSignedIn: boolean,
@@ -70,7 +73,7 @@ function mapStateToProps(state: State) {
 
 }
 
-function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | CheckoutAction | >) {
+function mapDispatchToProps(dispatch: Function) {
 
   return {
     stateUpdate: (value: UsState | CaState) => {
@@ -90,7 +93,7 @@ function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction | Checkou
     },
     checkIfEmailHasPassword: (email: string) => {
       dispatch(checkIfEmailHasPassword(email));
-    }
+    },
   };
 }
 

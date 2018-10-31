@@ -3,8 +3,9 @@
 // ----- Imports ----- //
 import type { PaymentMethod } from 'helpers/contributions';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
+
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type { State } from './regularContributionsReducer';
 
 
@@ -44,6 +45,28 @@ function creatingContributor(): Action {
 function setGuestAccountCreationToken(guestAccountCreationToken: string): Action {
   return { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken };
 }
+
+function setUserTypeFromIdentityResponse(userTypeFromIdentityResponse: UserTypeFromIdentityResponse): Action {
+  return { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse };
+}
+
+const checkIfEmailHasPassword = (email: string) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const { csrf } = state.page;
+    const { isSignedIn } = state.page.user;
+
+    getUserTypeFromIdentity(
+      email,
+      isSignedIn,
+      csrf,
+      (userType: UserTypeFromIdentityResponse) => {
+        console.log("about to dispatch");
+        dispatch(setUserTypeFromIdentityResponse(userType));
+      },
+    );
+  };
+
 
 // ----- Exports ----- //
 

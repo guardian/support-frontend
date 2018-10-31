@@ -23,6 +23,7 @@ import MarketingConsentContainer from './components/marketingConsentContainer';
 import reducer from './regularContributionsReducer';
 import FormFields, { formClassName, setShouldValidateFunctions } from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
+import { checkIfEmailHasPassword } from './regularContributionsActions';
 
 // ----- Page Startup ----- //
 
@@ -37,6 +38,9 @@ const store = pageInit(reducer(
 ), true);
 
 user.init(store.dispatch);
+
+const state = store.getState();
+store.dispatch(checkIfEmailHasPassword(state.page.user.email));
 
 const Loading = () => <div>Loading...</div>;
 
