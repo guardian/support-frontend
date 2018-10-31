@@ -75,7 +75,7 @@ export function checkoutFormShouldSubmit(
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   form: Object | string,
 ) {
-  return formIsValid(form) && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
+  return formIsValid(form) && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
 }
 
 export function getTitle(contributionType: ContributionType): string {

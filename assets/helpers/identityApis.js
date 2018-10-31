@@ -70,12 +70,5 @@ function canContributeWithoutSigningIn(
     || userTypeFromIdentityResponse === 'new';
 }
 
-function formShouldSubmit(
-  contributionType: Contrib,
-  isSignedIn: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  form: Object | string) {
-  return formIsValid(form) && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
-}
 
 export { getUserTypeFromIdentity, canContributeWithoutSigningIn };

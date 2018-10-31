@@ -165,10 +165,8 @@ const togglePayPalButton = (userTypeFromIdentityResponse?: UserTypeFromIdentityR
       'form--contribution',
     );
     if (shouldEnable && window.enablePayPalButton) {
-      console.log("enabling paypal");
       window.enablePayPalButton();
     } else if (window.disablePayPalButton) {
-      console.log("disable paypal");
       window.disablePayPalButton();
     }
   };
