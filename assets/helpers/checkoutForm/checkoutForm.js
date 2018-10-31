@@ -48,31 +48,27 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
   return [];
 };
 
+export const getForm: string => Object | null =
+  (formName: string) => document.querySelector(`.${formName}`);
+
 // Takes either a form element, or the HTML class of the form
-export const formIsValid = (form: Object | string) => {
-
-  let formElement;
-
-  if (typeof form === 'string') {
-    formElement = document.querySelector(`.${form}`);
-  } else {
-    formElement = form;
-  }
-
+export const formElementIsValid = (formElement: Object | null) => {
   if (formElement && formElement instanceof HTMLFormElement) {
     return formElement.checkValidity();
   }
-
   return false;
 };
+
+export const formIsValid = (formName: string) => formElementIsValid(getForm(formName));
 
 export function checkoutFormShouldSubmit(
   contributionType: Contrib,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  form: Object | string,
+  form: Object | null,
 ) {
-  return formIsValid(form) && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
+  return formElementIsValid(form)
+    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
 }
 
 export function getTitle(contributionType: ContributionType): string {

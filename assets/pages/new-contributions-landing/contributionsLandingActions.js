@@ -40,7 +40,7 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
+import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
 import * as cookie from 'helpers/cookie';
 import {
   type State,
@@ -161,7 +161,7 @@ const togglePayPalButton = () =>
       state.page.user.isSignedIn,
       state.page.form.userTypeFromIdentityResponse,
       // TODO: use the actual form state rather than re-fetching from DOM
-      'form--contribution',
+      getForm('form--contribution'),
     );
     if (shouldEnable && window.enablePayPalButton) {
       window.enablePayPalButton();

@@ -12,7 +12,7 @@ import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internat
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { hiddenIf } from 'helpers/utilities';
-import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
+import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
@@ -106,7 +106,7 @@ function ContributionSubmit(props: PropTypes) {
                 props.contributionType,
                 props.isSignedIn,
                 props.userTypeFromIdentityResponse,
-                formClassName,
+                getForm(formClassName),
               )
             }
             whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
