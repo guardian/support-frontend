@@ -51,7 +51,6 @@ type PropTypes = {|
   stateField: UsState | CaState,
   checkoutFormHasBeenSubmitted: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  checkoutFormHasBeenSubmitted: boolean,
   contributionType: Contrib,
 |};
 
