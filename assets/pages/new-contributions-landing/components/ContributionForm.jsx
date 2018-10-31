@@ -168,7 +168,6 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
-    console.log('onSubmit');
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     const componentId = `${props.paymentMethod}-${props.contributionType}-submit`;
@@ -189,11 +188,6 @@ function onSubmit(props: PropTypes): Event => void {
       props.userTypeFromIdentityResponse,
     )) {
       trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${props.userTypeFromIdentityResponse}`)
-    } else {
-      console.log('ha');
-      console.log(props.contributionType);
-      console.log(props.isSignedIn);
-      console.log(props.userTypeFromIdentityResponse);
     }
   };
 }
