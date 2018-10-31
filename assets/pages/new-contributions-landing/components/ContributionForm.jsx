@@ -128,8 +128,12 @@ function openStripePopup(props: PropTypes) {
 // Bizarrely, adding a type to this object means the type-checking on the
 // formHandlers is no longer accurate.
 // (Flow thinks it's OK when it's missing required properties).
+
 const formHandlersForRecurring = {
-  PayPal: () => { /* TODO PayPal recurring */ },
+  PayPal: () => {
+    // we don't get an onSubmit event for PayPal recurring, so there
+    // is no need to handle anything here
+  },
   Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
@@ -145,7 +149,6 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
         currency: props.currency,
         amount: getAmount(props),
         returnURL: payPalReturnUrl(props.countryGroupId),
-        // TODO: use new cancel url
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },

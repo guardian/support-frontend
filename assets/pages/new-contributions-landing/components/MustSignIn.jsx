@@ -7,11 +7,12 @@ import type { Contrib } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import AnimatedDots from 'components/spinners/animatedDots';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  returnUrl?: string,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   contributionType: Contrib,
@@ -22,9 +23,9 @@ type PropTypes = {|
 // ----- Functions ----- //
 
 // Build signout URL from given return URL or current location.
-function buildUrl(returnUrl: ?string): string {
+function buildUrl(): string {
 
-  const encodedReturn = encodeURIComponent(returnUrl || window.location);
+  const encodedReturn = encodeURIComponent(window.location);
 
   return `https://profile.${getBaseDomain()}/signin?returnUrl=${encodedReturn}`;
 
@@ -44,22 +45,22 @@ export const MustSignIn = (props: PropTypes) => {
   switch (props.userTypeFromIdentityResponse) {
     case 'requestPending':
       return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
-          PENDING
-        </a>
+        <div className="form__error">
+          <AnimatedDots />
+        </div>
       );
 
     case 'requestFailed':
       return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
-          FAILED IDENTITY REQUEST
-        </a>
+        <div className="form__error">
+          There was an unexpected error. Please refresh the page and try again
+        </div>
       );
 
     case 'current':
       return (
-        <a className="component-signout" href={buildUrl(props.returnUrl)}>
-          YOU MUST SIGN IN
+        <a className={classNameWithModifiers('form__error', ['sign-in'])} href={buildUrl()}>
+            You already have a Guardian account. Please <span className="underline">sign in</span> or use another email address.
         </a>
       );
 
@@ -67,11 +68,4 @@ export const MustSignIn = (props: PropTypes) => {
       return null;
   }
 
-};
-
-
-// ----- Default Props ----- //
-
-MustSignIn.defaultProps = {
-  returnUrl: '',
 };

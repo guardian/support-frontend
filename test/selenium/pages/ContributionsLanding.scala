@@ -6,7 +6,9 @@ import selenium.util.{Browser, Config}
 
 case class ContributionsLanding(region: String)(implicit val webDriver: WebDriver) extends Page with Browser {
 
-  val url = s"${Config.supportFrontendUrl}/$region/contribute"
+  // While the new contributions landing page test is running,
+  // we just want Selenium to test the old page.
+  val url = s"${Config.supportFrontendUrl}/$region/contribute.old"
 
   private val contributeButton = id("qa-contribute-button")
 

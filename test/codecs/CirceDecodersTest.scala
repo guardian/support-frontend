@@ -226,7 +226,6 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
             "newPaymentFlow" -> ExperimentSwitch(
               name = "newPaymentFlow",
               description = "Redesign of the payment flow UI",
-              segment = Segment.Perc0,
               state = On
             )
           ),
