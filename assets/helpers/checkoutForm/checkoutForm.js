@@ -51,9 +51,6 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
 // Takes either a form element, or the HTML class of the form
 export const formIsValid = (form: Object | string) => {
 
-  // JONNY: i think it's fine to pass it as an object, as you are checking
-  // that it is an instance of HTMLFormElement below
-
   let formElement;
 
   if (typeof form === 'string') {

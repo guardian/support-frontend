@@ -161,11 +161,6 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   },
 };
 
-
-// A || B
-
-// !(A || B) = !A && !A
-
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
