@@ -37,10 +37,12 @@ function buildUrl(email: string): string {
 
 export const MustSignIn = (props: PropTypes) => {
 
+  const signInUrl = buildUrl(props.email);
+
   const onClick = (event) => {
     event.preventDefault();
     trackMustSignInClick();
-    window.location.assign(event.target.href);
+    window.location.assign(signInUrl);
   };
 
   if (
@@ -67,7 +69,7 @@ export const MustSignIn = (props: PropTypes) => {
 
     case 'current':
       return (
-        <a className={classNameWithModifiers('form__error', ['sign-in'])} href={buildUrl(props.email)} onClick={onClick}>
+        <a className={classNameWithModifiers('form__error', ['sign-in'])} href={signInUrl} onClick={onClick}>
             You already have a Guardian account. Please <span className="underline">sign in</span> or use another email address.
         </a>
       );
