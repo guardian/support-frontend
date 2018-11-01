@@ -9,6 +9,7 @@ import { getBaseDomain } from 'helpers/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 // ---- Types ----- //
 
@@ -38,6 +39,14 @@ function buildUrl(email: string): string {
 
 export const MustSignIn = (props: PropTypes) => {
 
+  const signInUrl = buildUrl(props.email);
+
+  const onClick = (event) => {
+    event.preventDefault();
+    trackComponentClick('must-sign-in-old-flow');
+    window.location.assign(signInUrl);
+  };
+
   if (
     canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
     || !props.checkoutFormHasBeenSubmitted
@@ -61,7 +70,7 @@ export const MustSignIn = (props: PropTypes) => {
 
     case 'current':
       return (
-        <a href={buildUrl(props.email)}>
+        <a href={signInUrl} onClick={onClick}>
           <div className={classNameWithModifiers('component-error-message', ['sign-in'])}>
             <div>
               You already have a Guardian account.

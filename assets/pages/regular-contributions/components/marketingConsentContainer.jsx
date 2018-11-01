@@ -8,6 +8,7 @@ import type { Dispatch } from 'redux';
 import { setGnmMarketing, type Action } from 'helpers/user/userActions';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type State } from '../regularContributionsReducer';
@@ -17,6 +18,7 @@ import { type State } from '../regularContributionsReducer';
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
     onClick: (marketingPreferencesOptIn: boolean, email: string, csrf: CsrfState) => {
+      trackComponentClick('marketing-permissions-old-flow');
       sendMarketingPreferencesToIdentity(
         marketingPreferencesOptIn,
         email,

@@ -10,6 +10,7 @@ import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
 import SvgNewsletters from 'components/svgs/newsletters';
 import SvgInformation from 'components/svgs/information';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { Dispatch } from 'redux';
 import type { Action } from '../../../helpers/user/userActions';
 import type { Csrf as CsrfState } from '../../../helpers/csrf/csrfReducer';
@@ -33,6 +34,7 @@ const mapStateToProps = state => ({
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
     onClick: (email: string, csrf: CsrfState) => {
+      trackComponentClick('marketing-permissions');
       sendMarketingPreferencesToIdentity(
         true,
         email,
