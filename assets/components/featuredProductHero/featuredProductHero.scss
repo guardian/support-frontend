@@ -47,7 +47,7 @@
 
   .component-featured-product-hero__countdownbox .component-flash-sale-countdown {
     margin: 0 -5px;
-    width: 130%;
+    width: 160%;
     display: inline-block;
     .component-countdown {
       background: darken(gu-colour(garnett-neutral-3), 5%);
@@ -68,7 +68,7 @@
     display: none;
   }
   
-  .component-grid-picture__image {
+  .component-grid-picture__image, .component-grid-image {
     width: 180px;
     display: block;
 
@@ -103,10 +103,10 @@
 .component-featured-product-hero__content {
   @extend .gu-content-margin;
 
-  display: flex;
-
   @include mq($from: tablet) {
     position: relative;
+    display: flex;
+    align-items: flex-end;
   }
 
   @include mq($from: desktop) {
@@ -126,8 +126,11 @@
   @extend .gu-content-margin;
   position: relative;
 
+  @include mq($from: tablet) {
+    flex: 0 0 400px;
+  }
+
   @include mq($from: desktop) {
-    flex: 0 460px;
     margin: 10px 0 0;
     padding-right: 0;
     padding-left: 21px;
@@ -143,10 +146,19 @@
 }
 
 .component-featured-product-hero__image {
-  position: absolute;
+  position: relative;
+  z-index: 10;
   bottom: 0;
   right: 0;
-  overflow: hidden;
+  @include mq($from: tablet, $until: leftCol) {
+    left: -5%;
+  }
+  @include mq($from: leftCol) {
+    left: 5%;
+  }
+  @include mq($until: tablet) {
+    position: absolute;
+  }
 }
 
 .component-featured-product-hero__title {
@@ -198,5 +210,5 @@
   @include with-colour(sport-garnett-media-main-1);
 }
 .component-featured-product-hero--guardian-weekly {
-  @include with-colour(opinion-garnett-main-1);
+  @include with-colour(opinion-garnett-media-main-1);
 }
