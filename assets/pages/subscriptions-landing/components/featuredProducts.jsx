@@ -9,12 +9,14 @@ import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import GridPicture from 'components/gridPicture/gridPicture';
+import GridImage from 'components/gridImage/gridImage';
 
 
 // ----- Types ----- //
 type Product = {|
   name: SubscriptionProduct,
   headingText: string,
+  subheadingText: string,
   bodyText: string,
   link: string,
   image: Node,
@@ -42,32 +44,17 @@ const dpImage = (
     ]}
     fallback="digitalPackFlashSaleDesktop"
     fallbackSize={500}
-    altText="ad-free, live and discover, and the daily edition"
+    altText=""
     fallbackImgType="png"
   />);
 
 const weeklyImage = (
-  <GridPicture
-    sources={[
-        {
-          gridId: 'guardianWeeklyHeroDesktop',
-          srcSizes: [140, 500, 717],
-          imgType: 'png',
-          sizes: '90vw',
-          media: '(max-width: 739px)',
-        },
-        {
-          gridId: 'guardianWeeklyHeroDesktop',
-          srcSizes: [140, 500, 1000, 1080],
-          imgType: 'png',
-          sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
-          media: '(min-width: 740px)',
-        },
-      ]}
-    fallback="guardianWeeklyHeroDesktop"
-    fallbackSize={500}
+  <GridImage
+    gridId="guardianWeeklyHeroDesktop"
+    srcSizes={[140, 500, 1000, 1080]}
+    sizes="(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, 60vw"
     altText=""
-    fallbackImgType="png"
+    imgType="png"
   />);
 
 
@@ -78,6 +65,7 @@ const getProducts = (
   DigitalPack: {
     name: 'DigitalPack',
     headingText: 'Digital Pack',
+    subheadingText: 'Screen time well spent',
     bodyText: (countryGroupId === 'GBPCountries') ?
       'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper' :
       'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper',
@@ -86,7 +74,8 @@ const getProducts = (
   },
   Paper: {
     name: 'Paper',
-    headingText: 'Print Subscription',
+    headingText: 'Paper subscription',
+    subheadingText: 'Enjoy every word for less',
     bodyText: 'Save on The Guardian and The Observer retail price all year round.',
     link: subsLinks.Paper,
     image: dpImage,
@@ -94,7 +83,8 @@ const getProducts = (
   GuardianWeekly: {
     name: 'GuardianWeekly',
     headingText: 'Guardian Weekly',
-    bodyText: 'Our new, weekly magazine with free delivery worldwide',
+    subheadingText: 'Open up your world view',
+    bodyText: 'Discover our essential new magazine with free worldwide delivery',
     link: subsLinks.GuardianWeekly,
     image: weeklyImage,
   },
