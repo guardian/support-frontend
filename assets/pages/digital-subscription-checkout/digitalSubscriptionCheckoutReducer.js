@@ -2,17 +2,27 @@
 
 // ----- Imports ----- //
 
+import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/page';
-
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type Action } from './digitalSubscriptionCheckoutActions';
+import { marketingConsentReducerFor, type State as MarketingConsentState } from "components/marketingConsent/marketingConsentReducer";
 
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou';
 
+
+type CheckoutState = {
+  stage: Stage,
+}
+
 type PageState = {
-  stage: Stage;
+  checkout: CheckoutState,
+  user: UserState,
+  marketingConsent: MarketingConsentState,
 };
 
 export type State = {
@@ -27,7 +37,7 @@ const initialState = {
   stage: 'checkout',
 };
 
-function reducer(state: PageState = initialState, action: Action): PageState {
+function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
 
   switch (action.type) {
 
@@ -41,7 +51,17 @@ function reducer(state: PageState = initialState, action: Action): PageState {
 
 }
 
+function initReducer(countryGroupId: CountryGroupId) {
+  const checkoutState = reducer;
+  const userState = createUserReducer(countryGroupId);
+  const marketingState = marketingConsentReducerFor('DIGITAL_SUBSCRIPTION_CHECKOUT');
+  return combineReducers({
+    checkout: checkoutState,
+    user: userState,
+    marketingConsent: marketingState,
+  });
+}
 
 // ----- Export ----- //
 
-export default reducer;
+export default initReducer;

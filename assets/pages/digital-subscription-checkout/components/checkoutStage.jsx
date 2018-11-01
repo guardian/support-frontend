@@ -17,13 +17,17 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
+import { type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 
 
 // ----- Types ----- //
 
 type PropTypes = {|
-  stage: Stage,
+  checkout: {
+    stage: Stage,
+  },
   countryGroupId: CountryGroupId,
+  marketingConsent: MarketingConsentState,
 |};
 
 
@@ -82,8 +86,9 @@ const heroesByCountry: ImagesByCountry = {
 function mapStateToProps(state: State): PropTypes {
 
   return {
-    stage: state.page.stage,
+    checkout: state.page.checkout,
     countryGroupId: state.common.internationalisation.countryGroupId,
+    marketingConsent: state.page.marketingConsent,
   };
 
 }
@@ -93,7 +98,7 @@ function mapStateToProps(state: State): PropTypes {
 
 function CheckoutStage(props: PropTypes) {
 
-  switch (props.stage) {
+  switch (props.checkout.stage) {
 
     case 'thankyou':
       return (
@@ -107,7 +112,10 @@ function CheckoutStage(props: PropTypes) {
           <HeadingBlock heading="Your Digital Pack subscription is now live">
             <p>Thank you for supporting our journalism</p>
           </HeadingBlock>
-          <ThankYouContent countryGroupId={props.countryGroupId} />
+          <ThankYouContent
+            countryGroupId={props.countryGroupId}
+            context="DIGITAL_SUBSCRIPTION_CHECKOUT"
+          />
           <ReturnSection />
         </div>
       );

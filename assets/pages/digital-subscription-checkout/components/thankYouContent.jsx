@@ -18,12 +18,14 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import SvgNewsletters from 'components/svgs/newsletters';
 import SvgInformation from 'components/svgs/information';
+import MarketingConsent from 'components/marketingConsent/marketingConsent';
 
 
 // ----- Types ----- //
 
 type PropTypes = {
-  countryGroupId: CountryGroupId;
+  countryGroupId: CountryGroupId,
+  context: string,
 };
 
 
@@ -39,7 +41,20 @@ function ThankYouContent(props: PropTypes) {
         </p>
       </LeftMarginSection>
       <AppsSection countryGroupId={props.countryGroupId} />
-      <EmailsSection />
+      <LeftMarginSection modifierClasses={['thank-you-emails']}>
+        <MarketingConsent
+          context={props.context}
+          checkboxLabelTitle="Would you like to receive news and offers from The Guardian, The Observer and Guardian Weekly?"
+          checkboxLabelCopy="As a valued subscriber, we'd like to keep you informed with regular emails and updates regarding news and offers from The Guardian, The Observer and Guardian Weekly. Opt in here if you would like to receive these messages from us."
+        />
+        <p className="thank-you-content__copy thank-you-content__copy--small">
+          <small>
+            <SvgInformation />
+            You can unsubscribe at any time by going to the <a className="thank-you-content__link" href={emailPreferencesUrl}>preference centre</a>
+          </small>
+        </p>
+        <SvgNewsletters />
+      </LeftMarginSection>
     </div>
   );
 
@@ -83,31 +98,6 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
         url={getDailyEditionUrl(props.countryGroupId)}
       />
-    </LeftMarginSection>
-  );
-
-}
-
-function EmailsSection() {
-
-  return (
-    <LeftMarginSection modifierClasses={['thank-you-emails']}>
-      <div className="thank-you-content__email-copy">
-        <h2 className="thank-you-content__heading">
-          Stay in the know
-        </h2>
-        <p className="thank-you-content__copy">
-          Opt in below to receive news and offers from The Guardian, The Observer
-          and Guardian Weekly on the ways to read and support our journalism.
-        </p>
-        <p className="thank-you-content__copy thank-you-content__copy--small">
-          <small>
-            <SvgInformation />
-            You can unsubscribe at any time by going to the <a className="thank-you-content__link" href={emailPreferencesUrl}>preference centre</a>
-          </small>
-        </p>
-      </div>
-      <SvgNewsletters />
     </LeftMarginSection>
   );
 

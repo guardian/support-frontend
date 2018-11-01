@@ -212,7 +212,9 @@ function getDigitalCheckout(
   params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
   params.set('startTrialButton', referringCta || '');
 
-  return `${subsUrl}/checkout?${params.toString()}`;
+  //TODO!!
+  //return `${subsUrl}/checkout?${params.toString()}`;
+  return `/${countryGroups[cgId].supportInternationalisationId.toLowerCase()}/subscribe/digital/checkout?${params.toString()}`
 }
 
 

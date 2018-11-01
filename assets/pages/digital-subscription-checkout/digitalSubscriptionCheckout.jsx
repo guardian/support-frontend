@@ -14,18 +14,19 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
 
-import reducer from './digitalSubscriptionCheckoutReducer';
+import initReducer from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
-
-
-// ----- Redux Store ----- //
-
-const store = pageInit(reducer);
 
 
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detect();
+
+
+// ----- Redux Store ----- //
+
+const store = pageInit(initReducer(countryGroupId));
+
 
 const reactElementId: {
   [CountryGroupId]: string,
@@ -45,7 +46,9 @@ const content = (
       header={<SimpleHeader />}
       footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
     >
-      <CheckoutStage />
+      <CheckoutStage
+        countryGroupId={countryGroupId}
+      />
     </Page>
   </Provider>
 );
