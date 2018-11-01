@@ -12,6 +12,7 @@ import { init as pageInit } from 'helpers/page/page';
 import Page from 'components/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import CustomerService from 'components/customerService/customerService';
+import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
@@ -54,7 +55,11 @@ const content = (
   <Provider store={store}>
     <Page
       header={<CountrySwitcherHeader />}
-      footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
+      footer={
+        <Footer>
+          <CustomerService selectedCountryGroup={countryGroupId} />
+          <SubscriptionFaq subscriptionProduct="DigitalPack" />
+        </Footer>}
     >
       <DigitalSubscriptionLandingHeader
         countryGroupId={countryGroupId}
