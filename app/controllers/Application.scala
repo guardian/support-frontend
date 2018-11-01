@@ -106,7 +106,7 @@ class Application(
     implicit val gd: GuardianDomain = guardianDomain
 
     val experiments = settings.switches.experiments
-    val npf = experiments.get("newPaymentFlow")
+    val npf = experiments.get("newFlow")
     if (npf.exists(_.isInVariant(participation))) {
       SafeLogger.info("SERVENEW: Serving new contribution landing page")
       request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(

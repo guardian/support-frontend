@@ -230,7 +230,7 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
   });
 };
 
-const getNewPaymentFlowTestParticipation = (settings: Settings): ?Participations => {
+const getNewFlowTestParticipation = (settings: Settings): ?Participations => {
   const npfVariant = cookie.get('gu.serverside.ab.test');
   if (isTestSwitchedOn(settings, 'newFlow') && npfVariant) {
     const variant: NewFlowTestVariant = npfVariant === 'Variant' ? 'newFlow' : 'control';
@@ -247,11 +247,11 @@ const init = (
   abTests: Tests = tests,
 ): Participations => {
   // this is to assign the correct variant while npf server side test runs
-  const newPaymentFlowParticipation: ?Participations = getNewPaymentFlowTestParticipation(settings);
+  const newFlowTestParticipation: ?Participations = getNewFlowTestParticipation(settings);
 
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
-  const participationsWithServerSideNPFVariant = { ...participations, ...newPaymentFlowParticipation };
+  const participationsWithServerSideNPFVariant = { ...participations, ...newFlowTestParticipation };
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   setLocalStorageParticipations(Object.assign({}, participationsWithServerSideNPFVariant, urlParticipations));
   trackABOphan(participationsWithServerSideNPFVariant, false);
