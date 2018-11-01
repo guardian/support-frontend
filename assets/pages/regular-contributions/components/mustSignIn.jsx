@@ -9,7 +9,6 @@ import { getBaseDomain } from 'helpers/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { trackMustSignInClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 // ---- Types ----- //
 
@@ -26,6 +25,7 @@ type PropTypes = {|
 
 // Build signout URL from given return URL or current location.
 function buildUrl(email: string): string {
+
   const encodedReturn = encodeURIComponent(window.location);
   const encodedEmail = encodeURIComponent(email);
 
@@ -35,13 +35,8 @@ function buildUrl(email: string): string {
 
 // ----- Component ----- //
 
-export const MustSignIn = (props: PropTypes) => {
 
-  const onClick = (event) => {
-    event.preventDefault();
-    trackMustSignInClick();
-    window.location.assign(event.target.href);
-  };
+export const MustSignIn = (props: PropTypes) => {
 
   if (
     canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
@@ -53,22 +48,26 @@ export const MustSignIn = (props: PropTypes) => {
   switch (props.userTypeFromIdentityResponse) {
     case 'requestPending':
       return (
-        <div className="form__error">
+        <div className={classNameWithModifiers('component-error-message', ['sign-in'])}>
           <AnimatedDots />
         </div>
       );
-
     case 'requestFailed':
       return (
-        <div className="form__error">
-          There was an unexpected error. Please refresh the page and try again
+        <div className={classNameWithModifiers('component-error-message', ['sign-in'])}>
+          There was an unexpected error. Please refresh the page and try again.
         </div>
       );
 
     case 'current':
       return (
-        <a className={classNameWithModifiers('form__error', ['sign-in'])} href={buildUrl(props.email)} onClick={onClick}>
-            You already have a Guardian account. Please <span className="underline">sign in</span> or use another email address.
+        <a href={buildUrl(props.email)}>
+          <div className={classNameWithModifiers('component-error-message', ['sign-in'])}>
+            <div>
+              You already have a Guardian account.
+              Please <span className="underline">sign in</span> or use another email address.
+            </div>
+          </div>
         </a>
       );
 

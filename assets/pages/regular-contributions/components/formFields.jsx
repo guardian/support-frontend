@@ -30,7 +30,7 @@ import { setCheckoutFormHasBeenSubmitted } from '../helpers/checkoutForm/checkou
 import { checkIfEmailHasPassword } from '../regularContributionsActions';
 import { type State } from '../regularContributionsReducer';
 import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
-import { MustSignIn } from '../../new-contributions-landing/components/MustSignIn';
+import { MustSignIn } from './mustSignIn';
 
 
 // ----- Types ----- //
@@ -182,12 +182,12 @@ function NameForm(props: PropTypes) {
               pattern={emailRegexPattern}
               required
             />
-            {/* TODO: style this properly */ }
             <MustSignIn
               contributionType={props.contributionType}
               isSignedIn={props.isSignedIn}
               userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
               checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+              email={props.email.value}
             />
           </div>
         ) : null

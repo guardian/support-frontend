@@ -116,6 +116,7 @@ function FormFields(props: PropTypes) {
         userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
         contributionType={props.contributionType}
         checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+        email={props.email}
       />
       <NewContributionTextInput
         id="contributionFirstName"

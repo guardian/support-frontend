@@ -36,6 +36,9 @@ import storeReferrer from 'helpers/tracking/awin';
 
 import { type Action } from './pageActions';
 
+if (process.env.NODE_ENV === 'DEV') {
+  import('preact/devtools');
+}
 
 // ----- Types ----- //
 
