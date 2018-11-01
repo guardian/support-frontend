@@ -20,3 +20,9 @@ export type Switches = {
 export type Settings = {
   switches: Switches,
 };
+
+export function isTestSwitchedOn(settings: Settings, testName: string) {
+  const { experiments } = settings.switches;
+  const test = experiments[testName];
+  return test && test.state && test.state === 'On';
+}
