@@ -99,6 +99,18 @@ class Application(
     )).withSettingsSurrogateKey
   }
 
+  def supportLanding2(): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    Ok(views.html.main(
+      title = "Support the Guardian",
+      mainId = "support-landing-page-2",
+      mainJsBundle = "supportLandingPage2.js",
+      mainStyleBundle = "supportLandingPageStyles2.css",
+      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
+      description = stringsConfig.supportLandingDescription
+    )).withSettingsSurrogateKey
+  }
+
   def contributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: Settings = settingsProvider.settings()
