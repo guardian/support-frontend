@@ -2,14 +2,19 @@ package com.gu.acquisition.services
 
 import java.util.UUID
 
+import cats.data.EitherT
+import cats.implicits._
 import com.gu.acquisition.model._
 import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
 import com.gu.acquisition.services.AnalyticsService.RequestData
 import com.gu.acquisition.services.GAService.clientIdPattern
+import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
+import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
 import com.typesafe.scalalogging.LazyLogging
 import okhttp3._
-import ophan.thrift.event.{AbTestInfo, Acquisition, Product}
+import ophan.thrift.event.{AbTestInfo, Acquisition, PrintOptions, Product}
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.matching.Regex
 
 private[services] object GAService {
@@ -22,14 +27,36 @@ private[services] class GAService(implicit client: OkHttpClient)
   private val gaPropertyId: String = "UA-51507017-5"
   private val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")
 
-  private[services] def buildBody(submission: AcquisitionSubmission): Either[BuildError, RequestBody] = {
-    buildPayload(submission).map{
-      payload =>
-        RequestBody.create(null, payload)
+  private[services] def buildBody(submission: AcquisitionSubmission)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestBody] = EitherT {
+    getAnnualisedValue(submission.acquisition)
+      .fold(
+        error => {
+          logger.warn(s"Couldn't retrieve annualised value for this acquisition: $error")
+          buildPayload(submission, 0) // We still want to record the acquisition even if we can't get the AV
+        },
+        value => buildPayload(submission, value)
+      ).map {
+      maybePayload =>
+        maybePayload.map { payload =>
+          logger.debug(s"GA payload: $payload")
+          RequestBody.create(null, payload)
+        }
     }
   }
 
-  private[services] def buildPayload(submission: AcquisitionSubmission, transactionId: Option[String] = None): Either[BuildError, String] = {
+  private def getAnnualisedValue(acquisition: Acquisition)(implicit ec: ExecutionContext) = {
+    val acquisitionModel = AcquisitionModel(acquisition.amount,
+      acquisition.product.originalName,
+      acquisition.currency,
+      acquisition.paymentFrequency.originalName,
+      acquisition.paymentProvider.map(_.toString),
+      acquisition.printOptions.map(printOptions => PrintOptionsModel(printOptions.product.originalName, printOptions.deliveryCountryCode))
+    )
+
+    EitherT(AnnualisedValueService.getAsyncAV(acquisitionModel, "ophan"))
+  }
+
+  private[services] def buildPayload(submission: AcquisitionSubmission, annualisedValue: Double, transactionId: Option[String] = None): Either[BuildError, String] = {
     import submission._
     val tid = transactionId.getOrElse(UUID.randomUUID().toString)
     val goExp = buildOptimizeTestsPayload(acquisition.abTests)
@@ -69,9 +96,10 @@ private[services] class GAService(implicit client: OkHttpClient)
           "pa" -> "purchase", //This is a purchase
           "pr1nm" -> productName, // Product Name
           "pr1ca" -> conversionCategory.description, // Product category
-          "pr1pr" -> acquisition.amount.toString, // Product Price
+          "pr1pr" -> annualisedValue, // Product Price - we are tracking the annualised value here as this is what goes into the revenue metric
           "pr1qt" -> "1", // Product Quantity
           "pr1cc" -> acquisition.promoCode.getOrElse(""), // Product coupon code.
+          "pr1cm15" -> acquisition.amount.toString, // Custom metric 15 - purchasePrice
           "cu" -> acquisition.currency.toString // Currency
         )
 
@@ -128,7 +156,7 @@ private[services] class GAService(implicit client: OkHttpClient)
     }.getOrElse("")
 
 
-  override def buildRequest(submission: AcquisitionSubmission): Either[BuildError, RequestData] = {
+  override def buildRequest(submission: AcquisitionSubmission)(implicit ec: ExecutionContext): EitherT[Future, BuildError, RequestData] = {
 
     val url = endpoint.newBuilder()
       .addPathSegment("collect")
