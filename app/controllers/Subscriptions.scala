@@ -141,6 +141,6 @@ class Subscriptions(
     s"${supportUrl}/${countryCode}/subscribe/digital"
 
   def buildCanonicalWeeklySubscriptionLink(countryCode: String): String =
-    s"${supportUrl}/${countryCode}/subscribe/guardian-weekly"
+    s"${supportUrl}/${countryCode}/subscribe/weekly"
 
 }
