@@ -4,12 +4,12 @@ import cats.data.EitherT
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
-import okhttp3.OkHttpClient
+import okhttp3.{HttpUrl, OkHttpClient}
 
 import scala.concurrent.ExecutionContext
 
-class DefaultAcquisitionService(implicit client: OkHttpClient) extends AcquisitionService {
-  private val ophanService = new OphanService()
+class DefaultAcquisitionService(ophanEndpoint: Option[HttpUrl] = None)(implicit client: OkHttpClient) extends AcquisitionService {
+  private val ophanService = new OphanService(ophanEndpoint)
   private val gAService = new GAService()
   override def submit[A: AcquisitionSubmissionBuilder](a: A)(implicit ec: ExecutionContext) = {
     val ov = ophanService.submit(a).value

@@ -13,10 +13,10 @@ import scala.concurrent.{ExecutionContext, Future}
   * Build an acquisition submission, and submit it to Ophan.
   * Uses OkHttp for executing the Http request.
   */
-private [acquisition] class OphanService(implicit client: OkHttpClient)
+private [acquisition] class OphanService(endpointOverride: Option[HttpUrl] = None)(implicit client: OkHttpClient)
   extends AnalyticsService {
 
-  private val endpoint: HttpUrl = HttpUrl.parse("https://ophan.theguardian.com")
+  private val endpoint: HttpUrl = endpointOverride getOrElse HttpUrl.parse("https://ophan.theguardian.com")
 
   private def cookieValue(visitId: Option[String], browserId: Option[String]): String =
     List(visitId.map(("vsid", _)), browserId.map(("bwid", _))).flatten
