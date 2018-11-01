@@ -8,6 +8,7 @@ import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import HeadingBlock from 'components/headingBlock/headingBlock';
+import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { statelessInit as pageInit } from 'helpers/page/page';
@@ -43,8 +44,10 @@ const content = (
     footer={<Footer />}
   >
     <div className="weekly-subscription-landing-header">
-
-      <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news, analysis and features in one magazine, curated to give you a clearer global perspective." />
+      <LeftMarginSection>
+        <img src="https://media.guim.co.uk/47b4e8b7c78db718ea8f707ac245317698494cde/0_0_5246_3934/2000.jpg" />
+        <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news, analysis and features in one magazine, curated to give you a clearer global perspective." />
+      </LeftMarginSection>
     </div>
   </Page>
 );

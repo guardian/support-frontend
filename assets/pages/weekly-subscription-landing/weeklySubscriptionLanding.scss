@@ -8,3 +8,26 @@
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
 @import '~components/headingBlock/headingBlock';
+@import '~components/leftMarginSection/leftMarginSection';
+
+.weekly-subscription-landing-header {
+  background: #C5C4C4;
+  margin-bottom: 50px;
+  overflow: hidden;
+}
+
+.weekly-subscription-landing-header img {
+  width: 50%;
+  display: block;
+  animation: gw-dance .8s infinite alternate ease-in-out;
+
+}
+
+@keyframes gw-dance {
+  from, 49% { transform-origin: -50% 100%; }
+  50%, 75%, to { transform-origin: 150% 100%; }
+  25% { transform: rotate(-10deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(10deg); }
+}
+

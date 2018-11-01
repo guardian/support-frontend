@@ -4,8 +4,6 @@
 
 import React, { type Node } from 'react';
 
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-
 
 // ----- Types ----- //
 
@@ -23,7 +21,7 @@ function HeadingBlock(props: PropTypes) {
   return (
     <div className="component-heading-block">
       <div className="component-heading-block__content">
-          {props.overheading
+        {props.overheading
           ?
             (
               <div>
@@ -34,12 +32,12 @@ function HeadingBlock(props: PropTypes) {
           :
             (<div className="component-heading-block__heading"><h1 className="component-heading-block__maxwidth">{props.heading}</h1></div>)
         }
-          {props.children &&
+        {props.children.length > 0 &&
             <div className="component-heading-block__banner">
               {props.children}
             </div>
           }
-        </div>
+      </div>
     </div>
   );
 
