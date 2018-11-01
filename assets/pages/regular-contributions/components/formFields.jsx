@@ -188,6 +188,7 @@ function NameForm(props: PropTypes) {
               isSignedIn={props.isSignedIn}
               userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
               checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+              email={props.email.value}
             />
           </div>
         ) : null
