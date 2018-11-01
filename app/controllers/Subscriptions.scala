@@ -91,6 +91,17 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
+  def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/guardian-weekly")
+
+  def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    val title = "Support the Guardian | THe Guardian Weekly"
+    val id = "weekly-landing-page-" + countryCode
+    val js = "weeklyLandingPage.js"
+    val css = "weeklyLandingPageStyles.css"
+    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+  }
+
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
   def displayForm(countryCode: String): Action[AnyContent] =

@@ -79,6 +79,9 @@ GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscript
 GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
 
+GET  /subscribe/guardian-weekly                            controllers.Subscriptions.weeklyGeoRedirect()
+GET  /$country<(uk|us|au|int)>/subscribe/guardian-weekly   controllers.Subscriptions.weekly(country: String)
+
 # ----- Authentication ----- #
 
 GET  /login                                         controllers.Login.login
