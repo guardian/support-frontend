@@ -233,7 +233,7 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
 const getNewPaymentFlowTestParticipation = (settings: Settings): ?Participations => {
   const npfVariant = cookie.get('gu.serverside.ab.test');
   const { newPaymentFlow: serverSideTest } = settings.switches.experiments;
-  if (serverSideTest === 'On' && npfVariant) {
+  if (serverSideTest.state === 'On' && npfVariant) {
     const variant: NewFlowTestVariant = npfVariant === 'Variant' ? 'newFlow' : 'control';
     return { newFlow: variant };
   }
