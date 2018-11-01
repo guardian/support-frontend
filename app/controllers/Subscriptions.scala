@@ -39,8 +39,16 @@ class Subscriptions(
   }
 
   def geoRedirectAllMarkets(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectMarket = request.fastlyCountry.map(_.id).getOrElse("int")
-    Redirect(s"/$redirectMarket/$path", request.queryString, status = FOUND)
+    val redirectUrl = request.fastlyCountry match {
+      case Some(UK) => s"/uk/$path"
+      case Some(US) => s"/us/$path"
+      case Some(Australia) => s"/au/$path"
+      case Some(Europe) => s"/eu/$path"
+      case Some(Canada) => s"/ca/$path"
+      case Some(NewZealand) => s"/nz/$path"
+      case _ => s"/int/$path"
+    }
+    Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
   def legacyRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
