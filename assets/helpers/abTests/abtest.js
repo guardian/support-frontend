@@ -12,7 +12,7 @@ import * as storage from 'helpers/storage';
 import { type Settings, isTestSwitchedOn } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { tests, type NewFlowTestVariant } from './abtestDefinitions';
+import { tests } from './abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -233,7 +233,7 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
 const getNewFlowTestParticipation = (settings: Settings): ?Participations => {
   const npfVariant = cookie.get('gu.serverside.ab.test');
   if (isTestSwitchedOn(settings, 'newFlow') && npfVariant) {
-    const variant: NewFlowTestVariant = npfVariant === 'Variant' ? 'newFlow' : 'control';
+    const variant = npfVariant === 'Variant' ? 'newFlow' : 'control';
     return { newFlow: variant };
   }
 

@@ -4,7 +4,6 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 
 export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
-export type NewFlowTestVariant = 'control' | 'newFlow';
 
 export const tests: Tests = {
   annualContributionsRoundThree: {
