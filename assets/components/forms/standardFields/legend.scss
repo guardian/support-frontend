@@ -1,4 +1,4 @@
-@import '../standardFields/formFields';
+@import './formFields';
 
 .component-legend {
   @include label;

@@ -5,17 +5,25 @@
 import React from 'react';
 
 
+// ----- Types ----- //
+
+type AugmentedProps<Props> = Props & {
+  message: string | null,
+};
+
+type In<Props> = React$ComponentType<Props>;
+type Out<Props> = React$ComponentType<AugmentedProps<Props>>;
+
+
 // ----- Component ----- //
 
-function withError(message: ?string) {
-  return function HOC<Props: { id: string }>(Component: React$ComponentType<Props>): React$ComponentType<Props> {
-    return (props: Props) => (
-      <div>
-        <Component {...props} />
-        {message ? <label className="component-error" htmlFor={props.id}>{message}</label> : null}
-      </div>
-    );
-  };
+function withError<Props: { id: string }>(Component: In<Props>): Out<Props> {
+  return ({ message, ...props }: AugmentedProps<Props>) => (
+    <div>
+      <Component {...props} />
+      {message ? <label className="component-error" htmlFor={props.id}>{message}</label> : null}
+    </div>
+  );
 }
 
 

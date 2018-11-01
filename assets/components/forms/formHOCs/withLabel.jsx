@@ -5,17 +5,25 @@
 import React from 'react';
 
 
+// ----- Types ----- //
+
+type AugmentedProps<Props> = Props & {
+  label: string,
+};
+
+type In<Props> = React$ComponentType<Props>;
+type Out<Props> = React$ComponentType<AugmentedProps<Props>>;
+
+
 // ----- Component ----- //
 
-function withLabel(text: string) {
-  return function HOC<Props: { id: string }>(Component: React$ComponentType<Props>): React$ComponentType<Props> {
-    return (props: Props) => (
-      <div>
-        <label className="component-label" htmlFor={props.id}>{text}</label>
-        <Component {...props} />
-      </div>
-    );
-  };
+function withLabel<Props: { id: string }>(Component: In<Props>): Out<Props> {
+  return ({ label, ...props }: AugmentedProps<Props>) => (
+    <div>
+      <label className="component-label" htmlFor={props.id}>{label}</label>
+      <Component {...props} />
+    </div>
+  );
 }
 
 
