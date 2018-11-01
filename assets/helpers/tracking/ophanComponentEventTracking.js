@@ -2,6 +2,7 @@
 // ----- Imports ----- //
 
 import * as ophan from 'ophan';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 
 // ----- Types ----- //
 
@@ -73,6 +74,43 @@ const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
   });
 };
 
+const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): void => {
+  gaEvent({
+    category: 'click',
+    action: eventDetails,
+    label: componentId,
+  });
+
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_BUTTON',
+      id: componentId,
+      labels: ['checkout-submit'],
+    },
+    action: 'CLICK',
+    value: eventDetails,
+  });
+};
+
+const trackMustSignInClick = (): void => {
+  const componentId = 'must-sign-in';
+
+  gaEvent({
+    category: 'click',
+    action: componentId,
+    label: componentId,
+  });
+
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+      id: componentId,
+    },
+    action: 'CLICK',
+  });
+
+};
+
 function pageView(url: string, referrer: string) {
   try {
     ophan.sendInitialEvent(
@@ -86,5 +124,7 @@ function pageView(url: string, referrer: string) {
 
 export {
   trackComponentEvents,
+  trackCheckoutSubmitAttempt,
   pageView,
+  trackMustSignInClick,
 };

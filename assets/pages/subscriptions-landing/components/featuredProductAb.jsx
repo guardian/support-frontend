@@ -76,6 +76,7 @@ function FeaturedProductAb(props: PropTypes) {
   return product ? (
     <FeaturedProductHero
       headingText={product.headingText}
+      subheadingText={product.subheadingText}
       bodyText={product.bodyText}
       image={product.image}
       cta={getCta(product)}
