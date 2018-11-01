@@ -60,7 +60,7 @@ class PayPalOneOff(
     }
   }
 
-  def resultFromPaypalSuccess(success: PayPalSuccess, country: Option[String])(implicit request: RequestHeader): Result = {
+  def resultFromPaypalSuccess(success: PayPalSuccess, country: Option[String], isTestUser: Boolean)(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
     val redirect = Redirect {
       country match {
@@ -70,7 +70,7 @@ class PayPalOneOff(
     }
     val countryCookie = request.cookies.get("GU_country")
     val countryFromCookie = countryCookie.map(_.value).getOrElse("Unknown")
-    tipMonitoring.verify(s"${country.getOrElse(countryFromCookie)} One-off PayPal contribution")
+    if (!isTestUser) tipMonitoring.verify(s"${country.getOrElse(countryFromCookie)} One-off PayPal contribution")
     success.email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
       redirect
@@ -117,7 +117,7 @@ class PayPalOneOff(
 
     emailForUser(request.user)
       .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser))
-      .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country))
+      .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, isTestUser))
   }
 
   def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
