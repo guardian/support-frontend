@@ -9,7 +9,6 @@ import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import GridPicture from 'components/gridPicture/gridPicture';
-import GridImage from 'components/gridImage/gridImage';
 
 
 // ----- Types ----- //
@@ -49,21 +48,51 @@ const dpImage = (
   />);
 
 const weeklyImage = (
-  <GridImage
-    gridId="guardianWeeklyHero"
-    srcSizes={[140, 500, 1000, 1080]}
-    sizes="(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, 60vw"
+  <GridPicture
+    sources={[
+      {
+        gridId: 'guardianWeeklyHeroMobile',
+        srcSizes: [140, 500, 1000],
+        imgType: 'png',
+        sizes: '90vw',
+        media: '(max-width: 739px)',
+      },
+      {
+        gridId: 'guardianWeeklyHeroDesktop',
+        srcSizes: [140, 500, 1000],
+        imgType: 'png',
+        sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+        media: '(min-width: 740px)',
+      },
+    ]}
+    fallback="guardianWeeklyHeroDesktop"
+    fallbackSize={500}
     altText=""
-    imgType="png"
+    fallbackImgType="png"
   />);
 
 const paperImage = (
-  <GridImage
-    gridId="paperHero"
-    srcSizes={[140, 500, 1000, 1080]}
-    sizes="(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, 60vw"
+  <GridPicture
+    sources={[
+      {
+        gridId: 'paperHeroMobile',
+        srcSizes: [140, 500, 1000],
+        imgType: 'png',
+        sizes: '90vw',
+        media: '(max-width: 739px)',
+      },
+      {
+        gridId: 'paperHeroDesktop',
+        srcSizes: [140, 500, 1000],
+        imgType: 'png',
+        sizes: '(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, (min-width: 740px) 60vw',
+        media: '(min-width: 740px)',
+      },
+    ]}
+    fallback="paperHeroDesktop"
+    fallbackSize={500}
     altText=""
-    imgType="png"
+    fallbackImgType="png"
   />);
 
 
