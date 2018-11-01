@@ -92,6 +92,25 @@ const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): 
   });
 };
 
+const trackMustSignInClick = (): void => {
+  const componentId = 'must-sign-in';
+
+  gaEvent({
+    category: 'click',
+    action: componentId,
+    label: componentId,
+  });
+
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+      id: componentId,
+    },
+    action: 'CLICK',
+  });
+
+};
+
 function pageView(url: string, referrer: string) {
   try {
     ophan.sendInitialEvent(
@@ -107,4 +126,5 @@ export {
   trackComponentEvents,
   trackCheckoutSubmitAttempt,
   pageView,
+  trackMustSignInClick,
 };

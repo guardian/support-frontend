@@ -178,7 +178,11 @@ function onSubmit(props: PropTypes): Event => void {
       props.userTypeFromIdentityResponse,
       event.target,
     )) {
-      trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${props.userTypeFromIdentityResponse}`);
+      if (props.isSignedIn) {
+        trackCheckoutSubmitAttempt(componentId, 'allowed-for-user-type-signed-in');
+      } else {
+        trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${props.userTypeFromIdentityResponse}`);
+      }
       formHandlers[props.contributionType][props.paymentMethod](props);
     } else if (!formElementIsValid(event.target)) {
       trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
@@ -187,7 +191,7 @@ function onSubmit(props: PropTypes): Event => void {
       props.isSignedIn,
       props.userTypeFromIdentityResponse,
     )) {
-      trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${props.userTypeFromIdentityResponse}`)
+      trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${props.userTypeFromIdentityResponse}`);
     }
   };
 }

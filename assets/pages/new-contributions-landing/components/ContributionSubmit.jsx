@@ -13,7 +13,7 @@ import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { hiddenIf } from 'helpers/utilities';
 import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
-import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
@@ -107,16 +107,6 @@ function ContributionSubmit(props: PropTypes) {
                 props.isSignedIn,
                 props.userTypeFromIdentityResponse,
                 getForm(formClassName),
-              )
-            }
-            // this is just for tracking purposes, so we can call it
-            // in the onClick of the PayPal button and send data on form submissions
-            // which were blocked because the user needed to sign in
-            canContributeWithoutSigningIn={() =>
-              canContributeWithoutSigningIn(
-                props.contributionType,
-                props.isSignedIn,
-                props.userTypeFromIdentityResponse,
               )
             }
             whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}

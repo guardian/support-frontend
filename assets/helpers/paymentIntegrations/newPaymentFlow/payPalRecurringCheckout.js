@@ -6,7 +6,6 @@ import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
 // ----- Types ----- //
 
@@ -66,7 +65,6 @@ function getPayPalOptions(
   csrf: CsrfState,
   onPaymentAuthorisation: string => void,
   canOpen: () => boolean,
-  canContributeWithoutSigningIn: () => boolean,
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
@@ -115,14 +113,6 @@ function getPayPalOptions(
     onClick() {
       if (!canOpen()) {
         whenUnableToOpen();
-
-        if (canContributeWithoutSigningIn()) {
-          trackCheckoutSubmitAttempt('paypal-recurring-submit', 'blocked-because-form-not-valid');
-        } else {
-          trackCheckoutSubmitAttempt('paypal-recurring-submit', 'blocked-because-sign-in-required');
-        }
-      } else {
-        trackCheckoutSubmitAttempt('paypal-recurring-submit', 'allowed');
       }
     },
 

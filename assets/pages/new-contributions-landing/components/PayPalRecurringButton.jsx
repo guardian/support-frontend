@@ -7,10 +7,9 @@ import React from 'react';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getPayPalOptions } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
@@ -18,7 +17,6 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   hasLoaded: boolean,
   canOpen: () => boolean,
-  canContributeWithoutSigningIn: () => boolean,
   whenUnableToOpen: () => void,
   formClassName: string,
   isTestUser: boolean,
@@ -72,7 +70,6 @@ export class PayPalRecurringButton extends React.Component<PropTypes> {
         this.props.csrf,
         onPaymentAuthorisation,
         this.props.canOpen,
-        this.props.canContributeWithoutSigningIn,
         this.props.whenUnableToOpen,
         this.props.formClassName,
         this.props.isTestUser,
