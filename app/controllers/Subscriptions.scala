@@ -38,6 +38,11 @@ class Subscriptions(
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
+  def geoRedirectAllMarkets(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val redirectMarket = request.fastlyCountry.map(_.id).getOrElse("int")
+    Redirect(s"/$redirectMarket/$path", request.queryString, status = FOUND)
+  }
+
   def legacyRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     // Country code is required here because it's a parameter in the route.
     // But we don't actually use it.
@@ -91,7 +96,7 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
-  def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/guardian-weekly")
+  def weeklyGeoRedirect: Action[AnyContent] = geoRedirectAllMarkets("subscribe/guardian-weekly")
 
   def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()

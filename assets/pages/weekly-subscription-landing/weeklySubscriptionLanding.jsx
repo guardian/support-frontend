@@ -23,9 +23,11 @@ const reactElementId: {
   GBPCountries: 'weekly-landing-page-uk',
   UnitedStates: 'weekly-landing-page-us',
   AUDCountries: 'weekly-landing-page-au',
+  NZDCountries: 'weekly-landing-page-nz',
+  EURCountries: 'weekly-landing-page-eu',
+  Canada: 'weekly-landing-page-ca',
   International: 'weekly-landing-page-int',
 };
-
 
 // ----- Page Startup ----- //
 
@@ -41,6 +43,7 @@ const content = (
   >
     <div className="paypal-error">
       <h1>Guardian Weekly</h1>
+      <h2>{countryGroupId}</h2>
     </div>
   </Page>
 );
