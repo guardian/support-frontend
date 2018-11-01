@@ -1,6 +1,11 @@
-.component-heading-block__content {
-  background-color: gu-colour(garnett-neutral-1);
-  color: gu-colour(news-garnett-highlight);
+.component-heading-block__overheading {
+  background-color: gu-colour(news-garnett-highlight);
+  color: gu-colour(garnett-neutral-1);
+  display: inline-block;
+  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
+  font-family: $gu-headline;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .component-heading-block__heading {
@@ -9,19 +14,29 @@
   font-weight: bold;
   line-height: 1.12;
   padding: 8px ($gu-h-spacing / 2) $gu-v-spacing;
-
-  @include mq($from: mobileMedium) {
-    width: 350px;
-  }
+  background-color: gu-colour(garnett-neutral-1);
+  color: gu-colour(news-garnett-highlight);
 
   @include mq($from: tablet) {
     font-size: 32px;
-    width: 400px;
   }
 
   @include mq($from: desktop) {
     font-size: 42px;
-    width: 500px;
+  }
+}
+
+.component-heading-block__maxwidth {
+  @include mq($from: mobileMedium) {
+    max-width: 350px;
+  }
+
+  @include mq($from: tablet) {
+    max-width: 400px;
+  }
+
+  @include mq($from: desktop) {
+    max-width: 500px;
   }
 }
 

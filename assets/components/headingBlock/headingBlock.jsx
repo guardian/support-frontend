@@ -11,6 +11,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 type PropTypes = {|
   heading: string,
+  overheading?: ?string,
   children: Node,
 |};
 
@@ -23,16 +24,34 @@ function HeadingBlock(props: PropTypes) {
     <div className="component-heading-block">
       <LeftMarginSection>
         <div className="component-heading-block__content">
-          <h1 className="component-heading-block__heading">{props.heading}</h1>
-          <div className="component-heading-block__banner">
-            {props.children}
-          </div>
+          {props.overheading
+          ?
+            (
+              <div>
+                <h1 className="component-heading-block__overheading">{props.overheading}</h1>
+                <div className="component-heading-block__heading"><h2 className="component-heading-block__maxwidth">{props.heading}</h2></div>
+              </div>
+             )
+          :
+            (<div className="component-heading-block__heading"><h1 className="component-heading-block__maxwidth">{props.heading}</h1></div>)
+        }
+          {props.children &&
+            <div className="component-heading-block__banner">
+              {props.children}
+            </div>
+          }
         </div>
       </LeftMarginSection>
     </div>
   );
 
 }
+
+
+HeadingBlock.defaultProps = {
+  overheading: null,
+  children: null,
+};
 
 
 // ----- Export ----- //

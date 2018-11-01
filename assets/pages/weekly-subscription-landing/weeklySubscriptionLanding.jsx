@@ -7,8 +7,9 @@ import React from 'react';
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import HeadingBlock from 'components/headingBlock/headingBlock';
 
+import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
@@ -41,10 +42,7 @@ const content = (
     header={<SimpleHeader />}
     footer={<Footer />}
   >
-    <div className="paypal-error">
-      <h1>Guardian Weekly</h1>
-      <h2>{countryGroupId}</h2>
-    </div>
+    <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news, analysis and features in one magazine, curated to give you a clearer global perspective." />
   </Page>
 );
 
