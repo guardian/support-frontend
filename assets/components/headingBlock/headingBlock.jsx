@@ -33,9 +33,9 @@ function HeadingBlock(props: PropTypes) {
             (<div className="component-heading-block__heading"><h1 className="component-heading-block__maxwidth">{props.heading}</h1></div>)
         }
         {props.children.length > 0 &&
-            <div className="component-heading-block__banner">
-              {props.children}
-            </div>
+        <div className="component-heading-block__banner">
+          {props.children}
+        </div>
           }
       </div>
     </div>

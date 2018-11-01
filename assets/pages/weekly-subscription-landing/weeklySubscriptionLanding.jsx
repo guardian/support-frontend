@@ -45,8 +45,15 @@ const content = (
   >
     <div className="weekly-subscription-landing-header">
       <LeftMarginSection>
-        <img src="https://media.guim.co.uk/47b4e8b7c78db718ea8f707ac245317698494cde/0_0_5246_3934/2000.jpg" />
-        <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news, analysis and features in one magazine, curated to give you a clearer global perspective." />
+        <img src="https://media.guim.co.uk/0198392d89fac028dfea0c0aba940ef86eafdb10/0_0_1000_666/1000.png" />
+        <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news curated to give you a clearer global perspective." />
+      </LeftMarginSection>
+    </div>
+    <div className="weekly-subscription-underheader">
+      <LeftMarginSection>
+        <div className="weekly-subscription-underheader__cta">
+        See sub options
+        </div>
       </LeftMarginSection>
     </div>
   </Page>

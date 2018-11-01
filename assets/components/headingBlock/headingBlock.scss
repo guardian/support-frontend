@@ -6,6 +6,9 @@
   font-family: $gu-headline;
   font-weight: bold;
   font-size: 20px;
+  @include mq($from: tablet) {
+    font-size: 24px;
+  }
 }
 
 .component-heading-block__heading {
@@ -13,16 +16,16 @@
   font-family: $gu-headline;
   font-weight: bold;
   line-height: 1.12;
-  padding: 8px ($gu-h-spacing / 2) $gu-v-spacing;
+  padding: ($gu-v-spacing /2) ($gu-h-spacing / 2) ($gu-v-spacing * 1.5);
   background-color: gu-colour(garnett-neutral-1);
-  color: gu-colour(news-garnett-highlight);
+  color: #ffffff;
 
   @include mq($from: tablet) {
-    font-size: 32px;
+    font-size: 30px;
   }
 
   @include mq($from: desktop) {
-    font-size: 42px;
+    font-size: 36px;
   }
 }
 
