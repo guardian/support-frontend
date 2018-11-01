@@ -78,7 +78,13 @@ function getPayPalOptions(
   return {
     env: getPayPalEnvironment(isTestUser),
 
-    style: { color: 'blue', size: 'responsive', label: 'pay' },
+    style: {
+      color: 'blue',
+      size: 'responsive',
+      label: 'pay',
+      layout: 'horizontal',
+      fundingicons: false,
+    },
 
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
     commit: true,
@@ -92,18 +98,16 @@ function getPayPalOptions(
         return;
       }
 
+      window.enablePayPalButton = actions.enable;
+      window.disablePayPalButton = actions.disable;
+
       validateCalled = true;
       toggleButton(actions);
 
-      const form = document.querySelector(`.${formClassName}`);
-      if (form instanceof HTMLElement) {
-        // Thanks to event bubbling, we can just listen on the form element.
-        // This means that we'll get change events even from form elements which
-        // aren't in the DOM at the time this handler is bound.
-        form.addEventListener('change', () => toggleButton(actions));
-      } else {
-        logException(`No form found with class ${formClassName}`);
-      }
+    },
+
+    funding: {
+      disallowed: [window.paypal.FUNDING.CREDIT],
     },
 
     onClick() {

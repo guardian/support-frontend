@@ -754,7 +754,21 @@ form {
   font-size: 14px;
   line-height: 16px;
   padding: 6px 10px;
+  a, a:visited {
+    color: gu-colour(green-dark);
+  }
 }
+
+.form__error--sign-in {
+  display: block;
+  text-decoration: none;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+
 
 .form__submit {
   display: flex;

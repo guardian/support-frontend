@@ -18,7 +18,8 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     paymentAPIService,
     stringsConfig,
-    settingsProvider
+    settingsProvider,
+    appConfig.guardianDomain
   )
 
   lazy val subscriptionsController = new Subscriptions(

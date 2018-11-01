@@ -1,23 +1,25 @@
 package controllers
 
-import java.security.SecureRandom
-
 import actions.CustomActionBuilders
+import admin.{ServersideAbTest, Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.identity.play.IdUser
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.typesafe.scalalogging.StrictLogging
+import config.Configuration.GuardianDomain
 import config.StringsConfig
+import cookies.ServersideAbTestCookie
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import utils.BrowserCheck
 import utils.RequestCountry._
 
 import scala.concurrent.{ExecutionContext, Future}
-import monitoring.SafeLogger
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -29,8 +31,9 @@ class Application(
     payPalConfigProvider: PayPalConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
-    settingsProvider: SettingsProvider
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax {
+    settingsProvider: SettingsProvider,
+    guardianDomain: GuardianDomain
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging with ServersideAbTestCookie {
 
   import actionRefiners._
 
@@ -96,16 +99,26 @@ class Application(
     )).withSettingsSurrogateKey
   }
 
-  def contributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def oldOrNewContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+    type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: Settings = settingsProvider.settings()
-    Ok(views.html.main(
-      title = "Support the Guardian | Make a Contribution",
-      description = stringsConfig.contributionsLandingDescription,
-      mainId = s"contributions-landing-page-$countryCode",
-      mainJsBundle = "contributionsLandingPage.js",
-      mainStyleBundle = "contributionsLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    )).withSettingsSurrogateKey
+    implicit val participation: ServersideAbTest.Participation = ServersideAbTest.getParticipation
+    implicit val gd: GuardianDomain = guardianDomain
+
+    val experiments = settings.switches.experiments
+    if (experiments.get("newPaymentFlow").exists(_.isInVariant(participation))) {
+      SafeLogger.info("SERVENEW: Serving new contribution landing page")
+      request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+        err => {
+          SafeLogger.error(scrub"Error fetching user from identity: $err")
+          Ok(newContributions(countryCode, None))
+        },
+        user => Ok(newContributions(countryCode, user))
+      ).map(result => result.withSettingsSurrogateKey.withServersideAbTestCookie)
+    } else {
+      SafeLogger.info("SERVEOLD: Serving old contributions landing page")
+      Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey.withServersideAbTestCookie)
+    }
   }
 
   def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
@@ -115,6 +128,22 @@ class Application(
       _ => Ok(newContributions(countryCode, None)),
       user => Ok(newContributions(countryCode, user))
     ).map(_.withSettingsSurrogateKey)
+  }
+
+  def oldContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    Ok(oldContributions(countryCode)).withSettingsSurrogateKey
+  }
+
+  private def oldContributions(countryCode: String)(implicit request: RequestHeader, settings: Settings) = {
+    views.html.main(
+      title = "Support the Guardian | Make a Contribution",
+      description = stringsConfig.contributionsLandingDescription,
+      mainId = s"contributions-landing-page-$countryCode",
+      mainJsBundle = "contributionsLandingPage.js",
+      mainStyleBundle = "contributionsLandingPageStyles.css",
+      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
+    )
   }
 
   private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {

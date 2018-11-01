@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 
 import { config, amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -16,7 +15,7 @@ import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
-import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
+import { selectAmount, setValueAndTogglePayPal, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
@@ -47,9 +46,9 @@ const mapStateToProps = state => ({
   annualTestVariant: state.common.abParticipations.annualContributionsRoundThree,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: Function) => ({
   selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
-  updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
+  updateOtherAmount: (amount) => { dispatch(setValueAndTogglePayPal<string>(updateOtherAmount, amount)); },
 });
 
 // ----- Render ----- //

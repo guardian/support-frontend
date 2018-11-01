@@ -17,6 +17,8 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import { type Contrib as ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getTitle } from 'helpers/checkoutForm/checkoutForm';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { Contrib } from 'helpers/contributions';
 import { type Stage } from '../helpers/checkoutForm/checkoutFormReducer';
 
 // ----- Types ----- //
@@ -29,9 +31,11 @@ type PropTypes = {|
   isSignedIn: boolean,
   form: Node,
   payment: Node,
-  onNextButtonClick: () => void,
+  onNextButtonClick: (string, boolean, UserTypeFromIdentityResponse) => void,
   onBackClick: () => void,
   stage: Stage,
+  contributionType: Contrib,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 |};
 
 // ----- Component ----- //
@@ -69,7 +73,13 @@ export default function ContributionsCheckout(props: PropTypes) {
                 text="Continue to payment"
                 accessibilityHint="Continue to payment"
                 id="qa-contribute-button"
-                onClick={props.onNextButtonClick}
+                onClick={
+                  () => props.onNextButtonClick(
+                    props.contributionType,
+                    props.isSignedIn,
+                    props.userTypeFromIdentityResponse,
+                  )
+                }
                 modifierClasses={['form-navigation', 'continue']}
               />
             </div>

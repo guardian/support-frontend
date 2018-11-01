@@ -2,13 +2,16 @@
 
 // ----- Imports ----- //
 import { type Contrib as ContributionType } from 'helpers/contributions';
+import type { Contrib } from 'helpers/contributions';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 
 // Copied from
-// https://github.com/playframework/playframework/blob/38abd1ca6d17237950c82b1483057c5c39929cb4/framework/src/play/
-// src/main/scala/play/api/data/validation/Validation.scala#L80
+// https://github.com/playframework/playframework/blob/master/framework/src/play/
+// src/main/scala/play/api/data/validation/Validation.scala#L81
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
-export const emailRegexPattern = '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
+export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
 export function patternIsValid(value: string, pattern: string): boolean {
   const regex = new RegExp(pattern);
@@ -22,7 +25,6 @@ export function emptyInputField(input: ?string): boolean {
 export type UserFormFieldAttribute = {
   id: string,
   value: string,
-  shouldValidate: boolean,
 }
 
 export function formFieldIsValid(id: string) {
@@ -33,8 +35,8 @@ export function formFieldIsValid(id: string) {
   return false;
 }
 
-export function shouldShowError(field: UserFormFieldAttribute): boolean {
-  return field.shouldValidate && !formFieldIsValid(field.id);
+export function shouldShowError(field: UserFormFieldAttribute, checkoutFormHasBeenSubmitted: boolean): boolean {
+  return checkoutFormHasBeenSubmitted && !formFieldIsValid(field.id);
 }
 
 export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
@@ -45,13 +47,27 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
   return [];
 };
 
-export const formIsValid = (formClassName: string) => {
-  const form = document.querySelector(`.${formClassName}`);
-  if (form && form instanceof HTMLFormElement) {
-    return form.checkValidity();
+export const getForm: string => Object | null =
+  (formName: string) => document.querySelector(`.${formName}`);
+
+export const formElementIsValid = (formElement: Object | null) => {
+  if (formElement && formElement instanceof HTMLFormElement) {
+    return formElement.checkValidity();
   }
   return false;
 };
+
+export const formIsValid = (formName: string) => formElementIsValid(getForm(formName));
+
+export function checkoutFormShouldSubmit(
+  contributionType: Contrib,
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  form: Object | null,
+) {
+  return formElementIsValid(form)
+    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
+}
 
 export function getTitle(contributionType: ContributionType): string {
 

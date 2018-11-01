@@ -32,13 +32,14 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
+import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
 import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
-
 
 import { type State } from '../contributionsLandingReducer';
 
@@ -69,6 +70,8 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  isSignedIn: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -89,6 +92,8 @@ const mapStateToProps = (state: State) => ({
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
   selectedAmounts: state.page.form.selectedAmounts,
+  userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+  isSignedIn: state.page.user.isSignedIn,
 });
 
 
@@ -122,8 +127,12 @@ function openStripePopup(props: PropTypes) {
 // Bizarrely, adding a type to this object means the type-checking on the
 // formHandlers is no longer accurate.
 // (Flow thinks it's OK when it's missing required properties).
+
 const formHandlersForRecurring = {
-  PayPal: () => { /* TODO PayPal recurring */ },
+  PayPal: () => {
+    // we don't get an onSubmit event for PayPal recurring, so there
+    // is no need to handle anything here
+  },
   Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
@@ -139,7 +148,6 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
         currency: props.currency,
         amount: getAmount(props),
         returnURL: payPalReturnUrl(props.countryGroupId),
-        // TODO: use new cancel url
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
@@ -156,16 +164,20 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   },
 };
 
-
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-    if (!(event.target: any).checkValidity()) {
-      return;
+
+    if (checkoutFormShouldSubmit(
+      props.contributionType,
+      props.isSignedIn,
+      props.userTypeFromIdentityResponse,
+      event.target,
+    )) {
+      formHandlers[props.contributionType][props.paymentMethod](props);
     }
-    formHandlers[props.contributionType][props.paymentMethod](props);
   };
 }
 

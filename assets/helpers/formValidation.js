@@ -1,11 +1,11 @@
 // @flow
 
 // Copied from
-// https://github.com/playframework/playframework/blob/38abd1ca6d17237950c82b1483057c5c39929cb4/framework/src/play/
-// src/main/scala/play/api/data/validation/Validation.scala#L80
+// https://github.com/playframework/playframework/blob/master/framework/src/play/
+// src/main/scala/play/api/data/validation/Validation.scala#L81
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
-export const emailRegexPattern = '^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
+export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
 export const isNotEmpty: string => boolean = input => !!input && input.trim() !== '';
 export const isValidEmail: string => boolean = input => new RegExp(emailRegexPattern).test(input);
