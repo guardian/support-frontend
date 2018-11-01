@@ -76,8 +76,8 @@ const getProducts = (
     headingText: 'Digital Pack',
     subheadingText: 'Screen time well spent',
     bodyText: (countryGroupId === 'GBPCountries') ?
-      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper' :
-      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper',
+      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper.' :
+      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper.',
     link: subsLinks.DigitalPack,
     image: dpImage,
   },
@@ -93,7 +93,7 @@ const getProducts = (
     name: 'GuardianWeekly',
     headingText: 'Guardian Weekly',
     subheadingText: 'Open up your world view',
-    bodyText: 'Discover our essential new magazine with free worldwide delivery',
+    bodyText: 'Discover our essential new magazine with free worldwide delivery.',
     link: subsLinks.GuardianWeekly,
     image: weeklyImage,
   },
