@@ -32,8 +32,9 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { checkoutFormShouldSubmit, formElementIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
@@ -169,6 +170,7 @@ function onSubmit(props: PropTypes): Event => void {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
+    const componentId = `${props.paymentMethod}-${props.contributionType}-submit`;
 
     if (checkoutFormShouldSubmit(
       props.contributionType,
@@ -176,7 +178,20 @@ function onSubmit(props: PropTypes): Event => void {
       props.userTypeFromIdentityResponse,
       event.target,
     )) {
+      if (props.isSignedIn) {
+        trackCheckoutSubmitAttempt(componentId, 'allowed-for-user-type-signed-in');
+      } else {
+        trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${props.userTypeFromIdentityResponse}`);
+      }
       formHandlers[props.contributionType][props.paymentMethod](props);
+    } else if (!formElementIsValid(event.target)) {
+      trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
+    } else if (!canContributeWithoutSigningIn(
+      props.contributionType,
+      props.isSignedIn,
+      props.userTypeFromIdentityResponse,
+    )) {
+      trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${props.userTypeFromIdentityResponse}`);
     }
   };
 }

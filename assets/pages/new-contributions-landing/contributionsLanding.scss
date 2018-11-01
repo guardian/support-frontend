@@ -733,7 +733,7 @@ form {
   color: gu-colour(media-garnett-main-1);
 }
 
-.form__input:focus {
+.form__input:enabled:focus {
   box-shadow: 0 0 0 3px gu-colour(sport-garnett-media-main-1);
   outline: none;
 }

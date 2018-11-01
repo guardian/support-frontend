@@ -57,7 +57,7 @@ export const formElementIsValid = (formElement: Object | null) => {
   return false;
 };
 
-export const formIsValid = (formName: string) => formElementIsValid(getForm(formName));
+export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
 
 export function checkoutFormShouldSubmit(
   contributionType: Contrib,
