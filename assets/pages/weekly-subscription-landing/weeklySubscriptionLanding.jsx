@@ -42,7 +42,10 @@ const content = (
     header={<SimpleHeader />}
     footer={<Footer />}
   >
-    <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news, analysis and features in one magazine, curated to give you a clearer global perspective." />
+    <div className="weekly-subscription-landing-header">
+
+      <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news, analysis and features in one magazine, curated to give you a clearer global perspective." />
+    </div>
   </Page>
 );
 

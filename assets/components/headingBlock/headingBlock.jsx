@@ -22,8 +22,7 @@ function HeadingBlock(props: PropTypes) {
 
   return (
     <div className="component-heading-block">
-      <LeftMarginSection>
-        <div className="component-heading-block__content">
+      <div className="component-heading-block__content">
           {props.overheading
           ?
             (
@@ -41,7 +40,6 @@ function HeadingBlock(props: PropTypes) {
             </div>
           }
         </div>
-      </LeftMarginSection>
     </div>
   );
 
