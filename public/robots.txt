@@ -8,6 +8,15 @@ Disallow: /int/subscribe/premium-tier
 Disallow: /contribute.new
 Disallow: /contribute/recurring-guest
 
+Disallow: /uk/subscribe/guardian-weekly
+Disallow: /us/subscribe/guardian-weekly
+Disallow: /au/subscribe/guardian-weekly
+Disallow: /nz/subscribe/guardian-weekly
+Disallow: /eu/subscribe/guardian-weekly
+Disallow: /ca/subscribe/guardian-weekly
+Disallow: /int/subscribe/guardian-weekly
+Disallow: /subscribe/guardian-weekly
+
 Allow: /
 
 Sitemap: https://support.theguardian.com/sitemap.xml

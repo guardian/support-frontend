@@ -35,6 +35,8 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     digitalSubscriptionLandingPageStyles: 'pages/digital-subscription-landing/digitalSubscriptionLanding.scss',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.jsx',
     digitalSubscriptionCheckoutPageStyles: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.scss',
+    weeklySubscriptionLandingPage: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.jsx',
+    weeklySubscriptionLandingPageStyles: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.scss',
     premiumTierLandingPage: 'pages/premium-tier-landing/premiumTierLanding.jsx',
     premiumTierLandingPageStyles: 'pages/premium-tier-landing/premiumTierLanding.scss',
     regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
