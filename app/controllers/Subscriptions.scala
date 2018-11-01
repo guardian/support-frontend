@@ -95,10 +95,10 @@ class Subscriptions(
 
   def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
-    val title = "Support the Guardian | THe Guardian Weekly"
+    val title = "Support the Guardian | The Guardian Weekly"
     val id = "weekly-landing-page-" + countryCode
-    val js = "weeklyLandingPage.js"
-    val css = "weeklyLandingPageStyles.css"
+    val js = "weeklySubscriptionLandingPage.js"
+    val css = "weeklySubscriptionLandingPageStyles.css"
     Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
