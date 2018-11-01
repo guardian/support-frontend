@@ -4,7 +4,10 @@ import controllers._
 import play.api.BuiltInComponentsFromContext
 
 trait Controllers {
+
+  // scalastyle:off
   self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth with Monitoring =>
+  // scalastyle:on
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
 
