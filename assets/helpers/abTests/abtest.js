@@ -9,8 +9,8 @@ import seedrandom from 'seedrandom';
 import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
-import type { Settings, isTestSwitchedOn } from 'helpers/settings';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Settings, isTestSwitchedOn } from 'helpers/settings';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { tests, type NewFlowTestVariant } from './abtestDefinitions';
 
