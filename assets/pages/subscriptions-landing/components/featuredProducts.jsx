@@ -50,7 +50,16 @@ const dpImage = (
 
 const weeklyImage = (
   <GridImage
-    gridId="guardianWeeklyHeroDesktop"
+    gridId="guardianWeeklyHero"
+    srcSizes={[140, 500, 1000, 1080]}
+    sizes="(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, 60vw"
+    altText=""
+    imgType="png"
+  />);
+
+const paperImage = (
+  <GridImage
+    gridId="paperHero"
     srcSizes={[140, 500, 1000, 1080]}
     sizes="(min-width: 1300px) 750px, (min-width: 1140px) 700px, (min-width: 980px) 600px, 60vw"
     altText=""
@@ -78,7 +87,7 @@ const getProducts = (
     subheadingText: 'Enjoy every word for less',
     bodyText: 'Save on The Guardian and The Observer retail price all year round.',
     link: subsLinks.Paper,
-    image: dpImage,
+    image: paperImage,
   },
   GuardianWeekly: {
     name: 'GuardianWeekly',
