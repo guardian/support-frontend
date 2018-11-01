@@ -17,17 +17,19 @@ type PropTypes = {|
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   contributionType: Contrib,
   checkoutFormHasBeenSubmitted: boolean,
+  email: string,
 |};
 
 
 // ----- Functions ----- //
 
 // Build signout URL from given return URL or current location.
-function buildUrl(): string {
+function buildUrl(email: string): string {
 
   const encodedReturn = encodeURIComponent(window.location);
+  const encodedEmail = encodeURIComponent(email);
 
-  return `https://profile.${getBaseDomain()}/signin?returnUrl=${encodedReturn}`;
+  return `https://profile.${getBaseDomain()}/signin/current?returnUrl=${encodedReturn}&email=${encodedEmail}`;
 
 }
 
@@ -59,7 +61,7 @@ export const MustSignIn = (props: PropTypes) => {
 
     case 'current':
       return (
-        <a href={buildUrl()}>
+        <a href={buildUrl(props.email)}>
           <div className={classNameWithModifiers('component-error-message', ['sign-in'])}>
             <div>
               You already have a Guardian account.
