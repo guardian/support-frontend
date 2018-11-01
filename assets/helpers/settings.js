@@ -8,8 +8,15 @@ export type SwitchObject = {
 
 export type Switches = {
   [string]: SwitchObject,
+  experiments: {
+    [string]: {
+      name: string,
+      description: string,
+      state: Status,
+    }
+  }
 };
 
 export type Settings = {
-  switches: Switches
+  switches: Switches,
 };

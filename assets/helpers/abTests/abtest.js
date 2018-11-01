@@ -9,14 +9,15 @@ import seedrandom from 'seedrandom';
 import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
+import type { Settings } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { tests, type NewPaymentFlowTestVariant } from './abtestDefinitions';
+import { tests, type NewFlowTestVariant } from './abtestDefinitions';
 
 
 // ----- Types ----- //
 
-type TestId = $Keys<typeof tests>;
+type TestId = $Keys<typeof tests> | 'newFlow';
 
 type OphanABEvent = {
   variantName: string,
@@ -229,19 +230,25 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
   });
 };
 
-const getNewPaymentFlowTestParticipation = (): ?Participations => {
+const getNewPaymentFlowTestParticipation = (settings: Settings): ?Participations => {
   const npfVariant = cookie.get('gu.serverside.ab.test');
-  if (npfVariant) {
-    const variant: NewPaymentFlowTestVariant = npfVariant === 'Variant' ? 'newPaymentFlow' : 'control';
-    return { newPaymentFlow: variant };
+  const { newPaymentFlow: serverSideTest } = settings.switches.experiments;
+  if (serverSideTest === 'On' && npfVariant) {
+    const variant: NewFlowTestVariant = npfVariant === 'Variant' ? 'newFlow' : 'control';
+    return { newFlow: variant };
   }
 
   return {};
 };
 
-const init = (country: IsoCountry, countryGroupId: CountryGroupId, abTests: Tests = tests): Participations => {
+const init = (
+  country: IsoCountry,
+  countryGroupId: CountryGroupId,
+  settings: Settings,
+  abTests: Tests = tests,
+): Participations => {
   // this is to assign the correct variant while npf server side test runs
-  const newPaymentFlowParticipation: ?Participations = getNewPaymentFlowTestParticipation();
+  const newPaymentFlowParticipation: ?Participations = getNewPaymentFlowTestParticipation(settings);
 
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
