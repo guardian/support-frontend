@@ -1,7 +1,7 @@
 package monitoring
 
 import app.BuildInfo
-import com.gu.support.config.Stages.DEV
+import com.gu.support.config.Stages.PROD
 import com.gu.tip.{Tip, TipConfig, TipFactory}
 import config.Configuration
 
@@ -15,7 +15,7 @@ object TipFromConfig {
       boardSha = BuildInfo.gitCommitId
     )
 
-    if (config.stage == DEV) //todo - verify this works correctly
+    if (config.stage == PROD)
       TipFactory.create(tipConfig)
     else
       TipFactory.createDummy(tipConfig)
