@@ -17,6 +17,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
+import CheckoutForm from './checkoutForm';
 
 
 // ----- Types ----- //
@@ -118,7 +119,7 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <LeftMarginSection>
-          <p>Placeholder</p>
+          <CheckoutForm />
         </LeftMarginSection>
       );
 

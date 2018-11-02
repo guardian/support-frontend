@@ -13,6 +13,13 @@ function descending(a: number, b: number): number {
   return a < b ? 1 : 0;
 }
 
+// String comparison for use with Array.prototype.sort.
+function compareString(a: string, b: string) {
+  if (a < b) { return -1; }
+  if (a > b) { return 1; }
+  return 0;
+}
+
 // Converts a number to a given number of decimal places, default two.
 function roundDp(num: number, dps: number = 2) {
   return Math.round(num * (10 ** dps)) / (10 ** dps);
@@ -92,6 +99,7 @@ function addLeadingZeros(value: number, length: number = 2): string {
 export {
   ascending,
   descending,
+  compareString,
   roundDp,
   classNameWithModifiers,
   hiddenIf,
