@@ -14,8 +14,10 @@
   padding-top: $gu-v-spacing;
   padding-bottom: 0;
   margin-bottom: -$gu-v-spacing;
+  color: gu-colour(news-garnett-main-1);
 
-  @include mq($from: tablet) {
+  // point at you can see the all the individual invalid field error messages
+  @include mq($from: 361px) {
     display: none;
   }
 }
