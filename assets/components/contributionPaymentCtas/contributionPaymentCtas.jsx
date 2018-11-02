@@ -133,7 +133,7 @@ function RegularCta(props: {
 }): Node {
   const frequency = getFrequency(props.contributionType);
   const spokenType = getSpokenType(props.contributionType);
-  const clickUrl = addQueryParamsToURL(routes.recurringContribCheckout, {
+  const clickUrl = addQueryParamsToURL(routes.recurringContribCheckoutGuest, {
     contributionValue: props.amount.toString(),
     contribType: props.contributionType,
     currency: props.currencyId,
