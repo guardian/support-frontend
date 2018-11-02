@@ -105,7 +105,7 @@ function CheckoutStage(props: PropTypes) {
             fallbackImgType="png"
           />
           <LeftMarginSection>
-            <HeadingBlock heading="Your Digital Pack subscription is now live">
+            <HeadingBlock overheading="Thank You" heading="Your Digital Pack subscription is now live">
               <p>Thank you for supporting our journalism</p>
             </HeadingBlock>
           </LeftMarginSection>
