@@ -13,10 +13,9 @@ import { type CaState, type IsoCountry, type UsState } from 'helpers/internation
 import { logPromise, pollUntilPromise } from 'helpers/promise';
 import { logException } from 'helpers/logger';
 import { fetchJson, getRequestOptions, requestOptions } from 'helpers/fetch';
-import trackConversion from 'helpers/tracking/conversions';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 import { type ThankYouPageStage } from '../../../pages/new-contributions-landing/contributionsLandingReducer';
-import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 // ----- Types ----- //
 

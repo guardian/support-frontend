@@ -20,8 +20,8 @@ import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/contributions';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
+import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 
 // ----- Setup ----- //
 
