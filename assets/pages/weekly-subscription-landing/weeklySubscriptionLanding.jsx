@@ -51,7 +51,7 @@ const content = (
     <div className="weekly-subscription-underheader">
       <LeftMarginSection>
         <div className="weekly-subscription-underheader__cta">
-        See sub options
+        See Subscription options
         </div>
       </LeftMarginSection>
     </div>

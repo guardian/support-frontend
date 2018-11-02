@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
+import React, { type Node, Children } from 'react';
 
 
 // ----- Types ----- //
@@ -10,7 +10,7 @@ import React, { type Node } from 'react';
 type PropTypes = {|
   overheading: string,
   heading: string,
-  children?: ?Node,
+  children?: Node,
 |};
 
 
@@ -25,11 +25,11 @@ function HeadingBlock(props: PropTypes) {
         <div className="component-heading-block__heading">
           <h2 className="component-heading-block__maxwidth">{props.heading}</h2>
         </div>
-        {props.children.length > 0 &&
+        {Children.count(props.children) > 0 &&
         <div className="component-heading-block__banner">
           {props.children}
         </div>
-          }
+        }
       </div>
     </div>
   );
