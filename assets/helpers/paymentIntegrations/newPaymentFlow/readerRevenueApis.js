@@ -152,9 +152,7 @@ function checkRegularStatus(
         return logPromise(pollUntilPromise(
           MAX_POLLS,
           POLLING_INTERVAL,
-          () => {
-            return fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf));
-          },
+          () => fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf)),
           json2 => json2.status === 'pending',
         ).then(handleCompletion, handleExhaustedPolls));
 

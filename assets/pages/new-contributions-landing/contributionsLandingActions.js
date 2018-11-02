@@ -240,7 +240,7 @@ const regularPaymentRequestFromAuthorisation = (
 // This will execute at the end of every checkout, with the exception
 // of PayPal one-off where this happens on the backend after the user is redirected to our site.
 const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
+  (dispatch: Dispatch<Action>): void => {
     paymentResult.then((result) => {
       switch (result.paymentStatus) {
         case 'success':
