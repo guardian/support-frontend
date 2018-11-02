@@ -1,16 +1,14 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.acquisition.model.{AcquisitionSubmission, OphanIds}
+import com.gu.acquisition.model.OphanIds
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model._
 import com.gu.support.workers.model.states.SendAcquisitionEventState
-import io.circe.Encoder
-import io.circe.syntax._
-import ophan.thrift.event.{Acquisition, Product => OphanProduct}
+import ophan.thrift.event.{Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 
 import scala.concurrent.ExecutionContext.Implicits.global
