@@ -3,6 +3,7 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.acquisition.model.OphanIds
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
+import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model._
@@ -25,9 +26,11 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     requestInfo: RequestInfo,
     context: Context,
     services: Services
-  ): FutureHandlerResult =
+  ): FutureHandlerResult = {
+    SafeLogger.info(s"Sending acquisition event to ophan: ${state.toString}")
     // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
     services.ophanService.submit(state).fold(throw _, _ => HandlerResult(Unit, requestInfo))
+  }
 }
 
 object SendAcquisitionEvent {
