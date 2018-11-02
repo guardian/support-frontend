@@ -1,11 +1,15 @@
 .component-heading-block__overheading {
   background-color: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
-  display: inline-block;
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
   font-family: $gu-headline;
   font-weight: bold;
   font-size: 20px;
+  @supports(transform:translateY(-100%)){
+    transform:translateY(-100%);
+    position: absolute;
+    display: inline-block;
+  }
   @include mq($from: tablet) {
     font-size: 24px;
   }

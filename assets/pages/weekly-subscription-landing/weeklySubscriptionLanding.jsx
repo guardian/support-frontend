@@ -45,7 +45,6 @@ const content = (
   >
     <div className="weekly-subscription-landing-header">
       <LeftMarginSection>
-        <img src="https://media.guim.co.uk/0198392d89fac028dfea0c0aba940ef86eafdb10/0_0_1000_666/1000.png" />
         <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news curated to give you a clearer global perspective." />
       </LeftMarginSection>
     </div>

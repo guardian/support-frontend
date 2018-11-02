@@ -21,9 +21,9 @@ function HeadingBlock(props: PropTypes) {
   return (
     <div className="component-heading-block">
       <div className="component-heading-block__content">
-        <div>
-          <h1 className="component-heading-block__overheading">{props.overheading}</h1>
-          <div className="component-heading-block__heading"><h2 className="component-heading-block__maxwidth">{props.heading}</h2></div>
+        <h1 className="component-heading-block__overheading">{props.overheading}</h1>
+        <div className="component-heading-block__heading">
+          <h2 className="component-heading-block__maxwidth">{props.heading}</h2>
         </div>
         {props.children.length > 0 &&
         <div className="component-heading-block__banner">
