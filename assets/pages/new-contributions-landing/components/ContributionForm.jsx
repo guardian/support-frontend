@@ -32,7 +32,7 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { checkoutFormShouldSubmit, formElementIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { formElementIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
@@ -170,36 +170,32 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   },
 };
 
+// Note PayPal recurring flow does not call this function
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     const componentId = `${props.paymentMethod}-${props.contributionType}-submit`;
+    const formIsValid = formElementIsValid(event.target);
+    const userType = props.isSignedIn ? 'signed-in' : props.userTypeFromIdentityResponse;
+    const canContribute =
+      canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
+      || props.isSignedIn;
 
-    if (checkoutFormShouldSubmit(
-      props.contributionType,
-      props.isSignedIn,
-      props.userTypeFromIdentityResponse,
-      event.target,
-    )) {
-      if (props.isSignedIn) {
-        trackCheckoutSubmitAttempt(componentId, 'allowed-for-user-type-signed-in');
-      } else {
-        trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${props.userTypeFromIdentityResponse}`);
-      }
+
+    if (formIsValid) {
       props.setFormIsValid(true);
-      formHandlers[props.contributionType][props.paymentMethod](props);
-    } else if (!formElementIsValid(event.target)) {
-      trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
-    } else if (!canContributeWithoutSigningIn(
-      props.contributionType,
-      props.isSignedIn,
-      props.userTypeFromIdentityResponse,
-    )) {
-      trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${props.userTypeFromIdentityResponse}`);
+
+      if (canContribute) {
+        formHandlers[props.contributionType][props.paymentMethod](props);
+        trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${userType}`);
+      } else {
+        trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${userType}`);
+      }
     } else {
       props.setFormIsValid(false);
+      trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
     }
   };
 }
