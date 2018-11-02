@@ -20,7 +20,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
   feature("Sign up for a Monthly Contribution") {
 
-    scenario("Monthly contribution sign-up with Stripe - GBP") {
+    ignore("Monthly contribution sign-up with Stripe - GBP") {
 
       val landingPage = ContributionsLanding("uk")
       val recurringContributionForm = new RecurringContributionForm
@@ -69,7 +69,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
     }
 
-    scenario("Monthly contribution sign-up with PayPal - USD") {
+    ignore("Monthly contribution sign-up with PayPal - USD") {
 
       val expectedPayment = "15.00"
 
