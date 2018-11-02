@@ -1,3 +1,5 @@
+
+
 .component-heading-block__overheading {
   background-color: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
@@ -15,24 +17,6 @@
   }
 }
 
-.component-heading-block__heading {
-  font-size: 26px;
-  font-family: $gu-headline;
-  font-weight: bold;
-  line-height: 1.12;
-  padding: ($gu-v-spacing /2) ($gu-h-spacing / 2) ($gu-v-spacing * 1.5);
-  background-color: gu-colour(garnett-neutral-1);
-  color: #ffffff;
-
-  @include mq($from: tablet) {
-    font-size: 30px;
-  }
-
-  @include mq($from: desktop) {
-    font-size: 36px;
-  }
-}
-
 .component-heading-block__maxwidth {
   @include mq($from: mobileMedium) {
     max-width: 350px;
@@ -47,12 +31,32 @@
   }
 }
 
-.component-heading-block__banner {
-  border-top: 1px solid #ffffff;
+%component-heading-block__card {
+  background-color: gu-colour(garnett-neutral-1);
   color: #ffffff;
+  font-family: $gu-headline;
+}
+
+.component-heading-block__heading {
+  @extend %component-heading-block__card;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.12;
+  padding: ($gu-v-spacing /2) ($gu-h-spacing / 2) ($gu-v-spacing * 1.5);
+
+  @include mq($from: tablet) {
+    font-size: 30px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 36px;
+  }
+}
+
+.component-heading-block__banner {
+  @extend %component-heading-block__card;
+  border-top: 1px solid #ffffff;
   padding: ($gu-v-spacing / 1.5) ($gu-h-spacing / 2) $gu-v-spacing;
   font-size: 17px;
   line-height: 1;
-  font-family: $gu-headline;
-  background-color: gu-colour(garnett-neutral-1);
 }
