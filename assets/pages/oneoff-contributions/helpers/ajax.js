@@ -16,6 +16,7 @@ import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
 
 
@@ -134,6 +135,11 @@ function postCheckout(
 
   const onSuccess: OnSuccess = () => {
     trackConversion(abParticipations, routes.oneOffContribThankyou);
+    try {
+      trackComponentClick('one-off-conversion-old-payment-flow');
+    } catch (err) {
+      // just being cautious
+    }
     dispatch(checkoutSuccess());
   };
 

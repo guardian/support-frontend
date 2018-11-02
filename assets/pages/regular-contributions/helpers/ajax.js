@@ -21,6 +21,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/contributions';
 import type { OptimizeExperiments } from 'helpers/tracking/optimize';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 // ----- Setup ----- //
 
@@ -192,6 +193,11 @@ function statusPoll(
 
   if (pollCount >= MAX_POLLS) {
     trackConversion(participations, routes.recurringContribPending);
+    try {
+      trackComponentClick('recurring-conversion-old-payment-flow');
+    } catch (err) {
+      // just being cautious
+    }
     dispatch(checkoutPending(paymentMethod));
     return undefined;
   }
@@ -252,6 +258,11 @@ function handleStatus(
           break;
         case 'success':
           trackConversion(participations, routes.recurringContribThankyou);
+          try {
+            trackComponentClick('recurring-conversion-old-payment-flow');
+          } catch (err) {
+            // just being cautious
+          }
           dispatch(checkoutSuccess(paymentMethod));
           break;
         default: // pending

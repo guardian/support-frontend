@@ -16,6 +16,7 @@ import { fetchJson, getRequestOptions, requestOptions } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
 
 import { type ThankYouPageStage } from '../../../pages/new-contributions-landing/contributionsLandingReducer';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 // ----- Types ----- //
 
@@ -121,6 +122,11 @@ function checkRegularStatus(
     switch (json.status) {
       case 'success':
       case 'pending':
+        try {
+          trackComponentClick('recurring-conversion-new-payment-flow');
+        } catch (err) {
+          // just being cautious
+        }
         return PaymentSuccess;
 
       default:
@@ -148,7 +154,6 @@ function checkRegularStatus(
           MAX_POLLS,
           POLLING_INTERVAL,
           () => {
-            trackConversion(participations, routes.recurringContribPending);
             return fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf));
           },
           json2 => json2.status === 'pending',

@@ -38,9 +38,9 @@ import {
   getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { logException } from 'helpers/logger';
-import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import * as cookie from 'helpers/cookie';
 import {
   type State,
@@ -242,11 +242,13 @@ const regularPaymentRequestFromAuthorisation = (
 const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     paymentResult.then((result) => {
-      const state = getState();
-
       switch (result.paymentStatus) {
         case 'success':
-          trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
+          try {
+            trackComponentClick('one-off-conversion-new-payment-flow');
+          } catch (err) {
+            // just being cautious
+          }
           dispatch(paymentSuccess());
           break;
 
