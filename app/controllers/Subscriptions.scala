@@ -120,7 +120,8 @@ class Subscriptions(
       "en-au" -> buildCanonicalWeeklySubscriptionLink("au"),
       "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz"),
       "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca"),
-      "en" -> buildCanonicalWeeklySubscriptionLink("int")
+      "en" -> buildCanonicalWeeklySubscriptionLink("int"),
+      "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
     Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
   }
