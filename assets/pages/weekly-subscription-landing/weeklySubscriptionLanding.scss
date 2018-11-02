@@ -19,21 +19,16 @@
   }
 }
 
-.weekly-subscription-landing-header img {
-  width: 30%;
-  display: block;
-}
-
 .weekly-subscription-underheader {
   .component-left-margin-section__content {
     border-left: 1px solid gu-colour(garnett-neutral-4);
   }
+}
 
-  .weekly-subscription-underheader__cta {
-    border-top: 1px solid #ffffff;
-    margin-bottom: 50px;
-    padding: ($gu-v-spacing / 2)  ($gu-h-spacing / 2);
-    background: gu-colour(garnett-neutral-1);
-    color: #ffffff;
-  }
+.weekly-subscription-underheader__cta {
+  border-top: 1px solid #ffffff;
+  margin-bottom: 50px;
+  padding: ($gu-v-spacing / 2)  ($gu-h-spacing / 2);
+  background: gu-colour(garnett-neutral-1);
+  color: #ffffff;
 }
