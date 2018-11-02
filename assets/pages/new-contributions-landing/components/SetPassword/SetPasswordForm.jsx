@@ -13,6 +13,7 @@ import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { checkEmail, emailRegexPattern } from 'helpers/formValidation';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 import { NewContributionTextInput } from '../ContributionTextInput';
 import { type ThankYouPageStage } from '../../contributionsLandingReducer';
@@ -77,7 +78,7 @@ function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     props.setPasswordHasBeenSubmitted();
     event.preventDefault();
-
+    trackComponentClick('set-password');
     if (!(event.target: any).checkValidity()) {
       return;
     }
@@ -143,7 +144,12 @@ function SetPasswordForm(props: PropTypes) {
           accessibilityHintId="accessibility-hint-no-thanks"
           type="button"
           buttonCopy="No, thank you"
-          onClick={() => { props.setThankYouPageStage('thankYouPasswordDeclinedToSet'); }}
+          onClick={
+            () => {
+              trackComponentClick('decline-to-set-password');
+              props.setThankYouPageStage('thankYouPasswordDeclinedToSet');
+            }
+          }
         />
       </form>
       {props.passwordError === true ?

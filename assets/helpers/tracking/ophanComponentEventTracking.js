@@ -92,9 +92,7 @@ const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): 
   });
 };
 
-const trackMustSignInClick = (): void => {
-  const componentId = 'must-sign-in';
-
+const trackComponentClick = (componentId: string): void => {
   gaEvent({
     category: 'click',
     action: componentId,
@@ -126,5 +124,5 @@ export {
   trackComponentEvents,
   trackCheckoutSubmitAttempt,
   pageView,
-  trackMustSignInClick,
+  trackComponentClick,
 };

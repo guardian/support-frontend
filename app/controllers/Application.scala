@@ -106,7 +106,8 @@ class Application(
     implicit val gd: GuardianDomain = guardianDomain
 
     val experiments = settings.switches.experiments
-    if (experiments.get("newPaymentFlow").exists(_.isInVariant(participation))) {
+    val npf = experiments.get("newFlow")
+    if (npf.exists(_.isInVariant(participation))) {
       SafeLogger.info("SERVENEW: Serving new contribution landing page")
       request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
         err => {
@@ -115,9 +116,11 @@ class Application(
         },
         user => Ok(newContributions(countryCode, user))
       ).map(result => result.withSettingsSurrogateKey.withServersideAbTestCookie)
-    } else {
+    } else if (npf.exists(_.isInControl(participation))) {
       SafeLogger.info("SERVEOLD: Serving old contributions landing page")
       Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey.withServersideAbTestCookie)
+    } else {
+      Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey)
     }
   }
 

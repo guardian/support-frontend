@@ -34,7 +34,9 @@ describe('reducer tests', () => {
       abParticipations: {},
       otherQueryParams: [],
       settings: {
-        switches: {},
+        switches: {
+          experiments: {},
+        },
       },
       optimizeExperiments: {},
     };

@@ -9,14 +9,15 @@ import seedrandom from 'seedrandom';
 import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Settings, isTestSwitchedOn } from 'helpers/settings';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { tests, type NewPaymentFlowTestVariant } from './abtestDefinitions';
+import { tests } from './abtestDefinitions';
 
 
 // ----- Types ----- //
 
-type TestId = $Keys<typeof tests>;
+type TestId = $Keys<typeof tests> | 'newFlow';
 
 type OphanABEvent = {
   variantName: string,
@@ -229,23 +230,28 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
   });
 };
 
-const getNewPaymentFlowTestParticipation = (): ?Participations => {
+const getNewFlowTestParticipation = (settings: Settings): ?Participations => {
   const npfVariant = cookie.get('gu.serverside.ab.test');
-  if (npfVariant) {
-    const variant: NewPaymentFlowTestVariant = npfVariant === 'Variant' ? 'newPaymentFlow' : 'control';
-    return { newPaymentFlow: variant };
+  if (isTestSwitchedOn(settings, 'newFlow') && npfVariant) {
+    const variant = npfVariant === 'Variant' ? 'newFlow' : 'control';
+    return { newFlow: variant };
   }
 
   return {};
 };
 
-const init = (country: IsoCountry, countryGroupId: CountryGroupId, abTests: Tests = tests): Participations => {
+const init = (
+  country: IsoCountry,
+  countryGroupId: CountryGroupId,
+  settings: Settings,
+  abTests: Tests = tests,
+): Participations => {
   // this is to assign the correct variant while npf server side test runs
-  const newPaymentFlowParticipation: ?Participations = getNewPaymentFlowTestParticipation();
+  const newFlowTestParticipation: ?Participations = getNewFlowTestParticipation(settings);
 
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
-  const participationsWithServerSideNPFVariant = { ...participations, ...newPaymentFlowParticipation };
+  const participationsWithServerSideNPFVariant = { ...participations, ...newFlowTestParticipation };
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   setLocalStorageParticipations(Object.assign({}, participationsWithServerSideNPFVariant, urlParticipations));
   trackABOphan(participationsWithServerSideNPFVariant, false);

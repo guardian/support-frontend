@@ -9,7 +9,7 @@ import { getBaseDomain } from 'helpers/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { trackMustSignInClick } from 'helpers/tracking/ophanComponentEventTracking';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 // ---- Types ----- //
 
@@ -41,7 +41,7 @@ export const MustSignIn = (props: PropTypes) => {
 
   const onClick = (event) => {
     event.preventDefault();
-    trackMustSignInClick();
+    trackComponentClick('must-sign-in');
     window.location.assign(signInUrl);
   };
 

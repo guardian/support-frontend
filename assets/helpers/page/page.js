@@ -136,7 +136,7 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
 function statelessInit() {
   const country: IsoCountry = detectCountry();
   const countryGroupId: CountryGroupId = detectCountryGroup();
-  const participations: Participations = abTest.init(country, countryGroupId);
+  const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
   analyticsInitialisation(participations);
 }
 
@@ -162,11 +162,11 @@ function init<S, A>(
   thunk?: boolean = false,
 ): Store<*, *, *> {
 
+  const { settings } = window.guardian;
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const countryId: IsoCountry = detectCountry();
   const currencyId: IsoCurrency = detectCurrency(countryGroupId);
-  const participations: Participations = abTest.init(countryId, countryGroupId);
-  const { settings } = window.guardian;
+  const participations: Participations = abTest.init(countryId, countryGroupId, settings);
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(

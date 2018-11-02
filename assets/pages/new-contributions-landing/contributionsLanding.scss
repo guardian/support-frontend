@@ -58,6 +58,7 @@ header[role="banner"] {
   max-width: 355px;
   padding: 0;
   width: 100%;
+  cursor: pointer;
 }
 
 // Safari doesn't respect styles applied to <summary> so we need this wrapper div
