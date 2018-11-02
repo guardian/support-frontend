@@ -33,7 +33,7 @@
 
 %component-heading-block__card {
   background-color: gu-colour(garnett-neutral-1);
-  color: #ffffff;
+  color: gu-colour(garnett-neutral-5);
   font-family: $gu-headline;
 }
 
@@ -55,7 +55,7 @@
 
 .component-heading-block__banner {
   @extend %component-heading-block__card;
-  border-top: 1px solid #ffffff;
+  border-top: 1px solid gu-colour(garnett-neutral-5);
   padding: ($gu-v-spacing / 1.5) ($gu-h-spacing / 2) $gu-v-spacing;
   font-size: 17px;
   line-height: 1;
