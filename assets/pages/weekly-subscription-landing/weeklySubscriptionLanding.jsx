@@ -47,7 +47,7 @@ const content = (
     header={<SimpleHeader />}
     footer={<Footer />}
   >
-    <WeeklyHero />
+    <WeeklyHero subsLink="#subscribe" />
     <WeeklyContentBlock>
       <WeeklyTextBlock title="Open up your world view, Weekly">
         <p>Inside the magazine you’ll find quality, independent journalism including opinion,
@@ -67,7 +67,7 @@ const content = (
       ]}
       />
     </WeeklyContentBlock>
-    <WeeklyContentBlock type="grey">
+    <WeeklyContentBlock type="grey" id="subscribe">
       <WeeklyTextBlock title="Get your Guardian Weekly, subscribe now">
         <p>How would you like to pay for your Guardian Weekly?</p>
       </WeeklyTextBlock>

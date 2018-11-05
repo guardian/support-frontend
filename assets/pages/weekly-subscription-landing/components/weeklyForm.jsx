@@ -6,7 +6,7 @@ import React from 'react';
 
 import uuidv4 from 'uuid';
 
-import WeeklyCtaButton from './weeklyCtaButton';
+import WeeklyCta from './weeklyCta';
 
 // ----- Render ----- //
 
@@ -20,7 +20,7 @@ const WeeklyForm = () => (
     <FormLabel type="weekly" />
     <FormLabel type="quarterly" />
     <FormLabel type="monthly" />
-    <WeeklyCtaButton type="submit">Subscribe now</WeeklyCtaButton>
+    <WeeklyCta type="submit">Subscribe now</WeeklyCta>
   </form>
 );
 
