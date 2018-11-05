@@ -17,7 +17,7 @@
   background-color: gu-colour(news-faded);
 
   // point at you can see the all the individual invalid field error messages
-  @include mq($from: 361px) {
+  @include mq($from: mobileMedium) {
     display: none;
   }
 }
