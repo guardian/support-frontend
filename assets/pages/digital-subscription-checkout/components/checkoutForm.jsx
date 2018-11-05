@@ -60,7 +60,7 @@ function CheckoutForm() {
       <LastName id="last-name" label="Last name" type="text" />
       <Country id="country" label="Country">
         {Object.keys(countries)
-          .sort((a, b) => compareString(countries[a], countries[b]))
+          .sort((a, b) => countries[a].localeCompare(countries[b]))
           .map(iso => <option value={iso}>{countries[iso]}</option>)
         }
       </Country>
