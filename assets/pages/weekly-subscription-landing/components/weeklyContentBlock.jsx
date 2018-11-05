@@ -5,7 +5,6 @@
 import React, { type Node } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { string } from 'postcss-selector-parser';
 
 
 // ---- Types ----- //
