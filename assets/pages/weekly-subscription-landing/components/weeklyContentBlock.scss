@@ -1,0 +1,34 @@
+.weekly-content-block .component-left-margin-section__content {
+  border-left: 1px solid gu-colour(garnett-neutral-4);
+}
+
+.weekly-content-block--grey .component-left-margin-section__content {
+  background-color: gu-colour(garnett-neutral-3);
+}
+
+.weekly-content-block--feature .component-left-margin-section__content {
+  background-color: gu-colour(garnett-neutral-1);
+  color: gu-colour(garnett-neutral-5);
+  .weekly-feature-list .weekly-feature-list__item {
+    border-color: gu-colour(garnett-neutral-5);
+  }
+}
+
+.weekly-content-block--dark .component-left-margin-section__content {
+  background-color: gu-colour(garnett-neutral-7);
+  color: gu-colour(garnett-neutral-5);
+}
+
+.weekly-content-block__content {
+  max-width: 1180px;
+  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
+}
+
+.weekly-content-block {
+  .weekly-feature-list {
+    margin: 0 ($gu-h-spacing / 2 * -1);
+  }
+  .weekly-text-block {
+    margin-bottom: ($gu-v-spacing*2)
+  }
+}

@@ -1,0 +1,22 @@
+.weekly-hero {
+  background: gu-colour(garnett-neutral-3);
+  overflow: hidden;
+  padding-top: 300px;
+  .component-left-margin-section__content {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+  }
+}
+
+.weekly-hero-hanger {
+  background: gu-colour(garnett-neutral-5);
+  .component-left-margin-section__content {
+    @include multiline-bottom-border;
+  }
+}
+
+.weekly-hero-hanger__content {
+  border-top: 1px solid #ffffff;
+  padding: $gu-v-spacing  ($gu-h-spacing / 2);
+  background: gu-colour(garnett-neutral-1);
+  color: #ffffff;
+}

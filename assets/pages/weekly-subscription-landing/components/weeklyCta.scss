@@ -1,0 +1,27 @@
+.weekly-cta {
+  font-size: 16px;
+  line-height: 1.2;
+  display: inline-block;
+  font-family: $gu-text-sans-web;
+  font-weight: bold;
+  padding: ($gu-v-spacing) $gu-h-spacing;
+  background-color: gu-colour(news-garnett-highlight);
+  color: gu-colour(garnett-neutral-1);
+  border: none;
+  border-radius: 600px;
+  cursor: pointer;
+   &:hover {
+    background-color: gu-colour(highlight-dark);
+  }
+}
+
+.weekly-cta__content,
+.weekly-cta svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.weekly-cta svg {
+  height: $gu-v-spacing * 2;
+  margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
+}
