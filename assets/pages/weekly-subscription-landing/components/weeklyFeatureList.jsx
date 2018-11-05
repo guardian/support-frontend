@@ -24,7 +24,7 @@ type PropTypes = {|
 const weeklyFeatureList = ({ features, headingSize }: PropTypes) => (
   <ul className="weekly-feature-list">
     {features.map(({ title, copy }) => (
-      <li>
+      <li className="weekly-feature-list__item">
         <Heading className="weekly-feature-list__title" size={headingSize}>{title}</Heading>
         {copy && <p className="weekly-feature-list__copy" >{copy}</p>}
       </li>
