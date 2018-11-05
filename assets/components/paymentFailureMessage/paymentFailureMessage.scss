@@ -12,9 +12,9 @@
 
 .component-payment-failure-message--invalid_form_mobile {
   padding-top: $gu-v-spacing;
-  padding-bottom: 0;
   margin-bottom: -$gu-v-spacing;
   color: gu-colour(news-garnett-main-1);
+  background-color: gu-colour(news-faded);
 
   // point at you can see the all the individual invalid field error messages
   @include mq($from: 361px) {
@@ -25,7 +25,6 @@
 .gu-content__content {
   .component-payment-failure-message {
     width: auto;
-    background-color: transparent;
   }
 
   .component-payment-failure-message--no-valid-payments {
