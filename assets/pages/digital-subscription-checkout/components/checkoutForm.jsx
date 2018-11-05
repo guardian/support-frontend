@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import { countries } from 'helpers/internationalisation/country';
 import { compareString } from 'helpers/utilities';
@@ -11,20 +12,21 @@ import { compareString } from 'helpers/utilities';
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
+import { asControlled } from 'components/forms/formHOCs/asControlled';
 
 import { type State, actions } from '../digitalSubscriptionCheckoutReducer';
 
 
 // ----- Form Fields ----- //
 
-function Input1({ setValue, ...props }: { id: string, label: string, value: string, setValue: string => void }) {
-  const Com = withLabel(Input);
-  return <Com {...props} onChange={e => setValue(e.target.value)} />;
+function Input1(props: { id: string, label: string, value: string, setValue: string => void }) {
+  const Com = compose(asControlled, withLabel)(Input);
+  return <Com {...props} />;
 }
 
-function Select1({ setValue, ...props }: { id: string, label: string, value: string, setValue: string => void }) {
-  const Com = withLabel(Select);
-  return <Com {...props} onChange={e => setValue(e.target.value)} />;
+function Select1(props: { id: string, label: string, value: string, setValue: string => void }) {
+  const Com = compose(asControlled, withLabel)(Select);
+  return <Com {...props} />;
 }
 
 const FirstName = connect(
@@ -54,8 +56,8 @@ function CheckoutForm() {
 
   return (
     <div>
-      <FirstName id="first-name" label="First name" />
-      <LastName id="last-name" label="Last name" />
+      <FirstName id="first-name" label="First name" type="text" />
+      <LastName id="last-name" label="Last name" type="text" />
       <Country id="country" label="Country">
         {Object.keys(countries)
           .sort((a, b) => compareString(countries[a], countries[b]))
