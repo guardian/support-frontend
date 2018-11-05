@@ -19,9 +19,9 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const WeeklyCtaButton = ({
- children, icon, type, onClick 
+  children, icon, type, onClick,
 }: PropTypes) => (
-  <button onClick={onClick} className="component-weekly-cta-button">
+  <button onClick={onClick} type={type} className="component-weekly-cta-button">
     <span className="component-weekly-cta-button__content">{children}</span>
     {icon}
   </button>

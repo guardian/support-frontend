@@ -16,7 +16,7 @@ import WeeklyContentBlock from './components/weeklyContentBlock';
 import WeeklyTextBlock from './components/weeklyTextBlock';
 import WeeklyFeatureList from './components/weeklyFeatureList';
 import WeeklyHero from './components/weeklyHero';
-import WeeklyCtaButton from './components/weeklyCtaButton';
+import WeeklyForm from './components/weeklyForm';
 
 
 // ----- Internationalisation ----- //
@@ -50,7 +50,11 @@ const content = (
     <WeeklyHero />
     <WeeklyContentBlock>
       <WeeklyTextBlock title="Open up your world view, Weekly">
-        <p>Inside the magazine you’ll find quality, independent journalism including opinion, insight, culture and access to new puzzles each week. Subscribe today and get an expert view on some of the most challenging issues of today, as well as free delivery, wherever you are in the world</p>
+        <p>Inside the magazine you’ll find quality, independent journalism including opinion,
+          insight, culture and access to new puzzles each week. Subscribe today and get an
+          expert view on some of the most challenging issues of today, as well as free delivery,
+          wherever you are in the world
+        </p>
       </WeeklyTextBlock>
     </WeeklyContentBlock>
     <WeeklyContentBlock type="feature">
@@ -66,18 +70,14 @@ const content = (
     <WeeklyContentBlock type="grey">
       <WeeklyTextBlock title="Get your Guardian Weekly, subscribe now">
         <p>How would you like to pay for your Guardian Weekly?</p>
-        <form>
-
-          <label><input type="radio" name="sub-type" value="weekly" />Weekly</label>
-          <label><input type="radio" name="sub-type" value="quarterly" />Quarterly</label>
-          <label><input type="radio" name="sub-type" value="monthly" />Monthly</label>
-          <WeeklyCtaButton type="submit">Subscribe now</WeeklyCtaButton>
-        </form>
       </WeeklyTextBlock>
+      <WeeklyForm />
     </WeeklyContentBlock>
     <WeeklyContentBlock type="white">
       <WeeklyTextBlock title="Buying as a gift?">
-        <p>If you’d like to buy a Guardian Weekly subscription as a gift, just get in touch with your local customer service team.</p>
+        <p>If you’d like to buy a Guardian Weekly subscription as a gift,
+          just get in touch with your local customer service team.
+        </p>
       </WeeklyTextBlock>
       <WeeklyFeatureList features={[
         { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
@@ -89,10 +89,16 @@ const content = (
     </WeeklyContentBlock>
     <WeeklyContentBlock type="dark">
       <WeeklyTextBlock title="Promotion terms and conditions">
-        <p>Offer subject to availability. Guardian News and Media Limited ("GNM") reserves the right to withdraw this promotion at any time. View full promotion terms and conditions here.</p>
+        <p>Offer subject to availability. Guardian News and Media Limited
+          (&quot;GNM&quot;) reserves the right to withdraw this promotion
+          at any time. View full promotion terms and conditions here.
+        </p>
       </WeeklyTextBlock>
       <WeeklyTextBlock title="Guardian Weekly terms and conditions">
-        <p>Offer subject to availability. Guardian News and Media Limited ("GNM") reserves the right to withdraw this promotion at any time. View full promotion terms and conditions <a href="#">here</a>.</p>
+        <p>Offer subject to availability. Guardian News and Media Limited
+          (&quot;GNM&quot;) reserves the right to withdraw this promotion
+          at any time. View full promotion terms and conditions here.
+        </p>
       </WeeklyTextBlock>
     </WeeklyContentBlock>
   </Page>
