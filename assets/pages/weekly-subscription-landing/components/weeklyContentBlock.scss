@@ -25,8 +25,10 @@
 }
 
 .weekly-content-block {
-  .weekly-feature-list {
-    margin: 0 ($gu-h-spacing / 2 * -1);
+  .weekly-feature-list,
+  .weekly-form {
+    margin-left: ($gu-h-spacing / 2 * -1);
+    margin-right: ($gu-h-spacing / 2 * -1);
   }
   .weekly-text-block {
     margin-bottom: ($gu-v-spacing*2)

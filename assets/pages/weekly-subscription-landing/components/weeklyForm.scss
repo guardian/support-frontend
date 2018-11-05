@@ -1,0 +1,53 @@
+.weekly-form-wrap {
+  margin-bottom: $gu-v-spacing * 2;
+}
+
+.weekly-form {
+  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-rows: 1fr;
+  margin-bottom: $gu-v-spacing * 2;
+}
+
+.weekly-form > .weekly-form__item {
+  flex: 0 0 25%;
+  padding: 0 $gu-h-spacing/2;
+  box-sizing: border-box;
+}
+
+.weekly-form-label {
+  font-family: $gu-text-sans-web;
+  border: 1px solid gu-colour(garnett-neutral-4);
+  display: block;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.weekly-form-label__input {
+  position: absolute;
+  left: -4em;
+  visibility: hidden;
+}
+
+.weekly-form-label--checked {
+  background: gu-colour(garnett-neutral-5);
+}
+
+.weekly-form-label__title,
+.weekly-form-label__copy,
+.weekly-form-label__offer {
+  padding: $gu-v-spacing/2 $gu-h-spacing/2;
+  display: block;
+}
+
+.weekly-form-label__title {
+  font-weight: 600;
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+}
+
+.weekly-form-label__offer {
+  color: gu-colour(green-dark);
+  font-weight: 600;
+}
