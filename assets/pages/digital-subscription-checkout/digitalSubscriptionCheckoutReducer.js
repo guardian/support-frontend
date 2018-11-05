@@ -8,7 +8,7 @@ import { type IsoCountry } from 'helpers/internationalisation/country';
 
 // ----- Types ----- //
 
-type Stage = 'checkout' | 'thankyou';
+export type Stage = 'checkout' | 'thankyou';
 
 type PageState = {
   stage: Stage;
