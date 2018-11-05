@@ -210,7 +210,7 @@ function ContributionForm(props: PropTypes) {
     && maxTwoDecimals(input);
 
   const invalidFormErrorMessageOnMobile = (
-    <PaymentFailureMessage classModifiers={['invalid_form_mobile']} errorHeading="Invalid fields" checkoutFailureReason="invalid_form_mobile" />
+    <PaymentFailureMessage classModifiers={['invalid_form_mobile']} errorHeading="Form incomplete" checkoutFailureReason="invalid_form_mobile" />
   );
 
   return (

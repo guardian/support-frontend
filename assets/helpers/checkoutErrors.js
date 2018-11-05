@@ -31,7 +31,7 @@ function appropriateErrorMessage(checkoutFailureReason: ?CheckoutFailureReason):
     case 'all_payment_methods_unavailable':
       return 'Sorry, our payment methods are unavailable at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your contribution or consider another type of contribution from the tabs above. Thank you.';
     case 'invalid_form_mobile':
-      return 'Please correct invalid fields and try again.';
+      return 'Please check the fields above and try again.';
     default:
       return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
   }
