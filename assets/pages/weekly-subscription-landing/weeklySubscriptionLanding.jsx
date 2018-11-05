@@ -7,8 +7,6 @@ import React from 'react';
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
-import HeadingBlock from 'components/headingBlock/headingBlock';
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { statelessInit as pageInit } from 'helpers/page/page';
@@ -17,6 +15,7 @@ import { renderPage } from 'helpers/render';
 import WeeklyContentBlock from './components/weeklyContentBlock';
 import WeeklyTextBlock from './components/weeklyTextBlock';
 import WeeklyFeatureList from './components/weeklyFeatureList';
+import WeeklyHero from './components/weeklyHero';
 
 
 // ----- Internationalisation ----- //
@@ -47,16 +46,7 @@ const content = (
     header={<SimpleHeader />}
     footer={<Footer />}
   >
-    <div className="weekly-subscription-landing-header">
-      <LeftMarginSection>
-        <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news curated to give you a clearer global perspective." />
-      </LeftMarginSection>
-    </div>
-    <div className="weekly-subscription-landing-underheader">
-      <div className="weekly-subscription-underheader">
-        See Subscription options
-      </div>
-    </div>
+    <WeeklyHero />
     <WeeklyContentBlock>
       <WeeklyTextBlock title="Open up your world view, Weekly">
         <p>Inside the magazine you’ll find quality, independent journalism including opinion, insight, culture and access to new puzzles each week. Subscribe today and get an expert view on some of the most challenging issues of today, as well as free delivery, wherever you are in the world</p>

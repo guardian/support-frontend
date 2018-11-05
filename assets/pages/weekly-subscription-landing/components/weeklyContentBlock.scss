@@ -1,6 +1,5 @@
 .component-weekly-content-block .component-left-margin-section__content {
   border-left: 1px solid gu-colour(garnett-neutral-4);
-  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
 }
 
 .component-weekly-content-block--grey .component-left-margin-section__content {
@@ -21,6 +20,7 @@
 
 .component-weekly-content-block__content {
   max-width: 1180px;
+  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
 }
 
 .component-weekly-content-block {
