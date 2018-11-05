@@ -1,4 +1,4 @@
-.component-weekly-hero {
+.weekly-hero {
   background: gu-colour(garnett-neutral-3);
   overflow: hidden;
   padding-top: 300px;
@@ -7,14 +7,14 @@
   }
 }
 
-.component-weekly-hero-hanger {
+.weekly-hero-hanger {
   background: gu-colour(garnett-neutral-5);
   .component-left-margin-section__content {
     @include multiline-bottom-border;
   }
 }
 
-.component-weekly-hero-hanger__content {
+.weekly-hero-hanger__content {
   border-top: 1px solid #ffffff;
   padding: $gu-v-spacing  ($gu-h-spacing / 2);
   background: gu-colour(garnett-neutral-1);

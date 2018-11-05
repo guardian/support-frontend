@@ -22,13 +22,13 @@ type PropTypes = {|
 const WeeklyCtaButton = ({
   children, icon, type, onClick, href,
 }: PropTypes) => (href ? (
-  <a href={href} className="component-weekly-cta">
-    <span className="component-weekly-cta__content">{children}</span>
+  <a href={href} className="weekly-cta">
+    <span className="weekly-cta__content">{children}</span>
     {icon}
   </a>
 ) : (
-  <button onClick={onClick} type={type} className="component-weekly-cta">
-    <span className="component-weekly-cta__content">{children}</span>
+  <button onClick={onClick} type={type} className="weekly-cta">
+    <span className="weekly-cta__content">{children}</span>
     {icon}
   </button>
 ));

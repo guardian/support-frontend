@@ -19,9 +19,9 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const WeeklyContentBlock = ({ type, children, id }: PropTypes) => (
-  <div id={id} className={classNameWithModifiers('component-weekly-content-block', [type])}>
+  <div id={id} className={classNameWithModifiers('weekly-content-block', [type])}>
     <LeftMarginSection>
-      <div className="component-weekly-content-block__content">
+      <div className="weekly-content-block__content">
         {children}
       </div>
     </LeftMarginSection>

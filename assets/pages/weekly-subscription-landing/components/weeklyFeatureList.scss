@@ -1,15 +1,15 @@
-.component-weekly-feature-list {
+.weekly-feature-list {
   display: flex;
 }
 
-.component-weekly-feature-list__title {
+.weekly-feature-list__title {
   font-size: 24px;
   font-weight: 200;
   line-height: 1.16;
   font-family: $gu-headline;
 }
 
-.component-weekly-feature-list li {
+.weekly-feature-list li {
   flex: 0 0 25%;
   box-sizing: border-box;
   padding: 0 ($gu-h-spacing / 2) ($gu-v-spacing*2);

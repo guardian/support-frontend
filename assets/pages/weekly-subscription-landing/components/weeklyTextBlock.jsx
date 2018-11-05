@@ -16,8 +16,8 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const WeeklyTextBlock = ({ title, children, headingSize }: PropTypes) => (
-  <div className="component-weekly-text-block">
-    <Heading className="component-weekly-text-block__heading" size={headingSize}>{title}</Heading>
+  <div className="weekly-text-block">
+    <Heading className="weekly-text-block__heading" size={headingSize}>{title}</Heading>
     {children}
   </div>
 );

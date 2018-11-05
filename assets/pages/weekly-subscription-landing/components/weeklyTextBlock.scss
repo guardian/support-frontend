@@ -1,4 +1,4 @@
-.component-weekly-text-block__heading {
+.weekly-text-block__heading {
   font-size: 24px;
   font-weight: bold;
   line-height: 1.16;
@@ -6,10 +6,10 @@
   margin-bottom: ($gu-v-spacing/2);
 }
 
-.component-weekly-text-block {
+.weekly-text-block {
   max-width: 480px;
 }
 
-.component-weekly-text-block a {
+.weekly-text-block a {
   color: inherit;
 }
