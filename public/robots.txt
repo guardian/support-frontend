@@ -17,6 +17,11 @@ Disallow: /ca/subscribe/weekly
 Disallow: /int/subscribe/weekly
 Disallow: /subscribe/weekly
 
+Disallow: /uk/subscribe/digital/checkout
+Disallow: /us/subscribe/digital/checkout
+Disallow: /au/subscribe/digital/checkout
+Disallow: /int/subscribe/digital/checkout
+
 Allow: /
 
 Sitemap: https://support.theguardian.com/sitemap.xml
