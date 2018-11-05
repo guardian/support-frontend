@@ -10,15 +10,19 @@ import play.api.libs.json.{Reads, Writes, Json => PlayJson}
   * Model for acquisition data passed by the referrer.
   */
 case class ReferrerAcquisitionData(
-    campaignCode: Option[String],
-    referrerPageviewId: Option[String],
-    referrerUrl: Option[String],
-    componentId: Option[String],
-    componentType: Option[ComponentType],
-    source: Option[AcquisitionSource],
-    abTest: Option[AbTest], //Deprecated, please use abTests
-    abTests: Option[Set[AbTest]],
-    queryParameters: Option[Set[QueryParameter]]
+  campaignCode: Option[String],
+  referrerPageviewId: Option[String],
+  referrerUrl: Option[String],
+  componentId: Option[String],
+  componentType: Option[ComponentType],
+  source: Option[AcquisitionSource],
+  abTest: Option[AbTest], //Deprecated, please use abTests
+  abTests: Option[Set[AbTest]],
+  queryParameters: Option[Set[QueryParameter]],
+  hostname: Option[String],
+  gaClientId: Option[String],
+  userAgent: Option[String],
+  ipAddress: Option[String]
 )
 
 object ReferrerAcquisitionData {

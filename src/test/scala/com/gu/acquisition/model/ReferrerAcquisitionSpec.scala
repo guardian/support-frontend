@@ -17,7 +17,11 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
     source = Some(AcquisitionSource.GuardianWeb),
     abTest = Some(AbTest("test_name", "variant_name")),
     abTests = Some(Set(AbTest("test_name", "variant_name"), AbTest("test_name2", "variant_name2"))),
-    queryParameters = Some(Set(QueryParameter("param1", "val1"), QueryParameter("param2", "val2")))
+    queryParameters = Some(Set(QueryParameter("param1", "val1"), QueryParameter("param2", "val2"))),
+    hostname = Some("hostname"),
+    gaClientId = Some("gaClientId"),
+    userAgent = Some("userAgent"),
+    ipAddress = Some("ipAddress")
   )
 
   val referrerAcquisitionCJson: CJson = CJson.obj(
@@ -50,7 +54,11 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
         "name" -> CJson.fromString("param2"),
         "value" -> CJson.fromString("val2")
       )
-    )
+    ),
+    "hostname" -> CJson.fromString("hostname"),
+    "gaClientId" -> CJson.fromString("gaClientId"),
+    "userAgent" -> CJson.fromString("userAgent"),
+    "ipAddress" -> CJson.fromString("ipAddress")
   )
 
   val referrerAcquisitionPJson: JsObject = PJson.obj(
@@ -83,7 +91,11 @@ class ReferrerAcquisitionSpec extends WordSpecLike with Matchers with EitherValu
         "name" -> "param2",
         "value" -> "val2"
       )
-    )
+    ),
+    "hostname" -> "hostname",
+    "gaClientId" -> "gaClientId",
+    "userAgent" -> "userAgent",
+    "ipAddress" -> "ipAddress"
   )
 
   "Referrer acquisition data" should {
