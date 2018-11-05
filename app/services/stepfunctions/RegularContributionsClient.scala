@@ -14,7 +14,7 @@ import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
-import com.gu.support.workers.model.AccessScope.SessionId
+import com.gu.support.workers.model.AccountAccessScope.{SessionAccess, SessionId}
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
 import play.api.mvc.Call
@@ -22,6 +22,7 @@ import com.gu.support.workers.model.Status
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
+
 import scala.util.{Failure, Success, Try}
 
 object CreateRegularContributorRequest {
@@ -82,8 +83,13 @@ class RegularContributionsClient(
     request: CreateRegularContributorRequest,
     user: User,
     requestId: UUID,
-    accessScope: AccessScope
+    accessScope: AccountAccessScope
   ): EitherT[Future, RegularContributionError, StatusResponse] = {
+    val sessionId = accessScope match {
+      case SessionAccess(id) => Some(id.value)
+      case _ => None
+    }
+
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
@@ -94,7 +100,7 @@ class RegularContributionsClient(
         referrerAcquisitionData = request.referrerAcquisitionData,
         supportAbTests = request.supportAbTests
       )),
-      sessionId = accessScope.toOption
+      sessionId = sessionId
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
