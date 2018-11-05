@@ -16,6 +16,7 @@ import WeeklyContentBlock from './components/weeklyContentBlock';
 import WeeklyTextBlock from './components/weeklyTextBlock';
 import WeeklyFeatureList from './components/weeklyFeatureList';
 import WeeklyHero from './components/weeklyHero';
+import WeeklyCtaButton from './components/weeklyCtaButton';
 
 
 // ----- Internationalisation ----- //
@@ -65,6 +66,13 @@ const content = (
     <WeeklyContentBlock type="grey">
       <WeeklyTextBlock title="Get your Guardian Weekly, subscribe now">
         <p>How would you like to pay for your Guardian Weekly?</p>
+        <form>
+
+          <label><input type="radio" name="sub-type" value="weekly" />Weekly</label>
+          <label><input type="radio" name="sub-type" value="quarterly" />Quarterly</label>
+          <label><input type="radio" name="sub-type" value="monthly" />Monthly</label>
+          <WeeklyCtaButton type="submit">Subscribe now</WeeklyCtaButton>
+        </form>
       </WeeklyTextBlock>
     </WeeklyContentBlock>
     <WeeklyContentBlock type="white">

@@ -6,6 +6,7 @@ import React from 'react';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
+import WeeklyCtaButton from './weeklyCtaButton';
 
 // ----- Render ----- //
 
@@ -17,7 +18,7 @@ const WeeklyHero = () => (
     <div className="component-weekly-hero-hanger">
       <LeftMarginSection>
         <div className="component-weekly-hero-hanger__content">
-          See Subscription options
+          <WeeklyCtaButton>See Subscription options</WeeklyCtaButton>
         </div>
       </LeftMarginSection>
     </div>

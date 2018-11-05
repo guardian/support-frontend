@@ -7,9 +7,10 @@
 }
 
 .component-weekly-content-block--feature .component-left-margin-section__content {
-  background-color: gu-colour(news-garnett-highlight);
+  background-color: gu-colour(garnett-neutral-1);
+  color: gu-colour(garnett-neutral-5);
   .component-weekly-feature-list li {
-    border-color: gu-colour(garnett-neutral-1);
+    border-color: gu-colour(garnett-neutral-5);
   }
 }
 
