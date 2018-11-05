@@ -19,7 +19,7 @@ resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
 libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9" % "provided",
-  "com.gu" %% "acquisition-event-producer-play26" % "4.0.9"
+  "com.gu" %% "acquisition-event-producer-play26" % "4.0.12"
 )
 
 releaseProcess := Seq[ReleaseStep](
