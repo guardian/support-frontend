@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { countries } from 'helpers/internationalisation/country';
-import { compareString } from 'helpers/utilities';
 
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
