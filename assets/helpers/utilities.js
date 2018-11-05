@@ -92,7 +92,6 @@ function addLeadingZeros(value: number, length: number = 2): string {
 export {
   ascending,
   descending,
-  compareString,
   roundDp,
   classNameWithModifiers,
   hiddenIf,
