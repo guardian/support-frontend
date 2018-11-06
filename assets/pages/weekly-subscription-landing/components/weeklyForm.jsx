@@ -5,6 +5,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import SvgInfo from 'components/svgs/information';
+
 import WeeklyCta from './weeklyCta';
 import { subscriptions, type Subscription } from './../weeklySubscriptionLandingReducer';
 import { type State } from './../weeklySubscriptionLandingReducer';
@@ -29,7 +31,7 @@ const WeeklyForm = ({ checked }: PropTypes) => (
   <form className="weekly-form-wrap" onSubmit={(ev) => { onSubmit(ev, checked); }}>
     <div className="weekly-form">
       {Object.keys(subscriptions).map((type: Subscription) => {
-         const {
+        const {
           offer, copy, title,
         } = subscriptions[type];
         return (
@@ -38,12 +40,16 @@ const WeeklyForm = ({ checked }: PropTypes) => (
               {copy}
             </WeeklyFormLabel>
           </div>
-
-    );
-})}
+          );
+        })}
     </div>
 
     <WeeklyCta disabled={checked === null} type="submit">Subscribe now{checked && ` – ${subscriptions[checked].title}`}</WeeklyCta>
+
+    <div className="weekly-form__info">
+      <SvgInfo />
+      You can cancel your subscription at any time
+    </div>
   </form>
 );
 
