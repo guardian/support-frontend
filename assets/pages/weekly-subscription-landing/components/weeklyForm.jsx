@@ -8,8 +8,7 @@ import { connect } from 'react-redux';
 import SvgInfo from 'components/svgs/information';
 
 import WeeklyCta from './weeklyCta';
-import { subscriptions, type Subscription } from './../weeklySubscriptionLandingReducer';
-import { type State } from './../weeklySubscriptionLandingReducer';
+import { subscriptions, type Subscription, type State } from '../weeklySubscriptionLandingReducer';
 import WeeklyFormLabel from './weeklyFormLabel';
 
 // ---- Types ----- //

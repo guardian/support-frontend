@@ -8,8 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import uuidv4 from 'uuid';
 
-import { type Subscription } from '../weeklySubscriptionLandingReducer';
-import { type State } from '../weeklySubscriptionLandingReducer';
+import { type Subscription, type State } from '../weeklySubscriptionLandingReducer';
 import { setSubscription, type Action } from '../weeklySubscriptionLandingActions';
 
 // ---- Types ----- //
