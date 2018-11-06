@@ -10,7 +10,10 @@
   border: none;
   border-radius: 600px;
   cursor: pointer;
-   &:hover {
+  transition: background-color .2s;
+  will-change: background-color;
+
+  &:hover {
     background-color: gu-colour(highlight-dark);
   }
 }
