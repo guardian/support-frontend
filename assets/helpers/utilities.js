@@ -86,9 +86,12 @@ function addLeadingZeros(value: number, length: number = 2): string {
   return valueStr;
 }
 
+// Object with all enum keys
+type EnumMap<K: string, V, O: Object = *> = O & { [K]: V & $ElementType<O, K> };
+
 
 // ----- Exports ----- //
-
+export type { EnumMap };
 export {
   ascending,
   descending,

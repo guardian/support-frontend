@@ -10,15 +10,13 @@ import { currencies, detect } from './internationalisation/currency';
 
 
 // ----- Types ------ //
-
 export type SubscriptionProduct =
   'DigitalPack' |
   'PremiumTier' |
   'DailyEdition' |
   'GuardianWeekly' |
   'Paper' |
-  'PaperAndDigital' |
-  'Weekly';
+  'PaperAndDigital';
 
 type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
 
@@ -29,9 +27,17 @@ export type ComponentAbTest = {
 
 
 // ----- Config ----- //
+const billingPeriods = {
+  sixweek: 'sixweek', quarter: 'quarter', year: 'year', month: 'month',
+};
+const weeklyBillingPeriods = {
+  sixweek: 'sixweek',
+  quarter: 'quarter',
+  year: 'year',
+};
 
-type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
-export type WeeklyBillingPeriod = BillingPeriod & 'sixweek' | 'quarter' | 'year';
+export type BillingPeriod = $Keys<typeof billingPeriods>;
+export type WeeklyBillingPeriod = BillingPeriod & $Keys<typeof weeklyBillingPeriods>;
 
 const subscriptionPrices: {
   [SubscriptionProduct]: {
@@ -53,10 +59,13 @@ const subscriptionPrices: {
     International: { month: 19.99 },
   },
   GuardianWeekly: {
-    GBPCountries: { quarter: 37.50 },
-    UnitedStates: { quarter: 75 },
-    AUDCountries: { quarter: 97.50 },
-    International: { quarter: 81.30 },
+    GBPCountries: { quarter: 37.50, sixweek: 6, year: 150 },
+    EURCountries: { quarter: 61.30, sixweek: 6, year: 245.20 },
+    UnitedStates: { quarter: 75, sixweek: 6, year: 300 },
+    Canada: { quarter: 80, sixweek: 6, year: 320 },
+    AUDCountries: { quarter: 97.50, sixweek: 6, year: 390 },
+    NZDCountries: { quarter: 123, sixweek: 6, year: 492 },
+    International: { quarter: 81.30, sixweek: 6, year: 325.20 },
   },
   Paper: {
     GBPCountries: { month: 10.36 },
@@ -70,7 +79,7 @@ const subscriptionPrices: {
 };
 
 const defaultBillingPeriods: {
-  [SubscriptionProduct]: BillingPeriod,
+  [SubscriptionProduct]: BillingPeriod
 } = {
   PremiumTier: 'month',
   DigitalPack: 'month',
@@ -88,14 +97,21 @@ function getProductPrice(
   countryGroupId: CountryGroupId,
   billingPeriod?: BillingPeriod,
 ): string {
-  const useBillingPeriod: BillingPeriod = billingPeriod || defaultBillingPeriods[product];
-  return subscriptionPrices[product][countryGroupId][useBillingPeriod].toFixed(2);
+  const useBillingPeriod = billingPeriod || defaultBillingPeriods[product];
+  const price = subscriptionPrices[product][countryGroupId][useBillingPeriod].toFixed(2);
+  if (!price) { throw new Error(`Missing price for ${product}/${countryGroupId}/${useBillingPeriod}`); }
+  return price;
 }
 
-function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+function displayPrice(
+  product: SubscriptionProduct,
+  countryGroupId: CountryGroupId,
+  billingPeriod?: BillingPeriod,
+): string {
+  const useBillingPeriod: BillingPeriod = billingPeriod || defaultBillingPeriods[product];
   const currency = currencies[detect(countryGroupId)].glyph;
-  const price = getProductPrice(product, countryGroupId);
-  return `${currency}${price}/${defaultBillingPeriods[product]}`;
+  const price = getProductPrice(product, countryGroupId, billingPeriod);
+  return `${currency}${price}/${useBillingPeriod}`;
 }
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {

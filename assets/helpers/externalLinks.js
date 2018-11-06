@@ -14,6 +14,7 @@ import {
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { getBaseDomain } from 'helpers/url';
+import type { EnumMap } from 'helper/utilities';
 
 import { getPromoCode, getIntcmp } from './flashSale';
 import type { SubscriptionProduct, WeeklyBillingPeriod } from './subscriptions';
@@ -22,8 +23,6 @@ import type { SubscriptionProduct, WeeklyBillingPeriod } from './subscriptions';
 // ----- Types ----- //
 
 export type MemProduct = 'patrons' | 'events';
-
-type EnumMap<K: string, V, O: Object = *> = O & { [K]: V & $ElementType<O, K> };
 
 type PromoCodes = {
   [SubscriptionProduct]: string,

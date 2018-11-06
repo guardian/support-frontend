@@ -3,8 +3,9 @@
 // ----- Imports ----- //
 
 import type { CommonState } from 'helpers/page/page';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
+import { type WeeklyBillingPeriod, displayPrice } from 'helpers/subscriptions';
 import { type Action } from './weeklySubscriptionLandingActions';
 
 
@@ -12,7 +13,7 @@ import { type Action } from './weeklySubscriptionLandingActions';
 export type BillingPeriodWithDetails = {
   title: string,
   offer?: ?string,
-  copy: string,
+  copy: (countryGroupId: CountryGroupId) => string,
 }
 
 export const billingPeriods: {
@@ -21,16 +22,16 @@ export const billingPeriods: {
   sixweek: {
     title: 'Weekly',
     offer: 'Introductory offer',
-    copy: '6 issues for 6 pounds and then £37 every 3 months',
+    copy: countryGroupId => `6 issues for 6 pounds and then ${displayPrice('GuardianWeekly', countryGroupId, 'quarter')}`,
   },
   quarter: {
     title: 'Quarterly',
-    copy: '6 issues for 6 pounds and then £37 every 3 months',
+    copy: countryGroupId => `${displayPrice('GuardianWeekly', countryGroupId, 'quarter')}/quarter`,
   },
   year: {
     title: 'Annually',
     offer: '10% off',
-    copy: '6 issues for 6 pounds and then £37 every 3 months',
+    copy: countryGroupId => `${displayPrice('GuardianWeekly', countryGroupId, 'year')}/year`,
   },
 };
 

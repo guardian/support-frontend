@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import SvgInfo from 'components/svgs/information';
 import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { getWeeklyCheckout } from 'helpers/externalLinks';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import WeeklyCta from './weeklyCta';
 import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
@@ -18,7 +19,8 @@ import WeeklyFormLabel from './weeklyFormLabel';
 
 type PropTypes = {|
   checked?: ?WeeklyBillingPeriod,
-  url?: ?string
+  url?: ?string,
+  countryGroupId: CountryGroupId
 |};
 
 // ----- Render ----- //
@@ -28,7 +30,7 @@ const onSubmit = (ev: Event, url: ?string) => {
   if (url) { window.location.href = url; }
 };
 
-const WeeklyForm = ({ checked, url }: PropTypes) => (
+const WeeklyForm = ({ checked, url, countryGroupId }: PropTypes) => (
   <form className="weekly-form-wrap" onSubmit={(ev) => { onSubmit(ev, url); }}>
     <div className="weekly-form">
       {Object.keys(billingPeriods).map((type: WeeklyBillingPeriod) => {
@@ -38,7 +40,7 @@ const WeeklyForm = ({ checked, url }: PropTypes) => (
         return (
           <div className="weekly-form__item">
             <WeeklyFormLabel title={title} offer={offer} type={type} key={type}>
-              {copy}
+              {copy(countryGroupId)}
             </WeeklyFormLabel>
           </div>
           );
@@ -68,6 +70,7 @@ const mapStateToProps = (state: State) => {
   const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
   return {
     checked: state.page.period,
+    countryGroupId,
     url: state.page.period ? getWeeklyCheckout(
       referrerAcquisitionData,
       state.page.period,
