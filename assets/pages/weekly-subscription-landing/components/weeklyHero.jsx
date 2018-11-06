@@ -6,6 +6,8 @@ import React from 'react';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
+import SvgChevron from 'components/svgs/chevron';
+
 import WeeklyCta from './weeklyCta';
 
 
@@ -26,7 +28,7 @@ const WeeklyHero = ({ subsLink }: PropTypes) => (
     <div className="weekly-hero-hanger">
       <LeftMarginSection>
         <div className="weekly-hero-hanger__content">
-          <WeeklyCta href={subsLink}>See Subscription options</WeeklyCta>
+          <WeeklyCta icon={<SvgChevron />} href={subsLink}>See Subscription options</WeeklyCta>
         </div>
       </LeftMarginSection>
     </div>

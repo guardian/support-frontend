@@ -25,3 +25,7 @@
   height: $gu-v-spacing * 2;
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
 }
+
+.weekly-cta svg.svg-chevron {
+  height: $gu-v-spacing * 1.1;
+}
