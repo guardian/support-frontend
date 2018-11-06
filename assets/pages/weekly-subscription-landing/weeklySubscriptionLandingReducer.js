@@ -7,9 +7,37 @@ import type { CommonState } from 'helpers/page/page';
 import { type Action } from './weeklySubscriptionLandingActions';
 
 
-// ----- Types ----- //
+// ----- Subs ------ //
+export type SubscriptionWithDetails = {
+  title: string,
+  offer?: ?string,
+  copy: string,
+}
 
-export type Subscription = 'weekly' | 'monthly' | 'quarterly';
+type Subscriptions = {
+  weekly: SubscriptionWithDetails,
+  quarterly: SubscriptionWithDetails,
+  annually: SubscriptionWithDetails
+}
+
+export const subscriptions: Subscriptions = {
+  weekly: {
+    title: 'Weekly',
+    offer: 'Introductory offer',
+    copy: '6 issues for 6 pounds and then £37 every 3 months',
+  },
+  quarterly: {
+    title: 'Quarterly',
+    copy: '6 issues for 6 pounds and then £37 every 3 months',
+  },
+  annually: {
+    title: 'Annually',
+    offer: '10% off',
+    copy: '6 issues for 6 pounds and then £37 every 3 months',
+  },
+};
+
+export type Subscription = $Keys<typeof subscriptions>;
 
 type PageState = {
   subscription: Subscription;
