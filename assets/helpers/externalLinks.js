@@ -42,33 +42,43 @@ const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardia
 const emailPreferencesUrl = `https://profile.${getBaseDomain()}/email-prefs`;
 
 function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGroupId) {
+
+  const sixWeekDomestic = 'weeklydomestic-gwoct18-sixforsix-domestic';
+  const sixWeekRow = 'weeklyrestofworld-gwoct18-sixforsix-row';
+
+  const quarterDomestic = 'weeklydomestic-gwoct18-quarterly-domestic';
+  const quarterRow = 'weeklyrestofworld-gwoct18-quarterly-row';
+
+  const yearDomestic = 'weeklydomestic-gwoct18-annual-domestic';
+  const yearRow = 'weeklyrestofworld-gwoct18-quarterly-row';
+
   const urls: EnumMap<WeeklyBillingPeriod, EnumMap<CountryGroupId, string>> = {
     sixweek: {
-      GBPCountries: 'weeklydomestic-gwoct18-sixforsix-domestic',
-      UnitedStates: 'weeklydomestic-gwoct18-sixforsix-domestic',
-      AUDCountries: 'weeklydomestic-gwoct18-sixforsix-domestic',
-      NZDCountries: 'weeklydomestic-gwoct18-sixforsix-domestic',
-      EURCountries: 'weeklydomestic-gwoct18-sixforsix-domestic',
-      Canada: 'weeklydomestic-gwoct18-sixforsix-domestic',
-      International: 'weeklyrestofworld-gwoct18-sixforsix-row',
+      GBPCountries: sixWeekDomestic,
+      UnitedStates: sixWeekDomestic,
+      AUDCountries: sixWeekDomestic,
+      NZDCountries: sixWeekDomestic,
+      EURCountries: sixWeekDomestic,
+      Canada: sixWeekDomestic,
+      International: sixWeekRow,
     },
     quarter: {
-      GBPCountries: 'weeklydomestic-gwoct18-quarterly-domestic',
-      UnitedStates: 'weeklydomestic-gwoct18-quarterly-domestic',
-      AUDCountries: 'weeklydomestic-gwoct18-quarterly-domestic',
-      NZDCountries: 'weeklydomestic-gwoct18-quarterly-domestic',
-      EURCountries: 'weeklydomestic-gwoct18-quarterly-domestic',
-      Canada: 'weeklydomestic-gwoct18-quarterly-domestic',
-      International: 'weeklyrestofworld-gwoct18-quarterly-row',
+      GBPCountries: quarterDomestic,
+      UnitedStates: quarterDomestic,
+      AUDCountries: quarterDomestic,
+      NZDCountries: quarterDomestic,
+      EURCountries: quarterDomestic,
+      Canada: quarterDomestic,
+      International: quarterRow,
     },
     year: {
-      GBPCountries: 'weeklydomestic-gwoct18-annual-domestic',
-      UnitedStates: 'weeklydomestic-gwoct18-annual-domestic',
-      AUDCountries: 'weeklydomestic-gwoct18-annual-domestic',
-      NZDCountries: 'weeklydomestic-gwoct18-annual-domestic',
-      EURCountries: 'weeklydomestic-gwoct18-annual-domestic',
-      Canada: 'weeklydomestic-gwoct18-annual-domestic',
-      International: 'weeklyrestofworld-gwoct18-annual-row',
+      GBPCountries: yearDomestic,
+      UnitedStates: yearDomestic,
+      AUDCountries: yearDomestic,
+      NZDCountries: yearDomestic,
+      EURCountries: yearDomestic,
+      Canada: yearDomestic,
+      International: yearRow,
     },
   };
 
