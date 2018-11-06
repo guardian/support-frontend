@@ -12,11 +12,11 @@ export type Action = { type: 'SET_SUBSCRIPTION', subscription: Subscription };
 
 // ----- Action Creators ----- //
 
-function setStage(subscription: Subscription): Action {
+function setSubscription(subscription: Subscription): Action {
   return { type: 'SET_SUBSCRIPTION', subscription };
 }
 
 
 // ----- Exports ----- //
 
-export { setStage };
+export { setSubscription };

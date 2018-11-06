@@ -3,32 +3,38 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import uuidv4 from 'uuid';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import WeeklyCta from './weeklyCta';
+import { type Subscription } from './../weeklySubscriptionLandingReducer';
+import { type State } from './../weeklySubscriptionLandingReducer';
+import { setSubscription, type Action } from './../weeklySubscriptionLandingActions';
 
 // ---- Types ----- //
 
 type LabelPropTypes = {|
-  type: string,
+  type: Subscription,
   title: string,
   offer?: ?string,
   children: Node,
-  checked: boolean,
+  checked?: ?Subscription,
+  setSubscriptionAction: (Subscription) => Action,
 |};
 
 
 // ----- Render ----- //
 
-const FormLabel = ({
-  type, title, offer, children, checked,
+const PreFormLabel = ({
+  type, title, offer, children, checked, setSubscriptionAction,
 }: LabelPropTypes) => {
   const id = uuidv4();
   return (
-    <label className={classNameWithModifiers('weekly-form-label', [checked ? 'checked' : null])} htmlFor={id}>
-      <input className="weekly-form-label__input" id={id} type="radio" name="sub-type" value={type} />
+    <label onChange={() => { setSubscriptionAction(type); }} className={classNameWithModifiers('weekly-form-label', [type === checked ? 'checked' : null])} htmlFor={id}>
+      <input checked={type === checked} className="weekly-form-label__input" id={id} type="radio" name="sub-type" value={type} />
       <div className="weekly-form-label__title">{title}</div>
       {offer && <div className="weekly-form-label__offer">{offer}</div>}
       <div className="weekly-form-label__copy">{children}</div>
@@ -36,10 +42,24 @@ const FormLabel = ({
   );
 };
 
-FormLabel.defaultProps = {
+PreFormLabel.defaultProps = {
   offer: null,
-  checked: false,
+  checked: null,
 };
+
+
+// ----- State/Props Maps ----- //
+
+const mapStateToProps = (state: State) => ({
+  checked: state.page.subscription,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  setSubscriptionAction: bindActionCreators(setSubscription, dispatch),
+});
+
+
+const FormLabel = connect(mapStateToProps, mapDispatchToProps)(PreFormLabel);
 
 const WeeklyForm = () => (
   <form className="weekly-form-wrap">
