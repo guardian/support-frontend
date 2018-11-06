@@ -114,7 +114,7 @@ function paymentResultFromObject(json: Object): Promise<PaymentResult> {
 function postOneOffStripeExecutePaymentRequest(data: StripeChargeData): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
-    requestOptions(data, 'same-origin', 'POST', null),
+    requestOptions(data, 'omit', 'POST', null),
   ).then(paymentResultFromObject));
 }
 
@@ -137,7 +137,7 @@ function createPayPalPaymentResponseFromObject(res: Object): CreatePayPalPayment
 function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Promise<CreatePayPalPaymentResponse> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
-    requestOptions(data, 'same-origin', 'POST', null),
+    requestOptions(data, 'omit', 'POST', null),
   )).then(createPayPalPaymentResponseFromObject)
     .catch(err => unexpectedError(`error creating a PayPal payment: ${err}`));
 }

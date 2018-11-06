@@ -4,14 +4,13 @@ import cats.data.EitherT
 import monitoring.SafeLogger._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
+
 import services.ExecutePaymentBody._
 import codecs.CirceDecoders._
 import io.circe.Decoder
 import io.circe.parser.decode
 import monitoring.SafeLogger
 import cats.implicits._
-import play.api.libs.ws.ahc.CookieBuilder
-import play.libs.ws.WSCookie
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,7 +40,7 @@ object PaymentAPIService {
   case class Email(value: String)
 }
 
-class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: ExecutionContext) extends CookieBuilder {
+class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: ExecutionContext) {
 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
   private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
@@ -60,22 +59,16 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
   private def postPaypalData[A](
     data: ExecutePaymentBody,
     queryStrings: Map[String, Seq[String]],
-    isTestUser: Boolean,
-    gaId: Option[String]
+    isTestUser: Boolean
   ): EitherT[Future, PaymentAPIResponseError[A], WSResponse] = {
 
     val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
-
-    val cookies: Map[String, Seq[String]] = gaId
-      .map(id => Map("_ga" -> Seq(id)))
-      .getOrElse(Map.empty)
 
     wsClient.url(payPalExecutePaymentEndpoint)
       .withQueryStringParameters(convertQueryString(allQueryParams): _*)
       .withHttpHeaders("Accept" -> "application/json")
       .withBody(Json.toJson(data))
       .withMethod("POST")
-      .withCookies(buildCookies(cookies): _*)
       .execute()
       .attemptT
       .leftMap(PaymentAPIResponseError.ExecuteError)
@@ -102,10 +95,9 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
     acquisitionData: JsValue,
     queryStrings: Map[String, Seq[String]],
     email: Option[String],
-    isTestUser: Boolean,
-    gaId: Option[String]
+    isTestUser: Boolean
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postPaypalData(data, queryStrings, isTestUser, gaId).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
+    postPaypalData(data, queryStrings, isTestUser).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
   }
 }
