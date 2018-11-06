@@ -155,6 +155,7 @@ class Application(
       id = s"new-contributions-landing-page-$countryCode",
       js = "newContributionsLandingPage.js",
       css = "newContributionsLandingPageStyles.css",
+      description = stringsConfig.contributionsLandingDescription,
       oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
       oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
       regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
