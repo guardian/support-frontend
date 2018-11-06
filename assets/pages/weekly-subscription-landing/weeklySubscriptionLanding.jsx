@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import Footer from 'components/footer/footer';
 
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -41,6 +41,19 @@ const reactElementId: {
   International: 'weekly-landing-page-int',
 };
 
+const CountrySwitcherHeader = countrySwitcherHeaderContainer(
+  '/subscribe/weekly',
+  [
+    'GBPCountries',
+    'UnitedStates',
+    'AUDCountries',
+    'EURCountries',
+    'Canada',
+    'NZDCountries',
+    'International',
+  ],
+);
+
 // ----- Page Startup ----- //
 
 pageInit();
@@ -51,7 +64,7 @@ pageInit();
 const content = (
   <Provider store={store}>
     <Page
-      header={<SimpleHeader />}
+      header={<CountrySwitcherHeader />}
       footer={<Footer />}
     >
       <WeeklyHero subsLink="#subscribe" />
