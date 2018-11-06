@@ -1,20 +1,26 @@
+.weekly-form-label-wrap {
+  position: relative;
+  height: 100%;
+}
+
+.weekly-form-label-wrap__input {
+  position: absolute;
+  opacity: 0;
+}
+
 .weekly-form-label {
   font-family: $gu-text-sans-web;
   border: 1px solid gu-colour(garnett-neutral-4);
   display: block;
-  overflow: hidden;
-  position: relative;
   height: 100%;
   cursor: pointer;
 }
 
-.weekly-form-label__input {
-  position: absolute;
-  left: -4em;
-  visibility: hidden;
+.weekly-form-label-wrap__input:focus + .weekly-form-label {
+  box-shadow: 0 0 0 2px gu-colour(news-garnett-highlight);
 }
 
-.weekly-form-label--checked {
+.weekly-form-label-wrap__input:checked + .weekly-form-label {
   background: gu-colour(garnett-neutral-5);
 }
 

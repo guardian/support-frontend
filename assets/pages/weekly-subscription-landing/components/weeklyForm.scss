@@ -16,43 +16,6 @@
   }
 }
 
-.weekly-form-label {
-  font-family: $gu-text-sans-web;
-  border: 1px solid gu-colour(garnett-neutral-4);
-  display: block;
-  overflow: hidden;
-  position: relative;
-  height: 100%;
-  cursor: pointer;
-}
-
-.weekly-form-label__input {
-  position: absolute;
-  left: -4em;
-  visibility: hidden;
-}
-
-.weekly-form-label--checked {
-  background: gu-colour(garnett-neutral-5);
-}
-
-.weekly-form-label__title,
-.weekly-form-label__copy,
-.weekly-form-label__offer {
-  padding: $gu-v-spacing/2 $gu-h-spacing/2;
-  display: block;
-}
-
-.weekly-form-label__title {
-  font-weight: 600;
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-}
-
-.weekly-form-label__offer {
-  color: gu-colour(green-dark);
-  font-weight: 600;
-}
-
 .weekly-form__info {
   padding-top: $gu-v-spacing * 2;
   padding-bottom: $gu-v-spacing * 2.5;

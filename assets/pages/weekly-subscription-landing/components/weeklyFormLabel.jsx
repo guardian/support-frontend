@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import uuidv4 from 'uuid';
-import { classNameWithModifiers } from 'helpers/utilities';
 
 import { type Subscription } from '../weeklySubscriptionLandingReducer';
 import { type State } from '../weeklySubscriptionLandingReducer';
@@ -32,11 +31,13 @@ const WeeklyFormLabel = ({
 }: PropTypes) => {
   const id = uuidv4();
   return (
-    <label onChange={() => { setSubscriptionAction(type); }} className={classNameWithModifiers('weekly-form-label', [type === checked ? 'checked' : null])} htmlFor={id}>
-      <input checked={type === checked} className="weekly-form-label__input" id={id} type="radio" name="sub-type" value={type} />
-      <div className="weekly-form-label__title">{title}</div>
-      {offer && <div className="weekly-form-label__offer">{offer}</div>}
-      <div className="weekly-form-label__copy">{children}</div>
+    <label onChange={() => { setSubscriptionAction(type); }} htmlFor={id} className="weekly-form-label-wrap">
+      <input checked={type === checked} className="weekly-form-label-wrap__input" id={id} type="radio" name="sub-type" value={type} />
+      <div className="weekly-form-label">
+        <div className="weekly-form-label__title">{title}</div>
+        {offer && <div className="weekly-form-label__offer">{offer}</div>}
+        <div className="weekly-form-label__copy">{children}</div>
+      </div>
     </label>
   );
 };
