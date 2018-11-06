@@ -22,16 +22,16 @@ export const billingPeriods: {
   sixweek: {
     title: 'Weekly',
     offer: 'Introductory offer',
-    copy: countryGroupId => `6 issues for 6 pounds and then ${displayPrice('GuardianWeekly', countryGroupId, 'quarter')}`,
+    copy: countryGroupId => `6 issues for 6 pounds and then ${displayPrice<WeeklyBillingPeriod>('GuardianWeekly', countryGroupId, 'quarter')}`,
   },
   quarter: {
     title: 'Quarterly',
-    copy: countryGroupId => `${displayPrice('GuardianWeekly', countryGroupId, 'quarter')}/quarter`,
+    copy: countryGroupId => `${displayPrice<WeeklyBillingPeriod>('GuardianWeekly', countryGroupId, 'quarter')}/quarter`,
   },
   year: {
     title: 'Annually',
     offer: '10% off',
-    copy: countryGroupId => `${displayPrice('GuardianWeekly', countryGroupId, 'year')}/year`,
+    copy: countryGroupId => `${displayPrice<WeeklyBillingPeriod>('GuardianWeekly', countryGroupId, 'year')}/year`,
   },
 };
 
