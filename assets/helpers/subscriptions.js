@@ -29,42 +29,47 @@ export type ComponentAbTest = {
 
 // ----- Config ----- //
 
+type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
+export type WeeklyBillingPeriod = BillingPeriod & 'sixweek' | 'quarter' | 'year';
+
 const subscriptionPrices: {
   [SubscriptionProduct]: {
-    [CountryGroupId]: number,
+    [CountryGroupId]: {
+      [BillingPeriod]: number
+    },
   }
 } = {
   PremiumTier: {
-    GBPCountries: 5.99,
-    UnitedStates: 6.99,
-    AUDCountries: 7.99,
-    International: 5.99,
+    GBPCountries: { month: 5.99 },
+    UnitedStates: { month: 6.99 },
+    AUDCountries: { month: 7.99 },
+    International: { month: 5.99 },
   },
   DigitalPack: {
-    GBPCountries: 11.99,
-    UnitedStates: 19.99,
-    AUDCountries: 21.50,
-    International: 19.99,
+    GBPCountries: { month: 11.99 },
+    UnitedStates: { month: 19.99 },
+    AUDCountries: { month: 21.50 },
+    International: { month: 19.99 },
   },
   GuardianWeekly: {
-    GBPCountries: 37.50,
-    UnitedStates: 75,
-    AUDCountries: 97.50,
-    International: 81.30,
+    GBPCountries: { quarter: 37.50 },
+    UnitedStates: { quarter: 75 },
+    AUDCountries: { quarter: 97.50 },
+    International: { quarter: 81.30 },
   },
   Paper: {
-    GBPCountries: 10.36,
+    GBPCountries: { month: 10.36 },
   },
   PaperAndDigital: {
-    GBPCountries: 21.62,
+    GBPCountries: { month: 21.62 },
   },
   DailyEdition: {
-    GBPCountries: 11.99,
+    GBPCountries: { month: 11.99 },
   },
 };
 
 const defaultBillingPeriods: {
-  [SubscriptionProduct]: string,
+  [SubscriptionProduct]: BillingPeriod,
 } = {
   PremiumTier: 'month',
   DigitalPack: 'month',
@@ -75,13 +80,15 @@ const defaultBillingPeriods: {
 };
 
 
-// ----- Weekly ----- //
-export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
-
 // ----- Functions ----- //
 
-function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  return subscriptionPrices[product][countryGroupId].toFixed(2);
+function getProductPrice(
+  product: SubscriptionProduct,
+  countryGroupId: CountryGroupId,
+  billingPeriod?: BillingPeriod,
+): string {
+  const useBillingPeriod: BillingPeriod = billingPeriod || defaultBillingPeriods[product];
+  return subscriptionPrices[product][countryGroupId][useBillingPeriod].toFixed(2);
 }
 
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
