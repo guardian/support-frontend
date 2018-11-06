@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { EnumMap } from 'helpers/utilities';
 
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
@@ -10,6 +11,7 @@ import { currencies, detect } from './internationalisation/currency';
 
 
 // ----- Types ------ //
+
 export type SubscriptionProduct =
   'DigitalPack' |
   'PremiumTier' |
@@ -44,7 +46,8 @@ const subscriptionPrices: {
     [CountryGroupId]: {
       [BillingPeriod]: number
     },
-  }
+  },
+  GuardianWeekly: EnumMap<CountryGroupId, EnumMap<WeeklyBillingPeriod, number>>
 } = {
   PremiumTier: {
     GBPCountries: { month: 5.99 },
@@ -79,7 +82,8 @@ const subscriptionPrices: {
 };
 
 const defaultBillingPeriods: {
-  [SubscriptionProduct]: BillingPeriod
+  [SubscriptionProduct]: BillingPeriod,
+  'GuardianWeekly': WeeklyBillingPeriod,
 } = {
   PremiumTier: 'month',
   DigitalPack: 'month',
@@ -92,25 +96,24 @@ const defaultBillingPeriods: {
 
 // ----- Functions ----- //
 
-function getProductPrice(
+function getProductPrice<T:BillingPeriod>(
   product: SubscriptionProduct,
   countryGroupId: CountryGroupId,
-  billingPeriod?: BillingPeriod,
+  billingPeriod?: T,
 ): string {
   const useBillingPeriod = billingPeriod || defaultBillingPeriods[product];
-  const price = subscriptionPrices[product][countryGroupId][useBillingPeriod].toFixed(2);
-  if (!price) { throw new Error(`Missing price for ${product}/${countryGroupId}/${useBillingPeriod}`); }
-  return price;
+  return subscriptionPrices[product][countryGroupId][useBillingPeriod].toFixed(2);
+
 }
 
-function displayPrice(
+function displayPrice<T:BillingPeriod>(
   product: SubscriptionProduct,
   countryGroupId: CountryGroupId,
-  billingPeriod?: BillingPeriod,
+  billingPeriod?: T,
 ): string {
   const useBillingPeriod: BillingPeriod = billingPeriod || defaultBillingPeriods[product];
   const currency = currencies[detect(countryGroupId)].glyph;
-  const price = getProductPrice(product, countryGroupId, billingPeriod);
+  const price = getProductPrice<T>(product, countryGroupId, billingPeriod);
   return `${currency}${price}/${useBillingPeriod}`;
 }
 

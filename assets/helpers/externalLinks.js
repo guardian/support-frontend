@@ -14,7 +14,7 @@ import {
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { getBaseDomain } from 'helpers/url';
-import type { EnumMap } from 'helper/utilities';
+import type { EnumMap } from 'helpers/utilities';
 
 import { getPromoCode, getIntcmp } from './flashSale';
 import type { SubscriptionProduct, WeeklyBillingPeriod } from './subscriptions';
