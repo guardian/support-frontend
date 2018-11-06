@@ -120,16 +120,18 @@ function ContributionSubmit(props: PropTypes) {
           type="submit"
           className={hiddenIf(showPayPalRecurringButton, 'form__submit-button')}
         >
-          Contribute&nbsp;
-          {amount ? formatAmount(
-            currencies[props.currency],
-            spokenCurrencies[props.currency],
-            amount,
-            false,
-          ) : null}&nbsp;
-          {frequency ? `${frequency} ` : null}
-          {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
-          <SvgArrowRight />
+          <span className={'form__submit-button__inner'}>
+            Contribute&nbsp;
+            {amount ? formatAmount(
+              currencies[props.currency],
+              spokenCurrencies[props.currency],
+              amount,
+              false,
+            ) : null}&nbsp;
+            {frequency ? `${frequency} ` : null}
+            {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
+            <SvgArrowRight />
+          </span>
         </button>
       </div>
     );
