@@ -3,25 +3,65 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
-import uuidv4 from 'uuid';
+import SvgInfo from 'components/svgs/information';
 
 import WeeklyCta from './weeklyCta';
+import { subscriptions, type Subscription, type State } from '../weeklySubscriptionLandingReducer';
+import WeeklyFormLabel from './weeklyFormLabel';
+
+// ---- Types ----- //
+
+type PropTypes = {|
+  checked?: ?Subscription,
+|};
 
 // ----- Render ----- //
 
-const FormLabel = ({ type }: {type: string}) => {
-  const id = uuidv4();
-  return (<label htmlFor={id}><input id={id} type="radio" name="sub-type" value={type} />{type}</label>);
+const onSubmit = (ev: Event, subscription: ?Subscription) => {
+  ev.preventDefault();
+  if (subscription) {
+    console.log(`now leaving to the ${subscription} checkout 🚀`);
+  }
 };
 
-const WeeklyForm = () => (
-  <form>
-    <FormLabel type="weekly" />
-    <FormLabel type="quarterly" />
-    <FormLabel type="monthly" />
-    <WeeklyCta type="submit">Subscribe now</WeeklyCta>
+const WeeklyForm = ({ checked }: PropTypes) => (
+  <form className="weekly-form-wrap" onSubmit={(ev) => { onSubmit(ev, checked); }}>
+    <div className="weekly-form">
+      {Object.keys(subscriptions).map((type: Subscription) => {
+        const {
+          offer, copy, title,
+        } = subscriptions[type];
+        return (
+          <div className="weekly-form__item">
+            <WeeklyFormLabel title={title} offer={offer} type={type} key={type}>
+              {copy}
+            </WeeklyFormLabel>
+          </div>
+          );
+        })}
+    </div>
+
+    <WeeklyCta disabled={checked === null} type="submit">Subscribe now{checked && ` – ${subscriptions[checked].title}`}</WeeklyCta>
+
+    <div className="weekly-form__info">
+      <SvgInfo />
+      You can cancel your subscription at any time
+    </div>
   </form>
 );
 
-export default WeeklyForm;
+WeeklyForm.defaultProps = {
+  checked: null,
+};
+
+// ----- State/Props Maps ----- //
+
+const mapStateToProps = (state: State) => ({
+  checked: state.page.subscription,
+});
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps)(WeeklyForm);

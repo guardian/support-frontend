@@ -1,5 +1,7 @@
 .weekly-content-block .component-left-margin-section__content {
-  border-left: 1px solid gu-colour(garnett-neutral-4);
+  @include mq($from: tablet) {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+  }
 }
 
 .weekly-content-block--grey .component-left-margin-section__content {
@@ -25,8 +27,10 @@
 }
 
 .weekly-content-block {
-  .weekly-feature-list {
-    margin: 0 ($gu-h-spacing / 2 * -1);
+  .weekly-feature-list,
+  .weekly-form {
+    margin-left: ($gu-h-spacing / 2 * -1);
+    margin-right: ($gu-h-spacing / 2 * -1);
   }
   .weekly-text-block {
     margin-bottom: ($gu-v-spacing*2)

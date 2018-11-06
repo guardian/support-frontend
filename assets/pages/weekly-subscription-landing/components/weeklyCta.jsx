@@ -13,6 +13,7 @@ type PropTypes = {|
   icon?: Node,
   type: 'submit' | 'button',
   href: ?string,
+  disabled: boolean,
   onClick: ?(void => void),
 |};
 
@@ -20,14 +21,14 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const WeeklyCtaButton = ({
-  children, icon, type, onClick, href,
+  children, icon, type, onClick, href, disabled,
 }: PropTypes) => (href ? (
-  <a href={href} className="weekly-cta">
+  <a href={href} data-disabled={disabled} className="weekly-cta">
     <span className="weekly-cta__content">{children}</span>
     {icon}
   </a>
 ) : (
-  <button onClick={onClick} type={type} className="weekly-cta">
+  <button disabled={disabled} onClick={onClick} type={type} className="weekly-cta">
     <span className="weekly-cta__content">{children}</span>
     {icon}
   </button>
@@ -38,6 +39,7 @@ WeeklyCtaButton.defaultProps = {
   type: 'button',
   onClick: null,
   href: null,
+  disabled: false,
 };
 
 export default WeeklyCtaButton;

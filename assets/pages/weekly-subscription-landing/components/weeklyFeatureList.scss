@@ -1,5 +1,7 @@
 .weekly-feature-list {
-  display: flex;
+  @include mq($from: tablet) {
+    display: flex;
+  }
 }
 
 .weekly-feature-list__title {
@@ -12,8 +14,15 @@
 .weekly-feature-list__item {
   flex: 0 0 25%;
   box-sizing: border-box;
-  padding: 0 ($gu-h-spacing / 2) ($gu-v-spacing*2);
-  &:not(:last-child) {
-    border-right: 1px solid gu-colour(garnett-neutral-4);
+  padding: ($gu-v-spacing / 6) ($gu-h-spacing/2) ($gu-v-spacing * 2) 0;
+  margin-left: $gu-h-spacing / 2;
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+  @include mq($from: tablet) {
+    padding: 0 ($gu-h-spacing / 2) ($gu-v-spacing*2);
+    margin: 0;
+    border-top: 0;
+    &:not(:last-child) {
+      border-right: 1px solid gu-colour(garnett-neutral-4);
+    }
   }
 }
