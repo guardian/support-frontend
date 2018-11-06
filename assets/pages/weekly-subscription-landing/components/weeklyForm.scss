@@ -3,17 +3,21 @@
 }
 
 .weekly-form {
-  display: flex;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-auto-rows: 1fr;
   margin-bottom: $gu-v-spacing * 2;
+  @include mq($from: tablet) {
+    display: flex;
+  }
 }
 
 .weekly-form > .weekly-form__item {
   flex: 0 0 25%;
   padding: 0 $gu-h-spacing/2;
   box-sizing: border-box;
+  margin-bottom: $gu-v-spacing;
+  @include mq($from: tablet) {
+    height: 100%;
+    margin-bottom: 0;
+  }
 }
 
 .weekly-form-label {

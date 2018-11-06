@@ -43,7 +43,7 @@ const WeeklyForm = ({ checked }: PropTypes) => (
 })}
     </div>
 
-    <WeeklyCta disabled={checked === null} type="submit">Subscribe now – {checked}</WeeklyCta>
+    <WeeklyCta disabled={checked === null} type="submit">Subscribe now{checked && ` – ${subscriptions[checked].title}`}</WeeklyCta>
   </form>
 );
 

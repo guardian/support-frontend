@@ -3,7 +3,9 @@
   overflow: hidden;
   padding-top: 300px;
   .component-left-margin-section__content {
-    border-left: 1px solid gu-colour(garnett-neutral-4);
+    @include mq($from: tablet) {
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+    }
   }
 }
 
