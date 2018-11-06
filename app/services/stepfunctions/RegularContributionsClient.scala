@@ -7,6 +7,7 @@ import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import RegularContributionsClient._
+import actions.CustomActionBuilders.OptionalAuthRequest
 import com.gu.support.workers.model._
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.Decoder
@@ -79,8 +80,16 @@ class RegularContributionsClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
+  private def referrerAcquisitionDataWithGAFields(request: OptionalAuthRequest[CreateRegularContributorRequest]): ReferrerAcquisitionData = {
+    val hostname = request.host
+    val gaClientId = request.cookies.get("_ga").map(_.value)
+    val userAgent = request.headers.get("user-agent")
+    val ipAddress = request.remoteAddress
+    request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
+  }
+
   def createContributor(
-    request: CreateRegularContributorRequest,
+    request: OptionalAuthRequest[CreateRegularContributorRequest],
     user: User,
     requestId: UUID,
     accessScope: AccountAccessScope
@@ -93,12 +102,12 @@ class RegularContributionsClient(
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
-      product = request.contribution,
-      paymentFields = request.paymentFields,
+      product = request.body.contribution,
+      paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
-        ophanIds = request.ophanIds,
-        referrerAcquisitionData = request.referrerAcquisitionData,
-        supportAbTests = request.supportAbTests
+        ophanIds = request.body.ophanIds,
+        referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
+        supportAbTests = request.body.supportAbTests
       )),
       sessionId = sessionId
     )
