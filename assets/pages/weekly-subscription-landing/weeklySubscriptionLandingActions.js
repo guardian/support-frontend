@@ -2,21 +2,21 @@
 
 // ----- Imports ----- //
 
-import { type Subscription } from './weeklySubscriptionLandingReducer';
+import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 
 
 // ----- Types ----- //
 
-export type Action = { type: 'SET_SUBSCRIPTION', subscription: Subscription };
+export type Action = { type: 'SET_PERIOD', period: WeeklyBillingPeriod };
 
 
 // ----- Action Creators ----- //
 
-function setSubscription(subscription: Subscription): Action {
-  return { type: 'SET_SUBSCRIPTION', subscription };
+function setPeriod(period: WeeklyBillingPeriod): Action {
+  return { type: 'SET_PERIOD', period };
 }
 
 
 // ----- Exports ----- //
 
-export { setSubscription };
+export { setPeriod };

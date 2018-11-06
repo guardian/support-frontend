@@ -6,33 +6,35 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import SvgInfo from 'components/svgs/information';
+import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 
 import WeeklyCta from './weeklyCta';
-import { subscriptions, type Subscription, type State } from '../weeklySubscriptionLandingReducer';
+import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
 import WeeklyFormLabel from './weeklyFormLabel';
+
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  checked?: ?Subscription,
+  checked?: ?WeeklyBillingPeriod,
 |};
 
 // ----- Render ----- //
 
-const onSubmit = (ev: Event, subscription: ?Subscription) => {
+const onSubmit = (ev: Event, period: ?WeeklyBillingPeriod) => {
   ev.preventDefault();
-  if (subscription) {
-    console.log(`now leaving to the ${subscription} checkout 🚀`);
+  if (period) {
+    console.log(`now leaving to the ${period} checkout 🚀`);
   }
 };
 
 const WeeklyForm = ({ checked }: PropTypes) => (
   <form className="weekly-form-wrap" onSubmit={(ev) => { onSubmit(ev, checked); }}>
     <div className="weekly-form">
-      {Object.keys(subscriptions).map((type: Subscription) => {
+      {Object.keys(billingPeriods).map((type: WeeklyBillingPeriod) => {
         const {
           offer, copy, title,
-        } = subscriptions[type];
+        } = billingPeriods[type];
         return (
           <div className="weekly-form__item">
             <WeeklyFormLabel title={title} offer={offer} type={type} key={type}>
@@ -43,7 +45,9 @@ const WeeklyForm = ({ checked }: PropTypes) => (
         })}
     </div>
 
-    <WeeklyCta disabled={checked === null} type="submit">Subscribe now{checked && ` – ${subscriptions[checked].title}`}</WeeklyCta>
+    <WeeklyCta disabled={checked === null} type="submit">
+      Subscribe now{checked && ` – ${billingPeriods[checked].title}`}
+    </WeeklyCta>
 
     <div className="weekly-form__info">
       <SvgInfo />
@@ -59,7 +63,7 @@ WeeklyForm.defaultProps = {
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State) => ({
-  checked: state.page.subscription,
+  checked: state.page.period,
 });
 
 // ----- Exports ----- //

@@ -8,29 +8,30 @@ import { bindActionCreators } from 'redux';
 
 import uuidv4 from 'uuid';
 
-import { type Subscription, type State } from '../weeklySubscriptionLandingReducer';
-import { setSubscription, type Action } from '../weeklySubscriptionLandingActions';
+import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
+import { type State } from '../weeklySubscriptionLandingReducer';
+import { setPeriod, type Action } from '../weeklySubscriptionLandingActions';
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  type: Subscription,
+  type: WeeklyBillingPeriod,
   title: string,
   offer?: ?string,
   children: Node,
-  checked?: ?Subscription,
-  setSubscriptionAction: (Subscription) => Action,
+  checked?: ?WeeklyBillingPeriod,
+  setPeriodAction: (WeeklyBillingPeriod) => Action,
 |};
 
 
 // ----- Render ----- //
 
 const WeeklyFormLabel = ({
-  type, title, offer, children, checked, setSubscriptionAction,
+  type, title, offer, children, checked, setPeriodAction,
 }: PropTypes) => {
   const id = uuidv4();
   return (
-    <label onChange={() => { setSubscriptionAction(type); }} htmlFor={id} className="weekly-form-label-wrap">
+    <label onChange={() => { setPeriodAction(type); }} htmlFor={id} className="weekly-form-label-wrap">
       <input checked={type === checked} className="weekly-form-label-wrap__input" id={id} type="radio" name="sub-type" value={type} />
       <div className="weekly-form-label">
         <div className="weekly-form-label__title">{title}</div>
@@ -50,11 +51,11 @@ WeeklyFormLabel.defaultProps = {
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State) => ({
-  checked: state.page.subscription,
+  checked: state.page.period,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  setSubscriptionAction: bindActionCreators(setSubscription, dispatch),
+  setPeriodAction: bindActionCreators(setPeriod, dispatch),
 });
 
 

@@ -75,6 +75,9 @@ const defaultBillingPeriods: {
 };
 
 
+// ----- Weekly ----- //
+export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
+
 // ----- Functions ----- //
 
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
