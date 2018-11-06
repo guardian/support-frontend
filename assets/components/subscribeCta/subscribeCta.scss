@@ -1,0 +1,24 @@
+.component-subscribe-cta {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: gu-colour(guardian-brand-dark);
+  color: gu-colour(neutral-6);
+
+  &__heading {
+    font-family: $gu-headline;
+    font-size: 20px;
+    line-height: 1.17;
+    font-weight: bold;
+  }
+
+  .component-cta-link {
+    margin: 10px;
+    
+    background-color: gu-colour(garnett-neutral-3);
+    color: gu-colour(garnett-neutral-1);
+
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-1);;
+    }
+  }
+}

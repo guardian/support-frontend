@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export default function SvgScribble() {
+export default function SvgScribble(props: { isCirclesDesign: boolean } ) {
 
   return (
     <svg
@@ -35,7 +35,8 @@ export default function SvgScribble() {
         <text fontSize="56" fontWeight="bold">
           <tspan fill="#121212" x="207" y="150">our editor</tspan>
         </text>
-        <circle cx="513" cy="179" fill="#1896D7" r="30" />
+
+        {props.isCirclesDesign ? <circle cx="513" cy="179" fill="#1896D7" r="30" /> : ''}
       </g>
     </svg>
   );

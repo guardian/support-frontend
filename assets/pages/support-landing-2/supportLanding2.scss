@@ -1,7 +1,19 @@
 // -----  gu-sass ----- //
 
 @import '~stylesheets/gu-sass/gu-sass';
+@import '~stylesheets/common';
 
 // ----- Shared Components ----- //
-@import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
+@import '~components/pageSection/pageSection';
+@import '~components/introduction/introduction';
+@import '~components/introduction/plainIntroduction';
+@import '~components/ctaLink/ctaLink';
+@import '~components/svgs/svg';
+@import '~components/patronsEvents/patronsEvents';
+@import '~components/footer/footer';
+@import '~components/legal/contribLegal/contribLegal';
+@import '~components/readyToSupport/readyToSupport';
+@import '~components/subscribeCta/subscribeCta';
+@import '~components/contributeCta/contributeCta';
+@import '~components/whySupportMatters/whySupportMatters';

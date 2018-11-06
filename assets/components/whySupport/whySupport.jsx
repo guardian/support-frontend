@@ -29,7 +29,7 @@ export default function WhySupport(props: PropTypes) {
     <div className="component-why-support" {...otherProps}>
       <PageSection heading="Why support?" modifierClass="why-support">
         <Heading size={headingSize} className="component-why-support__heading">
-          <SvgScribble />
+          <SvgScribble isCirclesDesign={true}/>
         </Heading>
         <p className="component-why-support__copy">
           Your support is vital in helping the Guardian do the most important

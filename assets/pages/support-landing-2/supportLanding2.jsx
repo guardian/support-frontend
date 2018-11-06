@@ -1,40 +1,35 @@
 // @flow
 
-// ----- Imports ----- //
 import React from 'react';
+
+import { init as pageInit } from 'helpers/page/page';
+import { renderPage } from 'helpers/render';
+import Provider from "react-redux/es/components/Provider";
 
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 
-import { statelessInit as pageInit } from 'helpers/page/page';
-import { renderPage } from 'helpers/render';
-import Title from './components/title';
-import WhySupport from './components/why-support';
-import SvgChevronUp from 'components/svgs/chevronUp';
-import CtaLink from 'components/ctaLink/ctaLink';
+import pageReducer from "./supportLanding2Reducer";
 
-// ----- Page Startup ----- //
+import PlainIntroduction from 'components/introduction/PlainIntroduction';
+import WhySupportMatters from 'components/whySupportMatters/WhySupportMatters';
+import BeyondHeadlines from 'components/beyondHeadlines/BeyondHeadlines';
+import WaysToSupport from 'components/waysToSupport/WaysToSupport';
+import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
 
-pageInit();
-
-// ----- Render ----- //
+const store = pageInit(pageReducer);
 
 const content = (
-  <Page
-    header={<SimpleHeader />}
-    footer={<Footer />}
-  >
-    <Title />
-    <WhySupport />
-    <CtaLink
-      text="See supporter options"
-      url="#"
-      accessibilityHint="See the options for becoming a supporter"
-      svg={<SvgChevronUp />}
-      modifierClasses={['see-supporter-options']}
-    />
-  </Page>
+  <Provider store={store}>
+    <Page header={<SimpleHeader />} footer={<Footer disclaimer privacyPolicy/>}>
+      <PlainIntroduction />
+      <WhySupportMatters />
+      <BeyondHeadlines />
+      <WaysToSupport />
+      <PatronsEventsContainer />
+    </Page>
+  </Provider>
 );
 
 renderPage(content, 'support-landing-page-2');
