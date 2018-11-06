@@ -741,7 +741,7 @@ form {
 
 .form__input--primed:invalid,
 .form__input--invalid {
-  border-color: #3db540;
+  border-color: gu-colour(news-garnett-main-1);
 }
 
 .form__input::placeholder,
@@ -750,13 +750,13 @@ form {
 }
 
 .form__error {
-  background-color: rgba(61,181,64,.1);
-  color: #236925;
+  background-color: gu-colour(news-faded);
+  color: gu-colour(news-garnett-main-1);
   font-size: 14px;
   line-height: 16px;
   padding: 6px 10px;
   a, a:visited {
-    color: gu-colour(green-dark);
+    color: gu-colour(news-garnett-main-1);
   }
 }
 
@@ -768,8 +768,6 @@ form {
 .underline {
   text-decoration: underline;
 }
-
-
 
 .form__submit {
   display: flex;

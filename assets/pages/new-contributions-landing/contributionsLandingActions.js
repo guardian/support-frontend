@@ -71,7 +71,8 @@ export type Action =
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
-  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse };
+  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
+  | { type: 'FORM_VALID', isValid: boolean };
 
 
 const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action => {
@@ -127,6 +128,8 @@ const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
 const paymentFailure = (paymentError: CheckoutFailureReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
+
+const setFormIsValid = (isValid: boolean): Action => ({ type: 'FORM_VALID', isValid });
 
 const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
   ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
@@ -441,4 +444,5 @@ export {
   checkIfEmailHasPassword,
   togglePayPalButton,
   setValueAndTogglePayPal,
+  setFormIsValid,
 };
