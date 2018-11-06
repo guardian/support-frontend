@@ -36,7 +36,7 @@ export const billingPeriods: {
 
 
 type PageState = {
-  period: WeeklyBillingPeriod;
+  period?: WeeklyBillingPeriod;
 };
 
 export type State = {

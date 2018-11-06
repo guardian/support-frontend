@@ -17,7 +17,8 @@ export type SubscriptionProduct =
   'DailyEdition' |
   'GuardianWeekly' |
   'Paper' |
-  'PaperAndDigital';
+  'PaperAndDigital' |
+  'Weekly';
 
 type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
 
