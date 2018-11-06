@@ -32,7 +32,7 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { checkoutFormShouldSubmit, formElementIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { formElementIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
@@ -49,6 +49,7 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  setFormIsValid,
 } from '../contributionsLandingActions';
 
 
@@ -73,6 +74,8 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   isSignedIn: boolean,
+  setFormIsValid: boolean => void,
+  formIsValid: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -95,6 +98,7 @@ const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   isSignedIn: state.page.user.isSignedIn,
+  formIsValid: state.page.form.formIsValid,
 });
 
 
@@ -104,6 +108,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setFormIsValid: (isValid) => { dispatch(setFormIsValid(isValid)); },
 });
 
 // ----- Functions ----- //
@@ -165,33 +170,32 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   },
 };
 
+// Note PayPal recurring flow does not call this function
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     const componentId = `${props.paymentMethod}-${props.contributionType}-submit`;
+    const formIsValid = formElementIsValid(event.target);
+    const userType = props.isSignedIn ? 'signed-in' : props.userTypeFromIdentityResponse;
+    const canContribute =
+      canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
+      || props.isSignedIn;
 
-    if (checkoutFormShouldSubmit(
-      props.contributionType,
-      props.isSignedIn,
-      props.userTypeFromIdentityResponse,
-      event.target,
-    )) {
-      if (props.isSignedIn) {
-        trackCheckoutSubmitAttempt(componentId, 'allowed-for-user-type-signed-in');
+
+    if (formIsValid) {
+      props.setFormIsValid(true);
+
+      if (canContribute) {
+        formHandlers[props.contributionType][props.paymentMethod](props);
+        trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${userType}`);
       } else {
-        trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${props.userTypeFromIdentityResponse}`);
+        trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${userType}`);
       }
-      formHandlers[props.contributionType][props.paymentMethod](props);
-    } else if (!formElementIsValid(event.target)) {
+    } else {
+      props.setFormIsValid(false);
       trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
-    } else if (!canContributeWithoutSigningIn(
-      props.contributionType,
-      props.isSignedIn,
-      props.userTypeFromIdentityResponse,
-    )) {
-      trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${props.userTypeFromIdentityResponse}`);
     }
   };
 }
@@ -199,12 +203,15 @@ function onSubmit(props: PropTypes): Event => void {
 // ----- Render ----- //
 
 function ContributionForm(props: PropTypes) {
-
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
     && maxTwoDecimals(input);
+
+  const invalidFormErrorMessageOnMobile = (
+    <PaymentFailureMessage classModifiers={['invalid_form_mobile']} errorHeading="Form incomplete" checkoutFailureReason="invalid_form_mobile" />
+  );
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
@@ -215,6 +222,7 @@ function ContributionForm(props: PropTypes) {
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
       <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
+      {!props.formIsValid ? invalidFormErrorMessageOnMobile : null}
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
