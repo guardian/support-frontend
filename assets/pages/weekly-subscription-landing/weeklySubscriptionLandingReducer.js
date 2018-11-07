@@ -10,34 +10,26 @@ import { type Action } from './weeklySubscriptionLandingActions';
 
 
 // ----- Subs ------ //
-export type BillingPeriodWithDetails = {
-  title: string,
-  offer?: ?string,
-  copy: (countryGroupId: CountryGroupId) => string,
-}
-
-export const billingPeriods: {
-  [WeeklyBillingPeriod]: BillingPeriodWithDetails
-} = {
+export const billingPeriods = {
   sixweek: {
     title: 'Weekly',
     offer: 'Introductory offer',
-    copy: countryGroupId => `6 issues for 6 pounds and then ${getWeeklyProductPrice(countryGroupId, 'quarter')}`,
+    copy: (countryGroupId: CountryGroupId) => `6 issues for 6 pounds and then ${getWeeklyProductPrice(countryGroupId, 'quarter')}`,
   },
   quarter: {
     title: 'Quarterly',
-    copy: countryGroupId => `${getWeeklyProductPrice(countryGroupId, 'quarter')}/quarter`,
+    copy: (countryGroupId: CountryGroupId) => `${getWeeklyProductPrice(countryGroupId, 'quarter')}/quarter`,
   },
   year: {
     title: 'Annually',
     offer: '10% off',
-    copy: countryGroupId => `${getWeeklyProductPrice(countryGroupId, 'year')}/year`,
+    copy: (countryGroupId: CountryGroupId) => `${getWeeklyProductPrice(countryGroupId, 'year')}/year`,
   },
 };
 
 
 type PageState = {
-  period?: WeeklyBillingPeriod;
+  period: WeeklyBillingPeriod | null;
 };
 
 export type State = {

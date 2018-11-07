@@ -23,7 +23,7 @@ import reducer from './weeklySubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer);
+const store = pageInit(reducer, true);
 
 // ----- Internationalisation ----- //
 
@@ -53,10 +53,6 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
     'International',
   ],
 );
-
-// ----- Page Startup ----- //
-
-pageInit();
 
 
 // ----- Render ----- //
