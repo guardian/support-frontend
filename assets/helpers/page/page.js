@@ -31,7 +31,11 @@ import {
   detect as detectCountryGroup,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import { type OptimizeExperiments, getOptimizeExperiments } from 'helpers/tracking/optimize';
+import {
+  type OptimizeExperiments,
+  getOptimizeExperiments,
+  addExperimentUpdateListener, findOptimizeExperiments
+} from 'helpers/tracking/optimize';
 import storeReferrer from 'helpers/tracking/awin';
 
 import { type Action } from './pageActions';
@@ -177,12 +181,15 @@ function init<S, A>(
   );
   const commonReducer = createCommonReducer(initialState);
 
-  window.guardian.store = createStore(
+  const store = createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
     storeEnhancer(thunk),
   );
   console.log('Created redux store');
-  return window.guardian.store;
+
+  findOptimizeExperiments(store);
+
+  return store;
 }
 
 

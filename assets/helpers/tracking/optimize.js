@@ -24,38 +24,60 @@ const OPTIMIZE_QUERY_PARAMETER = 'utm_expid';
 
 // ----- Functions ----- //
 
+function optimizeIsLoaded() {
+  return typeof window.dataLayer !== 'undefined' && window.dataLayer !== null;
+}
+
 function gtag() {
-  if (typeof window.dataLayer !== 'undefined' && window.dataLayer !== null) {
+  if (optimizeIsLoaded()) {
     window.dataLayer.push(arguments);
   } else {
     console.log('window.datalayer is undefined');
   }
 }
 
+function addExperimentUpdateListener(store) {
+  window.addEventListener('OPTIMIZE_EXPERIMENTS_UPDATED', (ev) => {
+    console.log(`Event listener called, event: ${ev.detail}`);
+    store.dispatch(setExperimentVariant({
+      id: ev.detail.id,
+      variant: ev.detail.variant,
+    }));
+  });
+}
+
+function getExperimentsWithCallback(callback: (variant, id) => void){
+  gtag('event', 'optimize.callback', { callback });
+}
+
 function fetchOptimizeExperiments() {
   console.log('Called fetchOptimizeExperiments');
-  if (window.guardian && window.guardian.store) {
+
+  getExperimentsWithCallback((value, name) => {
+    console.log(`Optimize script - Experiment with ID: ${name} is in variant: ${value}`);
+    window.dispatchEvent(new CustomEvent('OPTIMIZE_EXPERIMENTS_UPDATED', {
+      detail: {
+        id: name,
+        variant: value,
+      },
+    }));
+  });
+}
+
+function findOptimizeExperiments(store) {
+  console.log('Called findOptimizeExperiments');
+
+  if (optimizeIsLoaded()) {
     gtag('event', 'optimize.callback', {
-      callback: (value, name) => {
-        console.log(`Optimize script - Experiment with ID: ${name} is in variant: ${value}`);
-        // const store = createStore(optimizeReducer);
-        window.guardian.store.dispatch(setExperimentVariant({
-          id: name,
-          variant: value
-        }));
+      callback: (variant, id) => {
+        store.dispatch(setExperimentVariant({ id, variant }));
       },
     });
   } else {
-    console.log('Redux store not created yet');
+    // Add a listener so we can update the store once Optimize loads
+    console.log('Adding event listener');
+    addExperimentUpdateListener(store);
   }
-}
-
-function applyAnyOptimizeExperiments(experimentId: String, callback) {
-  console.log('Called applyAnyOptimizeExperiments');
-  gtag('event', 'optimize.callback', {
-    name: experimentId,
-    callback,
-  });
 }
 
 // Makes sure experiments are of the type [string]: string to match participations.
@@ -121,9 +143,10 @@ function getOptimizeExperiments(): OptimizeExperiments {
 export {
   gtag,
   OPTIMIZE_QUERY_PARAMETER,
-  applyAnyOptimizeExperiments,
+  findOptimizeExperiments,
   getOptimizeExperiments,
   parseExperimentsFromGaData,
   parseExperimentFromQueryParam,
   fetchOptimizeExperiments,
+  addExperimentUpdateListener
 };

@@ -1,6 +1,6 @@
 // @flow
 
-import { applyAnyOptimizeExperiments } from 'helpers/tracking/optimize';
+import { findOptimizeExperiments } from 'helpers/tracking/optimize';
 import { setExperimentVariant } from 'helpers/optimize/optimizeActions';
 import { connect } from 'react-redux';
 import type { OptimizeExperiment, OptimizeState } from 'helpers/optimize/optimizeReducer';
@@ -27,14 +27,14 @@ function getExperiment(props: AwaitOptimiseFlagProps) {
 }
 
 function OptimizeAwaitFlagWrapper(props: AwaitOptimiseFlagProps) {
-  const callback = (variant: number) => {
-    console.log(`Component callback - Experiment ${props.experimentId} is in variant ${variant}`);
-    props.dispatch(setExperimentVariant({ id: props.experimentId, variant }));
-  };
+  // const callback = (variant: number) => {
+  //   console.log(`Component callback - Experiment ${props.experimentId} is in variant ${variant}`);
+  //   props.dispatch(setExperimentVariant({ id: props.experimentId, variant }));
+  // };
 
   const experiment = getExperiment(props);
   if (experiment == null) {
-    applyAnyOptimizeExperiments(props.experimentId, callback);
+    //findOptimizeExperiments(props.experimentId, callback);
     return props.children[0];
   }
 
