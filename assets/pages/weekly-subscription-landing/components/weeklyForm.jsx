@@ -4,46 +4,61 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import SvgInfo from 'components/svgs/information';
+import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import WeeklyCta from './weeklyCta';
-import { subscriptions, type Subscription, type State } from '../weeklySubscriptionLandingReducer';
+import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
+import { redirectToWeeklyPage, type Action } from '../weeklySubscriptionLandingActions';
 import WeeklyFormLabel from './weeklyFormLabel';
+
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  checked?: ?Subscription,
+  checked: WeeklyBillingPeriod | null,
+  countryGroupId: CountryGroupId,
+  redirectToWeeklyPageAction: () => void,
 |};
 
 // ----- Render ----- //
 
-const onSubmit = (ev: Event, subscription: ?Subscription) => {
-  ev.preventDefault();
-  if (subscription) {
-    console.log(`now leaving to the ${subscription} checkout 🚀`);
-  }
-};
-
-const WeeklyForm = ({ checked }: PropTypes) => (
-  <form className="weekly-form-wrap" onSubmit={(ev) => { onSubmit(ev, checked); }}>
+const WeeklyForm = ({
+  checked, countryGroupId, redirectToWeeklyPageAction,
+}: PropTypes) => (
+  <form
+    className="weekly-form-wrap"
+    onSubmit={(ev) => {
+    ev.preventDefault();
+    redirectToWeeklyPageAction();
+    }}
+  >
     <div className="weekly-form">
-      {Object.keys(subscriptions).map((type: Subscription) => {
+      {Object.keys(billingPeriods).map((type: WeeklyBillingPeriod) => {
         const {
-          offer, copy, title,
-        } = subscriptions[type];
+          copy, title,
+        } = billingPeriods[type];
         return (
           <div className="weekly-form__item">
-            <WeeklyFormLabel title={title} offer={offer} type={type} key={type}>
-              {copy}
+            <WeeklyFormLabel
+              title={title}
+              offer={billingPeriods[type].offer || null}
+              type={type}
+              key={type}
+            >
+              {copy(countryGroupId)}
             </WeeklyFormLabel>
           </div>
           );
         })}
     </div>
 
-    <WeeklyCta disabled={checked === null} type="submit">Subscribe now{checked && ` – ${subscriptions[checked].title}`}</WeeklyCta>
+    <WeeklyCta disabled={checked === null} type="submit">
+      Subscribe now{checked && ` – ${billingPeriods[checked].title}`}
+    </WeeklyCta>
 
     <div className="weekly-form__info">
       <SvgInfo />
@@ -59,9 +74,14 @@ WeeklyForm.defaultProps = {
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State) => ({
-  checked: state.page.subscription,
+  checked: state.page.period,
+  countryGroupId: state.common.internationalisation.countryGroupId,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  redirectToWeeklyPageAction: bindActionCreators(redirectToWeeklyPage, dispatch),
 });
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(WeeklyForm);
+export default connect(mapStateToProps, mapDispatchToProps)(WeeklyForm);
