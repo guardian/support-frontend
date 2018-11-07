@@ -13,8 +13,9 @@
   transition: background-color .2s;
   will-change: background-color;
 
-  &:hover {
+  &:hover, &:focus {
     background-color: gu-colour(highlight-dark);
+    outline: 0;
   }
 }
 
