@@ -39,44 +39,85 @@ const weeklyBillingPeriods = {
 export type BillingPeriod = $Keys<typeof billingPeriods>;
 export type WeeklyBillingPeriod = BillingPeriod & $Keys<typeof weeklyBillingPeriods>;
 
-const subscriptionPrices: {
+const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
-    [CountryGroupId]: {
-      [BillingPeriod]: number
-    },
+    [CountryGroupId]: number,
   }
 } = {
   PremiumTier: {
-    GBPCountries: { month: 5.99 },
-    UnitedStates: { month: 6.99 },
-    AUDCountries: { month: 7.99 },
-    International: { month: 5.99 },
+    GBPCountries: 5.99,
+    UnitedStates: 6.99,
+    AUDCountries: 7.99,
+    International: 5.99,
   },
   DigitalPack: {
-    GBPCountries: { month: 11.99 },
-    UnitedStates: { month: 19.99 },
-    AUDCountries: { month: 21.50 },
-    International: { month: 19.99 },
+    GBPCountries: 11.99,
+    UnitedStates: 19.99,
+    AUDCountries: 21.50,
+    International: 19.99,
   },
   GuardianWeekly: {
-    GBPCountries: { quarter: 37.50, sixweek: 6, year: 150 },
-    EURCountries: { quarter: 61.30, sixweek: 6, year: 245.20 },
-    UnitedStates: { quarter: 75, sixweek: 6, year: 300 },
-    Canada: { quarter: 80, sixweek: 6, year: 320 },
-    AUDCountries: { quarter: 97.50, sixweek: 6, year: 390 },
-    NZDCountries: { quarter: 123, sixweek: 6, year: 492 },
-    International: { quarter: 81.30, sixweek: 6, year: 325.20 },
+    GBPCountries: 37.50,
+    EURCountries: 61.30,
+    UnitedStates: 75,
+    Canada: 80,
+    AUDCountries: 97.50,
+    NZDCountries: 123,
+    International: 81.30,
   },
   Paper: {
-    GBPCountries: { month: 10.36 },
+    GBPCountries: 10.36,
   },
   PaperAndDigital: {
-    GBPCountries: { month: 21.62 },
+    GBPCountries: 21.62,
   },
   DailyEdition: {
-    GBPCountries: { month: 11.99 },
+    GBPCountries: 11.99,
   },
 };
+
+const subscriptionPricesForGuardianWeekly: {
+  [CountryGroupId]: {
+    [WeeklyBillingPeriod]: number,
+  }
+} = {
+  GBPCountries: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
+    sixweek: 6,
+    year: 150,
+  },
+  EURCountries: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
+    sixweek: 6,
+    year: 245.20,
+  },
+  UnitedStates: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
+    sixweek: 6,
+    year: 300,
+  },
+  Canada: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
+    sixweek: 6,
+    year: 320,
+  },
+  AUDCountries: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
+    sixweek: 6,
+    year: 390,
+  },
+  NZDCountries: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
+    sixweek: 6,
+    year: 492,
+  },
+  International: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
+    sixweek: 6,
+    year: 325.20,
+  },
+};
+
 
 const defaultBillingPeriods: {
   [SubscriptionProduct]: BillingPeriod
@@ -92,27 +133,19 @@ const defaultBillingPeriods: {
 
 // ----- Functions ----- //
 
-function getProductPrice(
-  product: SubscriptionProduct,
-  countryGroupId: CountryGroupId,
-  billingPeriod?: BillingPeriod,
-): string {
-  const useBillingPeriod = billingPeriod || defaultBillingPeriods[product];
-  const price = subscriptionPrices[product][countryGroupId][useBillingPeriod].toFixed(2);
-  if (!price) { throw new Error(`Missing price for ${product}/${countryGroupId}/${useBillingPeriod}`); }
-  return price;
+function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  return subscriptionPricesForDefaultBillingPeriod[product][countryGroupId].toFixed(2);
+}
+function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  const currency = currencies[detect(countryGroupId)].glyph;
+  const price = getProductPrice(product, countryGroupId);
+  return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
-function displayPrice(
-  product: SubscriptionProduct,
-  countryGroupId: CountryGroupId,
-  billingPeriod?: BillingPeriod,
-): string {
-  const useBillingPeriod: BillingPeriod = billingPeriod || defaultBillingPeriods[product];
-  const currency = currencies[detect(countryGroupId)].glyph;
-  const price = getProductPrice(product, countryGroupId, billingPeriod);
-  return `${currency}${price}/${useBillingPeriod}`;
+function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
+  return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
 }
+
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
 
@@ -168,4 +201,5 @@ export {
   sendTrackingEventsOnClick,
   displayPrice,
   getProductPrice,
+  getWeeklyProductPrice,
 };
