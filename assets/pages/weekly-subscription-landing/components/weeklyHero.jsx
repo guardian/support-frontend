@@ -24,6 +24,11 @@ const WeeklyHero = ({ subsLink }: PropTypes) => (
   <header>
     <div className="weekly-hero">
       <LeftMarginSection>
+        <p className="weekly-hero__headline">
+          The essential new
+          Weekly magazine
+          from The Guardian
+        </p>
         <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news curated to give you a clearer global perspective." />
       </LeftMarginSection>
     </div>

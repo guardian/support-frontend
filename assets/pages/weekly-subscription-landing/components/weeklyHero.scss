@@ -2,7 +2,6 @@
   background: gu-colour(header-dark);
   overflow: hidden;
   .component-left-margin-section__content {
-    padding-top: 300px;
     @include mq($from: tablet) {
       border-left: 1px solid gu-colour(header-border);
       .component-heading-block {
@@ -30,4 +29,16 @@
   padding: $gu-v-spacing  ($gu-h-spacing / 2);
   background: gu-colour(garnett-neutral-1);
   color: #ffffff;
+}
+
+.weekly-hero__headline {
+  color: gu-colour(garnett-neutral-5);
+  font-family: $gu-headline;
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 1;
+  display: block;
+  max-width: 430px;
+  margin-bottom: 240px;
+  padding: $gu-v-spacing/2  $gu-h-spacing/2;
 }
