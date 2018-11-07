@@ -10,6 +10,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
@@ -29,7 +30,7 @@ type PropTypes = {|
   selectAmount: (Amount | 'other', Contrib) => (() => void),
   otherAmount: string | null,
   checkOtherAmount: string => boolean,
-  updateOtherAmount: string => void,
+  updateOtherAmount: (string, Contrib) => void,
   checkoutFormHasBeenSubmitted: boolean,
   annualTestVariant: AnnualContributionsTestVariant,
 |};
@@ -47,8 +48,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
-  updateOtherAmount: (amount) => { dispatch(setValueAndTogglePayPal<string>(updateOtherAmount, amount)); },
+  selectAmount: (amount, contributionType) => () => {
+    trackComponentClick(`change-amount-new-flow-${contributionType}-${amount}`);
+    dispatch(selectAmount(amount, contributionType));
+  },
+  updateOtherAmount: (amount, contributionType) => {
+    trackComponentClick(`change-other-amount-new-flow-${contributionType}-${amount}`);
+    dispatch(setValueAndTogglePayPal<string>(updateOtherAmount, amount));
+  },
 });
 
 // ----- Render ----- //
@@ -119,7 +126,7 @@ function ContributionAmount(props: PropTypes) {
           label="Other amount"
           value={props.otherAmount}
           icon={iconForCountryGroup(props.countryGroupId)}
-          onInput={e => props.updateOtherAmount((e.target: any).value)}
+          onInput={e => props.updateOtherAmount((e.target: any).value, props.contributionType)}
           isValid={props.checkOtherAmount(props.otherAmount || '')}
           formHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}

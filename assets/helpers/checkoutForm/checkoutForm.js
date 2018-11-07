@@ -50,6 +50,28 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
 export const getForm: string => Object | null =
   (formName: string) => document.querySelector(`.${formName}`);
 
+const getInvalidReason = (validityState: ValidityState) => {
+  if (validityState.valueMissing) {
+    return '-value-missing';
+  } else if (validityState.patternMismatch) {
+    return '-pattern-mismatch';
+  }
+  return '';
+};
+
+export const invalidReason = (form: Object | null): string => {
+  let invalidReasonString = '';
+  if (form instanceof HTMLFormElement) {
+    [...form.elements].forEach((element) => {
+      if (element instanceof HTMLInputElement && !element.checkValidity()) {
+        invalidReasonString += `-${element.id}${getInvalidReason(element.validity)}`;
+      }
+    });
+  }
+  return invalidReasonString;
+};
+
+
 export const formElementIsValid = (formElement: Object | null) => {
   if (formElement && formElement instanceof HTMLFormElement) {
     return formElement.checkValidity();

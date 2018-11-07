@@ -121,6 +121,7 @@ function checkRegularStatus(
     switch (json.status) {
       case 'success':
       case 'pending':
+        trackConversion(participations, routes.recurringContribPending);
         return PaymentSuccess;
 
       default:
@@ -147,10 +148,7 @@ function checkRegularStatus(
         return logPromise(pollUntilPromise(
           MAX_POLLS,
           POLLING_INTERVAL,
-          () => {
-            trackConversion(participations, routes.recurringContribPending);
-            return fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf));
-          },
+          () => fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf)),
           json2 => json2.status === 'pending',
         ).then(handleCompletion, handleExhaustedPolls));
 
