@@ -30,7 +30,7 @@ type PropTypes = {|
   selectAmount: (Amount | 'other', CountryGroupId, Contrib) => (() => void),
   otherAmount: string | null,
   checkOtherAmount: string => boolean,
-  updateOtherAmount: (string, Contrib) => void,
+  updateOtherAmount: (string, CountryGroupId, Contrib) => void,
   checkoutFormHasBeenSubmitted: boolean,
   annualTestVariant: AnnualContributionsTestVariant,
 |};
@@ -49,11 +49,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   selectAmount: (amount, countryGroupId, contributionType) => () => {
-    trackComponentClick(`npf-change-amount-${contributionType}-${countryGroupId}-${amount.value || amount}`);
+    trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount.value || amount}`);
     dispatch(selectAmount(amount, contributionType));
   },
-  updateOtherAmount: (amount, contributionType) => {
-    trackComponentClick(`npf-change-other-amount-${contributionType}-${amount}`);
+  updateOtherAmount: (amount, countryGroupId, contributionType) => {
+    trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`);
     dispatch(setValueAndTogglePayPal<string>(updateOtherAmount, amount));
   },
 });
@@ -126,7 +126,7 @@ function ContributionAmount(props: PropTypes) {
           label="Other amount"
           value={props.otherAmount}
           icon={iconForCountryGroup(props.countryGroupId)}
-          onInput={e => props.updateOtherAmount((e.target: any).value, props.contributionType)}
+          onInput={e => props.updateOtherAmount((e.target: any).value, props.countryGroupId, props.contributionType)}
           isValid={props.checkOtherAmount(props.otherAmount || '')}
           formHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}

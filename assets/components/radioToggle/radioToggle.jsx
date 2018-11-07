@@ -7,6 +7,7 @@ import uuidv4 from 'uuid';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 
 // ----- Types ----- //
@@ -60,7 +61,10 @@ function getRadioButtons(props: PropTypes) {
           name={props.name}
           value={radio.value}
           id={radioId}
-          onChange={() => props.toggleAction(radio.value, props.countryGroupId)}
+          onChange={() => {
+            trackComponentClick(`opf-${props.name}-${props.countryGroupId}-${radio.value}`);
+            props.toggleAction(radio.value, props.countryGroupId);
+          }}
           checked={radioChecked}
           tabIndex="0"
           aria-describedby={a11yHintId}

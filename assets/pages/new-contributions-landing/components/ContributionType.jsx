@@ -12,6 +12,7 @@ import { getPaymentMethodToSelect } from 'helpers/checkouts';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updateContributionType } from '../contributionsLandingActions';
 
@@ -20,20 +21,27 @@ import { type Action, updateContributionType } from '../contributionsLandingActi
 type PropTypes = {|
   contributionType: Contrib,
   countryId: IsoCountry,
+  countryGroupId: CountryGroupId,
   switches: Switches,
-  onSelectContributionType: (Contrib, Switches, IsoCountry) => void,
+  onSelectContributionType: (Contrib, Switches, IsoCountry, CountryGroupId) => void,
 |};
 
 const mapStateToProps = (state: State) => ({
+  countryGroupId: state.common.internationalisation.countryGroupId,
   contributionType: state.page.form.contributionType,
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  onSelectContributionType: (contributionType: Contrib, switches: Switches, countryId: IsoCountry) => {
+  onSelectContributionType: (
+    contributionType: Contrib,
+    switches: Switches,
+    countryId: IsoCountry,
+    countryGroupId: CountryGroupId,
+  ) => {
     const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
-    trackComponentClick(`npf-change-contribution-type-${contributionType}`);
+    trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
     dispatch(updateContributionType(contributionType, paymentMethodToSelect));
   },
 });
@@ -55,7 +63,7 @@ function ContributionType(props: PropTypes) {
             type="radio"
             name="contributionType"
             value={oneOff}
-            onChange={() => props.onSelectContributionType(oneOff, props.switches, props.countryId)}
+            onChange={() => props.onSelectContributionType(oneOff, props.switches, props.countryId, props.countryGroupId)}
             checked={props.contributionType === oneOff}
           />
           <label htmlFor="contributionType-oneoff" className="form__radio-group-label">Single</label>
@@ -67,7 +75,7 @@ function ContributionType(props: PropTypes) {
             type="radio"
             name="contributionType"
             value={monthly}
-            onChange={() => props.onSelectContributionType(monthly, props.switches, props.countryId)}
+            onChange={() => props.onSelectContributionType(monthly, props.switches, props.countryId, props.countryGroupId)}
             checked={props.contributionType === monthly}
           />
           <label htmlFor="contributionType-monthly" className="form__radio-group-label">Monthly</label>
@@ -79,7 +87,7 @@ function ContributionType(props: PropTypes) {
             type="radio"
             name="contributionType"
             value={annual}
-            onChange={() => props.onSelectContributionType(annual, props.switches, props.countryId)}
+            onChange={() => props.onSelectContributionType(annual, props.switches, props.countryId, props.countryGroupId)}
             checked={props.contributionType === annual}
           />
           <label htmlFor="contributionType-annual" className="form__radio-group-label">Annual</label>
