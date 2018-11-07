@@ -120,7 +120,7 @@ function ContributionSubmit(props: PropTypes) {
           type="submit"
           className={hiddenIf(showPayPalRecurringButton, 'form__submit-button')}
         >
-          <span className='form__submit-button__inner'>
+          <span className="form__submit-button__inner">
             Contribute&nbsp;
             {amount ? formatAmount(
               currencies[props.currency],
