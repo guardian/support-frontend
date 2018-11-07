@@ -14,7 +14,6 @@ import {
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { getBaseDomain } from 'helpers/url';
-import type { EnumMap } from 'helpers/utilities';
 
 import { getPromoCode, getIntcmp } from './flashSale';
 import type { SubscriptionProduct, WeeklyBillingPeriod } from './subscriptions';
@@ -52,7 +51,7 @@ function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGr
   const yearDomestic = 'weeklydomestic-gwoct18-annual-domestic';
   const yearRow = 'weeklyrestofworld-gwoct18-quarterly-row';
 
-  const urls: EnumMap<WeeklyBillingPeriod, EnumMap<CountryGroupId, string>> = {
+  const urls = {
     sixweek: {
       GBPCountries: sixWeekDomestic,
       UnitedStates: sixWeekDomestic,
