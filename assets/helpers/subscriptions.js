@@ -27,17 +27,8 @@ export type ComponentAbTest = {
 
 
 // ----- Config ----- //
-const billingPeriods = {
-  sixweek: 'sixweek', quarter: 'quarter', year: 'year', month: 'month',
-};
-const weeklyBillingPeriods = {
-  sixweek: 'sixweek',
-  quarter: 'quarter',
-  year: 'year',
-};
-
-export type BillingPeriod = $Keys<typeof billingPeriods>;
-export type WeeklyBillingPeriod = BillingPeriod & $Keys<typeof weeklyBillingPeriods>;
+export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
+export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
 
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
