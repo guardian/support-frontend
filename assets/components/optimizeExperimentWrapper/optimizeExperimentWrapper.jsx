@@ -1,12 +1,10 @@
 // @flow
 
-import { findOptimizeExperiments } from 'helpers/tracking/optimize';
-import { setExperimentVariant } from 'helpers/optimize/optimizeActions';
 import { connect } from 'react-redux';
 import type { OptimizeExperiment, OptimizeState } from 'helpers/optimize/optimizeReducer';
 
 
-export type AwaitOptimiseFlagProps = {
+export type ExperimentWrapperProps = {
   experimentId: string,
   experiments: OptimizeExperiment[],
   setExperimentVariant: (variant: number) => void,
@@ -19,22 +17,17 @@ function mapStateToProps(state: OptimizeState, ownProps: {experimentId: string})
   };
 }
 
-function getExperiment(props: AwaitOptimiseFlagProps) {
+function getExperiment(props: ExperimentWrapperProps) {
   if (props.experiments) {
     return props.experiments.find(exp => exp.id === props.experimentId);
   }
   return null;
 }
 
-function OptimizeAwaitFlagWrapper(props: AwaitOptimiseFlagProps) {
-  // const callback = (variant: number) => {
-  //   console.log(`Component callback - Experiment ${props.experimentId} is in variant ${variant}`);
-  //   props.dispatch(setExperimentVariant({ id: props.experimentId, variant }));
-  // };
-
+function OptimizeExperimentWrapper(props: ExperimentWrapperProps) {
   const experiment = getExperiment(props);
+
   if (experiment == null) {
-    //findOptimizeExperiments(props.experimentId, callback);
     return props.children[0];
   }
 
@@ -42,4 +35,4 @@ function OptimizeAwaitFlagWrapper(props: AwaitOptimiseFlagProps) {
   return props.children[variant];
 }
 
-export default connect(mapStateToProps)(OptimizeAwaitFlagWrapper);
+export default connect(mapStateToProps)(OptimizeExperimentWrapper);

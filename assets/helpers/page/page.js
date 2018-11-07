@@ -34,7 +34,7 @@ import {
 import {
   type OptimizeExperiments,
   getOptimizeExperiments,
-  addExperimentUpdateListener, findOptimizeExperiments
+  addExperimentUpdateListener, addOptimizeExperiments
 } from 'helpers/tracking/optimize';
 import storeReferrer from 'helpers/tracking/awin';
 
@@ -187,7 +187,7 @@ function init<S, A>(
   );
   console.log('Created redux store');
 
-  findOptimizeExperiments(store);
+  addOptimizeExperiments(store);
 
   return store;
 }

@@ -5,9 +5,8 @@
 import * as storage from 'helpers/storage';
 import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
-import { gaPropertyId } from './googleTagManager';
 import { setExperimentVariant } from 'helpers/optimize/optimizeActions';
-
+import { gaPropertyId } from './googleTagManager';
 
 // ----- Types ----- //
 
@@ -22,6 +21,8 @@ const OPTIMIZE_STORAGE_KEY = 'optimizeExperiments';
 
 const OPTIMIZE_QUERY_PARAMETER = 'utm_expid';
 
+const EXPERIMENTS_UPDATED = 'OPTIMIZE_EXPERIMENTS_UPDATED';
+
 // ----- Functions ----- //
 
 function optimizeIsLoaded() {
@@ -32,12 +33,16 @@ function gtag() {
   if (optimizeIsLoaded()) {
     window.dataLayer.push(arguments);
   } else {
-    console.log('window.datalayer is undefined');
+    console.log('window.datalayer is undefined in gtag function');
   }
 }
 
+function gtagWithCallback(callback: (variant: string, id: string) => void) {
+  gtag('event', 'optimize.callback', { callback });
+}
+
 function addExperimentUpdateListener(store) {
-  window.addEventListener('OPTIMIZE_EXPERIMENTS_UPDATED', (ev) => {
+  window.addEventListener(EXPERIMENTS_UPDATED, (ev) => {
     console.log(`Event listener called, event: ${ev.detail}`);
     store.dispatch(setExperimentVariant({
       id: ev.detail.id,
@@ -46,38 +51,32 @@ function addExperimentUpdateListener(store) {
   });
 }
 
-function getExperimentsWithCallback(callback: (variant, id) => void){
-  gtag('event', 'optimize.callback', { callback });
-}
-
-function fetchOptimizeExperiments() {
-  console.log('Called fetchOptimizeExperiments');
-
-  getExperimentsWithCallback((value, name) => {
-    console.log(`Optimize script - Experiment with ID: ${name} is in variant: ${value}`);
-    window.dispatchEvent(new CustomEvent('OPTIMIZE_EXPERIMENTS_UPDATED', {
-      detail: {
-        id: name,
-        variant: value,
-      },
-    }));
-  });
-}
-
-function findOptimizeExperiments(store) {
-  console.log('Called findOptimizeExperiments');
+function addOptimizeExperiments(store) {
+  console.log('Called addOptimizeExperiments');
 
   if (optimizeIsLoaded()) {
-    gtag('event', 'optimize.callback', {
-      callback: (variant, id) => {
-        store.dispatch(setExperimentVariant({ id, variant }));
-      },
+    gtagWithCallback((variant, id) => {
+      store.dispatch(setExperimentVariant({ id, variant }));
     });
   } else {
     // Add a listener so we can update the store once Optimize loads
     console.log('Adding event listener');
     addExperimentUpdateListener(store);
   }
+}
+
+function fetchOptimizeExperiments() {
+  console.log('Called fetchOptimizeExperiments');
+
+  gtagWithCallback((value, name) => {
+    console.log(`Optimize script - Experiment with ID: ${name} is in variant: ${value}`);
+    window.dispatchEvent(new CustomEvent(EXPERIMENTS_UPDATED, {
+      detail: {
+        id: name,
+        variant: value,
+      },
+    }));
+  });
 }
 
 // Makes sure experiments are of the type [string]: string to match participations.
@@ -143,7 +142,7 @@ function getOptimizeExperiments(): OptimizeExperiments {
 export {
   gtag,
   OPTIMIZE_QUERY_PARAMETER,
-  findOptimizeExperiments,
+  addOptimizeExperiments,
   getOptimizeExperiments,
   parseExperimentsFromGaData,
   parseExperimentFromQueryParam,
