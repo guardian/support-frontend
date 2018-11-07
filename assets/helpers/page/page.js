@@ -161,7 +161,6 @@ function init<S, A>(
   pageReducer: Reducer<S, A> | null = null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
-
   const { settings } = window.guardian;
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const countryId: IsoCountry = detectCountry();
@@ -178,10 +177,12 @@ function init<S, A>(
   );
   const commonReducer = createCommonReducer(initialState);
 
-  return createStore(
+  window.guardian.store = createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
     storeEnhancer(thunk),
   );
+  console.log('Created redux store');
+  return window.guardian.store;
 }
 
 

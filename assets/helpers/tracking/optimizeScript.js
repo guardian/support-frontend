@@ -1,4 +1,7 @@
 /* eslint-disable */
+import { dispatch } from 'redux';
+import { fetchOptimizeExperiments } from './optimize';
+
 try {
   var db = indexedDB.open("test");
   // Check if Firefox Private Browsing is enabled
@@ -21,6 +24,9 @@ try {
     ga('create', 'UA-51507017-5', 'auto', {cookieDomain: 'auto', anonymizeIp: true});
     ga('require', 'GTM-NZGXNBL');
     ga('require', 'GTM-KGKKPS4');
+
+    console.log('optimize script finished');
+    fetchOptimizeExperiments();
   };
 } catch (e) {
   console.log(`Error initialising Optimize script: ${e.message}`);
