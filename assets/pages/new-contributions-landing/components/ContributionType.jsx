@@ -63,7 +63,9 @@ function ContributionType(props: PropTypes) {
             type="radio"
             name="contributionType"
             value={oneOff}
-            onChange={() => props.onSelectContributionType(oneOff, props.switches, props.countryId, props.countryGroupId)}
+            onChange={() =>
+              props.onSelectContributionType(oneOff, props.switches, props.countryId, props.countryGroupId)
+            }
             checked={props.contributionType === oneOff}
           />
           <label htmlFor="contributionType-oneoff" className="form__radio-group-label">Single</label>
@@ -75,7 +77,9 @@ function ContributionType(props: PropTypes) {
             type="radio"
             name="contributionType"
             value={monthly}
-            onChange={() => props.onSelectContributionType(monthly, props.switches, props.countryId, props.countryGroupId)}
+            onChange={() =>
+              props.onSelectContributionType(monthly, props.switches, props.countryId, props.countryGroupId)
+            }
             checked={props.contributionType === monthly}
           />
           <label htmlFor="contributionType-monthly" className="form__radio-group-label">Monthly</label>
@@ -87,7 +91,9 @@ function ContributionType(props: PropTypes) {
             type="radio"
             name="contributionType"
             value={annual}
-            onChange={() => props.onSelectContributionType(annual, props.switches, props.countryId, props.countryGroupId)}
+            onChange={() =>
+              props.onSelectContributionType(annual, props.switches, props.countryId, props.countryGroupId)
+            }
             checked={props.contributionType === annual}
           />
           <label htmlFor="contributionType-annual" className="form__radio-group-label">Annual</label>
