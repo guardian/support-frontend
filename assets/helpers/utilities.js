@@ -86,9 +86,7 @@ function addLeadingZeros(value: number, length: number = 2): string {
   return valueStr;
 }
 
-
 // ----- Exports ----- //
-
 export {
   ascending,
   descending,
