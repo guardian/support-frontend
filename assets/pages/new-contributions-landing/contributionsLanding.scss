@@ -800,17 +800,12 @@ form {
   display: none;
 }
 
-.form__radio-group--contribution-amount,
-.form__field--contribution-other-amount,
-.form__field--contribution-fname,
-.form__field--contribution-lname {
-  margin-top: 12px;
+.form__radio-group--contribution-amount {
+  margin: 12px 0;
 }
 
-.form__field--contribution-email,
-.form__field--contribution-state {
-  margin-top: 24px;
-  color: gu-colour(garnett-neutral-2);
+.form__field {
+  margin-top: 12px;
 }
 
 .form__radio-group--contribution-pay {
