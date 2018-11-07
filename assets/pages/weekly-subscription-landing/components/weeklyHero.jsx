@@ -21,10 +21,12 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const WeeklyHero = ({ subsLink }: PropTypes) => (
-  <div className="weekly-hero">
-    <LeftMarginSection>
-      <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news curated to give you a clearer global perspective." />
-    </LeftMarginSection>
+  <header>
+    <div className="weekly-hero">
+      <LeftMarginSection>
+        <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news curated to give you a clearer global perspective." />
+      </LeftMarginSection>
+    </div>
     <div className="weekly-hero-hanger">
       <LeftMarginSection>
         <div className="weekly-hero-hanger__content">
@@ -33,7 +35,7 @@ const WeeklyHero = ({ subsLink }: PropTypes) => (
       </LeftMarginSection>
     </div>
 
-  </div>
+  </header>
 );
 
 export default WeeklyHero;

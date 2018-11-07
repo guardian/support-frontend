@@ -19,7 +19,7 @@
 .weekly-form__info {
   padding-top: $gu-v-spacing * 2;
   padding-bottom: $gu-v-spacing * 2.5;
-  color: gu-colour(garnett-neutral-6);
+  color: gu-colour(garnett-neutral-5);
   font-family: $gu-text-sans-web;
   font-size: 16px;
   svg {
@@ -27,7 +27,7 @@
     vertical-align: text-bottom;
     margin-right: $gu-h-spacing / 4;
     circle {
-      fill: gu-colour(garnett-neutral-6);
+      fill: gu-colour(header-border);
     }
   }
 }
