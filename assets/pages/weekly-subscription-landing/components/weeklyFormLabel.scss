@@ -27,6 +27,8 @@
 
 .weekly-form-label__title {
   font-weight: 600;
+  font-size: 20px;
+  position: relative;
   border-bottom: 1px solid gu-colour(sport-garnett-main-1);
 }
 
@@ -40,6 +42,26 @@
   padding-bottom: $gu-v-spacing;
 }
 
+.weekly-form-label__check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $gu-v-spacing * 2.3;
+  height: $gu-v-spacing * 2.3;
+  border-radius: 100%;
+  background: gu-colour(news-garnett-highlight);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 3px;
+  margin: auto;
+  transform: translateY(5px);
+  opacity: 0;
+  transition: .2s;
+  svg {
+    width: 75%;
+  }
+}
 .weekly-form-label-wrap__input:hover + .weekly-form-label,
 .weekly-form-label-wrap__input:focus + .weekly-form-label {
   box-shadow: 0 0 0 2px rgba(gu-colour(garnett-neutral-5),.25);
@@ -47,6 +69,10 @@
 
 .weekly-form-label-wrap__input:checked + .weekly-form-label {
   background: gu-colour(sport-garnett-media-main-1);
+  .weekly-form-label__check {
+    transform: translateY(0);
+    opacity: 1;
+  }
   &, .weekly-form-label__title {
     border-color: gu-colour(sport-garnett-main-1);
   }
