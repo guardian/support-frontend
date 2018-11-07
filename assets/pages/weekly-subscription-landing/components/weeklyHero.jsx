@@ -31,7 +31,7 @@ const WeeklyHero = ({ subsLink }: PropTypes) => (
         <GridImage
           gridId="weeklyLandingHero"
           srcSizes={[1000, 500]}
-          sizes="(max-width: 740px) 100vw, 400px"
+          sizes="(max-width: 740px) 90vw, 500px"
           imgType="png"
         />
         <SvgWeeklyHeroCircles />
