@@ -27,7 +27,7 @@ type PropTypes = {|
   currency: IsoCurrency,
   contributionType: Contrib,
   selectedAmounts: { [Contrib]: Amount | 'other' },
-  selectAmount: (Amount | 'other', Contrib) => (() => void),
+  selectAmount: (Amount | 'other', CountryGroupId, Contrib) => (() => void),
   otherAmount: string | null,
   checkOtherAmount: string => boolean,
   updateOtherAmount: (string, Contrib) => void,
@@ -48,8 +48,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  selectAmount: (amount, contributionType) => () => {
-    trackComponentClick(`change-amount-new-flow-${contributionType}-${amount}`);
+  selectAmount: (amount, countryGroupId, contributionType) => () => {
+    trackComponentClick(`change-amount-new-flow-${contributionType}-${countryGroupId}-${amount.value || amount}`);
     dispatch(selectAmount(amount, contributionType));
   },
   updateOtherAmount: (amount, contributionType) => {
@@ -75,7 +75,7 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       value={amount.value}
       /* eslint-disable react/prop-types */
       checked={props.selectedAmounts[props.contributionType] !== 'other' && amount.value === props.selectedAmounts[props.contributionType].value}
-      onChange={props.selectAmount(amount, props.contributionType)}
+      onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType)}
       /* eslint-enable react/prop-types */
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
@@ -113,7 +113,7 @@ function ContributionAmount(props: PropTypes) {
             name="contributionAmount"
             value="other"
             checked={showOther}
-            onChange={props.selectAmount('other', props.contributionType)}
+            onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>

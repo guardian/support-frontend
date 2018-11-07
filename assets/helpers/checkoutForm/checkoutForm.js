@@ -63,7 +63,8 @@ export const invalidReason = (form: Object | null): string => {
   let invalidReasonString = '';
   if (form instanceof HTMLFormElement) {
     [...form.elements].forEach((element) => {
-      if (element instanceof HTMLInputElement && !element.checkValidity()) {
+      if ((element instanceof HTMLInputElement || element instanceof HTMLSelectElement)
+        && !element.checkValidity()) {
         invalidReasonString += `-${element.id}${getInvalidReason(element.validity)}`;
       }
     });
