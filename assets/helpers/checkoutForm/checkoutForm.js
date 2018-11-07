@@ -60,16 +60,22 @@ const getInvalidReason = (validityState: ValidityState) => {
 };
 
 export const invalidReason = (form: Object | null): string => {
-  let invalidReasonString = '';
-  if (form instanceof HTMLFormElement) {
-    [...form.elements].forEach((element) => {
-      if ((element instanceof HTMLInputElement || element instanceof HTMLSelectElement)
-        && !element.checkValidity()) {
-        invalidReasonString += `-${element.id}${getInvalidReason(element.validity)}`;
-      }
-    });
+  try {
+    let invalidReasonString = '';
+    if (form instanceof HTMLFormElement) {
+      [...form.elements].forEach((element) => {
+        if ((element instanceof HTMLInputElement || element instanceof HTMLSelectElement)
+          && !element.checkValidity()) {
+          invalidReasonString += `-${element.id}${getInvalidReason(element.validity)}`;
+        }
+      });
+    } else {
+      invalidReasonString = 'form-not-instance-of-html-element';
+    }
+    return invalidReasonString;
+  } catch (e) {
+    return e;
   }
-  return invalidReasonString;
 };
 
 
