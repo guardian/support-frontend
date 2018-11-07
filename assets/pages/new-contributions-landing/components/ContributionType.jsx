@@ -33,7 +33,7 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   onSelectContributionType: (contributionType: Contrib, switches: Switches, countryId: IsoCountry) => {
     const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
-    trackComponentClick(`change-contribution-type-new-flow-${contributionType}`);
+    trackComponentClick(`npf-change-contribution-type-${contributionType}`);
     dispatch(updateContributionType(contributionType, paymentMethodToSelect));
   },
 });

@@ -49,11 +49,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   selectAmount: (amount, countryGroupId, contributionType) => () => {
-    trackComponentClick(`change-amount-new-flow-${contributionType}-${countryGroupId}-${amount.value || amount}`);
+    trackComponentClick(`npf-change-amount-${contributionType}-${countryGroupId}-${amount.value || amount}`);
     dispatch(selectAmount(amount, contributionType));
   },
   updateOtherAmount: (amount, contributionType) => {
-    trackComponentClick(`change-other-amount-new-flow-${contributionType}-${amount}`);
+    trackComponentClick(`npf-change-other-amount-${contributionType}-${amount}`);
     dispatch(setValueAndTogglePayPal<string>(updateOtherAmount, amount));
   },
 });
