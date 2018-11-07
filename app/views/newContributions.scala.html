@@ -10,6 +10,7 @@
   id: String,
   js: String,
   css: String,
+  description: Option[String],
   oneOffDefaultStripeConfig: StripeConfig,
   oneOffUatStripeConfig: StripeConfig,
   regularDefaultStripeConfig: StripeConfig,
@@ -67,4 +68,4 @@
   </script>
 }
 
-@main(title = title, scripts = scripts, mainJsBundle = js, mainId = id, mainStyleBundle = css)
+@main(title = title, scripts = scripts, mainJsBundle = js, description = description, mainId = id, mainStyleBundle = css)
