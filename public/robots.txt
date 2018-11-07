@@ -5,8 +5,23 @@ Disallow: /uk/subscribe/premium-tier
 Disallow: /us/subscribe/premium-tier
 Disallow: /au/subscribe/premium-tier
 Disallow: /int/subscribe/premium-tier
-Disallow: /contribute.new
 Disallow: /contribute/recurring-guest
+
+Disallow: /uk/contribute.new
+Disallow: /us/contribute.new
+Disallow: /au/contribute.new
+Disallow: /nz/contribute.new
+Disallow: /eu/contribute.new
+Disallow: /ca/contribute.new
+Disallow: /int/contribute.new
+
+Disallow: /uk/contribute.old
+Disallow: /us/contribute.old
+Disallow: /au/contribute.old
+Disallow: /nz/contribute.old
+Disallow: /eu/contribute.old
+Disallow: /ca/contribute.old
+Disallow: /int/contribute.old
 
 Disallow: /uk/subscribe/weekly
 Disallow: /us/subscribe/weekly
