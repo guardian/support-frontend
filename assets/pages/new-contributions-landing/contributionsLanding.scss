@@ -770,21 +770,16 @@ form {
 }
 
 .form__submit {
-  display: flex;
-  justify-content: flex-end;
   margin-top: 24px;
   padding-bottom: 30px;
 }
 
 .form__submit-button {
-  align-items: center;
+  width: 100%;
   background: gu-colour(news-garnett-highlight);
   border: none;
   border-radius: 20px;
-  display: inline-flex;
   padding: 9px 20px;
-  flex: 1;
-  justify-content: space-between;
 
   &:enabled {
     cursor: pointer;
@@ -794,6 +789,13 @@ form {
       filter: brightness(90%);
     }
   }
+}
+
+.form__submit-button__inner {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .form__submit-button--hidden {
