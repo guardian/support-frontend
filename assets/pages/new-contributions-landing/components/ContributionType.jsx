@@ -9,6 +9,7 @@ import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { getPaymentMethodToSelect } from 'helpers/checkouts';
 
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import { type State } from '../contributionsLandingReducer';
@@ -32,6 +33,7 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   onSelectContributionType: (contributionType: Contrib, switches: Switches, countryId: IsoCountry) => {
     const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
+    trackComponentClick(`change-contribution-type-new-flow-${contributionType}`);
     dispatch(updateContributionType(contributionType, paymentMethodToSelect));
   },
 });
