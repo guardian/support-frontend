@@ -12,13 +12,14 @@ import Footer from 'components/footer/footer';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import SvgChevron from 'components/svgs/chevron';
 
 import WeeklyContentBlock from './components/weeklyContentBlock';
 import WeeklyTextBlock from './components/weeklyTextBlock';
 import WeeklyFeatureList from './components/weeklyFeatureList';
 import WeeklyHero from './components/weeklyHero';
 import WeeklyForm from './components/weeklyForm';
-
+import WeeklyCta from './components/weeklyCta';
 import reducer from './weeklySubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
@@ -63,7 +64,12 @@ const content = (
       header={<CountrySwitcherHeader />}
       footer={<Footer />}
     >
-      <WeeklyHero subsLink="#subscribe" />
+      <WeeklyHero
+        headline="The essential new Weekly magazine from The&nbsp;Guardian"
+        overheading="The Guardian Weekly subscriptions"
+        heading="Seven days of international news curated to give you a clearer global perspective."
+        cta={<WeeklyCta icon={<SvgChevron />} href="#subscribe">See Subscription options</WeeklyCta>}
+      />
       <WeeklyContentBlock>
         <WeeklyTextBlock title="Open up your world view, Weekly">
           <p>Inside the magazine you’ll find quality, independent journalism including opinion,
