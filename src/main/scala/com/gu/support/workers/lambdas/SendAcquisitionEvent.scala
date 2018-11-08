@@ -36,7 +36,9 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
 object SendAcquisitionEvent {
 
-  case class AnalyticsServiceErrorList(errors: List[AnalyticsServiceError]) extends Throwable
+  case class AnalyticsServiceErrorList(errors: List[AnalyticsServiceError]) extends Throwable {
+    override def getMessage: String = errors.map(_.getMessage).mkString(". ")
+  }
 
   // Typeclass instance used by the Ophan service to attempt to build a submission from the state.
   private implicit val stateAcquisitionSubmissionBuilder: AcquisitionSubmissionBuilder[SendAcquisitionEventState] =
