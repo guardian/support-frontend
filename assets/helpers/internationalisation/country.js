@@ -490,4 +490,5 @@ export {
   usStates,
   caStates,
   countries,
+  fromString,
 };

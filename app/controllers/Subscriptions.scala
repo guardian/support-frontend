@@ -128,14 +128,18 @@ class Subscriptions(
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
-  def displayForm(countryCode: String): Action[AnyContent] =
+  def displayForm(countryCode: String, displayCheckout: String): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId) { implicit request =>
-      implicit val settings: Settings = settingsProvider.settings()
-      val title = "Support the Guardian | Digital Subscription"
-      val id = "digital-subscription-checkout-page-" + countryCode
-      val js = "digitalSubscriptionCheckoutPage.js"
-      val css = "digitalSubscriptionCheckoutPageStyles.css"
-      Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+      if (displayCheckout == "true") {
+        implicit val settings: Settings = settingsProvider.settings()
+        val title = "Support the Guardian | Digital Subscription"
+        val id = "digital-subscription-checkout-page-" + countryCode
+        val js = "digitalSubscriptionCheckoutPage.js"
+        val css = "digitalSubscriptionCheckoutPageStyles.css"
+        Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+      } else {
+        Redirect(routes.Subscriptions.geoRedirect)
+      }
     }
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
