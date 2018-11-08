@@ -32,7 +32,7 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { formElementIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { formElementIsValid, invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
@@ -186,7 +186,6 @@ function onSubmit(props: PropTypes): Event => void {
 
     if (formIsValid) {
       props.setFormIsValid(true);
-
       if (canContribute) {
         formHandlers[props.contributionType][props.paymentMethod](props);
         trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${userType}`);
@@ -195,7 +194,7 @@ function onSubmit(props: PropTypes): Event => void {
       }
     } else {
       props.setFormIsValid(false);
-      trackCheckoutSubmitAttempt(componentId, 'blocked-because-form-not-valid');
+      trackCheckoutSubmitAttempt(componentId, `blocked-because-form-not-valid${invalidReason(event.target)}`);
     }
   };
 }

@@ -6,12 +6,13 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import type { Contrib } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
+import { formIsValid, getForm, invalidReason } from 'helpers/checkoutForm/checkoutForm';
+import { canContributeWithoutSigningIn } from 'helpers/identityApis';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 import ContributionsGuestCheckout from './contributionsGuestCheckout';
 import { type State } from '../regularContributionsReducer';
 import { setStage } from '../helpers/checkoutForm/checkoutFormActions';
 import { type Action as CheckoutAction, setCheckoutFormHasBeenSubmitted } from '../helpers/checkoutForm/checkoutFormActions';
-import { formClassName } from './formFields';
 
 // ----- State Maps ----- //
 
@@ -36,14 +37,23 @@ const mapDispatchToProps = (dispatch: Dispatch<CheckoutAction>) => ({
     isSignedIn: boolean,
     userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   ) => {
-    if (checkoutFormShouldSubmit(
-      contributionType,
-      isSignedIn,
-      userTypeFromIdentityResponse,
-      getForm(formClassName),
-    )) {
-      dispatch(setStage('payment'));
+    const canContribute =
+      canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
+      || isSignedIn;
+
+    const componentId = `opf-${contributionType}-submit`;
+    const formName = 'regular-contrib__checkout-form';
+    if (formIsValid(formName)) {
+      if (canContribute) {
+        dispatch(setStage('payment'));
+        trackCheckoutSubmitAttempt(componentId, `opf-allowed-for-user-type-${userTypeFromIdentityResponse}`);
+      } else {
+        trackCheckoutSubmitAttempt(componentId, `opf-blocked-because-user-type-is-${userTypeFromIdentityResponse}`);
+      }
+    } else {
+      trackCheckoutSubmitAttempt(componentId, `opf-blocked-because-form-not-valid${invalidReason(getForm(formName))}`);
     }
+
     dispatch(setCheckoutFormHasBeenSubmitted());
   },
 });
