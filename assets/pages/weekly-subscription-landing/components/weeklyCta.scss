@@ -1,7 +1,9 @@
 .weekly-cta {
   font-size: 16px;
   line-height: 1.2;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
   font-family: $gu-text-sans-web;
   font-weight: bold;
   padding: ($gu-v-spacing) $gu-h-spacing;
@@ -21,12 +23,13 @@
 
 .weekly-cta__content,
 .weekly-cta svg {
-  display: inline-block;
-  vertical-align: middle;
+  flex: 0 0 auto;
+  display: block;
 }
 
 .weekly-cta svg {
   height: $gu-v-spacing * 2;
+  width: 2em;
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
 }
 
