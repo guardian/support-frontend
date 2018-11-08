@@ -6,6 +6,7 @@ import type { CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
+import { getQueryParameter } from 'helpers/url';
 
 import { type Action } from './weeklySubscriptionLandingActions';
 
@@ -47,7 +48,7 @@ export type State = {
 // ----- Reducer ----- //
 
 const initialState: PageState = {
-  period: 'sixweek',
+  period: getQueryParameter('promo_6for6') ? 'sixweek' : null,
 };
 
 function reducer(state: PageState = initialState, action: Action): PageState {
