@@ -7,6 +7,7 @@ import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import RegularContributionsClient._
+import actions.CustomActionBuilders.OptionalAuthRequest
 import com.gu.support.workers.model._
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.Decoder
@@ -14,7 +15,7 @@ import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
-import com.gu.support.workers.model.AccessScope.SessionId
+import com.gu.support.workers.model.AccountAccessScope.{SessionAccess, SessionId}
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
 import play.api.mvc.Call
@@ -22,6 +23,7 @@ import com.gu.support.workers.model.Status
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
+
 import scala.util.{Failure, Success, Try}
 
 object CreateRegularContributorRequest {
@@ -78,23 +80,36 @@ class RegularContributionsClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
+  private def referrerAcquisitionDataWithGAFields(request: OptionalAuthRequest[CreateRegularContributorRequest]): ReferrerAcquisitionData = {
+    val hostname = request.host
+    val gaClientId = request.cookies.get("_ga").map(_.value)
+    val userAgent = request.headers.get("user-agent")
+    val ipAddress = request.remoteAddress
+    request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
+  }
+
   def createContributor(
-    request: CreateRegularContributorRequest,
+    request: OptionalAuthRequest[CreateRegularContributorRequest],
     user: User,
     requestId: UUID,
-    accessScope: AccessScope
+    accessScope: AccountAccessScope
   ): EitherT[Future, RegularContributionError, StatusResponse] = {
+    val sessionId = accessScope match {
+      case SessionAccess(id) => Some(id.value)
+      case _ => None
+    }
+
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
-      product = request.contribution,
-      paymentFields = request.paymentFields,
+      product = request.body.contribution,
+      paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
-        ophanIds = request.ophanIds,
-        referrerAcquisitionData = request.referrerAcquisitionData,
-        supportAbTests = request.supportAbTests
+        ophanIds = request.body.ophanIds,
+        referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
+        supportAbTests = request.body.supportAbTests
       )),
-      sessionId = accessScope.toOption
+      sessionId = sessionId
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>

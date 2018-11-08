@@ -38,6 +38,7 @@ Object {
   ],
   "componentId": "exampleComponentId",
   "componentType": "exampleComponentType",
+  "gaId": null,
   "pageviewId": "123456",
   "platform": "SUPPORT",
   "referrerPageviewId": "123456",
