@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn, getUserTypeFromIdentity } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
@@ -40,12 +40,19 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
-import * as cookie from 'helpers/cookie';
 import {
-  type State,
-  type UserFormData,
-  type ThankYouPageStage,
+  checkoutFormShouldSubmit,
+  formIsValid,
+  getForm,
+  invalidReason,
+  onFormSubmit
+} from 'helpers/checkoutForm/checkoutForm';
+import * as cookie from 'helpers/cookie';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
+import {
+type State,
+type UserFormData,
+type ThankYouPageStage,
 } from './contributionsLandingReducer';
 
 export type Action =
@@ -171,6 +178,22 @@ const togglePayPalButton = () =>
     } else if (window.disablePayPalButton) {
       window.disablePayPalButton();
     }
+  };
+
+const sendFormSubmitEventForPayPalRecurring = () =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const { contributionType, paymentMethod, userTypeFromIdentityResponse } = state.page.form;
+    const { isSignedIn } = state.page.user;
+    const formName = 'form--contribution';
+    onFormSubmit(
+      paymentMethod,
+      contributionType,
+      getForm(formName),
+      isSignedIn,
+      userTypeFromIdentityResponse,
+      (isValid: boolean) => dispatch(setFormIsValid(isValid)),
+    );
   };
 
 function setValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {
@@ -445,4 +468,5 @@ export {
   togglePayPalButton,
   setValueAndTogglePayPal,
   setFormIsValid,
+  sendFormSubmitEventForPayPalRecurring,
 };

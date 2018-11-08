@@ -65,7 +65,7 @@ function getPayPalOptions(
   csrf: CsrfState,
   onPaymentAuthorisation: string => void,
   canOpen: () => boolean,
-  whenUnableToOpen: () => void,
+  onClick: () => void,
   formClassName: string,
   isTestUser: boolean,
   setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
@@ -111,9 +111,7 @@ function getPayPalOptions(
     },
 
     onClick() {
-      if (!canOpen()) {
-        whenUnableToOpen();
-      }
+      onClick();
     },
 
     // This function is called when user clicks the PayPal button.

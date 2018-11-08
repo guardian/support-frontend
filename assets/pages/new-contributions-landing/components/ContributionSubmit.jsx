@@ -18,8 +18,9 @@ import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
 import {
-  setCheckoutFormHasBeenSubmitted,
+  sendFormSubmitEventForPayPalRecurring,
   setupRecurringPayPalPayment,
+  setCheckoutFormHasBeenSubmitted,
 } from '../contributionsLandingActions';
 
 
@@ -34,6 +35,7 @@ type PropTypes = {|
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
+  sendFormSubmitEventForPayPalRecurring: () => void,
   setCheckoutFormHasBeenSubmitted: () => void,
   setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
   payPalHasLoaded: boolean,
@@ -60,6 +62,7 @@ const mapStateToProps = (state: State) =>
   });
 
 const mapDispatchToProps = (dispatch: Function) => ({
+  sendFormSubmitEventForPayPalRecurring: () => { dispatch(sendFormSubmitEventForPayPalRecurring()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   setupRecurringPayPalPayment: (
     resolve: Function,
@@ -109,7 +112,10 @@ function ContributionSubmit(props: PropTypes) {
                 getForm(formClassName),
               )
             }
-            whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
+            onClick={() => {
+              props.setCheckoutFormHasBeenSubmitted();
+              props.sendFormSubmitEventForPayPalRecurring();
+            }}
             formClassName={formClassName}
             isTestUser={props.isTestUser}
             setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}

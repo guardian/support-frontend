@@ -32,7 +32,7 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { formElementIsValid, invalidReason } from 'helpers/checkoutForm/checkoutForm';
+import { formElementIsValid, invalidReason, onFormSubmit } from 'helpers/checkoutForm/checkoutForm';
 import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
@@ -176,26 +176,15 @@ function onSubmit(props: PropTypes): Event => void {
     // Causes errors to be displayed against payment fields
     props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-    const componentId = `${props.paymentMethod}-${props.contributionType}-submit`;
-    const formIsValid = formElementIsValid(event.target);
-    const userType = props.isSignedIn ? 'signed-in' : props.userTypeFromIdentityResponse;
-    const canContribute =
-      canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
-      || props.isSignedIn;
-
-
-    if (formIsValid) {
-      props.setFormIsValid(true);
-      if (canContribute) {
-        formHandlers[props.contributionType][props.paymentMethod](props);
-        trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${userType}`);
-      } else {
-        trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${userType}`);
-      }
-    } else {
-      props.setFormIsValid(false);
-      trackCheckoutSubmitAttempt(componentId, `blocked-because-form-not-valid${invalidReason(event.target)}`);
-    }
+    onFormSubmit(
+      props.paymentMethod,
+      props.contributionType,
+      event.target,
+      props.isSignedIn,
+      props.userTypeFromIdentityResponse,
+      props.setFormIsValid,
+      () => formHandlers[props.contributionType][props.paymentMethod](props),
+    );
   };
 }
 

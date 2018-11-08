@@ -2,9 +2,10 @@
 
 // ----- Imports ----- //
 import { type Contrib as ContributionType } from 'helpers/contributions';
-import type { Contrib } from 'helpers/contributions';
+import type { Contrib, PaymentMethod } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
@@ -78,12 +79,43 @@ export const invalidReason = (form: Object | null): string => {
   }
 };
 
-
 export const formElementIsValid = (formElement: Object | null) => {
   if (formElement && formElement instanceof HTMLFormElement) {
     return formElement.checkValidity();
   }
   return false;
+};
+
+
+export const onFormSubmit = (
+  paymentMethod: PaymentMethod,
+  contributionType: Contrib,
+  form: Object | null,
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  setFormIsValid: boolean => void,
+  handlePayment?: () => void,
+) => {
+  const componentId = `${paymentMethod}-${contributionType}-submit`;
+  const formIsValid = formElementIsValid(form);
+  const userType = isSignedIn ? 'signed-in' : userTypeFromIdentityResponse;
+  const canContribute =
+    canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
+    || isSignedIn;
+  if (formIsValid) {
+    setFormIsValid(true);
+    if (canContribute) {
+      if (handlePayment) {
+        handlePayment();
+      }
+      trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${userType}`);
+    } else {
+      trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${userType}`);
+    }
+  } else {
+    setFormIsValid(false);
+    trackCheckoutSubmitAttempt(componentId, `blocked-because-form-not-valid${invalidReason(form)}`);
+  }
 };
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
