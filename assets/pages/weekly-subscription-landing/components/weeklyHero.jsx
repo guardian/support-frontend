@@ -35,7 +35,7 @@ const WeeklyHero = ({
         <GridImage
           gridId="weeklyLandingHero"
           srcSizes={[1000, 500]}
-          sizes="(max-width: 740px) 90vw, 500px"
+          sizes="(max-width: 740px) 90vw, 600px"
           imgType="png"
         />
         <SvgWeeklyHeroCircles />
