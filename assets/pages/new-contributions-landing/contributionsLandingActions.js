@@ -43,8 +43,8 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import {
   checkoutFormShouldSubmit,
   getForm,
-  onFormSubmit,
 } from 'helpers/checkoutForm/checkoutForm';
+import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/cookie';
 import {
   type State,
@@ -180,19 +180,15 @@ const togglePayPalButton = () =>
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
-    const { contributionType, paymentMethod, userTypeFromIdentityResponse } = state.page.form;
-    const { isSignedIn } = state.page.user;
-    const formName = 'form--contribution';
-    onFormSubmit(
-      'npf',
-      paymentMethod,
-      contributionType,
-      getForm(formName),
-      isSignedIn,
-      userTypeFromIdentityResponse,
-      (isValid: boolean) => dispatch(setFormIsValid(isValid)),
-      () => dispatch(setCheckoutFormHasBeenSubmitted()),
-    );
+    const formSubmitParameters: FormSubmitParameters = {
+      ...state.page.form,
+      flowPrefix: 'npf',
+      form: getForm('form--contribution'),
+      isSignedIn: state.page.user.isSignedIn,
+      setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
+      setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
+    };
+    onFormSubmit(formSubmitParameters);
   };
 
 function setValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {

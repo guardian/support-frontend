@@ -122,7 +122,7 @@ function pageView(url: string, referrer: string) {
 
 export {
   trackComponentEvents,
-  trackCheckoutSubmitAttempt,
   pageView,
   trackComponentClick,
+  trackCheckoutSubmitAttempt,
 };

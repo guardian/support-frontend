@@ -32,7 +32,7 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { onFormSubmit } from 'helpers/checkoutForm/checkoutForm';
+import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
@@ -174,17 +174,15 @@ function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
     event.preventDefault();
-    onFormSubmit(
-      'npf',
-      props.paymentMethod,
-      props.contributionType,
-      event.target,
-      props.isSignedIn,
-      props.userTypeFromIdentityResponse,
-      props.setFormIsValid,
-      props.setCheckoutFormHasBeenSubmitted,
-      () => formHandlers[props.contributionType][props.paymentMethod](props),
-    );
+    const flowPrefix = 'npf';
+    const form = event.target;
+    const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
+    onFormSubmit({
+      ...props,
+      flowPrefix,
+      form,
+      handlePayment,
+    });
   };
 }
 

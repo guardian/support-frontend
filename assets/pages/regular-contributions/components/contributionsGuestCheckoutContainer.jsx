@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import type { Contrib, PaymentMethod } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { getForm, onFormSubmit } from 'helpers/checkoutForm/checkoutForm';
+import { getForm } from 'helpers/checkoutForm/checkoutForm';
+import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import ContributionsGuestCheckout from './contributionsGuestCheckout';
 import { type State } from '../regularContributionsReducer';
 import { setStage } from '../helpers/checkoutForm/checkoutFormActions';
@@ -37,18 +38,24 @@ const mapDispatchToProps = (dispatch: Dispatch<CheckoutAction>) => ({
     userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
     paymentMethod: PaymentMethod,
   ) => {
-    const formName = 'regular-contrib__checkout-form';
-    onFormSubmit(
-      'opf',
+    const form = getForm('regular-contrib__checkout-form');
+    const formSubmitParameters: FormSubmitParameters = {
+      flowPrefix: 'opf',
       paymentMethod,
       contributionType,
-      getForm(formName),
+      form,
       isSignedIn,
       userTypeFromIdentityResponse,
-      () => {}, // we don't need this for the old flow
-      () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
-      () => { dispatch(setStage('payment')); },
-    );
+      setCheckoutFormHasBeenSubmitted: () => {
+        dispatch(setCheckoutFormHasBeenSubmitted());
+      },
+      handlePayment: () => {
+        dispatch(setStage('payment'));
+      },
+      setFormIsValid: () => undefined, // not needed for old fow
+    };
+
+    onFormSubmit(formSubmitParameters);
   },
 });
 

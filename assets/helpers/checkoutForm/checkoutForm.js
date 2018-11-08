@@ -2,10 +2,9 @@
 
 // ----- Imports ----- //
 import { type Contrib as ContributionType } from 'helpers/contributions';
-import type { Contrib, PaymentMethod } from 'helpers/contributions';
+import type { Contrib } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
-import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
@@ -84,41 +83,6 @@ export const formElementIsValid = (formElement: Object | null) => {
     return formElement.checkValidity();
   }
   return false;
-};
-
-type OldFlowOrNewFlow = 'opf' | 'npf';
-
-export const onFormSubmit = (
-  flowPrefix: OldFlowOrNewFlow,
-  paymentMethod: PaymentMethod,
-  contributionType: Contrib,
-  form: Object | null,
-  isSignedIn: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  setFormIsValid: boolean => void,
-  setCheckoutFormHasBeenSubmitted: () => void,
-  handlePayment?: () => void,
-) => {
-  const componentId = `${paymentMethod}-${contributionType}-submit`;
-  const formIsValid = formElementIsValid(form);
-  const userType = isSignedIn ? 'signed-in' : userTypeFromIdentityResponse;
-  const canContribute = canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
-  if (formIsValid) {
-    setFormIsValid(true);
-    if (canContribute) {
-      // For PayPal, we handle the payment elsewhere
-      if (handlePayment) {
-        handlePayment();
-      }
-      trackCheckoutSubmitAttempt(componentId, `${flowPrefix}-allowed-for-user-type-${userType}`);
-    } else {
-      trackCheckoutSubmitAttempt(componentId, `${flowPrefix}-blocked-because-user-type-is-${userType}`);
-    }
-  } else {
-    setFormIsValid(false);
-    trackCheckoutSubmitAttempt(componentId, `${flowPrefix}-blocked-because-form-not-valid${invalidReason(form)}`);
-  }
-  setCheckoutFormHasBeenSubmitted();
 };
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
