@@ -41,14 +41,6 @@ function getOrderId() {
   return value;
 }
 
-function getContributionType() {
-  const param = getQueryParameter('contribType');
-  if (param) {
-    storage.setSession('contribType', param);
-  }
-  return (storage.getSession('contribType') || 'one_off').toLowerCase(); // PayPal route doesn't set the contribType
-}
-
 function getCurrency(): string {
   const currency = detectCurrency(detectCountryGroup());
   if (currency) {
