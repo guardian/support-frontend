@@ -94,6 +94,7 @@ export const onFormSubmit = (
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   setFormIsValid: boolean => void,
+  setCheckoutFormHasBeenSubmitted: () => void,
   handlePayment?: () => void,
 ) => {
   const componentId = `${paymentMethod}-${contributionType}-submit`;
@@ -116,6 +117,7 @@ export const onFormSubmit = (
     setFormIsValid(false);
     trackCheckoutSubmitAttempt(componentId, `blocked-because-form-not-valid${invalidReason(form)}`);
   }
+  setCheckoutFormHasBeenSubmitted();
 };
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));

@@ -32,9 +32,8 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { formElementIsValid, invalidReason, onFormSubmit } from 'helpers/checkoutForm/checkoutForm';
-import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
-import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
+import { onFormSubmit } from 'helpers/checkoutForm/checkoutForm';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
@@ -174,7 +173,6 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
-    props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
     onFormSubmit(
       props.paymentMethod,
@@ -183,6 +181,7 @@ function onSubmit(props: PropTypes): Event => void {
       props.isSignedIn,
       props.userTypeFromIdentityResponse,
       props.setFormIsValid,
+      props.setCheckoutFormHasBeenSubmitted,
       () => formHandlers[props.contributionType][props.paymentMethod](props),
     );
   };

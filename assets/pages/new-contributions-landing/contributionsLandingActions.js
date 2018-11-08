@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { canContributeWithoutSigningIn, getUserTypeFromIdentity } from 'helpers/identityApis';
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
@@ -42,17 +42,14 @@ import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import {
   checkoutFormShouldSubmit,
-  formIsValid,
   getForm,
-  invalidReason,
-  onFormSubmit
+  onFormSubmit,
 } from 'helpers/checkoutForm/checkoutForm';
 import * as cookie from 'helpers/cookie';
-import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 import {
-type State,
-type UserFormData,
-type ThankYouPageStage,
+  type State,
+  type UserFormData,
+  type ThankYouPageStage,
 } from './contributionsLandingReducer';
 
 export type Action =
@@ -193,6 +190,7 @@ const sendFormSubmitEventForPayPalRecurring = () =>
       isSignedIn,
       userTypeFromIdentityResponse,
       (isValid: boolean) => dispatch(setFormIsValid(isValid)),
+      () => dispatch(setCheckoutFormHasBeenSubmitted()),
     );
   };
 

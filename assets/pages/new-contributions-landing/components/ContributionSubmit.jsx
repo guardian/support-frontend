@@ -20,7 +20,6 @@ import { PayPalRecurringButton } from './PayPalRecurringButton';
 import {
   sendFormSubmitEventForPayPalRecurring,
   setupRecurringPayPalPayment,
-  setCheckoutFormHasBeenSubmitted,
 } from '../contributionsLandingActions';
 
 
@@ -36,7 +35,6 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   csrf: CsrfState,
   sendFormSubmitEventForPayPalRecurring: () => void,
-  setCheckoutFormHasBeenSubmitted: () => void,
   setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
@@ -63,7 +61,6 @@ const mapStateToProps = (state: State) =>
 
 const mapDispatchToProps = (dispatch: Function) => ({
   sendFormSubmitEventForPayPalRecurring: () => { dispatch(sendFormSubmitEventForPayPalRecurring()); },
-  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   setupRecurringPayPalPayment: (
     resolve: Function,
     reject: Function,
@@ -112,10 +109,7 @@ function ContributionSubmit(props: PropTypes) {
                 getForm(formClassName),
               )
             }
-            onClick={() => {
-              props.setCheckoutFormHasBeenSubmitted();
-              props.sendFormSubmitEventForPayPalRecurring();
-            }}
+            onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
             formClassName={formClassName}
             isTestUser={props.isTestUser}
             setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
