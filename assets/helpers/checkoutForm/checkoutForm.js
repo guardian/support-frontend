@@ -86,10 +86,10 @@ export const formElementIsValid = (formElement: Object | null) => {
   return false;
 };
 
-type FlowType = 'opf' | 'npf';
+type OldFlowOrNewFlow = 'opf' | 'npf';
 
 export const onFormSubmit = (
-  flowPrefix: FlowType,
+  flowPrefix: OldFlowOrNewFlow,
   paymentMethod: PaymentMethod,
   contributionType: Contrib,
   form: Object | null,
