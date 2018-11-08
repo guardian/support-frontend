@@ -11,17 +11,17 @@ type InitialProps<V> = {
   value: V,
 };
 
-type AugmentedProps<Props> = Props & {
-  setValue: string => void,
+type AugmentedProps<Props, Action> = Props & {
+  setValue: string => Action,
 };
 
 type In<Props> = React$ComponentType<Props>;
-type Out<Props> = React$ComponentType<AugmentedProps<Props>>;
+type Out<Props, A> = React$ComponentType<AugmentedProps<Props, A>>;
 
 
 // ----- Component ----- //
 
-function asControlled<V, Props: InitialProps<V>>(Component: In<Props>): Out<Props> {
+function asControlled<V, A, Props: InitialProps<V>>(Component: In<Props>): Out<Props, A> {
   return ({ setValue, ...props }) => (
     <Component {...props} onChange={e => setValue(e.target.value)} />
   );
