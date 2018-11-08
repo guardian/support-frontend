@@ -9,7 +9,7 @@ import Page from 'components/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import Footer from 'components/footer/footer';
 
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import SvgChevron from 'components/svgs/chevron';
@@ -29,6 +29,8 @@ const store = pageInit(reducer, true);
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detect();
+const { supportInternationalisationId } = countryGroups[countryGroupId];
+const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supportInternationalisationId : 'gb').toUpperCase();
 
 const reactElementId: {
   [CountryGroupId]: string,
@@ -54,7 +56,6 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
     'International',
   ],
 );
-
 
 // ----- Render ----- //
 
@@ -114,7 +115,7 @@ const content = (
           </p>
         </WeeklyTextBlock>
         <WeeklyTextBlock title="Guardian Weekly terms and conditions">
-          <p>Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions see <a href="https://subscribe.theguardian.com/p/WWM99X/terms?country=GB">here</a>.
+          <p>Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions see <a href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
           </p>
         </WeeklyTextBlock>
       </WeeklyContentBlock>
