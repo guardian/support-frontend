@@ -86,7 +86,6 @@ export const formElementIsValid = (formElement: Object | null) => {
   return false;
 };
 
-
 export const onFormSubmit = (
   paymentMethod: PaymentMethod,
   contributionType: Contrib,
@@ -104,6 +103,7 @@ export const onFormSubmit = (
   if (formIsValid) {
     setFormIsValid(true);
     if (canContribute) {
+      // For PayPal, we handle the payment elsewhere
       if (handlePayment) {
         handlePayment();
       }
