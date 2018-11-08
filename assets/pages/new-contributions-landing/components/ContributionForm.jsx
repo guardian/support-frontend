@@ -32,9 +32,8 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
-import { formElementIsValid, invalidReason } from 'helpers/checkoutForm/checkoutForm';
-import { type UserTypeFromIdentityResponse, canContributeWithoutSigningIn } from 'helpers/identityApis';
-import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
+import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
@@ -174,28 +173,16 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
-    props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-    const componentId = `${props.paymentMethod}-${props.contributionType}-submit`;
-    const formIsValid = formElementIsValid(event.target);
-    const userType = props.isSignedIn ? 'signed-in' : props.userTypeFromIdentityResponse;
-    const canContribute =
-      canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
-      || props.isSignedIn;
-
-
-    if (formIsValid) {
-      props.setFormIsValid(true);
-      if (canContribute) {
-        formHandlers[props.contributionType][props.paymentMethod](props);
-        trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${userType}`);
-      } else {
-        trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${userType}`);
-      }
-    } else {
-      props.setFormIsValid(false);
-      trackCheckoutSubmitAttempt(componentId, `blocked-because-form-not-valid${invalidReason(event.target)}`);
-    }
+    const flowPrefix = 'npf';
+    const form = event.target;
+    const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
+    onFormSubmit({
+      ...props,
+      flowPrefix,
+      form,
+      handlePayment,
+    });
   };
 }
 

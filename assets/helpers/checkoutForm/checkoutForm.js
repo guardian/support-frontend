@@ -78,7 +78,6 @@ export const invalidReason = (form: Object | null): string => {
   }
 };
 
-
 export const formElementIsValid = (formElement: Object | null) => {
   if (formElement && formElement instanceof HTMLFormElement) {
     return formElement.checkValidity();
