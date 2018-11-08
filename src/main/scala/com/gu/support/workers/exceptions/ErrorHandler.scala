@@ -1,7 +1,7 @@
 package com.gu.support.workers.exceptions
 
 import com.amazonaws.services.kms.model.AWSKMSException
-import com.gu.acquisition.model.errors.OphanServiceError
+import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.paypal.PayPalError
@@ -27,7 +27,7 @@ object ErrorHandler {
     //Salesforce
     case e: SalesforceErrorResponse => logAndRethrow(e.asRetryException)
     // Ophan
-    case e: OphanServiceError => logAndRethrow(e.asRetryException)
+    case e: AnalyticsServiceError => logAndRethrow(e.asRetryException)
     //Any Exception that we haven't specifically handled
     case e: Throwable => logAndRethrow(e.asRetryException)
   }

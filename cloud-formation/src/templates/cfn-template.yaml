@@ -13,6 +13,9 @@ Parameters:
     Description: Stack name
     Type: String
     Default: support
+  OphanRole:
+    Type: String
+    Description: ARN of the Ophan cross-account role
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
@@ -75,6 +78,13 @@ Resources:
                 - kms:Encrypt
                 - kms:Decrypt
                 Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
+        - PolicyName: AssumeOphanRole
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: sts:AssumeRole
+              Resource:
+                Ref: OphanRole
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"

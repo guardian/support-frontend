@@ -4,7 +4,7 @@ import java.net.{SocketException, SocketTimeoutException}
 
 import com.amazonaws.services.kms.model._
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
-import com.gu.acquisition.model.errors.OphanServiceError
+import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.helpers.WebServiceHelperError
 import io.circe.ParsingFailure
 
@@ -44,8 +44,8 @@ object RetryImplicits {
     }
   }
 
-  implicit class OphanServiceErrorConversions(val error: OphanServiceError) {
-    import OphanServiceError._
+  implicit class OphanServiceErrorConversions(val error: AnalyticsServiceError) {
+    import AnalyticsServiceError._
 
     def asRetryException: RetryException =
       error match {

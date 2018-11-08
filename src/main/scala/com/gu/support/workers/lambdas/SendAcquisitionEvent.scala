@@ -1,7 +1,8 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.acquisition.model.OphanIds
+import com.gu.acquisition.model.errors.AnalyticsServiceError
+import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
@@ -29,11 +30,13 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   ): FutureHandlerResult = {
     SafeLogger.info(s"Sending acquisition event to ophan: ${state.toString}")
     // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
-    services.ophanService.submit(state).fold(throw _, _ => HandlerResult(Unit, requestInfo))
+    services.ophanService.submit(state).fold(errors => throw AnalyticsServiceErrorList(errors), _ => HandlerResult(Unit, requestInfo))
   }
 }
 
 object SendAcquisitionEvent {
+
+  case class AnalyticsServiceErrorList(errors: List[AnalyticsServiceError]) extends Throwable
 
   // Typeclass instance used by the Ophan service to attempt to build a submission from the state.
   private implicit val stateAcquisitionSubmissionBuilder: AcquisitionSubmissionBuilder[SendAcquisitionEventState] =
@@ -44,6 +47,22 @@ object SendAcquisitionEvent {
 
       override def buildOphanIds(state: SendAcquisitionEventState): Either[String, OphanIds] =
         Either.fromOption(state.acquisitionData.map(_.ophanIds), "acquisition data not included")
+
+      override def buildGAData(a: SendAcquisitionEventState): Either[String, GAData] = {
+        for {
+          acquisitionData <- Either.fromOption(a.acquisitionData, "acquisition data not included")
+          ref = acquisitionData.referrerAcquisitionData
+          hostname <- Either.fromOption(ref.hostname, "missing hostname in referrer acquisition data")
+          gaClientId <- Either.fromOption(ref.gaClientId, "missing gaClientId in referrer acquisition data")
+          ipAddress = ref.ipAddress
+          userAgent = ref.userAgent
+        } yield GAData(
+          hostname = hostname,
+          clientId = gaClientId,
+          clientIpAddress = ipAddress,
+          clientUserAgent = userAgent
+        )
+      }
 
       def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod): thrift.PaymentFrequency =
         // object BillingObject extends the BillingObject trait.
