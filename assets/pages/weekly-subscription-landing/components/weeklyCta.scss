@@ -28,11 +28,6 @@
 }
 
 .weekly-cta svg {
-  height: $gu-v-spacing * 2;
-  width: 2em;
+  width: $gu-h-spacing * 1.5;
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
-}
-
-.weekly-cta svg.svg-chevron {
-  height: $gu-v-spacing * 1.1;
 }
