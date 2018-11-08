@@ -10,13 +10,17 @@ import { type IsoCountry, fromString } from 'helpers/internationalisation/countr
 
 export type Stage = 'checkout' | 'thankyou';
 
-type PageState = {
-  stage: Stage;
+export type FormFields = {|
   firstName: string,
   lastName: string,
   country: IsoCountry | null,
   telephone: string,
-};
+|};
+
+type PageState = {|
+  stage: Stage,
+  ...FormFields,
+|};
 
 export type State = {
   common: CommonState,
@@ -35,12 +39,26 @@ export type Action =
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
 
-const formActions = {
+const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
   setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
 };
+
+export type FormActionCreators = typeof formActionCreators;
+
+
+// ----- Selectors ----- //
+
+function formFieldsSelector(state: State): FormFields {
+  return {
+    firstName: state.page.firstName,
+    lastName: state.page.lastName,
+    country: state.page.country,
+    telephone: state.page.telephone,
+  };
+}
 
 
 // ----- Reducer ----- //
@@ -85,5 +103,6 @@ function reducer(state: PageState = initialState, action: Action): PageState {
 export {
   reducer,
   setStage,
-  formActions,
+  formFieldsSelector,
+  formActionCreators,
 };

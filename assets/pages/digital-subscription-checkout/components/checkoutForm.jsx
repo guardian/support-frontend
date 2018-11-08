@@ -6,39 +6,34 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { countries, type IsoCountry } from 'helpers/internationalisation/country';
+import { countries } from 'helpers/internationalisation/country';
 
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 
-import { type State, type Action, formActions } from '../digitalSubscriptionCheckoutReducer';
+import {
+  type State,
+  type FormFields,
+  type FormActionCreators,
+  formFieldsSelector,
+  formActionCreators,
+} from '../digitalSubscriptionCheckoutReducer';
 
 
 // ----- Types ----- //
 
-type PropTypes = {
-  firstName: string,
-  lastName: string,
-  country: IsoCountry,
-  telephone: string,
-  setFirstName: string => Action,
-  setLastName: string => Action,
-  setCountry: string => Action,
-  setTelephone: string => Action,
-};
+type PropTypes = {|
+  ...FormFields,
+  ...FormActionCreators,
+|};
 
 
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state: State) {
-  return {
-    firstName: state.page.firstName,
-    lastName: state.page.lastName,
-    country: state.page.country,
-    telephone: state.page.telephone,
-  };
+  return formFieldsSelector(state);
 }
 
 
@@ -90,4 +85,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, formActions)(CheckoutForm);
+export default connect(mapStateToProps, formActionCreators)(CheckoutForm);
