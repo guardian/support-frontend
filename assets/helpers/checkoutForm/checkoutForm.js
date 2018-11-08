@@ -86,7 +86,10 @@ export const formElementIsValid = (formElement: Object | null) => {
   return false;
 };
 
+type FlowType = 'opf' | 'npf';
+
 export const onFormSubmit = (
+  flowPrefix: FlowType,
   paymentMethod: PaymentMethod,
   contributionType: Contrib,
   form: Object | null,
@@ -107,13 +110,13 @@ export const onFormSubmit = (
       if (handlePayment) {
         handlePayment();
       }
-      trackCheckoutSubmitAttempt(componentId, `allowed-for-user-type-${userType}`);
+      trackCheckoutSubmitAttempt(componentId, `${flowPrefix}-allowed-for-user-type-${userType}`);
     } else {
-      trackCheckoutSubmitAttempt(componentId, `blocked-because-user-type-is-${userType}`);
+      trackCheckoutSubmitAttempt(componentId, `${flowPrefix}-blocked-because-user-type-is-${userType}`);
     }
   } else {
     setFormIsValid(false);
-    trackCheckoutSubmitAttempt(componentId, `blocked-because-form-not-valid${invalidReason(form)}`);
+    trackCheckoutSubmitAttempt(componentId, `${flowPrefix}-blocked-because-form-not-valid${invalidReason(form)}`);
   }
   setCheckoutFormHasBeenSubmitted();
 };

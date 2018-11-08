@@ -175,6 +175,7 @@ function onSubmit(props: PropTypes): Event => void {
     // Causes errors to be displayed against payment fields
     event.preventDefault();
     onFormSubmit(
+      'npf',
       props.paymentMethod,
       props.contributionType,
       event.target,

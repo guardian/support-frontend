@@ -39,6 +39,7 @@ const mapDispatchToProps = (dispatch: Dispatch<CheckoutAction>) => ({
   ) => {
     const formName = 'regular-contrib__checkout-form';
     onFormSubmit(
+      'opf',
       paymentMethod,
       contributionType,
       getForm(formName),

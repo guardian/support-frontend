@@ -184,6 +184,7 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     const { isSignedIn } = state.page.user;
     const formName = 'form--contribution';
     onFormSubmit(
+      'npf',
       paymentMethod,
       contributionType,
       getForm(formName),
