@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 
 
 // ----- State Maps ----- //

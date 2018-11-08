@@ -12,7 +12,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { OptimizeExperiments } from 'helpers/tracking/optimize';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 
 

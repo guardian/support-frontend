@@ -1,19 +1,25 @@
 // @flow
 
 import { connect } from 'react-redux';
-import type { OptimizeExperiment, OptimizeState } from 'helpers/optimize/optimizeReducer';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import type { CommonState } from 'helpers/page/commonReducer';
+import type { Node } from 'preact-compat';
 
 
 export type ExperimentWrapperProps = {
   experimentId: string,
-  experiments: OptimizeExperiment[],
-  setExperimentVariant: (variant: number) => void,
+  experiments: OptimizeExperiments,
+  children: Node,
 }
 
-function mapStateToProps(state: OptimizeState, ownProps: {experimentId: string}) {
+function mapStateToProps(
+  state: { common: CommonState },
+  ownProps: {experimentId: string, children: Node},
+): ExperimentWrapperProps {
   return {
     experimentId: ownProps.experimentId,
-    experiments: state.page.experiments,
+    experiments: state.common.optimizeExperiments,
+    children: ownProps.children,
   };
 }
 

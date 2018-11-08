@@ -16,8 +16,8 @@ import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acqu
 import type { ComponentAbTest } from 'helpers/subscriptions';
 import type { HeadingSize } from 'components/heading/heading';
 import { type Participations } from 'helpers/abTests/abtest';
-import { type OptimizeExperiments } from 'helpers/tracking/optimize';
-import { type CommonState } from 'helpers/page/page';
+import { type OptimizeExperiments } from 'helpers/optimize/optimize';
+import { type CommonState } from 'helpers/page/commonReducer';
 import FeaturedProductHero from 'components/featuredProductHero/featuredProductHero';
 
 // ----- Types ----- //

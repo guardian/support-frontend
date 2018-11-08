@@ -2,8 +2,8 @@
 
 // ----- Imports ----- //
 
+import { type CommonState } from 'helpers/page/commonReducer';
 import type { Action, PromotionOptions } from './promotionPopUpActions';
-import type { CommonState } from '../../../helpers/page/page';
 
 // ----- Setup ----- //
 

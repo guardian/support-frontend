@@ -1,5 +1,4 @@
 /* eslint-disable */
-import { dispatch } from 'redux';
 import { fetchOptimizeExperiments } from './optimize';
 
 try {

@@ -11,7 +11,7 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import type { PaymentMethod } from 'helpers/contributions';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type RegularContributionType } from 'helpers/contributions';

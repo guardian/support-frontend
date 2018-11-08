@@ -8,13 +8,13 @@ import { connect } from 'react-redux';
 import { type HeadingSize } from 'components/heading/heading';
 
 import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
-import { type CommonState } from 'helpers/page/page';
+import { type CommonState } from 'helpers/page/commonReducer';
 import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getSubsLinks } from 'helpers/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { getAppReferrer } from 'helpers/tracking/appStores';
 import { type Participations } from 'helpers/abTests/abtest';
-import { type OptimizeExperiments } from 'helpers/tracking/optimize';
+import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
 import InternationalSection from './components/internationalSection';

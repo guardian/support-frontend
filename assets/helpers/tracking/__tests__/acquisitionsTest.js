@@ -2,13 +2,11 @@
 
 // ----- Imports ----- //
 
-import { type OptimizeExperiments } from '../optimize';
-
 import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
-  participationsToAcquisitionABTest,
   optimizeExperimentsToAcquisitionABTest,
+  participationsToAcquisitionABTest,
 } from '../acquisitions';
 
 
@@ -41,11 +39,11 @@ describe('acquisitions', () => {
         testId3: 'variant3',
       };
 
-      const optimizeExperiments = {
-        optimizeExperiment1: 'variant1',
-        optimizeExperiment2: 'variant2',
-        optimizeExperiment3: 'variant3',
-      };
+      const optimizeExperiments = [
+        { id: 'optimizeExperiment1', variant: 'variant1' },
+        { id: 'optimizeExperiment2', variant: 'variant2' },
+        { id: 'optimizeExperiment3', variant: 'variant3' },
+      ];
 
       const paymentApiAcquisitionData =
         derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
@@ -106,16 +104,16 @@ describe('acquisitions', () => {
   describe('optimizeExperimentsToAcquisitionABTest', () => {
 
     it('should return an empty array in the presence of a empty object as its input', () => {
-      expect(optimizeExperimentsToAcquisitionABTest({})).toEqual([]);
+      expect(optimizeExperimentsToAcquisitionABTest([])).toEqual([]);
     });
 
     it('should return an array of AcquisitionAbTests prepended with an Optimize tag', () => {
 
-      const optimizeExperiments: OptimizeExperiments = {
-        testOne: 'variantOne',
-        testTwo: 'variantTwo',
-        testThree: 'variantSeven',
-      };
+      const optimizeExperiments = [
+        { id: 'optimizeExperiment1', variant: 'variant1' },
+        { id: 'optimizeExperiment2', variant: 'variant2' },
+        { id: 'optimizeExperiment3', variant: 'variant3' },
+      ];
 
       const acquisitionABTests = optimizeExperimentsToAcquisitionABTest(optimizeExperiments);
 

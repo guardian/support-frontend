@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import PriceCta from 'components/priceCta/priceCta';
 
 import { getDigitalCheckout } from 'helpers/externalLinks';
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getProductPrice } from 'helpers/subscriptions';
 

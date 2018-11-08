@@ -15,13 +15,12 @@ import { flashSaleIsActive } from 'helpers/flashSale';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import optimizeReducer from 'helpers/optimize/optimizeReducer';
 import FlashSaleDigitalPack from './components/flashSaleDigitalPack';
 import FeaturedProductAb from './components/featuredProductAb';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(optimizeReducer);
+const store = pageInit();
 
 
 // ----- Render ----- //

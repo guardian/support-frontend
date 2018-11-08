@@ -12,7 +12,7 @@ import {
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/abtest';
-import { type OptimizeExperiments } from 'helpers/tracking/optimize';
+import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
 
 import { getPromoCode, getIntcmp } from './flashSale';
