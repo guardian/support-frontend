@@ -80,9 +80,6 @@ $guss-webfonts: (
     'Guardian Titlepiece Web': (
         (weight: 'regular', style: 'normal'),
     ),
-    'GT Guardian Titlepiece': (
-        (weight: 'regular', style: 'normal'),
-    ),
     'Guardian Weekend Cond Web': (
         (weight: 'black', style: 'normal'),
     )
@@ -245,9 +242,6 @@ $guss-webfonts: (
         'Guardian Sans Web': (
             (weight: 'regular', style: 'normal'),
         ),
-        'GT Guardian Titlepiece': (
-            (weight: 'regular', style: 'normal'),
-        ),
     )
 );
 
@@ -302,4 +296,11 @@ $guss-webfonts: (
     url("/assets/fonts/GHGuardianHeadline-Bold.woff") format("woff"),
     url("/assets/fonts/GHGuardianHeadline-Bold.ttf") format("ttf");
     font-weight: 900;
+}
+
+@font-face {
+    font-family: "GT Guardian Titlepiece";
+    src: url("/assets/fonts/GTGuardianTitlepiece-Bold.woff2") format("woff2"),
+    url("/assets/fonts/GTGuardianTitlepiece-Bold.woff") format("woff");
+    font-weight: 400;
 }

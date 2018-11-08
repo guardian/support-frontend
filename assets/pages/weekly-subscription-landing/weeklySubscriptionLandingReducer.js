@@ -4,26 +4,33 @@
 
 import type { CommonState } from 'helpers/page/page';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
+import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
+import { getQueryParameter } from 'helpers/url';
+
 import { type Action } from './weeklySubscriptionLandingActions';
 
 
 // ----- Subs ------ //
+
+const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
+  currencies[detect(countryGroupId)].glyph,
+  getWeeklyProductPrice(countryGroupId, period),
+].join('');
+
 export const billingPeriods = {
   sixweek: {
-    title: 'Weekly',
+    title: '6 for 6',
     offer: 'Introductory offer',
-    copy: (countryGroupId: CountryGroupId) => `6 issues for 6 pounds and then ${getWeeklyProductPrice(countryGroupId, 'quarter')}`,
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'sixweek')} for the first 6 issues (then quarterly)`,
   },
   quarter: {
     title: 'Quarterly',
-    copy: (countryGroupId: CountryGroupId) => `${getWeeklyProductPrice(countryGroupId, 'quarter')}/quarter`,
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'quarter')} every 3 months`,
   },
   year: {
     title: 'Annually',
-    offer: '10% off',
-    copy: (countryGroupId: CountryGroupId) => `${getWeeklyProductPrice(countryGroupId, 'year')}/year`,
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'year')} every 12 months`,
   },
 };
 
@@ -41,7 +48,7 @@ export type State = {
 // ----- Reducer ----- //
 
 const initialState: PageState = {
-  period: 'sixweek',
+  period: getQueryParameter('promo_6for6') ? 'sixweek' : null,
 };
 
 function reducer(state: PageState = initialState, action: Action): PageState {

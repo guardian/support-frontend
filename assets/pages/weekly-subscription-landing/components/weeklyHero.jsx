@@ -2,50 +2,55 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridImage from 'components/gridImage/gridImage';
-import SvgChevron from 'components/svgs/chevron';
 import SvgWeeklyHeroCircles from 'components/svgs/weeklyHeroCircles';
-
-import WeeklyCta from './weeklyCta';
 
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  subsLink: string
+  overheading: string,
+  heading: string,
+  headline: string | null,
+  cta: Node | null,
 |};
 
 
 // ----- Render ----- //
 
-const WeeklyHero = ({ subsLink }: PropTypes) => (
+const WeeklyHero = ({
+  headline, overheading, heading, cta,
+}: PropTypes) => (
   <header>
     <div className="weekly-hero">
       <LeftMarginSection>
+        {headline &&
         <p className="weekly-hero__headline">
-          The essential new Weekly magazine from The&nbsp;Guardian
+          {headline}
         </p>
+        }
         <GridImage
           gridId="weeklyLandingHero"
           srcSizes={[1000, 500]}
-          sizes="(max-width: 740px) 90vw, 500px"
+          sizes="(max-width: 740px) 90vw, 600px"
           imgType="png"
         />
         <SvgWeeklyHeroCircles />
-        <HeadingBlock overheading="The Guardian Weekly subscriptions" heading="Seven days of international news curated to give you a clearer global perspective." />
+        <HeadingBlock overheading={overheading} heading={heading} />
       </LeftMarginSection>
     </div>
+    {cta &&
     <div className="weekly-hero-hanger">
       <LeftMarginSection>
         <div className="weekly-hero-hanger__content">
-          <WeeklyCta icon={<SvgChevron />} href={subsLink}>See Subscription options</WeeklyCta>
+          {cta}
         </div>
       </LeftMarginSection>
     </div>
-
+    }
   </header>
 );
 

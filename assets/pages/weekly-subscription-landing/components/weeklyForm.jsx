@@ -12,28 +12,29 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import WeeklyCta from './weeklyCta';
 import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
-import { redirectToWeeklyPage, type Action } from '../weeklySubscriptionLandingActions';
+import { redirectToWeeklyPage, setPeriod, type Action } from '../weeklySubscriptionLandingActions';
 import WeeklyFormLabel from './weeklyFormLabel';
 
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  checked: WeeklyBillingPeriod | null,
+  selectedPeriod: WeeklyBillingPeriod | null,
   countryGroupId: CountryGroupId,
   redirectToWeeklyPageAction: () => void,
+  setPeriodAction: (WeeklyBillingPeriod) => Action,
 |};
 
 // ----- Render ----- //
 
 const WeeklyForm = ({
-  checked, countryGroupId, redirectToWeeklyPageAction,
+  selectedPeriod, countryGroupId, redirectToWeeklyPageAction, setPeriodAction,
 }: PropTypes) => (
   <form
     className="weekly-form-wrap"
     onSubmit={(ev) => {
-    ev.preventDefault();
-    redirectToWeeklyPageAction();
+      ev.preventDefault();
+      redirectToWeeklyPageAction();
     }}
   >
     <div className="weekly-form">
@@ -48,6 +49,8 @@ const WeeklyForm = ({
               offer={billingPeriods[type].offer || null}
               type={type}
               key={type}
+              checked={type === selectedPeriod}
+              onChange={() => { setPeriodAction(type); }}
             >
               {copy(countryGroupId)}
             </WeeklyFormLabel>
@@ -56,8 +59,8 @@ const WeeklyForm = ({
         })}
     </div>
 
-    <WeeklyCta disabled={checked === null} type="submit">
-      Subscribe now{checked && ` – ${billingPeriods[checked].title}`}
+    <WeeklyCta disabled={selectedPeriod === null} type="submit">
+      Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
     </WeeklyCta>
 
     <div className="weekly-form__info">
@@ -67,19 +70,16 @@ const WeeklyForm = ({
   </form>
 );
 
-WeeklyForm.defaultProps = {
-  checked: null,
-};
-
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State) => ({
-  checked: state.page.period,
+  selectedPeriod: state.page.period,
   countryGroupId: state.common.internationalisation.countryGroupId,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   redirectToWeeklyPageAction: bindActionCreators(redirectToWeeklyPage, dispatch),
+  setPeriodAction: bindActionCreators(setPeriod, dispatch),
 });
 
 // ----- Exports ----- //
