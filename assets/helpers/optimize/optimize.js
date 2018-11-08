@@ -3,8 +3,6 @@
 // ----- Imports ----- //
 
 import * as storage from 'helpers/storage';
-import { setExperimentVariant } from 'helpers/page/commonActions';
-import { type Store } from 'redux';
 
 // ----- Types ----- //
 
@@ -17,14 +15,12 @@ export type OptimizeExperiments = OptimizeExperiment[];
 
 const OPTIMIZE_STORAGE_KEY = 'optimizeExperiments';
 
-const OPTIMIZE_QUERY_PARAMETER = 'utm_expid';
-
 const EXPERIMENTS_UPDATED = 'OPTIMIZE_EXPERIMENTS_UPDATED';
 
 // ----- Functions ----- //
 
 function optimizeIsLoaded() {
-  return typeof window.dataLayer !== 'undefined' && window.dataLayer !== null;
+  return window.dataLayer != null;
 }
 
 function gtag() {
@@ -36,7 +32,8 @@ function gtag() {
   }
 }
 
-function gtagWithCallback(callback: (variant: string, id: string) => void) {
+function getExperimentsFromApi(callback: (variant: string, id: string) => void) {
+  // $FlowIgnore
   gtag('event', 'optimize.callback', { callback });
 }
 
@@ -73,36 +70,35 @@ function storeExperimentInSession(experiment: OptimizeExperiment): boolean {
   }
 }
 
-function dispatchToStore(store: Store<*, *, *>, id: string, variant: string) {
-  storeExperimentInSession({ id, variant });
-  store.dispatch(setExperimentVariant({ id, variant }));
-}
-
-function addExperimentUpdateListener(store: Store<*, *, *>) {
+function addExperimentUpdateListener(addToStoreCallback: (OptimizeExperiment) => void) {
   window.addEventListener(EXPERIMENTS_UPDATED, (ev) => {
     console.log(`Event listener called, event: ${ev.detail}`);
-
-    dispatchToStore(store, ev.detail.id, ev.detail.variant);
+    addToStoreCallback({ id: ev.detail.id, variant: ev.detail.variant });
   });
 }
 
-function addOptimizeExperiments(store: Store<*, *, *>) {
+function addOptimizeExperiments(addToStoreCallback: (OptimizeExperiment) => void) {
   console.log('Called addOptimizeExperiments');
+
+  // Store experiments in the session as well as Redux
+  const withSessionStorageCallback = (exp: OptimizeExperiment) => {
+    storeExperimentInSession(exp);
+    addToStoreCallback(exp);
+  };
+
   if (optimizeIsLoaded()) {
-    gtagWithCallback((variant, id) => {
-      dispatchToStore(store, id, variant);
-    });
+    getExperimentsFromApi((variant, id) => withSessionStorageCallback({ id, variant }));
   } else {
     // Add a listener so we can update the store once Optimize loads
     console.log('Optimize is not ready yet - adding event listener');
-    addExperimentUpdateListener(store);
+    addExperimentUpdateListener(withSessionStorageCallback);
   }
 }
 
 function fetchOptimizeExperiments() {
   console.log('Called fetchOptimizeExperiments');
 
-  gtagWithCallback((value, name) => {
+  getExperimentsFromApi((value, name) => {
     console.log(`Optimize script - Experiment with ID: ${name} is in variant: ${value}`);
     window.dispatchEvent(new CustomEvent(EXPERIMENTS_UPDATED, {
       detail: {
@@ -116,7 +112,6 @@ function fetchOptimizeExperiments() {
 // ----- Exports ----- //
 
 export {
-  OPTIMIZE_QUERY_PARAMETER,
   addOptimizeExperiments,
   readExperimentsFromSession,
   fetchOptimizeExperiments,

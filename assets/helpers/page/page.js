@@ -21,6 +21,8 @@ import { getCampaign, getReferrerAcquisitionData } from 'helpers/tracking/acquis
 import { type CountryGroupId, detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { addOptimizeExperiments, readExperimentsFromSession } from 'helpers/optimize/optimize';
 import storeReferrer from 'helpers/tracking/awin';
+import type { OptimizeExperiment } from 'helpers/optimize/optimize';
+import { setExperimentVariant } from 'helpers/page/commonActions';
 
 if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
@@ -126,7 +128,7 @@ function init<S, A>(
   );
   console.log('Created redux store');
 
-  addOptimizeExperiments(store);
+  addOptimizeExperiments((exp: OptimizeExperiment) => store.dispatch(setExperimentVariant(exp)));
 
   return store;
 }

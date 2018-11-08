@@ -1,10 +1,10 @@
 // @flow
 
 import { connect } from 'react-redux';
-import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import type { OptimizeExperiments, OptimizeExperiment } from 'helpers/optimize/optimize';
 import type { CommonState } from 'helpers/page/commonReducer';
-import type { Node } from 'preact-compat';
-
+import type { Node } from 'react';
+import React from 'react';
 
 export type ExperimentWrapperProps = {
   experimentId: string,
@@ -12,33 +12,25 @@ export type ExperimentWrapperProps = {
   children: Node,
 }
 
-function mapStateToProps(
-  state: { common: CommonState },
-  ownProps: {experimentId: string, children: Node},
-): ExperimentWrapperProps {
+function mapStateToProps(state: { common: CommonState }){
   return {
-    experimentId: ownProps.experimentId,
     experiments: state.common.optimizeExperiments,
-    children: ownProps.children,
   };
 }
 
-function getExperiment(props: ExperimentWrapperProps) {
-  if (props.experiments) {
-    return props.experiments.find(exp => exp.id === props.experimentId);
-  }
-  return null;
+function getExperiment(props: ExperimentWrapperProps): OptimizeExperiment | null {
+  return props.experiments.find(exp => exp.id === props.experimentId) || null;
 }
 
 function OptimizeExperimentWrapper(props: ExperimentWrapperProps) {
   const experiment = getExperiment(props);
 
-  if (experiment == null) {
-    return props.children[0];
+  if (experiment === null) {
+    return React.Children.toArray(props.children)[0];
   }
 
-  const variant = experiment.variant || 0;
-  return props.children[variant];
+  const variant = Number(experiment.variant) || 0;
+  return React.Children.toArray(props.children)[variant];
 }
 
 export default connect(mapStateToProps)(OptimizeExperimentWrapper);

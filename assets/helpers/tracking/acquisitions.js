@@ -10,7 +10,7 @@ import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import { type OptimizeExperiments, OPTIMIZE_QUERY_PARAMETER } from '../optimize/optimize';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 
 
 // ----- Types ----- //
@@ -189,7 +189,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     getQueryParameter('INTCMP');
 
   const parameterExclusions =
-    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', OPTIMIZE_QUERY_PARAMETER];
+    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', 'utm_expid'];
 
   const queryParameters =
     acquisitionData.queryParameters ||

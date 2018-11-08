@@ -110,15 +110,15 @@ describe('acquisitions', () => {
     it('should return an array of AcquisitionAbTests prepended with an Optimize tag', () => {
 
       const optimizeExperiments = [
-        { id: 'optimizeExperiment1', variant: 'variant1' },
-        { id: 'optimizeExperiment2', variant: 'variant2' },
-        { id: 'optimizeExperiment3', variant: 'variant3' },
+        { id: 'Experiment1', variant: '1' },
+        { id: 'Experiment2', variant: '2' },
+        { id: 'Experiment3', variant: '3' },
       ];
 
       const acquisitionABTests = optimizeExperimentsToAcquisitionABTest(optimizeExperiments);
 
       expect(acquisitionABTests.length).toBe(3);
-      expect(acquisitionABTests[0]).toEqual({ name: 'optimize$$testOne', variant: 'variantOne' });
+      expect(acquisitionABTests[0]).toEqual({ name: 'optimize$$Experiment1', variant: '1' });
 
     });
 
