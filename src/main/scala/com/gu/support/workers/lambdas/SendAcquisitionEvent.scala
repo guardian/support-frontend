@@ -1,5 +1,7 @@
 package com.gu.support.workers.lambdas
 
+import java.util.UUID
+
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.{GAData, OphanIds}
@@ -55,7 +57,7 @@ object SendAcquisitionEvent {
           acquisitionData <- Either.fromOption(a.acquisitionData, "acquisition data not included")
           ref = acquisitionData.referrerAcquisitionData
           hostname <- Either.fromOption(ref.hostname, "missing hostname in referrer acquisition data")
-          gaClientId <- Either.fromOption(ref.gaClientId, "missing gaClientId in referrer acquisition data")
+          gaClientId = ref.gaClientId.getOrElse(UUID.randomUUID().toString)
           ipAddress = ref.ipAddress
           userAgent = ref.userAgent
         } yield GAData(
