@@ -73,7 +73,7 @@ const content = (
           </p>
         </WeeklyTextBlock>
       </WeeklyContentBlock>
-      <WeeklyContentBlock type="feature">
+      <WeeklyContentBlock type="grey">
         <WeeklyTextBlock title="As a subscriber you’ll enjoy" />
         <WeeklyFeatureList features={[
         { title: 'Up to 30% off the retail cover price' },
@@ -83,13 +83,13 @@ const content = (
       ]}
         />
       </WeeklyContentBlock>
-      <WeeklyContentBlock type="grey" id="subscribe">
+      <WeeklyContentBlock type="feature" id="subscribe">
         <WeeklyTextBlock title="Get your Guardian Weekly, subscribe now">
           <p>How would you like to pay for your Guardian Weekly?</p>
         </WeeklyTextBlock>
         <WeeklyForm />
       </WeeklyContentBlock>
-      <WeeklyContentBlock type="white">
+      <WeeklyContentBlock type="grey">
         <WeeklyTextBlock title="Buying as a gift?">
           <p>If you’d like to buy a Guardian Weekly subscription as a gift,
           just get in touch with your local customer service team.
@@ -103,7 +103,7 @@ const content = (
         />
 
       </WeeklyContentBlock>
-      <WeeklyContentBlock type="dark">
+      <WeeklyContentBlock type="white">
         <WeeklyTextBlock title="Promotion terms and conditions">
           <p>Offer subject to availability. Guardian News and Media Limited
           (&quot;GNM&quot;) reserves the right to withdraw this promotion

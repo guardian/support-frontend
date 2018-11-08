@@ -4,21 +4,31 @@
   }
 }
 
-.weekly-content-block--grey .component-left-margin-section__content {
+.weekly-content-block--grey {
   background-color: gu-colour(garnett-neutral-3);
+  .component-left-margin-section__content {
+    border-left: 0;
+    margin-left: -1px;
+  }
 }
 
-.weekly-content-block--feature .component-left-margin-section__content {
-  background-color: gu-colour(garnett-neutral-1);
+.weekly-content-block--feature {
+  background-color: gu-colour(header-dark);
   color: gu-colour(garnett-neutral-5);
+  .component-left-margin-section__content {
+    border-color: gu-colour(header-border);
+  }
   .weekly-feature-list .weekly-feature-list__item {
     border-color: gu-colour(garnett-neutral-5);
   }
 }
 
-.weekly-content-block--dark .component-left-margin-section__content {
+.weekly-content-block--dark {
   background-color: gu-colour(garnett-neutral-7);
   color: gu-colour(garnett-neutral-5);
+  .component-left-margin-section__content {
+    border-color: gu-colour(garnett-neutral-5);
+  }
 }
 
 .weekly-content-block__content {

@@ -5,6 +5,7 @@
 import React, { type Node } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import SvgCheckmark from 'components/svgs/checkmark';
 
 import uuidv4 from 'uuid';
 
@@ -34,9 +35,14 @@ const WeeklyFormLabel = ({
     <label onChange={() => { setPeriodAction(type); }} htmlFor={id} className="weekly-form-label-wrap">
       <input checked={type === checked} className="weekly-form-label-wrap__input" id={id} type="radio" name="sub-type" value={type} />
       <div className="weekly-form-label">
-        <div className="weekly-form-label__title">{title}</div>
-        {offer !== null && <div className="weekly-form-label__offer">{offer}</div>}
-        <div className="weekly-form-label__copy">{children}</div>
+        <div className="weekly-form-label__title">
+          {title}
+          <div aria-hidden="true" className="weekly-form-label__check"><SvgCheckmark /></div>
+        </div>
+        <div className="weekly-form-label__copy">
+          {offer && <div className="weekly-form-label__offer">{offer}</div>}
+          {children}
+        </div>
       </div>
     </label>
   );
