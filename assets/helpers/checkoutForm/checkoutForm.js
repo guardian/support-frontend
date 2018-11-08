@@ -100,9 +100,7 @@ export const onFormSubmit = (
   const componentId = `${paymentMethod}-${contributionType}-submit`;
   const formIsValid = formElementIsValid(form);
   const userType = isSignedIn ? 'signed-in' : userTypeFromIdentityResponse;
-  const canContribute =
-    canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
-    || isSignedIn;
+  const canContribute = canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
   if (formIsValid) {
     setFormIsValid(true);
     if (canContribute) {
