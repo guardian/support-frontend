@@ -16,5 +16,6 @@ case class AcquisitionData(
   componentType: Option[ComponentType],
   source: Option[AcquisitionSource],
   abTests: Option[Set[AbTest]],
-  queryParameters: Option[Set[QueryParameter]]
+  queryParameters: Option[Set[QueryParameter]],
+  gaId: Option[String]
 )

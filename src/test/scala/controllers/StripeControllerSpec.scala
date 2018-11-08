@@ -93,7 +93,6 @@ class StripeControllerSpec extends PlaySpec with Status {
     lifecycle = new DefaultApplicationLifecycle()
   )
 
-
   "StripeController" when {
 
     "a request is made to create a payment" should {

@@ -90,7 +90,6 @@ class PaypalControllerSpec extends PlaySpec with Status {
     lifecycle = new DefaultApplicationLifecycle()
   )
 
-
   "Paypal Controller" when {
 
     "a request is made to create a payment" should {

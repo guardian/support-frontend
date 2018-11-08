@@ -18,6 +18,7 @@ import model.email.ContributorRow
 import model.paypal._
 import services._
 import util.EnvironmentBasedBuilder
+
 import scala.concurrent.Future
 import scala.collection.JavaConverters._
 import scala.util.Try
@@ -26,7 +27,7 @@ class PaypalBackend(
     paypalService: PaypalService,
     databaseService: DatabaseService,
     identityService: IdentityService,
-    ophanService: OphanService,
+    ophanService: AnalyticsService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
@@ -49,7 +50,7 @@ class PaypalBackend(
    * The Android app creates and approves the payment directly via PayPal.
    * Funds are captured via this endpoint.
    */
-  def capturePayment(c: CapturePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
+  def capturePayment(c: CapturePaypalPaymentData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
     paypalService.capturePayment(c)
       .bimap(
         err => {
@@ -59,7 +60,7 @@ class PaypalBackend(
         payment => {
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
           val enrichedPaypalPayment = EnrichedPaypalPayment.create(payment, c.signedInUserEmail)
-          postPaymentTasks(enrichedPaypalPayment, c.acquisitionData, countrySubdivisionCode)
+          postPaymentTasks(enrichedPaypalPayment, c.acquisitionData, clientBrowserInfo)
             .leftMap { err =>
               cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Paypal)
               logger.error(s"Didn't complete post-payment tasks after capturing PayPal payment. " +
@@ -72,7 +73,7 @@ class PaypalBackend(
         }
       )
 
-  def executePayment(e: ExecutePaypalPaymentData, countrySubdivisionCode: Option[String]): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
+  def executePayment(e: ExecutePaypalPaymentData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
     paypalService.executePayment(e)
       .bimap(
         err => {
@@ -82,7 +83,7 @@ class PaypalBackend(
         payment => {
           val enrichedPaypalPayment = EnrichedPaypalPayment.create(payment, e.signedInUserEmail)
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
-          postPaymentTasks(enrichedPaypalPayment, e.acquisitionData, countrySubdivisionCode)
+          postPaymentTasks(enrichedPaypalPayment, e.acquisitionData, clientBrowserInfo)
             .leftMap {
               err => {
                 cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Paypal)
@@ -113,7 +114,7 @@ class PaypalBackend(
   }
 
   // Success or failure of these steps shouldn't affect the response to the client
-  private def postPaymentTasks(enrichedPayment: EnrichedPaypalPayment, acquisitionData: AcquisitionData, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
+  private def postPaymentTasks(enrichedPayment: EnrichedPaypalPayment, acquisitionData: AcquisitionData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
     val payment = enrichedPayment.payment
     EitherT.fromEither(getEmail(enrichedPayment)).flatMap { email =>
 
@@ -121,11 +122,11 @@ class PaypalBackend(
 
       val trackContributionResult: EitherT[Future, BackendError, Unit] = identityIdM
         .flatMap { identityId =>
-          trackContribution(payment, acquisitionData, email, Option(identityId), countrySubdivisionCode)
+          trackContribution(payment, acquisitionData, email, Option(identityId), clientBrowserInfo)
         }
         .leftMap { err =>
           logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway")
-          trackContribution(payment, acquisitionData, email, identityId = None, countrySubdivisionCode)
+          trackContribution(payment, acquisitionData, email, identityId = None, clientBrowserInfo)
             .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
           err
         }
@@ -143,8 +144,8 @@ class PaypalBackend(
     }
   }
 
-  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long], countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
-    ContributionData.fromPaypalCharge(payment, email, identityId, countrySubdivisionCode)
+  private def trackContribution(payment: Payment, acquisitionData: AcquisitionData, email: String, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
+    ContributionData.fromPaypalCharge(payment, email, identityId, clientBrowserInfo.countrySubdivisionCode)
       .leftMap { error =>
         logger.error(s"Error creating contribution data from paypal. Error: $error")
         BackendError.fromPaypalAPIError(error)
@@ -152,7 +153,7 @@ class PaypalBackend(
       .toEitherT[Future]
       .flatMap { contributionData =>
         BackendError.combineResults(
-          submitAcquisitionToOphan(payment, acquisitionData, contributionData.identityId),
+          submitAcquisitionToOphan(payment, acquisitionData, contributionData.identityId, clientBrowserInfo),
           insertContributionDataIntoDatabase(contributionData)
         )
       }
@@ -177,8 +178,8 @@ class PaypalBackend(
       .leftMap(BackendError.fromDatabaseError)
   }
 
-  private def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long]): EitherT[Future, BackendError, Unit] =
-    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId))
+  private def submitAcquisitionToOphan(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] =
+    ophanService.submitAcquisition(PaypalAcquisition(payment, acquisitionData, identityId, clientBrowserInfo))
       .bimap(BackendError.fromOphanError, _ => ())
 
   private def validateRefundHook(headers: Map[String, String], rawJson: String): EitherT[Future, BackendError, Unit] =
@@ -219,7 +220,7 @@ object PaypalBackend {
       paypalService: PaypalService,
       databaseService: DatabaseService,
       identityService: IdentityService,
-      ophanService: OphanService,
+      ophanService: AnalyticsService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
@@ -245,7 +246,7 @@ object PaypalBackend {
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       configLoader
         .loadConfig[Environment, OphanConfig](env)
-        .andThen(OphanService.fromOphanConfig): InitializationResult[OphanService],
+        .andThen(AnalyticsService.fromOphanConfig): InitializationResult[AnalyticsService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],

@@ -8,13 +8,13 @@ import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
 import backend.StripeBackend
 import model.stripe.{StripeChargeData, StripeRefundHook}
-import model.{CheckoutErrorResponse, DefaultThreadPool, ResultBody}
+import model.{CheckoutErrorResponse, ClientBrowserInfo, DefaultThreadPool, ResultBody}
 
 class StripeController(
   cc: ControllerComponents,
   stripeBackendProvider: RequestBasedProvider[StripeBackend],
 )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
-  extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider with RequestSyntax {
+  extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
 
   import util.RequestTypeDecoder.instances._
   import model.stripe.StripeJsonDecoder._
@@ -22,7 +22,7 @@ class StripeController(
 
   def executePayment: Action[StripeChargeData] = CorsAction.async(circe.json[StripeChargeData]) { request => {
       stripeBackendProvider.getInstanceFor(request)
-        .createCharge(request.body, request.countrySubdivisionCode)
+        .createCharge(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
         .fold(
           err => {
             val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)

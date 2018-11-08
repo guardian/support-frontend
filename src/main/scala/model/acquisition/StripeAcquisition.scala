@@ -1,16 +1,17 @@
 package model.acquisition
 
-import com.gu.acquisition.model.OphanIds
+import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import ophan.thrift.event._
 import cats.implicits._
 import ophan.thrift.event.Acquisition
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
+import model.ClientBrowserInfo
 import model.stripe.StripeChargeData
 
 
-case class StripeAcquisition(stripeChargeData: StripeChargeData, charge: Charge, identityId: Option[Long])
+case class StripeAcquisition(stripeChargeData: StripeChargeData, charge: Charge, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo)
 
 object StripeAcquisition extends StrictLogging {
 
@@ -24,6 +25,9 @@ object StripeAcquisition extends StrictLogging {
           stripeAcquisition.stripeChargeData.acquisitionData.browserId)
         )
       }
+
+      override def buildGAData(a: StripeAcquisition): Either[String, GAData] =
+        Right(ClientBrowserInfo.toGAData(a.clientBrowserInfo))
 
       override def buildAcquisition(stripeAcquisition: StripeAcquisition): Either[String, Acquisition] = {
         Either.catchNonFatal {

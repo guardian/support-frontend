@@ -101,6 +101,9 @@ Parameters:
       For the CODE stack you can leave this empty since it won't be used.
       For the PROD stack you need to set it.
     Type: String
+  OphanRole:
+    Type: String
+    Description: ARN of the Ophan cross-account role
 
 
 Conditions:
@@ -219,6 +222,13 @@ Resources:
                 Action:
                 - cloudwatch:PutMetricData
                 Resource: '*'
+        - PolicyName: AssumeOphanRole
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: sts:AssumeRole
+              Resource:
+                Ref: OphanRole
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile

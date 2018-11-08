@@ -4,7 +4,7 @@ import actions.CorsActionProvider
 import cats.implicits._
 import backend.{BackendError, PaypalBackend}
 import com.typesafe.scalalogging.StrictLogging
-import model.{DefaultThreadPool, ResultBody}
+import model.{ClientBrowserInfo, DefaultThreadPool, ResultBody}
 import model.paypal._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents, Result}
@@ -14,7 +14,7 @@ class PaypalController(
   cc: ControllerComponents,
   paypalBackendProvider: RequestBasedProvider[PaypalBackend]
 )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
-    extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider with RequestSyntax  {
+    extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
 
   import util.RequestTypeDecoder.instances._
   import PaypalJsonDecoder._
@@ -39,7 +39,7 @@ class PaypalController(
     captureRequest =>
       paypalBackendProvider
         .getInstanceFor(captureRequest)
-        .capturePayment(captureRequest.body, captureRequest.countrySubdivisionCode)
+        .capturePayment(captureRequest.body, ClientBrowserInfo.fromRequest(captureRequest, captureRequest.body.acquisitionData.gaId))
         .fold(
         err => toErrorResult(err),
         _ => Ok(ResultBody.Success(()))
@@ -52,7 +52,7 @@ class PaypalController(
     executeRequest =>
       paypalBackendProvider
         .getInstanceFor(executeRequest)
-        .executePayment(executeRequest.body, executeRequest.countrySubdivisionCode)
+        .executePayment(executeRequest.body, ClientBrowserInfo.fromRequest(executeRequest, executeRequest.body.acquisitionData.gaId))
         .fold(
           err => toErrorResult(err),
           payment => Ok(ResultBody.Success(ExecutePaymentResponse(payment.email)))

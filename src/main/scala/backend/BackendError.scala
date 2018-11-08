@@ -2,7 +2,7 @@ package backend
 
 import cats.data.EitherT
 import cats.kernel.Semigroup
-import com.gu.acquisition.model.errors.OphanServiceError
+import com.gu.acquisition.model.errors.AnalyticsServiceError
 import model.DefaultThreadPool
 import services.{DatabaseService, EmailService, IdentityClient}
 import model.paypal.{PaypalApiError => PaypalAPIError}
@@ -15,7 +15,7 @@ sealed abstract class BackendError extends Exception {
   override def getMessage: String = this match {
     case BackendError.Database(err) => err.getMessage
     case BackendError.IdentityServiceError(err) => err.getMessage
-    case BackendError.Ophan(err) => err.getMessage
+    case BackendError.Ophan(err) => err.map(_.getMessage).mkString(", ")
     case BackendError.StripeApiError(err) => err.getMessage
     case BackendError.PaypalApiError(err) => err.message
     case BackendError.Email(err) => err.getMessage
@@ -26,7 +26,7 @@ sealed abstract class BackendError extends Exception {
 object BackendError {
   final case class Database(error: DatabaseService.Error) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
-  final case class Ophan(error: OphanServiceError) extends BackendError
+  final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
   final case class Email(error: EmailService.Error) extends BackendError
@@ -48,7 +48,7 @@ object BackendError {
 
   def fromIdentityError(err: IdentityClient.ContextualError): BackendError = IdentityServiceError(err)
   def fromDatabaseError(err: DatabaseService.Error): BackendError = Database(err)
-  def fromOphanError(err: OphanServiceError): BackendError = Ophan(err)
+  def fromOphanError(err: List[AnalyticsServiceError]): BackendError = Ophan(err)
   def fromPaypalAPIError(err: PaypalAPIError): BackendError = PaypalApiError(err)
   def fromStripeApiError(err: StripeError): BackendError = StripeApiError(err)
   def fromEmailError(err: EmailService.Error): BackendError = Email(err)

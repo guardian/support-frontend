@@ -1,13 +1,13 @@
 package model.acquisition
 
-import com.gu.acquisition.model.OphanIds
+import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.paypal.api.payments.Payment
-import model.AcquisitionData
+import model.{AcquisitionData, ClientBrowserInfo}
 import ophan.thrift.event._
 import cats.implicits._
 
-case class PaypalAcquisition(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long])
+case class PaypalAcquisition(payment: Payment, acquisitionData: AcquisitionData, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo)
 
 object PaypalAcquisition {
 
@@ -21,6 +21,9 @@ object PaypalAcquisition {
           paypalAcquisition.acquisitionData.browserId)
         )
       }
+
+      override def buildGAData(a: PaypalAcquisition): Either[String, GAData] =
+        Right(ClientBrowserInfo.toGAData(a.clientBrowserInfo))
 
       override def buildAcquisition(paypalAcquisition: PaypalAcquisition): Either[String, Acquisition] = {
         Either.catchNonFatal {

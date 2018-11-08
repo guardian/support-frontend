@@ -26,13 +26,13 @@ class StripeBackend(
     stripeService: StripeService,
     databaseService: DatabaseService,
     identityService: IdentityService,
-    ophanService: OphanService,
+    ophanService: AnalyticsService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
-  def createCharge(data: StripeChargeData, countrySubdivisionCode: Option[String]): EitherT[Future, StripeApiError, StripeChargeSuccess] =
+  def createCharge(data: StripeChargeData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripeChargeSuccess] =
     stripeService.createCharge(data)
       .bimap(
         err => {
@@ -44,7 +44,7 @@ class StripeBackend(
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
           val email = data.signedInUserEmail.getOrElse(data.paymentData.email)
 
-          postPaymentTasks(email, data, charge, countrySubdivisionCode)
+          postPaymentTasks(email, data, charge, clientBrowserInfo)
             .leftMap { err =>
               cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Stripe)
               logger.error(
@@ -65,16 +65,16 @@ class StripeBackend(
     } yield dbUpdateResult
   }
 
-  private def postPaymentTasks(email: String, data: StripeChargeData, charge: Charge, countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit] = {
+  private def postPaymentTasks(email: String, data: StripeChargeData, charge: Charge, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
 
     val identityIdM: EitherT[Future, BackendError, Long] = getOrCreateIdentityIdFromEmail(email)
 
     val trackContributionResult = {
       identityIdM
-        .flatMap(identityId => trackContribution(charge, data, Option(identityId), countrySubdivisionCode))
+        .flatMap(identityId => trackContribution(charge, data, Option(identityId), clientBrowserInfo))
         .leftMap { err =>
           logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway")
-          trackContribution(charge, data, identityId = None, countrySubdivisionCode)
+          trackContribution(charge, data, identityId = None, clientBrowserInfo)
             .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
           err
         }
@@ -91,10 +91,10 @@ class StripeBackend(
     )
   }
 
-  private def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long], countrySubdivisionCode: Option[String]): EitherT[Future, BackendError, Unit]  =
+  private def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  =
     BackendError.combineResults(
-      insertContributionDataIntoDatabase(ContributionData.fromStripeCharge(identityId, charge, countrySubdivisionCode)),
-      submitAcquisitionToOphan(StripeAcquisition(data, charge, identityId))
+      insertContributionDataIntoDatabase(ContributionData.fromStripeCharge(identityId, charge, clientBrowserInfo.countrySubdivisionCode)),
+      submitAcquisitionToOphan(StripeAcquisition(data, charge, identityId, clientBrowserInfo))
     )
 
   // Convert the result of the identity id operation,
@@ -142,7 +142,7 @@ object StripeBackend {
     stripeService: StripeService,
     databaseService: DatabaseService,
     identityService: IdentityService,
-    ophanService: OphanService,
+    ophanService: AnalyticsService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): StripeBackend = {
@@ -168,7 +168,7 @@ object StripeBackend {
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
       configLoader
         .loadConfig[Environment, OphanConfig](env)
-        .andThen(OphanService.fromOphanConfig): InitializationResult[OphanService],
+        .andThen(AnalyticsService.fromOphanConfig): InitializationResult[AnalyticsService],
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],

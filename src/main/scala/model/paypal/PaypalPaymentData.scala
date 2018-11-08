@@ -34,6 +34,7 @@ object PaypalJsonDecoder {
       refererAbTest <- downField("refererAbTest").as[Option[AbTest]]
       nativeAbTests <- downField("nativeAbTests").as[Option[Set[AbTest]]]
       queryParameters <- downField("queryParameters").as[Option[Set[QueryParameter]]]
+      gaId <- downField("gaId").as[Option[String]]
     } yield {
       CapturePaypalPaymentData(
         paymentData = CapturePaymentData(
@@ -53,7 +54,8 @@ object PaypalJsonDecoder {
           abTests = Option(Set(abTest, refererAbTest).flatten ++ nativeAbTests
             .getOrElse(Set[AbTest]()))
             .filter(_.nonEmpty),
-          queryParameters = queryParameters
+          queryParameters = queryParameters,
+          gaId = gaId
         ),
         signedInUserEmail = None
       )
