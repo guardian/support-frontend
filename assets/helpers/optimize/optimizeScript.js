@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { fetchOptimizeExperiments } from './optimize';
+import { getOptimizeExperiments } from './optimize';
 
 try {
   var db = indexedDB.open("test");
@@ -24,8 +24,7 @@ try {
     ga('require', 'GTM-NZGXNBL');
     ga('require', 'GTM-KGKKPS4');
 
-    console.log('optimize script finished');
-    fetchOptimizeExperiments();
+    getOptimizeExperiments();
   };
 } catch (e) {
   console.log(`Error initialising Optimize script: ${e.message}`);

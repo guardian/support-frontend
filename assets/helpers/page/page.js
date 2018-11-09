@@ -126,7 +126,6 @@ function init<S, A>(
     combineReducers({ page: pageReducer, common: commonReducer }),
     storeEnhancer(thunk),
   );
-  console.log('Created redux store');
 
   addOptimizeExperiments((exp: OptimizeExperiment) => store.dispatch(setExperimentVariant(exp)));
 

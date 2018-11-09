@@ -27,8 +27,6 @@ function gtag() {
   if (optimizeIsLoaded()) {
     // eslint-disable-next-line prefer-rest-params
     window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
-  } else {
-    console.log('window.datalayer is undefined in gtag function');
   }
 }
 
@@ -70,16 +68,14 @@ function storeExperimentInSession(experiment: OptimizeExperiment): boolean {
   }
 }
 
-function addExperimentUpdateListener(addToStoreCallback: (OptimizeExperiment) => void) {
-  window.addEventListener(EXPERIMENTS_UPDATED, (ev) => {
-    console.log(`Event listener called, event: ${ev.detail}`);
-    addToStoreCallback({ id: ev.detail.id, variant: ev.detail.variant });
-  });
+function addExperimentUpdateListener(addToStoreCallback: OptimizeExperiment => void) {
+  window.addEventListener(
+    EXPERIMENTS_UPDATED,
+    ev => addToStoreCallback({ id: ev.detail.id, variant: ev.detail.variant }),
+  );
 }
 
-function addOptimizeExperiments(addToStoreCallback: (OptimizeExperiment) => void) {
-  console.log('Called addOptimizeExperiments');
-
+function addOptimizeExperiments(addToStoreCallback: OptimizeExperiment => void) {
   // Store experiments in the session as well as Redux
   const withSessionStorageCallback = (exp: OptimizeExperiment) => {
     storeExperimentInSession(exp);
@@ -90,16 +86,12 @@ function addOptimizeExperiments(addToStoreCallback: (OptimizeExperiment) => void
     getExperimentsFromApi((variant, id) => withSessionStorageCallback({ id, variant }));
   } else {
     // Add a listener so we can update the store once Optimize loads
-    console.log('Optimize is not ready yet - adding event listener');
     addExperimentUpdateListener(withSessionStorageCallback);
   }
 }
 
-function fetchOptimizeExperiments() {
-  console.log('Called fetchOptimizeExperiments');
-
+function getOptimizeExperiments() {
   getExperimentsFromApi((value, name) => {
-    console.log(`Optimize script - Experiment with ID: ${name} is in variant: ${value}`);
     window.dispatchEvent(new CustomEvent(EXPERIMENTS_UPDATED, {
       detail: {
         id: name,
@@ -114,5 +106,5 @@ function fetchOptimizeExperiments() {
 export {
   addOptimizeExperiments,
   readExperimentsFromSession,
-  fetchOptimizeExperiments,
+  getOptimizeExperiments,
 };
