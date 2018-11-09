@@ -41,7 +41,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       Given("The user fills in their details correctly")
       recurringContributionForm.fillInPersonalDetails()
 
-      Given("They select next")
+      When("They select next")
       recurringContributionForm.clickNext
 
       Then("they should be redirected to the payment page")
