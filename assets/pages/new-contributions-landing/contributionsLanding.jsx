@@ -62,7 +62,7 @@ const router = (
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
               <NewContributionFormContainer
-                thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou.new`}
+                thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
               />
               <NewContributionBackground />
             </Page>
@@ -70,7 +70,7 @@ const router = (
         />
         <Route
           exact
-          path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou.new"
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou"
           render={() => {
             setCookie(
               ONE_OFF_CONTRIBUTION_COOKIE,
