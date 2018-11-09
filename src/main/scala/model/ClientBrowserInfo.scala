@@ -16,7 +16,7 @@ case class ClientBrowserInfo(
 object ClientBrowserInfo {
   def fromRequest(request: Request[_], gaClientId: Option[String]): ClientBrowserInfo = {
     ClientBrowserInfo(
-      hostname = request.host,
+      hostname = request.headers.get("origin").map(_.stripPrefix("https://")).getOrElse("support.theguardian.com"),
       gaClientId = gaClientId.getOrElse(UUID.randomUUID().toString),
       userAgent = request.headers.get("user-agent"),
       ipAddress = request.remoteAddress,
