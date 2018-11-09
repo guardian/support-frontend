@@ -63,10 +63,34 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
       val landingPage = ContributionsLanding("us")
       val testUser = new TestUser(driverConfig)
+      val registerPageOne = RegisterPageOne(testUser, 15)
       val payPalCheckout = new PayPalCheckout
       val expectedPayment = "15.00"
       val recurringContributionForm = RecurringContributionForm(testUser)
       val recurringContributionThankYou = new RecurringContributionThankYou
+
+      goTo(registerPageOne)
+
+      assert(registerPageOne.pageHasLoaded)
+
+      Given("that the user fills in their personal details correctly")
+      registerPageOne.fillInPersonalDetails()
+
+      When("they submit the form to create their Identity account")
+      registerPageOne.submit()
+      Then("they should be redirected to register as an Identity user")
+
+      val registerPageTwo = RegisterPageTwo(testUser, 15)
+      assert(registerPageTwo.pageHasLoaded)
+
+      Given("that the user fills in their personal details correctly")
+      registerPageTwo.fillInPersonalDetails()
+
+      When("they submit the form to create their Identity account")
+
+      registerPageTwo.submit()
+
+      goTo(landingPage)
 
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
@@ -77,9 +101,6 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
       Then("they should be redirected to the Monthly Contributions page")
       assert(recurringContributionForm.detailsPageHasLoaded)
-
-      Given("The user fills in their details correctly")
-      recurringContributionForm.fillInPersonalDetailsNoEmail()
 
       Given("They select next")
       recurringContributionForm.clickNext

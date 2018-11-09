@@ -8,7 +8,7 @@ import selenium.util.{Browser, Config, TestUser}
 
 case class RegisterPageOne(testUser: TestUser, amount: Int)(implicit val webDriver: WebDriver) extends Page with Browser {
   private val returnUrlParam = URLEncoder.encode(s"${Config.supportFrontendUrl}/contribute/recurring?contributionValue%3D${amount}", "UTF-8")
-  val url = s"${Config.identityFrontendUrl}/signin/start?returnUrl=${returnUrlParam}&skipConfirmation=true&clientId=recurringContributions"
+  val url = s"${Config.identityFrontendUrl}/signin?returnUrl=${returnUrlParam}&skipConfirmation=true&clientId=recurringContributions"
 
   def fillInPersonalDetails() { RegisterFields.fillIn() }
 
