@@ -21,6 +21,7 @@ class SiteMap(
     Ok(sitemapResponse)
   }
 
+  // TODO: more cleanup
   private def supportLandingPages()(implicit req: RequestHeader) = {
     <url>
       <loc>{
