@@ -41,14 +41,6 @@ function getOrderId() {
   return value;
 }
 
-function getContributionType() {
-  const param = getQueryParameter('contribType');
-  if (param) {
-    storage.setSession('contribType', param);
-  }
-  return (storage.getSession('contribType') || 'one_off').toLowerCase(); // PayPal route doesn't set the contribType
-}
-
 function getCurrency(): string {
   const currency = detectCurrency(detectCountryGroup());
   if (currency) {
@@ -143,21 +135,6 @@ function sendData(
       internalCampaignCode: getQueryParameter('INTCMP') || undefined,
       experience: getVariantsAsString(participations),
       paymentRequestApiStatus,
-      ecommerce: {
-        currencyCode: currency,
-        purchase: {
-          actionField: {
-            id: orderId,
-            revenue: value, // Total transaction value (incl. tax and shipping)
-          },
-          products: [{
-            name: `${getContributionType()}_contribution`,
-            category: 'contribution',
-            price: value,
-            quantity: 1,
-          }],
-        },
-      },
     });
   } catch (e) {
     console.log(`Error in GTM tracking ${e}`);
@@ -186,10 +163,6 @@ function init(participations: Participations) {
   pushToDataLayer('DataLayerReady', participations);
 }
 
-function successfulConversion(participations: Participations) {
-  sendData('SuccessfulConversion', participations);
-}
-
 function gaEvent(gaEventData: GaEventData) {
   if (window.googleTagManagerDataLayer) {
     window.googleTagManagerDataLayer.push({
@@ -210,7 +183,6 @@ function appStoreCtaClick() {
 export {
   init,
   gaEvent,
-  successfulConversion,
   appStoreCtaClick,
   gaPropertyId,
 };
