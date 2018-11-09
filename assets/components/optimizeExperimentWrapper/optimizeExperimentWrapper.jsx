@@ -12,7 +12,7 @@ export type ExperimentWrapperProps = {
   children: Node,
 }
 
-function mapStateToProps(state: { common: CommonState }){
+function mapStateToProps(state: { common: CommonState }) {
   return {
     experiments: state.common.optimizeExperiments,
   };
