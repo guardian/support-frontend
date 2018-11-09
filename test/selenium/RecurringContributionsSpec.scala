@@ -20,42 +20,32 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
   feature("Sign up for a Monthly Contribution") {
 
-    ignore("Monthly contribution sign-up with Stripe - GBP") {
+    scenario("Monthly contribution sign-up with Stripe - GBP") {
 
       val landingPage = ContributionsLanding("uk")
-      val recurringContributionForm = new RecurringContributionForm
+      val testUser = new TestUser(driverConfig)
+
+      val recurringContributionForm = RecurringContributionForm(testUser)
       val recurringContributionThankYou = new RecurringContributionThankYou
 
       Given("that a test user goes to the contributions landing page")
-      val testUser = new TestUser(driverConfig)
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
 
       When("they select to contribute the default amount")
       landingPage.clickContribute
 
-      Then("they should be redirected to register as an Identity user")
-      val registerPageOne = RegisterPageOne(testUser, 10)
-      assert(registerPageOne.pageHasLoaded)
-
-      Given("that the user fills in their personal details correctly")
-      registerPageOne.fillInPersonalDetails()
-
-      When("they submit the form to create their Identity account")
-      registerPageOne.submit()
-
-      Then("they should be redirected to register as an Identity user")
-      val registerPageTwo = RegisterPageTwo(testUser, 10)
-      assert(registerPageTwo.pageHasLoaded)
-
-      Given("that the user fills in their personal details correctly")
-      registerPageTwo.fillInPersonalDetails()
-
-      When("they submit the form to create their Identity account")
-      registerPageTwo.submit()
-
       Then("they should be redirected to the Monthly Contributions page")
-      assert(recurringContributionForm.pageHasLoaded)
+      assert(recurringContributionForm.detailsPageHasLoaded)
+
+      Given("The user fills in their details correctly")
+      recurringContributionForm.fillInPersonalDetails()
+
+      When("They select next")
+      recurringContributionForm.clickNext
+
+      Then("they should be redirected to the payment page")
+      assert(recurringContributionForm.paymentPageHasLoaded)
 
       Given("that the user selects to pay with Stripe")
 
@@ -69,50 +59,35 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
     }
 
-    ignore("Monthly contribution sign-up with PayPal - USD") {
-
-      val expectedPayment = "15.00"
+    scenario("Monthly contribution sign-up with Paypal - USD") {
 
       val landingPage = ContributionsLanding("us")
-      val recurringContributionForm = new RecurringContributionForm
+      val testUser = new TestUser(driverConfig)
       val payPalCheckout = new PayPalCheckout
+      val expectedPayment = "15.00"
+      val recurringContributionForm = RecurringContributionForm(testUser)
       val recurringContributionThankYou = new RecurringContributionThankYou
 
       Given("that a test user goes to the contributions landing page")
-      val testUser = new TestUser(driverConfig)
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
 
       When("they select to contribute the default amount")
       landingPage.clickContribute
 
-      Then("they should be redirected to register as an Identity user")
-      val registerPageOne = RegisterPageOne(testUser, 10)
-      assert(registerPageOne.pageHasLoaded)
-
-      Given("that the user fills in their personal details correctly")
-      registerPageOne.fillInPersonalDetails()
-
-      When("they submit the form to create their Identity account")
-      registerPageOne.submit()
-
-      Then("they should be redirected to register as an Identity user")
-      val registerPageTwo = RegisterPageTwo(testUser, 10)
-      assert(registerPageTwo.pageHasLoaded)
-
-      Given("that the user fills in their personal details correctly")
-      registerPageTwo.fillInPersonalDetails()
-
-      When("they submit the form to create their Identity account")
-      registerPageTwo.submit()
-
       Then("they should be redirected to the Monthly Contributions page")
-      assert(recurringContributionForm.pageHasLoaded)
+      assert(recurringContributionForm.detailsPageHasLoaded)
 
-      Given("that the user sets their state correctly")
-      recurringContributionForm.selectState
+      Given("The user fills in their details correctly")
+      recurringContributionForm.fillInPersonalDetailsNoEmail()
 
-      And("they select to pay with PayPal")
+      Given("They select next")
+      recurringContributionForm.clickNext
+
+      Then("they should be redirected to the payment page")
+      assert(recurringContributionForm.paymentPageHasLoaded)
+
+      Given("they select to pay with PayPal")
 
       When("they press the PayPal payment button")
       recurringContributionForm.selectPayPalPayment
