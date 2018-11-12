@@ -57,7 +57,7 @@ const subscriptionPricesForDefaultBillingPeriod: {
     International: 81.30,
   },
   Paper: {
-    GBPCountries: 10.36,
+    GBPCountries: 10.79,
   },
   PaperAndDigital: {
     GBPCountries: 21.62,
