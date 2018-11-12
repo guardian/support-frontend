@@ -36,6 +36,7 @@ function redirectToWeeklyPage() {
     ) : null;
 
     if (location) {
+      sendTrackingEventsOnClick('main_cta_click', 'GuardianWeekly', null)();
       window.location.href = location;
     }
   };
