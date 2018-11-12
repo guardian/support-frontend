@@ -1,8 +1,8 @@
-package selenium
+package selenium.contributions.old
 
-import org.scalatest._
-import _root_.selenium.pages._
+import selenium.contributions.old.pages._
 import _root_.selenium.util._
+import org.scalatest._
 
 class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser {
 

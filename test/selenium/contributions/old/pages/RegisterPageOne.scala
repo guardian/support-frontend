@@ -1,4 +1,4 @@
-package selenium.pages
+package selenium.contributions.old.pages
 
 import java.net.URLEncoder
 

@@ -1,7 +1,7 @@
-package selenium
+package selenium.contributions.old
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.pages.{ContributionsLanding, OneOffContributionForm, OneOffContributionThankYou}
+import selenium.contributions.old.pages.{ContributionsLanding, OneOffContributionForm, OneOffContributionThankYou}
 import selenium.util._
 
 class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser {
