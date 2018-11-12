@@ -204,8 +204,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |        "state": "On"
           |      }
           |    },
-          |    "optimize": "Off",
-          |    "internationalSubscribePages": "On"
+          |    "optimize": "Off"
           |  }
           |}""".stripMargin
 
@@ -228,8 +227,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
               state = On
             )
           ),
-          optimize = Off,
-          internationalSubscribePages = On
+          optimize = Off
         )
       )
 
