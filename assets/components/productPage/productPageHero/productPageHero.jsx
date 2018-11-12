@@ -7,6 +7,7 @@ import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridImage from 'components/gridImage/gridImage';
 import SvgWeeklyHeroCircles from 'components/svgs/weeklyHeroCircles';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ---- Types ----- //
@@ -16,36 +17,32 @@ type PropTypes = {|
   heading: string,
   headline: string | null,
   cta: Node | null,
+  children: Node | null,
+  modifierClasses: Array<?string>,
 |};
 
 
 // ----- Render ----- //
 
-const WeeklyHero = ({
-  headline, overheading, heading, cta,
+const ProductPageHero = ({
+  headline, overheading, heading, cta, modifierClasses, children,
 }: PropTypes) => (
   <header>
-    <div className="weekly-hero">
+    <div className={classNameWithModifiers('component-product-page-hero', modifierClasses)}>
       <LeftMarginSection>
         {headline &&
-        <p className="weekly-hero__headline">
+        <p className="component-product-page-hero__headline">
           {headline}
         </p>
         }
-        <GridImage
-          gridId="weeklyLandingHero"
-          srcSizes={[1000, 500]}
-          sizes="(max-width: 740px) 90vw, 600px"
-          imgType="png"
-        />
-        <SvgWeeklyHeroCircles />
+        {children}
         <HeadingBlock overheading={overheading} heading={heading} />
       </LeftMarginSection>
     </div>
     {cta &&
-    <div className="weekly-hero-hanger">
+    <div className="component-product-page-hero-hanger">
       <LeftMarginSection>
-        <div className="weekly-hero-hanger__content">
+        <div className="component-product-page-hero-hanger__content">
           {cta}
         </div>
       </LeftMarginSection>
@@ -54,4 +51,9 @@ const WeeklyHero = ({
   </header>
 );
 
-export default WeeklyHero;
+ProductPageHero.defaultProps = {
+  modifierClasses: [],
+};
+
+
+export default ProductPageHero;

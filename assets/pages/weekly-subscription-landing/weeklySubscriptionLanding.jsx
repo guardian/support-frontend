@@ -12,12 +12,14 @@ import Footer from 'components/footer/footer';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import GridImage from 'components/gridImage/gridImage';
+import SvgWeeklyHeroCircles from 'components/svgs/weeklyHeroCircles';
 import SvgChevron from 'components/svgs/chevron';
+import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 
 import WeeklyContentBlock from './components/weeklyContentBlock';
 import WeeklyTextBlock from './components/weeklyTextBlock';
 import WeeklyFeatureList from './components/weeklyFeatureList';
-import WeeklyHero from './components/weeklyHero';
 import WeeklyForm from './components/weeklyForm';
 import WeeklyCta from './components/weeklyCta';
 import reducer from './weeklySubscriptionLandingReducer';
@@ -65,12 +67,21 @@ const content = (
       header={<CountrySwitcherHeader />}
       footer={<Footer />}
     >
-      <WeeklyHero
+      <ProductPagehero
         headline="The essential new Weekly magazine from The&nbsp;Guardian"
         overheading="The Guardian Weekly subscriptions"
         heading="Seven days of international news curated to give you a clearer global perspective."
+        modifierClasses={['weekly']}
         cta={<WeeklyCta icon={<SvgChevron />} href="#subscribe">See Subscription options</WeeklyCta>}
-      />
+      >
+        <GridImage
+          gridId="weeklyLandingHero"
+          srcSizes={[1000, 500]}
+          sizes="(max-width: 740px) 90vw, 600px"
+          imgType="png"
+        />
+        <SvgWeeklyHeroCircles />
+      </ProductPagehero>
       <WeeklyContentBlock>
         <WeeklyTextBlock title="Open up your world view, Weekly">
           <p>Inside the magazine you’ll find quality, independent journalism

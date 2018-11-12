@@ -1,4 +1,4 @@
-.weekly-hero {
+.component-product-page-hero {
   background: gu-colour(header-dark);
   border-top: 1px solid gu-colour(header-border);
   overflow: hidden;
@@ -11,44 +11,18 @@
       }    
     }
   }
-  .svg-weekly-hero-circles {
-    position: absolute;
-    width: 300px;
-    left: -300px;
-    bottom: 0;
-  }
   .component-heading-block {
     z-index: 10;
     position: relative;
   }
-  .component-grid-image {
-    display: block;
-    width: 90%;
-    max-width: 500px;
-    margin: ($gu-v-spacing * 3) auto -25%;
-    z-index: 9;
-    @include mq($from: tablet) {
-      width: auto;
-      max-width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 10%;
-      right: -20%;
-      margin: 0;
-    }
-    @include mq($from: desktop) {
-      left: 500px;
-      right: auto;
-    }
-  }
 }
 
-.weekly-hero-hanger {
+.component-product-page-hero-hanger {
   background: gu-colour(garnett-neutral-5);
   .component-left-margin-section__content {
     @include mq($from: tablet) {
       border-left: 1px solid gu-colour(garnett-neutral-4);
-      .weekly-hero-hanger__content {
+      .component-product-page-hero-hanger__content {
         margin-left: -1px;
       }
     }
@@ -56,14 +30,14 @@
   }
 }
 
-.weekly-hero-hanger__content {
+.component-product-page-hero-hanger__content {
   border-top: 1px solid #ffffff;
   padding: $gu-v-spacing  ($gu-h-spacing / 2);
   background: gu-colour(garnett-neutral-1);
   color: #ffffff;
 }
 
-.weekly-hero__headline {
+.component-product-page-hero__headline {
   color: gu-colour(garnett-neutral-5);
   font-family: $gu-titlepiece;
   font-weight: bold;
