@@ -16,7 +16,7 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
-import initReducer from './digitalSubscriptionCheckoutReducer';
+import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
 
 
