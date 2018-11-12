@@ -16,9 +16,10 @@ import GridImage from 'components/gridImage/gridImage';
 import SvgWeeklyHeroCircles from 'components/svgs/weeklyHeroCircles';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
+import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
-import WeeklyContentBlock from './components/weeklyContentBlock';
-import WeeklyTextBlock from './components/weeklyTextBlock';
 import WeeklyFeatureList from './components/weeklyFeatureList';
 import WeeklyForm from './components/weeklyForm';
 import WeeklyCta from './components/weeklyCta';
@@ -82,54 +83,58 @@ const content = (
         />
         <SvgWeeklyHeroCircles />
       </ProductPagehero>
-      <WeeklyContentBlock>
-        <WeeklyTextBlock title="Open up your world view, Weekly">
+      <ProductPageContentBlock>
+        <ProductPageTextBlock title="Open up your world view, Weekly">
           <p>Inside the magazine you’ll find quality, independent journalism
             including opinion, insight, culture and access to new puzzles each week.
             Subscribe today and get an expert view on some of the most challenging
             issues of today, as well as free delivery, wherever you are in the world.
           </p>
-        </WeeklyTextBlock>
-      </WeeklyContentBlock>
-      <WeeklyContentBlock type="grey">
-        <WeeklyTextBlock title="As a subscriber you’ll enjoy" />
-        <WeeklyFeatureList features={[
+        </ProductPageTextBlock>
+      </ProductPageContentBlock>
+      <ProductPageContentBlock type="grey">
+        <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
+        <ProductPageContentBlockOutset>
+          <WeeklyFeatureList features={[
         { title: 'Up to 30% off the retail cover price' },
         { title: 'Free international shipping' },
         { title: 'A weekly email newsletter from the editor' },
         { title: 'Access to all editions at any time, on any device, through PressReader.' },
       ]}
-        />
-      </WeeklyContentBlock>
-      <WeeklyContentBlock type="feature" id="subscribe">
-        <WeeklyTextBlock title="Get your Guardian Weekly, subscribe now">
+          />
+        </ProductPageContentBlockOutset>
+      </ProductPageContentBlock>
+      <ProductPageContentBlock type="feature" id="subscribe">
+        <ProductPageTextBlock title="Get your Guardian Weekly, subscribe now">
           <p>How would you like to pay for your Guardian Weekly?</p>
-        </WeeklyTextBlock>
+        </ProductPageTextBlock>
         <WeeklyForm />
-      </WeeklyContentBlock>
-      <WeeklyContentBlock type="grey">
-        <WeeklyTextBlock title="Buying as a gift?">
+      </ProductPageContentBlock>
+      <ProductPageContentBlock type="grey">
+        <ProductPageTextBlock title="Buying as a gift?">
           <p>If you’d like to buy a Guardian Weekly subscription as a gift,
           just get in touch with your local customer service team.
           </p>
-        </WeeklyTextBlock>
-        <WeeklyFeatureList features={[
-        { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
-        { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
-        { title: 'USA and Canada', copy: '+1 917-900-4663' },
-      ]}
-        />
-      </WeeklyContentBlock>
-      <WeeklyContentBlock type="white">
-        <WeeklyTextBlock title="Promotion terms and conditions">
+        </ProductPageTextBlock>
+        <ProductPageContentBlockOutset>
+          <WeeklyFeatureList features={[
+            { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
+            { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
+            { title: 'USA and Canada', copy: '+1 917-900-4663' },
+          ]}
+          />
+        </ProductPageContentBlockOutset>
+      </ProductPageContentBlock>
+      <ProductPageContentBlock type="white">
+        <ProductPageTextBlock title="Promotion terms and conditions">
           <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Weekly print subscription services and their terms and conditions - see <a href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">here</a>
           </p>
-        </WeeklyTextBlock>
-        <WeeklyTextBlock title="Guardian Weekly terms and conditions">
+        </ProductPageTextBlock>
+        <ProductPageTextBlock title="Guardian Weekly terms and conditions">
           <p>Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions see <a href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
           </p>
-        </WeeklyTextBlock>
-      </WeeklyContentBlock>
+        </ProductPageTextBlock>
+      </ProductPageContentBlock>
     </Page>
   </Provider>
 );

@@ -5,8 +5,6 @@
 import React, { type Node } from 'react';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import GridImage from 'components/gridImage/gridImage';
-import SvgWeeklyHeroCircles from 'components/svgs/weeklyHeroCircles';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 
