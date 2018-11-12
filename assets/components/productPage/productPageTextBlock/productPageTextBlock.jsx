@@ -15,16 +15,16 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-const WeeklyTextBlock = ({ title, children, headingSize }: PropTypes) => (
-  <div className="weekly-text-block">
-    <Heading className="weekly-text-block__heading" size={headingSize}>{title}</Heading>
+const ProductPageTextBlock = ({ title, children, headingSize }: PropTypes) => (
+  <div className="component-product-page-text-block">
+    <Heading className="component-product-page-text-block__heading" size={headingSize}>{title}</Heading>
     {children}
   </div>
 );
 
-WeeklyTextBlock.defaultProps = {
+ProductPageTextBlock.defaultProps = {
   headingSize: 2,
   children: null,
 };
 
-export default WeeklyTextBlock;
+export default ProductPageTextBlock;

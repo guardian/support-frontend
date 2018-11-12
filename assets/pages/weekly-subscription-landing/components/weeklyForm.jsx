@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import SvgInfo from 'components/svgs/information';
 import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
 
 import WeeklyCta from './weeklyCta';
 import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
@@ -37,8 +38,9 @@ const WeeklyForm = ({
       redirectToWeeklyPageAction();
     }}
   >
-    <div className="weekly-form">
-      {Object.keys(billingPeriods).map((type: WeeklyBillingPeriod) => {
+    <ProductPageContentBlockOutset>
+      <div className="weekly-form">
+        {Object.keys(billingPeriods).map((type: WeeklyBillingPeriod) => {
         const {
           copy, title,
         } = billingPeriods[type];
@@ -57,7 +59,8 @@ const WeeklyForm = ({
           </div>
           );
         })}
-    </div>
+      </div>
+    </ProductPageContentBlockOutset>
 
     <WeeklyCta disabled={selectedPeriod === null} type="submit">
       Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
