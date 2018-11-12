@@ -8,7 +8,7 @@ case class ContributionsLanding(region: String)(implicit val webDriver: WebDrive
 
   // While the new contributions landing page test is running,
   // we just want Selenium to test the old page.
-  val url = s"${Config.supportFrontendUrl}/$region/contribute"
+  val url = s"${Config.supportFrontendUrl}/$region"
 
   private val contributeButton = id("qa-contribute-button")
 
