@@ -13,7 +13,7 @@ import {
   setEmail,
   setStateField,
 } from 'helpers/user/userActions';
-import { setCountry } from 'helpers/page/pageActions';
+import { setCountry } from 'helpers/page/commonActions';
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';

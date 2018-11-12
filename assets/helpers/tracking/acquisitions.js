@@ -10,7 +10,7 @@ import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import { type OptimizeExperiments, OPTIMIZE_QUERY_PARAMETER } from './optimize';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 
 
 // ----- Types ----- //
@@ -171,9 +171,9 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
 // Prepends all the experiment names (the keys) with 'optimize$$' to be able to
 // differentiate from native tests, and returns as array of AB tests.
 function optimizeExperimentsToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
-  return Object.keys(opt).map(k => ({
-    name: `optimize$$${k}`,
-    variant: opt[k],
+  return opt.map(exp => ({
+    name: `optimize$$${exp.id}`,
+    variant: exp.variant,
   }));
 }
 
@@ -189,7 +189,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     getQueryParameter('INTCMP');
 
   const parameterExclusions =
-    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', OPTIMIZE_QUERY_PARAMETER];
+    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', 'utm_expid'];
 
   const queryParameters =
     acquisitionData.queryParameters ||

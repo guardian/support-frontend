@@ -10,7 +10,7 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import type { Action } from './oneoffContributionsActions';
 import { checkoutFormReducer as checkoutForm, type OneOffContributionsCheckoutFormState } from './helpers/checkoutForm/checkoutFormReducer';

@@ -31,7 +31,7 @@ function Video(props: PropTypes) {
         frameBorder="0"
         allow="autoplay; encrypted-media"
         allowFullScreen
-        sandbox="allow-scripts allow-same-origin"
+        sandbox="allow-scripts allow-same-origin allow-presentation"
       />
     </div>
   );

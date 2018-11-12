@@ -15,10 +15,8 @@ import { flashSaleIsActive } from 'helpers/flashSale';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-
 import FlashSaleDigitalPack from './components/flashSaleDigitalPack';
 import FeaturedProductAb from './components/featuredProductAb';
-
 
 // ----- Redux Store ----- //
 

@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';

@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 
 import LegalSection from './legalSection';
 
