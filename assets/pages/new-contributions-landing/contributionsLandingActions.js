@@ -267,7 +267,7 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
 
       switch (result.paymentStatus) {
         case 'success':
-          trackConversion(state.common.abParticipations, '/contribute/thankyou.new');
+          trackConversion(state.common.abParticipations, '/contribute/thankyou');
           dispatch(paymentSuccess());
           break;
 

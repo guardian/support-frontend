@@ -64,7 +64,8 @@ class PayPalOneOff(
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
     val redirect = Redirect {
       country match {
-        case Some(c) => s"/$c/thankyou.new"
+        // TODO: more cleanup
+        case Some(c) => s"/$c/thankyou"
         case None => "/contribute/one-off/thankyou"
       }
     }
@@ -80,7 +81,7 @@ class PayPalOneOff(
     })
   }
 
-  //TODO - remove once old paypal return route has been removed
+  //TODO - more cleanup
   def newReturnURL(paymentId: String, PayerID: String, country: String): Action[AnyContent] = returnURL(paymentId, PayerID, Some(country))
 
   def returnURL(paymentId: String, PayerID: String, country: Option[String] = None): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>

@@ -22,7 +22,7 @@ type PropTypes = {|
 
 const renderCountryGroup = (selectedCountryGroup: CountryGroup) => (countryGroup: CountryGroup) => (
   <li className="countryGroups__item">
-    <a href={`/${countryGroup.supportInternationalisationId}/contribute.new`}>
+    <a href={`/${countryGroup.supportInternationalisationId}/contribute`}>
       {countryGroup.name} ({currencies[countryGroup.currency].extendedGlyph})
       {countryGroup === selectedCountryGroup ? (
         <span className="icon">
