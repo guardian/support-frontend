@@ -20,6 +20,10 @@
 @import 'components/weeklyForm';
 @import 'components/weeklyFormLabel';
 
+:root {
+  scroll-behavior: smooth;
+}
+
 .component-product-page-hero--weekly {
   .svg-weekly-hero-circles {
     position: absolute;
