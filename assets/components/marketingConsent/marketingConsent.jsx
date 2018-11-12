@@ -11,7 +11,7 @@ import CheckboxInput from 'components/checkboxInput/checkboxInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import DotcomCta from 'components/dotcomCta/dotcomCta';
 import PageSection from 'components/pageSection/pageSection';
-
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import { setGnmMarketing, type Action } from 'helpers/user/userActions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
@@ -65,6 +65,7 @@ const MarketingConsent = (props: PropTypes): React.Node => {
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
     onClick: (marketingPreferencesOptIn: boolean, email: string, csrf: CsrfState, context: string) => {
+      trackComponentClick('marketing-permissions-old-flow');
       sendMarketingPreferencesToIdentity(
         marketingPreferencesOptIn,
         email,
