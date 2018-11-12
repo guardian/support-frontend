@@ -17,6 +17,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
+import CheckoutForm from './checkoutForm';
 import { type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 
 
@@ -109,9 +110,11 @@ function CheckoutStage(props: PropTypes) {
             altText="digital subscription"
             fallbackImgType="png"
           />
-          <HeadingBlock heading="Your Digital Pack subscription is now live">
-            <p>Thank you for supporting our journalism</p>
-          </HeadingBlock>
+          <LeftMarginSection>
+            <HeadingBlock overheading="Thank You" heading="Your Digital Pack subscription is now live">
+              <p>Thank you for supporting our journalism</p>
+            </HeadingBlock>
+          </LeftMarginSection>
           <ThankYouContent
             countryGroupId={props.countryGroupId}
             context="DIGITAL_SUBSCRIPTION_CHECKOUT"
@@ -124,7 +127,7 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <LeftMarginSection>
-          <p>Placeholder</p>
+          <CheckoutForm />
         </LeftMarginSection>
       );
 

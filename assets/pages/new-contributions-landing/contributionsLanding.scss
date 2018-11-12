@@ -58,6 +58,7 @@ header[role="banner"] {
   max-width: 355px;
   padding: 0;
   width: 100%;
+  cursor: pointer;
 }
 
 // Safari doesn't respect styles applied to <summary> so we need this wrapper div
@@ -733,14 +734,14 @@ form {
   color: gu-colour(media-garnett-main-1);
 }
 
-.form__input:focus {
+.form__input:enabled:focus {
   box-shadow: 0 0 0 3px gu-colour(sport-garnett-media-main-1);
   outline: none;
 }
 
 .form__input--primed:invalid,
 .form__input--invalid {
-  border-color: #3db540;
+  border-color: gu-colour(news-garnett-main-1);
 }
 
 .form__input::placeholder,
@@ -749,29 +750,36 @@ form {
 }
 
 .form__error {
-  background-color: rgba(61,181,64,.1);
-  color: #236925;
+  background-color: gu-colour(news-faded);
+  color: gu-colour(news-garnett-main-1);
   font-size: 14px;
   line-height: 16px;
   padding: 6px 10px;
+  a, a:visited {
+    color: gu-colour(news-garnett-main-1);
+  }
+}
+
+.form__error--sign-in {
+  display: block;
+  text-decoration: none;
+}
+
+.underline {
+  text-decoration: underline;
 }
 
 .form__submit {
-  display: flex;
-  justify-content: flex-end;
   margin-top: 24px;
   padding-bottom: 30px;
 }
 
 .form__submit-button {
-  align-items: center;
+  width: 100%;
   background: gu-colour(news-garnett-highlight);
   border: none;
   border-radius: 20px;
-  display: inline-flex;
   padding: 9px 20px;
-  flex: 1;
-  justify-content: space-between;
 
   &:enabled {
     cursor: pointer;
@@ -783,21 +791,23 @@ form {
   }
 }
 
+.form__submit-button__inner {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .form__submit-button--hidden {
   display: none;
 }
 
-.form__radio-group--contribution-amount,
-.form__field--contribution-other-amount,
-.form__field--contribution-fname,
-.form__field--contribution-lname {
-  margin-top: 12px;
+.form__radio-group--contribution-amount {
+  margin: 12px 0;
 }
 
-.form__field--contribution-email,
-.form__field--contribution-state {
-  margin-top: 24px;
-  color: gu-colour(garnett-neutral-2);
+.form__field {
+  margin-top: 12px;
 }
 
 .form__radio-group--contribution-pay {

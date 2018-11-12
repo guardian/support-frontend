@@ -16,7 +16,7 @@ import { type OptimizeExperiments } from 'helpers/tracking/optimize';
 import { getBaseDomain } from 'helpers/url';
 
 import { getPromoCode, getIntcmp } from './flashSale';
-import type { SubscriptionProduct } from './subscriptions';
+import type { SubscriptionProduct, WeeklyBillingPeriod } from './subscriptions';
 
 
 // ----- Types ----- //
@@ -39,6 +39,50 @@ const patronsUrl = 'https://patrons.theguardian.com';
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
 const emailPreferencesUrl = `https://profile.${getBaseDomain()}/email-prefs`;
+
+function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGroupId) {
+
+  const sixWeekDomestic = 'weeklydomestic-gwoct18-sixforsix-domestic';
+  const sixWeekRow = 'weeklyrestofworld-gwoct18-sixforsix-row';
+
+  const quarterDomestic = 'weeklydomestic-gwoct18-quarterly-domestic';
+  const quarterRow = 'weeklyrestofworld-gwoct18-quarterly-row';
+
+  const yearDomestic = 'weeklydomestic-gwoct18-annual-domestic';
+  const yearRow = 'weeklyrestofworld-gwoct18-quarterly-row';
+
+  const urls = {
+    sixweek: {
+      GBPCountries: sixWeekDomestic,
+      UnitedStates: sixWeekDomestic,
+      AUDCountries: sixWeekDomestic,
+      NZDCountries: sixWeekDomestic,
+      EURCountries: sixWeekDomestic,
+      Canada: sixWeekDomestic,
+      International: sixWeekRow,
+    },
+    quarter: {
+      GBPCountries: quarterDomestic,
+      UnitedStates: quarterDomestic,
+      AUDCountries: quarterDomestic,
+      NZDCountries: quarterDomestic,
+      EURCountries: quarterDomestic,
+      Canada: quarterDomestic,
+      International: quarterRow,
+    },
+    year: {
+      GBPCountries: yearDomestic,
+      UnitedStates: yearDomestic,
+      AUDCountries: yearDomestic,
+      NZDCountries: yearDomestic,
+      EURCountries: yearDomestic,
+      Canada: yearDomestic,
+      International: yearRow,
+    },
+  };
+
+  return urls[period][countryGroup];
+}
 
 const memUrls: {
   [MemProduct]: string,
@@ -218,6 +262,30 @@ function getDigitalCheckout(
 }
 
 
+// Builds a link to the GW checkout.
+function getWeeklyCheckout(
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  period: WeeklyBillingPeriod,
+  cgId: CountryGroupId,
+  nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
+): string {
+  const acquisitionData = deriveSubsAcquisitionData(
+    referrerAcquisitionData,
+    nativeAbParticipations,
+    optimizeExperiments,
+  );
+
+  const url = getWeeklyZuoraCode(period, cgId);
+  const params = new URLSearchParams(window.location.search);
+
+  params.set('acquisitionData', JSON.stringify(acquisitionData));
+  params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
+
+  return `${subsUrl}/checkout/${url}?${params.toString()}`;
+}
+
+
 function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
   const groupFromId = countryGroups[cgId];
   if (groupFromId) {
@@ -260,4 +328,5 @@ export {
   androidAppUrl,
   getDailyEditionUrl,
   emailPreferencesUrl,
+  getWeeklyCheckout,
 };

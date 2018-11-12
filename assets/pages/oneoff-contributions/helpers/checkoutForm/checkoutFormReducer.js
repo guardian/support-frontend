@@ -6,24 +6,14 @@ import { type Action } from './checkoutFormActions';
 // ----- Types ----- //
 
 
-export type CheckoutFormAttribute = {
-  shouldValidate: boolean,
-}
-
 export type OneOffContributionsCheckoutFormState = {
-  email: CheckoutFormAttribute,
-  fullName: CheckoutFormAttribute,
+  checkoutFormHasBeenSubmitted: boolean,
 };
 
 // ----- Setup ----- //
 
 const initialState: OneOffContributionsCheckoutFormState = {
-  email: {
-    shouldValidate: false,
-  },
-  fullName: {
-    shouldValidate: false,
-  },
+  checkoutFormHasBeenSubmitted: false,
 };
 
 
@@ -35,11 +25,9 @@ function checkoutFormReducer(
 ): OneOffContributionsCheckoutFormState {
 
   switch (action.type) {
-    case 'SET_EMAIL_SHOULD_VALIDATE':
-      return { ...state, email: { ...state.email, shouldValidate: true } };
 
-    case 'SET_FULL_NAME_SHOULD_VALIDATE':
-      return { ...state, fullName: { ...state.fullName, shouldValidate: true } };
+    case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
+      return { ...state, checkoutFormHasBeenSubmitted: true };
 
     default:
       return state;

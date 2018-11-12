@@ -1,0 +1,26 @@
+.weekly-feature-list {
+  @include mq($from: tablet) {
+    display: flex;
+  }
+}
+
+.weekly-feature-list__title {
+  font-size: 24px;
+  font-weight: 200;
+  line-height: 1.16;
+  font-family: $gu-headline;
+}
+
+.weekly-feature-list__item {
+  flex: 0 0 25%;
+  box-sizing: border-box;
+  padding: ($gu-v-spacing / 6) ($gu-h-spacing/2) ($gu-v-spacing * 2) 0;
+  margin-left: $gu-h-spacing / 2;
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+  @include mq($from: tablet) {
+    padding: 0 ($gu-h-spacing / 2) ($gu-v-spacing*2);
+    margin: 0;
+    border-top: 0;
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+  }
+}

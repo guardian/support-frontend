@@ -32,13 +32,14 @@ import {
   isLargerOrEqual,
   maxTwoDecimals,
 } from 'helpers/formValidation';
+import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import { NewContributionType } from './ContributionType';
 import { NewContributionAmount } from './ContributionAmount';
 import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
-
 
 import { type State } from '../contributionsLandingReducer';
 
@@ -47,6 +48,7 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  setFormIsValid,
 } from '../contributionsLandingActions';
 
 
@@ -69,6 +71,10 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  isSignedIn: boolean,
+  setFormIsValid: boolean => void,
+  formIsValid: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -89,6 +95,9 @@ const mapStateToProps = (state: State) => ({
   currency: state.common.internationalisation.currencyId,
   paymentError: state.page.form.paymentError,
   selectedAmounts: state.page.form.selectedAmounts,
+  userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+  isSignedIn: state.page.user.isSignedIn,
+  formIsValid: state.page.form.formIsValid,
 });
 
 
@@ -98,6 +107,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setFormIsValid: (isValid) => { dispatch(setFormIsValid(isValid)); },
 });
 
 // ----- Functions ----- //
@@ -122,8 +132,12 @@ function openStripePopup(props: PropTypes) {
 // Bizarrely, adding a type to this object means the type-checking on the
 // formHandlers is no longer accurate.
 // (Flow thinks it's OK when it's missing required properties).
+
 const formHandlersForRecurring = {
-  PayPal: () => { /* TODO PayPal recurring */ },
+  PayPal: () => {
+    // we don't get an onSubmit event for PayPal recurring, so there
+    // is no need to handle anything here
+  },
   Stripe: openStripePopup,
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
@@ -139,7 +153,6 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
         currency: props.currency,
         amount: getAmount(props),
         returnURL: payPalReturnUrl(props.countryGroupId),
-        // TODO: use new cancel url
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
@@ -156,28 +169,35 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
   },
 };
 
-
+// Note PayPal recurring flow does not call this function
 function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     // Causes errors to be displayed against payment fields
-    props.setCheckoutFormHasBeenSubmitted();
     event.preventDefault();
-    if (!(event.target: any).checkValidity()) {
-      return;
-    }
-    formHandlers[props.contributionType][props.paymentMethod](props);
+    const flowPrefix = 'npf';
+    const form = event.target;
+    const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
+    onFormSubmit({
+      ...props,
+      flowPrefix,
+      form,
+      handlePayment,
+    });
   };
 }
 
 // ----- Render ----- //
 
 function ContributionForm(props: PropTypes) {
-
   const checkOtherAmount: string => boolean = input =>
     isNotEmpty(input)
     && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
     && maxTwoDecimals(input);
+
+  const invalidFormErrorMessageOnMobile = (
+    <PaymentFailureMessage classModifiers={['invalid_form_mobile']} errorHeading="Form incomplete" checkoutFailureReason="invalid_form_mobile" />
+  );
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
@@ -188,6 +208,7 @@ function ContributionForm(props: PropTypes) {
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
       <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
+      {!props.formIsValid ? invalidFormErrorMessageOnMobile : null}
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>

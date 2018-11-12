@@ -63,11 +63,12 @@ class IdentityController(
         .getUserType(email)
         .fold(
           err => {
-            SafeLogger.error(scrub"Failed to retrieve user type for ${email}: ${err.toString}")
+            SafeLogger.error(scrub"Failed to retrieve user type for $email: ${err.toString}")
             InternalServerError
           },
           response => {
-            SafeLogger.info(s"Successfully retrieved user type for ${email}")
+            SafeLogger.info(s"Successfully retrieved user type for $email")
+            SafeLogger.info(s"USERTYPE: $response")
             Ok(response.asJson)
           }
         )

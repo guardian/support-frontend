@@ -17,6 +17,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
 import FlashSaleDigitalPack from './components/flashSaleDigitalPack';
+import FeaturedProductAb from './components/featuredProductAb';
 
 
 // ----- Redux Store ----- //
@@ -34,7 +35,9 @@ const content = (
     >
       {flashSaleIsActive('DigitalPack') ? (<FlashSaleDigitalPack
         headingSize={3}
-      />) : null}
+      />) : <FeaturedProductAb
+        headingSize={3}
+      />}
       <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
       <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport

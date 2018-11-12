@@ -29,6 +29,7 @@ type PropTypes = {|
   setFullName: (string) => void,
   setEmail: (string) => void,
   isSignedIn: boolean,
+  checkoutFormHasBeenSubmitted: boolean,
 |};
 
 // ----- Map State/Props ----- //
@@ -41,6 +42,7 @@ function mapStateToProps(state: State) {
     fullName,
     email,
     isSignedIn: state.page.user.isSignedIn,
+    checkoutFormHasBeenSubmitted: state.page.checkoutForm.checkoutFormHasBeenSubmitted,
   };
 
 }
@@ -71,9 +73,9 @@ function NameForm(props: PropTypes) {
             value={props.email.value}
             labelText="Email"
             placeholder="Email"
-            onChange={props.setEmail}
+            onInput={props.setEmail}
             modifierClasses={['email']}
-            showError={shouldShowError(props.email)}
+            showError={shouldShowError(props.email, props.checkoutFormHasBeenSubmitted)}
             errorMessage="Please enter a valid email address."
             type="email"
             pattern={emailRegexPattern}
@@ -86,9 +88,9 @@ function NameForm(props: PropTypes) {
         placeholder="Full name"
         labelText="Full name"
         value={props.fullName.value}
-        onChange={props.setFullName}
+        onInput={props.setFullName}
         modifierClasses={['name']}
-        showError={shouldShowError(props.fullName)}
+        showError={shouldShowError(props.fullName, props.checkoutFormHasBeenSubmitted)}
         errorMessage="Please enter your name."
         required
       />

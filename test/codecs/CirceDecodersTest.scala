@@ -198,10 +198,9 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |      "directDebit": "On"
           |    },
           |    "experiments": {
-          |      "newPaymentFlow": {
-          |        "name": "newPaymentFlow",
+          |      "newFlow": {
+          |        "name": "newFlow",
           |        "description": "Redesign of the payment flow UI",
-          |        "segment": "Perc0",
           |        "state": "On"
           |      }
           |    },
@@ -223,10 +222,9 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
             directDebit = Some(On)
           ),
           experiments = Map(
-            "newPaymentFlow" -> ExperimentSwitch(
-              name = "newPaymentFlow",
+            "newFlow" -> ExperimentSwitch(
+              name = "newFlow",
               description = "Redesign of the payment flow UI",
-              segment = Segment.Perc0,
               state = On
             )
           ),

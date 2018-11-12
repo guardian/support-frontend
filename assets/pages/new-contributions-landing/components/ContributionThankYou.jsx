@@ -56,7 +56,7 @@ function ContributionThankYou(props: PropTypes) {
       {props.contributionType !== 'ONE_OFF' ? (
         <section className="confirmation">
           <p className="confirmation__message">
-            {`Look out for an email confirming your ${getSpokenType(props.contributionType)} recurring payment. ${directDebitMessageSuffix}`}
+            {`Look out for an email within three business days confirming your ${getSpokenType(props.contributionType)} recurring payment. ${directDebitMessageSuffix}`}
           </p>
         </section>
       ) : null}

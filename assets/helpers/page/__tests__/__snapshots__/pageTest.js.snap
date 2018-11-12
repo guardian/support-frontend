@@ -29,7 +29,9 @@ Object {
     "source": null,
   },
   "settings": Object {
-    "switches": Object {},
+    "switches": Object {
+      "experiments": Object {},
+    },
   },
 }
 `;

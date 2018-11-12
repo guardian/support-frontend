@@ -4,19 +4,19 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 
 import { config, amounts, type Amount, type Contrib } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
-import { type Action, selectAmount, updateOtherAmount } from '../contributionsLandingActions';
+import { selectAmount, setValueAndTogglePayPal, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
@@ -27,10 +27,10 @@ type PropTypes = {|
   currency: IsoCurrency,
   contributionType: Contrib,
   selectedAmounts: { [Contrib]: Amount | 'other' },
-  selectAmount: (Amount | 'other', Contrib) => (() => void),
+  selectAmount: (Amount | 'other', CountryGroupId, Contrib) => (() => void),
   otherAmount: string | null,
   checkOtherAmount: string => boolean,
-  updateOtherAmount: string => void,
+  updateOtherAmount: (string, CountryGroupId, Contrib) => void,
   checkoutFormHasBeenSubmitted: boolean,
   annualTestVariant: AnnualContributionsTestVariant,
 |};
@@ -47,9 +47,15 @@ const mapStateToProps = state => ({
   annualTestVariant: state.common.abParticipations.annualContributionsRoundThree,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  selectAmount: (amount, contributionType) => () => { dispatch(selectAmount(amount, contributionType)); },
-  updateOtherAmount: (amount) => { dispatch(updateOtherAmount(amount)); },
+const mapDispatchToProps = (dispatch: Function) => ({
+  selectAmount: (amount, countryGroupId, contributionType) => () => {
+    trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount.value || amount}`);
+    dispatch(selectAmount(amount, contributionType));
+  },
+  updateOtherAmount: (amount, countryGroupId, contributionType) => {
+    trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`);
+    dispatch(setValueAndTogglePayPal<string>(updateOtherAmount, amount));
+  },
 });
 
 // ----- Render ----- //
@@ -69,7 +75,7 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       value={amount.value}
       /* eslint-disable react/prop-types */
       checked={props.selectedAmounts[props.contributionType] !== 'other' && amount.value === props.selectedAmounts[props.contributionType].value}
-      onChange={props.selectAmount(amount, props.contributionType)}
+      onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType)}
       /* eslint-enable react/prop-types */
     />
     <label htmlFor={`contributionAmount-${amount.value}`} className="form__radio-group-label" aria-label={formatAmount(currency, spokenCurrency, amount, true)}>
@@ -107,7 +113,7 @@ function ContributionAmount(props: PropTypes) {
             name="contributionAmount"
             value="other"
             checked={showOther}
-            onChange={props.selectAmount('other', props.contributionType)}
+            onChange={props.selectAmount('other', props.countryGroupId, props.contributionType)}
           />
           <label htmlFor="contributionAmount-other" className="form__radio-group-label">Other</label>
         </li>
@@ -120,7 +126,7 @@ function ContributionAmount(props: PropTypes) {
           label="Other amount"
           value={props.otherAmount}
           icon={iconForCountryGroup(props.countryGroupId)}
-          onInput={e => props.updateOtherAmount((e.target: any).value)}
+          onInput={e => props.updateOtherAmount((e.target: any).value, props.countryGroupId, props.contributionType)}
           isValid={props.checkOtherAmount(props.otherAmount || '')}
           formHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}

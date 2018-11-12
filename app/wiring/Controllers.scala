@@ -4,7 +4,10 @@ import controllers._
 import play.api.BuiltInComponentsFromContext
 
 trait Controllers {
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth =>
+
+  // scalastyle:off
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth with Monitoring =>
+  // scalastyle:on
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
 
@@ -18,7 +21,8 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     paymentAPIService,
     stringsConfig,
-    settingsProvider
+    settingsProvider,
+    appConfig.guardianDomain
   )
 
   lazy val subscriptionsController = new Subscriptions(
@@ -60,7 +64,8 @@ trait Controllers {
     controllerComponents,
     paymentAPIService,
     identityService,
-    settingsProvider
+    settingsProvider,
+    tipMonitoring
   )
 
   lazy val oneOffContributions = new OneOffContributions(

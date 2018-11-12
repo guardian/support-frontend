@@ -297,3 +297,10 @@ $guss-webfonts: (
     url("/assets/fonts/GHGuardianHeadline-Bold.ttf") format("ttf");
     font-weight: 900;
 }
+
+@font-face {
+    font-family: "GT Guardian Titlepiece";
+    src: url("/assets/fonts/GTGuardianTitlepiece-Bold.woff2") format("woff2"),
+    url("/assets/fonts/GTGuardianTitlepiece-Bold.woff") format("woff");
+    font-weight: 400;
+}

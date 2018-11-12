@@ -1,3 +1,8 @@
+@mixin with-colour($color) {
+  & .component-featured-product-hero__heading,
+  & .component-flash-sale-countdown, {
+    color: gu-colour($color);
+  }}
 
 .component-featured-product-hero {
   position: relative;
@@ -42,8 +47,7 @@
 
   .component-featured-product-hero__countdownbox .component-flash-sale-countdown {
     margin: 0 -5px;
-    color: #bb3b80;
-    width: 130%;
+    width: 160%;
     display: inline-block;
     .component-countdown {
       background: darken(gu-colour(garnett-neutral-3), 5%);
@@ -64,7 +68,7 @@
     display: none;
   }
   
-  .component-grid-picture__image {
+  .component-grid-picture__image, .component-grid-image {
     width: 180px;
     display: block;
 
@@ -99,10 +103,10 @@
 .component-featured-product-hero__content {
   @extend .gu-content-margin;
 
-  display: flex;
-
   @include mq($from: tablet) {
     position: relative;
+    display: flex;
+    align-items: flex-end;
   }
 
   @include mq($from: desktop) {
@@ -122,19 +126,39 @@
   @extend .gu-content-margin;
   position: relative;
 
+  @include mq($from: tablet) {
+    flex: 0 0 400px;
+  }
+
   @include mq($from: desktop) {
-    flex: 0 460px;
     margin: 10px 0 0;
     padding-right: 0;
     padding-left: 21px;
   }
+
+  @include mq($from: leftCol) {
+    min-height: 350px;
+  }
+
+  @include mq($from: wide) {
+    min-height: 400px;
+  }
 }
 
 .component-featured-product-hero__image {
-  position: absolute;
+  position: relative;
+  z-index: 10;
   bottom: 0;
   right: 0;
-  overflow: hidden;
+  @include mq($from: tablet, $until: leftCol) {
+    left: -5%;
+  }
+  @include mq($from: leftCol) {
+    left: 5%;
+  }
+  @include mq($until: tablet) {
+    position: absolute;
+  }
 }
 
 .component-featured-product-hero__title {
@@ -150,7 +174,6 @@
 
 .component-featured-product-hero__heading {
   @extend .component-featured-product-hero__title;
-  color: gu-colour(lifestyle-garnett-main-1);
   margin-top: 8px;
   @include mq($from: phablet) {
     max-width: 350px;
@@ -178,4 +201,14 @@
 
 .component-cta-link--flash-sale {
   z-index: 1;
+}
+
+.component-featured-product-hero--digital-pack {
+  @include with-colour(lifestyle-garnett-main-1);
+}
+.component-featured-product-hero--paper {
+  @include with-colour(sport-garnett-media-main-1);
+}
+.component-featured-product-hero--guardian-weekly {
+  @include with-colour(opinion-garnett-media-main-1);
 }

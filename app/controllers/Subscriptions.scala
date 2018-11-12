@@ -38,6 +38,19 @@ class Subscriptions(
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
+  def geoRedirectAllMarkets(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val redirectUrl = request.fastlyCountry match {
+      case Some(UK) => s"/uk/$path"
+      case Some(US) => s"/us/$path"
+      case Some(Australia) => s"/au/$path"
+      case Some(Europe) => s"/eu/$path"
+      case Some(Canada) => s"/ca/$path"
+      case Some(NewZealand) => s"/nz/$path"
+      case _ => s"/int/$path"
+    }
+    Redirect(redirectUrl, request.queryString, status = FOUND)
+  }
+
   def legacyRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     // Country code is required here because it's a parameter in the route.
     // But we don't actually use it.
@@ -91,19 +104,48 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
+  def weeklyGeoRedirect: Action[AnyContent] = geoRedirectAllMarkets("subscribe/weekly")
+
+  def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    val title = "The Guardian Weekly Subscriptions | The Guardian"
+    val id = "weekly-landing-page-" + countryCode
+    val js = "weeklySubscriptionLandingPage.js"
+    val css = "weeklySubscriptionLandingPageStyles.css"
+    val description = stringsConfig.weeklyLandingDescription
+    val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
+    val hrefLangLinks = Map(
+      "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
+      "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),
+      "en-au" -> buildCanonicalWeeklySubscriptionLink("au"),
+      "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz"),
+      "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca"),
+      "en" -> buildCanonicalWeeklySubscriptionLink("int"),
+      "en" -> buildCanonicalWeeklySubscriptionLink("eu")
+    )
+    Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
+  }
+
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
-  def displayForm(countryCode: String): Action[AnyContent] =
+  def displayForm(countryCode: String, displayCheckout: String): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId) { implicit request =>
-      implicit val settings: Settings = settingsProvider.settings()
-      val title = "Support the Guardian | Digital Subscription"
-      val id = "digital-subscription-checkout-page-" + countryCode
-      val js = "digitalSubscriptionCheckoutPage.js"
-      val css = "digitalSubscriptionCheckoutPageStyles.css"
-      Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+      if (displayCheckout == "true") {
+        implicit val settings: Settings = settingsProvider.settings()
+        val title = "Support the Guardian | Digital Subscription"
+        val id = "digital-subscription-checkout-page-" + countryCode
+        val js = "digitalSubscriptionCheckoutPage.js"
+        val css = "digitalSubscriptionCheckoutPageStyles.css"
+        Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+      } else {
+        Redirect(routes.Subscriptions.geoRedirect)
+      }
     }
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"
+
+  def buildCanonicalWeeklySubscriptionLink(countryCode: String): String =
+    s"${supportUrl}/${countryCode}/subscribe/weekly"
 
 }

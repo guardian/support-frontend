@@ -13,6 +13,8 @@ import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
+import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
+import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 import initReducer from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
@@ -44,7 +46,12 @@ const content = (
   <Provider store={store}>
     <Page
       header={<SimpleHeader />}
-      footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
+      footer={
+        <Footer>
+          <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
+          <CustomerService selectedCountryGroup={countryGroupId} />
+          <SubscriptionFaq subscriptionProduct="DigitalPack" />
+        </Footer>}
     >
       <CheckoutStage
         countryGroupId={countryGroupId}

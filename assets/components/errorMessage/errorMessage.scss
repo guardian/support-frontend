@@ -17,7 +17,7 @@
   }
 
   @include mq($from: tablet) {
-    width: 404px;
+    width: 260px;
   }
 
   .svg-exclamation {
@@ -35,4 +35,23 @@
   top: 50%;
   transform: translateY(-50%);
   left: 10%;
+}
+
+
+.component-error-message--sign-in {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  align-items: center;
+  height: auto;
+  padding: $gu-v-spacing/2 $gu-h-spacing;
+
+  @include mq($from: mobileLandscape) {
+    height: auto;
+  }
+
+  @include mq($from: tablet) {
+    height: auto;
+  }
 }

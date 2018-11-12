@@ -10,14 +10,15 @@ import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'hel
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { hiddenIf } from 'helpers/utilities';
-import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { checkoutFormShouldSubmit, getForm } from 'helpers/checkoutForm/checkoutForm';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
 import {
-  setCheckoutFormHasBeenSubmitted,
+  sendFormSubmitEventForPayPalRecurring,
   setupRecurringPayPalPayment,
 } from '../contributionsLandingActions';
 
@@ -33,11 +34,13 @@ type PropTypes = {|
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  setCheckoutFormHasBeenSubmitted: () => void,
+  sendFormSubmitEventForPayPalRecurring: () => void,
   setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 |};
 
 const mapStateToProps = (state: State) =>
@@ -52,10 +55,12 @@ const mapStateToProps = (state: State) =>
     csrf: state.page.csrf,
     payPalHasLoaded: state.page.form.payPalHasLoaded,
     isTestUser: state.page.user.isTestUser,
+    isSignedIn: state.page.user.isSignedIn,
+    userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
+  sendFormSubmitEventForPayPalRecurring: () => { dispatch(sendFormSubmitEventForPayPalRecurring()); },
   setupRecurringPayPalPayment: (
     resolve: Function,
     reject: Function,
@@ -96,8 +101,15 @@ function ContributionSubmit(props: PropTypes) {
             csrf={props.csrf}
             currencyId={props.currencyId}
             hasLoaded={props.payPalHasLoaded}
-            canOpen={() => formIsValid(formClassName)}
-            whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
+            canOpen={() =>
+              checkoutFormShouldSubmit(
+                props.contributionType,
+                props.isSignedIn,
+                props.userTypeFromIdentityResponse,
+                getForm(formClassName),
+              )
+            }
+            onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
             formClassName={formClassName}
             isTestUser={props.isTestUser}
             setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
@@ -108,16 +120,18 @@ function ContributionSubmit(props: PropTypes) {
           type="submit"
           className={hiddenIf(showPayPalRecurringButton, 'form__submit-button')}
         >
-          Contribute&nbsp;
-          {amount ? formatAmount(
-            currencies[props.currency],
-            spokenCurrencies[props.currency],
-            amount,
-            false,
-          ) : null}&nbsp;
-          {frequency ? `${frequency} ` : null}
-          {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
-          <SvgArrowRight />
+          <span className="form__submit-button__inner">
+            Contribute&nbsp;
+            {amount ? formatAmount(
+              currencies[props.currency],
+              spokenCurrencies[props.currency],
+              amount,
+              false,
+            ) : null}&nbsp;
+            {frequency ? `${frequency} ` : null}
+            {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
+            <SvgArrowRight />
+          </span>
         </button>
       </div>
     );

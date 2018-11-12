@@ -20,9 +20,10 @@ import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import ContributionsGuestCheckoutContainer from './components/contributionsGuestCheckoutContainer';
 import reducer from './regularContributionsReducer';
-import FormFields, { formClassName, setShouldValidateFunctions } from './components/formFields';
+import FormFields, { formClassName } from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
-
+import { checkIfEmailHasPassword } from './regularContributionsActions';
+import { setCheckoutFormHasBeenSubmitted } from './helpers/checkoutForm/checkoutFormActions';
 // ----- Page Startup ----- //
 
 const contributionType = parseRegularContributionType(getQueryParameter('contribType') || 'MONTHLY');
@@ -36,6 +37,9 @@ const store = pageInit(reducer(
 ), true);
 
 user.init(store.dispatch);
+
+const state = store.getState();
+store.dispatch(checkIfEmailHasPassword(state.page.user.email));
 
 const Loading = () => <div>Loading...</div>;
 
@@ -62,7 +66,7 @@ const router = (
                 <RegularContributionsPayment
                   whenUnableToOpen={
                     () =>
-                      setShouldValidateFunctions.forEach(f => store.dispatch(f(true)))
+                      store.dispatch(setCheckoutFormHasBeenSubmitted())
                   }
                   canOpen={
                     () => formIsValid(formClassName)

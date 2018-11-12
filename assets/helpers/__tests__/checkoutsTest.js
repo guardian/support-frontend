@@ -21,6 +21,7 @@ describe('checkouts', () => {
         payPal: 'On',
         directDebit: 'On',
       },
+      experiments: {},
     };
 
     const allSwitchesOff = {
@@ -33,6 +34,7 @@ describe('checkouts', () => {
         payPal: 'Off',
         directDebit: 'Off',
       },
+      experiments: {},
     };
 
     it('should return correct values for Monthly Recurring UK when switches are all on', () => {

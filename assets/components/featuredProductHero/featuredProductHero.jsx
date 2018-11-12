@@ -5,6 +5,7 @@
 import React, { type Node } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities';
+import { type SubscriptionProduct } from 'helpers/subscriptions';
 
 import Heading from 'components/heading/heading';
 import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
@@ -20,6 +21,7 @@ type PropTypes = {
   bodyText: string,
   cta?: Node,
   image?: Node,
+  product?: ?SubscriptionProduct,
 };
 
 export default function FeaturedProductHero(props: PropTypes) {
@@ -32,12 +34,20 @@ export default function FeaturedProductHero(props: PropTypes) {
     bodyText,
     cta,
     image,
+    product,
   } = props;
 
   const timerClassName = classNameWithModifiers('component-featured-product-hero__countdownbox', hasTimer ? [] : ['hidden']);
-
+  const rootClassName = classNameWithModifiers(
+    'component-featured-product-hero',
+    [
+      product === 'DigitalPack' ? 'digital-pack' : null,
+      product === 'Paper' ? 'paper' : null,
+      product === 'GuardianWeekly' ? 'guardian-weekly' : null,
+    ],
+  );
   return (
-    <section className="component-featured-product-hero">
+    <section className={rootClassName}>
       <div className="component-featured-product-hero__content">
         <div className="component-featured-product-hero__description">
           <Heading
@@ -78,4 +88,5 @@ FeaturedProductHero.defaultProps = {
   cta: null,
   image: null,
   hasTimer: false,
+  product: null,
 };

@@ -36,10 +36,11 @@ GET  /monthly-contributions                         controllers.Application.cont
 
 # ----- Contributions ----- #
 
-GET  /contribute                                    controllers.Application.contributeGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.new controllers.Application.newContributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou.new controllers.Application.newContributionsLanding(country: String)
+GET  /contribute                                        controllers.Application.contributeGeoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.oldOrNewContributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.old  controllers.Application.oldContributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.new  controllers.Application.newContributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou.new    controllers.Application.newContributionsLanding(country: String)
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
 GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormMaybeAuthenticated()
@@ -73,10 +74,13 @@ GET  /:country/subscribe                           controllers.Subscriptions.leg
 
 GET  /subscribe/digital                            controllers.Subscriptions.digitalGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.Subscriptions.digital(country: String)
-GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscriptions.displayForm(country: String)
+GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscriptions.displayForm(country: String, displayCheckout: String ?= "false")
 
 GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
+
+GET  /subscribe/weekly                            controllers.Subscriptions.weeklyGeoRedirect()
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly   controllers.Subscriptions.weekly(country: String)
 
 # ----- Authentication ----- #
 

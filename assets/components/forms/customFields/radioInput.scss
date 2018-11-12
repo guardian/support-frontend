@@ -1,0 +1,24 @@
+.component-radio-input {
+  display: block;
+  width: 318px;
+  font-size: 16px;
+  font-family: $gu-text-sans-web;
+  padding: ($gu-v-spacing / 2) ($gu-h-spacing / 2);
+  cursor: pointer;
+  margin-bottom: $gu-v-spacing;
+}
+
+.component-radio-input__text {
+  margin-left: ($gu-h-spacing / 2);
+  font-weight: bold;
+}
+
+.component-radio-input__input {
+  margin-top: -1px;
+  vertical-align: middle;
+  transition: box-shadow .2s;
+
+  &:hover {
+    box-shadow: 0 0 0 2px lighten(gu-colour(garnett-neutral-4), 6%);
+  }
+}

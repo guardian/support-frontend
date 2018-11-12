@@ -157,6 +157,16 @@
       margin-left: $gu-v-spacing * 2;
     }
   }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  .email-input {
+    a, a:visited {
+      text-decoration: none;
+    }
+  }
 }
 
 .regular-contribution-payment__or-label {

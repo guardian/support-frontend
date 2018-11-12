@@ -2,8 +2,7 @@
 
 // ----- Imports ----- //
 
-import reducer, { type Stage } from '../digitalSubscriptionCheckoutReducer';
-import { setStage } from '../digitalSubscriptionCheckoutActions';
+import { reducer, setStage, type Stage } from '../digitalSubscriptionCheckoutReducer';
 
 
 // ----- Tests ----- //

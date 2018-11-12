@@ -2,6 +2,9 @@
 
 // ----- Imports ----- //
 import { type Contrib as ContributionType } from 'helpers/contributions';
+import type { Contrib } from 'helpers/contributions';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
@@ -22,7 +25,6 @@ export function emptyInputField(input: ?string): boolean {
 export type UserFormFieldAttribute = {
   id: string,
   value: string,
-  shouldValidate: boolean,
 }
 
 export function formFieldIsValid(id: string) {
@@ -33,8 +35,8 @@ export function formFieldIsValid(id: string) {
   return false;
 }
 
-export function shouldShowError(field: UserFormFieldAttribute): boolean {
-  return field.shouldValidate && !formFieldIsValid(field.id);
+export function shouldShowError(field: UserFormFieldAttribute, checkoutFormHasBeenSubmitted: boolean): boolean {
+  return checkoutFormHasBeenSubmitted && !formFieldIsValid(field.id);
 }
 
 export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
@@ -45,13 +47,55 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
   return [];
 };
 
-export const formIsValid = (formClassName: string) => {
-  const form = document.querySelector(`.${formClassName}`);
-  if (form && form instanceof HTMLFormElement) {
-    return form.checkValidity();
+export const getForm: string => Object | null =
+  (formName: string) => document.querySelector(`.${formName}`);
+
+const getInvalidReason = (validityState: ValidityState) => {
+  if (validityState.valueMissing) {
+    return '-value-missing';
+  } else if (validityState.patternMismatch) {
+    return '-pattern-mismatch';
+  }
+  return '';
+};
+
+export const invalidReason = (form: Object | null): string => {
+  try {
+    let invalidReasonString = '';
+    if (form instanceof HTMLFormElement) {
+      [...form.elements].forEach((element) => {
+        if ((element instanceof HTMLInputElement || element instanceof HTMLSelectElement)
+          && !element.checkValidity()) {
+          invalidReasonString += `-${element.id}${getInvalidReason(element.validity)}`;
+        }
+      });
+    } else {
+      invalidReasonString = 'form-not-instance-of-html-element';
+    }
+    return invalidReasonString;
+  } catch (e) {
+    return e;
+  }
+};
+
+export const formElementIsValid = (formElement: Object | null) => {
+  if (formElement && formElement instanceof HTMLFormElement) {
+    return formElement.checkValidity();
   }
   return false;
 };
+
+export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
+
+export function checkoutFormShouldSubmit(
+  contributionType: Contrib,
+  isSignedIn: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  form: Object | null,
+) {
+  return formElementIsValid(form)
+    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
+}
 
 export function getTitle(contributionType: ContributionType): string {
 
