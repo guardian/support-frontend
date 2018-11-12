@@ -12,6 +12,7 @@ import Footer from 'components/footer/footer';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import GridImage from 'components/gridImage/gridImage';
 import SvgWeeklyHeroCircles from 'components/svgs/weeklyHeroCircles';
 import SvgChevron from 'components/svgs/chevron';
@@ -74,7 +75,7 @@ const content = (
         overheading="The Guardian Weekly subscriptions"
         heading="Seven days of international news curated to give you a clearer global perspective."
         modifierClasses={['weekly']}
-        cta={<WeeklyCta icon={<SvgChevron />} href="#subscribe">See Subscription options</WeeklyCta>}
+        cta={<WeeklyCta trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</WeeklyCta>}
       >
         <GridImage
           gridId="weeklyLandingHero"
