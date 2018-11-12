@@ -104,7 +104,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
 
       val settingsProvider = mock[SettingsProvider]
       when(settingsProvider.settings()).thenReturn(
-        Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On, On))
+        Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
       )
 
       new RegularContributions(
