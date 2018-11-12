@@ -39,7 +39,7 @@ export default function SubscribeCta() {
       </p>
       <CtaLink
         text="Choose a subscription"
-        url="#"
+        url="/subscribe"
         accessibilityHint="Choose a subscription"
       />
     </section>

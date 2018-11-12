@@ -17,7 +17,7 @@ export default function ContributeCta() {
       </p>
       <CtaLink
         text="Make a contribution"
-        url="#"
+        url="/contribute"
         accessibilityHint="Make a contribution"
       />
     </section>

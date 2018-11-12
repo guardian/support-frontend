@@ -3,7 +3,11 @@ import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import SvgChevronUp from 'components/svgs/chevronUp';
 
-export default function WhySupportMatters() {
+type PropTypes = {|
+  ctaUrl: string
+|};
+
+export default function WhySupportMatters(props: PropTypes) {
   return (
     <PageSection heading="Why your support matters" modifierClass="why-support-matters">
       <p>
@@ -13,7 +17,7 @@ export default function WhySupportMatters() {
       </p>
       <CtaLink
         text="See supporter options"
-        url="#"
+        url={props.ctaUrl}
         accessibilityHint="See the options for becoming a supporter"
         svg={<SvgChevronUp />}
         modifierClasses={['see-supporter-options']}

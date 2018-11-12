@@ -24,9 +24,9 @@ const content = (
   <Provider store={store}>
     <Page header={<SimpleHeader />} footer={<Footer disclaimer privacyPolicy/>}>
       <PlainIntroduction />
-      <WhySupportMatters />
+      <WhySupportMatters ctaUrl={"#ways-to-support"}/>
       <BeyondHeadlines />
-      <WaysToSupport />
+      <WaysToSupport id={"ways-to-support"}/>
       <PatronsEventsContainer />
     </Page>
   </Provider>
