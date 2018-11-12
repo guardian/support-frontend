@@ -21,8 +21,12 @@ export type FormFields = {|
   telephone: string,
 |};
 
-type PageState = {|
+type CheckoutState = {
   stage: Stage,
+}
+
+type PageState = {|
+  checkout: CheckoutState,
   ...FormFields,
   marketingConsent: MarketingConsentState,
 |};
@@ -30,6 +34,7 @@ type PageState = {|
 export type State = {
   common: CommonState,
   page: PageState,
+  marketingConsent: MarketingConsentState,
 };
 
 export type Action =
@@ -69,15 +74,17 @@ function formFieldsSelector(state: State): FormFields {
 // ----- Reducer ----- //
 
 const initialState = {
-  stage: 'checkout',
+  checkout: {
+    stage: 'checkout',
+  },
   firstName: '',
   lastName: '',
   country: null,
   telephone: '',
   marketingConsent: {
-    error: false,
     confirmOptIn: null,
-  },
+    error: false,
+  }
 };
 
 function reducer(state: PageState = initialState, action: Action): PageState {
@@ -85,7 +92,7 @@ function reducer(state: PageState = initialState, action: Action): PageState {
   switch (action.type) {
 
     case 'SET_STAGE':
-      return { ...state, stage: action.stage };
+      return { ...state, checkout: { stage: action.stage } };
 
     case 'SET_FIRST_NAME':
       return { ...state, firstName: action.firstName };
