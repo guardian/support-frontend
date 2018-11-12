@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
-import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
+import countrySwitcherHeaderContainerWithTracking from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainerWithTracking';
 import Footer from 'components/footer/footer';
 
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -47,7 +47,7 @@ const reactElementId: {
   International: 'weekly-landing-page-int',
 };
 
-const CountrySwitcherHeader = countrySwitcherHeaderContainer(
+const CountrySwitcherHeader = countrySwitcherHeaderContainerWithTracking(
   '/subscribe/weekly',
   [
     'GBPCountries',
@@ -58,6 +58,7 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainer(
     'NZDCountries',
     'International',
   ],
+  'GuardianWeekly',
 );
 
 // ----- Render ----- //
