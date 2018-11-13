@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
 
 import { countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import type { PropTypes } from './countrySwitcherHeader';
 
