@@ -67,9 +67,9 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        headline="The essential new Weekly magazine from The&nbsp;Guardian"
-        overheading="The Guardian Weekly subscriptions"
-        heading="Seven days of international news curated to give you a clearer global perspective."
+        headline="Become a Guardian Weekly subscriber"
+        overheading="Guardian Weekly subscriptions"
+        heading="Get a clearer, global perspective on the issues that matter, in one magazine."
         modifierClasses={['weekly']}
         cta={<WeeklyCta icon={<SvgChevron />} href="#subscribe">See Subscription options</WeeklyCta>}
       >
@@ -82,10 +82,7 @@ const content = (
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
-          <p className={largeParagraphClassName}>Inside the magazine you’ll find quality, independent journalism
-            including opinion, insight, culture and access to new puzzles each week.
-            Subscribe today and get an expert view on some of the most challenging
-            issues of today, as well as free delivery, wherever you are in the world.
+          <p className={largeParagraphClassName}>Get closer to the issues that have made the world’s week. Inside the essential magazine from The Guardian, you’ll find expert opinion, insight and culture - all curated to bring you an independent, progressive perspective. You’ll also discover challenging new puzzles every week. Subscribe today and get free delivery, wherever you are in the world.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
@@ -93,24 +90,23 @@ const content = (
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
         <div className={outsetClassName}>
           <WeeklyFeatureList features={[
-            { title: 'Up to 30% off the retail cover price' },
+            { title: 'Up to 35% off the retail cover price' },
             { title: 'Free international shipping' },
             { title: 'A weekly email newsletter from the editor' },
-            { title: 'Access to all editions at any time, on any device, through PressReader.' },
+            { title: 'Access to every edition on any device, through PressReader' },
           ]}
           />
         </div>
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" id="subscribe">
-        <ProductPageTextBlock title="Get your Guardian Weekly, subscribe now">
-          <p>How would you like to pay for your Guardian Weekly?</p>
+        <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
+          <p>Choose how you’d like to pay</p>
         </ProductPageTextBlock>
         <WeeklyForm />
       </ProductPageContentBlock>
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Buying as a gift?">
-          <p className={largeParagraphClassName}>If you’d like to buy a Guardian Weekly subscription as a gift,
-          just get in touch with your local customer service team.
+        <ProductPageTextBlock title="Gift subscriptions">
+          <p className={largeParagraphClassName}>A Guardian Weekly subscription makes a great gift. To buy one, just get in touch with your local customer service team:
           </p>
         </ProductPageTextBlock>
         <div className={outsetClassName}>
