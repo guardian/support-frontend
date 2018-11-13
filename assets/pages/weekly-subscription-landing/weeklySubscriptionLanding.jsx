@@ -18,6 +18,7 @@ import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
+import { className as bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlockBg';
 import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import WeeklyFeatureList from './components/weeklyFeatureList';
@@ -108,7 +109,7 @@ const content = (
         <ProductPageTextBlock title="Get your Guardian Weekly, subscribe now">
           <p>How would you like to pay for your Guardian Weekly?</p>
         </ProductPageTextBlock>
-        <WeeklyForm />
+        <WeeklyForm ctaClassNameForBg={bgClassName} />
       </ProductPageContentBlock>
       <ProductPageContentBlock type="grey">
         <ProductPageTextBlock title="Buying as a gift?">

@@ -24,12 +24,13 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   redirectToWeeklyPageAction: () => void,
   setPeriodAction: (WeeklyBillingPeriod) => Action,
+  ctaClassNameForBg?: string | null,
 |};
 
 // ----- Render ----- //
 
 const WeeklyForm = ({
-  selectedPeriod, countryGroupId, redirectToWeeklyPageAction, setPeriodAction,
+  selectedPeriod, countryGroupId, redirectToWeeklyPageAction, setPeriodAction, ctaClassNameForBg,
 }: PropTypes) => (
   <form
     className="weekly-form-wrap"
@@ -61,10 +62,11 @@ const WeeklyForm = ({
         })}
       </div>
     </ProductPageContentBlockOutset>
-
-    <WeeklyCta disabled={selectedPeriod === null} type="submit">
-      Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
-    </WeeklyCta>
+    <div className={['weekly-form__cta', ctaClassNameForBg].join(' ')}>
+      <WeeklyCta disabled={selectedPeriod === null} type="submit">
+        Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
+      </WeeklyCta>
+    </div>
 
     <div className="weekly-form__info">
       <SvgInfo />
@@ -72,6 +74,10 @@ const WeeklyForm = ({
     </div>
   </form>
 );
+
+WeeklyForm.defaultProps = {
+  ctaClassNameForBg: null,
+};
 
 // ----- State/Props Maps ----- //
 

@@ -14,9 +14,9 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-export const className = 'component-product-page-content-block__outset';
+export const className = 'component-product-page-content-block__bg';
 
-const ProductPageContentBlockOutset = ({
+const ProductPageContentBlockBg = ({
   children,
 }: PropTypes) => (
   <div className={className}>
@@ -24,4 +24,4 @@ const ProductPageContentBlockOutset = ({
   </div>
 );
 
-export default ProductPageContentBlockOutset;
+export default ProductPageContentBlockBg;

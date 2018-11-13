@@ -5,7 +5,9 @@
 }
 
 .component-product-page-content-block--grey {
-  background-color: gu-colour(garnett-neutral-3);
+  &, .component-product-page-content-block__bg {
+    background-color: gu-colour(garnett-neutral-3);
+  }
   .component-left-margin-section__content {
     border-left: 0;
     margin-left: -1px;
@@ -13,8 +15,10 @@
 }
 
 .component-product-page-content-block--feature {
-  background-color: gu-colour(header-dark);
   color: gu-colour(garnett-neutral-5);
+  &, .component-product-page-content-block__bg {
+    background-color: gu-colour(header-dark);
+  }
   .component-left-margin-section__content {
     border-color: gu-colour(header-border);
   }
@@ -24,8 +28,10 @@
 }
 
 .component-product-page-content-block--dark {
-  background-color: gu-colour(garnett-neutral-7);
   color: gu-colour(garnett-neutral-5);
+  &, .component-product-page-content-block__bg {
+    background-color: gu-colour(garnett-neutral-7);
+  }
   .component-left-margin-section__content {
     border-color: gu-colour(garnett-neutral-5);
   }
