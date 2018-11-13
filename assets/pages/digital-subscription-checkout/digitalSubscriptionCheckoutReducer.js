@@ -4,9 +4,10 @@
 
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
-import { marketingConsentReducerFor, type State as MarketingConsentState } from "components/marketingConsent/marketingConsentReducer";
+import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { createUserReducer } from 'helpers/user/userReducer';
+import { type User as UserState } from 'helpers/user/userReducer'; // <-- for when we need it (to shut the Linter up)
+import { marketingConsentReducerFor, type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { type IsoCountry, fromString } from 'helpers/internationalisation/country';
 
 
@@ -23,18 +24,18 @@ export type FormFields = {|
 
 type CheckoutState = {
   stage: Stage,
+  ...FormFields,
 }
 
 type PageState = {|
   checkout: CheckoutState,
-  ...FormFields,
+  user: UserState,
   marketingConsent: MarketingConsentState,
 |};
 
 export type State = {
   common: CommonState,
   page: PageState,
-  marketingConsent: MarketingConsentState,
 };
 
 export type Action =
@@ -63,10 +64,10 @@ export type FormActionCreators = typeof formActionCreators;
 
 function formFieldsSelector(state: State): FormFields {
   return {
-    firstName: state.page.firstName,
-    lastName: state.page.lastName,
-    country: state.page.country,
-    telephone: state.page.telephone,
+    firstName: state.page.checkout.firstName,
+    lastName: state.page.checkout.lastName,
+    country: state.page.checkout.country,
+    telephone: state.page.checkout.telephone,
   };
 }
 
@@ -74,25 +75,19 @@ function formFieldsSelector(state: State): FormFields {
 // ----- Reducer ----- //
 
 const initialState = {
-  checkout: {
-    stage: 'checkout',
-  },
+  stage: 'checkout',
   firstName: '',
   lastName: '',
   country: null,
   telephone: '',
-  marketingConsent: {
-    confirmOptIn: null,
-    error: false,
-  }
 };
 
-function reducer(state: PageState = initialState, action: Action): PageState {
+function checkoutReducer(state: CheckoutState = initialState, action: Action): CheckoutState {
 
   switch (action.type) {
 
     case 'SET_STAGE':
-      return { ...state, checkout: { stage: action.stage } };
+      return { ...state, stage: action.stage };
 
     case 'SET_FIRST_NAME':
       return { ...state, firstName: action.firstName };
@@ -113,12 +108,11 @@ function reducer(state: PageState = initialState, action: Action): PageState {
 
 }
 
-function initReducer(countryGroupId: CountryGroupId) {
-  const checkoutState = reducer;
-  const userState = createUserReducer(countryGroupId);
+function initReducer(cgId: CountryGroupId = detect()) {
+  const userState = createUserReducer(cgId);
   const marketingState = marketingConsentReducerFor('DIGITAL_SUBSCRIPTION_CHECKOUT');
   return combineReducers({
-    checkout: checkoutState,
+    checkout: checkoutReducer,
     user: userState,
     marketingConsent: marketingState,
   });

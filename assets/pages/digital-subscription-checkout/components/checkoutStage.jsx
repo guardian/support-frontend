@@ -14,11 +14,11 @@ import ProductHero, {
 } from 'components/productHero/productHero';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
 import CheckoutForm from './checkoutForm';
-import { type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 
 
 // ----- Types ----- //

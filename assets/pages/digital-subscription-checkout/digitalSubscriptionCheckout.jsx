@@ -53,9 +53,7 @@ const content = (
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </Footer>}
     >
-      <CheckoutStage
-        countryGroupId={countryGroupId}
-      />
+      <CheckoutStage />
     </Page>
   </Provider>
 );
