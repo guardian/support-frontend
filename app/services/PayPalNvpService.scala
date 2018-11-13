@@ -25,10 +25,11 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     val msg = s"NVPResponse: $response"
 
     retrieveNVPParam(response, "ACK") match {
-      case "Success" => SafeLogger.info("Successful PayPal NVP request")
-      case "SuccessWithWarning" => SafeLogger.warn(s"Response (with warning) from PayPal was: $msg")
-      case "Failure" => SafeLogger.error(scrub"Failure response from PayPal was: $msg")
-      case "FailureWithWarning" => SafeLogger.error(scrub"Response from PayPal was: $msg")
+      case Some("Success") => SafeLogger.info("Successful PayPal NVP request")
+      case Some("SuccessWithWarning") => SafeLogger.warn(s"Response (with warning) from PayPal was: $msg")
+      case Some("Failure") => SafeLogger.error(scrub"Failure response from PayPal was: $msg")
+      case Some("FailureWithWarning") => SafeLogger.error(scrub"Response from PayPal was: $msg")
+      case _ => SafeLogger.warn("No ACK parameter was present in the response")
     }
 
   }
@@ -56,9 +57,14 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
 
   // Takes an NVP response and retrieves a given parameter as a string.
   private def retrieveNVPParam(response: QueryString, paramName: String) =
-    response.paramMap(paramName).head
+    response.paramMap(paramName).headOption match {
+      case None =>
+        SafeLogger.warn(s"Parameter $paramName was missing from the NVP response - $response")
+        None
+      case Some(value) => Some(value)
+    }
 
-  def retrieveEmail(baid: String): Future[String] = {
+  def retrieveEmail(baid: String): Future[Option[String]] = {
     val params = Map(
       "METHOD" -> "BillAgreementUpdate",
       "REFERENCEID" -> baid
@@ -70,7 +76,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   }
 
   // Sets up a payment by contacting PayPal and returns the token.
-  def retrieveToken(returnUrl: String, cancelUrl: String)(billingDetails: PayPalBillingDetails): Future[String] = {
+  def retrieveToken(returnUrl: String, cancelUrl: String)(billingDetails: PayPalBillingDetails): Future[Option[String]] = {
     val paymentParams = Map(
       "METHOD" -> "SetExpressCheckout",
       "PAYMENTREQUEST_0_PAYMENTACTION" -> "SALE",
@@ -91,7 +97,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   }
 
   // Sends a request to PayPal to create billing agreement and returns BAID.
-  def createBillingAgreement(token: Token): Future[String] = {
+  def createBillingAgreement(token: Token): Future[Option[String]] = {
     val agreementParams = Map(
       "METHOD" -> "CreateBillingAgreement",
       "TOKEN" -> token.token
