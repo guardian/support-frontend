@@ -71,7 +71,7 @@ function FeaturedProductAb(props: PropTypes) {
     optimizeExperiments,
   );
 
-  const product = getProduct(subsLinks, countryGroupId) || getProducts(subsLinks, countryGroupId).GuardianWeekly;
+  const product = getProduct(subsLinks, countryGroupId) || getProducts(subsLinks, countryGroupId).Paper;
 
   return product ? (
     <FeaturedProductHero

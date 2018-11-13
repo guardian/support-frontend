@@ -5,10 +5,11 @@ import React, { type Node } from 'react';
 
 import { type SubsUrls } from 'helpers/externalLinks';
 import { getQueryParameter } from 'helpers/url';
-import { type SubscriptionProduct } from 'helpers/subscriptions';
+import { discountedDisplayPrice, type SubscriptionProduct } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import GridPicture from 'components/gridPicture/gridPicture';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 
 // ----- Types ----- //
@@ -95,6 +96,22 @@ const paperImage = (
     fallbackImgType="png"
   />);
 
+const getDigitalPackSubHeadingAndBody = (countryGroupId: CountryGroupId) => {
+  if (flashSaleIsActive('DigitalPack')) {
+    return {
+      subheadingText: 'Save 50% for three months',
+      bodyText: `Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. ${discountedDisplayPrice('DigitalPack', countryGroupId)} for your first three months.`,
+    };
+  }
+
+  return {
+    subheadingText: 'Screen time well spent',
+    bodyText: (countryGroupId === 'GBPCountries') ?
+      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper.' :
+      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper.',
+  };
+};
+
 
 const getProducts = (
   subsLinks: SubsUrls,
@@ -103,10 +120,7 @@ const getProducts = (
   DigitalPack: {
     name: 'DigitalPack',
     headingText: 'Digital Pack',
-    subheadingText: 'Screen time well spent',
-    bodyText: (countryGroupId === 'GBPCountries') ?
-      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper.' :
-      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper.',
+    ...getDigitalPackSubHeadingAndBody(countryGroupId),
     link: subsLinks.DigitalPack,
     image: dpImage,
   },
@@ -114,7 +128,8 @@ const getProducts = (
     name: 'Paper',
     headingText: 'Paper subscription',
     subheadingText: 'Enjoy every word for less',
-    bodyText: 'Save on The Guardian and The Observer retail price all year round.',
+    bodyText: flashSaleIsActive('Paper') ? 'Save 50% for three months on subscriptions to The Guardian and The Observer' :
+      'Save on The Guardian and The Observer retail price all year round.',
     link: subsLinks.Paper,
     image: paperImage,
   },

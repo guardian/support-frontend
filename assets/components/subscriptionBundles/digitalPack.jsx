@@ -5,11 +5,12 @@
 import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
-import { flashSaleIsActive, getDiscountedPrice } from 'helpers/flashSale';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 import { type ImageId } from 'helpers/theGrid';
 import {
-  type ComponentAbTest, discountedDisplayPrice,
+  type ComponentAbTest,
+  discountedDisplayPrice,
   displayPrice,
   sendTrackingEventsOnClick,
 } from 'helpers/subscriptions';

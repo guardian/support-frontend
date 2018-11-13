@@ -143,9 +143,9 @@ const defaultBillingPeriods: {
 
 // ----- Functions ----- //
 
-function fixDecimals(number: Number) {
+function fixDecimals(number: number): string {
   if (Number.isInteger(number)) {
-    return number;
+    return number.toString();
   }
   return number.toFixed(2);
 }
