@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import SvgInfo from 'components/svgs/information';
 import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
+import { outsetClassName, bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 
 import WeeklyCta from './weeklyCta';
 import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
@@ -38,7 +38,7 @@ const WeeklyForm = ({
       redirectToWeeklyPageAction();
     }}
   >
-    <ProductPageContentBlockOutset>
+    <div className={outsetClassName}>
       <div className="weekly-form">
         {Object.keys(billingPeriods).map((type: WeeklyBillingPeriod) => {
         const {
@@ -60,11 +60,12 @@ const WeeklyForm = ({
           );
         })}
       </div>
-    </ProductPageContentBlockOutset>
-
-    <WeeklyCta disabled={selectedPeriod === null} type="submit">
-      Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
-    </WeeklyCta>
+    </div>
+    <div className={['weekly-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
+      <WeeklyCta disabled={selectedPeriod === null} type="submit">
+        Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
+      </WeeklyCta>
+    </div>
 
     <div className="weekly-form__info">
       <SvgInfo />

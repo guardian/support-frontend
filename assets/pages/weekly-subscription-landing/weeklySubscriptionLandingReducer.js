@@ -22,7 +22,7 @@ export const billingPeriods = {
   sixweek: {
     title: '6 for 6',
     offer: 'Introductory offer',
-    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'sixweek')} for the first 6 issues (then quarterly)`,
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'sixweek')} for the first 6 issues (then ${getPrice(countryGroupId, 'quarter')} quarterly)`,
   },
   quarter: {
     title: 'Quarterly',
@@ -47,8 +47,10 @@ export type State = {
 
 // ----- Reducer ----- //
 
+const promoInUrl = getQueryParameter('promo');
+
 const initialState: PageState = {
-  period: getQueryParameter('promo_6for6') ? 'sixweek' : null,
+  period: promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year' ? promoInUrl : null,
 };
 
 function reducer(state: PageState = initialState, action: Action): PageState {

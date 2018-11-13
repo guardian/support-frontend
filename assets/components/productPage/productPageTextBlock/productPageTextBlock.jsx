@@ -15,6 +15,8 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
+export const largeParagraphClassName = 'component-product-page-text-block__large';
+
 const ProductPageTextBlock = ({ title, children, headingSize }: PropTypes) => (
   <div className="component-product-page-text-block">
     <Heading className="component-product-page-text-block__heading" size={headingSize}>{title}</Heading>

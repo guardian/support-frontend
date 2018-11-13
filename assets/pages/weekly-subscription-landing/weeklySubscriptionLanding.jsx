@@ -14,12 +14,10 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import GridImage from 'components/gridImage/gridImage';
-import SvgWeeklyHeroCircles from 'components/svgs/weeklyHeroCircles';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageContentBlock, { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import WeeklyFeatureList from './components/weeklyFeatureList';
 import WeeklyForm from './components/weeklyForm';
@@ -71,69 +69,70 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        headline="The essential new Weekly magazine from The&nbsp;Guardian"
-        overheading="The Guardian Weekly subscriptions"
-        heading="Seven days of international news curated to give you a clearer global perspective."
+        headline="Become a Guardian Weekly subscriber"
+        overheading="Guardian Weekly subscriptions"
+        heading="Get a clearer, global perspective on the issues that matter, in one magazine."
         modifierClasses={['weekly']}
         cta={<WeeklyCta trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</WeeklyCta>}
       >
         <GridImage
           gridId="weeklyLandingHero"
-          srcSizes={[1000, 500]}
+          srcSizes={[946, 473]}
           sizes="(max-width: 740px) 90vw, 600px"
           imgType="png"
         />
-        <SvgWeeklyHeroCircles />
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
-          <p>Inside the magazine you’ll find quality, independent journalism
-            including opinion, insight, culture and access to new puzzles each week.
-            Subscribe today and get an expert view on some of the most challenging
-            issues of today, as well as free delivery, wherever you are in the world.
+          <p className={largeParagraphClassName}>Get closer to the issues that have made
+          the world’s week. Inside the essential magazine from The&nbsp;Guardian, you’ll find
+          expert opinion, insight and culture - all curated to bring you an independent,
+          progressive perspective. You’ll also discover challenging new puzzles every week.
+          Subscribe today and get free delivery, wherever you are in the world.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
-      <ProductPageContentBlock type="grey">
+      <ProductPageContentBlock>
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
-        <ProductPageContentBlockOutset>
+        <div className={outsetClassName}>
           <WeeklyFeatureList features={[
-        { title: 'Up to 30% off the retail cover price' },
-        { title: 'Free international shipping' },
-        { title: 'A weekly email newsletter from the editor' },
-        { title: 'Access to all editions at any time, on any device, through PressReader.' },
-      ]}
+            { title: 'Up to 35% off the retail cover price' },
+            { title: 'Free international shipping' },
+            { title: 'A weekly email newsletter from the editor' },
+            { title: 'Access to every edition on any device, through PressReader' },
+          ]}
           />
-        </ProductPageContentBlockOutset>
+        </div>
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" id="subscribe">
-        <ProductPageTextBlock title="Get your Guardian Weekly, subscribe now">
-          <p>How would you like to pay for your Guardian Weekly?</p>
+        <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
+          <p>Choose how you’d like to pay</p>
         </ProductPageTextBlock>
         <WeeklyForm />
       </ProductPageContentBlock>
-      <ProductPageContentBlock type="grey">
-        <ProductPageTextBlock title="Buying as a gift?">
-          <p>If you’d like to buy a Guardian Weekly subscription as a gift,
-          just get in touch with your local customer service team.
+      <ProductPageContentBlock>
+        <ProductPageTextBlock title="Gift subscriptions">
+          <p className={largeParagraphClassName}>A Guardian Weekly subscription
+          makes a great gift. To&nbsp;buy&nbsp;one, just get in touch with your local customer
+          service team:
           </p>
         </ProductPageTextBlock>
-        <ProductPageContentBlockOutset>
+        <div className={outsetClassName}>
           <WeeklyFeatureList features={[
             { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
             { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
             { title: 'USA and Canada', copy: '+1 917-900-4663' },
           ]}
           />
-        </ProductPageContentBlockOutset>
+        </div>
       </ProductPageContentBlock>
-      <ProductPageContentBlock type="white">
+      <ProductPageContentBlock>
         <ProductPageTextBlock title="Promotion terms and conditions">
-          <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Weekly print subscription services and their terms and conditions - see <a href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">here</a>
+          <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Weekly print subscription services and their terms and conditions - see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">here</a>
           </p>
         </ProductPageTextBlock>
         <ProductPageTextBlock title="Guardian Weekly terms and conditions">
-          <p>Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions see <a href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
+          <p>Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>

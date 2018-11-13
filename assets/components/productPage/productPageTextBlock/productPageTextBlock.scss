@@ -7,9 +7,22 @@
 }
 
 .component-product-page-text-block {
-  max-width: 480px;
+  max-width: 550px;
+  @include mq($from: tablet) {
+    width: 75%;
+  }
+  @include mq($from: desktop) {
+    width: 50%;
+  }
 }
 
 .component-product-page-text-block a {
   color: inherit;
+}
+
+.component-product-page-text-block__large {
+  font-size: 24px;
+  font-weight: 200;
+  line-height: 1.16;
+  font-family: $gu-headline;
 }
