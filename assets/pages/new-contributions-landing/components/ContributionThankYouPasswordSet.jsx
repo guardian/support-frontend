@@ -5,6 +5,7 @@
 import React from 'react';
 import CtaLink from 'components/ctaLink/ctaLink';
 import MarketingConsent from '../components/MarketingConsent';
+import ContributionsSurvey from '../components/ContributionsSurvey';
 
 // ----- Render ----- //
 
@@ -18,6 +19,7 @@ function ContributionThankYouPasswordSet() {
           preferences.
         </p>
       </section>
+      <ContributionsSurvey />
       <MarketingConsent />
       <div className="confirmation confirmation--backtothegu">
         <CtaLink
