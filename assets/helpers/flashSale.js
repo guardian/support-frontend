@@ -2,7 +2,6 @@
 
 import { getQueryParameter } from 'helpers/url';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getProductPrice } from 'helpers/subscriptions';
 
 import type { SubscriptionProduct } from './subscriptions';
 
@@ -10,7 +9,7 @@ import type { SubscriptionProduct } from './subscriptions';
 function getEndTime(): number { return new Date(2018, 10, 5, 0, 0).getTime(); }
 
 // Which products are included in the current sale?
-const includedProducts: SubscriptionProduct[] = ['DigitalPack'];
+const includedProducts: SubscriptionProduct[] = ['DigitalPack', 'Paper', 'PaperAndDigital'];
 
 function flashSaleIsActive(product: SubscriptionProduct): boolean {
   // Days are 1 based, months are 0 based
@@ -38,12 +37,6 @@ const saleDetails: SaleDetails = {
   DigitalPack: {
     promoCode: 'DDPO80X',
     intcmp: '',
-    prices: {
-      GBPCountries: 6,
-      UnitedStates: 10,
-      AUDCountries: 10.75,
-      International: 10,
-    },
   },
   Paper: {
     promoCode: 'GFS80G',
@@ -71,13 +64,6 @@ function getCountdownAbTestParticipation(): boolean {
   return getQueryParameter('ab_timer') === 'variant';
 }
 
-function getDiscountedPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  if (flashSaleIsActive(product) && saleDetails[product].prices && saleDetails[product].prices[countryGroupId]) {
-    return `${saleDetails[product].prices[countryGroupId]}/month`;
-  }
-  return getProductPrice(product, countryGroupId);
-}
-
 function getPromoCode(product: SubscriptionProduct, defaultCode: string): string {
   if (flashSaleIsActive(product)) {
     return saleDetails[product].promoCode;
@@ -93,7 +79,6 @@ function getIntcmp(product: SubscriptionProduct, intcmp: ?string, defaultIntcmp:
 }
 
 export {
-  getDiscountedPrice,
   flashSaleIsActive,
   getPromoCode,
   getIntcmp,

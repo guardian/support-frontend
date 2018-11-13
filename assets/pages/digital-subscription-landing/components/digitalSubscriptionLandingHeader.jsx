@@ -15,9 +15,9 @@ import GridPicture, {
 import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { displayPrice } from 'helpers/subscriptions';
+import { discountedDisplayPrice, displayPrice } from 'helpers/subscriptions';
 import { currencies, detect } from 'helpers/internationalisation/currency';
-import { flashSaleIsActive, getDiscountedPrice, getCountdownAbTestParticipation } from 'helpers/flashSale';
+import { flashSaleIsActive, getCountdownAbTestParticipation } from 'helpers/flashSale';
 import CtaSwitch from './ctaSwitch';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
@@ -136,7 +136,7 @@ function getFlashSaleCopy(countryGroupId: CountryGroupId) {
   const currency = currencies[detect(countryGroupId)].glyph;
   return {
     heading: 'Digital Pack Sale',
-    subHeading: `${currency}${getDiscountedPrice('DigitalPack', countryGroupId)} for three months, then ${displayPrice('DigitalPack', countryGroupId)}`,
+    subHeading: `${currency}${discountedDisplayPrice('DigitalPack', countryGroupId)} for three months, then ${displayPrice('DigitalPack', countryGroupId)}`,
   };
 }
 

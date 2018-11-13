@@ -9,8 +9,8 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getDiscountedPrice, getCountdownAbTestParticipation } from 'helpers/flashSale';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { getCountdownAbTestParticipation } from 'helpers/flashSale';
+import { discountedDisplayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { ComponentAbTest } from 'helpers/subscriptions';
@@ -63,8 +63,6 @@ function FlashSaleDigitalPack(props: PropTypes) {
     optimizeExperiments,
   );
 
-  const currency = currencies[detect(countryGroupId)].glyph;
-
   const cta = (
     <CtaLink
       text="Subscribe now"
@@ -103,7 +101,7 @@ function FlashSaleDigitalPack(props: PropTypes) {
     <FeaturedProductHero
       headingText="Digital Pack"
       subheadingText="Save 50% for three months"
-      bodyText={`Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. ${currency}${getDiscountedPrice('DigitalPack', countryGroupId)} for your first three months.`}
+      bodyText={`Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. ${discountedDisplayPrice('DigitalPack', countryGroupId)} for your first three months.`}
       image={image}
       cta={cta}
       headingSize={headingSize}

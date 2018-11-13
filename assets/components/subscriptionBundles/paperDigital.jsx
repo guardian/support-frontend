@@ -3,15 +3,14 @@
 import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
-import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ComponentAbTest } from 'helpers/subscriptions';
+import { discountedDisplayPrice, displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   url: string,
-  countryGroupId: CountryGroupId,
   abTest: ComponentAbTest | null,
   gridId: 'paperDigitalCirclePink' | 'paperDigitalCircleOrange'
 |};
@@ -19,17 +18,31 @@ type PropTypes = {|
 
 // ----- Component ----- //
 
+function getCopy() {
+  if (flashSaleIsActive('Paper')) {
+    return {
+      subHeading: `from ${discountedDisplayPrice('PaperAndDigital', 'GBPCountries')}`,
+      description: 'Save 50% for three months on a combined paper and digital subscription, then the standard subscription price.',
+    };
+  }
+  return {
+    subHeading: `from ${displayPrice('PaperAndDigital', 'GBPCountries')}`,
+    description: 'All the benefits of a paper subscription, plus access to the digital pack',
+  };
+}
+
 export default function PaperDigital(props: PropTypes) {
+  const copy = getCopy();
   return (
 
     <SubscriptionBundle
       modifierClass="paper-digital"
       heading="Paper+Digital"
-      subheading={`from ${displayPrice('PaperAndDigital', props.countryGroupId)}`}
+      subheading={copy.subHeading}
       headingSize={3}
       benefits={{
         list: false,
-        copy: 'All the benefits of a paper subscription, plus access to the digital pack',
+        copy: copy.description,
       }}
       gridImage={{
         gridId: props.gridId,

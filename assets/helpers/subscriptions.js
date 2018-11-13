@@ -67,6 +67,25 @@ const subscriptionPricesForDefaultBillingPeriod: {
   },
 };
 
+const discountPricesForDefaultBillingPeriod: {
+  [SubscriptionProduct]: {
+    [CountryGroupId]: number,
+  }
+} = {
+  DigitalPack: {
+    GBPCountries: 6,
+    UnitedStates: 10,
+    AUDCountries: 10.75,
+    International: 10,
+  },
+  Paper: {
+    GBPCountries: 5.40,
+  },
+  PaperAndDigital: {
+    GBPCountries: 10.81,
+  },
+};
+
 const subscriptionPricesForGuardianWeekly: {
   [CountryGroupId]: {
     [WeeklyBillingPeriod]: number,
@@ -124,12 +143,29 @@ const defaultBillingPeriods: {
 
 // ----- Functions ----- //
 
+function fixDecimals(number: Number) {
+  if (Number.isInteger(number)) {
+    return number;
+  }
+  return number.toFixed(2);
+}
+
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  return subscriptionPricesForDefaultBillingPeriod[product][countryGroupId].toFixed(2);
+  return fixDecimals(subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]);
 }
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = getProductPrice(product, countryGroupId);
+  return `${currency}${price}/${defaultBillingPeriods[product]}`;
+}
+
+function getDiscountedPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  return fixDecimals(discountPricesForDefaultBillingPeriod[product][countryGroupId]);
+}
+
+function discountedDisplayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  const currency = currencies[detect(countryGroupId)].glyph;
+  const price = getDiscountedPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
@@ -191,6 +227,7 @@ function sendTrackingEventsOnClick(
 export {
   sendTrackingEventsOnClick,
   displayPrice,
+  discountedDisplayPrice,
   getProductPrice,
   getWeeklyProductPrice,
 };

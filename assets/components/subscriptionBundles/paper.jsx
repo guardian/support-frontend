@@ -2,32 +2,45 @@
 
 import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ComponentAbTest } from 'helpers/subscriptions';
-import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { discountedDisplayPrice, displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   url: string,
-  countryGroupId: CountryGroupId,
   abTest: ComponentAbTest | null,
 |};
 
 
 // ----- Component ----- //
 
+function getCopy() {
+  if (flashSaleIsActive('Paper')) {
+    return {
+      subHeading: `from ${discountedDisplayPrice('Paper', 'GBPCountries')}`,
+      description: 'Save 50% for three months on subscriptions to The Guardian and The Observer, then the standard subscription price.',
+    };
+  }
+  return {
+    subHeading: `from ${displayPrice('Paper', 'GBPCountries')}`,
+    description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
+  };
+}
+
 export default function Paper(props: PropTypes) {
+  const copy = getCopy();
   return (
     <SubscriptionBundle
       modifierClass="paper"
       heading="Paper"
-      subheading={`from ${displayPrice('Paper', props.countryGroupId)}`}
+      subheading={copy.subHeading}
       headingSize={3}
       benefits={{
         list: false,
-        copy: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
+        copy: copy.description,
       }}
       gridImage={{
         gridId: 'paperCircle',
