@@ -35,7 +35,6 @@
 .weekly-form__cta {
   @include mq($until: tablet) {
     transition: .4s;
-    opacity: 1;
     transform: translateY(0);
     position: sticky;
     bottom: 0;
@@ -43,9 +42,7 @@
     margin: $gu-v-spacing * -1 $gu-h-spacing * -.5;
     padding: $gu-v-spacing $gu-h-spacing * .5;
     &[data-disabled] {
-      opacity: 0;
-      transform: translateY(100%);
-      pointer-events: none;
+      position: static;
     }
   }
 }
