@@ -13,7 +13,6 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import GridImage from 'components/gridImage/gridImage';
-import SvgWeeklyHeroCircles from 'components/svgs/weeklyHeroCircles';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
@@ -81,7 +80,6 @@ const content = (
           sizes="(max-width: 740px) 90vw, 600px"
           imgType="png"
         />
-        <SvgWeeklyHeroCircles />
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
@@ -96,11 +94,11 @@ const content = (
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
         <ProductPageContentBlockOutset>
           <WeeklyFeatureList features={[
-        { title: 'Up to 30% off the retail cover price' },
-        { title: 'Free international shipping' },
-        { title: 'A weekly email newsletter from the editor' },
-        { title: 'Access to all editions at any time, on any device, through PressReader.' },
-      ]}
+            { title: 'Up to 30% off the retail cover price' },
+            { title: 'Free international shipping' },
+            { title: 'A weekly email newsletter from the editor' },
+            { title: 'Access to all editions at any time, on any device, through PressReader.' },
+          ]}
           />
         </ProductPageContentBlockOutset>
       </ProductPageContentBlock>
