@@ -13,6 +13,8 @@ import { createUserReducer, type User as UserState } from 'helpers/user/userRedu
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import { combineReducers } from 'redux';
 
+import { type FormError } from 'components/forms/formHOCs/withError';
+
 
 // ----- Types ----- //
 
@@ -25,18 +27,22 @@ export type FormFields = {|
   telephone: string,
 |};
 
+export type FormField = $Keys<FormFields>;
+
 type CheckoutState = {|
   stage: string,
   firstName: string,
   lastName: string,
   country: ?string,
   telephone: string,
+  errors: FormError<FormField>[],
 |}
 
 type PageState = {|
   form: {
     stage: Stage,
     ...FormFields,
+    errors: FormError<FormField>[],
   },
   user: UserState,
   csrf: CsrfState,
@@ -90,6 +96,7 @@ const initialState = {
   lastName: '',
   country: null,
   telephone: '',
+  errors: [],
 };
 
 function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
