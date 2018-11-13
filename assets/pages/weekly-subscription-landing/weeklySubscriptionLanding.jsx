@@ -83,9 +83,9 @@ const content = (
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
           <p className={largeParagraphClassName}>Inside the essential magazine from
-          The Guardian, you’ll find expert opinion, insight and culture, curated to
-          bring you a progressive, international perspective. You’ll also discover
-          challenging new puzzles every week. Subscribe today and get free delivery, worldwide
+          The Guardian, you&#39;ll find expert opinion, insight and culture, curated to
+          bring you a progressive, international perspective. You&#39;ll also discover
+          challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
