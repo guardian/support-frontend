@@ -144,17 +144,21 @@ const getProducts = (
 });
 
 const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Product => {
+  const products = getProducts(subsLinks, countryGroupId);
   switch (getQueryParameter('ab_product')) {
     case 'DigitalPack':
-      return getProducts(subsLinks, countryGroupId).DigitalPack;
+      return products.DigitalPack;
     case 'Paper':
-      return getProducts(subsLinks, countryGroupId).Paper;
+      return products.Paper;
     case 'GuardianWeekly':
-      return getProducts(subsLinks, countryGroupId).GuardianWeekly;
+      return products.GuardianWeekly;
     default:
-      return null;
+      if (countryGroupId === 'GBPCountries' && flashSaleIsActive('Paper')) {
+        return products.Paper;
+      }
+      return products.GuardianWeekly;
   }
 };
 
-export { getProduct, getProducts };
+export { getProduct };
 export type { Product };
