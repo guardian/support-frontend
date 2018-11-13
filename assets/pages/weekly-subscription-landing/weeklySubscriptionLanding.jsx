@@ -82,7 +82,11 @@ const content = (
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
-          <p className={largeParagraphClassName}>Get closer to the issues that have made the world’s week. Inside the essential magazine from The Guardian, you’ll find expert opinion, insight and culture - all curated to bring you an independent, progressive perspective. You’ll also discover challenging new puzzles every week. Subscribe today and get free delivery, wherever you are in the world.
+          <p className={largeParagraphClassName}>Get closer to the issues that have made
+          the world’s week. Inside the essential magazine from The&nbsp;Guardian, you’ll find
+          expert opinion, insight and culture - all curated to bring you an independent,
+          progressive perspective. You’ll also discover challenging new puzzles every week.
+          Subscribe today and get free delivery, wherever you are in the world.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
@@ -106,7 +110,9 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Gift subscriptions">
-          <p className={largeParagraphClassName}>A Guardian Weekly subscription makes a great gift. To buy one, just get in touch with your local customer service team:
+          <p className={largeParagraphClassName}>A Guardian Weekly subscription
+          makes a great gift. To&nbsp;buy&nbsp;one, just get in touch with your local customer
+          service team:
           </p>
         </ProductPageTextBlock>
         <div className={outsetClassName}>
