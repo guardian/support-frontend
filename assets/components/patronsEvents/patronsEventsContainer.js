@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import PatronsEvents from 'components/patronsEvents/patronsEvents';
 
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 
 
 // ----- State Maps ----- //

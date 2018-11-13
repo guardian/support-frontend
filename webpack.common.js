@@ -48,7 +48,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
-    optimizeScript: 'helpers/tracking/optimizeScript.js',
+    optimizeScript: 'helpers/optimize/optimizeScript.js',
     error404Page: 'pages/error/error404.jsx',
     error500Page: 'pages/error/error500.jsx',
     errorPageStyles: 'pages/error/error.scss',

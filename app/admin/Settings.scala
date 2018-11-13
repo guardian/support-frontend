@@ -15,8 +15,7 @@ case class Switches(
     oneOffPaymentMethods: PaymentMethodsSwitch,
     recurringPaymentMethods: PaymentMethodsSwitch,
     experiments: Map[String, ExperimentSwitch],
-    optimize: SwitchState,
-    internationalSubscribePages: SwitchState
+    optimize: SwitchState
 )
 
 case class Settings(switches: Switches)

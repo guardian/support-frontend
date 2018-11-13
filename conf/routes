@@ -37,10 +37,8 @@ GET  /monthly-contributions                         controllers.Application.cont
 # ----- Contributions ----- #
 
 GET  /contribute                                        controllers.Application.contributeGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.oldOrNewContributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.old  controllers.Application.oldContributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.new  controllers.Application.newContributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou.new    controllers.Application.newContributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String)
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
 GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormMaybeAuthenticated()
@@ -108,7 +106,8 @@ GET  /paypal/rest/return                                controllers.PayPalOneOff
 GET  /paypal/rest/cancel                                controllers.PayPalOneOff.cancelURL
 GET  /paypal/rest/error                                 controllers.PayPalOneOff.paypalError
 
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return.new   controllers.PayPalOneOff.newReturnURL(paymentId: String, PayerID: String, country: String)
+# TODO: more cleanup
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return   controllers.PayPalOneOff.newReturnURL(paymentId: String, PayerID: String, country: String)
 
 # ----- Direct Debit ----- #
 

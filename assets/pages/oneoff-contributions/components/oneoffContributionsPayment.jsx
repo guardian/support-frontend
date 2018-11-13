@@ -13,7 +13,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/settings';
 import SvgCreditCard from 'components/svgs/creditCard';
-import type { OptimizeExperiments } from 'helpers/tracking/optimize';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';

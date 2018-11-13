@@ -19,7 +19,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/contributions';
-import type { OptimizeExperiments } from 'helpers/tracking/optimize';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import uuidv4 from 'uuid';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 

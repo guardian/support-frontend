@@ -58,21 +58,18 @@ class Subscriptions(
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (settingsProvider.settings().switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
-      Redirect(controllers.routes.Subscriptions.geoRedirect())
-    } else {
-      implicit val settings: Settings = settingsProvider.settings()
-      val title = "Support the Guardian | Get a Subscription"
-      val id = "subscriptions-landing-page"
-      val js = "subscriptionsLandingPage.js"
-      Ok(views.html.main(
-        title,
-        id,
-        js,
-        "subscriptionsLandingPageStyles.css",
-        description = stringsConfig.subscriptionsLandingDescription
-      )).withSettingsSurrogateKey
-    }
+    implicit val settings: Settings = settingsProvider.settings()
+    val title = "Support the Guardian | Get a Subscription"
+    val id = "subscriptions-landing-page"
+    val js = "subscriptionsLandingPage.js"
+    Ok(views.html.main(
+      title,
+      id,
+      js,
+      "subscriptionsLandingPageStyles.css",
+      description = stringsConfig.subscriptionsLandingDescription
+    )).withSettingsSurrogateKey
+
   }
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>

@@ -12,25 +12,29 @@ import { classNameWithModifiers } from 'helpers/utilities';
 type PropTypes = {|
   type: 'white' | 'grey' | 'feature' | 'dark',
   id?: ?string,
-  children: Node
+  children: Node,
+  modifierClasses: Array<?string>,
 |};
 
 
 // ----- Render ----- //
 
-const WeeklyContentBlock = ({ type, children, id }: PropTypes) => (
-  <div id={id} className={classNameWithModifiers('weekly-content-block', [type])}>
+const ProductPageContentBlock = ({
+  type, children, id, modifierClasses,
+}: PropTypes) => (
+  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, ...modifierClasses])}>
     <LeftMarginSection>
-      <div className="weekly-content-block__content">
+      <div className="component-product-page-content-block__content">
         {children}
       </div>
     </LeftMarginSection>
   </div>
 );
 
-WeeklyContentBlock.defaultProps = {
+ProductPageContentBlock.defaultProps = {
   type: 'white',
   id: null,
+  modifierClasses: [],
 };
 
-export default WeeklyContentBlock;
+export default ProductPageContentBlock;

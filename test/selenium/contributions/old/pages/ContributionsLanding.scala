@@ -1,4 +1,4 @@
-package selenium.pages
+package selenium.contributions.old.pages
 
 import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.Page
@@ -8,7 +8,7 @@ case class ContributionsLanding(region: String)(implicit val webDriver: WebDrive
 
   // While the new contributions landing page test is running,
   // we just want Selenium to test the old page.
-  val url = s"${Config.supportFrontendUrl}/$region/contribute.old"
+  val url = s"${Config.supportFrontendUrl}/$region"
 
   private val contributeButton = id("qa-contribute-button")
 

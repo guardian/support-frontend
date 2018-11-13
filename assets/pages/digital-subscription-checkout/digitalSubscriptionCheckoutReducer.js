@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { combineReducers } from 'redux';
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor, type State as MarketingConsentState } from "components/marketingConsent/marketingConsentReducer";
