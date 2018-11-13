@@ -1,7 +1,7 @@
 import React from 'react';
-import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import SvgChevronUp from 'components/svgs/chevronUp';
+import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 type PropTypes = {|
   ctaUrl: string
@@ -9,7 +9,7 @@ type PropTypes = {|
 
 export default function WhySupportMatters(props: PropTypes) {
   return (
-    <PageSection heading="Why your support matters" modifierClass="why-support-matters">
+    <ProductPageTextBlock title="Why your support matters">
       <p>
         Unlike many news organisations, we have kept our journalism open to our global audience.
         We have not put up a paywall as we believe everyone deserves access to quality journalism,
@@ -19,9 +19,9 @@ export default function WhySupportMatters(props: PropTypes) {
         text="See supporter options"
         url={props.ctaUrl}
         accessibilityHint="See the options for becoming a supporter"
-        svg={<SvgChevronUp />}
+        svg={<SvgChevronUp modifierClass="rotate-180"/>}
         modifierClasses={['see-supporter-options']}
       />
-    </PageSection>
+    </ProductPageTextBlock>
   )
 }

@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux';
 
-import PatronsEvents from 'components/patronsEvents/patronsEvents';
+import PatronsEvents, {PatronEventsLeft} from 'components/patronsEvents/patronsEvents';
 
 import type { CommonState } from 'helpers/page/commonReducer';
 
@@ -22,4 +22,4 @@ function mapStateToProps(state: { common: CommonState }) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps)(PatronsEvents);
+export default connect(mapStateToProps)(PatronEventsLeft);

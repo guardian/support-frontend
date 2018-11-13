@@ -88,3 +88,7 @@
 .svg-paywall-mobile, .svg-paywall-desktop, .svg-paywall-wide {
   font-family: $gu-headline;
 }
+
+svg[class*="--rotate-180"] {
+  transform: rotate(180deg);
+}

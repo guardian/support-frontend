@@ -105,7 +105,7 @@ class Application(
       title = "Support the Guardian",
       mainId = "support-landing-page-2",
       mainJsBundle = "supportLandingPage2.js",
-      mainStyleBundle = "supportLandingPageStyles2.css",
+      mainStyleBundle = "supportLandingPage2.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
       description = stringsConfig.supportLandingDescription
     )).withSettingsSurrogateKey

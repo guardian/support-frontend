@@ -62,6 +62,10 @@
 .component-cta-link--see-supporter-options {
   background-color: gu-colour(lifestyle-garnett-main-1);
 
+  .component-cta-link__text {
+    color: gu-colour(neutral-6);
+  }
+
   @include mq($from: tablet) {
     width: 500px;
   }

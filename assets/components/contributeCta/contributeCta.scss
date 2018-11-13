@@ -1,3 +1,6 @@
+@import '~stylesheets/gu-sass/colours';
+@import '~stylesheets/gu-sass/typography';
+
 .component-contribute-cta {
   padding: 10px;
   margin-top: 10px;
@@ -12,5 +15,9 @@
 
   .component-cta-link {
     margin: 10px;
+
+    &__text {
+      color: gu-colour(neutral-6);
+    }
   }
 }

@@ -1,11 +1,11 @@
 import React from 'react';
-import PageSection from 'components/pageSection/pageSection';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 import SvgScribble from 'components/svgs/scribble';
+import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 export default function BeyondHeadlines() {
   return (
-    <PageSection heading="Beyond the headlines">
+    <ProductPageTextBlock title="Beyond the headlines">
       <p>
         We pride ourselves on our breaking news stories,
         in-depth analysis and thoughtful opinion pieces.
@@ -24,6 +24,6 @@ export default function BeyondHeadlines() {
         politicians or shareholders. This independence matters because it enables us
         to challenge the powerful, and hold them to account.
       </p>
-    </PageSection>
+    </ProductPageTextBlock>
   )
 }

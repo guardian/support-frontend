@@ -17,17 +17,29 @@ import WhySupportMatters from 'components/whySupportMatters/WhySupportMatters';
 import BeyondHeadlines from 'components/beyondHeadlines/BeyondHeadlines';
 import WaysToSupport from 'components/waysToSupport/WaysToSupport';
 import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+
+import './supportLanding2.scss';
 
 const store = pageInit(pageReducer);
 
+
 const content = (
   <Provider store={store}>
-    <Page header={<SimpleHeader />} footer={<Footer disclaimer privacyPolicy/>}>
+    <Page header={<SimpleHeader/>} footer={<Footer disclaimer privacyPolicy/>}>
       <PlainIntroduction />
-      <WhySupportMatters ctaUrl={"#ways-to-support"}/>
-      <BeyondHeadlines />
-      <WaysToSupport id={"ways-to-support"}/>
-      <PatronsEventsContainer />
+      <ProductPageContentBlock>
+        <WhySupportMatters ctaUrl={'#ways-to-support'}/>
+      </ProductPageContentBlock>
+      <ProductPageContentBlock>
+        <BeyondHeadlines />
+      </ProductPageContentBlock>
+      <ProductPageContentBlock>
+        <WaysToSupport id={'ways-to-support'}/>
+      </ProductPageContentBlock>
+      <ProductPageContentBlock>
+        <PatronsEventsContainer />
+      </ProductPageContentBlock>
     </Page>
   </Provider>
 );
