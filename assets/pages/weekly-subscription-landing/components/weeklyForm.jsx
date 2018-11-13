@@ -62,7 +62,7 @@ const WeeklyForm = ({
         })}
       </div>
     </ProductPageContentBlockOutset>
-    <div className={['weekly-form__cta', ctaClassNameForBg].join(' ')}>
+    <div className={['weekly-form__cta', ctaClassNameForBg].join(' ')} data-disabled={selectedPeriod === null}>
       <WeeklyCta disabled={selectedPeriod === null} type="submit">
         Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
       </WeeklyCta>
