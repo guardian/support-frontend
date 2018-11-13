@@ -13,3 +13,10 @@
 .component-product-page-text-block a {
   color: inherit;
 }
+
+.component-product-page-text-block__large {
+  font-size: 24px;
+  font-weight: 200;
+  line-height: 1.16;
+  font-family: $gu-headline;
+}

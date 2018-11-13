@@ -18,7 +18,7 @@ import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import WeeklyFeatureList from './components/weeklyFeatureList';
 import WeeklyForm from './components/weeklyForm';
@@ -85,7 +85,7 @@ const content = (
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
-          <p>Inside the magazine you’ll find quality, independent journalism
+          <p className={largeParagraphClassName}>Inside the magazine you’ll find quality, independent journalism
             including opinion, insight, culture and access to new puzzles each week.
             Subscribe today and get an expert view on some of the most challenging
             issues of today, as well as free delivery, wherever you are in the world.
@@ -112,7 +112,7 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Buying as a gift?">
-          <p>If you’d like to buy a Guardian Weekly subscription as a gift,
+          <p className={largeParagraphClassName}>If you’d like to buy a Guardian Weekly subscription as a gift,
           just get in touch with your local customer service team.
           </p>
         </ProductPageTextBlock>

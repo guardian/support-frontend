@@ -1,5 +1,4 @@
 .weekly-feature-list {
-  color: gu-colour(nav-faded);
   @include mq($from: tablet) {
     display: flex;
   }
