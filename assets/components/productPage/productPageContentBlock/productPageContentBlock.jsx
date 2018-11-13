@@ -38,7 +38,8 @@ ProductPageContentBlock.defaultProps = {
 };
 
 
-// Exports
+// ---- Exports ----- //
+
 export const outsetClassName = 'component-product-page-content-block__outset';
 export const bgClassName = 'component-product-page-content-block__bg';
 
