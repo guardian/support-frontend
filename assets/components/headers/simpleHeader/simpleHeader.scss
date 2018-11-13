@@ -1,11 +1,9 @@
 .component-simple-header {
-  background-color: gu-colour(nav-faded);
+  background-color: gu-colour(header-dark);
 
   .svg-guardian-logo {
     height: 100%;
   }
-
-  border-bottom: 1px solid gu-colour(nav-dark);
 }
 
 .component-simple-header__link {
