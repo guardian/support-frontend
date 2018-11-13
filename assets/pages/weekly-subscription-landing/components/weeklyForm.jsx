@@ -10,6 +10,7 @@ import SvgInfo from 'components/svgs/information';
 import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
+import { className as bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlockBg';
 
 import WeeklyCta from './weeklyCta';
 import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
@@ -24,13 +25,12 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   redirectToWeeklyPageAction: () => void,
   setPeriodAction: (WeeklyBillingPeriod) => Action,
-  ctaClassNameForBg?: string | null,
 |};
 
 // ----- Render ----- //
 
 const WeeklyForm = ({
-  selectedPeriod, countryGroupId, redirectToWeeklyPageAction, setPeriodAction, ctaClassNameForBg,
+  selectedPeriod, countryGroupId, redirectToWeeklyPageAction, setPeriodAction,
 }: PropTypes) => (
   <form
     className="weekly-form-wrap"
@@ -62,7 +62,7 @@ const WeeklyForm = ({
         })}
       </div>
     </ProductPageContentBlockOutset>
-    <div className={['weekly-form__cta', ctaClassNameForBg].join(' ')} data-disabled={selectedPeriod === null}>
+    <div className={['weekly-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
       <WeeklyCta disabled={selectedPeriod === null} type="submit">
         Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
       </WeeklyCta>
@@ -74,10 +74,6 @@ const WeeklyForm = ({
     </div>
   </form>
 );
-
-WeeklyForm.defaultProps = {
-  ctaClassNameForBg: null,
-};
 
 // ----- State/Props Maps ----- //
 

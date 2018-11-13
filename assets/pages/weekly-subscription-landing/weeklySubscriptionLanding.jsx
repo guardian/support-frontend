@@ -18,7 +18,6 @@ import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
-import { className as bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlockBg';
 import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import WeeklyFeatureList from './components/weeklyFeatureList';
@@ -93,7 +92,7 @@ const content = (
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
-      <ProductPageContentBlock type="grey">
+      <ProductPageContentBlock>
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
         <ProductPageContentBlockOutset>
           <WeeklyFeatureList features={[
@@ -109,9 +108,9 @@ const content = (
         <ProductPageTextBlock title="Get your Guardian Weekly, subscribe now">
           <p>How would you like to pay for your Guardian Weekly?</p>
         </ProductPageTextBlock>
-        <WeeklyForm ctaClassNameForBg={bgClassName} />
+        <WeeklyForm />
       </ProductPageContentBlock>
-      <ProductPageContentBlock type="grey">
+      <ProductPageContentBlock>
         <ProductPageTextBlock title="Buying as a gift?">
           <p>If you’d like to buy a Guardian Weekly subscription as a gift,
           just get in touch with your local customer service team.
@@ -126,7 +125,7 @@ const content = (
           />
         </ProductPageContentBlockOutset>
       </ProductPageContentBlock>
-      <ProductPageContentBlock type="white">
+      <ProductPageContentBlock>
         <ProductPageTextBlock title="Promotion terms and conditions">
           <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Weekly print subscription services and their terms and conditions - see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">here</a>
           </p>

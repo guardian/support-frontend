@@ -4,6 +4,12 @@
   }
 }
 
+.component-product-page-content-block--white + .component-product-page-content-block--white {
+  .component-left-margin-section__content {
+    border-top: 1px solid gu-colour(garnett-neutral-4);
+  }
+}
+
 .component-product-page-content-block--grey {
   &, .component-product-page-content-block__bg {
     background-color: gu-colour(garnett-neutral-3);
