@@ -82,7 +82,7 @@ const content = (
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
-          <p className={largeParagraphClassName}>Get closer to the issues that have made
+          <p>Get closer to the issues that have made
           the world’s week. Inside the essential magazine from The&nbsp;Guardian, you’ll find
           expert opinion, insight and culture - all curated to bring you an independent,
           progressive perspective. You’ll also discover challenging new puzzles every week.
