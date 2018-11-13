@@ -15,8 +15,7 @@ import { renderPage } from 'helpers/render';
 import GridImage from 'components/gridImage/gridImage';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
+import ProductPageContentBlock, { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import WeeklyFeatureList from './components/weeklyFeatureList';
@@ -92,7 +91,7 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
-        <ProductPageContentBlockOutset>
+        <div className={outsetClassName}>
           <WeeklyFeatureList features={[
             { title: 'Up to 30% off the retail cover price' },
             { title: 'Free international shipping' },
@@ -100,7 +99,7 @@ const content = (
             { title: 'Access to all editions at any time, on any device, through PressReader.' },
           ]}
           />
-        </ProductPageContentBlockOutset>
+        </div>
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" id="subscribe">
         <ProductPageTextBlock title="Get your Guardian Weekly, subscribe now">
@@ -114,14 +113,14 @@ const content = (
           just get in touch with your local customer service team.
           </p>
         </ProductPageTextBlock>
-        <ProductPageContentBlockOutset>
+        <div className={outsetClassName}>
           <WeeklyFeatureList features={[
             { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
             { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
             { title: 'USA and Canada', copy: '+1 917-900-4663' },
           ]}
           />
-        </ProductPageContentBlockOutset>
+        </div>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Promotion terms and conditions">
