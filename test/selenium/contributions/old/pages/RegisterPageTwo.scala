@@ -1,4 +1,4 @@
-package selenium.pages
+package selenium.contributions.old.pages
 
 import org.scalatest.selenium.Page
 import java.net.URLEncoder

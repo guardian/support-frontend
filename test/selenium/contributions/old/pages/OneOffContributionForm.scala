@@ -1,4 +1,4 @@
-package selenium.pages
+package selenium.contributions.old.pages
 
 import selenium.util.{Browser, Config, TestUser}
 import org.openqa.selenium.WebDriver

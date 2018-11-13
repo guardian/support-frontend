@@ -1,7 +1,7 @@
-package selenium
+package selenium.contributions.old
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.pages.{ContributionsLanding, OneOffContributionForm, OneOffContributionThankYou}
+import selenium.contributions.old.pages.{ContributionsLanding, OneOffContributionForm, OneOffContributionThankYou}
 import selenium.util._
 
 class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser {
@@ -20,12 +20,12 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
   feature("Sign up for a one-off contribution") {
 
-    scenario("One-off contribution sign-up with Stripe - AUD") {
+    scenario("One-off contribution sign-up with Stripe - GBP") {
 
       val stripePayment = 22.55
-      val currency = "AUD"
+      val currency = "GBP"
       val testUser = new TestUser(driverConfig)
-      val landingPage = ContributionsLanding("au")
+      val landingPage = ContributionsLanding("uk")
       val oneOffContributionForm = OneOffContributionForm(testUser, stripePayment.toInt, currency)
       val oneOffContributionThankYou = new OneOffContributionThankYou
 
