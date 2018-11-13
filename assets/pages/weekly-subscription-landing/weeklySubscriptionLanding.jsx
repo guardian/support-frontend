@@ -75,7 +75,7 @@ const content = (
       >
         <GridImage
           gridId="weeklyLandingHero"
-          srcSizes={[1000, 500]}
+          srcSizes={[946, 473]}
           sizes="(max-width: 740px) 90vw, 600px"
           imgType="png"
         />

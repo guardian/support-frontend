@@ -52,7 +52,7 @@ export const imageCatalogue: {
   guardianWeeklyHeroMobile: '0198392d89fac028dfea0c0aba940ef86eafdb10/0_0_1000_666',
   paperHeroDesktop: 'f1040916a71642c924a52c61dc7c4aae2b8dd88d/0_0_1080_784',
   paperHeroMobile: '9b8d348e9ba521c388e3482ece4037e3f0fb3864/0_0_1000_666',
-  weeklyLandingHero: 'd86a4895bf9ccc2c319c2d2d01c06473e3b148a8/0_0_1266_1112',
+  weeklyLandingHero: '3a093833e468eec890838eb36d462f0281299f9c/0_0_5060_5350',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
