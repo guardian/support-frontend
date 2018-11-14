@@ -5,10 +5,8 @@
 }
 
 .weekly-feature-list__title {
-  font-size: 24px;
+  @include gu-font-headline-responsive;
   font-weight: 200;
-  line-height: 1.16;
-  font-family: $gu-headline;
 }
 
 .weekly-feature-list__item {

@@ -1,4 +1,5 @@
 .component-product-page-content-block .component-left-margin-section__content {
+  max-width: 100%;
   @include mq($from: tablet) {
     border-left: 1px solid gu-colour(garnett-neutral-4);
   }
@@ -44,7 +45,7 @@
 }
 
 .component-product-page-content-block__content {
-  max-width: 1180px;
+  max-width: 944px;
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
 }
 

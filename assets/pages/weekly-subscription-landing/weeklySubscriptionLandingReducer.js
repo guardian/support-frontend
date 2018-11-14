@@ -14,7 +14,7 @@ import { type Action } from './weeklySubscriptionLandingActions';
 // ----- Subs ------ //
 
 const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
-  currencies[detect(countryGroupId)].glyph,
+  currencies[detect(countryGroupId)].extendedGlyph,
   getWeeklyProductPrice(countryGroupId, period),
 ].join('');
 
