@@ -60,6 +60,15 @@ $gu-fonts: (
 
 }
 
+@mixin gu-font-headline-responsive {
+  line-height: 1.2;
+  font-size: 20px;
+  font-family: $gu-headline;
+  @include mq($from: tablet) {
+    font-size: 24px;
+  }
+}
+
 
 // ----- Defaults ----- //
 
