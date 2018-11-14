@@ -44,8 +44,8 @@ function ThankYouContent(props: PropTypes) {
       <LeftMarginSection modifierClasses={['thank-you-emails']}>
         <MarketingConsent
           context={props.context}
-          checkboxLabelTitle="Would you like to receive news and offers from The Guardian, The Observer and Guardian Weekly?"
-          checkboxLabelCopy="As a valued subscriber, we'd like to keep you informed with regular emails and updates regarding news and offers from The Guardian, The Observer and Guardian Weekly. Opt in here if you would like to receive these messages from us."
+          checkboxLabelTitle="As a valued subscriber, we'd like to keep you informed with regular emails and updates regarding news and offers from The Guardian, The Observer and Guardian Weekly."
+          checkboxLabelCopy="Opt in here if you would like to receive these messages from us."
         />
         <p className="thank-you-content__copy thank-you-content__copy--small">
           <small>
