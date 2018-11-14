@@ -12,6 +12,7 @@ import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import { contributionsEmail } from 'helpers/legal';
 
+import '../error.scss';
 
 // ----- Types ----- //
 

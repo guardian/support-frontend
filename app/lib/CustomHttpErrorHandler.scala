@@ -31,7 +31,7 @@ class CustomHttpErrorHandler(
 
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] =
     Future.successful(
-      NotFound(main("Error 404", "error-404-page", "error404Page.js", "errorPageStyles.css")(assets, request, settingsProvider.settings()))
+      NotFound(main("Error 404", "error-404-page", "error404Page.js", "error404Page.css")(assets, request, settingsProvider.settings()))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
         .withSettingsSurrogateKey
     )
@@ -39,7 +39,7 @@ class CustomHttpErrorHandler(
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
     logServerError(request, exception)
     Future.successful(
-      InternalServerError(main("Error 500", "error-500-page", "error500Page.js", "errorPageStyles.css")(assets, request, settingsProvider.settings()))
+      InternalServerError(main("Error 500", "error-500-page", "error500Page.js", "error500Page.css")(assets, request, settingsProvider.settings()))
         .withHeaders(CacheControl.noCache)
         .withSettingsSurrogateKey
     )
