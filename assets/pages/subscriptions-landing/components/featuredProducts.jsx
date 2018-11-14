@@ -126,7 +126,7 @@ const getProducts = (
   },
   Paper: {
     name: 'Paper',
-    headingText: 'Paper subscription',
+    headingText: flashSaleIsActive('Paper') ? 'Paper subscription 50% off' : 'Paper subscription',
     subheadingText: 'Enjoy every word for less',
     bodyText: flashSaleIsActive('Paper') ? 'Save 50% for three months on subscriptions to The Guardian and The Observer' :
       'Save on The Guardian and The Observer retail price all year round.',
