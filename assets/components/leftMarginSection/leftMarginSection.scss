@@ -27,6 +27,6 @@
   }
 
   @include mq($from: desktop) {
-    flex-basis: 970px;
+    flex-basis: 960px;
   }
 }
