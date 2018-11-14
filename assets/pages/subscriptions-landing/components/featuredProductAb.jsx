@@ -17,7 +17,7 @@ import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { type CommonState } from 'helpers/page/commonReducer';
 import FeaturedProductHero from 'components/featuredProductHero/featuredProductHero';
 
-import { getProduct, getProducts, type Product } from './featuredProducts';
+import { getProduct, type Product } from './featuredProducts';
 
 // ----- Types ----- //
 
@@ -71,7 +71,7 @@ function FeaturedProductAb(props: PropTypes) {
     optimizeExperiments,
   );
 
-  const product = getProduct(subsLinks, countryGroupId) || getProducts(subsLinks, countryGroupId).GuardianWeekly;
+  const product = getProduct(subsLinks, countryGroupId);
 
   return product ? (
     <FeaturedProductHero

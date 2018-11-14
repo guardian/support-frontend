@@ -64,12 +64,10 @@ function SubscriptionsSection(props: PropTypes) {
       />
       <Paper
         url={subsLinks.Paper}
-        countryGroupId={props.countryGroupId}
         abTest={props.abParticipations}
       />
       <PaperDigital
         url={subsLinks.PaperAndDigital}
-        countryGroupId={props.countryGroupId}
         abTest={props.abParticipations}
         gridId="paperDigitalCircleOrange"
       />

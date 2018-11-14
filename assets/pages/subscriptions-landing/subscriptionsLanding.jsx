@@ -11,11 +11,9 @@ import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
 import WhySupportVideoContainer from 'components/whySupportVideo/whySupportVideoContainer';
-import { flashSaleIsActive } from 'helpers/flashSale';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import FlashSaleDigitalPack from './components/flashSaleDigitalPack';
 import FeaturedProductAb from './components/featuredProductAb';
 
 // ----- Redux Store ----- //
@@ -31,11 +29,9 @@ const content = (
       header={<SimpleHeader />}
       footer={<FooterContainer disclaimer privacyPolicy />}
     >
-      {flashSaleIsActive('DigitalPack') ? (<FlashSaleDigitalPack
+      <FeaturedProductAb
         headingSize={3}
-      />) : <FeaturedProductAb
-        headingSize={3}
-      />}
+      />
       <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
       <WhySupportVideoContainer headingSize={3} id="why-support" />
       <ReadyToSupport

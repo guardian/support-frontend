@@ -32,12 +32,10 @@ function PaperSection(props: PropTypes) {
     <ThreeSubscriptions heading="Print Subscriptions">
       <Paper
         url={props.subsLinks.Paper}
-        countryGroupId={props.countryGroupId}
         abTest={props.abTest}
       />
       <PaperDigital
         url={props.subsLinks.PaperAndDigital}
-        countryGroupId={props.countryGroupId}
         abTest={props.abTest}
         gridId="paperDigitalCirclePink"
       />
