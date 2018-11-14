@@ -36,8 +36,8 @@ export default ({
           <div aria-hidden="true" className="weekly-form-label__check"><SvgCheckmark /></div>
         </div>
         <div className="weekly-form-label__copy">
-          {offer && <div className="weekly-form-label__offer">{offer}</div>}
-          {children}
+          {offer && <strong className="weekly-form-label__offer">{offer}</strong>}
+          <div>{children}</div>
         </div>
       </div>
     </label>

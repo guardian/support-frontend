@@ -10,8 +10,9 @@
 
 .weekly-form-label {
   font-family: $gu-text-sans-web;
-  background: gu-colour(sport-garnett-feature);
-  border: 1px solid gu-colour(sport-garnett-main-1);
+  background: gu-colour(garnett-neutral-5);
+  border: 1px solid gu-colour(garnett-neutral-2);
+  color: gu-colour(garnett-neutral-1);
   display: block;
   height: 100%;
   cursor: pointer;
@@ -29,13 +30,17 @@
   font-weight: 600;
   font-size: 20px;
   position: relative;
-  border-bottom: 1px solid gu-colour(sport-garnett-main-1);
+  border-bottom: 1px solid gu-colour(garnett-neutral-2);
 }
 
 .weekly-form-label__offer {
-  color: gu-colour(news-garnett-highlight);
+  color: gu-colour(garnett-neutral-5);
   font-weight: 600;
-  display: block;
+  display: inline-block;
+  background: gu-colour(garnett-neutral-1);
+  margin: 0 -6px;
+  padding: 0 6px;
+  line-height: 1.4;
 }
 
 .weekly-form-label__copy {
@@ -53,7 +58,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  right: 3px;
+  right: 6px;
   margin: auto;
   transform: translateY(5px);
   opacity: 0;
@@ -71,15 +76,8 @@
 .weekly-form-label-wrap__input:checked + .weekly-form-label {
   background: gu-colour(news-garnett-highlight);
   border-color: rgba(0,0,0,.3);
-  color: gu-colour(garnett-neutral-1);
   .weekly-form-label__check {
     transform: translateY(0);
     opacity: 1;
-  }
-  .weekly-form-label__offer {
-    color: inherit;
-  }
-  &, .weekly-form-label__title {
-    border-color: rgba(0,0,0,.3)
   }
 }
