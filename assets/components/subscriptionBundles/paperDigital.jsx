@@ -19,7 +19,7 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function getCopy() {
-  if (flashSaleIsActive('Paper')) {
+  if (flashSaleIsActive('PaperAndDigital')) {
     return {
       subHeading: `from ${discountedDisplayPrice('PaperAndDigital', 'GBPCountries')}`,
       description: 'Save 50% for three months on a combined paper and digital subscription, then the standard subscription price.',
