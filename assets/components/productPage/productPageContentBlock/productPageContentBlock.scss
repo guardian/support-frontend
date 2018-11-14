@@ -1,4 +1,5 @@
 .component-product-page-content-block .component-left-margin-section__content {
+  max-width: 100%;
   @include mq($from: tablet) {
     border-left: 1px solid gu-colour(garnett-neutral-4);
   }
