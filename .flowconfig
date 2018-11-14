@@ -8,6 +8,11 @@ assets
 [libs]
 
 [options]
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
+module.file_ext=.css
+module.file_ext=.scss
 module.name_mapper='^containerisableComponents/' -> '<PROJECT_ROOT>/assets/containerisableComponents/'
 module.name_mapper='^components/' -> '<PROJECT_ROOT>/assets/components/'
 module.name_mapper='^helpers/' -> '<PROJECT_ROOT>/assets/helpers/'
