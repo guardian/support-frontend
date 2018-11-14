@@ -5,13 +5,12 @@
 }
 
 .component-product-page-text-block {
-  max-width: 550px;
   overflow-wrap: break-word;
   @include mq($from: tablet) {
     width: 75%;
   }
   @include mq($from: desktop) {
-    width: 50%;
+    width: 57.5%;
   }
 }
 
