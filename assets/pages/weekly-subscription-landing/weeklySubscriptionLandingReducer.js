@@ -50,7 +50,7 @@ export type State = {
 const promoInUrl = getQueryParameter('promo');
 
 const initialState: PageState = {
-  period: promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year' ? promoInUrl : null,
+  period: promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year' ? promoInUrl : 'sixweek',
 };
 
 function reducer(state: PageState = initialState, action: Action): PageState {
