@@ -22,7 +22,11 @@ const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) =
   getWeeklyProductPrice(countryGroupId, period),
 ].join('');
 
-export const billingPeriods = {
+export const billingPeriods: {[WeeklyBillingPeriod]: {
+  title: string,
+  offer?: string,
+  copy: (CountryGroupId)=>string
+}} = {
   sixweek: {
     title: '6 for 6',
     offer: 'Introductory offer',
