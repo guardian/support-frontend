@@ -254,7 +254,7 @@ header[role="banner"] {
     background-color: gu-colour(news-garnett-highlight);
   }
 
-
+  // TODO: center with flex-box instead!
   .glogo {
     top: 7px;
     right: 10px;
@@ -1064,83 +1064,42 @@ form {
 /* Small header test */
 
 .gu-content--small-header {
-  $header-height: 44px;
-  grid-template-rows: [header-t] $header-height [header-b] 1fr [footer-t] auto [footer-b];
+  @include mq($from: mobile, $until: tablet) {
+    $header-height: 44px;
+    grid-template-rows: [header-t] $header-height [header-b] 1fr [footer-t] auto [footer-b];
 
-  @include mq(tablet) {
-    grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];
-  }
-
-  .glogo {
-    width: 30px;
-    height: 30px;
-    right: 0px;
-
-    @include mq(tablet) {
-      width: 60px;
-      height: 60px;
-
-      // TODO: center with flex-box instead
-      top: 7px;
-      right: 10px;
-    }
-  }
-
-
-  header[role="banner"] {
-    height: $header-height;
-
-    // to match .gu-content__content
-    padding: 0 10px;
-
-    @include mq(tablet) {
-      height: 75px;
-    }
-  }
-
-  .countryGroups {
-    margin-left: 0;
-
-    // TODO: this is basically just vertical centering. use flex-box!
-    margin-top: 4px;
-
-    summary {
-      padding-left: 0;
+    .glogo {
+      width: 30px;
+      height: 30px;
+      right: 0;
     }
 
-    @include mq(tablet) {
-      margin-top: $gu-v-spacing * 2.5;
+    header[role="banner"] {
+      height: $header-height;
+
+      // to match .gu-content__content
+      padding: 0 10px;
     }
-  }
 
-  .header {
-    font: bold 22px/1.15 $gu-headline;
-    margin: 0 -10px;
-    padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+    .countryGroups {
+      margin-left: 0;
 
-    @include mq(tablet) {
-      font-size: 36px;
-      padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
+      // TODO: this is basically just vertical centering. use flex-box!
+      margin-top: 4px;
+
+      summary {
+        padding-left: 0;
+      }
     }
-  }
 
-  .blurb {
-    font: 100 16px/1.25 $gu-text-egyptian-web;
-    margin: 0;
-
-    @include mq(tablet) {
-      margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
-      font-size: 17px;
+    .header {
+      font-size: 22px;
+      padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
     }
-  }
 
-  .glogo {
-    width: 30px;
-    height: 30px;
-
-    @include mq(tablet) {
-      width: 60px;
-      height: 60px;
+    .blurb {
+      font-size: 16px;
+      margin: 0;
     }
   }
 }
