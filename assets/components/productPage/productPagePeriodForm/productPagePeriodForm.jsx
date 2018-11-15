@@ -7,8 +7,8 @@ import React from 'react';
 import SvgInfo from 'components/svgs/information';
 import { outsetClassName, bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 
-import WeeklyCta from './weeklyCta';
-import WeeklyFormLabel from './weeklyFormLabel';
+import ProductPageButton from '../productPageButton/productPageButton';
+import ProductPagePeriodFormLabel from './productPagePeriodFormLabel';
 
 import { type Action } from './productPagePeriodFormActions';
 
@@ -27,6 +27,7 @@ type PropTypes<P> = {|
   setPeriodAction: (P) => Action<P>,
 |};
 
+
 // ----- Render ----- //
 
 export default function ProductPagePeriodForm<P:string>({
@@ -34,21 +35,21 @@ export default function ProductPagePeriodForm<P:string>({
 }: PropTypes<P>) {
   return (
     <form
-      className="weekly-form-wrap"
+      className="component-product-page-period-form-wrap"
       onSubmit={(ev) => {
       ev.preventDefault();
       onSubmit(selectedPeriod);
     }}
     >
       <div className={outsetClassName}>
-        <div className="weekly-form">
+        <div className="component-product-page-period-form">
           {Object.keys(periods).map((key: P) => {
             const {
               copy, title, offer,
             } = periods[key];
             return (
-              <div className="weekly-form__item">
-                <WeeklyFormLabel
+              <div className="component-product-page-period-form__item">
+                <ProductPagePeriodFormLabel
                   title={title}
                   offer={offer}
                   type={key}
@@ -57,19 +58,19 @@ export default function ProductPagePeriodForm<P:string>({
                   onChange={() => { setPeriodAction(key); }}
                 >
                   {copy}
-                </WeeklyFormLabel>
+                </ProductPagePeriodFormLabel>
               </div>
               );
             })}
         </div>
       </div>
-      <div className={['weekly-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
-        <WeeklyCta disabled={selectedPeriod === null} type="submit">
+      <div className={['component-product-page-period-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
+        <ProductPageButton disabled={selectedPeriod === null} type="submit">
         Subscribe now{selectedPeriod && ` – ${periods[selectedPeriod].title}`}
-        </WeeklyCta>
+        </ProductPageButton>
       </div>
 
-      <div className="weekly-form__info">
+      <div className="component-product-page-period-form__info">
         <SvgInfo />
       You can cancel your subscription at any time
       </div>

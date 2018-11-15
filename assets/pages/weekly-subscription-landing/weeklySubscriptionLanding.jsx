@@ -18,10 +18,10 @@ import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock, { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
 
 import WeeklyFeatureList from './components/weeklyFeatureList';
 import WeeklyForm from './components/weeklyForm';
-import WeeklyCta from './components/weeklyCta';
 import reducer from './weeklySubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
@@ -73,7 +73,7 @@ const content = (
         overheading="Guardian Weekly subscriptions"
         heading="Get a clearer, global perspective on the issues that matter, in one magazine."
         modifierClasses={['weekly']}
-        cta={<WeeklyCta trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</WeeklyCta>}
+        cta={<ProductPageButton trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</ProductPageButton>}
       >
         <GridImage
           gridId="weeklyLandingHero"

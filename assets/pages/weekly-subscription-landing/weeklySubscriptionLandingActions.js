@@ -5,8 +5,9 @@
 import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { productPagePeriodFormActionsFor } from 'components/productPage/productPagePeriodForm/productPagePeriodFormActions';
+
 import { type State } from './weeklySubscriptionLandingReducer';
-import { productPagePeriodFormActionsFor } from './components/productPagePeriodFormActions';
 
 // ----- Action Creators ----- //
 
