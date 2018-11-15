@@ -6,6 +6,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.GetRecurringSubscription
 import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.workers.model.AccountAccessScope.{AuthenticatedAccess, SessionAccess, SessionId}
 import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers.model.{Contribution, DigitalPack, RequestInfo}
 import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
