@@ -9,7 +9,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
 import { type Action } from 'components/productPage/productPagePeriodForm/productPagePeriodFormActions';
-import ProductPagePeriodForm from 'components/productPage/productPagePeriodForm/productPagePeriodForm';
+import ProductPagePeriodForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePeriodForm/productPagePeriodForm';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
 import { redirectToWeeklyPage, setPeriod } from '../weeklySubscriptionLandingActions';
@@ -22,11 +22,7 @@ const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) =
   getWeeklyProductPrice(countryGroupId, period),
 ].join('');
 
-export const billingPeriods: {[WeeklyBillingPeriod]: {
-  title: string,
-  offer?: string,
-  copy: (CountryGroupId)=>string
-}} = {
+export const billingPeriods = {
   sixweek: {
     title: '6 for 6',
     offer: 'Introductory offer',
@@ -45,7 +41,7 @@ export const billingPeriods: {[WeeklyBillingPeriod]: {
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => {
   const periods = {};
   Object.keys(billingPeriods).forEach((k) => {
     periods[k] = {
@@ -58,15 +54,15 @@ const mapStateToProps = (state: State) => {
   return {
     periods,
     selectedPeriod: state.page.period,
-    countryGroupId: state.common.internationalisation.countryGroupId,
   };
 
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action<WeeklyBillingPeriod>>) => ({
-  setPeriodAction: bindActionCreators(setPeriod, dispatch),
-  onSubmit: bindActionCreators(redirectToWeeklyPage, dispatch),
-});
+const mapDispatchToProps = (dispatch: Dispatch<Action<WeeklyBillingPeriod>>): DispatchPropTypes<WeeklyBillingPeriod> =>
+  ({
+    setPeriodAction: bindActionCreators(setPeriod, dispatch),
+    onSubmitAction: bindActionCreators(redirectToWeeklyPage, dispatch),
+  });
 
 
 // ----- Exports ----- //

@@ -14,32 +14,40 @@ import { type Action } from './productPagePeriodFormActions';
 
 // ---- Types ----- //
 
-type Period = {|
+export type Period = {|
   title: string,
   copy: string,
   offer: string | null,
 |}
 
-type PropTypes<P> = {|
+export type StatePropTypes<P> = {|
   periods: {[P]: Period},
   selectedPeriod: P | null,
-  onSubmit: (selectedPeriod: string | null) => void,
-  setPeriodAction: (P) => Action<P>,
+|};
+
+export type DispatchPropTypes<P> = {|
+  onSubmitAction: () => *,
+  setPeriodAction: (P) => *,
+|};
+
+type PropTypes<P> = {|
+  ...StatePropTypes<P>,
+  ...DispatchPropTypes<P>,
 |};
 
 
 // ----- Render ----- //
 
 export default function ProductPagePeriodForm<P:string>({
-  selectedPeriod, onSubmit, setPeriodAction, periods,
+  selectedPeriod, onSubmitAction, setPeriodAction, periods,
 }: PropTypes<P>) {
   return (
     <form
       className="component-product-page-period-form-wrap"
       onSubmit={(ev) => {
-      ev.preventDefault();
-      onSubmit(selectedPeriod);
-    }}
+        ev.preventDefault();
+        onSubmitAction();
+      }}
     >
       <div className={outsetClassName}>
         <div className="component-product-page-period-form">
