@@ -1,4 +1,4 @@
-.component-product-page-period-form {
+.component-product-page-period-form__items {
   margin-bottom: $gu-v-spacing * 2;
   @include mq($from: tablet) {
     display: flex;
@@ -6,7 +6,7 @@
   }
 }
 
-.component-product-page-period-form > .component-product-page-period-form__item {
+.component-product-page-period-form__items > .component-product-page-period-form__item {
   flex: 0 0 25%;
   padding: 0 $gu-h-spacing/2;
   box-sizing: border-box;

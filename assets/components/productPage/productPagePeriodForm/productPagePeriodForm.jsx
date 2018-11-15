@@ -44,14 +44,13 @@ export default function ProductPagePeriodForm<P:string>({
 
   return (
     <form
-      className="component-product-page-period-form-wrap"
       onSubmit={(ev) => {
         ev.preventDefault();
         onSubmitAction();
       }}
     >
       <div className={outsetClassName}>
-        <div className="component-product-page-period-form">
+        <div className="component-product-page-period-form__items">
           {keys.map((key: P) => {
             const {
               copy, title, offer,
