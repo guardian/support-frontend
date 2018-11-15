@@ -41,22 +41,17 @@ export const billingPeriods = {
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => {
-  const periods = {};
-  Object.keys(billingPeriods).forEach((k) => {
-    periods[k] = {
+const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => ({
+  periods: Object.keys(billingPeriods).reduce((ps, k) => ({
+    ...ps,
+    [k]: {
       title: billingPeriods[k].title,
       copy: billingPeriods[k].copy(state.common.internationalisation.countryGroupId),
       offer: billingPeriods[k].offer || null,
-    };
-  });
-
-  return {
-    periods,
-    selectedPeriod: state.page.period,
-  };
-
-};
+    },
+  }), {}),
+  selectedPeriod: state.page.period,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<WeeklyBillingPeriod>>): DispatchPropTypes<WeeklyBillingPeriod> =>
   ({
