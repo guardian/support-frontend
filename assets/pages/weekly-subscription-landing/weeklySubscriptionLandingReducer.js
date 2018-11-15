@@ -7,9 +7,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
 import { getQueryParameter } from 'helpers/url';
-
-import { productPagePeriodFormReducerFor } from './components/productPagePeriodFormReducer';
-
+import { productPagePeriodFormReducerFor, type State as FormState } from './components/productPagePeriodFormReducer';
 
 // ----- Subs ------ //
 
@@ -35,13 +33,9 @@ export const billingPeriods = {
 };
 
 
-type PageState = {
-  period: string | null;
-};
-
 export type State = {
   common: CommonState,
-  page: PageState,
+  page: FormState<WeeklyBillingPeriod>,
 };
 
 
@@ -49,7 +43,7 @@ export type State = {
 
 const promoInUrl = getQueryParameter('promo');
 
-const initialState: PageState = {
+const initialState: FormState<WeeklyBillingPeriod> = {
   period: promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year' ? promoInUrl : 'sixweek',
 };
 

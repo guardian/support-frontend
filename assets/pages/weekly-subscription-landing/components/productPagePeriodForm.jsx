@@ -20,18 +20,18 @@ type Period = {|
   offer: string | null,
 |}
 
-type PropTypes = {|
-  periods: {[string]: Period},
-  selectedPeriod: string | null,
+type PropTypes<P> = {|
+  periods: {[P]: Period},
+  selectedPeriod: P | null,
   onSubmit: (selectedPeriod: string | null) => void,
-  setPeriodAction: (string) => Action,
+  setPeriodAction: (P) => Action<P>,
 |};
 
 // ----- Render ----- //
 
-export default function ProductPagePeriodForm({
+export default function ProductPagePeriodForm<P:string>({
   selectedPeriod, onSubmit, setPeriodAction, periods,
-}: PropTypes) {
+}: PropTypes<P>) {
   return (
     <form
       className="weekly-form-wrap"
@@ -42,7 +42,7 @@ export default function ProductPagePeriodForm({
     >
       <div className={outsetClassName}>
         <div className="weekly-form">
-          {Object.keys(periods).map((key: string) => {
+          {Object.keys(periods).map((key: P) => {
             const {
               copy, title, offer,
             } = periods[key];

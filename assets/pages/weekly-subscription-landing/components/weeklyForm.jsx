@@ -5,6 +5,8 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
+
 import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
 import { redirectToWeeklyPage, setPeriod } from '../weeklySubscriptionLandingActions';
 import { type Action } from './productPagePeriodFormActions';
@@ -38,7 +40,7 @@ const mapStateToProps = (state: State) => {
 
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: Dispatch<Action<WeeklyBillingPeriod>>) => ({
   setPeriodAction: bindActionCreators(setPeriod, dispatch),
   onSubmit: bindActionCreators(redirectToWeeklyPage, dispatch),
 });

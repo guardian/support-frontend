@@ -2,16 +2,16 @@
 // ----- Imports ----- //
 import type { Action } from './productPagePeriodFormActions';
 
-type State = {
-  period: string | null;
+export type State<Period> = {
+  period: Period | null;
 };
 
 // ----- Reducer ----- //
-function productPagePeriodFormReducerFor(scope: string, initialState: State) {
+function productPagePeriodFormReducerFor<Period>(scope: string, initialState: State<Period>) {
   return function productPagePeriodFormReducer(
-    state: State = initialState,
-    action: Action,
-  ): State {
+    state: State<Period> = initialState,
+    action: Action<Period>,
+  ): State<Period> {
     if (action.scope !== scope) {
       return state;
     }

@@ -6,13 +6,11 @@ import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { type State } from './weeklySubscriptionLandingReducer';
-import { productPagePeriodFormActionsFor, type Action } from './components/productPagePeriodFormActions';
+import { productPagePeriodFormActionsFor } from './components/productPagePeriodFormActions';
 
 // ----- Action Creators ----- //
 
-function setPeriod(period: WeeklyBillingPeriod): (dispatch: Function) => Action {
-  return productPagePeriodFormActionsFor('GuardianWeekly', 'GuardianWeekly').setPeriod(period);
-}
+const { setPeriod } = productPagePeriodFormActionsFor<WeeklyBillingPeriod>('GuardianWeekly', 'GuardianWeekly');
 
 function redirectToWeeklyPage() {
   return (dispatch: Function, getState: () => State) => {
