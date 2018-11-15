@@ -17,11 +17,11 @@ export type State = {
 
 const promoInUrl = getQueryParameter('promo');
 
-const initialState: FormState<WeeklyBillingPeriod> = {
-  period: promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year' ? promoInUrl : 'sixweek',
-};
+const initialPeriod: WeeklyBillingPeriod = promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year'
+  ? promoInUrl
+  : 'sixweek';
 
 
 // ----- Export ----- //
 
-export default productPagePeriodFormReducerFor('GuardianWeekly', initialState);
+export default productPagePeriodFormReducerFor<WeeklyBillingPeriod>('GuardianWeekly', initialPeriod);

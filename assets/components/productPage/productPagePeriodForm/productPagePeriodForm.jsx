@@ -74,7 +74,7 @@ export default function ProductPagePeriodForm<P:string>({
       </div>
       <div className={['component-product-page-period-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
         <ProductPageButton disabled={selectedPeriod === null} type="submit">
-          Subscribe now{selectedPeriod && ` – ${periods[selectedPeriod].title}`}
+          Subscribe now{selectedPeriod && periods[selectedPeriod] && ` – ${periods[selectedPeriod].title}`}
         </ProductPageButton>
       </div>
 
