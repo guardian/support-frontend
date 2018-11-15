@@ -89,7 +89,12 @@ class PayPalOneOff(
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
       cookieAcquisitionData <- Try {
-        Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
+        val parsed = Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
+
+        request.cookies.get("_ga") match {
+          case Some(gaId) => parsed.as[JsObject] + ("gaId" -> Json.toJson(gaId.value))
+          case None => parsed
+        }
       }.toOption
     } yield cookieAcquisitionData).getOrElse(fallbackAcquisitionData)
 
