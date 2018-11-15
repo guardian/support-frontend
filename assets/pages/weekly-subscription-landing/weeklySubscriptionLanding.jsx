@@ -19,8 +19,8 @@ import ProductPagehero from 'components/productPage/productPageHero/productPageH
 import ProductPageContentBlock, { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
+import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
 
-import WeeklyFeatureList from './components/weeklyFeatureList';
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
 
@@ -94,7 +94,7 @@ const content = (
       <ProductPageContentBlock>
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
         <div className={outsetClassName}>
-          <WeeklyFeatureList features={[
+          <ProductPageFeatures features={[
             { title: 'Up to 35% off the retail cover price' },
             { title: 'Free international shipping' },
             { title: 'A weekly email newsletter from the editor' },
@@ -117,7 +117,7 @@ const content = (
           </p>
         </ProductPageTextBlock>
         <div className={outsetClassName}>
-          <WeeklyFeatureList features={[
+          <ProductPageFeatures features={[
             { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
             { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
             { title: 'USA and Canada', copy: '+1 917-900-4663' },

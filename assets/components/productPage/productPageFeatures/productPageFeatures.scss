@@ -1,15 +1,15 @@
-.weekly-feature-list {
+.component-product-page-features {
   @include mq($from: tablet) {
     display: flex;
   }
 }
 
-.weekly-feature-list__title {
+.component-product-page-features__title {
   @include gu-font-headline-responsive;
   font-weight: 200;
 }
 
-.weekly-feature-list__item {
+.component-product-page-features__item {
   flex: 0 0 25%;
   box-sizing: border-box;
   padding: ($gu-v-spacing / 6) ($gu-h-spacing/2) ($gu-v-spacing * 2) 0;

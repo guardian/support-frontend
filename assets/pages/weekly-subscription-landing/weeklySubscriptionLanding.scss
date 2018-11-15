@@ -14,13 +14,10 @@
 @import '~components/productPage/productPageHero/productPageHero';
 @import '~components/productPage/productPageContentBlock/productPageContentBlock';
 @import '~components/productPage/productPageTextBlock/productPageTextBlock';
-@import '~components/productPage/ProductPageButton/ProductPageButton';
-@import '~components/productPage/ProductPageFeatures/ProductPageFeatures';
-
-@import 'components/weeklyFeatureList';
-
-@import 'components/productPagePeriodForm';
-@import 'components/productPagePeriodFormLabel';
+@import '~components/productPage/productPageButton/productPageButton';
+@import '~components/productPage/productPageFeatures/productPageFeatures';
+@import '~components/productPage/productPagePeriodForm/productPagePeriodForm';
+@import '~components/productPage/productPagePeriodForm/productPagePeriodFormLabel';
 
 :root {
   scroll-behavior: smooth;
