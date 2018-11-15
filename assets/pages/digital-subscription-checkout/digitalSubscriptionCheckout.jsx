@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
+import * as user from 'helpers/user/user';
 
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
@@ -24,6 +25,7 @@ import CheckoutStage from './components/checkoutStage';
 
 const store = pageInit(initReducer());
 
+user.init(store.dispatch);
 
 // ----- Internationalisation ----- //
 
