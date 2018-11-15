@@ -6,20 +6,12 @@ import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { type State } from './weeklySubscriptionLandingReducer';
-
-
-// ----- Types ----- //
-
-export type Action = { type: 'SET_PERIOD', period: WeeklyBillingPeriod };
-
+import { productPagePeriodFormActionsFor, type Action } from './components/productPagePeriodFormActions';
 
 // ----- Action Creators ----- //
 
 function setPeriod(period: WeeklyBillingPeriod): (dispatch: Function) => Action {
-  return (dispatch) => {
-    sendTrackingEventsOnClick(`toggle_period_${period}`, 'GuardianWeekly', null)();
-    return dispatch({ type: 'SET_PERIOD', period });
-  };
+  return productPagePeriodFormActionsFor('GuardianWeekly', 'GuardianWeekly').setPeriod(period);
 }
 
 function redirectToWeeklyPage() {

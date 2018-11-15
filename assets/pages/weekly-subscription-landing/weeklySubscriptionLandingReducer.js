@@ -8,7 +8,7 @@ import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
 import { getQueryParameter } from 'helpers/url';
 
-import { type Action } from './weeklySubscriptionLandingActions';
+import { productPagePeriodFormReducerFor } from './components/productPagePeriodFormReducer';
 
 
 // ----- Subs ------ //
@@ -36,7 +36,7 @@ export const billingPeriods = {
 
 
 type PageState = {
-  period: WeeklyBillingPeriod | null;
+  period: string | null;
 };
 
 export type State = {
@@ -53,21 +53,7 @@ const initialState: PageState = {
   period: promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year' ? promoInUrl : 'sixweek',
 };
 
-function reducer(state: PageState = initialState, action: Action): PageState {
-
-  switch (action.type) {
-
-    case 'SET_PERIOD':
-      return { ...state, period: action.period };
-
-    default:
-      return state;
-
-  }
-
-}
-
 
 // ----- Export ----- //
 
-export default reducer;
+export default productPagePeriodFormReducerFor('GuardianWeekly', initialState);

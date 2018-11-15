@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import SvgInfo from 'components/svgs/information';
-import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { outsetClassName, bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 
@@ -20,27 +19,28 @@ import WeeklyFormLabel from './weeklyFormLabel';
 // ---- Types ----- //
 
 type PropTypes = {|
-  selectedPeriod: WeeklyBillingPeriod | null,
+  selectedPeriod: string | null,
   countryGroupId: CountryGroupId,
   redirectToWeeklyPageAction: () => void,
-  setPeriodAction: (WeeklyBillingPeriod) => Action,
+  setPeriodAction: (string) => Action,
 |};
 
 // ----- Render ----- //
 
-const WeeklyForm = ({
+function WeeklyForm({
   selectedPeriod, countryGroupId, redirectToWeeklyPageAction, setPeriodAction,
-}: PropTypes) => (
-  <form
-    className="weekly-form-wrap"
-    onSubmit={(ev) => {
+}: PropTypes) {
+  return (
+    <form
+      className="weekly-form-wrap"
+      onSubmit={(ev) => {
       ev.preventDefault();
       redirectToWeeklyPageAction();
     }}
-  >
-    <div className={outsetClassName}>
-      <div className="weekly-form">
-        {Object.keys(billingPeriods).map((type: WeeklyBillingPeriod) => {
+    >
+      <div className={outsetClassName}>
+        <div className="weekly-form">
+          {Object.keys(billingPeriods).map((type) => {
         const {
           copy, title,
         } = billingPeriods[type];
@@ -59,20 +59,21 @@ const WeeklyForm = ({
           </div>
           );
         })}
+        </div>
       </div>
-    </div>
-    <div className={['weekly-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
-      <WeeklyCta disabled={selectedPeriod === null} type="submit">
+      <div className={['weekly-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
+        <WeeklyCta disabled={selectedPeriod === null} type="submit">
         Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
-      </WeeklyCta>
-    </div>
+        </WeeklyCta>
+      </div>
 
-    <div className="weekly-form__info">
-      <SvgInfo />
+      <div className="weekly-form__info">
+        <SvgInfo />
       You can cancel your subscription at any time
-    </div>
-  </form>
-);
+      </div>
+    </form>
+  );
+}
 
 // ----- State/Props Maps ----- //
 
