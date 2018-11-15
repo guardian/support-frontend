@@ -3,13 +3,45 @@
 // ----- Imports ----- //
 
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { currencies, detect } from 'helpers/internationalisation/currency';
+import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
 import { getQueryParameter } from 'helpers/url';
-import { productPagePeriodFormReducerFor, type State as FormState } from 'components/productPage/productPagePeriodForm/productPagePeriodFormReducer';
+
+import { type Action } from './weeklySubscriptionLandingActions';
+
+
+// ----- Subs ------ //
+
+const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
+  currencies[detect(countryGroupId)].extendedGlyph,
+  getWeeklyProductPrice(countryGroupId, period),
+].join('');
+
+export const billingPeriods = {
+  sixweek: {
+    title: '6 for 6',
+    offer: 'Introductory offer',
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'sixweek')} for the first 6 issues (then ${getPrice(countryGroupId, 'quarter')} quarterly)`,
+  },
+  quarter: {
+    title: 'Quarterly',
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'quarter')} every 3 months`,
+  },
+  year: {
+    title: 'Annually',
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'year')} every 12 months`,
+  },
+};
+
+
+type PageState = {
+  period: WeeklyBillingPeriod | null;
+};
 
 export type State = {
   common: CommonState,
-  page: FormState<WeeklyBillingPeriod>,
+  page: PageState,
 };
 
 
@@ -17,11 +49,25 @@ export type State = {
 
 const promoInUrl = getQueryParameter('promo');
 
-const initialState: FormState<WeeklyBillingPeriod> = {
+const initialState: PageState = {
   period: promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year' ? promoInUrl : 'sixweek',
 };
+
+function reducer(state: PageState = initialState, action: Action): PageState {
+
+  switch (action.type) {
+
+    case 'SET_PERIOD':
+      return { ...state, period: action.period };
+
+    default:
+      return state;
+
+  }
+
+}
 
 
 // ----- Export ----- //
 
-export default productPagePeriodFormReducerFor('GuardianWeekly', initialState);
+export default reducer;
