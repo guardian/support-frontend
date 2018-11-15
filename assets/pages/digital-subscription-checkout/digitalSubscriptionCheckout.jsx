@@ -16,13 +16,13 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
-import { reducer } from './digitalSubscriptionCheckoutReducer';
+import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
 
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer);
+const store = pageInit(initReducer());
 
 
 // ----- Internationalisation ----- //

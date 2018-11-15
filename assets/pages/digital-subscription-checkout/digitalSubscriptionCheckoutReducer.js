@@ -4,6 +4,14 @@
 
 import type { CommonState } from 'helpers/page/commonReducer';
 import { type IsoCountry, fromString } from 'helpers/internationalisation/country';
+import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
+import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import csrf from 'helpers/csrf/csrfReducer';
+
+import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
+import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
+import {combineReducers} from "redux";
 
 
 // ----- Types ----- //
@@ -17,9 +25,22 @@ export type FormFields = {|
   telephone: string,
 |};
 
+type CheckoutState = {|
+  stage: string,
+  firstName: string,
+  lastName: string,
+  country: ?string,
+  telephone: string,
+|}
+
 type PageState = {|
-  stage: Stage,
-  ...FormFields,
+  form: {
+    stage: Stage,
+    ...FormFields,
+  },
+  user: UserState,
+  csrf: CsrfState,
+  marketingConsent: MarketingConsentState,
 |};
 
 export type State = {
@@ -53,10 +74,10 @@ export type FormActionCreators = typeof formActionCreators;
 
 function formFieldsSelector(state: State): FormFields {
   return {
-    firstName: state.page.firstName,
-    lastName: state.page.lastName,
-    country: state.page.country,
-    telephone: state.page.telephone,
+    firstName: state.page.form.firstName,
+    lastName: state.page.form.lastName,
+    country: state.page.form.country,
+    telephone: state.page.form.telephone,
   };
 }
 
@@ -64,14 +85,14 @@ function formFieldsSelector(state: State): FormFields {
 // ----- Reducer ----- //
 
 const initialState = {
-  stage: 'checkout',
+  stage: 'thankyou',
   firstName: '',
   lastName: '',
   country: null,
   telephone: '',
 };
 
-function reducer(state: PageState = initialState, action: Action): PageState {
+function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
 
   switch (action.type) {
 
@@ -97,11 +118,20 @@ function reducer(state: PageState = initialState, action: Action): PageState {
 
 }
 
+function initReducer(countryGroupId: CountryGroupId = detect()) {
+  return combineReducers({
+    form: reducer,
+    user: createUserReducer(countryGroupId),
+    csrf,
+    marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
+  });
+}
+
 
 // ----- Export ----- //
 
 export {
-  reducer,
+  initReducer,
   setStage,
   formFieldsSelector,
   formActionCreators,

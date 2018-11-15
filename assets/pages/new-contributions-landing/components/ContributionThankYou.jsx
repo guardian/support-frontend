@@ -8,7 +8,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { type Contrib, getSpokenType } from 'helpers/contributions';
 import CtaLink from 'components/ctaLink/ctaLink';
-import MarketingConsent from '../components/MarketingConsent';
+import MarketingConsent from './MarketingConsentContainer';
 import ContributionsSurvey from '../components/ContributionsSurvey';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 
