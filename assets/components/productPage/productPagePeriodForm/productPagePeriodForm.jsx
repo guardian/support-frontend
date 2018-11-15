@@ -10,8 +10,6 @@ import { outsetClassName, bgClassName } from 'components/productPage/productPage
 import ProductPageButton from '../productPageButton/productPageButton';
 import ProductPagePeriodFormLabel from './productPagePeriodFormLabel';
 
-import { type Action } from './productPagePeriodFormActions';
-
 // ---- Types ----- //
 
 export type Period = {|
@@ -39,8 +37,11 @@ type PropTypes<P> = {|
 // ----- Render ----- //
 
 export default function ProductPagePeriodForm<P:string>({
-  selectedPeriod, onSubmitAction, setPeriodAction, periods,
+  periods, selectedPeriod, onSubmitAction, setPeriodAction,
 }: PropTypes<P>) {
+
+  const keys = Object.keys(periods);
+
   return (
     <form
       className="component-product-page-period-form-wrap"
@@ -51,7 +52,7 @@ export default function ProductPagePeriodForm<P:string>({
     >
       <div className={outsetClassName}>
         <div className="component-product-page-period-form">
-          {Object.keys(periods).map((key: P) => {
+          {keys.map((key: P) => {
             const {
               copy, title, offer,
             } = periods[key];
