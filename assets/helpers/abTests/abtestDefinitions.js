@@ -18,4 +18,17 @@ export const tests: Tests = {
     independent: true,
     seed: 3,
   },
+
+  smallMobileHeader: {
+    variants: ['control', 'smallHeader'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 4,
+  },
 };

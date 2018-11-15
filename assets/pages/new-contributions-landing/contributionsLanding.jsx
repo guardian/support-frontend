@@ -42,11 +42,13 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 const selectedCountryGroup = countryGroups[countryGroupId];
 
+const { abParticipations } = store.getState().common;
+const hasSmallMobileHeader = abParticipations.smallMobileHeader === 'smallHeader';
+
 // ----- Render ----- //
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
-
 
 const router = (
   <BrowserRouter>
@@ -57,7 +59,7 @@ const router = (
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
           render={() => (
             <Page
-              classModifiers={['contribution-form']}
+              classModifiers={['contribution-form', ...(hasSmallMobileHeader ? ['small-header'] : [])]}
               header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
@@ -78,7 +80,7 @@ const router = (
             );
             return (
               <Page
-                classModifiers={['contribution-thankyou']}
+                classModifiers={['contribution-thankyou', ...(hasSmallMobileHeader ? ['small-header'] : [])]}
                 header={<NewHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
