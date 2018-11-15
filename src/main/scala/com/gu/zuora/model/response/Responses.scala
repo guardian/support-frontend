@@ -32,7 +32,7 @@ object ZuoraErrorResponse {
 }
 
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
-  extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
+    extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
 
   override def toString: String = this.errors.toString()
   def toRetryNone: RetryNone = new RetryNone(message = this.asJson.noSpaces, cause = this)
@@ -77,20 +77,20 @@ object SubscribeResponseAccount {
   implicit val codec: Codec[SubscribeResponseAccount] = capitalizingCodec
 }
 case class SubscribeResponseAccount(
-  accountNumber: String,
-  subscriptionNumber: String,
-  gatewayResponse: String,
-  paymentId: String,
-  invoiceResult: InvoiceResult,
-  totalTcv: Float,
-  subscriptionId: String,
-  totalMrr: Float,
-  paymentTransactionNumber: String,
-  accountId: String,
-  gatewayResponseCode: String,
-  invoiceNumber: String,
-  invoiceId: String,
-  success: Boolean
+    accountNumber: String,
+    subscriptionNumber: String,
+    gatewayResponse: String,
+    paymentId: String,
+    invoiceResult: InvoiceResult,
+    totalTcv: Float,
+    subscriptionId: String,
+    totalMrr: Float,
+    paymentTransactionNumber: String,
+    accountId: String,
+    gatewayResponseCode: String,
+    invoiceNumber: String,
+    invoiceId: String,
+    success: Boolean
 ) extends ZuoraResponse {
 
   def domainAccountNumber: ZuoraAccountNumber = ZuoraAccountNumber(accountNumber)

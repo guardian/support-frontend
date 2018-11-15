@@ -32,8 +32,8 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     val createZuora = new CreateZuoraSubscription(mockServiceProvider)
 
     val outStream = new ByteArrayOutputStream()
-
-    createZuora.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson(billingPeriod = Monthly)), outStream, context)
+    val in = wrapFixture(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
+    createZuora.handleRequest(in, outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
     sendThankYouEmail._1.accountNumber.length should be > 0
@@ -74,6 +74,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
       .thenReturn(Future.successful(Nil))
     when(mockZuora.subscribe(any[SubscribeRequest]))
       .thenAnswer((invocation: InvocationOnMock) => realService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
+    when(mockZuora.config).thenReturn(realService.config)
     mockZuora
   }
 

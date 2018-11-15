@@ -94,7 +94,8 @@ object Fixtures {
             "name":"fakeTest",
             "variant":"fakeVariant"
           }],
-          "queryParameters":null
+          "queryParameters":null,
+          "hostname":"support.thegulocal.com"
         },
         "supportAbTests":[{
           "name":"fakeSupportTest",

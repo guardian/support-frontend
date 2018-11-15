@@ -7,7 +7,7 @@ import com.gu.monitoring.SafeLogger._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.GetRecurringSubscription
 import com.gu.support.workers.lambdas.IdentityId
-import com.gu.support.workers.model.AccountAccessScope.{SessionAccess, AuthenticatedAccess, SessionId}
+import com.gu.support.workers.model.AccountAccessScope.{AuthenticatedAccess, SessionAccess, SessionId}
 import com.gu.support.workers.model.Monthly
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
@@ -40,7 +40,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
 
   it should "be resistant to 'ZOQL injection'" in {
     // try https://github.com/guardian/zuora-auto-cancel/blob/master/lib/zuora/src/main/scala/com/gu/util/zuora/SafeQueryBuilder.scala
-    IdentityId("30000701' or status = 'Active") should be(None)
+    IdentityId("30000701' or status = 'Active").isFailure should be(true)
   }
 
   it should "retrieve subscriptions from an account id" in {
