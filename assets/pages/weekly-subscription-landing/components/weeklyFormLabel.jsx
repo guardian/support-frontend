@@ -7,12 +7,10 @@ import SvgCheckmark from 'components/svgs/checkmark';
 
 import uuidv4 from 'uuid';
 
-import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
-
 // ---- Types ----- //
 
 type PropTypes = {|
-  type: WeeklyBillingPeriod,
+  type: string,
   title: string,
   offer: string | null,
   children: Node,
