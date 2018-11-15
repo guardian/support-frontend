@@ -1,14 +1,14 @@
-.weekly-form-label-wrap {
+.component-product-page-period-form-label {
   position: relative;
   height: 100%;
 }
 
-.weekly-form-label-wrap__input {
+.component-product-page-period-form-label__input {
   position: absolute;
   opacity: 0;
 }
 
-.weekly-form-label {
+.component-product-page-period-form-label__box {
   font-family: $gu-text-sans-web;
   background: gu-colour(garnett-neutral-5);
   border: 1px solid gu-colour(garnett-neutral-2);
@@ -20,20 +20,20 @@
   will-change: background-color box-shadow;
 }
 
-.weekly-form-label__title,
-.weekly-form-label__copy {
+.component-product-page-period-form-label__title,
+.component-product-page-period-form-label__copy {
   padding: $gu-v-spacing/2 $gu-h-spacing/2;
   display: block;
 }
 
-.weekly-form-label__title {
+.component-product-page-period-form-label__title {
   font-weight: 600;
   font-size: 20px;
   position: relative;
   border-bottom: 1px solid gu-colour(garnett-neutral-2);
 }
 
-.weekly-form-label__offer {
+.component-product-page-period-form-label__offer {
   color: gu-colour(garnett-neutral-5);
   font-weight: 600;
   display: inline-block;
@@ -43,11 +43,11 @@
   line-height: 1.4;
 }
 
-.weekly-form-label__copy {
+.component-product-page-period-form-label__copy {
   padding-bottom: $gu-v-spacing;
 }
 
-.weekly-form-label__check {
+.component-product-page-period-form-label__check {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,15 +68,15 @@
     fill: gu-colour(news-garnett-highlight);
   }
 }
-.weekly-form-label-wrap__input:hover + .weekly-form-label,
-.weekly-form-label-wrap__input:focus + .weekly-form-label {
+.component-product-page-period-form-label__input:hover + .component-product-page-period-form-label__box,
+.component-product-page-period-form-label__input:focus + .component-product-page-period-form-label__box {
   box-shadow: 0 0 0 2px rgba(gu-colour(garnett-neutral-5),.25);
 }
 
-.weekly-form-label-wrap__input:checked + .weekly-form-label {
+.component-product-page-period-form-label__input:checked + .component-product-page-period-form-label__box {
   background: gu-colour(news-garnett-highlight);
   border-color: rgba(0,0,0,.3);
-  .weekly-form-label__check {
+  .component-product-page-period-form-label__check {
     transform: translateY(0);
     opacity: 1;
   }

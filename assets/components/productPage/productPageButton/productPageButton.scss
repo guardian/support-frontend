@@ -1,4 +1,4 @@
-.weekly-cta {
+.component-product-page-button {
   font-size: 16px;
   line-height: 1.2;
   display: inline-flex;
@@ -26,13 +26,13 @@
   }
 }
 
-.weekly-cta__content,
-.weekly-cta svg {
+.component-product-page-button__content,
+.component-product-page-button svg {
   flex: 0 0 auto;
   display: block;
 }
 
-.weekly-cta svg {
+.component-product-page-button svg {
   width: $gu-h-spacing * 1.5;
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
 }
