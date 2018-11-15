@@ -54,22 +54,15 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        headline="Become a Guardian Weekly subscriber"
-        overheading="Guardian Weekly subscriptions"
-        heading="Get a clearer, global perspective on the issues that matter, in one magazine."
+        headline="Become a Guardian Paper subscriber"
+        overheading="Guardian Paper subscriptions"
+        heading="Get a clearer, global perspective on the issues that matter, in one newspaper."
         modifierClasses={['weekly']}
-        cta={<ProductPageButton trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</ProductPageButton>}
-      >
-        <GridImage
-          gridId="weeklyLandingHero"
-          srcSizes={[946, 473]}
-          sizes="(max-width: 740px) 90vw, 600px"
-          imgType="png"
-        />
-      </ProductPagehero>
+        cta={<ProductPageButton trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</ProductPageButton>}
+      />
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Open up your world view, Weekly">
-          <p className={largeParagraphClassName}>Inside the essential magazine from
+        <ProductPageTextBlock title="Open up your world view, Paper">
+          <p className={largeParagraphClassName}>Inside the essential newspaper from
           The&nbsp;Guardian, you&#39;ll find expert opinion, insight and culture, curated to
           bring you a progressive, international perspective. You&#39;ll also discover
           challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
@@ -82,21 +75,21 @@ const content = (
           <ProductPageFeatures features={[
             { title: 'Up to 35% off the retail cover price' },
             { title: 'Free international shipping' },
-            { title: 'A weekly email newsletter from the editor' },
+            { title: 'A paper email newsletter from the editor' },
             { title: 'Access to every edition on any device, through PressReader' },
           ]}
           />
         </div>
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" id="subscribe">
-        <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
+        <ProductPageTextBlock title="Subscribe to Guardian Paper today">
           <p>Choose how you’d like to pay</p>
         </ProductPageTextBlock>
         <Form />
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Gift subscriptions">
-          <p className={largeParagraphClassName}>A Guardian Weekly subscription
+          <p className={largeParagraphClassName}>A Guardian Paper subscription
           makes a great gift. To&nbsp;buy&nbsp;one, just get in touch with your local customer
           service team:
           </p>
@@ -112,7 +105,7 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Promotion terms and conditions">
-          <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Weekly print subscription services and their terms and conditions - see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">theguardian.com/guardian-weekly-subscription-terms-conditions</a>
+          <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Paper print subscription services and their terms and conditions - see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">theguardian.com/guardian-weekly-subscription-terms-conditions</a>
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>

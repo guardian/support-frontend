@@ -17,11 +17,10 @@ export type State = {
 
 const promoInUrl = getQueryParameter('promo');
 
-const initialState: FormState<PaperBillingPeriod> = {
-  period: promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'month' ? promoInUrl : null,
-};
+const initialPeriod: ?PaperBillingPeriod =
+  promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'month' ? promoInUrl : null;
 
 
 // ----- Export ----- //
 
-export default productPagePeriodFormReducerFor('Paper', initialState);
+export default productPagePeriodFormReducerFor<?PaperBillingPeriod>('Paper', initialPeriod);

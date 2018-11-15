@@ -7,3 +7,16 @@
 
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
+@import '~components/headingBlock/headingBlock';
+@import '~components/leftMarginSection/leftMarginSection';
+@import '~components/productPage/productPageHero/productPageHero';
+@import '~components/productPage/productPageContentBlock/productPageContentBlock';
+@import '~components/productPage/productPageTextBlock/productPageTextBlock';
+@import '~components/productPage/productPageButton/productPageButton';
+@import '~components/productPage/productPageFeatures/productPageFeatures';
+@import '~components/productPage/productPagePeriodForm/productPagePeriodForm';
+@import '~components/productPage/productPagePeriodForm/productPagePeriodFormLabel';
+
+:root {
+  scroll-behavior: smooth;
+}
