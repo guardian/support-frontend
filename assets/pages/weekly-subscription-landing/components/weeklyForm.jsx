@@ -2,90 +2,64 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import SvgInfo from 'components/svgs/information';
-import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { outsetClassName, bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import { currencies, detect } from 'helpers/internationalisation/currency';
+import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
+import { type Action } from 'components/productPage/productPagePeriodForm/productPagePeriodFormActions';
+import ProductPagePeriodForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePeriodForm/productPagePeriodForm';
 
-import WeeklyCta from './weeklyCta';
-import { billingPeriods, type State } from '../weeklySubscriptionLandingReducer';
-import { redirectToWeeklyPage, setPeriod, type Action } from '../weeklySubscriptionLandingActions';
-import WeeklyFormLabel from './weeklyFormLabel';
+import { type State } from '../weeklySubscriptionLandingReducer';
+import { redirectToWeeklyPage, setPeriod } from '../weeklySubscriptionLandingActions';
 
 
-// ---- Types ----- //
+// ---- Periods ----- //
 
-type PropTypes = {|
-  selectedPeriod: WeeklyBillingPeriod | null,
-  countryGroupId: CountryGroupId,
-  redirectToWeeklyPageAction: () => void,
-  setPeriodAction: (WeeklyBillingPeriod) => Action,
-|};
+const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
+  currencies[detect(countryGroupId)].extendedGlyph,
+  getWeeklyProductPrice(countryGroupId, period),
+].join('');
 
-// ----- Render ----- //
+export const billingPeriods = {
+  sixweek: {
+    title: '6 for 6',
+    offer: 'Introductory offer',
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'sixweek')} for the first 6 issues (then ${getPrice(countryGroupId, 'quarter')} quarterly)`,
+  },
+  quarter: {
+    title: 'Quarterly',
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'quarter')} every 3 months`,
+  },
+  year: {
+    title: 'Annually',
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'year')} every 12 months`,
+  },
+};
 
-const WeeklyForm = ({
-  selectedPeriod, countryGroupId, redirectToWeeklyPageAction, setPeriodAction,
-}: PropTypes) => (
-  <form
-    className="weekly-form-wrap"
-    onSubmit={(ev) => {
-      ev.preventDefault();
-      redirectToWeeklyPageAction();
-    }}
-  >
-    <div className={outsetClassName}>
-      <div className="weekly-form">
-        {Object.keys(billingPeriods).map((type: WeeklyBillingPeriod) => {
-        const {
-          copy, title,
-        } = billingPeriods[type];
-        return (
-          <div className="weekly-form__item">
-            <WeeklyFormLabel
-              title={title}
-              offer={billingPeriods[type].offer || null}
-              type={type}
-              key={type}
-              checked={type === selectedPeriod}
-              onChange={() => { setPeriodAction(type); }}
-            >
-              {copy(countryGroupId)}
-            </WeeklyFormLabel>
-          </div>
-          );
-        })}
-      </div>
-    </div>
-    <div className={['weekly-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
-      <WeeklyCta disabled={selectedPeriod === null} type="submit">
-        Subscribe now{selectedPeriod && ` – ${billingPeriods[selectedPeriod].title}`}
-      </WeeklyCta>
-    </div>
-
-    <div className="weekly-form__info">
-      <SvgInfo />
-      You can cancel your subscription at any time
-    </div>
-  </form>
-);
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => ({
+  periods: Object.keys(billingPeriods).reduce((ps, k) => ({
+    ...ps,
+    [k]: {
+      title: billingPeriods[k].title,
+      copy: billingPeriods[k].copy(state.common.internationalisation.countryGroupId),
+      offer: billingPeriods[k].offer || null,
+    },
+  }), {}),
   selectedPeriod: state.page.period,
-  countryGroupId: state.common.internationalisation.countryGroupId,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-  redirectToWeeklyPageAction: bindActionCreators(redirectToWeeklyPage, dispatch),
-  setPeriodAction: bindActionCreators(setPeriod, dispatch),
-});
+const mapDispatchToProps = (dispatch: Dispatch<Action<WeeklyBillingPeriod>>): DispatchPropTypes<WeeklyBillingPeriod> =>
+  ({
+    setPeriodAction: bindActionCreators(setPeriod, dispatch),
+    onSubmitAction: bindActionCreators(redirectToWeeklyPage, dispatch),
+  });
+
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(WeeklyForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductPagePeriodForm);
