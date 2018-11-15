@@ -43,7 +43,7 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 const selectedCountryGroup = countryGroups[countryGroupId];
 
 const { abParticipations } = store.getState().common;
-const hasSmallMobileHeader = abParticipations.smallMobileHeader === 'smallHeader';
+const hasSmallMobileHeader = abParticipations.smallMobileHeader.startsWith('shrink');
 
 // ----- Render ----- //
 

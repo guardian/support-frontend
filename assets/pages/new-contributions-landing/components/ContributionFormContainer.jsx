@@ -27,6 +27,7 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
+import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //
@@ -49,6 +50,7 @@ type PropTypes = {|
   isTestUser: boolean,
   paymentMethod: PaymentMethod,
   contributionType: Contrib,
+  abParticipations: Participations,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -64,6 +66,7 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser,
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
+  abParticipations: state.common.abParticipations,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -84,12 +87,21 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
+  const showHeader = !props.abParticipations.smallMobileHeader.includes('NoHeader');
+  const showBlurb = !props.abParticipations.smallMobileHeader.includes('NoBlurb');
+
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content">
-        <h1 className="header">{countryGroupSpecificDetails[props.countryGroupId].headerCopy}</h1>
-        <p className="blurb">{countryGroupSpecificDetails[props.countryGroupId].contributeCopy}</p>
+        {showHeader
+          ? <h1 className="header">{countryGroupSpecificDetails[props.countryGroupId].headerCopy}</h1>
+          : null
+        }
+        {showBlurb
+          ? <p className="blurb">{countryGroupSpecificDetails[props.countryGroupId].contributeCopy}</p>
+          : null
+        }
         <NewContributionForm
           onPaymentAuthorisation={onPaymentAuthorisation}
         />
