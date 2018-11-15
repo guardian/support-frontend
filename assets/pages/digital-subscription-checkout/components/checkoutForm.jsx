@@ -7,11 +7,12 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { countries } from 'helpers/internationalisation/country';
+import { type FormError, firstError } from 'helpers/subscriptionsForms/validation';
 
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
-import { withError, type FormError } from 'components/forms/formHOCs/withError';
+import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 
 import {
@@ -19,7 +20,7 @@ import {
   type FormFields,
   type FormField,
   type FormActionCreators,
-  formFieldsSelector,
+  getFormFields,
   formActionCreators,
 } from '../digitalSubscriptionCheckoutReducer';
 
@@ -37,7 +38,7 @@ type PropTypes = {|
 
 function mapStateToProps(state: State) {
   return {
-    ...formFieldsSelector(state),
+    ...getFormFields(state),
     errors: state.page.form.errors,
   };
 }
@@ -61,8 +62,7 @@ function CheckoutForm(props: PropTypes) {
         type="text"
         value={props.firstName}
         setValue={props.setFirstName}
-        errors={props.errors}
-        fieldName="firstName"
+        error={firstError('firstName', props.errors)}
       />
       <Input1
         id="last-name"
@@ -70,16 +70,14 @@ function CheckoutForm(props: PropTypes) {
         type="text"
         value={props.lastName}
         setValue={props.setLastName}
-        errors={props.errors}
-        fieldName="lastName"
+        error={firstError('lastName', props.errors)}
       />
       <Select1
         id="country"
         label="Country"
         value={props.country}
         setValue={props.setCountry}
-        errors={props.errors}
-        fieldName="country"
+        error={firstError('country', props.errors)}
       >
         <option value="">--</option>
         {Object.keys(countries)
@@ -93,9 +91,9 @@ function CheckoutForm(props: PropTypes) {
         type="tel"
         value={props.telephone}
         setValue={props.setTelephone}
-        errors={props.errors}
-        fieldName="telephone"
+        error={firstError('telephone', props.errors)}
       />
+      <button onClick={() => props.submitForm()}>Submit</button>
     </div>
   );
 

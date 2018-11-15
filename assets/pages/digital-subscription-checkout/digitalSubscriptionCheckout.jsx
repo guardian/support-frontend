@@ -23,7 +23,7 @@ import CheckoutStage from './components/checkoutStage';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(initReducer());
+const store = pageInit(initReducer(), true);
 
 user.init(store.dispatch);
 
