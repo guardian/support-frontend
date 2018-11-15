@@ -1063,8 +1063,8 @@ form {
 
 /* Small header test */
 
-.gu-content--small-header {
-  @include mq($from: mobile, $until: tablet) {
+@include mq($from: mobile, $until: tablet) {
+  .gu-content--shrink {
     $header-height: 44px;
     grid-template-rows: [header-t] $header-height [header-b] 1fr [footer-t] auto [footer-b];
 
@@ -1100,6 +1100,24 @@ form {
     .blurb {
       font-size: 16px;
       margin: 0;
+    }
+  }
+
+  .gu-content--no-blurb {
+    .blurb {
+      display: none;
+    }
+  }
+
+  .gu-content--no-header {
+    .header {
+      display: none;
+    }
+  }
+
+  .gu-content--no-blurb.gu-content--no-header {
+    .form__radio-group-list {
+      padding-top: 0;
     }
   }
 }

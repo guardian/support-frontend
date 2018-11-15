@@ -43,7 +43,9 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 const selectedCountryGroup = countryGroups[countryGroupId];
 
 const { abParticipations } = store.getState().common;
-const hasSmallMobileHeader = abParticipations.smallMobileHeader.startsWith('shrink');
+const extraClasses = abParticipations.smallMobileHeader
+  .split('_')
+  .filter(x => x !== 'control' && x !== 'notintest');
 
 // ----- Render ----- //
 
@@ -59,7 +61,7 @@ const router = (
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
           render={() => (
             <Page
-              classModifiers={['contribution-form', ...(hasSmallMobileHeader ? ['small-header'] : [])]}
+              classModifiers={['contribution-form', ...extraClasses]}
               header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
@@ -80,7 +82,7 @@ const router = (
             );
             return (
               <Page
-                classModifiers={['contribution-thankyou', ...(hasSmallMobileHeader ? ['small-header'] : [])]}
+                classModifiers={['contribution-thankyou', ...extraClasses]}
                 header={<NewHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >

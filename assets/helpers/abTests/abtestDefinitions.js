@@ -20,7 +20,7 @@ export const tests: Tests = {
   },
 
   smallMobileHeader: {
-    variants: ['control', 'shrink', 'shrinkNoBlurb', 'shrinkNoBlurbNoHeader'],
+    variants: ['control', 'shrink', 'shrink_no-blurb', 'shrink_no-blurb_no-header'],
     audiences: {
       ALL: {
         offset: 0,
