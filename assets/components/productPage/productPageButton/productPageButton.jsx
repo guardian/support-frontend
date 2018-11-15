@@ -21,16 +21,16 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-const WeeklyCtaButton = ({
+const ProductPageButton = ({
   children, icon, type, onClick, href, disabled, trackingOnClick,
 }: PropTypes) => (href ? (
   <a
     href={href}
     data-disabled={disabled}
-    className="weekly-cta"
+    className="component-product-page-button"
     onClick={trackingOnClick}
   >
-    <span className="weekly-cta__content">{children}</span>
+    <span className="component-product-page-button__content">{children}</span>
     {icon}
   </a>
 ) : (
@@ -38,14 +38,14 @@ const WeeklyCtaButton = ({
     disabled={disabled}
     onClick={(ev) => { if (onClick) { onClick(ev); } if (trackingOnClick) { trackingOnClick(); } }}
     type={type}
-    className="weekly-cta"
+    className="component-product-page-button"
   >
-    <span className="weekly-cta__content">{children}</span>
+    <span className="component-product-page-button__content">{children}</span>
     {icon}
   </button>
 ));
 
-WeeklyCtaButton.defaultProps = {
+ProductPageButton.defaultProps = {
   icon: <SvgArrowRightStraight />,
   type: 'button',
   onClick: null,
@@ -54,4 +54,4 @@ WeeklyCtaButton.defaultProps = {
   disabled: false,
 };
 
-export default WeeklyCtaButton;
+export default ProductPageButton;
