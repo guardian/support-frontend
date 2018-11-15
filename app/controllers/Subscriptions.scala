@@ -123,7 +123,8 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
   }
 
-  def paperMethodRedirect(): Action[AnyContent] = Action { implicit request => Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
+  def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
+    Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
   }
 
   def paper(method: String): Action[AnyContent] = CachedAction() { implicit request =>
