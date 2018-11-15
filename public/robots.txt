@@ -7,15 +7,6 @@ Disallow: /au/subscribe/premium-tier
 Disallow: /int/subscribe/premium-tier
 Disallow: /contribute/recurring-guest
 
-Disallow: /uk/subscribe/weekly
-Disallow: /us/subscribe/weekly
-Disallow: /au/subscribe/weekly
-Disallow: /nz/subscribe/weekly
-Disallow: /eu/subscribe/weekly
-Disallow: /ca/subscribe/weekly
-Disallow: /int/subscribe/weekly
-Disallow: /subscribe/weekly
-
 Disallow: /uk/subscribe/digital/checkout
 Disallow: /us/subscribe/digital/checkout
 Disallow: /au/subscribe/digital/checkout
