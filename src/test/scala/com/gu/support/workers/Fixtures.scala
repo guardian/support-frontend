@@ -350,20 +350,14 @@ object Fixtures {
       }
     """
 
-  val sendAcquisitionEventJson =
-    """
-      {
-        "state": "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",
-        "error": null,
-        "requestInfo": {
-          "encrypted": true,
-          "testUser": true,
-          "failed": false,
-          "messages": [
-            "Payment method is Stripe"
-          ]
-        }
-      }
-    """
+  val sendAcquisitionEventJson = wrapFixture(
+    s"""{
+          $requestIdJson,
+          $userJson,
+          "product": ${contribution(currency = GBP)},
+          "paymentMethod": $payPalPaymentMethod,
+          "acquisitionData": $acquisitionData
+        }"""
+  )
 
 }

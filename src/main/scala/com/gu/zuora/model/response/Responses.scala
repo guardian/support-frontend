@@ -79,17 +79,10 @@ object SubscribeResponseAccount {
 case class SubscribeResponseAccount(
     accountNumber: String,
     subscriptionNumber: String,
-    gatewayResponse: String,
-    paymentId: String,
-    invoiceResult: InvoiceResult,
     totalTcv: Float,
     subscriptionId: String,
     totalMrr: Float,
-    paymentTransactionNumber: String,
     accountId: String,
-    gatewayResponseCode: String,
-    invoiceNumber: String,
-    invoiceId: String,
     success: Boolean
 ) extends ZuoraResponse {
 

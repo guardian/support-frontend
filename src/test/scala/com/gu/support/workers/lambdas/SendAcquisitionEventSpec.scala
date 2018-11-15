@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream
 import com.gu.ophan.AcquisitionService
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.Fixtures.sendAcquisitionEventJson
-import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
+import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
 import com.gu.test.tags.objects.IntegrationTest
@@ -20,7 +20,7 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
     val outStream = new ByteArrayOutputStream()
 
-    sendAcquisitionEvent.handleRequest(sendAcquisitionEventJson.asInputStream, outStream, context)
+    sendAcquisitionEvent.handleRequest(sendAcquisitionEventJson, outStream, context)
     //Check the output
 
     val out = Encoding.in[Unit](outStream.toInputStream)

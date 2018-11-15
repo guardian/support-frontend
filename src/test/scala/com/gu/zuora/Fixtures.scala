@@ -194,6 +194,19 @@ object Fixtures {
           "InvoiceId": "2c92c0f85be67835015be751f2c6655e"
         }
     """
+
+  val minimalSubscribeResponseAccount =
+    s"""
+      {
+          "SubscriptionId": "2c92c0f86716797001671754520357f2",
+          "SubscriptionNumber": "A-S00047037",
+          "TotalMrr": 9.991666667,
+          "AccountId": "2c92c0f867167970016717544fd357e9",
+          "AccountNumber": "A00019554",
+          "Success": true,
+          "TotalTcv": 115.387634411
+      }
+     """
   val subscribeResponse =
     s"""
       [

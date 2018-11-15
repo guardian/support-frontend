@@ -26,7 +26,7 @@ lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
 )
 
-lazy val circeVersion = "0.9.3"
+lazy val circeVersion = "0.10.1"
 lazy val awsVersion = "1.11.331"
 lazy val okhttpVersion = "3.10.0"
 
