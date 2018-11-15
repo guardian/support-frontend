@@ -52,6 +52,7 @@ type PropTypes = {|
   checkoutFormHasBeenSubmitted: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   contributionType: Contrib,
+  isRecurringContributor: boolean,
 |};
 
 // ----- Map State/Props ----- //
@@ -68,6 +69,7 @@ function mapStateToProps(state: State) {
     country: state.common.internationalisation.countryId,
     isSignedIn: state.page.user.isSignedIn,
     stateField: state.page.user.stateField,
+    isRecurringContributor: state.page.user.isRecurringContributor,
     checkoutFormHasBeenSubmitted: state.page.checkoutForm.checkoutFormHasBeenSubmitted,
     userTypeFromIdentityResponse: state.page.regularContrib.userTypeFromIdentityResponse,
     contributionType: state.page.regularContrib.contributionType,

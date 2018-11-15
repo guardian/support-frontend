@@ -22,6 +22,7 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
 import { MustSignIn } from './MustSignIn';
+import { ExistingRecurringContributor } from './ExistingRecurringContributor';
 import { type State } from '../contributionsLandingReducer';
 
 import {
@@ -43,6 +44,7 @@ type PropTypes = {|
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
+  isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   updateFirstName: Event => void,
   updateLastName: Event => void,
@@ -66,6 +68,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   state: state.page.form.formData.state,
   isSignedIn: state.page.user.isSignedIn,
+  isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
 });
@@ -117,6 +120,11 @@ function FormFields(props: PropTypes) {
         contributionType={props.contributionType}
         checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
         email={props.email}
+      />
+      <ExistingRecurringContributor
+        contributionType={props.contributionType}
+        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+        isRecurringContributor={props.isRecurringContributor}
       />
       <NewContributionTextInput
         id="contributionFirstName"

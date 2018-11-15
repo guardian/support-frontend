@@ -166,6 +166,7 @@ const togglePayPalButton = () =>
     const shouldEnable = checkoutFormShouldSubmit(
       state.page.form.contributionType,
       state.page.user.isSignedIn,
+      state.page.user.isRecurringContributor,
       state.page.form.userTypeFromIdentityResponse,
       // TODO: use the actual form state rather than re-fetching from DOM
       getForm('form--contribution'),
@@ -212,6 +213,7 @@ const checkIfEmailHasPassword = (email: string) =>
         dispatch(setValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
     );
   };
+
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
