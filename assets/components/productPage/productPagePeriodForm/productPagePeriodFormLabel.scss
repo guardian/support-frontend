@@ -1,14 +1,14 @@
-.component-product-page-period-form-label-wrap {
+.component-product-page-period-form-label {
   position: relative;
   height: 100%;
 }
 
-.component-product-page-period-form-label-wrap__input {
+.component-product-page-period-form-label__input {
   position: absolute;
   opacity: 0;
 }
 
-.component-product-page-period-form-label {
+.component-product-page-period-form-label__box {
   font-family: $gu-text-sans-web;
   background: gu-colour(garnett-neutral-5);
   border: 1px solid gu-colour(garnett-neutral-2);
@@ -68,12 +68,12 @@
     fill: gu-colour(news-garnett-highlight);
   }
 }
-.component-product-page-period-form-label-wrap__input:hover + .component-product-page-period-form-label,
-.component-product-page-period-form-label-wrap__input:focus + .component-product-page-period-form-label {
+.component-product-page-period-form-label__input:hover + .component-product-page-period-form-label__box,
+.component-product-page-period-form-label__input:focus + .component-product-page-period-form-label__box {
   box-shadow: 0 0 0 2px rgba(gu-colour(garnett-neutral-5),.25);
 }
 
-.component-product-page-period-form-label-wrap__input:checked + .component-product-page-period-form-label {
+.component-product-page-period-form-label__input:checked + .component-product-page-period-form-label__box {
   background: gu-colour(news-garnett-highlight);
   border-color: rgba(0,0,0,.3);
   .component-product-page-period-form-label__check {

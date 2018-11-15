@@ -27,9 +27,9 @@ export default ({
 }: PropTypes) => {
   const id = uuidv4();
   return (
-    <label onChange={onChange} htmlFor={id} className="component-product-page-period-form-label-wrap">
-      <input checked={checked} className="component-product-page-period-form-label-wrap__input" id={id} type="radio" name="sub-type" value={type} />
-      <div className="component-product-page-period-form-label">
+    <label onChange={onChange} htmlFor={id} className="component-product-page-period-form-label">
+      <input checked={checked} className="component-product-page-period-form-label__input" id={id} type="radio" name="sub-type" value={type} />
+      <div className="component-product-page-period-form-label__box">
         <div className="component-product-page-period-form-label__title">
           {title}
           <div aria-hidden="true" className="component-product-page-period-form-label__check"><SvgCheckmark /></div>
