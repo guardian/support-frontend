@@ -18,16 +18,11 @@
 }
 
 .component-heading-block__maxwidth {
-  @include mq($from: mobileMedium) {
-    max-width: 350px;
-  }
-
   @include mq($from: tablet) {
-    max-width: 400px;
+    width: 75%;
   }
-
   @include mq($from: desktop) {
-    max-width: 500px;
+    width: 50%;
   }
 }
 

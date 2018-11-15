@@ -123,6 +123,21 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
   }
 
+  def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
+    Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
+  }
+
+  def paper(method: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    val title = "The Guardian Subscriptions | The Guardian"
+    val id = "paper-subscription-landing-page-" + method
+    val js = "paperSubscriptionLandingPage.js"
+    val css = "paperSubscriptionLandingPage.css"
+    val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
+
+    Ok(views.html.main(title, id, js, css, None, canonicalLink)).withSettingsSurrogateKey
+  }
+
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
   def displayForm(countryCode: String, displayCheckout: String): Action[AnyContent] =
@@ -138,6 +153,9 @@ class Subscriptions(
         Redirect(routes.Subscriptions.geoRedirect)
       }
     }
+
+  def buildCanonicalPaperSubscriptionLink(method: String = "collection"): String =
+    s"${supportUrl}/subscribe/paper/${method}"
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"

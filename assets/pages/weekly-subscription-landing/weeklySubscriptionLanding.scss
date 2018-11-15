@@ -14,19 +14,16 @@
 @import '~components/productPage/productPageHero/productPageHero';
 @import '~components/productPage/productPageContentBlock/productPageContentBlock';
 @import '~components/productPage/productPageTextBlock/productPageTextBlock';
+@import '~components/productPage/productPageButton/productPageButton';
+@import '~components/productPage/productPageFeatures/productPageFeatures';
+@import '~components/productPage/productPagePeriodForm/productPagePeriodForm';
+@import '~components/productPage/productPagePeriodForm/productPagePeriodFormLabel';
 
-@import 'components/weeklyFeatureList';
-@import 'components/weeklyCta';
-@import 'components/weeklyForm';
-@import 'components/weeklyFormLabel';
+:root {
+  scroll-behavior: smooth;
+}
 
 .component-product-page-hero--weekly {
-  .svg-weekly-hero-circles {
-    position: absolute;
-    width: 300px;
-    left: -300px;
-    bottom: 0;
-  }
   .component-grid-image {
     display: block;
     width: 90%;
@@ -38,12 +35,12 @@
       max-width: 100%;
       height: 100%;
       position: absolute;
-      top: 10%;
+      top: 5%;
       right: -20%;
       margin: 0;
     }
     @include mq($from: desktop) {
-      left: 500px;
+      left: 450px;
       right: auto;
     }
   }

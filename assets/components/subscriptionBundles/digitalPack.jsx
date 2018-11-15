@@ -5,21 +5,21 @@
 import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
-import { flashSaleIsActive, getDiscountedPrice } from 'helpers/flashSale';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 import { type ImageId } from 'helpers/theGrid';
 import {
   type ComponentAbTest,
+  discountedDisplayPrice,
   displayPrice,
   sendTrackingEventsOnClick,
 } from 'helpers/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-
 function getFlashSaleCopy(countryGroupId: CountryGroupId) {
   if (countryGroupId === 'GBPCountries') {
     return {
-      subHeading: <span>£{getDiscountedPrice('DigitalPack', countryGroupId)} - save 50%</span>,
+      subHeading: <span>{discountedDisplayPrice('DigitalPack', countryGroupId)} - save 50%</span>,
       description:
       // eslint-disable-next-line react/jsx-indent
         <span>Ad-free reading on all devices, including the Premium App and Daily Edition iPad app.

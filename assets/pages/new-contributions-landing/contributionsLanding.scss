@@ -1036,6 +1036,31 @@ form {
   padding: 0 $gu-h-spacing $gu-v-spacing;
 }
 
+.component-contributions-survey {
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  margin: 0 -10px;
+  padding: 0 10px;
+
+  h3 {
+    font-family: $gu-text-egyptian-web;
+    letter-spacing: -0.5px;
+    font-weight: 900;
+    font-size: 17px;
+    margin: ($gu-v-spacing / 3) 0;
+  }
+
+  .component-cta-link {
+    display: inline-block;
+    margin-bottom: $gu-v-spacing * 3;
+    margin-top: $gu-v-spacing;
+  }
+
+  .component-cta-link__text {
+    padding-right: 25px;
+    font-size: 16px;
+  }
+}
+
 /* Small header test */
 
 .gu-content--small-header {

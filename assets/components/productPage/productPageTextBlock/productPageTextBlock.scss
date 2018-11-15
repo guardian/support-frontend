@@ -1,15 +1,24 @@
 .component-product-page-text-block__heading {
-  font-size: 24px;
+  @include gu-font-headline-responsive;
   font-weight: bold;
-  line-height: 1.16;
-  font-family: $gu-headline;
   margin-bottom: ($gu-v-spacing/2);
 }
 
 .component-product-page-text-block {
-  max-width: 480px;
+  overflow-wrap: break-word;
+  @include mq($from: tablet) {
+    width: 75%;
+  }
+  @include mq($from: desktop) {
+    width: 57.5%;
+  }
 }
 
 .component-product-page-text-block a {
   color: inherit;
+}
+
+.component-product-page-text-block__large {
+  @include gu-font-headline-responsive;
+  font-weight: 200;
 }
