@@ -50,7 +50,7 @@ import {
   createOneOffPayPalPayment,
   setFormIsValid,
 } from '../contributionsLandingActions';
-import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
+import ContributionErrorMessage from './ContributionErrorMessage';
 
 
 // ----- Types ----- //
@@ -200,20 +200,6 @@ function ContributionForm(props: PropTypes) {
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
     && maxTwoDecimals(input);
 
-  const invalidFormErrorMessageOnMobile = (
-    <PaymentFailureMessage classModifiers={['invalid_form_mobile']} errorHeading="Form incomplete" checkoutFailureReason="invalid_form_mobile" />
-  );
-
-  const errorMessage = !props.formIsValid
-    ? invalidFormErrorMessageOnMobile
-    : (
-      <ExistingRecurringContributorErrorMessage
-        contributionType={props.contributionType}
-        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
-        isRecurringContributor={props.isRecurringContributor}
-      />
-    );
-
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <NewContributionType />
@@ -222,7 +208,7 @@ function ContributionForm(props: PropTypes) {
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
-      { errorMessage }
+      <ContributionErrorMessage />
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>

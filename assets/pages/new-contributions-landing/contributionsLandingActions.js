@@ -186,6 +186,7 @@ const sendFormSubmitEventForPayPalRecurring = () =>
       flowPrefix: 'npf',
       form: getForm('form--contribution'),
       isSignedIn: state.page.user.isSignedIn,
+      isRecurringContributor: state.page.user.isRecurringContributor,
       setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
       setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
     };
