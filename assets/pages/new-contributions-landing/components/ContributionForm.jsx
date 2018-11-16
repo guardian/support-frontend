@@ -184,7 +184,6 @@ function onSubmit(props: PropTypes): Event => void {
     const form = event.target;
 
     if (props.isPostDeploymentTestUser && props.paymentMethod === 'Stripe') {
-      console.log(props.isPostDeploymentTestUser);
       props.onPaymentAuthorisation({ paymentMethod: 'Stripe', token: 'tok_visa' });
     } else {
       const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);

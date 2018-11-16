@@ -47,8 +47,6 @@ const init = (dispatch: Function) => {
     dispatch(setTestUser(true));
   }
 
-  console.log("user.js", cookie.get('_post_deploy_user'))
-
   if (testUserCondition && cookie.get('_post_deploy_user')) {
     dispatch(setPostDeploymentTestUser(true));
   }
