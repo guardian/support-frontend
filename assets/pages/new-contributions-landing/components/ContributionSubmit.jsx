@@ -41,6 +41,7 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  isRecurringContributor: boolean,
 |};
 
 const mapStateToProps = (state: State) =>
@@ -56,6 +57,7 @@ const mapStateToProps = (state: State) =>
     payPalHasLoaded: state.page.form.payPalHasLoaded,
     isTestUser: state.page.user.isTestUser,
     isSignedIn: state.page.user.isSignedIn,
+    isRecurringContributor: state.page.user.isRecurringContributor,
     userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   });
 
@@ -105,6 +107,7 @@ function ContributionSubmit(props: PropTypes) {
               checkoutFormShouldSubmit(
                 props.contributionType,
                 props.isSignedIn,
+                props.isRecurringContributor,
                 props.userTypeFromIdentityResponse,
                 getForm(formClassName),
               )

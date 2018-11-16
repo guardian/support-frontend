@@ -19,7 +19,7 @@ type PropTypes = {|
 
 // ----- Component ----- //
 
-export const ExistingRecurringContributor = (props: PropTypes) => {
+export const ExistingRecurringContributorErrorMessage = (props: PropTypes) => {
 
   const manageUrl = 'https://manage.theguardian.com/contributions?INTCPM=existing-contributor-from-support';
 
@@ -34,7 +34,7 @@ export const ExistingRecurringContributor = (props: PropTypes) => {
   }
 
   return (
-    <a className={classNameWithModifiers('form__error', ['sign-in'])} href={manageUrl} onClick={onClick}>
+    <a className={classNameWithModifiers('form__error', ['existing-contributor'])} href={manageUrl} onClick={onClick}>
         You already have recurring contribution. You can visit <span className="underline">manage my account</span> to give us more, if you wanna.
     </a>);
 

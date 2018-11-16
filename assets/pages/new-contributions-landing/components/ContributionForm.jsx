@@ -50,6 +50,7 @@ import {
   createOneOffPayPalPayment,
   setFormIsValid,
 } from '../contributionsLandingActions';
+import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
 
 
 // ----- Types ----- //
@@ -75,6 +76,8 @@ type PropTypes = {|
   isSignedIn: boolean,
   setFormIsValid: boolean => void,
   formIsValid: boolean,
+  isRecurringContributor: boolean,
+  checkoutFormHasBeenSubmitted: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -98,6 +101,8 @@ const mapStateToProps = (state: State) => ({
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   isSignedIn: state.page.user.isSignedIn,
   formIsValid: state.page.form.formIsValid,
+  isRecurringContributor: state.page.user.isRecurringContributor,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
 
@@ -199,6 +204,16 @@ function ContributionForm(props: PropTypes) {
     <PaymentFailureMessage classModifiers={['invalid_form_mobile']} errorHeading="Form incomplete" checkoutFailureReason="invalid_form_mobile" />
   );
 
+  const errorMessage = !props.formIsValid
+    ? invalidFormErrorMessageOnMobile
+    : (
+      <ExistingRecurringContributorErrorMessage
+        contributionType={props.contributionType}
+        checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+        isRecurringContributor={props.isRecurringContributor}
+      />
+    );
+
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <NewContributionType />
@@ -207,8 +222,7 @@ function ContributionForm(props: PropTypes) {
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
-      <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
-      {!props.formIsValid ? invalidFormErrorMessageOnMobile : null}
+      { errorMessage }
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>

@@ -775,6 +775,12 @@ form {
   text-decoration: none;
 }
 
+.form__error--existing-contributor {
+  margin-top: $gu-v-spacing;
+  display: block;
+  text-decoration: none;
+}
+
 .underline {
   text-decoration: underline;
 }
