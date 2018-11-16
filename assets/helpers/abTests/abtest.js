@@ -199,10 +199,12 @@ function getParticipations(
       return;
     }
 
+    if (test.canRun && !test.canRun()) {
+      return;
+    }
+
     if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
-    } else if (test.canRun && !test.canRun()) {
-      participations[testId] = notintest;
     } else if (userInTest(test.audiences, mvtId, country, countryGroupId)) {
       participations[testId] = assignUserToVariant(mvtId, test);
     } else {

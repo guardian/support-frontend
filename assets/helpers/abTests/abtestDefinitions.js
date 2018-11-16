@@ -30,5 +30,9 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 4,
+    canRun: () => [
+      'ACQUISITIONS_EPIC',
+      'ACQUISITIONS_ENGAGMENT_BANNER',
+    ].some(componentType => window.location.href.includes(componentType)),
   },
 };

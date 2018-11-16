@@ -42,10 +42,10 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 const selectedCountryGroup = countryGroups[countryGroupId];
 
-const { abParticipations } = store.getState().common;
-const extraClasses = abParticipations.smallMobileHeader
-  .split('_')
-  .filter(x => x !== 'control' && x !== 'notintest');
+const { smallMobileHeader } = store.getState().common.abParticipations;
+const extraClasses = smallMobileHeader
+  ? smallMobileHeader.split('_').filter(x => x !== 'control' && x !== 'notintest')
+  : [];
 
 // ----- Render ----- //
 
