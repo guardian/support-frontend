@@ -127,6 +127,17 @@ class Application(
     )
   }
 
+  def showcase: Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    Ok(views.html.main(
+      title = "Support the Guardian",
+      mainId = "showcase-landing-page",
+      mainJsBundle = "showcasePage.js",
+      mainStyleBundle = "showcasePage.css",
+      description = stringsConfig.supportLandingDescription
+    )).withSettingsSurrogateKey
+  }
+
   def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
