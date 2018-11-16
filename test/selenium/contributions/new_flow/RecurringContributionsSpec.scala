@@ -30,13 +30,14 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       val testUser = new TestUser(driverConfig)
 
       val recurringContributionForm = RecurringContributionForm(testUser)
-      val recurringContributionThankYou = new RecurringContributionThankYou("uk")
+      val recurringContributionThankYou = new ContributionThankYou("uk")
 
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
 
       Given("The user fills in their details correctly")
+      recurringContributionForm.clearForm()
       recurringContributionForm.fillInPersonalDetails()
 
       Given("that the user selects to pay with Stripe")
@@ -46,11 +47,12 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       When("they click contribute")
       landingPage.clickContribute
 
-      //TODO - hangs here
       And("the mock calls the backend using a test Stripe token")
 
       Then("the thankyou page should display")
-      assert(recurringContributionThankYou.pageHasLoaded)
+      eventually {
+        assert(recurringContributionThankYou.pageHasLoaded)
+      }
 
     }
 
@@ -61,13 +63,14 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       val payPalCheckout = new PayPalCheckout
       val expectedPayment = "15.00"
       val recurringContributionForm = RecurringContributionForm(testUser)
-      val recurringContributionThankYou = new RecurringContributionThankYou("us")
+      val recurringContributionThankYou = new ContributionThankYou("us")
 
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
 
       Given("The user fills in their details correctly")
+      recurringContributionForm.clearForm()
       recurringContributionForm.fillInPersonalDetails()
       recurringContributionForm.selectState
 

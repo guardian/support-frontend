@@ -1,13 +1,17 @@
 package selenium.contributions.new_flow
 
+import org.scalatest.concurrent.Eventually
+import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.contributions.new_flow.pages.{ContributionsLanding, OneOffContributionForm, OneOffContributionThankYou}
+import selenium.contributions.new_flow.pages.{ContributionsLanding, OneOffContributionForm, ContributionThankYou}
 import selenium.util._
 
-class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser {
+class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
 
   val driverConfig = new DriverConfig
   override implicit val webDriver = driverConfig.webDriver
+
+  override implicit val patienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
 
   before { driverConfig.reset() }
 
@@ -27,7 +31,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       val testUser = new TestUser(driverConfig)
       val landingPage = ContributionsLanding("au")
       val oneOffContributionForm = OneOffContributionForm(testUser, stripePayment.toInt, currency)
-      val oneOffContributionThankYou = new OneOffContributionThankYou
+      val oneOffContributionThankYou = new ContributionThankYou("au")
 
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
@@ -52,11 +56,13 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       When("they click contribute")
       landingPage.clickContribute
 
-      //TODO - hangs here
       And("the mock calls the backend using a test Stripe token")
 
       Then("the thankyou page should display")
-      assert(oneOffContributionThankYou.pageHasLoaded)
+
+      eventually {
+        assert(oneOffContributionThankYou.pageHasLoaded)
+      }
     }
 
   }

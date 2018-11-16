@@ -24,9 +24,10 @@ case class RecurringContributionForm(testUser: TestUser)(implicit val webDriver:
       setValue(lastName, testUser.username, clear = true)
     }
 
-    def fillInWithoutEmail() {
-      setValue(firstName, testUser.username, clear = true)
-      setValue(lastName, testUser.username, clear = true)
+    def clear(): Unit = {
+      clearValue(email)
+      clearValue(firstName)
+      clearValue(lastName)
     }
   }
 
@@ -44,7 +45,7 @@ case class RecurringContributionForm(testUser: TestUser)(implicit val webDriver:
 
   def fillInPersonalDetails() { RegisterFields.fillIn() }
 
-  def fillInPersonalDetailsNoEmail() { RegisterFields.fillInWithoutEmail() }
+  def clearForm(): Unit = RegisterFields.clear()
 
   // ----- Stripe ----- //
 
