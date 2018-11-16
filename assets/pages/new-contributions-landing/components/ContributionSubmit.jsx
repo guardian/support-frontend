@@ -6,17 +6,12 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import type { CaState, UsState } from 'helpers/internationalisation/country';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { hiddenIf } from 'helpers/utilities';
-import { checkoutFormShouldSubmit } from 'helpers/checkoutForm/checkoutForm';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
@@ -29,11 +24,11 @@ import {
 // ----- Types ----- //
 
 type PropTypes = {|
-  contributionType: ContributionType,
+  contributionType: Contrib,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
   isWaiting: boolean,
-  selectedAmounts: SelectedAmounts,
+  selectedAmounts: { [Contrib]: Amount | 'other' },
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
@@ -42,15 +37,7 @@ type PropTypes = {|
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
-  isSignedIn: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  isRecurringContributor: boolean,
-  otherAmounts: OtherAmounts,
-  countryGroupId: CountryGroupId,
-  state: UsState | CaState | null,
-  firstName: string | null,
-  lastName: string | null,
-  email: string | null,
+  formIsSubmittable: boolean,
 |};
 
 const mapStateToProps = (state: State) =>
@@ -65,15 +52,7 @@ const mapStateToProps = (state: State) =>
     csrf: state.page.csrf,
     payPalHasLoaded: state.page.form.payPalHasLoaded,
     isTestUser: state.page.user.isTestUser,
-    isSignedIn: state.page.user.isSignedIn,
-    isRecurringContributor: state.page.user.isRecurringContributor,
-    userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
-    otherAmounts: state.page.form.formData.otherAmounts,
-    countryGroupId: state.common.internationalisation.countryGroupId,
-    state: state.page.form.formData.state,
-    firstName: state.page.form.formData.firstName,
-    lastName: state.page.form.formData.lastName,
-    email: state.page.form.formData.email,
+    formIsSubmittable: state.page.form.formIsSubmittable,
   });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -104,17 +83,6 @@ function ContributionSubmit(props: PropTypes) {
     const formClassName = 'form--contribution';
     const showPayPalRecurringButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
 
-    const formIsValidParameters = {
-      selectedAmounts: props.selectedAmounts,
-      otherAmounts: props.otherAmounts,
-      countryGroupId: props.countryGroupId,
-      contributionType: props.contributionType,
-      state: props.state,
-      firstName: props.firstName,
-      lastName: props.lastName,
-      email: props.email,
-    };
-
     // We have to show/hide PayPalRecurringButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
     // See PayPalRecurringButton.jsx for more info.
@@ -129,15 +97,7 @@ function ContributionSubmit(props: PropTypes) {
             csrf={props.csrf}
             currencyId={props.currencyId}
             hasLoaded={props.payPalHasLoaded}
-            canOpen={() =>
-              checkoutFormShouldSubmit(
-                props.contributionType,
-                props.isSignedIn,
-                props.isRecurringContributor,
-                props.userTypeFromIdentityResponse,
-                formIsValidParameters,
-              )
-            }
+            canOpen={() => props.formIsSubmittable}
             onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
             formClassName={formClassName}
             isTestUser={props.isTestUser}

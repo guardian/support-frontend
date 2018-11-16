@@ -2,12 +2,12 @@
 
 // ----- Imports ----- //
 
-import type { ErrorReason } from 'helpers/errorReasons';
+import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   type Amount,
   logInvalidCombination,
-  type ContributionType,
+  type Contrib,
   type PaymentMethod,
   type PaymentMatrix,
 } from 'helpers/contributions';
@@ -41,7 +41,7 @@ import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import {
-  checkoutFormShouldSubmit,
+  checkoutFormShouldSubmit, formElementIsValid,
   getForm,
 } from 'helpers/checkoutForm/checkoutForm';
 import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
@@ -53,7 +53,7 @@ import {
 } from './contributionsLandingReducer';
 
 export type Action =
-  | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType, paymentMethodToSelect: PaymentMethod }
+  | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib, paymentMethodToSelect: PaymentMethod }
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'UPDATE_FIRST_NAME', firstName: string }
   | { type: 'UPDATE_LAST_NAME', lastName: string }
@@ -61,25 +61,26 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
-  | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
+  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
+  | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
-  | { type: 'PAYMENT_FAILURE', paymentError: ErrorReason }
+  | { type: 'PAYMENT_FAILURE', paymentError: CheckoutFailureReason }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_PASSWORD_ERROR', passwordError: boolean }
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
+  | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
-  | { type: 'FORM_VALID', isValid: boolean };
+  | { type: 'SET_FORM_IS_VALID', isValid: boolean };
 
 
-const updateContributionType = (contributionType: ContributionType, paymentMethodToSelect: PaymentMethod): Action => {
+const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action => {
   // PayPal one-off redirects away from the site before hitting the thank you page
   // so we need to store the contrib type & payment method in the storage so that it is available on the
   // thank you page in all scenarios.
@@ -114,7 +115,7 @@ const updateUserFormData = (userFormData: UserFormData): Action => ({ type: 'UPD
 
 const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
 
-const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): Action =>
+const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Action =>
   ({
     type: 'SELECT_AMOUNT', amount, contributionType,
   });
@@ -131,9 +132,9 @@ const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
-const paymentFailure = (paymentError: ErrorReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
+const paymentFailure = (paymentError: CheckoutFailureReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
 
-const setFormIsValid = (isValid: boolean): Action => ({ type: 'FORM_VALID', isValid });
+const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
 const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
   ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
@@ -145,7 +146,7 @@ const setHasSeenDirectDebitThankYouCopy = (): Action => ({ type: 'SET_HAS_SEEN_D
 
 const setThirdPartyPaymentLibrary =
   (thirdPartyPaymentLibraryByContrib: {
-    [ContributionType]: {
+    [Contrib]: {
       [PaymentMethod]: ThirdPartyPaymentLibrary
     }
   }): Action => ({
@@ -160,35 +161,8 @@ const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeF
   userTypeFromIdentityResponse,
 });
 
-const togglePayPalButton = () =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
-
-    const formIsValidParameters = {
-      selectedAmounts: state.page.form.selectedAmounts,
-      otherAmounts: state.page.form.formData.otherAmounts,
-      countryGroupId: state.common.internationalisation.countryGroupId,
-      contributionType: state.page.form.contributionType,
-      state: state.page.form.formData.state,
-      firstName: state.page.form.formData.firstName,
-      lastName: state.page.form.formData.lastName,
-      email: state.page.form.formData.email,
-    };
-
-    const shouldEnable = checkoutFormShouldSubmit(
-      state.page.form.contributionType,
-      state.page.user.isSignedIn,
-      state.page.user.isRecurringContributor,
-      state.page.form.userTypeFromIdentityResponse,
-      // TODO: use the actual form state rather than re-fetching from DOM
-      formIsValidParameters,
-    );
-    if (shouldEnable && window.enablePayPalButton) {
-      window.enablePayPalButton();
-    } else if (window.disablePayPalButton) {
-      window.disablePayPalButton();
-    }
-  };
+const setFormIsSubmittable = (formIsSubmittable: boolean): Action =>
+  ({ type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
@@ -198,17 +172,37 @@ const sendFormSubmitEventForPayPalRecurring = () =>
       flowPrefix: 'npf',
       form: getForm('form--contribution'),
       isSignedIn: state.page.user.isSignedIn,
-      isRecurringContributor: state.page.user.isRecurringContributor,
       setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
       setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
     };
     onFormSubmit(formSubmitParameters);
   };
 
-function setValueAndTogglePayPal<T>(setStateValue: T => Action, value: T) {
-  return (dispatch: Function): void => {
+function setValue<T>(setStateValue: T => Action, value: T) {
+  return (dispatch: Function, getState: () => State): void => {
+
     dispatch(setStateValue(value));
-    dispatch(togglePayPalButton());
+
+    const state = getState();
+
+    // TODO: use the actual form state rather than re-fetching from DOM
+    const valid = formElementIsValid(getForm('form--contribution'));
+
+    dispatch(setFormIsValid(valid));
+
+    const shouldEnable = checkoutFormShouldSubmit(
+      state.page.form.contributionType,
+      state.page.user.isSignedIn,
+      state.page.form.userTypeFromIdentityResponse,
+      valid,
+    );
+    if (shouldEnable && window.enablePayPalButton) {
+      dispatch(setFormIsSubmittable(true));
+      window.enablePayPalButton();
+    } else if (window.disablePayPalButton) {
+      dispatch(setFormIsSubmittable(false));
+      window.disablePayPalButton();
+    }
   };
 }
 
@@ -223,10 +217,9 @@ const checkIfEmailHasPassword = (email: string) =>
       isSignedIn,
       csrf,
       (userType: UserTypeFromIdentityResponse) =>
-        dispatch(setValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
+        dispatch(setValue<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
     );
   };
-
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
@@ -268,6 +261,7 @@ const regularPaymentRequestFromAuthorisation = (
   ophanIds: getOphanIds(),
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
+  sessionId: state.page.sessionId,
 });
 
 // A PaymentResult represents the end state of the checkout process,
@@ -474,8 +468,8 @@ export {
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
-  togglePayPalButton,
-  setValueAndTogglePayPal,
+  setFormIsSubmittable,
+  setValue,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
 };

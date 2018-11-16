@@ -16,7 +16,7 @@ import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
-import { selectAmount, setValueAndTogglePayPal, updateOtherAmount } from '../contributionsLandingActions';
+import { selectAmount, setValue, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
 
 // ----- Types ----- //
@@ -54,7 +54,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
   updateOtherAmount: (amount, countryGroupId, contributionType) => {
     trackComponentClick(`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`);
-    dispatch(setValueAndTogglePayPal<string>(updateOtherAmount, amount));
+    dispatch(setValue<string>(updateOtherAmount, amount));
   },
 });
 
