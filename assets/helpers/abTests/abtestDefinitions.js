@@ -32,7 +32,7 @@ export const tests: Tests = {
     seed: 4,
     canRun: () => [
       'ACQUISITIONS_EPIC',
-      'ACQUISITIONS_ENGAGMENT_BANNER',
+      'ACQUISITIONS_ENGAGEMENT_BANNER',
     ].some(componentType => window.location.href.includes(componentType)),
   },
 };
