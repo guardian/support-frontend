@@ -10,7 +10,8 @@
 	canonicalLink: Option[String] = None,
 	hrefLangLinks: Map[String, String] = Map(),
 	styles: Html = Html(""),
-	scripts: Html = Html("")
+	scripts: Html = Html(""),
+  csrf: Option[String] = None
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
 
 <!DOCTYPE html>
@@ -19,6 +20,13 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
+
+  @csrf.map { token =>
+    <script type="text/javascript">
+      window.guardian = window.guardian || {};
+      window.guardian.csrf = {token: "@token"}
+    </script>
+  }
 
 	@description.map { definedDescription =>
 		<meta name="description" content="@definedDescription" />

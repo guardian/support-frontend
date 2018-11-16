@@ -8,6 +8,7 @@ import config.StringsConfig
 import play.api.mvc._
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import utils.RequestCountry._
+import views.html.helper.CSRF
 
 import scala.concurrent.ExecutionContext
 
@@ -125,7 +126,7 @@ class Subscriptions(
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
-  def displayForm(countryCode: String, displayCheckout: String): Action[AnyContent] =
+  def displayForm(countryCode: String, displayCheckout: String, isCsrf: Boolean = false): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId) { implicit request =>
       if (displayCheckout == "true") {
         implicit val settings: Settings = settingsProvider.settings()
@@ -133,7 +134,8 @@ class Subscriptions(
         val id = "digital-subscription-checkout-page-" + countryCode
         val js = "digitalSubscriptionCheckoutPage.js"
         val css = "digitalSubscriptionCheckoutPageStyles.css"
-        Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+        val csrf = CSRF.getToken.value
+        Ok(views.html.main(title, id, js, css, csrf = Some(csrf))).withSettingsSurrogateKey
       } else {
         Redirect(routes.Subscriptions.geoRedirect)
       }

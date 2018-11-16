@@ -14,7 +14,7 @@ import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/
 
 const mapStateToProps = state => ({
   confirmOptIn: state.page.marketingConsent.confirmOptIn,
-  email: state.page.form.email,
+  email: state.page.user.email,
   csrf: state.page.csrf,
 });
 
