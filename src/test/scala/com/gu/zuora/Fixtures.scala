@@ -177,26 +177,6 @@ object Fixtures {
 
   val subscribeResponseAccount =
     s"""
-        {
-          "AccountNumber": "A00015771",
-          "SubscriptionNumber": "A-S00043097",
-          "GatewayResponse": "Payment complete.",
-          "PaymentId": "2c92c0f85be67835015be751f3286569",
-          "InvoiceResult": $invoiceResult,
-          "TotalTcv": 60,
-          "SubscriptionId": "2c92c0f85be67835015be751f24a6550",
-          "Success": true,
-          "TotalMrr": 5,
-          "PaymentTransactionNumber": "ch_AcMack4JjPKuw6",
-          "AccountId": "2c92c0f85be67835015be751f1d8654c",
-          "GatewayResponseCode": "Approved",
-          "InvoiceNumber": "INV00051836",
-          "InvoiceId": "2c92c0f85be67835015be751f2c6655e"
-        }
-    """
-
-  val minimalSubscribeResponseAccount =
-    s"""
       {
           "SubscriptionId": "2c92c0f86716797001671754520357f2",
           "SubscriptionNumber": "A-S00047037",

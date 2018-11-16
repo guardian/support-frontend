@@ -2,8 +2,6 @@ package com.gu.zuora
 
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.GetRecurringSubscription
 import com.gu.support.workers.lambdas.IdentityId
@@ -126,7 +124,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
 
   it should "work for AUD contributions" in doRequest(creditCardSubscriptionRequest(AUD))
 
-  it should "work with Direct Debit" in doRequest(directDebitSubscriptionRequest)
+  ignore should "work with Direct Debit" in doRequest(directDebitSubscriptionRequest)
 
   def doRequest(subscribeRequest: SubscribeRequest) = {
     //Accounts will be created in Sandbox
@@ -135,7 +133,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
       response =>
         response.head.success should be(true)
     }.recover {
-      case e: ZuoraErrorResponse => SafeLogger.error(scrub"Zuora error: $e", e); fail()
+      case e: ZuoraErrorResponse => fail(e)
     }
   }
 }
