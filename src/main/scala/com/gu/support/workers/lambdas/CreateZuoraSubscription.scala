@@ -94,14 +94,25 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
             )
           )
         )
-      case d: DigitalPack => buildProductSubscription(config.digitalPackRatePlan(d.billingPeriod))
+      case d: DigitalPack =>
+        val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
+        val contractAcceptanceDate = contractEffectiveDate
+          .plusDays(config.digitalPack.defaultFreeTrialPeriod)
+          .plusDays(config.digitalPack.paymentGracePeriod)
+
+        buildProductSubscription(
+          config.digitalPackRatePlan(d.billingPeriod),
+          contractAcceptanceDate = contractAcceptanceDate,
+          contractEffectiveDate = contractEffectiveDate
+        )
     }
   }
 
   private def buildProductSubscription(
     ratePlanId: RatePlanId,
     ratePlanCharges: List[RatePlanChargeData] = Nil,
-    date: LocalDate = LocalDate.now(DateTimeZone.UTC)
+    contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
+    contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
   ) =
     SubscriptionData(
       List(
@@ -111,7 +122,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           Nil
         )
       ),
-      Subscription(date, date, date)
+      Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate)
     )
 
   private def buildContactDetails(state: CreateZuoraSubscriptionState) = {
