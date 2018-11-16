@@ -65,7 +65,7 @@ export type Test = {|
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
-  customSegmentCondition?: () => boolean,
+  canRun?: () => boolean,
   independent: boolean,
   seed: number,
 |};
@@ -201,7 +201,7 @@ function getParticipations(
 
     if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
-    } else if (test.customSegmentCondition && !test.customSegmentCondition()) {
+    } else if (test.canRun && !test.canRun()) {
       participations[testId] = notintest;
     } else if (userInTest(test.audiences, mvtId, country, countryGroupId)) {
       participations[testId] = assignUserToVariant(mvtId, test);
