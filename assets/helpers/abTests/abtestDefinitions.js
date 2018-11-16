@@ -18,4 +18,21 @@ export const tests: Tests = {
     independent: true,
     seed: 3,
   },
+
+  smallMobileHeader: {
+    variants: ['control', 'shrink', 'shrink_no-blurb', 'shrink_no-blurb_no-header'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 4,
+    canRun: () => [
+      'ACQUISITIONS_EPIC',
+      'ACQUISITIONS_ENGAGMENT_BANNER',
+    ].some(componentType => window.location.href.includes(componentType)),
+  },
 };
