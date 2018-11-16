@@ -26,23 +26,22 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
     scenario("Monthly contribution sign-up with Stripe - GBP") {
 
-      val landingPage = ContributionsLanding("uk")
       val testUser = new TestUser(driverConfig)
+      val landingPage = ContributionsLanding("uk", testUser)
 
-      val recurringContributionForm = RecurringContributionForm(testUser)
-      val recurringContributionThankYou = new ContributionThankYou("uk")
+      val contributionThankYou = new ContributionThankYou("uk")
 
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
 
       Given("The user fills in their details correctly")
-      recurringContributionForm.clearForm()
-      recurringContributionForm.fillInPersonalDetails()
+      landingPage.clearForm()
+      landingPage.fillInPersonalDetails()
 
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
-      recurringContributionForm.selectStripePayment()
+      landingPage.selectStripePayment()
 
       When("they click contribute")
       landingPage.clickContribute
@@ -51,32 +50,31 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
       Then("the thankyou page should display")
       eventually {
-        assert(recurringContributionThankYou.pageHasLoaded)
+        assert(contributionThankYou.pageHasLoaded)
       }
 
     }
 
     scenario("Monthly contribution sign-up with Paypal - USD") {
 
-      val landingPage = ContributionsLanding("us")
       val testUser = new TestUser(driverConfig)
+      val landingPage = ContributionsLanding("us", testUser)
       val payPalCheckout = new PayPalCheckout
       val expectedPayment = "15.00"
-      val recurringContributionForm = RecurringContributionForm(testUser)
-      val recurringContributionThankYou = new ContributionThankYou("us")
+      val contributionThankYou = new ContributionThankYou("us")
 
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
 
       Given("The user fills in their details correctly")
-      recurringContributionForm.clearForm()
-      recurringContributionForm.fillInPersonalDetails()
-      recurringContributionForm.selectState
+      landingPage.clearForm()
+      landingPage.fillInPersonalDetails()
+      landingPage.selectState
 
       Given("that the user selects to pay with PayPal")
       When("they press the Stripe payment button")
-      recurringContributionForm.selectPayPalPayment()
+      landingPage.selectPayPalPayment()
 
       When("they click contribute")
       landingPage.clickContributePayPalButton
@@ -104,7 +102,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
       Then("the thankyou page should display")
       eventually {
-        assert(recurringContributionThankYou.pageHasLoaded)
+        assert(contributionThankYou.pageHasLoaded)
       }
 
     }

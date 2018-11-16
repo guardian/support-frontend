@@ -3,7 +3,7 @@ package selenium.contributions.new_flow
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.contributions.new_flow.pages.{ContributionsLanding, OneOffContributionForm, ContributionThankYou}
+import selenium.contributions.new_flow.pages.{ContributionsLanding, ContributionThankYou}
 import selenium.util._
 
 class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
@@ -27,11 +27,9 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
     scenario("One-off contribution sign-up with Stripe - AUD") {
 
       val stripePayment = 22.55
-      val currency = "AUD"
       val testUser = new TestUser(driverConfig)
-      val landingPage = ContributionsLanding("au")
-      val oneOffContributionForm = OneOffContributionForm(testUser, stripePayment.toInt, currency)
-      val oneOffContributionThankYou = new ContributionThankYou("au")
+      val landingPage = ContributionsLanding("au", testUser)
+      val contributionThankYou = new ContributionThankYou("au")
 
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
@@ -47,11 +45,11 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       landingPage.enterAmount(stripePayment)
 
       Given("The user fills in their details correctly")
-      oneOffContributionForm.fillInPersonalDetails()
+      landingPage.fillInPersonalDetails()
 
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
-      oneOffContributionForm.clickContributeByCard()
+      landingPage.selectStripePayment()
 
       When("they click contribute")
       landingPage.clickContribute
@@ -61,7 +59,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       Then("the thankyou page should display")
 
       eventually {
-        assert(oneOffContributionThankYou.pageHasLoaded)
+        assert(contributionThankYou.pageHasLoaded)
       }
     }
 
