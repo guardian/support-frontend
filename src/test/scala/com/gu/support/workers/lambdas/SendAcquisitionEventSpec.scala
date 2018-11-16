@@ -16,13 +16,13 @@ import org.scalatest.mockito.MockitoSugar
 class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
   "SendAcquisitionEvent" should "work with a valid input" taggedAs IntegrationTest in {
-    val sendAcquisitionEvent = new SendAcquisitionEvent(MockOphanHelper.mockServices)
+    val sendAcquisitionEvent = new SendAcquisitionEvent(MockAcquisitionHelper.mockServices)
 
     val outStream = new ByteArrayOutputStream()
 
     sendAcquisitionEvent.handleRequest(sendAcquisitionEventJson, outStream, context)
-    //Check the output
 
+    //Check the output
     val out = Encoding.in[Unit](outStream.toInputStream)
 
     out.isSuccess should be(true)
@@ -30,10 +30,10 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
 }
 
-object MockOphanHelper extends MockitoSugar {
+object MockAcquisitionHelper extends MockitoSugar {
 
   lazy val mockServices = {
-    //Mock the Ophan service
+    //Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
     val ophan = AcquisitionService(true)

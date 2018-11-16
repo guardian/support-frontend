@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Fixtures.idId
+import com.gu.salesforce.Fixtures.{email, idId}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
 import com.gu.support.workers.model.{BillingPeriod, Monthly, RequestInfo}
@@ -22,7 +22,7 @@ object Fixtures {
     s"""
       "user":{
           "id": "$idId",
-          "primaryEmailAddress": "test@gu.com",
+          "primaryEmailAddress": "$email",
           "firstName": "test",
           "lastName": "user",
           "country": "GB",
