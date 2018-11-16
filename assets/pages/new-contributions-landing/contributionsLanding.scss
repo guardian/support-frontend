@@ -1103,19 +1103,19 @@ form {
     }
   }
 
-  .gu-content--no-blurb {
+  .gu-content--contribution-form.gu-content--no-blurb {
     .blurb {
       display: none;
     }
   }
 
-  .gu-content--no-header {
+  .gu-content--contribution-form.gu-content--no-header {
     .header {
       display: none;
     }
   }
 
-  .gu-content--no-blurb.gu-content--no-header {
+  .gu-content--contribution-form.gu-content--no-blurb.gu-content--no-header {
     .form__radio-group-list {
       padding-top: 0;
     }
