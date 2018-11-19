@@ -11,7 +11,7 @@
     display: inline-block;
   }
   @include mq($from: desktop) {
-    @include gu-typeface(headline, 22, true);
+    @include gu-typeface(headline, 22, $size-only: true);
     line-height: 1;
   }
 }
