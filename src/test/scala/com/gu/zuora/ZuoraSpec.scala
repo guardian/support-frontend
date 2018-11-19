@@ -124,7 +124,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
 
   it should "work for AUD contributions" in doRequest(creditCardSubscriptionRequest(AUD))
 
-  ignore should "work with Direct Debit" in doRequest(directDebitSubscriptionRequest)
+  it should "work with Direct Debit" in doRequest(directDebitSubscriptionRequest)
 
   def doRequest(subscribeRequest: SubscribeRequest) = {
     //Accounts will be created in Sandbox
