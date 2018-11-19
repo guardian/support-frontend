@@ -52,7 +52,6 @@ const mapDispatchToProps = (dispatch: Dispatch<CheckoutAction>) => ({
       handlePayment: () => {
         dispatch(setStage('payment'));
       },
-      isRecurringContributor: false, // hardcoding as not needed for old flow
       setFormIsValid: () => undefined, // not needed for old fow
     };
 
