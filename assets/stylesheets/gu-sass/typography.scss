@@ -20,7 +20,7 @@ $gu-fonts: (
 	egyptian: (
 		family: $gu-text-egyptian-web,
 		sizes: (
-			17: 24px
+			17: 24px,
 		)
 	),
 	headline: (
@@ -50,9 +50,9 @@ $gu-fonts: (
 //
 // Usage:
 //
-// gu-typeface(copy, 16);
-// gu-typeface(copy, 14)
-// gu-typeface(copy, 18, true)
+// gu-typeface(egyptian, 17);
+// gu-typeface(sans, 16)
+// gu-typeface(sans, 18, true)
 //
 @mixin gu-typeface($name, $size, $size-only: false) {
 	$font-data: map-get($gu-fonts, $name);
