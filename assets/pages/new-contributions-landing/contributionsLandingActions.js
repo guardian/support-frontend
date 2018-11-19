@@ -178,6 +178,9 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
+/*
+  Set the value of a form variable, then set the form validity and submitability
+*/
 function setValue<T>(setStateValue: T => Action, value: T) {
   return (dispatch: Function, getState: () => State): void => {
 
@@ -190,12 +193,14 @@ function setValue<T>(setStateValue: T => Action, value: T) {
 
     dispatch(setFormIsValid(valid));
 
-    const shouldEnable = checkoutFormShouldSubmit(
-      state.page.form.contributionType,
-      state.page.user.isSignedIn,
-      state.page.form.userTypeFromIdentityResponse,
-      valid,
-    );
+    const shouldEnable = checkoutFormShouldSubmit({
+      formValid: valid,
+      contributionType: state.page.form.contributionType,
+      isSignedIn: state.page.user.isSignedIn,
+      userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+      isRecurringContributor: state.page.user.isRecurringContributor,
+    });
+
     if (shouldEnable && window.enablePayPalButton) {
       dispatch(setFormIsSubmittable(true));
       window.enablePayPalButton();

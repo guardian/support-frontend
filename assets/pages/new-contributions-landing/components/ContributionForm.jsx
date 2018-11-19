@@ -74,6 +74,7 @@ type PropTypes = {|
   isSignedIn: boolean,
   formIsValid: boolean,
   formIsSubmittable: boolean,
+  isPostDeploymentTestUser: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -98,6 +99,7 @@ const mapStateToProps = (state: State) => ({
   isSignedIn: state.page.user.isSignedIn,
   formIsValid: state.page.form.formIsValid,
   formIsSubmittable: state.page.form.formIsSubmittable,
+  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
 });
 
 
