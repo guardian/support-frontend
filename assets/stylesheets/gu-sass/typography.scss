@@ -17,7 +17,7 @@ $gu-text-sans-web: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial,
 // ----- Font Properties ----- //
 
 $gu-fonts: (
-	egyptian: (
+	textEgyptian: (
 		family: $gu-text-egyptian-web,
 		sizes: (
 			17: 24px,
@@ -35,7 +35,7 @@ $gu-fonts: (
 			50: 54px,
 		)
 	),
-	sans: (
+	textSans: (
 		family: $gu-text-sans-web,
 		sizes: (
 			16: 22px,
@@ -51,9 +51,9 @@ $gu-fonts: (
 //
 // Usage:
 //
-// gu-typeface(egyptian, 17);
-// gu-typeface(sans, 16)
-// gu-typeface(sans, 18, true)
+// gu-typeface(textEgyptian, 17);
+// gu-typeface(textSans, 16)
+// gu-typeface(textSans, 18, $size-only: true)
 //
 @mixin gu-typeface($name, $size, $size-only: false) {
 	$font-data: map-get($gu-fonts, $name);
@@ -73,7 +73,7 @@ $gu-fonts: (
 
 // ----- Headings ----- //
 @mixin gu-fontset-heading-sans($size-only: false) {
-	@include gu-typeface(sans, 18, $size-only);
+	@include gu-typeface(textSans, 18, $size-only);
 	@if $size-only == false {
 		font-weight: 700;
 	}
@@ -102,13 +102,13 @@ $gu-fonts: (
 
 // ----- Body ----- //
 @mixin gu-fontset-body-sans($size-only: false) {
-	@include gu-typeface(sans, 16, $size-only);
+	@include gu-typeface(textSans, 16, $size-only);
 	@if $size-only == false {
 		font-weight: 400;
 	}
 }
 @mixin gu-fontset-body($size-only: false) {
-	@include gu-typeface(egyptian, 17, $size-only);
+	@include gu-typeface(textEgyptian, 17, $size-only);
 	@if $size-only == false {
 		font-weight: 400;
 	}
