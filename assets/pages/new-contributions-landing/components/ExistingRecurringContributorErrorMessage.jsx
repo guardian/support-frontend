@@ -21,7 +21,7 @@ type PropTypes = {|
 
 export const ExistingRecurringContributorErrorMessage = (props: PropTypes) => {
 
-  const manageUrl = 'https://manage.theguardian.com/contributions?INTCPM=existing-contributor-from-support';
+  const manageUrl = 'https://manage.theguardian.com/contributions?INTCMP=existing-contributor-from-support';
 
   const onClick = (event) => {
     event.preventDefault();
