@@ -8,7 +8,6 @@ import {
   getIosAppUrl,
   androidAppUrl,
   getDailyEditionUrl,
-  emailPreferencesUrl,
 } from 'helpers/externalLinks';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';

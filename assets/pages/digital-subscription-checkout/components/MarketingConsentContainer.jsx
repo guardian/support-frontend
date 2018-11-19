@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
 import { connect } from 'react-redux';
 import MarketingConsent from 'components/marketingConsentNew/marketingConsent';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';

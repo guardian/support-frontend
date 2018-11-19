@@ -11,7 +11,7 @@ import csrf from 'helpers/csrf/csrfReducer';
 
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
-import {combineReducers} from "redux";
+import { combineReducers } from 'redux';
 
 
 // ----- Types ----- //
