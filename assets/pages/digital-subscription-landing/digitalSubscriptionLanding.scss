@@ -75,6 +75,13 @@
       width: 50%;
       vertical-align: top;
     }
+    @include mq($from: desktop) {
+      max-width: 485px;
+    }
+
+    @include mq($from: leftCol) {
+      max-width: 520px;
+    }
   }
 
   .product-block__image {
