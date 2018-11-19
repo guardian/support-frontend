@@ -12,6 +12,8 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
+import * as storage from 'helpers/storage';
+import type { Contrib } from 'helpers/contributions';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
@@ -52,6 +54,15 @@ const extraClasses = smallMobileHeader
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
 
+const setOneOffContributionCookie = (contributionType: Contrib) => {
+  if (contributionType === 'ONE_OFF') {
+    setCookie(
+      ONE_OFF_CONTRIBUTION_COOKIE,
+      currentTimeInEpochMilliseconds.toString(),
+    );
+  }
+};
+
 const router = (
   <BrowserRouter>
     <Provider store={store}>
@@ -76,10 +87,7 @@ const router = (
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou"
           render={() => {
-            setCookie(
-              ONE_OFF_CONTRIBUTION_COOKIE,
-              currentTimeInEpochMilliseconds.toString(),
-            );
+            setOneOffContributionCookie(storage.getSession('contributionType'));
             return (
               <Page
                 classModifiers={['contribution-thankyou', ...extraClasses]}
