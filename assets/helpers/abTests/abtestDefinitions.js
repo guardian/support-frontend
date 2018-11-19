@@ -20,7 +20,7 @@ export const tests: Tests = {
     seed: 3,
   },
 
-  smallMobileHeader: {
+  smallMobileHeaderNotEpicOrBanner: {
     variants: ['control', 'shrink', 'shrink_no-blurb', 'shrink_no-blurb_no-header'],
     audiences: {
       ALL: {
@@ -31,7 +31,7 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 4,
-    canRun: () => [
+    canRun: () => ![
       'ACQUISITIONS_EPIC',
       'ACQUISITIONS_ENGAGEMENT_BANNER',
     ].some((componentType: string) => {
