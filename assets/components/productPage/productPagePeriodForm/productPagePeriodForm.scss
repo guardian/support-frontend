@@ -17,7 +17,7 @@
 }
 
 .component-product-page-period-form__info {
-  @include gu-font-sans;
+  @include gu-fontset-sans;
   padding-top: $gu-v-spacing * 2;
   padding-bottom: $gu-v-spacing * 2.5;
   color: gu-colour(garnett-neutral-5);

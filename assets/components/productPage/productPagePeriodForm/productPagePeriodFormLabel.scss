@@ -9,7 +9,7 @@
 }
 
 .component-product-page-period-form-label__box {
-  @include gu-font-sans;
+  @include gu-fontset-sans;
   background: gu-colour(garnett-neutral-5);
   border: 1px solid gu-colour(garnett-neutral-2);
   color: gu-colour(garnett-neutral-1);
@@ -27,7 +27,7 @@
 }
 
 .component-product-page-period-form-label__title {
-  @include gu-font-sans-title(true);
+  @include gu-fontset-sans-title(true);
   font-weight: 600;
   position: relative;
   border-bottom: 1px solid gu-colour(garnett-neutral-2);

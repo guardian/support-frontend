@@ -5,12 +5,12 @@
 }
 
 .component-product-page-features__title {
-  @include gu-font-standfirst;
+  @include gu-fontset-standfirst;
   font-weight: 200;
 }
 
 .component-product-page-features__copy {
-  @include gu-font-body;
+  @include gu-fontset-body;
   margin-top: $gu-v-spacing / 4;
 }
 

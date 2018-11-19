@@ -60,26 +60,26 @@ $gu-fonts: (
 }
 
 // ----- Base fonts ----- //
-@mixin gu-font-headline {
+@mixin gu-family-headline {
 	font-family: $gu-headline;
 	line-height: 1.15;
 }
 
-@mixin gu-font-egyptian {
+@mixin gu-family-egyptian {
 	font-family: $gu-text-egyptian-web;
 	line-height: 1.4;
 }
 
-@mixin gu-font-sans {
+@mixin gu-family-sans {
 	font-family: $gu-text-sans-web;
 	line-height: 1.375;
 }
 
 
 // ----- Headlines ----- //
-@mixin gu-font-header($size-only: false) {
+@mixin gu-fontset-header($size-only: false) {
 	@if $size-only == false {
-		@include gu-font-headline;
+		@include gu-family-headline;
 	}
 	font-size: 32px;
 	line-height: 1.08;
@@ -87,18 +87,18 @@ $gu-fonts: (
     font-size: 42px;
   }
 }
-@mixin gu-font-headline($size-only: false) {
+@mixin gu-fontset-headline($size-only: false) {
 	@if $size-only == false {
-		@include gu-font-headline;
+		@include gu-family-headline;
 	}
 	font-size: 22px;
   @include mq($from: tablet) {
     font-size: 24px;
   }
 }
-@mixin gu-font-standfirst($size-only: false) {
+@mixin gu-fontset-standfirst($size-only: false) {
 	@if $size-only == false {
-		@include gu-font-headline;
+		@include gu-family-headline;
 	}
 	font-size: 20px;
   @include mq($from: tablet) {
@@ -108,25 +108,25 @@ $gu-fonts: (
 
 
 // ----- Body ----- //
-@mixin gu-font-body($size-only: false) {
+@mixin gu-fontset-body($size-only: false) {
 	@if $size-only == false {
-		@include gu-font-egyptian;
+		@include gu-family-egyptian;
 	}
   font-size: 17px;
 }
 
 
 // ----- Sans ----- //
-@mixin gu-font-sans($size-only: false) {
+@mixin gu-fontset-sans($size-only: false) {
 	@if $size-only == false {
-		@include gu-font-sans;
+		@include gu-family-sans;
 	}
   font-size: 16px;
 }
 
-@mixin gu-font-sans-title($size-only: false) {
+@mixin gu-fontset-sans-title($size-only: false) {
 	@if $size-only == false {
-		@include gu-font-sans;
+		@include gu-family-sans;
 	}
   font-size: 18px;
 }
