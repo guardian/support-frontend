@@ -12,10 +12,11 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 type PropTypes = {|
   overheading: string,
+  type: 'grey' | 'feature',
   heading: string,
-  headline: string | null,
-  cta: Node | null,
-  children: Node | null,
+  headline?: string | null,
+  cta?: Node | null,
+  children?: Node | null,
   modifierClasses: Array<?string>,
 |};
 
@@ -23,10 +24,10 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const ProductPageHero = ({
-  headline, overheading, heading, cta, modifierClasses, children,
+  headline, overheading, heading, cta, modifierClasses, children, type,
 }: PropTypes) => (
   <header>
-    <div className={classNameWithModifiers('component-product-page-hero', modifierClasses)}>
+    <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, type])}>
       <LeftMarginSection>
         {headline &&
         <p className="component-product-page-hero__headline">
@@ -51,6 +52,10 @@ const ProductPageHero = ({
 
 ProductPageHero.defaultProps = {
   modifierClasses: [],
+  children: null,
+  cta: null,
+  headline: null,
+  type: 'grey',
 };
 
 

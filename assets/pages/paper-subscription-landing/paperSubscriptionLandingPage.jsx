@@ -12,11 +12,10 @@ import Footer from 'components/footer/footer';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import GridImage from 'components/gridImage/gridImage';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock, { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { largeParagraphClassName, ulClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
 
@@ -54,36 +53,31 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        headline="Become a Guardian Paper subscriber"
-        overheading="Guardian Paper subscriptions"
-        heading="Get a clearer, global perspective on the issues that matter, in one newspaper."
-        modifierClasses={['weekly']}
-        cta={<ProductPageButton trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</ProductPageButton>}
+        overheading="The Guardian paper subscriptions"
+        heading="Save up to 31% on the Guardian and the Observer’s newspaper retail price all year round"
+        type="feature"
+        modifierClasses={['paper']}
       />
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Open up your world view, Paper">
-          <p className={largeParagraphClassName}>Inside the essential newspaper from
-          The&nbsp;Guardian, you&#39;ll find expert opinion, insight and culture, curated to
-          bring you a progressive, international perspective. You&#39;ll also discover
-          challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
+        <ProductPageTextBlock>
+          <p className={largeParagraphClassName}>Pick between voucher and home delivery. If you live with in London some more info about the two options at a glance There’s one for each newspaper in the package you choose.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
-        <div className={outsetClassName}>
-          <ProductPageFeatures features={[
-            { title: 'Up to 35% off the retail cover price' },
-            { title: 'Free international shipping' },
-            { title: 'A paper email newsletter from the editor' },
-            { title: 'Access to every edition on any device, through PressReader' },
-          ]}
-          />
-        </div>
+        <ProductPageTextBlock title="How do vouchers work?">
+          <ul className={ulClassName}>
+            <li>When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter.</li>
+            <li>You can exchange these vouchers for that day’s newspaper at retailers across the UK. That includes most independent newsagents, a range of petrol stations, and most supermarkets, including Tesco, Sainsbury’s and Waitrose &amp; Partners.</li>
+            <li>Your newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper.</li>
+            <li>You’ll receive your vouchers within 14 days of subscribing.</li>
+            <li>You can pause your subscription for up to four weeks a year. So if you’re heading away, you won’t have to pay for the papers you’ll miss.</li>
+          </ul>
+        </ProductPageTextBlock>
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" id="subscribe">
         <ProductPageTextBlock title="Subscribe to Guardian Paper today">
-          <p>Choose how you’d like to pay</p>
+          <p>Now pick your perfect voucher subscription package</p>
         </ProductPageTextBlock>
         <Form />
       </ProductPageContentBlock>

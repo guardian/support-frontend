@@ -22,3 +22,20 @@
   @include gu-font-headline-responsive;
   font-weight: 200;
 }
+
+.component-product-page-text-block__ul li {
+  position: relative;
+  $bullet-size: 16px;
+  padding-left: $gu-h-spacing/2 + $bullet-size;
+  margin-bottom: $gu-v-spacing;
+  &:before {
+    content: '';
+    width: $bullet-size;
+    height: $bullet-size;
+    background: gu-colour(news-garnett-highlight);
+    border-radius: 100%;
+    position: absolute;
+    top: 3px;
+    left: 0;
+  }
+}
