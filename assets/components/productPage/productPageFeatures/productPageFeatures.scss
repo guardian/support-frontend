@@ -8,8 +8,7 @@
 }
 
 .component-product-page-features__title {
-  @include gu-fontset-standfirst;
-  font-weight: 200;
+  @include gu-fontset-body-large;
 }
 
 .component-product-page-features__copy {

@@ -1,6 +1,5 @@
 .component-product-page-text-block__heading {
-  @include gu-fontset-headline;
-  font-weight: bold;
+  @include gu-fontset-heading;
   margin-bottom: ($gu-v-spacing/2);
 }
 
@@ -18,6 +17,5 @@
 }
 
 .component-product-page-text-block__large {
-  @include gu-fontset-standfirst;
-  font-weight: 200;
+  @include gu-fontset-body-large;
 }

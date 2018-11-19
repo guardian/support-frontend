@@ -71,49 +71,57 @@ $gu-fonts: (
 
 
 
-// ----- Headlines ----- //
-
-@mixin gu-fontset-header($size-only: false) {
+// ----- Headings ----- //
+@mixin gu-fontset-heading-sans($size-only: false) {
+	@include gu-typeface(sans, 18, $size-only);
+	@if $size-only == false {
+		font-weight: 700;
+	}
+}
+@mixin gu-fontset-heading-large($size-only: false) {
 	@include gu-typeface(headline, 32, $size-only);
   @include mq($from: tablet) {
 		@include gu-typeface(headline, 42, true);
   }
   @include mq($from: leftCol) {
 		@include gu-typeface(headline, 50, true);
-  }
+	}
+	@if $size-only == false {
+		font-weight: 700;
+	}
 }
-@mixin gu-fontset-headline($size-only: false) {
+@mixin gu-fontset-heading($size-only: false) {
 	@include gu-typeface(headline, 22, $size-only);
   @include mq($from: tablet) {
 		@include gu-typeface(headline, 24, true);
-  }
+	}
+	@if $size-only == false {
+		font-weight: 700;
+	}
 }
-@mixin gu-fontset-standfirst($size-only: false) {
+
+// ----- Body ----- //
+@mixin gu-fontset-body-sans($size-only: false) {
+	@include gu-typeface(sans, 16, $size-only);
+	@if $size-only == false {
+		font-weight: 400;
+	}
+}
+@mixin gu-fontset-body($size-only: false) {
+	@include gu-typeface(egyptian, 17, $size-only);
+	@if $size-only == false {
+		font-weight: 400;
+	}
+}
+@mixin gu-fontset-body-large($size-only: false) {
 	@include gu-typeface(headline, 20, $size-only);
   @include mq($from: tablet) {
 		@include gu-typeface(headline, 22, true);
-  }
+	}
+	@if $size-only == false {
+		font-weight: 400;
+	}
 }
-
-
-
-// ----- Body ----- //
-
-@mixin gu-fontset-body($size-only: false) {
-	@include gu-typeface(egyptian, 17, $size-only);
-}
-
-
-
-// ----- Sans ----- //
-
-@mixin gu-fontset-sans($size-only: false) {
-	@include gu-typeface(sans, 16, $size-only);
-}
-
-@mixin gu-fontset-sans-title($size-only: false) {
-	@include gu-typeface(sans, 18, $size-only);}
-
 
 
 // ----- Defaults ----- //
