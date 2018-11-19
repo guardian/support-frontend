@@ -126,7 +126,7 @@ function SetPasswordForm(props: PropTypes) {
           value={props.password}
           onInput={props.updatePassword}
           pattern={'^.{6,20}$'}
-          isValid={props.password.length >= 6 && props.password.length <= 72}
+          isValid={props.password.length >= 6 && props.password.length <= 20}
           formHasBeenSubmitted={props.passwordHasBeenSubmitted}
           errorMessage="Please enter a password between 6 and 20 characters long"
           required
