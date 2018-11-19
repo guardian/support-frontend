@@ -1,18 +1,18 @@
 .component-heading-block__overheading {
-  @include gu-family-headline;
-	font-size: 16px;
+  @include gu-typeface(headline, 16);
   line-height: 1;
   font-weight: bold;
   background-color: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
-  @include mq($from: desktop) {
-    font-size: 22px;
-  }
   @supports(transform:translateY(-100%)){
     transform:translateY(-100%);
     position: absolute;
     display: inline-block;
+  }
+  @include mq($from: desktop) {
+    @include gu-typeface(headline, 22, true);
+    line-height: 1;
   }
 }
 

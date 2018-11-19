@@ -1,5 +1,5 @@
 .component-product-page-text-block__heading {
-  @include gu-family-headline;
+  @include gu-fontset-headline;
   font-weight: bold;
   margin-bottom: ($gu-v-spacing/2);
 }

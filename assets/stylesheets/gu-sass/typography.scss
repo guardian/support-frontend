@@ -17,13 +17,28 @@ $gu-text-sans-web: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial,
 // ----- Font Properties ----- //
 
 $gu-fonts: (
-	copy: (
+	egyptian: (
 		family: $gu-text-egyptian-web,
-		font-weight: normal,
 		sizes: (
-			14: 20px,
-			16: 20px,
-			18: 28px
+			17: 24px
+		)
+	),
+	headline: (
+		family: $gu-headline,
+		sizes: (
+			16: 18px,
+			20: 24px,
+			22: 26px,
+			24: 28px,
+			32: 35px,
+			42: 45px,
+		)
+	),
+	sans: (
+		family: $gu-text-sans-web,
+		sizes: (
+			16: 22px,
+			18: 24px,
 		)
 	)
 );
@@ -31,105 +46,69 @@ $gu-fonts: (
 
 // ----- Mixins ----- //
 
-// Used to populate font information.
+// Used to get font/lh pairs.
 //
 // Usage:
 //
-// gu-font(copy, 16);
-// gu-font(copy, 14, $weight: bold)
-// gu-font(copy, 18, $line-height: 22)
+// gu-typeface(copy, 16);
+// gu-typeface(copy, 14)
+// gu-typeface(copy, 18, true)
 //
-@mixin gu-font($name, $size, $weight: null, $line-height: null) {
-
+@mixin gu-typeface($name, $size, $size-only: false) {
 	$font-data: map-get($gu-fonts, $name);
-
 	font-size: $size + 0px;
-	font-family: map-get($font-data, family);
-
-	@if ($weight) {
-		font-weight: $weight;
-	} @else {
-		font-weight: map-get($font-data, font-weight);
-	}
-
-	@if ($line-height) {
-		line-height: $line-height + 0px;
-	} @else {
-		line-height: map-get(map-get($font-data, sizes), $size);
+	line-height: map-get(map-get($font-data, sizes), $size);
+	@if $size-only == false {
+		font-family: map-get($font-data, family);
 	}
 }
 
-// ----- Base fonts ----- //
-@mixin gu-family-headline {
-	font-family: $gu-headline;
-	line-height: 1.15;
-}
 
-@mixin gu-family-egyptian {
-	font-family: $gu-text-egyptian-web;
-	line-height: 1.4;
-}
+// ----- Font sets ----- //
 
-@mixin gu-family-sans {
-	font-family: $gu-text-sans-web;
-	line-height: 1.375;
-}
+// Use these to get uniform responsive type across pages
+
 
 
 // ----- Headlines ----- //
+
 @mixin gu-fontset-header($size-only: false) {
-	@if $size-only == false {
-		@include gu-family-headline;
-	}
-	font-size: 32px;
-	line-height: 1.08;
-  @include mq($from: desktop) {
-    font-size: 42px;
+	@include gu-typeface(headline, 32, $size-only);
+  @include mq($from: tablet) {
+		@include gu-typeface(headline, 42, true);
   }
 }
 @mixin gu-fontset-headline($size-only: false) {
-	@if $size-only == false {
-		@include gu-family-headline;
-	}
-	font-size: 22px;
+	@include gu-typeface(headline, 22, $size-only);
   @include mq($from: tablet) {
-    font-size: 24px;
+		@include gu-typeface(headline, 24, true);
   }
 }
 @mixin gu-fontset-standfirst($size-only: false) {
-	@if $size-only == false {
-		@include gu-family-headline;
-	}
-	font-size: 20px;
+	@include gu-typeface(headline, 20, $size-only);
   @include mq($from: tablet) {
-    font-size: 22px;
+		@include gu-typeface(headline, 22, true);
   }
 }
 
 
+
 // ----- Body ----- //
+
 @mixin gu-fontset-body($size-only: false) {
-	@if $size-only == false {
-		@include gu-family-egyptian;
-	}
-  font-size: 17px;
+	@include gu-typeface(egyptian, 17, $size-only);
 }
+
 
 
 // ----- Sans ----- //
+
 @mixin gu-fontset-sans($size-only: false) {
-	@if $size-only == false {
-		@include gu-family-sans;
-	}
-  font-size: 16px;
+	@include gu-typeface(sans, 16, $size-only);
 }
 
 @mixin gu-fontset-sans-title($size-only: false) {
-	@if $size-only == false {
-		@include gu-family-sans;
-	}
-  font-size: 18px;
-}
+	@include gu-typeface(sans, 18, $size-only);}
 
 
 
