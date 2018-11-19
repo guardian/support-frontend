@@ -95,7 +95,7 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" >
         <ProductPageTextBlock title="FAQ and help" icon={<SvgInfo />}>
-          <p className={sansParagraphClassName}>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Paper print subscription services and their terms and conditions - see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">theguardian.com/guardian-weekly-subscription-terms-conditions</a>
+          <p className={sansParagraphClassName}>Lorem <a href="#top">Ipsum</a>
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
