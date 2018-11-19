@@ -7,7 +7,10 @@
 .component-product-page-text-block {
   @include gu-fontset-body;
   overflow-wrap: break-word;
-  max-width: gu-span(8);
+  max-width: gu-span(7);
+  @include mq($from: tablet) {
+    max-width: gu-span(8);
+  }
 }
 
 .component-product-page-text-block a {
