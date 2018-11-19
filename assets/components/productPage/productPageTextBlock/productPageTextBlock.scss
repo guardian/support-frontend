@@ -1,11 +1,11 @@
 .component-product-page-text-block__heading {
-  @include gu-font-headline-responsive;
+  @include gu-font-headline;
   font-weight: bold;
   margin-bottom: ($gu-v-spacing/2);
 }
 
 .component-product-page-text-block {
-  @include gu-font-body-responsive;
+  @include gu-font-body;
   overflow-wrap: break-word;
   max-width: gu-span(8);
 }
@@ -15,6 +15,6 @@
 }
 
 .component-product-page-text-block__large {
-  @include gu-font-standfirst-responsive;
+  @include gu-font-standfirst;
   font-weight: 200;
 }
