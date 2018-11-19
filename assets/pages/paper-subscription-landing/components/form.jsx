@@ -5,8 +5,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { currencies } from 'helpers/internationalisation/currency';
-import { type PaperBillingPeriod, getPaperProductPrice } from 'helpers/subscriptions';
+import { type PaperBillingPeriod } from 'helpers/subscriptions';
 import { type Action } from 'components/productPage/productPagePeriodForm/productPagePeriodFormActions';
 import ProductPagePeriodForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePeriodForm/productPagePeriodForm';
 
@@ -16,31 +15,26 @@ import { redirectToWeeklyPage, setPeriod } from '../paperSubscriptionLandingPage
 
 // ---- Periods ----- //
 
-const getPrice = (period: PaperBillingPeriod) => [
-  currencies.GBP.extendedGlyph,
-  getPaperProductPrice(period),
-].join('');
-
 const billingPeriods = {
   month: {
-    title: '6 for 6',
-    offer: 'Introductory offer',
-    copy: `${getPrice('sixday')} for the first 6 issues (then ${getPrice('month')} quarterly)`,
+    title: 'Everyday',
+    offer: null,
+    copy: 'Lorem ipsum sit amet',
   },
   sixday: {
-    title: '6 for 6',
-    offer: 'Introductory offer',
-    copy: `${getPrice('sixday')} for the first 6 issues (then ${getPrice('month')} quarterly)`,
+    title: 'Sixday',
+    offer: null,
+    copy: 'Lorem ipsum sit amet',
   },
   weekend: {
-    title: 'Quarterly',
+    title: 'Weekend',
     offer: null,
-    copy: `${getPrice('month')} every 3 months`,
+    copy: 'Lorem ipsum sit amet',
   },
   sunday: {
-    title: 'Observer',
+    title: 'Sunday',
     offer: null,
-    copy: `${getPrice('month')} every 12 months`,
+    copy: 'Lorem ipsum sit amet',
   },
 };
 

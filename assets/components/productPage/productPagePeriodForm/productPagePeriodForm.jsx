@@ -4,7 +4,6 @@
 
 import React from 'react';
 
-import SvgInfo from 'components/svgs/information';
 import { outsetClassName, bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 
 import ProductPageButton from '../productPageButton/productPageButton';

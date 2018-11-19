@@ -174,11 +174,6 @@ function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: We
   return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
 }
 
-function getPaperProductPrice(billingPeriod: PaperBillingPeriod): string {
-  return billingPeriod === 'sixday' ? '12' : '99';
-}
-
-
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
 
   switch (product) {
@@ -235,5 +230,4 @@ export {
   discountedDisplayPrice,
   getProductPrice,
   getWeeklyProductPrice,
-  getPaperProductPrice,
 };
