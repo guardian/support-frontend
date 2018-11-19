@@ -44,6 +44,7 @@ export default function ProductPagePeriodForm<P:string>({
 
   return (
     <form
+      className="component-product-page-period-form"
       onSubmit={(ev) => {
         ev.preventDefault();
         onSubmitAction();
