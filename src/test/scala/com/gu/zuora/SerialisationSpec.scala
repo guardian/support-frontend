@@ -6,12 +6,13 @@ import com.gu.support.workers.model.PaymentFields
 import com.gu.zuora.Fixtures._
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response._
+import com.typesafe.scalalogging.LazyLogging
 import io.circe
 import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}
 
-class SerialisationSpec extends FlatSpec with Matchers {
+class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
 
   "Account" should "serialise to correct json" in {
     val json = account(GBP).asJson
@@ -41,7 +42,10 @@ class SerialisationSpec extends FlatSpec with Matchers {
 
   "SubscribeResponseAccount" should "deserialise correctly" in {
     val decodeResponse = decode[SubscribeResponseAccount](subscribeResponseAccount)
-    decodeResponse.isRight should be(true)
+    decodeResponse.fold(
+      err => fail(err.toString),
+      _ => succeed
+    )
   }
 
   "SubscribeResponse" should "deserialise correctly" in {

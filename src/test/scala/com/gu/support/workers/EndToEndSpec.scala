@@ -29,7 +29,7 @@ class EndToEndSpec extends LambdaSpec {
       .chain(new CreateZuoraSubscription())
       .parallel(
         new SendThankYouEmail(),
-        new SendAcquisitionEvent(MockOphanHelper.mockServices) //We have to mock Ophan - there doesn't seem to be a test mode
+        new SendAcquisitionEvent(MockAcquisitionHelper.mockServices) //We have to mock the acquisition service - there doesn't seem to be a test mode
       )
       .last()
 

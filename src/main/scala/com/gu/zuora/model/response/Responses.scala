@@ -35,7 +35,9 @@ case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
   extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
 
   override def toString: String = this.errors.toString()
+
   def toRetryNone: RetryNone = new RetryNone(message = this.asJson.noSpaces, cause = this)
+
   def toRetryUnlimited: RetryUnlimited = new RetryUnlimited(this.asJson.noSpaces, cause = this)
 
   // Based on https://knowledgecenter.zuora.com/DC_Developers/G_SOAP_API/L_Error_Handling/Errors#ErrorCode_Object
@@ -76,20 +78,14 @@ case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends Zu
 object SubscribeResponseAccount {
   implicit val codec: Codec[SubscribeResponseAccount] = capitalizingCodec
 }
+
 case class SubscribeResponseAccount(
   accountNumber: String,
   subscriptionNumber: String,
-  gatewayResponse: String,
-  paymentId: String,
-  invoiceResult: InvoiceResult,
   totalTcv: Float,
   subscriptionId: String,
   totalMrr: Float,
-  paymentTransactionNumber: String,
   accountId: String,
-  gatewayResponseCode: String,
-  invoiceNumber: String,
-  invoiceId: String,
   success: Boolean
 ) extends ZuoraResponse {
 
@@ -100,6 +96,7 @@ case class SubscribeResponseAccount(
 object InvoiceResult {
   implicit val codec: Codec[InvoiceResult] = capitalizingCodec
 }
+
 case class InvoiceResult(invoice: List[Invoice])
 
 object Invoice {

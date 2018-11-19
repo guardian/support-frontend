@@ -2,7 +2,7 @@ package com.gu.ophan
 
 import com.gu.okhttp.RequestRunners
 
-object OphanService {
+object AcquisitionService {
 
   def apply(isTestService: Boolean): com.gu.acquisition.services.AcquisitionService =
     if (isTestService) {

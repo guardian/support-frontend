@@ -100,14 +100,6 @@ class SendThankYouEmailSpec extends LambdaSpec {
       .validate("SfContactId", "sfContactId")
   }
 
-  it should "still work without a Payment Method" in {
-    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "123456", "55779911")
-    val ef = ContributionEmailFields("", new DateTime(1999, 12, 31, 11, 59), 0, Currency.GBP, "UK", "", Monthly, SfContactId("sfContactId"), dd)
-    val resultJson = parse(ef.payload)
-    resultJson.isRight should be(true)
-    (resultJson.right.get \\ "payment method").isEmpty should be(true)
-  }
-
   class JsonValidater(json: Json) {
     def validate(jsonKey: String, expectedValue: String) = {
       (json \\ jsonKey).head.asString.getOrElse("") should equal(expectedValue)

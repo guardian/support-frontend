@@ -10,14 +10,21 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
+lazy val setupGitHook = taskKey[Unit]("Set up a pre-push git hook to run the integration tests")
+
+setupGitHook := {
+  "ln -s ../../scripts/pre-push .git/hooks/pre-push" !
+}
+
 lazy val scalaStyleSettings = Seq(
   scalastyleFailOnError := true,
   testScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value,
-  (test in Test) := ((test in Test) dependsOn testScalastyle).value,
+  (test in Test) := ((test in Test) dependsOn testScalastyle dependsOn setupGitHook).value,
   (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
   ScalariformKeys.preferences := ScalariformKeys.preferences.value
     .setPreference(SpacesAroundMultiImports, false)
+
 )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
@@ -26,7 +33,7 @@ lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
 )
 
-lazy val circeVersion = "0.9.3"
+lazy val circeVersion = "0.10.1"
 lazy val awsVersion = "1.11.331"
 lazy val okhttpVersion = "3.10.0"
 
