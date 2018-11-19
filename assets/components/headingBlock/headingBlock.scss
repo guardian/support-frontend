@@ -1,19 +1,15 @@
 
 
 .component-heading-block__overheading {
+  @include gu-font-header-tag-responsive();
   background-color: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
-  font-family: $gu-headline;
   font-weight: bold;
-  font-size: 20px;
   @supports(transform:translateY(-100%)){
     transform:translateY(-100%);
     position: absolute;
     display: inline-block;
-  }
-  @include mq($from: tablet) {
-    font-size: 24px;
   }
 }
 
@@ -29,22 +25,12 @@
 
 .component-heading-block__heading {
   @extend %component-heading-block__card;
-  font-size: 26px;
+  @include gu-font-header-responsive();
   font-weight: bold;
-  line-height: 1.12;
   padding: ($gu-v-spacing /2) ($gu-h-spacing / 2) ($gu-v-spacing * 1.5);
-
-  @include mq($from: tablet) {
-    font-size: 30px;
-  }
-
-  @include mq($from: desktop) {
-    font-size: 36px;
-  }
 }
 
 .component-heading-block__banner {
-  @extend %component-heading-block__card;
   border-top: 1px solid gu-colour(garnett-neutral-5);
   padding: ($gu-v-spacing / 1.5) ($gu-h-spacing / 2) $gu-v-spacing;
   font-size: 17px;

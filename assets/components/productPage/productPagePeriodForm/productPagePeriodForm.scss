@@ -17,11 +17,10 @@
 }
 
 .component-product-page-period-form__info {
+  @include gu-font-sans-responsive;
   padding-top: $gu-v-spacing * 2;
   padding-bottom: $gu-v-spacing * 2.5;
   color: gu-colour(garnett-neutral-5);
-  font-family: $gu-text-sans-web;
-  font-size: 16px;
   svg {
     display: inline-block;
     vertical-align: text-bottom;

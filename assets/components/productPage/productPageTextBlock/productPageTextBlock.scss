@@ -5,6 +5,7 @@
 }
 
 .component-product-page-text-block {
+  @include gu-font-body-responsive;
   overflow-wrap: break-word;
   max-width: gu-span(8);
 }
