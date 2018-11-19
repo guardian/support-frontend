@@ -18,12 +18,7 @@
 }
 
 .component-heading-block__maxwidth {
-  @include mq($from: tablet) {
-    width: 75%;
-  }
-  @include mq($from: desktop) {
-    width: 50%;
-  }
+  max-width: gu-span(8);
 }
 
 %component-heading-block__card {

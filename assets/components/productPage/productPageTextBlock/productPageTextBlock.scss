@@ -6,12 +6,7 @@
 
 .component-product-page-text-block {
   overflow-wrap: break-word;
-  @include mq($from: tablet) {
-    width: 75%;
-  }
-  @include mq($from: desktop) {
-    width: 57.5%;
-  }
+  max-width: gu-span(8);
 }
 
 .component-product-page-text-block a {
