@@ -71,7 +71,7 @@ class PayPalOneOff(
     }
     val countryCookie = request.cookies.get("GU_country")
     val countryFromCookie = countryCookie.map(_.value).getOrElse("Unknown")
-    if (!isTestUser) tipMonitoring.verify(s"${country.getOrElse(countryFromCookie)} One-off PayPal contribution")
+    if (!isTestUser) tipMonitoring.verify(s"${country.getOrElse(countryFromCookie).toUpperCase} One-off PayPal contribution")
     success.email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
       redirect
