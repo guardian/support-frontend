@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn, getUserTypeFromIdentity } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
@@ -195,9 +195,11 @@ function setValue<T>(setStateValue: T => Action, value: T) {
 
     const shouldEnable = checkoutFormShouldSubmit({
       formValid: valid,
-      contributionType: state.page.form.contributionType,
-      isSignedIn: state.page.user.isSignedIn,
-      userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+      canContributeWithoutSigningIn: canContributeWithoutSigningIn(
+        state.page.form.contributionType,
+        state.page.user.isSignedIn,
+        state.page.form.userTypeFromIdentityResponse,
+      ),
       isRecurringContributor: state.page.user.isRecurringContributor,
     });
 
