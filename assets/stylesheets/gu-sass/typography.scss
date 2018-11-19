@@ -32,6 +32,7 @@ $gu-fonts: (
 			24: 28px,
 			32: 35px,
 			42: 45px,
+			50: 54px,
 		)
 	),
 	sans: (
@@ -76,6 +77,9 @@ $gu-fonts: (
 	@include gu-typeface(headline, 32, $size-only);
   @include mq($from: tablet) {
 		@include gu-typeface(headline, 42, true);
+  }
+  @include mq($from: leftCol) {
+		@include gu-typeface(headline, 50, true);
   }
 }
 @mixin gu-fontset-headline($size-only: false) {

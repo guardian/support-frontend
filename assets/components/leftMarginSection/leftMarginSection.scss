@@ -26,8 +26,4 @@
   @include mq($from: desktop) {
     flex-basis: gu-span(12);
   }
-
-  @include mq($from: leftCol) {
-    flex-basis: gu-span(13);
-  }
 }
