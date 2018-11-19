@@ -48,7 +48,6 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
-  setFormIsValid,
 } from '../contributionsLandingActions';
 
 
