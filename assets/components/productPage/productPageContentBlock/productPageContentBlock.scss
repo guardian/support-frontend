@@ -33,6 +33,11 @@
     border-color: gu-colour(garnett-neutral-5);
   }
 }
+.component-product-page-content-block--feature + .component-product-page-content-block--feature {
+  .component-left-margin-section__content {
+    border-top: 1px solid gu-colour(header-border);
+  }
+}
 
 .component-product-page-content-block--dark {
   color: gu-colour(garnett-neutral-5);

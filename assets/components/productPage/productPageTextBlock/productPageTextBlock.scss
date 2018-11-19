@@ -2,6 +2,11 @@
   @include gu-font-headline-responsive;
   font-weight: bold;
   margin-bottom: ($gu-v-spacing/2);
+  svg {
+    margin-left: $gu-h-spacing/3;
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 
 .component-product-page-text-block {
