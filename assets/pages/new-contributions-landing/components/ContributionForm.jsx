@@ -77,6 +77,7 @@ type PropTypes = {|
   formIsValid: boolean,
   isRecurringContributor: boolean,
   checkoutFormHasBeenSubmitted: boolean,
+  isPostDeploymentTestUser: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -102,6 +103,7 @@ const mapStateToProps = (state: State) => ({
   formIsValid: state.page.form.formIsValid,
   isRecurringContributor: state.page.user.isRecurringContributor,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
 });
 
 
@@ -180,13 +182,18 @@ function onSubmit(props: PropTypes): Event => void {
     event.preventDefault();
     const flowPrefix = 'npf';
     const form = event.target;
-    const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
-    onFormSubmit({
-      ...props,
-      flowPrefix,
-      form,
-      handlePayment,
-    });
+
+    if (props.isPostDeploymentTestUser && props.paymentMethod === 'Stripe') {
+      props.onPaymentAuthorisation({ paymentMethod: 'Stripe', token: 'tok_visa' });
+    } else {
+      const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
+      onFormSubmit({
+        ...props,
+        flowPrefix,
+        form,
+        handlePayment,
+      });
+    }
   };
 }
 
