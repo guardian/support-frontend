@@ -42,4 +42,24 @@ export const tests: Tests = {
       return searchString.includes(componentType);
     }),
   },
+
+  usContributionTypes: {
+    variants: [
+      'control',
+      'default-annual',
+      'default-single',
+      'default-annual_no-monthly',
+      'default-single_no-monthly',
+    ],
+    audiences: {
+      // TODO: is this working? with URL hash I can bypass, maybe that's expected
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 5,
+  },
 };

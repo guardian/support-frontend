@@ -7,7 +7,11 @@ import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { type Contrib } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { getPaymentMethodToSelect } from 'helpers/checkouts';
+import {
+  getPaymentMethodToSelect,
+  getValidContributionTypes,
+  toHumanReadableContributionType,
+} from 'helpers/checkouts';
 
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -15,6 +19,7 @@ import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updateContributionType } from '../contributionsLandingActions';
+import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
 
@@ -24,6 +29,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   switches: Switches,
   onSelectContributionType: (Contrib, Switches, IsoCountry, CountryGroupId) => void,
+  abParticipations: Participations,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -31,6 +37,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
+  abParticipations: state.common.abParticipations,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
@@ -49,55 +56,27 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
 // ----- Render ----- //
 
 function ContributionType(props: PropTypes) {
-  const oneOff = 'ONE_OFF';
-  const monthly = 'MONTHLY';
-  const annual = 'ANNUAL';
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list">
-        <li className="form__radio-group-item">
-          <input
-            id="contributionType-oneoff"
-            className="form__radio-group-input"
-            type="radio"
-            name="contributionType"
-            value={oneOff}
-            onChange={() =>
-              props.onSelectContributionType(oneOff, props.switches, props.countryId, props.countryGroupId)
-            }
-            checked={props.contributionType === oneOff}
-          />
-          <label htmlFor="contributionType-oneoff" className="form__radio-group-label">Single</label>
-        </li>
-        <li className="form__radio-group-item">
-          <input
-            id="contributionType-monthly"
-            className="form__radio-group-input"
-            type="radio"
-            name="contributionType"
-            value={monthly}
-            onChange={() =>
-              props.onSelectContributionType(monthly, props.switches, props.countryId, props.countryGroupId)
-            }
-            checked={props.contributionType === monthly}
-          />
-          <label htmlFor="contributionType-monthly" className="form__radio-group-label">Monthly</label>
-        </li>
-        <li className="form__radio-group-item">
-          <input
-            id="contributionType-annual"
-            className="form__radio-group-input"
-            type="radio"
-            name="contributionType"
-            value={annual}
-            onChange={() =>
-              props.onSelectContributionType(annual, props.switches, props.countryId, props.countryGroupId)
-            }
-            checked={props.contributionType === annual}
-          />
-          <label htmlFor="contributionType-annual" className="form__radio-group-label">Annual</label>
-        </li>
+        {getValidContributionTypes(props.abParticipations).map((contributionType: Contrib) =>
+          (<li className="form__radio-group-item">
+            <input
+              id={`contributionType-${contributionType}`}
+              className="form__radio-group-input"
+              type="radio"
+              name="contributionType"
+              value={contributionType}
+              onChange={() =>
+                props.onSelectContributionType(contributionType, props.switches, props.countryId, props.countryGroupId)
+              }
+              checked={props.contributionType === contributionType}
+            />
+            <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
+              {toHumanReadableContributionType(contributionType)}
+            </label>
+          </li>))}
       </ul>
     </fieldset>
   );

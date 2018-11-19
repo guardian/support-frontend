@@ -21,6 +21,7 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
+import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
 
 // ----- Types ----- //
 
@@ -103,7 +104,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   // ----- Initial state ----- //
 
   const initialState: FormState = {
-    contributionType: parseContrib(storage.getSession('contributionType'), 'MONTHLY'),
+    contributionType: getContributionTypeFromSessionOrElse('MONTHLY'),
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {

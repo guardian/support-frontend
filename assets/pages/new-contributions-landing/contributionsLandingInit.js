@@ -5,8 +5,13 @@ import { type Store, type Dispatch } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { type ThirdPartyPaymentLibrary, getValidPaymentMethods, getPaymentMethodFromSession } from 'helpers/checkouts';
-import { amounts, type Amount } from 'helpers/contributions';
+import {
+  type ThirdPartyPaymentLibrary,
+  getValidPaymentMethods,
+  getPaymentMethodFromSession,
+  getContributionTypeFromSessionOrElse,
+} from 'helpers/checkouts';
+import { amounts, type Amount, parseContrib } from 'helpers/contributions';
 import {
   type Action,
   paymentWaiting,
@@ -19,6 +24,8 @@ import {
   checkIfEmailHasPassword,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
+import { updateContributionType } from 'pages/new-contributions-landing/contributionsLandingActions';
+import * as storage from 'helpers/storage';
 
 // ----- Functions ----- //
 
@@ -77,6 +84,21 @@ function initialiseSelectedAnnualAmount(state: State, dispatch: Function) {
   }
 }
 
+function initialiseContributionType(state: State, dispatch: Function) {
+  const { usContributionTypes } = state.common.abParticipations;
+  const params = usContributionTypes
+    ? usContributionTypes.split('_')
+    : [];
+
+  if (params.includes('default-annual')) {
+    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('ANNUAL')));
+  } else if (params.includes('default-single')) {
+    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('ONE_OFF')));
+  } else {
+    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('MONTHLY')));
+  }
+}
+
 const init = (store: Store<State, Action, Function>) => {
   const { dispatch } = store;
 
@@ -84,6 +106,7 @@ const init = (store: Store<State, Action, Function>) => {
   selectDefaultPaymentMethod(state, dispatch);
   initialisePaymentMethods(state, dispatch);
   initialiseSelectedAnnualAmount(state, dispatch);
+  initialiseContributionType(state, dispatch);
 
   const { firstName, lastName, email } = state.page.user;
 
