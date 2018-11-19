@@ -27,7 +27,7 @@
   @extend %component-heading-block__card;
   @include gu-font-header-responsive();
   font-weight: bold;
-  padding: ($gu-v-spacing /2) ($gu-h-spacing / 2) ($gu-v-spacing * 1.5);
+  padding: ($gu-v-spacing /4) ($gu-h-spacing / 2) ($gu-v-spacing * 1.5);
 }
 
 .component-heading-block__banner {
