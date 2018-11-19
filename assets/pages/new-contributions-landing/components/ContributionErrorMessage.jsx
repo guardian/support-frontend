@@ -17,7 +17,6 @@ import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringCon
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  email: string,
   contributionType: Contrib,
   paymentError: CheckoutFailureReason | null,
   isSignedIn: boolean,

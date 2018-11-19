@@ -7,7 +7,7 @@ import type { Dispatch } from 'redux';
 import type { Contrib, PaymentMethod } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
-import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
+import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmitOld';
 import ContributionsGuestCheckout from './contributionsGuestCheckout';
 import { type State } from '../regularContributionsReducer';
 import { setStage } from '../helpers/checkoutForm/checkoutFormActions';
@@ -52,6 +52,7 @@ const mapDispatchToProps = (dispatch: Dispatch<CheckoutAction>) => ({
       handlePayment: () => {
         dispatch(setStage('payment'));
       },
+      isRecurringContributor: false, // hardcoding as not needed for old flow
       setFormIsValid: () => undefined, // not needed for old fow
     };
 

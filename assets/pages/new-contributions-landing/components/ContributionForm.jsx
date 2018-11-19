@@ -22,7 +22,6 @@ import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPay
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 
-import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 

@@ -102,7 +102,7 @@ function createUserReducer(countryGroup: CountryGroupId) {
         return { ...state, gnmMarketing: action.preference };
 
       case 'SET_IS_SIGNED_IN':
-      return { ...state, isSignedIn: action.isSignedIn };
+        return { ...state, isSignedIn: action.isSignedIn };
 
       case 'SET_IS_RECURRING_CONTRIBUTOR':
         return { ...state, isRecurringContributor: true };

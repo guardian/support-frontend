@@ -7,7 +7,6 @@ import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type ThirdPartyPaymentLibrary, getValidPaymentMethods, getPaymentMethodFromSession } from 'helpers/checkouts';
 import { amounts, type Amount } from 'helpers/contributions';
-import { get as getCookie } from 'helpers/cookie';
 import {
   type Action,
   paymentWaiting,
@@ -90,12 +89,7 @@ const init = (store: Store<State, Action, Function>) => {
     firstName,
     lastName,
     email,
-    isRecurringContributor,
   } = state.page.user;
-
-  if (isRecurringContributor) {
-
-  }
 
   dispatch(checkIfEmailHasPassword(email));
   dispatch(updateUserFormData({ firstName, lastName, email }));

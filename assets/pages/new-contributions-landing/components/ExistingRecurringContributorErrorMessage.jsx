@@ -35,7 +35,7 @@ export const ExistingRecurringContributorErrorMessage = (props: PropTypes) => {
 
   return (
     <a className={classNameWithModifiers('form__error', ['existing-contributor'])} href={manageUrl} onClick={onClick}>
-        You already have recurring contribution. You can visit <span className="underline">manage my account</span> to give us more, if you wanna.
+      We’ve checked, and you are already a recurring contributor. Thank you so much for your ongoing support.  If you’d like to give more, either select a single contribution or increase the amount of your existing contribution by going to your  <span className="underline">account settings.</span>
     </a>);
 
 };
