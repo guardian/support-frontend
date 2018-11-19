@@ -156,7 +156,7 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
       if (countryGroupId === 'GBPCountries' && flashSaleIsActive('Paper')) {
         return products.Paper;
       }
-      if (countryGroupId === 'UnitedStates' && flashSaleIsActive('DigitalPack')) {
+      if (countryGroupId !== 'GBPCountries' && flashSaleIsActive('DigitalPack')) {
         return products.DigitalPack;
       }
       return products.GuardianWeekly;
