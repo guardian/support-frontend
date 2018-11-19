@@ -43,6 +43,7 @@ type PropTypes = {|
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
+  isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   updateFirstName: Event => void,
   updateLastName: Event => void,
@@ -66,6 +67,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   state: state.page.form.formData.state,
   isSignedIn: state.page.user.isSignedIn,
+  isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
 });

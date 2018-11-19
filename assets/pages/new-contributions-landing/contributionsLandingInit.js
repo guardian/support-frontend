@@ -85,7 +85,11 @@ const init = (store: Store<State, Action, Function>) => {
   initialisePaymentMethods(state, dispatch);
   initialiseSelectedAnnualAmount(state, dispatch);
 
-  const { firstName, lastName, email } = state.page.user;
+  const {
+    firstName,
+    lastName,
+    email,
+  } = state.page.user;
 
   dispatch(checkIfEmailHasPassword(email));
   dispatch(updateUserFormData({ firstName, lastName, email }));
