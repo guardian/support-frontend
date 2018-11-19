@@ -106,6 +106,7 @@ class PayPalOneOff(
     val queryStrings = request.queryString
     val testUsername = request.cookies.get("_test_username")
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
+    val userAgent = request.headers.get("user-agent")
 
     def emailForUser(user: Option[AuthenticatedIdUser])(
       implicit
@@ -122,7 +123,7 @@ class PayPalOneOff(
     }
 
     emailForUser(request.user)
-      .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser))
+      .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser, userAgent))
       .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, isTestUser))
   }
 

@@ -59,14 +59,17 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
   private def postPaypalData[A](
     data: ExecutePaymentBody,
     queryStrings: Map[String, Seq[String]],
-    isTestUser: Boolean
+    isTestUser: Boolean,
+    userAgent: Option[String]
   ): EitherT[Future, PaymentAPIResponseError[A], WSResponse] = {
 
     val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
 
+    val headers = Seq("Accept" -> "application/json") ++ userAgent.map("User-Agent" -> _)
+
     wsClient.url(payPalExecutePaymentEndpoint)
       .withQueryStringParameters(convertQueryString(allQueryParams): _*)
-      .withHttpHeaders("Accept" -> "application/json")
+      .withHttpHeaders(headers: _*)
       .withBody(Json.toJson(data))
       .withMethod("POST")
       .execute()
@@ -95,9 +98,10 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
     acquisitionData: JsValue,
     queryStrings: Map[String, Seq[String]],
     email: Option[String],
-    isTestUser: Boolean
+    isTestUser: Boolean,
+    userAgent: Option[String]
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
     val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postPaypalData(data, queryStrings, isTestUser).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
+    postPaypalData(data, queryStrings, isTestUser, userAgent).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
   }
 }
