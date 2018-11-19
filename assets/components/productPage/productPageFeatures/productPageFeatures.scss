@@ -11,6 +11,7 @@
 
 .component-product-page-features__copy {
   @include gu-font-body-responsive;
+  margin-top: $gu-v-spacing / 4;
 }
 
 .component-product-page-features__item {
