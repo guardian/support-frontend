@@ -77,11 +77,6 @@ export default function ProductPagePeriodForm<P:string>({
           Subscribe now{selectedPeriod && periods[selectedPeriod] && ` – ${periods[selectedPeriod].title}`}
         </ProductPageButton>
       </div>
-
-      <div className="component-product-page-period-form__info">
-        <SvgInfo />
-        You can cancel your subscription at any time
-      </div>
     </form>
   );
 }
