@@ -19,6 +19,7 @@ type PropTypes = {|
 // ----- Render ----- //
 
 export const largeParagraphClassName = 'component-product-page-text-block__large';
+export const sansParagraphClassName = 'component-product-page-text-block__sans';
 export const ulClassName = 'component-product-page-text-block__ul';
 
 const ProductPageTextBlock = ({

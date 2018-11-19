@@ -28,6 +28,10 @@
   font-weight: 200;
 }
 
+.component-product-page-text-block__sans {
+  font-family: $gu-text-sans-web;
+}
+
 .component-product-page-text-block__ul li {
   position: relative;
   $bullet-size: 16px;

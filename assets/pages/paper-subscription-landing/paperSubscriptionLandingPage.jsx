@@ -15,7 +15,7 @@ import { renderPage } from 'helpers/render';
 import SvgInfo from 'components/svgs/information';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { largeParagraphClassName, ulClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { largeParagraphClassName, ulClassName, sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import Form from './components/form';
 import reducer from './paperSubscriptionLandingPageReducer';
@@ -95,7 +95,7 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" >
         <ProductPageTextBlock title="FAQ and help" icon={<SvgInfo />}>
-          <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Paper print subscription services and their terms and conditions - see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">theguardian.com/guardian-weekly-subscription-terms-conditions</a>
+          <p className={sansParagraphClassName}>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Paper print subscription services and their terms and conditions - see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">theguardian.com/guardian-weekly-subscription-terms-conditions</a>
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
