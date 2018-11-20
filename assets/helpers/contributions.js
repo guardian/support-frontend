@@ -311,12 +311,12 @@ function getMinContribution(contributionType: ContributionType, countryGroupId: 
   return config[countryGroupId][contributionType].min;
 }
 
-function parseContrib(s: ?string, contrib: ContributionType): ContributionType {
-  switch ((s || contrib).toUpperCase()) {
+function toContributionTypeOrElse(s: ?string, fallback: ContributionType): ContributionType {
+  switch ((s || fallback).toUpperCase()) {
     case 'ANNUAL': return 'ANNUAL';
     case 'MONTHLY': return 'MONTHLY';
     case 'ONE_OFF': return 'ONE_OFF';
-    default: return contrib;
+    default: return fallback;
   }
 }
 
@@ -473,7 +473,7 @@ function getContributionAmountRadios(
 export {
   config,
   amounts,
-  parseContrib,
+  toContributionTypeOrElse,
   validateContribution,
   parseContribution,
   getMinContribution,
