@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Contrib, PaymentMethod } from 'helpers/contributions';
+import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import React from 'react';
@@ -48,7 +48,7 @@ type PropTypes = {|
   payPalSetHasLoaded: () => void,
   isTestUser: boolean,
   paymentMethod: PaymentMethod,
-  contributionType: Contrib,
+  contributionType: ContributionType,
 |};
 
 /* eslint-enable react/no-unused-prop-types */

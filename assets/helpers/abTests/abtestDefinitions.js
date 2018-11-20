@@ -1,5 +1,5 @@
 // @flow
-import { getSession } from 'helpers/storage';
+import { isFromEpicOrBanner } from 'helpers/referrerComponent';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
@@ -20,7 +20,7 @@ export const tests: Tests = {
     seed: 3,
   },
 
-  smallMobileHeader: {
+  smallMobileHeaderNotEpicOrBanner: {
     variants: ['control', 'shrink', 'shrink_no-blurb', 'shrink_no-blurb_no-header'],
     audiences: {
       ALL: {
@@ -31,15 +31,25 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 4,
-    canRun: () => [
-      'ACQUISITIONS_EPIC',
-      'ACQUISITIONS_ENGAGEMENT_BANNER',
-    ].some((componentType: string) => {
-      // Try from session storage first. This is so that we get the correct header
-      // on subsequent pageviews which don't have the componentType in the URL, e.g.
-      // thank you page after PayPal one-off, or after changing country dropdown.
-      const searchString = getSession('acquisitionData') || window.location.href;
-      return searchString.includes(componentType);
-    }),
+    canRun: () => !isFromEpicOrBanner,
+  },
+
+  usContributionTypes: {
+    variants: [
+      'control',
+      'default-annual',
+      'default-single',
+      'default-annual_no-monthly',
+      'default-single_no-monthly',
+    ],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 5,
   },
 };

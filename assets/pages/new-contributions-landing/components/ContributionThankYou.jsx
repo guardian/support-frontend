@@ -6,9 +6,9 @@ import { type Dispatch } from 'redux';
 import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { type Contrib, getSpokenType } from 'helpers/contributions';
+import { type ContributionType, getSpokenType } from 'helpers/contributions';
 import CtaLink from 'components/ctaLink/ctaLink';
-import MarketingConsent from '../components/MarketingConsent';
+import MarketingConsent from './MarketingConsentContainer';
 import ContributionsSurvey from '../components/ContributionsSurvey';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 
@@ -16,7 +16,7 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributions
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,

@@ -17,7 +17,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
-import type { Contrib } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
@@ -36,7 +36,7 @@ type PropTypes = {|
   checkoutFailureReason: ?CheckoutFailureReason,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentStatus: PaymentStatus,
   currencyId: IsoCurrency,
   amount: number,
