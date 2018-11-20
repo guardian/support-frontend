@@ -21,6 +21,7 @@ import admin._
 import models.identity.responses.{SetGuestPasswordResponseCookie, SetGuestPasswordResponseCookies}
 import services._
 import org.joda.time.DateTime
+import models.Catalog._
 
 object CirceDecoders {
 
@@ -133,6 +134,9 @@ object CirceDecoders {
 
   implicit val catalogDecoder: Decoder[Catalog] = deriveDecoder
   implicit val catalogEncoder: Encoder[Catalog] = deriveEncoder
+
+  implicit val paperPricesDecoder: Decoder[PaperPrices] = deriveDecoder
+  implicit val paperPricesEncoder: Encoder[PaperPrices] = deriveEncoder
 
   implicit val pricePlanDecoder: Decoder[PricePlan] = deriveDecoder
   implicit val pricePlanEncoder: Encoder[PricePlan] = deriveEncoder
