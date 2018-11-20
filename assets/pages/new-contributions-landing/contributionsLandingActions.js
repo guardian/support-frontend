@@ -178,6 +178,28 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
+
+function enableOrDisableForm(formIsValid: boolean, state: State, dispatch: Function) {
+
+  const shouldEnable = checkoutFormShouldSubmit({
+    formValid: formIsValid,
+    canContributeWithoutSigningIn: canContributeWithoutSigningIn(
+      state.page.form.contributionType,
+      state.page.user.isSignedIn,
+      state.page.form.userTypeFromIdentityResponse,
+    ),
+    isRecurringContributor: state.page.user.isRecurringContributor,
+  });
+
+  if (shouldEnable && window.enablePayPalButton) {
+    dispatch(setFormIsSubmittable(true));
+    window.enablePayPalButton();
+  } else if (window.disablePayPalButton) {
+    dispatch(setFormIsSubmittable(false));
+    window.disablePayPalButton();
+  }
+}
+
 /*
   Set the value of a form variable, then set the form validity and submitability
 */
@@ -189,27 +211,10 @@ function setValue<T>(setStateValue: T => Action, value: T) {
     const state = getState();
 
     // TODO: use the actual form state rather than re-fetching from DOM
-    const valid = formElementIsValid(getForm('form--contribution'));
+    const formIsValid = formElementIsValid(getForm('form--contribution'));
 
-    dispatch(setFormIsValid(valid));
-
-    const shouldEnable = checkoutFormShouldSubmit({
-      formValid: valid,
-      canContributeWithoutSigningIn: canContributeWithoutSigningIn(
-        state.page.form.contributionType,
-        state.page.user.isSignedIn,
-        state.page.form.userTypeFromIdentityResponse,
-      ),
-      isRecurringContributor: state.page.user.isRecurringContributor,
-    });
-
-    if (shouldEnable && window.enablePayPalButton) {
-      dispatch(setFormIsSubmittable(true));
-      window.enablePayPalButton();
-    } else if (window.disablePayPalButton) {
-      dispatch(setFormIsSubmittable(false));
-      window.disablePayPalButton();
-    }
+    dispatch(setFormIsValid(formIsValid));
+    enableOrDisableForm(formIsValid, state, dispatch);
   };
 }
 
