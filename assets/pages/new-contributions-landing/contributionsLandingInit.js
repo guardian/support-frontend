@@ -1,23 +1,24 @@
 // @flow
 
 // ----- Imports ----- //
-import { type Store, type Dispatch } from 'redux';
+import { type Store } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Switches } from 'helpers/settings';
 import {
   type ThirdPartyPaymentLibrary,
   getValidPaymentMethods,
   getPaymentMethodFromSession,
   getContributionTypeFromSessionOrElse,
 } from 'helpers/checkouts';
-import { amounts, type Amount } from 'helpers/contributions';
+import { amounts, type Amount, type PaymentMethod, type Contrib } from 'helpers/contributions';
 import {
   type Action,
   paymentWaiting,
   onThirdPartyPaymentAuthorised,
   setThirdPartyPaymentLibrary,
-  updatePaymentMethod,
   updateUserFormData,
   setPayPalHasLoaded,
   selectAmount,
@@ -28,20 +29,15 @@ import { type State } from './contributionsLandingReducer';
 
 // ----- Functions ----- //
 
-function selectDefaultPaymentMethod(state: State, dispatch: Dispatch<Action>) {
-  const { contributionType } = state.page.form;
-  const { countryId } = state.common.internationalisation;
-  const { switches } = state.common.settings;
-
+function getInitialPaymentMethod(contributionType: Contrib, countryId: IsoCountry, switches: Switches): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
   const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 
-  const paymentMethodToSelect =
+  return (
     paymentMethodFromSession && validPaymentMethods.includes(getPaymentMethodFromSession())
       ? paymentMethodFromSession
-      : validPaymentMethods[0] || 'None';
-
-  dispatch(updatePaymentMethod(paymentMethodToSelect));
+      : validPaymentMethods[0] || 'None'
+  );
 }
 
 function initialiseStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser, dispatch) {
@@ -89,12 +85,17 @@ function initialiseContributionType(state: State, dispatch: Function) {
     ? usContributionTypes.split('_')
     : [];
 
+  const { contributionType } = state.page.form;
+  const { countryId } = state.common.internationalisation;
+  const { switches } = state.common.settings;
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
+
   if (params.includes('default-annual')) {
-    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('ANNUAL')));
+    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('ANNUAL'), paymentMethod));
   } else if (params.includes('default-single')) {
-    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('ONE_OFF')));
+    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('ONE_OFF'), paymentMethod));
   } else {
-    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('MONTHLY')));
+    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('MONTHLY'), paymentMethod));
   }
 }
 
@@ -102,7 +103,6 @@ const init = (store: Store<State, Action, Function>) => {
   const { dispatch } = store;
 
   const state = store.getState();
-  selectDefaultPaymentMethod(state, dispatch);
   initialisePaymentMethods(state, dispatch);
   initialiseSelectedAnnualAmount(state, dispatch);
   initialiseContributionType(state, dispatch);
