@@ -43,7 +43,6 @@ export const tests: Tests = {
       'default-single_no-monthly',
     ],
     audiences: {
-      // TODO: is this working? with URL hash I can bypass, maybe that's expected
       UnitedStates: {
         offset: 0,
         size: 1,
