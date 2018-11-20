@@ -103,6 +103,4 @@ function ContributionTypeTabs(props: PropTypes) {
   );
 }
 
-const NewContributionType = connect(mapStateToProps, mapDispatchToProps)(ContributionTypeTabs);
-
-export { NewContributionType };
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionTypeTabs);

@@ -35,7 +35,7 @@ import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
-import { NewContributionType } from './ContributionType';
+import ContributionTypeTabs from './ContributionTypeTabs';
 import { NewContributionAmount } from './ContributionAmount';
 import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
@@ -208,7 +208,7 @@ function ContributionForm(props: PropTypes) {
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-      <NewContributionType />
+      <ContributionTypeTabs />
       <NewContributionAmount
         checkOtherAmount={checkOtherAmount}
       />
