@@ -84,7 +84,6 @@ libraryDependencies ++= Seq(
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.gu" %% "tip" % "0.5.1",
-  "ai.x" %% "play-json-extensions" % "0.10.0",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
   "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7",

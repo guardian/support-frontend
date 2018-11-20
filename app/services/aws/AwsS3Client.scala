@@ -4,9 +4,10 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3Client, AmazonS3ClientBuilder}
 import com.amazonaws.services.s3.model.{GetObjectRequest, S3ObjectInputStream}
 import services.aws
-import play.api.libs.json.{JsValue, Json}
 import scala.util.{Failure, Success, Try}
 import scala.io.Source
+import io.circe._
+import io.circe.parser._
 
 object AwsS3Client {
   implicit val s3: AmazonS3 =
@@ -18,10 +19,10 @@ object AwsS3Client {
 
   def fetchObject(s3Client: AmazonS3, request: GetObjectRequest): Try[S3ObjectInputStream] = Try(s3Client.getObject(request).getObjectContent)
 
-  def fetchJson(s3Client: AmazonS3, request: GetObjectRequest): Option[JsValue] = {
+  def fetchJson(s3Client: AmazonS3, request: GetObjectRequest): Option[Json] = {
     val attempt = for {
       s3Stream <- fetchObject(s3Client, request)
-      json <- Try(Json.parse(Source.fromInputStream(s3Stream).mkString))
+      json <- parse(Source.fromInputStream(s3Stream).mkString).toTry
       _ <- Try(s3Stream.close())
     } yield json
     attempt match {

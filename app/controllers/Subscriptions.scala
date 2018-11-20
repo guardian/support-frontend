@@ -10,6 +10,8 @@ import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchStat
 import utils.RequestCountry._
 import services.CatalogService.getPaperPrices
 import scala.concurrent.ExecutionContext
+import io.circe.syntax._
+import codecs.CirceDecoders._
 
 class Subscriptions(
     actionRefiners: CustomActionBuilders,
@@ -125,7 +127,7 @@ class Subscriptions(
 
   def paperPrices(): Action[AnyContent] = NoCacheAction() { implicit request =>
     {
-      Ok(getPaperPrices.getOrElse("").toString).withSettingsSurrogateKey
+      Ok(getPaperPrices.asJson.toString).withSettingsSurrogateKey
     }
   }
 

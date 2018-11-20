@@ -19,7 +19,7 @@ import ophan.thrift.componentEvent.ComponentType
 import services.stepfunctions.StatusResponse
 import admin._
 import models.identity.responses.{SetGuestPasswordResponseCookie, SetGuestPasswordResponseCookies}
-import services.{GetUserTypeResponse, PayPalError, PayPalSuccess}
+import services._
 import org.joda.time.DateTime
 
 object CirceDecoders {
@@ -118,6 +118,24 @@ object CirceDecoders {
 
   implicit val payPalErrorBodyDecoder: Decoder[PayPalError] = deriveDecoder
   implicit val payPalSuccessDecoder: Decoder[PayPalSuccess] = deriveDecoder
+
+  implicit val pricingDecoder: Decoder[Pricing] = deriveDecoder
+  implicit val pricingEncoder: Encoder[Pricing] = deriveEncoder
+
+  implicit val chargeDecoder: Decoder[Charge] = deriveDecoder
+  implicit val chargeEncoder: Encoder[Charge] = deriveEncoder
+
+  implicit val productRatePlanDecoder: Decoder[ProductRatePlan] = deriveDecoder
+  implicit val productRatePlanEncoder: Encoder[ProductRatePlan] = deriveEncoder
+
+  implicit val productDecoder: Decoder[Product] = deriveDecoder
+  implicit val productEncoder: Encoder[Product] = deriveEncoder
+
+  implicit val catalogDecoder: Decoder[Catalog] = deriveDecoder
+  implicit val catalogEncoder: Encoder[Catalog] = deriveEncoder
+
+  implicit val pricePlanDecoder: Decoder[PricePlan] = deriveDecoder
+  implicit val pricePlanEncoder: Encoder[PricePlan] = deriveEncoder
 
   implicit val dateTimeEncoder: Encoder[DateTime] = Encoder.encodeString.contramap(_.toString)
   implicit val cookieResponseEncoder: Encoder[SetGuestPasswordResponseCookie] = deriveEncoder
