@@ -11,8 +11,10 @@ import {
   type ThirdPartyPaymentLibrary,
   getValidPaymentMethods,
   getPaymentMethodFromSession,
+  getValidContributionTypes,
   getContributionTypeFromSessionOrElse,
 } from 'helpers/checkouts';
+import { type Participations } from 'helpers/abTests/abtest';
 import { amounts, type Amount, type PaymentMethod, type ContributionType } from 'helpers/contributions';
 import {
   type Action,
@@ -44,6 +46,29 @@ function getInitialPaymentMethod(
   );
 }
 
+function getInitialContributionType(abParticipations: Participations): ContributionType {
+  const { usContributionTypes } = abParticipations;
+  const abTestParams = usContributionTypes
+    ? usContributionTypes.split('_')
+    : [];
+
+  let contributionType: ContributionType;
+  if (abTestParams.includes('default-annual')) {
+    contributionType = getContributionTypeFromSessionOrElse('ANNUAL');
+  } else if (abTestParams.includes('default-single')) {
+    contributionType = getContributionTypeFromSessionOrElse('ONE_OFF');
+  } else {
+    contributionType = getContributionTypeFromSessionOrElse('MONTHLY');
+  }
+
+  return (
+    // make sure we don't select a contribution type which isn't on the page
+    getValidContributionTypes(abParticipations).includes(contributionType)
+      ? contributionType
+      : getValidContributionTypes(abParticipations)[0]
+  );
+}
+
 function initialiseStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser, dispatch) {
   const library: ThirdPartyPaymentLibrary =
     setupStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser);
@@ -72,7 +97,7 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
   loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 }
 
-function initialiseSelectedAnnualAmount(state: State, dispatch: Function) {
+function selectInitialAnnualAmount(state: State, dispatch: Function) {
   const { countryGroupId } = state.common.internationalisation;
   const annualTestVariant = state.common.abParticipations.annualContributionsRoundThree;
 
@@ -83,33 +108,26 @@ function initialiseSelectedAnnualAmount(state: State, dispatch: Function) {
   }
 }
 
-function initialiseContributionType(state: State, dispatch: Function) {
-  const { usContributionTypes } = state.common.abParticipations;
-  const params = usContributionTypes
-    ? usContributionTypes.split('_')
-    : [];
-
-  const { contributionType } = state.page.form;
+function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
+  const { abParticipations } = state.common;
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
+
+  const contributionType = getInitialContributionType(abParticipations);
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
 
-  if (params.includes('default-annual')) {
-    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('ANNUAL'), paymentMethod));
-  } else if (params.includes('default-single')) {
-    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('ONE_OFF'), paymentMethod));
-  } else {
-    dispatch(updateContributionType(getContributionTypeFromSessionOrElse('MONTHLY'), paymentMethod));
-  }
+  dispatch(updateContributionType(contributionType, paymentMethod));
 }
 
 const init = (store: Store<State, Action, Function>) => {
   const { dispatch } = store;
 
   const state = store.getState();
+
   initialisePaymentMethods(state, dispatch);
-  initialiseSelectedAnnualAmount(state, dispatch);
-  initialiseContributionType(state, dispatch);
+
+  selectInitialAnnualAmount(state, dispatch);
+  selectInitialContributionTypeAndPaymentMethod(state, dispatch);
 
   const {
     firstName,
