@@ -14,7 +14,6 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import * as user from 'helpers/user/user';
 import { isFromEpicOrBanner } from 'helpers/referrerComponent';
 import * as storage from 'helpers/storage';
-import type { Contrib } from 'helpers/contributions';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
