@@ -12,7 +12,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   private val contributePayPalButton = className("paypal-button")
 
-  private val oneOffButton = cssSelector(".form__radio-group-label[for='contributionType-oneoff']")
+  private val oneOffButton = cssSelector(".form__radio-group-label[for='contributionType-ONE_OFF']")
 
   private val otherAmountButton = cssSelector(".form__radio-group-label[for='contributionAmount-other']")
 
