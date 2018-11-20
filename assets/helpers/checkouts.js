@@ -15,7 +15,6 @@ import { type Switches, type SwitchObject } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
-import { updateContributionType } from 'pages/new-contributions-landing/contributionsLandingActions';
 
 
 // ----- Types ----- //

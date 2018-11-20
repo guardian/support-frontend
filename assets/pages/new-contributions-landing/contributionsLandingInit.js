@@ -11,7 +11,7 @@ import {
   getPaymentMethodFromSession,
   getContributionTypeFromSessionOrElse,
 } from 'helpers/checkouts';
-import { amounts, type Amount, parseContrib } from 'helpers/contributions';
+import { amounts, type Amount } from 'helpers/contributions';
 import {
   type Action,
   paymentWaiting,
@@ -22,10 +22,9 @@ import {
   setPayPalHasLoaded,
   selectAmount,
   checkIfEmailHasPassword,
+  updateContributionType,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
-import { updateContributionType } from 'pages/new-contributions-landing/contributionsLandingActions';
-import * as storage from 'helpers/storage';
 
 // ----- Functions ----- //
 

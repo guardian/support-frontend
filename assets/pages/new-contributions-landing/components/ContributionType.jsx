@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
 import { type Contrib } from 'helpers/contributions';
+import type { Participations } from 'helpers/abTests/abtest';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
   getPaymentMethodToSelect,
@@ -19,7 +20,6 @@ import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updateContributionType } from '../contributionsLandingActions';
-import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Types ----- //
 
@@ -60,8 +60,8 @@ function ContributionType(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list">
-        {getValidContributionTypes(props.abParticipations).map((contributionType: Contrib) =>
-          (<li className="form__radio-group-item">
+        {getValidContributionTypes(props.abParticipations).map((contributionType: Contrib) => (
+          <li className="form__radio-group-item">
             <input
               id={`contributionType-${contributionType}`}
               className="form__radio-group-input"
