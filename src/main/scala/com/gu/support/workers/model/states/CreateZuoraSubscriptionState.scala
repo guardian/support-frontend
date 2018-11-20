@@ -10,10 +10,5 @@ case class CreateZuoraSubscriptionState(
   product: ProductType,
   paymentMethod: PaymentMethod,
   salesForceContact: SalesforceContactRecord,
-  acquisitionData: Option[AcquisitionData],
-  sessionId: Option[String]
-) extends StepFunctionUserState {
-
-  def accountAccessScope: AccountAccessScope = AccountAccessScope.fromInput(sessionId)
-
-}
+  acquisitionData: Option[AcquisitionData]
+) extends StepFunctionUserState

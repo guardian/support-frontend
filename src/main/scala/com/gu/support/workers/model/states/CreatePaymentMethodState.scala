@@ -9,6 +9,5 @@ case class CreatePaymentMethodState(
   user: User,
   product: ProductType,
   paymentFields: PaymentFields,
-  acquisitionData: Option[AcquisitionData],
-  sessionId: Option[String]
+  acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
