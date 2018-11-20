@@ -9,7 +9,7 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import Secure from 'components/secure/secure';
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 
 
 // ----- Types ----- //

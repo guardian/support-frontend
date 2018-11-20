@@ -4,7 +4,7 @@
 
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
-import { amounts, parseContrib, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { amounts, toContributionTypeOrElse, type Amount, type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import sessionId from 'helpers/sessionId/reducer';
 import { type CommonState } from 'helpers/page/commonReducer';
@@ -41,7 +41,7 @@ export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 
 type FormData = UserFormData & {
   otherAmounts: {
-    [Contrib]: { amount: string | null }
+    [ContributionType]: { amount: string | null }
   },
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
@@ -54,10 +54,10 @@ type SetPasswordData = {
 }
 
 type FormState = {
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
-  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectedAmounts: { [ContributionType]: Amount | 'other' },
   isWaiting: boolean,
   formData: FormData,
   setPasswordData: SetPasswordData,
@@ -88,13 +88,13 @@ export type State = {
 // ----- Functions ----- //
 
 function createFormReducer(countryGroupId: CountryGroupId) {
-  const amountsForCountry: { [Contrib]: Amount[] } = {
+  const amountsForCountry: { [ContributionType]: Amount[] } = {
     ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId],
     MONTHLY: amounts('notintest').MONTHLY[countryGroupId],
     ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
   };
 
-  const initialAmount: { [Contrib]: Amount | 'other' } = {
+  const initialAmount: { [ContributionType]: Amount | 'other' } = {
     ONE_OFF: amountsForCountry.ONE_OFF.find(amount => amount.isDefault) || amountsForCountry.ONE_OFF[0],
     MONTHLY: amountsForCountry.MONTHLY.find(amount => amount.isDefault) || amountsForCountry.MONTHLY[0],
     ANNUAL: amountsForCountry.ANNUAL.find(amount => amount.isDefault) || amountsForCountry.ANNUAL[0],
@@ -103,7 +103,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   // ----- Initial state ----- //
 
   const initialState: FormState = {
-    contributionType: parseContrib(storage.getSession('contributionType'), 'MONTHLY'),
+    contributionType: toContributionTypeOrElse(storage.getSession('contributionType'), 'MONTHLY'),
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {

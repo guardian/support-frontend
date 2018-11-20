@@ -6,7 +6,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
+import { getFrequency, type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
@@ -26,11 +26,11 @@ import {
 // ----- Types ----- //
 
 type PropTypes = {|
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
   isWaiting: boolean,
-  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectedAmounts: { [ContributionType]: Amount | 'other' },
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,

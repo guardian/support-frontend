@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { type ThirdPartyPaymentLibrary, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
 import { type Switches } from 'helpers/settings';
 import {
-  type Contrib,
+  type ContributionType,
   type PaymentMethod,
   type ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
@@ -28,13 +28,13 @@ import { type Action, updatePaymentMethod, setThirdPartyPaymentLibrary } from '.
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   countryId: IsoCountry,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currency: IsoCurrency,
   paymentMethod: PaymentMethod,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   updatePaymentMethod: PaymentMethod => Action,
-  setThirdPartyPaymentLibrary: (?{ [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
+  setThirdPartyPaymentLibrary: (?{ [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
   isTestUser: boolean,
   switches: Switches,
 |};

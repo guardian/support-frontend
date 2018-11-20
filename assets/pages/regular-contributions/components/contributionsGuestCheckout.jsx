@@ -14,11 +14,10 @@ import YourDetails from 'components/yourDetails/yourDetails';
 import PageSection from 'components/pageSection/pageSection';
 import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 import CtaLink from 'components/ctaLink/ctaLink';
-import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getTitle } from 'helpers/checkoutForm/checkoutForm';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { Contrib } from 'helpers/contributions';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type Stage } from '../helpers/checkoutForm/checkoutFormReducer';
 
 // ----- Types ----- //
@@ -34,7 +33,7 @@ type PropTypes = {|
   onNextButtonClick: (string, boolean, UserTypeFromIdentityResponse) => void,
   onBackClick: () => void,
   stage: Stage,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 |};
 

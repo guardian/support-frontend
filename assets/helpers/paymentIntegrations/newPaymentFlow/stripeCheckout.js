@@ -19,7 +19,7 @@
  */
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type Contrib } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import { type PaymentAuthorisation } from './readerRevenueApis';
 
 // ----- Functions ----- //
@@ -42,7 +42,7 @@ function loadStripe(): Promise<void> {
 
 }
 
-function getStripeKey(contributionType: Contrib, currency: IsoCurrency, isTestUser: boolean): string {
+function getStripeKey(contributionType: ContributionType, currency: IsoCurrency, isTestUser: boolean): string {
   const key = contributionType === 'ONE_OFF' ? contributionType : 'REGULAR';
   switch (currency) {
     case 'AUD':
@@ -57,7 +57,7 @@ function getStripeKey(contributionType: Contrib, currency: IsoCurrency, isTestUs
 
 function setupStripeCheckout(
   onPaymentAuthorisation: PaymentAuthorisation => void,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currency: IsoCurrency,
   isTestUser: boolean,
 ): Object {
