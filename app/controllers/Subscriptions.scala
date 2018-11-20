@@ -8,7 +8,7 @@ import config.StringsConfig
 import play.api.mvc._
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import utils.RequestCountry._
-
+import services.CatalogService.getPaperPrices
 import scala.concurrent.ExecutionContext
 
 class Subscriptions(
@@ -125,10 +125,7 @@ class Subscriptions(
 
   def paperPrices(): Action[AnyContent] = NoCacheAction() { implicit request =>
     {
-      import services.aws.AwsS3Client.{s3, fetchJson}
-      import com.amazonaws.services.s3.model.GetObjectRequest
-      val catalog = new GetObjectRequest(s"gu-zuora-catalog/PROD/Zuora-PROD", "catalog.json")
-      Ok(fetchJson(s3, catalog).getOrElse("").toString).withSettingsSurrogateKey
+      Ok(getPaperPrices.getOrElse("").toString).withSettingsSurrogateKey
     }
   }
 
