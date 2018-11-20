@@ -7,6 +7,7 @@ import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/
 import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type ThirdPartyPaymentLibrary, getValidPaymentMethods, getPaymentMethodFromSession } from 'helpers/checkouts';
 import { amounts, type Amount } from 'helpers/contributions';
+import * as storage from 'helpers/storage';
 import {
   type Action,
   paymentWaiting,
@@ -84,6 +85,9 @@ const init = (store: Store<State, Action, Function>) => {
   selectDefaultPaymentMethod(state, dispatch);
   initialisePaymentMethods(state, dispatch);
   initialiseSelectedAnnualAmount(state, dispatch);
+  storage.setSession('contributionType', state.page.form.contributionType);
+  storage.setSession('paymentMethod', state.page.form.paymentMethod);
+
 
   const {
     firstName,
