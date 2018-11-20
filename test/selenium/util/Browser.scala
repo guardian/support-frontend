@@ -54,6 +54,15 @@ trait Browser extends WebBrowser {
       throw new MissingPageElementException(q)
   }
 
+  def clearValue(q: Query) {
+    if (pageHasElement(q)) {
+
+      q.webElement.clear
+
+    } else
+      throw new MissingPageElementException(q)
+  }
+
   // Unfortunately this seems to be required in order to complete 3rd party payment forms
   def setValueSlowly(q: Query, value: String): Unit = {
     for {

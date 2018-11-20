@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { type Contrib } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
@@ -43,13 +43,14 @@ type PropTypes = {|
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
+  isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
   updateState: Event => void,
   checkIfEmailHasPassword: Event => void,
-  contributionType: Contrib,
+  contributionType: ContributionType,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -66,6 +67,7 @@ const mapStateToProps = (state: State) => ({
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   state: state.page.form.formData.state,
   isSignedIn: state.page.user.isSignedIn,
+  isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
 });

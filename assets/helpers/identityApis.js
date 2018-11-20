@@ -7,7 +7,7 @@ import { routes } from 'helpers/routes';
 import { fetchJson } from 'helpers/fetch';
 import { checkEmail } from 'helpers/formValidation';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { Contrib } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 
 // ----- Types     ----- //
 type UserType = 'new' | 'guest' | 'current';
@@ -59,7 +59,7 @@ function getUserTypeFromIdentity(
 }
 
 function canContributeWithoutSigningIn(
-  contributionType: Contrib,
+  contributionType: ContributionType,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 ) {

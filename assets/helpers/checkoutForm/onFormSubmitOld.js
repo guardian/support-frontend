@@ -17,7 +17,6 @@ export type FormSubmitParameters = {
   setFormIsValid: boolean => void,
   setCheckoutFormHasBeenSubmitted: () => void,
   handlePayment?: () => void,
-  isRecurringContributor: boolean,
 }
 
 export const onFormSubmit = (params: FormSubmitParameters) => {
@@ -25,8 +24,7 @@ export const onFormSubmit = (params: FormSubmitParameters) => {
   const formIsValid = formElementIsValid(params.form);
   const userType = params.isSignedIn ? 'signed-in' : params.userTypeFromIdentityResponse;
   const canContribute =
-    !params.isRecurringContributor
-    && canContributeWithoutSigningIn(params.contributionType, params.isSignedIn, params.userTypeFromIdentityResponse);
+    canContributeWithoutSigningIn(params.contributionType, params.isSignedIn, params.userTypeFromIdentityResponse);
   if (formIsValid) {
     params.setFormIsValid(true);
     if (canContribute) {

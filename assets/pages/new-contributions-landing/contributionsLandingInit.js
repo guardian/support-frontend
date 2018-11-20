@@ -13,7 +13,7 @@ import {
   getPaymentMethodFromSession,
   getContributionTypeFromSessionOrElse,
 } from 'helpers/checkouts';
-import { amounts, type Amount, type PaymentMethod, type Contrib } from 'helpers/contributions';
+import { amounts, type Amount, type PaymentMethod, type ContributionType } from 'helpers/contributions';
 import {
   type Action,
   paymentWaiting,
@@ -107,7 +107,11 @@ const init = (store: Store<State, Action, Function>) => {
   initialiseSelectedAnnualAmount(state, dispatch);
   initialiseContributionType(state, dispatch);
 
-  const { firstName, lastName, email } = state.page.user;
+  const {
+    firstName,
+    lastName,
+    email,
+  } = state.page.user;
 
   dispatch(checkIfEmailHasPassword(email));
   dispatch(updateUserFormData({ firstName, lastName, email }));

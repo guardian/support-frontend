@@ -89,13 +89,11 @@ export const formIsValid = (formClassName: string) => formElementIsValid(getForm
 export function checkoutFormShouldSubmit(
   contributionType: ContributionType,
   isSignedIn: boolean,
-  isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   form: Object | null,
 ) {
   return formElementIsValid(form)
-    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
-    && !isRecurringContributor;
+    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
 }
 
 export function getTitle(contributionType: ContributionType): string {
@@ -110,4 +108,3 @@ export function getTitle(contributionType: ContributionType): string {
       return 'Make a single';
   }
 }
-

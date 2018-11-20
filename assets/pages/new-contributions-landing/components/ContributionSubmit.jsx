@@ -6,7 +6,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, type Amount, type Contrib, type PaymentMethod } from 'helpers/contributions';
+import { getFrequency, type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
@@ -26,11 +26,11 @@ import {
 // ----- Types ----- //
 
 type PropTypes = {|
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   currency: IsoCurrency,
   isWaiting: boolean,
-  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectedAmounts: { [ContributionType]: Amount | 'other' },
   otherAmount: string | null,
   currencyId: IsoCurrency,
   csrf: CsrfState,
@@ -41,6 +41,7 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  isRecurringContributor: boolean,
 |};
 
 const mapStateToProps = (state: State) =>
@@ -56,6 +57,7 @@ const mapStateToProps = (state: State) =>
     payPalHasLoaded: state.page.form.payPalHasLoaded,
     isTestUser: state.page.user.isTestUser,
     isSignedIn: state.page.user.isSignedIn,
+    isRecurringContributor: state.page.user.isRecurringContributor,
     userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   });
 
@@ -105,6 +107,7 @@ function ContributionSubmit(props: PropTypes) {
               checkoutFormShouldSubmit(
                 props.contributionType,
                 props.isSignedIn,
+                props.isRecurringContributor,
                 props.userTypeFromIdentityResponse,
                 getForm(formClassName),
               )

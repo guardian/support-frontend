@@ -21,7 +21,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
-  Contrib as ContributionType,
+  ContributionType,
   ContributionError,
 } from 'helpers/contributions';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';

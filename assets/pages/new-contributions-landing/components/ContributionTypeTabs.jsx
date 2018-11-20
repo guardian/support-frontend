@@ -5,8 +5,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
-import { type Contrib } from 'helpers/contributions';
-import type { Participations } from 'helpers/abTests/abtest';
+import { type ContributionType } from 'helpers/contributions';
+import { type Participations } from 'helpers/abTests/abtest';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
   getPaymentMethodToSelect,
@@ -24,11 +24,11 @@ import { type Action, updateContributionType } from '../contributionsLandingActi
 // ----- Types ----- //
 
 type PropTypes = {|
-  contributionType: Contrib,
+  contributionType: ContributionType,
   countryId: IsoCountry,
   countryGroupId: CountryGroupId,
   switches: Switches,
-  onSelectContributionType: (Contrib, Switches, IsoCountry, CountryGroupId) => void,
+  onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
   abParticipations: Participations,
 |};
 
@@ -42,7 +42,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   onSelectContributionType: (
-    contributionType: Contrib,
+    contributionType: ContributionType,
     switches: Switches,
     countryId: IsoCountry,
     countryGroupId: CountryGroupId,
@@ -55,12 +55,12 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
 
 // ----- Render ----- //
 
-function ContributionType(props: PropTypes) {
+function ContributionTypeTabs(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list">
-        {getValidContributionTypes(props.abParticipations).map((contributionType: Contrib) => (
+        {getValidContributionTypes(props.abParticipations).map((contributionType: ContributionType) => (
           <li className="form__radio-group-item">
             <input
               id={`contributionType-${contributionType}`}
@@ -82,6 +82,4 @@ function ContributionType(props: PropTypes) {
   );
 }
 
-const NewContributionType = connect(mapStateToProps, mapDispatchToProps)(ContributionType);
-
-export { NewContributionType };
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionTypeTabs);

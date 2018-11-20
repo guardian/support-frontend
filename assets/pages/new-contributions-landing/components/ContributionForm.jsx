@@ -10,7 +10,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
   config,
-  type Contrib,
+  type ContributionType,
   type PaymentMatrix,
   type PaymentMethod,
   logInvalidCombination,
@@ -22,7 +22,6 @@ import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPay
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 
-import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 
@@ -36,7 +35,7 @@ import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
-import { NewContributionType } from './ContributionType';
+import ContributionTypeTabs from './ContributionTypeTabs';
 import { NewContributionAmount } from './ContributionAmount';
 import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
@@ -50,6 +49,7 @@ import {
   createOneOffPayPalPayment,
   setFormIsValid,
 } from '../contributionsLandingActions';
+import ContributionErrorMessage from './ContributionErrorMessage';
 
 
 // ----- Types ----- //
@@ -61,10 +61,10 @@ type PropTypes = {|
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currency: IsoCurrency,
   paymentError: CheckoutFailureReason | null,
-  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectedAmounts: { [ContributionType]: Amount | 'other' },
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
@@ -75,6 +75,9 @@ type PropTypes = {|
   isSignedIn: boolean,
   setFormIsValid: boolean => void,
   formIsValid: boolean,
+  isRecurringContributor: boolean,
+  checkoutFormHasBeenSubmitted: boolean,
+  isPostDeploymentTestUser: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -98,6 +101,9 @@ const mapStateToProps = (state: State) => ({
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   isSignedIn: state.page.user.isSignedIn,
   formIsValid: state.page.form.formIsValid,
+  isRecurringContributor: state.page.user.isRecurringContributor,
+  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
 });
 
 
@@ -176,13 +182,18 @@ function onSubmit(props: PropTypes): Event => void {
     event.preventDefault();
     const flowPrefix = 'npf';
     const form = event.target;
-    const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
-    onFormSubmit({
-      ...props,
-      flowPrefix,
-      form,
-      handlePayment,
-    });
+
+    if (props.isPostDeploymentTestUser && props.paymentMethod === 'Stripe') {
+      props.onPaymentAuthorisation({ paymentMethod: 'Stripe', token: 'tok_visa' });
+    } else {
+      const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
+      onFormSubmit({
+        ...props,
+        flowPrefix,
+        form,
+        handlePayment,
+      });
+    }
   };
 }
 
@@ -195,20 +206,15 @@ function ContributionForm(props: PropTypes) {
     && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
     && maxTwoDecimals(input);
 
-  const invalidFormErrorMessageOnMobile = (
-    <PaymentFailureMessage classModifiers={['invalid_form_mobile']} errorHeading="Form incomplete" checkoutFailureReason="invalid_form_mobile" />
-  );
-
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-      <NewContributionType />
+      <ContributionTypeTabs />
       <NewContributionAmount
         checkOtherAmount={checkOtherAmount}
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
-      <PaymentFailureMessage checkoutFailureReason={props.paymentError} />
-      {!props.formIsValid ? invalidFormErrorMessageOnMobile : null}
+      <ContributionErrorMessage />
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
