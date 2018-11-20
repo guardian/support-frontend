@@ -15,15 +15,16 @@ class Tabs extends Component<any, any> {
   }
   render() {
     return (
-      <ProductPageTabs
-        active={this.state.active}
-        onChange={(t) => { this.onChange(t); }}
-        tabs={[
-        { name: 'Tab 1' },
-        { name: 'Tab 2' },
-      ]}
-      />
-
+      <div style={{ marginLeft: -11 }}>
+        <ProductPageTabs
+          active={this.state.active}
+          onChange={(t) => { this.onChange(t); }}
+          tabs={[
+            { name: 'Voucher' },
+            { name: 'Home Delivery' },
+          ]}
+        />
+      </div>
     );
   }
 }

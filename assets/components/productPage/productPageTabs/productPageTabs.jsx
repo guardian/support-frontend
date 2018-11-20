@@ -24,11 +24,14 @@ const ProductPageTabs = ({
   tabs, active, onChange,
 }: PropTypes) => (
   <div role="tablist" className="component-product-page-tabs">
-    {tabs.map(({ name }, index) => (
-      <button className={classNameWithModifiers('component-product-page-tabs__tab', index === active ? ['active'] : [])} role="tab" onClick={() => onChange(index)}>
-        {name} – {(index === active).toString()}
-      </button>
-    ))}
+    {tabs.map(({ name }, index) => {
+      const isActive = index === active;
+      return (
+        <button className={classNameWithModifiers('component-product-page-tabs__tab', isActive ? ['active'] : [])} role="tab" aria-selected={isActive} onClick={() => onChange(index)}>
+          {name}
+        </button>
+      );
+    })}
   </div>
 );
 

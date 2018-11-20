@@ -1,3 +1,48 @@
-.component-product-page-tabs__tab--active {
-  background: hotpink;
+.component-product-page-tabs {
+  display: flex;
+  overflow: hidden;
+  align-items: flex-end;
+  justify-content: flex-start;
 }
+
+.component-product-page-tabs__tab {
+  @include gu-fontset-heading-sans;
+  padding: ($gu-v-spacing)/1.5 $gu-h-spacing/2;
+  display: block;
+  border: 0;
+  border-top: 2px solid gu-colour(header-dark);
+  box-shadow: inset -1px 0 0 0 gu-colour(garnett-neutral-4);
+  border-bottom: none;
+  text-align: left;
+  appearance: none;
+  min-width: gu-span(3) + $gu-h-spacing/2;
+  box-sizing: border-box;
+  cursor: pointer;
+  @include mq($until:phablet) {
+    flex: 1 1 0;
+  }
+}
+
+.component-product-page-tabs__tab:first-child {
+  box-shadow: inset 1px 0 0 0 gu-colour(garnett-neutral-4), inset -1px 0 0 0 gu-colour(garnett-neutral-4);
+}
+
+.component-product-page-tabs__tab:hover {
+  text-decoration: underline;
+}
+
+.component-product-page-tabs__tab:focus {
+  background: gu-colour(garnett-neutral-3);
+  text-decoration: underline;
+  outline: none;
+}
+
+.component-product-page-tabs__tab--active,
+.component-product-page-tabs__tab--active:focus {
+  background: gu-colour(header-dark);
+  color: gu-colour(garnett-neutral-5);
+  box-shadow: none;
+  text-decoration: none;
+  cursor: default;
+}
+
