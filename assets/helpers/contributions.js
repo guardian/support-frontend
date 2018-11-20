@@ -330,8 +330,8 @@ function parseRegularContributionType(s: string): RegularContributionType {
 
 }
 
-function billingPeriodFromContrib(contrib: ContributionType): BillingPeriod {
-  switch (contrib) {
+function billingPeriodFromContrib(contributionType: ContributionType): BillingPeriod {
+  switch (contributionType) {
     case 'ANNUAL': return 'Annual';
     default: return 'Monthly';
   }

@@ -33,4 +33,23 @@ export const tests: Tests = {
     seed: 4,
     canRun: () => !isFromEpicOrBanner,
   },
+
+  usContributionTypes: {
+    variants: [
+      'control',
+      'default-annual',
+      'default-single',
+      'default-annual_no-monthly',
+      'default-single_no-monthly',
+    ],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 5,
+  },
 };

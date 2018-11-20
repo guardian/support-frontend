@@ -3,12 +3,18 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/url';
-import type { ContributionType, PaymentMethod } from 'helpers/contributions';
-import { getMinContribution, parseContribution, validateContribution } from 'helpers/contributions';
+import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import {
+  getMinContribution,
+  parseContribution,
+  toContributionTypeOrElse,
+  validateContribution,
+} from 'helpers/contributions';
 import * as storage from 'helpers/storage';
 import { type Switches, type SwitchObject } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //
@@ -49,6 +55,32 @@ function getAmount(contributionType: ContributionType, countryGroup: CountryGrou
 
   return getMinContribution(contributionType, countryGroup);
 
+}
+
+function getValidContributionTypes(abParticipations: Participations): ContributionType[] {
+  const { usContributionTypes } = abParticipations;
+  const params = usContributionTypes
+    ? usContributionTypes.split('_')
+    : [];
+
+  if (params.includes('no-monthly')) {
+    return ['ONE_OFF', 'ANNUAL'];
+  }
+
+  return ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
+}
+
+function toHumanReadableContributionType(contributionType: ContributionType): 'Single' | 'Monthly' | 'Annual' {
+  switch (contributionType) {
+    case 'ONE_OFF': return 'Single';
+    case 'MONTHLY': return 'Monthly';
+    case 'ANNUAL': return 'Annual';
+    default: return 'Annual';
+  }
+}
+
+function getContributionTypeFromSessionOrElse(fallback: ContributionType): ContributionType {
+  return toContributionTypeOrElse(storage.getSession('contributionType'), fallback);
 }
 
 // Returns an array of Payment Methods, in the order of preference,
@@ -118,6 +150,9 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 
 export {
   getAmount,
+  getValidContributionTypes,
+  getContributionTypeFromSessionOrElse,
+  toHumanReadableContributionType,
   getValidPaymentMethods,
   getPaymentMethodToSelect,
   getPaymentMethodFromSession,

@@ -4,7 +4,7 @@
 
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import { combineReducers } from 'redux';
-import { amounts, toContributionTypeOrElse, type Amount, type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { amounts, type Amount, type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import sessionId from 'helpers/sessionId/reducer';
 import { type CommonState } from 'helpers/page/commonReducer';
@@ -15,6 +15,7 @@ import { type DirectDebitState } from 'components/directDebit/directDebitReducer
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
+import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
 import * as storage from 'helpers/storage';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
@@ -103,7 +104,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   // ----- Initial state ----- //
 
   const initialState: FormState = {
-    contributionType: toContributionTypeOrElse(storage.getSession('contributionType'), 'MONTHLY'),
+    contributionType: getContributionTypeFromSessionOrElse('MONTHLY'),
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
