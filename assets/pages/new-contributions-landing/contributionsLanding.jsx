@@ -13,6 +13,7 @@ import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
 import { isFromEpicOrBanner } from 'helpers/referrerComponent';
+import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
@@ -57,6 +58,13 @@ if (smallMobileHeaderNotEpicOrBanner) {
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
 
+const setOneOffContributionCookie = () => {
+  setCookie(
+    ONE_OFF_CONTRIBUTION_COOKIE,
+    currentTimeInEpochMilliseconds.toString(),
+  );
+};
+
 const router = (
   <BrowserRouter>
     <Provider store={store}>
@@ -81,10 +89,10 @@ const router = (
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou"
           render={() => {
-            setCookie(
-              ONE_OFF_CONTRIBUTION_COOKIE,
-              currentTimeInEpochMilliseconds.toString(),
-            );
+            // we set the recurring cookie server side
+            if (storage.getSession('contributionType') === 'ONE_OFF') {
+              setOneOffContributionCookie();
+            }
             return (
               <Page
                 classModifiers={['contribution-thankyou', ...extraClasses]}
