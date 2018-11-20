@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-  type Contrib,
+  type ContributionType,
 } from 'helpers/contributions';
 import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
 import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
@@ -17,7 +17,7 @@ import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringCon
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentError: CheckoutFailureReason | null,
   isSignedIn: boolean,
   formIsValid: boolean,

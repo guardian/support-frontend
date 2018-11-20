@@ -75,13 +75,12 @@
       width: 50%;
       vertical-align: top;
     }
-
     @include mq($from: desktop) {
-      width: 485px;
+      max-width: 485px;
     }
 
     @include mq($from: leftCol) {
-      width: 520px;
+      max-width: 520px;
     }
   }
 

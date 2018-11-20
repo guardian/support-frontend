@@ -1,6 +1,9 @@
 .component-product-page-period-form__items {
   margin-bottom: $gu-v-spacing * 2;
-  @include mq($from: tablet) {
+  @include mq($until: leftCol) {
+    max-width: gu-span(6);
+  }
+  @include mq($from: leftCol) {
     display: flex;
     align-items: stretch;
   }
@@ -11,17 +14,16 @@
   padding: 0 $gu-h-spacing/2;
   box-sizing: border-box;
   margin-bottom: $gu-v-spacing;
-  @include mq($from: tablet) {
+  @include mq($from: leftCol) {
     margin-bottom: 0;
   }
 }
 
 .component-product-page-period-form__info {
+  @include gu-fontset-body-sans;
   padding-top: $gu-v-spacing * 2;
   padding-bottom: $gu-v-spacing * 2.5;
   color: gu-colour(garnett-neutral-5);
-  font-family: $gu-text-sans-web;
-  font-size: 16px;
   svg {
     display: inline-block;
     vertical-align: text-bottom;

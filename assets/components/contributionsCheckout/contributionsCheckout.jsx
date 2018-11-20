@@ -14,7 +14,7 @@ import YourDetails from 'components/yourDetails/yourDetails';
 import PageSection from 'components/pageSection/pageSection';
 import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 
-import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getTitle } from 'helpers/checkoutForm/checkoutForm';
 

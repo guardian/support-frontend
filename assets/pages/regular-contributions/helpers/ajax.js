@@ -6,7 +6,7 @@
 import { routes } from 'helpers/routes';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Dispatch } from 'redux';
-import type { BillingPeriod, Contrib } from 'helpers/contributions';
+import type { BillingPeriod, ContributionType } from 'helpers/contributions';
 import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
 import { getSupportAbTests } from 'helpers/tracking/acquisitions';
@@ -122,7 +122,7 @@ const getPaymentFields =
 function requestData(
   abParticipations: Participations,
   amount: number,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currency: IsoCurrency,
   csrf: CsrfState,
   paymentFieldName: PaymentFieldName,
@@ -273,7 +273,7 @@ function postCheckout(
   amount: number,
   csrf: CsrfState,
   currencyId: IsoCurrency,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   dispatch: Dispatch<*>,
   paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,

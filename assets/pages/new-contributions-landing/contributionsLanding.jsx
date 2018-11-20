@@ -12,6 +12,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
+import { isFromEpicOrBanner } from 'helpers/referrerComponent';
 import * as storage from 'helpers/storage';
 import type { Contrib } from 'helpers/contributions';
 import { set as setCookie } from 'helpers/cookie';
@@ -44,10 +45,14 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 const selectedCountryGroup = countryGroups[countryGroupId];
 
-const { smallMobileHeader } = store.getState().common.abParticipations;
-const extraClasses = smallMobileHeader
-  ? smallMobileHeader.split('_').filter(x => x !== 'control' && x !== 'notintest')
-  : [];
+const { smallMobileHeaderNotEpicOrBanner } = store.getState().common.abParticipations;
+
+let extraClasses = [];
+if (smallMobileHeaderNotEpicOrBanner) {
+  extraClasses = smallMobileHeaderNotEpicOrBanner.split('_').filter(x => x !== 'control' && x !== 'notintest');
+} else if (isFromEpicOrBanner) {
+  extraClasses = ['shrink', 'no-blurb', 'no-header'];
+}
 
 // ----- Render ----- //
 
