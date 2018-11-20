@@ -84,25 +84,6 @@ export const formElementIsValid = (formElement: Object | null) => {
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
 
-type CheckoutFormShouldSubmitParameters = {|
-  isRecurringContributor: boolean,
-  canContributeWithoutSigningIn: boolean,
-  formValid: boolean,
-|}
-
-
-export function checkoutFormShouldSubmit(params: CheckoutFormShouldSubmitParameters) {
-  const {
-    formValid,
-    canContributeWithoutSigningIn,
-    isRecurringContributor,
-  } = params;
-
-  return formValid
-    && canContributeWithoutSigningIn
-    && !isRecurringContributor;
-}
-
 export function getTitle(contributionType: ContributionType): string {
 
   switch (contributionType) {

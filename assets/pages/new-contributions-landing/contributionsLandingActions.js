@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { canContributeWithoutSigningIn, getUserTypeFromIdentity } from 'helpers/identityApis';
+import { userCanContributeWithoutSigningIn, getUserTypeFromIdentity } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
@@ -181,15 +181,17 @@ const sendFormSubmitEventForPayPalRecurring = () =>
 
 function enableOrDisableForm(formIsValid: boolean, state: State, dispatch: Function) {
 
-  const shouldEnable = checkoutFormShouldSubmit({
-    formValid: formIsValid,
-    canContributeWithoutSigningIn: canContributeWithoutSigningIn(
-      state.page.form.contributionType,
-      state.page.user.isSignedIn,
-      state.page.form.userTypeFromIdentityResponse,
-    ),
-    isRecurringContributor: state.page.user.isRecurringContributor,
-  });
+  const { isRecurringContributor } = state.page.user;
+  const canContributeWithoutSigningIn = userCanContributeWithoutSigningIn(
+    state.page.form.contributionType,
+    state.page.user.isSignedIn,
+    state.page.form.userTypeFromIdentityResponse,
+  );
+
+  const shouldEnable =
+    formIsValid
+    && !isRecurringContributor
+    && canContributeWithoutSigningIn;
 
   if (shouldEnable && window.enablePayPalButton) {
     dispatch(setFormIsSubmittable(true));
