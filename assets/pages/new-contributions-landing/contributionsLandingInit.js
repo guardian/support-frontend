@@ -29,7 +29,11 @@ import { type State } from './contributionsLandingReducer';
 
 // ----- Functions ----- //
 
-function getInitialPaymentMethod(contributionType: Contrib, countryId: IsoCountry, switches: Switches): PaymentMethod {
+function getInitialPaymentMethod(
+  contributionType: ContributionType,
+  countryId: IsoCountry,
+  switches: Switches,
+): PaymentMethod {
   const paymentMethodFromSession = getPaymentMethodFromSession();
   const validPaymentMethods = getValidPaymentMethods(contributionType, switches, countryId);
 
