@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { Contrib as ContributionType } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 

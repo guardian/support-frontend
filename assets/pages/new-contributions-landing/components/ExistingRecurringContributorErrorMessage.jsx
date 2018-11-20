@@ -6,12 +6,12 @@
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
-import type { Contrib } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  contributionType: Contrib,
+  contributionType: ContributionType,
   isRecurringContributor: boolean,
   checkoutFormHasBeenSubmitted: boolean,
 |};

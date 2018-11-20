@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/url';
-import type { Contrib, PaymentMethod } from 'helpers/contributions';
+import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import { getMinContribution, parseContribution, validateContribution } from 'helpers/contributions';
 import * as storage from 'helpers/storage';
 import { type Switches, type SwitchObject } from 'helpers/settings';
@@ -31,7 +31,7 @@ function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMetho
 }
 
 
-function getAmount(contributionType: Contrib, countryGroup: CountryGroupId): number {
+function getAmount(contributionType: ContributionType, countryGroup: CountryGroupId): number {
 
   const contributionValue = getQueryParameter('contributionValue');
 
@@ -53,7 +53,7 @@ function getAmount(contributionType: Contrib, countryGroup: CountryGroupId): num
 
 // Returns an array of Payment Methods, in the order of preference,
 // i.e the first element in the array will be the default option
-function getPaymentMethods(contributionType: Contrib, countryId: IsoCountry): PaymentMethod[] {
+function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
   return contributionType !== 'ONE_OFF' && countryId === 'GB'
     ? ['DirectDebit', 'Stripe', 'PayPal']
     : ['Stripe', 'PayPal'];
@@ -64,7 +64,7 @@ const switchIsOn =
     switchName && switches[switchName] && switches[switchName] === 'On';
 
 function getValidPaymentMethods(
-  contributionType: Contrib,
+  contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
 ): PaymentMethod[] {
@@ -74,7 +74,7 @@ function getValidPaymentMethods(
 }
 
 function getPaymentMethodToSelect(
-  contributionType: Contrib,
+  contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
 ) {
@@ -90,7 +90,7 @@ function getPaymentMethodFromSession(): ?PaymentMethod {
   return null;
 }
 
-function getPaymentDescription(contributionType: Contrib, paymentMethod: PaymentMethod): string {
+function getPaymentDescription(contributionType: ContributionType, paymentMethod: PaymentMethod): string {
   if (contributionType === 'ONE_OFF') {
     if (paymentMethod === 'PayPal') {
       return 'with PayPal';

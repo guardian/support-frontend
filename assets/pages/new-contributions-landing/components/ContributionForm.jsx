@@ -10,7 +10,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
   config,
-  type Contrib,
+  type ContributionType,
   type PaymentMatrix,
   type PaymentMethod,
   logInvalidCombination,
@@ -61,10 +61,10 @@ type PropTypes = {|
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currency: IsoCurrency,
   paymentError: CheckoutFailureReason | null,
-  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectedAmounts: { [ContributionType]: Amount | 'other' },
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,

@@ -10,7 +10,7 @@ import {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import type {
-  Contrib as ContributionType,
+  ContributionType,
   ContributionError,
   ValidationError,
 } from 'helpers/contributions';
