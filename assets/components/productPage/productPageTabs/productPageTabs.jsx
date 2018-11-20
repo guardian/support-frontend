@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ---- Types ----- //
@@ -22,10 +23,10 @@ type PropTypes = {|
 const ProductPageTabs = ({
   tabs, active, onChange,
 }: PropTypes) => (
-  <div role="tablist" aria-label="Entertainment">
+  <div role="tablist" className="component-product-page-tabs">
     {tabs.map(({ name }, index) => (
-      <button tabIndex={index === active ? null : -1} role="tab" onClick={() => onChange(index)} onFocus={() => onChange(index)}>
-        {name} – {index === active}
+      <button className={classNameWithModifiers('component-product-page-tabs__tab', index === active ? ['active'] : [])} role="tab" onClick={() => onChange(index)}>
+        {name} – {(index === active).toString()}
       </button>
     ))}
   </div>

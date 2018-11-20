@@ -22,6 +22,7 @@ import ProductPageButton from 'components/productPage/productPageButton/productP
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
 
 import WeeklyForm from './components/weeklyForm';
+import Tabs from './components/tabs';
 import reducer from './weeklySubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
@@ -90,6 +91,7 @@ const content = (
           challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
           </p>
         </ProductPageTextBlock>
+        <Tabs />
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
