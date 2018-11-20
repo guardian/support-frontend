@@ -6,7 +6,7 @@
 import type { ContributionType } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
-import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { userCanContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
@@ -48,7 +48,7 @@ export const MustSignIn = (props: PropTypes) => {
   };
 
   if (
-    canContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
+    userCanContributeWithoutSigningIn(props.contributionType, props.isSignedIn, props.userTypeFromIdentityResponse)
     || !props.checkoutFormHasBeenSubmitted
   ) {
     return null;
