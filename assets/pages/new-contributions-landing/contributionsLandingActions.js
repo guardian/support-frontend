@@ -40,10 +40,7 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import {
-  checkoutFormShouldSubmit, formElementIsValid,
-  getForm,
-} from 'helpers/checkoutForm/checkoutForm';
+import { formElementIsValid, getForm } from 'helpers/checkoutForm/checkoutForm';
 import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/cookie';
 import {
