@@ -1,29 +1,23 @@
-
-
 .component-heading-block__overheading {
+  @include gu-typeface(headline, 16);
+  line-height: 1;
+  font-weight: bold;
   background-color: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
-  font-family: $gu-headline;
-  font-weight: bold;
-  font-size: 20px;
   @supports(transform:translateY(-100%)){
     transform:translateY(-100%);
     position: absolute;
     display: inline-block;
   }
-  @include mq($from: tablet) {
-    font-size: 24px;
+  @include mq($from: desktop) {
+    @include gu-typeface(headline, 22, $size-only: true);
+    line-height: 1;
   }
 }
 
 .component-heading-block__maxwidth {
-  @include mq($from: tablet) {
-    width: 75%;
-  }
-  @include mq($from: desktop) {
-    width: 50%;
-  }
+  max-width: gu-span(8);
 }
 
 %component-heading-block__card {
@@ -34,24 +28,12 @@
 
 .component-heading-block__heading {
   @extend %component-heading-block__card;
-  font-size: 26px;
-  font-weight: bold;
-  line-height: 1.12;
-  padding: ($gu-v-spacing /2) ($gu-h-spacing / 2) ($gu-v-spacing * 1.5);
-
-  @include mq($from: tablet) {
-    font-size: 30px;
-  }
-
-  @include mq($from: desktop) {
-    font-size: 36px;
-  }
+  @include gu-fontset-heading-large;
+  padding: ($gu-v-spacing /4) ($gu-h-spacing / 2) ($gu-v-spacing * 1.5);
 }
 
 .component-heading-block__banner {
-  @extend %component-heading-block__card;
+  @include gu-fontset-body;
   border-top: 1px solid gu-colour(garnett-neutral-5);
   padding: ($gu-v-spacing / 1.5) ($gu-h-spacing / 2) $gu-v-spacing;
-  font-size: 17px;
-  line-height: 1;
 }

@@ -7,10 +7,18 @@
 // =============================================================================
 $gu-h-spacing: 20px;
 $gu-v-spacing: 12px;
+$gu-col-width: 60px;
 
 
 // Size of cta buttons
 $cta-height: 44px;
+
+// Columns
+// =============================================================================
+@function gu-span($n-columns) {
+  @return $n-columns * $gu-col-width + $gu-h-spacing * ($n-columns - 1);
+}
+
 
 
 // Margin
