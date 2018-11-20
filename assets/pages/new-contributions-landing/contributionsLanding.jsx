@@ -12,11 +12,11 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
+import { isFromEpicOrBanner } from 'helpers/referrerComponent';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { NewHeader } from 'components/headers/new-header/Header';
-import { getSession } from 'helpers/storage';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -44,17 +44,6 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 const selectedCountryGroup = countryGroups[countryGroupId];
 
 const { smallMobileHeaderNotEpicOrBanner } = store.getState().common.abParticipations;
-
-const isFromEpicOrBanner = [
-  'ACQUISITIONS_EPIC',
-  'ACQUISITIONS_ENGAGEMENT_BANNER',
-].some((componentType: string) => {
-  // Try from session storage first. This is so that we get the correct header
-  // on subsequent pageviews which don't have the componentType in the URL, e.g.
-  // thank you page after PayPal one-off, or after changing country dropdown.
-  const searchString = getSession('acquisitionData') || window.location.href;
-  return searchString.includes(componentType);
-});
 
 let extraClasses = [];
 if (smallMobileHeaderNotEpicOrBanner) {
