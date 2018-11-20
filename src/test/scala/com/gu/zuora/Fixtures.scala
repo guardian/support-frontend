@@ -113,7 +113,7 @@ object Fixtures {
     salesforceId,
     identityId,
     paymentGateway,
-    None
+    "createdreqid_hi"
   )
 
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)

@@ -5,7 +5,6 @@ import cats.implicits._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.workers.lambdas.IdentityId
-import com.gu.support.workers.model.AccountAccessScope.SessionId
 import com.gu.zuora.GetAccountForIdentity.{DomainAccount, ZuoraAccountNumber}
 import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.model.response._
@@ -32,7 +31,7 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
 
   def getAccountFields(identityId: IdentityId): Future[List[DomainAccount]] = {
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
-    val queryData = QueryData(s"select AccountNumber, CreatedSessionId__c from account where IdentityId__c = '${identityId.value}'")
+    val queryData = QueryData(s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}'")
     postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromWireAccount))
   }
 
@@ -75,22 +74,16 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
 object GetAccountForIdentity {
 
   case class ZuoraAccountNumber(value: String)
+  case class CreatedRequestId(value: String)
 
-  sealed trait ExistingContributionSessionId
-  case object NotCreatedInSession extends ExistingContributionSessionId
-  case class CreatedInSession(sessionId: SessionId) extends ExistingContributionSessionId
-
-  case class DomainAccount(accountNumber: ZuoraAccountNumber, existingAccountSessionId: ExistingContributionSessionId)
+  case class DomainAccount(accountNumber: ZuoraAccountNumber, existingAccountRequestId: Option[CreatedRequestId])
 
   object DomainAccount {
 
     def fromWireAccount(accountRecord: AccountRecord): DomainAccount =
       DomainAccount(
         ZuoraAccountNumber(accountRecord.AccountNumber),
-        accountRecord.CreatedSessionId__c.filter(_.length > 0).map(SessionId.apply) match {
-          case None => NotCreatedInSession
-          case Some(sessionId) => CreatedInSession(sessionId)
-        }
+        accountRecord.CreatedRequestId__c.filter(_.length > 0).map(CreatedRequestId.apply)
       )
 
   }

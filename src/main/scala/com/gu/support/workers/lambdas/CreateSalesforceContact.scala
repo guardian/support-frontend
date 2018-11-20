@@ -42,7 +42,6 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.product,
       state.paymentMethod,
       response.ContactRecord,
-      state.acquisitionData,
-      state.sessionId
+      state.acquisitionData
     )
 }

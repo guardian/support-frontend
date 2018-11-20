@@ -1,11 +1,12 @@
 package com.gu.support.workers
 
+import java.util.UUID
+
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.lambdas.IdentityId
-import com.gu.support.workers.model.AccountAccessScope.{SessionAccess, AuthenticatedAccess, SessionId}
-import com.gu.support.workers.model.{AccountAccessScope, BillingPeriod}
-import com.gu.zuora.GetAccountForIdentity.{CreatedInSession, DomainAccount, ExistingContributionSessionId}
+import com.gu.support.workers.model.BillingPeriod
+import com.gu.zuora.GetAccountForIdentity.{CreatedRequestId, DomainAccount}
 import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.ZuoraConfig.RatePlanId
 import com.gu.zuora.ZuoraService
@@ -17,7 +18,7 @@ object GetRecurringSubscription {
 
   def apply(
     zuoraService: ZuoraService,
-    accessScope: AccountAccessScope,
+    requestId: UUID,
     identityId: IdentityId,
     billingPeriod: BillingPeriod
   )(implicit ec: ExecutionContext): Future[Option[DomainSubscription]] = {
@@ -27,8 +28,8 @@ object GetRecurringSubscription {
     val hasContributorPlan: List[RatePlan] => Boolean = GetRecurringSubscription.hasContributorPlan(productRatePlanId)
 
     def isAccountAccessAllowed(domainAccount: DomainAccount): Boolean =
-      IsAccountAccessAllowed(accessScope, domainAccount.existingAccountSessionId)
-        .withLogging(s"isInScope, access scope: $accessScope, account: $domainAccount")
+      IsSameRequest(requestId, domainAccount.existingAccountRequestId)
+        .withLogging(s"isInScope, access scope: $requestId, account: $domainAccount")
 
     for {
       accountIds <- zuoraService.getAccountFields(identityId)
@@ -52,14 +53,9 @@ object GetRecurringSubscription {
 
 }
 
-object IsAccountAccessAllowed {
+object IsSameRequest {
 
-  def apply(accessScope: AccountAccessScope, existingAccountSessionId: ExistingContributionSessionId): Boolean = {
-    (accessScope, existingAccountSessionId) match {
-      case (AuthenticatedAccess, _) => true
-      case (SessionAccess(currentSessionId), CreatedInSession(existingSubSession)) if currentSessionId == existingSubSession => true
-      case _ => false
-    }
-  }
+  def apply(requestId: UUID, existingAccountSessionId: Option[CreatedRequestId]): Boolean =
+    existingAccountSessionId.map(_.value).contains(requestId.toString)
 
 }
