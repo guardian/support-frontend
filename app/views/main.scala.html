@@ -24,7 +24,9 @@
   @csrf.map { token =>
     <script type="text/javascript">
       window.guardian = window.guardian || {};
-      window.guardian.csrf = {token: "@token"}
+      if(!window.guardian.csrf) {
+        window.guardian.csrf = {token: "@token"}
+      }
     </script>
   }
 
