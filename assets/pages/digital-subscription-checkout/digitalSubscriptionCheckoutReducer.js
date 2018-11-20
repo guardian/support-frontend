@@ -85,7 +85,7 @@ function formFieldsSelector(state: State): FormFields {
 // ----- Reducer ----- //
 
 const initialState = {
-  stage: 'thankyou',
+  stage: 'checkout',
   firstName: '',
   lastName: '',
   country: null,
