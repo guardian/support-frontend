@@ -54,13 +54,11 @@ const extraClasses = smallMobileHeader
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 const currentTimeInEpochMilliseconds: number = Date.now();
 
-const setOneOffContributionCookie = (contributionType: Contrib) => {
-  if (contributionType === 'ONE_OFF') {
-    setCookie(
-      ONE_OFF_CONTRIBUTION_COOKIE,
-      currentTimeInEpochMilliseconds.toString(),
-    );
-  }
+const setOneOffContributionCookie = () => {
+  setCookie(
+    ONE_OFF_CONTRIBUTION_COOKIE,
+    currentTimeInEpochMilliseconds.toString(),
+  );
 };
 
 const router = (
@@ -87,7 +85,9 @@ const router = (
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou"
           render={() => {
-            setOneOffContributionCookie(storage.getSession('contributionType'));
+            if (storage.getSession('contributionType') === 'ONE_OFF') {
+              setOneOffContributionCookie();
+            }
             return (
               <Page
                 classModifiers={['contribution-thankyou', ...extraClasses]}
