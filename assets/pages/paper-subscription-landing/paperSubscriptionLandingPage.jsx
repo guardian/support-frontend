@@ -76,7 +76,7 @@ const content = (
             `You can exchange these vouchers for that day’s newspaper at retailers
               across the UK. That includes most independent newsagents, a range of petrol
               stations, and most supermarkets, including Tesco, Sainsbury’s and
-              Waitrose &amp; Partners.
+              Waitrose & Partners.
             `,
             `Your newsagent won’t lose out; we’ll pay them the same amount that
               they receive if you pay cash for your paper.
