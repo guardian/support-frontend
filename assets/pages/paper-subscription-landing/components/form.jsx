@@ -5,17 +5,17 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { type PaperBillingPeriod } from 'helpers/subscriptions';
-import { type Action } from 'components/productPage/productPagePeriodForm/productPagePeriodFormActions';
-import ProductPagePeriodForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePeriodForm/productPagePeriodForm';
+import { type PaperBillingPlan } from 'helpers/subscriptions';
+import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
+import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
-import { setPeriod } from '../paperSubscriptionLandingPageActions';
+import { setPlan } from '../paperSubscriptionLandingPageActions';
 
 
-// ---- Periods ----- //
+// ---- Plans ----- //
 
-const billingPeriods = {
+const plans = {
   month: {
     title: 'Everyday',
     offer: null,
@@ -41,18 +41,18 @@ const billingPeriods = {
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): StatePropTypes<PaperBillingPeriod> => ({
-  periods: billingPeriods,
-  selectedPeriod: state.page.period,
+const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => ({
+  plans,
+  selectedPlan: state.page.plan,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action<PaperBillingPeriod>>): DispatchPropTypes<PaperBillingPeriod> =>
+const mapDispatchToProps = (dispatch: Dispatch<Action<PaperBillingPlan>>): DispatchPropTypes<PaperBillingPlan> =>
   ({
-    setPeriodAction: bindActionCreators(setPeriod, dispatch),
+    setPlanAction: bindActionCreators(setPlan, dispatch),
     onSubmitAction: bindActionCreators(() => null, dispatch),
   });
 
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductPagePeriodForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductPagePlanForm);

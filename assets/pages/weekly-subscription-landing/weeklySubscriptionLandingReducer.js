@@ -5,7 +5,7 @@
 import type { CommonState } from 'helpers/page/commonReducer';
 import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { getQueryParameter } from 'helpers/url';
-import { productPagePeriodFormReducerFor, type State as FormState } from 'components/productPage/productPagePeriodForm/productPagePeriodFormReducer';
+import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 export type State = {
   common: CommonState,
@@ -24,4 +24,4 @@ const initialPeriod: WeeklyBillingPeriod = promoInUrl === 'sixweek' || promoInUr
 
 // ----- Export ----- //
 
-export default productPagePeriodFormReducerFor<WeeklyBillingPeriod>('GuardianWeekly', initialPeriod);
+export default ProductPagePlanFormReducerFor<WeeklyBillingPeriod>('GuardianWeekly', initialPeriod);

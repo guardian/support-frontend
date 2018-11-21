@@ -7,24 +7,24 @@ import React from 'react';
 import { outsetClassName, bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 
 import ProductPageButton from '../productPageButton/productPageButton';
-import ProductPagePeriodFormLabel from './productPagePeriodFormLabel';
+import ProductPagePlanFormLabel from './productPagePlanFormLabel';
 
 // ---- Types ----- //
 
-export type Period = {|
+export type Plan = {|
   title: string,
   copy: string,
   offer: string | null,
 |}
 
 export type StatePropTypes<P> = {|
-  periods: {[P]: Period},
-  selectedPeriod: P | null,
+  plans: {[P]: Plan},
+  selectedPlan: P | null,
 |};
 
 export type DispatchPropTypes<P> = {|
   onSubmitAction: () => *,
-  setPeriodAction: (P) => *,
+  setPlanAction: (P) => *,
 |};
 
 type PropTypes<P> = {|
@@ -35,46 +35,46 @@ type PropTypes<P> = {|
 
 // ----- Render ----- //
 
-export default function ProductPagePeriodForm<P:string>({
-  periods, selectedPeriod, onSubmitAction, setPeriodAction,
+export default function ProductPagePlanForm<P:string>({
+  plans, selectedPlan, onSubmitAction, setPlanAction,
 }: PropTypes<P>) {
 
-  const keys = Object.keys(periods);
+  const keys = Object.keys(plans);
 
   return (
     <form
-      className="component-product-page-period-form"
+      className="component-product-page-plan-form"
       onSubmit={(ev) => {
         ev.preventDefault();
         onSubmitAction();
       }}
     >
       <div className={outsetClassName}>
-        <div className="component-product-page-period-form__items">
+        <div className="component-product-page-plan-form__items">
           {keys.map((key: P) => {
             const {
               copy, title, offer,
-            } = periods[key];
+            } = plans[key];
             return (
-              <div className="component-product-page-period-form__item">
-                <ProductPagePeriodFormLabel
+              <div className="component-product-page-plan-form__item">
+                <ProductPagePlanFormLabel
                   title={title}
                   offer={offer}
                   type={key}
                   key={key}
-                  checked={key === selectedPeriod}
-                  onChange={() => { setPeriodAction(key); }}
+                  checked={key === selectedPlan}
+                  onChange={() => { setPlanAction(key); }}
                 >
                   {copy}
-                </ProductPagePeriodFormLabel>
+                </ProductPagePlanFormLabel>
               </div>
               );
             })}
         </div>
       </div>
-      <div className={['component-product-page-period-form__cta', bgClassName].join(' ')} data-disabled={selectedPeriod === null}>
-        <ProductPageButton disabled={selectedPeriod === null} type="submit">
-          Subscribe now{selectedPeriod && periods[selectedPeriod] && ` – ${periods[selectedPeriod].title}`}
+      <div className={['component-product-page-plan-form__cta', bgClassName].join(' ')} data-disabled={selectedPlan === null}>
+        <ProductPageButton disabled={selectedPlan === null} type="submit">
+          Subscribe now{selectedPlan && plans[selectedPlan] && ` – ${plans[selectedPlan].title}`}
         </ProductPageButton>
       </div>
     </form>

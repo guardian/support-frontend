@@ -29,7 +29,7 @@ export type ComponentAbTest = {
 // ----- Config ----- //
 export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month' | 'sixday' | 'weekend' | 'sunday';
 export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
-export type PaperBillingPeriod = 'month' | 'sixday' | 'weekend' | 'sunday';
+export type PaperBillingPlan = 'month' | 'sixday' | 'weekend' | 'sunday';
 
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {

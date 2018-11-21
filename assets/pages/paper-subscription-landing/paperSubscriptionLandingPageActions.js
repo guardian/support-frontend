@@ -2,13 +2,13 @@
 
 // ----- Imports ----- //
 
-import { type PaperBillingPeriod } from 'helpers/subscriptions';
-import { productPagePeriodFormActionsFor } from 'components/productPage/productPagePeriodForm/productPagePeriodFormActions';
+import { type PaperBillingPlan } from 'helpers/subscriptions';
+import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 
 // ----- Action Creators ----- //
 
-const { setPeriod } = productPagePeriodFormActionsFor<PaperBillingPeriod>('Paper', 'Paper');
+const { setPlan } = ProductPagePlanFormActionsFor<PaperBillingPlan>('Paper', 'Paper');
 
 // ----- Exports ----- //
 
-export { setPeriod };
+export { setPlan };

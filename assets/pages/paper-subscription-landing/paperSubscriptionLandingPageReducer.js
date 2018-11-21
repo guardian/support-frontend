@@ -3,13 +3,13 @@
 // ----- Imports ----- //
 
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type PaperBillingPeriod } from 'helpers/subscriptions';
+import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { getQueryParameter } from 'helpers/url';
-import { productPagePeriodFormReducerFor, type State as FormState } from 'components/productPage/productPagePeriodForm/productPagePeriodFormReducer';
+import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 export type State = {
   common: CommonState,
-  page: FormState<PaperBillingPeriod>,
+  page: FormState<PaperBillingPlan>,
 };
 
 
@@ -17,10 +17,10 @@ export type State = {
 
 const promoInUrl = getQueryParameter('promo');
 
-const initialPeriod: ?PaperBillingPeriod =
+const initialPeriod: ?PaperBillingPlan =
   promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'month' ? promoInUrl : null;
 
 
 // ----- Export ----- //
 
-export default productPagePeriodFormReducerFor<?PaperBillingPeriod>('Paper', initialPeriod);
+export default ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod);
