@@ -12,7 +12,6 @@ case class Charge(
 )
 
 case class ProductRatePlan(
-    description: Option[String],
     name: String,
     id: String,
     productRatePlanCharges: List[Charge]
@@ -39,8 +38,7 @@ case class Catalog(
 case class PricePlan(
     id: String,
     name: String,
-    description: Option[String],
-    price: Double
+    pricePerPeriod: Double
 )
 
 object PricePlan {
@@ -54,12 +52,11 @@ object PricePlan {
             PricePlan(
               productRatePlan.id,
               productRatePlan.name,
-              productRatePlan.description,
               productRatePlan.price
             )
           )
       )
-      .sortBy(_.price)
+      .sortBy(_.pricePerPeriod)
       .reverse
   }
 }
