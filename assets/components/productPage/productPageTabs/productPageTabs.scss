@@ -11,8 +11,8 @@
   display: block;
   border: 0;
   border-top: 2px solid gu-colour(header-dark);
-  box-shadow: inset -1px 0 0 0 gu-colour(garnett-neutral-4);
-  border-bottom: none;
+  background-color: gu-colour(header-dark);
+  color: gu-colour(garnett-neutral-5);
   text-align: left;
   appearance: none;
   min-width: gu-span(3) + $gu-h-spacing/2;
@@ -27,26 +27,26 @@
   outline: none;
 }
 
-.component-product-page-tabs__tab:not(.component-product-page-tabs__tab--active):first-child {
-  box-shadow: inset 1px 0 0 0 gu-colour(garnett-neutral-4), inset -1px 0 0 0 gu-colour(garnett-neutral-4);
-}
-
 .component-product-page-tabs__tab:not(.component-product-page-tabs__tab--active):hover {
   text-decoration: underline;
 }
 
 .component-product-page-tabs__tab:not(.component-product-page-tabs__tab--active):focus {
-  background-color: gu-colour(garnett-neutral-3);
+  background-color: darken(gu-colour(header-dark), 5%);
 }
 
 .component-product-page-tabs__tab--active {
-  background-color: gu-colour(header-dark);
-  color: gu-colour(garnett-neutral-5);
-  box-shadow: none;
+  background-color: gu-colour(garnett-neutral-5);
+  color: gu-colour(garnett-neutral-1);
+  box-shadow: inset -1px 0 0 0 gu-colour(garnett-neutral-4);
   text-decoration: none;
   cursor: default;
 }
 
+.component-product-page-tabs__tab--active:first-child {
+  box-shadow: inset 1px 0 0 0 gu-colour(garnett-neutral-4), inset -1px 0 0 0 gu-colour(garnett-neutral-4);
+}
+
 .component-product-page-tabs__tab--active:focus {
-  background-color: darken(gu-colour(header-dark), 5%);
+  background-color: gu-colour(garnett-neutral-3);
 }
