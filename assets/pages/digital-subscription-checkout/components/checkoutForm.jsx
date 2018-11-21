@@ -7,17 +7,20 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { countries } from 'helpers/internationalisation/country';
+import { type FormError, firstError } from 'helpers/subscriptionsForms/validation';
 
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
+import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 
 import {
   type State,
   type FormFields,
+  type FormField,
   type FormActionCreators,
-  formFieldsSelector,
+  getFormFields,
   formActionCreators,
 } from '../digitalSubscriptionCheckoutReducer';
 
@@ -26,6 +29,7 @@ import {
 
 type PropTypes = {|
   ...FormFields,
+  errors: FormError<FormField>[],
   ...FormActionCreators,
 |};
 
@@ -33,14 +37,17 @@ type PropTypes = {|
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state: State) {
-  return formFieldsSelector(state);
+  return {
+    ...getFormFields(state),
+    errors: state.page.form.errors,
+  };
 }
 
 
 // ----- Form Fields ----- //
 
-const Input1 = compose(asControlled, withLabel)(Input);
-const Select1 = compose(asControlled, withLabel)(Select);
+const Input1 = compose(asControlled, withError, withLabel)(Input);
+const Select1 = compose(asControlled, withError, withLabel)(Select);
 
 
 // ----- Component ----- //
@@ -55,6 +62,7 @@ function CheckoutForm(props: PropTypes) {
         type="text"
         value={props.firstName}
         setValue={props.setFirstName}
+        error={firstError('firstName', props.errors)}
       />
       <Input1
         id="last-name"
@@ -62,8 +70,15 @@ function CheckoutForm(props: PropTypes) {
         type="text"
         value={props.lastName}
         setValue={props.setLastName}
+        error={firstError('lastName', props.errors)}
       />
-      <Select1 id="country" label="Country" value={props.country} setValue={props.setCountry}>
+      <Select1
+        id="country"
+        label="Country"
+        value={props.country}
+        setValue={props.setCountry}
+        error={firstError('country', props.errors)}
+      >
         <option value="">--</option>
         {Object.keys(countries)
           .sort((a, b) => countries[a].localeCompare(countries[b]))
@@ -76,7 +91,9 @@ function CheckoutForm(props: PropTypes) {
         type="tel"
         value={props.telephone}
         setValue={props.setTelephone}
+        error={firstError('telephone', props.errors)}
       />
+      <button onClick={() => props.submitForm()}>Submit</button>
     </div>
   );
 
