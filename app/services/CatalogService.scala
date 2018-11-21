@@ -31,10 +31,10 @@ object CatalogService {
   }
 
   def getPaperPrices: PaperPrices = getCatalog(Stages.PROD).map {
-    json =>
+    catalog =>
       PaperPrices(
-        PricePlan.build(json, paperCollectionProductRatePlanIds),
-        PricePlan.build(json, paperDeliveryProductRatePlanIds)
+        PricePlan.build(catalog, paperCollectionProductRatePlanIds),
+        PricePlan.build(catalog, paperDeliveryProductRatePlanIds)
       )
   }.getOrElse(PaperPrices.empty)
 

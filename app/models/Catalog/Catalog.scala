@@ -18,7 +18,7 @@ case class ProductRatePlan(
 ) {
   def price: Double = {
     productRatePlanCharges
-      .filter( _.endDateCondition.contains("Subscription_End"))
+      .filter(_.endDateCondition.contains("Subscription_End"))
       .map(
         _.pricing
           .filter(_.currency == "GBP")
@@ -38,7 +38,7 @@ case class Catalog(
 case class PricePlan(
     id: String,
     name: String,
-    pricePerPeriod: Double
+    pricePerPeriod: List[Pricing]
 )
 
 object PricePlan {
@@ -52,19 +52,22 @@ object PricePlan {
             PricePlan(
               productRatePlan.id,
               productRatePlan.name,
-              productRatePlan.price
-            )
-          )
-      )
-      .sortBy(_.pricePerPeriod)
+              List(
+                Pricing(
+                  "GBP",
+                  productRatePlan.price
+                )
+              )
+            )))
+      .sortBy(_.pricePerPeriod.head.price)
       .reverse
   }
 }
 
-case class PaperPrices (
-  collection: List[PricePlan],
-  delivery: List[PricePlan],
+case class PaperPrices(
+    collection: List[PricePlan],
+    delivery: List[PricePlan]
 )
 object PaperPrices {
-  def empty = PaperPrices(List.empty, List.empty)
+  def empty: PaperPrices = PaperPrices(List.empty, List.empty)
 }
