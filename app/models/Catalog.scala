@@ -7,6 +7,7 @@ case class Pricing(
 
 case class Charge(
     model: String,
+    endDateCondition: String,
     pricing: List[Pricing]
 )
 
@@ -17,11 +18,13 @@ case class ProductRatePlan(
     productRatePlanCharges: List[Charge]
 ) {
   def price: Double = {
-    productRatePlanCharges.map(
-      _.pricing
-        .filter(_.currency == "GBP")
-        .map(_.price).sum
-    ).sum
+    productRatePlanCharges
+      .filter( _.endDateCondition == "Subscription_End")
+      .map(
+        _.pricing
+          .filter(_.currency == "GBP")
+          .map(_.price).sum
+      ).sum
   }
 }
 
