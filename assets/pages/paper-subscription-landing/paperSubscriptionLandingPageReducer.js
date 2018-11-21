@@ -18,7 +18,7 @@ export type State = {
 const promoInUrl = getQueryParameter('promo');
 
 const initialPeriod: ?PaperBillingPlan =
-  promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'month' ? promoInUrl : null;
+  promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'everyday' ? promoInUrl : null;
 
 
 // ----- Export ----- //

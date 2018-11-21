@@ -16,7 +16,7 @@ import { setPlan } from '../paperSubscriptionLandingPageActions';
 // ---- Plans ----- //
 
 const plans = {
-  month: {
+  everyday: {
     title: 'Everyday',
     offer: null,
     copy: 'Lorem ipsum sit amet',
