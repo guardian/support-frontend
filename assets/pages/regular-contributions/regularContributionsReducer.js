@@ -15,7 +15,7 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import type { PaymentMethod } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { type RegularContributionType } from 'helpers/contributions';
-import type { UserTypeFromIdentity } from 'helpers/identityApis';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { checkoutFormReducer as checkoutForm, type RegularContributionsCheckoutFormState } from './helpers/checkoutForm/checkoutFormReducer';
@@ -35,7 +35,7 @@ type RegularContributionsState = {
   statusUri: ?string,
   pollCount: number,
   guestAccountCreationToken: ?string,
-  userTypeFromIdentityResponse: UserTypeFromIdentity,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 };
 
 type PageState = {

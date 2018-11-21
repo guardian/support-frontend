@@ -12,7 +12,7 @@ import type { ContributionType } from 'helpers/contributions';
 // ----- Types     ----- //
 type UserType = 'new' | 'guest' | 'current';
 
-export type UserTypeFromIdentity =
+export type UserTypeFromIdentityResponse =
   UserType
   | 'noRequestSent'
   | 'requestPending'
@@ -23,8 +23,8 @@ export type UserTypeFromIdentity =
 function sendGetUserTypeFromIdentityRequest(
   email: string,
   csrf: Csrf,
-  setUserTypeFromIdentityResponse: UserTypeFromIdentity => void,
-): Promise<UserTypeFromIdentity> {
+  setUserTypeFromIdentityResponse: UserTypeFromIdentityResponse => void,
+): Promise<UserTypeFromIdentityResponse> {
   return fetchJson(
     `${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
     getRequestOptions('same-origin', csrf),
@@ -41,8 +41,8 @@ function getUserTypeFromIdentity(
   email: string,
   isSignedIn: boolean,
   csrf: Csrf,
-  setUserTypeFromIdentityResponse: UserTypeFromIdentity => void,
-): Promise<UserTypeFromIdentity> {
+  setUserTypeFromIdentityResponse: UserTypeFromIdentityResponse => void,
+): Promise<UserTypeFromIdentityResponse> {
 
   if (isSignedIn || !checkEmail(email)) {
     setUserTypeFromIdentityResponse('noRequestSent');
@@ -61,7 +61,7 @@ function getUserTypeFromIdentity(
 function canContributeWithoutSigningIn(
   contributionType: ContributionType,
   isSignedIn: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentity,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 ) {
   return contributionType === 'ONE_OFF'
     || isSignedIn

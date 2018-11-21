@@ -1,6 +1,6 @@
 // @flow
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
-import { userCanContributeWithoutSigningIn, type UserTypeFromIdentity } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { formElementIsValid, invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
 
@@ -12,7 +12,7 @@ export type FormSubmitParameters = {
   contributionType: ContributionType,
   form: Object | null,
   isSignedIn: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentity,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   setFormIsValid: boolean => void,
   setCheckoutFormHasBeenSubmitted: () => void,
   handlePayment?: () => void,
@@ -23,7 +23,7 @@ export const onFormSubmit = (params: FormSubmitParameters) => {
   const formIsValid = formElementIsValid(params.form);
   const userType = params.isSignedIn ? 'signed-in' : params.userTypeFromIdentityResponse;
   const canContribute =
-    userCanContributeWithoutSigningIn(params.contributionType, params.isSignedIn, params.userTypeFromIdentityResponse);
+    canContributeWithoutSigningIn(params.contributionType, params.isSignedIn, params.userTypeFromIdentityResponse);
   if (formIsValid) {
     params.setFormIsValid(true);
     if (canContribute) {

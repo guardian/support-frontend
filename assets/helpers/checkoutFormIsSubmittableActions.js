@@ -1,8 +1,8 @@
 // @flow
 
-// ----- Functions ----- //
+// ----- Imports ----- //
 
-import { userCanContributeWithoutSigningIn } from 'helpers/identityApis';
+import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 import type { State } from '../pages/new-contributions-landing/contributionsLandingReducer';
 import { formElementIsValid, getForm } from './checkoutForm/checkoutForm';
 import {
@@ -11,7 +11,12 @@ import {
 } from '../pages/new-contributions-landing/contributionsLandingActions';
 import { type Action as UserAction } from './user/userActions';
 
+
+// ----- Types ----- //
+
 type Action = ContributionsLandingAction | UserAction;
+
+// ----- Functions ----- //
 
 const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) => {
   if (formIsSubmittable && window.enablePayPalButton) {
@@ -26,13 +31,12 @@ const setFormIsSubmittable = (formIsSubmittable: boolean): Action => {
   return ({ type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable });
 };
 
-
 function enableOrDisableForm() {
   return (dispatch: Function, getState: () => State): void => {
 
     const state = getState();
     const { isRecurringContributor } = state.page.user;
-    const canContributeWithoutSigningIn = userCanContributeWithoutSigningIn(
+    const userCanContributeWithoutSigningIn = canContributeWithoutSigningIn(
       state.page.form.contributionType,
       state.page.user.isSignedIn,
       state.page.form.userTypeFromIdentityResponse,
@@ -44,7 +48,7 @@ function enableOrDisableForm() {
     const shouldEnable =
       formIsValid
       && !isRecurringContributor
-      && canContributeWithoutSigningIn;
+      && userCanContributeWithoutSigningIn;
 
     dispatch(setFormIsSubmittable(shouldEnable));
   };

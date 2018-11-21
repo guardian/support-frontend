@@ -39,7 +39,7 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
-import { type UserTypeFromIdentity } from 'helpers/identityApis';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import { setFormSubmissionDependentValue } from 'helpers/checkoutFormIsSubmittableActions';
@@ -74,7 +74,7 @@ export type Action =
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
-  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentity }
+  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean };
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
@@ -166,11 +166,12 @@ const setThirdPartyPaymentLibrary =
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
-const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeFromIdentity): ((Function) => void) =>
-  (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() =>
-      ({ type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse })));
-  };
+const setUserTypeFromIdentityResponse =
+  (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
+    (dispatch: Function): void => {
+      dispatch(setFormSubmissionDependentValue(() =>
+        ({ type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse })));
+    };
 
 
 const updateContributionTypeAndPaymentMethod =
@@ -195,7 +196,7 @@ const checkIfEmailHasPassword = (email: string) =>
       email,
       isSignedIn,
       csrf,
-      (userType: UserTypeFromIdentity) =>
+      (userType: UserTypeFromIdentityResponse) =>
         dispatch(setUserTypeFromIdentityResponse(userType)),
     );
   };

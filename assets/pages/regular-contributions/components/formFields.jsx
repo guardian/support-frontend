@@ -19,7 +19,7 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { UserTypeFromIdentity } from 'helpers/identityApis';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { ContributionType } from 'helpers/contributions';
 import {
   type UserFormFieldAttribute,
@@ -50,7 +50,7 @@ type PropTypes = {|
   isSignedIn: boolean,
   stateField: UsState | CaState,
   checkoutFormHasBeenSubmitted: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentity,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   contributionType: ContributionType,
 |};
 

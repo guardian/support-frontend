@@ -17,7 +17,7 @@ import {
   checkEmail,
   emailRegexPattern,
 } from 'helpers/formValidation';
-import { type UserTypeFromIdentity } from 'helpers/identityApis';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
@@ -43,7 +43,7 @@ type PropTypes = {|
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
   isRecurringContributor: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentity,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
