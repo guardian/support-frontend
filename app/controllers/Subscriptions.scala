@@ -128,6 +128,10 @@ class Subscriptions(
     Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
   }
 
+  def paperMethodRedirectTo(method: String): Action[AnyContent] = Action { implicit request =>
+    Redirect(buildCanonicalPaperSubscriptionLink(Some(method)), request.queryString, status = FOUND)
+  }
+
   def paper(method: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
     val title = "The Guardian Subscriptions | The Guardian"
@@ -156,8 +160,8 @@ class Subscriptions(
       }
     }
 
-  def buildCanonicalPaperSubscriptionLink(method: String = "collection"): String =
-    s"${supportUrl}/subscribe/paper/${method}"
+  def buildCanonicalPaperSubscriptionLink(method: Option[String] = None): String =
+    s"${supportUrl}/uk/subscribe/paper/${method.getOrElse("collection")}"
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"
