@@ -17,6 +17,7 @@ import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
+import { enableOrDisableForm } from 'helpers/checkoutFormIsSubmittableActions';
 import { NewHeader } from 'components/headers/new-header/Header';
 
 import { init as formInit } from './contributionsLandingInit';
@@ -110,4 +111,4 @@ const router = (
   </BrowserRouter>
 );
 
-renderPage(router, reactElementId);
+renderPage(router, reactElementId, () => store.dispatch(enableOrDisableForm()));

@@ -57,4 +57,4 @@ function setFormSubmissionDependentValue(setStateValue: () => Action) {
   };
 }
 
-export { setFormSubmissionDependentValue };
+export { setFormSubmissionDependentValue, enableOrDisableForm };
