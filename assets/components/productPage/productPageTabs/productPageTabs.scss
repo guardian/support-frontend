@@ -23,26 +23,30 @@
   }
 }
 
-.component-product-page-tabs__tab:first-child {
-  box-shadow: inset 1px 0 0 0 gu-colour(garnett-neutral-4), inset -1px 0 0 0 gu-colour(garnett-neutral-4);
-}
-
-.component-product-page-tabs__tab:hover {
-  text-decoration: underline;
-}
-
 .component-product-page-tabs__tab:focus {
-  background: gu-colour(garnett-neutral-3);
-  text-decoration: underline;
   outline: none;
 }
 
-.component-product-page-tabs__tab--active,
-.component-product-page-tabs__tab--active:focus {
-  background: gu-colour(header-dark);
+.component-product-page-tabs__tab:not(.component-product-page-tabs__tab--active):first-child {
+  box-shadow: inset 1px 0 0 0 gu-colour(garnett-neutral-4), inset -1px 0 0 0 gu-colour(garnett-neutral-4);
+}
+
+.component-product-page-tabs__tab:not(.component-product-page-tabs__tab--active):hover {
+  text-decoration: underline;
+}
+
+.component-product-page-tabs__tab:not(.component-product-page-tabs__tab--active):focus {
+  background-color: gu-colour(garnett-neutral-3);
+}
+
+.component-product-page-tabs__tab--active {
+  background-color: gu-colour(header-dark);
   color: gu-colour(garnett-neutral-5);
   box-shadow: none;
   text-decoration: none;
   cursor: default;
 }
 
+.component-product-page-tabs__tab--active:focus {
+  background-color: darken(gu-colour(header-dark), 5%);
+}
