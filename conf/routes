@@ -116,6 +116,10 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return   controllers.PayPalO
 
 POST /direct-debit/check-account                      controllers.DirectDebit.checkAccount
 
+# ----- Verification ----- #
+
+GET  /.well-known/*file   controllers.Assets.at(path="/public", file)
+
 # ----- Assets ----- #
 
 GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
