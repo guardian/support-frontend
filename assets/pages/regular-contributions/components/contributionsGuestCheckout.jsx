@@ -17,7 +17,7 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import { type ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getTitle } from 'helpers/checkoutForm/checkoutForm';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { type UserTypeFromIdentity } from 'helpers/identityApis';
 import { type Stage } from '../helpers/checkoutForm/checkoutFormReducer';
 
 // ----- Types ----- //
@@ -30,11 +30,11 @@ type PropTypes = {|
   isSignedIn: boolean,
   form: Node,
   payment: Node,
-  onNextButtonClick: (string, boolean, UserTypeFromIdentityResponse) => void,
+  onNextButtonClick: (string, boolean, UserTypeFromIdentity) => void,
   onBackClick: () => void,
   stage: Stage,
   contributionType: ContributionType,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  userTypeFromIdentityResponse: UserTypeFromIdentity,
 |};
 
 // ----- Component ----- //

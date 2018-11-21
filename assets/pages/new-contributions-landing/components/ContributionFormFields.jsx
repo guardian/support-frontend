@@ -17,7 +17,7 @@ import {
   checkEmail,
   emailRegexPattern,
 } from 'helpers/formValidation';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { type UserTypeFromIdentity } from 'helpers/identityApis';
 
 import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
@@ -30,7 +30,7 @@ import {
   updateEmail,
   updateState,
   checkIfEmailHasPassword,
-  setValue,
+  setFormSubmissionDependentValue,
 } from '../contributionsLandingActions';
 
 
@@ -44,7 +44,7 @@ type PropTypes = {|
   checkoutFormHasBeenSubmitted: boolean,
   isSignedIn: boolean,
   isRecurringContributor: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  userTypeFromIdentityResponse: UserTypeFromIdentity,
   updateFirstName: Event => void,
   updateLastName: Event => void,
   updateEmail: Event => void,
@@ -73,10 +73,10 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateFirstName: (event) => { dispatch(setValue<string>(updateFirstName, event.target.value)); },
-  updateLastName: (event) => { dispatch(setValue<string>(updateLastName, event.target.value)); },
-  updateEmail: (event) => { dispatch(setValue<string>(updateEmail, event.target.value)); },
-  updateState: (event) => { dispatch(setValue<UsState | CaState | null>(updateState, event.target.value === '' ? null : event.target.value)); },
+  updateFirstName: (event) => { dispatch(setFormSubmissionDependentValue<string>(updateFirstName, event.target.value)); },
+  updateLastName: (event) => { dispatch(setFormSubmissionDependentValue<string>(updateLastName, event.target.value)); },
+  updateEmail: (event) => { dispatch(setFormSubmissionDependentValue<string>(updateEmail, event.target.value)); },
+  updateState: (event) => { dispatch(setFormSubmissionDependentValue<UsState | CaState | null>(updateState, event.target.value === '' ? null : event.target.value)); },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 

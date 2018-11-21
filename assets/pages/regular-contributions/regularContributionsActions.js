@@ -4,7 +4,7 @@
 import type { PaymentMethod } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/errorReasons';
 
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { UserTypeFromIdentity } from 'helpers/identityApis';
 import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type { State } from './regularContributionsReducer';
 
@@ -18,7 +18,7 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'CREATING_CONTRIBUTOR' }
-  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse };
+  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentity };
 
 // ----- Actions ----- //
 
@@ -46,7 +46,7 @@ function setGuestAccountCreationToken(guestAccountCreationToken: string): Action
   return { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken };
 }
 
-function setUserTypeFromIdentityResponse(userTypeFromIdentityResponse: UserTypeFromIdentityResponse): Action {
+function setUserTypeFromIdentityResponse(userTypeFromIdentityResponse: UserTypeFromIdentity): Action {
   return { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse };
 }
 
@@ -60,7 +60,7 @@ const checkIfEmailHasPassword = (email: string) =>
       email,
       isSignedIn,
       csrf,
-      (userType: UserTypeFromIdentityResponse) => {
+      (userType: UserTypeFromIdentity) => {
         dispatch(setUserTypeFromIdentityResponse(userType));
       },
     );

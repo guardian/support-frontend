@@ -39,7 +39,7 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { type UserTypeFromIdentity } from 'helpers/identityApis';
 import { formElementIsValid, getForm } from 'helpers/checkoutForm/checkoutForm';
 import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/cookie';
@@ -73,7 +73,7 @@ export type Action =
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
-  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
+  | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentity }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean };
 
 
@@ -153,13 +153,23 @@ const setThirdPartyPaymentLibrary =
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
-const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): Action => ({
+const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeFromIdentity): Action => ({
   type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
   userTypeFromIdentityResponse,
 });
 
-const setFormIsSubmittable = (formIsSubmittable: boolean): Action =>
-  ({ type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable });
+const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) => {
+  if (formIsSubmittable && window.enablePayPalButton) {
+    window.enablePayPalButton();
+  } else if (window.disablePayPalButton) {
+    window.disablePayPalButton();
+  }
+};
+
+const setFormIsSubmittable = (formIsSubmittable: boolean): Action => {
+  enableOrDisablePayPalExpressCheckoutButton(formIsSubmittable);
+  return ({ type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable });
+};
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
@@ -176,44 +186,36 @@ const sendFormSubmitEventForPayPalRecurring = () =>
   };
 
 
-function enableOrDisableForm(formIsValid: boolean, state: State, dispatch: Function) {
+function enableOrDisableForm() {
+  return (dispatch: Function, getState: () => State): void => {
 
-  const { isRecurringContributor } = state.page.user;
-  const canContributeWithoutSigningIn = userCanContributeWithoutSigningIn(
-    state.page.form.contributionType,
-    state.page.user.isSignedIn,
-    state.page.form.userTypeFromIdentityResponse,
-  );
+    const state = getState();
+    const { isRecurringContributor } = state.page.user;
+    const canContributeWithoutSigningIn = userCanContributeWithoutSigningIn(
+      state.page.form.contributionType,
+      state.page.user.isSignedIn,
+      state.page.form.userTypeFromIdentityResponse,
+    );
 
-  const shouldEnable =
-    formIsValid
-    && !isRecurringContributor
-    && canContributeWithoutSigningIn;
+    const formIsValid = formElementIsValid(getForm('form--contribution'));
+    dispatch(setFormIsValid(formIsValid));
 
-  if (shouldEnable && window.enablePayPalButton) {
-    dispatch(setFormIsSubmittable(true));
-    window.enablePayPalButton();
-  } else if (window.disablePayPalButton) {
-    dispatch(setFormIsSubmittable(false));
-    window.disablePayPalButton();
-  }
+    const shouldEnable =
+      formIsValid
+      && !isRecurringContributor
+      && canContributeWithoutSigningIn;
+
+    dispatch(setFormIsSubmittable(shouldEnable));
+  };
 }
 
 /*
   Set the value of a form variable, then set the form validity and submitability
 */
-function setValue<T>(setStateValue: T => Action, value: T) {
-  return (dispatch: Function, getState: () => State): void => {
-
+function setFormSubmissionDependentValue<T>(setStateValue: T => Action, value: T) {
+  return (dispatch: Function): void => {
     dispatch(setStateValue(value));
-
-    const state = getState();
-
-    // TODO: use the actual form state rather than re-fetching from DOM
-    const formIsValid = formElementIsValid(getForm('form--contribution'));
-
-    dispatch(setFormIsValid(formIsValid));
-    enableOrDisableForm(formIsValid, state, dispatch);
+    dispatch(enableOrDisableForm());
   };
 }
 
@@ -227,8 +229,8 @@ const checkIfEmailHasPassword = (email: string) =>
       email,
       isSignedIn,
       csrf,
-      (userType: UserTypeFromIdentityResponse) =>
-        dispatch(setValue<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
+      (userType: UserTypeFromIdentity) =>
+        dispatch(setFormSubmissionDependentValue<UserTypeFromIdentity>(setUserTypeFromIdentityResponse, userType)),
     );
   };
 
@@ -480,7 +482,7 @@ export {
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
   setFormIsSubmittable,
-  setValue,
+  setFormSubmissionDependentValue,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
 };
