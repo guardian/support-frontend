@@ -26,7 +26,7 @@
 }
 
 .component-product-page-text-block__sans {
-  font-family: $gu-text-sans-web;
+  @include gu-fontset-body-sans;
 }
 
 .component-product-page-text-block__ul li {
