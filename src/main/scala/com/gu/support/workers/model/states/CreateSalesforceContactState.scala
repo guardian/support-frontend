@@ -9,6 +9,5 @@ case class CreateSalesforceContactState(
   user: User,
   product: ProductType,
   paymentMethod: PaymentMethod,
-  acquisitionData: Option[AcquisitionData],
-  sessionId: Option[String]
+  acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
