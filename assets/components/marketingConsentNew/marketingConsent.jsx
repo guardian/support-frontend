@@ -3,18 +3,13 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { classNameWithModifiers } from 'helpers/utilities';
-
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
 import SvgNewsletters from 'components/svgs/newsletters';
 import SvgInformation from 'components/svgs/information';
-import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
-import type { Dispatch } from 'redux';
-import type { Action } from '../../../helpers/user/userActions';
-import type { Csrf as CsrfState } from '../../../helpers/csrf/csrfReducer';
-import { sendMarketingPreferencesToIdentity } from '../../../components/marketingConsent/helpers';
+import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+
 
 // ----- Types ----- //
 
@@ -25,26 +20,6 @@ type PropTypes = {|
   onClick: (?string, CsrfState) => void,
 |};
 
-const mapStateToProps = state => ({
-  confirmOptIn: state.page.marketingConsent.confirmOptIn,
-  email: state.page.form.formData.email,
-  csrf: state.page.csrf,
-});
-
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
-  return {
-    onClick: (email: string, csrf: CsrfState) => {
-      trackComponentClick('marketing-permissions');
-      sendMarketingPreferencesToIdentity(
-        true,
-        email,
-        dispatch,
-        csrf,
-        'MARKETING_CONSENT',
-      );
-    },
-  };
-}
 
 // ----- Render ----- //
 
@@ -89,4 +64,7 @@ function MarketingConsent(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MarketingConsent);
+
+// ----- Exports ----- //
+
+export default MarketingConsent;

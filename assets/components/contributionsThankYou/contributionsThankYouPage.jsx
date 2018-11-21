@@ -9,7 +9,7 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
-import { type Contrib } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import EmailConfirmation from './emailConfirmation';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
@@ -19,7 +19,7 @@ import ContributionsSurveySection from '../survey/contributionsSurveySection';
 // ---- Types ----- //
 
 type PropTypes = {|
-  contributionType: Contrib,
+  contributionType: ContributionType,
   directDebit: ?DirectDebit,
   countryGroupId: CountryGroupId,
   marketingConsent: Node,

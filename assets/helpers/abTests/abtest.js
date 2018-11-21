@@ -9,7 +9,7 @@ import seedrandom from 'seedrandom';
 import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
-import { type Settings, isTestSwitchedOn } from 'helpers/settings';
+import { type Settings } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { tests } from './abtestDefinitions';
@@ -17,7 +17,7 @@ import { tests } from './abtestDefinitions';
 
 // ----- Types ----- //
 
-type TestId = $Keys<typeof tests> | 'newFlow';
+type TestId = $Keys<typeof tests>;
 
 type OphanABEvent = {
   variantName: string,
@@ -65,7 +65,7 @@ export type Test = {|
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
-  customSegmentCondition?: () => boolean,
+  canRun?: () => boolean,
   independent: boolean,
   seed: number,
 |};
@@ -199,10 +199,12 @@ function getParticipations(
       return;
     }
 
+    if (test.canRun && !test.canRun()) {
+      return;
+    }
+
     if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
-    } else if (test.customSegmentCondition && !test.customSegmentCondition()) {
-      participations[testId] = notintest;
     } else if (userInTest(test.audiences, mvtId, country, countryGroupId)) {
       participations[testId] = assignUserToVariant(mvtId, test);
     } else {
@@ -230,33 +232,20 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
   });
 };
 
-const getNewFlowTestParticipation = (settings: Settings): ?Participations => {
-  const npfVariant = cookie.get('gu.serverside.ab.test');
-  if (isTestSwitchedOn(settings, 'newFlow') && npfVariant) {
-    const variant = npfVariant === 'Variant' ? 'newFlow' : 'control';
-    return { newFlow: variant };
-  }
-
-  return {};
-};
-
 const init = (
   country: IsoCountry,
   countryGroupId: CountryGroupId,
   settings: Settings,
   abTests: Tests = tests,
 ): Participations => {
-  // this is to assign the correct variant while npf server side test runs
-  const newFlowTestParticipation: ?Participations = getNewFlowTestParticipation(settings);
-
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
-  const participationsWithServerSideNPFVariant = { ...participations, ...newFlowTestParticipation };
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  setLocalStorageParticipations(Object.assign({}, participationsWithServerSideNPFVariant, urlParticipations));
-  trackABOphan(participationsWithServerSideNPFVariant, false);
+  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
 
-  return participationsWithServerSideNPFVariant;
+  trackABOphan(participations, false);
+
+  return participations;
 };
 
 const getVariantsAsString = (participation: Participations): string => {

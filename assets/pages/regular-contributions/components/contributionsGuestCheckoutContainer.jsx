@@ -4,10 +4,10 @@
 
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
-import type { Contrib, PaymentMethod } from 'helpers/contributions';
+import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
-import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
+import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmitOld';
 import ContributionsGuestCheckout from './contributionsGuestCheckout';
 import { type State } from '../regularContributionsReducer';
 import { setStage } from '../helpers/checkoutForm/checkoutFormActions';
@@ -33,7 +33,7 @@ const mapDispatchToProps = (dispatch: Dispatch<CheckoutAction>) => ({
   },
 
   onNextButtonClick: (
-    contributionType: Contrib,
+    contributionType: ContributionType,
     isSignedIn: boolean,
     userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
     paymentMethod: PaymentMethod,

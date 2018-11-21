@@ -22,6 +22,7 @@ export type User = {
   stateField?: string,
   gnmMarketing: boolean,
   isSignedIn: boolean,
+  isRecurringContributor: boolean,
 };
 
 
@@ -38,6 +39,7 @@ const initialState: User = {
   isPostDeploymentTestUser: false,
   gnmMarketing: false,
   isSignedIn: false,
+  isRecurringContributor: false,
 };
 
 
@@ -101,6 +103,9 @@ function createUserReducer(countryGroup: CountryGroupId) {
 
       case 'SET_IS_SIGNED_IN':
         return { ...state, isSignedIn: action.isSignedIn };
+
+      case 'SET_IS_RECURRING_CONTRIBUTOR':
+        return { ...state, isRecurringContributor: true };
 
       default:
         return state;

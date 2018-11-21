@@ -39,11 +39,11 @@ export type ContributionTypeMap<T> = {|
 |};
 
 export type RegularContributionType = $Keys<RegularContributionTypeMap<null>>;
-export type Contrib = $Keys<ContributionTypeMap<null>>;
+export type ContributionType = $Keys<ContributionTypeMap<null>>;
 
 export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
-export const logInvalidCombination = (contributionType: Contrib, paymentMethod: PaymentMethod) => {
+export const logInvalidCombination = (contributionType: ContributionType, paymentMethod: PaymentMethod) => {
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
 };
 
@@ -69,7 +69,7 @@ export type ParsedContribution = {|
 |};
 
 type Config = {
-  [Contrib]: {
+  [ContributionType]: {
     min: number,
     minInWords: string,
     max: number,
@@ -281,7 +281,7 @@ const amounts = (annualTestVariant: string) => ({
 
 function validateContribution(
   input: number,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   countryGroupId: CountryGroupId,
 ): ?ValidationError {
 
@@ -307,16 +307,16 @@ function parseContribution(input: string): ParsedContribution {
 
 }
 
-function getMinContribution(contributionType: Contrib, countryGroupId: CountryGroupId): number {
+function getMinContribution(contributionType: ContributionType, countryGroupId: CountryGroupId): number {
   return config[countryGroupId][contributionType].min;
 }
 
-function parseContrib(s: ?string, contrib: Contrib): Contrib {
-  switch ((s || contrib).toUpperCase()) {
+function toContributionTypeOrElse(s: ?string, fallback: ContributionType): ContributionType {
+  switch ((s || fallback).toUpperCase()) {
     case 'ANNUAL': return 'ANNUAL';
     case 'MONTHLY': return 'MONTHLY';
     case 'ONE_OFF': return 'ONE_OFF';
-    default: return contrib;
+    default: return fallback;
   }
 }
 
@@ -330,8 +330,8 @@ function parseRegularContributionType(s: string): RegularContributionType {
 
 }
 
-function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
-  switch (contrib) {
+function billingPeriodFromContrib(contributionType: ContributionType): BillingPeriod {
+  switch (contributionType) {
     case 'ANNUAL': return 'Annual';
     default: return 'Monthly';
   }
@@ -339,7 +339,7 @@ function billingPeriodFromContrib(contrib: Contrib): BillingPeriod {
 
 function errorMessage(
   error: ContributionError,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   countryGroupId: CountryGroupId,
 ): ?string {
 
@@ -360,7 +360,7 @@ function errorMessage(
 
 }
 
-function getContributionTypeClassName(contributionType: Contrib): string {
+function getContributionTypeClassName(contributionType: ContributionType): string {
 
   if (contributionType === 'ONE_OFF') {
     return 'one-off';
@@ -372,7 +372,7 @@ function getContributionTypeClassName(contributionType: Contrib): string {
 
 }
 
-function getSpokenType(contributionType: Contrib): string {
+function getSpokenType(contributionType: ContributionType): string {
 
   if (contributionType === 'ONE_OFF') {
     return 'single';
@@ -384,7 +384,7 @@ function getSpokenType(contributionType: Contrib): string {
 
 }
 
-function getFrequency(contributionType: Contrib): string {
+function getFrequency(contributionType: ContributionType): string {
 
   if (contributionType === 'ONE_OFF') {
     return '';
@@ -397,7 +397,7 @@ function getFrequency(contributionType: Contrib): string {
 }
 
 function getCustomAmountA11yHint(
-  contributionType: Contrib,
+  contributionType: ContributionType,
   countryGroupId: CountryGroupId,
 ): string {
 
@@ -415,7 +415,7 @@ function getCustomAmountA11yHint(
 }
 
 function getAmountA11yHint(
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currencyId: IsoCurrency,
   spokenAmount: string,
 ): string {
@@ -453,7 +453,7 @@ const contributionTypeRadios = [
 
 
 function getContributionAmountRadios(
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   annualTestVariant: AnnualContributionsTestVariant,
@@ -473,7 +473,7 @@ function getContributionAmountRadios(
 export {
   config,
   amounts,
-  parseContrib,
+  toContributionTypeOrElse,
   validateContribution,
   parseContribution,
   getMinContribution,

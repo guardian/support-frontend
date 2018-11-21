@@ -71,7 +71,7 @@ class PayPalOneOff(
     }
     val countryCookie = request.cookies.get("GU_country")
     val countryFromCookie = countryCookie.map(_.value).getOrElse("Unknown")
-    if (!isTestUser) tipMonitoring.verify(s"${country.getOrElse(countryFromCookie)} One-off PayPal contribution")
+    if (!isTestUser) tipMonitoring.verify(s"${country.getOrElse(countryFromCookie).toUpperCase} One-off PayPal contribution")
     success.email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
       redirect
@@ -89,7 +89,12 @@ class PayPalOneOff(
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
       cookieAcquisitionData <- Try {
-        Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
+        val parsed = Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
+
+        request.cookies.get("_ga") match {
+          case Some(gaId) => parsed.as[JsObject] + ("gaId" -> Json.toJson(gaId.value))
+          case None => parsed
+        }
       }.toOption
     } yield cookieAcquisitionData).getOrElse(fallbackAcquisitionData)
 
@@ -101,6 +106,7 @@ class PayPalOneOff(
     val queryStrings = request.queryString
     val testUsername = request.cookies.get("_test_username")
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
+    val userAgent = request.headers.get("user-agent")
 
     def emailForUser(user: Option[AuthenticatedIdUser])(
       implicit
@@ -117,7 +123,7 @@ class PayPalOneOff(
     }
 
     emailForUser(request.user)
-      .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser))
+      .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser, userAgent))
       .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, isTestUser))
   }
 

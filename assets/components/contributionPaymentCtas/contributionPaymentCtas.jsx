@@ -19,7 +19,7 @@ import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
 
 import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import { type Status } from 'helpers/settings';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';

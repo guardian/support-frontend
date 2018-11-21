@@ -1,9 +1,8 @@
 // @flow
 
 // ----- Imports ----- //
-import { type Contrib as ContributionType } from 'helpers/contributions';
-import type { Contrib } from 'helpers/contributions';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { type ContributionType } from 'helpers/contributions';
+import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 
 // Copied from
@@ -88,13 +87,15 @@ export const formElementIsValid = (formElement: Object | null) => {
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
 
 export function checkoutFormShouldSubmit(
-  contributionType: Contrib,
+  contributionType: ContributionType,
   isSignedIn: boolean,
+  isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   form: Object | null,
 ) {
   return formElementIsValid(form)
-    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse);
+    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
+    && !isRecurringContributor;
 }
 
 export function getTitle(contributionType: ContributionType): string {

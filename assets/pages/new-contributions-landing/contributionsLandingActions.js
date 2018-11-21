@@ -7,7 +7,7 @@ import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   type Amount,
   logInvalidCombination,
-  type Contrib,
+  type ContributionType,
   type PaymentMethod,
   type PaymentMatrix,
 } from 'helpers/contributions';
@@ -53,7 +53,7 @@ import {
 } from './contributionsLandingReducer';
 
 export type Action =
-  | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: Contrib, paymentMethodToSelect: PaymentMethod }
+  | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType, paymentMethodToSelect: PaymentMethod }
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'UPDATE_FIRST_NAME', firstName: string }
   | { type: 'UPDATE_LAST_NAME', lastName: string }
@@ -61,8 +61,8 @@ export type Action =
   | { type: 'UPDATE_PASSWORD', password: string }
   | { type: 'UPDATE_STATE', state: UsState | CaState | null }
   | { type: 'UPDATE_USER_FORM_DATA', userFormData: UserFormData }
-  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [Contrib]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
-  | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: Contrib }
+  | { type: 'UPDATE_PAYMENT_READY', thirdPartyPaymentLibraryByContrib: { [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary } } }
+  | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
   | { type: 'PAYMENT_FAILURE', paymentError: CheckoutFailureReason }
@@ -79,7 +79,7 @@ export type Action =
   | { type: 'FORM_VALID', isValid: boolean };
 
 
-const updateContributionType = (contributionType: Contrib, paymentMethodToSelect: PaymentMethod): Action => {
+const updateContributionType = (contributionType: ContributionType, paymentMethodToSelect: PaymentMethod): Action => {
   // PayPal one-off redirects away from the site before hitting the thank you page
   // so we need to store the contrib type & payment method in the storage so that it is available on the
   // thank you page in all scenarios.
@@ -114,7 +114,7 @@ const updateUserFormData = (userFormData: UserFormData): Action => ({ type: 'UPD
 
 const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
 
-const selectAmount = (amount: Amount | 'other', contributionType: Contrib): Action =>
+const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): Action =>
   ({
     type: 'SELECT_AMOUNT', amount, contributionType,
   });
@@ -145,7 +145,7 @@ const setHasSeenDirectDebitThankYouCopy = (): Action => ({ type: 'SET_HAS_SEEN_D
 
 const setThirdPartyPaymentLibrary =
   (thirdPartyPaymentLibraryByContrib: {
-    [Contrib]: {
+    [ContributionType]: {
       [PaymentMethod]: ThirdPartyPaymentLibrary
     }
   }): Action => ({
@@ -166,6 +166,7 @@ const togglePayPalButton = () =>
     const shouldEnable = checkoutFormShouldSubmit(
       state.page.form.contributionType,
       state.page.user.isSignedIn,
+      state.page.user.isRecurringContributor,
       state.page.form.userTypeFromIdentityResponse,
       // TODO: use the actual form state rather than re-fetching from DOM
       getForm('form--contribution'),
@@ -185,6 +186,7 @@ const sendFormSubmitEventForPayPalRecurring = () =>
       flowPrefix: 'npf',
       form: getForm('form--contribution'),
       isSignedIn: state.page.user.isSignedIn,
+      isRecurringContributor: state.page.user.isRecurringContributor,
       setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
       setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
     };
@@ -212,6 +214,7 @@ const checkIfEmailHasPassword = (email: string) =>
         dispatch(setValueAndTogglePayPal<UserTypeFromIdentityResponse>(setUserTypeFromIdentityResponse, userType)),
     );
   };
+
 
 const getAmount = (state: State) =>
   parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'

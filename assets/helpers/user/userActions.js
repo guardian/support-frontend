@@ -13,6 +13,7 @@ export type Action =
   | { type: 'SET_EMAIL', email: string }
   | { type: 'SET_STATEFIELD', stateField: string }
   | { type: 'SET_TEST_USER', testUser: boolean }
+  | { type: 'SET_IS_RECURRING_CONTRIBUTOR' }
   | { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser: boolean }
   | { type: 'SET_GNM_MARKETING', preference: boolean }
   | { type: 'SET_IS_SIGNED_IN', isSignedIn: boolean };
@@ -51,6 +52,10 @@ export function setEmail(email: string): Action {
 
 export function setStateField(stateField: string): Action {
   return { type: 'SET_STATEFIELD', stateField };
+}
+
+export function setIsRecurringContributor(): Action {
+  return { type: 'SET_IS_RECURRING_CONTRIBUTOR' };
 }
 
 export function setTestUser(testUser: boolean): Action {
