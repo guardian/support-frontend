@@ -28,6 +28,15 @@ if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
 }
 
+
+// ----- Types ----- //
+
+export type ReduxState<PageState> = {|
+  common: CommonState,
+  page: PageState,
+|};
+
+
 // ----- Functions ----- //
 
 function doNotTrack(): boolean {

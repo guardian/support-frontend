@@ -4,7 +4,7 @@
 
 import { compose, type Dispatch } from 'redux';
 
-import type { CommonState } from 'helpers/page/commonReducer';
+import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import {
   type IsoCountry,
@@ -50,17 +50,12 @@ type CheckoutState = {|
   errors: FormError<FormField>[],
 |};
 
-type PageState = {|
+export type State = ReduxState<{|
   checkout: CheckoutState,
   user: UserState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
-|};
-
-export type State = {
-  common: CommonState,
-  page: PageState,
-};
+|}>;
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
