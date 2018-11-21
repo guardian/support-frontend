@@ -1,5 +1,5 @@
 // @flow
-import type { Contrib, PaymentMethod } from 'helpers/contributions';
+import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { formElementIsValid, invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
@@ -10,7 +10,7 @@ type OldFlowOrNewFlow = 'opf' | 'npf';
 export type FormSubmitParameters = {
   flowPrefix: OldFlowOrNewFlow,
   paymentMethod: PaymentMethod,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   form: Object | null,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,

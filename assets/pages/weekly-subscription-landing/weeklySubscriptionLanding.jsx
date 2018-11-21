@@ -20,9 +20,9 @@ import ProductPageContentBlock, { outsetClassName } from 'components/productPage
 import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
+import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 
 import WeeklyForm from './components/weeklyForm';
-import Tabs from './components/tabs';
 import reducer from './weeklySubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
@@ -91,7 +91,6 @@ const content = (
           challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
           </p>
         </ProductPageTextBlock>
-        <Tabs />
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
@@ -110,6 +109,9 @@ const content = (
           <p>Choose how you’d like to pay</p>
         </ProductPageTextBlock>
         <WeeklyForm />
+        <ProductPageInfoChip>
+          You can cancel your subscription at any time
+        </ProductPageInfoChip>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Gift subscriptions">

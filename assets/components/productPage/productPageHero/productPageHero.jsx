@@ -6,16 +6,18 @@ import React, { type Node } from 'react';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { type Option } from 'helpers/types/option';
 
 
 // ---- Types ----- //
 
 type PropTypes = {|
   overheading: string,
+  type: 'grey' | 'feature',
   heading: string,
-  headline: string | null,
-  cta: Node | null,
-  children: Node | null,
+  headline?: Option<string>,
+  cta?: Option<Node>,
+  children?: Option<Node>,
   modifierClasses: Array<?string>,
 |};
 
@@ -23,10 +25,10 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const ProductPageHero = ({
-  headline, overheading, heading, cta, modifierClasses, children,
+  headline, overheading, heading, cta, modifierClasses, children, type,
 }: PropTypes) => (
   <header>
-    <div className={classNameWithModifiers('component-product-page-hero', modifierClasses)}>
+    <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, type])}>
       <LeftMarginSection>
         {headline &&
         <p className="component-product-page-hero__headline">
@@ -51,6 +53,10 @@ const ProductPageHero = ({
 
 ProductPageHero.defaultProps = {
   modifierClasses: [],
+  children: null,
+  cta: null,
+  headline: null,
+  type: 'grey',
 };
 
 

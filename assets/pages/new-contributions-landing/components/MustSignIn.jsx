@@ -3,7 +3,7 @@
 
 // ----- Imports ----- //
 
-import type { Contrib } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import React from 'react';
 import { getBaseDomain } from 'helpers/url';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
@@ -16,7 +16,7 @@ import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTrackin
 type PropTypes = {|
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   checkoutFormHasBeenSubmitted: boolean,
   email: string,
 |};

@@ -40,7 +40,7 @@ class RegularContributionsClientTest extends FlatSpec with Matchers with Mockito
 
   "checkoutStatus" should "detect a failed execution correctly" in {
     val failedCheckoutState = new StateExitedEventDetails
-    failedCheckoutState.setName("CheckoutFailure")
+    failedCheckoutState.setName("SucceedOrFailChoice")
     failedCheckoutState.setOutput("test")
     when(mockStateWrapper.unWrap[CheckoutFailureState]("test")).thenReturn(Success(CheckoutFailureState(mock[User], CheckoutFailureReasons.Unknown)))
     val actual = checkoutStatus(List(Success(fillerState), Success(fillerState), Success(failedCheckoutState)), mockStateWrapper, "tracking123")

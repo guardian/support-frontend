@@ -9,17 +9,23 @@ import Heading, { type HeadingSize } from 'components/heading/heading';
 // ---- Types ----- //
 
 type PropTypes = {|
-  title: string, children?: ?Node, headingSize: HeadingSize,
+  title?: string | null,
+  children?: ?Node,
+  icon?: ?Node,
+  headingSize: HeadingSize,
 |};
 
 
 // ----- Render ----- //
 
 export const largeParagraphClassName = 'component-product-page-text-block__large';
+export const sansParagraphClassName = 'component-product-page-text-block__sans';
 
-const ProductPageTextBlock = ({ title, children, headingSize }: PropTypes) => (
+const ProductPageTextBlock = ({
+  title, children, headingSize, icon,
+}: PropTypes) => (
   <div className="component-product-page-text-block">
-    <Heading className="component-product-page-text-block__heading" size={headingSize}>{title}</Heading>
+    {title && <Heading className="component-product-page-text-block__heading" size={headingSize}>{title}{icon} </Heading>}
     {children}
   </div>
 );
@@ -27,6 +33,8 @@ const ProductPageTextBlock = ({ title, children, headingSize }: PropTypes) => (
 ProductPageTextBlock.defaultProps = {
   headingSize: 2,
   children: null,
+  icon: null,
+  title: null,
 };
 
 export default ProductPageTextBlock;

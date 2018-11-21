@@ -169,7 +169,7 @@ object StepFunctionExecutionStatus {
     val searchForFinishedCheckout: Option[StatusResponse] = detailedHistory.collectFirst {
       case detailsAttempt if detailsAttempt.map(_.getName) == Success("CheckoutSuccess") =>
         StatusResponse(Status.Success, trackingUri, None)
-      case detailsAttempt if detailsAttempt.map(_.getName) == Success("CheckoutFailure") =>
+      case detailsAttempt if detailsAttempt.map(_.getName) == Success("SucceedOrFailChoice") =>
         StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, detailsAttempt.get))
     }
 

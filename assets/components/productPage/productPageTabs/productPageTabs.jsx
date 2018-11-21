@@ -5,6 +5,8 @@
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 
+import './productPageTabs.scss';
+
 
 // ---- Types ----- //
 type Tab = {|

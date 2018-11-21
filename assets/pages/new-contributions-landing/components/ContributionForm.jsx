@@ -10,7 +10,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
   config,
-  type Contrib,
+  type ContributionType,
   type PaymentMatrix,
   type PaymentMethod,
   logInvalidCombination,
@@ -35,7 +35,7 @@ import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
-import { NewContributionType } from './ContributionType';
+import ContributionTypeTabs from './ContributionTypeTabs';
 import { NewContributionAmount } from './ContributionAmount';
 import { NewPaymentMethodSelector } from './PaymentMethodSelector';
 import { NewContributionSubmit } from './ContributionSubmit';
@@ -61,10 +61,10 @@ type PropTypes = {|
   otherAmount: string | null,
   paymentMethod: PaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currency: IsoCurrency,
   paymentError: CheckoutFailureReason | null,
-  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectedAmounts: { [ContributionType]: Amount | 'other' },
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
@@ -208,7 +208,7 @@ function ContributionForm(props: PropTypes) {
 
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-      <NewContributionType />
+      <ContributionTypeTabs />
       <NewContributionAmount
         checkOtherAmount={checkOtherAmount}
       />

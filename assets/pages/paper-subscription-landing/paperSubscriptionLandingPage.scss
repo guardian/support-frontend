@@ -7,3 +7,20 @@
 
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
+@import '~components/headingBlock/headingBlock';
+@import '~components/leftMarginSection/leftMarginSection';
+@import '~components/productPage/productPageHero/productPageHero';
+@import '~components/productPage/productPageContentBlock/productPageContentBlock';
+@import '~components/productPage/productPageTextBlock/productPageTextBlock';
+@import '~components/productPage/productPageButton/productPageButton';
+@import '~components/productPage/productPageFeatures/productPageFeatures';
+@import '~components/productPage/productPagePlanForm/productPagePlanForm';
+@import '~components/productPage/productPagePlanForm/productPagePlanFormLabel';
+
+:root {
+  scroll-behavior: smooth;
+}
+
+.component-product-page-hero--paper .component-left-margin-section__content {
+  padding-top: 20em;
+}
