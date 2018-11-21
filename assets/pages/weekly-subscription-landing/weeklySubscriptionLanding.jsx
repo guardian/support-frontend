@@ -25,6 +25,8 @@ import ProductPageInfoChip from 'components/productPage/productPageInfoChip/prod
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
 
+import './weeklySubscriptionLanding.scss';
+
 // ----- Redux Store ----- //
 
 const store = pageInit(reducer, true);

@@ -109,7 +109,7 @@ class Subscriptions(
     val title = "The Guardian Weekly Subscriptions | The Guardian"
     val id = "weekly-landing-page-" + countryCode
     val js = "weeklySubscriptionLandingPage.js"
-    val css = "weeklySubscriptionLandingPageStyles.css"
+    val css = "weeklySubscriptionLandingPage.css"
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
     val hrefLangLinks = Map(
