@@ -11,8 +11,8 @@ import utils.RequestCountry._
 import services.CatalogService.getPaperPrices
 import views.html.helper.CSRF
 import scala.concurrent.ExecutionContext
+import io.circe.generic.auto._
 import io.circe.syntax._
-import codecs.CirceDecoders._
 
 class Subscriptions(
     actionRefiners: CustomActionBuilders,

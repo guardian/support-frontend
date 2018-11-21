@@ -3,8 +3,8 @@ package services
 import services.aws.AwsS3Client.{fetchJson, s3}
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.gu.support.config.{Stage, Stages}
-import codecs.CirceDecoders._
-import io.circe.Json
+import io.circe.generic.auto._
+import io.circe.syntax._
 import models.Catalog._
 
 object CatalogService {
