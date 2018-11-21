@@ -137,6 +137,7 @@ const init = (store: Store<State, Action, Function>) => {
 
   dispatch(checkIfEmailHasPassword(email));
   dispatch(updateUserFormData({ firstName, lastName, email }));
+
 };
 
 

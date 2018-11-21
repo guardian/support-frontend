@@ -12,7 +12,7 @@ import {
   type PaymentMatrix,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { userCanContributeWithoutSigningIn, getUserTypeFromIdentity } from 'helpers/identityApis';
+import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
@@ -40,8 +40,9 @@ import {
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentity } from 'helpers/identityApis';
-import { formElementIsValid, getForm } from 'helpers/checkoutForm/checkoutForm';
+import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
+import { setFormSubmissionDependentValue } from 'helpers/checkoutFormIsSubmittableActions';
 import * as cookie from 'helpers/cookie';
 import {
   type State,
@@ -76,10 +77,13 @@ export type Action =
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentity }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean };
 
+const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
 // Do not export this, as we only want it to be called via updateContributionTypeAndPaymentMethod
-const updateContributionType = (contributionType: ContributionType): Action =>
-  ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType });
+const updateContributionType = (contributionType: ContributionType): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_CONTRIBUTION_TYPE', contributionType })));
+  };
 
 const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
   // PayPal one-off redirects away from the site before hitting the thank you page
@@ -89,28 +93,41 @@ const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
   return ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
 };
 
-const updateFirstName = (firstName: string): Action => ({ type: 'UPDATE_FIRST_NAME', firstName });
+const updateFirstName = (firstName: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_FIRST_NAME', firstName })));
+  };
 
-const updateLastName = (lastName: string): Action => ({ type: 'UPDATE_LAST_NAME', lastName });
+const updateLastName = (lastName: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_LAST_NAME', lastName })));
+  };
 
-const updateEmail = (email: string): Action => {
-  // PayPal one-off redirects away from the site before hitting the thank you page
-  // so we need to store the email in the storage so that it is available on the
-  // thank you page in all scenarios.
-  storage.setSession('gu.email', email);
-  return ({ type: 'UPDATE_EMAIL', email });
-};
+const updateEmail = (email: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    // PayPal one-off redirects away from the site before hitting the thank you page
+    // so we need to store the email in the storage so that it is available on the
+    // thank you page in all scenarios.
+    storage.setSession('gu.email', email);
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_EMAIL', email })));
+  };
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
-const updateUserFormData = (userFormData: UserFormData): Action => ({ type: 'UPDATE_USER_FORM_DATA', userFormData });
+const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_USER_FORM_DATA', userFormData })));
+  };
 
-const updateState = (state: UsState | CaState | null): Action => ({ type: 'UPDATE_STATE', state });
+const updateState = (state: UsState | CaState | null): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_STATE', state })));
+  };
 
-const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): Action =>
-  ({
-    type: 'SELECT_AMOUNT', amount, contributionType,
-  });
+const selectAmount = (amount: Amount | 'other', contributionType: ContributionType): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SELECT_AMOUNT', amount, contributionType })));
+  };
 
 const setCheckoutFormHasBeenSubmitted = (): Action => ({ type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' });
 
@@ -118,15 +135,16 @@ const setPasswordHasBeenSubmitted = (): Action => ({ type: 'SET_PASSWORD_HAS_BEE
 
 const setPasswordError = (passwordError: boolean): Action => ({ type: 'SET_PASSWORD_ERROR', passwordError });
 
-const updateOtherAmount = (otherAmount: string): Action => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount });
+const updateOtherAmount = (otherAmount: string): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'UPDATE_OTHER_AMOUNT', otherAmount })));
+  };
 
 const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
 const paymentFailure = (paymentError: CheckoutFailureReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
-
-const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
 const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action =>
   ({ type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken });
@@ -148,72 +166,12 @@ const setThirdPartyPaymentLibrary =
 
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
-const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeFromIdentity): Action => ({
-  type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE',
-  userTypeFromIdentityResponse,
-});
-
-const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) => {
-  if (formIsSubmittable && window.enablePayPalButton) {
-    window.enablePayPalButton();
-  } else if (window.disablePayPalButton) {
-    window.disablePayPalButton();
-  }
-};
-
-const setFormIsSubmittable = (formIsSubmittable: boolean): Action => {
-  enableOrDisablePayPalExpressCheckoutButton(formIsSubmittable);
-  return ({ type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable });
-};
-
-const sendFormSubmitEventForPayPalRecurring = () =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
-    const formSubmitParameters: FormSubmitParameters = {
-      ...state.page.form,
-      flowPrefix: 'npf',
-      form: getForm('form--contribution'),
-      isSignedIn: state.page.user.isSignedIn,
-      isRecurringContributor: state.page.user.isRecurringContributor,
-      setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
-      setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
-    };
-    onFormSubmit(formSubmitParameters);
+const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeFromIdentity): ((Function) => void) =>
+  (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() =>
+      ({ type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse })));
   };
 
-
-function enableOrDisableForm() {
-  return (dispatch: Function, getState: () => State): void => {
-
-    const state = getState();
-    const { isRecurringContributor } = state.page.user;
-    const canContributeWithoutSigningIn = userCanContributeWithoutSigningIn(
-      state.page.form.contributionType,
-      state.page.user.isSignedIn,
-      state.page.form.userTypeFromIdentityResponse,
-    );
-
-    const formIsValid = formElementIsValid(getForm('form--contribution'));
-    dispatch(setFormIsValid(formIsValid));
-
-    const shouldEnable =
-      formIsValid
-      && !isRecurringContributor
-      && canContributeWithoutSigningIn;
-
-    dispatch(setFormIsSubmittable(shouldEnable));
-  };
-}
-
-/*
-  Set the value of a form variable, then set the form validity and submitability
-*/
-function setFormSubmissionDependentValue<T>(setStateValue: T => Action, value: T) {
-  return (dispatch: Function): void => {
-    dispatch(setStateValue(value));
-    dispatch(enableOrDisableForm());
-  };
-}
 
 const updateContributionTypeAndPaymentMethod =
   (contributionType: ContributionType, paymentMethodToSelect: PaymentMethod) =>
@@ -223,7 +181,7 @@ const updateContributionTypeAndPaymentMethod =
       // thank you page in all scenarios.
       storage.setSession('contributionType', contributionType);
       storage.setSession('paymentMethod', paymentMethodToSelect);
-      dispatch(setFormSubmissionDependentValue<ContributionType>(updateContributionType, contributionType));
+      dispatch(updateContributionType(contributionType));
       dispatch(updatePaymentMethod(paymentMethodToSelect));
     };
 
@@ -238,8 +196,23 @@ const checkIfEmailHasPassword = (email: string) =>
       isSignedIn,
       csrf,
       (userType: UserTypeFromIdentity) =>
-        dispatch(setFormSubmissionDependentValue<UserTypeFromIdentity>(setUserTypeFromIdentityResponse, userType)),
+        dispatch(setUserTypeFromIdentityResponse(userType)),
     );
+  };
+
+const sendFormSubmitEventForPayPalRecurring = () =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const formSubmitParameters: FormSubmitParameters = {
+      ...state.page.form,
+      flowPrefix: 'npf',
+      form: getForm('form--contribution'),
+      isSignedIn: state.page.user.isSignedIn,
+      isRecurringContributor: state.page.user.isRecurringContributor,
+      setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
+      setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
+    };
+    onFormSubmit(formSubmitParameters);
   };
 
 
@@ -490,8 +463,6 @@ export {
   setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
-  setFormIsSubmittable,
-  setFormSubmissionDependentValue,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
 };

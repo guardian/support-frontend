@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { type Dispatch } from 'redux';
 import { type ContributionType } from 'helpers/contributions';
 import { type Participations } from 'helpers/abTests/abtest';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -19,7 +18,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
-import { type Action, updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
+import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 

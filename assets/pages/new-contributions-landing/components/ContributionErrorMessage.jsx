@@ -46,7 +46,7 @@ function ContributionErrorMessage(props: PropTypes) {
 
   if (props.paymentError) {
     return (<GeneralErrorMessage errorReason={props.paymentError} />);
-  } else if (!props.formIsValid) {
+  } else if (!props.formIsValid && props.checkoutFormHasBeenSubmitted) {
     return (
       <GeneralErrorMessage
         classModifiers={['invalid_form_mobile']}

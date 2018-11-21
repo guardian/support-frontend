@@ -3,6 +3,7 @@
 // ----- Types ----- //
 
 import { setSession } from 'helpers/storage';
+import { setFormSubmissionDependentValue } from 'helpers/checkoutFormIsSubmittableActions';
 
 export type Action =
   | { type: 'SET_USER_ID', id: string }
@@ -54,8 +55,10 @@ export function setStateField(stateField: string): Action {
   return { type: 'SET_STATEFIELD', stateField };
 }
 
-export function setIsRecurringContributor(): Action {
-  return { type: 'SET_IS_RECURRING_CONTRIBUTOR' };
+export function setIsRecurringContributor() {
+  return (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_IS_RECURRING_CONTRIBUTOR' })));
+  };
 }
 
 export function setTestUser(testUser: boolean): Action {
