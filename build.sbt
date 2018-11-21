@@ -50,7 +50,7 @@ lazy val root = (project in file("."))
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "io.symphonia" % "lambda-logging" % "1.0.1",
       "com.gu" %% "support-internationalisation" % "0.9",
-      "com.gu" %% "support-models" % "0.38-SNAPSHOT",
+      "com.gu" %% "support-models" % "0.38",
       "com.gu" %% "support-config" % "0.16",
       "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
       "com.netaporter" %% "scala-uri" % "0.4.16",
