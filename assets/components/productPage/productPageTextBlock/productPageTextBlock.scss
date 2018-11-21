@@ -29,7 +29,7 @@
   @include gu-fontset-body-sans;
 }
 
-.component-product-page-text-block__ul li {
+.component-product-page-text-block__li {
   position: relative;
   $bullet-size: 16px;
   padding-left: $gu-h-spacing/2 + $bullet-size;
