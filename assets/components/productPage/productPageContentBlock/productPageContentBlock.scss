@@ -33,6 +33,11 @@
     border-color: gu-colour(garnett-neutral-5);
   }
 }
+.component-product-page-content-block--feature + .component-product-page-content-block--feature {
+  .component-left-margin-section__content {
+    border-top: 1px solid gu-colour(header-border);
+  }
+}
 
 .component-product-page-content-block--dark {
   color: gu-colour(garnett-neutral-5);
@@ -54,8 +59,12 @@
   margin-right: ($gu-h-spacing / 2 * -1);
 }
 
+// ----- Vertical rhythm ------ //
+
 .component-product-page-content-block {
-  .component-product-page-text-block {
+  .component-product-page-text-block, 
+  .component-product-page-plan-form,
+  .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)
   }
 }

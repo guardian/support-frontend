@@ -1,6 +1,11 @@
 .component-product-page-text-block__heading {
   @include gu-fontset-heading;
   margin-bottom: ($gu-v-spacing/2);
+  svg {
+    margin-left: $gu-h-spacing/3;
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 
 .component-product-page-text-block {
@@ -18,4 +23,25 @@
 
 .component-product-page-text-block__large {
   @include gu-fontset-body-large;
+}
+
+.component-product-page-text-block__sans {
+  @include gu-fontset-body-sans;
+}
+
+.component-product-page-text-block__li {
+  position: relative;
+  $bullet-size: 16px;
+  padding-left: $gu-h-spacing/2 + $bullet-size;
+  margin-bottom: $gu-v-spacing;
+  &:before {
+    content: '';
+    width: $bullet-size;
+    height: $bullet-size;
+    background: gu-colour(news-garnett-highlight);
+    border-radius: 100%;
+    position: absolute;
+    top: 3px;
+    left: 0;
+  }
 }

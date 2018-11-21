@@ -8,14 +8,14 @@ import { bindActionCreators } from 'redux';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
-import { type Action } from 'components/productPage/productPagePeriodForm/productPagePeriodFormActions';
-import ProductPagePeriodForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePeriodForm/productPagePeriodForm';
+import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
+import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
-import { redirectToWeeklyPage, setPeriod } from '../weeklySubscriptionLandingActions';
+import { redirectToWeeklyPage, setPlan } from '../weeklySubscriptionLandingActions';
 
 
-// ---- Periods ----- //
+// ---- Plans ----- //
 
 const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
   currencies[detect(countryGroupId)].extendedGlyph,
@@ -42,7 +42,7 @@ export const billingPeriods = {
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => ({
-  periods: Object.keys(billingPeriods).reduce((ps, k) => ({
+  plans: Object.keys(billingPeriods).reduce((ps, k) => ({
     ...ps,
     [k]: {
       title: billingPeriods[k].title,
@@ -50,16 +50,16 @@ const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => (
       offer: billingPeriods[k].offer || null,
     },
   }), {}),
-  selectedPeriod: state.page.period,
+  selectedPlan: state.page.plan,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<WeeklyBillingPeriod>>): DispatchPropTypes<WeeklyBillingPeriod> =>
   ({
-    setPeriodAction: bindActionCreators(setPeriod, dispatch),
+    setPlanAction: bindActionCreators(setPlan, dispatch),
     onSubmitAction: bindActionCreators(redirectToWeeklyPage, dispatch),
   });
 
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductPagePeriodForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductPagePlanForm);

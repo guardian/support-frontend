@@ -1,9 +1,8 @@
 .component-product-page-hero {
-  background: gu-colour(garnett-neutral-3);
   overflow: hidden;
   .component-left-margin-section__content {
     @include mq($from: tablet) {
-      border-left: 1px solid gu-colour(garnett-neutral-4);
+      border-left: 1px solid;
       position: relative;
       .component-heading-block {
         margin-left: -1px;
@@ -13,6 +12,21 @@
   .component-heading-block {
     z-index: 10;
     position: relative;
+  }
+}
+
+.component-product-page-hero--feature {
+  border-top: 1px solid gu-colour(header-border);
+  background-color: gu-colour(header-dark);
+  .component-left-margin-section__content {
+    border-left-color: gu-colour(header-border);
+  }
+}
+
+.component-product-page-hero--grey {
+  background: gu-colour(garnett-neutral-3);
+  .component-left-margin-section__content {
+    border-left-color: gu-colour(garnett-neutral-4);
   }
 }
 

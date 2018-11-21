@@ -30,6 +30,8 @@ export type ComponentAbTest = {
 export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
 export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
 
+export type PaperBillingPlan = 'everyday' | 'sixday' | 'weekend' | 'sunday';
+
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
     [CountryGroupId]: number,
@@ -172,7 +174,6 @@ function discountedDisplayPrice(product: SubscriptionProduct, countryGroupId: Co
 function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
   return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
 }
-
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
 
