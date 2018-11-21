@@ -7,7 +7,7 @@ case class Pricing(
 
 case class Charge(
     model: String,
-    endDateCondition: String,
+    endDateCondition: Option[String],
     pricing: List[Pricing]
 )
 
@@ -18,7 +18,7 @@ case class ProductRatePlan(
 ) {
   def price: Double = {
     productRatePlanCharges
-      .filter( _.endDateCondition == "Subscription_End")
+      .filter( _.endDateCondition.contains("Subscription_End"))
       .map(
         _.pricing
           .filter(_.currency == "GBP")
