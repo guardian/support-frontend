@@ -8,11 +8,8 @@ import config.StringsConfig
 import play.api.mvc._
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import utils.RequestCountry._
-import services.ZuoraCatalogService.getPaperPrices
 import views.html.helper.CSRF
 import scala.concurrent.ExecutionContext
-import io.circe.generic.auto._
-import io.circe.syntax._
 
 class Subscriptions(
     actionRefiners: CustomActionBuilders,
@@ -126,12 +123,6 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
   }
 
-  def paperPrices(): Action[AnyContent] = NoCacheAction() { implicit request =>
-    {
-      Ok(getPaperPrices.asJson.toString).withSettingsSurrogateKey
-    }
-  }
-
   def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
     Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
   }
@@ -165,7 +156,7 @@ class Subscriptions(
     }
 
   def buildCanonicalPaperSubscriptionLink(method: String = "collection"): String =
-    s"${supportUrl}/uk/subscribe/paper/${method}"
+    s"${supportUrl}/subscribe/paper/${method}"
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"
