@@ -6,6 +6,7 @@ import React, { type Node } from 'react';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { type Option } from 'helpers/types/option';
 
 
 // ---- Types ----- //
@@ -14,9 +15,9 @@ type PropTypes = {|
   overheading: string,
   type: 'grey' | 'feature',
   heading: string,
-  headline?: string | null,
-  cta?: Node | null,
-  children?: Node | null,
+  headline?: Option<string>,
+  cta?: Option<Node>,
+  children?: Option<Node>,
   modifierClasses: Array<?string>,
 |};
 

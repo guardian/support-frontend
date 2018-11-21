@@ -1,6 +1,6 @@
 .component-product-page-info-chip {
   @include gu-fontset-body-sans;
-  svg {
+  .svg-information {
     display: inline-block;
     vertical-align: text-bottom;
     margin-right: $gu-h-spacing / 4;
