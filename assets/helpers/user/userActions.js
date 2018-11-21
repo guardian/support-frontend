@@ -42,8 +42,10 @@ export function setFullName(name: string): Action {
   return { type: 'SET_FULL_NAME', name };
 }
 
-export function setIsSignedIn(isSignedIn: boolean): Action {
-  return { type: 'SET_IS_SIGNED_IN', isSignedIn };
+export function setIsSignedIn(isSignedIn: boolean): (Function => void) {
+  return (dispatch: Function): void => {
+    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_IS_SIGNED_IN', isSignedIn })));
+  };
 }
 
 export function setEmail(email: string): Action {
@@ -55,7 +57,7 @@ export function setStateField(stateField: string): Action {
   return { type: 'SET_STATEFIELD', stateField };
 }
 
-export function setIsRecurringContributor() {
+export function setIsRecurringContributor(): (Function => void) {
   return (dispatch: Function): void => {
     dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_IS_RECURRING_CONTRIBUTOR' })));
   };
