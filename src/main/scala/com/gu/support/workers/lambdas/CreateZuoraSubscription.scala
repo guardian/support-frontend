@@ -6,7 +6,6 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.GetRecurringSubscription
 import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.AccountAccessScope.{AuthenticatedAccess, SessionAccess, SessionId}
 import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers.model.{Contribution, DigitalPack, RequestInfo}
 import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
@@ -32,7 +31,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     services: Services
   ): FutureHandlerResult = for {
     identityId <- Future.fromTry(IdentityId(state.user.id))
-    maybeDomainSubscription <- GetRecurringSubscription(services.zuoraService, state.accountAccessScope, identityId, state.product.billingPeriod)
+    maybeDomainSubscription <- GetRecurringSubscription(services.zuoraService, state.requestId, identityId, state.product.billingPeriod)
     thankYouState <- maybeDomainSubscription match {
       case Some(domainSubscription) => skipSubscribe(state, requestInfo, domainSubscription)
       case None => subscribe(state, requestInfo, services)
@@ -142,10 +141,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     state.salesForceContact.Id,
     state.user.id,
     PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
-    state.accountAccessScope match {
-      case SessionAccess(SessionId(value)) => Some(value)
-      case AuthenticatedAccess => None
-    }
+    state.requestId.toString
   )
 }
 
