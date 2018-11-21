@@ -5,6 +5,7 @@
 import React, { type Node } from 'react';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 
+import './productPageButton.scss';
 
 // ---- Types ----- //
 

@@ -1,3 +1,5 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
 .component-product-page-content-block .component-left-margin-section__content {
   max-width: 100%;
   @include mq($from: tablet) {

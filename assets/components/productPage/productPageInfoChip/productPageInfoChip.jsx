@@ -6,6 +6,8 @@ import React, { type Node } from 'react';
 
 import SvgInfo from 'components/svgs/information';
 
+import './productPageInfoChip.scss';
+
 // ---- Types ----- //
 
 

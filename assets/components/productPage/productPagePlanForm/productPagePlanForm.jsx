@@ -9,6 +9,8 @@ import { outsetClassName, bgClassName } from 'components/productPage/productPage
 import ProductPageButton from '../productPageButton/productPageButton';
 import ProductPagePlanFormLabel from './productPagePlanFormLabel';
 
+import './productPagePlanForm.scss';
+
 // ---- Types ----- //
 
 export type Plan = {|

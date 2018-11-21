@@ -5,6 +5,7 @@
 import React from 'react';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 
+import './productPageFeatures.scss';
 
 // ---- Types ----- //
 
