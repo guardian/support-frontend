@@ -10,7 +10,7 @@ import { type Action } from 'components/productPage/productPagePeriodForm/produc
 import ProductPagePeriodForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePeriodForm/productPagePeriodForm';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
-import { redirectToWeeklyPage, setPeriod } from '../paperSubscriptionLandingPageActions';
+import { setPeriod } from '../paperSubscriptionLandingPageActions';
 
 
 // ---- Periods ----- //
@@ -49,7 +49,7 @@ const mapStateToProps = (state: State): StatePropTypes<PaperBillingPeriod> => ({
 const mapDispatchToProps = (dispatch: Dispatch<Action<PaperBillingPeriod>>): DispatchPropTypes<PaperBillingPeriod> =>
   ({
     setPeriodAction: bindActionCreators(setPeriod, dispatch),
-    onSubmitAction: bindActionCreators(redirectToWeeklyPage, dispatch),
+    onSubmitAction: bindActionCreators(() => null, dispatch),
   });
 
 
