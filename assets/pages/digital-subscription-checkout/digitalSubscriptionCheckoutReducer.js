@@ -5,7 +5,13 @@
 import { compose, type Dispatch } from 'redux';
 
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type IsoCountry, fromString } from 'helpers/internationalisation/country';
+import { type Option } from 'helpers/types/option';
+import {
+  type IsoCountry,
+  fromString,
+  type StateProvince,
+  stateProvinceFromString,
+} from 'helpers/internationalisation/country';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
@@ -31,7 +37,8 @@ export type Stage = 'checkout' | 'thankyou';
 export type FormFields = {|
   firstName: string,
   lastName: string,
-  country: IsoCountry | null,
+  country: Option<IsoCountry>,
+  stateProvince: Option<StateProvince>,
   telephone: string,
 |};
 
@@ -61,6 +68,7 @@ export type Action =
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_COUNTRY', country: string }
+  | { type: 'SET_STATE_PROVINCE', stateProvince: string }
   | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
 
 
@@ -71,6 +79,7 @@ function getFormFields(state: State): FormFields {
     firstName: state.page.checkout.firstName,
     lastName: state.page.checkout.lastName,
     country: state.page.checkout.country,
+    stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
   };
 }
@@ -92,6 +101,13 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       rule: notNull(fields.country),
       error: formError('country', 'Please select a country.'),
     },
+    {
+      rule: fields.country === 'US' || fields.country === 'CA' ? notNull(fields.stateProvince) : true,
+      error: formError(
+        'stateProvince',
+        fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
+      ),
+    },
   ]);
 }
 
@@ -106,6 +122,7 @@ const formActionCreators = {
   setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
+  setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) =>
     compose(dispatch, setFormErrors, getErrors, getFormFields)(getState()),
 };
@@ -120,6 +137,7 @@ const initialState = {
   firstName: '',
   lastName: '',
   country: null,
+  stateProvince: null,
   telephone: '',
   errors: [],
 };
@@ -141,7 +159,10 @@ function reducer(state: CheckoutState = initialState, action: Action): CheckoutS
       return { ...state, telephone: action.telephone };
 
     case 'SET_COUNTRY':
-      return { ...state, country: fromString(action.country) };
+      return { ...state, country: fromString(action.country), stateProvince: null };
+
+    case 'SET_STATE_PROVINCE':
+      return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
 
     case 'SET_ERRORS':
       return { ...state, errors: action.errors };
