@@ -45,6 +45,20 @@ object Fixtures {
          }
        """
 
+  val stripePaymentMethod = // test env card and cus token, not prod ones
+    s"""
+        {
+           "TokenId": "card_E0zitFfsO2wTEn",
+           "SecondTokenId": "cus_E0zic0cedDT5MZ",
+           "CreditCardNumber": "4242",
+           "CreditCardCountry": "US",
+           "CreditCardExpirationMonth": 2,
+           "CreditCardExpirationYear": 2022,
+           "CreditCardType": "Visa",
+           "Type": "CreditCardReferenceTransaction"
+         }
+       """
+
   def contribution(amount: BigDecimal = 5, currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly) =
     s"""
       {
@@ -180,7 +194,7 @@ object Fixtures {
        |  $requestIdJson,
        |  $userJson,
        |  "product": ${product},
-       |  "paymentMethod": $payPalPaymentMethod,
+       |  "paymentMethod": $stripePaymentMethod,
        |  "salesForceContact": {
        |    "Id": "123",
        |    "AccountId": "123"
@@ -203,7 +217,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
-            "paymentMethod": $payPalPaymentMethod,
+            "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
         """
@@ -213,7 +227,7 @@ object Fixtures {
             $requestIdJson,
             $userJson,
             "product": ${digitalPackJson},
-            "paymentMethod": $payPalPaymentMethod,
+            "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
         """
@@ -355,7 +369,7 @@ object Fixtures {
           $requestIdJson,
           $userJson,
           "product": ${contribution(currency = GBP)},
-          "paymentMethod": $payPalPaymentMethod,
+          "paymentMethod": $stripePaymentMethod,
           "acquisitionData": $acquisitionData
         }"""
   )
