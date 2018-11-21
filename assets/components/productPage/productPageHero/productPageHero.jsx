@@ -8,6 +8,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Option } from 'helpers/types/option';
 
+import './productPageHero.scss';
 
 // ---- Types ----- //
 

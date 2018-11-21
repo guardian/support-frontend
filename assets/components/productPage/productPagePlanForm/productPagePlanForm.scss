@@ -1,3 +1,5 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
 .component-product-page-plan-form__items {
   margin-bottom: $gu-v-spacing * 2;
   @include mq($until: leftCol) {

@@ -7,6 +7,7 @@ import SvgCheckmark from 'components/svgs/checkmark';
 
 import uuidv4 from 'uuid';
 
+import './productPagePlanFormLabel.scss';
 
 // ---- Types ----- //
 

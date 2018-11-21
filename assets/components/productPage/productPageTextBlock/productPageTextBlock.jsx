@@ -5,6 +5,7 @@
 import React, { type Node } from 'react';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 
+import './productPageTextBlock.scss';
 
 // ---- Types ----- //
 
