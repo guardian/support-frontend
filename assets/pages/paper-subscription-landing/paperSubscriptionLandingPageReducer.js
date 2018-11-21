@@ -13,14 +13,11 @@ export type State = {
 };
 
 
-// ----- Reducer ----- //
+export default () => {
+  const promoInUrl = getQueryParameter('promo');
 
-const promoInUrl = getQueryParameter('promo');
+  const initialPeriod: ?PaperBillingPlan =
+    promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'everyday' ? promoInUrl : null;
 
-const initialPeriod: ?PaperBillingPlan =
-  promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'everyday' ? promoInUrl : null;
-
-
-// ----- Export ----- //
-
-export default ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod);
+  return ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod);
+};

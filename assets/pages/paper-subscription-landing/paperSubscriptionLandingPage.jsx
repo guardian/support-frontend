@@ -40,7 +40,7 @@ const reactElementId: {
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer, true);
+const store = pageInit(reducer(), true);
 
 
 // ----- Render ----- //
