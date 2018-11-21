@@ -12,6 +12,7 @@ import { type Option } from 'helpers/types/option';
 
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
+import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
@@ -52,19 +53,13 @@ const Input1 = compose(asControlled, withError, withLabel)(Input);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
 
-function options<A: {}>(os: A): React$Node {
-  return Object.keys(os)
-    .sort((a, b) => os[a].localeCompare(os[b]))
-    .map(k => <option value={k}>{os[k]}</option>);
-}
-
 function statesForCountry(country: Option<IsoCountry>): React$Node {
 
   switch (country) {
     case 'US':
-      return options(usStates);
+      return sortedOptions(usStates);
     case 'CA':
-      return options(caStates);
+      return sortedOptions(caStates);
     default:
       return null;
   }
@@ -102,7 +97,7 @@ function CheckoutForm(props: PropTypes) {
         error={firstError('country', props.errors)}
       >
         <option value="">--</option>
-        {options(countries)}
+        {sortedOptions(countries)}
       </Select1>
       <Select2
         id="stateProvince"
