@@ -51,7 +51,7 @@ const init = (dispatch: Function) => {
     dispatch(setPostDeploymentTestUser(true));
   }
 
-  if (getCookie('gu_recurring_contributor')) {
+  if (getCookie('gu_recurring_contributor') === 'true') {
     dispatch(setIsRecurringContributor());
   }
 
