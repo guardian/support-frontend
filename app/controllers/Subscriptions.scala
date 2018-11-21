@@ -8,7 +8,7 @@ import config.StringsConfig
 import play.api.mvc._
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import utils.RequestCountry._
-import services.CatalogService.getPaperPrices
+import services.ZuoraCatalogService.getPaperPrices
 import views.html.helper.CSRF
 import scala.concurrent.ExecutionContext
 import io.circe.generic.auto._

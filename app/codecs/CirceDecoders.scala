@@ -21,7 +21,7 @@ import admin._
 import models.identity.responses.{SetGuestPasswordResponseCookie, SetGuestPasswordResponseCookies}
 import services._
 import org.joda.time.DateTime
-import models.Catalog._
+import models.ZuoraCatalog._
 
 object CirceDecoders {
 

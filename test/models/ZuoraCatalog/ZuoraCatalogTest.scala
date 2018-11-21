@@ -1,35 +1,33 @@
-package models.Catalog
+package models.ZuoraCatalog
 
 import org.scalatest.{MustMatchers, WordSpec}
 
-class CatalogTest extends WordSpec with MustMatchers {
-  val testingCatalog = Catalog(
+class ZuoraCatalogTest extends WordSpec with MustMatchers {
+  val testingCatalog = ZuoraCatalog(
     List(
-      Product(
+      ZuoraCatalogProduct(
         productRatePlans = List(
-          ProductRatePlan(
-            name = "£15 Product",
+          ZuoraCatalogProductRatePlan(
+            name = Some("£15 Product"),
             id = "t-15",
             productRatePlanCharges = List(
-              Charge(
-                model = "Test",
+              ZuoraCatalogCharge(
                 endDateCondition = Some("Subscription_End"),
                 pricing = List(
-                  Pricing(
+                  ZuoraCatalogPricing(
                     currency = "GBP",
                     price = 10
                   )
                 )
               ),
-              Charge(
-                model = "Test",
+              ZuoraCatalogCharge(
                 endDateCondition = Some("Subscription_End"),
                 pricing = List(
-                  Pricing(
+                  ZuoraCatalogPricing(
                     currency = "GBP",
                     price = 5
                   ),
-                  Pricing(
+                  ZuoraCatalogPricing(
                     currency = "USD",
                     price = 3
                   )
@@ -39,27 +37,25 @@ class CatalogTest extends WordSpec with MustMatchers {
           )
         )
       ),
-      Product(
+      ZuoraCatalogProduct(
         productRatePlans = List(
-          ProductRatePlan(
-            name = "£20 Product",
+          ZuoraCatalogProductRatePlan(
+            name = Some("£20 Product"),
             id = "t-20",
             productRatePlanCharges = List(
-              Charge(
-                model = "Test",
+              ZuoraCatalogCharge(
                 endDateCondition = Some("Fixed_Period"),
                 pricing = List(
-                  Pricing(
+                  ZuoraCatalogPricing(
                     currency = "GBP",
                     price = 1000
                   )
                 )
               ),
-              Charge(
-                model = "Test",
+              ZuoraCatalogCharge(
                 endDateCondition = Some("Subscription_End"),
                 pricing = List(
-                  Pricing(
+                  ZuoraCatalogPricing(
                     currency = "GBP",
                     price = 20
                   ),
@@ -75,24 +71,24 @@ class CatalogTest extends WordSpec with MustMatchers {
   "PricePlan builder" should {
 
     "filter out USD prices" in {
-      val list = PricePlan.build(testingCatalog, List("t-15"))
+      val list = ZuoraCatalogPricePlan.build(testingCatalog, List("t-15"))
       list.head.pricePerPeriod.head.currency mustBe "GBP"
       list.head.pricePerPeriod.head.price mustBe 15
     }
 
     "filter out a fixed period payment" in {
-      val list = PricePlan.build(testingCatalog, List("t-20"))
+      val list = ZuoraCatalogPricePlan.build(testingCatalog, List("t-20"))
       list.head.pricePerPeriod.head.price mustBe 20
     }
 
     "returns 1 price in pounds" in {
-      val list = PricePlan.build(testingCatalog, List("t-15"))
+      val list = ZuoraCatalogPricePlan.build(testingCatalog, List("t-15"))
       list.head.pricePerPeriod.length mustBe 1
       list.head.pricePerPeriod.head.currency mustBe "GBP"
     }
 
     "not get any products" in {
-      val list = PricePlan.build(testingCatalog, List("t-9999"))
+      val list = ZuoraCatalogPricePlan.build(testingCatalog, List("t-9999"))
       list.length mustBe 0
     }
   }

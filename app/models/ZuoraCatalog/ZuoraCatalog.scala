@@ -1,20 +1,19 @@
-package models.Catalog
+package models.ZuoraCatalog
 
-case class Pricing(
+case class ZuoraCatalogPricing(
     currency: String,
     price: Double
 )
 
-case class Charge(
-    model: String,
+case class ZuoraCatalogCharge(
     endDateCondition: Option[String],
-    pricing: List[Pricing]
+    pricing: List[ZuoraCatalogPricing]
 )
 
-case class ProductRatePlan(
-    name: String,
+case class ZuoraCatalogProductRatePlan(
+    name: Option[String],
     id: String,
-    productRatePlanCharges: List[Charge]
+    productRatePlanCharges: List[ZuoraCatalogCharge]
 ) {
   def price: Double = {
     productRatePlanCharges
@@ -27,33 +26,33 @@ case class ProductRatePlan(
   }
 }
 
-case class Product(
-    productRatePlans: List[ProductRatePlan]
+case class ZuoraCatalogProduct(
+    productRatePlans: List[ZuoraCatalogProductRatePlan]
 )
 
-case class Catalog(
-    products: List[Product]
+case class ZuoraCatalog(
+    products: List[ZuoraCatalogProduct]
 )
 
-case class PricePlan(
+case class ZuoraCatalogPricePlan(
     id: String,
-    name: String,
-    pricePerPeriod: List[Pricing]
+    name: Option[String],
+    pricePerPeriod: List[ZuoraCatalogPricing]
 )
 
-object PricePlan {
-  def build(catalog: Catalog, plans: List[String]): List[PricePlan] = {
-    catalog.products
+object ZuoraCatalogPricePlan {
+  def build(ZuoraCatalog: ZuoraCatalog, plans: List[String]): List[ZuoraCatalogPricePlan] = {
+    ZuoraCatalog.products
       .flatMap(product =>
         product.productRatePlans
           .filter(plan => {
             plans.contains(plan.id)
           }).map(productRatePlan =>
-            PricePlan(
+            ZuoraCatalogPricePlan(
               productRatePlan.id,
               productRatePlan.name,
               List(
-                Pricing(
+                ZuoraCatalogPricing(
                   "GBP",
                   productRatePlan.price
                 )
@@ -65,8 +64,8 @@ object PricePlan {
 }
 
 case class PaperPrices(
-    collection: List[PricePlan],
-    delivery: List[PricePlan]
+    collection: List[ZuoraCatalogPricePlan],
+    delivery: List[ZuoraCatalogPricePlan]
 )
 object PaperPrices {
   def empty: PaperPrices = PaperPrices(List.empty, List.empty)

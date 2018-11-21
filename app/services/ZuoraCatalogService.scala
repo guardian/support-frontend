@@ -5,9 +5,9 @@ import com.amazonaws.services.s3.model.GetObjectRequest
 import com.gu.support.config.{Stage, Stages}
 import io.circe.generic.auto._
 import io.circe.syntax._
-import models.Catalog._
+import models.ZuoraCatalog._
 
-object CatalogService {
+object ZuoraCatalogService {
 
   val paperCollectionProductRatePlanIds = List(
     "2c92a0ff56fe33f00157040f9a537f4b",
@@ -23,18 +23,18 @@ object CatalogService {
     "2c92a0fd560d13880156136b72e50f0c"
   )
 
-  def getCatalog(stage: Stage): Option[Catalog] = {
+  def getCatalog(stage: Stage): Option[ZuoraCatalog] = {
     val catalog = new GetObjectRequest(s"gu-zuora-catalog/$stage/Zuora-$stage", "catalog.json")
     fetchJson(s3, catalog).flatMap(
-      _.as[Catalog].toOption
+      _.as[ZuoraCatalog].toOption
     )
   }
 
   def getPaperPrices: PaperPrices = getCatalog(Stages.PROD).map {
     catalog =>
       PaperPrices(
-        PricePlan.build(catalog, paperCollectionProductRatePlanIds),
-        PricePlan.build(catalog, paperDeliveryProductRatePlanIds)
+        ZuoraCatalogPricePlan.build(catalog, paperCollectionProductRatePlanIds),
+        ZuoraCatalogPricePlan.build(catalog, paperDeliveryProductRatePlanIds)
       )
   }.getOrElse(PaperPrices.empty)
 
