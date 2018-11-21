@@ -38,20 +38,13 @@ export type FormFields = {|
 export type FormField = $Keys<FormFields>;
 
 type CheckoutState = {|
-  stage: string,
-  firstName: string,
-  lastName: string,
-  country: ?string,
-  telephone: string,
+  stage: Stage,
+  ...FormFields,
   errors: FormError<FormField>[],
-|}
+|};
 
 type PageState = {|
-  form: {
-    stage: Stage,
-    ...FormFields,
-    errors: FormError<FormField>[],
-  },
+  checkout: CheckoutState,
   user: UserState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
@@ -75,10 +68,10 @@ export type Action =
 
 function getFormFields(state: State): FormFields {
   return {
-    firstName: state.page.form.firstName,
-    lastName: state.page.form.lastName,
-    country: state.page.form.country,
-    telephone: state.page.form.telephone,
+    firstName: state.page.checkout.firstName,
+    lastName: state.page.checkout.lastName,
+    country: state.page.checkout.country,
+    telephone: state.page.checkout.telephone,
   };
 }
 
@@ -162,7 +155,7 @@ function reducer(state: CheckoutState = initialState, action: Action): CheckoutS
 
 function initReducer(countryGroupId: CountryGroupId = detect()) {
   return combineReducers({
-    form: reducer,
+    checkout: reducer,
     user: createUserReducer(countryGroupId),
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),

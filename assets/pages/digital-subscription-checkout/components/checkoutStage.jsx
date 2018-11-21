@@ -83,7 +83,7 @@ const heroesByCountry: ImagesByCountry = {
 function mapStateToProps(state: State): PropTypes {
 
   return {
-    stage: state.page.form.stage,
+    stage: state.page.checkout.stage,
     countryGroupId: state.common.internationalisation.countryGroupId,
   };
 

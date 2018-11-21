@@ -39,7 +39,7 @@ type PropTypes = {|
 function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
-    errors: state.page.form.errors,
+    errors: state.page.checkout.errors,
   };
 }
 
