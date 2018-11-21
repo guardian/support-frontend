@@ -4,6 +4,8 @@
 
 import { getQueryParameter } from 'helpers/url';
 import * as cookie from 'helpers/cookie';
+import { type Option } from 'helpers/types/option';
+
 import { countryGroups } from './countryGroup';
 import type { CountryGroupId } from './countryGroup';
 
@@ -348,9 +350,31 @@ const countries = {
 export type UsState = $Keys<typeof usStates>;
 export type CaState = $Keys<typeof caStates>;
 export type IsoCountry = $Keys<typeof countries>;
+export type StateProvince = UsState | CaState;
 
 
 // ----- Functions ----- /
+
+function usStateFromString(s: string): Option<UsState> {
+  return usStates[s] ? s : null;
+}
+
+function caStateFromString(s: string): Option<CaState> {
+  return caStates[s] ? s : null;
+}
+
+function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option<StateProvince> {
+
+  switch (country) {
+    case 'US':
+      return usStateFromString(s);
+    case 'CA':
+      return caStateFromString(s);
+    default:
+      return null;
+  }
+
+}
 
 function fromString(s: string): ?IsoCountry {
   const candidateIso = s.toUpperCase();
@@ -491,4 +515,5 @@ export {
   caStates,
   countries,
   fromString,
+  stateProvinceFromString,
 };

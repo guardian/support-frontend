@@ -16,7 +16,7 @@ describe('Digital Subscription Checkout Reducer', () => {
 
     const newState = initReducer()(undefined, action);
 
-    expect(newState.form.stage).toEqual(stage);
+    expect(newState.checkout.stage).toEqual(stage);
 
   });
 
@@ -27,7 +27,7 @@ describe('Digital Subscription Checkout Reducer', () => {
 
     const newState = initReducer()(undefined, action);
 
-    expect(newState.form.stage).toEqual(stage);
+    expect(newState.checkout.stage).toEqual(stage);
 
   });
 
