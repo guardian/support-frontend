@@ -154,7 +154,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
           ...state,
           contributionType: action.contributionType,
           showOtherAmount: false,
-          paymentMethod: action.paymentMethodToSelect,
           formData: { ...state.formData },
         };
 

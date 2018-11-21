@@ -25,7 +25,7 @@ import {
   setPayPalHasLoaded,
   selectAmount,
   checkIfEmailHasPassword,
-  updateContributionType,
+  updateContributionTypeAndPaymentMethod,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 
@@ -116,7 +116,7 @@ function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: F
   const contributionType = getInitialContributionType(abParticipations);
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
 
-  dispatch(updateContributionType(contributionType, paymentMethod));
+  dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
 const init = (store: Store<State, Action, Function>) => {

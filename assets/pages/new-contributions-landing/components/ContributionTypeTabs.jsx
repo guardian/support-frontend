@@ -19,7 +19,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
-import { type Action, updateContributionType } from '../contributionsLandingActions';
+import { type Action, updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
@@ -40,7 +40,7 @@ const mapStateToProps = (state: State) => ({
   abParticipations: state.common.abParticipations,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+const mapDispatchToProps = (dispatch: Function) => ({
   onSelectContributionType: (
     contributionType: ContributionType,
     switches: Switches,
@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
   ) => {
     const paymentMethodToSelect = getPaymentMethodToSelect(contributionType, switches, countryId);
     trackComponentClick(`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`);
-    dispatch(updateContributionType(contributionType, paymentMethodToSelect));
+    dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethodToSelect));
   },
 });
 
