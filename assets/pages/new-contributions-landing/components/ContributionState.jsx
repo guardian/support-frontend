@@ -18,7 +18,6 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   selectedState: CaState | UsState | null,
   onChange: (Event => void) | false,
-  errorMessage: string | null,
   isValid: boolean,
   formHasBeenSubmitted: boolean,
 |};
@@ -37,13 +36,14 @@ const renderStatesField = (
   states: { [string]: string },
   selectedState: UsState | CaState | null,
   onChange: (Event => void) | false,
-  showError: boolean, errorMessage: string | null,
+  showError: boolean,
+  label: string,
 ) => (
   <div className={classNameWithModifiers('form__field', ['contribution-state'])}>
-    <label className="form__label" htmlFor="contributionState">State</label>
+    <label className="form__label" htmlFor="contributionState">{label}</label>
     <span className="form__input-with-icon">
       <select id="contributionState" className={classNameWithModifiers('form__input', selectedState ? [] : ['placeholder'])} onChange={onChange} required>
-        <option value="">Please select your state</option>
+        <option value="">Please select your {label.toLowerCase()}</option>
         {(Object.entries(states): any).map(renderState(selectedState))}
       </select>
       <span className="form__icon">
@@ -52,7 +52,7 @@ const renderStatesField = (
     </span>
     {showError ? (
       <div className="form__error">
-        {errorMessage}
+        Please provide a {label.toLowerCase()}
       </div>
       ) : null}
   </div>
@@ -62,9 +62,9 @@ function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   switch (props.countryGroupId) {
     case 'UnitedStates':
-      return renderStatesField(usStates, props.selectedState, props.onChange, showError, props.errorMessage);
+      return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
     case 'Canada':
-      return renderStatesField(caStates, props.selectedState, props.onChange, showError, props.errorMessage);
+      return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
     default:
       return null;
   }

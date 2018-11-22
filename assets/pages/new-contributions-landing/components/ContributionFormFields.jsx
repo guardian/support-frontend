@@ -153,7 +153,6 @@ function FormFields(props: PropTypes) {
         selectedState={state}
         isValid={checkState(state)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        errorMessage="Please provide a state"
       />
     </div>
   );
