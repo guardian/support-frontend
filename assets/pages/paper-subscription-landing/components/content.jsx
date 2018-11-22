@@ -48,7 +48,7 @@ class Content extends Component<PropTypes> {
         <ProductPageTextBlock title="FAQ and help" icon={<SvgInfo />}>
           <p className={sansParagraphClassName}>
           If you’ve got any more questions, you might well find the answers in the <a href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions">Subscriptions FAQs</a>.
-           If you can’t find the answer to your question here, please call our customer services team on PHONE NUMBER.
+           If you can’t find the answer to your question here, please call our customer services team on <a href="tel:+4403303336767">0330 333 6767</a>.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
