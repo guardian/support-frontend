@@ -4,6 +4,7 @@ import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 import { formElementIsValid, invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
+import { contributionTypeIsRecurring } from 'helpers/contributions';
 
 type OldFlowOrNewFlow = 'opf' | 'npf';
 
@@ -21,11 +22,15 @@ export type FormSubmitParameters = {
 }
 
 export const onFormSubmit = (params: FormSubmitParameters) => {
+
+  const shouldBlockExistingRecurringContributor =
+    params.isRecurringContributor && contributionTypeIsRecurring(params.contributionType);
+
   const componentId = `${params.paymentMethod}-${params.contributionType}-submit`;
   const formIsValid = formElementIsValid(params.form);
   const userType = params.isSignedIn ? 'signed-in' : params.userTypeFromIdentityResponse;
   const canContribute =
-    !params.isRecurringContributor
+    !shouldBlockExistingRecurringContributor
     && canContributeWithoutSigningIn(params.contributionType, params.isSignedIn, params.userTypeFromIdentityResponse);
   if (formIsValid) {
     params.setFormIsValid(true);

@@ -1,7 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
-import { type ContributionType } from 'helpers/contributions';
+import { type ContributionType, contributionTypeIsRecurring } from 'helpers/contributions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 
@@ -85,10 +85,6 @@ export const formElementIsValid = (formElement: Object | null) => {
 };
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
-
-const contributionTypeIsRecurring = (contributionType: ContributionType) =>
-  contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
-
 
 export function checkoutFormShouldSubmit(
   contributionType: ContributionType,
