@@ -7,12 +7,14 @@ import React from 'react';
 import CtaLink from 'components/ctaLink/ctaLink';
 import SvgChevronUp from 'components/svgs/chevronUp';
 import Heading, { type HeadingSize } from 'components/heading/heading';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 // ----- Props ----- //
 
 type PropTypes = {|
   ctaUrl: string,
   headingSize: HeadingSize,
+  context?: string,
 |};
 
 
@@ -33,6 +35,7 @@ export default function ReadyToSupport(props: PropTypes) {
           accessibilityHint="See the options for becoming a supporter"
           svg={<SvgChevronUp />}
           modifierClasses={['see-supporter-options']}
+          onClick={sendClickedEvent((props.context ? props.context + '-' : '') + 'supporter-options')}
         />
       </div>
     </section>

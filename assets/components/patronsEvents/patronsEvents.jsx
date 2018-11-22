@@ -13,6 +13,7 @@ import { getMemLink, getPatronsLink } from 'helpers/externalLinks';
 
 type PropTypes = {|
   campaignCode?: ?string,
+  context?: string,
 |};
 
 
@@ -32,6 +33,7 @@ export default function PatronsEvents(props: PropTypes) {
         ctaUrl={getPatronsLink(props.campaignCode)}
         ctaAccessibilityHint="Find out more about becoming a Patron"
         imgType="png"
+        context={(props.context ? props.context + '-' : '') +  'patrons'}
       />
       <OtherProduct
         modifierClass="live-events"
@@ -42,6 +44,7 @@ export default function PatronsEvents(props: PropTypes) {
         ctaText="Find out more"
         ctaUrl={getMemLink('events', props.campaignCode)}
         ctaAccessibilityHint="Find out more about Guardian live events"
+        context={(props.context ? props.context + '-' : '') + 'events'}
       />
     </PageSection>
   );

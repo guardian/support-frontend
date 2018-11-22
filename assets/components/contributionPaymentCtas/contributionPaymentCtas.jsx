@@ -17,6 +17,7 @@ import {
 import { classNameWithModifiers } from 'helpers/utilities';
 import { routes } from 'helpers/routes';
 import { addQueryParamsToURL } from 'helpers/url';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type ContributionType } from 'helpers/contributions';
@@ -42,19 +43,22 @@ type PropTypes = {|
   |}>,
   error: ?string,
   resetError: void => void,
+  context?: string,
 |};
 
 
 // ----- Heading ----- //
 
 // Prevents a click event if it's not allowed.
-function onCtaClick(isDisabled: boolean, resetError: void => void): Function {
+function onCtaClick(isDisabled: boolean, resetError: void => void, context?: string): Function {
 
   return (clickEvent) => {
 
     if (isDisabled) {
       clickEvent.preventDefault();
     }
+
+    sendClickedEvent(`${(context ? context + '-' : '')}ContributeCTA`);
 
     resetError();
 
@@ -102,6 +106,7 @@ function OneOffCta(props: {
   currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
+  context?: string,
 }): Node {
 
   const clickUrl = addQueryParamsToURL(routes.oneOffContribCheckout, {
@@ -110,12 +115,14 @@ function OneOffCta(props: {
     currency: props.currencyId,
   });
 
+  const ctaContext = (props.context ? props.context + '-' : '') +  'one-off';
+
   return (
     <CtaLink
       text={`Contribute ${currencies[props.currencyId].glyph}${props.amount} with card`}
       accessibilityHint="proceed to make your single contribution"
       url={clickUrl}
-      onClick={onCtaClick(props.isDisabled, props.resetError)}
+      onClick={onCtaClick(props.isDisabled, props.resetError, ctaContext)}
       id="qa-contribute-button"
       modifierClasses={['contribute-one-off', 'border']}
     />
@@ -130,6 +137,7 @@ function RegularCta(props: {
   currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
+  context?: string,
 }): Node {
   const frequency = getFrequency(props.contributionType);
   const spokenType = getSpokenType(props.contributionType);
@@ -139,12 +147,14 @@ function RegularCta(props: {
     currency: props.currencyId,
   });
 
+  const ctaContext = (props.context ? props.context + '-' : '') +  'regular';
+
   return (
     <CtaLink
       text={`Contribute ${currencies[props.currencyId].glyph}${props.amount} ${frequency}`}
       accessibilityHint={`proceed to make your ${spokenType} contribution`}
       url={clickUrl}
-      onClick={onCtaClick(props.isDisabled, props.resetError)}
+      onClick={onCtaClick(props.isDisabled, props.resetError, ctaContext)}
       id="qa-contribute-button"
       modifierClasses={['contribute-regular']}
     />

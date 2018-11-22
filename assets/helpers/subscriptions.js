@@ -195,6 +195,7 @@ function sendTrackingEventsOnClick(
   id: string,
   product: SubscriptionProduct,
   abTest: ComponentAbTest | null,
+  context?: string,
 ): () => void {
 
   const componentEvent = {
@@ -215,7 +216,7 @@ function sendTrackingEventsOnClick(
     gaEvent({
       category: 'click',
       action: product,
-      label: id,
+      label: (context ? context + '-' : '') + id,
     });
 
   };

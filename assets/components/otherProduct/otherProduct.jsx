@@ -9,6 +9,7 @@ import GridImage from 'components/gridImage/gridImage';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 import type { ImageType } from 'helpers/theGrid';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 // ----- Props ----- //
 
@@ -22,13 +23,13 @@ type PropTypes = {|
   ctaUrl: string,
   ctaAccessibilityHint: string,
   imgType?: ImageType,
+  context?: string,
 |};
 
 
 // ----- Component ----- //
 
 export default function OtherProduct(props: PropTypes) {
-
   return (
     <div className={classNameWithModifiers('component-other-product', [props.modifierClass])}>
       <div className="component-other-product__image">
@@ -46,6 +47,7 @@ export default function OtherProduct(props: PropTypes) {
         text={props.ctaText}
         url={props.ctaUrl}
         accessibilityHint={props.ctaAccessibilityHint}
+        onClick={sendClickedEvent(props.context || '')}
       />
     </div>
   );

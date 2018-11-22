@@ -58,6 +58,7 @@ function DigitalPack(props: {
   url: string,
   gridId: ImageId,
   abTest: ComponentAbTest | null,
+  context?: string,
 }) {
   const copy = getCopy(props.countryGroupId);
   return (
@@ -81,7 +82,7 @@ function DigitalPack(props: {
           url: props.url,
           accessibilityHint: 'Find out how to sign up for a free trial of The Guardian\'s digital subscription.',
           modifierClasses: ['border'],
-          onClick: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', props.abTest),
+          onClick: sendTrackingEventsOnClick('digipack_cta', 'DigitalPack', props.abTest, props.context),
         },
       ]}
     />
