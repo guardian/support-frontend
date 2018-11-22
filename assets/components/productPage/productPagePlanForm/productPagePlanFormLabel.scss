@@ -92,7 +92,7 @@
   border-top: 1px solid gu-colour(garnett-neutral-4);
   margin: $gu-v-spacing/2 $gu-h-spacing/2 0;
   padding-top: $gu-v-spacing/2;
-  padding-bottom: $gu-v-spacing/3;
+  padding-bottom: $gu-v-spacing;
 }
 
 .component-product-page-plan-form-label__price {
@@ -102,4 +102,5 @@
 
 .component-product-page-plan-form-label__saving { 
   font-style: italic;
+  line-height: 1;
 }

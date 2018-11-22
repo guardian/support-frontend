@@ -18,8 +18,8 @@ import { setPlan } from '../paperSubscriptionLandingPageActions';
 
 const newsstandPrices = {
   weekly: 2,
-  saturday: 2.9,
-  sunday: 3,
+  saturday: 3,
+  sunday: 3.25,
 };
 
 const collectionPlans = {
