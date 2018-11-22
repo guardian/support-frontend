@@ -37,8 +37,10 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(initReducer(countryGroupId), true);
 
-formInit(store);
+// We need to initialise in this order, as
+// formInit depends on the user being populated
 user.init(store.dispatch, setUserStateActions);
+formInit(store);
 
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
