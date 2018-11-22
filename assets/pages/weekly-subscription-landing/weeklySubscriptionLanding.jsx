@@ -94,7 +94,7 @@ const content = (
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
-      <ProductPageContentBlock>
+      <ProductPageContentBlock id="benefits">
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
         <div className={outsetClassName}>
           <ProductPageFeatures features={[
