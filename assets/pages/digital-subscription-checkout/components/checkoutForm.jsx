@@ -12,7 +12,9 @@ import { type Option } from 'helpers/types/option';
 
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
+import { Fieldset } from 'components/forms/standardFields/fieldset';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
+import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
@@ -118,6 +120,20 @@ function CheckoutForm(props: PropTypes) {
         setValue={props.setTelephone}
         error={firstError('telephone', props.errors)}
       />
+      <Fieldset>
+        <RadioInput
+          text="£11.99 Every month"
+          name="paymentFrequency"
+          checked={props.paymentFrequency === 'monthly'}
+          onChange={() => props.setPaymentFrequency('monthly')}
+        />
+        <RadioInput
+          text="£119.90 Every year"
+          name="paymentFrequency"
+          checked={props.paymentFrequency === 'yearly'}
+          onChange={() => props.setPaymentFrequency('yearly')}
+        />
+      </Fieldset>
       <button onClick={() => props.submitForm()}>Submit</button>
     </div>
   );

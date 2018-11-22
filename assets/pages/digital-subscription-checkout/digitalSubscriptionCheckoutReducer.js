@@ -33,6 +33,7 @@ import {
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou';
+type PaymentFrequency = 'monthly' | 'yearly';
 
 export type FormFields = {|
   firstName: string,
@@ -40,6 +41,7 @@ export type FormFields = {|
   country: Option<IsoCountry>,
   stateProvince: Option<StateProvince>,
   telephone: string,
+  paymentFrequency: PaymentFrequency,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -64,6 +66,7 @@ export type Action =
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
+  | { type: 'SET_PAYMENT_FREQUENCY', paymentFrequency: PaymentFrequency }
   | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
 
 
@@ -76,6 +79,7 @@ function getFormFields(state: State): FormFields {
     country: state.page.checkout.country,
     stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
+    paymentFrequency: state.page.checkout.paymentFrequency,
   };
 }
 
@@ -118,6 +122,7 @@ const formActionCreators = {
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
+  setPaymentFrequency: (paymentFrequency: PaymentFrequency): Action => ({ type: 'SET_PAYMENT_FREQUENCY', paymentFrequency }),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) =>
     compose(dispatch, setFormErrors, getErrors, getFormFields)(getState()),
 };
@@ -134,6 +139,7 @@ const initialState = {
   country: null,
   stateProvince: null,
   telephone: '',
+  paymentFrequency: 'monthly',
   errors: [],
 };
 
@@ -158,6 +164,9 @@ function reducer(state: CheckoutState = initialState, action: Action): CheckoutS
 
     case 'SET_STATE_PROVINCE':
       return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
+
+    case 'SET_PAYMENT_FREQUENCY':
+      return { ...state, paymentFrequency: action.paymentFrequency };
 
     case 'SET_ERRORS':
       return { ...state, errors: action.errors };
