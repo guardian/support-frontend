@@ -24,14 +24,12 @@ export const tabs: {[PaperDeliveryMethod]: {name: string}} = {
   },
 };
 
-export type Tab = PaperDeliveryMethod;
-
 type StatePropTypes = {|
   selectedTab: number,
 |};
 
 type DispatchPropTypes = {|
-  setTabAction: (Tab) => *,
+  setTabAction: (PaperDeliveryMethod) => *,
 |};
 
 type PropTypes = {|

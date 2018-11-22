@@ -11,6 +11,7 @@ import Footer from 'components/footer/footer';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
@@ -25,12 +26,10 @@ import './paperSubscriptionLandingPage.scss';
 
 // ----- Collection or delivery ----- //
 
-type Method = 'collection' | 'delivery';
-
-const method: Method = window.location.pathname.includes('collection') ? 'collection' : 'delivery';
+const method: PaperDeliveryMethod = window.location.pathname.includes('collection') ? 'collection' : 'delivery';
 
 const reactElementId: {
-  [Method]: string,
+  [PaperDeliveryMethod]: string,
 } = {
   collection: 'paper-subscription-landing-page-collection',
   delivery: 'paper-subscription-landing-page-delivery',
@@ -39,7 +38,7 @@ const reactElementId: {
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer(), true);
+const store = pageInit(reducer(method), true);
 
 
 // ----- Render ----- //

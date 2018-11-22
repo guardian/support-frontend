@@ -6,31 +6,34 @@ import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { getQueryParameter } from 'helpers/url';
+import { type PaperDeliveryMethod } from 'helpers/subscriptions';
+
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
-import { type Tab } from './components/tabs';
+
 import { type TabActions } from './paperSubscriptionLandingPageActions';
 
 // ----- Tabs ----- //
 
 type TabsState = {
-  active: Tab
+  active: PaperDeliveryMethod
 }
 
-const tabsReducer = (state: TabsState = {
-  active: 'collection',
-}, action: TabActions): TabsState => {
+const getTabsReducer = (initialTab: PaperDeliveryMethod) =>
+  (state: TabsState = {
+    active: initialTab,
+  }, action: TabActions): TabsState => {
 
-  switch (action.type) {
+    switch (action.type) {
 
-    case 'SET_TAB':
-      return { ...state, active: action.tab };
+      case 'SET_TAB':
+        return { ...state, active: action.tab };
 
-    default:
-      return state;
+      default:
+        return state;
 
-  }
+    }
 
-};
+  };
 
 // ----- Exports ----- //
 
@@ -42,7 +45,7 @@ export type State = {
   }
 };
 
-export default () => {
+export default (initialTab: PaperDeliveryMethod) => {
   const promoInUrl = getQueryParameter('promo');
 
   const initialPeriod: ?PaperBillingPlan =
@@ -50,6 +53,6 @@ export default () => {
 
   return combineReducers({
     plan: ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod),
-    tabs: tabsReducer,
+    tabs: getTabsReducer(initialTab),
   });
 };
