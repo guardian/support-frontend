@@ -118,9 +118,15 @@ function CheckoutStage(props: PropTypes) {
     case 'checkout':
     default:
       return (
-        <LeftMarginSection>
+        <div className="checkout-content">
+          <LeftMarginSection modifierClasses={['free-trial']}>
+            <p className="free-trial__copy">
+              You can use all the features free for the next 14 days,
+              and then your first payment will be taken.
+            </p>
+          </LeftMarginSection>
           <CheckoutForm />
-        </LeftMarginSection>
+        </div>
       );
 
   }

@@ -44,6 +44,51 @@
     position: relative;
   }
 
+  // ----- Checkout
+
+  .checkout-content {
+    .component-left-margin-section__content {
+      box-sizing: border-box;
+      border-left: 1px solid gu-colour(garnett-neutral-3);
+    }
+  }
+
+  .component-left-margin-section--free-trial {
+    .component-left-margin-section__content {
+      @include multiline-bottom-border;
+    }
+  }
+
+  .free-trial__copy {
+    @include gu-fontset-body-large;
+    font-style: italic;
+    font-weight: 300;
+    padding-left: $gu-h-spacing / 2;
+    margin-bottom: $gu-v-spacing;
+
+    @include mq($from: mobileLandscape) {
+      width: 460px;
+    }
+  }
+
+  .checkout-form {
+    .component-left-margin-section__content {
+      padding-left: $gu-h-spacing / 2;
+    }
+  }
+
+  .checkout-form__heading {
+    @include gu-fontset-body-large;
+    margin-top: 2px;
+  }
+
+  .component-left-margin-section--your-details {
+    .component-left-margin-section__content {
+      background-color: gu-colour(garnett-neutral-3);
+      padding-bottom: $gu-v-spacing * 3;
+    }
+  }
+
   // ----- Thank You
 
   .thank-you-content {
