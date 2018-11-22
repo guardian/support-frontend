@@ -14,6 +14,9 @@
   & .component-product-page-features .component-product-page-features__item {
     border-color: $border;
   }
+  & .component-product-page-content-block-divider__line {
+    @include multiline(4, $border);
+  }
   /*div > $selector adds some leeway for react wrapping elements*/
   & + &,
   & + div > &  {
@@ -25,6 +28,7 @@
 
 .component-product-page-content-block .component-left-margin-section__content {
   max-width: 100%;
+  position: relative;
   @include mq($from: tablet) {
     border-left: 1px solid gu-colour(garnett-neutral-4);
   }
@@ -59,9 +63,6 @@
   );
 }
 
-
-
-
 .component-product-page-content-block__content {
   max-width: gu-span(12);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
@@ -72,6 +73,18 @@
   margin-right: ($gu-h-spacing / 2 * -1);
 }
 
+.component-product-page-content-block-divider {
+  height: 20px;
+  margin-bottom: ($gu-v-spacing*.33);
+  .component-product-page-content-block-divider__line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border: 0;
+    margin: 0;
+  }
+}
+
 // ----- Vertical rhythm ------ //
 
 .component-product-page-content-block {
@@ -79,5 +92,8 @@
   .component-product-page-plan-form,
   .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)
+  }
+  .component-product-page-text-block--heading-only + .component-product-page-content-block-divider {
+    margin-top: ($gu-v-spacing*-1)
   }
 }

@@ -42,6 +42,7 @@ export default function ProductPagePlanForm<P:string>({
 }: PropTypes<P>) {
 
   const keys = Object.keys(plans);
+  const selectedPlanTitle = selectedPlan && plans[selectedPlan] ? plans[selectedPlan].title : null;
 
   return (
     <form
@@ -75,8 +76,8 @@ export default function ProductPagePlanForm<P:string>({
         </div>
       </div>
       <div className={['component-product-page-plan-form__cta', bgClassName].join(' ')} data-disabled={selectedPlan === null}>
-        <ProductPageButton disabled={selectedPlan === null} type="submit">
-          Subscribe now{selectedPlan && plans[selectedPlan] && ` – ${plans[selectedPlan].title}`}
+        <ProductPageButton disabled={!selectedPlanTitle} type="submit">
+          Subscribe now{selectedPlanTitle && ` – ${selectedPlanTitle}`}
         </ProductPageButton>
       </div>
     </form>
