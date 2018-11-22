@@ -43,8 +43,8 @@ export default (dataset: Object) => {
     collectionSunday: getPriceAsFloat(dataset.collectionSunday),
 
     deliveryEveryday: getPriceAsFloat(dataset.deliveryEveryday),
-    deliveryWeekend: getPriceAsFloat(dataset.deliverySixday),
-    deliverySixday: getPriceAsFloat(dataset.deliveryWeekend),
+    deliveryWeekend: getPriceAsFloat(dataset.deliveryWeekend),
+    deliverySixday: getPriceAsFloat(dataset.deliverySixday),
     deliverySunday: getPriceAsFloat(dataset.deliverySunday),
   };
 

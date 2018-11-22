@@ -18,8 +18,8 @@ import { setPlan } from '../paperSubscriptionLandingPageActions';
 
 const newsstandPrices = {
   weekly: 2,
-  saturday: 3,
-  sunday: 3.25,
+  saturday: 2.90,
+  sunday: 3,
 };
 
 const collectionPlans = {
@@ -49,14 +49,17 @@ const deliveryPlans = {
   deliveryEveryday: {
     title: 'Everyday',
     copy: 'Enjoy every issue of The Guardian and Observer newspapers from Monday to Sunday, delivered to your home',
+    newsstand: (newsstandPrices.weekly * 5) + newsstandPrices.saturday + newsstandPrices.sunday,
   },
   deliverySixday: {
     title: 'Sixday',
     copy: 'Get every issue of The Guardian delivered to your front door, from Monday to Saturday',
+    newsstand: (newsstandPrices.weekly * 5) + newsstandPrices.saturday,
   },
   deliveryWeekend: {
     title: 'Weekend',
     copy: 'Make more of every weekend with The Guardian on Saturday and The Observer on Sunday, delivered to your home',
+    newsstand: newsstandPrices.saturday + newsstandPrices.sunday,
   },
   deliverySunday: {
     title: 'Sunday',
@@ -71,7 +74,12 @@ const plans = {
 
 // ----- State/Props Maps ----- //
 
-const getSaving = (subscription: number, newsstand: number) => Math.floor(((newsstand * 4) - subscription) * 100) / 100;
+const roundToTwoDecimals = (num: number) => parseFloat(Math.round(num * 100) / 100).toFixed(2);
+
+const getWeeklySubPrice = (subscription: number) => (subscription * 3) / 13;
+
+const getSaving = (subscription: number, newsstand: number) =>
+  roundToTwoDecimals(((newsstand - getWeeklySubPrice(subscription)) * 13) / 3);
 
 const getPriceStr = (price: Option<number>): Option<string> =>
   (price ? `From £${price} per month` : null);
@@ -86,7 +94,7 @@ const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => ({
       copy: plans[k].copy,
       offer: null,
       price: getPriceStr(state.page.prices[k]),
-      saving: getSavingStr(state.page.prices[k], plans[k].newsstand),
+      saving: getSavingStr(state.page.prices[k], plans[k].newsstand ? plans[k].newsstand : null),
     },
   }), {}),
   selectedPlan: state.page.plan.plan,
