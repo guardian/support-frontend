@@ -38,3 +38,22 @@
     left: calc(100% - 33px);
   }
 }
+
+.component-cta-link--large-font {
+  font-size: 16px;
+}
+
+.component-cta-link--white-on-black {
+  background: transparent;
+  color: gu-colour(garnett-neutral-1);
+  border: 1px solid gu-colour(neutral-1);
+
+  svg {
+    fill: gu-colour(garnett-neutral-1);
+  }
+
+  &:hover,
+  &:focus {
+    background: gu-colour(garnett-neutral-4);
+  }
+}
