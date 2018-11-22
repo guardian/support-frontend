@@ -7,12 +7,7 @@ import { connect } from 'react-redux';
 import TextInput from 'components/textInput/textInput';
 import SelectInput from 'components/selectInput/selectInput';
 
-import {
-  setFirstName,
-  setLastName,
-  setEmail,
-  setStateField,
-} from 'helpers/user/userActions';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import { setCountry } from 'helpers/page/commonActions';
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -76,6 +71,13 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Function) {
+
+  const {
+    setStateField,
+    setFirstName,
+    setLastName,
+    setEmail,
+  } = defaultUserActionFunctions;
 
   return {
     stateUpdate: (value: UsState | CaState) => {

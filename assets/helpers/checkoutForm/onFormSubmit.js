@@ -12,7 +12,6 @@ export type FormSubmitParameters = {
   contributionType: Contrib,
   isSignedIn: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  formIsValid: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   handlePayment?: () => void,
   formIsSubmittable: boolean,

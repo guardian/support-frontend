@@ -42,8 +42,8 @@ import trackConversion from 'helpers/tracking/conversions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
-import { setFormSubmissionDependentValue } from 'helpers/checkoutFormIsSubmittableActions';
 import * as cookie from 'helpers/cookie';
+import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import {
   type State,
   type UserFormData,

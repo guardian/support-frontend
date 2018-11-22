@@ -17,14 +17,15 @@ import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
-import { enableOrDisableForm } from 'helpers/checkoutFormIsSubmittableActions';
 import { NewHeader } from 'components/headers/new-header/Header';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { NewContributionFormContainer } from './components/ContributionFormContainer';
+import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer from './components/ContributionThankYouContainer';
 import { NewContributionBackground } from './components/ContributionBackground';
+import { setUserStateActions } from './setUserStateActions';
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -36,8 +37,9 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(initReducer(countryGroupId), true);
 
-user.init(store.dispatch);
 formInit(store);
+user.init(store.dispatch, setUserStateActions);
+
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 

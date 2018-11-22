@@ -1,10 +1,6 @@
 // @flow
 
 // ----- Types ----- //
-
-import { setSession } from 'helpers/storage';
-import { setFormSubmissionDependentValue } from 'helpers/checkoutFormIsSubmittableActions';
-
 export type Action =
   | { type: 'SET_USER_ID', id: string }
   | { type: 'SET_DISPLAY_NAME', name: string }
@@ -19,58 +15,17 @@ export type Action =
   | { type: 'SET_GNM_MARKETING', preference: boolean }
   | { type: 'SET_IS_SIGNED_IN', isSignedIn: boolean };
 
-
-// ----- Actions Creators ----- //
-
-export function setId(id: string): Action {
-  return { type: 'SET_USER_ID', id };
-}
-
-export function setDisplayName(name: string): Action {
-  return { type: 'SET_DISPLAY_NAME', name };
-}
-
-export function setFirstName(name: string): Action {
-  return { type: 'SET_FIRST_NAME', name };
-}
-
-export function setLastName(name: string): Action {
-  return { type: 'SET_LAST_NAME', name };
-}
-
-export function setFullName(name: string): Action {
-  return { type: 'SET_FULL_NAME', name };
-}
-
-export function setIsSignedIn(isSignedIn: boolean): (Function => void) {
-  return (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_IS_SIGNED_IN', isSignedIn })));
-  };
-}
-
-export function setEmail(email: string): Action {
-  setSession('gu.email', email);
-  return { type: 'SET_EMAIL', email };
-}
-
-export function setStateField(stateField: string): Action {
-  return { type: 'SET_STATEFIELD', stateField };
-}
-
-export function setIsRecurringContributor(): (Function => void) {
-  return (dispatch: Function): void => {
-    dispatch(setFormSubmissionDependentValue(() => ({ type: 'SET_IS_RECURRING_CONTRIBUTOR' })));
-  };
-}
-
-export function setTestUser(testUser: boolean): Action {
-  return { type: 'SET_TEST_USER', testUser };
-}
-
-export function setPostDeploymentTestUser(postDeploymentTestUser: boolean): Action {
-  return { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser };
-}
-
-export function setGnmMarketing(preference: boolean): Action {
-  return { type: 'SET_GNM_MARKETING', preference };
+export type UserSetStateActions = {
+  setId: string => Action,
+  setDisplayName: string => Action,
+  setFirstName: string => Action,
+  setLastName: string => Action,
+  setFullName: string => Action,
+  setIsSignedIn: boolean => Action | (Function => void),
+  setEmail: string => Action,
+  setStateField: string => Action,
+  setIsRecurringContributor: () => Action | (Function => void),
+  setTestUser: boolean => Action,
+  setPostDeploymentTestUser: boolean => Action,
+  setGnmMarketing: boolean => Action,
 }
