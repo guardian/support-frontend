@@ -144,7 +144,7 @@ class Subscriptions(
 
     def pricesToMap(prices: List[ZuoraCatalogPricePlan], prefix: String) = {
       prices.map(price => (
-        s"${prefix}-${price.id}",
+        s"$prefix-${price.name.getOrElse(price.id).toLowerCase}",
         price.pricePerPeriod.filter(_.currency == "GBP").map(_.price).sum.toString
       )).toMap
     }

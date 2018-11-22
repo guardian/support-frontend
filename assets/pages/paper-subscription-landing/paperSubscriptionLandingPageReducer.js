@@ -29,10 +29,25 @@ export type State = {
   }
 };
 
+const getPriceAsFloat = (price): Option<number> => (price ? parseFloat(price) : null);
 
-export default (prices: PaperPrices) => {
+
+export default (dataset: Object) => {
 
   const promoInUrl = getQueryParameter('promo');
+
+  const prices: PaperPrices = {
+    collectionEveryday: getPriceAsFloat(dataset.collectionEveryday),
+    collectionSixday: getPriceAsFloat(dataset.collectionSixday),
+    collectionWeekend: getPriceAsFloat(dataset.collectionWeekend),
+    collectionSunday: getPriceAsFloat(dataset.collectionSunday),
+
+    deliveryEveryday: getPriceAsFloat(dataset.deliveryEveryday),
+    deliveryWeekend: getPriceAsFloat(dataset.deliverySixday),
+    deliverySixday: getPriceAsFloat(dataset.deliveryWeekend),
+    deliverySunday: getPriceAsFloat(dataset.deliverySunday),
+  };
+
 
   const initialPeriod: ?PaperBillingPlan =
     promoInUrl === 'collectionEveryday' || promoInUrl === 'collectionSixday' ||

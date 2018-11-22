@@ -25,22 +25,22 @@ const newsstandPrices = {
 const collectionPlans = {
   collectionEveryday: {
     title: 'Everyday',
-    copy: 'Lorem ipsum sit amet',
+    copy: 'Receive vouchers to enjoy every issue of The Guardian and The Observer, from Monday to Sunday',
     newsstand: (newsstandPrices.weekly * 5) + newsstandPrices.saturday + newsstandPrices.sunday,
   },
   collectionSixday: {
     title: 'Sixday',
-    copy: 'Lorem ipsum sit amet',
+    copy: 'We\'ll send you vouchers to pick up every issue of The Guardian, from Monday to Saturday',
     newsstand: (newsstandPrices.weekly * 5) + newsstandPrices.saturday,
   },
   collectionWeekend: {
     title: 'Weekend',
-    copy: 'Lorem ipsum sit amet',
+    copy: 'Make more of your weekend, with vouchers for The Guardian every Saturday and The Observer every Sunday',
     newsstand: newsstandPrices.saturday + newsstandPrices.sunday,
   },
   collectionSunday: {
-    title: 'Collect Sunday',
-    copy: 'Lorem ipsum sit amet',
+    title: 'Sunday',
+    copy: 'Get vouchers to pick up The Observer newspaper every Sunday',
     newsstand: newsstandPrices.sunday,
   },
 };
@@ -48,23 +48,19 @@ const collectionPlans = {
 const deliveryPlans = {
   deliveryEveryday: {
     title: 'Everyday',
-    copy: 'Lorem ipsum sit amet',
-    newsstand: (newsstandPrices.weekly * 5) + newsstandPrices.saturday + newsstandPrices.sunday,
+    copy: 'Enjoy every issue of The Guardian and Observer newspapers from Monday to Sunday, delivered to your home',
   },
   deliverySixday: {
     title: 'Sixday',
-    copy: 'Lorem ipsum sit amet',
-    newsstand: (newsstandPrices.weekly * 5) + newsstandPrices.saturday,
+    copy: 'Get every issue of The Guardian delivered to your front door, from Monday to Saturday',
   },
   deliveryWeekend: {
     title: 'Weekend',
-    copy: 'Lorem ipsum sit amet',
-    newsstand: newsstandPrices.saturday + newsstandPrices.sunday,
+    copy: 'Make more of every weekend with The Guardian on Saturday and The Observer on Sunday, delivered to your home',
   },
   deliverySunday: {
-    title: 'Delivery Sunday',
-    copy: 'Lorem ipsum sit amet',
-    newsstand: newsstandPrices.sunday,
+    title: 'Sunday',
+    copy: 'Relax with The Observer every Sunday, delivered to your doormat',
   },
 };
 
@@ -79,8 +75,8 @@ const getSaving = (subscription: number, newsstand: number) => Math.floor(((news
 
 const getPriceStr = (price: Option<number>): Option<string> =>
   (price ? `From £${price} per month` : null);
-const getSavingStr = (subscription: Option<number>, newsstand: number): Option<string> =>
-  (subscription ? `save £${getSaving(subscription, newsstand)} a month` : null);
+const getSavingStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> =>
+  (subscription && newsstand ? `save £${getSaving(subscription, newsstand)} a month` : null);
 
 const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => ({
   plans: Object.keys(plans).reduce((ps, k) => ({
