@@ -12,6 +12,7 @@ import ProductHero, {
   type GridImages,
   type ImagesByCountry,
 } from 'components/productHero/productHero';
+import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -119,6 +120,10 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <div className="checkout-content">
+          <CheckoutHeading
+            heading="Digital Pack Subscription"
+            copy="Cancel your subscription at any time"
+          />
           <LeftMarginSection modifierClasses={['free-trial']}>
             <p className="free-trial__copy">
               You can use all the features free for the next 14 days,
