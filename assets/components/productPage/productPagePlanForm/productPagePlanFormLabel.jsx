@@ -38,10 +38,11 @@ export default ({
           {title}
           <div aria-hidden="true" className="component-product-page-plan-form-label__check"><SvgCheckmark /></div>
         </div>
-        <div className="component-product-page-plan-form-label__copy">
+        <div className="component-product-page-plan-form-label__content">
           {offer && <strong className="component-product-page-plan-form-label__offer">{offer}</strong>}
           <div>{children}</div>
-          {price &&
+        </div>
+        {(price || saving) &&
           <div className="component-product-page-plan-form-label__footer">
             {price &&
             <strong className="component-product-page-plan-form-label__price">
@@ -55,7 +56,6 @@ export default ({
             }
           </div>
           }
-        </div>
       </div>
     </label>
   );
