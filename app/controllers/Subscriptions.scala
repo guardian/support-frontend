@@ -121,7 +121,7 @@ class Subscriptions(
       "en" -> buildCanonicalWeeklySubscriptionLink("int"),
       "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
-    Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
+    Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
   }
 
   def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
