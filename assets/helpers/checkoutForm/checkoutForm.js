@@ -1,7 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
-import { type ContributionType } from 'helpers/contributions';
+import { type ContributionType, contributionTypeIsRecurring } from 'helpers/contributions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 
@@ -93,9 +93,13 @@ export function checkoutFormShouldSubmit(
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   form: Object | null,
 ) {
+
+  const shouldBlockExistingRecurringContributor =
+      isRecurringContributor && contributionTypeIsRecurring(contributionType);
+
   return formElementIsValid(form)
     && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
-    && !isRecurringContributor;
+    && !(shouldBlockExistingRecurringContributor);
 }
 
 export function getTitle(contributionType: ContributionType): string {
