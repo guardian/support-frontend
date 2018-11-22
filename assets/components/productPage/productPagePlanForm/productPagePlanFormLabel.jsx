@@ -50,7 +50,7 @@ export default ({
             }
             {saving &&
             <div className="component-product-page-plan-form-label__saving">
-              {price}
+              {saving}
             </div>
             }
           </div>

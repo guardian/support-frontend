@@ -20,7 +20,7 @@ import ProductPageTextBlockList from 'components/productPage/productPageTextBloc
 
 import Form from './components/form';
 import Tabs from './components/tabs';
-import reducer from './paperSubscriptionLandingPageReducer';
+import reducer, { type PaperPrices } from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
 
@@ -39,9 +39,22 @@ const reactElementId: {
 };
 
 
+// ----- Prices ----- //
+const { dataset } = document.querySelector(`#${reactElementId[method]}`) || { dataset: {} };
+const prices: PaperPrices = {
+  collectionEveryday: dataset['collection-2c92a0fd56fe270b0157040dd79b35da'] ? parseFloat(dataset['collection-2c92a0fd56fe270b0157040dd79b35da']) : null,
+  collectionSixday: dataset['collection-2c92a0fd56fe270b0157040e42e536ef'] ? parseFloat(dataset['collection-2c92a0fd56fe270b0157040e42e536ef']) : null,
+  collectionWeekend: dataset['collection-2c92a0ff56fe33f00157040f9a537f4b'] ? parseFloat(dataset['collection-2c92a0ff56fe33f00157040f9a537f4b']) : null,
+  collectionSunday: dataset['collection-2c92a0fe5af9a6b9015b0fe1ecc0116c'] ? parseFloat(dataset['collection-2c92a0fe5af9a6b9015b0fe1ecc0116c']) : null,
+
+  deliveryEveryday: dataset['delivery-2c92a0fd560d13880156136b72e50f0c'] ? parseFloat(dataset['delivery-2c92a0fd560d13880156136b72e50f0c']) : null,
+  deliverySixday: dataset['delivery-2c92a0fd5614305c01561dc88f3275be'] ? parseFloat(dataset['delivery-2c92a0fd5614305c01561dc88f3275be']) : null,
+  deliveryWeekend: dataset['delivery-2c92a0ff5af9b657015b0fea5b653f81'] ? parseFloat(dataset['delivery-2c92a0ff5af9b657015b0fea5b653f81']) : null,
+  deliverySunda: dataset['delivery-2c92a0ff560d311b0156136f2afe5315'] ? parseFloat(dataset['delivery-2c92a0ff560d311b0156136f2afe5315']) : null,
+};
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer(), true);
+const store = pageInit(reducer(prices), true);
 
 
 // ----- Render ----- //

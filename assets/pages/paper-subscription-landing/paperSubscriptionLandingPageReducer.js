@@ -2,22 +2,46 @@
 
 // ----- Imports ----- //
 
+import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type PaperBillingPlan } from 'helpers/subscriptions';
+import { type Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/url';
+import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
+
+export type PaperPrices = {
+  collectionEveryday: Option<number>,
+  collectionSixday: Option<number>,
+  collectionWeekend: Option<number>,
+  collectionSunday: Option<number>,
+
+  deliveryEveryday: Option<number>,
+  deliverySixday: Option<number>,
+  deliveryWeekend: Option<number>,
+  deliverySunday: Option<number>,
+};
 
 export type State = {
   common: CommonState,
-  page: FormState<PaperBillingPlan>,
+  page: {
+    prices: PaperPrices,
+    plan: FormState<PaperBillingPlan>,
+  }
 };
 
 
-export default () => {
+export default (prices: PaperPrices) => {
+
   const promoInUrl = getQueryParameter('promo');
 
   const initialPeriod: ?PaperBillingPlan =
-    promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'everyday' ? promoInUrl : null;
+    promoInUrl === 'collectionEveryday' || promoInUrl === 'collectionSixday' ||
+    promoInUrl === 'collectionWeekend' || promoInUrl === 'collectionSunday' ||
+    promoInUrl === 'deliveryEveryday' || promoInUrl === 'deliverySixday' ||
+    promoInUrl === 'deliveryWeekend' || promoInUrl === 'deliverySunday' ? promoInUrl : null;
 
-  return ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod);
+  return combineReducers({
+    plan: ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod),
+    prices: () => prices,
+  });
 };
