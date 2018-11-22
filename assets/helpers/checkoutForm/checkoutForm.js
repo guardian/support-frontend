@@ -86,6 +86,10 @@ export const formElementIsValid = (formElement: Object | null) => {
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
 
+const contributionTypeIsRecurring = (contributionType: ContributionType) =>
+  contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
+
+
 export function checkoutFormShouldSubmit(
   contributionType: ContributionType,
   isSignedIn: boolean,
@@ -93,9 +97,13 @@ export function checkoutFormShouldSubmit(
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   form: Object | null,
 ) {
+
+  const shouldBlockExistingRecurringContributor =
+      isRecurringContributor && contributionTypeIsRecurring(contributionType);
+
   return formElementIsValid(form)
     && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
-    && !isRecurringContributor;
+    && !(shouldBlockExistingRecurringContributor);
 }
 
 export function getTitle(contributionType: ContributionType): string {
