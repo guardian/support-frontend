@@ -8,13 +8,14 @@ import { bindActionCreators } from 'redux';
 
 import { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
+import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
 
 // ----- Tabs ----- //
 
-export const tabs: {[string]: {name: string}} = {
+export const tabs: {[PaperDeliveryMethod]: {name: string}} = {
   collection: {
     name: 'Voucher',
   },
@@ -23,7 +24,7 @@ export const tabs: {[string]: {name: string}} = {
   },
 };
 
-export type Tab = $Keys<typeof tabs>;
+export type Tab = PaperDeliveryMethod;
 
 type StatePropTypes = {|
   selectedTab: number,

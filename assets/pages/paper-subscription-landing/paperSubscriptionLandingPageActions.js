@@ -4,16 +4,20 @@
 
 import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import { type Tab } from './components/tabs';
+import { type PaperDeliveryMethod } from 'helpers/subscriptions';
+import { paperSubsUrl } from 'helpers/routes';
 
 // ----- Types ----- //
-export type TabActions = { type: 'SET_TAB', tab: Tab }
+export type TabActions = { type: 'SET_TAB', tab: PaperDeliveryMethod }
 
 
 // ----- Action Creators ----- //
 
 const { setPlan } = ProductPagePlanFormActionsFor<PaperBillingPlan>('Paper', 'Paper');
-const setTab = (tab: Tab): TabActions => ({ type: 'SET_TAB', tab });
+const setTab = (tab: PaperDeliveryMethod): TabActions => {
+  window.history.replaceState({}, null, paperSubsUrl(tab));
+  return { type: 'SET_TAB', tab };
+};
 
 // ----- Exports ----- //
 

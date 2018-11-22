@@ -5,6 +5,7 @@
 import type { CountryGroupId } from './internationalisation/countryGroup';
 import { countryGroups } from './internationalisation/countryGroup';
 import { getOrigin } from './url';
+import { type PaperDeliveryMethod } from './subscriptions';
 
 const routes: {
   [string]: string,
@@ -27,6 +28,10 @@ const routes: {
   payPalRestReturnURL: '/paypal/rest/return',
 };
 
+function paperSubsUrl(deliveryMethod: PaperDeliveryMethod): string {
+  return `${getOrigin()}/uk/subscribe/paper/${deliveryMethod}`;
+}
+
 function payPalCancelUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
 }
@@ -38,4 +43,4 @@ function payPalReturnUrl(cgId: CountryGroupId): string {
 
 // ----- Exports ----- //
 
-export { routes, payPalCancelUrl, payPalReturnUrl };
+export { routes, payPalCancelUrl, payPalReturnUrl, paperSubsUrl };

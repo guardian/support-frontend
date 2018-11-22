@@ -31,6 +31,7 @@ export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
 export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
 
 export type PaperBillingPlan = 'everyday' | 'sixday' | 'weekend' | 'sunday';
+export type PaperDeliveryMethod = 'collection' | 'delivery';
 
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
