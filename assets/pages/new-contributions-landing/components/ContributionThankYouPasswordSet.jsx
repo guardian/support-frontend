@@ -23,7 +23,7 @@ function ContributionThankYouPasswordSet() {
       <MarketingConsent />
       <div className="confirmation confirmation--backtothegu">
         <CtaLink
-          modifierClasses={['large-font']}
+          modifierClasses={['backtothegu']}
           accessibilityHint="accessibility-hint-return-to-guardian"
           url="https://www.theguardian.com"
           text="Return to The Guardian&nbsp;"

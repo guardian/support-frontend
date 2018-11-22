@@ -785,6 +785,39 @@ form {
   text-decoration: underline;
 }
 
+.form__submit {
+  margin-top: 24px;
+  padding-bottom: 30px;
+}
+
+.form__submit-button {
+  width: 100%;
+  background: gu-colour(news-garnett-highlight);
+  border: none;
+  border-radius: 20px;
+  padding: 9px 20px;
+
+  &:enabled {
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      filter: brightness(90%);
+    }
+  }
+}
+
+.form__submit-button__inner {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form__submit-button--hidden {
+  display: none;
+}
+
 .form__radio-group--contribution-amount {
   margin: 12px 0;
 }
@@ -848,6 +881,11 @@ form {
   height: 14px;
 }
 
+.form__submit .svg-arrow-right-straight {
+  width: 20px;
+  height: 18px;
+  vertical-align: middle;
+}
 
 .icon {
   fill: inherit;
@@ -896,10 +934,6 @@ form {
   margin-bottom: 0;
 }
 
-.set-password__form {
-  padding-bottom: 30px;
-}
-
 .marketing-permissions__title, .set-password__title {
   font-family: $gu-text-egyptian-web;
   letter-spacing: -0.5px;
@@ -918,6 +952,10 @@ form {
 .confirmation__meta {
   font-family: $gu-text-sans-web;
   font-size: 12px;
+}
+
+.component-cta-link--backtothegu {
+  font-size: 16px;
 }
 
 .button {
@@ -954,6 +992,11 @@ form {
   margin-right: 10px;
 }
 
+.button--wob {
+  background: gu-colour(garnett-neutral-1);
+  color: gu-colour(garnett-neutral-5);
+}
+
 .button .svg-arrow-right-straight {
   width: 20px;
   height: 18px;
@@ -977,58 +1020,6 @@ form {
   color: inherit;
   display: block;
   text-align: right;
-}
-
-/* Form buttons */
-
-.form__buttons {
-  margin-top: 24px;
-  padding-bottom: 30px;
-}
-
-.form__submit {
-  margin-top: 24px;
-  padding-bottom: 30px;
-}
-
-.form__submit-button {
-  width: 100%;
-  background: gu-colour(news-garnett-highlight);
-  border: none;
-  border-radius: 20px;
-  padding: 9px 20px;
-  position: relative;
-
-  &:enabled {
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      filter: brightness(90%);
-    }
-  }
-}
-
-.form__submit-button__inner {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.form__submit-button--hidden {
-  display: none;
-}
-
-.form__submit-button .svg-arrow-right-straight {
-  height: 16px;
-  vertical-align: middle;
-  left: calc(100% - 34px);
-  top: 14px;
-}
-
-.form__submit--set-password {
-  padding-bottom: $gu-v-spacing;
 }
 
 
