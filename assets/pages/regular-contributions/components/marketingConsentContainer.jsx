@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
 import { type Action } from 'helpers/user/userActions';
-import { defaultUserActionFunctions} from 'helpers/user/defaultUserActionFunctions';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
