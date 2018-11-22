@@ -2,25 +2,20 @@
 
 // ----- Imports ----- //
 
-import { compose, type Dispatch } from 'redux';
+import { compose, combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
+import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import csrf from 'helpers/csrf/csrfReducer';
+import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import {
   type IsoCountry,
   fromString,
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
-import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import csrf from 'helpers/csrf/csrfReducer';
-
-import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
-import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
-import { combineReducers } from 'redux';
-
 import {
   validate,
   nonEmptyString,
@@ -28,6 +23,11 @@ import {
   formError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
+
+import {
+  marketingConsentReducerFor,
+  type State as MarketingConsentState,
+} from 'components/marketingConsent/marketingConsentReducer';
 
 
 // ----- Types ----- //
