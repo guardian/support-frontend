@@ -19,6 +19,7 @@ import ProductPageTextBlock, { largeParagraphClassName, sansParagraphClassName }
 import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
 
 import Form from './components/form';
+import Tabs from './components/tabs';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
@@ -64,6 +65,7 @@ const content = (
            one for each newspaper in the package you choose.
           </p>
         </ProductPageTextBlock>
+        <Tabs />
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="How do vouchers work?">
