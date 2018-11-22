@@ -8,7 +8,7 @@ import type { Node } from 'react';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import TermsPrivacy from "../legal/termsPrivacy/termsPrivacy";
+import TermsPrivacy from '../legal/termsPrivacy/termsPrivacy';
 
 // ----- Props ----- //
 
