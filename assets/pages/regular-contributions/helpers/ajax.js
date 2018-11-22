@@ -20,7 +20,6 @@ import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/contributions';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
-import uuidv4 from 'uuid';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 
 // ----- Setup ----- //
@@ -64,7 +63,6 @@ type RegularContribFields = {|
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
   email: ?string,
-  sessionId: string,
 |};
 
 // https://github.com/guardian/support-models/blob/master/src/main/scala/com/gu/support/workers/model/Status.scala
@@ -167,7 +165,6 @@ function requestData(
     referrerAcquisitionData,
     supportAbTests,
     email: user.email,
-    sessionId: uuidv4(),
   };
 
   if (user.stateField) {
