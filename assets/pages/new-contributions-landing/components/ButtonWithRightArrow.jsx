@@ -21,7 +21,7 @@ function ButtonWithRightArrow(props: PropTypes) {
   return (
     <div className={props.componentClassName}>
       <button
-        className={props.buttonClassName}
+        className={`button button--right-arrow ${props.buttonClassName}`}
         type={props.type}
         aria-describedby={props.accessibilityHintId}
         onClick={props.onClick}

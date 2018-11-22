@@ -7,7 +7,7 @@ import React from 'react';
 import type { PaymentMethod } from 'helpers/contributions';
 import { connect } from 'react-redux';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
-import SetPasswordForm from './SetPassword/SetPasswordForm';
+import SetPasswordForm from './SetPasswordForm';
 
 // ----- Types ----- //
 

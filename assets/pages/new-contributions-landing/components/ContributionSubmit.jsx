@@ -95,7 +95,7 @@ function ContributionSubmit(props: PropTypes) {
         spokenCurrencies[props.currency],
         amount,
         false,
-      ) : "";
+      ) : '';
 
     const paymentDescriptionCopy = getPaymentDescription(props.contributionType, props.paymentMethod);
 
@@ -135,7 +135,7 @@ function ContributionSubmit(props: PropTypes) {
           accessibilityHintId="accessibility-hint-submit-contribution"
           disabled={props.isWaiting}
           type="submit"
-          componentClassName={""}
+          componentClassName="form__submit--contribution"
           buttonClassName={hiddenIf(showPayPalRecurringButton, 'form__submit-button')}
           buttonCopy={submitButtonCopy}
         />
