@@ -1,17 +1,26 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-@mixin with-border($selector, $colour) {
-  #{$selector} .component-left-margin-section__content,
-  #{$selector} .component-product-page-features .component-product-page-features__item {
-    border-color: $colour;
+@mixin block-colours($border, $bg: null, $text: null) {
+  @if($text){
+    color: $text;
+  }
+  @if($bg){
+    &, .component-product-page-content-block__bg {
+      background-color: gu-colour(header-dark);
+    }
+  }
+  &, .component-product-page-content-block__bg,
+  & .component-left-margin-section__content,
+  & .component-product-page-features .component-product-page-features__item {
+    border-color: $border;
   }
   /*div > $selector adds some leeway for react wrapping elements*/
-  #{$selector} + #{$selector},
-  #{$selector} + div > #{$selector}  {
+  & + &,
+  & + div > &  {
     .component-left-margin-section__content {
-      border-top: 1px solid $colour;
+      border-top: 1px solid $border;
     }
-  }  
+  }    
 }
 
 .component-product-page-content-block .component-left-margin-section__content {
@@ -21,42 +30,35 @@
   }
 }
 
+.component-product-page-content-block--white {
+  @include block-colours(
+    $border: gu-colour(garnett-neutral-4)
+  );
+}
+
 .component-product-page-content-block--grey {
-  &, .component-product-page-content-block__bg {
-    background-color: gu-colour(garnett-neutral-3);
-  }
+  @include block-colours(
+    $border: gu-colour(garnett-neutral-4),
+    $bg: gu-colour(garnett-neutral-3),
+  );
 }
 
 .component-product-page-content-block--feature {
-  color: gu-colour(garnett-neutral-5);
-  &, .component-product-page-content-block__bg {
-    background-color: gu-colour(header-dark);
-  }
+  @include block-colours(
+    $border: gu-colour(header-border),
+    $bg: gu-colour(header-dark),
+    $text: gu-colour(garnett-neutral-5),
+  );
 }
 
 .component-product-page-content-block--dark {
-  color: gu-colour(garnett-neutral-5);
-  &, .component-product-page-content-block__bg {
-    background-color: gu-colour(garnett-neutral-7);
-  }
+  @include block-colours(
+    $border: gu-colour(garnett-neutral-5),
+    $text: gu-colour(garnett-neutral-5),
+    $bg: gu-colour(garnett-neutral-7),
+  );
 }
 
-@include with-border(
-  $selector: ".component-product-page-content-block--grey", 
-  $colour: gu-colour(garnett-neutral-4)
-);
-@include with-border(
-  $selector: ".component-product-page-content-block--white", 
-  $colour: gu-colour(garnett-neutral-4)
-);
-@include with-border(
-  $selector: ".component-product-page-content-block--feature", 
-  $colour: gu-colour(header-border)
-);
-@include with-border(
-  $selector: ".component-product-page-content-block--dark", 
-  $colour: gu-colour(garnett-neutral-5)
-);
 
 
 
