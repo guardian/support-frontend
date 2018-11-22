@@ -9,18 +9,21 @@ import { bindActionCreators } from 'redux';
 import { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
+import { paperSubsUrl } from 'helpers/routes';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
 
 // ----- Tabs ----- //
 
-export const tabs: {[PaperDeliveryMethod]: {name: string}} = {
+export const tabs: {[PaperDeliveryMethod]: {name: string, href: string}} = {
   collection: {
     name: 'Voucher',
+    href: paperSubsUrl('collection'),
   },
   delivery: {
     name: 'Home Delivery',
+    href: paperSubsUrl('delivery'),
   },
 };
 
@@ -44,7 +47,10 @@ const Tabs = ({ selectedTab, setTabAction }: PropTypes) => (
     <ProductPageTabs
       active={selectedTab}
       onChange={(t) => { setTabAction(Object.keys(tabs)[t]); }}
-      tabs={Object.keys(tabs).map(tab => ({ name: tabs[tab].name }))}
+      tabs={Object.keys(tabs).map(k => ({
+        name: tabs[k].name,
+        href: tabs[k].href,
+      }))}
     />
   </div>
 );
