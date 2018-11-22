@@ -11,8 +11,8 @@ import { tabsReducer, type TabsState } from './components/tabsReducer';
 
 export type State = {
   common: CommonState,
-  tabs: TabsState,
   page: {
+    tabs: TabsState,
     plan: FormState<PaperBillingPlan>,
   }
 };

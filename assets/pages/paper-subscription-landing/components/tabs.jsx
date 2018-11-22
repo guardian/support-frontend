@@ -2,11 +2,15 @@
 
 // ----- Imports ----- //
 
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
 
+import { type State } from '../paperSubscriptionLandingPageReducer';
+import { setTab, type TabActions } from './tabsActions';
 
 // ----- Tabs ----- //
 
@@ -21,26 +25,43 @@ export const tabs: {[string]: {name: string}} = {
 
 export type Tab = $Keys<typeof tabs>;
 
+type StatePropTypes = {|
+  selectedTab: number,
+|};
+
+type DispatchPropTypes = {|
+  setTabAction: (Tab) => *,
+|};
+
+type PropTypes = {|
+  ...StatePropTypes,
+  ...DispatchPropTypes,
+|};
+
 // ----- Component ----- //
 
-class Tabs extends Component<any, any> {
-  state = {
-    active: 0,
-  }
-  onChange(active: any) {
-    this.setState({ active });
-  }
-  render() {
-    return (
-      <div className={outsetClassName}>
-        <ProductPageTabs
-          active={this.state.active}
-          onChange={(t) => { this.onChange(t); }}
-          tabs={Object.keys(tabs).map(tab => ({ name: tabs[tab].name }))}
-        />
-      </div>
-    );
-  }
-}
+const Tabs = ({ selectedTab, setTabAction }: PropTypes) => (
+  <div className={outsetClassName}>
+    <ProductPageTabs
+      active={selectedTab}
+      onChange={(t) => { setTabAction(Object.keys(tabs)[t]); }}
+      tabs={Object.keys(tabs).map(tab => ({ name: tabs[tab].name }))}
+    />
+  </div>
+);
 
-export default Tabs;
+// ----- State/Props Maps ----- //
+
+const mapStateToProps = (state: State) => ({
+  selectedTab: Object.keys(tabs).indexOf(state.page.tabs.active),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>
+  ({
+    setTabAction: bindActionCreators(setTab, dispatch),
+  });
+
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tabs);
