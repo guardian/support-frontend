@@ -63,7 +63,7 @@ const plans = {
 const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => ({
   plans: Object
     .entries(plans)
-    .filter(([key]) => key.toLowerCase().includes(state.page.tabs.active))
+    .filter(([key]) => key.toLowerCase().includes(state.page.tab))
     .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}),
   selectedPlan: state.page.plan.plan,
 });

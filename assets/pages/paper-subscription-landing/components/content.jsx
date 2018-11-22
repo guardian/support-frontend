@@ -31,7 +31,10 @@ class Content extends Component<PropTypes> {
 
   componentDidUpdate({ selectedTab }) {
     if (selectedTab !== this.props.selectedTab && this.tabRef) {
-      this.tabRef.focus();
+      // $FlowIgnore
+      this.tabRef.focus({
+        preventScroll: true,
+      });
     }
   }
 
@@ -129,7 +132,7 @@ class Content extends Component<PropTypes> {
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State) => ({
-  selectedTab: state.page.tabs.active,
+  selectedTab: state.page.tab,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>

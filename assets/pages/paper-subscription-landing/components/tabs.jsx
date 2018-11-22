@@ -52,7 +52,7 @@ const Tabs = ({ selectedTab, setTabAction }: PropTypes) => (
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State) => ({
-  selectedTab: Object.keys(tabs).indexOf(state.page.tabs.active),
+  selectedTab: Object.keys(tabs).indexOf(state.page.tab),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>

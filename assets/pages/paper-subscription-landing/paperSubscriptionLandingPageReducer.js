@@ -14,19 +14,15 @@ import { type TabActions } from './paperSubscriptionLandingPageActions';
 
 // ----- Tabs ----- //
 
-type TabsState = {
-  active: PaperDeliveryMethod
-}
+type ActiveTabState = PaperDeliveryMethod;
 
 const getTabsReducer = (initialTab: PaperDeliveryMethod) =>
-  (state: TabsState = {
-    active: initialTab,
-  }, action: TabActions): TabsState => {
+  (state: ActiveTabState = initialTab, action: TabActions): ActiveTabState => {
 
     switch (action.type) {
 
       case 'SET_TAB':
-        return { ...state, active: action.tab };
+        return action.tab;
 
       default:
         return state;
@@ -40,7 +36,7 @@ const getTabsReducer = (initialTab: PaperDeliveryMethod) =>
 export type State = {
   common: CommonState,
   page: {
-    tabs: TabsState,
+    tab: ActiveTabState,
     plan: FormState<PaperBillingPlan>,
   }
 };
@@ -56,6 +52,6 @@ export default (initialTab: PaperDeliveryMethod) => {
 
   return combineReducers({
     plan: ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod),
-    tabs: getTabsReducer(initialTab),
+    tab: getTabsReducer(initialTab),
   });
 };
