@@ -85,6 +85,7 @@ GET  /uk/subscribe/paper          controllers.Subscriptions.paperMethodRedirect(
 GET  /subscribe/paper/$method<collection|delivery>          controllers.Subscriptions.paperMethodRedirectTo(method)
 GET  /uk/subscribe/paper/$method<collection|delivery>          controllers.Subscriptions.paper(method: String)
 
+
 # ----- Authentication ----- #
 
 GET  /login                                         controllers.Login.login

@@ -9,7 +9,6 @@ import play.api.mvc._
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import utils.RequestCountry._
 import views.html.helper.CSRF
-
 import scala.concurrent.ExecutionContext
 
 class Subscriptions(
