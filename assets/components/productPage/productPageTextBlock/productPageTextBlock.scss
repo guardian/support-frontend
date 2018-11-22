@@ -8,6 +8,11 @@
     display: inline-block;
     vertical-align: middle;
   }
+  .svg-information {
+    circle {
+      fill: gu-colour(header-border);
+    }
+  }
 }
 
 .component-product-page-text-block {
