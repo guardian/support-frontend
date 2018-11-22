@@ -163,13 +163,25 @@ const setUserTypeFromIdentityResponse = (userTypeFromIdentityResponse: UserTypeF
 const togglePayPalButton = () =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
+
+    const formIsValidParameters = {
+      selectedAmounts: state.page.form.selectedAmounts,
+      otherAmounts: state.page.form.formData.otherAmounts,
+      countryGroupId: state.common.internationalisation.countryGroupId,
+      contributionType: state.page.form.contributionType,
+      state: state.page.form.formData.state,
+      firstName: state.page.form.formData.firstName,
+      lastName: state.page.form.formData.lastName,
+      email: state.page.form.formData.email,
+    };
+
     const shouldEnable = checkoutFormShouldSubmit(
       state.page.form.contributionType,
       state.page.user.isSignedIn,
       state.page.user.isRecurringContributor,
       state.page.form.userTypeFromIdentityResponse,
       // TODO: use the actual form state rather than re-fetching from DOM
-      getForm('form--contribution'),
+      formIsValidParameters,
     );
     if (shouldEnable && window.enablePayPalButton) {
       window.enablePayPalButton();

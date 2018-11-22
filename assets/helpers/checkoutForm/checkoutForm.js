@@ -4,6 +4,16 @@
 import { type ContributionType, contributionTypeIsRecurring } from 'helpers/contributions';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { canContributeWithoutSigningIn } from 'helpers/identityApis';
+import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CaState, UsState } from 'helpers/internationalisation/country';
+import {
+  checkAmountOrOtherAmount,
+  checkEmail,
+  checkFirstName,
+  checkLastName,
+  checkStateIfApplicable,
+} from 'helpers/formValidation';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
@@ -86,18 +96,48 @@ export const formElementIsValid = (formElement: Object | null) => {
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
 
+export type FormIsValidParameters = {
+  selectedAmounts: SelectedAmounts,
+  otherAmounts: OtherAmounts,
+  countryGroupId: CountryGroupId,
+  contributionType: ContributionType,
+  state: UsState | CaState | null,
+  firstName: string | null,
+  lastName: string | null,
+  email: string | null,
+}
+
+const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
+  const {
+    selectedAmounts,
+    otherAmounts,
+    countryGroupId,
+    contributionType,
+    state,
+    firstName,
+    lastName,
+    email,
+  } = formIsValidParameters;
+
+  return checkFirstName(firstName)
+    && checkLastName(lastName)
+    && checkEmail(email)
+    && checkStateIfApplicable(state, countryGroupId)
+    && checkAmountOrOtherAmount(selectedAmounts, otherAmounts, contributionType, countryGroupId);
+};
+
 export function checkoutFormShouldSubmit(
   contributionType: ContributionType,
   isSignedIn: boolean,
   isRecurringContributor: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  form: Object | null,
+  formIsValidParameters: FormIsValidParameters,
 ) {
 
   const shouldBlockExistingRecurringContributor =
       isRecurringContributor && contributionTypeIsRecurring(contributionType);
 
-  return formElementIsValid(form)
+  return getFormIsValid(formIsValidParameters)
     && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
     && !(shouldBlockExistingRecurringContributor);
 }

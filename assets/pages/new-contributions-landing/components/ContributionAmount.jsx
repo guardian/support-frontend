@@ -29,7 +29,7 @@ type PropTypes = {|
   selectedAmounts: { [ContributionType]: Amount | 'other' },
   selectAmount: (Amount | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmount: string | null,
-  checkOtherAmount: string => boolean,
+  checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   annualTestVariant: AnnualContributionsTestVariant,
@@ -127,7 +127,7 @@ function ContributionAmount(props: PropTypes) {
           value={props.otherAmount}
           icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value, props.countryGroupId, props.contributionType)}
-          isValid={props.checkOtherAmount(props.otherAmount || '')}
+          isValid={props.checkOtherAmount(props.otherAmount || '', props.countryGroupId, props.contributionType)}
           formHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"

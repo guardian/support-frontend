@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
-  config,
   type ContributionType,
   type PaymentMatrix,
   type PaymentMethod,
@@ -25,12 +24,7 @@ import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 
-import {
-  isNotEmpty,
-  isSmallerOrEqual,
-  isLargerOrEqual,
-  maxTwoDecimals,
-} from 'helpers/formValidation';
+import { checkAmount } from 'helpers/formValidation';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
@@ -200,17 +194,11 @@ function onSubmit(props: PropTypes): Event => void {
 // ----- Render ----- //
 
 function ContributionForm(props: PropTypes) {
-  const checkOtherAmount: string => boolean = input =>
-    isNotEmpty(input)
-    && isLargerOrEqual(config[props.countryGroupId][props.contributionType].min, input)
-    && isSmallerOrEqual(config[props.countryGroupId][props.contributionType].max, input)
-    && maxTwoDecimals(input);
-
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <ContributionTypeTabs />
       <NewContributionAmount
-        checkOtherAmount={checkOtherAmount}
+        checkOtherAmount={checkAmount}
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
