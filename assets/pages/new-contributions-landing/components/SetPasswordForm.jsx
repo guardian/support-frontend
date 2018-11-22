@@ -138,10 +138,8 @@ function SetPasswordForm(props: PropTypes) {
             className="form__submit-button"
             aria-describedby="accessibility-hint-create-account"
           >
-            <span className="form__submit-button__inner">
-              Create an account
-              <SvgArrowRight />
-            </span>
+            Create an account
+            <SvgArrowRight />
           </button>
         </div>
         <CtaLink
