@@ -20,21 +20,29 @@ const plans = {
     title: 'Everyday',
     offer: null,
     copy: 'Lorem ipsum sit amet',
+    price: '£56.12 per month',
+    saving: 'save £3.45 a month',
   },
   sixday: {
     title: 'Sixday',
     offer: null,
     copy: 'Lorem ipsum sit amet',
+    price: '£56.12 per month',
+    saving: 'save £3.45 a month',
   },
   weekend: {
     title: 'Weekend',
     offer: null,
     copy: 'Lorem ipsum sit amet',
+    price: '£56.12 per month',
+    saving: 'save £3.45 a month',
   },
   sunday: {
     title: 'Sunday',
     offer: null,
     copy: 'Lorem ipsum sit amet',
+    price: '£56.12 per month',
+    saving: 'save £3.45 a month',
   },
 };
 

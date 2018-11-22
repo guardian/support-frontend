@@ -4,6 +4,7 @@
 
 import React, { type Node } from 'react';
 import SvgCheckmark from 'components/svgs/checkmark';
+import { type Option } from 'helpers/types/option';
 
 import uuidv4 from 'uuid';
 
@@ -14,7 +15,9 @@ import './productPagePlanFormLabel.scss';
 type PropTypes = {|
   type: string,
   title: string,
-  offer: string | null,
+  offer: Option<string>,
+  price: Option<string>,
+  saving: Option<string>,
   children: Node,
   checked: boolean,
   onChange: (Event) => void,
@@ -24,7 +27,7 @@ type PropTypes = {|
 // ----- Render ----- //
 
 export default ({
-  type, title, offer, children, checked, onChange,
+  type, title, offer, children, checked, onChange, price, saving,
 }: PropTypes) => {
   const id = uuidv4();
   return (
@@ -38,6 +41,20 @@ export default ({
         <div className="component-product-page-plan-form-label__copy">
           {offer && <strong className="component-product-page-plan-form-label__offer">{offer}</strong>}
           <div>{children}</div>
+          {price &&
+          <div className="component-product-page-plan-form-label__footer">
+            {price &&
+            <strong className="component-product-page-plan-form-label__price">
+              {price}
+            </strong>
+            }
+            {saving &&
+            <div className="component-product-page-plan-form-label__saving">
+              {price}
+            </div>
+            }
+          </div>
+          }
         </div>
       </div>
     </label>
