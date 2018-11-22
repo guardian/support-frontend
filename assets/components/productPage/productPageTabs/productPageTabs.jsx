@@ -25,16 +25,20 @@ type PropTypes = {|
 const ProductPageTabs = ({
   tabs, active, onChange,
 }: PropTypes) => (
-  <div role="tablist" className="component-product-page-tabs">
-    {tabs.map(({ name }, index) => {
-      const isActive = index === active;
-      return (
-        <button className={classNameWithModifiers('component-product-page-tabs__tab', isActive ? ['active'] : [])} role="tab" aria-selected={isActive} onClick={() => onChange(index)}>
-          {name}
-        </button>
-      );
-    })}
-  </div>
+  <nav className="component-product-page-tabs">
+    <ul className="component-product-page-tabs__ul">
+      {tabs.map(({ name }, index) => {
+        const isActive = index === active;
+        return (
+          <li className="component-product-page-tabs__li">
+            <button className={classNameWithModifiers('component-product-page-tabs__tab', isActive ? ['active'] : [])} onClick={() => onChange(index)}>
+              {name}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
 );
 
 export default ProductPageTabs;

@@ -1,17 +1,27 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-product-page-tabs {
-  display: flex;
   overflow: hidden;
+  margin-left: -1px;
+}
+
+.component-product-page-tabs__ul {
+  display: flex;
   align-items: flex-end;
   justify-content: flex-start;
-  margin-left: -1px;
+}
+
+.component-product-page-tabs__li {
+  @include mq($until:phablet) {
+    flex: 1 1 0;
+  }
 }
 
 .component-product-page-tabs__tab {
   @include gu-fontset-heading-sans;
   padding: ($gu-v-spacing)/1.5 $gu-h-spacing/2;
   display: block;
+  width: 100%;
   border: 0;
   border-top: 2px solid gu-colour(header-dark);
   background-color: gu-colour(header-dark);
@@ -21,9 +31,6 @@
   min-width: gu-span(3) + $gu-h-spacing/2;
   box-sizing: border-box;
   cursor: pointer;
-  @include mq($until:phablet) {
-    flex: 1 1 0;
-  }
 }
 
 .component-product-page-tabs__tab:focus {
