@@ -15,7 +15,7 @@ export type Action =
   | { type: 'SET_GNM_MARKETING', preference: boolean }
   | { type: 'SET_IS_SIGNED_IN', isSignedIn: boolean };
 
-export type UserSetStateActions = {
+export type UserSetStateActions = {|
   setId: string => Action,
   setDisplayName: string => Action,
   setFirstName: string => Action,
@@ -32,4 +32,4 @@ export type UserSetStateActions = {
   // contributions landing page state as well as update the user state, hence the union type.
   setIsSignedIn: boolean => (Action | (Function => void)),
   setIsRecurringContributor: () => (Action | (Function => void)),
-}
+|}
