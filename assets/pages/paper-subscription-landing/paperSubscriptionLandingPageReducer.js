@@ -49,7 +49,10 @@ export default (initialTab: PaperDeliveryMethod) => {
   const promoInUrl = getQueryParameter('promo');
 
   const initialPeriod: ?PaperBillingPlan =
-    promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'everyday' ? promoInUrl : null;
+    promoInUrl === 'collectionEveryday' || promoInUrl === 'collectionSixday' ||
+    promoInUrl === 'collectionWeekend' || promoInUrl === 'collectionSunday' ||
+    promoInUrl === 'deliveryEveryday' || promoInUrl === 'deliverySixday' ||
+    promoInUrl === 'deliveryWeekend' || promoInUrl === 'deliverySunday' ? promoInUrl : null;
 
   return combineReducers({
     plan: ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod),

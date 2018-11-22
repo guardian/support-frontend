@@ -16,23 +16,43 @@ import { setPlan } from '../paperSubscriptionLandingPageActions';
 // ---- Plans ----- //
 
 const plans = {
-  everyday: {
+  collectionEveryday: {
     title: 'Everyday',
     offer: null,
     copy: 'Lorem ipsum sit amet',
   },
-  sixday: {
+  collectionSixday: {
     title: 'Sixday',
     offer: null,
     copy: 'Lorem ipsum sit amet',
   },
-  weekend: {
+  collectionWeekend: {
     title: 'Weekend',
     offer: null,
     copy: 'Lorem ipsum sit amet',
   },
-  sunday: {
-    title: 'Sunday',
+  collectionSunday: {
+    title: 'Collect Sunday',
+    offer: null,
+    copy: 'Lorem ipsum sit amet',
+  },
+  deliveryEveryday: {
+    title: 'Everyday',
+    offer: null,
+    copy: 'Lorem ipsum sit amet',
+  },
+  deliverySixday: {
+    title: 'Sixday',
+    offer: null,
+    copy: 'Lorem ipsum sit amet',
+  },
+  deliveryWeekend: {
+    title: 'Weekend',
+    offer: null,
+    copy: 'Lorem ipsum sit amet',
+  },
+  deliverySunday: {
+    title: 'Delivery Sunday',
     offer: null,
     copy: 'Lorem ipsum sit amet',
   },
@@ -40,9 +60,11 @@ const plans = {
 
 
 // ----- State/Props Maps ----- //
-
 const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => ({
-  plans,
+  plans: Object
+    .entries(plans)
+    .filter(([key]) => key.toLowerCase().includes(state.page.tabs.active))
+    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}),
   selectedPlan: state.page.plan.plan,
 });
 
