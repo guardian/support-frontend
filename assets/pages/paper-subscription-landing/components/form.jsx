@@ -15,7 +15,7 @@ import { setPlan } from '../paperSubscriptionLandingPageActions';
 
 // ---- Plans ----- //
 
-const plans = {
+const collectionPlans = {
   collectionEveryday: {
     title: 'Everyday',
     offer: null,
@@ -36,6 +36,9 @@ const plans = {
     offer: null,
     copy: 'Lorem ipsum sit amet',
   },
+};
+
+const deliveryPlans = {
   deliveryEveryday: {
     title: 'Everyday',
     offer: null,
@@ -61,10 +64,7 @@ const plans = {
 
 // ----- State/Props Maps ----- //
 const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => ({
-  plans: Object
-    .entries(plans)
-    .filter(([key]) => key.toLowerCase().includes(state.page.tab))
-    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}),
+  plans: state.page.tab === 'collection' ? collectionPlans : deliveryPlans,
   selectedPlan: state.page.plan.plan,
 });
 
