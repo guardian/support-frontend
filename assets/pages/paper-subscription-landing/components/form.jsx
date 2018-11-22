@@ -43,7 +43,7 @@ const plans = {
 
 const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => ({
   plans,
-  selectedPlan: state.page.plan,
+  selectedPlan: state.page.plan.plan,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<PaperBillingPlan>>): DispatchPropTypes<PaperBillingPlan> =>
