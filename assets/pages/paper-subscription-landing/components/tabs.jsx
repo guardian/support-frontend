@@ -10,7 +10,7 @@ import { outsetClassName } from 'components/productPage/productPageContentBlock/
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
-import { setTab, type TabActions } from './tabsActions';
+import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
 
 // ----- Tabs ----- //
 
