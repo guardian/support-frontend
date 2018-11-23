@@ -21,6 +21,7 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
+import { withArrow } from 'components/forms/formHOCs/withArrow';
 import { canShow } from 'components/forms/formHOCs/canShow';
 
 import {
@@ -57,6 +58,7 @@ function mapStateToProps(state: State) {
 const Input1 = compose(asControlled, withError, withLabel)(Input);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
+const Button1 = withArrow(Button);
 
 function statesForCountry(country: Option<IsoCountry>): React$Node {
 
@@ -167,7 +169,7 @@ function CheckoutForm(props: PropTypes) {
           strong="Cancel any time you want. "
           copy="There is no set time on your agreement so you can stop your subscription anytime."
         />
-        <Button onClick={() => props.submitForm()}>Submit</Button>
+        <Button1 onClick={() => props.submitForm()}>Continue to payment</Button1>
       </LeftMarginSection>
     </div>
   );
