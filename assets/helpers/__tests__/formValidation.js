@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { maxTwoDecimals } from '../formValidation';
+import { checkAmountOrOtherAmount, maxTwoDecimals } from '../formValidation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { checkStateIfApplicable } from 'helpers/formValidation';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
@@ -82,6 +82,62 @@ describe('formValidation', () => {
       expect(checkStateIfApplicable(state, 'EURCountries')).toEqual(true);
       expect(checkStateIfApplicable(state, 'International')).toEqual(true);
       expect(checkStateIfApplicable(state, 'NZDCountries')).toEqual(true);
+    });
+  });
+
+  describe('checkAmountOrOtherAmount', () => {
+
+    const defaultSelectedAmounts =  {
+      ONE_OFF: {
+        value: '50',
+        spoken: 'fifty',
+        isDefault: true,
+      },
+      MONTHLY: {
+        value: '15',
+        spoken: 'fifteen',
+        isDefault: true,
+      },
+      ANNUAL: {
+        value: '100',
+        spoken: 'one hundred',
+        isDefault: true,
+      },
+    };
+
+    const selectedAmountsWithOtherSelected = {
+      ONE_OFF: 'other',
+      MONTHLY: 'other',
+      ANNUAL: 'other',
+    };
+
+    const defaultOtherAmounts = {
+      ONE_OFF: {
+        amount: null,
+      },
+      MONTHLY: {
+        amount: '2',
+      },
+      ANNUAL: {
+        amount: '0',
+      },
+    };
+
+
+    it('should return true if selected amount is not other and amount is valid', () => {
+      expect(checkAmountOrOtherAmount(defaultSelectedAmounts, defaultOtherAmounts, 'MONTHLY', 'UnitedStates')).toEqual(true);
+    });
+
+    it('should return true if other is selected and amount is valid', () => {
+      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'MONTHLY', 'UnitedStates')).toEqual(true);
+    });
+
+    it('should return false if other is selected and amount is empty', () => {
+      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'ONE_OFF', 'UnitedStates')).toEqual(false);
+    });
+
+    it('should return false if other is selected and amount is invalid', () => {
+      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'ANNUAL', 'UnitedStates')).toEqual(false);
     });
   });
 });
