@@ -9,6 +9,7 @@ import SvgSubscribed from 'components/svgs/subscribed';
 import SvgNewsletters from 'components/svgs/newsletters';
 import SvgInformation from 'components/svgs/information';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { checkEmail } from 'helpers/formValidation';
 
 
 // ----- Types ----- //
@@ -24,44 +25,50 @@ type PropTypes = {|
 // ----- Render ----- //
 
 function MarketingConsent(props: PropTypes) {
-  return (
-    <section className={classNameWithModifiers('marketing-permissions', ['newsletter'])}>
-      <h3 className="marketing-permissions__title">Subscriptions, membership and contributions</h3>
-      <p className="marketing-permissions__message">
-        Get related news and offers – whether you are a subscriber, member,
-        contributor or would like to become one.
-      </p>
+  if (checkEmail(props.email)) {
+    return (
+      <section className={classNameWithModifiers('marketing-permissions', ['newsletter'])}>
+        <h3 className="marketing-permissions__title">Subscriptions, membership and contributions</h3>
+        <p className="marketing-permissions__message">
+          Get related news and offers – whether you are a subscriber, member,
+          contributor or would like to become one.
+        </p>
 
-      {props.confirmOptIn === true ?
-        <button disabled="disabled" className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}>
-          <SvgSubscribed />
-          Signed up
-        </button> :
-        <button
-          className={classNameWithModifiers('button', ['newsletter'])}
-          onClick={
-            () => props.onClick(props.email, props.csrf)
-          }
-        >
-          <SvgSubscribe />
-          Sign me up
-        </button>
-      }
+        {props.confirmOptIn === true ?
+          <button
+            disabled="disabled"
+            className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
+          >
+            <SvgSubscribed />
+            Signed up
+          </button> :
+          <button
+            className={classNameWithModifiers('button', ['newsletter'])}
+            onClick={
+              () => props.onClick(props.email, props.csrf)
+            }
+          >
+            <SvgSubscribe />
+            Sign me up
+          </button>
+        }
 
-      <p className="confirmation__meta">
-        <small>
-          { props.confirmOptIn === true ?
-            'We\'ll be in touch. Check your inbox for a confirmation link.' :
-            <div>
-              <SvgInformation />
-              <span className="information__message">You can unsubscribe at any time</span>
-            </div>
-          }
-        </small>
-      </p>
-      <SvgNewsletters />
-    </section>
-  );
+        <p className="confirmation__meta">
+          <small>
+            {props.confirmOptIn === true ?
+              'We\'ll be in touch. Check your inbox for a confirmation link.' :
+              <div>
+                <SvgInformation />
+                <span className="information__message">You can unsubscribe at any time</span>
+              </div>
+            }
+          </small>
+        </p>
+        <SvgNewsletters />
+      </section>
+    );
+  }
+  return null;
 }
 
 
