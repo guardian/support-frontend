@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type ErrorReason } from 'helpers/errorReasons';
 import { combineReducers } from 'redux';
 import { amounts, type Amount, type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
@@ -61,7 +61,7 @@ type FormState = {
   formData: FormData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
-  paymentError: CheckoutFailureReason | null,
+  paymentError: ErrorReason | null,
   guestAccountCreationToken: ?string,
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,

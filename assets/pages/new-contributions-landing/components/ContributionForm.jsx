@@ -15,7 +15,7 @@ import {
   type PaymentMethod,
   logInvalidCombination,
 } from 'helpers/contributions';
-import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type ErrorReason } from 'helpers/errorReasons';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
@@ -63,7 +63,7 @@ type PropTypes = {|
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   contributionType: ContributionType,
   currency: IsoCurrency,
-  paymentError: CheckoutFailureReason | null,
+  paymentError: ErrorReason | null,
   selectedAmounts: { [ContributionType]: Amount | 'other' },
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setPaymentIsWaiting: boolean => void,

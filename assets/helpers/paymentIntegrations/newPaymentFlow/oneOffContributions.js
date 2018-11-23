@@ -1,7 +1,7 @@
 // @flow
 import { type PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { ErrorReason } from 'helpers/errorReasons';
 import { logPromise } from 'helpers/promise';
 import { logException } from 'helpers/logger';
 import { fetchJson, requestOptions } from 'helpers/fetch';
@@ -103,7 +103,7 @@ function paymentApiEndpointWithMode(url: string) {
 // { type: "success", data: { currency: string, amount: number } }
 function paymentResultFromObject(json: Object): Promise<PaymentResult> {
   if (json.error) {
-    const failureReason: CheckoutFailureReason = json.error.failureReason ? json.error.failureReason : 'unknown';
+    const failureReason: ErrorReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
   return Promise.resolve(PaymentSuccess);

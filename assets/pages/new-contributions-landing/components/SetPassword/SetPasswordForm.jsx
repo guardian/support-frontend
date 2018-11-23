@@ -153,9 +153,9 @@ function SetPasswordForm(props: PropTypes) {
         />
       </form>
       {props.passwordError === true ?
-        <div className="component-password-failure-message component-payment-failure-message">
-          <SvgExclamationAlternate /><span className="component-payment-failure-message__error-heading">{passwordErrorHeading}</span>
-          <span className="component-payment-failure-message__small-print">{passwordErrorMessage}</span>
+        <div className="component-password-failure-message component-general-error-message">
+          <SvgExclamationAlternate /><span className="component-general-error-message__error-heading">{passwordErrorHeading}</span>
+          <span className="component-general-error-message__small-print">{passwordErrorMessage}</span>
         </div> : null
       }
     </div>

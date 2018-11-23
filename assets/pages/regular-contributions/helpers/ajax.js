@@ -14,7 +14,7 @@ import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { ErrorReason } from 'helpers/errorReasons';
 import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
@@ -71,7 +71,7 @@ type Status = 'success' | 'failure' | 'pending';
 type StatusResponse = {|
   status: Status,
   trackingUri: string,
-  failureReason: CheckoutFailureReason,
+  failureReason: ErrorReason,
   guestAccountCreationToken?: string
 |}
 

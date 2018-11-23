@@ -15,6 +15,7 @@ const mapStateToProps = state => ({
   confirmOptIn: state.page.marketingConsent.confirmOptIn,
   email: state.page.form.formData.email,
   csrf: state.page.csrf,
+  error: state.page.marketingConsent.error,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
