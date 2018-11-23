@@ -2,10 +2,8 @@
 
 // ----- Imports ----- //
 
-import { checkAmountOrOtherAmount, maxTwoDecimals } from '../formValidation';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { checkStateIfApplicable } from 'helpers/formValidation';
-import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import { checkAmountOrOtherAmount, maxTwoDecimals } from '../formValidation';
 
 // ----- Tests ----- //
 
@@ -87,7 +85,7 @@ describe('formValidation', () => {
 
   describe('checkAmountOrOtherAmount', () => {
 
-    const defaultSelectedAmounts =  {
+    const defaultSelectedAmounts = {
       ONE_OFF: {
         value: '50',
         spoken: 'fifty',
