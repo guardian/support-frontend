@@ -14,7 +14,7 @@ import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 type PropTypes = {|
   ctaUrl: string,
   headingSize: HeadingSize,
-  context?: string,
+  context: string,
 |};
 
 
@@ -35,10 +35,15 @@ export default function ReadyToSupport(props: PropTypes) {
           accessibilityHint="See the options for becoming a supporter"
           svg={<SvgChevronUp />}
           modifierClasses={['see-supporter-options']}
-          onClick={sendClickedEvent((props.context ? props.context + '-' : '') + 'supporter-options')}
+          onClick={sendClickedEvent(props.context.concat('-supporter_options_cta'))}
         />
       </div>
     </section>
   );
 
 }
+
+
+ReadyToSupport.defaultProps = {
+  context: 'component-ready-to-support',
+};

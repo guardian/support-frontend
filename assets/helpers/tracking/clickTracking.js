@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { type ComponentAbTest } from 'helpers/subscriptions';
 import { gaEvent } from './googleTagManager';
 
 
@@ -17,7 +16,7 @@ function sendClickedEvent(
     gaEvent({
       category: 'click',
       action: triggerActivity || 'CLICK',
-      label: label,
+      label,
     });
   };
 

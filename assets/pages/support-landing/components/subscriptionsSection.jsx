@@ -24,7 +24,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   abParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
-  context?: string,
+  context: string,
 |};
 
 
@@ -80,6 +80,10 @@ function SubscriptionsSection(props: PropTypes) {
 
 }
 
+
+SubscriptionsSection.defaultProps = {
+  context: 'subscriptions-section',
+};
 
 // ----- Exports ----- //
 

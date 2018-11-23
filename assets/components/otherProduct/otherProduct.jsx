@@ -23,7 +23,7 @@ type PropTypes = {|
   ctaUrl: string,
   ctaAccessibilityHint: string,
   imgType?: ImageType,
-  context?: string,
+  context: string,
 |};
 
 
@@ -47,7 +47,7 @@ export default function OtherProduct(props: PropTypes) {
         text={props.ctaText}
         url={props.ctaUrl}
         accessibilityHint={props.ctaAccessibilityHint}
-        onClick={sendClickedEvent(props.context || '')}
+        onClick={sendClickedEvent(props.context.concat('-cta_link'))}
       />
     </div>
   );
@@ -60,4 +60,5 @@ export default function OtherProduct(props: PropTypes) {
 OtherProduct.defaultProps = {
   modifierClass: '',
   imgType: 'jpg',
+  context: 'component-other-product',
 };

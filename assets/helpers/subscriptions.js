@@ -216,7 +216,7 @@ function sendTrackingEventsOnClick(
     gaEvent({
       category: 'click',
       action: product,
-      label: (context ? context + '-' : '') + id,
+      label: (context ? context.concat('-') : '').concat(id),
     });
 
   };

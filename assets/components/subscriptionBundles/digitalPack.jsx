@@ -58,7 +58,7 @@ function DigitalPack(props: {
   url: string,
   gridId: ImageId,
   abTest: ComponentAbTest | null,
-  context?: string,
+  context: string,
 }) {
   const copy = getCopy(props.countryGroupId);
   return (
@@ -95,6 +95,7 @@ function DigitalPack(props: {
 
 DigitalPack.defaultProps = {
   abTest: null,
+  context: 'digital-subscription',
 };
 
 

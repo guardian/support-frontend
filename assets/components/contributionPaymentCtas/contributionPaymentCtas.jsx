@@ -58,7 +58,7 @@ function onCtaClick(isDisabled: boolean, resetError: void => void, context?: str
       clickEvent.preventDefault();
     }
 
-    sendClickedEvent(`${(context ? context + '-' : '')}ContributeCTA`);
+    sendClickedEvent(`${(context ? context.concat('-') : '')}ContributeCTA`);
 
     resetError();
 
@@ -96,6 +96,10 @@ export default function ContributionPaymentCtas(props: PropTypes) {
 
 }
 
+ContributionPaymentCtas.defaultProps = {
+  context: 'component-contribution-payment-ctas',
+};
+
 
 // ----- Auxiliary Components ----- //
 
@@ -106,7 +110,7 @@ function OneOffCta(props: {
   currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
-  context?: string,
+  context: string,
 }): Node {
 
   const clickUrl = addQueryParamsToURL(routes.oneOffContribCheckout, {
@@ -115,7 +119,7 @@ function OneOffCta(props: {
     currency: props.currencyId,
   });
 
-  const ctaContext = (props.context ? props.context + '-' : '') +  'one-off';
+  const ctaContext = props.context.concat('-one_off_cta');
 
   return (
     <CtaLink
@@ -137,7 +141,7 @@ function RegularCta(props: {
   currencyId: IsoCurrency,
   isDisabled: boolean,
   resetError: void => void,
-  context?: string,
+  context: string,
 }): Node {
   const frequency = getFrequency(props.contributionType);
   const spokenType = getSpokenType(props.contributionType);
@@ -147,7 +151,7 @@ function RegularCta(props: {
     currency: props.currencyId,
   });
 
-  const ctaContext = (props.context ? props.context + '-' : '') +  'regular';
+  const ctaContext = props.context.concat('-regular_cta');
 
   return (
     <CtaLink

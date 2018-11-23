@@ -13,7 +13,7 @@ type PropTypes = {|
   url: string,
   abTest: ComponentAbTest | null,
   gridId: 'paperDigitalCirclePink' | 'paperDigitalCircleOrange',
-  context?: string,
+  context: string,
 |};
 
 
@@ -63,3 +63,7 @@ export default function PaperDigital(props: PropTypes) {
     />
   );
 }
+
+PaperDigital.defaultProps = {
+  context: 'paper-and-digital-subscription',
+};
