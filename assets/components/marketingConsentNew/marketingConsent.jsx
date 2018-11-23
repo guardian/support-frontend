@@ -11,6 +11,7 @@ import SvgInformation from 'components/svgs/information';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { checkEmail } from 'helpers/formValidation';
+import { logException } from 'helpers/logger';
 
 
 // ----- Types ----- //
@@ -79,6 +80,8 @@ function MarketingConsent(props: PropTypes) {
       </section>
     );
   }
+
+  logException('Unable to display marketing consent button due to not having a valid email address to send to the API');
   return null;
 }
 
