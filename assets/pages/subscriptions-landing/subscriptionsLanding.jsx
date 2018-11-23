@@ -27,7 +27,7 @@ const content = (
   <Provider store={store}>
     <Page
       header={<SimpleHeader />}
-      footer={<FooterContainer disclaimer privacyPolicy />}
+      footer={<FooterContainer disclaimer />}
     >
       <FeaturedProductAb
         headingSize={3}
