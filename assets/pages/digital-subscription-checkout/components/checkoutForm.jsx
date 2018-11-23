@@ -143,6 +143,20 @@ function CheckoutForm(props: PropTypes) {
       </LeftMarginSection>
       <LeftMarginSection>
         <h2 className="checkout-form__heading">How would you like to pay?</h2>
+        <Fieldset>
+          <RadioInput
+            text="Direct debit"
+            name="paymentMethod"
+            checked={props.paymentMethod === 'directDebit'}
+            onChange={() => props.setPaymentMethod('directDebit')}
+          />
+          <RadioInput
+            text="Credit/Debit card"
+            name="paymentMethod"
+            checked={props.paymentMethod === 'card'}
+            onChange={() => props.setPaymentMethod('card')}
+          />
+        </Fieldset>
         <button onClick={() => props.submitForm()}>Submit</button>
       </LeftMarginSection>
     </div>

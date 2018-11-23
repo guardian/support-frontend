@@ -34,6 +34,7 @@ import {
 
 export type Stage = 'checkout' | 'thankyou';
 type PaymentFrequency = 'monthly' | 'yearly';
+type PaymentMethod = 'card' | 'directDebit';
 
 export type FormFields = {|
   firstName: string,
@@ -42,6 +43,7 @@ export type FormFields = {|
   stateProvince: Option<StateProvince>,
   telephone: string,
   paymentFrequency: PaymentFrequency,
+  paymentMethod: PaymentMethod,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -67,6 +69,7 @@ export type Action =
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
   | { type: 'SET_PAYMENT_FREQUENCY', paymentFrequency: PaymentFrequency }
+  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
 
 
@@ -80,6 +83,7 @@ function getFormFields(state: State): FormFields {
     stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
     paymentFrequency: state.page.checkout.paymentFrequency,
+    paymentMethod: state.page.checkout.paymentMethod,
   };
 }
 
@@ -123,6 +127,7 @@ const formActionCreators = {
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
   setPaymentFrequency: (paymentFrequency: PaymentFrequency): Action => ({ type: 'SET_PAYMENT_FREQUENCY', paymentFrequency }),
+  setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) =>
     compose(dispatch, setFormErrors, getErrors, getFormFields)(getState()),
 };
@@ -140,6 +145,7 @@ const initialState = {
   stateProvince: null,
   telephone: '',
   paymentFrequency: 'monthly',
+  paymentMethod: 'directDebit',
   errors: [],
 };
 
@@ -167,6 +173,9 @@ function reducer(state: CheckoutState = initialState, action: Action): CheckoutS
 
     case 'SET_PAYMENT_FREQUENCY':
       return { ...state, paymentFrequency: action.paymentFrequency };
+
+    case 'SET_PAYMENT_METHOD':
+      return { ...state, paymentMethod: action.paymentMethod };
 
     case 'SET_ERRORS':
       return { ...state, errors: action.errors };
