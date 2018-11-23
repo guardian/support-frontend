@@ -3,6 +3,9 @@
 // ----- Imports ----- //
 
 import { maxTwoDecimals } from '../formValidation';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { checkStateIfApplicable } from 'helpers/formValidation';
+import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 
 // ----- Tests ----- //
 
@@ -43,5 +46,42 @@ describe('formValidation', () => {
       expect(maxTwoDecimals('-12')).toEqual(false);
     });
 
+  });
+
+  describe('checkStateIfApplicable', () => {
+
+    it('should return false if state is null', () => {
+      const state = null;
+      const countryGroupId = 'UnitedStates';
+      expect(checkStateIfApplicable(state, countryGroupId)).toEqual(false);
+    });
+
+    it('should return true if countryGroupId is UnitedStates and state is a string', () => {
+      const state = 'CA';
+      const countryGroupId = 'UnitedStates';
+      expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+    });
+
+    it('should return true if countryGroupId is Canada and state is a string', () => {
+      const state = 'AL';
+      const countryGroupId = 'Canada';
+      expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
+    });
+
+    it('should return true if countryGroupId is not Canada or United States regardless of the state', () => {
+      let state = 'AL';
+      expect(checkStateIfApplicable(state, 'GBPCountries')).toEqual(true);
+      expect(checkStateIfApplicable(state, 'AUDCountries')).toEqual(true);
+      expect(checkStateIfApplicable(state, 'EURCountries')).toEqual(true);
+      expect(checkStateIfApplicable(state, 'International')).toEqual(true);
+      expect(checkStateIfApplicable(state, 'NZDCountries')).toEqual(true);
+
+      state = null;
+      expect(checkStateIfApplicable(state, 'GBPCountries')).toEqual(true);
+      expect(checkStateIfApplicable(state, 'AUDCountries')).toEqual(true);
+      expect(checkStateIfApplicable(state, 'EURCountries')).toEqual(true);
+      expect(checkStateIfApplicable(state, 'International')).toEqual(true);
+      expect(checkStateIfApplicable(state, 'NZDCountries')).toEqual(true);
+    });
   });
 });
