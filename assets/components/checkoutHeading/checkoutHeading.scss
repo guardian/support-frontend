@@ -19,4 +19,6 @@
 
 .component-checkout-heading__copy {
   @include gu-fontset-body-sans;
+
+  color: gu-colour(news-garnett-highlight);
 }
