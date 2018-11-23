@@ -8,7 +8,6 @@ import type { Node } from 'react';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import TermsPrivacy from '../legal/termsPrivacy/termsPrivacy';
 
 // ----- Props ----- //
 
@@ -38,14 +37,7 @@ function PrivacyPolicy(props: { privacyPolicy: boolean }) {
 }
 
 function Disclaimer(props: { disclaimer: boolean, countryGroupId: CountryGroupId }) {
-  if (props.disclaimer) {
-    return (
-      <div>
-        <TermsPrivacy countryGroupId={props.countryGroupId} />
-        <ContribLegal countryGroupId={props.countryGroupId} />
-      </div>);
-  }
-  return null;
+  return props.disclaimer ? <ContribLegal countryGroupId={props.countryGroupId} /> : null;
 }
 
 // ----- Component ----- //

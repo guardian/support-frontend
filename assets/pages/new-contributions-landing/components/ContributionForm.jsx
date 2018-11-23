@@ -24,6 +24,7 @@ import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 
 import {
   isNotEmpty,
@@ -216,6 +217,7 @@ function ContributionForm(props: PropTypes) {
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
       <ContributionErrorMessage />
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
+      <TermsPrivacy countryGroupId={props.countryGroupId} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
   );
