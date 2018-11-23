@@ -11,6 +11,7 @@ import { type FormError, firstError } from 'helpers/subscriptionsForms/validatio
 import { type Option } from 'helpers/types/option';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
 import { Fieldset } from 'components/forms/standardFields/fieldset';
@@ -158,6 +159,14 @@ function CheckoutForm(props: PropTypes) {
             onChange={() => props.setPaymentMethod('card')}
           />
         </Fieldset>
+        <CheckoutCopy
+          strong="Money Back Guarantee "
+          copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
+        />
+        <CheckoutCopy
+          strong="Cancel any time you want. "
+          copy="There is no set time on your agreement so you can stop your subscription anytime."
+        />
         <Button onClick={() => props.submitForm()}>Submit</Button>
       </LeftMarginSection>
     </div>
