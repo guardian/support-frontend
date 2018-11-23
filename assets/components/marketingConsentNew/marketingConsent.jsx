@@ -10,6 +10,7 @@ import SvgNewsletters from 'components/svgs/newsletters';
 import SvgInformation from 'components/svgs/information';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/formValidation';
+import { logException } from 'helpers/logger';
 
 
 // ----- Types ----- //
@@ -68,6 +69,8 @@ function MarketingConsent(props: PropTypes) {
       </section>
     );
   }
+
+  logException('Could not get a valid email address for user.');
   return null;
 }
 
