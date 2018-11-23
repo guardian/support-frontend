@@ -33,7 +33,7 @@ Object {
   },
   "regularContrib": Object {
     "amount": 20,
-    "checkoutFailureReason": null,
+    "errorReason": null,
     "contributionType": "MONTHLY",
     "guestAccountCreationToken": null,
     "payPalHasLoaded": false,

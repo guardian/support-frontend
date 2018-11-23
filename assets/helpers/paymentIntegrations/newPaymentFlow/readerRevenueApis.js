@@ -5,7 +5,7 @@ import {
   type OphanIds,
   type ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type ErrorReason } from 'helpers/errorReasons';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/contributions';
 import { type Participations } from 'helpers/abTests/abtest';
@@ -75,7 +75,7 @@ export type PaymentAuthorisation = StripeAuthorisation | PayPalAuthorisation | D
 // because the end of that checkout happens on the backend after the user is redirected to our site.
 export type PaymentResult
   = {| paymentStatus: 'success' |}
-  | {| paymentStatus: 'failure', error: CheckoutFailureReason |};
+  | {| paymentStatus: 'failure', error: ErrorReason |};
 
 // ----- Setup ----- //
 const PaymentSuccess: PaymentResult = { paymentStatus: 'success' };

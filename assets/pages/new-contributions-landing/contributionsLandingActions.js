@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { ErrorReason } from 'helpers/errorReasons';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   type Amount,
@@ -65,7 +65,7 @@ export type Action =
   | { type: 'SELECT_AMOUNT', amount: Amount | 'other', contributionType: ContributionType }
   | { type: 'UPDATE_OTHER_AMOUNT', otherAmount: string }
   | { type: 'PAYMENT_RESULT', paymentResult: Promise<PaymentResult> }
-  | { type: 'PAYMENT_FAILURE', paymentError: CheckoutFailureReason }
+  | { type: 'PAYMENT_FAILURE', paymentError: ErrorReason }
   | { type: 'PAYMENT_WAITING', isWaiting: boolean }
   | { type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED' }
   | { type: 'SET_PASSWORD_HAS_BEEN_SUBMITTED' }
@@ -131,7 +131,7 @@ const paymentSuccess = (): Action => ({ type: 'PAYMENT_SUCCESS' });
 
 const paymentWaiting = (isWaiting: boolean): Action => ({ type: 'PAYMENT_WAITING', isWaiting });
 
-const paymentFailure = (paymentError: CheckoutFailureReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
+const paymentFailure = (paymentError: ErrorReason): Action => ({ type: 'PAYMENT_FAILURE', paymentError });
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'FORM_VALID', isValid });
 

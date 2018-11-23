@@ -21,8 +21,8 @@ import type { ContributionType } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
-import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
+import type { ErrorReason } from 'helpers/errorReasons';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
 
@@ -33,7 +33,7 @@ export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Fail
 type PropTypes = {|
   dispatch: Dispatch<*>,
   email: string,
-  checkoutFailureReason: ?CheckoutFailureReason,
+  errorReason: ?ErrorReason,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   contributionType: ContributionType,
@@ -60,13 +60,13 @@ type PropTypes = {|
 // Shows a message about the status of the form or the payment.
 function getStatusMessage(
   paymentStatus: PaymentStatus,
-  checkoutFailureReason: ?CheckoutFailureReason,
+  errorReason: ?ErrorReason,
 ): Node {
 
   if (paymentStatus === 'Pending') {
     return <ProgressMessage message={['Processing transaction', 'Please wait']} />;
   }
-  return <PaymentFailureMessage checkoutFailureReason={checkoutFailureReason} />;
+  return <GeneralErrorMessage errorReason={errorReason} />;
 
 }
 
@@ -154,7 +154,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     <section className="regular-contribution-payment">
       { props.paymentStatus === 'Success' ? <Redirect to={{ pathname: routes.recurringContribThankyou }} /> : null }
       { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
-      {getStatusMessage(props.paymentStatus, props.checkoutFailureReason)}
+      {getStatusMessage(props.paymentStatus, props.errorReason)}
       {directDebitButton}
       {stripeButton}
       {payPalButton}
@@ -170,7 +170,7 @@ function mapStateToProps(state) {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
-    checkoutFailureReason: state.page.regularContrib.checkoutFailureReason,
+    errorReason: state.page.regularContrib.errorReason,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,
     currencyId: state.common.internationalisation.currencyId,

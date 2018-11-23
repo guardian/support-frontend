@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -36,7 +36,7 @@ type PropTypes = {|
   payPalHasLoaded: boolean,
   paymentComplete: boolean,
   payPalSwitchStatus: Status,
-  paymentError: CheckoutFailureReason | null,
+  paymentError: ErrorReason | null,
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   thankYouRoute: string,

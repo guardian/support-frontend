@@ -14,8 +14,8 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Status } from 'helpers/settings';
 import SvgCreditCard from 'components/svgs/creditCard';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
-import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import type { ErrorReason } from 'helpers/errorReasons';
 import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import { type Action as CheckoutAction, setCheckoutFormHasBeenSubmitted } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
@@ -27,7 +27,7 @@ import { formClassName } from './formFields';
 type PropTypes = {|
   dispatch: Function,
   email: string,
-  checkoutFailureReason: ?CheckoutFailureReason,
+  errorReason: ?ErrorReason,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
@@ -49,7 +49,7 @@ function mapStateToProps(state: State) {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
-    checkoutFailureReason: state.page.oneoffContrib.checkoutFailureReason,
+    errorReason: state.page.oneoffContrib.errorReason,
     areAnyRequiredFieldsEmpty: !state.page.user.email || !state.page.user.fullName,
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
@@ -83,7 +83,7 @@ function OneoffContributionsPayment(props: PropTypes, context) {
   return (
     <section className="oneoff-contribution-payment">
       { props.paymentComplete ? <Redirect to={{ pathname: routes.oneOffContribThankyou }} /> : null }
-      <PaymentFailureMessage checkoutFailureReason={props.checkoutFailureReason} />
+      <GeneralErrorMessage errorReason={props.errorReason} />
       <StripePopUpButton
         email={props.email}
         onPaymentAuthorisation={postCheckout(
