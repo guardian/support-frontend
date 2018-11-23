@@ -6,14 +6,13 @@ import React from 'react';
 import type { Node } from 'react';
 
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
-import { privacyLink, copyrightNotice } from 'helpers/legal';
+import { copyrightNotice } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import TermsPrivacy from '../legal/termsPrivacy/termsPrivacy';
 
 // ----- Props ----- //
 
 type PropTypes = {|
-  privacyPolicy: boolean,
   disclaimer: boolean,
   countryGroupId: CountryGroupId,
   children: Node,
@@ -21,21 +20,6 @@ type PropTypes = {|
 
 
 // ----- Functions ----- //
-
-function PrivacyPolicy(props: { privacyPolicy: boolean }) {
-
-  if (props.privacyPolicy) {
-    return (
-      <div className="component-footer__privacy-policy-text">
-        To find out what personal data we collect and how we use it, please visit our
-        <a className="component-footer__privacy-policy" href={privacyLink}> Privacy Policy</a>.
-      </div>
-    );
-  }
-
-  return null;
-
-}
 
 function Disclaimer(props: { disclaimer: boolean, countryGroupId: CountryGroupId }) {
   if (props.disclaimer) {
@@ -55,7 +39,6 @@ function Footer(props: PropTypes) {
   return (
     <footer className="component-footer" role="contentinfo">
       <div className="component-footer__content">
-        <PrivacyPolicy privacyPolicy={props.privacyPolicy} />
         {props.children}
         <small className="component-footer__copyright">{copyrightNotice}</small>
         <Disclaimer disclaimer={props.disclaimer} countryGroupId={props.countryGroupId} />
@@ -69,7 +52,6 @@ function Footer(props: PropTypes) {
 // ----- Default Props ----- //
 
 Footer.defaultProps = {
-  privacyPolicy: false,
   disclaimer: false,
   countryGroupId: 'GBPCountries',
   children: [],
