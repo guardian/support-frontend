@@ -8,6 +8,9 @@ const defaultContributeCopy = `
   as and when you feel like it – choose the option that suits you best.
 `;
 
+const usHeaderCopy = 'TODO header';
+const usContributeCopy = 'TODO contribute';
+
 export type CountryMetaData = {
   headerCopy: string,
   contributeCopy: string,
@@ -25,8 +28,8 @@ const countryGroupSpecificDetails: {
     contributeCopy: defaultContributeCopy,
   },
   UnitedStates: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
+    headerCopy: usHeaderCopy,
+    contributeCopy: usContributeCopy,
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
