@@ -861,12 +861,6 @@ form {
   height: 14px;
 }
 
-.form__submit .svg-arrow-right-straight {
-  width: 20px;
-  height: 18px;
-  vertical-align: middle;
-}
-
 .icon {
   fill: inherit;
 }
@@ -944,17 +938,20 @@ form {
 .button {
   align-items: center;
   border: 1px solid currentColor;
+  background-color: gu-colour(garnett-neutral-5);
   border-radius: $gu-v-spacing * 2;
   font-family: $gu-text-sans-web;
   height: $gu-v-spacing * 3.5;
   line-height: 1;
   padding: 0 $gu-h-spacing;
   text-decoration: none;
-}
+  position: relative;
 
-.button--newsletter {
-  color: gu-colour(garnett-neutral-5);
-  background-color: gu-colour(green-dark);
+  svg {
+    position: absolute;
+    fill: currentColor;
+    overflow: visible;
+  }
 
   &:enabled {
     cursor: pointer;
@@ -965,33 +962,32 @@ form {
   }
 }
 
+.button--newsletter {
+  color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(green-dark);
+  border-color: gu-colour(green-dark);
+  text-align: right;
+  width: 140px;
+
+  svg {
+    right: calc(100% - 33px);
+    height: 16px;
+  }
+}
+
 .button--newsletter__subscribed {
   color: gu-colour(green-dark);
   background-color: transparent;
 }
 
-.button--newsletter .svg-subscribe, .button--newsletter .svg-subscribed {
-  margin-right: 10px;
-}
-
 .button--right-arrow {
   width: 100%;
-  position: relative;
-  padding: 0 $gu-h-spacing;
+  padding: 0 50px 0 $gu-h-spacing;
   text-align: left;
-  &:enabled {
-    cursor: pointer;
-    &:hover,
-    &:focus {
-      filter: brightness(90%);
-    }
-  }
 
   .svg-arrow-right-straight {
-    height: 16px;
-    position: absolute;
     left: calc(100% - 34px);
-    top: 14px;
+    height: 16px;
   }
 }
 
@@ -1048,7 +1044,7 @@ form {
     margin: ($gu-v-spacing / 3) 0;
   }
 
-  .component-cta-link {
+  .component-contributions-survey__button {
     display: inline-block;
     margin-bottom: $gu-v-spacing * 3;
     margin-top: $gu-v-spacing;

@@ -139,8 +139,8 @@ function SetPasswordForm(props: PropTypes) {
           buttonCopy="Create an account"
         />
         <ButtonWithRightArrow
-          componentClassName=""
-          buttonClassName={classNameWithModifiers('button', ['blackonwhite'])}
+          componentClassName="form_no-submit"
+          buttonClassName="button--no-thanks"
           accessibilityHintId="accessibility-hint-no-thanks"
           type="button"
           buttonCopy="No, thank you"
