@@ -14,6 +14,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
 import { Fieldset } from 'components/forms/standardFields/fieldset';
+import { Button } from 'components/forms/standardFields/button';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
@@ -157,7 +158,7 @@ function CheckoutForm(props: PropTypes) {
             onChange={() => props.setPaymentMethod('card')}
           />
         </Fieldset>
-        <button onClick={() => props.submitForm()}>Submit</button>
+        <Button onClick={() => props.submitForm()}>Submit</Button>
       </LeftMarginSection>
     </div>
   );
