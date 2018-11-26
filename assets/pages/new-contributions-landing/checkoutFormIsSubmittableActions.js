@@ -11,7 +11,12 @@ import {
   checkLastName,
   checkStateIfApplicable,
 } from 'helpers/formValidation';
-import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import {
+  type ContributionType,
+  type OtherAmounts,
+  type SelectedAmounts,
+  contributionTypeIsRecurring,
+} from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CaState, UsState } from 'helpers/internationalisation/country';
 import type { State } from './contributionsLandingReducer';
@@ -87,6 +92,10 @@ function enableOrDisableForm() {
 
     const state = getState();
     const { isRecurringContributor } = state.page.user;
+
+    const shouldBlockExistingRecurringContributor =
+      isRecurringContributor && contributionTypeIsRecurring(state.page.form.contributionType);
+
     const userCanContributeWithoutSigningIn = canContributeWithoutSigningIn(
       state.page.form.contributionType,
       state.page.user.isSignedIn,
@@ -98,7 +107,7 @@ function enableOrDisableForm() {
 
     const shouldEnable =
       formIsValid
-      && !isRecurringContributor
+      && !(shouldBlockExistingRecurringContributor)
       && userCanContributeWithoutSigningIn;
 
     dispatch(setFormIsSubmittable(shouldEnable));
