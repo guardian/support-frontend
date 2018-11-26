@@ -1,7 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
-import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
@@ -44,6 +44,8 @@ export const formInputs = (formClassName: string): Array<HTMLInputElement> => {
   return [];
 };
 
+export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
+
 export const getForm: string => Object | null =
   (formName: string) => document.querySelector(`.${formName}`);
 
@@ -82,7 +84,6 @@ export const formElementIsValid = (formElement: Object | null) => {
   return false;
 };
 
-export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
 
 export function getTitle(contributionType: ContributionType): string {
 
