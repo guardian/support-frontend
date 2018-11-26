@@ -19,7 +19,8 @@ resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
 libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9" % "provided",
-  "com.gu" %% "acquisition-event-producer-play26" % "4.0.12"
+  "com.gu" %% "acquisition-event-producer-play26" % "4.0.12",
+  "com.gu" %% "support-promotions" % "0.1-SNAPSHOT"
 )
 
 releaseProcess := Seq[ReleaseStep](
@@ -30,10 +31,10 @@ releaseProcess := Seq[ReleaseStep](
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
-  ReleaseStep(action = Command.process("publishSigned", _), enableCrossBuild = true),
+  ReleaseStep(action = Command.process("publishSigned", _)),
   setNextVersion,
   commitNextVersion,
-  ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
+  ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
   pushChanges
 )
 
