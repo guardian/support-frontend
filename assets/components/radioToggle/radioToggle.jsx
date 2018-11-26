@@ -47,7 +47,6 @@ function getRadioButtons(props: PropTypes) {
     const radioChecked = radio.value === props.checked;
     const labelModifier = radioChecked ? 'checked' : null;
 
-    /* eslint-disable jsx-a11y/label-has-for */
     return (
       <span
         id={radio.id}
@@ -77,7 +76,6 @@ function getRadioButtons(props: PropTypes) {
         </label>
       </span>
     );
-    /* eslint-enable jsx-a11y/label-has-for */
 
   });
 
