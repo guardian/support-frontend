@@ -43,7 +43,7 @@ type PropTypes = {|
   |}>,
   error: ?string,
   resetError: void => void,
-  context?: string,
+  context: string,
 |};
 
 
@@ -58,7 +58,9 @@ function onCtaClick(isDisabled: boolean, resetError: void => void, context?: str
       clickEvent.preventDefault();
     }
 
-    sendClickedEvent(`${(context ? context.concat('-') : '')}ContributeCTA`);
+    if (!isDisabled) {
+      sendClickedEvent(`${(context ? context : 'contribute_cta')}`);
+    }
 
     resetError();
 
