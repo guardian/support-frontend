@@ -12,6 +12,7 @@ import ProductHero, {
   type GridImages,
   type ImagesByCountry,
 } from 'components/productHero/productHero';
+import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -118,9 +119,19 @@ function CheckoutStage(props: PropTypes) {
     case 'checkout':
     default:
       return (
-        <LeftMarginSection>
+        <div className="checkout-content">
+          <CheckoutHeading
+            heading="Digital Pack Subscription"
+            copy="Cancel your subscription at any time"
+          />
+          <LeftMarginSection modifierClasses={['free-trial']}>
+            <p className="checkout-content__free-trial">
+              You can use all the features free for the next 14 days,
+              and then your first payment will be taken.
+            </p>
+          </LeftMarginSection>
           <CheckoutForm />
-        </LeftMarginSection>
+        </div>
       );
 
   }

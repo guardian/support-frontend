@@ -8,6 +8,8 @@
   border: none;
   border-radius: 600px;
   cursor: pointer;
+  margin-top: $gu-v-spacing * 2;
+  transition: background-color .2s;
 
   &:hover {
     background-color: gu-colour(highlight-dark);

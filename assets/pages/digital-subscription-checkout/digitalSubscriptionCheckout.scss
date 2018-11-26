@@ -11,6 +11,8 @@
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
 @import '~components/leftMarginSection/leftMarginSection';
+@import '~components/checkoutHeading/checkoutHeading';
+@import '~components/checkoutCopy/checkoutCopy';
 @import '~components/customerService/customerService';
 @import '~components/subscriptionFaq/subscriptionFaq';
 @import '~components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
@@ -19,8 +21,11 @@
 @import '~components/productHero/productHero';
 @import '~components/forms/standardFields/input';
 @import '~components/forms/standardFields/select';
+@import '~components/forms/standardFields/button';
+@import '~components/forms/customFields/radioInput';
 @import '~components/forms/formHOCs/withLabel';
 @import '~components/forms/formHOCs/withError';
+@import '~components/forms/formHOCs/withArrow';
 
 
 // ----- Page-Specific Styles ----- //
@@ -42,6 +47,54 @@
     // Makes sure the circle SVGs stay behind the heading.
     position: relative;
   }
+
+  // ----- Checkout
+
+  .checkout-content {
+    .component-left-margin-section__content {
+      box-sizing: border-box;
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .checkout-form {
+    .component-left-margin-section__content {
+      padding-left: $gu-h-spacing / 2;
+      padding-bottom: $gu-v-spacing * 3;
+      border-top: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .checkout-form__heading {
+    @include gu-fontset-body-large;
+
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .component-left-margin-section--free-trial {
+    .component-left-margin-section__content {
+      @include multiline-bottom-border;
+    }
+  }
+
+  .checkout-content__free-trial {
+    @include gu-fontset-body-large;
+    font-style: italic;
+    font-weight: 300;
+    padding-left: $gu-h-spacing / 2;
+    margin-bottom: $gu-v-spacing * 2;
+
+    @include mq($from: mobileLandscape) {
+      width: 460px;
+    }
+  }
+
+  .component-left-margin-section--your-details {
+    .component-left-margin-section__content {
+      border-top: none;
+    }
+  }
+
 
   // ----- Thank You
 
