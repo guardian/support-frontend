@@ -52,6 +52,8 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 
 // ----- Render ----- //
 
+const context = 'support-landing-page';
+
 const content = (
   <Provider store={store}>
     <Page
@@ -73,19 +75,25 @@ const content = (
           <ContributionSelectionContainer />
           <ContributionAwarePaymentLogosContainer />
           <ContributionPaymentCtasContainer
+            context={context}
             PayPalButton={() =>
               <PayPalContributionButtonContainer cancelURL={`${getOrigin()}/uk`} />
           }
           />
         </Contribute>
-        <SubscriptionsSection />
+        <SubscriptionsSection
+          context={context}
+        />
       </section>
       <WhySupport headingSize={3} />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}
         headingSize={2}
+        context={context}
       />
-      <PatronsEventsContainer />
+      <PatronsEventsContainer
+        context={context}
+      />
     </Page>
   </Provider>
 );

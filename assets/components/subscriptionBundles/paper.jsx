@@ -12,6 +12,7 @@ import { flashSaleIsActive } from 'helpers/flashSale';
 type PropTypes = {|
   url: string,
   abTest: ComponentAbTest | null,
+  context: string,
 |};
 
 
@@ -53,9 +54,13 @@ export default function Paper(props: PropTypes) {
           url: props.url,
           accessibilityHint: 'Proceed to paper subscription options',
           modifierClasses: ['border'],
-          onClick: sendTrackingEventsOnClick('paper_cta', 'Paper', props.abTest),
+          onClick: sendTrackingEventsOnClick('paper_cta', 'Paper', props.abTest, props.context),
         },
       ]}
     />
   );
 }
+
+Paper.defaultProps = {
+  context: 'paper-subscription',
+};
