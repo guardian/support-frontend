@@ -6,7 +6,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { getFrequency, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import SvgArrowRight from 'components/svgs/arrowRightStraight';
@@ -17,8 +17,8 @@ import { type State } from '../contributionsLandingReducer';
 import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
 import {
-sendFormSubmitEventForPayPalRecurring,
-setupRecurringPayPalPayment,
+  sendFormSubmitEventForPayPalRecurring,
+  setupRecurringPayPalPayment,
 } from '../contributionsLandingActions';
 
 
