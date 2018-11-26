@@ -6,11 +6,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import TextInput from 'components/textInput/textInput';
-import {
-  setFullName,
-  setEmail,
-  type Action as UserAction,
-} from 'helpers/user/userActions';
+import { type Action as UserAction } from 'helpers/user/userActions';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import {
   type UserFormFieldAttribute,
   shouldShowError,
@@ -48,6 +45,8 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<UserAction | CheckoutAction>) {
+
+  const { setFullName, setEmail } = defaultUserActionFunctions;
 
   return {
     setFullName: (fullName: string) => {

@@ -22,8 +22,10 @@ import { NewHeader } from 'components/headers/new-header/Header';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { NewContributionFormContainer } from './components/ContributionFormContainer';
+import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer from './components/ContributionThankYouContainer';
 import { NewContributionBackground } from './components/ContributionBackground';
+import { setUserStateActions } from './setUserStateActions';
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -35,8 +37,11 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(initReducer(countryGroupId), true);
 
-user.init(store.dispatch);
+// We need to initialise in this order, as
+// formInit depends on the user being populated
+user.init(store.dispatch, setUserStateActions);
 formInit(store);
+
 
 const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 
@@ -110,4 +115,4 @@ const router = (
   </BrowserRouter>
 );
 
-renderPage(router, reactElementId);
+renderPage(router, reactElementId, () => store.dispatch(enableOrDisableForm()));

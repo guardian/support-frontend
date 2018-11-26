@@ -67,6 +67,7 @@ type FormState = {
   payPalHasLoaded: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
+  formIsSubmittable: boolean,
 };
 
 type PageState = {
@@ -143,6 +144,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
+    formIsSubmittable: true,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -152,7 +154,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
           ...state,
           contributionType: action.contributionType,
           showOtherAmount: false,
-          paymentMethod: action.paymentMethodToSelect,
           formData: { ...state.formData },
         };
 
@@ -232,8 +233,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'PAYMENT_FAILURE':
         return { ...state, paymentComplete: false, paymentError: action.paymentError };
 
-      case 'FORM_VALID':
+      case 'SET_FORM_IS_VALID':
         return { ...state, formIsValid: action.isValid };
+
+      case 'SET_FORM_IS_SUBMITTABLE':
+        return { ...state, formIsSubmittable: action.formIsSubmittable };
 
       case 'PAYMENT_WAITING':
         return { ...state, paymentComplete: false, isWaiting: action.isWaiting };

@@ -42,7 +42,6 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
-  setFormIsValid,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 
@@ -68,11 +67,9 @@ type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   isSignedIn: boolean,
-  setFormIsValid: boolean => void,
   formIsValid: boolean,
-  isRecurringContributor: boolean,
-  checkoutFormHasBeenSubmitted: boolean,
   isPostDeploymentTestUser: boolean,
+  formIsSubmittable: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -96,9 +93,8 @@ const mapStateToProps = (state: State) => ({
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   isSignedIn: state.page.user.isSignedIn,
   formIsValid: state.page.form.formIsValid,
-  isRecurringContributor: state.page.user.isRecurringContributor,
-  checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
+  formIsSubmittable: state.page.form.formIsSubmittable,
 });
 
 
@@ -108,7 +104,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setFormIsValid: (isValid) => { dispatch(setFormIsValid(isValid)); },
 });
 
 // ----- Functions ----- //
@@ -185,8 +180,8 @@ function onSubmit(props: PropTypes): Event => void {
       onFormSubmit({
         ...props,
         flowPrefix,
-        form,
         handlePayment,
+        form,
       });
     }
   };
