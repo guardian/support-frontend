@@ -12,7 +12,7 @@ import type { Action as ContributionSelectionAction } from 'components/contribut
 import type { State as PayPalState } from 'components/payPalContributionButton/payPalContributionButtonReducer';
 import type { Action as PayPalAction } from 'components/payPalContributionButton/payPalContributionButtonActions';
 
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 

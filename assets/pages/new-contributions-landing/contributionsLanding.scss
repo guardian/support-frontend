@@ -7,7 +7,7 @@
 @import '~components/directDebit/directDebitForm/directDebitForm';
 @import '~components/errorMessage/errorMessage';
 @import '~components/ctaLink/ctaLink';
-@import '~components/paymentFailureMessage/paymentFailureMessage';
+@import '~components/generalErrorMessage/generalErrorMessage';
 @import 'components/SetPassword/setPassword';
 
 body {
@@ -35,7 +35,7 @@ body {
 /*= HEADER */
 
 header[role="banner"] {
-  background-color: gu-colour(nav-faded);
+  background-color: gu-colour(header-dark);
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   position: relative;
   z-index: 1;
@@ -45,11 +45,15 @@ header[role="banner"] {
   width: 60px;
   height: 60px;
   position: relative;
-}
 
-.glogo .svg-roundel {
-  width: 100%;
-  height: 100%;
+  .svg-roundel {
+    width: 100%;
+    height: 100%;
+  }
+
+  .svg-roundel__g {
+    fill: gu-colour(header-dark);
+  }
 }
 
 .countryGroups {
@@ -59,6 +63,10 @@ header[role="banner"] {
   padding: 0;
   width: 100%;
   cursor: pointer;
+}
+
+.countryGroups__label {
+  color: #fff;
 }
 
 // Safari doesn't respect styles applied to <summary> so we need this wrapper div
@@ -87,6 +95,7 @@ header[role="banner"] {
 .countryGroups .svg-chevron {
   width: 19px;
   height: 10px;
+  fill: #fff;
 }
 
 .countryGroups[open] .svg-chevron {
@@ -104,6 +113,7 @@ header[role="banner"] {
   width: 14px;
   height: 14px;
   fill: gu-colour(garnett-neutral-1);
+  fill: #fff;
 }
 
 .countryGroups summary {
@@ -244,9 +254,9 @@ header[role="banner"] {
     background-color: gu-colour(news-garnett-highlight);
   }
 
-
+  // TODO: center with flex-box instead!
   .glogo {
-    top: 10px;
+    top: 7px;
     right: 10px;
   }
 
@@ -304,7 +314,7 @@ header[role="banner"] {
   }
 
   .glogo {
-    top: $gu-v-spacing * 2;
+    top: 7px;
   }
 
   .gu-content__content {
@@ -552,6 +562,17 @@ header[role="banner"] {
   flex-direction: column;
 }
 
+.form--contribution .component-terms-privacy {
+  margin-bottom: 30px;
+  font-size: 12px;
+  line-height: 16px;
+  color: gu-colour(garnett-neutral-2);
+
+  a {
+    color: gu-colour(neutral-2);
+  }
+}
+
 /*= TYPOGRAPHY */
 
 form {
@@ -765,13 +786,19 @@ form {
   text-decoration: none;
 }
 
+.form__error--existing-contributor {
+  margin-top: $gu-v-spacing;
+  display: block;
+  text-decoration: none;
+}
+
 .underline {
   text-decoration: underline;
 }
 
 .form__submit {
   margin-top: 24px;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
 }
 
 .form__submit-button {
@@ -1024,4 +1051,90 @@ form {
 
 .component-password-failure-message {
   padding: 0 $gu-h-spacing $gu-v-spacing;
+}
+
+.component-contributions-survey {
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  margin: 0 -10px;
+  padding: 0 10px;
+
+  h3 {
+    font-family: $gu-text-egyptian-web;
+    letter-spacing: -0.5px;
+    font-weight: 900;
+    font-size: 17px;
+    margin: ($gu-v-spacing / 3) 0;
+  }
+
+  .component-cta-link {
+    display: inline-block;
+    margin-bottom: $gu-v-spacing * 3;
+    margin-top: $gu-v-spacing;
+  }
+
+  .component-cta-link__text {
+    padding-right: 25px;
+    font-size: 16px;
+  }
+}
+
+/* Small header test */
+
+@include mq($from: mobile, $until: tablet) {
+  .gu-content--shrink {
+    $header-height: 44px;
+    grid-template-rows: [header-t] $header-height [header-b] 1fr [footer-t] auto [footer-b];
+
+    .glogo {
+      width: 30px;
+      height: 30px;
+      right: 0;
+    }
+
+    header[role="banner"] {
+      height: $header-height;
+
+      // to match .gu-content__content
+      padding: 0 10px;
+    }
+
+    .countryGroups {
+      margin-left: 0;
+
+      // TODO: this is basically just vertical centering. use flex-box!
+      margin-top: 4px;
+
+      summary {
+        padding-left: 0;
+      }
+    }
+
+    .header {
+      font-size: 22px;
+      padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+    }
+
+    .blurb {
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+
+  .gu-content--contribution-form.gu-content--no-blurb {
+    .blurb {
+      display: none;
+    }
+  }
+
+  .gu-content--contribution-form.gu-content--no-header {
+    .header {
+      display: none;
+    }
+  }
+
+  .gu-content--contribution-form.gu-content--no-blurb.gu-content--no-header {
+    .form__radio-group-list {
+      padding-top: 0;
+    }
+  }
 }

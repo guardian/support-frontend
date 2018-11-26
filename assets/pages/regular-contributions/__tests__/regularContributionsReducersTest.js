@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { ErrorReason } from 'helpers/errorReasons';
 import createReducer from '../regularContributionsReducer';
 
 
@@ -18,15 +18,15 @@ describe('Regular contributions Reducer', () => {
 
   it('should handle CHECKOUT_ERROR', () => {
 
-    const insufficientFunds: CheckoutFailureReason = 'insufficient_funds';
+    const insufficientFunds: ErrorReason = 'insufficient_funds';
     const action = {
       type: 'CHECKOUT_ERROR',
-      checkoutFailureReason: insufficientFunds,
+      errorReason: insufficientFunds,
     };
 
     const newState = reducer(undefined, action);
 
-    expect(newState.regularContrib.checkoutFailureReason).toEqual(insufficientFunds);
+    expect(newState.regularContrib.errorReason).toEqual(insufficientFunds);
     expect(newState.regularContrib.paymentStatus).toMatchSnapshot();
   });
 
@@ -40,7 +40,7 @@ describe('Regular contributions Reducer', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.regularContrib.checkoutFailureReason).toMatchSnapshot();
+    expect(newState.regularContrib.errorReason).toMatchSnapshot();
   });
 
   it('should handle CREATING_CONTRIBUTOR', () => {

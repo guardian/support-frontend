@@ -4,34 +4,30 @@
 
 import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { getWeeklyCheckout } from 'helpers/externalLinks';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
+
 import { type State } from './weeklySubscriptionLandingReducer';
-
-
-// ----- Types ----- //
-
-export type Action = { type: 'SET_PERIOD', period: WeeklyBillingPeriod };
-
 
 // ----- Action Creators ----- //
 
-function setPeriod(period: WeeklyBillingPeriod): Action {
-  return { type: 'SET_PERIOD', period };
-}
+const { setPlan } = ProductPagePlanFormActionsFor<WeeklyBillingPeriod>('GuardianWeekly', 'GuardianWeekly');
 
 function redirectToWeeklyPage() {
   return (dispatch: Function, getState: () => State) => {
     const state = getState();
     const { countryGroupId } = state.common.internationalisation;
     const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
-    const location = state.page.period ? getWeeklyCheckout(
+    const location = state.page.plan ? getWeeklyCheckout(
       referrerAcquisitionData,
-      state.page.period,
+      state.page.plan,
       countryGroupId,
       abParticipations,
       optimizeExperiments,
     ) : null;
 
     if (location) {
+      sendTrackingEventsOnClick('main_cta_click', 'GuardianWeekly', null)();
       window.location.href = location;
     }
   };
@@ -40,4 +36,4 @@ function redirectToWeeklyPage() {
 
 // ----- Exports ----- //
 
-export { setPeriod, redirectToWeeklyPage };
+export { setPlan, redirectToWeeklyPage };

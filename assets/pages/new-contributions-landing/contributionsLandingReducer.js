@@ -2,19 +2,19 @@
 
 // ----- Imports ----- //
 
-import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type ErrorReason } from 'helpers/errorReasons';
 import { combineReducers } from 'redux';
-import { amounts, parseContrib, type Amount, type Contrib, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { amounts, type Amount, type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
-import sessionId from 'helpers/sessionId/reducer';
-import { type CommonState } from 'helpers/page/page';
+import { type CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
+import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type SessionId as SessionIdState } from 'helpers/sessionId/reducer';
+import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
 import * as storage from 'helpers/storage';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
@@ -40,9 +40,7 @@ export type ThankYouPageStageMap<T> = {
 export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 
 type FormData = UserFormData & {
-  otherAmounts: {
-    [Contrib]: { amount: string | null }
-  },
+  otherAmounts: OtherAmounts,
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
@@ -54,15 +52,15 @@ type SetPasswordData = {
 }
 
 type FormState = {
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
-  selectedAmounts: { [Contrib]: Amount | 'other' },
+  selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
-  paymentError: CheckoutFailureReason | null,
+  paymentError: ErrorReason | null,
   guestAccountCreationToken: ?string,
   thankYouPageStage: ThankYouPageStage,
   hasSeenDirectDebitThankYouCopy: boolean,
@@ -76,7 +74,6 @@ type PageState = {
   user: UserState,
   csrf: CsrfState,
   directDebit: DirectDebitState,
-  sessionId: SessionIdState,
   marketingConsent: MarketingConsentState,
 };
 
@@ -88,13 +85,13 @@ export type State = {
 // ----- Functions ----- //
 
 function createFormReducer(countryGroupId: CountryGroupId) {
-  const amountsForCountry: { [Contrib]: Amount[] } = {
+  const amountsForCountry: { [ContributionType]: Amount[] } = {
     ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId],
     MONTHLY: amounts('notintest').MONTHLY[countryGroupId],
     ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
   };
 
-  const initialAmount: { [Contrib]: Amount | 'other' } = {
+  const initialAmount: { [ContributionType]: Amount | 'other' } = {
     ONE_OFF: amountsForCountry.ONE_OFF.find(amount => amount.isDefault) || amountsForCountry.ONE_OFF[0],
     MONTHLY: amountsForCountry.MONTHLY.find(amount => amount.isDefault) || amountsForCountry.MONTHLY[0],
     ANNUAL: amountsForCountry.ANNUAL.find(amount => amount.isDefault) || amountsForCountry.ANNUAL[0],
@@ -103,7 +100,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
   // ----- Initial state ----- //
 
   const initialState: FormState = {
-    contributionType: parseContrib(storage.getSession('contributionType'), 'MONTHLY'),
+    contributionType: getContributionTypeFromSessionOrElse('MONTHLY'),
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
@@ -275,7 +272,6 @@ function initReducer(countryGroupId: CountryGroupId) {
     user: createUserReducer(countryGroupId),
     directDebit,
     csrf,
-    sessionId,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
 }

@@ -16,7 +16,7 @@ Object {
   },
   "oneoffContrib": Object {
     "amount": 20,
-    "checkoutFailureReason": null,
+    "errorReason": null,
     "paymentComplete": false,
   },
   "user": Object {
@@ -27,6 +27,7 @@ Object {
     "gnmMarketing": false,
     "id": "",
     "isPostDeploymentTestUser": false,
+    "isRecurringContributor": false,
     "isSignedIn": false,
     "isTestUser": null,
     "lastName": "",

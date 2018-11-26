@@ -8,6 +8,8 @@
     border: solid 1px;
     padding: 7px;
     margin-right: 5px;
+    border: #fff solid 1px;
+    fill: #fff;
   }
 
   .component-select-input__select {
@@ -21,6 +23,7 @@
     background: none;
     padding: 0;
     height: auto;
+    color: #fff;
 
     @include mq($from: mobileLandscape) {
       font-size: 14px;
@@ -28,6 +31,10 @@
 
     &:hover {
       text-decoration: underline;
+    }
+
+    option {
+      color: gu-colour(garnett-neutral-1);
     }
 
     &::-ms-expand {

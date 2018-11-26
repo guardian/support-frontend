@@ -12,10 +12,29 @@
 @import '~components/headingBlock/headingBlock';
 @import '~components/leftMarginSection/leftMarginSection';
 
-@import 'components/weeklyContentBlock';
-@import 'components/weeklyTextBlock';
-@import 'components/weeklyFeatureList';
-@import 'components/weeklyHero';
-@import 'components/weeklyCta';
-@import 'components/weeklyForm';
-@import 'components/weeklyFormLabel';
+:root {
+  scroll-behavior: smooth;
+}
+
+.component-product-page-hero--weekly {
+  .component-grid-image {
+    display: block;
+    width: 90%;
+    max-width: 500px;
+    margin: ($gu-v-spacing * 3) auto -25%;
+    z-index: 9;
+    @include mq($from: tablet) {
+      width: auto;
+      max-width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 5%;
+      right: -20%;
+      margin: 0;
+    }
+    @include mq($from: desktop) {
+      left: 450px;
+      right: auto;
+    }
+  }
+}

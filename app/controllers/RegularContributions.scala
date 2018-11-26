@@ -4,12 +4,10 @@ import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
-import cats.data.EitherT
 import cats.implicits._
 import codecs.CirceDecoders.statusEncoder
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.workers.model.AccountAccessScope.{AuthenticatedAccess, SessionAccess}
 import com.gu.support.workers.model.User
 import config.Configuration.GuardianDomain
 import cookies.RecurringContributionCookie
@@ -115,8 +113,8 @@ class RegularContributions(
     SafeLogger.info(s"[${request.uuid}] User ${fullUser.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
 
     val result = for {
-      user <- identityService.getUser(fullUser) // FIXME also need to check they are email verified before using AccessScopeNoRestriction
-      response <- client.createContributor(request, contributor(user, request.body), request.uuid, AuthenticatedAccess).leftMap(_.toString)
+      user <- identityService.getUser(fullUser)
+      response <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
     } yield response
 
     result.fold(
@@ -135,8 +133,7 @@ class RegularContributions(
     val result = for {
       userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email)
       user <- identityService.getUser(IdMinimalUser(userIdWithOptionalToken.userId, None))
-      sessionId <- EitherT(Future.successful(request.body.maybeSessionId.toRight("no read access token for anonymous user")))
-      response <- client.createContributor(request, contributor(user, request.body), request.uuid, SessionAccess(sessionId)).leftMap(_.toString)
+      response <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
     } yield StatusResponse.fromStatusResponseAndToken(response, userIdWithOptionalToken.guestAccountRegistrationToken)
 
     result.fold(

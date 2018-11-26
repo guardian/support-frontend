@@ -8,7 +8,7 @@ import config.StringsConfig
 import play.api.mvc._
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
 import utils.RequestCountry._
-
+import views.html.helper.CSRF
 import scala.concurrent.ExecutionContext
 
 class Subscriptions(
@@ -58,21 +58,18 @@ class Subscriptions(
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    if (settingsProvider.settings().switches.internationalSubscribePages == SwitchState.Off && countryCode.toLowerCase != "uk") {
-      Redirect(controllers.routes.Subscriptions.geoRedirect())
-    } else {
-      implicit val settings: Settings = settingsProvider.settings()
-      val title = "Support the Guardian | Get a Subscription"
-      val id = "subscriptions-landing-page"
-      val js = "subscriptionsLandingPage.js"
-      Ok(views.html.main(
-        title,
-        id,
-        js,
-        "subscriptionsLandingPageStyles.css",
-        description = stringsConfig.subscriptionsLandingDescription
-      )).withSettingsSurrogateKey
-    }
+    implicit val settings: Settings = settingsProvider.settings()
+    val title = "Support the Guardian | Get a Subscription"
+    val id = "subscriptions-landing-page"
+    val js = "subscriptionsLandingPage.js"
+    Ok(views.html.main(
+      title,
+      id,
+      js,
+      "subscriptionsLandingPageStyles.css",
+      description = stringsConfig.subscriptionsLandingDescription
+    )).withSettingsSurrogateKey
+
   }
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -111,7 +108,7 @@ class Subscriptions(
     val title = "The Guardian Weekly Subscriptions | The Guardian"
     val id = "weekly-landing-page-" + countryCode
     val js = "weeklySubscriptionLandingPage.js"
-    val css = "weeklySubscriptionLandingPageStyles.css"
+    val css = "weeklySubscriptionLandingPage.css"
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
     val hrefLangLinks = Map(
@@ -123,12 +120,31 @@ class Subscriptions(
       "en" -> buildCanonicalWeeklySubscriptionLink("int"),
       "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
-    Ok(views.html.main(title, id, js, css, description)).withSettingsSurrogateKey
+    Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
+  }
+
+  def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
+    Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
+  }
+
+  def paperMethodRedirectTo(method: String): Action[AnyContent] = Action { implicit request =>
+    Redirect(buildCanonicalPaperSubscriptionLink(Some(method)), request.queryString, status = FOUND)
+  }
+
+  def paper(method: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
+    val title = "The Guardian Subscriptions | The Guardian"
+    val id = "paper-subscription-landing-page-" + method
+    val js = "paperSubscriptionLandingPage.js"
+    val css = "paperSubscriptionLandingPage.css"
+    val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
+
+    Ok(views.html.main(title, id, js, css, None, canonicalLink)).withSettingsSurrogateKey
   }
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
-  def displayForm(countryCode: String, displayCheckout: String): Action[AnyContent] =
+  def displayForm(countryCode: String, displayCheckout: String, isCsrf: Boolean = false): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId) { implicit request =>
       if (displayCheckout == "true") {
         implicit val settings: Settings = settingsProvider.settings()
@@ -136,11 +152,15 @@ class Subscriptions(
         val id = "digital-subscription-checkout-page-" + countryCode
         val js = "digitalSubscriptionCheckoutPage.js"
         val css = "digitalSubscriptionCheckoutPageStyles.css"
-        Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+        val csrf = CSRF.getToken.value
+        Ok(views.html.main(title, id, js, css, csrf = Some(csrf))).withSettingsSurrogateKey
       } else {
         Redirect(routes.Subscriptions.geoRedirect)
       }
     }
+
+  def buildCanonicalPaperSubscriptionLink(method: Option[String] = None): String =
+    s"${supportUrl}/uk/subscribe/paper/${method.getOrElse("collection")}"
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"

@@ -11,6 +11,7 @@ npm-debug.log
 yarn-error.log
 app/npm-debug.log
 coverage/
+package-lock.json
 
 dev
 logs

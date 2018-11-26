@@ -30,6 +30,8 @@ export type ComponentAbTest = {
 export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
 export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
 
+export type PaperBillingPlan = 'everyday' | 'sixday' | 'weekend' | 'sunday';
+
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
     [CountryGroupId]: number,
@@ -57,13 +59,32 @@ const subscriptionPricesForDefaultBillingPeriod: {
     International: 81.30,
   },
   Paper: {
-    GBPCountries: 10.36,
+    GBPCountries: 10.79,
   },
   PaperAndDigital: {
     GBPCountries: 21.62,
   },
   DailyEdition: {
     GBPCountries: 11.99,
+  },
+};
+
+const discountPricesForDefaultBillingPeriod: {
+  [SubscriptionProduct]: {
+    [CountryGroupId]: number,
+  }
+} = {
+  DigitalPack: {
+    GBPCountries: 6,
+    UnitedStates: 10,
+    AUDCountries: 10.75,
+    International: 10,
+  },
+  Paper: {
+    GBPCountries: 5.40,
+  },
+  PaperAndDigital: {
+    GBPCountries: 10.81,
   },
 };
 
@@ -124,8 +145,15 @@ const defaultBillingPeriods: {
 
 // ----- Functions ----- //
 
+function fixDecimals(number: number): string {
+  if (Number.isInteger(number)) {
+    return number.toString();
+  }
+  return number.toFixed(2);
+}
+
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  return subscriptionPricesForDefaultBillingPeriod[product][countryGroupId].toFixed(2);
+  return fixDecimals(subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]);
 }
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const currency = currencies[detect(countryGroupId)].glyph;
@@ -133,10 +161,19 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
+function getDiscountedPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  return fixDecimals(discountPricesForDefaultBillingPeriod[product][countryGroupId]);
+}
+
+function discountedDisplayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  const currency = currencies[detect(countryGroupId)].glyph;
+  const price = getDiscountedPrice(product, countryGroupId);
+  return `${currency}${price}/${defaultBillingPeriods[product]}`;
+}
+
 function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
   return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
 }
-
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
 
@@ -191,6 +228,7 @@ function sendTrackingEventsOnClick(
 export {
   sendTrackingEventsOnClick,
   displayPrice,
+  discountedDisplayPrice,
   getProductPrice,
   getWeeklyProductPrice,
 };

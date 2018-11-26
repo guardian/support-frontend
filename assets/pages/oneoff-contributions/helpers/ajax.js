@@ -9,12 +9,12 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { OptimizeExperiments } from 'helpers/tracking/optimize';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import * as cookie from 'helpers/cookie';
 import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { ErrorReason } from 'helpers/errorReasons';
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
 
@@ -50,7 +50,7 @@ type PaymentApiStripeExecutePaymentBody = {|
 type PaymentApiError = {| type: string, error: Object |}
 
 type OnSuccess = () => void;
-type OnFailure = CheckoutFailureReason => void;
+type OnFailure = ErrorReason => void;
 
 
 // ----- Functions ----- //
@@ -94,7 +94,7 @@ function requestData(
 }
 
 const handleFailure = (onFailure: OnFailure) => (paymentApiError: PaymentApiError): void => {
-  const failureReason: CheckoutFailureReason = paymentApiError.error.failureReason ? paymentApiError.error.failureReason : 'unknown';
+  const failureReason: ErrorReason = paymentApiError.error.failureReason ? paymentApiError.error.failureReason : 'unknown';
   onFailure(failureReason);
 };
 
@@ -137,8 +137,8 @@ function postCheckout(
     dispatch(checkoutSuccess());
   };
 
-  const onFailure: OnFailure = (checkoutFailureReason: CheckoutFailureReason) => {
-    dispatch(checkoutError(checkoutFailureReason));
+  const onFailure: OnFailure = (errorReason: ErrorReason) => {
+    dispatch(checkoutError(errorReason));
   };
 
   return (stripeAuthorisation: StripeAuthorisation) => {

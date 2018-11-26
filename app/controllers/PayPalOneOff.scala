@@ -65,7 +65,8 @@ class PayPalOneOff(
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
     val redirect = Redirect {
       country match {
-        case Some(c) => s"/$c/thankyou.new"
+        // TODO: more cleanup
+        case Some(c) => s"/$c/thankyou"
         case None => "/contribute/one-off/thankyou"
       }
     }
@@ -85,7 +86,7 @@ class PayPalOneOff(
     })
   }
 
-  //TODO - remove once old paypal return route has been removed
+  //TODO - more cleanup
   def newReturnURL(paymentId: String, PayerID: String, country: String): Action[AnyContent] = returnURL(paymentId, PayerID, Some(country))
 
   def returnURL(paymentId: String, PayerID: String, country: Option[String] = None): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
@@ -93,7 +94,12 @@ class PayPalOneOff(
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
       cookieAcquisitionData <- Try {
-        Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
+        val parsed = Json.parse(java.net.URLDecoder.decode(cookie.value, "UTF-8"))
+
+        request.cookies.get("_ga") match {
+          case Some(gaId) => parsed.as[JsObject] + ("gaId" -> Json.toJson(gaId.value))
+          case None => parsed
+        }
       }.toOption
     } yield cookieAcquisitionData).getOrElse(fallbackAcquisitionData)
 
@@ -105,6 +111,7 @@ class PayPalOneOff(
     val queryStrings = request.queryString
     val testUsername = request.cookies.get("_test_username")
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
+    val userAgent = request.headers.get("user-agent")
 
     def emailForUser(user: Option[AuthenticatedIdUser])(
       implicit
@@ -121,7 +128,7 @@ class PayPalOneOff(
     }
 
     emailForUser(request.user)
-      .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser))
+      .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser, userAgent))
       .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, isTestUser))
   }
 

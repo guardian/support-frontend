@@ -5,6 +5,7 @@
 import { routes } from 'helpers/routes';
 import * as cookie from 'helpers/cookie';
 import { getSession } from 'helpers/storage';
+import { get as getCookie } from 'helpers/cookie';
 
 import {
   setId,
@@ -16,6 +17,7 @@ import {
   setPostDeploymentTestUser,
   setFullName,
   setIsSignedIn,
+  setIsRecurringContributor,
 } from './userActions';
 
 
@@ -47,6 +49,10 @@ const init = (dispatch: Function) => {
 
   if (testUserCondition && cookie.get('_post_deploy_user')) {
     dispatch(setPostDeploymentTestUser(true));
+  }
+
+  if (getCookie('gu_recurring_contributor') === 'true') {
+    dispatch(setIsRecurringContributor());
   }
 
   if (windowHasUser) {

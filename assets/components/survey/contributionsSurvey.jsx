@@ -17,7 +17,7 @@ export default function ContributionsSurvey() {
       </p>
       <CtaLink
         text="Share your thoughts"
-        url="https://www.surveymonkey.co.uk/r/9YPHM6W"
+        url="https://www.surveymonkey.co.uk/r/QVKCKXQ"
         accessibilityHint="Please tell us about your contribution to The Guardian by filling out this short form."
         modifierClasses={['survey']}
       />

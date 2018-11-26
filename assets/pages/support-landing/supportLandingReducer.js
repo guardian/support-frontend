@@ -10,7 +10,7 @@ import { payPalContributionButtonReducerFor } from 'components/payPalContributio
 import type { State as ContributionSelectionState } from 'components/contributionSelection/contributionSelectionReducer';
 import type { State as PayPalState } from 'components/payPalContributionButton/payPalContributionButtonReducer';
 
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 
 
 // ----- Types ----- //

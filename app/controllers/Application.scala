@@ -99,57 +99,16 @@ class Application(
     )).withSettingsSurrogateKey
   }
 
-  def oldOrNewContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
-    type Attempt[A] = EitherT[Future, String, A]
-    implicit val settings: Settings = settingsProvider.settings()
-    implicit val participation: ServersideAbTest.Participation = ServersideAbTest.getParticipation
-    implicit val gd: GuardianDomain = guardianDomain
-
-    val experiments = settings.switches.experiments
-    val npf = experiments.get("newFlow")
-    if (npf.exists(_.isInVariant(participation))) {
-      SafeLogger.info("SERVENEW: Serving new contribution landing page")
-      request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-        err => {
-          SafeLogger.error(scrub"Error fetching user from identity: $err")
-          Ok(newContributions(countryCode, None))
-        },
-        user => Ok(newContributions(countryCode, user))
-      ).map(result => result.withSettingsSurrogateKey.withServersideAbTestCookie)
-    } else if (npf.exists(_.isInControl(participation))) {
-      SafeLogger.info("SERVEOLD: Serving old contributions landing page")
-      Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey.withServersideAbTestCookie)
-    } else {
-      Future(Ok(oldContributions(countryCode)).withSettingsSurrogateKey)
-    }
-  }
-
-  def newContributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  def contributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: Settings = settingsProvider.settings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(newContributions(countryCode, None)),
-      user => Ok(newContributions(countryCode, user))
+      _ => Ok(contributionsHtml(countryCode, None)),
+      user => Ok(contributionsHtml(countryCode, user))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  def oldContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
-    Ok(oldContributions(countryCode)).withSettingsSurrogateKey
-  }
-
-  private def oldContributions(countryCode: String)(implicit request: RequestHeader, settings: Settings) = {
-    views.html.main(
-      title = "Support the Guardian | Make a Contribution",
-      description = stringsConfig.contributionsLandingDescription,
-      mainId = s"contributions-landing-page-$countryCode",
-      mainJsBundle = "contributionsLandingPage.js",
-      mainStyleBundle = "contributionsLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    )
-  }
-
-  private def newContributions(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",

@@ -11,7 +11,7 @@ import SvgMastercardLogo from 'components/svgs/mastercardLogo';
 import SvgPaypalLogo from 'components/svgs/payPalLogo';
 import SvgAmexLogo from 'components/svgs/amexLogo';
 
-import type { Contrib as ContributionType } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 
 // ----- Component ----- //
 

@@ -13,14 +13,14 @@ import {
   setEmail,
   setStateField,
 } from 'helpers/user/userActions';
-import { setCountry } from 'helpers/page/pageActions';
+import { setCountry } from 'helpers/page/commonActions';
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { Contrib } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import {
   type UserFormFieldAttribute,
   shouldShowError,
@@ -51,7 +51,7 @@ type PropTypes = {|
   stateField: UsState | CaState,
   checkoutFormHasBeenSubmitted: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  contributionType: Contrib,
+  contributionType: ContributionType,
 |};
 
 // ----- Map State/Props ----- //

@@ -13,11 +13,11 @@ import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acqu
 import { type ComponentAbTest } from 'helpers/subscriptions';
 import type { HeadingSize } from 'components/heading/heading';
 import { type Participations } from 'helpers/abTests/abtest';
-import { type OptimizeExperiments } from 'helpers/tracking/optimize';
-import { type CommonState } from 'helpers/page/page';
+import { type OptimizeExperiments } from 'helpers/optimize/optimize';
+import { type CommonState } from 'helpers/page/commonReducer';
 import FeaturedProductHero from 'components/featuredProductHero/featuredProductHero';
 
-import { getProduct, getProducts, type Product } from './featuredProducts';
+import { getProduct, type Product } from './featuredProducts';
 
 // ----- Types ----- //
 
@@ -71,7 +71,7 @@ function FeaturedProductAb(props: PropTypes) {
     optimizeExperiments,
   );
 
-  const product = getProduct(subsLinks, countryGroupId) || getProducts(subsLinks, countryGroupId).GuardianWeekly;
+  const product = getProduct(subsLinks, countryGroupId);
 
   return product ? (
     <FeaturedProductHero

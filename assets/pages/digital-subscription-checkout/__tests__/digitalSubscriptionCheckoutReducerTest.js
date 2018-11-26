@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { reducer, setStage, type Stage } from '../digitalSubscriptionCheckoutReducer';
+import { initReducer, setStage, type Stage } from '../digitalSubscriptionCheckoutReducer';
 
 
 // ----- Tests ----- //
@@ -14,9 +14,9 @@ describe('Digital Subscription Checkout Reducer', () => {
     const stage: Stage = 'thankyou';
     const action = setStage(stage);
 
-    const newState = reducer(undefined, action);
+    const newState = initReducer()(undefined, action);
 
-    expect(newState.stage).toEqual(stage);
+    expect(newState.checkout.stage).toEqual(stage);
 
   });
 
@@ -25,9 +25,9 @@ describe('Digital Subscription Checkout Reducer', () => {
     const stage: Stage = 'checkout';
     const action = setStage(stage);
 
-    const newState = reducer(undefined, action);
+    const newState = initReducer()(undefined, action);
 
-    expect(newState.stage).toEqual(stage);
+    expect(newState.checkout.stage).toEqual(stage);
 
   });
 

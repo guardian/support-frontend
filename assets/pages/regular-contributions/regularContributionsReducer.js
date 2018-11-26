@@ -11,9 +11,9 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
-import type { CommonState } from 'helpers/page/page';
+import type { CommonState } from 'helpers/page/commonReducer';
 import type { PaymentMethod } from 'helpers/contributions';
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { ErrorReason } from 'helpers/errorReasons';
 import { type RegularContributionType } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
@@ -28,7 +28,7 @@ import type { PaymentStatus } from './components/regularContributionsPayment';
 type RegularContributionsState = {
   amount: number,
   contributionType: RegularContributionType,
-  checkoutFailureReason: ?CheckoutFailureReason,
+  errorReason: ?ErrorReason,
   paymentStatus: PaymentStatus,
   paymentMethod: ?PaymentMethod,
   payPalHasLoaded: boolean,
@@ -64,7 +64,7 @@ function createRegularContributionsReducer(
   const initialState: RegularContributionsState = {
     amount,
     contributionType,
-    checkoutFailureReason: null,
+    errorReason: null,
     paymentStatus: 'NotStarted',
     paymentMethod,
     payPalHasLoaded: false,
@@ -88,7 +88,7 @@ function createRegularContributionsReducer(
         return { ...state, paymentStatus: 'Success', paymentMethod: action.paymentMethod };
 
       case 'CHECKOUT_ERROR':
-        return { ...state, paymentStatus: 'Failed', checkoutFailureReason: action.checkoutFailureReason };
+        return { ...state, paymentStatus: 'Failed', errorReason: action.errorReason };
 
       case 'CREATING_CONTRIBUTOR':
         return { ...state, paymentStatus: 'Pending' };

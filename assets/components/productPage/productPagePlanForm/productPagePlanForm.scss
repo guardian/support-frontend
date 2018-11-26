@@ -1,0 +1,37 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-product-page-plan-form__items {
+  margin-bottom: $gu-v-spacing * 2;
+  @include mq($until: leftCol) {
+    max-width: gu-span(6);
+  }
+  @include mq($from: leftCol) {
+    display: flex;
+    align-items: stretch;
+  }
+}
+
+.component-product-page-plan-form__items > .component-product-page-plan-form__item {
+  flex: 0 0 25%;
+  padding: 0 $gu-h-spacing/2;
+  box-sizing: border-box;
+  margin-bottom: $gu-v-spacing;
+  @include mq($from: leftCol) {
+    margin-bottom: 0;
+  }
+}
+
+.component-product-page-plan-form__cta {
+  @include mq($until: tablet) {
+    transition: .4s;
+    transform: translateY(0);
+    position: sticky;
+    bottom: 0;
+    background: rgba(0,0,0,.75);
+    margin: $gu-v-spacing * -1 $gu-h-spacing * -.5;
+    padding: $gu-v-spacing $gu-h-spacing * .5;
+    &[data-disabled] {
+      position: static;
+    }
+  }
+}

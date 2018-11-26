@@ -16,7 +16,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Status } from 'helpers/settings';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { OptimizeExperiments } from 'helpers/tracking/optimize';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 
 
 // ---- Types ----- //

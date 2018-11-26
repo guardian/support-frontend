@@ -6,7 +6,7 @@
 import { routes } from 'helpers/routes';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Dispatch } from 'redux';
-import type { BillingPeriod, Contrib } from 'helpers/contributions';
+import type { BillingPeriod, ContributionType } from 'helpers/contributions';
 import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
 import { getSupportAbTests } from 'helpers/tracking/acquisitions';
@@ -14,13 +14,12 @@ import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import type { CheckoutFailureReason } from 'helpers/checkoutErrors';
+import type { ErrorReason } from 'helpers/errorReasons';
 import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/contributions';
-import type { OptimizeExperiments } from 'helpers/tracking/optimize';
-import uuidv4 from 'uuid';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 
 // ----- Setup ----- //
@@ -64,7 +63,6 @@ type RegularContribFields = {|
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
   email: ?string,
-  sessionId: string,
 |};
 
 // https://github.com/guardian/support-models/blob/master/src/main/scala/com/gu/support/workers/model/Status.scala
@@ -73,7 +71,7 @@ type Status = 'success' | 'failure' | 'pending';
 type StatusResponse = {|
   status: Status,
   trackingUri: string,
-  failureReason: CheckoutFailureReason,
+  failureReason: ErrorReason,
   guestAccountCreationToken?: string
 |}
 
@@ -122,7 +120,7 @@ const getPaymentFields =
 function requestData(
   abParticipations: Participations,
   amount: number,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currency: IsoCurrency,
   csrf: CsrfState,
   paymentFieldName: PaymentFieldName,
@@ -167,7 +165,6 @@ function requestData(
     referrerAcquisitionData,
     supportAbTests,
     email: user.email,
-    sessionId: uuidv4(),
   };
 
   if (user.stateField) {
@@ -273,7 +270,7 @@ function postCheckout(
   amount: number,
   csrf: CsrfState,
   currencyId: IsoCurrency,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   dispatch: Dispatch<*>,
   paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,

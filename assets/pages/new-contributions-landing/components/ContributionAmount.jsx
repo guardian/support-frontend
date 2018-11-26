@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { config, amounts, type Amount, type Contrib } from 'helpers/contributions';
+import { config, amounts, type Amount, type ContributionType } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -25,12 +25,12 @@ import { NewContributionTextInput } from './ContributionTextInput';
 type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
-  contributionType: Contrib,
-  selectedAmounts: { [Contrib]: Amount | 'other' },
-  selectAmount: (Amount | 'other', CountryGroupId, Contrib) => (() => void),
+  contributionType: ContributionType,
+  selectedAmounts: { [ContributionType]: Amount | 'other' },
+  selectAmount: (Amount | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmount: string | null,
-  checkOtherAmount: string => boolean,
-  updateOtherAmount: (string, CountryGroupId, Contrib) => void,
+  checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
+  updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   annualTestVariant: AnnualContributionsTestVariant,
 |};
@@ -127,7 +127,7 @@ function ContributionAmount(props: PropTypes) {
           value={props.otherAmount}
           icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value, props.countryGroupId, props.contributionType)}
-          isValid={props.checkOtherAmount(props.otherAmount || '')}
+          isValid={props.checkOtherAmount(props.otherAmount || '', props.countryGroupId, props.contributionType)}
           formHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"

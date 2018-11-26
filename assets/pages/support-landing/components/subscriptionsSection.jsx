@@ -9,7 +9,7 @@ import { getSubsLinks } from 'helpers/externalLinks';
 import { getCampaign, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type Participations } from 'helpers/abTests/abtest';
-import { type OptimizeExperiments } from 'helpers/tracking/optimize';
+import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 
 import ThreeSubscriptions from 'components/threeSubscriptions/threeSubscriptions';
 import DigitalPack from 'components/subscriptionBundles/digitalPack';
@@ -64,12 +64,10 @@ function SubscriptionsSection(props: PropTypes) {
       />
       <Paper
         url={subsLinks.Paper}
-        countryGroupId={props.countryGroupId}
         abTest={props.abParticipations}
       />
       <PaperDigital
         url={subsLinks.PaperAndDigital}
-        countryGroupId={props.countryGroupId}
         abTest={props.abParticipations}
         gridId="paperDigitalCircleOrange"
       />

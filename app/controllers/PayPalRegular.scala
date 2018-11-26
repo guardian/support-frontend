@@ -37,15 +37,21 @@ class PayPalRegular(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
         cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
       )(paypalBillingDetails)
-    }.map { response =>
-      Ok(Token(response).asJson)
+    }.map { maybeString =>
+      maybeString
+        .map(s => Ok(Token(s).asJson))
+        .getOrElse(BadRequest("We were unable to set up a payment for this request (missing PayPal token)"))
     }
   }
 
   def createAgreement: Action[Token] = maybeAuthenticatedAction().async(circe.json[Token]) { implicit request =>
     withPaypalServiceForRequest(request) { service =>
       service.createBillingAgreement(request.body)
-    }.map(token => Ok(Token(token).asJson))
+    }.map { maybeString =>
+      maybeString
+        .map(s => Ok(Token(s).asJson))
+        .getOrElse(BadRequest("We were unable to create an agreement for this request (missing PayPal token)"))
+    }
   }
 
   private def withPaypalServiceForRequest[T](request: CustomActionBuilders.OptionalAuthRequest[_])(fn: PayPalNvpService => T): T = {

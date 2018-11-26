@@ -6,16 +6,17 @@ import { type Dispatch } from 'redux';
 import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { type Contrib, getSpokenType } from 'helpers/contributions';
+import { type ContributionType, getSpokenType } from 'helpers/contributions';
 import CtaLink from 'components/ctaLink/ctaLink';
-import MarketingConsent from '../components/MarketingConsent';
+import MarketingConsent from './MarketingConsentContainer';
+import ContributionsSurvey from '../components/ContributionsSurvey';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
@@ -52,7 +53,6 @@ function ContributionThankYou(props: PropTypes) {
   return (
     <div className="thank-you__container">
       <h1 className="header">{`Thank you for a valuable contribution. ${directDebitHeaderSuffix}`}</h1>
-
       {props.contributionType !== 'ONE_OFF' ? (
         <section className="confirmation">
           <p className="confirmation__message">
@@ -60,6 +60,7 @@ function ContributionThankYou(props: PropTypes) {
           </p>
         </section>
       ) : null}
+      <ContributionsSurvey />
       <MarketingConsent />
       <div className="confirmation confirmation--backtothegu">
         <CtaLink
