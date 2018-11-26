@@ -31,7 +31,7 @@ object PathVerification {
 
   sealed trait MonitoredRegion { val tipString: String }
   case object AU extends MonitoredRegion { val tipString = "AU" }
-  case object GB extends MonitoredRegion { val tipString = "GB" }
+  case object UK extends MonitoredRegion { val tipString = "UK" }
   case object US extends MonitoredRegion { val tipString = "US" }
 
   sealed trait MonitoredProduct { val tipString: String }
@@ -47,9 +47,9 @@ object PathVerification {
     val configPath: String = s"${region.tipString} ${product.tipString} with ${paymentMethod.tipString}"
   }
 
-  def monitoredRegion(country: String): Option[MonitoredRegion] = country match {
+  def monitoredRegion(country: String): Option[MonitoredRegion] = country.toUpperCase match {
     case "AU" => Some(AU)
-    case "GB" => Some(GB)
+    case "UK" => Some(UK)
     case "US" => Some(US)
     case _ => None
   }

@@ -1,7 +1,7 @@
 - name: US One-off contribution with PayPal
   description: Successful one-off contribution in USD (using PayPal)
 
-- name: GB One-off contribution with PayPal
+- name: UK One-off contribution with PayPal
   description: Successful one-off contribution in GBP (using PayPal)
 
 - name: AU One-off contribution with PayPal

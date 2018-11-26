@@ -70,10 +70,8 @@ class PayPalOneOff(
         case None => "/contribute/one-off/thankyou"
       }
     }
-    val countryCookie = request.cookies.get("GU_country")
-    val countryFromCookie = countryCookie.map(_.value).getOrElse("Unknown")
     if (!isTestUser) {
-      monitoredRegion(country.getOrElse(countryFromCookie)).map {
+      monitoredRegion(country.getOrElse("Unknown")).map {
         region => verify(TipPath(region, OneOffContribution, PayPal), tipMonitoring.verify)
       }
     }
