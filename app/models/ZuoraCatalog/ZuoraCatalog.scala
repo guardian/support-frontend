@@ -58,7 +58,7 @@ object ZuoraCatalogPricePlan {
               List(
                 ZuoraCatalogPricing(
                   "GBP",
-                  round(productRatePlan.price, 2)
+                  round(productRatePlan.price)
                 )
               )
             )))
