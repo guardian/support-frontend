@@ -42,7 +42,7 @@ case class ZuoraCatalogPricePlan(
 
 object ZuoraCatalogPricePlan {
 
-  def round(price: Double, precision: Int): Double =
+  def round(price: Double): Double =
     BigDecimal(price).setScale(2, BigDecimal.RoundingMode.HALF_DOWN).toDouble
 
   def build(ZuoraCatalog: ZuoraCatalog, plans: List[String]): List[ZuoraCatalogPricePlan] = {

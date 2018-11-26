@@ -96,7 +96,7 @@
   </noscript>
 
 	<div id="@mainId"
-    @{data.map{case (key, value) => s"""data-$key=$value """}}
+    @{data.map { case (key, value) => s"""data-$key=$value """ }}
   ></div>
 
 	<script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
