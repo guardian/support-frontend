@@ -8,6 +8,7 @@ import * as storage from 'helpers/storage';
 import { formInputs } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { type RegularContributionType, billingPeriodFromContrib } from 'helpers/contributions';
 import { formClassName } from '../../pages/regular-contributions/components/formFields';
 
 
@@ -51,14 +52,16 @@ function setupPayment(
   amountToPay: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
+  regularContributionType: RegularContributionType,
 ) {
   const csrfToken = csrf.token;
+  const billingPeriod = billingPeriodFromContrib(regularContributionType);
 
   return (resolve, reject) => {
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
       amount: amountToPay,
-      billingPeriod: 'monthly',
+      billingPeriod: billingPeriod,
       currency: currencyId,
     };
 
@@ -92,6 +95,7 @@ function setup(
   onPaymentAuthorisation: string => void,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
+  regularContributionType: RegularContributionType,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {
@@ -144,7 +148,7 @@ function setup(
     },
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(amount, currencyId, csrf),
+    payment: setupPayment(amount, currencyId, csrf, regularContributionType),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize,
