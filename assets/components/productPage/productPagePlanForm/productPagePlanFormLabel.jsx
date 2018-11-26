@@ -16,8 +16,7 @@ type PropTypes = {|
   type: string,
   title: string,
   offer: Option<string>,
-  price: Option<string>,
-  saving: Option<string>,
+  footer: Option<Node>,
   children: Node,
   checked: boolean,
   onChange: (Event) => void,
@@ -27,7 +26,7 @@ type PropTypes = {|
 // ----- Render ----- //
 
 export default ({
-  type, title, offer, children, checked, onChange, price, saving,
+  type, title, offer, children, checked, onChange, footer,
 }: PropTypes) => {
   const id = uuidv4();
   return (
@@ -42,20 +41,11 @@ export default ({
           {offer && <strong className="component-product-page-plan-form-label__offer">{offer}</strong>}
           <div>{children}</div>
         </div>
-        {(price || saving) &&
+        {footer &&
           <div className="component-product-page-plan-form-label__footer">
-            {price &&
-            <strong className="component-product-page-plan-form-label__price">
-              {price}
-            </strong>
-            }
-            {saving &&
-            <div className="component-product-page-plan-form-label__saving">
-              {saving}
-            </div>
-            }
+            {footer}
           </div>
-          }
+        }
       </div>
     </label>
   );

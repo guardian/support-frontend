@@ -95,12 +95,12 @@
   padding-bottom: $gu-v-spacing;
 }
 
-.component-product-page-plan-form-label__price {
+.component-product-page-plan-form-price__title {
   @include gu-fontset-heading-sans($size-only: true);
   font-weight: bold;
 }
 
-.component-product-page-plan-form-label__saving { 
+.component-product-page-plan-form-price__copy { 
   font-style: italic;
   line-height: 1;
 }

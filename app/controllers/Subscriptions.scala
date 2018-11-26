@@ -143,10 +143,12 @@ class Subscriptions(
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
 
     def pricesToMap(prices: List[ZuoraCatalogPricePlan], prefix: String) = {
-      prices.map { price => (
-        s"$prefix-${price.name.getOrElse(price.id).toLowerCase}",
-        price.pricePerPeriod.filter(_.currency == "GBP").map(_.price).sum.toString
-      )}.toMap
+      prices.map { price =>
+        (
+          s"$prefix-${price.name.getOrElse(price.id).toLowerCase}",
+          price.pricePerPeriod.filter(_.currency == "GBP").map(_.price).sum.toString
+        )
+      }.toMap
     }
 
     val collectionPrices = pricesToMap(getPaperPrices.collection, "collection")

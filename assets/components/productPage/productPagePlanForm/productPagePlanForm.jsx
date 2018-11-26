@@ -9,6 +9,7 @@ import { type Option } from 'helpers/types/option';
 
 import ProductPageButton from '../productPageButton/productPageButton';
 import ProductPagePlanFormLabel from './productPagePlanFormLabel';
+import ProductPagePlanFormPrice from './productPagePlanFormPrice';
 
 import './productPagePlanForm.scss';
 
@@ -64,8 +65,12 @@ export default function ProductPagePlanForm<P:string>({
               <div className="component-product-page-plan-form__item">
                 <ProductPagePlanFormLabel
                   {...{
-                  title, offer, key, price, saving,
+                  title, offer, key,
                   }}
+                  footer={((price || saving) ?
+                    <ProductPagePlanFormPrice title={price} copy={saving} />
+                    : null
+                  )}
                   type={key}
                   checked={key === selectedPlan}
                   onChange={() => { setPlanAction(key); }}
