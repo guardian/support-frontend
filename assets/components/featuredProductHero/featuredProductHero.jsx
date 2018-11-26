@@ -37,7 +37,7 @@ export default function FeaturedProductHero(props: PropTypes) {
     product,
   } = props;
 
-  const timerClassName = classNameWithModifiers('component-featured-product-hero__countdownbox', hasTimer ? [] : ['hidden']);
+  const timerClassName = classNameWithModifiers('component-featured-product-hero__countdownbox', product === 'DigitalPack' ? [] : ['hidden']);
   const rootClassName = classNameWithModifiers(
     'component-featured-product-hero',
     [
