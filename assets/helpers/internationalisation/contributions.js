@@ -53,11 +53,4 @@ const usCampaignDetails: CountryMetaData = {
   headerClasses: 'header__us-campaign',
 };
 
-const getCountryGroupSpecificDetails = (countryGroupId: CountryGroupId) => {
-  if (getQueryParameter('INTCMP') === 'TODO') {
-    return usCampaignDetails;
-  }
-  return countryGroupSpecificDetails[countryGroupId];
-};
-
-export { countryGroupSpecificDetails, getCountryGroupSpecificDetails };
+export { countryGroupSpecificDetails, usCampaignDetails };
