@@ -29,22 +29,22 @@ object PathVerification {
 
   type VerifyPath = String => Future[TipResponse]
 
-  sealed trait MonitoredRegion
-  case object AU extends MonitoredRegion
-  case object GB extends MonitoredRegion
-  case object US extends MonitoredRegion
+  sealed trait MonitoredRegion { val tipString: String }
+  case object AU extends MonitoredRegion { val tipString = "AU" }
+  case object GB extends MonitoredRegion { val tipString = "GB" }
+  case object US extends MonitoredRegion { val tipString = "US" }
 
-  sealed trait MonitoredProduct
-  case object OneOffContribution extends MonitoredProduct { override def toString: String = "One-off contribution" }
-  case object RecurringContribution extends MonitoredProduct { override def toString: String = "Recurring contribution" }
+  sealed trait MonitoredProduct { val tipString: String }
+  case object OneOffContribution extends MonitoredProduct { val tipString = "One-off contribution" }
+  case object RecurringContribution extends MonitoredProduct { val tipString = "Recurring contribution" }
 
-  sealed trait MonitoredPaymentMethod
-  case object DirectDebit extends MonitoredPaymentMethod { override def toString: String = "Direct Debit" }
-  case object PayPal extends MonitoredPaymentMethod
-  case object Stripe extends MonitoredPaymentMethod
+  sealed trait MonitoredPaymentMethod { val tipString: String }
+  case object DirectDebit extends MonitoredPaymentMethod { val tipString = "Direct Debit" }
+  case object PayPal extends MonitoredPaymentMethod { val tipString = "PayPal" }
+  case object Stripe extends MonitoredPaymentMethod { val tipString = "Stripe" }
 
   case class TipPath(region: MonitoredRegion, product: MonitoredProduct, paymentMethod: MonitoredPaymentMethod) {
-    override def toString: String = s"$region $product with $paymentMethod"
+    val configPath: String = s"${region.tipString} ${product.tipString} with ${paymentMethod.tipString}"
   }
 
   def monitoredRegion(country: String): Option[MonitoredRegion] = country match {
@@ -55,7 +55,7 @@ object PathVerification {
   }
 
   def verify(tipPath: TipPath, verifier: VerifyPath): Future[TipResponse] = {
-    verifier(tipPath.toString)
+    verifier(tipPath.configPath)
   }
 
 }
