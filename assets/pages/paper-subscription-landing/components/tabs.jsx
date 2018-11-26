@@ -18,7 +18,7 @@ import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions'
 
 export const tabs: {[PaperDeliveryMethod]: {name: string, href: string}} = {
   collection: {
-    name: 'Voucher',
+    name: 'Voucher Book',
     href: paperSubsUrl('collection'),
   },
   delivery: {
