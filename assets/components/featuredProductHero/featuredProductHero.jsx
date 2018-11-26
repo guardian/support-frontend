@@ -86,7 +86,7 @@ export default function FeaturedProductHero(props: PropTypes) {
 FeaturedProductHero.defaultProps = {
   subheadingText: null,
   cta: null,
-  image: null,
   hasTimer: false,
+  image: null,
   product: null,
 };
