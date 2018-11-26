@@ -52,14 +52,12 @@ type PropTypes = {|
 // Prevents a click event if it's not allowed.
 function onCtaClick(isDisabled: boolean, resetError: void => void, context: string): Function {
 
-  if (!isDisabled) {
-    sendClickedEvent(context);
-  }
-
   return (clickEvent) => {
 
     if (isDisabled) {
       clickEvent.preventDefault();
+    } else {
+      sendClickedEvent(context);
     }
 
     resetError();
