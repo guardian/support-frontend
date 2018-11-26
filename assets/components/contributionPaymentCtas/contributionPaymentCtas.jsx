@@ -57,7 +57,7 @@ function onCtaClick(isDisabled: boolean, resetError: void => void, context: stri
     if (isDisabled) {
       clickEvent.preventDefault();
     } else {
-      sendClickedEvent(context);
+      sendClickedEvent(context)();
     }
 
     resetError();
