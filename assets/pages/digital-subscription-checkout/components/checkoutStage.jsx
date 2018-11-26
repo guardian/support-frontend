@@ -125,7 +125,7 @@ function CheckoutStage(props: PropTypes) {
             copy="Cancel your subscription at any time"
           />
           <LeftMarginSection modifierClasses={['free-trial']}>
-            <p className="free-trial__copy">
+            <p className="checkout-content__free-trial">
               You can use all the features free for the next 14 days,
               and then your first payment will be taken.
             </p>
