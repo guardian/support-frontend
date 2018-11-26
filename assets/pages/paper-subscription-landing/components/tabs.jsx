@@ -32,7 +32,7 @@ type StatePropTypes = {|
 |};
 
 type DispatchPropTypes = {|
-  setTabAction: (PaperDeliveryMethod) => *,
+  setTabAction: (PaperDeliveryMethod) => TabActions,
 |};
 
 type PropTypes = {|

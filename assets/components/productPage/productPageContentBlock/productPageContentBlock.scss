@@ -17,7 +17,10 @@
   & .component-product-page-content-block-divider__line {
     @include multiline(4, $border);
   }
-  /*div > $selector adds some leeway for react wrapping elements*/
+  /*
+  div > $selector adds some leeway to use react elements with extra divs 
+  until preact.fragment gets here
+  */
   & + &,
   & + div > &  {
     .component-left-margin-section__content {
@@ -76,13 +79,14 @@
 .component-product-page-content-block-divider {
   height: 20px;
   margin-bottom: ($gu-v-spacing*.33);
-  .component-product-page-content-block-divider__line {
-    position: absolute;
-    left: 0;
-    right: 0;
-    border: 0;
-    margin: 0;
-  }
+}
+
+.component-product-page-content-block-divider__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border: 0;
+  margin: 0;
 }
 
 // ----- Vertical rhythm ------ //

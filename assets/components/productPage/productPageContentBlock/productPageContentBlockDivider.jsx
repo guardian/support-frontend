@@ -6,8 +6,6 @@ import React from 'react';
 
 import './productPageContentBlock.scss';
 
-// ---- Types ----- //
-
 
 // ----- Render ----- //
 

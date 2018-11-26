@@ -8,7 +8,7 @@ import React, { type Node } from 'react';
 // ---- Types ----- //
 
 type PropTypes = {|
-  items: (string | Node)[]
+  items: (Node)[]
 |};
 
 
