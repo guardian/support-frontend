@@ -14,7 +14,6 @@ import type { HeadingSize } from 'components/heading/heading';
 // ----- Types ----- //
 
 type PropTypes = {
-  hasTimer?: boolean,
   headingSize: HeadingSize,
   headingText: string,
   subheadingText?: ?string,
@@ -27,7 +26,6 @@ type PropTypes = {
 export default function FeaturedProductHero(props: PropTypes) {
 
   const {
-    hasTimer,
     headingSize,
     headingText,
     subheadingText,
@@ -87,6 +85,5 @@ FeaturedProductHero.defaultProps = {
   subheadingText: null,
   cta: null,
   image: null,
-  hasTimer: false,
   product: null,
 };
