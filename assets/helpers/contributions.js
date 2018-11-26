@@ -80,6 +80,12 @@ type Config = {
   }
 }
 
+export type OtherAmounts = {
+  [ContributionType]: { amount: string | null }
+};
+
+export type SelectedAmounts = { [ContributionType]: Amount | 'other' };
+
 
 // ----- Setup ----- //
 

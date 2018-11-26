@@ -12,6 +12,7 @@ import { type UsState, type CaState } from 'helpers/internationalisation/country
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
+import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
 import * as storage from 'helpers/storage';
@@ -39,9 +40,7 @@ export type ThankYouPageStageMap<T> = {
 export type ThankYouPageStage = $Keys<ThankYouPageStageMap<null>>
 
 type FormData = UserFormData & {
-  otherAmounts: {
-    [ContributionType]: { amount: string | null }
-  },
+  otherAmounts: OtherAmounts,
   state: UsState | CaState | null,
   checkoutFormHasBeenSubmitted: boolean,
 };
@@ -56,7 +55,7 @@ type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
-  selectedAmounts: { [ContributionType]: Amount | 'other' },
+  selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
   setPasswordData: SetPasswordData,
