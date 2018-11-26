@@ -8,7 +8,7 @@ import type { Status } from 'helpers/settings';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
+import { getCountryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -84,12 +84,17 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
+  const countryGroupDetails = getCountryGroupSpecificDetails(props.countryGroupId);
+  const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
+
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content">
-        <h1 className="header">{countryGroupSpecificDetails[props.countryGroupId].headerCopy}</h1>
-        <p className="blurb">{countryGroupSpecificDetails[props.countryGroupId].contributeCopy}</p>
+        <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
+        { countryGroupDetails.contributeCopy ?
+          <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
+        }
         <NewContributionForm
           onPaymentAuthorisation={onPaymentAuthorisation}
         />
