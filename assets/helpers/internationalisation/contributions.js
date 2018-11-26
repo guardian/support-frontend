@@ -1,7 +1,6 @@
 // @flow
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getQueryParameter } from 'helpers/url';
 
 const defaultHeaderCopy = 'Help us deliver the independent journalism the world needs';
 const defaultContributeCopy = `
