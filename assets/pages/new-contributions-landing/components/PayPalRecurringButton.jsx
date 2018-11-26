@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import { type ContributionType } from 'helpers/contributions';
 import { getPayPalOptions } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -20,7 +21,13 @@ type PropTypes = {|
   onClick: () => void,
   formClassName: string,
   isTestUser: boolean,
-  setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
+  contributionType: ContributionType,
+  setupRecurringPayPalPayment: (
+    resolve: string => void,
+    reject: Error => void,
+    IsoCurrency, CsrfState,
+    regularContributionType: ContributionType
+  ) => void,
 |};
 
 
@@ -73,6 +80,7 @@ export class PayPalRecurringButton extends React.Component<PropTypes> {
         this.props.onClick,
         this.props.formClassName,
         this.props.isTestUser,
+        this.props.contributionType,
         this.props.setupRecurringPayPalPayment,
       ),
     );

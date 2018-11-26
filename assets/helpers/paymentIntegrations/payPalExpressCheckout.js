@@ -61,7 +61,7 @@ function setupPayment(
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
       amount: amountToPay,
-      billingPeriod: billingPeriod,
+      billingPeriod,
       currency: currencyId,
     };
 

@@ -6,6 +6,7 @@ import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ContributionType } from 'helpers/contributions';
 
 // ----- Types ----- //
 
@@ -39,10 +40,16 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
 function setupPayment(
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
+  contributionType: ContributionType,
+  setupRecurringPayPalPayment: (
+    resolve: string => void,
+    reject: Error => void,
+    IsoCurrency, CsrfState,
+    contributionType: ContributionType
+  ) => void,
 ) {
   return (resolve, reject) => {
-    setupRecurringPayPalPayment(resolve, reject, currencyId, csrf);
+    setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, contributionType);
   };
 }
 
@@ -68,7 +75,14 @@ function getPayPalOptions(
   onClick: () => void,
   formClassName: string,
   isTestUser: boolean,
-  setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
+  contributionType: ContributionType,
+  setupRecurringPayPalPayment: (
+    resolve: string => void,
+    reject: Error => void,
+    IsoCurrency,
+    CsrfState,
+    contributionType: ContributionType
+  ) => void,
 ): Object {
 
   function toggleButton(actions): void {
@@ -115,7 +129,7 @@ function getPayPalOptions(
     },
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(currencyId, csrf, setupRecurringPayPalPayment),
+    payment: setupPayment(currencyId, csrf, contributionType, setupRecurringPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize: (data) => {

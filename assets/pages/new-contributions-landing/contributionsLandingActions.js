@@ -7,6 +7,7 @@ import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   type Amount,
   logInvalidCombination,
+  billingPeriodFromContrib,
   type ContributionType,
   type PaymentMethod,
   type PaymentMatrix,
@@ -353,15 +354,17 @@ const setupRecurringPayPalPayment = (
   reject: Error => void,
   currency: IsoCurrency,
   csrf: Csrf,
+  contributionType: ContributionType,
 ) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
     const csrfToken = csrf.token;
     const amount = getAmount(state);
+    const billingPeriod = billingPeriodFromContrib(contributionType);
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
       amount,
-      billingPeriod: 'monthly',
+      billingPeriod,
       currency,
     };
 
