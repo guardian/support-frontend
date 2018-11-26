@@ -14,6 +14,7 @@ import type { HeadingSize } from 'components/heading/heading';
 // ----- Types ----- //
 
 type PropTypes = {
+  hasTimer?: boolean,
   headingSize: HeadingSize,
   headingText: string,
   subheadingText?: ?string,
@@ -26,6 +27,7 @@ type PropTypes = {
 export default function FeaturedProductHero(props: PropTypes) {
 
   const {
+    hasTimer,
     headingSize,
     headingText,
     subheadingText,
@@ -35,7 +37,6 @@ export default function FeaturedProductHero(props: PropTypes) {
     product,
   } = props;
 
-  const hasTimer = product === 'DigitalPack';
   const timerClassName = classNameWithModifiers('component-featured-product-hero__countdownbox', hasTimer ? [] : ['hidden']);
   const rootClassName = classNameWithModifiers(
     'component-featured-product-hero',
@@ -85,6 +86,7 @@ export default function FeaturedProductHero(props: PropTypes) {
 FeaturedProductHero.defaultProps = {
   subheadingText: null,
   cta: null,
+  hasTimer: false,
   image: null,
   product: null,
 };
