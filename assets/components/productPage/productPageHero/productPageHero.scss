@@ -3,9 +3,9 @@
 .component-product-page-hero {
   overflow: hidden;
   .component-left-margin-section__content {
+    position: relative;
     @include mq($from: tablet) {
       border-left: 1px solid;
-      position: relative;
       .component-heading-block {
         margin-left: -1px;
       }    

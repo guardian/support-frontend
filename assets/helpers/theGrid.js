@@ -53,6 +53,8 @@ export const imageCatalogue: {
   paperHeroDesktop: 'f1040916a71642c924a52c61dc7c4aae2b8dd88d/0_0_1080_784',
   paperHeroMobile: '9b8d348e9ba521c388e3482ece4037e3f0fb3864/0_0_1000_666',
   weeklyLandingHero: '3a093833e468eec890838eb36d462f0281299f9c/0_0_5060_5350',
+  paperLandingHero: 'cf91f9718b1f8397eaa10eae1d02ae3f143f261f/0_0_2600_1192',
+  paperLandingHeroMobile: 'c662f53516b202d56fed0a08c8f1cdbd1d132a92/0_0_924_696',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

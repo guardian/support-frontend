@@ -13,6 +13,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
 import SvgInfo from 'components/svgs/information';
+import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { largeParagraphClassName, sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
@@ -57,7 +58,30 @@ const content = (
         heading="Save up to 31% on the Guardian and the Observer’s newspaper retail price all year round"
         type="feature"
         modifierClasses={['paper']}
-      />
+      >
+        <GridPicture
+          sources={[
+            {
+              gridId: 'paperLandingHeroMobile',
+              srcSizes: [500, 924],
+              imgType: 'png',
+              sizes: '100vw',
+              media: '(max-width: 739px)',
+            },
+            {
+              gridId: 'paperLandingHero',
+              srcSizes: [1000, 2000],
+              imgType: 'png',
+              sizes: '(min-width: 1000px) 2000px, 1000px',
+              media: '(min-width: 740px)',
+            },
+          ]}
+          fallback="paperLandingHero"
+          fallbackSize={1000}
+          altText=""
+          fallbackImgType="png"
+        />
+      </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock>
           <p className={largeParagraphClassName}>Pick between voucher and home delivery.
