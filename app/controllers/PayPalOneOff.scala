@@ -11,6 +11,7 @@ import services._
 import cats.data.EitherT
 import cats.implicits._
 import monitoring.SafeLogger
+import monitoring.PathVerification.{TipPath, PayPal, OneOffContribution, monitoredRegion, verify}
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -69,9 +70,11 @@ class PayPalOneOff(
         case None => "/contribute/one-off/thankyou"
       }
     }
-    val countryCookie = request.cookies.get("GU_country")
-    val countryFromCookie = countryCookie.map(_.value).getOrElse("Unknown")
-    if (!isTestUser) tipMonitoring.verify(s"${country.getOrElse(countryFromCookie).toUpperCase} One-off PayPal contribution")
+    if (!isTestUser) {
+      monitoredRegion(country.getOrElse("Unknown")).map {
+        region => verify(TipPath(region, OneOffContribution, PayPal), tipMonitoring.verify)
+      }
+    }
     success.email.fold({
       SafeLogger.info("Redirecting to thank you page without email in flash session")
       redirect
