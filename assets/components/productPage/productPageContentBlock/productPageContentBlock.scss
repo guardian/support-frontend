@@ -2,6 +2,7 @@
 
 .component-product-page-content-block .component-left-margin-section__content {
   max-width: 100%;
+  overflow: hidden;
   @include mq($from: tablet) {
     border-left: 1px solid gu-colour(garnett-neutral-4);
   }
@@ -54,12 +55,14 @@
 .component-product-page-content-block__content {
   max-width: gu-span(12);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
+  position: relative;
 }
 
 .component-product-page-content-block__outset {
   margin-left: ($gu-h-spacing / 2 * -1);
   margin-right: ($gu-h-spacing / 2 * -1);
 }
+
 
 // ----- Vertical rhythm ------ //
 
@@ -68,5 +71,27 @@
   .component-product-page-plan-form,
   .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)
+  }
+}
+
+
+// ----- Images ------ //
+
+.component-product-page-content-block__image {
+  max-width: gu-span(6);
+  @include mq($from: tablet) {
+    position: absolute;
+    left: gu-span(7) + $gu-h-spacing;
+  }
+  @include mq($from: desktop) {
+    left: gu-span(8) + $gu-h-spacing;
+  }
+  @include mq($from: wide) {
+    width: gu-span(5);
+  }
+  bottom: ($gu-v-spacing*2)*-1;
+  .component-grid-image {
+    display: block;
+    width: 100%;
   }
 }

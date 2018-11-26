@@ -14,6 +14,7 @@ import { renderPage } from 'helpers/render';
 
 import SvgInfo from 'components/svgs/information';
 import GridPicture from 'components/gridPicture/gridPicture';
+import GridImage from 'components/gridImage/gridImage';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { largeParagraphClassName, sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
@@ -91,7 +92,14 @@ const content = (
         </ProductPageTextBlock>
         <Tabs />
       </ProductPageContentBlock>
-      <ProductPageContentBlock>
+      <ProductPageContentBlock image={<GridImage
+        gridId="paperVoucherFeature"
+        srcSizes={[920, 500, 140]}
+        sizes="(max-width: 740px) 100vw, 500px"
+        imgType="png"
+      />
+      }
+      >
         <ProductPageTextBlock title="How do vouchers work?">
           <ProductPageTextBlockList items={[
             `When you take out a voucher subscription, we’ll send you a book of vouchers.
