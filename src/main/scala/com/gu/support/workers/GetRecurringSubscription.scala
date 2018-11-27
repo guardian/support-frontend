@@ -4,11 +4,11 @@ import java.util.UUID
 
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
+import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.workers.lambdas.IdentityId
 import com.gu.support.workers.model.BillingPeriod
 import com.gu.zuora.GetAccountForIdentity.{CreatedRequestId, DomainAccount}
 import com.gu.zuora.GetSubscription.DomainSubscription
-import com.gu.zuora.ZuoraConfig.RatePlanId
 import com.gu.zuora.ZuoraService
 import com.gu.zuora.model.response.RatePlan
 
@@ -23,7 +23,7 @@ object GetRecurringSubscription {
     billingPeriod: BillingPeriod
   )(implicit ec: ExecutionContext): Future[Option[DomainSubscription]] = {
 
-    val productRatePlanId: RatePlanId = zuoraService.config.contributionConfig(billingPeriod).productRatePlanId
+    val productRatePlanId: ProductRatePlanId = zuoraService.config.contributionConfig(billingPeriod).productRatePlanId
 
     val hasContributorPlan: List[RatePlan] => Boolean = GetRecurringSubscription.hasContributorPlan(productRatePlanId)
 
@@ -39,7 +39,7 @@ object GetRecurringSubscription {
     } yield maybeRecentContributor
   }
 
-  def hasContributorPlan(ratePlanId: RatePlanId)(ratePlans: List[RatePlan]): Boolean =
+  def hasContributorPlan(ratePlanId: ProductRatePlanId)(ratePlans: List[RatePlan]): Boolean =
     ratePlans.exists(_.productRatePlanId == ratePlanId)
 
   implicit class LogImplicit[A](op: A) {

@@ -127,7 +127,7 @@ object Fixtures {
       RatePlanData(
         RatePlan(config.monthlyContribution.productRatePlanId), //Contribution product
         List(RatePlanChargeData(
-          RatePlanCharge(config.monthlyContribution.productRatePlanChargeId, Some(25: BigDecimal))
+          ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 25)
         )),
         Nil
       )
@@ -150,7 +150,7 @@ object Fixtures {
       RatePlanData(
         RatePlan(config.monthlyContribution.productRatePlanId),
         List(RatePlanChargeData(
-          RatePlanCharge(config.monthlyContribution.productRatePlanChargeId, Some(5: BigDecimal))
+          ContributionRatePlanCharge(config.monthlyContribution.productRatePlanChargeId, 5)
         )),
         Nil
       )

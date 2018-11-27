@@ -4,7 +4,6 @@ import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.support.config._
-import com.gu.zuora.ZuoraConfigProvider
 import com.typesafe.config.ConfigFactory
 
 import scala.util.Try

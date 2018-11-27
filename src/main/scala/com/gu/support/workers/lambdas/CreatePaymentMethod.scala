@@ -48,6 +48,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.user,
       state.product,
       paymentMethod,
+      state.promoCode,
       state.acquisitionData
     )
 

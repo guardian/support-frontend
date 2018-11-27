@@ -6,6 +6,7 @@ import com.gu.support.workers.model.PaymentFields
 import com.gu.zuora.Fixtures._
 import com.gu.zuora.encoding.CustomCodecs._
 import com.gu.zuora.model.response._
+import com.gu.zuora.model.{ContributionRatePlanCharge, DiscountRatePlanCharge}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe
 import io.circe.parser._
@@ -33,6 +34,47 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
     val json = creditCardSubscriptionRequest().asJson
     (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
     (json \\ "sfContactId__c").head.asString.get should be(salesforceId)
+  }
+
+  "DiscountRatePlanCharge" should "serialise and deserialize correctly" in {
+    val correct = parse("""{
+      "ProductRatePlanChargeId" : "12345",
+      "DiscountPercentage" : 15.0,
+      "UpToPeriods" : 3,
+      "UpToPeriodsType" : "Months",
+      "EndDateCondition" : "FixedPeriod"
+    }""").right.get
+    val rpc = DiscountRatePlanCharge("12345", upToPeriods = 3, discountPercentage = 15)
+
+    rpc.asJson should be(correct)
+
+    correct.as[DiscountRatePlanCharge].fold(
+      err => fail(err),
+      c => {
+        c.productRatePlanChargeId shouldBe "12345"
+        c.upToPeriods shouldBe 3
+        c.discountPercentage shouldBe 15
+      }
+    )
+  }
+
+  "ContributionRatePlanCharge" should "serialise and deserialize correctly" in {
+    val correct = parse("""{
+      "ProductRatePlanChargeId" : "12345",
+      "Price" : 15,
+      "EndDateCondition" : "SubscriptionEnd"
+    }""").right.get
+    val rpc = ContributionRatePlanCharge("12345", price = 15)
+
+    rpc.asJson should be(correct)
+
+    correct.as[ContributionRatePlanCharge].fold(
+      err => fail(err),
+      c => {
+        c.productRatePlanChargeId shouldBe "12345"
+        c.price shouldBe 15
+      }
+    )
   }
 
   "InvoiceResult" should "deserialise correctly" in {

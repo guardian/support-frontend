@@ -10,10 +10,9 @@ import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendTh
 import com.gu.support.workers.model.{Contribution, DigitalPack, RequestInfo}
 import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
 import com.gu.zuora.GetSubscription.DomainSubscription
-import com.gu.zuora.ZuoraConfig.RatePlanId
+import com.gu.zuora.ProductSubscriptionBuilders._
 import com.gu.zuora.model._
 import com.gu.zuora.model.response.SubscribeResponseAccount
-import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -83,46 +82,10 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   private def buildSubscriptionData(state: CreateZuoraSubscriptionState) = {
     val config = zuoraConfigProvider.get(state.user.isTestUser)
     state.product match {
-      case c: Contribution =>
-        val contributionConfig = config.contributionConfig(c.billingPeriod)
-        buildProductSubscription(
-          contributionConfig.productRatePlanId,
-          List(
-            RatePlanChargeData(
-              RatePlanCharge(contributionConfig.productRatePlanChargeId, Some(c.amount)) //Pass the amount the user selected into Zuora
-            )
-          )
-        )
-      case d: DigitalPack =>
-        val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
-        val contractAcceptanceDate = contractEffectiveDate
-          .plusDays(config.digitalPack.defaultFreeTrialPeriod)
-          .plusDays(config.digitalPack.paymentGracePeriod)
-
-        buildProductSubscription(
-          config.digitalPackRatePlan(d.billingPeriod),
-          contractAcceptanceDate = contractAcceptanceDate,
-          contractEffectiveDate = contractEffectiveDate
-        )
+      case c: Contribution => c.build(config)
+      case d: DigitalPack => d.build(config)
     }
   }
-
-  private def buildProductSubscription(
-    ratePlanId: RatePlanId,
-    ratePlanCharges: List[RatePlanChargeData] = Nil,
-    contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
-  ) =
-    SubscriptionData(
-      List(
-        RatePlanData(
-          RatePlan(ratePlanId),
-          ratePlanCharges,
-          Nil
-        )
-      ),
-      Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate)
-    )
 
   private def buildContactDetails(state: CreateZuoraSubscriptionState) = {
     ContactDetails(

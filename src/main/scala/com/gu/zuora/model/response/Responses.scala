@@ -32,7 +32,7 @@ object ZuoraErrorResponse {
 }
 
 case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
-  extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
+    extends Throwable(errors.asJson.spaces2) with ZuoraResponse {
 
   override def toString: String = this.errors.toString()
 
@@ -80,13 +80,13 @@ object SubscribeResponseAccount {
 }
 
 case class SubscribeResponseAccount(
-  accountNumber: String,
-  subscriptionNumber: String,
-  totalTcv: Float,
-  subscriptionId: String,
-  totalMrr: Float,
-  accountId: String,
-  success: Boolean
+    accountNumber: String,
+    subscriptionNumber: String,
+    totalTcv: Float,
+    subscriptionId: String,
+    totalMrr: Float,
+    accountId: String,
+    success: Boolean
 ) extends ZuoraResponse {
 
   def domainAccountNumber: ZuoraAccountNumber = ZuoraAccountNumber(accountNumber)

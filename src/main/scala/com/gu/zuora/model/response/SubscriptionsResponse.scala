@@ -2,8 +2,6 @@ package com.gu.zuora.model.response
 
 import com.gu.support.workers.encoding.Codec
 import com.gu.support.workers.encoding.Helpers.deriveCodec
-import com.gu.support.workers.model.BillingPeriod
-import com.gu.zuora.ZuoraConfig
 
 object SubscriptionsResponse {
   implicit val codec: Codec[SubscriptionsResponse] = deriveCodec
