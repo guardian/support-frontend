@@ -17,10 +17,17 @@ licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.h
 
 resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
+lazy val circeVersion = "0.10.1"
+
 libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9" % "provided",
   "com.gu" %% "acquisition-event-producer-play26" % "4.0.12",
-  "com.gu" %% "support-promotions" % "0.1-SNAPSHOT"
+  "org.typelevel" %% "cats-core" % "1.4.0",
+  "io.circe" %% "circe-core" % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
+  "io.circe" %% "circe-generic-extras" % circeVersion,
+  "io.circe" %% "circe-parser" % circeVersion,
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 
 releaseProcess := Seq[ReleaseStep](
