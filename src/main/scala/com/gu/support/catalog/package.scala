@@ -4,9 +4,11 @@ import java.time.DayOfWeek
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
+import com.gu.support.encoding.Codec
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.generic.auto._
 import io.circe.{Decoder, Json}
+import Codec._
 
 package object catalog {
 
@@ -22,6 +24,11 @@ package object catalog {
     currency: Currency,
     price: Double
   )
+
+  object Pricing {
+    import com.gu.support.encoding.CustomCodecs.{decodeCurrency, encodeCurrency}
+    implicit val codec: Codec[Pricing] = deriveCodec
+  }
 
   sealed trait ProductType {
     val id: String

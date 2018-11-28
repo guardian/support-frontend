@@ -1,5 +1,7 @@
 package com.gu.support.workers.model
 
+import io.circe.{Decoder, Encoder}
+
 
 sealed trait BillingPeriod{
   val noun: String
@@ -7,6 +9,10 @@ sealed trait BillingPeriod{
 
 object BillingPeriod {
   def fromString(code: String): Option[BillingPeriod] = List(Monthly, Annual).find(_.getClass.getSimpleName == s"$code$$")
+  implicit val decodePeriod: Decoder[BillingPeriod] =
+    Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"Unrecognised period code '$code'"))
+  implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
+
 }
 
 case object Monthly extends BillingPeriod {

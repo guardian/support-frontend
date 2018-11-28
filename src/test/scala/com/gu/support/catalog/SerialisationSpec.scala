@@ -7,6 +7,7 @@ import com.typesafe.scalalogging.LazyLogging
 import io.circe.Decoder
 import io.circe.generic.auto._
 import io.circe.generic.semiauto.deriveDecoder
+import com.gu.support.encoding.CustomCodecs.decodeCurrency
 import io.circe.parser.parse
 import org.scalatest.FlatSpec
 

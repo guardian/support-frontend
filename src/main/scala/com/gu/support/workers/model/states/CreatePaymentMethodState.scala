@@ -13,3 +13,4 @@ case class CreatePaymentMethodState(
   promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
+

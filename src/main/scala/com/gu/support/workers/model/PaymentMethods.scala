@@ -1,6 +1,11 @@
 package com.gu.support.workers.model
 
 import com.gu.i18n.Country
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.capitalizingCodec
+import io.circe.{Decoder, Encoder}
+import io.circe.syntax._
+import cats.syntax.functor._
 
 sealed trait PaymentMethod {
   def `type`: String
@@ -34,3 +39,24 @@ case class DirectDebitPaymentMethod(
   bankTransferType: String = "DirectDebitUK",
   `type`: String = "BankTransfer"
 ) extends PaymentMethod
+
+object PaymentMethod {
+  import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
+  implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = capitalizingCodec
+  implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = capitalizingCodec
+  implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = capitalizingCodec
+
+  //Payment Methods are details from the payment provider
+  implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
+    case p: PayPalReferenceTransaction => p.asJson
+    case c: CreditCardReferenceTransaction => c.asJson
+    case d: DirectDebitPaymentMethod => d.asJson
+  }
+
+  implicit val decodePaymentMethod: Decoder[PaymentMethod] =
+    List[Decoder[PaymentMethod]](
+      Decoder[PayPalReferenceTransaction].widen,
+      Decoder[CreditCardReferenceTransaction].widen,
+      Decoder[DirectDebitPaymentMethod].widen
+    ).reduceLeft(_ or _)
+}
