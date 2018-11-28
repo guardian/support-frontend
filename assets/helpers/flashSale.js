@@ -41,7 +41,7 @@ const saleDetails: SaleDetails = {
     intcmp: '',
   },
   Paper: {
-    promoCode: 'GCA80F',
+    promoCode: 'GCA80Z',
     intcmp: 'gdnwb_macqn_other_subs_SubscribeLandingPagePrintOnlySupporterLandingPagePrintOnly_',
   },
   PaperAndDigital: {
