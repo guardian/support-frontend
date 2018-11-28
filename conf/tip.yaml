@@ -1,3 +1,5 @@
+# One-off Contributions PayPal
+
 - name: US One-off contribution with PayPal
   description: Successful one-off contribution in USD (using PayPal)
 
@@ -6,3 +8,52 @@
 
 - name: AU One-off contribution with PayPal
   description: Successful one-off contribution in AUD (using PayPal)
+
+# Recurring Contributions PayPal
+
+- name: US Recurring contribution with PayPal
+  description: Successful recurring contributions form submission in USD (using PayPal)
+
+- name: US Recurring contribution (Guest) with PayPal
+  description: Successful recurring contributions (guest checkout) form submission in USD (using PayPal)
+
+- name: UK Recurring contribution with PayPal
+  description: Successful recurring contributions form submission in GBP (using PayPal)
+
+- name: UK Recurring contribution (Guest) with PayPal
+  description: Successful recurring contributions (guest checkout) form submission in GBP (using PayPal)
+
+- name: AU Recurring contribution with PayPal
+  description: Successful recurring contributions form submission in AUD (using PayPal)
+
+- name: AU Recurring contribution (Guest) with PayPal
+  description: Successful recurring contributions (guest checkout) form submission in AUD (using PayPal)
+
+# Recurring Contributions Card
+
+- name: US Recurring contribution with Card
+  description: Successful recurring contributions form submission in USD (using Stripe)
+
+- name: US Recurring contribution (Guest) with Card
+  description: Successful recurring contributions (guest checkout) form submission in USD (using Stripe)
+
+- name: UK Recurring contribution with Card
+  description: Successful recurring contributions form submission in GBP (using Stripe)
+
+- name: UK Recurring contribution (Guest) with Card
+  description: Successful recurring contributions (guest checkout) form submission in GBP (using Stripe)
+
+- name: AU Recurring contribution with Card
+  description: Successful recurring contributions form submission in AUD (using Stripe)
+
+- name: AU Recurring contribution (Guest) with Card
+  description: Successful recurring contributions (guest checkout) form submission in AUD (using Stripe)
+
+# Recurring Contributions Direct Debit
+
+- name: UK Recurring contribution with Direct Debit
+  description: Successful recurring contributions form submission in GBP (using GoCardless)
+
+- name: UK Recurring contribution (Guest) with Direct Debit
+  description: Successful recurring contributions (guest checkout) form submission in GBP (using GoCardless)
+
