@@ -6,9 +6,7 @@ organization := "com.gu"
 
 description := "Scala library to provide shared configuration to Guardian Support projects."
 
-scalaVersion := "2.11.8"
-
-crossScalaVersions := Seq(scalaVersion.value, "2.12.4")
+scalaVersion := "2.12.7"
 
 scmInfo := Some(ScmInfo(
   url("https://github.com/guardian/support-models"),
@@ -19,10 +17,11 @@ licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.h
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.1",
-  "com.gu" %% "support-internationalisation" % "0.9"
+  "com.gu" %% "support-models" % "0.39-SNAPSHOT",
+  "com.gu" %% "support-internationalisation" % "0.9" % "provided",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 
-releaseCrossBuild := true
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
@@ -31,9 +30,9 @@ releaseProcess := Seq[ReleaseStep](
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
-  ReleaseStep(action = Command.process("publishSigned", _), enableCrossBuild = true),
+  ReleaseStep(action = Command.process("publishSigned", _)),
   setNextVersion,
   commitNextVersion,
-  ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
+  ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
   pushChanges
 )
