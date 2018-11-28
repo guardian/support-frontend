@@ -16,7 +16,7 @@ class PromotionServiceSpec extends FlatSpec with Matchers {
   }
 
   it should "validate a PromoCode" in {
-    service.validatePromotion(code, Country.UK, prpId) should be(Right(code))
+    service.validatePromotion(code, Country.UK, prpId) should be(Right(promotion))
     service.validatePromotion("INVALID_CODE", Country.UK, prpId) should be(Left(NoSuchCode))
     service.validatePromotion(code, Country.UK, "67890") should be(Left(InvalidProductRatePlan))
     service.validatePromotion(code, Country.US, prpId) should be(Left(InvalidCountry))

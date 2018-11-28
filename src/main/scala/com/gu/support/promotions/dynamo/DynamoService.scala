@@ -18,6 +18,7 @@ class DynamoService[T](table: Table)(implicit decoder: Decoder[T]) extends LazyL
     val items: Iterator[Item] = table.scan().iterator().asScala
     items.flatMap {
       i =>
+        logger.info(i.toJSON)
         val result = decode[T](i.toJSON)
         result.leftMap(err => logger.warn(s"Couldn't decode a PromoCode with body ${i.toJSON}. Error was: $err"))
         result.toOption

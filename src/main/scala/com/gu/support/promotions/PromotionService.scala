@@ -10,12 +10,12 @@ class PromotionService(promotionCollection: PromotionCollection) {
   def findPromotion(promoCode: PromoCode): Option[AnyPromotion] =
     promotionCollection.all().find(_.promoCodes.exists(_ == promoCode))
 
-  def validatePromotion(promoCode: PromoCode, country: Country, productRatePlanId: ProductRatePlanId, now: DateTime = DateTime.now): Either[PromoError, PromoCode] =
+  def validatePromotion(promoCode: PromoCode, country: Country, productRatePlanId: ProductRatePlanId, now: DateTime = DateTime.now): Either[PromoError, AnyPromotion] =
     findPromotion(promoCode) match {
       case Some(p) => p.validateFor(productRatePlanId, country, now)
         .headOption
         .map(err => Left(err))
-        .getOrElse(Right(promoCode))
+        .getOrElse(Right(p))
 
       case _ => Left(NoSuchCode)
     }
