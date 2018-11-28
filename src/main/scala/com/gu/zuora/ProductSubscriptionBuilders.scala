@@ -2,7 +2,7 @@ package com.gu.zuora
 
 import com.gu.support.config.ZuoraConfig
 import com.gu.support.workers.model.{Contribution, DigitalPack, ProductType}
-import com.gu.zuora.model._
+import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
 
 object ProductSubscriptionBuilders {

@@ -6,10 +6,10 @@ import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.config.ZuoraConfig
 import com.gu.support.workers.lambdas.IdentityId
-import com.gu.zuora.GetAccountForIdentity.{DomainAccount, ZuoraAccountNumber}
+import com.gu.support.zuora.api.response._
+import com.gu.support.zuora.api.{QueryData, SubscribeRequest}
+import com.gu.zuora.GetAccountForIdentity.DomainAccount
 import com.gu.zuora.GetSubscription.DomainSubscription
-import com.gu.zuora.model.response._
-import com.gu.zuora.model.{QueryData, SubscribeRequest}
 import io.circe
 import io.circe.Decoder
 import io.circe.parser.decode
@@ -74,7 +74,6 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
 
 object GetAccountForIdentity {
 
-  case class ZuoraAccountNumber(value: String)
   case class CreatedRequestId(value: String)
 
   case class DomainAccount(accountNumber: ZuoraAccountNumber, existingAccountRequestId: Option[CreatedRequestId])

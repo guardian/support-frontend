@@ -4,93 +4,12 @@ import com.gu.config.Configuration
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.workers.model.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction}
-import com.gu.zuora.model._
+import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
 object Fixtures {
   val accountNumber = "A00071408"
-
-  val getAccountResponse =
-    s"""
-       {
-         "basicInfo" : {
-           "id" : "2c92c0f85bae511e015bcf31cde61532",
-           "name" : "001g000001gPV73AAG",
-           "accountNumber" : "$accountNumber",
-           "notes" : null,
-           "status" : "Active",
-           "crmId" : "001g000001gPV73AAG",
-           "batch" : "Batch1",
-           "invoiceTemplateId" : "2c92c0f849369b8801493bf7db7e450e",
-           "communicationProfileId" : null,
-           "IdentityId__c" : "30000291",
-           "sfContactId__c" : "003g000001UtN1qAAF",
-           "CCURN__c" : null
-         },
-         "billingAndPayment" : {
-           "billCycleDay" : 3,
-           "currency" : "GBP",
-           "paymentTerm" : "Due Upon Receipt",
-           "paymentGateway" : "Stripe Gateway 1",
-           "invoiceDeliveryPrefsPrint" : false,
-           "invoiceDeliveryPrefsEmail" : false,
-           "additionalEmailAddresses" : [ ]
-         },
-         "metrics" : {
-           "balance" : 0E-9,
-           "totalInvoiceBalance" : 0E-9,
-           "creditBalance" : 0E-9,
-           "contractedMrr" : 4.250000000
-         },
-         "billToContact" : {
-           "address1" : "Test",
-           "address2" : "TEst",
-           "city" : "Test",
-           "country" : "United Kingdom",
-           "county" : null,
-           "fax" : null,
-           "firstName" : "Test",
-           "homePhone" : null,
-           "lastName" : "Test",
-           "mobilePhone" : null,
-           "nickname" : null,
-           "otherPhone" : null,
-           "otherPhoneType" : null,
-           "personalEmail" : null,
-           "state" : "Test",
-           "taxRegion" : null,
-           "workEmail" : "test@foo.com",
-           "workPhone" : null,
-           "zipCode" : "T223EST",
-           "SpecialDeliveryInstructions__c" : null
-         },
-         "soldToContact" : {
-           "address1" : "Test",
-           "address2" : "TEst",
-           "city" : "Test",
-           "country" : "United Kingdom",
-           "county" : null,
-           "fax" : null,
-           "firstName" : "Test",
-           "homePhone" : null,
-           "lastName" : "Test",
-           "mobilePhone" : null,
-           "nickname" : null,
-           "otherPhone" : null,
-           "otherPhoneType" : null,
-           "personalEmail" : null,
-           "state" : "Test",
-           "taxRegion" : null,
-           "workEmail" : "test@foo.com",
-           "workPhone" : null,
-           "zipCode" : "T223EST",
-           "SpecialDeliveryInstructions__c" : null
-         },
-         "taxInfo" : null,
-         "success" : true
-       }
-    """
 
   val salesforceAccountId = "001g000001gPmXdAAK"
   val salesforceId = "003g000001UtkrEAAR"
@@ -163,17 +82,6 @@ object Fixtures {
 
   val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account(), contactDetails, payPalPaymentMethod, invalidMonthlySubsData, SubscribeOptions())))
 
-  val invoiceResult =
-    """
-      {
-        "Invoice": [
-          {
-            "InvoiceNumber": "INV00051836",
-            "Id": "2c92c0f85be67835015be751f2c6655e"
-          }
-        ]
-      }
-    """
 
   val subscribeResponseAccount =
     s"""
@@ -187,40 +95,7 @@ object Fixtures {
           "TotalTcv": 115.387634411
       }
      """
-  val subscribeResponse =
-    s"""
-      [
-        $subscribeResponseAccount
-      ]
-    """
-  val subscribeResponseAnnual =
-    """
-     [
-        {
-          "AccountNumber": "A00016540",
-          "SubscriptionNumber": "A-S00043802",
-          "GatewayResponse": "Approved",
-          "PaymentId": "2c92c0f95e1d5ca3015e38e585f339dc",
-          "InvoiceResult": {
-            "Invoice": [
-              {
-                "InvoiceNumber": "INV00052447",
-                "Id": "2c92c0f95e1d5ca3015e38e585b539d1"
-              }
-            ]
-          },
-          "TotalTcv": 150,
-          "SubscriptionId": "2c92c0f95e1d5ca3015e38e5854739c3",
-          "Success": true,
-          "TotalMrr": 12.5,
-          "PaymentTransactionNumber": "18X93788F8464761C",
-          "AccountId": "2c92c0f95e1d5ca3015e38e583c739bd",
-          "GatewayResponseCode": "Approved",
-          "InvoiceNumber": "INV00052447",
-          "InvoiceId": "2c92c0f95e1d5ca3015e38e585b539d1"
-        }
-      ]
-   """
+
   val error =
     """
       {
@@ -228,28 +103,4 @@ object Fixtures {
         "Message": "'termType' value should be one of: TERMED, EVERGREEN"
       }
     """
-
-  val errorResponse =
-    s"""
-        [
-          {
-            "Errors": [
-              {
-                "Code": "MISSING_REQUIRED_VALUE",
-                "Message": "SubscriptionData.SubscriptionRatePlanData[0].ProductRatePlanId is invalid."
-              }
-            ],
-            "Success": false
-          }
-        ]
-     """
-
-  val directDebitPaymentFieldsJson =
-    s"""
-       {
-        "accountHolderName": "Mickey Mouse",
-        "sortCode": "204532",
-        "accountNumber": "37462947"
-       }
-     """
 }

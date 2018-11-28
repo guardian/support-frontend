@@ -4,15 +4,15 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.GetRecurringSubscription
-import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers.model.{Contribution, DigitalPack, RequestInfo}
-import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
+import com.gu.support.zuora.api._
+import com.gu.support.zuora.api.response.{SubscribeResponseAccount, ZuoraAccountNumber}
 import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
-import com.gu.zuora.model._
-import com.gu.zuora.model.response.SubscribeResponseAccount
+import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

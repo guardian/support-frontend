@@ -3,10 +3,11 @@ package com.gu.support.workers.encoding
 import java.io.InputStream
 import java.util.Base64
 
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Encryption.encrypt
 import com.gu.support.workers.model.{JsonWrapper, RequestInfo}
-import com.gu.zuora.encoding.CustomCodecs.{jsonWrapperDecoder, jsonWrapperEncoder}
 import io.circe.Encoder
+import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 

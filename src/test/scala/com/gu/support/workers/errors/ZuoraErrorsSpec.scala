@@ -6,17 +6,18 @@ import com.gu.config.Configuration
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.Fixtures.{createContributionZuoraSubscriptionJson, wrapFixture}
-import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.model.JsonWrapper
 import com.gu.support.workers.{Fixtures, LambdaSpec}
+import com.gu.support.zuora.api.response.ZuoraErrorResponse
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures.{incorrectPaymentMethod, invalidSubscriptionRequest}
 import com.gu.zuora.ZuoraService
-import com.gu.zuora.encoding.CustomCodecs.jsonWrapperDecoder
-import com.gu.zuora.model.response.ZuoraErrorResponse
+import io.circe.generic.auto._
 import io.circe.parser.decode
 import org.scalatest.RecoverMethods
 

@@ -7,10 +7,10 @@ import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.workers.lambdas.IdentityId
 import com.gu.support.workers.model.BillingPeriod
+import com.gu.support.zuora.api.response.RatePlan
 import com.gu.zuora.GetAccountForIdentity.{CreatedRequestId, DomainAccount}
 import com.gu.zuora.GetSubscription.DomainSubscription
 import com.gu.zuora.ZuoraService
-import com.gu.zuora.model.response.RatePlan
 
 import scala.concurrent.{ExecutionContext, Future}
 

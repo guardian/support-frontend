@@ -7,13 +7,14 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.stripe.Stripe.StripeError
 import com.gu.stripe.{Stripe, StripeService}
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.Fixtures.{createStripePaymentMethodContributionJson, wrapFixture}
-import com.gu.support.workers.encoding.ErrorJson
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.model.JsonWrapper
 import com.gu.support.workers.{Fixtures, LambdaSpec}
-import com.gu.zuora.encoding.CustomCodecs.jsonWrapperDecoder
+import io.circe.generic.auto._
 import io.circe.parser.decode
 import io.circe.syntax._
 

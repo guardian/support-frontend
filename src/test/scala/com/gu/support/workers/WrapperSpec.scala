@@ -1,13 +1,13 @@
 package com.gu.support.workers
 
 import com.gu.monitoring.SafeLogger
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures.{contribution, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.model.Contribution
 import com.gu.support.workers.model.states.CreateSalesforceContactState
-import com.gu.zuora.encoding.CustomCodecs._
+import io.circe.generic.auto._
 import org.scalatest.{FlatSpec, Matchers}
 
 class WrapperSpec extends FlatSpec with Matchers {

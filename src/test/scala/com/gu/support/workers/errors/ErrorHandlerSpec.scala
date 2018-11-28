@@ -9,7 +9,7 @@ import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
 import com.gu.stripe.Stripe
 import com.gu.support.workers.exceptions.RetryImplicits._
 import com.gu.support.workers.exceptions._
-import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
+import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.ParsingFailure
 import org.scalatest.{FlatSpec, Matchers}
 

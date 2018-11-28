@@ -1,11 +1,11 @@
 package com.gu.salesforce
 
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
-import com.gu.support.workers.encoding.Codec
-import com.gu.support.workers.encoding.Helpers.deriveCodec
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
 import com.gu.support.workers.model.SalesforceContactRecord
-import com.gu.zuora.encoding.CustomCodecs._
 import org.joda.time.DateTime
 
 object Salesforce {

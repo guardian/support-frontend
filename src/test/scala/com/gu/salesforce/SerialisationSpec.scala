@@ -2,7 +2,7 @@ package com.gu.salesforce
 
 import com.gu.salesforce.Fixtures._
 import com.gu.salesforce.Salesforce.{Authentication, NewContact, UpsertData}
-import com.gu.zuora.encoding.CustomCodecs
+import com.gu.support.encoding.CustomCodecs
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Printer
 import io.circe.parser._

@@ -6,7 +6,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
-import com.gu.zuora.encoding.CustomCodecs
+import com.gu.support.encoding.CustomCodecs
 import io.circe
 import io.circe.Decoder
 import io.circe.parser._

@@ -5,16 +5,16 @@ import java.io.ByteArrayOutputStream
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields, IdentityUserId}
 import com.gu.monitoring.SafeLogger
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.encoding.StateCodecs.checkoutFailureStateDecoder
 import com.gu.support.workers.model.CheckoutFailureReasons.{PaymentMethodUnacceptable, Unknown}
 import com.gu.support.workers.model.states.CheckoutFailureState
 import com.gu.support.workers.{Fixtures, LambdaSpec}
+import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.encoding.CustomCodecs._
-import com.gu.zuora.model.response.{ZuoraError, ZuoraErrorResponse}
+import io.circe.generic.auto._
 import io.circe.parser.decode
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
