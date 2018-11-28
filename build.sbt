@@ -52,6 +52,7 @@ lazy val root = (project in file("."))
       "com.gu" %% "support-internationalisation" % "0.9",
       "com.gu" %% "support-models" % "0.39-SNAPSHOT",
       "com.gu" %% "support-config" % "0.17-SNAPSHOT",
+      "com.gu" %% "support-services" % "0.1-SNAPSHOT",
       "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
       "com.netaporter" %% "scala-uri" % "0.4.16",
       "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",

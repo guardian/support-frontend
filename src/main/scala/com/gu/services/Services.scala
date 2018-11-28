@@ -6,6 +6,7 @@ import com.gu.ophan.AcquisitionService
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
+import com.gu.support.promotions.{DynamoPromotionCollection, PromotionService}
 import com.gu.zuora.ZuoraService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -25,5 +26,6 @@ class Services(isTestUser: Boolean) {
   lazy val salesforceService = new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
   lazy val acquisitionService = AcquisitionService(isTestUser)
+  lazy val promotionService = new PromotionService(new DynamoPromotionCollection(promotionsTablesConfigProvider.get(isTestUser)))
 }
 
