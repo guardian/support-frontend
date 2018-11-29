@@ -25,6 +25,7 @@ import com.gu.support.config._
 import fixtures.TestCSRFComponents
 import admin.SwitchState.On
 import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
+import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 
 class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
@@ -118,7 +119,8 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         payPalConfigProvider,
         stubControllerComponents(),
         guardianDomain = GuardianDomain(".thegulocal.com"),
-        settingsProvider
+        settingsProvider,
+        mock[Tip]
       )
     }
 
