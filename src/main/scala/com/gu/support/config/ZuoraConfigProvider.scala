@@ -9,8 +9,6 @@ case class ZuoraContributionConfig(productRatePlanId: ProductRatePlanId, product
 
 case class ZuoraDigitalPackConfig(defaultFreeTrialPeriod: Int, paymentGracePeriod: Int, productRatePlans: ProductRatePlans)
 
-case class ZuoraDiscountsConfig(productRatePlanId: ProductRatePlanId, productRatePlanChargeId: ProductRatePlanChargeId)
-
 case class ProductRatePlans(monthly: ProductRatePlanId, quarterly: ProductRatePlanId, annual: ProductRatePlanId)
 
 case class ZuoraConfig(
@@ -19,8 +17,7 @@ case class ZuoraConfig(
   password: String,
   monthlyContribution: ZuoraContributionConfig,
   annualContribution: ZuoraContributionConfig,
-  digitalPack: ZuoraDigitalPackConfig,
-  discounts: ZuoraDiscountsConfig
+  digitalPack: ZuoraDigitalPackConfig
 ) extends TouchpointConfig {
 
   def contributionConfig(billingPeriod: BillingPeriod): ZuoraContributionConfig =
@@ -45,7 +42,6 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage) extends Touchpoin
     monthlyContribution = contributionFromConfig(config.getConfig("zuora.contribution.monthly")),
     annualContribution = contributionFromConfig(config.getConfig("zuora.contribution.annual")),
     digitalPack = digitalPackFromConfig(config.getConfig("zuora.digitalpack")),
-    discounts = discountsFromConfig(config.getConfig("zuora.discounts"))
   )
 
   private def contributionFromConfig(config: Config): ZuoraContributionConfig = ZuoraContributionConfig(
@@ -61,10 +57,5 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage) extends Touchpoin
       quarterly = config.getString("productRatePlanIds.quarterly"),
       annual = config.getString("productRatePlanIds.annual")
     )
-  )
-
-  private def discountsFromConfig(config: Config): ZuoraDiscountsConfig = ZuoraDiscountsConfig(
-    productRatePlanId = config.getString("productRatePlanId"),
-    productRatePlanChargeId = config.getString("productRatePlanChargeId")
   )
 }
