@@ -76,13 +76,14 @@ const plans = {
 
 const roundToTwoDecimals = (num: number) => parseFloat(Math.round(num * 100) / 100).toFixed(2);
 
-const getWeeklySubPrice = (subscription: number) => (subscription * 3) / 13;
+const getMonthlyNewsStandPrice = (newsstand: number) => (((newsstand) * 13) / 3);
 
 const getSaving = (subscription: number, newsstand: number) =>
-  roundToTwoDecimals(((newsstand - getWeeklySubPrice(subscription)) * 13) / 3);
+  roundToTwoDecimals(getMonthlyNewsStandPrice(newsstand) - subscription);
 
 const getPriceStr = (price: Option<number>): Option<string> =>
   (price ? `From £${price} per month` : null);
+
 const getSavingStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> =>
   (subscription && newsstand ? `save £${getSaving(subscription, newsstand)} a month` : null);
 
