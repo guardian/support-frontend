@@ -14,11 +14,10 @@ import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext
 
 class DynamoService[T](table: Table)(implicit decoder: Decoder[T]) extends LazyLogging {
-  def all(): Iterator[T] = {
+  def all: Iterator[T] = {
     val items: Iterator[Item] = table.scan().iterator().asScala
     items.flatMap {
       i =>
-        logger.info(i.toJSON)
         val result = decode[T](i.toJSON)
         result.leftMap(err => logger.warn(s"Couldn't decode a PromoCode with body ${i.toJSON}. Error was: $err"))
         result.toOption

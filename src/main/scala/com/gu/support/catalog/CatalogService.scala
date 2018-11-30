@@ -3,6 +3,7 @@ package com.gu.support.catalog
 import AwsS3Client.{fetchJson, s3}
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.gu.support.config.Stage
+import io.circe.generic.auto._
 
 object CatalogService{
   def apply(stage: Stage): CatalogService = new CatalogService(stage)

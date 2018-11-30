@@ -4,8 +4,6 @@ name := "support-services"
 
 organization := "com.gu"
 
-version := "0.1"
-
 scalaVersion := "2.12.7"
 
 val awsClientVersion = "1.11.226"

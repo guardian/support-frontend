@@ -5,12 +5,14 @@ import com.gu.support.catalog.ProductRatePlanId
 import org.joda.time.DateTime
 
 object PromotionValidator {
-  implicit class PromotionExtensions(promotion: Promotion[_]) {
-    def validateFor(productRatePlanId: ProductRatePlanId, country: Country, now: DateTime = DateTime.now()) = validateAll(Some(productRatePlanId), country, now)
+  implicit class PromotionExtensions(promotion: Promotion) {
+    def validateFor(productRatePlanId: ProductRatePlanId, country: Country, isRenewal: Boolean, now: DateTime = DateTime.now()) =
+      validateAll(Some(productRatePlanId), country, isRenewal, now)
 
-    private def validateAll(maybeProductRatePlanId: Option[ProductRatePlanId] = None, country: Country, now: DateTime = DateTime.now()): List[PromoError] = {
+    private def validateAll(maybeProductRatePlanId: Option[ProductRatePlanId] = None, country: Country, isRenewal: Boolean, now: DateTime = DateTime.now()): List[PromoError] = {
       val errors = List(
         maybeProductRatePlanId.flatMap(validateProductRatePlan),
+        validateRenewal(isRenewal),
         validateCountry(country),
         validateDate(now)
       )
@@ -18,10 +20,16 @@ object PromotionValidator {
     }
 
     def validateProductRatePlan(productRatePlanId: ProductRatePlanId): Option[PromoError] =
-      if (promotion.promotionType == Tracking || promotion.appliesTo.productRatePlanIds.contains(productRatePlanId))
+      if (promotion.tracking || promotion.appliesTo.productRatePlanIds.contains(productRatePlanId))
         None
       else
         Some(InvalidProductRatePlan)
+
+    def validateRenewal(isRenewal: Boolean) =
+      if (promotion.renewalOnly && !isRenewal)
+        Some(NotApplicable)
+      else
+        None
 
     def validateCountry(country: Country): Option[PromoError]=
       if (promotion.appliesTo.countries.contains(country))

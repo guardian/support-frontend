@@ -1,18 +1,17 @@
 package com.gu.support.promotions
 
-import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.config.PromotionsTablesConfig
 import com.gu.support.promotions.dynamo.{DynamoService, DynamoTables}
-import com.typesafe.config.Config
 
 trait PromotionCollection {
-  def all(): Iterator[AnyPromotion]
+  def all: Iterator[Promotion]
 }
 
-class SimplePromotionCollection(promotions: List[AnyPromotion]) extends PromotionCollection {
-  override def all(): Iterator[AnyPromotion] = promotions.iterator
+class SimplePromotionCollection(promotions: List[Promotion]) extends PromotionCollection {
+  override def all: Iterator[Promotion] = promotions.iterator
 }
 
-class DynamoPromotionCollection(config: Config, environment: TouchPointEnvironment) extends
-  DynamoService[AnyPromotion](DynamoTables.promotions(config, environment)) with
+class DynamoPromotionCollection(config: PromotionsTablesConfig) extends
+  DynamoService[Promotion](DynamoTables.getTable(config.promotions)) with
   PromotionCollection
 
