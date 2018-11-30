@@ -18,7 +18,7 @@ import { setPlan } from '../paperSubscriptionLandingPageActions';
 
 const newsstandPrices = {
   weekly: 2,
-  saturday: 2.90,
+  saturday: 2.9,
   sunday: 3,
 };
 
@@ -76,7 +76,7 @@ const plans = {
 
 const roundToTwoDecimals = (num: number) => parseFloat(Math.round(num * 100) / 100).toFixed(2);
 
-const getMonthlyNewsStandPrice = (newsstand: number) => (((newsstand) * 13) / 3);
+const getMonthlyNewsStandPrice = (newsstand: number) => ((newsstand) * 52) / 12;
 
 const getSaving = (subscription: number, newsstand: number) =>
   roundToTwoDecimals(getMonthlyNewsStandPrice(newsstand) - subscription);
