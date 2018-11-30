@@ -8,7 +8,6 @@
 @import '~components/errorMessage/errorMessage';
 @import '~components/ctaLink/ctaLink';
 @import '~components/generalErrorMessage/generalErrorMessage';
-@import 'components/SetPassword/setPassword';
 
 body {
   min-height: 100vh;
@@ -806,28 +805,9 @@ form {
   padding-bottom: 20px;
 }
 
-.form__submit-button {
-  width: 100%;
+.form__submit-button.button {
   background: gu-colour(news-garnett-highlight);
-  border: none;
-  border-radius: 20px;
-  padding: 9px 20px;
-
-  &:enabled {
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      filter: brightness(90%);
-    }
-  }
-}
-
-.form__submit-button__inner {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
+  border: 1px solid gu-colour(news-garnett-highlight);
 }
 
 .form__submit-button--hidden {
@@ -897,16 +877,9 @@ form {
   height: 14px;
 }
 
-.form__submit .svg-arrow-right-straight {
-  width: 20px;
-  height: 18px;
-  vertical-align: middle;
-}
-
 .icon {
   fill: inherit;
 }
-
 
 /*= THANK YOU PAGE */
 
@@ -950,6 +923,14 @@ form {
   margin-bottom: 0;
 }
 
+.set-password__form {
+ padding-bottom: 30px;
+}
+
+.form__submit.form__submit--create-account {
+  padding-bottom: $gu-v-spacing;
+}
+
 .marketing-permissions__title, .set-password__title {
   font-family: $gu-text-egyptian-web;
   letter-spacing: -0.5px;
@@ -970,25 +951,23 @@ form {
   font-size: 12px;
 }
 
-.component-cta-link--backtothegu {
-  font-size: 16px;
-}
-
 .button {
   align-items: center;
   border: 1px solid currentColor;
+  background-color: gu-colour(garnett-neutral-5);
   border-radius: $gu-v-spacing * 2;
-  display: inline-flex;
   font-family: $gu-text-sans-web;
   height: $gu-v-spacing * 3.5;
   line-height: 1;
   padding: 0 $gu-h-spacing;
   text-decoration: none;
-}
+  position: relative;
 
-.button--newsletter {
-  color: gu-colour(garnett-neutral-5);
-  background-color: gu-colour(green-dark);
+  svg {
+    position: absolute;
+    fill: currentColor;
+    overflow: visible;
+  }
 
   &:enabled {
     cursor: pointer;
@@ -999,24 +978,33 @@ form {
   }
 }
 
+.button--newsletter {
+  color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(green-dark);
+  border-color: gu-colour(green-dark);
+  text-align: right;
+  width: 140px;
+
+  svg {
+    right: calc(100% - 33px);
+    height: 16px;
+  }
+}
+
 .button--newsletter__subscribed {
   color: gu-colour(green-dark);
   background-color: transparent;
 }
 
-.button--newsletter .svg-subscribe, .button--newsletter .svg-subscribed {
-  margin-right: 10px;
-}
+.button--right-arrow {
+  width: 100%;
+  padding: 0 50px 0 $gu-h-spacing;
+  text-align: left;
 
-.button--wob {
-  background: gu-colour(garnett-neutral-1);
-  color: gu-colour(garnett-neutral-5);
-}
-
-.button .svg-arrow-right-straight {
-  width: 20px;
-  height: 18px;
-  fill: gu-colour(garnett-neutral-5);
+  .svg-arrow-right-straight {
+    left: calc(100% - 34px);
+    height: 16px;
+  }
 }
 
 .svg-subscribe, .svg-lock {
@@ -1056,6 +1044,7 @@ form {
 
 .component-password-failure-message {
   padding: 0 $gu-h-spacing $gu-v-spacing;
+  margin-top: $gu-v-spacing;
 }
 
 .component-contributions-survey {
@@ -1071,7 +1060,7 @@ form {
     margin: ($gu-v-spacing / 3) 0;
   }
 
-  .component-cta-link {
+  .component-contributions-survey__button {
     display: inline-block;
     margin-bottom: $gu-v-spacing * 3;
     margin-top: $gu-v-spacing;

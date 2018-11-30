@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { getFrequency, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import { getPaymentDescription } from 'helpers/checkouts';
 import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
-import SvgArrowRight from 'components/svgs/arrowRightStraight';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { SelectedAmounts } from 'helpers/contributions';
 import { hiddenIf } from 'helpers/utilities';
@@ -20,6 +19,7 @@ import {
   sendFormSubmitEventForPayPalRecurring,
   setupRecurringPayPalPayment,
 } from '../contributionsLandingActions';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 
 
 // ----- Types ----- //
@@ -84,6 +84,19 @@ function ContributionSubmit(props: PropTypes) {
     const formClassName = 'form--contribution';
     const showPayPalRecurringButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
 
+    const amountCopy = amount ?
+      formatAmount(
+        currencies[props.currency],
+        spokenCurrencies[props.currency],
+        amount,
+        false,
+      ) : '';
+
+    const paymentDescriptionCopy = getPaymentDescription(props.contributionType, props.paymentMethod);
+
+    const submitButtonCopy = `Contribute ${amountCopy} ${frequency} ${paymentDescriptionCopy}`;
+
+
     // We have to show/hide PayPalRecurringButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
     // See PayPalRecurringButton.jsx for more info.
@@ -105,24 +118,14 @@ function ContributionSubmit(props: PropTypes) {
             setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
           />
         </div>
-        <button
+        <ButtonWithRightArrow
+          accessibilityHintId="accessibility-hint-submit-contribution"
           disabled={props.isWaiting}
           type="submit"
-          className={hiddenIf(showPayPalRecurringButton, 'form__submit-button')}
-        >
-          <span className="form__submit-button__inner">
-            Contribute&nbsp;
-            {amount ? formatAmount(
-              currencies[props.currency],
-              spokenCurrencies[props.currency],
-              amount,
-              false,
-            ) : null}&nbsp;
-            {frequency ? `${frequency} ` : null}
-            {getPaymentDescription(props.contributionType, props.paymentMethod)}&nbsp;
-            <SvgArrowRight />
-          </span>
-        </button>
+          componentClassName="form__submit--contribution"
+          buttonClassName={hiddenIf(showPayPalRecurringButton, 'form__submit-button')}
+          buttonCopy={submitButtonCopy}
+        />
       </div>
     );
   }
