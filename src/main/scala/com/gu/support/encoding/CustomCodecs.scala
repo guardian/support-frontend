@@ -7,7 +7,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.StringExtensions._
 import com.gu.support.workers.model._
 import io.circe.{Decoder, Encoder}
-import org.joda.time.{DateTime, LocalDate}
+import org.joda.time.{DateTime, Days, LocalDate, Months}
 
 import scala.util.Try
 
@@ -35,6 +35,10 @@ trait ModelsCodecs {
 }
 
 trait HelperCodecs {
+  implicit val dayDecoder: Decoder[Days] = Decoder.decodeInt.map(Days.days)
+  implicit val dayEncoder: Encoder[Days] = Encoder.encodeInt.contramap(_.getDays)
+  implicit val monthDecoder: Decoder[Months] = Decoder.decodeInt.map(Months.months)
+  implicit val monthEncoder: Encoder[Months] = Encoder.encodeInt.contramap(_.getMonths)
   implicit val encodeLocalTime: Encoder[LocalDate] = Encoder.encodeString.contramap(_.toString("yyyy-MM-dd"))
   implicit val decodeLocalTime: Decoder[LocalDate] = Decoder.decodeString.map(LocalDate.parse)
   implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeLong.contramap(_.getMillis)

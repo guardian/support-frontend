@@ -6,7 +6,8 @@ import io.circe.syntax._
 import org.scalatest.{FlatSpec, Matchers}
 import Codec._
 import com.gu.support.zuora.api.response.{Invoice, InvoiceResult}
-import io.circe.{Decoder, ObjectEncoder}
+import io.circe._
+import io.circe.generic.semiauto
 
 class EncoderSpec extends FlatSpec with Matchers with LazyLogging {
   implicit val encoder: ObjectEncoder[TestClass] = capitalizingEncoder[TestClass]
@@ -59,5 +60,16 @@ class EncoderSpec extends FlatSpec with Matchers with LazyLogging {
     val decodeResult = decode[InvoiceResult](json)
 
     decodeResult.isRight should be(true)
+  }
+
+  "JsonObjectExtensions" should "rename a field successfully" in {
+    import JsonHelpers.JsonObjectExtensions
+
+    val json = Json.fromString("hello")
+    val jsonObject = JsonObject(("a", json))
+    val result = jsonObject.renameField("a", "b")
+
+    result("b") shouldBe Some(json)
+    result("a") shouldBe None
   }
 }

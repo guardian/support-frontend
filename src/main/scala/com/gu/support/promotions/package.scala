@@ -3,10 +3,12 @@ package com.gu.support
 import cats.syntax.functor._
 import com.gu.i18n.{Country, CountryGroup}
 import com.gu.support.catalog.ProductRatePlanId
+import com.gu.support.encoding.JsonHelpers
 import io.circe.generic.semiauto.deriveDecoder
-import io.circe.{ACursor, Decoder}
+import io.circe.{ACursor, Decoder, Json, JsonObject}
 import org.joda.time.format.DateTimeFormat
-import org.joda.time.{DateTime, Days}
+import org.joda.time.{DateTime, Days, Months}
+import JsonHelpers._
 
 package object promotions {
   type CampaignCode = String
@@ -14,8 +16,6 @@ package object promotions {
   type Channel = String
 
   type PromoCode = String
-
-  type AnyPromotion = Promotion[PromotionType]
 
   case class AppliesTo(productRatePlanIds: Set[ProductRatePlanId], countries: Set[Country])
 
@@ -28,51 +28,40 @@ package object promotions {
 
   }
 
-  sealed trait PromotionType {
-    override def toString = getClass.getSimpleName
+  sealed trait Benefit
 
-    val name: String
+  case class DiscountBenefit(amount: Double, durationMonths: Option[Months]) extends Benefit
+
+  object DiscountBenefit{
+    val jsonName = "percent_discount"
   }
 
-  case class Discount(durationMonths: Option[Int], amount: Double) extends PromotionType {
-    val name = "Discount"
+  case class FreeTrialBenefit(duration: Days) extends Benefit
+
+  object FreeTrialBenefit{
+    val jsonName = "free_trial"
   }
 
-  case class FreeTrial(duration: Days) extends PromotionType {
-    val name = "FreeTrial"
+  case class IncentiveBenefit(redemptionInstructions: String, legalTerms: Option[String], termsAndConditions: Option[String]) extends Benefit
+
+  object IncentiveBenefit {
+    val jsonName = "incentive"
   }
 
-  case object Renewal extends PromotionType {
-    val name = "Renewal"
+  object Benefit {
+    import com.gu.support.encoding.CustomCodecs._
+    implicit val discountDecoder: Decoder[DiscountBenefit] = deriveDecoder
+    implicit val freeTrialDecoder: Decoder[FreeTrialBenefit] = deriveDecoder
+    implicit val incentiveDecoder: Decoder[IncentiveBenefit] = deriveDecoder
+
+    implicit val decoder: Decoder[Benefit] = List[Decoder[Benefit]](
+      Decoder[DiscountBenefit].widen,
+      Decoder[FreeTrialBenefit].widen,
+      Decoder[IncentiveBenefit].widen
+    ).reduceLeft(_ or _)
   }
 
-  @Deprecated
-  case object Tracking extends PromotionType {
-    val name = "Tracking"
-  }
-
-  case class DoubleBenefit(a: PromotionType, b: PromotionType) extends PromotionType {
-    val name = "Double"
-  }
-
-  object PromotionType {
-    implicit val discountDecoder: Decoder[Discount] = deriveDecoder
-    implicit val freeTrialDecoder: Decoder[FreeTrial] = deriveDecoder
-    implicit val renewalDecoder: Decoder[Renewal.type] = deriveDecoder
-    implicit val trackingDecoder: Decoder[Tracking.type] = deriveDecoder
-    implicit val doubleDecoder: Decoder[DoubleBenefit] = deriveDecoder
-
-    implicit val decodePromotionType: Decoder[PromotionType] =
-      List[Decoder[PromotionType]](
-        Decoder[Discount].widen,
-        Decoder[FreeTrial].widen,
-        Decoder[DoubleBenefit].widen,
-        Decoder[Renewal.type].widen,
-        Decoder[Tracking.type].widen
-      ).reduceLeft(_ or _)
-  }
-
-  case class Promotion[+Type <: PromotionType](
+  case class Promotion(
     name: String,
     description: String,
     appliesTo: AppliesTo,
@@ -80,38 +69,33 @@ package object promotions {
     channelCodes: Map[Channel, Set[PromoCode]],
     starts: DateTime,
     expires: Option[DateTime],
-    promotionType: Type) {
+    discount: Option[DiscountBenefit],
+    freeTrial: Option[FreeTrialBenefit],
+    incentive: Option[IncentiveBenefit] = None,
+    renewalOnly: Boolean = false,
+    tracking: Boolean = false
+  ) {
     def promoCodes: Iterable[PromoCode] = channelCodes.values.flatten
   }
 
-  object Promotion{
+  object Promotion {
+
+    implicit val decoder: Decoder[Promotion] = deriveDecoder[Promotion].prepare(mapFields)
 
     private def mapFields(c: ACursor) = c.withFocus {
-        _.mapObject { x =>
-          val value = x("codes") //Change the incoming codes element name to channelCodes to match the Promotion case class
-          value.map(x.add("channelCodes", _)).getOrElse(x)
-        }
-      }
-
-
-    implicit val discountDecoder: Decoder[Promotion[Discount]] = deriveDecoder[Promotion[Discount]].prepare(mapFields)
-    implicit val doubleDecoder: Decoder[Promotion[DoubleBenefit]] = deriveDecoder[Promotion[DoubleBenefit]].prepare(mapFields)
-    implicit val freeTrialDecoder: Decoder[Promotion[FreeTrial]] = deriveDecoder[Promotion[FreeTrial]].prepare(mapFields)
-    implicit val renewalDecoder: Decoder[Promotion[Renewal.type]] = deriveDecoder[Promotion[Renewal.type]].prepare(mapFields)
-    implicit val trackingDecoder: Decoder[Promotion[Tracking.type]] = deriveDecoder[Promotion[Tracking.type]].prepare(mapFields)
-
-    implicit val promotionDecoder: Decoder[Promotion[PromotionType]] = List[Decoder[Promotion[PromotionType]]](
-      Decoder[Promotion[Discount]].widen,
-      Decoder[Promotion[FreeTrial]].widen,
-      Decoder[Promotion[DoubleBenefit]].widen,
-      Decoder[Promotion[Renewal.type]].widen,
-      Decoder[Promotion[Tracking.type]].widen
-    ).reduceLeft(_ or _)
-
+      _.mapObject(_
+        .extractBenefits
+        .renameField("codes", "channelCodes")
+        .checkKeyExists("renewalOnly", Json.fromBoolean(false))
+        .checkKeyExists("tracking", Json.fromBoolean(false))
+      )
+    }
   }
 
-  implicit val countryDecoder: Decoder[Country] = Decoder.decodeString.emap { code => CountryGroup.countryByCode(code).toRight(s"Unrecognised country code '$code'") }
-  implicit val dayDecoder: Decoder[Days] = Decoder.decodeInt.map(Days.days)
+  implicit val countryDecoder: Decoder[Country] = Decoder.decodeString.emap {
+    code => CountryGroup.countryByCode(code).toRight(s"Unrecognised country code '$code'")
+  }
+
   val dateFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
   implicit val dateTimeDecoder: Decoder[DateTime] = Decoder.decodeString.map(dateFormatter.parseDateTime)
 

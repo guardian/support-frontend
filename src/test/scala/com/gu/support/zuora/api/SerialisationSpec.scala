@@ -3,12 +3,13 @@ package com.gu.support.zuora.api
 import com.gu.i18n.Currency.GBP
 import com.gu.support.SerialisationTestHelpers._
 import com.gu.support.encoding.CustomCodecs._
-import Fixtures._
 import com.gu.support.workers.model.PaymentFields
+import com.gu.support.zuora.api.Fixtures._
 import com.gu.support.zuora.api.response._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
 import io.circe.syntax._
+import org.joda.time.Months.months
 import org.scalatest.{FlatSpec, Matchers}
 
 class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
@@ -42,7 +43,7 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
     testDecoding[SubscribeRequest](subscribeRequestJson)
   }
 
-  "DiscountRatePlanCharge" should "serialise and deserialize correctly" in {
+  "DiscountRatePlanCharge with fixed end date" should "serialise and deserialize correctly" in {
     val correct = parse("""{
       "ProductRatePlanChargeId" : "12345",
       "DiscountPercentage" : 15.0,
@@ -50,7 +51,8 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
       "UpToPeriodsType" : "Months",
       "EndDateCondition" : "FixedPeriod"
     }""").right.get
-    val rpc = DiscountRatePlanCharge("12345", upToPeriods = 3, discountPercentage = 15)
+
+    val rpc = DiscountRatePlanCharge("12345", upToPeriods = Some(months(3)), discountPercentage = 15)
 
     rpc.asJson should be(correct)
 
@@ -58,7 +60,28 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
       err => fail(err),
       c => {
         c.productRatePlanChargeId shouldBe "12345"
-        c.upToPeriods shouldBe 3
+        c.upToPeriods shouldBe Some(months(3))
+        c.discountPercentage shouldBe 15
+      }
+    )
+  }
+
+  "DiscountRatePlanCharge with no end date" should "serialise and deserialize correctly" in {
+    val correct = parse("""{
+      "ProductRatePlanChargeId" : "12345",
+      "DiscountPercentage" : 15.0,
+      "EndDateCondition" : "SubscriptionEnd"
+    }""").right.get
+
+    val rpc = DiscountRatePlanCharge("12345", discountPercentage = 15, None)
+
+    rpc.asJson should be(correct)
+
+    correct.as[DiscountRatePlanCharge].fold(
+      err => fail(err),
+      c => {
+        c.productRatePlanChargeId shouldBe "12345"
+        c.upToPeriods shouldBe None
         c.discountPercentage shouldBe 15
       }
     )

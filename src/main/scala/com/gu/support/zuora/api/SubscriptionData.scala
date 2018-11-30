@@ -7,18 +7,32 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.Codec
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
-import org.joda.time.LocalDate
+import org.joda.time.{LocalDate, Months}
+import com.gu.support.encoding.CustomCodecs.monthDecoder
 
 object RatePlanCharge {
+  val fixedPeriod = "FixedPeriod"
+  val subscriptionEnd = "SubscriptionEnd"
+  val endDateCondition = "EndDateCondition"
+  val upToPeriods = "UpToPeriods"
+
   implicit val discountEncoder: Encoder[DiscountRatePlanCharge] = capitalizingEncoder[DiscountRatePlanCharge]
-    .mapJsonObject(_
-      .add("UpToPeriodsType", Json.fromString("Months"))
-      .add("EndDateCondition", Json.fromString("FixedPeriod")))
+    .mapJsonObject { jo =>
+      jo.toMap.find { case (field, value) => field == upToPeriods && value != Json.Null }
+        .map(_ => jo
+          .add("UpToPeriodsType", Json.fromString("Months"))
+          .add(endDateCondition, Json.fromString(fixedPeriod))
+        )
+        .getOrElse(jo
+          .add(endDateCondition, Json.fromString(subscriptionEnd))
+          .remove(upToPeriods)
+        )
+    }
   implicit val discountDecoder: Decoder[DiscountRatePlanCharge] = decapitalizingDecoder
 
   implicit val contributionEncoder: Encoder[ContributionRatePlanCharge] = capitalizingEncoder[ContributionRatePlanCharge]
     .mapJsonObject(_
-      .add("EndDateCondition", Json.fromString("SubscriptionEnd")))
+      .add(endDateCondition, Json.fromString(subscriptionEnd)))
   implicit val contributionDecoder: Decoder[ContributionRatePlanCharge] = decapitalizingDecoder
 
   implicit val encodeRatePlanCharge: Encoder[RatePlanCharge] = Encoder.instance {
@@ -40,7 +54,7 @@ sealed trait RatePlanCharge {
 case class DiscountRatePlanCharge(
   productRatePlanChargeId: ProductRatePlanChargeId,
   discountPercentage: Double,
-  upToPeriods: Int
+  upToPeriods: Option[Months]
 ) extends RatePlanCharge
 
 case class ContributionRatePlanCharge(
