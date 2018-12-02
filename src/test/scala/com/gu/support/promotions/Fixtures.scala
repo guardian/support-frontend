@@ -12,15 +12,25 @@ object Fixtures {
 
   val freeTrialPromoCode = "FREE_TRIAL_CODE"
   val discountPromoCode = "DISCOUNT_CODE"
+  val doublePromoCode = "DOUBLE_CODE"
   val invalidPromoCode = "INVALID_CODE"
   val renewalPromoCode = "RENEWAL_CODE"
   val validProductRatePlanId = "12345"
   val invalidProductRatePlanId = "67890"
   val prpIds = List(validProductRatePlanId)
-  val freeTrial = promotion(prpIds, freeTrialPromoCode, freeTrial = Some(FreeTrialBenefit(Days.days(5))))
-  val discount = promotion(prpIds, discountPromoCode, discount = Some(DiscountBenefit(30, Some(Months.months(3)))))
+
+  val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))
+  val discountBenefit = Some(DiscountBenefit(30, Some(Months.months(3))))
+
+  val freeTrial = promotion(prpIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
+  val validFreeTrial = ValidatedPromotion(freeTrialPromoCode, freeTrial)
+  val discount = promotion(prpIds, discountPromoCode, discountBenefit)
+  val validDiscount = ValidatedPromotion(discountPromoCode, discount)
+  val double = promotion(prpIds, doublePromoCode, discountBenefit, freeTrialBenefit)
+  val validDouble = ValidatedPromotion(doublePromoCode, double)
   val tracking = promotion(prpIds, tracking = true)
   val renewal = promotion(prpIds, renewalPromoCode, renewal = true)
+
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(
     List(
