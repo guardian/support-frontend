@@ -8,6 +8,7 @@ import org.joda.time.LocalDate
 //noinspection TypeAnnotation
 object Fixtures {
   val accountNumber = "A00071408"
+  val promoCode = "TEST_CODE"
 
   val getAccountResponse =
     s"""
@@ -121,6 +122,7 @@ object Fixtures {
   val productRatePlanId = "12345"
   val productRatePlanChargeId = "67890"
 
+  val subscription = Subscription(date, date, date, promoCode = Some(promoCode))
   val monthlySubscriptionData = SubscriptionData(
     List(
       RatePlanData(
@@ -131,7 +133,7 @@ object Fixtures {
         Nil
       )
     ),
-    Subscription(date, date, date)
+    subscription
   )
 
   val accountJson =
@@ -149,6 +151,21 @@ object Fixtures {
         "PaymentTerm" : "Due Upon Receipt",
         "BcdSettingOption" : "AutoSet",
         "Batch" : "Batch1"
+      }
+    """
+
+  val subscriptionJson =
+    s"""
+      {
+        "ContractEffectiveDate" : "2018-11-28",
+        "ContractAcceptanceDate" : "2018-12-14",
+        "TermStartDate" : "2018-11-28",
+        "AutoRenew" : true,
+        "InitialTerm" : 12,
+        "RenewalTerm" : 12,
+        "TermType" : "TERMED",
+        "InitialPromotionCode__c": "$promoCode",
+        "PromotionCode__c": "$promoCode"
       }
     """
 
@@ -189,15 +206,7 @@ object Fixtures {
               ]
             }
           ],
-          "Subscription" : {
-            "ContractEffectiveDate" : "2018-11-28",
-            "ContractAcceptanceDate" : "2018-12-14",
-            "TermStartDate" : "2018-11-28",
-            "AutoRenew" : true,
-            "InitialTerm" : 12,
-            "RenewalTerm" : 12,
-            "TermType" : "TERMED"
-          }
+          "Subscription" : $subscriptionJson
         },
         "SubscribeOptions" : {
           "GenerateInvoice" : true,
@@ -329,4 +338,13 @@ object Fixtures {
         "accountNumber": "37462947"
        }
      """
+
+  val contributionRatePlanCharge =
+    """
+    {
+      "ProductRatePlanChargeId" : "12345",
+      "Price" : 15,
+      "EndDateCondition" : "SubscriptionEnd"
+    }
+    """
 }

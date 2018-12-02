@@ -9,6 +9,8 @@ import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.{LocalDate, Months}
 import com.gu.support.encoding.CustomCodecs.monthDecoder
+import com.gu.support.encoding.JsonHelpers._
+import com.gu.support.promotions.PromoCode
 
 object RatePlanCharge {
   val fixedPeriod = "FixedPeriod"
@@ -96,7 +98,14 @@ object SubscriptionProductFeature {
 case class SubscriptionProductFeature(featureId: String)
 
 object Subscription {
-  implicit val codec: Codec[Subscription] = capitalizingCodec
+  implicit val decoder: Decoder[Subscription] = decapitalizingDecoder[Subscription].prepare(
+    _.withFocus(_.mapObject(_.renameField("PromotionCode__c", "promoCode")))
+  )
+
+  implicit val encoder: Encoder[Subscription] = capitalizingEncoder[Subscription].mapJsonObject(_
+    .copyField("PromoCode", "PromotionCode__c")
+    .renameField("PromoCode", "InitialPromotionCode__c")
+  )
 }
 
 case class Subscription(
@@ -106,7 +115,8 @@ case class Subscription(
   autoRenew: Boolean = true,
   initialTerm: Int = 12,
   renewalTerm: Int = 12,
-  termType: String = "TERMED"
+  termType: String = "TERMED",
+  promoCode: Option[PromoCode] = None
 )
 
 object RatePlanChargeData {

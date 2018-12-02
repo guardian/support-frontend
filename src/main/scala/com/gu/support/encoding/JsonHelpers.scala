@@ -6,8 +6,11 @@ import io.circe.{Json, JsonObject}
 object JsonHelpers {
   implicit class JsonObjectExtensions(jsonObject: JsonObject) {
     def renameField(from: String, to: String) =
+      jsonObject.copyField(from, to).remove(from)
+
+    def copyField(from: String, to: String) =
       jsonObject(from)
-        .map(json => jsonObject.add(to, json).remove(from))
+        .map(json => jsonObject.add(to, json))
         .getOrElse(jsonObject)
 
     def checkKeyExists(key: String, default: Json) =

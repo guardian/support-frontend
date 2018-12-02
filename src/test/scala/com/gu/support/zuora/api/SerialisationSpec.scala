@@ -1,18 +1,20 @@
 package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.GBP
+import com.gu.support.SerialisationTestHelpers
 import com.gu.support.SerialisationTestHelpers._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.model.PaymentFields
 import com.gu.support.zuora.api.Fixtures._
 import com.gu.support.zuora.api.response._
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.Json
 import io.circe.parser._
 import io.circe.syntax._
 import org.joda.time.Months.months
 import org.scalatest.{FlatSpec, Matchers}
 
-class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
+class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with LazyLogging {
 
   "Account" should "serialise to correct json" in {
     val json = account(GBP).asJson
@@ -24,13 +26,8 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
     testDecoding[Account](s"$accountJson")
   }
 
-  "PaymentMethod" should "serialise to correct json" in {
-    val json = creditCardPaymentMethod.asJson
-  }
-
   "PaymentFields" should "deserialise correctly" in {
-    val ddFields = decode[PaymentFields](directDebitPaymentFieldsJson)
-    ddFields.isRight should be(true)
+    testDecoding[PaymentFields](directDebitPaymentFieldsJson)
   }
 
   "SubscribeRequest" should "serialise to correct json" in {
@@ -44,7 +41,8 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
   }
 
   "DiscountRatePlanCharge with fixed end date" should "serialise and deserialize correctly" in {
-    val correct = parse("""{
+    val correct = parse(
+      """{
       "ProductRatePlanChargeId" : "12345",
       "DiscountPercentage" : 15.0,
       "UpToPeriods" : 3,
@@ -67,7 +65,8 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
   }
 
   "DiscountRatePlanCharge with no end date" should "serialise and deserialize correctly" in {
-    val correct = parse("""{
+    val correct = parse(
+      """{
       "ProductRatePlanChargeId" : "12345",
       "DiscountPercentage" : 15.0,
       "EndDateCondition" : "SubscriptionEnd"
@@ -88,17 +87,7 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
   }
 
   "ContributionRatePlanCharge" should "serialise and deserialize correctly" in {
-    val correct = parse("""{
-      "ProductRatePlanChargeId" : "12345",
-      "Price" : 15,
-      "EndDateCondition" : "SubscriptionEnd"
-    }""").right.get
-    val rpc = ContributionRatePlanCharge("12345", price = 15)
-
-    rpc.asJson should be(correct)
-
-    correct.as[ContributionRatePlanCharge].fold(
-      err => fail(err),
+    testDecoding[ContributionRatePlanCharge](Fixtures.contributionRatePlanCharge,
       c => {
         c.productRatePlanChargeId shouldBe "12345"
         c.price shouldBe 15
@@ -107,44 +96,49 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
   }
 
   "InvoiceResult" should "deserialise correctly" in {
-    val decodeResponse = decode[InvoiceResult](invoiceResult)
-    decodeResponse.isRight should be(true)
+    testDecoding[InvoiceResult](invoiceResult)
+  }
+
+  "Subscription" should "serialise and deserialise correctly" in {
+    testDecoding[Subscription](subscriptionJson, s => {
+        s.promoCode shouldBe Some(promoCode)
+      })
+
+    val encoded = subscription.asJson
+    (encoded \\ "InitialPromotionCode__c").map(_ shouldBe Json.fromString(promoCode))
+    (encoded \\ "PromotionCode__c").map(_ shouldBe Json.fromString(promoCode))
   }
 
   "SubscribeResponseAccount" should "deserialise correctly" in {
-    val decodeResponse = decode[SubscribeResponseAccount](subscribeResponseAccount)
-    decodeResponse.fold(
-      err => fail(err.toString),
-      _ => succeed
-    )
+    testDecoding[SubscribeResponseAccount](subscribeResponseAccount)
   }
 
   "SubscribeResponse" should "deserialise correctly" in {
-    val decodeResponse = decode[List[SubscribeResponseAccount]](subscribeResponseAnnual)
-    decodeResponse.isRight should be(true)
+    testDecoding[List[SubscribeResponseAccount]](subscribeResponseAnnual)
   }
 
   "GetAccountResponse" should "deserialise from json" in {
-    val decodeResult = decode[GetAccountResponse](Fixtures.getAccountResponse)
-    decodeResult.isRight should be(true)
-    decodeResult.right.get.basicInfo.accountNumber should be(Fixtures.accountNumber)
+    testDecoding[GetAccountResponse](
+      Fixtures.getAccountResponse,
+      _.basicInfo.accountNumber should be(Fixtures.accountNumber)
+    )
   }
 
   "Error" should "deserialise correctly" in {
-
-    val decodeResult = decode[ZuoraError](Fixtures.error)
-    decodeResult.isRight should be(true)
-    decodeResult.right.get.Code should be("53100320")
+    testDecoding[ZuoraError](
+      Fixtures.error,
+      _.Code should be("53100320")
+    )
   }
 
   "ErrorResponse" should "deserialise correctly" in {
     //The Zuora api docs say that the subscribe action returns a ZuoraErrorResponse
     //but actually it returns a list of those.
-    val decodeResult = decode[List[ZuoraErrorResponse]](Fixtures.errorResponse)
-
-    assertDecodingSucceeded(decodeResult)
-    decodeResult.right.get.head.errors.size should be(1)
-    decodeResult.right.get.head.errors.head.Code should be("MISSING_REQUIRED_VALUE")
+    testDecoding[List[ZuoraErrorResponse]](Fixtures.errorResponse,
+    errs => {
+      errs.head.errors.size should be(1)
+      errs.head.errors.head.Code should be("MISSING_REQUIRED_VALUE")
+    })
   }
 
 }
