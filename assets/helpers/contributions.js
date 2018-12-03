@@ -11,6 +11,7 @@ import type { Radio } from 'components/radioToggle/radioToggle';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
+import { getUsSingleAmounts } from 'helpers/abTests/helpers/usSingleContributionsAmounts';
 
 // ----- Types ----- //
 
@@ -228,10 +229,10 @@ const defaultMonthlyAmount = [
   { value: '30', spoken: numbersInWords['30'], isDefault: false },
 ];
 
-const amounts = (annualTestVariant: string) => ({
+const amounts = (annualTestVariant: string, usSingleAmountTestVariant: string) => ({
   ONE_OFF: {
     GBPCountries: defaultOneOffAmount,
-    UnitedStates: defaultOneOffAmount,
+    UnitedStates: getUsSingleAmounts(usSingleAmountTestVariant),
     EURCountries: defaultOneOffAmount,
     AUDCountries: [
       { value: '50', spoken: numbersInWords['50'], isDefault: false },
@@ -465,9 +466,10 @@ function getContributionAmountRadios(
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   annualTestVariant: AnnualContributionsTestVariant,
+  usSingleAmountTestVariant: string,
 ): Radio[] {
 
-  return amounts(annualTestVariant)[contributionType][countryGroupId].map(amount => ({
+  return amounts(annualTestVariant, usSingleAmountTestVariant)[contributionType][countryGroupId].map(amount => ({
     value: amount.value,
     text: `${currencies[currencyId].glyph}${amount.value}`,
     accessibilityHint: getAmountA11yHint(contributionType, currencyId, amount.spoken),

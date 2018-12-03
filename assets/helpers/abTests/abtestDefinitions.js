@@ -7,6 +7,20 @@ import type { Tests } from './abtest';
 export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
 
 export const tests: Tests = {
+
+  usSingleContributionsAmounts: {
+    variants: ['control', 'singleD100', 'single3575'],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 5,
+  },
+
   annualContributionsRoundThree: {
     variants: ['control', 'annualAmountsA'],
     audiences: {
