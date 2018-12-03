@@ -129,9 +129,12 @@ install_js_deps() {
 }
 
 fetch_dev_cert() {
-  aws s3 cp s3://gu-reader-revenue-private/subscriptions/frontend/DEV/subscriptions-frontend.private.conf \
-    /etc/gu  \
-    --profile membership
+  aws s3 cp s3://identity-local-ssl/wildcard-thegulocal-com-exp2019-01-09.crt /usr/local/etc/nginx/ --profile membership
+  aws s3 cp s3://identity-local-ssl/wildcard-thegulocal-com-exp2019-01-09.key /usr/local/etc/nginx/ --profile membership
+}
+
+copy_nginx_config() {
+  ln -s ../nginx/support.conf /usr/local/etc/nginx/sites-enabled/support.conf
 }
 
 report() {
@@ -149,6 +152,7 @@ main () {
   install_nginx
   install_awscli
   fetch_dev_cert
+  copy_nginx_config
   install_jdk
   install_sbt
   install_node
