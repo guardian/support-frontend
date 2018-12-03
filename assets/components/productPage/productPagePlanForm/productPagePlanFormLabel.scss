@@ -13,25 +13,28 @@
 .component-product-page-plan-form-label__box {
   @include gu-fontset-body-sans;
   background: gu-colour(garnett-neutral-5);
-  border: 1px solid gu-colour(garnett-neutral-2);
   color: gu-colour(garnett-neutral-1);
   display: block;
   height: 100%;
   cursor: pointer;
   transition: .2s;
   will-change: background-color box-shadow;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
 }
 
 .component-product-page-plan-form-label__title,
-.component-product-page-plan-form-label__copy {
-  padding: $gu-v-spacing/2 $gu-h-spacing/2;
+.component-product-page-plan-form-label__content {
   display: block;
 }
 
 .component-product-page-plan-form-label__title {
   @include gu-fontset-heading-sans;
+  padding: $gu-v-spacing/3 $gu-h-spacing/2 $gu-v-spacing/4;
+  background-color: gu-colour(garnett-neutral-4);
   position: relative;
-  border-bottom: 1px solid gu-colour(garnett-neutral-2);
 }
 
 .component-product-page-plan-form-label__offer {
@@ -44,16 +47,17 @@
   line-height: 1.4;
 }
 
-.component-product-page-plan-form-label__copy {
-  padding-bottom: $gu-v-spacing;
+.component-product-page-plan-form-label__content {
+  flex: 1 1 auto;
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing/1.5;  
 }
 
 .component-product-page-plan-form-label__check {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $gu-v-spacing * 2.3;
-  height: $gu-v-spacing * 2.3;
+  width: $gu-v-spacing * 2;
+  height: $gu-v-spacing * 2;
   border-radius: 100%;
   background: gu-colour(garnett-neutral-1);
   position: absolute;
@@ -75,10 +79,27 @@
 }
 
 .component-product-page-plan-form-label__input:checked + .component-product-page-plan-form-label__box {
-  background: gu-colour(news-garnett-highlight);
-  border-color: rgba(0,0,0,.3);
+  .component-product-page-plan-form-label__title {
+    background: gu-colour(news-garnett-highlight);
+  }
   .component-product-page-plan-form-label__check {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+.component-product-page-plan-form-label__footer {
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+  margin: $gu-v-spacing/2 $gu-h-spacing/2 0;
+  padding-top: $gu-v-spacing/2;
+  padding-bottom: $gu-v-spacing;
+}
+
+.component-product-page-plan-form-price__title {
+  @include gu-fontset-heading-sans($size-only: true);
+  font-weight: bold;
+}
+
+.component-product-page-plan-form-price__copy { 
+  font-style: italic;
 }

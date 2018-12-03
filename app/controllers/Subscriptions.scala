@@ -7,9 +7,12 @@ import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
+import models.ZuoraCatalog.ZuoraCatalogPricePlan
 import utils.RequestCountry._
 import views.html.helper.CSRF
+
 import scala.concurrent.ExecutionContext
+import services.ZuoraCatalogService.getPaperPrices
 
 class Subscriptions(
     actionRefiners: CustomActionBuilders,
@@ -139,7 +142,19 @@ class Subscriptions(
     val css = "paperSubscriptionLandingPage.css"
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
 
-    Ok(views.html.main(title, id, js, css, None, canonicalLink)).withSettingsSurrogateKey
+    def pricesToMap(prices: List[ZuoraCatalogPricePlan], prefix: String) = {
+      prices.map { price =>
+        (
+          s"$prefix-${price.name.getOrElse(price.id).toLowerCase}",
+          price.pricePerPeriod.filter(_.currency == "GBP").map(_.price).sum.toString
+        )
+      }.toMap
+    }
+
+    val collectionPrices = pricesToMap(getPaperPrices.collection, "collection")
+    val deliveryPrices = pricesToMap(getPaperPrices.delivery, "delivery")
+
+    Ok(views.html.main(title, id, js, css, None, canonicalLink, data = collectionPrices ++ deliveryPrices)).withSettingsSurrogateKey
   }
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")

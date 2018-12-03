@@ -41,6 +41,10 @@ case class ZuoraCatalogPricePlan(
 )
 
 object ZuoraCatalogPricePlan {
+
+  def round(price: Double): Double =
+    BigDecimal(price).setScale(2, BigDecimal.RoundingMode.HALF_DOWN).toDouble
+
   def build(ZuoraCatalog: ZuoraCatalog, plans: List[String]): List[ZuoraCatalogPricePlan] = {
     ZuoraCatalog.products
       .flatMap(product =>
@@ -54,7 +58,7 @@ object ZuoraCatalogPricePlan {
               List(
                 ZuoraCatalogPricing(
                   "GBP",
-                  productRatePlan.price
+                  round(productRatePlan.price)
                 )
               )
             )))

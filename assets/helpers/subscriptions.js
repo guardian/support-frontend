@@ -30,7 +30,17 @@ export type ComponentAbTest = {
 export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
 export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
 
-export type PaperBillingPlan = 'everyday' | 'sixday' | 'weekend' | 'sunday';
+export type PaperBillingPlan =
+  'collectionEveryday' | 'collectionSixday' | 'collectionWeekend' | 'collectionSunday' |
+  'deliveryEveryday' | 'deliverySixday' | 'deliveryWeekend' | 'deliverySunday';
+
+export type PaperNewsstandTiers = 'weekly' | 'saturday' | 'sunday';
+
+const newsstandPrices: {[PaperNewsstandTiers]: number} = {
+  weekly: 2 * 5,
+  saturday: 2.9,
+  sunday: 3,
+};
 
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
@@ -224,6 +234,15 @@ function sendTrackingEventsOnClick(
 }
 
 
+// ----- Newsstand savings ----- //
+const getMonthlyNewsStandPrice = (newsstand: number) => ((newsstand) * 52) / 12;
+
+const getNewsstandSaving = (subscriptionMonthlyCost: number, newsstandWeeklyCost: number) =>
+  fixDecimals(getMonthlyNewsStandPrice(newsstandWeeklyCost) - subscriptionMonthlyCost);
+
+const getNewsstandPrice = (tiers: PaperNewsstandTiers[]) =>
+  tiers.map(tier => newsstandPrices[tier]).reduce((a, b) => a + b, 0);
+
 // ----- Exports ----- //
 
 export {
@@ -232,4 +251,6 @@ export {
   discountedDisplayPrice,
   getProductPrice,
   getWeeklyProductPrice,
+  getNewsstandSaving,
+  getNewsstandPrice,
 };
