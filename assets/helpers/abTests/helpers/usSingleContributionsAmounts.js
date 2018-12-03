@@ -1,6 +1,8 @@
 // @flow
+import type { Amount } from 'helpers/contributions';
 
 /* eslint-disable quote-props */
+
 const numbersInWords = {
   '25': 'twenty five',
   '35': 'thirty five',
@@ -13,28 +15,28 @@ const numbersInWords = {
 };
 /* eslint-enable  quote-props */
 
-const VariantA = [
+const VariantA: Array<Amount> = [
   { value: '25', spoken: numbersInWords['25'], isDefault: false },
   { value: '50', spoken: numbersInWords['50'], isDefault: false },
   { value: '100', spoken: numbersInWords['100'], isDefault: true },
   { value: '250', spoken: numbersInWords['250'], isDefault: false },
 ];
 
-const VariantB = [
+const VariantB: Array<Amount> = [
   { value: '35', spoken: numbersInWords['35'], isDefault: false },
   { value: '75', spoken: numbersInWords['75'], isDefault: true },
   { value: '125', spoken: numbersInWords['125'], isDefault: false },
   { value: '250', spoken: numbersInWords['250'], isDefault: false },
 ];
 
-const Control = [
+const Control: Array<Amount> = [
   { value: '25', spoken: numbersInWords['25'], isDefault: false },
   { value: '50', spoken: numbersInWords['50'], isDefault: true },
   { value: '100', spoken: numbersInWords['100'], isDefault: false },
   { value: '250', spoken: numbersInWords['250'], isDefault: false },
 ];
 
-export const getUsSingleAmounts = (usSingleAmountsTestVariant: string) => {
+export const getUsSingleAmounts = (usSingleAmountsTestVariant: string): Array<Amount> => {
   if (usSingleAmountsTestVariant === 'singleD100') {
     return VariantA;
   } else if (usSingleAmountsTestVariant === 'single3575') {
