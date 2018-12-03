@@ -61,9 +61,10 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-kms" % awsVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % awsVersion,
+  "com.amazonaws" % "aws-java-sdk-s3" % awsVersion,
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
-  "com.gu" %% "support-models" % "0.32",
+  "com.gu" %% "support-models" % "0.38",
   "com.gu" %% "support-config" % "0.16",
   "com.gu" %% "fezziwig" % "0.8",
   "com.typesafe.akka" %% "akka-agent" % "2.5.14",
@@ -82,8 +83,10 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
+  "com.gu" %% "tip" % "0.5.1",
   // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.8.11.1",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
+  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7",
   filters,
   ws
 )

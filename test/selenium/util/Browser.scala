@@ -20,6 +20,9 @@ trait Browser extends WebBrowser {
   def pageHasElement(q: Query): Boolean =
     waitUntil(ExpectedConditions.visibilityOfElementLocated(q.by))
 
+  def elementIsClickable(q: Query): Boolean =
+    waitUntil(ExpectedConditions.elementToBeClickable(q.by))
+
   def pageDoesNotHaveElement(q: Query): Boolean =
     waitUntil(ExpectedConditions.not(ExpectedConditions.presenceOfAllElementsLocatedBy(q.by)))
 
@@ -46,6 +49,15 @@ trait Browser extends WebBrowser {
 
       if (clear) q.webElement.clear
       q.webElement.sendKeys(value)
+
+    } else
+      throw new MissingPageElementException(q)
+  }
+
+  def clearValue(q: Query) {
+    if (pageHasElement(q)) {
+
+      q.webElement.clear
 
     } else
       throw new MissingPageElementException(q)

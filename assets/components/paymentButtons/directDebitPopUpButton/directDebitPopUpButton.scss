@@ -6,7 +6,7 @@
   cursor: pointer;
   display: block;
   font-family: $gu-sans-web;
-  font-size: 14px;
+  font-size: 16px;
   height: $cta-height;
   padding-left: $gu-h-spacing;
   position: relative;
@@ -29,17 +29,3 @@
   }
 }
 
-.component-direct-debit-pop-up-button--disable {
-  background-color: gu-colour(garnett-neutral-4);
-  color: gu-colour(garnett-neutral-2);
-  cursor: auto;
-
-  .svg-arrow-right-straight {
-    fill: gu-colour(garnett-neutral-2);
-  }
-
-  &:hover {
-    background-color: gu-colour(garnett-neutral-4);
-  }
-
-}

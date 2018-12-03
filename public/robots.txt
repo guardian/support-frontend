@@ -1,12 +1,23 @@
 User-agent: *
 
-Disallow: /subscribe/digital
-Disallow: /uk/subscribe/digital
-Disallow: /us/subscribe/digital
-Disallow: /au/subscribe/digital
-Disallow: /int/subscribe/digital
-Disallow: /contribute.new
+Disallow: /subscribe/premium-tier
+Disallow: /uk/subscribe/premium-tier
+Disallow: /us/subscribe/premium-tier
+Disallow: /au/subscribe/premium-tier
+Disallow: /int/subscribe/premium-tier
 Disallow: /contribute/recurring-guest
+
+Disallow: /subscribe/paper
+Disallow: /subscribe/paper/delivery
+Disallow: /subscribe/paper/collection
+Disallow: /uk/subscribe/paper
+Disallow: /uk/subscribe/paper/delivery
+Disallow: /uk/subscribe/paper/collection
+
+Disallow: /uk/subscribe/digital/checkout
+Disallow: /us/subscribe/digital/checkout
+Disallow: /au/subscribe/digital/checkout
+Disallow: /int/subscribe/digital/checkout
 
 Allow: /
 

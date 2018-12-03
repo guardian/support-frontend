@@ -9,11 +9,13 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import * as cookie from 'helpers/cookie';
 import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
-
+import type { ErrorReason } from 'helpers/errorReasons';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { checkoutError, checkoutSuccess } from '../oneoffContributionsActions';
 
 
@@ -32,6 +34,7 @@ function stripeOneOffContributionEndpoint(testUser: ?string) {
   return ONEOFF_CONTRIB_ENDPOINT;
 }
 
+
 // ----- Types ----- //
 
 type PaymentApiStripeExecutePaymentBody = {|
@@ -44,15 +47,22 @@ type PaymentApiStripeExecutePaymentBody = {|
   acquisitionData: PaymentAPIAcquisitionData,
 |};
 
+type PaymentApiError = {| type: string, error: Object |}
+
+type OnSuccess = () => void;
+type OnFailure = ErrorReason => void;
+
+
 // ----- Functions ----- //
 
 function requestData(
   abParticipations: Participations,
-  paymentToken: string,
+  stripeAuthorisation: StripeAuthorisation,
   currency: IsoCurrency,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
+  optimizeExperiments: OptimizeExperiments,
 ) {
   const { user } = getState().page;
 
@@ -63,10 +73,10 @@ function requestData(
       paymentData: {
         currency,
         amount,
-        token: paymentToken,
+        token: stripeAuthorisation.token,
         email: user.email,
       },
-      acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations),
+      acquisitionData: derivePaymentApiAcquisitionData(referrerAcquisitionData, abParticipations, optimizeExperiments),
     };
 
     return {
@@ -83,47 +93,70 @@ function requestData(
   });
 }
 
-function postToEndpoint(request: Object, dispatch: Function, abParticipations: Participations): Promise<*> {
-  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request).then((response) => {
-    if (response.ok) {
-      trackConversion(abParticipations, routes.oneOffContribThankyou);
-      dispatch(checkoutSuccess());
-    }
-    return response.json();
-  }).then((responseJson) => {
-    if (responseJson.error.exceptionType === 'CardException') {
-      dispatch(checkoutError('Your card has been declined.'));
-    } else {
-      const errorHttpCode = responseJson.error.errorCode || 'unknown';
-      const exceptionType = responseJson.error.exceptionType || 'unknown';
-      const errorName = responseJson.error.errorName || 'unknown';
-      logException(`Stripe payment attempt failed with following error: code: ${errorHttpCode} type: ${exceptionType} error-name: ${errorName}.`);
-      dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-    }
-  }).catch(() => {
-    logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
-    dispatch(checkoutError('There was an error processing your payment. Please\u00a0try\u00a0again\u00a0later.'));
-  });
+const handleFailure = (onFailure: OnFailure) => (paymentApiError: PaymentApiError): void => {
+  const failureReason: ErrorReason = paymentApiError.error.failureReason ? paymentApiError.error.failureReason : 'unknown';
+  onFailure(failureReason);
+};
+
+const handleResponse = (onSuccess: OnSuccess, onFailure: OnFailure) => (response): Promise<void> => {
+
+  if (response.ok) {
+    onSuccess();
+    return Promise.resolve();
+  }
+
+  return response.json().then(handleFailure(onFailure));
+
+};
+
+const handleUnknownError = (onFailure: OnFailure) => () => {
+  logException('Stripe payment attempt failed with unexpected error while attempting to process payment response');
+  onFailure('unknown');
+};
+
+function postToEndpoint(request: Object, onSuccess: OnSuccess, onFailure: OnFailure): Promise<*> {
+
+  return fetch(stripeOneOffContributionEndpoint(cookie.get('_test_username')), request)
+    .then(handleResponse(onSuccess, onFailure))
+    .catch(handleUnknownError(onFailure));
+
 }
 
-export default function postCheckout(
+function postCheckout(
   abParticipations: Participations,
   dispatch: Function,
   amount: number,
   currencyId: IsoCurrency,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-): (string) => Promise<*> {
-  return (paymentToken: string) => {
+  optimizeExperiments: OptimizeExperiments,
+): StripeAuthorisation => void {
+
+  const onSuccess: OnSuccess = () => {
+    trackConversion(abParticipations, routes.oneOffContribThankyou);
+    dispatch(checkoutSuccess());
+  };
+
+  const onFailure: OnFailure = (errorReason: ErrorReason) => {
+    dispatch(checkoutError(errorReason));
+  };
+
+  return (stripeAuthorisation: StripeAuthorisation) => {
     const request = requestData(
       abParticipations,
-      paymentToken,
+      stripeAuthorisation,
       currencyId,
       amount,
       referrerAcquisitionData,
       getState,
+      optimizeExperiments,
     );
 
-    return postToEndpoint(request, dispatch, abParticipations);
+    postToEndpoint(request, onSuccess, onFailure);
   };
 }
+
+
+// ----- Export ----- //
+
+export default postCheckout;

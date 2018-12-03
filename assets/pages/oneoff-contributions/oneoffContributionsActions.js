@@ -1,26 +1,26 @@
 // @flow
 
+// ----- Imports ----- //
+
+import type { ErrorReason } from 'helpers/errorReasons';
+
 // ----- Types ----- //
 
 export type Action =
-    | { type: 'CHECKOUT_ERROR', message: ?string }
-    | { type: 'SET_EMAIL_HAS_BEEN_BLURRED' | 'CHECKOUT_SUCCESS' };
+    | { type: 'CHECKOUT_ERROR', errorReason: ErrorReason }
+    | { type: 'CHECKOUT_SUCCESS' };
 
-// ----- Actions ----- //
 
-function checkoutError(message: ?string): Action {
-  return { type: 'CHECKOUT_ERROR', message };
+// ----- Action Creators ----- //
+
+function checkoutError(errorReason: ErrorReason): Action {
+  return { type: 'CHECKOUT_ERROR', errorReason };
 }
 
 function checkoutSuccess(): Action {
   return { type: 'CHECKOUT_SUCCESS' };
 }
 
-function setEmailHasBeenBlurred(): Action {
-  return { type: 'SET_EMAIL_HAS_BEEN_BLURRED' };
-}
-
-
 // ----- Exports ----- //
 
-export { checkoutError, checkoutSuccess, setEmailHasBeenBlurred };
+export { checkoutError, checkoutSuccess };

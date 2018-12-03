@@ -4,15 +4,17 @@
 
 import React, { type Node } from 'react';
 
+import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   id: ?string,
   header: Node,
   footer: Node,
   children: Node,
-};
+  classModifiers: Array<?string>
+|};
 
 
 // ----- Component ----- //
@@ -20,7 +22,7 @@ type PropTypes = {
 export default function Page(props: PropTypes) {
 
   return (
-    <div id={props.id} className="gu-content">
+    <div id={props.id} className={classNameWithModifiers('gu-content', props.classModifiers)}>
       {props.header}
       <main role="main" className="gu-content__main">
         {props.children}
@@ -36,4 +38,5 @@ export default function Page(props: PropTypes) {
 
 Page.defaultProps = {
   id: null,
+  classModifiers: [],
 };

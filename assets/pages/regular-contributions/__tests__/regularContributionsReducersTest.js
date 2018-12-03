@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { ErrorReason } from 'helpers/errorReasons';
 import createReducer from '../regularContributionsReducer';
 
 
@@ -9,7 +10,7 @@ import createReducer from '../regularContributionsReducer';
 
 describe('Regular contributions Reducer', () => {
 
-  const reducer = createReducer(20, 'DirectDebit', 'MONTHLY');
+  const reducer = createReducer(20, 'DirectDebit', 'MONTHLY', 'GBPCountries');
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchSnapshot();
@@ -17,15 +18,15 @@ describe('Regular contributions Reducer', () => {
 
   it('should handle CHECKOUT_ERROR', () => {
 
-    const message = 'Test error';
+    const insufficientFunds: ErrorReason = 'insufficient_funds';
     const action = {
       type: 'CHECKOUT_ERROR',
-      message,
+      errorReason: insufficientFunds,
     };
 
     const newState = reducer(undefined, action);
 
-    expect(newState.regularContrib.error).toEqual(message);
+    expect(newState.regularContrib.errorReason).toEqual(insufficientFunds);
     expect(newState.regularContrib.paymentStatus).toMatchSnapshot();
   });
 
@@ -39,7 +40,7 @@ describe('Regular contributions Reducer', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.regularContrib.error).toMatchSnapshot();
+    expect(newState.regularContrib.errorReason).toMatchSnapshot();
   });
 
   it('should handle CREATING_CONTRIBUTOR', () => {
@@ -52,13 +53,4 @@ describe('Regular contributions Reducer', () => {
     expect(newState.regularContrib.paymentStatus).toEqual('Pending');
   });
 
-  it('should handle SET_EMAIL_HAS_BEEN_BLURRED', () => {
-
-    const action = {
-      type: 'SET_EMAIL_HAS_BEEN_BLURRED',
-    };
-
-    const newState = reducer(undefined, action);
-    expect(newState.regularContrib.emailHasBeenBlurred).toEqual(true);
-  });
 });

@@ -36,10 +36,9 @@ GET  /monthly-contributions                         controllers.Application.cont
 
 # ----- Contributions ----- #
 
-GET  /contribute                                    controllers.Application.contributeGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String)
-GET  /contribute.new                                controllers.Application.newContributionsLanding()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute.react controllers.Application.reactContributionsLanding(country: String)
+GET  /contribute                                        controllers.Application.contributeGeoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String)
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
 GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormMaybeAuthenticated()
@@ -52,6 +51,10 @@ GET  /contribute/recurring/pending                  controllers.RegularContribut
 # this endpoint should be removed once identity remove
 # the need for a client token
 POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
+
+# ------ Identity ------ #
+PUT /identity/set-password-guest                 controllers.IdentityController.setPasswordGuest
+GET /identity/get-user-type                      controllers.IdentityController.getUserType(maybeEmail: Option[String])
 
 
 GET  /contribute/one-off                            controllers.OneOffContributions.displayForm()
@@ -69,7 +72,19 @@ GET  /:country/subscribe                           controllers.Subscriptions.leg
 
 GET  /subscribe/digital                            controllers.Subscriptions.digitalGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.Subscriptions.digital(country: String)
-GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscriptions.displayForm(country: String)
+GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscriptions.displayForm(country: String, displayCheckout: String ?= "false")
+
+GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
+GET  /$country<(uk|us|au|int)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
+
+GET  /subscribe/weekly                            controllers.Subscriptions.weeklyGeoRedirect()
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly   controllers.Subscriptions.weekly(country: String)
+
+GET  /subscribe/paper          controllers.Subscriptions.paperMethodRedirect()
+GET  /uk/subscribe/paper          controllers.Subscriptions.paperMethodRedirect()
+GET  /subscribe/paper/$method<collection|delivery>          controllers.Subscriptions.paperMethodRedirectTo(method)
+GET  /uk/subscribe/paper/$method<collection|delivery>          controllers.Subscriptions.paper(method: String)
+
 
 # ----- Authentication ----- #
 
@@ -89,16 +104,27 @@ GET  /paypal/cancel                                 controllers.PayPalRegular.ca
 
 # ----- PayPal (One-off Endpoints) ----- #
 
-GET  /paypal/rest/return                                controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String)
+# For PayPal one-off create a payment by sending a request to the payment API directly.
+# <payment-api-host>/contribute/one-off/paypal/create-payment
+# This requires return and cancel urls depending on whether the user authorized the payment or not.
+# https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
+GET  /paypal/rest/return                                controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, country: Option[String] = None)
 GET  /paypal/rest/cancel                                controllers.PayPalOneOff.cancelURL
+GET  /paypal/rest/error                                 controllers.PayPalOneOff.paypalError
+
+# TODO: more cleanup
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return   controllers.PayPalOneOff.newReturnURL(paymentId: String, PayerID: String, country: String)
 
 # ----- Direct Debit ----- #
 
 POST /direct-debit/check-account                      controllers.DirectDebit.checkAccount
 
+# ----- Verification ----- #
+
+GET  /.well-known/*file   controllers.Assets.at(path="/public", file)
+
 # ----- Assets ----- #
 # See application.conf for cache time config
 
 GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
-GET  /assets-payment/*file                          controllers.Assets.at(path="/public/assets-new-ui", file)
 GET  /*file                                         controllers.Assets.at(path="/public", file)

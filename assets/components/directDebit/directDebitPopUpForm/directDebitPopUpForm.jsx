@@ -15,19 +15,16 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import SvgCross from 'components/svgs/cross';
 
 import type { Phase } from 'components/directDebit/directDebitActions';
-import type { RegularCheckoutCallback } from 'helpers/checkouts';
-
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 // ---- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
-  callback: RegularCheckoutCallback,
+type PropTypes = {|
+  onPaymentAuthorisation: PaymentAuthorisation => void,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
   phase: Phase,
-};
-/* eslint-enable react/no-unused-prop-types */
+|};
 
 
 // ----- Map State/Props ----- //
@@ -69,9 +66,11 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
             className="component-direct-debit-pop-up-form__close-button focus-target"
             onClick={props.closeDirectDebitPopUp}
           >
-            <SvgCross />
+            <span>
+              <SvgCross />
+            </span>
           </button>
-          <DirectDebitForm callback={props.callback} />
+          <DirectDebitForm onPaymentAuthorisation={props.onPaymentAuthorisation} />
         </div>
       </div>
     );

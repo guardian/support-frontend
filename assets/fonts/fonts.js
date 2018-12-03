@@ -22,4 +22,6 @@ require('./GHGuardianHeadline-Light.ttf');
 require('./GHGuardianHeadline-LightItalic.woff');
 require('./GHGuardianHeadline-LightItalic.woff2');
 require('./GHGuardianHeadline-LightItalic.ttf');
+require('./GTGuardianTitlepiece-Bold.woff');
+require('./GTGuardianTitlepiece-Bold.woff2');
 

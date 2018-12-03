@@ -12,16 +12,19 @@ import { init as pageInit } from 'helpers/page/page';
 import Page from 'components/page/page';
 import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
 import CustomerService from 'components/customerService/customerService';
+import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
+import PromotionPopUp from './components/promotionPopUp';
+import promotionPopUpReducer from './components/promotionPopUpReducer';
 
 
 // ----- Redux Store ----- //
 
-const store = pageInit();
+const store = pageInit(promotionPopUpReducer);
 
 // ----- Internationalisation ----- //
 
@@ -52,13 +55,19 @@ const content = (
   <Provider store={store}>
     <Page
       header={<CountrySwitcherHeader />}
-      footer={<Footer><CustomerService selectedCountryGroup={countryGroupId} /></Footer>}
+      footer={
+        <Footer>
+          <CustomerService selectedCountryGroup={countryGroupId} />
+          <SubscriptionFaq subscriptionProduct="DigitalPack" />
+        </Footer>}
     >
-      <DigitalSubscriptionLandingHeader countryGroupId={countryGroupId} />
+      <DigitalSubscriptionLandingHeader
+        countryGroupId={countryGroupId}
+      />
       <ProductBlock countryGroupId={countryGroupId} />
-      <LeftMarginSection modifierClasses={['grey']}>
-        <IndependentJournalismSection />
-      </LeftMarginSection>
+      <AdFreeSection headingSize={2} />
+      <IndependentJournalismSection />
+      <PromotionPopUp />
     </Page>
   </Provider>
 );

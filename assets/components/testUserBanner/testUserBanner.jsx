@@ -8,9 +8,9 @@ import { connect } from 'react-redux';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   isTestUser: boolean,
-};
+|};
 
 // ----- Component ----- //
 

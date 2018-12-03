@@ -12,14 +12,18 @@
   }
 }
 
+.component-left-margin-section--blue {
+  color: #ffffff;
+  .component-left-margin-section__content {
+    background: gu-colour(sport-garnett-feature);
+  }
+}
+
 .component-left-margin-section__content {
   flex-grow: 1;
+  flex-basis: gu-span(11) + $gu-h-spacing;
 
-  @include mq($from: tablet) {
-    flex-basis: 730px;
-  }
-
-  @include mq($from: desktop) {
-    flex-basis: 970px;
+  @include mq($from: leftCol) {
+    flex-basis: gu-span(12) + $gu-h-spacing;
   }
 }

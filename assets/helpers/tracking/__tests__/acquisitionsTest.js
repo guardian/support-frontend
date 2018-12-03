@@ -5,8 +5,10 @@
 import {
   derivePaymentApiAcquisitionData,
   getOphanIds,
+  optimizeExperimentsToAcquisitionABTest,
   participationsToAcquisitionABTest,
 } from '../acquisitions';
+
 
 // ----- Tests ----- //
 
@@ -24,11 +26,10 @@ describe('acquisitions', () => {
         componentId: 'exampleComponentId',
         componentType: 'exampleComponentType',
         source: 'exampleSource',
-        abTest: {
+        abTests: [{
           name: 'referrerAbTest',
           variant: 'value1',
-        },
-        abTests: [],
+        }],
         queryParameters: [{ name: 'param1', value: 'value1' }, { name: 'param2', value: 'value2' }],
       };
 
@@ -38,13 +39,19 @@ describe('acquisitions', () => {
         testId3: 'variant3',
       };
 
+      const optimizeExperiments = [
+        { id: 'optimizeExperiment1', variant: 'variant1' },
+        { id: 'optimizeExperiment2', variant: 'variant2' },
+        { id: 'optimizeExperiment3', variant: 'variant3' },
+      ];
+
       const paymentApiAcquisitionData =
-        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+        derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
 
       expect(paymentApiAcquisitionData).toMatchSnapshot();
 
       // The abTests array should be a combination of supportAbTests and the source tests
-      expect(paymentApiAcquisitionData.abTests && paymentApiAcquisitionData.abTests.length).toEqual(4);
+      expect(paymentApiAcquisitionData.abTests && paymentApiAcquisitionData.abTests.length).toEqual(7);
       expect(paymentApiAcquisitionData.campaignCodes && paymentApiAcquisitionData.campaignCodes.length).toEqual(1);
     });
   });
@@ -92,5 +99,28 @@ describe('acquisitions', () => {
       expect(acquisitionABTests.length).toEqual(3);
       expect(acquisitionABTests[0]).toEqual({ name: 'test0', variant: 'variant0' });
     });
+  });
+
+  describe('optimizeExperimentsToAcquisitionABTest', () => {
+
+    it('should return an empty array in the presence of a empty object as its input', () => {
+      expect(optimizeExperimentsToAcquisitionABTest([])).toEqual([]);
+    });
+
+    it('should return an array of AcquisitionAbTests prepended with an Optimize tag', () => {
+
+      const optimizeExperiments = [
+        { id: 'Experiment1', variant: '1' },
+        { id: 'Experiment2', variant: '2' },
+        { id: 'Experiment3', variant: '3' },
+      ];
+
+      const acquisitionABTests = optimizeExperimentsToAcquisitionABTest(optimizeExperiments);
+
+      expect(acquisitionABTests.length).toBe(3);
+      expect(acquisitionABTests[0]).toEqual({ name: 'optimize$$Experiment1', variant: '1' });
+
+    });
+
   });
 });

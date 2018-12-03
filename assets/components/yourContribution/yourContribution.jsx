@@ -9,26 +9,21 @@ import PaymentAmount from 'components/paymentAmount/paymentAmount';
 import Secure from 'components/secure/secure';
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type IsoCountry } from 'helpers/internationalisation/country';
-import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   contributionType: ContributionType,
-  country: IsoCountry,
   amount: number,
   currencyId: IsoCurrency,
-};
+|};
 
 
 // ----- Setup ----- //
 
-function getHeading(
-  contributionType: ContributionType,
-  country: IsoCountry,
-): string {
+function getHeading(contributionType: ContributionType): string {
 
   switch (contributionType) {
     case 'ANNUAL':
@@ -37,7 +32,7 @@ function getHeading(
       return 'Your monthly contribution';
     case 'ONE_OFF':
     default:
-      return `Your ${country === 'US' ? 'one-time' : 'one-off'} contribution`;
+      return 'Your single contribution';
   }
 
 }
@@ -49,7 +44,7 @@ export default function YourContribution(props: PropTypes) {
 
   return (
     <div className="component-your-contribution">
-      <PageSection heading={getHeading(props.contributionType, props.country)}>
+      <PageSection heading={getHeading(props.contributionType)}>
         <PaymentAmount
           amount={props.amount}
           currencyId={props.currencyId}

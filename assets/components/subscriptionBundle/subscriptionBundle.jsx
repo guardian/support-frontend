@@ -14,6 +14,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import type { HeadingSize } from 'components/heading/heading';
 import type { ListItem } from 'components/featureList/featureList';
 import type { GridImg } from 'components/gridImage/gridImage';
+import type { Node } from 'react';
 
 
 // ----- Props ----- //
@@ -23,18 +24,26 @@ type BundleCta = {
   url: string,
   accessibilityHint: string,
   modifierClasses: Array<?string>,
-  onClick: ?Function,
+  onClick?: ?Function,
 };
 
-type PropTypes = {
+type Benefits = {
+  list: true,
+  benefits: ListItem[],
+} | {
+  list: false,
+  copy: Node,
+};
+
+type PropTypes = {|
   modifierClass?: string,
   heading: string,
-  subheading: string,
-  benefits: ListItem[],
+  subheading: Node,
+  benefits: Benefits,
   gridImage: GridImg,
   headingSize: HeadingSize,
   ctas: BundleCta[],
-};
+|};
 
 
 // ----- Component ----- //
@@ -50,7 +59,10 @@ export default function SubscriptionBundle(props: PropTypes) {
           subheading={props.subheading}
           headingSize={props.headingSize}
         />
-        <FeatureList listItems={props.benefits} modifierClass={props.modifierClass} />
+        {props.benefits.list ?
+          <FeatureList listItems={props.benefits.benefits} modifierClass={props.modifierClass} /> :
+          <p className="component-subscription-bundle__description">{props.benefits.copy}</p>
+        }
         {props.ctas.map(cta => <CtaLink {...cta} />)}
       </div>
     </div>

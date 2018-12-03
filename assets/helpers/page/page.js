@@ -3,55 +3,38 @@
 // ----- Imports ----- //
 
 import 'ophan';
-import {
-  createStore,
-  combineReducers,
-  applyMiddleware,
-  compose,
-  type Reducer,
-  type StoreEnhancer,
-} from 'redux';
-import thunkMiddleware from 'redux-thunk';
 import type { Store } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore, type Reducer } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 
-import * as abTest from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Switches } from 'helpers/switch';
+import * as abTest from 'helpers/abTests/abtest';
+import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency, type IsoCurrency } from 'helpers/internationalisation/currency';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import {
-  getCampaign,
-  getAcquisition,
-  type Campaign,
-  type ReferrerAcquisitionData,
-} from 'helpers/tracking/acquisitions';
-import {
-  detect as detectCountryGroup,
-  type CountryGroupId,
-} from 'helpers/internationalisation/countryGroup';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { createCommonReducer } from 'helpers/page/commonReducer';
+import { getCampaign, getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type CountryGroupId, detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import { addOptimizeExperiments, readExperimentsFromSession } from 'helpers/optimize/optimize';
+import storeReferrer from 'helpers/tracking/awin';
+import type { OptimizeExperiment } from 'helpers/optimize/optimize';
+import { setExperimentVariant } from 'helpers/page/commonActions';
 
-import type { Action } from './pageActions';
+if (process.env.NODE_ENV === 'DEV') {
+  import('preact/devtools');
+}
 
 
 // ----- Types ----- //
 
-export type Internationalisation = {|
-  currencyId: IsoCurrency,
-  countryGroupId: CountryGroupId,
-  countryId: IsoCountry,
+export type ReduxState<PageState> = {|
+  common: CommonState,
+  page: PageState,
 |};
-
-export type CommonState = {
-  campaign: ?Campaign,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  otherQueryParams: Array<[string, string]>,
-  abParticipations: Participations,
-  switches: Switches,
-  internationalisation: Internationalisation,
-};
 
 
 // ----- Functions ----- //
@@ -67,6 +50,7 @@ function doNotTrack(): boolean {
 function analyticsInitialisation(participations: Participations): void {
   if (!(doNotTrack())) {
     googleTagManager.init(participations);
+    storeReferrer();
   }
   // Logging.
   logger.init();
@@ -78,9 +62,10 @@ function buildInitialState(
   countryGroupId: CountryGroupId,
   countryId: IsoCountry,
   currencyId: IsoCurrency,
-  switches: Switches,
+  settings: Settings,
 ): CommonState {
-  const acquisition = getAcquisition(abParticipations);
+  const acquisition = getReferrerAcquisitionData();
+  const optimizeExperiments = readExperimentsFromSession();
   const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
   const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
   const internationalisation = {
@@ -95,31 +80,8 @@ function buildInitialState(
     otherQueryParams,
     internationalisation,
     abParticipations,
-    switches,
-  };
-
-}
-
-// Sets up the common reducer with its initial state.
-function createCommonReducer(initialState: CommonState): (state?: CommonState, action: Action) => CommonState {
-
-  return function commonReducer(
-    state?: CommonState = initialState,
-    action: Action,
-  ): CommonState {
-
-    switch (action.type) {
-
-      case 'SET_COUNTRY':
-        return {
-          ...state,
-          internationalisation: { ...state.internationalisation, countryId: action.country },
-        };
-
-      default:
-        return state;
-    }
-
+    settings,
+    optimizeExperiments,
   };
 
 }
@@ -128,13 +90,13 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
 function statelessInit() {
   const country: IsoCountry = detectCountry();
   const countryGroupId: CountryGroupId = detectCountryGroup();
-  const participations: Participations = abTest.init(country, countryGroupId);
+  const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
   analyticsInitialisation(participations);
 }
 
 // Enables redux devtools extension and optional redux-thunk.
 /* eslint-disable no-underscore-dangle */
-function storeEnhancer<S, A>(thunk: boolean): StoreEnhancer<S, A> | typeof undefined {
+function storeEnhancer(thunk: boolean) {
 
   if (thunk) {
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -153,12 +115,11 @@ function init<S, A>(
   pageReducer: Reducer<S, A> | null = null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
-
+  const { settings } = window.guardian;
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const countryId: IsoCountry = detectCountry();
   const currencyId: IsoCurrency = detectCurrency(countryGroupId);
-  const participations: Participations = abTest.init(countryId, countryGroupId);
-  const { switches } = window.guardian;
+  const participations: Participations = abTest.init(countryId, countryGroupId, settings);
   analyticsInitialisation(participations);
 
   const initialState: CommonState = buildInitialState(
@@ -166,21 +127,25 @@ function init<S, A>(
     countryGroupId,
     countryId,
     currencyId,
-    switches,
+    settings,
   );
   const commonReducer = createCommonReducer(initialState);
 
-  return createStore(
+  const store = createStore(
     combineReducers({ page: pageReducer, common: commonReducer }),
     storeEnhancer(thunk),
   );
+
+  addOptimizeExperiments((exp: OptimizeExperiment) => store.dispatch(setExperimentVariant(exp)));
+
+  return store;
 }
 
 
 // ----- Exports ----- //
 
 export {
-  createCommonReducer,
   init,
   statelessInit,
+  doNotTrack,
 };

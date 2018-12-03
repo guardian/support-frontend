@@ -6,12 +6,11 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //
-type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent';
+type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent' | 'AppStoreCtaClick';
 
 type PaymentRequestAPIStatus =
   'PaymentRequestAPINotAvailable' |
@@ -28,6 +27,8 @@ type GaEventData = {
   action: string,
   label: ?string,
 }
+
+const gaPropertyId = 'UA-51507017-5';
 
 // ----- Functions ----- //
 
@@ -141,7 +142,6 @@ function sendData(
       campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
       internalCampaignCode: getQueryParameter('INTCMP') || undefined,
       experience: getVariantsAsString(participations),
-      ophanBrowserID: getOphanIds().browserId,
       paymentRequestApiStatus,
       ecommerce: {
         currencyCode: currency,
@@ -191,12 +191,18 @@ function successfulConversion(participations: Participations) {
 }
 
 function gaEvent(gaEventData: GaEventData) {
-  window.googleTagManagerDataLayer.push({
-    event: 'GAEvent',
-    eventCategory: gaEventData.category,
-    eventAction: gaEventData.action,
-    eventLabel: gaEventData.label,
-  });
+  if (window.googleTagManagerDataLayer) {
+    window.googleTagManagerDataLayer.push({
+      event: 'GAEvent',
+      eventCategory: gaEventData.category,
+      eventAction: gaEventData.action,
+      eventLabel: gaEventData.label,
+    });
+  }
+}
+
+function appStoreCtaClick() {
+  sendData('AppStoreCtaClick', { TestName: '' });
 }
 
 // ----- Exports ---//
@@ -205,4 +211,6 @@ export {
   init,
   gaEvent,
   successfulConversion,
+  appStoreCtaClick,
+  gaPropertyId,
 };

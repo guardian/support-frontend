@@ -23,6 +23,7 @@
 @import '~components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
 @import '~components/paymentButtons/payPalExpressButton/payPalExpressButton';
 @import '~components/paymentButtons/stripePopUpButton/stripePopUpButton';
+@import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/progressMessage/progressMessage';
 @import '~components/questionsContact/questionsContact';
 @import '~components/secure/secure';
@@ -40,6 +41,7 @@
 @import '~components/yourDetails/yourDetails';
 @import '~components/legal/legalSection/legalSection';
 @import '~components/contributionsCheckout/contributionsCheckout';
+@import '~components/survey/survey';
 
 // ----- Page-Specific Styles ----- //
 
@@ -81,8 +83,11 @@
     margin-bottom: $gu-v-spacing;
   }
 
-  .component-text-input__input--error {
-    border: 2px solid gu-colour(error);
+  .component-text-input--error {
+    .component-text-input__input {
+      border: 2px solid gu-colour(error);
+      margin-bottom: $gu-v-spacing / 2;
+    }
   }
 
   .component-text-input--last-name {
@@ -92,16 +97,6 @@
   // ----- Payment methods
 
   .component-direct-debit-pop-up-button {
-    margin-bottom: $gu-v-spacing;
-    width: 100%;
-
-    @include mq($from: phablet) {
-      width: 304px;
-    }
-  }
-
-
-  .component-paypal-button-checkout__disabled-pop-up-button {
     margin-bottom: $gu-v-spacing;
     width: 100%;
 
@@ -131,6 +126,46 @@
 
   .component-payment-error--paypal-express {
     margin-top: $gu-v-spacing;
+  }
+
+  .component-cta-link--continue {
+    margin-top: $gu-v-spacing;
+    height: 42px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 $gu-h-spacing;
+    @include mq($from: desktop) {
+      width: 304px;
+    }
+  }
+
+  .component-cta-link--back {
+    background-color: transparent;
+    margin-top: $gu-v-spacing;
+    height: 42px;
+    color: gu-colour(garnett-neutral-1);
+    border: 1px solid gu-colour(neutral-4);
+    display: inline-block;
+    .svg-arrow-right-straight {
+      fill: gu-colour(garnett-neutral-1);
+      position: absolute;
+      left: $gu-v-spacing;
+      transform: rotate(180deg);
+    }
+
+    .component-cta-link__text {
+      margin-left: $gu-v-spacing * 2;
+    }
+  }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  .email-input {
+    a, a:visited {
+      text-decoration: none;
+    }
   }
 }
 

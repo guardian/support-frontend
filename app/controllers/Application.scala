@@ -1,31 +1,43 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.{ServersideAbTest, Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
+import cats.data.EitherT
+import cats.implicits._
 import com.gu.i18n.CountryGroup._
+import com.gu.identity.play.IdUser
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.typesafe.scalalogging.StrictLogging
+import config.Configuration.GuardianDomain
 import config.StringsConfig
+import cookies.ServersideAbTestCookie
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
-import switchboard.Switches
 import utils.BrowserCheck
 import utils.RequestCountry._
-import scala.concurrent.ExecutionContext
-import monitoring.SafeLogger
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class Application(
     actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
     identityService: IdentityService,
     components: ControllerComponents,
+    oneOffStripeConfigProvider: StripeConfigProvider,
+    regularStripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
-    switches: Switches
-)(implicit val ec: ExecutionContext) extends AbstractController(components) {
+    settingsProvider: SettingsProvider,
+    guardianDomain: GuardianDomain
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging with ServersideAbTestCookie {
 
   import actionRefiners._
 
-  implicit val ar = assets
-  implicit val sw = switches
+  implicit val a: AssetsResolver = assets
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())
@@ -76,47 +88,48 @@ class Application(
   }
 
   def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       title = "Support the Guardian",
       mainId = "support-landing-page",
       mainJsBundle = "supportLandingPage.js",
       mainStyleBundle = "supportLandingPageStyles.css",
       scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
-      description = Some(stringsConfig.supportLandingDescription)
-    ))
+      description = stringsConfig.supportLandingDescription
+    )).withSettingsSurrogateKey
   }
 
-  def contributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.main(
-      title = "Support the Guardian | Make a Contribution",
-      description = Some(stringsConfig.contributionsLandingDescription),
-      mainId = s"contributions-landing-page-$countryCode",
-      mainJsBundle = "contributionsLandingPage.js",
-      mainStyleBundle = "contributionsLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    ))
+  def contributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+    type Attempt[A] = EitherT[Future, String, A]
+    implicit val settings: Settings = settingsProvider.settings()
+    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+      _ => Ok(contributionsHtml(countryCode, None)),
+      user => Ok(contributionsHtml(countryCode, user))
+    ).map(_.withSettingsSurrogateKey)
   }
 
-  def reactContributionsLanding(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.main(
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
+    views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
-      description = Some(stringsConfig.contributionsLandingDescription),
-      mainId = s"new-contributions-landing-page-$countryCode",
-      mainJsBundle = "newContributionsLandingPage.js",
-      mainStyleBundle = "newContributionsLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint)
-    ))
-  }
-
-  def newContributionsLanding(): Action[AnyContent] = NoCacheAction() { implicit request =>
-    Ok(views.html.newMain(
-      title = "Support the Guardian | Make a Contribution",
-      description = Some(stringsConfig.contributionsLandingDescription)
-    ))
+      id = s"new-contributions-landing-page-$countryCode",
+      js = "newContributionsLandingPage.js",
+      css = "newContributionsLandingPageStyles.css",
+      description = stringsConfig.contributionsLandingDescription,
+      oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+      oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+      regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+      regularUatStripeConfig = regularStripeConfigProvider.get(true),
+      regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+      regularUatPayPalConfig = payPalConfigProvider.get(true),
+      paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      idUser = idUser
+    )
   }
 
   def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Ok(views.html.main(title, id, js, css))
+    implicit val settings: Settings = settingsProvider.settings()
+    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {

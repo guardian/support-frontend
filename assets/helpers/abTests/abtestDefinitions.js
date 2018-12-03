@@ -1,69 +1,14 @@
 // @flow
+import { isFromEpicOrBanner } from 'helpers/referrerComponent';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
-export type AnnualContributionsTestVariant = 'control' | 'annual' | 'annualHigherAmounts' | 'notintest';
+export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
 
 export const tests: Tests = {
-  oneOffOneTimeSingle: {
-    variants: ['control', 'single', 'once', 'oneTime'],
-    audiences: {
-      GBPCountries: {
-        offset: 0,
-        size: 1,
-      },
-      AUDCountries: {
-        offset: 0,
-        size: 1,
-      },
-      Canada: {
-        offset: 0,
-        size: 1,
-      },
-      NZDCountries: {
-        offset: 0,
-        size: 1,
-      },
-      International: {
-        offset: 0,
-        size: 1,
-      },
-      EURCountries: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 0,
-  },
-  usOneOffOneTimeSingle: {
-    variants: ['control', 'single', 'once', 'oneOff'],
-    audiences: {
-      UnitedStates: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 2,
-  },
-  annualContributionsRoundTwo: {
-    variants: ['control', 'annual', 'annualHigherAmounts'],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 3,
-  },
-  recurringGuestCheckout: {
-    variants: ['control', 'guest'],
+  annualContributionsRoundThree: {
+    variants: ['control', 'annualAmountsA'],
     audiences: {
       ALL: {
         offset: 0,
@@ -72,6 +17,38 @@ export const tests: Tests = {
     },
     isActive: false,
     independent: true,
+    seed: 3,
+  },
+
+  smallMobileHeaderNotEpicOrBanner: {
+    variants: ['control', 'shrink', 'shrink_no-blurb', 'shrink_no-blurb_no-header'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
     seed: 4,
+    canRun: () => !isFromEpicOrBanner,
+  },
+
+  usContributionTypes: {
+    variants: [
+      'control',
+      'default-annual',
+      'default-single',
+      'default-annual_no-monthly',
+    ],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    independent: true,
+    seed: 5,
   },
 };

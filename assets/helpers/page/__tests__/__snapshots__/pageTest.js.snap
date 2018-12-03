@@ -17,9 +17,9 @@ Object {
     "countryId": "GB",
     "currencyId": "GBP",
   },
+  "optimizeExperiments": Array [],
   "otherQueryParams": Array [],
   "referrerAcquisitionData": Object {
-    "abTest": null,
     "abTests": Array [],
     "campaignCode": null,
     "componentId": null,
@@ -28,6 +28,10 @@ Object {
     "referrerPageviewId": null,
     "source": null,
   },
-  "switches": Object {},
+  "settings": Object {
+    "switches": Object {
+      "experiments": Object {},
+    },
+  },
 }
 `;

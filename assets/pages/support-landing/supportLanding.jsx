@@ -12,11 +12,10 @@ import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import Contribute from 'components/contribute/contribute';
-import { setInitialAmountsForAnnualHigherAmountsVariant } from 'helpers/abTests/helpers/annualContributions';
+import { setInitialAmountsForAnnualVariants } from 'helpers/abTests/helpers/annualContributions';
 
 // React components connected to redux store
 import CountrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
-import ThreeSubscriptionsContainer from 'components/threeSubscriptions/threeSubscriptionsContainer';
 import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
 
 import { init as pageInit } from 'helpers/page/page';
@@ -30,6 +29,7 @@ import ContributionSelectionContainer from './components/contributionSelectionCo
 import ContributionPaymentCtasContainer from './components/contributionPaymentCtasContainer';
 import PayPalContributionButtonContainer from './components/payPalContributionButtonContainer';
 import ContributionAwarePaymentLogosContainer from './components/contributionAwarePaymentLogosContainer';
+import SubscriptionsSection from './components/subscriptionsSection';
 
 
 // ----- Setup ----- //
@@ -52,6 +52,8 @@ const CountrySwitcherHeader = CountrySwitcherHeaderContainer(
 
 // ----- Render ----- //
 
+const context = 'support-landing-page';
+
 const content = (
   <Provider store={store}>
     <Page
@@ -73,26 +75,28 @@ const content = (
           <ContributionSelectionContainer />
           <ContributionAwarePaymentLogosContainer />
           <ContributionPaymentCtasContainer
+            context={context}
             PayPalButton={() =>
               <PayPalContributionButtonContainer cancelURL={`${getOrigin()}/uk`} />
           }
           />
         </Contribute>
-        <ThreeSubscriptionsContainer
-          digitalHeadingSize={3}
-          paperHeadingSize={3}
-          paperDigitalHeadingSize={3}
+        <SubscriptionsSection
+          context={context}
         />
       </section>
       <WhySupport headingSize={3} />
       <ReadyToSupport
         ctaUrl={`#${supporterSectionId}`}
         headingSize={2}
+        context={context}
       />
-      <PatronsEventsContainer />
+      <PatronsEventsContainer
+        context={context}
+      />
     </Page>
   </Provider>
 );
 
-setInitialAmountsForAnnualHigherAmountsVariant(store);
+setInitialAmountsForAnnualVariants(store);
 renderPage(content, 'support-landing-page');

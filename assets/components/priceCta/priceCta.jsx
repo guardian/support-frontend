@@ -4,9 +4,9 @@
 
 import React from 'react';
 
-import { classNameWithModifiers } from 'helpers/utilities';
-
 import CtaLink from 'components/ctaLink/ctaLink';
+
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ----- Types ----- //
@@ -15,29 +15,25 @@ type PropTypes = {
   ctaText: string,
   url: string,
   price: string,
-  dark: boolean,
-  secondaryCopy: string,
+  secondaryCopy: string | null,
 };
 
 
 // ----- Component ----- //
 
-export default function PriceCta(props: PropTypes) {
+function PriceCta(props: PropTypes) {
+
+  const withSecondary = props.secondaryCopy !== null;
 
   return (
-    <div className={classNameWithModifiers('component-price-cta', props.dark ? ['dark'] : [])}>
+    <div className={classNameWithModifiers('component-price-cta', withSecondary ? ['with-secondary'] : [])}>
       <CtaLink
         text={props.ctaText}
         url={props.url}
         accessibilityHint={`${props.ctaText} for only ${props.price} per month`}
-        ctaId="price-cta"
+        id="price-cta"
       />
-      <p className="component-price-cta__price">
-        <span className="component-price-cta__price-copy">for only</span>
-        <span className="component-price-cta__price-amount">{props.price}</span>
-        <span className="component-price-cta__price-copy">per month</span>
-      </p>
-      <p className="component-price-cta__cancel">{props.secondaryCopy}</p>
+      {withSecondary ? <p className="component-price-cta__secondary">{props.secondaryCopy}</p> : null}
     </div>
   );
 
@@ -47,6 +43,10 @@ export default function PriceCta(props: PropTypes) {
 // ----- Default Props ----- //
 
 PriceCta.defaultProps = {
-  dark: false,
-  secondaryCopy: 'You can cancel your subscription at any time',
+  secondaryCopy: null,
 };
+
+
+// ----- Exports ----- //
+
+export default PriceCta;

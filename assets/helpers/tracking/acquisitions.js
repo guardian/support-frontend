@@ -2,14 +2,15 @@
 
 // ----- Imports ----- //
 
-
 import * as ophan from 'ophan';
+
 import { get as getCookie } from 'helpers/cookie';
 import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 
 
 // ----- Types ----- //
@@ -32,6 +33,7 @@ export type OphanIds = {|
   browserId: ?string,
 |};
 
+// https://github.com/guardian/frontend/blob/master/static/src/javascripts/projects/common/modules/commercial/acquisitions-ophan.js
 export type ReferrerAcquisitionData = {|
   campaignCode: ?string,
   referrerPageviewId: ?string,
@@ -39,8 +41,9 @@ export type ReferrerAcquisitionData = {|
   componentId: ?string,
   componentType: ?string,
   source: ?string,
-  abTest: ?AcquisitionABTest,
-  abTests: ?Array<AcquisitionABTest>,
+  abTests: ?AcquisitionABTest[],
+  // these aren't in the referrer acquisition data model on frontend, but they're convenient to include
+  // as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
   queryParameters: ?AcquisitionQueryParameters,
 |};
 
@@ -56,6 +59,7 @@ export type PaymentAPIAcquisitionData = {|
   componentType: ?string,
   source: ?string,
   abTests: ?AcquisitionABTest[],
+  gaId: ?string,
 |};
 
 // ----- Setup ----- //
@@ -65,7 +69,8 @@ const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
 
 
 // ----- Campaigns ----- //
-const campaigns : {
+
+const campaigns: {
   [string]: string[],
 } = {
   seven_fifty_middle: [
@@ -117,7 +122,7 @@ function getCampaign(acquisition: ReferrerAcquisitionData): ?Campaign {
 }
 
 // Stores the acquisition data in sessionStorage.
-function storeAcquisition(referrerAcquisitionData: ReferrerAcquisitionData): boolean {
+function storeReferrerAcquisitionData(referrerAcquisitionData: ReferrerAcquisitionData): boolean {
 
   try {
 
@@ -133,7 +138,7 @@ function storeAcquisition(referrerAcquisitionData: ReferrerAcquisitionData): boo
 }
 
 // Reads the acquisition data from sessionStorage.
-function readAcquisition(): ?ReferrerAcquisitionData {
+function readReferrerAcquisitionData(): ?Object {
 
   const stored = storage.getSession(ACQUISITIONS_STORAGE_KEY);
   return stored ? deserialiseJsonObject(stored) : null;
@@ -163,30 +168,32 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
   return response;
 };
 
-// Builds the acquisition object from data and other sources.
-function buildAcquisition(
-  acquisitionData: Object = {},
-  abParticipations: Participations,
-): ReferrerAcquisitionData {
+// Prepends all the experiment names (the keys) with 'optimize$$' to be able to
+// differentiate from native tests, and returns as array of AB tests.
+function optimizeExperimentsToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
+  return opt.map(exp => ({
+    name: `optimize$$${exp.id}`,
+    variant: exp.variant,
+  }));
+}
 
+// Builds the acquisition object from data and other sources.
+function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcquisitionData {
+
+  // This was how referrer pageview id used to be passed.
   const referrerPageviewId = acquisitionData.referrerPageviewId ||
     getQueryParameter('REFPVID');
 
+  // This was how referrer pageview id used to be passed.
   const campaignCode = acquisitionData.campaignCode ||
     getQueryParameter('INTCMP');
 
   const parameterExclusions =
-    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency'];
+    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', 'utm_expid'];
 
   const queryParameters =
     acquisitionData.queryParameters ||
     toAcquisitionQueryParameters(getAllQueryParamsWithExclusions(parameterExclusions));
-
-  const abTests = participationsToAcquisitionABTest(abParticipations);
-
-  if (acquisitionData.abTest) {
-    abTests.push(acquisitionData.abTest);
-  }
 
   return {
     referrerPageviewId,
@@ -195,8 +202,7 @@ function buildAcquisition(
     componentId: acquisitionData.componentId,
     componentType: acquisitionData.componentType,
     source: acquisitionData.source,
-    abTest: acquisitionData.abTest,
-    abTests: abTests.length > 0 ? abTests : undefined,
+    abTests: acquisitionData.abTest ? [acquisitionData.abTest] : acquisitionData.abTests,
     queryParameters: queryParameters.length > 0 ? queryParameters : undefined,
   };
 }
@@ -207,21 +213,29 @@ const getOphanIds = (): OphanIds => ({
   visitId: getCookie('vsid'),
 });
 
+function getSupportAbTests(participations: Participations, experiments: OptimizeExperiments): AcquisitionABTest[] {
+  return [
+    ...participationsToAcquisitionABTest(participations),
+    ...optimizeExperimentsToAcquisitionABTest(experiments),
+  ];
+}
+
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
-  const abTests: AcquisitionABTest[] = participationsToAcquisitionABTest(nativeAbParticipations);
+  const abTests = [
+    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
+    ...(referrerAcquisitionData.abTests || []),
+  ];
+
   const campaignCodes = referrerAcquisitionData.campaignCode ?
     [referrerAcquisitionData.campaignCode] : [];
 
-  if (referrerAcquisitionData.abTest) {
-    abTests.push(referrerAcquisitionData.abTest);
-  }
-
-  const response: PaymentAPIAcquisitionData = {
+  return {
     platform: 'SUPPORT',
     visitId: ophanIds.visitId,
     browserId: ophanIds.browserId,
@@ -233,24 +247,52 @@ function derivePaymentApiAcquisitionData(
     componentType: referrerAcquisitionData.componentType,
     source: referrerAcquisitionData.source,
     abTests,
+    gaId: getCookie('_ga'),
+  };
+}
+
+function deriveSubsAcquisitionData(
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
+): ReferrerAcquisitionData {
+
+  const abTests = [
+    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
+    ...(referrerAcquisitionData.abTests || []),
+  ];
+
+  return {
+    ...referrerAcquisitionData,
+    abTests,
   };
 
-  return response;
 }
 
 // Returns the acquisition metadata, either from query param or sessionStorage.
 // Also stores in sessionStorage if not present or new from param.
-function getAcquisition(abParticipations: Participations): ReferrerAcquisitionData {
+function getReferrerAcquisitionData(): ReferrerAcquisitionData {
 
   const paramData = deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM) || '');
 
   // Read from param, or read from sessionStorage, or build minimal version.
-  const referrerAcquisitionData =
-      buildAcquisition(paramData || readAcquisition() || undefined, abParticipations);
-  storeAcquisition(referrerAcquisitionData);
+  const referrerAcquisitionData = buildReferrerAcquisitionData(paramData || readReferrerAcquisitionData() || undefined);
+  storeReferrerAcquisitionData(referrerAcquisitionData);
 
   return referrerAcquisitionData;
+}
 
+const usCampaignVariants = ['us_eoy_top_ticker', 'us_eoy_bottom_ticker', 'us_eoy_bottom_ticker_two'];
+
+function isUsCampaignTest(referrerAcquisitionData: ReferrerAcquisitionData): boolean {
+  if (referrerAcquisitionData.abTests) {
+    const index = referrerAcquisitionData.abTests.findIndex((test: AcquisitionABTest) =>
+      test.name === 'AcquisitionsEpicUsEndOfYearRound2' &&
+      usCampaignVariants.includes(test.variant));
+
+    return index >= 0;
+  }
+  return false;
 }
 
 
@@ -258,8 +300,12 @@ function getAcquisition(abParticipations: Participations): ReferrerAcquisitionDa
 
 export {
   getCampaign,
-  getAcquisition,
+  getReferrerAcquisitionData,
   getOphanIds,
   participationsToAcquisitionABTest,
+  optimizeExperimentsToAcquisitionABTest,
   derivePaymentApiAcquisitionData,
+  deriveSubsAcquisitionData,
+  getSupportAbTests,
+  isUsCampaignTest,
 };

@@ -26,6 +26,10 @@ function classNameWithModifiers(className: string, modifiers: Array<?string>): s
     .reduce((acc, modifier) => `${acc} ${className}--${modifier}`, className);
 }
 
+function hiddenIf(shouldHide: boolean, className: string): string {
+  return shouldHide ? classNameWithModifiers(className, ['hidden']) : className;
+}
+
 // Generates a key handler that only trigger a function if the
 // CarriageReturnCode and SpaceCode are pressed
 function clickSubstituteKeyPressHandler(handler?: () => void = () => {}) {
@@ -73,31 +77,25 @@ function deserialiseJsonObject(serialised: string): ?Object {
 
 }
 
-function validateEmailAddress(email: string): boolean {
-  // Copied from
-  // https://github.com/playframework/playframework/blob/38abd1ca6d17237950c82b1483057c5c39929cb4/framework/src/play/
-  // src/main/scala/play/api/data/validation/Validation.scala#L80
-  // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
-  // for compatibility with Stripe
-  const emailValidationRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
-  return emailValidationRegex.test(email);
-}
-
-function emptyInputField(input: ?string): boolean {
-  return input === undefined || input === null || input === '' || input.trim().length === 0;
+// Adds leading zeros
+function addLeadingZeros(value: number, length: number = 2): string {
+  let valueStr = String(value);
+  while (valueStr.length < length) {
+    valueStr = `0${valueStr}`;
+  }
+  return valueStr;
 }
 
 // ----- Exports ----- //
-
 export {
   ascending,
   descending,
   roundDp,
   classNameWithModifiers,
+  hiddenIf,
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
-  validateEmailAddress,
-  emptyInputField,
+  addLeadingZeros,
 };

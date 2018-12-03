@@ -23,8 +23,9 @@ import services.{HttpIdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import com.gu.support.config._
 import fixtures.TestCSRFComponents
-import switchboard.SwitchState.On
-import switchboard.{PaymentMethodsSwitch, Switches}
+import admin.SwitchState.On
+import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
+import config.Configuration.GuardianDomain
 
 class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
@@ -101,6 +102,11 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         signature = ""
       ))
 
+      val settingsProvider = mock[SettingsProvider]
+      when(settingsProvider.settings()).thenReturn(
+        Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
+      )
+
       new RegularContributions(
         mock[RegularContributionsClient],
         assetResolver,
@@ -111,8 +117,8 @@ class RegularContributionsTest extends WordSpec with MustMatchers with TestCSRFC
         stripeConfigProvider,
         payPalConfigProvider,
         stubControllerComponents(),
-        Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On, On),
-        guardianDomain = ".thegulocal.com"
+        guardianDomain = GuardianDomain(".thegulocal.com"),
+        settingsProvider
       )
     }
 

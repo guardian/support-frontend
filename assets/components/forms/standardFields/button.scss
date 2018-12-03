@@ -1,0 +1,17 @@
+.component-button {
+  font-size: 16px;
+  font-weight: bold;
+  height: 42px;
+  padding: 0 $gu-h-spacing;
+  background-color: gu-colour(news-garnett-highlight);
+  color: gu-colour(garnett-neutral-1);
+  border: none;
+  border-radius: 600px;
+  cursor: pointer;
+  margin-top: $gu-v-spacing * 2;
+  transition: background-color .2s;
+
+  &:hover {
+    background-color: gu-colour(highlight-dark);
+  }
+}

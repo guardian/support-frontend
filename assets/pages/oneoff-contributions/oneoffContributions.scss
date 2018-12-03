@@ -20,6 +20,7 @@
 @import '~components/pageSection/pageSection';
 @import '~components/paymentAmount/paymentAmount';
 @import '~components/paymentButtons/stripePopUpButton/stripePopUpButton';
+@import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/progressMessage/progressMessage';
 @import '~components/questionsContact/questionsContact';
 @import '~components/secure/secure';
@@ -37,7 +38,8 @@
 @import '~components/yourDetails/yourDetails';
 @import '~components/legal/legalSection/legalSection';
 @import '~components/contributionsCheckout/contributionsCheckout';
-
+@import '~components/survey/survey';
+@import '~components/survey/surveySection';
 
 // ----- Page-Specific Styles ----- //
 
@@ -76,7 +78,6 @@
     }
   }
 
-
   .component-paypal-contribution-button {
     height: $cta-height;
     width: 100%;
@@ -90,9 +91,11 @@
     margin-top: $gu-v-spacing;
   }
 
-  .component-text-input__input--error {
-    border: 2px solid gu-colour(error);
-    margin-bottom: $gu-v-spacing / 2;
+  .component-text-input--error {
+    .component-text-input__input {
+      border: 2px solid gu-colour(error);
+      margin-bottom: $gu-v-spacing / 2;
+    }
   }
 }
 

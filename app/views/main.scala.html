@@ -1,15 +1,18 @@
 @import assets.AssetsResolver
 @import views.ViewHelpers._
-@import switchboard.Switches
+@import admin.Settings
 @(
 	title: String,
 	mainId: String,
 	mainJsBundle: String,
 	mainStyleBundle: String,
 	description: Option[String] = None,
+	canonicalLink: Option[String] = None,
+	hrefLangLinks: Map[String, String] = Map(),
 	styles: Html = Html(""),
-	scripts: Html = Html("")
-)(implicit assets: AssetsResolver, request: RequestHeader, switches: Switches)
+	scripts: Html = Html(""),
+  csrf: Option[String] = None
+)(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,12 +21,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
 
-	@if(description.isDefined) {
-		<meta name="description" content="@description" />
-		<meta property="og:description" content="@description" />
+  @csrf.map { token =>
+    <script type="text/javascript">
+      window.guardian = window.guardian || {};
+      if(!window.guardian.csrf) {
+        window.guardian.csrf = {token: "@token"}
+      }
+    </script>
+  }
+
+	@description.map { definedDescription =>
+		<meta name="description" content="@definedDescription" />
+		<meta property="og:description" content="@definedDescription" />
 	}
 
-	@switchesScript(switches)
+	@canonicalLink.map { definedCanonicalLink =>
+		<link rel="canonical" href="@definedCanonicalLink" />
+	}
+
+	@for((lang, link) <- hrefLangLinks){
+		<link rel="alternate" href="@link" hreflang="@lang" />
+	}
+
+	@settingsScript(settings)
 
 	<title>@title</title>
 	<meta property="og:title" content="@title"/>
@@ -56,15 +76,13 @@
 		}
 	</script>
 
-	@if(!doNotTrack) {
-		<script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
-	}
+	<script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
 
 	<link rel="preload"  as="script" href="@assets(mainJsBundle)">
 
 	@styles
 </head>
-<body>
+<body class="header-tweaks">
 	<noscript>
     <div style="text-align: center;
                 font-size: 30px;
@@ -78,7 +96,7 @@
 
 	<div id="@mainId"></div>
 
-	<script src="https://polyfill.guim.co.uk/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger"></script>
+	<script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
 	<script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
 	<script type="text/javascript">
     window.guardian = window.guardian || {};

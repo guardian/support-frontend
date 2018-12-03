@@ -7,6 +7,7 @@ import uuidv4 from 'uuid';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 
 // ----- Types ----- //
@@ -21,7 +22,7 @@ export type Radio = {
 // Disabling the linter here because it's just buggy...
 /* eslint-disable react/no-unused-prop-types */
 
-type PropTypes = {
+type PropTypes = {|
   name: string,
   radios: Radio[],
   checked: ?string,
@@ -29,7 +30,7 @@ type PropTypes = {
   modifierClass?: ?string,
   accessibilityHint?: ?string,
   countryGroupId: CountryGroupId,
-};
+|};
 
 /* eslint-enable react/no-unused-prop-types */
 
@@ -46,7 +47,6 @@ function getRadioButtons(props: PropTypes) {
     const radioChecked = radio.value === props.checked;
     const labelModifier = radioChecked ? 'checked' : null;
 
-    /* eslint-disable jsx-a11y/label-has-for */
     return (
       <span
         id={radio.id}
@@ -60,7 +60,10 @@ function getRadioButtons(props: PropTypes) {
           name={props.name}
           value={radio.value}
           id={radioId}
-          onChange={() => props.toggleAction(radio.value, props.countryGroupId)}
+          onChange={() => {
+            trackComponentClick(`opf-${props.name}-${props.countryGroupId}-${radio.value}`);
+            props.toggleAction(radio.value, props.countryGroupId);
+          }}
           checked={radioChecked}
           tabIndex="0"
           aria-describedby={a11yHintId}
@@ -73,7 +76,6 @@ function getRadioButtons(props: PropTypes) {
         </label>
       </span>
     );
-    /* eslint-enable jsx-a11y/label-has-for */
 
   });
 

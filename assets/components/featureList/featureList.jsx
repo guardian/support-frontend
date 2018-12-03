@@ -9,20 +9,15 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-// Disabling the linter here because it's just buggy...
-/* eslint-disable react/no-unused-prop-types */
-
 export type ListItem =
   | {| heading: Node, text: string |}
   | {| heading: Node |}
   | {| text: string |};
 
-/* eslint-enable react/no-unused-prop-types */
-
-type PropTypes = {
+type PropTypes = {|
   modifierClass?: string,
   listItems: ListItem[],
-};
+|};
 
 
 // ----- Component ----- //

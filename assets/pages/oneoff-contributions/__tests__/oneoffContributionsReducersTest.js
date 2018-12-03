@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { ErrorReason } from 'helpers/errorReasons';
 import createReducer from '../oneOffContributionsReducer';
 
 
@@ -9,7 +10,7 @@ import createReducer from '../oneOffContributionsReducer';
 
 describe('One-off Reducer', () => {
 
-  const reducer = createReducer(20);
+  const reducer = createReducer(20, 'GBPCountries');
 
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toMatchSnapshot();
@@ -17,15 +18,15 @@ describe('One-off Reducer', () => {
 
   it('should handle CHECKOUT_ERROR', () => {
 
-    const message = 'Test error';
+    const insufficientFunds: ErrorReason = 'insufficient_funds';
     const action = {
       type: 'CHECKOUT_ERROR',
-      message,
+      errorReason: insufficientFunds,
     };
 
     const newState = reducer(undefined, action);
 
-    expect(newState.oneoffContrib.error).toEqual(message);
+    expect(newState.oneoffContrib.errorReason).toEqual(insufficientFunds);
   });
 
   it('should handle SET_PAYPAL_BUTTON', () => {
@@ -38,16 +39,7 @@ describe('One-off Reducer', () => {
 
     const newState = reducer(undefined, action);
 
-    expect(newState.oneoffContrib.error).toMatchSnapshot();
-  });
-
-  it('should handle SET_EMAIL_HAS_BEEN_BLURRED', () => {
-
-    const action = { type: 'SET_EMAIL_HAS_BEEN_BLURRED' };
-
-    const newState = reducer(undefined, action);
-
-    expect(newState.oneoffContrib.emailHasBeenBlurred).toEqual(true);
+    expect(newState.oneoffContrib.errorReason).toMatchSnapshot();
   });
 
 });

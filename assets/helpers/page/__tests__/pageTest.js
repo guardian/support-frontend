@@ -4,7 +4,7 @@
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
-import { createCommonReducer } from '../page';
+import { createCommonReducer } from '../commonReducer';
 
 
 // ----- Tests ----- //
@@ -23,7 +23,6 @@ describe('reducer tests', () => {
         componentId: null,
         componentType: null,
         source: null,
-        abTest: null,
         abTests: [],
         queryParameters: [],
       },
@@ -34,7 +33,12 @@ describe('reducer tests', () => {
       },
       abParticipations: {},
       otherQueryParams: [],
-      switches: {},
+      settings: {
+        switches: {
+          experiments: {},
+        },
+      },
+      optimizeExperiments: [],
     };
 
     global.reducer = createCommonReducer(initialState);

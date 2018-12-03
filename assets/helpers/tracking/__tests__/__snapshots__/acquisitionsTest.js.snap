@@ -16,6 +16,18 @@ Object {
       "variant": "variant3",
     },
     Object {
+      "name": "optimize$$optimizeExperiment1",
+      "variant": "variant1",
+    },
+    Object {
+      "name": "optimize$$optimizeExperiment2",
+      "variant": "variant2",
+    },
+    Object {
+      "name": "optimize$$optimizeExperiment3",
+      "variant": "variant3",
+    },
+    Object {
       "name": "referrerAbTest",
       "variant": "value1",
     },
@@ -26,6 +38,7 @@ Object {
   ],
   "componentId": "exampleComponentId",
   "componentType": "exampleComponentType",
+  "gaId": null,
   "pageviewId": "123456",
   "platform": "SUPPORT",
   "referrerPageviewId": "123456",

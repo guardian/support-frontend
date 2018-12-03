@@ -9,11 +9,11 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   highlights: ?string[],
   headingSize: HeadingSize,
   modifierClasses: Array<?string>,
-};
+|};
 
 
 // ----- Component ----- //

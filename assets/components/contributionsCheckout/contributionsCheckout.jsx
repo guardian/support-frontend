@@ -14,44 +14,22 @@ import YourDetails from 'components/yourDetails/yourDetails';
 import PageSection from 'components/pageSection/pageSection';
 import LegalSectionContainer from 'components/legal/legalSection/legalSectionContainer';
 
-import { type Contrib as ContributionType } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type IsoCountry } from 'helpers/internationalisation/country';
+import { getTitle } from 'helpers/checkoutForm/checkoutForm';
 
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   amount: number,
   currencyId: IsoCurrency,
-  country: IsoCountry,
   contributionType: ContributionType,
   name: string,
   isSignedIn: boolean,
   form: Node,
   payment: Node,
-};
-
-
-// ----- Functions ----- //
-
-function getTitle(
-  contributionType: ContributionType,
-  country: IsoCountry,
-): string {
-
-  switch (contributionType) {
-    case 'ANNUAL':
-      return 'Make an annual';
-    case 'MONTHLY':
-      return 'Make a monthly';
-    case 'ONE_OFF':
-    default:
-      return `Make a ${country === 'US' ? 'one-time' : 'one-off'}`;
-  }
-
-}
-
+|};
 
 // ----- Component ----- //
 
@@ -64,12 +42,11 @@ export default function ContributionsCheckout(props: PropTypes) {
         footer={<Footer />}
       >
         <CirclesIntroduction
-          headings={[getTitle(props.contributionType, props.country), 'contribution']}
+          headings={[getTitle(props.contributionType), 'contribution']}
           modifierClasses={['compact']}
         />
         <YourContribution
           contributionType={props.contributionType}
-          country={props.country}
           amount={props.amount}
           currencyId={props.currencyId}
         />

@@ -6,16 +6,17 @@ import play.api.mvc._
 import play.api.libs.circe.Circe
 
 import scala.concurrent.{ExecutionContext, Future}
+
 import services.{IdentityService, PaymentAPIService, TestUserService}
 import views.html.oneOffContributions
 import com.gu.support.config.StripeConfigProvider
 import cats.implicits._
 import com.gu.googleauth.AuthAction
-import com.gu.identity.play.{AuthenticatedIdUser, IdUser}
+import com.gu.identity.play.IdUser
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import switchboard.Switches
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -26,13 +27,12 @@ class OneOffContributions(
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
-    switches: Switches
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
+    settingsProvider: SettingsProvider
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
-  implicit val ar = assets
-  implicit val sw = switches
+  implicit val a: AssetsResolver = assets
 
   def autofill: Action[AnyContent] = authenticatedAction().async { implicit request =>
     identityService.getUser(request.user).fold(
@@ -41,9 +41,9 @@ class OneOffContributions(
     )
   }
 
-  private def formHtml(idUser: Option[IdUser])(implicit request: RequestHeader) =
+  private def formHtml(idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
     oneOffContributions(
-      title = "Support the Guardian | One-off Contribution",
+      title = "Support the Guardian | Single Contribution",
       id = "oneoff-contributions-page",
       js = "oneoffContributionsPage.js",
       css = "oneoffContributionsPageStyles.css",
@@ -53,18 +53,18 @@ class OneOffContributions(
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser
     )
+  }
 
   def displayForm(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
-    request.user.fold {
-      Future.successful(Ok(formHtml(None)))
-    } { minimalUser =>
-      {
+    implicit val settings: Settings = settingsProvider.settings()
+    request.user
+      .fold(Future.successful(Ok(formHtml(None)))) { minimalUser =>
         identityService.getUser(minimalUser).fold(
           _ => Ok(formHtml(None)),
           user => Ok(formHtml(Some(user)))
         )
       }
-    }
+      .map(_.withSettingsSurrogateKey)
   }
 
   private def fullNameFor(user: IdUser): Option[String] = {

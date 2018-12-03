@@ -1,9 +1,6 @@
 // @flow
 
 // ----- Types ----- //
-
-import { setSession } from 'helpers/storage';
-
 export type Action =
   | { type: 'SET_USER_ID', id: string }
   | { type: 'SET_DISPLAY_NAME', name: string }
@@ -13,54 +10,26 @@ export type Action =
   | { type: 'SET_EMAIL', email: string }
   | { type: 'SET_STATEFIELD', stateField: string }
   | { type: 'SET_TEST_USER', testUser: boolean }
+  | { type: 'SET_IS_RECURRING_CONTRIBUTOR' }
   | { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser: boolean }
   | { type: 'SET_GNM_MARKETING', preference: boolean }
   | { type: 'SET_IS_SIGNED_IN', isSignedIn: boolean };
 
+export type UserSetStateActions = {|
+  setId: string => Action,
+  setDisplayName: string => Action,
+  setFirstName: string => Action,
+  setLastName: string => Action,
+  setFullName: string => Action,
+  setEmail: string => Action,
+  setStateField: string => Action,
+  setTestUser: boolean => Action,
+  setPostDeploymentTestUser: boolean => Action,
+  setGnmMarketing: boolean => Action,
 
-// ----- Actions Creators ----- //
-
-export function setId(id: string): Action {
-  return { type: 'SET_USER_ID', id };
-}
-
-export function setDisplayName(name: string): Action {
-  return { type: 'SET_DISPLAY_NAME', name };
-}
-
-export function setFirstName(name: string): Action {
-  return { type: 'SET_FIRST_NAME', name };
-}
-
-export function setLastName(name: string): Action {
-  return { type: 'SET_LAST_NAME', name };
-}
-
-export function setFullName(name: string): Action {
-  return { type: 'SET_FULL_NAME', name };
-}
-
-export function setIsSignedIn(isSignedIn: boolean): Action {
-  return { type: 'SET_IS_SIGNED_IN', isSignedIn };
-}
-
-export function setEmail(email: string): Action {
-  setSession('gu.email', email);
-  return { type: 'SET_EMAIL', email };
-}
-
-export function setStateField(stateField: string): Action {
-  return { type: 'SET_STATEFIELD', stateField };
-}
-
-export function setTestUser(testUser: boolean): Action {
-  return { type: 'SET_TEST_USER', testUser };
-}
-
-export function setPostDeploymentTestUser(postDeploymentTestUser: boolean): Action {
-  return { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser };
-}
-
-export function setGnmMarketing(preference: boolean): Action {
-  return { type: 'SET_GNM_MARKETING', preference };
-}
+  // When we change either of these in the context of the contributions landing page,
+  // we need to dispatch some additional actions to update some state in the
+  // contributions landing page state as well as update the user state, hence the union type.
+  setIsSignedIn: boolean => (Action | (Function => void)),
+  setIsRecurringContributor: () => (Action | (Function => void)),
+|}

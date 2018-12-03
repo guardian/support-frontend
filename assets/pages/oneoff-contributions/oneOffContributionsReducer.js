@@ -5,61 +5,61 @@
 import { combineReducers } from 'redux';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-
-import { userReducer as user } from 'helpers/user/userReducer';
+import type { ErrorReason } from 'helpers/errorReasons';
+import { createUserReducer } from 'helpers/user/userReducer';
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import csrf from 'helpers/csrf/csrfReducer';
-
-import type { CommonState } from 'helpers/page/page';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CommonState } from 'helpers/page/commonReducer';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import type { Action } from './oneoffContributionsActions';
+import { checkoutFormReducer as checkoutForm, type OneOffContributionsCheckoutFormState } from './helpers/checkoutForm/checkoutFormReducer';
 
 
 // ----- Types ----- //
 
-export type State = {
+type OneOffContributionsState = {
   amount: number,
-  error: ?string,
+  errorReason: ?ErrorReason,
   paymentComplete: boolean,
-  emailHasBeenBlurred: boolean,
 };
 
-export type CombinedState = {
-  oneoffContrib: State,
+type PageState = {
+  oneoffContrib: OneOffContributionsState,
   user: UserState,
   csrf: CsrfState,
-  marketingConsent: MarketingConsentState
+  checkoutForm: OneOffContributionsCheckoutFormState,
+  marketingConsent: MarketingConsentState,
 };
 
-export type PageState = {
+export type State = {
   common: CommonState,
-  page: CombinedState,
-}
+  page: PageState,
+};
 
 
 // ----- Reducers ----- //
 
-function createOneOffContribReducer(amount: number) {
+function createOneOffContributionsReducer(amount: number) {
 
-  const initialState: State = {
+  const initialState: OneOffContributionsState = {
     amount,
-    error: null,
+    errorReason: null,
     paymentComplete: false,
-    emailHasBeenBlurred: false,
   };
 
-  return function oneOffContribReducer(state: State = initialState, action: Action): State {
+  return function oneOffContribReducer(
+    state: OneOffContributionsState = initialState,
+    action: Action,
+  ): OneOffContributionsState {
 
     switch (action.type) {
 
       case 'CHECKOUT_ERROR':
-        return Object.assign({}, state, { error: action.message });
+        return { ...state, errorReason: action.errorReason };
 
       case 'CHECKOUT_SUCCESS':
-        return Object.assign({}, state, { paymentComplete: true });
-
-      case 'SET_EMAIL_HAS_BEEN_BLURRED':
-        return Object.assign({}, state, { emailHasBeenBlurred: true });
+        return { ...state, paymentComplete: true };
 
       default:
         return state;
@@ -71,11 +71,12 @@ function createOneOffContribReducer(amount: number) {
 
 // ----- Exports ----- //
 
-export default function createRootOneOffContribReducer(amount: number) {
+export default function createRootOneOffContributionsReducer(amount: number, countryGroup: CountryGroupId) {
   return combineReducers({
-    oneoffContrib: createOneOffContribReducer(amount),
+    oneoffContrib: createOneOffContributionsReducer(amount),
     marketingConsent: marketingConsentReducerFor('CONTRIBUTIONS_THANK_YOU'),
-    user,
+    user: createUserReducer(countryGroup),
     csrf,
+    checkoutForm,
   });
 }

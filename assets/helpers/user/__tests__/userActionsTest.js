@@ -1,19 +1,21 @@
 // @flow
-import {
-  setDisplayName,
-  setFirstName,
-  setLastName,
-  setFullName,
-  setEmail,
-  setStateField,
-  setTestUser,
-  setPostDeploymentTestUser,
-  setGnmMarketing,
-  setIsSignedIn,
-} from '../userActions';
+import { defaultUserActionFunctions } from '../defaultUserActionFunctions';
 
 
 describe('actions', () => {
+
+  const {
+    setDisplayName,
+    setFirstName,
+    setLastName,
+    setFullName,
+    setIsSignedIn,
+    setEmail,
+    setTestUser,
+    setPostDeploymentTestUser,
+    setGnmMarketing,
+    setStateField,
+  } = defaultUserActionFunctions;
 
   it('should create SET_DISPLAY_NAME action', () => {
     const name: string = 'My Name';

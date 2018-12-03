@@ -9,21 +9,22 @@ import type { Dispatch } from 'redux';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
 import PayPalExpressButton from 'components/paymentButtons/payPalExpressButton/payPalExpressButton';
 import DirectDebitPopUpButton from 'components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
-import ErrorMessage from 'components/errorMessage/errorMessage';
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import { emptyInputField, validateEmailAddress } from 'helpers/utilities';
-import type { Status } from 'helpers/switch';
+import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
+import type { Status } from 'helpers/settings';
 import { routes } from 'helpers/routes';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
-import type { Contrib } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { ErrorReason } from 'helpers/errorReasons';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { setPayPalHasLoaded } from '../regularContributionsActions';
 import { postCheckout } from '../helpers/ajax';
-
 
 // ----- Types ----- //
 
@@ -32,11 +33,10 @@ export type PaymentStatus = 'NotStarted' | 'Pending' | 'PollingTimedOut' | 'Fail
 type PropTypes = {|
   dispatch: Dispatch<*>,
   email: string,
-  disable: boolean,
-  error: ?string,
+  errorReason: ?ErrorReason,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   paymentStatus: PaymentStatus,
   currencyId: IsoCurrency,
   amount: number,
@@ -49,6 +49,9 @@ type PropTypes = {|
   directDebitSwitchStatus: Status,
   stripeSwitchStatus: Status,
   payPalSwitchStatus: Status,
+  optimizeExperiments: OptimizeExperiments,
+  canOpen: () => boolean,
+  whenUnableToOpen: () => void,
 |};
 
 
@@ -57,13 +60,13 @@ type PropTypes = {|
 // Shows a message about the status of the form or the payment.
 function getStatusMessage(
   paymentStatus: PaymentStatus,
-  error: ?string,
+  errorReason: ?ErrorReason,
 ): Node {
 
   if (paymentStatus === 'Pending') {
     return <ProgressMessage message={['Processing transaction', 'Please wait']} />;
   }
-  return <ErrorMessage message={error} />;
+  return <GeneralErrorMessage errorReason={errorReason} />;
 
 }
 
@@ -82,7 +85,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
   if (props.country === 'GB') {
     directDebitButton = (
       <DirectDebitPopUpButton
-        callback={postCheckout(
+        onPaymentAuthorisation={postCheckout(
           props.abParticipations,
           props.amount,
           props.csrf,
@@ -92,15 +95,17 @@ function RegularContributionsPayment(props: PropTypes, context) {
           'DirectDebit',
           props.referrerAcquisitionData,
           context.store.getState,
+          props.optimizeExperiments,
         )}
         switchStatus={props.directDebitSwitchStatus}
-        disable={props.disable}
+        canOpen={props.canOpen}
+        whenUnableToOpen={props.whenUnableToOpen}
       />);
   }
 
   const stripeButton = (<StripePopUpButton
     email={props.email}
-    callback={postCheckout(
+    onPaymentAuthorisation={postCheckout(
       props.abParticipations,
       props.amount,
       props.csrf,
@@ -110,20 +115,23 @@ function RegularContributionsPayment(props: PropTypes, context) {
       'Stripe',
       props.referrerAcquisitionData,
       context.store.getState,
+      props.optimizeExperiments,
     )}
     currencyId={props.currencyId}
     isTestUser={props.isTestUser}
     isPostDeploymentTestUser={props.isPostDeploymentTestUser}
     amount={props.amount}
     switchStatus={props.stripeSwitchStatus}
-    disable={props.disable}
+    svg={<SvgArrowRightStraight />}
+    canOpen={props.canOpen}
+    whenUnableToOpen={props.whenUnableToOpen}
   />);
 
   const payPalButton = (<PayPalExpressButton
     amount={props.amount}
     currencyId={props.currencyId}
     csrf={props.csrf}
-    callback={postCheckout(
+    onPaymentAuthorisation={postCheckout(
       props.abParticipations,
       props.amount,
       props.csrf,
@@ -133,18 +141,20 @@ function RegularContributionsPayment(props: PropTypes, context) {
       'PayPal',
       props.referrerAcquisitionData,
       context.store.getState,
+      props.optimizeExperiments,
     )}
     hasLoaded={props.payPalHasLoaded}
     setHasLoaded={props.payPalSetHasLoaded}
     switchStatus={props.payPalSwitchStatus}
-    disable={props.disable}
+    canOpen={props.canOpen}
+    whenUnableToOpen={props.whenUnableToOpen}
   />);
 
   return (
     <section className="regular-contribution-payment">
       { props.paymentStatus === 'Success' ? <Redirect to={{ pathname: routes.recurringContribThankyou }} /> : null }
       { props.paymentStatus === 'PollingTimedOut' ? <Redirect to={{ pathname: routes.recurringContribPending }} /> : null }
-      {getStatusMessage(props.paymentStatus, props.error)}
+      {getStatusMessage(props.paymentStatus, props.errorReason)}
       {directDebitButton}
       {stripeButton}
       {payPalButton}
@@ -155,15 +165,12 @@ function RegularContributionsPayment(props: PropTypes, context) {
 // ----- Map State/Props ----- //
 
 function mapStateToProps(state) {
+
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
-    disable:
-      emptyInputField(state.page.user.firstName)
-      || emptyInputField(state.page.user.lastName)
-      || !validateEmailAddress(state.page.user.email),
-    error: state.page.regularContrib.error,
+    errorReason: state.page.regularContrib.errorReason,
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,
     currencyId: state.common.internationalisation.currencyId,
@@ -174,9 +181,10 @@ function mapStateToProps(state) {
     abParticipations: state.common.abParticipations,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     payPalHasLoaded: state.page.regularContrib.payPalHasLoaded,
-    directDebitSwitchStatus: state.common.switches.recurringPaymentMethods.directDebit,
-    stripeSwitchStatus: state.common.switches.recurringPaymentMethods.stripe,
-    payPalSwitchStatus: state.common.switches.recurringPaymentMethods.payPal,
+    directDebitSwitchStatus: state.common.settings.switches.recurringPaymentMethods.directDebit,
+    stripeSwitchStatus: state.common.settings.switches.recurringPaymentMethods.stripe,
+    payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
+    optimizeExperiments: state.common.optimizeExperiments,
   };
 }
 
@@ -188,6 +196,12 @@ function mapDispatchToProps(dispatch: Dispatch<*>) {
     },
   };
 }
+
+RegularContributionsPayment.defaultProps = {
+  canOpen: () => true,
+  whenUnableToOpen: () => undefined,
+};
+
 
 // ----- Exports ----- //
 

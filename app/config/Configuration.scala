@@ -1,12 +1,14 @@
 package config
 
+import admin.SettingsSource
+import cats.syntax.either._
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
+import config.Configuration.GuardianDomain
 import services.GoCardlessConfigProvider
 import services.aws.AwsConfig
 import services.stepfunctions.StateMachineArn
-import switchboard.Switches
 
 class Configuration {
   val config = ConfigFactory.load()
@@ -21,11 +23,11 @@ class Configuration {
 
   lazy val aws = new AwsConfig(config.getConfig("aws"))
 
-  lazy val guardianDomain = config.getString("guardianDomain")
+  lazy val guardianDomain = GuardianDomain(config.getString("guardianDomain"))
 
   lazy val supportUrl = config.getString("support.url")
 
-  lazy val paymentApiUrl = config.getString("paymentApi.url");
+  lazy val paymentApiUrl = config.getString("paymentApi.url")
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
@@ -39,6 +41,11 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
-  implicit val switches = Switches.fromConfig(config.getConfig("switches"))
+  lazy val settingsSource: SettingsSource = SettingsSource.fromConfig(config).valueOr(throw _)
 
+  lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
+}
+
+object Configuration {
+  case class GuardianDomain(value: String)
 }

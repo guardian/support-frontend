@@ -1,9 +1,0 @@
-@import switchboard.Switches
-@import views.ViewHelpers.printSwitches
-
-@(switches: Switches)
-
-<script type="text/javascript">
-    window.guardian = window.guardian || {};
-    guardian.switches = @Html(printSwitches(switches));
-</script>

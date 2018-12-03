@@ -1,0 +1,14 @@
+.component-checkout-copy {
+  @include gu-fontset-body;
+
+  margin-top: $gu-v-spacing * 2;
+  width: calc(100vw - 20px);
+
+  @include mq($from: mobileMedium) {
+    width: 340px;
+  }
+}
+
+.component-checkout-copy__strong {
+  font-weight: bold;
+}

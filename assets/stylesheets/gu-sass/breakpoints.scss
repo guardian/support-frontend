@@ -3,7 +3,7 @@
 // of this file.
 //
 // It exposes an 'mq' mixin, which is used as follows:
-// 
+//
 // - Make the text black from the tablet until the desktop breakpoints.
 // @include mq($from: tablet, until: desktop) {
 //     color: #000;

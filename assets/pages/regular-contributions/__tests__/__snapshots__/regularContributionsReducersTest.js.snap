@@ -6,6 +6,10 @@ exports[`Regular contributions Reducer should handle SET_PAYPAL_BUTTON 1`] = `nu
 
 exports[`Regular contributions Reducer should return the initial state 1`] = `
 Object {
+  "checkoutForm": Object {
+    "checkoutFormHasBeenSubmitted": false,
+    "stage": "checkout",
+  },
   "csrf": Object {
     "token": null,
   },
@@ -30,24 +34,28 @@ Object {
   "regularContrib": Object {
     "amount": 20,
     "contributionType": "MONTHLY",
-    "emailHasBeenBlurred": false,
-    "error": null,
+    "errorReason": null,
+    "guestAccountCreationToken": null,
     "payPalHasLoaded": false,
     "paymentMethod": "DirectDebit",
     "paymentStatus": "NotStarted",
     "pollCount": 0,
     "statusUri": null,
+    "userTypeFromIdentityResponse": "noRequestSent",
   },
   "user": Object {
     "displayName": "",
     "email": "",
     "firstName": "",
+    "fullName": "",
     "gnmMarketing": false,
     "id": "",
     "isPostDeploymentTestUser": false,
+    "isRecurringContributor": false,
     "isSignedIn": false,
     "isTestUser": null,
     "lastName": "",
+    "stateField": "",
   },
 }
 `;

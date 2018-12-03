@@ -1,0 +1,72 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-product-page-content-block .component-left-margin-section__content {
+  max-width: 100%;
+  @include mq($from: tablet) {
+    border-left: 1px solid gu-colour(garnett-neutral-4);
+  }
+}
+
+.component-product-page-content-block--white + .component-product-page-content-block--white {
+  .component-left-margin-section__content {
+    border-top: 1px solid gu-colour(garnett-neutral-4);
+  }
+}
+
+.component-product-page-content-block--grey {
+  &, .component-product-page-content-block__bg {
+    background-color: gu-colour(garnett-neutral-3);
+  }
+  .component-left-margin-section__content {
+    border-left: 0;
+    margin-left: -1px;
+  }
+}
+
+.component-product-page-content-block--feature {
+  color: gu-colour(garnett-neutral-5);
+  &, .component-product-page-content-block__bg {
+    background-color: gu-colour(header-dark);
+  }
+  .component-left-margin-section__content {
+    border-color: gu-colour(header-border);
+  }
+  .component-product-page-features .component-product-page-features__item {
+    border-color: gu-colour(garnett-neutral-5);
+  }
+}
+.component-product-page-content-block--feature + .component-product-page-content-block--feature {
+  .component-left-margin-section__content {
+    border-top: 1px solid gu-colour(header-border);
+  }
+}
+
+.component-product-page-content-block--dark {
+  color: gu-colour(garnett-neutral-5);
+  &, .component-product-page-content-block__bg {
+    background-color: gu-colour(garnett-neutral-7);
+  }
+  .component-left-margin-section__content {
+    border-color: gu-colour(garnett-neutral-5);
+  }
+}
+
+.component-product-page-content-block__content {
+  max-width: gu-span(12);
+  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
+}
+
+.component-product-page-content-block__outset {
+  margin-left: ($gu-h-spacing / 2 * -1);
+  margin-right: ($gu-h-spacing / 2 * -1);
+}
+
+// ----- Vertical rhythm ------ //
+
+.component-product-page-content-block {
+  .component-product-page-text-block, 
+  .component-product-page-plan-form,
+  .component-product-page-info-chip {
+    margin-bottom: ($gu-v-spacing*2)
+  }
+}

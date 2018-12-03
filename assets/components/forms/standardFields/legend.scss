@@ -1,0 +1,5 @@
+@import './formFields';
+
+.component-legend {
+  @include label;
+}

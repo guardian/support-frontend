@@ -7,10 +7,9 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
-import { getDiscountedPrice } from './flashSale';
+
 
 // ----- Types ------ //
-
 export type SubscriptionProduct =
   'DigitalPack' |
   'PremiumTier' |
@@ -19,9 +18,21 @@ export type SubscriptionProduct =
   'Paper' |
   'PaperAndDigital';
 
-// ----- Config ----- //
+type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
 
-const subscriptionPrices: {
+export type ComponentAbTest = {
+  name: string,
+  variant: string,
+};
+
+
+// ----- Config ----- //
+export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
+export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
+
+export type PaperBillingPlan = 'everyday' | 'sixday' | 'weekend' | 'sunday';
+
+const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
     [CountryGroupId]: number,
   }
@@ -39,24 +50,89 @@ const subscriptionPrices: {
     International: 19.99,
   },
   GuardianWeekly: {
-    GBPCountries: 30,
-    UnitedStates: 60,
-    AUDCountries: 78,
-    International: 65,
+    GBPCountries: 37.50,
+    EURCountries: 61.30,
+    UnitedStates: 75,
+    Canada: 80,
+    AUDCountries: 97.50,
+    NZDCountries: 123,
+    International: 81.30,
   },
   Paper: {
-    GBPCountries: 10.36,
+    GBPCountries: 10.79,
   },
   PaperAndDigital: {
     GBPCountries: 21.62,
   },
   DailyEdition: {
-    GBPCountries: 6.99,
+    GBPCountries: 11.99,
   },
 };
 
+const discountPricesForDefaultBillingPeriod: {
+  [SubscriptionProduct]: {
+    [CountryGroupId]: number,
+  }
+} = {
+  DigitalPack: {
+    GBPCountries: 6,
+    UnitedStates: 10,
+    AUDCountries: 10.75,
+    International: 10,
+  },
+  Paper: {
+    GBPCountries: 5.40,
+  },
+  PaperAndDigital: {
+    GBPCountries: 10.81,
+  },
+};
+
+const subscriptionPricesForGuardianWeekly: {
+  [CountryGroupId]: {
+    [WeeklyBillingPeriod]: number,
+  }
+} = {
+  GBPCountries: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
+    sixweek: 6,
+    year: 150,
+  },
+  EURCountries: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
+    sixweek: 6,
+    year: 245.20,
+  },
+  UnitedStates: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
+    sixweek: 6,
+    year: 300,
+  },
+  Canada: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
+    sixweek: 6,
+    year: 320,
+  },
+  AUDCountries: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
+    sixweek: 6,
+    year: 390,
+  },
+  NZDCountries: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
+    sixweek: 6,
+    year: 492,
+  },
+  International: {
+    quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
+    sixweek: 6,
+    year: 325.20,
+  },
+};
+
+
 const defaultBillingPeriods: {
-  [SubscriptionProduct]: string,
+  [SubscriptionProduct]: BillingPeriod
 } = {
   PremiumTier: 'month',
   DigitalPack: 'month',
@@ -66,51 +142,94 @@ const defaultBillingPeriods: {
   DailyEdition: 'month',
 };
 
-function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  const price = subscriptionPrices[product][countryGroupId];
-  const discounted = getDiscountedPrice(product, price);
-  return Number.isInteger(discounted) ? discounted.toString() : discounted.toFixed(2);
+
+// ----- Functions ----- //
+
+function fixDecimals(number: number): string {
+  if (Number.isInteger(number)) {
+    return number.toString();
+  }
+  return number.toFixed(2);
 }
 
+function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  return fixDecimals(subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]);
+}
 function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = getProductPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
+function getDiscountedPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  return fixDecimals(discountPricesForDefaultBillingPeriod[product][countryGroupId]);
+}
+
+function discountedDisplayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  const currency = currencies[detect(countryGroupId)].glyph;
+  const price = getDiscountedPrice(product, countryGroupId);
+  return `${currency}${price}/${defaultBillingPeriods[product]}`;
+}
+
+function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
+  return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
+}
+
+function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
+
+  switch (product) {
+    case 'DigitalPack':
+    case 'PremiumTier':
+    case 'DailyEdition':
+      return 'DIGITAL_SUBSCRIPTION';
+    case 'GuardianWeekly':
+    case 'Paper':
+    case 'PaperAndDigital':
+    default:
+      return 'PRINT_SUBSCRIPTION';
+  }
+
+}
+
 function sendTrackingEventsOnClick(
   id: string,
-  product: 'digital' | 'print',
-  abTest: string,
-  variant: boolean,
+  product: SubscriptionProduct,
+  abTest: ComponentAbTest | null,
+  context?: string,
 ): () => void {
+
+  const componentEvent = {
+    component: {
+      componentType: 'ACQUISITIONS_BUTTON',
+      id,
+      products: [ophanProductFromSubscriptionProduct(product)],
+    },
+    action: 'CLICK',
+    id,
+    ...(abTest ? { abTest } : {}),
+  };
 
   return () => {
 
-    trackComponentEvents({
-      component: {
-        componentType: 'ACQUISITIONS_BUTTON',
-        id,
-        products: product === 'digital' ? ['DIGITAL_SUBSCRIPTION'] : ['PRINT_SUBSCRIPTION'],
-      },
-      action: 'CLICK',
-      id: `${abTest}${id}`,
-      abTest: {
-        name: `${abTest}`,
-        variant: variant ? 'variant' : 'control',
-      },
-    });
+    trackComponentEvents(componentEvent);
 
     gaEvent({
       category: 'click',
-      action: `${abTest}`,
-      label: id,
+      action: product,
+      label: (context ? context.concat('-') : '').concat(id),
     });
 
   };
 
 }
 
+
 // ----- Exports ----- //
 
-export { sendTrackingEventsOnClick, displayPrice, getProductPrice };
+export {
+  sendTrackingEventsOnClick,
+  displayPrice,
+  discountedDisplayPrice,
+  getProductPrice,
+  getWeeklyProductPrice,
+};

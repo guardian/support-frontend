@@ -11,12 +11,12 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   privacyPolicy: boolean,
   disclaimer: boolean,
   countryGroupId: CountryGroupId,
   children: Node,
-};
+|};
 
 
 // ----- Functions ----- //
@@ -45,7 +45,7 @@ function Disclaimer(props: { disclaimer: boolean, countryGroupId: CountryGroupId
 function Footer(props: PropTypes) {
 
   return (
-    <footer className="component-footer">
+    <footer className="component-footer" role="contentinfo">
       <div className="component-footer__content">
         <PrivacyPolicy privacyPolicy={props.privacyPolicy} />
         {props.children}

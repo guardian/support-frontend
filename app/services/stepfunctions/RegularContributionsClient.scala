@@ -2,25 +2,26 @@ package services.stepfunctions
 
 import java.util.UUID
 
-import scala.concurrent.Future
+import actions.CustomActionBuilders.OptionalAuthRequest
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
-import RegularContributionsClient._
-import com.gu.support.workers.model._
-import io.circe.generic.semiauto.{deriveDecoder}
-import io.circe.{Decoder}
 import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
+import com.gu.support.workers.model.{Status, _}
 import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
-import play.api.mvc.Call
-import com.gu.support.workers.model.Status
+import io.circe.Decoder
+import io.circe.generic.semiauto.deriveDecoder
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
+import play.api.mvc.Call
+import services.stepfunctions.RegularContributionsClient._
+
+import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 object CreateRegularContributorRequest {
@@ -52,7 +53,17 @@ object RegularContributionsClient {
     new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
 }
 
-case class StatusResponse(status: Status, trackingUri: String, failureReason: Option[CheckoutFailureReason] = None)
+case class StatusResponse(
+    status: Status,
+    trackingUri: String,
+    failureReason: Option[CheckoutFailureReason] = None,
+    guestAccountCreationToken: Option[String] = None
+)
+
+object StatusResponse {
+  def fromStatusResponseAndToken(statusResponse: StatusResponse, token: Option[String]): StatusResponse =
+    StatusResponse(statusResponse.status, statusResponse.trackingUri, statusResponse.failureReason, token)
+}
 
 class RegularContributionsClient(
     arn: StateMachineArn,
@@ -64,16 +75,29 @@ class RegularContributionsClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
-  def createContributor(request: CreateRegularContributorRequest, user: User, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
+  private def referrerAcquisitionDataWithGAFields(request: OptionalAuthRequest[CreateRegularContributorRequest]): ReferrerAcquisitionData = {
+    val hostname = request.host
+    val gaClientId = request.cookies.get("_ga").map(_.value)
+    val userAgent = request.headers.get("user-agent")
+    val ipAddress = request.remoteAddress
+    request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
+  }
+
+  def createContributor(
+    request: OptionalAuthRequest[CreateRegularContributorRequest],
+    user: User,
+    requestId: UUID
+  ): EitherT[Future, RegularContributionError, StatusResponse] = {
+
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
-      product = request.contribution,
-      paymentFields = request.paymentFields,
+      product = request.body.contribution,
+      paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
-        ophanIds = request.ophanIds,
-        referrerAcquisitionData = request.referrerAcquisitionData,
-        supportAbTests = request.supportAbTests
+        ophanIds = request.body.ophanIds,
+        referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
+        supportAbTests = request.body.supportAbTests
       ))
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
@@ -134,7 +158,7 @@ object StepFunctionExecutionStatus {
     val searchForFinishedCheckout: Option[StatusResponse] = detailedHistory.collectFirst {
       case detailsAttempt if detailsAttempt.map(_.getName) == Success("CheckoutSuccess") =>
         StatusResponse(Status.Success, trackingUri, None)
-      case detailsAttempt if detailsAttempt.map(_.getName) == Success("CheckoutFailure") =>
+      case detailsAttempt if detailsAttempt.map(_.getName) == Success("SucceedOrFailChoice") =>
         StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, detailsAttempt.get))
     }
 

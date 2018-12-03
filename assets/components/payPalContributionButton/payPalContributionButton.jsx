@@ -13,15 +13,16 @@ import * as storage from 'helpers/storage';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
   abParticipations: Participations,
@@ -34,7 +35,8 @@ type PropTypes = {
   onClick: ?(void => void),
   switchStatus: Status,
   cancelURL: string,
-};
+  optimizeExperiments: OptimizeExperiments,
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 
@@ -57,6 +59,7 @@ function payWithPayPal(props: PropTypes) {
         props.errorHandler,
         props.abParticipations,
         props.cancelURL,
+        props.optimizeExperiments,
       );
     }
   };

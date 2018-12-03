@@ -1,0 +1,44 @@
+.component-radio-input {
+  display: block;
+  font-size: 16px;
+  font-family: $gu-text-sans-web;
+  cursor: pointer;
+  margin-top: $gu-v-spacing;
+  position: relative;
+
+  &:hover {
+    .component-radio-input__text::before {
+      border-color: gu-colour(garnett-neutral-2);
+    }
+  }
+}
+
+.component-radio-input__text {
+  font-weight: bold;
+}
+
+.component-radio-input__input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  top: 0;
+  left: 0;
+}
+
+.component-radio-input__text::before {
+  display: inline-block;
+  vertical-align: top;
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 1px solid gu-colour(garnett-neutral-4);
+  box-shadow: inset 0 0 0 3px #fff;
+  border-radius: 60px;
+  margin-right: 5px;
+}
+
+.component-radio-input__input:checked + .component-radio-input__text::before {
+  background-color: gu-colour(green-dark);
+  border-color: gu-colour(green-dark);
+}

@@ -10,8 +10,7 @@ import {
   clickSubstituteKeyPressHandler,
   parseBoolean,
   deserialiseJsonObject,
-  validateEmailAddress,
-  emptyInputField,
+  addLeadingZeros,
 } from '../utilities';
 
 
@@ -19,7 +18,7 @@ import {
 
 // Returns a mocked keypress event.
 function getMockedKeypress(key: number) {
-  return { keyCode: key, preventDefault: () => {} };
+  return { keyCode: key, preventDefault: () => { } };
 }
 
 
@@ -151,6 +150,20 @@ describe('utilities', () => {
 
   });
 
+  describe('addLeadingZeros', () => {
+
+    it('should fill in a smaller number', () => {
+      expect(addLeadingZeros(2, 2)).toBe('02');
+      expect(addLeadingZeros(12, 3)).toBe('012');
+    });
+
+    it('should not fill in larger numbers', () => {
+      expect(addLeadingZeros(20, 2)).toBe('20');
+      expect(addLeadingZeros(120, 3)).toBe('120');
+    });
+
+  });
+
   describe('deserialiseJsonObject', () => {
 
     it('should deserialise a valid JSON object', () => {
@@ -179,52 +192,4 @@ describe('utilities', () => {
     });
 
   });
-
-  describe('validateEmailAddress', () => {
-
-    it('should return true for test@gu.com', () => {
-      expect(validateEmailAddress('test@gu.com')).toEqual(true);
-    });
-
-    it('should return false if there is a space at the end of an email address', () => {
-      expect(validateEmailAddress('test@gu.com ')).toEqual(false);
-    });
-
-    it('should return false if there is a space at the start of an email address', () => {
-      expect(validateEmailAddress(' test@gu.com')).toEqual(false);
-    });
-
-    it('should return false if there is no dot in the domain', () => {
-      expect(validateEmailAddress('test@gu')).toEqual(false);
-    });
-
-    it('should return true for test@gu.co.uk', () => {
-      expect(validateEmailAddress('test@gu.co.uk')).toEqual(true);
-    });
-  });
-
-  describe('emptyInputField', () => {
-
-    it('should return true for null', () => {
-      expect(emptyInputField(null)).toEqual(true);
-    });
-
-    it('should return true for undefined', () => {
-      expect(emptyInputField(undefined)).toEqual(true);
-    });
-
-    it('should return true for an empty string', () => {
-      expect(emptyInputField('')).toEqual(true);
-    });
-
-    it('should return true for a string which only contains a space', () => {
-      expect(emptyInputField(' ')).toEqual(true);
-    });
-
-    it('should return false for a string which contains characters other than a space', () => {
-      expect(emptyInputField('Test')).toEqual(false);
-    });
-
-  });
-
 });

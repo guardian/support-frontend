@@ -1,0 +1,84 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-product-page-plan-form-label {
+  position: relative;
+  height: 100%;
+}
+
+.component-product-page-plan-form-label__input {
+  position: absolute;
+  opacity: 0;
+}
+
+.component-product-page-plan-form-label__box {
+  @include gu-fontset-body-sans;
+  background: gu-colour(garnett-neutral-5);
+  border: 1px solid gu-colour(garnett-neutral-2);
+  color: gu-colour(garnett-neutral-1);
+  display: block;
+  height: 100%;
+  cursor: pointer;
+  transition: .2s;
+  will-change: background-color box-shadow;
+}
+
+.component-product-page-plan-form-label__title,
+.component-product-page-plan-form-label__copy {
+  padding: $gu-v-spacing/2 $gu-h-spacing/2;
+  display: block;
+}
+
+.component-product-page-plan-form-label__title {
+  @include gu-fontset-heading-sans;
+  position: relative;
+  border-bottom: 1px solid gu-colour(garnett-neutral-2);
+}
+
+.component-product-page-plan-form-label__offer {
+  color: gu-colour(garnett-neutral-5);
+  font-weight: 600;
+  display: inline-block;
+  background: gu-colour(garnett-neutral-1);
+  margin: 0 -6px;
+  padding: 0 6px;
+  line-height: 1.4;
+}
+
+.component-product-page-plan-form-label__copy {
+  padding-bottom: $gu-v-spacing;
+}
+
+.component-product-page-plan-form-label__check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $gu-v-spacing * 2.3;
+  height: $gu-v-spacing * 2.3;
+  border-radius: 100%;
+  background: gu-colour(garnett-neutral-1);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 6px;
+  margin: auto;
+  transform: translateY(5px);
+  opacity: 0;
+  transition: .2s;
+  svg {
+    width: 75%;
+    fill: gu-colour(news-garnett-highlight);
+  }
+}
+.component-product-page-plan-form-label__input:hover + .component-product-page-plan-form-label__box,
+.component-product-page-plan-form-label__input:focus + .component-product-page-plan-form-label__box {
+  box-shadow: 0 0 0 2px rgba(gu-colour(garnett-neutral-5),.25);
+}
+
+.component-product-page-plan-form-label__input:checked + .component-product-page-plan-form-label__box {
+  background: gu-colour(news-garnett-highlight);
+  border-color: rgba(0,0,0,.3);
+  .component-product-page-plan-form-label__check {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

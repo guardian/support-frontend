@@ -1,0 +1,69 @@
+.component-general-error-message {
+  padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
+  color: gu-colour(news-garnett-main-1);
+  background-color: gu-colour(news-faded);
+  margin-bottom: 20px;
+
+  @include mq($from: tablet) {
+    width: 404px;
+  }
+
+}
+
+.component-general-error-message--invalid_form_mobile {
+  padding-top: $gu-v-spacing;
+  margin-bottom: -$gu-v-spacing;
+  color: gu-colour(news-garnett-main-1);
+  background-color: gu-colour(news-faded);
+
+  // point at you can see the all the individual invalid field error messages
+  @include mq($from: mobileMedium) {
+    display: none;
+  }
+}
+
+.component-general-error-message--marketing_consent_api_error {
+  margin-top: $gu-v-spacing * 2;
+}
+
+.gu-content__content {
+  .component-general-error-message {
+    width: auto;
+  }
+
+  .component-general-error-message--no-valid-payments {
+    padding: 0;
+  }
+}
+
+.svg-exclamation-alternate {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: bottom;
+}
+
+.svg-exclamation-alternate__circle {
+  fill: gu-colour(news-garnett-main-1);
+}
+
+.svg-exclamation-alternate__exclamation-mark {
+  fill: gu-colour(garnett-neutral-5);
+}
+
+.component-general-error-message__error-heading {
+  vertical-align: bottom;
+  display: inline-block;
+  font-family: $gu-sans-web;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.component-general-error-message__small-print {
+  display: block;
+  line-height: 18px;
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: $gu-v-spacing;
+}
+

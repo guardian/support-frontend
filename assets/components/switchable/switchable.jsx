@@ -3,16 +3,16 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
-type PropTypes = {
+type PropTypes = {|
   status: Status,
   component: React$ComponentType<*>,
   fallback: React$ComponentType<*>,
-};
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 

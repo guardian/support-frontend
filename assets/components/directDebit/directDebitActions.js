@@ -1,9 +1,9 @@
 // @flow
 
 import * as storage from 'helpers/storage';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 import { checkAccount } from './helpers/ajax';
-
 
 // ----- Types ----- //
 
@@ -111,7 +111,7 @@ function payDirectDebitClicked(): Function {
   };
 }
 
-function confirmDirectDebitClicked(callback: Function): Function {
+function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation => void): Function {
 
   return (dispatch: Function, getState: Function) => {
 
@@ -123,7 +123,12 @@ function confirmDirectDebitClicked(callback: Function): Function {
 
     const sortCode = sortCodeArray.join('');
 
-    callback(undefined, accountNumber, sortCode, accountHolderName);
+    onPaymentAuthorisation({
+      paymentMethod: 'DirectDebit',
+      accountHolderName,
+      sortCode,
+      accountNumber,
+    });
 
     dispatch(closeDirectDebitPopUp());
 

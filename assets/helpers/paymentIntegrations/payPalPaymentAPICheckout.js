@@ -12,16 +12,9 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 
-// ----- Types ----- //
-
-type PayPalPaymentAPIPostData = {|
-  currency: IsoCurrency,
-  amount: number,
-  returnURL: string,
-  cancelURL: string,
-|}
 
 // ----- Functions ----- //
 
@@ -44,13 +37,17 @@ export function paypalPaymentAPIRedirect(
   errorHandler: (string) => void,
   nativeAbParticipations: Participations,
   cancelURL: string,
+  optimizeExperiments: OptimizeExperiments,
 ): void {
-
-  const acquisitionData = derivePaymentApiAcquisitionData(referrerAcquisitionData, nativeAbParticipations);
+  const acquisitionData = derivePaymentApiAcquisitionData(
+    referrerAcquisitionData,
+    nativeAbParticipations,
+    optimizeExperiments,
+  );
   cookie.set('acquisition_data', encodeURIComponent(JSON.stringify(acquisitionData)));
 
   const { currency } = countryGroups[countryGroupId];
-  const postData: PayPalPaymentAPIPostData = {
+  const postData: CreatePaypalPaymentData = {
     amount,
     currency,
     returnURL: getAbsoluteURL(routes.payPalRestReturnURL),

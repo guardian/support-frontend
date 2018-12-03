@@ -4,75 +4,111 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import TextInput from 'components/textInput/textInput';
 import SelectInput from 'components/selectInput/selectInput';
 
-import {
-  setFirstName,
-  setLastName,
-  setStateField,
-  type Action as UserAction,
-} from 'helpers/user/userActions';
-
-import { setCountry, type Action as PageAction } from 'helpers/page/pageActions';
-
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
+import { setCountry } from 'helpers/page/commonActions';
 import { usStates, countries, caStates } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry, UsState, CaState } from 'helpers/internationalisation/country';
 import type { SelectOption } from 'components/selectInput/selectInput';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import EmailFormFieldContainer from './emailFormFieldContainer';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { ContributionType } from 'helpers/contributions';
+import {
+  type UserFormFieldAttribute,
+  shouldShowError,
+  emailRegexPattern,
+} from 'helpers/checkoutForm/checkoutForm';
+import { setCheckoutFormHasBeenSubmitted } from '../helpers/checkoutForm/checkoutFormActions';
+import { checkIfEmailHasPassword } from '../regularContributionsActions';
+import { type State } from '../regularContributionsReducer';
+import { getFormFields } from '../helpers/checkoutForm/checkoutFormFieldsSelector';
+import { MustSignIn } from './mustSignIn';
+
 
 // ----- Types ----- //
 
-type PropTypes = {
-  firstNameUpdate: (name: string) => void,
-  lastNameUpdate: (name: string) => void,
+type PropTypes = {|
   stateUpdate: (value: UsState | CaState) => void,
   countryUpdate: (value: string) => void,
-  firstName: string,
-  lastName: string,
+  firstName: UserFormFieldAttribute,
+  lastName: UserFormFieldAttribute,
+  email: UserFormFieldAttribute,
+  setFirstName: (string) => void,
+  setLastName: (string) => void,
+  setEmail: (string) => void,
+  checkIfEmailHasPassword: (string) => void,
   countryGroup: CountryGroupId,
   country: IsoCountry,
-};
+  isSignedIn: boolean,
+  stateField: UsState | CaState,
+  checkoutFormHasBeenSubmitted: boolean,
+  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  contributionType: ContributionType,
+|};
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state) {
+function mapStateToProps(state: State) {
+
+  const { firstName, lastName, email } = getFormFields(state);
 
   return {
-    firstName: state.page.user.firstName,
-    lastName: state.page.user.lastName,
+    firstName,
+    lastName,
+    email,
     countryGroup: state.common.internationalisation.countryGroupId,
     country: state.common.internationalisation.countryId,
+    isSignedIn: state.page.user.isSignedIn,
+    stateField: state.page.user.stateField,
+    checkoutFormHasBeenSubmitted: state.page.checkoutForm.checkoutFormHasBeenSubmitted,
+    userTypeFromIdentityResponse: state.page.regularContrib.userTypeFromIdentityResponse,
+    contributionType: state.page.regularContrib.contributionType,
   };
 
 }
 
-function mapDispatchToProps(dispatch: Dispatch<UserAction | PageAction>) {
+function mapDispatchToProps(dispatch: Function) {
+
+  const {
+    setStateField,
+    setFirstName,
+    setLastName,
+    setEmail,
+  } = defaultUserActionFunctions;
 
   return {
-    firstNameUpdate: (name: string) => {
-      dispatch(setFirstName(name));
-    },
-    lastNameUpdate: (name: string) => {
-      dispatch(setLastName(name));
-    },
     stateUpdate: (value: UsState | CaState) => {
       dispatch(setStateField(value));
     },
     countryUpdate: (value: IsoCountry) => {
       dispatch(setCountry(value));
     },
+    setFirstName: (firstName: string) => {
+      dispatch(setFirstName(firstName));
+    },
+    setLastName: (lastName: string) => {
+      dispatch(setLastName(lastName));
+    },
+    setEmail: (email: string) => {
+      dispatch(setEmail(email));
+    },
+    checkIfEmailHasPassword: (email: string) => {
+      dispatch(checkIfEmailHasPassword(email));
+    },
   };
-
 }
 
 
 // ----- Functions ----- //
 
-function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaState) => void) {
+function stateDropdown(
+  countryGroup: CountryGroupId,
+  stateUpdate: (UsState | CaState) => void,
+  stateField: UsState | CaState,
+) {
 
   if (countryGroup !== 'UnitedStates' && countryGroup !== 'Canada') {
     return null;
@@ -81,10 +117,7 @@ function stateDropdown(countryGroup: CountryGroupId, stateUpdate: (UsState | CaS
   const stateLabel = countryGroup === 'Canada' ? 'province/territory' : 'state';
 
   const options: SelectOption[] = Object.keys(states).map((stateCode: UsState | CaState) =>
-    ({ value: stateCode, text: states[stateCode] }));
-
-  // Sets the initial state to the first in the dropdown.
-  stateUpdate(options[0].value);
+    ({ value: stateCode, text: states[stateCode], selected: stateCode === stateField }));
 
   return (<SelectInput
     id="qa-state-dropdown"
@@ -122,34 +155,72 @@ function countriesDropdown(
   />);
 }
 
+export const formClassName = 'regular-contrib__checkout-form';
+
+export const setShouldValidateFunctions = [
+  setCheckoutFormHasBeenSubmitted,
+];
+
 
 // ----- Component ----- //
 
 function NameForm(props: PropTypes) {
-
   return (
-    <form className="regular-contrib__name-form">
-      <EmailFormFieldContainer />
+    <form className={formClassName}>
+      {
+        !props.isSignedIn ? (
+          <div className="email-input">
+            <TextInput
+              id="email"
+              value={props.email.value}
+              labelText="Email"
+              placeholder="Email"
+              onInput={props.setEmail}
+              onChange={props.checkIfEmailHasPassword}
+              modifierClasses={['email']}
+              showError={shouldShowError(props.email, props.checkoutFormHasBeenSubmitted)}
+              errorMessage="Please enter a valid email address."
+              type="email"
+              pattern={emailRegexPattern}
+              required
+            />
+            <MustSignIn
+              contributionType={props.contributionType}
+              isSignedIn={props.isSignedIn}
+              userTypeFromIdentityResponse={props.userTypeFromIdentityResponse}
+              checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+              email={props.email.value}
+            />
+          </div>
+        ) : null
+      }
       <TextInput
         id="first-name"
         labelText="First name"
         placeholder="First name"
-        value={props.firstName}
-        onChange={props.firstNameUpdate}
+        value={props.firstName.value}
+        onInput={props.setFirstName}
         modifierClasses={['first-name']}
+        showError={shouldShowError(props.firstName, props.checkoutFormHasBeenSubmitted)}
+        errorMessage="Please enter a first name."
         required
       />
       <TextInput
         id="last-name"
         labelText="Last name"
         placeholder="Last name"
-        value={props.lastName}
-        onChange={props.lastNameUpdate}
+        value={props.lastName.value}
+        onInput={props.setLastName}
         modifierClasses={['last-name']}
+        showError={shouldShowError(props.lastName, props.checkoutFormHasBeenSubmitted)}
+        errorMessage="Please enter a last name."
         required
       />
-      {stateDropdown(props.countryGroup, props.stateUpdate)}
+      {stateDropdown(props.countryGroup, props.stateUpdate, props.stateField)}
       {countriesDropdown(props.countryGroup, props.countryUpdate, props.country)}
+      <p className="component-your-details__info">
+        <small>All fields are required.</small>
+      </p>
     </form>
   );
 }

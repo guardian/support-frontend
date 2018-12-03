@@ -31,6 +31,7 @@ function mapStateToProps(state) {
   return {
     contributionType: state.page.regularContrib,
     directDebit: getDirectDebitDetails(state),
+    countryGroupId: state.common.internationalisation,
   };
 }
 
@@ -55,6 +56,7 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
     ...ownProps,
     contributionType: stateProps.contributionType,
     directDebit,
+    countryGroupId: stateProps.countryGroupId,
   };
 
 }

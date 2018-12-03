@@ -5,23 +5,27 @@
 import { routes } from 'helpers/routes';
 import * as cookie from 'helpers/cookie';
 import { getSession } from 'helpers/storage';
-
-import {
-  setId,
-  setDisplayName,
-  setEmail,
-  setFirstName,
-  setLastName,
-  setTestUser,
-  setPostDeploymentTestUser,
-  setFullName,
-  setIsSignedIn,
-} from './userActions';
+import { get as getCookie } from 'helpers/cookie';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
+import type { UserSetStateActions } from 'helpers/user/userActions';
 
 
 // ----- Functions ----- //
 
-const init = (dispatch: Function) => {
+const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
+
+  const {
+    setId,
+    setDisplayName,
+    setFirstName,
+    setLastName,
+    setFullName,
+    setIsSignedIn,
+    setEmail,
+    setIsRecurringContributor,
+    setTestUser,
+    setPostDeploymentTestUser,
+  } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
   const userAppearsLoggedIn = cookie.get('GU_U');
@@ -47,6 +51,10 @@ const init = (dispatch: Function) => {
 
   if (testUserCondition && cookie.get('_post_deploy_user')) {
     dispatch(setPostDeploymentTestUser(true));
+  }
+
+  if (getCookie('gu_recurring_contributor') === 'true') {
+    dispatch(setIsRecurringContributor());
   }
 
   if (windowHasUser) {

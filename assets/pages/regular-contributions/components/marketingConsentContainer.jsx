@@ -5,18 +5,24 @@
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import { setGnmMarketing, type Action } from 'helpers/user/userActions';
+import { type Action } from 'helpers/user/userActions';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { PageState as RegularContributionPageState } from '../regularContributionsReducer';
+import { type State } from '../regularContributionsReducer';
 
 // ----- Component ----- //
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
+
+  const { setGnmMarketing } = defaultUserActionFunctions;
+
   return {
     onClick: (marketingPreferencesOptIn: boolean, email: string, csrf: CsrfState) => {
+      trackComponentClick('marketing-permissions-old-flow');
       sendMarketingPreferencesToIdentity(
         marketingPreferencesOptIn,
         email,
@@ -31,7 +37,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
   };
 }
 
-function mapStateToProps(state: RegularContributionPageState) {
+function mapStateToProps(state: State) {
   return {
     email: state.page.user.email,
     marketingPreferencesOptIn: state.page.user.gnmMarketing,

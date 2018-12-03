@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import { detect as detectCountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -23,13 +23,14 @@ import reducer from './oneOffContributionsReducer';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
 import FormFields from './components/formFields';
 import OneoffContributionsPayment from './components/oneoffContributionsPayment';
+import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Page Startup ----- //
 
-const countryGroup = detectCountryGroup();
+const countryGroupId: CountryGroupId = detectCountryGroupId();
 
-const store = pageInit(reducer(getAmount('ONE_OFF', countryGroup)), true);
+const store = pageInit(reducer(getAmount('ONE_OFF', countryGroupId), countryGroupId), true);
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 
@@ -64,6 +65,7 @@ const router = (
               <ContributionsThankYouPage
                 contributionType="ONE_OFF"
                 directDebit={null}
+                countryGroupId={countryGroupId}
                 marketingConsent={<MarketingConsentContainer />}
               />);
           }

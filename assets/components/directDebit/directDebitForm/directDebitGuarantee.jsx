@@ -4,11 +4,11 @@
 import React from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 
-type PropTypes = {
+type PropTypes = {|
   isDDGuaranteeOpen: boolean,
   openDDGuaranteeClicked: () => void,
   closeDDGuaranteeClicked: () => void
-};
+|};
 
 function className(baseClass: string, open: boolean) {
   return classNameWithModifiers(baseClass, open ? ['open'] : ['closed']);

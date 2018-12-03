@@ -1,0 +1,73 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-product-page-hero {
+  overflow: hidden;
+  .component-left-margin-section__content {
+    @include mq($from: tablet) {
+      border-left: 1px solid;
+      position: relative;
+      .component-heading-block {
+        margin-left: -1px;
+      }    
+    }
+  }
+  .component-heading-block {
+    z-index: 10;
+    position: relative;
+  }
+}
+
+.component-product-page-hero--feature {
+  border-top: 1px solid gu-colour(header-border);
+  background-color: gu-colour(header-dark);
+  .component-left-margin-section__content {
+    border-left-color: gu-colour(header-border);
+  }
+}
+
+.component-product-page-hero--grey {
+  background: gu-colour(garnett-neutral-3);
+  .component-left-margin-section__content {
+    border-left-color: gu-colour(garnett-neutral-4);
+  }
+}
+
+.component-product-page-hero-hanger {
+  background: gu-colour(garnett-neutral-5);
+  .component-left-margin-section__content {
+    @include mq($from: tablet) {
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+      .component-product-page-hero-hanger__content {
+        margin-left: -1px;
+      }
+    }
+    @include multiline-bottom-border;
+  }
+}
+
+.component-product-page-hero-hanger__content {
+  border-top: 1px solid #ffffff;
+  padding: $gu-v-spacing  ($gu-h-spacing / 2);
+  background: gu-colour(garnett-neutral-1);
+  color: #ffffff;
+}
+
+.component-product-page-hero__headline {
+  color: gu-colour(garnett-neutral-7);
+  font-family: $gu-titlepiece;
+  font-weight: 400;
+  line-height: 1;
+  display: block;
+  max-width: 440px;
+  padding: $gu-v-spacing/2  $gu-h-spacing/2;
+  font-size: 30px;
+  @include mq($from: phablet) {
+    font-size: 48px;
+  }
+  @include mq($from: tablet) {
+    margin-bottom: 240px;
+  }
+  @include mq($from: desktop) {
+    font-size: 60px;
+  }
+}

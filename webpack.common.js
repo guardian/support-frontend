@@ -5,6 +5,8 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
+const cssnano = require('cssnano');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
@@ -15,6 +17,13 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     new MiniCssExtractPlugin({
       filename: path.join('stylesheets', cssFilename),
     }),
+    ...(minimizeCss ? [new OptimizeCssAssetsPlugin({
+      cssProcessor: cssnano,
+      cssProcessorPluginOptions: {
+        preset: 'default',
+      },
+      canPrint: true,
+    })] : []),
   ],
 
   context: path.resolve(__dirname, 'assets'),
@@ -28,12 +37,16 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     subscriptionsLandingPageStyles: 'pages/subscriptions-landing/subscriptionsLanding.scss',
     contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
     contributionsLandingPageStyles: 'pages/contributions-landing/contributionsLanding.scss',
-    newContributionsLandingPage: 'pages/contributions-landing/newContributionsLanding.jsx',
-    newContributionsLandingPageStyles: 'pages/contributions-landing/newContributionsLanding.scss',
+    newContributionsLandingPage: 'pages/new-contributions-landing/contributionsLanding.jsx',
+    newContributionsLandingPageStyles: 'pages/new-contributions-landing/contributionsLanding.scss',
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
     digitalSubscriptionLandingPageStyles: 'pages/digital-subscription-landing/digitalSubscriptionLanding.scss',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.jsx',
     digitalSubscriptionCheckoutPageStyles: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.scss',
+    paperSubscriptionLandingPage: 'pages/paper-subscription-landing/paperSubscriptionLandingPage.jsx',
+    weeklySubscriptionLandingPage: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.jsx',
+    premiumTierLandingPage: 'pages/premium-tier-landing/premiumTierLanding.jsx',
+    premiumTierLandingPageStyles: 'pages/premium-tier-landing/premiumTierLanding.scss',
     regularContributionsPage: 'pages/regular-contributions/regularContributions.jsx',
     regularContributionsPageStyles: 'pages/regular-contributions/regularContributions.scss',
     oneoffContributionsPage: 'pages/oneoff-contributions/oneoffContributions.jsx',
@@ -43,10 +56,9 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
-    optimize: 'helpers/tracking/optimize.js',
+    optimizeScript: 'helpers/optimize/optimizeScript.js',
     error404Page: 'pages/error/error404.jsx',
     error500Page: 'pages/error/error500.jsx',
-    errorPageStyles: 'pages/error/error.scss',
     unsupportedBrowserStyles: 'stylesheets/fallback-pages/unsupportedBrowser.scss',
     contributionsRedirectStyles: 'stylesheets/fallback-pages/contributionsRedirect.scss',
   },
@@ -92,14 +104,14 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            options: {
-              minimize: minimizeCss,
-            },
           },
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [pxtorem({ propList: ['*'] }), autoprefixer()],
+              plugins: [
+                pxtorem({ propList: ['*'] }),
+                autoprefixer(),
+              ],
             },
           },
           {

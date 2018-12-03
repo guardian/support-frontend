@@ -11,9 +11,21 @@
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
 @import '~components/leftMarginSection/leftMarginSection';
+@import '~components/checkoutHeading/checkoutHeading';
+@import '~components/checkoutCopy/checkoutCopy';
 @import '~components/customerService/customerService';
+@import '~components/subscriptionFaq/subscriptionFaq';
+@import '~components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 @import '~components/headingBlock/headingBlock';
-@import '~components/subscriptionsThankYou/subscriptionsThankYou';
+@import '~components/returnSection/returnSection';
+@import '~components/productHero/productHero';
+@import '~components/forms/standardFields/input';
+@import '~components/forms/standardFields/select';
+@import '~components/forms/standardFields/button';
+@import '~components/forms/customFields/radioInput';
+@import '~components/forms/formHOCs/withLabel';
+@import '~components/forms/formHOCs/withError';
+@import '~components/forms/formHOCs/withArrow';
 
 
 // ----- Page-Specific Styles ----- //
@@ -23,20 +35,76 @@
 #digital-subscription-checkout-page-us,
 #digital-subscription-checkout-page-au {
 
-  // ----- General
+  // ----- Heading
 
-  .component-left-margin-section__content {
-    overflow-x: hidden;
-    @include mq($from: leftCol) {
-      overflow-x: visible;
+  .component-product-hero {
+    @include mq($until: tablet) {
+      display: none;
     }
   }
 
-  // ----- Apps
+  .component-heading-block {
+    // Makes sure the circle SVGs stay behind the heading.
+    position: relative;
+  }
 
-  .apps-section {
+  // ----- Checkout
+
+  .checkout-content {
     .component-left-margin-section__content {
-      padding: 2px ($gu-h-spacing / 2) 0;
+      box-sizing: border-box;
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .checkout-form {
+    .component-left-margin-section__content {
+      padding-left: $gu-h-spacing / 2;
+      padding-bottom: $gu-v-spacing * 3;
+      border-top: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .checkout-form__heading {
+    @include gu-fontset-body-large;
+
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .component-left-margin-section--free-trial {
+    .component-left-margin-section__content {
+      @include multiline-bottom-border;
+    }
+  }
+
+  .checkout-content__free-trial {
+    @include gu-fontset-body-large;
+    font-style: italic;
+    font-weight: 300;
+    padding-left: $gu-h-spacing / 2;
+    margin-bottom: $gu-v-spacing * 2;
+
+    @include mq($from: mobileLandscape) {
+      width: 460px;
+    }
+  }
+
+  .component-left-margin-section--your-details {
+    .component-left-margin-section__content {
+      border-top: none;
+    }
+  }
+
+
+  // ----- Thank You
+
+  .thank-you-content {
+    // Makes sure the circle SVGs stay behind the heading.
+    position: relative;
+    background-color: #fff;
+
+    .component-left-margin-section__content {
+      padding: 2px ($gu-h-spacing / 2) ($gu-v-spacing * 2);
       box-sizing: border-box;
 
       @include mq($from: tablet) {
@@ -46,19 +114,21 @@
 
     .component-cta-link {
       background-color: transparent;
-      border: 1px solid gu-colour(garnett-neutral-1);
-      height: $cta-height;
+      border: 1px solid gu-colour(garnett-neutral-4);
+      height: $cta-height - 2;
       box-sizing: border-box;
       line-height: $cta-height - 2;
       color: gu-colour(garnett-neutral-1);
       margin-bottom: $gu-v-spacing;
 
       @include mq($from: mobileLandscape) {
-        width: 300px;
+        width: 355px;
       }
 
       &:hover {
         background-color: gu-colour(garnett-neutral-1);
+        border-color: gu-colour(garnett-neutral-1);
+        transition: border-color .3s;
         color: #fff;
 
         .svg-arrow-right-straight {
@@ -72,20 +142,22 @@
         top: 30%;
       }
     }
-  }
 
-  .apps-section__ctas {
-    margin-bottom: $gu-v-spacing * 2;
-
-    @include mq($from: tablet) {
+    .svg-information {
       display: inline-block;
       vertical-align: top;
-      margin-top: $gu-v-spacing;
-      margin-left: $gu-h-spacing;
+      margin-right: 5px;
+    }
+
+  }
+
+  .component-left-margin-section--thank-you-apps {
+    .component-left-margin-section__content {
+      border-top: 1px solid gu-colour(garnett-neutral-4);
     }
   }
 
-  .apps-section__heading {
+  .thank-you-content__heading {
     font-size: 22px;
     line-height: 1.18;
     font-weight: 300;
@@ -93,30 +165,60 @@
 
     @include mq($from: tablet) {
       font-size: 28px;
-      width: 300px;
     }
 
     @include mq($from: desktop) {
       font-size: 36px;
-      width: 250px;
+      width: 470px;
     }
   }
 
-  .apps-section__copy {
-    font-size: 14px;
-    line-height: 1.43;
+  .thank-you-content__subheading {
+    font-size: 20px;
+    line-height: 1.18;
+    font-weight: 300;
     font-family: $gu-headline;
-    color: gu-colour(media-garnett-main-1);
-    margin: $gu-v-spacing 0 ($gu-v-spacing * 2);
+    margin: ($gu-v-spacing * 2) 0 $gu-v-spacing;
 
     @include mq($from: tablet) {
-      display: inline-block;
-      width: 300px;
-      vertical-align: top;
+      font-size: 22px;
+    }
+
+    @include mq($from: desktop) {
+      font-size: 28px;
     }
   }
 
-  .apps-section__strong {
+  .thank-you-content__copy {
+    font-size: 17px;
+    line-height: 1.25;
+    font-family: $gu-headline;
+    color: gu-colour(media-garnett-main-1);
+    margin: $gu-v-spacing 0;
+
+    @include mq($from: phablet) {
+      width: 560px;
+    }
+  }
+
+  .thank-you-content__copy--small {
+    font-family: $gu-text-egyptian-web;
+    color: gu-colour(garnett-neutral-6);
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .thank-you-content__copy--italic {
+    font-style: italic;
+    margin: 0;
+  }
+
+  .thank-you-content__strong {
     font-weight: bold;
   }
+
+  .thank-you-content__link {
+    color: gu-colour(garnett-neutral-6);
+  }
+
 }

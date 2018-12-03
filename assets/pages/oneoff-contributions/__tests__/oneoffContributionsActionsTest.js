@@ -1,16 +1,17 @@
 // @flow
+import type { ErrorReason } from 'helpers/errorReasons';
 import { checkoutError } from '../oneoffContributionsActions';
 
 
 describe('One-off actions', () => {
 
   it('should create an action to flag a checkout error', () => {
-    const message:string = 'This is an error.';
+    const insufficientFunds: ErrorReason = 'insufficient_funds';
     const expectedAction = {
       type: 'CHECKOUT_ERROR',
-      message,
+      errorReason: insufficientFunds,
     };
-    expect(checkoutError(message)).toEqual(expectedAction);
+    expect(checkoutError(insufficientFunds)).toEqual(expectedAction);
   });
 
 });

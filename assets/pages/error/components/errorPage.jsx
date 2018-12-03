@@ -12,15 +12,16 @@ import PageSection from 'components/pageSection/pageSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import { contributionsEmail } from 'helpers/legal';
 
+import '../error.scss';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   errorCode: string,
   headings: string[],
   copy: string,
   reportLink?: boolean,
-};
+|};
 
 
 // ----- Component ----- //

@@ -4,7 +4,10 @@ import controllers._
 import play.api.BuiltInComponentsFromContext
 
 trait Controllers {
-  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth =>
+
+  // scalastyle:off
+  self: AssetsComponents with Services with BuiltInComponentsFromContext with ApplicationConfiguration with ActionBuilders with Assets with GoogleAuth with Monitoring =>
+  // scalastyle:on
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
 
@@ -13,9 +16,13 @@ trait Controllers {
     assetsResolver,
     identityService,
     controllerComponents,
+    appConfig.oneOffStripeConfigProvider,
+    appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
     paymentAPIService,
     stringsConfig,
-    appConfig.switches
+    settingsProvider,
+    appConfig.guardianDomain
   )
 
   lazy val subscriptionsController = new Subscriptions(
@@ -23,7 +30,8 @@ trait Controllers {
     assetsResolver,
     controllerComponents,
     stringsConfig,
-    appConfig.switches
+    settingsProvider,
+    appConfig.supportUrl
   )
 
   lazy val regularContributionsController = new RegularContributions(
@@ -36,8 +44,8 @@ trait Controllers {
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
-    appConfig.switches,
-    appConfig.guardianDomain
+    appConfig.guardianDomain,
+    settingsProvider
   )
 
   lazy val payPalRegularController = new PayPalRegular(
@@ -46,7 +54,7 @@ trait Controllers {
     payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
-    appConfig.switches
+    settingsProvider
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
@@ -56,7 +64,8 @@ trait Controllers {
     controllerComponents,
     paymentAPIService,
     identityService,
-    appConfig.switches
+    settingsProvider,
+    tipMonitoring
   )
 
   lazy val oneOffContributions = new OneOffContributions(
@@ -68,7 +77,7 @@ trait Controllers {
     paymentAPIService,
     authAction,
     controllerComponents,
-    appConfig.switches
+    settingsProvider
   )
 
   lazy val testUsersController = new TestUsersManagement(
@@ -87,7 +96,8 @@ trait Controllers {
   lazy val identityController = new IdentityController(
     identityService,
     controllerComponents,
-    actionRefiners
+    actionRefiners,
+    appConfig.guardianDomain
   )
 
   lazy val directDebitController = new DirectDebit(

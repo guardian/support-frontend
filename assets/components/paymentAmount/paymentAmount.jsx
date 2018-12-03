@@ -14,10 +14,10 @@ const wideClass = 'component-payment-amount--wide-value';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   amount: number,
   currencyId: IsoCurrency,
-};
+|};
 
 
 // ----- Component ----- //

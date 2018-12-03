@@ -17,8 +17,11 @@ import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct,
 import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
 import ophan.thrift.componentEvent.ComponentType
 import services.stepfunctions.StatusResponse
-import switchboard.{PaymentMethodsSwitch, ExperimentSwitch, Group, Segment, SwitchState, Switches}
-import services.{PaymentApiError, PayPalError}
+import admin._
+import models.identity.responses.{SetGuestPasswordResponseCookie, SetGuestPasswordResponseCookies}
+import services._
+import org.joda.time.DateTime
+import models.ZuoraCatalog._
 
 object CirceDecoders {
 
@@ -98,13 +101,14 @@ object CirceDecoders {
 
   implicit val userCodec: Codec[User] = deriveCodec
   implicit val createPaymentMethodStateCodec: Codec[CreatePaymentMethodState] = deriveCodec
-  implicit val switchStateEncode: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
-  implicit val switchStateDecode: Decoder[SwitchState] = deriveDecoder
+  implicit val switchStateEncoder: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
+  implicit val switchStateDecoder: Decoder[SwitchState] = Decoder.decodeString.map(SwitchState.fromString)
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
   implicit val segmentEncoder: Encoder[Segment] = Encoder.encodeString.contramap[Segment](_.toString)
-  implicit val segmentDecoder: Decoder[Segment] = deriveDecoder
+  implicit val segmentDecoder: Decoder[Segment] = Decoder.decodeString.map(Segment.fromString)
   implicit val experimentSwitchCodec: Codec[ExperimentSwitch] = deriveCodec
   implicit val switchesCodec: Codec[Switches] = deriveCodec
+  implicit val settingsCodec: Codec[Settings] = deriveCodec
 
   implicit val statusEncoder: Encoder[StatusResponse] = deriveEncoder
   implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap {
@@ -113,7 +117,11 @@ object CirceDecoders {
   implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
   implicit val checkoutFailureStateCodec: Codec[CheckoutFailureState] = deriveCodec
 
-  private implicit val paypalApiErrorDecoder: Decoder[PayPalError] = deriveDecoder
-  implicit val paymentApiError: Decoder[PaymentApiError] = deriveDecoder
-}
+  implicit val payPalErrorBodyDecoder: Decoder[PayPalError] = deriveDecoder
+  implicit val payPalSuccessDecoder: Decoder[PayPalSuccess] = deriveDecoder
 
+  implicit val dateTimeEncoder: Encoder[DateTime] = Encoder.encodeString.contramap(_.toString)
+  implicit val cookieResponseEncoder: Encoder[SetGuestPasswordResponseCookie] = deriveEncoder
+  implicit val cookiesResponseEncoder: Encoder[SetGuestPasswordResponseCookies] = deriveEncoder
+  implicit val getUserTypeEncoder: Encoder[GetUserTypeResponse] = deriveEncoder
+}

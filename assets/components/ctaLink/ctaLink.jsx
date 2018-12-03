@@ -13,7 +13,7 @@ import type { Node } from 'react';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   text: string,
   accessibilityHint: string,
   url?: ?string,
@@ -22,7 +22,7 @@ type PropTypes = {
   id?: ?string,
   svg?: Node,
   modifierClasses: Array<?string>,
-};
+|};
 
 // ----- Component ----- //
 
@@ -40,7 +40,7 @@ export default function CtaLink(props: PropTypes) {
       tabIndex={props.tabIndex}
       aria-describedby={accessibilityHintId}
     >
-      <span>{props.text}</span>
+      <span className="component-cta-link__text">{props.text}</span>
       {props.svg}
       <p id={accessibilityHintId} className="accessibility-hint">{props.accessibilityHint}</p>
     </a>

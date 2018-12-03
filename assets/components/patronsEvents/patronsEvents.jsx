@@ -7,14 +7,14 @@ import React from 'react';
 import PageSection from 'components/pageSection/pageSection';
 import OtherProduct from 'components/otherProduct/otherProduct';
 
-import { getMemLink } from 'helpers/externalLinks';
-
+import { getMemLink, getPatronsLink } from 'helpers/externalLinks';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   campaignCode?: ?string,
-};
+  context: string,
+|};
 
 
 // ----- Component ----- //
@@ -25,13 +25,15 @@ export default function PatronsEvents(props: PropTypes) {
     <PageSection heading="Other ways you can support us" modifierClass="patrons-events">
       <OtherProduct
         modifierClass="patrons"
-        gridImg="newsroom"
-        imgAlt="newsroom"
+        gridImg="windrushGreyscale"
+        imgAlt="passengers aboard windrush ship"
         heading="Patrons"
-        copy="The Patron tier is for those who want a deeper relationship with the Guardian and its journalists"
+        copy="Support from our Patrons is crucial to ensure that generations to come will be able to enjoy The Guardian."
         ctaText="Find out more"
-        ctaUrl={getMemLink('patrons', props.campaignCode)}
+        ctaUrl={getPatronsLink(props.campaignCode)}
         ctaAccessibilityHint="Find out more about becoming a Patron"
+        imgType="png"
+        context={props.context.concat('-patrons_cta')}
       />
       <OtherProduct
         modifierClass="live-events"
@@ -42,6 +44,7 @@ export default function PatronsEvents(props: PropTypes) {
         ctaText="Find out more"
         ctaUrl={getMemLink('events', props.campaignCode)}
         ctaAccessibilityHint="Find out more about Guardian live events"
+        context={props.context.concat('-live_events_cta')}
       />
     </PageSection>
   );
@@ -53,4 +56,5 @@ export default function PatronsEvents(props: PropTypes) {
 
 PatronsEvents.defaultProps = {
   campaignCode: null,
+  context: 'patrons-events',
 };

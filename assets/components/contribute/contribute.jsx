@@ -13,12 +13,12 @@ import type { Node } from 'react';
 
 // ----- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   copy: string | Node,
   children: Node,
   heading?: string,
   modifierClasses: Array<?string>,
-};
+|};
 
 
 // ----- Component ----- //

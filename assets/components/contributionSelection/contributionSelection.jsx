@@ -11,7 +11,7 @@ import ErrorMessage from 'components/errorMessage/errorMessage';
 import {
   errorMessage as contributionsErrorMessage,
   getContributionTypeClassName,
-  getContributionTypeRadios,
+  contributionTypeRadios,
   getContributionAmountRadios,
   getCustomAmountA11yHint,
 } from 'helpers/contributions';
@@ -21,7 +21,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { currencies, type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
-  Contrib as ContributionType,
+  ContributionType,
   ContributionError,
 } from 'helpers/contributions';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
@@ -41,8 +41,6 @@ type PropTypes = {|
   setCustomAmount: (string, CountryGroupId) => void,
   onKeyPress: Object => void,
   error: ContributionError,
-  oneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneTime' | 'notintest',
-  usOneOffSingleOneTimeTestVariant: 'control' | 'single' | 'once' | 'oneOff' | 'notintest',
   annualTestVariant: AnnualContributionsTestVariant,
 |};
 
@@ -52,21 +50,14 @@ type PropTypes = {|
 function ContributionSelection(props: PropTypes) {
 
   const modifierClassArray = [getContributionTypeClassName(props.contributionType)];
-  if (props.annualTestVariant === 'annual' || props.annualTestVariant === 'annualHigherAmounts') {
-    modifierClassArray.push('annual-test');
-  }
+  modifierClassArray.push('annual-test');
 
   return (
     <div className={classNameWithModifiers('component-contribution-selection', modifierClassArray)}>
       <div className="component-contribution-selection__type">
         <RadioToggle
           name="contribution-type-toggle"
-          radios={getContributionTypeRadios(
-            props.countryGroupId,
-            props.oneOffSingleOneTimeTestVariant,
-            props.usOneOffSingleOneTimeTestVariant,
-            props.annualTestVariant,
-          )}
+          radios={contributionTypeRadios}
           checked={props.contributionType}
           toggleAction={props.setContributionType}
           countryGroupId={props.countryGroupId}

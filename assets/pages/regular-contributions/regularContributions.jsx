@@ -12,28 +12,35 @@ import * as user from 'helpers/user/user';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { routes } from 'helpers/routes';
-import { getAmount, getPaymentMethod } from 'helpers/checkouts';
+import { getAmount, getPaymentMethodFromSession } from 'helpers/checkouts';
 import { parseRegularContributionType } from 'helpers/contributions';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
 import ContributionsCheckoutContainer from './components/contributionsCheckoutContainer';
+import ContributionsGuestCheckoutContainer from './components/contributionsGuestCheckoutContainer';
 import MarketingConsentContainer from './components/marketingConsentContainer';
 import reducer from './regularContributionsReducer';
-import FormFields from './components/formFields';
+import FormFields, { formClassName } from './components/formFields';
 import RegularContributionsPayment from './components/regularContributionsPayment';
-
-
+import { checkIfEmailHasPassword } from './regularContributionsActions';
+import { setCheckoutFormHasBeenSubmitted } from './helpers/checkoutForm/checkoutFormActions';
 // ----- Page Startup ----- //
 
 const contributionType = parseRegularContributionType(getQueryParameter('contribType') || 'MONTHLY');
+const countryGroup = detectCountryGroup();
 
 const store = pageInit(reducer(
-  getAmount(contributionType, detectCountryGroup()),
-  getPaymentMethod(),
+  getAmount(contributionType, countryGroup),
+  getPaymentMethodFromSession(),
   contributionType,
+  countryGroup,
 ), true);
 
 user.init(store.dispatch);
+
+const state = store.getState();
+store.dispatch(checkIfEmailHasPassword(state.page.user.email));
 
 const Loading = () => <div>Loading...</div>;
 
@@ -56,7 +63,17 @@ const router = (
             <ContributionsCheckoutContainer
               contributionType={contributionType}
               form={<FormFields />}
-              payment={<RegularContributionsPayment />}
+              payment={
+                <RegularContributionsPayment
+                  whenUnableToOpen={
+                    () =>
+                      store.dispatch(setCheckoutFormHasBeenSubmitted())
+                  }
+                  canOpen={
+                    () => formIsValid(formClassName)
+                  }
+                />
+              }
             />
           )}
         />
@@ -64,10 +81,12 @@ const router = (
           exact
           path={routes.recurringContribCheckoutGuest}
           render={() => (
-            <ContributionsCheckoutContainer
+            <ContributionsGuestCheckoutContainer
               contributionType={contributionType}
               form={<FormFields />}
-              payment={<RegularContributionsPayment />}
+              payment={
+                <RegularContributionsPayment />
+              }
             />
           )}
         />

@@ -9,18 +9,21 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
-import { type Contrib } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import EmailConfirmation from './emailConfirmation';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
+import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
+import ContributionsSurveySection from '../survey/contributionsSurveySection';
 
 // ---- Types ----- //
 
-type PropTypes = {
-  contributionType: Contrib,
+type PropTypes = {|
+  contributionType: ContributionType,
   directDebit: ?DirectDebit,
+  countryGroupId: CountryGroupId,
   marketingConsent: Node,
-};
+|};
 
 
 // ----- Component ----- //
@@ -39,7 +42,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
       <div className="multiline-divider" />
       <BodyCopy {...props} />
       {props.marketingConsent}
-      <QuestionsContact />
+      <QuestionsContact countryGroupId={props.countryGroupId} />
       <SpreadTheWord />
     </Page>
   );
@@ -50,11 +53,17 @@ export default function ContributionsThankYouPage(props: PropTypes) {
 
 function BodyCopy(props: PropTypes) {
   if (props.contributionType === 'ONE_OFF') {
-    return null;
-  } else if (props.directDebit) {
+    return <ContributionsSurveySection />;
+  }
+  // recurring
+  if (props.directDebit) {
     return (
-      <DirectDebitDetails {...props.directDebit} />
+      <div className="component-direct-debit-details__container">
+        <DirectDebitDetails {...props.directDebit} />
+        <ContributionsSurveySection />
+      </div>
     );
   }
+  // recurring non-DD
   return <EmailConfirmation />;
 }

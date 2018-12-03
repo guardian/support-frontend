@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import type { Settings } from 'helpers/settings';
 import { getVariantsAsString, init as abInit } from '../abtest';
 import type { Participations } from '../abtest';
 
@@ -11,6 +12,9 @@ jest.mock('ophan', () => ({
 
 // ----- Tests ----- //
 
+const emptySettings: Settings = {
+  switches: { experiments: {} },
+};
 
 describe('basic behaviour of init', () => {
 
@@ -38,7 +42,7 @@ describe('basic behaviour of init', () => {
     };
 
     const country = 'GB';
-    const participations: Participations = abInit(country, 'GBPCountries', tests);
+    const participations: Participations = abInit(country, 'GBPCountries', emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'control' };
 
     expect(participations).toEqual(expectedParticipations);
@@ -64,7 +68,7 @@ describe('basic behaviour of init', () => {
     };
 
     const country = 'GB';
-    const participations: Participations = abInit(country, 'GBPCountries', tests);
+    const participations: Participations = abInit(country, 'GBPCountries', emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'variant' };
 
     expect(participations).toEqual(expectedParticipations);
@@ -91,7 +95,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'GB';
     const countryGroupId = 'GBPCountries';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'variant' };
 
     expect(participations).toEqual(expectedParticipations);
@@ -118,7 +122,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'US';
     const countryGroupId = 'UnitedStates';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'notintest' };
 
     expect(participations).toEqual(expectedParticipations);
@@ -148,7 +152,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'US';
     const countryGroupId = 'UnitedStates';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'notintest' };
     const expectedMediaQuery = '(min-width:740px) and (max-width:980px)';
 
@@ -180,7 +184,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'US';
     const countryGroupId = 'UnitedStates';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'notintest' };
     const expectedMediaQuery = '(min-width:740px)';
 
@@ -213,7 +217,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'US';
     const countryGroupId = 'UnitedStates';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'notintest' };
     const expectedMediaQuery = '(min-width:740px)';
 
@@ -245,7 +249,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'US';
     const countryGroupId = 'UnitedStates';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'notintest' };
     const expectedMediaQuery = '(max-width:740px)';
 
@@ -274,7 +278,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'GI';
     const countryGroupId = 'GBPCountries';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'control' };
 
     expect(participations).toEqual(expectedParticipations);
@@ -305,7 +309,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'US';
     const countryGroupId = 'UnitedStates';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'notintest' };
     const expectedMediaQuery = '(min-width:740px)';
 
@@ -342,7 +346,7 @@ describe('basic behaviour of init', () => {
 
     const country = 'GB';
     const countryGroupId = 'GBPCountries';
-    const participations: Participations = abInit(country, countryGroupId, tests);
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
     const expectedParticipations: Participations = { mockTest: 'notintest' };
 
     expect(participations).toEqual(expectedParticipations);
@@ -360,7 +364,7 @@ describe('Correct allocation in a multi test environment', () => {
   US: |  20%   |        60%                |   20%   |
         Test 1         Test 2              Not in Test
 
-  Test 3 is 100% GB, but customSegmentCondition is false
+  Test 3 is 100% GB, but canRun is false
    */
 
   const tests = {
@@ -403,7 +407,7 @@ describe('Correct allocation in a multi test environment', () => {
         },
       },
       isActive: true,
-      customSegmentCondition: () => false,
+      canRun: () => false,
       independent: false,
       seed: 0,
     },
@@ -414,8 +418,8 @@ describe('Correct allocation in a multi test environment', () => {
     document.cookie = 'GU_mvt_id=810000';
     const country = 'GB';
     const countryGroupId = 'GBPCountries';
-    const participations: Participations = abInit(country, countryGroupId, tests);
-    const expectedParticipations: Participations = { mockTest: 'control', mockTest2: 'notintest', mockTest3: 'notintest' };
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    const expectedParticipations: Participations = { mockTest: 'control', mockTest2: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
   });
 
@@ -424,8 +428,8 @@ describe('Correct allocation in a multi test environment', () => {
     document.cookie = 'GU_mvt_id=810000';
     const country = 'US';
     const countryGroupId = 'GBPCountries';
-    const participations: Participations = abInit(country, countryGroupId, tests);
-    const expectedParticipations: Participations = { mockTest: 'notintest', mockTest2: 'notintest', mockTest3: 'notintest' };
+    const participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    const expectedParticipations: Participations = { mockTest: 'notintest', mockTest2: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
   });
 
@@ -434,13 +438,13 @@ describe('Correct allocation in a multi test environment', () => {
     document.cookie = 'GU_mvt_id=510000';
     const country = 'GB';
     const countryGroupId = 'GBPCountries';
-    let participations: Participations = abInit(country, countryGroupId, tests);
-    let expectedParticipations: Participations = { mockTest: 'control', mockTest2: 'notintest', mockTest3: 'notintest' };
+    let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    let expectedParticipations: Participations = { mockTest: 'control', mockTest2: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=510001';
-    participations = abInit(country, countryGroupId, tests);
-    expectedParticipations = { mockTest: 'variant', mockTest2: 'notintest', mockTest3: 'notintest' };
+    participations = abInit(country, countryGroupId, emptySettings, tests);
+    expectedParticipations = { mockTest: 'variant', mockTest2: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
   });
 
@@ -449,15 +453,15 @@ describe('Correct allocation in a multi test environment', () => {
     document.cookie = 'GU_mvt_id=510000';
     const country = 'US';
     const countryGroupId = 'UnitedStates';
-    let participations: Participations = abInit(country, countryGroupId, tests);
-    let expectedParticipations: Participations = { mockTest: 'notintest', mockTest2: 'control', mockTest3: 'notintest' };
+    let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    let expectedParticipations: Participations = { mockTest: 'notintest', mockTest2: 'control' };
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=510001';
-    participations = abInit(country, countryGroupId, tests);
-    expectedParticipations = { mockTest: 'notintest', mockTest2: 'variant', mockTest3: 'notintest' };
+    participations = abInit(country, countryGroupId, emptySettings, tests);
+    expectedParticipations = { mockTest: 'notintest', mockTest2: 'variant' };
     expect(participations).toEqual(expectedParticipations);
-    expect(getVariantsAsString(participations)).toEqual('mockTest=notintest; mockTest2=variant; mockTest3=notintest');
+    expect(getVariantsAsString(participations)).toEqual('mockTest=notintest; mockTest2=variant');
   });
 
   it('It correctly segments a user who has a cookie between 0 and 20% in GB', () => {
@@ -466,13 +470,13 @@ describe('Correct allocation in a multi test environment', () => {
     const country = 'GB';
     const countryGroupId = 'GBPCountries';
 
-    let participations: Participations = abInit(country, countryGroupId, tests);
-    let expectedParticipations: Participations = { mockTest: 'control', mockTest2: 'notintest', mockTest3: 'notintest' };
+    let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    let expectedParticipations: Participations = { mockTest: 'control', mockTest2: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=150001';
-    participations = abInit(country, countryGroupId, tests);
-    expectedParticipations = { mockTest: 'variant', mockTest2: 'notintest', mockTest3: 'notintest' };
+    participations = abInit(country, countryGroupId, emptySettings, tests);
+    expectedParticipations = { mockTest: 'variant', mockTest2: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
   });
 
@@ -482,13 +486,13 @@ describe('Correct allocation in a multi test environment', () => {
     const country = 'US';
     const countryGroupId = 'UnitedStates';
 
-    let participations: Participations = abInit(country, countryGroupId, tests);
-    let expectedParticipations: Participations = { mockTest: 'control', mockTest2: 'notintest', mockTest3: 'notintest' };
+    let participations: Participations = abInit(country, countryGroupId, emptySettings, tests);
+    let expectedParticipations: Participations = { mockTest: 'control', mockTest2: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
 
     document.cookie = 'GU_mvt_id=150001';
-    participations = abInit(country, 'GBPCountries', tests);
-    expectedParticipations = { mockTest: 'variant', mockTest2: 'notintest', mockTest3: 'notintest' };
+    participations = abInit(country, 'GBPCountries', emptySettings, tests);
+    expectedParticipations = { mockTest: 'variant', mockTest2: 'notintest' };
     expect(participations).toEqual(expectedParticipations);
   });
 

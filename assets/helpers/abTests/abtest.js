@@ -9,7 +9,8 @@ import seedrandom from 'seedrandom';
 import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Settings } from 'helpers/settings';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import { tests } from './abtestDefinitions';
 
@@ -64,7 +65,7 @@ export type Test = {|
   variants: string[],
   audiences: Audiences,
   isActive: boolean,
-  customSegmentCondition?: () => boolean,
+  canRun?: () => boolean,
   independent: boolean,
   seed: number,
 |};
@@ -198,10 +199,12 @@ function getParticipations(
       return;
     }
 
+    if (test.canRun && !test.canRun()) {
+      return;
+    }
+
     if (testId in currentParticipation) {
       participations[testId] = currentParticipation[testId];
-    } else if (test.customSegmentCondition && !test.customSegmentCondition()) {
-      participations[testId] = notintest;
     } else if (userInTest(test.audiences, mvtId, country, countryGroupId)) {
       participations[testId] = assignUserToVariant(mvtId, test);
     } else {
@@ -229,12 +232,17 @@ const trackABOphan = (participations: Participations, complete: boolean): void =
   });
 };
 
-const init = (country: IsoCountry, countryGroupId: CountryGroupId, abTests: Tests = tests): Participations => {
-
+const init = (
+  country: IsoCountry,
+  countryGroupId: CountryGroupId,
+  settings: Settings,
+  abTests: Tests = tests,
+): Participations => {
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
+
   trackABOphan(participations, false);
 
   return participations;

@@ -19,25 +19,35 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
 
   def logIn(): Unit = clickOn(loginButton)
 
-  def acceptPayment(): Unit = clickOn(agreeAndPay)
+  def acceptPayment(): Unit = {
+    pageHasElement(agreeAndPay)
+    clickOn(agreeAndPay)
+  }
 
-  def payPalHasPaymentSummary(): Boolean = pageHasElement(agreeAndPay)
+  def payPalSummaryHasLoaded(): Boolean = {
+    pageDoesNotHaveElement(id("preloaderSpinner"))
+    pageDoesNotHaveElement(id("spinner"))
+    pageHasElement(agreeAndPay)
+    elementIsClickable(agreeAndPay)
+  }
 
   def payPalSummaryHasCorrectDetails(expectedCurrencyAndAmount: String): Boolean = elementHasText(paymentAmount, expectedCurrencyAndAmount)
 
   def initialPageHasLoaded: Boolean = {
+    pageDoesNotHaveElement(id("preloaderSpinner"))
+    pageDoesNotHaveElement(id("spinner"))
     pageHasUrlOrElement(guestRegistrationUrlFragment, emailInput)
   }
 
   def loginContainerHasLoaded: Boolean = {
+    pageDoesNotHaveElement(id("preloaderSpinner"))
+    pageDoesNotHaveElement(id("spinner"))
     pageHasElement(emailInput)
-  }
-
-  def switchToPayPalPage(): Unit = {
-    switchFrame(container)
+    elementIsClickable(emailInput)
   }
 
   def acceptPayPalPaymentPage(): Unit = {
+    pageDoesNotHaveElement(id("preloaderSpinner"))
     pageDoesNotHaveElement(id("spinner"))
     acceptPayment()
   }
@@ -47,6 +57,7 @@ class PayPalCheckout(implicit val webDriver: WebDriver) extends Browser {
   }
 
   def acceptPayPalPaymentPopUp(): Unit = {
+    pageDoesNotHaveElement(id("preloaderSpinner"))
     pageDoesNotHaveElement(id("spinner"))
     acceptPayment()
     switchToParentWindow()

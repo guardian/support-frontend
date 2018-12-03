@@ -1,0 +1,14 @@
+@import './formFields';
+
+.component-input:not([type="radio"]) {
+  @include form-field;
+
+  min-height: 38px;
+  padding-left: 12px;
+  padding-right: 12px;
+  width: calc(100vw - 46px);
+
+  @include mq($from: mobileMedium) {
+    width: 314px;
+  }
+}

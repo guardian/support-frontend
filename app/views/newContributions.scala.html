@@ -1,0 +1,70 @@
+@import assets.AssetsResolver
+@import com.gu.identity.play.IdUser
+@import com.gu.support.config._
+@import helper.CSRF
+@import com.gu.i18n.Currency.AUD
+@import admin.Settings
+@(
+  title: String,
+  id: String,
+  js: String,
+  css: String,
+  description: Option[String],
+  oneOffDefaultStripeConfig: StripeConfig,
+  oneOffUatStripeConfig: StripeConfig,
+  regularDefaultStripeConfig: StripeConfig,
+  regularUatStripeConfig: StripeConfig,
+  regularDefaultPayPalConfig: PayPalConfig,
+  regularUatPayPalConfig: PayPalConfig,
+  paymentApiStripeEndpoint: String,
+  paymentApiPayPalEndpoint: String,
+  idUser: Option[IdUser]
+)(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
+
+@scripts = {
+  <script type="text/javascript">
+    window.guardian = window.guardian || {};
+    @idUser.map { user =>
+      window.guardian.user = {
+        id: "@user.id",
+        email: "@user.primaryEmailAddress",
+        @user.publicFields.displayName.map { displayName =>
+          displayName: "@displayName",
+        }
+        @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
+          firstName: "@firstName",
+          lastName: "@lastName",
+        }
+      };
+    };
+    window.guardian.stripeKeyDefaultCurrencies = {
+      ONE_OFF: {
+        default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
+        uat: "@oneOffUatStripeConfig.forCurrency(None).publicKey"
+      },
+      REGULAR: {
+        default: "@regularDefaultStripeConfig.forCurrency(None).publicKey",
+        uat: "@regularUatStripeConfig.forCurrency(None).publicKey"
+      }
+    };
+    window.guardian.stripeKeyAustralia = {
+      ONE_OFF: {
+        default: "@oneOffDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+        uat: "@oneOffUatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      },
+      REGULAR: {
+        default: "@regularDefaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+        uat: "@regularUatStripeConfig.forCurrency(Some(AUD)).publicKey"
+      }
+    };
+    window.guardian.payPalEnvironment = {
+      default: "@regularDefaultPayPalConfig.payPalEnvironment",
+      uat: "@regularUatPayPalConfig.payPalEnvironment"
+    };
+    window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
+    window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
+    window.guardian.csrf = { token: "@CSRF.getToken.value" };
+  </script>
+}
+
+@main(title = title, scripts = scripts, mainJsBundle = js, description = description, mainId = id, mainStyleBundle = css)

@@ -6,98 +6,69 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import { Redirect } from 'react-router';
-
 import { routes } from 'helpers/routes';
 import StripePopUpButton from 'components/paymentButtons/stripePopUpButton/stripePopUpButton';
-import ErrorMessage from 'components/errorMessage/errorMessage';
-
-import { validateEmailAddress } from 'helpers/utilities';
-
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { Status } from 'helpers/switch';
-
-import { checkoutError, type Action } from '../oneoffContributionsActions';
+import type { Status } from 'helpers/settings';
+import SvgCreditCard from 'components/svgs/creditCard';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import type { ErrorReason } from 'helpers/errorReasons';
+import { formIsValid } from 'helpers/checkoutForm/checkoutForm';
+import { type Action as CheckoutAction, setCheckoutFormHasBeenSubmitted } from '../helpers/checkoutForm/checkoutFormActions';
 import postCheckout from '../helpers/ajax';
-
+import { type State } from '../oneOffContributionsReducer';
+import { formClassName } from './formFields';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   dispatch: Function,
   email: string,
-  error: ?string,
-  areAnyRequiredFieldsEmpty: boolean,
+  errorReason: ?ErrorReason,
   amount: number,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  checkoutError: (?string) => void,
   abParticipations: Participations,
   currencyId: IsoCurrency,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
   stripeSwitchStatus: Status,
   paymentComplete: boolean,
+  optimizeExperiments: OptimizeExperiments,
+  setCheckoutFormHasBeenSubmitted: () => void,
 |};
 
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state) {
+
+function mapStateToProps(state: State) {
   return {
     isTestUser: state.page.user.isTestUser || false,
     isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
     email: state.page.user.email,
-    error: state.page.oneoffContrib.error,
+    errorReason: state.page.oneoffContrib.errorReason,
     areAnyRequiredFieldsEmpty: !state.page.user.email || !state.page.user.fullName,
     amount: state.page.oneoffContrib.amount,
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     abParticipations: state.common.abParticipations,
     currencyId: state.common.internationalisation.currencyId,
-    stripeSwitchStatus: state.common.switches.oneOffPaymentMethods.stripe,
+    stripeSwitchStatus: state.common.settings.switches.oneOffPaymentMethods.stripe,
     paymentComplete: state.page.oneoffContrib.paymentComplete || false,
+    optimizeExperiments: state.common.optimizeExperiments,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>) {
+function mapDispatchToProps(dispatch: Dispatch<CheckoutAction>) {
   return {
     dispatch,
-    checkoutError: (message: ?string) => {
-      dispatch(checkoutError(message));
+    setCheckoutFormHasBeenSubmitted: () => {
+      dispatch(setCheckoutFormHasBeenSubmitted());
     },
   };
 }
-
-// ----- Functions ----- //
-
-// If the form is valid, calls the given callback, otherwise sets an error.
-function formValidation(
-  areAnyRequiredFieldsEmpty: boolean,
-  validEmail: boolean,
-  error: ?string => void,
-): Function {
-
-  return (): boolean => {
-
-    if (!areAnyRequiredFieldsEmpty && validEmail) {
-      if (error) {
-        error(null);
-      }
-      return true;
-    }
-
-    if (error) {
-      if (areAnyRequiredFieldsEmpty) {
-        error('Please fill in all the fields above.');
-      } else {
-        error('Please fill in a valid email address.');
-      }
-    }
-    return false;
-  };
-
-}
-
 
 // ----- Component ----- //
 
@@ -109,32 +80,29 @@ function formValidation(
  * You should not use context for other purposes. Please use redux.
  */
 function OneoffContributionsPayment(props: PropTypes, context) {
-
   return (
     <section className="oneoff-contribution-payment">
       { props.paymentComplete ? <Redirect to={{ pathname: routes.oneOffContribThankyou }} /> : null }
-      <ErrorMessage message={props.error} />
+      <GeneralErrorMessage errorReason={props.errorReason} />
       <StripePopUpButton
         email={props.email}
-        callback={postCheckout(
+        onPaymentAuthorisation={postCheckout(
           props.abParticipations,
           props.dispatch,
           props.amount,
           props.currencyId,
           props.referrerAcquisitionData,
           context.store.getState,
+          props.optimizeExperiments,
         )}
-        canOpen={formValidation(
-          props.areAnyRequiredFieldsEmpty,
-          validateEmailAddress(props.email),
-          props.checkoutError,
-        )}
+        canOpen={() => formIsValid(formClassName)}
+        whenUnableToOpen={() => props.setCheckoutFormHasBeenSubmitted()}
         currencyId={props.currencyId}
         isTestUser={props.isTestUser}
         isPostDeploymentTestUser={props.isPostDeploymentTestUser}
         amount={props.amount}
         switchStatus={props.stripeSwitchStatus}
-        disable={false}
+        svg={<SvgCreditCard />}
       />
     </section>
   );

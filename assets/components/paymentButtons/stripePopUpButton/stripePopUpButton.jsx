@@ -2,34 +2,34 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
-
-import SvgCreditCard from 'components/svgs/creditCard';
+import React, { type Node } from 'react';
 import Switchable from 'components/switchable/switchable';
 import PaymentError from 'components/switchable/errorComponents/paymentError';
-import type { Status } from 'helpers/switch';
+import type { Status } from 'helpers/settings';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
 import {
   setupStripeCheckout,
   openDialogBox,
 } from 'helpers/paymentIntegrations/stripeCheckout';
-import { classNameWithModifiers } from 'helpers/utilities';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+
 
 // ---- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   amount: number,
-  callback: (token: string) => Promise<*>,
+  onPaymentAuthorisation: StripeAuthorisation => void,
   closeHandler: () => void,
   currencyId: IsoCurrency,
   email: string,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
+  whenUnableToOpen: () => void,
   canOpen: () => boolean,
   switchStatus: Status,
-  disable: boolean
+  svg: Node,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -51,39 +51,42 @@ const StripePopUpButton = (props: PropTypes) => (
   />
 );
 
-
 // ----- Auxiliary Components ----- //
 
 function Button(props: PropTypes) {
 
+  const tokenToAuthorisation = (token: string): StripeAuthorisation => ({
+    paymentMethod: 'Stripe',
+    token,
+  });
+
+  const onPaymentAuthorisation = (token: string): void => {
+    props.onPaymentAuthorisation(tokenToAuthorisation(token));
+  };
+
   if (!isStripeSetup()) {
-    setupStripeCheckout(props.callback, props.closeHandler, props.currencyId, props.isTestUser);
+    setupStripeCheckout(onPaymentAuthorisation, props.closeHandler, props.currencyId, props.isTestUser);
   }
 
   const onClick = () => {
     // Don't open Stripe Checkout for automated tests, call the backend immediately
     if (props.isPostDeploymentTestUser) {
-      const testTokenId = 'tok_visa';
-      props.callback(testTokenId);
-    } else if (props.canOpen && props.canOpen()) {
+      onPaymentAuthorisation('tok_visa');
+    } else if (props.canOpen()) {
       storage.setSession('paymentMethod', 'Stripe');
       openDialogBox(props.amount, props.email);
+    } else {
+      props.whenUnableToOpen();
     }
   };
-
-  const baseClass = 'component-stripe-pop-up-button';
-  const className: string = props.disable
-    ? classNameWithModifiers(baseClass, ['disable'])
-    : baseClass;
 
   return (
     <button
       id="qa-pay-with-card"
-      className={className}
+      className="component-stripe-pop-up-button"
       onClick={onClick}
-      disabled={props.disable}
     >
-      Pay with debit/credit card <SvgCreditCard />
+      Pay with debit/credit card {props.svg}
     </button>
   );
 
@@ -93,8 +96,9 @@ function Button(props: PropTypes) {
 // ----- Default Props ----- //
 
 StripePopUpButton.defaultProps = {
-  canOpen: () => true,
   closeHandler: () => {},
+  canOpen: () => true,
+  whenUnableToOpen: () => undefined,
   switchStatus: 'On',
 };
 

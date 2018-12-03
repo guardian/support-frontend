@@ -8,11 +8,12 @@ import CtaLink from 'components/ctaLink/ctaLink';
 import GridImage from 'components/gridImage/gridImage';
 
 import { classNameWithModifiers } from 'helpers/utilities';
-
+import type { ImageType } from 'helpers/theGrid';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 // ----- Props ----- //
 
-type PropTypes = {
+type PropTypes = {|
   modifierClass?: string,
   gridImg: string,
   imgAlt: string,
@@ -21,21 +22,23 @@ type PropTypes = {
   ctaText: string,
   ctaUrl: string,
   ctaAccessibilityHint: string,
-};
+  imgType?: ImageType,
+  context: string,
+|};
 
 
 // ----- Component ----- //
 
 export default function OtherProduct(props: PropTypes) {
-
   return (
     <div className={classNameWithModifiers('component-other-product', [props.modifierClass])}>
       <div className="component-other-product__image">
         <GridImage
           gridId={props.gridImg}
-          srcSizes={[1000, 500, 140]}
+          srcSizes={[500, 140]}
           sizes="(max-width: 480px) 90vw, (max-width: 660px) 400px, 270px"
           altText={props.imgAlt}
+          imgType={props.imgType}
         />
       </div>
       <h2 className="component-other-product__heading">{props.heading}</h2>
@@ -44,6 +47,7 @@ export default function OtherProduct(props: PropTypes) {
         text={props.ctaText}
         url={props.ctaUrl}
         accessibilityHint={props.ctaAccessibilityHint}
+        onClick={sendClickedEvent(props.context.concat('-cta_link'))}
       />
     </div>
   );
@@ -55,4 +59,6 @@ export default function OtherProduct(props: PropTypes) {
 
 OtherProduct.defaultProps = {
   modifierClass: '',
+  imgType: 'jpg',
+  context: 'component-other-product',
 };

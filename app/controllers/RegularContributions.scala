@@ -2,12 +2,14 @@ package controllers
 
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.implicits._
 import codecs.CirceDecoders.statusEncoder
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
+import config.Configuration.GuardianDomain
 import cookies.RecurringContributionCookie
 import io.circe.syntax._
 import lib.PlayImplicits._
@@ -16,9 +18,8 @@ import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
-import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient}
+import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient, StatusResponse}
 import services.{IdentityService, MembersDataService, TestUserService}
-import switchboard.Switches
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,16 +34,15 @@ class RegularContributions(
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
-    switches: Switches,
-    guardianDomain: String
-)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe {
+    guardianDomain: GuardianDomain,
+    settingsProvider: SettingsProvider
+)(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
-  implicit val ar = assets
-  implicit val sw = switches
+  implicit val a: AssetsResolver = assets
 
-  def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: WrappedRequest[AnyContent]): Result =
+  def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: RequestHeader, settings: Settings): Result = {
     Ok(recurringContributions(
       title = "Support the Guardian | Recurring Contributions",
       id = "regular-contributions-page",
@@ -54,8 +54,9 @@ class RegularContributions(
       uatStripeConfig = stripeConfigProvider.get(true),
       payPalConfig = payPalConfigProvider.get(uatMode)
     ))
+  }
 
-  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: WrappedRequest[AnyContent]): Future[Result] =
+  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: RequestHeader, settings: Settings): Future[Result] =
     identityService.getUser(user).semiflatMap { fullUser =>
       isRegularContributor(user.credentials) map {
         case Some(true) =>
@@ -70,7 +71,7 @@ class RegularContributions(
       InternalServerError
     }
 
-  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent]): Future[Result] = {
+  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent], settings: Settings): Future[Result] = {
     val uatMode = testUsers.isTestUser(request)
     Future.successful(
       monthlyContributionsPage(None, uatMode)
@@ -79,16 +80,14 @@ class RegularContributions(
 
   def displayFormAuthenticated(): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
-      displayFormWithUser(request.user)
+      implicit val settings: Settings = settingsProvider.settings()
+      displayFormWithUser(request.user).map(_.withSettingsSurrogateKey)
     }
 
   def displayFormMaybeAuthenticated(): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
-      request.user.fold {
-        displayFormWithoutUser()
-      } {
-        user => displayFormWithUser(user)
-      }
+      implicit val settings: Settings = settingsProvider.settings()
+      request.user.fold(displayFormWithoutUser())(displayFormWithUser).map(_.withSettingsSurrogateKey)
     }
 
   def status(jobId: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
@@ -115,7 +114,7 @@ class RegularContributions(
 
     val result = for {
       user <- identityService.getUser(fullUser)
-      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
+      response <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
     } yield response
 
     result.fold(
@@ -132,19 +131,20 @@ class RegularContributions(
 
   private def createContributorAndUser()(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]) = {
     val result = for {
-      userId <- identityService.getOrCreateUserIdFromEmail(request.body.email)
-      user <- identityService.getUser(IdMinimalUser(userId, None))
-      response <- client.createContributor(request.body, contributor(user, request.body), request.uuid).leftMap(_.toString)
-    } yield response
+      userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email)
+      user <- identityService.getUser(IdMinimalUser(userIdWithOptionalToken.userId, None))
+      response <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+    } yield StatusResponse.fromStatusResponseAndToken(response, userIdWithOptionalToken.guestAccountRegistrationToken)
 
     result.fold(
       { error =>
         SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.body.email}, due to $error")
         InternalServerError
       },
-      response =>
+      response => {
         Accepted(response.asJson)
           .withCookies(RecurringContributionCookie.create(guardianDomain, request.body.contribution.billingPeriod))
+      }
 
     )
   }

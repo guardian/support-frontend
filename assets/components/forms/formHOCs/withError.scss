@@ -1,0 +1,13 @@
+.component-error {
+  display: block;
+  width: calc(100vw - 36px);
+  background-color: transparentize(gu-colour(news-garnett-media-main-1), 0.7);
+  font-size: 16px;
+  font-family: $gu-text-sans-web;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  @include mq($from: mobileMedium) {
+    width: 324px;
+  }
+}

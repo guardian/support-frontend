@@ -8,10 +8,11 @@ import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
+
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
-import switchboard.Switches
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 
 import scala.concurrent.ExecutionContext
 
@@ -21,13 +22,12 @@ class PayPalRegular(
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
-    switches: Switches
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe {
+    settingsProvider: SettingsProvider
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 
-  implicit val assetsResolver = assets
-  implicit val sw = switches
+  implicit val a: AssetsResolver = assets
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>
@@ -37,15 +37,21 @@ class PayPalRegular(
         returnUrl = routes.PayPalRegular.returnUrl().absoluteURL(secure = true),
         cancelUrl = routes.PayPalRegular.cancelUrl().absoluteURL(secure = true)
       )(paypalBillingDetails)
-    }.map { response =>
-      Ok(Token(response).asJson)
+    }.map { maybeString =>
+      maybeString
+        .map(s => Ok(Token(s).asJson))
+        .getOrElse(BadRequest("We were unable to set up a payment for this request (missing PayPal token)"))
     }
   }
 
   def createAgreement: Action[Token] = maybeAuthenticatedAction().async(circe.json[Token]) { implicit request =>
     withPaypalServiceForRequest(request) { service =>
       service.createBillingAgreement(request.body)
-    }.map(token => Ok(Token(token).asJson))
+    }.map { maybeString =>
+      maybeString
+        .map(s => Ok(Token(s).asJson))
+        .getOrElse(BadRequest("We were unable to create an agreement for this request (missing PayPal token)"))
+    }
   }
 
   private def withPaypalServiceForRequest[T](request: CustomActionBuilders.OptionalAuthRequest[_])(fn: PayPalNvpService => T): T = {
@@ -57,24 +63,26 @@ class PayPalRegular(
   // The endpoint corresponding to the PayPal return url, hit if the user is
   // redirected and needs to come back.
   def returnUrl: Action[AnyContent] = PrivateAction { implicit request =>
+    implicit val settings: Settings = settingsProvider.settings()
     SafeLogger.error(scrub"User hit the PayPal returnUrl.")
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
-    ))
+    )).withSettingsSurrogateKey
   }
 
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
   // redirected and the payment fails.
   def cancelUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
+    implicit val settings: Settings = settingsProvider.settings()
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",
       "payPalErrorPage.js",
       "payPalErrorPageStyles.css"
-    ))
+    )).withSettingsSurrogateKey
   }
 }

@@ -5,8 +5,11 @@
 import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
+import { formInputs } from 'helpers/checkoutForm/checkoutForm';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { formClassName } from '../../pages/regular-contributions/components/formFields';
+
 
 // ----- Functions ----- //
 
@@ -86,11 +89,13 @@ function setup(
   amount: number,
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  callback: (token: string) => Promise<*>,
+  onPaymentAuthorisation: string => void,
+  canOpen: () => boolean,
+  whenUnableToOpen: () => void,
 ): Promise<Object> {
 
   const handleBaId = (baid: Object) => {
-    callback(baid.token);
+    onPaymentAuthorisation(baid.token);
   };
 
   const onAuthorize = (data) => {
@@ -101,12 +106,42 @@ function setup(
       });
   };
 
+  function addFormChangeListeners(handler: () => void) {
+    formInputs(formClassName).forEach(input => input.addEventListener('change', handler));
+  }
+
+  function toggleButton(actions): void {
+    return canOpen() ? actions.enable() : actions.disable();
+  }
+
   const payPalOptions: Object = {
     env: window.guardian.payPalEnvironment,
-    style: { color: 'blue', size: 'responsive' },
+    style: {
+      color: 'blue',
+      size: 'responsive',
+      label: 'pay',
+      layout: 'horizontal',
+      fundingicons: false,
+    },
 
     // Defines whether user sees 'Agree and Continue' or 'Agree and Pay now' in overlay.
     commit: true,
+
+    validate(actions) {
+      toggleButton(actions);
+
+      addFormChangeListeners(() => toggleButton(actions));
+    },
+
+    onClick() {
+      if (!canOpen()) {
+        whenUnableToOpen();
+      }
+    },
+
+    funding: {
+      disallowed: [window.paypal.FUNDING.CREDIT],
+    },
 
     // This function is called when user clicks the PayPal button.
     payment: setupPayment(amount, currencyId, csrf),

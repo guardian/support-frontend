@@ -3,8 +3,11 @@ package services
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
+import models.identity.UserIdWithGuestAccountToken
+import models.identity.responses.SetGuestPasswordResponseCookies
 import monitoring.SafeLogger
 import play.api.mvc.RequestHeader
+import org.joda.time.DateTime
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -22,7 +25,19 @@ class StubIdentityService extends IdentityService {
     Future.successful(true)
   }
 
-  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, String] = {
-    EitherT.rightT[Future, String]("123456")
+  def setPasswordGuest(
+    password: String,
+    guestAccountRegistrationToken: String
+  )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies] = {
+    SafeLogger.info("Stubbed identity service active. Returning true (Successful response from Identity Consent API) ")
+    EitherT.rightT[Future, String](SetGuestPasswordResponseCookies(DateTime.now(), List.empty))
+  }
+
+  def getUserType(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, GetUserTypeResponse] = {
+    EitherT.rightT[Future, String](GetUserTypeResponse("guest"))
+  }
+
+  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
+    EitherT.rightT[Future, String](UserIdWithGuestAccountToken("123456", None))
   }
 }

@@ -6,19 +6,21 @@
 import { routes } from 'helpers/routes';
 import { getOphanIds } from 'helpers/tracking/acquisitions';
 import type { Dispatch } from 'redux';
-import type { BillingPeriod, Contrib } from 'helpers/contributions';
+import type { BillingPeriod, ContributionType } from 'helpers/contributions';
 import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
-import { participationsToAcquisitionABTest } from 'helpers/tracking/acquisitions';
+import { getSupportAbTests } from 'helpers/tracking/acquisitions';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { RegularCheckoutCallback } from 'helpers/checkouts';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { ErrorReason } from 'helpers/errorReasons';
 import trackConversion from 'helpers/tracking/conversions';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { PaymentMethod } from 'helpers/checkouts';
-import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor } from '../regularContributionsActions';
+import type { PaymentMethod } from 'helpers/contributions';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
 
 // ----- Setup ----- //
 
@@ -34,7 +36,7 @@ type ContributionRequest = {
   billingPeriod: BillingPeriod,
 };
 
-type PaymentFieldName = 'baid' | 'stripeToken' | 'directDebitData';
+type PaymentFieldName = 'baid' | 'stripeToken' | 'directDebitData' | 'none';
 
 type PayPalDetails = {|
   'baid': string
@@ -60,8 +62,18 @@ type RegularContribFields = {|
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
-  email: ?string
+  email: ?string,
 |};
+
+// https://github.com/guardian/support-models/blob/master/src/main/scala/com/gu/support/workers/model/Status.scala
+type Status = 'success' | 'failure' | 'pending';
+
+type StatusResponse = {|
+  status: Status,
+  trackingUri: string,
+  failureReason: ErrorReason,
+  guestAccountCreationToken?: string
+|}
 
 // ----- Functions ----- //
 
@@ -74,41 +86,29 @@ const paymentMethodToPaymentFieldMap = {
   DirectDebit: 'directDebitData',
   PayPal: 'baid',
   Stripe: 'stripeToken',
+  None: 'none',
 };
 
 const getPaymentFields =
-  (
-    token?: string,
-    accountNumber?: string,
-    sortCode?: string,
-    accountHolderName?: string,
-    paymentFieldName: string,
-  ): ?(PayPalDetails | StripeDetails | DirectDebitDetails
-    ) => {
+  (token: PaymentAuthorisation): ?(PayPalDetails | StripeDetails | DirectDebitDetails) => {
     let response = null;
-    switch (paymentFieldName) {
-      case 'baid':
-        if (token) {
-          response = {
-            [paymentFieldName]: token,
-          };
-        }
+    switch (token.paymentMethod) {
+      case 'PayPal':
+        response = {
+          baid: token.token,
+        };
         break;
-      case 'stripeToken':
-        if (token) {
-          response = {
-            [paymentFieldName]: token,
-          };
-        }
+      case 'Stripe':
+        response = {
+          stripeToken: token.token,
+        };
         break;
-      case 'directDebitData':
-        if (accountHolderName && sortCode && accountNumber) {
-          response = {
-            accountHolderName,
-            sortCode,
-            accountNumber,
-          };
-        }
+      case 'DirectDebit':
+        response = {
+          accountHolderName: token.accountHolderName,
+          sortCode: token.sortCode,
+          accountNumber: token.accountNumber,
+        };
         break;
       default:
         response = null;
@@ -120,16 +120,14 @@ const getPaymentFields =
 function requestData(
   abParticipations: Participations,
   amount: number,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   currency: IsoCurrency,
   csrf: CsrfState,
   paymentFieldName: PaymentFieldName,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-  token?: string,
-  accountNumber?: string,
-  sortCode?: string,
-  accountHolderName?: string,
+  paymentAuthorisation: PaymentAuthorisation,
+  optimizeExperiments: OptimizeExperiments,
 ) {
 
   const { user } = getState().page;
@@ -143,14 +141,8 @@ function requestData(
   }
 
   const ophanIds: OphanIds = getOphanIds();
-  const supportAbTests = participationsToAcquisitionABTest(abParticipations);
-  const paymentFields = getPaymentFields(
-    token,
-    accountNumber,
-    sortCode,
-    accountHolderName,
-    paymentFieldName,
-  );
+  const supportAbTests = getSupportAbTests(abParticipations, optimizeExperiments);
+  const paymentFields = getPaymentFields(paymentAuthorisation);
 
   if (!paymentFields) {
     return Promise.resolve({
@@ -247,12 +239,16 @@ function handleStatus(
 ) {
 
   if (response.ok) {
-    response.json().then((status) => {
-      trackingURI = status.trackingUri;
+    response.json().then((statusResponse: StatusResponse) => {
+      trackingURI = statusResponse.trackingUri;
 
-      switch (status.status) {
+      if (statusResponse.guestAccountCreationToken) {
+        dispatch(setGuestAccountCreationToken(statusResponse.guestAccountCreationToken));
+      }
+
+      switch (statusResponse.status) {
         case 'failure':
-          dispatch(checkoutError(status.message));
+          dispatch(checkoutError(statusResponse.failureReason));
           break;
         case 'success':
           trackConversion(participations, routes.recurringContribThankyou);
@@ -265,7 +261,7 @@ function handleStatus(
   } else if (trackingURI) {
     delayedStatusPoll(dispatch, csrf, referrerAcquisitionData, paymentMethod, participations);
   } else {
-    dispatch(checkoutError());
+    dispatch(checkoutError('unknown'));
   }
 }
 
@@ -274,19 +270,14 @@ function postCheckout(
   amount: number,
   csrf: CsrfState,
   currencyId: IsoCurrency,
-  contributionType: Contrib,
+  contributionType: ContributionType,
   dispatch: Dispatch<*>,
   paymentMethod: PaymentMethod,
   referrerAcquisitionData: ReferrerAcquisitionData,
   getState: Function,
-): RegularCheckoutCallback {
-  return (
-    token?: string,
-    accountNumber?: string,
-    sortCode?: string,
-    accountHolderName?: string,
-  ) => {
-
+  optimizeExperiments: OptimizeExperiments,
+): PaymentAuthorisation => void {
+  return (paymentAuthorisation: PaymentAuthorisation) => {
     pollCount = 0;
     dispatch(creatingContributor());
 
@@ -299,13 +290,11 @@ function postCheckout(
       paymentMethodToPaymentFieldMap[paymentMethod],
       referrerAcquisitionData,
       getState,
-      token,
-      accountNumber,
-      sortCode,
-      accountHolderName,
+      paymentAuthorisation,
+      optimizeExperiments,
     );
 
-    return fetch(routes.recurringContribCreate, request).then((response) => {
+    fetch(routes.recurringContribCreate, request).then((response) => {
       handleStatus(
         response,
         dispatch,

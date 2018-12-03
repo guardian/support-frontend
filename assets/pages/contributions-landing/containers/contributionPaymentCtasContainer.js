@@ -23,7 +23,6 @@ function mapStateToProps(state: State) {
     currencyId: state.common.internationalisation.currencyId,
     isDisabled: !!state.page.selection.error,
     error: state.page.payPal.error,
-    isGuestCheckout: state.common.abParticipations.recurringGuestCheckout === 'guest',
   };
 
 }
