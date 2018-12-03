@@ -17,10 +17,6 @@
   csrf: Option[String] = None
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
 
-@mapToDataset(data: Map[String, String]) = @{data.map { case (key, value) =>
-  Html(s"""data-${HtmlFormat.escape(key.replaceAll("[^a-zA-Z0-9\\-]", ""))}="${HtmlFormat.escape(value)}" """)
-}}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
