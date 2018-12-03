@@ -128,6 +128,12 @@ install_js_deps() {
   yarn install
 }
 
+fetch_dev_cert() {
+  aws s3 cp s3://gu-reader-revenue-private/subscriptions/frontend/DEV/subscriptions-frontend.private.conf \
+    /etc/gu  \
+    --profile membership
+}
+
 report() {
   if [[ ${#EXTRA_STEPS[@]} -gt 0 ]]; then
     for i in "${!EXTRA_STEPS[@]}"; do
@@ -142,6 +148,7 @@ main () {
   install_homebrew
   install_nginx
   install_awscli
+  fetch_dev_cert
   install_jdk
   install_sbt
   install_node
