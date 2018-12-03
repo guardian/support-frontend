@@ -124,6 +124,7 @@ POST /direct-debit/check-account                      controllers.DirectDebit.ch
 GET  /.well-known/*file   controllers.Assets.at(path="/public", file)
 
 # ----- Assets ----- #
+# See application.conf for cache time config
 
 GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /*file                                         controllers.Assets.at(path="/public", file)
