@@ -40,7 +40,9 @@ const reactElementId: {
 
 
 // ----- Prices ----- //
+
 const { dataset } = document.querySelector(`#${reactElementId[method]}`) || { dataset: {} };
+
 
 // ----- Redux Store ----- //
 

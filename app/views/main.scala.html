@@ -1,6 +1,8 @@
 @import assets.AssetsResolver
 @import views.ViewHelpers._
 @import admin.Settings
+@import play.twirl.api.HtmlFormat
+
 @(
 	title: String,
 	mainId: String,
@@ -14,6 +16,10 @@
   data: Map[String, String] = Map.empty,
   csrf: Option[String] = None
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
+
+@mapToDataset(data: Map[String, String]) = @{data.map { case (key, value) =>
+  Html(s"""data-${HtmlFormat.escape(key.replaceAll("[^a-zA-Z0-9\\-]", ""))}="${HtmlFormat.escape(value)}" """)
+}}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -95,9 +101,7 @@
     </div>
   </noscript>
 
-	<div id="@mainId"
-    @{data.map { case (key, value) => s"""data-$key=$value """ }}
-  ></div>
+	<div id="@mainId" @{mapToDataset(data)}></div>
 
 	<script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
 	<script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
