@@ -20,7 +20,7 @@ const getPriceStr = (price: Option<number>): Option<string> =>
   (price ? `From £${price} per month` : null);
 
 const getSavingStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> =>
-  (subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0 ? `save £${getNewsstandSaving(subscription, newsstand)} a month` : null);
+  (subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0 ? `Save £${getNewsstandSaving(subscription, newsstand)} a month on retail price` : null);
 
 
 // ---- Plans ----- //
