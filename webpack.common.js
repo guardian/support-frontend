@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 const cssnano = require('cssnano');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
@@ -16,6 +17,13 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     new MiniCssExtractPlugin({
       filename: path.join('stylesheets', cssFilename),
     }),
+    ...(minimizeCss ? [new OptimizeCssAssetsPlugin({
+      cssProcessor: cssnano,
+      cssProcessorPluginOptions: {
+        preset: 'default',
+      },
+      canPrint: true,
+    })] : []),
   ],
 
   context: path.resolve(__dirname, 'assets'),
@@ -103,7 +111,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
               plugins: [
                 pxtorem({ propList: ['*'] }),
                 autoprefixer(),
-                ...(minimizeCss ? [cssnano] : []),
               ],
             },
           },

@@ -2,8 +2,6 @@
 
 // ----- Imports ----- //
 import { type ContributionType } from 'helpers/contributions';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { canContributeWithoutSigningIn } from 'helpers/identityApis';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
@@ -85,18 +83,6 @@ export const formElementIsValid = (formElement: Object | null) => {
 };
 
 export const formIsValid = (formClassName: string) => formElementIsValid(getForm(formClassName));
-
-export function checkoutFormShouldSubmit(
-  contributionType: ContributionType,
-  isSignedIn: boolean,
-  isRecurringContributor: boolean,
-  userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  form: Object | null,
-) {
-  return formElementIsValid(form)
-    && canContributeWithoutSigningIn(contributionType, isSignedIn, userTypeFromIdentityResponse)
-    && !isRecurringContributor;
-}
 
 export function getTitle(contributionType: ContributionType): string {
 

@@ -6,24 +6,26 @@ import { routes } from 'helpers/routes';
 import * as cookie from 'helpers/cookie';
 import { getSession } from 'helpers/storage';
 import { get as getCookie } from 'helpers/cookie';
-
-import {
-  setId,
-  setDisplayName,
-  setEmail,
-  setFirstName,
-  setLastName,
-  setTestUser,
-  setPostDeploymentTestUser,
-  setFullName,
-  setIsSignedIn,
-  setIsRecurringContributor,
-} from './userActions';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
+import type { UserSetStateActions } from 'helpers/user/userActions';
 
 
 // ----- Functions ----- //
 
-const init = (dispatch: Function) => {
+const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
+
+  const {
+    setId,
+    setDisplayName,
+    setFirstName,
+    setLastName,
+    setFullName,
+    setIsSignedIn,
+    setEmail,
+    setIsRecurringContributor,
+    setTestUser,
+    setPostDeploymentTestUser,
+  } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
   const userAppearsLoggedIn = cookie.get('GU_U');

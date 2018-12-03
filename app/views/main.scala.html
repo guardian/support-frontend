@@ -1,6 +1,7 @@
 @import assets.AssetsResolver
 @import views.ViewHelpers._
 @import admin.Settings
+
 @(
 	title: String,
 	mainId: String,
@@ -11,6 +12,7 @@
 	hrefLangLinks: Map[String, String] = Map(),
 	styles: Html = Html(""),
 	scripts: Html = Html(""),
+  data: Map[String, String] = Map.empty,
   csrf: Option[String] = None
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
 
@@ -94,7 +96,7 @@
     </div>
   </noscript>
 
-	<div id="@mainId"></div>
+	<div id="@mainId" @{mapToDataset(data)}></div>
 
 	<script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
 	<script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>

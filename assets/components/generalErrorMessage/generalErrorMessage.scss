@@ -1,4 +1,4 @@
-.component-payment-failure-message {
+.component-general-error-message {
   padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
   color: gu-colour(news-garnett-main-1);
   background-color: gu-colour(news-faded);
@@ -10,7 +10,7 @@
 
 }
 
-.component-payment-failure-message--invalid_form_mobile {
+.component-general-error-message--invalid_form_mobile {
   padding-top: $gu-v-spacing;
   margin-bottom: -$gu-v-spacing;
   color: gu-colour(news-garnett-main-1);
@@ -22,12 +22,16 @@
   }
 }
 
+.component-general-error-message--marketing_consent_api_error {
+  margin-top: $gu-v-spacing * 2;
+}
+
 .gu-content__content {
-  .component-payment-failure-message {
+  .component-general-error-message {
     width: auto;
   }
 
-  .component-payment-failure-message--no-valid-payments {
+  .component-general-error-message--no-valid-payments {
     padding: 0;
   }
 }
@@ -46,7 +50,7 @@
   fill: gu-colour(garnett-neutral-5);
 }
 
-.component-payment-failure-message__error-heading {
+.component-general-error-message__error-heading {
   vertical-align: bottom;
   display: inline-block;
   font-family: $gu-sans-web;
@@ -54,7 +58,7 @@
   font-weight: 600;
 }
 
-.component-payment-failure-message__small-print {
+.component-general-error-message__small-print {
   display: block;
   line-height: 18px;
   font-family: $gu-text-sans-web;

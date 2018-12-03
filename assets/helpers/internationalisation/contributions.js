@@ -10,7 +10,8 @@ const defaultContributeCopy = `
 
 export type CountryMetaData = {
   headerCopy: string,
-  contributeCopy: string,
+  contributeCopy?: string,
+  headerClasses?: string,
 };
 
 const countryGroupSpecificDetails: {
@@ -46,4 +47,9 @@ const countryGroupSpecificDetails: {
   },
 };
 
-export { countryGroupSpecificDetails };
+const usCampaignDetails: CountryMetaData = {
+  headerCopy: 'Make a year-end gift to The Guardian and invest in our independent journalism for 2019 and beyond.',
+  headerClasses: 'header__us-campaign',
+};
+
+export { countryGroupSpecificDetails, usCampaignDetails };

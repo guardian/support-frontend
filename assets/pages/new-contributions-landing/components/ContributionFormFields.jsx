@@ -30,7 +30,6 @@ import {
   updateEmail,
   updateState,
   checkIfEmailHasPassword,
-  setValueAndTogglePayPal,
 } from '../contributionsLandingActions';
 
 
@@ -56,7 +55,7 @@ type PropTypes = {|
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
 const getCheckoutFormValue = (formValue: string | null, userValue: string | null): string | null =>
-  (formValue === null ? userValue : formValue);
+  ((formValue === null || formValue === '') ? userValue : formValue);
 
 /* eslint-enable react/no-unused-prop-types */
 
@@ -73,10 +72,10 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateFirstName: (event) => { dispatch(setValueAndTogglePayPal<string>(updateFirstName, event.target.value)); },
-  updateLastName: (event) => { dispatch(setValueAndTogglePayPal<string>(updateLastName, event.target.value)); },
-  updateEmail: (event) => { dispatch(setValueAndTogglePayPal<string>(updateEmail, event.target.value)); },
-  updateState: (event) => { dispatch(setValueAndTogglePayPal<UsState | CaState | null>(updateState, event.target.value === '' ? null : event.target.value)); },
+  updateFirstName: (event) => { dispatch(updateFirstName(event.target.value)); },
+  updateLastName: (event) => { dispatch(updateLastName(event.target.value)); },
+  updateEmail: (event) => { dispatch(updateEmail(event.target.value)); },
+  updateState: (event) => { dispatch(updateState(event.target.value === '' ? null : event.target.value)); },
   checkIfEmailHasPassword: (event) => { dispatch(checkIfEmailHasPassword(event.target.value)); },
 });
 

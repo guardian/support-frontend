@@ -5,12 +5,13 @@
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
+import { isUsCampaignTest, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
+import { countryGroupSpecificDetails, usCampaignDetails } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
+import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -36,7 +37,7 @@ type PropTypes = {|
   payPalHasLoaded: boolean,
   paymentComplete: boolean,
   payPalSwitchStatus: Status,
-  paymentError: CheckoutFailureReason | null,
+  paymentError: ErrorReason | null,
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   thankYouRoute: string,
@@ -49,6 +50,7 @@ type PropTypes = {|
   isTestUser: boolean,
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
+  referrerAcquisitionData: ReferrerAcquisitionData,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -64,6 +66,7 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser,
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
+  referrerAcquisitionData: state.common.referrerAcquisitionData,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -84,12 +87,20 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
+  const countryGroupDetails = isUsCampaignTest(props.referrerAcquisitionData) ?
+    usCampaignDetails :
+    countryGroupSpecificDetails[props.countryGroupId];
+
+  const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
+
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content">
-        <h1 className="header">{countryGroupSpecificDetails[props.countryGroupId].headerCopy}</h1>
-        <p className="blurb">{countryGroupSpecificDetails[props.countryGroupId].contributeCopy}</p>
+        <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
+        { countryGroupDetails.contributeCopy ?
+          <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
+        }
         <NewContributionForm
           onPaymentAuthorisation={onPaymentAuthorisation}
         />

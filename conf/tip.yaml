@@ -1,20 +1,8 @@
-- name: US One-off PayPal contribution
+- name: US One-off contribution with PayPal
   description: Successful one-off contribution in USD (using PayPal)
 
-- name: GB One-off PayPal contribution
+- name: UK One-off contribution with PayPal
   description: Successful one-off contribution in GBP (using PayPal)
 
-- name: AU One-off PayPal contribution
+- name: AU One-off contribution with PayPal
   description: Successful one-off contribution in AUD (using PayPal)
-
-- name: EU One-off PayPal contribution
-  description: Successful one-off contribution in EUR (using PayPal)
-
-- name: INT One-off PayPal contribution
-  description: Successful one-off contribution in USD (using PayPal)
-
-- name: NZ One-off PayPal contribution
-  description: Successful one-off contribution in NZD (using PayPal)
-
-- name: CA One-off PayPal contribution
-  description: Successful one-off contribution in CAD (using PayPal)

@@ -24,6 +24,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   abParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
+  context: string,
 |};
 
 
@@ -61,21 +62,28 @@ function SubscriptionsSection(props: PropTypes) {
         countryGroupId={props.countryGroupId}
         gridId="digitalCirclePink"
         abTest={props.abParticipations}
+        context={props.context}
       />
       <Paper
         url={subsLinks.Paper}
         abTest={props.abParticipations}
+        context={props.context}
       />
       <PaperDigital
         url={subsLinks.PaperAndDigital}
         abTest={props.abParticipations}
         gridId="paperDigitalCircleOrange"
+        context={props.context}
       />
     </ThreeSubscriptions>
   );
 
 }
 
+
+SubscriptionsSection.defaultProps = {
+  context: 'subscriptions-section',
+};
 
 // ----- Exports ----- //
 

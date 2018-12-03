@@ -12,7 +12,8 @@ import { flashSaleIsActive } from 'helpers/flashSale';
 type PropTypes = {|
   url: string,
   abTest: ComponentAbTest | null,
-  gridId: 'paperDigitalCirclePink' | 'paperDigitalCircleOrange'
+  gridId: 'paperDigitalCirclePink' | 'paperDigitalCircleOrange',
+  context: string,
 |};
 
 
@@ -55,10 +56,14 @@ export default function PaperDigital(props: PropTypes) {
           url: props.url,
           accessibilityHint: 'Proceed to choose which days you would like to regularly receive the newspaper in conjunction with a digital subscription',
           modifierClasses: ['border'],
-          onClick: sendTrackingEventsOnClick('paper_digital_cta', 'PaperAndDigital', props.abTest),
+          onClick: sendTrackingEventsOnClick('paper_digital_cta', 'PaperAndDigital', props.abTest, props.context),
         },
       ]}
 
     />
   );
 }
+
+PaperDigital.defaultProps = {
+  context: 'paper-and-digital-subscription',
+};

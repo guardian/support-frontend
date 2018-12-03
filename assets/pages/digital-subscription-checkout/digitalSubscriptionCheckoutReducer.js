@@ -2,25 +2,20 @@
 
 // ----- Imports ----- //
 
-import { compose, type Dispatch } from 'redux';
+import { compose, combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
+import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import csrf from 'helpers/csrf/csrfReducer';
+import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import {
   type IsoCountry,
   fromString,
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
-import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import csrf from 'helpers/csrf/csrfReducer';
-
-import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
-import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
-import { combineReducers } from 'redux';
-
 import {
   validate,
   nonEmptyString,
@@ -29,10 +24,17 @@ import {
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
 
+import {
+  marketingConsentReducerFor,
+  type State as MarketingConsentState,
+} from 'components/marketingConsent/marketingConsentReducer';
+
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou';
+type PaymentFrequency = 'monthly' | 'yearly';
+type PaymentMethod = 'card' | 'directDebit';
 
 export type FormFields = {|
   firstName: string,
@@ -40,6 +42,8 @@ export type FormFields = {|
   country: Option<IsoCountry>,
   stateProvince: Option<StateProvince>,
   telephone: string,
+  paymentFrequency: PaymentFrequency,
+  paymentMethod: PaymentMethod,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -64,6 +68,8 @@ export type Action =
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
+  | { type: 'SET_PAYMENT_FREQUENCY', paymentFrequency: PaymentFrequency }
+  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
 
 
@@ -76,6 +82,8 @@ function getFormFields(state: State): FormFields {
     country: state.page.checkout.country,
     stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
+    paymentFrequency: state.page.checkout.paymentFrequency,
+    paymentMethod: state.page.checkout.paymentMethod,
   };
 }
 
@@ -118,6 +126,8 @@ const formActionCreators = {
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
+  setPaymentFrequency: (paymentFrequency: PaymentFrequency): Action => ({ type: 'SET_PAYMENT_FREQUENCY', paymentFrequency }),
+  setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) =>
     compose(dispatch, setFormErrors, getErrors, getFormFields)(getState()),
 };
@@ -134,6 +144,8 @@ const initialState = {
   country: null,
   stateProvince: null,
   telephone: '',
+  paymentFrequency: 'monthly',
+  paymentMethod: 'directDebit',
   errors: [],
 };
 
@@ -158,6 +170,12 @@ function reducer(state: CheckoutState = initialState, action: Action): CheckoutS
 
     case 'SET_STATE_PROVINCE':
       return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
+
+    case 'SET_PAYMENT_FREQUENCY':
+      return { ...state, paymentFrequency: action.paymentFrequency };
+
+    case 'SET_PAYMENT_METHOD':
+      return { ...state, paymentMethod: action.paymentMethod };
 
     case 'SET_ERRORS':
       return { ...state, errors: action.errors };

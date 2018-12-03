@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import {
   type ContributionType,
 } from 'helpers/contributions';
-import { type CheckoutFailureReason } from 'helpers/checkoutErrors';
-import PaymentFailureMessage from 'components/paymentFailureMessage/paymentFailureMessage';
+import { type ErrorReason } from 'helpers/errorReasons';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { type State } from '../contributionsLandingReducer';
 import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
 
@@ -18,7 +18,7 @@ import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringCon
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   contributionType: ContributionType,
-  paymentError: CheckoutFailureReason | null,
+  paymentError: ErrorReason | null,
   isSignedIn: boolean,
   formIsValid: boolean,
   isRecurringContributor: boolean,
@@ -45,13 +45,13 @@ function ContributionErrorMessage(props: PropTypes) {
   const shouldsShowExistingContributorErrorMessage = (props.contributionType !== 'ONE_OFF' && props.isRecurringContributor && props.checkoutFormHasBeenSubmitted);
 
   if (props.paymentError) {
-    return (<PaymentFailureMessage checkoutFailureReason={props.paymentError} />);
-  } else if (!props.formIsValid) {
+    return (<GeneralErrorMessage errorReason={props.paymentError} />);
+  } else if (!props.formIsValid && props.checkoutFormHasBeenSubmitted) {
     return (
-      <PaymentFailureMessage
+      <GeneralErrorMessage
         classModifiers={['invalid_form_mobile']}
         errorHeading="Form incomplete"
-        checkoutFailureReason="invalid_form_mobile"
+        errorReason="invalid_form_mobile"
       />
     );
   } else if (shouldsShowExistingContributorErrorMessage) {

@@ -34,6 +34,13 @@ export type PaperBillingPlan =
   'collectionEveryday' | 'collectionSixday' | 'collectionWeekend' | 'collectionSunday' |
   'deliveryEveryday' | 'deliverySixday' | 'deliveryWeekend' | 'deliverySunday';
 export type PaperDeliveryMethod = 'collection' | 'delivery';
+export type PaperNewsstandTiers = 'weekly' | 'saturday' | 'sunday';
+
+const newsstandPrices: {[PaperNewsstandTiers]: number} = {
+  weekly: 2 * 5,
+  saturday: 2.9,
+  sunday: 3,
+};
 
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
@@ -198,6 +205,7 @@ function sendTrackingEventsOnClick(
   id: string,
   product: SubscriptionProduct,
   abTest: ComponentAbTest | null,
+  context?: string,
 ): () => void {
 
   const componentEvent = {
@@ -218,13 +226,22 @@ function sendTrackingEventsOnClick(
     gaEvent({
       category: 'click',
       action: product,
-      label: id,
+      label: (context ? context.concat('-') : '').concat(id),
     });
 
   };
 
 }
 
+
+// ----- Newsstand savings ----- //
+const getMonthlyNewsStandPrice = (newsstand: number) => ((newsstand) * 52) / 12;
+
+const getNewsstandSaving = (subscriptionMonthlyCost: number, newsstandWeeklyCost: number) =>
+  fixDecimals(getMonthlyNewsStandPrice(newsstandWeeklyCost) - subscriptionMonthlyCost);
+
+const getNewsstandPrice = (tiers: PaperNewsstandTiers[]) =>
+  tiers.map(tier => newsstandPrices[tier]).reduce((a, b) => a + b, 0);
 
 // ----- Exports ----- //
 
@@ -234,4 +251,6 @@ export {
   discountedDisplayPrice,
   getProductPrice,
   getWeeklyProductPrice,
+  getNewsstandSaving,
+  getNewsstandPrice,
 };

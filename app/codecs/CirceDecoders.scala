@@ -19,8 +19,9 @@ import ophan.thrift.componentEvent.ComponentType
 import services.stepfunctions.StatusResponse
 import admin._
 import models.identity.responses.{SetGuestPasswordResponseCookie, SetGuestPasswordResponseCookies}
-import services.{GetUserTypeResponse, PayPalError, PayPalSuccess}
+import services._
 import org.joda.time.DateTime
+import models.ZuoraCatalog._
 
 object CirceDecoders {
 

@@ -282,6 +282,19 @@ function getReferrerAcquisitionData(): ReferrerAcquisitionData {
   return referrerAcquisitionData;
 }
 
+const usCampaignVariants = ['us_eoy_top_ticker', 'us_eoy_bottom_ticker', 'us_eoy_bottom_ticker_two'];
+
+function isUsCampaignTest(referrerAcquisitionData: ReferrerAcquisitionData): boolean {
+  if (referrerAcquisitionData.abTests) {
+    const index = referrerAcquisitionData.abTests.findIndex((test: AcquisitionABTest) =>
+      test.name === 'AcquisitionsEpicUsEndOfYearRound2' &&
+      usCampaignVariants.includes(test.variant));
+
+    return index >= 0;
+  }
+  return false;
+}
+
 
 // ----- Exports ----- //
 
@@ -294,4 +307,5 @@ export {
   derivePaymentApiAcquisitionData,
   deriveSubsAcquisitionData,
   getSupportAbTests,
+  isUsCampaignTest,
 };

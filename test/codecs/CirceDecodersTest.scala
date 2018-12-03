@@ -11,11 +11,14 @@ import io.circe.syntax._
 import io.circe.{Json, JsonObject}
 import models.CheckBankAccountDetails
 import SwitchState._
+import models.ZuoraCatalog._
 import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import ophan.thrift.event.AcquisitionSource.GuardianWeb
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatest.EitherValues._
+import io.circe.generic.auto._
+
 class CirceDecodersTest extends WordSpec with MustMatchers {
 
   "referrerAcquisitionDataCodec" should {
@@ -145,6 +148,47 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
 
       checkBankAccountData.sortCode.value mustBe "121212"
       checkBankAccountData.accountNumber.value mustBe "12121212"
+    }
+  }
+
+  "ZuoraCatalog" should {
+    "decode json" in {
+
+      val json =
+        """
+          |{
+          |  "products": [
+          |    {
+          |      "productRatePlans": [
+          |        {
+          |          "id": "t-15",
+          |          "productRatePlanCharges": [
+          |            {
+          |              "pricing": [
+          |                {
+          |                  "currency": "GBP",
+          |                  "price": 12.34
+          |                }
+          |              ]
+          |            }
+          |          ]
+          |        }
+          |      ]
+          |    }
+          |  ]
+          |}
+        """.stripMargin
+
+      val catalog = parse(json).toOption.get.as[ZuoraCatalog].toOption.get
+
+      catalog.products.length mustBe 1
+
+      val plan = catalog.products.head.productRatePlans.head
+
+      plan.name mustBe None
+      plan.id mustBe "t-15"
+      plan.productRatePlanCharges.head.pricing.head.currency mustBe "GBP"
+      plan.productRatePlanCharges.head.pricing.head.price mustBe 12.34
     }
   }
 

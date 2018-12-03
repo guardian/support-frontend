@@ -5,9 +5,11 @@
 import React from 'react';
 
 import { outsetClassName, bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import { type Option } from 'helpers/types/option';
 
 import ProductPageButton from '../productPageButton/productPageButton';
 import ProductPagePlanFormLabel from './productPagePlanFormLabel';
+import ProductPagePlanFormPrice from './productPagePlanFormPrice';
 
 import './productPagePlanForm.scss';
 
@@ -16,7 +18,9 @@ import './productPagePlanForm.scss';
 export type Plan = {|
   title: string,
   copy: string,
-  offer: string | null,
+  offer: Option<string>,
+  price: Option<string>,
+  saving: Option<string>,
 |}
 
 export type StatePropTypes<P> = {|
@@ -56,15 +60,19 @@ export default function ProductPagePlanForm<P:string>({
         <div className="component-product-page-plan-form__items">
           {keys.map((key: P) => {
             const {
-              copy, title, offer,
+              copy, title, offer, price, saving,
             } = plans[key];
             return (
               <div className="component-product-page-plan-form__item">
                 <ProductPagePlanFormLabel
-                  title={title}
-                  offer={offer}
+                  {...{
+                  title, offer, key,
+                  }}
+                  footer={((price || saving) ?
+                    <ProductPagePlanFormPrice title={price} copy={saving} />
+                    : null
+                  )}
                   type={key}
-                  key={key}
                   checked={key === selectedPlan}
                   onChange={() => { setPlanAction(key); }}
                 >

@@ -40,8 +40,10 @@ export type ContributionTypeMap<T> = {|
 
 export type RegularContributionType = $Keys<RegularContributionTypeMap<null>>;
 export type ContributionType = $Keys<ContributionTypeMap<null>>;
-
 export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
+
+export const contributionTypeIsRecurring = (contributionType: ContributionType) =>
+  contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
 
 export const logInvalidCombination = (contributionType: ContributionType, paymentMethod: PaymentMethod) => {
   logException(`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`);
@@ -77,6 +79,12 @@ type Config = {
     default: number,
   }
 }
+
+export type OtherAmounts = {
+  [ContributionType]: { amount: string | null }
+};
+
+export type SelectedAmounts = { [ContributionType]: Amount | 'other' };
 
 
 // ----- Setup ----- //

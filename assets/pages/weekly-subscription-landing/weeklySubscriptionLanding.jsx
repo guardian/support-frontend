@@ -88,13 +88,13 @@ const content = (
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
           <p className={largeParagraphClassName}>Inside the essential magazine from
-          The&nbsp;Guardian, you&#39;ll find expert opinion, insight and culture, curated to
-          bring you a progressive, international perspective. You&#39;ll also discover
+          The&nbsp;Guardian, you&rsquo;ll find expert opinion, insight and culture, curated to
+          bring you a progressive, international perspective. You&rsquo;ll also discover
           challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
-      <ProductPageContentBlock>
+      <ProductPageContentBlock id="benefits">
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
         <div className={outsetClassName}>
           <ProductPageFeatures features={[
@@ -137,7 +137,7 @@ const content = (
           </p>
         </ProductPageTextBlock>
         <ProductPageTextBlock title="Guardian Weekly terms and conditions">
-          <p>Offer subject to availability. Guardian News and Media Limited (&quot;GNM&quot;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions visit <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>subscribe.theguardian.com/p/WWM99X/terms</a>.
+          <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions visit <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>subscribe.theguardian.com/p/WWM99X/terms</a>.
           </p>
         </ProductPageTextBlock>
       </ProductPageContentBlock>

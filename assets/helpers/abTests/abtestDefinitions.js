@@ -40,7 +40,6 @@ export const tests: Tests = {
       'default-annual',
       'default-single',
       'default-annual_no-monthly',
-      'default-single_no-monthly',
     ],
     audiences: {
       UnitedStates: {
@@ -48,7 +47,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: true,
+    isActive: false,
     independent: true,
     seed: 5,
   },

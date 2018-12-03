@@ -36,9 +36,14 @@ const reactElementId: {
 };
 
 
+// ----- Prices ----- //
+
+const { dataset } = document.querySelector(`#${reactElementId[method]}`) || { dataset: {} };
+
+
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer(method), true);
+const store = pageInit(reducer(method, dataset), true);
 
 
 // ----- Render ----- //

@@ -29,7 +29,7 @@ const dpImage = (
     sources={[
       {
         gridId: 'digitalPackFlashSaleMobile',
-        srcSizes: [140, 500, 1000],
+        srcSizes: [140, 500],
         imgType: 'png',
         sizes: '90vw',
         media: '(max-width: 739px)',
