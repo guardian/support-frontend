@@ -3,14 +3,13 @@ package com.gu.support
 import cats.syntax.functor._
 import com.gu.i18n.{Country, CountryGroup}
 import com.gu.support.catalog.ProductRatePlanId
-import com.gu.support.encoding.JsonHelpers
+import com.gu.support.encoding.CustomCodecs.{decodeCountry, decodeDateTimeFromString}
+import com.gu.support.encoding.JsonHelpers._
 import io.circe.generic.semiauto.deriveDecoder
-import io.circe.{ACursor, Decoder, Json, JsonObject}
-import org.joda.time.format.DateTimeFormat
+import io.circe.{ACursor, Decoder, Json}
 import org.joda.time.{DateTime, Days, Months}
-import JsonHelpers._
-
 package object promotions {
+
   type CampaignCode = String
 
   type Channel = String
@@ -79,7 +78,6 @@ package object promotions {
   }
 
   object Promotion {
-
     implicit val decoder: Decoder[Promotion] = deriveDecoder[Promotion].prepare(mapFields)
 
     private def mapFields(c: ACursor) = c.withFocus {
@@ -92,11 +90,32 @@ package object promotions {
     }
   }
 
-  implicit val countryDecoder: Decoder[Country] = Decoder.decodeString.emap {
-    code => CountryGroup.countryByCode(code).toRight(s"Unrecognised country code '$code'")
+  sealed trait PromoError {
+    def msg: String
   }
 
-  val dateFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-  implicit val dateTimeDecoder: Decoder[DateTime] = Decoder.decodeString.map(dateFormatter.parseDateTime)
+  case object InvalidCountry extends PromoError {
+    override val msg = "The promo code you supplied is not applicable in this country"
+  }
+
+  case object InvalidProductRatePlan extends PromoError {
+    override val msg = "The promo code you supplied is not applicable for this product"
+  }
+
+  case object NotApplicable extends PromoError {
+    override  val msg = "This promotion is not applicable"
+  }
+
+  case object NoSuchCode extends PromoError {
+    override  val msg = "Unknown or expired promo code"
+  }
+
+  case object ExpiredPromotion extends PromoError {
+    override val msg = "The promo code you supplied has expired"
+  }
+
+  case object PromotionNotActiveYet extends PromoError {
+    override val msg = "The promo code you supplied is not active yet"
+  }
 
 }

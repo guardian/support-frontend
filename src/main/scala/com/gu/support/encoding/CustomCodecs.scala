@@ -41,6 +41,7 @@ trait HelperCodecs {
   implicit val monthEncoder: Encoder[Months] = Encoder.encodeInt.contramap(_.getMonths)
   implicit val encodeLocalTime: Encoder[LocalDate] = Encoder.encodeString.contramap(_.toString("yyyy-MM-dd"))
   implicit val decodeLocalTime: Decoder[LocalDate] = Decoder.decodeString.map(LocalDate.parse)
+  implicit val decodeDateTimeFromString: Decoder[DateTime] = Decoder.decodeString.map(DateTime.parse)
   implicit val encodeDateTime: Encoder[DateTime] = Encoder.encodeLong.contramap(_.getMillis)
   implicit val decodeDateTime: Decoder[DateTime] = Decoder.decodeLong.map(new DateTime(_))
   implicit val uuidDecoder: Decoder[UUID] = Decoder.decodeString.emap(code => Try(UUID.fromString(code)).toOption.toRight(s"Invalid UUID '$code'"))
