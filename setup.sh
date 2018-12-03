@@ -115,7 +115,13 @@ install_sbt() {
 }
 
 install_yarn() {
-  npm install -g yarn
+  if ! installed yarn; then
+    if linux; then
+      sudo apt-get install yarn
+    elif mac; then
+      brew install yarn
+    fi
+  fi
 }
 
 install_js_deps() {
@@ -139,6 +145,7 @@ main () {
   install_jdk
   install_sbt
   install_node
+  install_yarn
   install_js_deps
   report
 }
