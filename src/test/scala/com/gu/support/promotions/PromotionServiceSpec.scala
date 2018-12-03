@@ -6,37 +6,52 @@ import com.gu.support.promotions.Fixtures.{freeTrialPromoCode, _}
 import com.typesafe.config.ConfigFactory
 import org.scalatest.{FlatSpec, Matchers}
 import Fixtures._
+import com.gu.i18n.Country.UK
 
+//noinspection NameBooleanParameters
 class PromotionServiceSpec extends FlatSpec with Matchers {
 
-  val service = new PromotionService(
-    new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get(),
+  val config = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
+  val serviceWithFixtures = new PromotionService(
+    config,
     Some(new SimplePromotionCollection(List(freeTrial, discount, tracking, renewal)))
   )
 
+  val serviceWithDynamo = new PromotionService(
+    config,
+    None
+  )
+
   "PromotionService" should "find a PromoCode" in {
-    service.findPromotion(freeTrialPromoCode) should be(Some(freeTrial))
+    serviceWithFixtures.findPromotion(freeTrialPromoCode) should be(Some(freeTrial))
   }
 
   it should "validate a PromoCode" in {
-    service.validatePromoCode(freeTrialPromoCode, Country.UK, validProductRatePlanId, false) should be(Right(freeTrial))
-    service.validatePromoCode(invalidPromoCode, Country.UK, validProductRatePlanId, false) should be(Left(NoSuchCode))
-    service.validatePromoCode(freeTrialPromoCode, Country.UK, invalidProductRatePlanId, false) should be(Left(InvalidProductRatePlan))
-    service.validatePromoCode(freeTrialPromoCode, Country.US, validProductRatePlanId, false) should be(Left(InvalidCountry))
-    service.validatePromoCode(renewalPromoCode, Country.UK, validProductRatePlanId, false) should be(Left(NotApplicable))
+    serviceWithFixtures.validatePromoCode(freeTrialPromoCode, UK, validProductRatePlanId, false) should be(Right(freeTrial))
+    serviceWithFixtures.validatePromoCode(invalidPromoCode, UK, validProductRatePlanId, false) should be(Left(NoSuchCode))
+    serviceWithFixtures.validatePromoCode(freeTrialPromoCode, UK, invalidProductRatePlanId, false) should be(Left(InvalidProductRatePlan))
+    serviceWithFixtures.validatePromoCode(freeTrialPromoCode, Country.US, validProductRatePlanId, false) should be(Left(InvalidCountry))
+    serviceWithFixtures.validatePromoCode(renewalPromoCode, UK, validProductRatePlanId, false) should be(Left(NotApplicable))
   }
 
   it should "apply a discount PromoCode" in {
-    val result = service.applyPromotion(discountPromoCode, Country.UK, validProductRatePlanId, subscriptionData, false)
-    result.isRight shouldBe true
-    result.right.get.ratePlanData.length shouldBe 2
+    val result = serviceWithFixtures.applyPromotion(discountPromoCode, UK, validProductRatePlanId, subscriptionData, false)
+    result.ratePlanData.length shouldBe 2
   }
 
   it should "not apply an invalid PromoCode" in {
-    service.applyPromotion(invalidPromoCode, Country.UK, validProductRatePlanId, subscriptionData, false) shouldBe Left(NoSuchCode)
+    serviceWithFixtures.applyPromotion(invalidPromoCode, UK, validProductRatePlanId, subscriptionData, false) shouldBe Left(NoSuchCode)
   }
 
   it should "find all discounts" in {
-    service.discountPromotions.length shouldBe 1
+    serviceWithFixtures.discountPromotions.length shouldBe 1
   }
+
+  ignore should "apply a real promo code" in {
+    val realPromoCode = "DJP8L27FY"
+    val digipackMonthlyProductRatePlanId = "2c92c0f84bbfec8b014bc655f4852d9d"
+    val result = serviceWithDynamo.applyPromotion(realPromoCode, UK, digipackMonthlyProductRatePlanId, subscriptionData, isRenewal = false)
+    result.ratePlanData.length shouldBe 2
+  }
+
 }

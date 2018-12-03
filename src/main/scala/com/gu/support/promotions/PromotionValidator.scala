@@ -26,7 +26,7 @@ object PromotionValidator {
         Some(InvalidProductRatePlan)
 
     def validateRenewal(isRenewal: Boolean) =
-      if (promotion.renewalOnly && !isRenewal)
+      if (promotion.renewalOnly != isRenewal)
         Some(NotApplicable)
       else
         None

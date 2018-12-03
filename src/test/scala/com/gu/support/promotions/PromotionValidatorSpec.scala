@@ -7,6 +7,7 @@ import org.joda.time.DateTime
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers._
 
+//noinspection NameBooleanParameters
 class PromotionValidatorSpec extends FlatSpec {
   val NoErrors = Nil
 
@@ -30,28 +31,31 @@ class PromotionValidatorSpec extends FlatSpec {
     futurePromotion.validateFor(validProductRatePlanId, US, false) should contain(InvalidCountry)
 
     // check valid promotions adhere to their time/status.
-    expiredPromotion.validateFor(validProductRatePlanId, UK, false).head should be(ExpiredPromotion)
-    activePromotion.validateFor(validProductRatePlanId, UK, false) should be(NoErrors)
-    futurePromotion.validateFor(validProductRatePlanId, UK, false).head should be(PromotionNotActiveYet)
+    expiredPromotion.validateFor(validProductRatePlanId, UK, false).head shouldBe ExpiredPromotion
+    activePromotion.validateFor(validProductRatePlanId, UK, false) shouldBe NoErrors
+    futurePromotion.validateFor(validProductRatePlanId, UK, false).head shouldBe PromotionNotActiveYet
 
     // check start date comparison is inclusive to the millisecond, and expires is exclusive to the millisecond
     // (tested via the provided 'now' overrride)
-    futurePromotion.validateFor(validProductRatePlanId, UK, false, providedStarts.minusMillis(1)).head should be(PromotionNotActiveYet)
-    futurePromotion.validateFor(validProductRatePlanId, UK, false, providedExpires).head should be(ExpiredPromotion)
-    futurePromotion.validateFor(validProductRatePlanId, UK, false, providedStarts) should be(NoErrors)
-    futurePromotion.validateFor(validProductRatePlanId, UK, false, providedExpires.minusMillis(1)) should be(NoErrors)
+    futurePromotion.validateFor(validProductRatePlanId, UK, false, providedStarts.minusMillis(1)).head shouldBe PromotionNotActiveYet
+    futurePromotion.validateFor(validProductRatePlanId, UK, false, providedExpires).head shouldBe ExpiredPromotion
+    futurePromotion.validateFor(validProductRatePlanId, UK, false, providedStarts) shouldBe NoErrors
+    futurePromotion.validateFor(validProductRatePlanId, UK, false, providedExpires.minusMillis(1)) shouldBe NoErrors
 
     // check Tracking promotions don't check against the rate plan InvalidProductRatePlan
-    activePromotion.copy(tracking = true).validateFor(invalidProductRatePlanId, UK, false) should be(NoErrors)
-    activePromotion.copy(tracking = true).validateFor(validProductRatePlanId, UK, false) should be(NoErrors)
-    expiredPromotion.copy(tracking = true).validateFor(invalidProductRatePlanId, US, false).head should be(InvalidCountry)
+    activePromotion.copy(tracking = true).validateFor(invalidProductRatePlanId, UK, false) shouldBe NoErrors
+    activePromotion.copy(tracking = true).validateFor(validProductRatePlanId, UK, false) shouldBe NoErrors
+    expiredPromotion.copy(tracking = true).validateFor(invalidProductRatePlanId, US, false).head shouldBe InvalidCountry
+  }
 
+  it should "handle renewal promotions correctly" in {
     // check Renewal promotions check against the rate plan InvalidProductRatePlan
-    activePromotion.copy(renewalOnly = true).validateFor(invalidProductRatePlanId, UK, true).head should be(InvalidProductRatePlan)
-    expiredPromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, US, true).head should be(InvalidCountry)
+    activePromotion.copy(renewalOnly = true).validateFor(invalidProductRatePlanId, UK, true).head shouldBe InvalidProductRatePlan
+    expiredPromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, US, true).head shouldBe InvalidCountry
 
     // check Renewal promotions are invalid for new subscriptions
-    expiredPromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, UK, false).head should be(NotApplicable)
-    activePromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, UK, true) should be(NoErrors)
+    activePromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, UK, false).head shouldBe NotApplicable
+    activePromotion.copy(renewalOnly = false).validateFor(validProductRatePlanId, UK, true).head shouldBe NotApplicable
+    activePromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, UK, true) shouldBe NoErrors
   }
 }

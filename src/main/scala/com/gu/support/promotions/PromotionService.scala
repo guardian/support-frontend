@@ -33,8 +33,9 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
     productRatePlanId: ProductRatePlanId,
     subscriptionData: SubscriptionData,
     isRenewal: Boolean
-  ): Either[PromoError, SubscriptionData] =
+  ): SubscriptionData =
     validatePromoCode(promoCode, country, productRatePlanId, isRenewal)
       .map(PromotionApplicator(_, config.discount).applyTo(subscriptionData))
+      .toOption.getOrElse(subscriptionData)
 
 }
