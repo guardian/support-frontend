@@ -22,10 +22,47 @@ type PropTypes = {|
   csrf: CsrfState,
   onClick: (?string, CsrfState) => void,
   error: boolean,
+  loading: boolean,
 |};
 
 
 // ----- Render ----- //
+
+function Button(props: PropTypes) {
+  if (props.confirmOptIn === true) {
+    return (
+      <button
+        disabled="disabled"
+        className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
+      >
+        <SvgSubscribed />
+        Signed up
+      </button>
+    );
+  } else if (props.loading === true) {
+    return (
+      <button
+        disabled="disabled"
+        className={classNameWithModifiers('button', ['newsletter', 'newsletter__loading'])}
+      >
+        <SvgSubscribe />
+        Loading...
+      </button>
+    );
+  }
+  return (
+    <button
+      className={classNameWithModifiers('button', ['newsletter'])}
+      onClick={
+          () => props.onClick(props.email, props.csrf)
+        }
+    >
+      <SvgSubscribe />
+        Sign me up
+    </button>
+  );
+
+}
 
 function MarketingConsent(props: PropTypes) {
 
@@ -46,24 +83,7 @@ function MarketingConsent(props: PropTypes) {
           contributor or would like to become one.
         </p>
 
-        {props.confirmOptIn === true ?
-          <button
-            disabled="disabled"
-            className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
-          >
-            <SvgSubscribed />
-            Signed up
-          </button> :
-          <button
-            className={classNameWithModifiers('button', ['newsletter'])}
-            onClick={
-              () => props.onClick(props.email, props.csrf)
-            }
-          >
-            <SvgSubscribe />
-            Sign me up
-          </button>
-        }
+        {Button(props)}
 
         <p className="confirmation__meta">
           <small>
@@ -87,6 +107,7 @@ function MarketingConsent(props: PropTypes) {
 
 MarketingConsent.defaultProps = {
   error: false,
+  loading: false,
 };
 
 

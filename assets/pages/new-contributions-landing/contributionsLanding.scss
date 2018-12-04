@@ -996,6 +996,11 @@ form {
   background-color: transparent;
 }
 
+.button--newsletter__loading {
+  color: gu-colour(garnett-neutral-4);
+  background-color: transparent;
+}
+
 .button--right-arrow {
   width: 100%;
   padding: 0 50px 0 $gu-h-spacing;
