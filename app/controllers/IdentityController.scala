@@ -15,12 +15,14 @@ import models.identity.responses.SetGuestPasswordResponseCookies
 import codecs.CirceDecoders._
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class IdentityController(
     identityService: IdentityService,
     components: ControllerComponents,
     actionRefiners: CustomActionBuilders,
-    guardianDomain: GuardianDomain
+    guardianDomain: GuardianDomain,
+    warn: () => Try[Unit]
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
 
@@ -34,7 +36,8 @@ class IdentityController(
         Ok
       } else {
         SafeLogger.error(scrub"Failed to send consents preferences email for ${request.body.email}")
-        InternalServerError
+        warn()
+        NotFound
       }
     }
   }
@@ -45,7 +48,8 @@ class IdentityController(
       .fold(
         err => {
           SafeLogger.error(scrub"Failed to set password using guest account registration token ${request.body.guestAccountRegistrationToken}: ${err.toString}")
-          InternalServerError
+          warn()
+          NotFound
         },
         cookiesFromResponse => {
           SafeLogger.info(s"Successfully set password using guest account registration token ${request.body.guestAccountRegistrationToken}")
