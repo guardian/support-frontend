@@ -155,14 +155,6 @@ object Fixtures {
           "sessionId": "testingToken"
         }"""
 
-  val oldSchemaContributionJson =
-    s"""{
-          $requestIdJson,
-          $userJson,
-          "contribution": ${contribution()},
-          "paymentFields": $stripeJson
-        }"""
-
   val createPayPalPaymentMethodDigitalPackJson =
     s"""{
           $requestIdJson,

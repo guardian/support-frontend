@@ -14,7 +14,6 @@ object Fixtures {
   val salesforceAccountId = "001g000001gPmXdAAK"
   val salesforceId = "003g000001UtkrEAAR"
   val identityId = "30000311"
-  val paymentGateway = "Stripe Gateway 1"
   val tokenId = "card_Aaynm1dIeDH1zp"
   val secondTokenId = "cus_AaynKIp19IIGDz"
   val cardNumber = "4242"
@@ -82,24 +81,4 @@ object Fixtures {
 
   val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account(), contactDetails, payPalPaymentMethod, invalidMonthlySubsData, SubscribeOptions())))
 
-  val subscribeResponseAccount =
-    s"""
-      {
-          "SubscriptionId": "2c92c0f86716797001671754520357f2",
-          "SubscriptionNumber": "A-S00047037",
-          "TotalMrr": 9.991666667,
-          "AccountId": "2c92c0f867167970016717544fd357e9",
-          "AccountNumber": "A00019554",
-          "Success": true,
-          "TotalTcv": 115.387634411
-      }
-     """
-
-  val error =
-    """
-      {
-        "Code": "53100320",
-        "Message": "'termType' value should be one of: TERMED, EVERGREEN"
-      }
-    """
 }
