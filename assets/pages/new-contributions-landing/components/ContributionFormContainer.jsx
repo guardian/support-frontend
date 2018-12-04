@@ -20,6 +20,7 @@ import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions'
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
+import { ContributionUsTicker } from './ContributionUsTicker';
 import { setPayPalHasLoaded } from '../contributionsLandingActions';
 
 import {
@@ -28,7 +29,6 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
-import { ContributionsTickerTemplate } from './ContributionTicker';
 
 
 // ----- Types ----- //
@@ -99,7 +99,7 @@ function ContributionFormContainer(props: PropTypes) {
     : (
       <div className="gu-content__content">
         <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
-        <ContributionsTickerTemplate />
+        { props.countryGroupId === 'UnitedStates' && <ContributionUsTicker /> }
         { countryGroupDetails.contributeCopy ?
           <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
         }
