@@ -1,9 +1,9 @@
 package com.gu.support.zuora.api
 
 import com.gu.support.encoding.Codec
-import com.gu.support.workers.model.PaymentMethod
 import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.workers.PaymentMethod
 
 object SubscribeItem {
   implicit val codec: Codec[SubscribeItem] = capitalizingCodec

@@ -2,7 +2,6 @@ package com.gu.support.workers
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
-import com.gu.support.workers.model.{BillingPeriod, Monthly}
 
 //noinspection TypeAnnotation
 object Fixtures {

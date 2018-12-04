@@ -1,16 +1,17 @@
-package com.gu.support.workers.model.states
+package com.gu.support.workers.states
 
 import java.util.UUID
 
-import com.gu.support.promotions.PromoCode
-import com.gu.support.workers.model._
+import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User}
+import com.gu.support.workers._
 
-case class CreateZuoraSubscriptionState(
+case class SendThankYouEmailState(
   requestId: UUID,
   user: User,
   product: ProductType,
   paymentMethod: PaymentMethod,
-  promoCode: Option[PromoCode],
   salesForceContact: SalesforceContactRecord,
+  accountNumber: String,
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
+

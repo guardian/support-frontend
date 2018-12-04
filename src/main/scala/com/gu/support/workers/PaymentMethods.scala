@@ -1,11 +1,11 @@
-package com.gu.support.workers.model
+package com.gu.support.workers
 
+import cats.syntax.functor._
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.capitalizingCodec
-import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
-import cats.syntax.functor._
+import io.circe.{Decoder, Encoder}
 
 sealed trait PaymentMethod {
   def `type`: String

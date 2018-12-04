@@ -1,4 +1,4 @@
-package com.gu.support.workers.model
+package com.gu.support.workers
 
 /**
  * AWS Step Functions expect to be passed valid Json, as we want to encrypt the whole of the

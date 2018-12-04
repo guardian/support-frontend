@@ -1,4 +1,4 @@
-package com.gu.support.workers.model
+package com.gu.support.workers
 
 sealed trait Status {
   def asString: String

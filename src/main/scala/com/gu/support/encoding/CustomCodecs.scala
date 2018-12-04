@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.encoding.Codec._
-import com.gu.support.workers.model._
+import com.gu.support.workers._
 import io.circe.{Decoder, Encoder}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 

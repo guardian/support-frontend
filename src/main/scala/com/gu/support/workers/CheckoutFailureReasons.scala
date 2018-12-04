@@ -1,6 +1,6 @@
-package com.gu.support.workers.model
+package com.gu.support.workers
 
-import PartialFunction.condOpt
+import scala.PartialFunction.condOpt
 
 object CheckoutFailureReasons {
 
@@ -94,4 +94,3 @@ object CheckoutFailureReasons {
   }
 
 }
-

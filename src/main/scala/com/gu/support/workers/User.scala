@@ -1,4 +1,4 @@
-package com.gu.support.workers.model
+package com.gu.support.workers
 
 import com.gu.i18n.Country
 

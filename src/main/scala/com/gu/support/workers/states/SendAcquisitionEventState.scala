@@ -1,6 +1,7 @@
-package com.gu.support.workers.model.states
+package com.gu.support.workers.states
 
-import com.gu.support.workers.model._
+import com.gu.support.workers.{PaymentMethod, User}
+import com.gu.support.workers._
 
 case class SendAcquisitionEventState(
   user: User,

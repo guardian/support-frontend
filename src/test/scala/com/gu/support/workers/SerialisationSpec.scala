@@ -4,8 +4,7 @@ import com.gu.i18n.Currency
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.model.states.{CreatePaymentMethodState, CreateSalesforceContactState, CreateZuoraSubscriptionState, SendThankYouEmailState}
-import com.gu.support.workers.model.{Annual, Contribution}
+import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState, CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser.decode

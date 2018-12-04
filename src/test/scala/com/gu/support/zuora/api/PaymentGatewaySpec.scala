@@ -1,7 +1,7 @@
 package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.{AUD, GBP}
-import com.gu.support.workers.model.CreditCardReferenceTransaction
+import com.gu.support.workers.CreditCardReferenceTransaction
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
 
