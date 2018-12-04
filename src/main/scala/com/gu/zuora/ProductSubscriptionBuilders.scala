@@ -39,11 +39,9 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate
       )
 
-      val result = maybePromoCode
+      maybePromoCode
         .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
         .getOrElse(subscriptionData)
-
-      result
     }
   }
 
