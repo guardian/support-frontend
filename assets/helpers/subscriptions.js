@@ -10,6 +10,7 @@ import { currencies, detect } from './internationalisation/currency';
 
 
 // ----- Types ------ //
+
 export type SubscriptionProduct =
   'DigitalPack' |
   'PremiumTier' |
@@ -25,8 +26,7 @@ export type ComponentAbTest = {
   variant: string,
 };
 
-
-// ----- Config ----- //
+export type DigitalBillingPeriod = 'monthly' | 'yearly';
 export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
 export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
 
@@ -41,6 +41,9 @@ const newsstandPrices: {[PaperNewsstandTiers]: number} = {
   saturday: 2.9,
   sunday: 3,
 };
+
+
+// ----- Config ----- //
 
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
@@ -98,6 +101,37 @@ const discountPricesForDefaultBillingPeriod: {
   },
 };
 
+const digitalSubscriptionPrices = {
+  GBPCountries: {
+    monthly: 11.99,
+    yearly: 119.90,
+  },
+  UnitedStates: {
+    monthly: 19.99,
+    yearly: 199.90,
+  },
+  AUDCountries: {
+    monthly: 21.50,
+    yearly: 215.00,
+  },
+  EURCountries: {
+    monthly: 14.99,
+    yearly: 149.90,
+  },
+  International: {
+    monthly: 19.99,
+    yearly: 199.90,
+  },
+  NZDCountries: {
+    monthly: 23.50,
+    yearly: 235.00,
+  },
+  Canada: {
+    monthly: 21.95,
+    yearly: 219.50,
+  },
+};
+
 const subscriptionPricesForGuardianWeekly: {
   [CountryGroupId]: {
     [WeeklyBillingPeriod]: number,
@@ -140,7 +174,6 @@ const subscriptionPricesForGuardianWeekly: {
   },
 };
 
-
 const defaultBillingPeriods: {
   [SubscriptionProduct]: BillingPeriod
 } = {
@@ -160,6 +193,10 @@ function fixDecimals(number: number): string {
     return number.toString();
   }
   return number.toFixed(2);
+}
+
+function getDigitalPrice(cgId: CountryGroupId, frequency: DigitalBillingPeriod): number {
+  return digitalSubscriptionPrices[cgId][frequency];
 }
 
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
@@ -253,4 +290,5 @@ export {
   getWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
+  getDigitalPrice,
 };
