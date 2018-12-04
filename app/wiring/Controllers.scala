@@ -45,7 +45,8 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     appConfig.guardianDomain,
-    settingsProvider
+    settingsProvider,
+    tipMonitoring
   )
 
   lazy val payPalRegularController = new PayPalRegular(
