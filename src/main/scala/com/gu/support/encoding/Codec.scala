@@ -7,6 +7,7 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe._
 import shapeless.Lazy
 import StringExtensions._
+import JsonHelpers._
 
 class Codec[T](enc: Encoder[T], dec: Decoder[T]) extends Encoder[T] with Decoder[T] {
   override def apply(a: T): Json = enc.apply(a)
@@ -33,16 +34,7 @@ object Codec
   def capitalizingEncoder[A](implicit encode: Lazy[DerivedObjectEncoder[A]]): ObjectEncoder[A] =
     deriveEncoder[A].mapJsonObject(capitalizeFields)
 
-  def modifyFields(json: JsonObject)(f: String => String): JsonObject = {
-    //ignore intelliJ, this is needed!
-    import cats.implicits._
+  def capitalizeFields(jsonObject: JsonObject): JsonObject = jsonObject.mapKeys(_.capitalize)
 
-    val newFields = json.keys.map(str => f(str)).zip(json.values)
-    val newObject = JsonObject.fromFoldable(newFields.toList)
-    newObject
-  }
-
-  def capitalizeFields(jsonObject: JsonObject): JsonObject = modifyFields(jsonObject)(_.capitalize)
-
-  def decapitalizeFields(jsonObject: JsonObject): JsonObject = modifyFields(jsonObject)(_.decapitalize)
+  def decapitalizeFields(jsonObject: JsonObject): JsonObject = jsonObject.mapKeys(_.decapitalize)
 }

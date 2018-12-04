@@ -90,6 +90,8 @@ package object promotions {
     }
   }
 
+  case class ValidatedPromotion(promoCode: PromoCode, promotion: Promotion)
+
   sealed trait PromoError {
     def msg: String
   }

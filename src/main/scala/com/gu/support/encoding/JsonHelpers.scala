@@ -19,6 +19,15 @@ object JsonHelpers {
       else
         jsonObject.add(key, default)
 
+    def mapKeys(f: String => String): JsonObject = {
+      //ignore intelliJ, this is needed!
+      import cats.implicits._
+
+      val newFields = jsonObject.keys.map(str => f(str)).zip(jsonObject.values)
+      val newObject = JsonObject.fromFoldable(newFields.toList)
+      newObject
+    }
+
     def extractBenefits: JsonObject = {
       val result = for {
         promotionTypeJson <- jsonObject("promotionType")

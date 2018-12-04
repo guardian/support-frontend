@@ -1,7 +1,7 @@
 package com.gu.support.zuora.api
 
 import cats.syntax.functor._
-import com.gu.support.catalog.ProductRatePlanChargeId
+import com.gu.support.catalog.{ProductRatePlanChargeId, ProductRatePlanId}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.Codec
@@ -89,7 +89,7 @@ object RatePlan {
   implicit val codec: Codec[RatePlan] = capitalizingCodec
 }
 
-case class RatePlan(productRatePlanId: String)
+case class RatePlan(productRatePlanId: ProductRatePlanId)
 
 object SubscriptionProductFeature {
   implicit val codec: Codec[SubscriptionProductFeature] = capitalizingCodec

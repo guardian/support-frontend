@@ -9,6 +9,7 @@ import io.circe.generic.semiauto.deriveDecoder
 import io.circe.generic.auto._
 import io.circe.{Decoder, Json}
 import Codec._
+import com.gu.support.encoding.JsonHelpers._
 
 package object catalog {
 
@@ -26,7 +27,9 @@ package object catalog {
   )
 
   object Pricing {
+
     import com.gu.support.encoding.CustomCodecs.{decodeCurrency, encodeCurrency}
+
     implicit val codec: Codec[Pricing] = deriveCodec
   }
 
@@ -45,13 +48,9 @@ package object catalog {
   object ProductRatePlanCharge {
     implicit val productRatePlanChargeDecoder: Decoder[ProductRatePlanCharge] = deriveDecoder[ProductRatePlanCharge].prepare {
       _.withFocus {
-        _.mapObject { jsonObject =>
-          val existingValue = jsonObject("ProductType__c").map(j =>
-            if (j.isNull)
-              Json.fromString("")
-            else j
-          )
-          jsonObject.remove("ProductType__c").add("productType", existingValue.get)
+        _.mapObject {
+          _.checkKeyExists("ProductType__c", Json.fromString(""))
+            .copyField("ProductType__c", "productType")
         }
       }
     }

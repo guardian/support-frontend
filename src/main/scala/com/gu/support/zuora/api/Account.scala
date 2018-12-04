@@ -1,12 +1,14 @@
 package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.Codec._
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.encoding.JsonHelpers._
 import io.circe.{Decoder, Encoder}
 
 object Account {
-  implicit val encoder: Encoder[Account] = capitalizingEncoder[Account].mapJsonObject(modifyFields(_)(decapitalizeSfContactId))
+  private val salesforceIdName = "sfContactId__c"
+  implicit val encoder: Encoder[Account] = capitalizingEncoder[Account].mapJsonObject(_.renameField(salesforceIdName.capitalize, salesforceIdName))
   implicit val decoder: Decoder[Account] = decapitalizingDecoder[Account]
 }
 
