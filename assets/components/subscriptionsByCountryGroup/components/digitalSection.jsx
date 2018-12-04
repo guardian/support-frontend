@@ -30,7 +30,7 @@ type PropTypes = {|
 
 function DigitalSection(props: PropTypes) {
   return (
-    <ThreeSubscriptions heading="">
+    <ThreeSubscriptions heading="Digital Subscriptions">
       <PremiumTier
         headingSize={props.headingSize}
         referrer={props.appReferrer}
