@@ -23,7 +23,7 @@ case class Promotion(
 }
 
 object Promotion {
-  import com.gu.support.encoding.CustomCodecs.decodeDateTimeFromString
+  import com.gu.support.encoding.CustomCodecs.decodeDateTime
   implicit val decoder: Decoder[Promotion] = deriveDecoder[Promotion].prepare(mapFields)
 
   private def mapFields(c: ACursor) = c.withFocus {

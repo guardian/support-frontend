@@ -7,28 +7,22 @@ import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState, CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
-import io.circe.parser.decode
 import org.scalatest.FlatSpec
 
 class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with LazyLogging {
 
   "Contribution JSON with a billing period set" should "be decoded correctly" in {
     val input = contribution(billingPeriod = Annual)
-    val result = decode[Contribution](input)
-    result.isRight should be(true)
-    result.right.get.billingPeriod should be(Annual)
+    testDecoding[Contribution](input, _.billingPeriod shouldBe Annual)
   }
 
   "CreatePaymentMethodState" should "deserialise correctly" in {
     testDecoding[CreatePaymentMethodState](createStripePaymentMethodContributionJson())
     testDecoding[CreatePaymentMethodState](createPayPalPaymentMethodContributionJson(Currency.USD))
     testDecoding[CreatePaymentMethodState](createPayPalPaymentMethodDigitalPackJson)
-    val result = decode[CreatePaymentMethodState](createDirectDebitDigitalPackJson)
-    assertDecodingSucceeded[CreatePaymentMethodState](result)
-    val acquisitionData = result.right.get.acquisitionData
-    acquisitionData.isDefined shouldBe true
-    acquisitionData.get.ophanIds.pageviewId shouldBe Some("jkcg440imu1c0m8pxpxe")
-
+    testDecoding[CreatePaymentMethodState](createDirectDebitDigitalPackJson,
+      _.acquisitionData.get.ophanIds.pageviewId shouldBe Some("jkcg440imu1c0m8pxpxe")
+    )
   }
 
   "CreateSalesforceContactState" should "deserialise correctly" in {

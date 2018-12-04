@@ -1,5 +1,7 @@
 package com.gu.support.workers
 
+import io.circe.{Decoder, Encoder}
+
 import scala.PartialFunction.condOpt
 
 object CheckoutFailureReasons {
@@ -91,6 +93,12 @@ object CheckoutFailureReasons {
     case "transaction_not_allowed" => PaymentMethodUnacceptable
     case "try_again_later" => PaymentMethodTemporarilyDeclined
     case "withdrawal_count_limit_exceeded" => PaymentMethodUnacceptable
+  }
+
+  implicit val encodeFailureReason: Encoder[CheckoutFailureReason] = Encoder.encodeString.contramap[CheckoutFailureReason](_.asString)
+
+  implicit val decodeFailureReason: Decoder[CheckoutFailureReason] = Decoder.decodeString.emap {
+    identifier => CheckoutFailureReasons.fromString(identifier).toRight(s"Unrecognised failure reason '$identifier'")
   }
 
 }

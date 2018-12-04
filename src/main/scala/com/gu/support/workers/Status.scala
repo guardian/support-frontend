@@ -1,5 +1,7 @@
 package com.gu.support.workers
 
+import io.circe.{Decoder, Encoder}
+
 sealed trait Status {
   def asString: String
 }
@@ -19,5 +21,11 @@ object Status {
 
   case object Pending extends Status {
     override def asString = "pending"
+  }
+
+  implicit val encodeStatus: Encoder[Status] = Encoder.encodeString.contramap[Status](_.asString)
+
+  implicit val decodeStatus: Decoder[Status] = Decoder.decodeString.emap {
+    identifier => Status.fromString(identifier).toRight(s"Unrecognised status '$identifier'")
   }
 }
