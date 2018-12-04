@@ -36,7 +36,6 @@ if (!isDetailsSupported) {
 const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(initReducer(countryGroupId), true);
-
 // We need to initialise in this order, as
 // formInit depends on the user being populated
 user.init(store.dispatch, setUserStateActions);
@@ -86,9 +85,10 @@ const router = (
               <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
               />
-              <NewContributionBackground />
+              <NewContributionBackground countryGroupId={countryGroupId}/>
             </Page>
-          )}
+          )
+        }
         />
         <Route
           exact
@@ -105,7 +105,7 @@ const router = (
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
                 <ContributionThankYouContainer />
-                <NewContributionBackground />
+                <NewContributionBackground countryGroupId={countryGroupId} />
               </Page>
             );
           }}

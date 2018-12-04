@@ -57,6 +57,7 @@ export const imageCatalogue: {
   paperLandingHeroMobile: 'c662f53516b202d56fed0a08c8f1cdbd1d132a92/0_0_924_696',
   paperDeliveryFeature: '7cd44415801daf5bcb379bb0ba348c6ed7601c01/0_0_920_820',
   paperVoucherFeature: '33ce22d8c3b65e830b91ab089f5c0670cbd6a7d9/0_0_920_820',
+  UsCampaignLanding: '56fbd07b8e3b7090853dce5aa47c7153bd5c6e05/0_0_1500_1454',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
