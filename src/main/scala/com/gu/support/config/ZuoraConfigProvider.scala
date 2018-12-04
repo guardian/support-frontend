@@ -2,7 +2,7 @@ package com.gu.support.config
 
 
 import com.gu.support.catalog.{ProductRatePlanChargeId, ProductRatePlanId}
-import com.gu.support.workers.model.{Annual, BillingPeriod, Monthly, Quarterly}
+import com.gu.support.workers.{Annual, BillingPeriod, Monthly, Quarterly}
 import com.typesafe.config.Config
 
 case class ZuoraContributionConfig(productRatePlanId: ProductRatePlanId, productRatePlanChargeId: ProductRatePlanChargeId)
