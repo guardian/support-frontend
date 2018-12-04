@@ -5,7 +5,7 @@ import java.util.Base64
 
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Encryption.encrypt
-import com.gu.support.workers.model.{JsonWrapper, RequestInfo}
+import com.gu.support.workers.{JsonWrapper, RequestInfo}
 import io.circe.Encoder
 import io.circe.generic.auto._
 import io.circe.parser._

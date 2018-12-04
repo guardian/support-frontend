@@ -2,8 +2,8 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.model.states.StepFunctionUserState
-import com.gu.support.workers.model.{ExecutionError, RequestInfo}
+import com.gu.support.workers.states.StepFunctionUserState
+import com.gu.support.workers.{ExecutionError, RequestInfo}
 import io.circe.{Decoder, Encoder}
 
 import scala.concurrent.duration._

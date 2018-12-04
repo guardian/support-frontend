@@ -4,7 +4,7 @@ import java.io.{InputStream, OutputStream}
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import com.gu.support.workers.exceptions.ErrorHandler
-import com.gu.support.workers.model.{ExecutionError, RequestInfo}
+import com.gu.support.workers.{ExecutionError, RequestInfo}
 import io.circe.{Decoder, Encoder}
 
 import scala.concurrent.duration._

@@ -5,7 +5,7 @@ import cats.implicits._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.config.ZuoraConfig
-import com.gu.support.workers.model.IdentityId
+import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{QueryData, SubscribeRequest}
 import com.gu.support.zuora.domain.{DomainAccount, DomainSubscription}

@@ -5,9 +5,9 @@ import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.{SalesforceContactResponse, UpsertData}
 import com.gu.services.Services
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.workers.RequestInfo
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.model.RequestInfo
-import com.gu.support.workers.model.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
+import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global

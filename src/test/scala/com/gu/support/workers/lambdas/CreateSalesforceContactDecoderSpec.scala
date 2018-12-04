@@ -2,8 +2,8 @@ package com.gu.support.workers.lambdas
 
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.model.states.CreateSalesforceContactState
-import com.gu.support.workers.model.{Contribution, PayPalReferenceTransaction, PaymentMethod}
+import com.gu.support.workers.states.CreateSalesforceContactState
+import com.gu.support.workers.{Contribution, PayPalReferenceTransaction, PaymentMethod}
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser._

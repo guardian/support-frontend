@@ -8,7 +8,6 @@ import com.gu.salesforce.Fixtures.{email, idId}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
-import com.gu.support.workers.model.{BillingPeriod, Monthly, RequestInfo}
 import io.circe.generic.auto._
 import io.circe.syntax._
 

@@ -5,7 +5,6 @@ import java.util.UUID
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog.ProductRatePlanId
-import com.gu.support.workers.model.{BillingPeriod, IdentityId}
 import com.gu.support.zuora.api.response.RatePlan
 import com.gu.support.zuora.domain.{CreatedRequestId, DomainAccount, DomainSubscription}
 import com.gu.zuora.ZuoraService

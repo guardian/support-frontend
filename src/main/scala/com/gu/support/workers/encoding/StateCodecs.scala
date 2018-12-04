@@ -2,8 +2,8 @@ package com.gu.support.workers.encoding
 
 import com.gu.salesforce.Salesforce._
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.model.CheckoutFailureReasons._
-import com.gu.support.workers.model.{CheckoutFailureReasons, Status}
+import com.gu.support.workers.CheckoutFailureReasons._
+import com.gu.support.workers.{CheckoutFailureReasons, Status}
 import io.circe.{Decoder, Encoder}
 
 object StateCodecs {

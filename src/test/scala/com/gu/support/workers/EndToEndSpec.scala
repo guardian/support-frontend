@@ -8,7 +8,6 @@ import com.gu.monitoring.SafeLogger
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.lambdas._
-import com.gu.support.workers.model.JsonWrapper
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.generic.auto._
 import io.circe.parser._

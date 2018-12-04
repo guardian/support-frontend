@@ -11,8 +11,7 @@ import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.Fixtures.{createContributionZuoraSubscriptionJson, wrapFixture}
 import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
-import com.gu.support.workers.model.JsonWrapper
-import com.gu.support.workers.{Fixtures, LambdaSpec}
+import com.gu.support.workers.{Fixtures, JsonWrapper, LambdaSpec}
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures.{incorrectPaymentMethod, invalidSubscriptionRequest}

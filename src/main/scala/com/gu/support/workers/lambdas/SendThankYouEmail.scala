@@ -7,8 +7,8 @@ import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.model.states.SendThankYouEmailState
-import com.gu.support.workers.model.{Contribution, DigitalPack, DirectDebitPaymentMethod, RequestInfo}
+import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.{Contribution, DigitalPack, DirectDebitPaymentMethod, RequestInfo}
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._

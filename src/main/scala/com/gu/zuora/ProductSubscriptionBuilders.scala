@@ -4,7 +4,7 @@ import com.gu.i18n.Country
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.ZuoraConfig
 import com.gu.support.promotions.{PromoCode, PromotionService}
-import com.gu.support.workers.model.{Contribution, DigitalPack}
+import com.gu.support.workers.{Contribution, DigitalPack}
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
 

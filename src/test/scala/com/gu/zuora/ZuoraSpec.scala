@@ -5,8 +5,7 @@ import java.util.UUID
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
-import com.gu.support.workers.GetRecurringSubscription
-import com.gu.support.workers.model.{IdentityId, Monthly}
+import com.gu.support.workers.{GetRecurringSubscription, IdentityId, Monthly}
 import com.gu.support.zuora.api.SubscribeRequest
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest

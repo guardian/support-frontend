@@ -6,9 +6,8 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromotionService
-import com.gu.support.workers.GetRecurringSubscription
-import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
-import com.gu.support.workers.model.{Contribution, DigitalPack, IdentityId, RequestInfo}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers._
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response.{SubscribeResponseAccount, ZuoraAccountNumber}
 import com.gu.support.zuora.domain.DomainSubscription

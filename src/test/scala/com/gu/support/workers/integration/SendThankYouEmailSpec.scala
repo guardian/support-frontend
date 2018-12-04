@@ -10,11 +10,10 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
-import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.SendThankYouEmail
-import com.gu.support.workers.model.{DirectDebitPaymentMethod, Monthly, User}
+import com.gu.support.workers.{DirectDebitPaymentMethod, LambdaSpec, Monthly, User}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json

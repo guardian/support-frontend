@@ -7,9 +7,9 @@ import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
-import com.gu.support.workers.model.CheckoutFailureReasons._
-import com.gu.support.workers.model.states.{CheckoutFailureState, FailureHandlerState}
-import com.gu.support.workers.model.{Contribution, DigitalPack, ExecutionError, RequestInfo}
+import com.gu.support.workers.CheckoutFailureReasons._
+import com.gu.support.workers.states.{CheckoutFailureState, FailureHandlerState}
+import com.gu.support.workers.{Contribution, DigitalPack, ExecutionError, RequestInfo}
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import io.circe.Decoder
 import io.circe.generic.auto._

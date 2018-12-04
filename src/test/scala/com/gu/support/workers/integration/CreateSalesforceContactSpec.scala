@@ -9,7 +9,7 @@ import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.CreateSalesforceContact
-import com.gu.support.workers.model.states.CreateZuoraSubscriptionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.generic.auto._
 

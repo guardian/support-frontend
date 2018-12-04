@@ -5,7 +5,7 @@ import java.util.Base64
 import com.gu.config.Configuration
 import com.gu.support.config.AwsConfig
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.model.JsonWrapper
+import com.gu.support.workers.JsonWrapper
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 import io.circe.parser._
