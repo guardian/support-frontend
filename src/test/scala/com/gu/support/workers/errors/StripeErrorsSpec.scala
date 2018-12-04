@@ -95,14 +95,14 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     stripeError.get.code should be(Some("card_declined"))
   }
 
-  private lazy val timeoutServices = mockServices(
+  private lazy val timeoutServices = mockService(
     s => s.stripeService,
     //Create a stripe service which will timeout after 1 millisecond
     new StripeService(Configuration.stripeConfigProvider.get(), configurableFutureRunner(1.milliseconds))
   )
 
   def errorServices(baseUrl: String): ServiceProvider = {
-    mockServices(
+    mockService(
       s => s.stripeService,
       new StripeService(Configuration.stripeConfigProvider.get(), configurableFutureRunner(10.seconds), baseUrl)
     )

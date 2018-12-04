@@ -28,7 +28,7 @@ object Configuration {
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)
   val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
-  val promotionsTablesConfigProvider = new PromotionsTablesConfigProvider(config, stage)
+  val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
 
   val contributionThanksQueueName = config.getString("email.thankYou.queueName")
 }

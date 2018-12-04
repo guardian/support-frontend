@@ -5,11 +5,9 @@ import java.util.UUID
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog.ProductRatePlanId
-import com.gu.support.workers.lambdas.IdentityId
-import com.gu.support.workers.model.BillingPeriod
+import com.gu.support.workers.model.{BillingPeriod, IdentityId}
 import com.gu.support.zuora.api.response.RatePlan
-import com.gu.zuora.GetAccountForIdentity.{CreatedRequestId, DomainAccount}
-import com.gu.zuora.GetSubscription.DomainSubscription
+import com.gu.support.zuora.domain.{CreatedRequestId, DomainAccount, DomainSubscription}
 import com.gu.zuora.ZuoraService
 
 import scala.concurrent.{ExecutionContext, Future}

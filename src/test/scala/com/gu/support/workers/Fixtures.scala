@@ -222,13 +222,25 @@ object Fixtures {
             "salesForceContact": $salesforceContactJson
             }
         """
-  def createDigiPackZuoraSubscriptionJson =
+  val createDigiPackZuoraSubscriptionJson =
     s"""
           {
             $requestIdJson,
             $userJson,
             "product": ${digitalPackJson},
             "paymentMethod": $stripePaymentMethod,
+            "salesForceContact": $salesforceContactJson
+            }
+        """
+
+  val createDigiPackSubscriptionWithPromoJson =
+    s"""
+          {
+            $requestIdJson,
+            $userJson,
+            "product": ${digitalPackJson},
+            "paymentMethod": $stripePaymentMethod,
+            "promoCode": "DJP8L27FY",
             "salesForceContact": $salesforceContactJson
             }
         """

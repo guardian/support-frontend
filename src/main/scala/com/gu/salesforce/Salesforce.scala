@@ -3,7 +3,7 @@ package com.gu.salesforce
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse._
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.encoding.CustomCodecs.{decodeDateTime, encodeDateTime}
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
 import com.gu.support.workers.model.SalesforceContactRecord
 import org.joda.time.DateTime

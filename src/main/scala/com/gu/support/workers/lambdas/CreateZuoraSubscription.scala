@@ -5,18 +5,18 @@ import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.GetRecurringSubscription
 import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
-import com.gu.support.workers.model.{Contribution, DigitalPack, RequestInfo}
+import com.gu.support.workers.model.{Contribution, DigitalPack, IdentityId, RequestInfo}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response.{SubscribeResponseAccount, ZuoraAccountNumber}
-import com.gu.zuora.GetSubscription.DomainSubscription
+import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
 import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Try
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
@@ -53,7 +53,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   }
 
   def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
-    singleSubscribe(services.zuoraService.subscribe)(buildSubscribeRequest(state))
+    singleSubscribe(services.zuoraService.subscribe)(buildSubscribeRequest(state, services.promotionService))
       .map(response =>
         HandlerResult(getEmailState(state, response.domainAccountNumber), requestInfo))
 
@@ -68,22 +68,22 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.acquisitionData
     )
 
-  private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
+  private def buildSubscribeRequest(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
     SubscribeItem(
       buildAccount(state),
       buildContactDetails(state),
       state.paymentMethod,
-      buildSubscriptionData(state),
+      buildSubscriptionData(state, promotionService),
       SubscribeOptions()
     )
   }
 
-  private def buildSubscriptionData(state: CreateZuoraSubscriptionState) = {
+  private def buildSubscriptionData(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
     val config = zuoraConfigProvider.get(state.user.isTestUser)
     state.product match {
       case c: Contribution => c.build(config)
-      case d: DigitalPack => d.build(config)
+      case d: DigitalPack => d.build(config, state.user.country, state.promoCode, promotionService)
     }
   }
 
@@ -106,12 +106,4 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
     state.requestId.toString
   )
-}
-
-case class IdentityId(value: String)
-object IdentityId {
-
-  def apply(wire: String): Try[IdentityId] =
-    Try(wire.toLong).map(_.toString).map(new IdentityId(_))
-
 }

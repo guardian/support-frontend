@@ -1,13 +1,16 @@
 package com.gu.zuora
 
+import com.gu.i18n.Country
+import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.ZuoraConfig
-import com.gu.support.workers.model.{Contribution, DigitalPack, ProductType}
+import com.gu.support.promotions.{PromoCode, PromotionService}
+import com.gu.support.workers.model.{Contribution, DigitalPack}
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
 
 object ProductSubscriptionBuilders {
 
-  implicit class ContributionSubscriptionBuilder(val contribution: Contribution) extends ProductSubscriptionBuilder[Contribution] {
+  implicit class ContributionSubscriptionBuilder(val contribution: Contribution) extends ProductSubscriptionBuilder {
     def build(config: ZuoraConfig): SubscriptionData = {
       val contributionConfig = config.contributionConfig(contribution.billingPeriod)
       buildProductSubscription(
@@ -21,52 +24,35 @@ object ProductSubscriptionBuilders {
     }
   }
 
-  implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder[DigitalPack] {
-    def build(config: ZuoraConfig): SubscriptionData = {
+  implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder {
+    def build(config: ZuoraConfig, country: Country, maybePromoCode: Option[PromoCode], promotionService: PromotionService): SubscriptionData = {
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
       val contractAcceptanceDate = contractEffectiveDate
         .plusDays(config.digitalPack.defaultFreeTrialPeriod)
         .plusDays(config.digitalPack.paymentGracePeriod)
 
-      buildProductSubscription(
-        config.digitalPackRatePlan(digitalPack.billingPeriod),
+      val productRatePlanId = config.digitalPackRatePlan(digitalPack.billingPeriod)
+
+      val subscriptionData = buildProductSubscription(
+        productRatePlanId,
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate
       )
 
-      SubscriptionData(
-        List(
-          RatePlanData(
-            RatePlan(config.discounts.productRatePlanId),
-            List(RatePlanChargeData(
-              DiscountRatePlanCharge(
-                config.discounts.productRatePlanChargeId,
-                discountPercentage = 15,
-                upToPeriods = 2
-              )
-            )),
-            Nil
-          ),
-          RatePlanData(
-            RatePlan(config.digitalPackRatePlan(digitalPack.billingPeriod)),
-            Nil,
-            Nil
-          )
-        ),
-        Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate)
-      )
-    }
+      val result = maybePromoCode
+        .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
+        .getOrElse(subscriptionData)
 
+      result
+    }
   }
 
 }
 
-trait ProductSubscriptionBuilder[T <: ProductType] {
-
-  def build(config: ZuoraConfig): SubscriptionData
+trait ProductSubscriptionBuilder {
 
   protected def buildProductSubscription(
-    ratePlanId: RatePlanId,
+    productRatePlanId: ProductRatePlanId,
     ratePlanCharges: List[RatePlanChargeData] = Nil,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
     contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
@@ -74,7 +60,7 @@ trait ProductSubscriptionBuilder[T <: ProductType] {
     SubscriptionData(
       List(
         RatePlanData(
-          RatePlan(ratePlanId),
+          RatePlan(productRatePlanId),
           ratePlanCharges,
           Nil
         )

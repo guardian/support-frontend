@@ -42,7 +42,7 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     server.shutdown()
   }
 
-  lazy private val timeOutServices = mockServices(
+  lazy private val timeOutServices = mockService(
     s => s.payPalService,
     new PayPalService(Configuration.payPalConfigProvider.get(), RequestRunners.configurableFutureRunner(1.milliseconds))
   )
@@ -51,7 +51,7 @@ class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
     val conf = Configuration.payPalConfigProvider.get()
     val mockConfig = PayPalConfig(conf.payPalEnvironment, conf.NVPVersion, baseUrl, conf.user, conf.password, conf.signature)
     val payPal = new PayPalService(mockConfig, RequestRunners.configurableFutureRunner(10.seconds))
-    mockServices(
+    mockService(
       s => s.payPalService,
       payPal
     )

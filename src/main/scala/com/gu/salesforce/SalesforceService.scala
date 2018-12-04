@@ -6,7 +6,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
-import com.gu.support.encoding.CustomCodecs
+import com.gu.support.encoding.CustomCodecs._
 import io.circe
 import io.circe.Decoder
 import io.circe.parser._
@@ -77,8 +77,7 @@ object AuthService {
 }
 
 class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[SalesforceAuthenticationErrorResponse]
-    with CustomCodecs {
+    extends WebServiceHelper[SalesforceAuthenticationErrorResponse] {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)

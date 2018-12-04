@@ -82,7 +82,6 @@ object Fixtures {
 
   val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account(), contactDetails, payPalPaymentMethod, invalidMonthlySubsData, SubscribeOptions())))
 
-
   val subscribeResponseAccount =
     s"""
       {

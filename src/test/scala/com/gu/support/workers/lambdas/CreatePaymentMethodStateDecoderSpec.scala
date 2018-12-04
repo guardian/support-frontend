@@ -94,9 +94,4 @@ class CreatePaymentMethodStateDecoderSpec extends FlatSpec with Matchers with Mo
     })
   }
 
-  it should "be able to decode the old json schema" in {
-    val state = decode[CreatePaymentMethodState](oldSchemaContributionJson)
-    state.isRight should be(true)
-  }
-
 }

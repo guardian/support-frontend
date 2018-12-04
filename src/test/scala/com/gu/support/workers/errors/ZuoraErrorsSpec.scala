@@ -84,7 +84,7 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
 
   private val timeoutServices = errorServices(None, 1.milliseconds)
 
-  def errorServices(baseUrl: Option[String], timeout: Duration = 10.seconds): ServiceProvider = mockServices(
+  def errorServices(baseUrl: Option[String], timeout: Duration = 10.seconds): ServiceProvider = mockService(
     s => s.zuoraService,
     new ZuoraService(Configuration.zuoraConfigProvider.get(), configurableFutureRunner(timeout), baseUrl)
   )
