@@ -28,6 +28,7 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
+import { ContributionsTickerTemplate } from './ContributionTicker';
 
 
 // ----- Types ----- //
@@ -98,6 +99,7 @@ function ContributionFormContainer(props: PropTypes) {
     : (
       <div className="gu-content__content">
         <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
+        <ContributionsTickerTemplate />
         { countryGroupDetails.contributeCopy ?
           <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
         }
