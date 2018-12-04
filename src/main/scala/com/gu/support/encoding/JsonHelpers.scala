@@ -4,6 +4,7 @@ import com.gu.support.promotions.{DiscountBenefit, FreeTrialBenefit, IncentiveBe
 import io.circe.{Json, JsonObject}
 
 object JsonHelpers {
+
   implicit class JsonObjectExtensions(jsonObject: JsonObject) {
     def renameField(from: String, to: String) =
       jsonObject.copyField(from, to).remove(from)
@@ -13,8 +14,14 @@ object JsonHelpers {
         .map(json => jsonObject.add(to, json))
         .getOrElse(jsonObject)
 
+    def removeIfNull(key: String) =
+      jsonObject(key)
+        .filter(_ == Json.Null)
+        .map(_ => jsonObject.remove(key))
+        .getOrElse(jsonObject)
+
     def checkKeyExists(key: String, default: Json) =
-      if(jsonObject.contains(key))
+      if (jsonObject.contains(key))
         jsonObject
       else
         jsonObject.add(key, default)
@@ -66,4 +73,5 @@ object JsonHelpers {
   implicit class JsonExtensions(json: Json) {
     def getField(key: String) = json.hcursor.downField(key).focus
   }
+
 }
