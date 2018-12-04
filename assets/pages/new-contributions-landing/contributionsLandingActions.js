@@ -71,6 +71,7 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
+  | { type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment: boolean }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -113,6 +114,8 @@ const updateEmail = (email: string): ((Function) => void) =>
   };
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
+
+const setCanMakeApplePayPayment = (canMakeApplePayPayment: boolean): Action => ({ type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment });
 
 const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -465,4 +468,5 @@ export {
   checkIfEmailHasPassword,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
+  setCanMakeApplePayPayment,
 };

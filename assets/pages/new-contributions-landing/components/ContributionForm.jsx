@@ -44,6 +44,8 @@ import {
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
+import ApplePay from './ApplePay';
+import { setCanMakeApplePayPayment } from '../../new-contributions-landing/contributionsLandingActions';
 
 
 // ----- Types ----- //
@@ -70,6 +72,11 @@ type PropTypes = {|
   formIsValid: boolean,
   isPostDeploymentTestUser: boolean,
   formIsSubmittable: boolean,
+  canMakeApplePayPayment: boolean,
+  country: string,
+  amount: number,
+  setCanMakeApplePayPayment: (boolean) => void,
+
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -104,6 +111,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setCanMakeApplePayPayment:
+    (canMakeApplePayPayment) => { dispatch(setCanMakeApplePayPayment(canMakeApplePayPayment)); },
 });
 
 // ----- Functions ----- //
@@ -195,6 +204,9 @@ function ContributionForm(props: PropTypes) {
       <ContributionTypeTabs />
       <NewContributionAmount
         checkOtherAmount={checkAmount}
+      />
+      <ApplePay
+        setCanMakeApplePayPayment={props.setCanMakeApplePayPayment}
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />

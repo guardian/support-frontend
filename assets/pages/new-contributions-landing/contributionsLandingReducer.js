@@ -68,6 +68,7 @@ type FormState = {
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
+  canMakeApplePayPayment: boolean,
 };
 
 type PageState = {
@@ -145,6 +146,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
     formIsSubmittable: true,
+    canMakeApplePayPayment: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -202,6 +204,9 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
+
+      case 'SET_CAN_MAKE_APPLE_PAY_PAYMENT':
+        return { ...state, canMakeApplePayPayment: action.canMakeApplePayPayment };
 
       case 'UPDATE_USER_FORM_DATA':
         return { ...state, formData: { ...state.formData, ...action.userFormData } };
