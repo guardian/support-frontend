@@ -50,22 +50,6 @@ class FailureHandlerSpec extends LambdaSpec {
 
   }
 
-  "FailureHandler lambda" should "still return a failed JsonWrapper and an Unknown failure reason if it receives the old schema" in {
-    val failureHandler = new FailureHandler()
-
-    val outStream = new ByteArrayOutputStream()
-
-    failureHandler.handleRequest(oldSchemaFailureJson.asInputStream, outStream, context)
-
-    val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
-    val requestInfo = outState.get._3
-    val checkoutFailureState = outState.get._1
-
-    requestInfo.failed should be(true)
-    checkoutFailureState.checkoutFailureReason should be(Unknown)
-
-  }
-
   it should "return a non failed JsonWrapper and an appropriate failure reason for a payment error from Zuora" in {
     val failureHandler = new FailureHandler()
 
