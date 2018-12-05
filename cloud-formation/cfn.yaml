@@ -292,6 +292,25 @@ Resources:
     - TargetGroup
     - ElasticLoadBalancer
 
+  HighWarningAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: Warnings support-frontend
+      AlarmDescription: This alerts when non critical events happen. These should be dealt with in the next sprint.
+      MetricName: WarningCount
+      Namespace: support-frontend
+      Dimensions:
+        - Name: Stage
+          Value: !Sub ${Stage}
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 3
+      Period: 60
+      EvaluationPeriods: 2
+      Statistic: Sum
+
   StateMachineUnavailableMetric:
     Type: "AWS::Logs::MetricFilter"
     Properties:
