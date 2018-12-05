@@ -41,7 +41,7 @@ const ContentHelpBlock = () => (
 
 
 const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (
-  <ProductPageContentBlock allowOverflow type="feature">
+  <ProductPageContentBlock type="feature">
     <ProductPageTextBlock {...{ title }} />
     <ProductPageContentBlockDivider />
     {text &&
@@ -64,6 +64,7 @@ const ContentVoucherFaqBlock = () => (
   />
   }
   >
+    <ProductPageContentBlockDivider />
     <ProductPageTextBlock title="How do vouchers work?">
       <ProductPageTextBlockList items={[
         'When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter',
@@ -98,6 +99,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     />
     }
     >
+      <ProductPageContentBlockDivider />
       <ProductPageTextBlock title="How does delivery work?">
         <ProductPageTextBlockList items={[
           (
