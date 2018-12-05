@@ -15,7 +15,7 @@ object DiscountBenefit {
 
 case class FreeTrialBenefit(duration: Days) extends Benefit
 
-object FreeTrialBenefit{
+object FreeTrialBenefit {
   val jsonName = "free_trial"
 }
 
