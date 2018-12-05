@@ -37,5 +37,11 @@ cmake-build-release/
 
 # IntelliJ
 target/
+lib_managed/
+project/boot/
+project/plugins/project/
+.cache
+.lib/
 
+.idea/
 
