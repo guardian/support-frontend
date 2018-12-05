@@ -17,6 +17,14 @@ licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.h
 
 resolvers += Resolver.bintrayRepo("guardian", "ophan")
 
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
+
 lazy val circeVersion = "0.10.1"
 
 libraryDependencies ++= Seq(
