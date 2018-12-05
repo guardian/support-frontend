@@ -5,7 +5,6 @@
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { type Option } from 'helpers/types/option';
-import { getQueryParameter } from 'helpers/url';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
@@ -58,9 +57,7 @@ const getTabsReducer = (initialTab: PaperDeliveryMethod) =>
 
 // ----- Exports ----- //
 
-export default (initialTab: PaperDeliveryMethod, dataset: Object) => {
-
-  const promoInUrl = getQueryParameter('promo');
+export default (initialTab: PaperDeliveryMethod, dataset: Object, promoInUrl: ?string) => {
 
   const prices: PaperPrices = {
     collectionEveryday: getPriceAsFloat(dataset.collectionEveryday),

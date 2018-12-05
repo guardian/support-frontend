@@ -5,7 +5,7 @@
     color: $text;
   }
   @if($bg){
-    &, .component-product-page-content-block__bg {
+    &, .component-product-page-content-block-bg {
       background-color: gu-colour(header-dark);
     }
   }

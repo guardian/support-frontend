@@ -13,6 +13,7 @@ import ProductPageContentBlock from 'components/productPage/productPageContentBl
 import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 
+import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
@@ -40,11 +41,11 @@ const reactElementId: {
 // ----- Prices ----- //
 
 const { dataset } = document.querySelector(`#${reactElementId[method]}`) || { dataset: {} };
-
+const promoInUrl = getQueryParameter('promo');
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer(method, dataset), true);
+const store = pageInit(reducer(method, dataset, promoInUrl), true);
 
 
 // ----- Render ----- //
