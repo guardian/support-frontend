@@ -9,7 +9,7 @@ sealed trait Benefit
 
 case class DiscountBenefit(amount: Double, durationMonths: Option[Months]) extends Benefit
 
-object DiscountBenefit{
+object DiscountBenefit {
   val jsonName = "percent_discount"
 }
 
