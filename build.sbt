@@ -1,3 +1,4 @@
+import sbt.Resolver
 import sbtrelease.ReleaseStateTransformations._
 
 name := "support-services"
@@ -5,6 +6,8 @@ name := "support-services"
 organization := "com.gu"
 
 scalaVersion := "2.12.7"
+
+resolvers ++= Seq(Resolver.sonatypeRepo("releases"))
 
 val awsClientVersion = "1.11.226"
 lazy val circeVersion = "0.10.1"
@@ -19,8 +22,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "com.gu" %% "support-internationalisation" % "0.9",
-  "com.gu" %% "support-models" % "0.39-SNAPSHOT",
-  "com.gu" %% "support-config" % "0.17-SNAPSHOT",
+  "com.gu" %% "support-models" % "0.39",
+  "com.gu" %% "support-config" % "0.17",
   "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 

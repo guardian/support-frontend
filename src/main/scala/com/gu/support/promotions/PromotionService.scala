@@ -13,9 +13,6 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
   def findPromotion(promoCode: PromoCode): Option[Promotion] =
     promotionCollection.all.find(_.promoCodes.exists(_ == promoCode))
 
-  def discountPromotions: Iterator[Promotion] =
-    promotionCollection.all.filter(p => p.discount.isDefined)
-
   def validatePromoCode(promoCode: PromoCode, country: Country, productRatePlanId: ProductRatePlanId, isRenewal: Boolean): Either[PromoError, ValidatedPromotion] =
     findPromotion(promoCode)
       .map(validatePromotion(_, country, productRatePlanId, isRenewal).map(ValidatedPromotion(promoCode, _)))

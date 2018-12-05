@@ -15,6 +15,7 @@ object Fixtures {
   val doublePromoCode = "DOUBLE_CODE"
   val invalidPromoCode = "INVALID_CODE"
   val renewalPromoCode = "RENEWAL_CODE"
+  val trackingPromoCode = "TRACKING_CODE"
   val validProductRatePlanId = "12345"
   val invalidProductRatePlanId = "67890"
   val prpIds = List(validProductRatePlanId)
@@ -28,8 +29,8 @@ object Fixtures {
   val validDiscount = ValidatedPromotion(discountPromoCode, discount)
   val double = promotion(prpIds, doublePromoCode, discountBenefit, freeTrialBenefit)
   val validDouble = ValidatedPromotion(doublePromoCode, double)
-  val tracking = promotion(prpIds, tracking = true)
-  val renewal = promotion(prpIds, renewalPromoCode, renewal = true)
+  val tracking = promotion(prpIds, trackingPromoCode, tracking = true)
+  val renewal = promotion(prpIds, renewalPromoCode, discountBenefit, renewal = true)
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(

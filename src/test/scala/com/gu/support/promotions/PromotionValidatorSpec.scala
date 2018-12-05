@@ -53,9 +53,10 @@ class PromotionValidatorSpec extends FlatSpec {
     activePromotion.copy(renewalOnly = true).validateFor(invalidProductRatePlanId, UK, true).head shouldBe InvalidProductRatePlan
     expiredPromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, US, true).head shouldBe InvalidCountry
 
-    // check Renewal promotions are invalid for new subscriptions
+    // check Renewal promotions are invalid for new subscriptions and vice versa
     activePromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, UK, false).head shouldBe NotApplicable
     activePromotion.copy(renewalOnly = false).validateFor(validProductRatePlanId, UK, true).head shouldBe NotApplicable
+
     activePromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, UK, true) shouldBe NoErrors
   }
 }
