@@ -209,6 +209,7 @@ function ContributionForm(props: PropTypes) {
         stripeCheckout={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
         canMakeApplePayPayment={props.canMakeApplePayPayment}
         currency={props.currency}
+        contributionType={props.contributionType}
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />

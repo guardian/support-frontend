@@ -5,8 +5,9 @@
 import React from 'react';
 
 import { PaymentRequestButtonElement, StripeProvider, Elements, injectStripe } from 'react-stripe-elements';
-import { getStripeKey } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getStripeKey } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import type { ContributionType } from 'helpers/contributions';
 
 
 // ----- Types -----//
@@ -20,6 +21,7 @@ type PropTypes = {|
   isTestUser: boolean,
   setCanMakeApplePayPayment: (boolean) => void,
   stripeCheckout: Object | null,
+  contributionType: ContributionType,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -39,10 +41,9 @@ function paymentRequestButton(props: {
     currency: 'usd',
     total: {
       label: 'Demo total',
-      amount: props.amount,
+      amount: 500,
     },
   });
-
   paymentRequest.on('token', ({ complete, token, ...data }) => {
     console.log('Received Stripe token: ', token);
     console.log('Received customer information: ', data);
@@ -50,11 +51,14 @@ function paymentRequestButton(props: {
   });
 
   paymentRequest.canMakePayment().then((result) => {
-    props.setCanMakeApplePayPayment(!!result);
+    console.log(result);
+    if (result && result.applePay) {
+      props.setCanMakeApplePayPayment(!!result.applePay);
+    }
   });
 
-
-  return props.canMakeApplePayPayment ? (
+  console.log('a ', props.canMakeApplePayPayment);
+  return props.canMakeApplePayPayment === true ? (
     <PaymentRequestButtonElement
       paymentRequest={paymentRequest}
       className="PaymentRequestButton"
@@ -75,9 +79,9 @@ function paymentRequestButton(props: {
 
 function ApplePay(props: PropTypes) {
   if (props.stripeCheckout) {
-    getStripeKey(props.currency, props.isTestUser);
+    const key = getStripeKey(props.contributionType, props.currency, props.isTestUser);
     return (
-      <StripeProvider apiKey="pk_test_12345">
+      <StripeProvider apiKey={key}>
         <Elements>
           <PaymentRequestButton
             canMakeApplePayPayment={props.canMakeApplePayPayment}
