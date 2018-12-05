@@ -4,7 +4,8 @@
 
 import React from 'react';
 
-import { outsetClassName, bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import { bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
 import { type Option } from 'helpers/types/option';
 
 import ProductPageButton from '../productPageButton/productPageButton';
@@ -56,7 +57,7 @@ export default function ProductPagePlanForm<P:string>({
         onSubmitAction();
       }}
     >
-      <div className={outsetClassName}>
+      <ProductPageContentBlockOutset>
         <div className="component-product-page-plan-form__items">
           {keys.map((key: P) => {
             const {
@@ -82,7 +83,7 @@ export default function ProductPagePlanForm<P:string>({
               );
             })}
         </div>
-      </div>
+      </ProductPageContentBlockOutset>
       <div className={['component-product-page-plan-form__cta', bgClassName].join(' ')} data-disabled={selectedPlan === null}>
         <ProductPageButton disabled={!selectedPlanTitle} type="submit">
           Subscribe now{selectedPlanTitle && ` – ${selectedPlanTitle}`}

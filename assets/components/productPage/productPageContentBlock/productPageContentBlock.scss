@@ -9,7 +9,7 @@
       background-color: gu-colour(header-dark);
     }
   }
-  &, .component-product-page-content-block__bg,
+  &, .component-product-page-content-block-bg,
   & .component-left-margin-section__content,
   & .component-product-page-features .component-product-page-features__item {
     border-color: $border;
@@ -36,6 +36,10 @@
   @include mq($from: tablet) {
     border-left: 1px solid gu-colour(garnett-neutral-4);
   }
+}
+
+.component-product-page-content-block--allow-overflow .component-left-margin-section__content {
+  overflow: visible;
 }
 
 .component-product-page-content-block--white {
@@ -73,7 +77,7 @@
   position: relative;
 }
 
-.component-product-page-content-block__outset {
+.component-product-page-content-block-outset {
   margin-left: ($gu-h-spacing / 2 * -1);
   margin-right: ($gu-h-spacing / 2 * -1);
 }

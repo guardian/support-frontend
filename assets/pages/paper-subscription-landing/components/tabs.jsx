@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { paperSubsUrl } from 'helpers/routes';
@@ -43,7 +43,7 @@ type PropTypes = {|
 // ----- Component ----- //
 
 const Tabs = ({ selectedTab, setTabAction }: PropTypes) => (
-  <div className={outsetClassName}>
+  <ProductPageContentBlockOutset>
     <ProductPageTabs
       active={selectedTab}
       onChange={(t) => { setTabAction(Object.keys(tabs)[t]); }}
@@ -52,7 +52,7 @@ const Tabs = ({ selectedTab, setTabAction }: PropTypes) => (
         href: tabs[k].href,
       }))}
     />
-  </div>
+  </ProductPageContentBlockOutset>
 );
 
 // ----- State/Props Maps ----- //

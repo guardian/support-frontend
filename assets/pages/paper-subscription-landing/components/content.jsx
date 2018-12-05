@@ -41,7 +41,7 @@ const ContentHelpBlock = () => (
 
 
 const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (
-  <ProductPageContentBlock type="feature">
+  <ProductPageContentBlock allowOverflow type="feature">
     <ProductPageTextBlock {...{ title }} />
     <ProductPageContentBlockDivider />
     {text &&
