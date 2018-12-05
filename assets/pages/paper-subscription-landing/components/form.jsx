@@ -25,7 +25,7 @@ const getSavingStr = (subscription: Option<number>, newsstand: Option<number>): 
 
 // ---- Plans ----- //
 
-const collectionPlans = {
+const allPlans = {
   collectionEveryday: {
     title: 'Everyday',
     copy: 'Receive vouchers to enjoy every issue of The Guardian and The Observer, from Monday to Sunday',
@@ -46,9 +46,6 @@ const collectionPlans = {
     copy: 'Get vouchers to pick up The Observer newspaper every Sunday',
     newsstand: getNewsstandPrice(['sunday']),
   },
-};
-
-const deliveryPlans = {
   deliveryEveryday: {
     title: 'Everyday',
     copy: 'Enjoy every issue of The Guardian and Observer newspapers from Monday to Sunday, delivered to your home',
@@ -71,26 +68,34 @@ const deliveryPlans = {
   },
 };
 
-const plans = {
-  ...collectionPlans, ...deliveryPlans,
-};
-
 
 // ----- State/Props Maps ----- //
-
-const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => ({
-  plans: Object.keys(plans).reduce((ps, k) => ({
+const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => {
+  const transformPlans = (plans: $Keys<typeof allPlans>[]) => plans.reduce((ps, k) => ({
     ...ps,
     [k]: {
-      title: plans[k].title,
-      copy: plans[k].copy,
+      title: allPlans[k].title,
+      copy: allPlans[k].copy,
       offer: null,
       price: getPriceStr(state.page.prices[k]),
-      saving: getSavingStr(state.page.prices[k], plans[k].newsstand ? plans[k].newsstand : null),
+      saving: getSavingStr(state.page.prices[k], allPlans[k].newsstand ? allPlans[k].newsstand : null),
     },
-  }), {}),
-  selectedPlan: state.page.plan.plan,
-});
+  }), {});
+
+  if (state.page.tab === 'collection') {
+    return {
+      plans: transformPlans(['collectionEveryday', 'collectionSixday', 'collectionWeekend', 'collectionSunday']),
+      selectedPlan: state.page.plan.plan,
+    };
+  }
+
+  return {
+    plans: transformPlans(['deliveryEveryday', 'deliverySixday', 'deliveryWeekend', 'deliverySunday']),
+    selectedPlan: state.page.plan.plan,
+  };
+
+
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<PaperBillingPlan>>): DispatchPropTypes<PaperBillingPlan> =>
   ({

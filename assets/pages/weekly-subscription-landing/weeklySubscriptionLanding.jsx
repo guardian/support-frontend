@@ -16,7 +16,8 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import GridImage from 'components/gridImage/gridImage';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-import ProductPageContentBlock, { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
 import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
@@ -96,7 +97,7 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock id="benefits">
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
-        <div className={outsetClassName}>
+        <ProductPageContentBlockOutset>
           <ProductPageFeatures features={[
             { title: 'Up to 35% off the retail cover price' },
             { title: 'Free international shipping' },
@@ -104,9 +105,9 @@ const content = (
             { title: 'Access to every edition on any device, through PressReader' },
           ]}
           />
-        </div>
+        </ProductPageContentBlockOutset>
       </ProductPageContentBlock>
-      <ProductPageContentBlock type="feature" id="subscribe">
+      <ProductPageContentBlock type="feature" id="subscribe" allowOverflow>
         <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
           <p>Choose how you’d like to pay</p>
         </ProductPageTextBlock>
@@ -122,14 +123,14 @@ const content = (
           service team:
           </p>
         </ProductPageTextBlock>
-        <div className={outsetClassName}>
+        <ProductPageContentBlockOutset>
           <ProductPageFeatures features={[
             { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
             { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
             { title: 'USA and Canada', copy: '+1 917-900-4663' },
           ]}
           />
-        </div>
+        </ProductPageContentBlockOutset>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Promotion terms and conditions">

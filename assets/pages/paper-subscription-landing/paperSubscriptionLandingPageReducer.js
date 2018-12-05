@@ -5,9 +5,14 @@
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { type Option } from 'helpers/types/option';
-import { getQueryParameter } from 'helpers/url';
+import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
+
+import { type TabActions } from './paperSubscriptionLandingPageActions';
+
+
+// ----- Types ----- //
 
 export type PaperPrices = {
   collectionEveryday: Option<number>,
@@ -21,20 +26,38 @@ export type PaperPrices = {
   deliverySunday: Option<number>,
 };
 
+type ActiveTabState = PaperDeliveryMethod;
+
 export type State = {
   common: CommonState,
   page: {
+    tab: ActiveTabState,
     prices: PaperPrices,
     plan: FormState<PaperBillingPlan>,
   }
 };
 
+
+// ----- Helpers ----- //
+
 const getPriceAsFloat = (price): Option<number> => (price ? parseFloat(price) : null);
 
+const getTabsReducer = (initialTab: PaperDeliveryMethod) =>
+  (state: ActiveTabState = initialTab, action: TabActions): ActiveTabState => {
 
-export default (dataset: Object) => {
+    switch (action.type) {
+      case 'SET_TAB':
+        return action.tab;
+      default:
+        return state;
+    }
 
-  const promoInUrl = getQueryParameter('promo');
+  };
+
+
+// ----- Exports ----- //
+
+export default (initialTab: PaperDeliveryMethod, dataset: Object, promoInUrl: ?string) => {
 
   const prices: PaperPrices = {
     collectionEveryday: getPriceAsFloat(dataset.collectionEveryday),
@@ -57,6 +80,7 @@ export default (dataset: Object) => {
 
   return combineReducers({
     plan: ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod),
+    tab: getTabsReducer(initialTab),
     prices: () => prices,
   });
 };

@@ -17,15 +17,16 @@ type PropTypes = {|
   children: Node,
   image: Option<Node>,
   modifierClasses: Array<string>,
+  allowOverflow: boolean
 |};
 
 
 // ----- Render ----- //
 
 const ProductPageContentBlock = ({
-  type, children, id, modifierClasses, image,
+  type, children, id, modifierClasses, image, allowOverflow,
 }: PropTypes) => (
-  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, ...modifierClasses])}>
+  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, allowOverflow ? 'allow-overflow' : null, ...modifierClasses])}>
     <LeftMarginSection>
       <div className="component-product-page-content-block__content">
         {children}
@@ -41,13 +42,13 @@ ProductPageContentBlock.defaultProps = {
   type: 'white',
   id: null,
   image: null,
+  allowOverflow: false,
   modifierClasses: [],
 };
 
 
 // ---- Exports ----- //
 
-export const outsetClassName = 'component-product-page-content-block__outset';
-export const bgClassName = 'component-product-page-content-block__bg';
+export const bgClassName = 'component-product-page-content-block-bg';
 
 export default ProductPageContentBlock;
