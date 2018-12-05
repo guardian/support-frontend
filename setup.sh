@@ -4,6 +4,8 @@ set -e
 readonly SYSTEM=$(uname -s)
 EXTRA_STEPS=()
 
+NGINX_ROOT=/usr/local/etc/nginx/
+
 linux() {
   [[ ${SYSTEM} == 'Linux' ]]
 }
@@ -72,7 +74,7 @@ install_jdk() {
     if linux; then
       sudo apt-get install -y openjdk-8-jdk
     elif mac; then
-      EXTRA_STEPS+=("Download the JDK from http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html")
+      EXTRA_STEPS+=("Download the JDK from https://adoptopenjdk.net")
     fi
   fi
 }
@@ -99,6 +101,7 @@ install_node() {
 install_nginx() {
   if ! installed nginx; then
     brew install nginx
+    EXTRA_STEPS+=("nginx has been installed. Ensure you have 'include sites-enabled/*' in your nginx configuration ${NGINX_ROOT}/nginx.conf and add '127.0.0.1 support.thegulocal.com' to /etc/hosts")
   fi
 }
 
@@ -129,12 +132,12 @@ install_js_deps() {
 }
 
 fetch_dev_cert() {
-  aws s3 cp s3://identity-local-ssl/wildcard-thegulocal-com-exp2019-01-09.crt /usr/local/etc/nginx/ --profile membership
-  aws s3 cp s3://identity-local-ssl/wildcard-thegulocal-com-exp2019-01-09.key /usr/local/etc/nginx/ --profile membership
+  aws s3 cp s3://identity-local-ssl/wildcard-thegulocal-com-exp2019-01-09.crt ${NGINX_ROOT} --profile membership
+  aws s3 cp s3://identity-local-ssl/wildcard-thegulocal-com-exp2019-01-09.key ${NGINX_ROOT} --profile membership
 }
 
-copy_nginx_config() {
-  ln -s ../nginx/support.conf /usr/local/etc/nginx/sites-enabled/support.conf
+link_nginx_config() {
+  ln -sf ../nginx/support.conf ${NGINX_ROOT}sites-enabled/support.conf
 }
 
 report() {
@@ -153,7 +156,7 @@ main () {
   install_nginx
   install_awscli
   fetch_dev_cert
-  copy_nginx_config
+  link_nginx_config
   install_jdk
   install_sbt
   install_yarn
