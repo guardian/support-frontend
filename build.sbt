@@ -17,6 +17,14 @@ licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.h
 
 resolvers ++= Seq(Resolver.sonatypeRepo("releases"))
 
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
+
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.1",
   "com.gu" %% "support-models" % "0.39",
