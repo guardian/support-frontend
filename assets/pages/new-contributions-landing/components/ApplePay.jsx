@@ -78,7 +78,7 @@ function paymentRequestButton(props: {
 // ----- Component ----- //
 
 function ApplePay(props: PropTypes) {
-  if (props.stripeCheckout) {
+  if (props.stripeCheckout && props.contributionType === 'ONE_OFF') {
     const key = getStripeKey(props.contributionType, props.currency, props.isTestUser);
     return (
       <StripeProvider apiKey={key}>
