@@ -16,19 +16,22 @@ import { logException } from 'helpers/logger';
 
 // ----- Types ----- //
 
-type PropTypes = {|
+type ButtonPropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
   onClick: (?string, CsrfState) => void,
-  error: boolean,
   loading: boolean,
 |};
 
+type PropTypes = {|
+  ...ButtonPropTypes,
+  error: boolean,
+|};
 
 // ----- Render ----- //
 
-function Button(props: PropTypes) {
+function Button(props: ButtonPropTypes) {
   if (props.confirmOptIn === true) {
     return (
       <button
@@ -83,7 +86,13 @@ function MarketingConsent(props: PropTypes) {
           contributor or would like to become one.
         </p>
 
-        {Button(props)}
+        {Button({
+          confirmOptIn: props.confirmOptIn,
+          email: props.email,
+          csrf: props.csrf,
+          onClick: props.onClick,
+          loading: props.loading,
+        })}
 
         <p className="confirmation__meta">
           <small>
