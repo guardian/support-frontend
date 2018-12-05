@@ -10,7 +10,7 @@ import type { Action } from './marketingConsentActions';
 export type State = {
   error: boolean,
   confirmOptIn: ?boolean,
-  loading: boolean,
+  requestPending: boolean,
 };
 
 
@@ -19,7 +19,7 @@ export type State = {
 const initialState: State = {
   error: false,
   confirmOptIn: null,
-  loading: false,
+  requestPending: false,
 };
 
 
