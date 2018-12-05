@@ -13,6 +13,7 @@ Object {
   "marketingConsent": Object {
     "confirmOptIn": null,
     "error": false,
+    "requestPending": false,
   },
   "oneoffContrib": Object {
     "amount": 20,
