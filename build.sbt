@@ -15,9 +15,11 @@ scmInfo := Some(ScmInfo(
 
 licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html"))
 
+resolvers ++= Seq(Resolver.sonatypeRepo("releases"))
+
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.1",
-  "com.gu" %% "support-models" % "0.39-SNAPSHOT",
+  "com.gu" %% "support-models" % "0.39",
   "com.gu" %% "support-internationalisation" % "0.9" % "provided",
   "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
