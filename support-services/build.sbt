@@ -1,22 +1,13 @@
-import sbt.Resolver
-import sbtrelease.ReleaseStateTransformations._
+import LibraryVersions.{awsClientVersion, catsVersion, circeVersion}
 
 name := "support-services"
 
-organization := "com.gu"
-
-scalaVersion := "2.12.7"
-
-resolvers ++= Seq(Resolver.sonatypeRepo("releases"))
-
-val awsClientVersion = "1.11.226"
-lazy val circeVersion = "0.10.1"
+description := "Scala library to provide shared services to Guardian Support projects."
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-  "com.typesafe" % "config" % "1.3.2",
   "com.amazonaws" % "aws-java-sdk-dynamodb" % awsClientVersion,
-  "org.typelevel" %% "cats-core" % "1.4.0",
+  "org.typelevel" %% "cats-core" % catsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
@@ -24,20 +15,4 @@ libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9",
   "com.gu" %% "support-models" % "0.39",
   "com.gu" %% "support-config" % "0.17",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-)
-
-releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  ReleaseStep(action = Command.process("publishSigned", _)),
-  setNextVersion,
-  commitNextVersion,
-  ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
-  pushChanges
 )

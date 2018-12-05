@@ -6,7 +6,7 @@ import org.scalatest.FlatSpec
 
 class CatalogServiceTest extends FlatSpec with LazyLogging {
 
-  "CatalogService" should "fetch the catalog from S3" in {
+  "CatalogService" should "fetch the catalog from S3" ignore {
     val catalog = CatalogService(PROD).getCatalog
     catalog.foreach(i => logger.info(s"$i"))
   }
