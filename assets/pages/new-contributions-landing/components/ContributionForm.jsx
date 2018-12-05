@@ -73,8 +73,6 @@ type PropTypes = {|
   isPostDeploymentTestUser: boolean,
   formIsSubmittable: boolean,
   canMakeApplePayPayment: boolean,
-  country: string,
-  amount: number,
   setCanMakeApplePayPayment: (boolean) => void,
 
 |};
@@ -102,6 +100,7 @@ const mapStateToProps = (state: State) => ({
   formIsValid: state.page.form.formIsValid,
   isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
   formIsSubmittable: state.page.form.formIsSubmittable,
+  canMakeApplePayPayment: state.page.form.canMakeApplePayPayment,
 });
 
 
@@ -207,6 +206,9 @@ function ContributionForm(props: PropTypes) {
       />
       <ApplePay
         setCanMakeApplePayPayment={props.setCanMakeApplePayPayment}
+        stripeCheckout={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
+        canMakeApplePayPayment={props.canMakeApplePayPayment}
+        currency={props.currency}
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />

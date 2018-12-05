@@ -16,9 +16,10 @@ type PropTypes = {|
   canMakeApplePayPayment: boolean,
   country: string,
   amount: number,
-  currencyId: IsoCurrency,
+  currency: IsoCurrency,
   isTestUser: boolean,
   setCanMakeApplePayPayment: (boolean) => void,
+  stripeCheckout: Object | null,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -28,14 +29,14 @@ function paymentRequestButton(props: {
   stripe: Object,
   canMakeApplePayPayment: boolean,
   country: string,
-  currencyId: IsoCurrency,
+  currency: IsoCurrency,
   amount: number,
   setCanMakeApplePayPayment: (boolean) => void,
 }) {
-
+  console.log(props.currency);
   const paymentRequest = props.stripe.paymentRequest({
     country: props.country,
-    currency: props.currencyId,
+    currency: 'usd',
     total: {
       label: 'Demo total',
       amount: props.amount,
@@ -55,14 +56,14 @@ function paymentRequestButton(props: {
 
   return props.canMakeApplePayPayment ? (
     <PaymentRequestButtonElement
-      paymentRequest
+      paymentRequest={paymentRequest}
       className="PaymentRequestButton"
       style={{
         // For more details on how to style the Payment Request Button, see:
         // https://stripe.com/docs/elements/payment-request-button#styling-the-element
         paymentRequestButton: {
           theme: 'light',
-          height: '64px',
+            height: '64px',
         },
       }}
     />
@@ -73,21 +74,23 @@ function paymentRequestButton(props: {
 // ----- Component ----- //
 
 function ApplePay(props: PropTypes) {
-
-  getStripeKey(props.currencyId, props.isTestUser);
-  return (
-    <StripeProvider apiKey="pk_test_12345">
-      <Elements>
-        <PaymentRequestButton
-          canMakeApplePayPayment={props.canMakeApplePayPayment}
-          country={props.country}
-          currency={props.currencyId}
-          amount={props.amount}
-          setCanMakeApplePayPayment={props.setCanMakeApplePayPayment}
-        />
-      </Elements>
-    </StripeProvider>
-  );
+  if (props.stripeCheckout) {
+    getStripeKey(props.currency, props.isTestUser);
+    return (
+      <StripeProvider apiKey="pk_test_12345">
+        <Elements>
+          <PaymentRequestButton
+            canMakeApplePayPayment={props.canMakeApplePayPayment}
+            country={props.country}
+            currency={props.currency}
+            amount={props.amount}
+            setCanMakeApplePayPayment={props.setCanMakeApplePayPayment}
+          />
+        </Elements>
+      </StripeProvider>
+    );
+  }
+  return null;
 }
 
 
@@ -100,7 +103,6 @@ ApplePay.defaultProps = {
   canMakeApplePayPayment: true,
   country: 'US',
   amount: 5,
-  currencyId: 'GBP',
   isTestUser: false,
 };
 

@@ -106,15 +106,15 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
-        Stripe: {},
+        Stripe: null,
       },
       MONTHLY: {
-        Stripe: {},
-        PayPal: {},
+        Stripe: null,
+        PayPal: null,
       },
       ANNUAL: {
-        Stripe: {},
-        PayPal: {},
+        Stripe: null,
+        PayPal: null,
       },
     },
     formData: {
