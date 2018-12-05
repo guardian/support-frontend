@@ -148,6 +148,7 @@ report() {
 main () {
   check_encryption
   create_aws_config
+  install_node
   install_homebrew
   install_nginx
   install_awscli
@@ -155,7 +156,6 @@ main () {
   copy_nginx_config
   install_jdk
   install_sbt
-  install_node
   install_yarn
   install_js_deps
   report
