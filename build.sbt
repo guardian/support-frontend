@@ -1,5 +1,13 @@
 import sbt.Keys.{publishTo, resolvers, scalaVersion}
+import sbtrelease.ReleasePlugin.autoImport.releaseUseGlobalVersion
 import sbtrelease.ReleaseStateTransformations._
+
+skip in publish := true
+
+scmInfo := Some(ScmInfo(
+  url("https://github.com/guardian/support-libraries"),
+  "scm:git:git@github.com:guardian/support-libraries.git"
+))
 
 val release = Seq[ReleaseStep](
   checkSnapshotDependencies,
@@ -20,7 +28,6 @@ lazy val commonSettings = Seq(
   organization := "com.gu",
   scalaVersion := "2.12.7",
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
-  isSnapshot := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -29,7 +36,17 @@ lazy val commonSettings = Seq(
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
-  releaseProcess := release
+
+  releaseProcess := release,
+  releaseUseGlobalVersion := false,
+  releaseVersionFile := file(name.value + "/version.sbt"),
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
+  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
+  releaseTagName := {
+    val versionInThisBuild = (version in ThisBuild).value
+    val versionValue = version.value
+    s"${name.value}-v${if (releaseUseGlobalVersion.value) versionInThisBuild else versionValue}"
+  }
 )
 
 lazy val commonDependencies = Seq(
