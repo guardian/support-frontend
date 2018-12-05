@@ -40,8 +40,8 @@ function marketingConsentReducerFor(scope: string): Function {
       case 'SET_CONFIRM_MARKETING_CONSENT':
         return { ...state, confirmOptIn: action.confirmOptIn };
 
-      case 'SET_LOADING':
-        return { ...state, loading: action.loading };
+      case 'SET_REQUEST_PENDING':
+        return { ...state, requestPending: action.requestPending };
 
       default:
         return state;

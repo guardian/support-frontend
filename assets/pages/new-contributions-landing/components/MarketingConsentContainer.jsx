@@ -16,7 +16,7 @@ const mapStateToProps = state => ({
   email: state.page.form.formData.email,
   csrf: state.page.csrf,
   error: state.page.marketingConsent.error,
-  loading: state.page.marketingConsent.loading,
+  requestPending: state.page.marketingConsent.requestPending,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {

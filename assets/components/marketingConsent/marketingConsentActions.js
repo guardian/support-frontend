@@ -5,7 +5,7 @@
 export type Action =
   | { type: 'SET_API_ERROR', scope: string, error: boolean }
   | { type: 'SET_CONFIRM_MARKETING_CONSENT', scope: string, confirmOptIn: boolean}
-  | { type: 'SET_LOADING', scope: string, loading: boolean};
+  | { type: 'SET_REQUEST_PENDING', scope: string, requestPending: boolean};
 
 // ----- Action Creators ----- //
 
@@ -18,8 +18,8 @@ function marketingConsentActionsFor(scope: string): Object {
     setConfirmMarketingConsent(confirmOptIn: boolean): Action {
       return { type: 'SET_CONFIRM_MARKETING_CONSENT', scope, confirmOptIn };
     },
-    setLoading(loading: boolean): Action {
-      return { type: 'SET_LOADING', scope, loading };
+    setRequestPending(requestPending: boolean): Action {
+      return { type: 'SET_REQUEST_PENDING', scope, requestPending };
     },
   };
 }

@@ -21,7 +21,7 @@ type ButtonPropTypes = {|
   email: string,
   csrf: CsrfState,
   onClick: (?string, CsrfState) => void,
-  loading: boolean,
+  requestPending: boolean,
 |};
 
 type PropTypes = {|
@@ -42,14 +42,14 @@ function Button(props: ButtonPropTypes) {
         Signed up
       </button>
     );
-  } else if (props.loading === true) {
+  } else if (props.requestPending === true) {
     return (
       <button
         disabled="disabled"
-        className={classNameWithModifiers('button', ['newsletter', 'newsletter__loading'])}
+        className={classNameWithModifiers('button', ['newsletter', 'newsletter__request-pending'])}
       >
         <SvgSubscribe />
-        Loading...
+        Pending...
       </button>
     );
   }
@@ -91,7 +91,7 @@ function MarketingConsent(props: PropTypes) {
           email: props.email,
           csrf: props.csrf,
           onClick: props.onClick,
-          loading: props.loading,
+          requestPending: props.requestPending,
         })}
 
         <p className="confirmation__meta">
@@ -116,7 +116,7 @@ function MarketingConsent(props: PropTypes) {
 
 MarketingConsent.defaultProps = {
   error: false,
-  loading: false,
+  requestPending: false,
 };
 
 
