@@ -107,7 +107,7 @@ const content = (
           />
         </ProductPageContentBlockOutset>
       </ProductPageContentBlock>
-      <ProductPageContentBlock type="feature" id="subscribe" allowOverflow>
+      <ProductPageContentBlock type="feature" id="subscribe">
         <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
           <p>Choose how you’d like to pay</p>
         </ProductPageTextBlock>

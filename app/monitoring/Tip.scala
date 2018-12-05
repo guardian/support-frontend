@@ -46,10 +46,10 @@ object PathVerification {
   case object Card extends MonitoredPaymentMethod { val tipString = "Card" }
 
   case class TipPath(
-    region: MonitoredRegion,
-    product: MonitoredProduct,
-    paymentMethod: MonitoredPaymentMethod,
-    guestCheckout: Boolean = false
+      region: MonitoredRegion,
+      product: MonitoredProduct,
+      paymentMethod: MonitoredPaymentMethod,
+      guestCheckout: Boolean = false
   ) {
     val productLabel: String = if (guestCheckout) s"${product.tipString} (Guest)" else product.tipString
     val configPath: String = s"${region.tipString} $productLabel with ${paymentMethod.tipString}"
