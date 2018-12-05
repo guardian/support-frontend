@@ -13,6 +13,7 @@ import { loadPayPalExpress, setup } from 'helpers/paymentIntegrations/payPalExpr
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type RegularContributionType } from 'helpers/contributions';
 
 // ---- Types ----- //
 
@@ -26,6 +27,7 @@ type PropTypes = {|
   switchStatus: Status,
   canOpen: () => boolean,
   whenUnableToOpen: () => void,
+  regularContributionType: RegularContributionType,
 |};
 
 
@@ -68,6 +70,7 @@ function Button(props: PropTypes) {
     onPaymentAuthorisation,
     props.canOpen,
     props.whenUnableToOpen,
+    props.regularContributionType,
   );
 
 
