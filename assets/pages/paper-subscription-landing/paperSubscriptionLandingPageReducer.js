@@ -5,8 +5,7 @@
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { type Option } from 'helpers/types/option';
-import { type PaperDeliveryMethod } from 'helpers/subscriptions';
-import { type PaperBillingPlan } from 'helpers/subscriptions';
+import { type PaperDeliveryMethod, type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 import { type TabActions } from './paperSubscriptionLandingPageActions';

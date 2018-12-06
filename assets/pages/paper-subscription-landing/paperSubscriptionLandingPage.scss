@@ -14,6 +14,12 @@
   scroll-behavior: smooth;
 }
 
+.component-product-page-content-block__image {
+  max-width: gu-span(5);
+  min-width: gu-span(4);
+}
+
+
 .component-product-page-hero--paper {
   @include mq($from: tablet) {
     .component-heading-block {

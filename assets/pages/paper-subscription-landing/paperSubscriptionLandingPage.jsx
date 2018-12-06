@@ -58,7 +58,7 @@ const content = (
     >
       <ProductPagehero
         overheading="The Guardian paper subscriptions"
-        heading="Save up to 31% on the Guardian and the Observer’s newspaper retail price all year round"
+        heading="Save up to 31% on The Guardian and The Observer’s newspaper retail price all year round"
         type="feature"
         modifierClasses={['paper']}
       >
