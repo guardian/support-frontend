@@ -86,7 +86,7 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
 
 
   render() {
-    let wrapperClassName = 'contributions-landing-ticker--hidden';
+    let wrapperClassName = 'contributions-landing-ticker contributions-landing-ticker--hidden';
     if (this.state && this.state.totalSoFar && this.state.totalSoFar !== 0) {
       wrapperClassName = 'contributions-landing-ticker';
     }
