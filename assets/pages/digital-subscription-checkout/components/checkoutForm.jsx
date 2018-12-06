@@ -153,16 +153,16 @@ function CheckoutForm(props: PropTypes) {
         <h2 className="checkout-form__heading">How often would you like to pay?</h2>
         <Fieldset>
           <RadioInput
-            text={`${getPrice(props.country, 'monthly')}Every month`}
+            text={`${getPrice(props.country, 'month')}Every month`}
             name="paymentFrequency"
-            checked={props.paymentFrequency === 'monthly'}
-            onChange={() => props.setPaymentFrequency('monthly')}
+            checked={props.paymentFrequency === 'month'}
+            onChange={() => props.setPaymentFrequency('month')}
           />
           <RadioInput
-            text={`${getPrice(props.country, 'yearly')}Every year`}
+            text={`${getPrice(props.country, 'year')}Every year`}
             name="paymentFrequency"
-            checked={props.paymentFrequency === 'yearly'}
-            onChange={() => props.setPaymentFrequency('yearly')}
+            checked={props.paymentFrequency === 'year'}
+            onChange={() => props.setPaymentFrequency('year')}
           />
         </Fieldset>
       </LeftMarginSection>

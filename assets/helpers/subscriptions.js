@@ -26,7 +26,7 @@ export type ComponentAbTest = {
   variant: string,
 };
 
-export type DigitalBillingPeriod = 'monthly' | 'yearly';
+export type DigitalBillingPeriod = 'month' | 'year';
 export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
 export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
 
@@ -103,32 +103,32 @@ const discountPricesForDefaultBillingPeriod: {
 
 const digitalSubscriptionPrices = {
   GBPCountries: {
-    monthly: 11.99,
-    yearly: 119.90,
+    month: 11.99,
+    year: 119.90,
   },
   UnitedStates: {
-    monthly: 19.99,
-    yearly: 199.90,
+    month: 19.99,
+    year: 199.90,
   },
   AUDCountries: {
-    monthly: 21.50,
-    yearly: 215.00,
+    month: 21.50,
+    year: 215.00,
   },
   EURCountries: {
-    monthly: 14.99,
-    yearly: 149.90,
+    month: 14.99,
+    year: 149.90,
   },
   International: {
-    monthly: 19.99,
-    yearly: 199.90,
+    month: 19.99,
+    year: 199.90,
   },
   NZDCountries: {
-    monthly: 23.50,
-    yearly: 235.00,
+    month: 23.50,
+    year: 235.00,
   },
   Canada: {
-    monthly: 21.95,
-    yearly: 219.50,
+    month: 21.95,
+    year: 219.50,
   },
 };
 

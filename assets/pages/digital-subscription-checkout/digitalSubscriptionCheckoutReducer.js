@@ -144,7 +144,7 @@ const initialState = {
   country: null,
   stateProvince: null,
   telephone: '',
-  paymentFrequency: 'monthly',
+  paymentFrequency: 'month',
   paymentMethod: 'directDebit',
   errors: [],
 };
