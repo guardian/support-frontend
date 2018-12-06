@@ -99,7 +99,7 @@ function ContributionFormContainer(props: PropTypes) {
     : (
       <div className="gu-content__content">
         <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
-        { props.countryGroupId === 'UnitedStates' && <ContributionUsTicker /> }
+        { props.countryGroupId === 'UnitedStates' ? <ContributionUsTicker /> : null }
         { countryGroupDetails.contributeCopy ?
           <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
         }
