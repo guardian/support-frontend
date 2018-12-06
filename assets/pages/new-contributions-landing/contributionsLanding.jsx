@@ -85,7 +85,7 @@ const router = (
               <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
               />
-              <NewContributionBackground countryGroupId={countryGroupId}/>
+              <NewContributionBackground countryGroupId={countryGroupId} />
             </Page>
           )
         }
