@@ -62,6 +62,14 @@
   );
 }
 
+.component-product-page-content-block--feature-secondary {
+  @include block-colours(
+    $border: gu-colour(header-border),
+    $bg: gu-colour(news-garnett-highlight),
+    $text: gu-colour(garnett-neutral-1)
+  );
+}
+
 .component-product-page-content-block--dark {
   @include block-colours(
     $border: gu-colour(garnett-neutral-5),

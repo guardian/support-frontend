@@ -12,7 +12,7 @@ import './productPageContentBlock.scss';
 // ---- Types ----- //
 
 type PropTypes = {|
-  type: 'white' | 'grey' | 'feature' | 'dark',
+  type: 'white' | 'grey' | 'feature' | 'dark' | 'feature-secondary',
   id?: Option<string>,
   children: Node,
   image: Option<Node>,
