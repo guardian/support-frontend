@@ -134,6 +134,11 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
   return fromQueryParameter() || fromCountryGroupId(countryGroup) || 'GBP';
 }
 
+function showPrice(p: Price, extendedGlyph: boolean = false): string {
+  const glyph = currencies[p.currency][extendedGlyph ? 'extendedGlyph' : 'glyph'];
+  return `${glyph}${p.value.toFixed(2)}`;
+}
+
 const GBP = (value: number): Price => ({ value, currency: 'GBP' });
 const USD = (value: number): Price => ({ value, currency: 'USD' });
 const AUD = (value: number): Price => ({ value, currency: 'AUD' });
@@ -149,6 +154,7 @@ export {
   spokenCurrencies,
   fromCountryGroupId,
   currencies,
+  showPrice,
   GBP,
   USD,
   AUD,

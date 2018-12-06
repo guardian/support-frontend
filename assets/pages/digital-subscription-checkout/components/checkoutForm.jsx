@@ -11,7 +11,7 @@ import { type FormError, firstError } from 'helpers/subscriptionsForms/validatio
 import { type Option } from 'helpers/types/option';
 import { fromCountry, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getDigitalPrice, type DigitalBillingPeriod } from 'helpers/subscriptions';
-import { currencies } from 'helpers/internationalisation/currency';
+import { showPrice } from 'helpers/internationalisation/currency';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
@@ -65,12 +65,12 @@ function getPrice(country: Option<IsoCountry>, frequency: DigitalBillingPeriod):
   if (cgId) {
 
     const price = getDigitalPrice(cgId, frequency);
-    const glyph = currencies[price.currency].extendedGlyph;
-    return `${glyph}${price.value.toFixed(2)} `;
+    return `${showPrice(price, true)} `;
 
   }
 
   return '';
+
 }
 
 
