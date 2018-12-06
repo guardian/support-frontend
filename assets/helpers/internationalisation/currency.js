@@ -31,11 +31,6 @@ export type SpokenCurrency = {|
   plural: string,
 |};
 
-export type Price = $ReadOnly<{|
-  value: number,
-  currency: IsoCurrency,
-|}>;
-
 
 // ----- Config ----- //
 
@@ -134,17 +129,8 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
   return fromQueryParameter() || fromCountryGroupId(countryGroup) || 'GBP';
 }
 
-function showPrice(p: Price, extendedGlyph: boolean = false): string {
-  const glyph = currencies[p.currency][extendedGlyph ? 'extendedGlyph' : 'glyph'];
-  return `${glyph}${p.value.toFixed(2)}`;
-}
-
-const GBP = (value: number): Price => ({ value, currency: 'GBP' });
-const USD = (value: number): Price => ({ value, currency: 'USD' });
-const AUD = (value: number): Price => ({ value, currency: 'AUD' });
-const EUR = (value: number): Price => ({ value, currency: 'EUR' });
-const NZD = (value: number): Price => ({ value, currency: 'NZD' });
-const CAD = (value: number): Price => ({ value, currency: 'CAD' });
+const glyph = (c: IsoCurrency): string => currencies[c].glyph;
+const extendedGlyph = (c: IsoCurrency): string => currencies[c].extendedGlyph;
 
 
 // ----- Exports ----- //
@@ -154,11 +140,6 @@ export {
   spokenCurrencies,
   fromCountryGroupId,
   currencies,
-  showPrice,
-  GBP,
-  USD,
-  AUD,
-  EUR,
-  NZD,
-  CAD,
+  glyph,
+  extendedGlyph,
 };

@@ -11,7 +11,7 @@ import { type FormError, firstError } from 'helpers/subscriptionsForms/validatio
 import { type Option } from 'helpers/types/option';
 import { fromCountry, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getDigitalPrice, type DigitalBillingPeriod } from 'helpers/subscriptions';
-import { showPrice } from 'helpers/internationalisation/currency';
+import { showPrice } from 'helpers/internationalisation/price';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';

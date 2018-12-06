@@ -3,20 +3,11 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Price, GBP, USD, AUD, EUR, NZD, CAD } from 'helpers/internationalisation/price';
 
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
-import {
-  type Price,
-  currencies,
-  detect,
-  GBP,
-  USD,
-  AUD,
-  EUR,
-  NZD,
-  CAD,
-} from './internationalisation/currency';
+import { currencies, detect } from './internationalisation/currency';
 
 
 // ----- Types ------ //
