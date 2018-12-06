@@ -10,10 +10,13 @@ This repo holds shared libraries used by [support-frontend](https://github.com/g
 ## [support-services](./support-services/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-services_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-services_2.12)
 
+## [support-internationalisation](./support-internationalisation/)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-internationalisation_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-internationalisation_2.12)
+
 ## Releasing
 ### Releasing to local repo
 
-You can publish all three libraries locally by running:
+You can publish all four libraries locally by running:
 
 `sbt publishLocal`
 
