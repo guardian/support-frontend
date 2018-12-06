@@ -2,10 +2,10 @@
 This repo holds shared libraries used by [support-frontend](https://github.com/guardian/support-frontend) and [support-workers](https://github.com/guardian/support-workers)
 
 ## [support-config](./support-config/)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-config_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-config_2.11)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-config_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-config_2.11)
 
 ## [support-models](./support-models/)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-models_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-models_2.11)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-models_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-models_2.11)
 
 ## [support-services](./support-services/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-services_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-services_2.12)
