@@ -245,7 +245,7 @@ const withParams = ({
   optimizeExperiments,
 }: {
   referrerAcquisitionData: ReferrerAcquisitionData,
-  cgId?: Option<CountryGroupId>,
+  cgId: Option<CountryGroupId>,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
 }) => (url: string) => {
@@ -333,6 +333,7 @@ function getPaperCheckout(
 
   return withParams({
     referrerAcquisitionData,
+    cgId: null,
     nativeAbParticipations,
     optimizeExperiments,
   })([subsUrl, 'checkout', urls[billingPlan]].join('/'));
