@@ -6,7 +6,7 @@
   }
   @if($bg){
     &, .component-product-page-content-block-bg {
-      background-color: gu-colour(header-dark);
+      background-color: $bg;
     }
   }
   &, .component-product-page-content-block-bg,
