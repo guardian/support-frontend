@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import { countries, usStates, caStates, type IsoCountry } from 'helpers/internationalisation/country';
 import { type FormError, firstError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
-import { fromCountry, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { fromCountry, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getDigitalPrice, type DigitalBillingPeriod } from 'helpers/subscriptions';
 import { currencies } from 'helpers/internationalisation/currency';
 
