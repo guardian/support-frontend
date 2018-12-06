@@ -11,7 +11,7 @@ import { type Action } from 'components/productPage/productPagePlanForm/productP
 import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
-import { setPlan } from '../paperSubscriptionLandingPageActions';
+import { setPlan, redirectToCheckout } from '../paperSubscriptionLandingPageActions';
 
 
 // ---- Helpers ----- //
@@ -100,7 +100,7 @@ const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => {
 const mapDispatchToProps = (dispatch: Dispatch<Action<PaperBillingPlan>>): DispatchPropTypes<PaperBillingPlan> =>
   ({
     setPlanAction: bindActionCreators(setPlan, dispatch),
-    onSubmitAction: bindActionCreators(() => null, dispatch),
+    onSubmitAction: bindActionCreators(redirectToCheckout, dispatch),
   });
 
 

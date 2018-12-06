@@ -11,12 +11,13 @@ import {
   countryGroups,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
+import { type Option } from 'helpers/types/option';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
+import type { SubscriptionProduct, WeeklyBillingPeriod, PaperBillingPlan } from 'helpers/subscriptions';
 
 import { getPromoCode, getIntcmp } from './flashSale';
-import type { SubscriptionProduct, WeeklyBillingPeriod } from './subscriptions';
 
 
 // ----- Types ----- //
@@ -236,6 +237,34 @@ function getSubsLinks(
 
 }
 
+// Puts in URL parameters
+const withParams = ({
+  referrerAcquisitionData,
+  cgId,
+  nativeAbParticipations,
+  optimizeExperiments,
+}: {
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  cgId: Option<CountryGroupId>,
+  nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
+}) => (url: string) => {
+  const acquisitionData = deriveSubsAcquisitionData(
+    referrerAcquisitionData,
+    nativeAbParticipations,
+    optimizeExperiments,
+  );
+
+  const params = new URLSearchParams(window.location.search);
+
+  params.set('acquisitionData', JSON.stringify(acquisitionData));
+  if (cgId) {
+    params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
+  }
+  return [url, params.toString()].join('?');
+};
+
+
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -284,6 +313,32 @@ function getWeeklyCheckout(
 }
 
 
+// Builds a link to paper subs checkout
+function getPaperCheckout(
+  billingPlan: PaperBillingPlan,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
+) {
+  const urls = {
+    collectionEveryday: 'delivery-everyday',
+    collectionSixday: 'voucher-sixday',
+    collectionWeekend: 'voucher-weekend',
+    collectionSunday: 'voucher-sunday',
+    deliveryEveryday: 'delivery-everyday',
+    deliverySixday: 'delivery-sixday',
+    deliveryWeekend: 'delivery-weekend',
+    deliverySunday: 'delivery-sunday',
+  };
+
+  return withParams({
+    referrerAcquisitionData,
+    nativeAbParticipations,
+    optimizeExperiments,
+  })([subsUrl, 'checkout', urls[billingPlan]].join('/'));
+}
+
+
 function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
   const groupFromId = countryGroups[cgId];
   if (groupFromId) {
@@ -327,4 +382,5 @@ export {
   getDailyEditionUrl,
   emailPreferencesUrl,
   getWeeklyCheckout,
+  getPaperCheckout,
 };
