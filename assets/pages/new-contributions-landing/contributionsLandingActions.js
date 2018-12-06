@@ -9,7 +9,7 @@ import {
   logInvalidCombination,
   type ContributionType,
   type PaymentMethod,
-  type PaymentMatrix,
+  type PaymentMatrix, getAmount,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getUserTypeFromIdentity } from 'helpers/identityApis';
@@ -49,6 +49,7 @@ import {
   type UserFormData,
   type ThankYouPageStage,
 } from './contributionsLandingReducer';
+import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -71,6 +72,7 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
+  | { type: 'SET_PAYMENT_REQUEST', paymentRequest: Object }
   | { type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment: boolean }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
@@ -116,6 +118,9 @@ const updateEmail = (email: string): ((Function) => void) =>
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
 const setCanMakeApplePayPayment = (canMakeApplePayPayment: boolean): Action => ({ type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment });
+
+const setPaymentRequest = (paymentRequest: Object): Action => ({ type: 'SET_PAYMENT_REQUEST', paymentRequest});
+
 
 const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -219,19 +224,17 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
-
-const getAmount = (state: State) =>
-  parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
-    ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
-    : state.page.form.selectedAmounts[state.page.form.contributionType].value);
-
 const stripeChargeDataFromAuthorisation = (
   authorisation: PaymentAuthorisation,
   state: State,
 ): StripeChargeData => ({
   paymentData: {
     currency: state.common.internationalisation.currencyId,
-    amount: getAmount(state),
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    ),
     token: authorisation.paymentMethod === 'Stripe' ? authorisation.token : '',
     email: state.page.form.formData.email || '',
   },
@@ -252,7 +255,11 @@ const regularPaymentRequestFromAuthorisation = (
   state: state.page.form.formData.state,
   email: state.page.form.formData.email || '',
   contribution: {
-    amount: getAmount(state),
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    ),
     currency: state.common.internationalisation.currencyId,
     billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
   },
@@ -349,7 +356,11 @@ const setupRecurringPayPalPayment = (
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
     const csrfToken = csrf.token;
-    const amount = getAmount(state);
+    const amount = getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    );
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
       amount,
@@ -469,4 +480,5 @@ export {
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
   setCanMakeApplePayPayment,
+  setPaymentRequest,
 };

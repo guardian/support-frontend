@@ -20,8 +20,10 @@ type PropTypes = {|
   currency: IsoCurrency,
   isTestUser: boolean,
   setCanMakeApplePayPayment: (boolean) => void,
+  setPaymentRequest: (Object) => void,
   stripeCheckout: Object | null,
   contributionType: ContributionType,
+  paymentRequest: Object | null,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -29,38 +31,49 @@ type PropTypes = {|
 // ---- Auxiliary functions ----- //
 function paymentRequestButton(props: {
   stripe: Object,
+  paymentRequest: Object | null,
   canMakeApplePayPayment: boolean,
   country: string,
   currency: IsoCurrency,
   amount: number,
   setCanMakeApplePayPayment: (boolean) => void,
+  setPaymentRequest: (Object) => void,
 }) {
-  console.log(props.currency);
-  const paymentRequest = props.stripe.paymentRequest({
-    country: props.country,
-    currency: 'usd',
+  if (!props.paymentRequest) {
+    const paymentRequest = props.stripe.paymentRequest({
+      country: props.country,
+      currency: 'usd',
+      total: {
+        label: 'Demo total',
+        amount: props.amount,
+      },
+    });
+    paymentRequest.on('token', ({ complete, token, ...data }) => {
+      console.log('Received Stripe token: ', token);
+      console.log('Received customer information: ', data);
+      complete('success');
+    });
+
+    paymentRequest.canMakePayment().then((result) => {
+      console.log(result);
+      if (result) {
+        props.setCanMakeApplePayPayment(true);
+      }
+    });
+    window.paymentRequest = paymentRequest;
+    props.setPaymentRequest(paymentRequest);
+    return null;
+  }
+  props.paymentRequest.update({
     total: {
       label: 'Demo total',
-      amount: 500,
+      amount: props.amount * 100,
     },
   });
-  paymentRequest.on('token', ({ complete, token, ...data }) => {
-    console.log('Received Stripe token: ', token);
-    console.log('Received customer information: ', data);
-    complete('success');
-  });
 
-  paymentRequest.canMakePayment().then((result) => {
-    console.log(result);
-    if (result && result.applePay) {
-      props.setCanMakeApplePayPayment(!!result.applePay);
-    }
-  });
-
-  console.log('a ', props.canMakeApplePayPayment);
-  return props.canMakeApplePayPayment === true ? (
+  return (props.canMakeApplePayPayment === true) ? (
     <PaymentRequestButtonElement
-      paymentRequest={paymentRequest}
+      paymentRequest={props.paymentRequest}
       className="PaymentRequestButton"
       style={{
         // For more details on how to style the Payment Request Button, see:
@@ -89,6 +102,8 @@ function ApplePay(props: PropTypes) {
             currency={props.currency}
             amount={props.amount}
             setCanMakeApplePayPayment={props.setCanMakeApplePayPayment}
+            setPaymentRequest={props.setPaymentRequest}
+            paymentRequest={props.paymentRequest}
           />
         </Elements>
       </StripeProvider>

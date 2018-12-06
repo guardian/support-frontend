@@ -87,6 +87,11 @@ export type OtherAmounts = {
 export type SelectedAmounts = { [ContributionType]: Amount | 'other' };
 
 
+const getAmount = (selectedAmounts: SelectedAmounts, otherAmounts: OtherAmounts, contributionType: ContributionType) =>
+  parseFloat(selectedAmounts[contributionType] === 'other'
+    ? otherAmounts[contributionType].amount
+    : selectedAmounts[contributionType].value);
+
 // ----- Setup ----- //
 
 /* eslint-disable quote-props */
@@ -494,4 +499,5 @@ export {
   contributionTypeRadios,
   getContributionAmountRadios,
   parseRegularContributionType,
+  getAmount,
 };
