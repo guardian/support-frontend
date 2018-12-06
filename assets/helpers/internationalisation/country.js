@@ -344,7 +344,6 @@ const countries = {
   SH: 'Saint Helena',
 };
 
-
 // ----- Types ----- //
 
 export type UsState = $Keys<typeof usStates>;
@@ -352,6 +351,43 @@ export type CaState = $Keys<typeof caStates>;
 export type IsoCountry = $Keys<typeof countries>;
 export type StateProvince = UsState | CaState;
 
+const stripePaymentRequestAllowedCountries = [
+  'AT',
+  'AU',
+  'BE',
+  'BR',
+  'CA',
+  'CH',
+  'DE',
+  'DK',
+  'EE',
+  'ES',
+  'FI',
+  'FR',
+  'GB',
+  'HK',
+  'IE',
+  'IN',
+  'IT',
+  'JP',
+  'LT',
+  'LU',
+  'LV',
+  'MX',
+  'NL',
+  'NZ',
+  'NO',
+  'PH',
+  'PL',
+  'PT',
+  'RO',
+  'SE',
+  'SG',
+  'SK',
+  'US',
+];
+
+export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) => stripePaymentRequestAllowedCountries.includes(country);
 
 // ----- Functions ----- /
 

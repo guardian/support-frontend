@@ -443,8 +443,17 @@ const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, Paym
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
-
     paymentAuthorisationHandlers[state.page.form.contributionType][state.page.form.paymentMethod](
+      dispatch,
+      state,
+      paymentAuthorisation,
+    );
+  };
+
+const onStripePaymentRequestApiPaymentAuthorised =  (paymentAuthorisation: PaymentAuthorisation) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    paymentAuthorisationHandlers.ONE_OFF.Stripe(
       dispatch,
       state,
       paymentAuthorisation,
@@ -481,4 +490,5 @@ export {
   sendFormSubmitEventForPayPalRecurring,
   setCanMakeApplePayPayment,
   setPaymentRequest,
+  onStripePaymentRequestApiPaymentAuthorised,
 };

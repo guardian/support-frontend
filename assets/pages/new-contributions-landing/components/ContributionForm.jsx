@@ -40,13 +40,14 @@ import { type State } from '../contributionsLandingReducer';
 
 import {
   paymentWaiting,
-  onThirdPartyPaymentAuthorised,
+  onStripePaymentRequestApiPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
-import ApplePay from './ApplePay';
-import { setPaymentRequest, setCanMakeApplePayPayment } from '../../new-contributions-landing/contributionsLandingActions';
+import StripePaymentRequestButton from './StripePaymentRequestButton';
+import { setPaymentRequest, setCanMakeApplePayPayment, updateEmail } from '../../new-contributions-landing/contributionsLandingActions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
@@ -62,7 +63,7 @@ type PropTypes = {|
   currency: IsoCurrency,
   paymentError: ErrorReason | null,
   selectedAmounts: SelectedAmounts,
-  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
+  onStripePaymentRequestApiPaymentAuthorised: PaymentAuthorisation => void,
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
   setCheckoutFormHasBeenSubmitted: () => void,
@@ -77,6 +78,9 @@ type PropTypes = {|
   setCanMakeApplePayPayment: (boolean) => void,
   setPaymentRequest: (Object) => void,
   paymentRequest: Object | null,
+  updateEmail: string => void,
+  isTestUser: boolean,
+  country: IsoCountry,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -90,7 +94,7 @@ const mapStateToProps = (state: State) => ({
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
-  otherAmounts: state.page.form.formData.otherAmounts[state.page.form.contributionType],
+  otherAmounts: state.page.form.formData.otherAmounts,
   paymentMethod: state.page.form.paymentMethod,
   thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
   contributionType: state.page.form.contributionType,
@@ -104,12 +108,15 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   canMakeApplePayPayment: state.page.form.canMakeApplePayPayment,
   paymentRequest: state.page.form.paymentRequest,
+  isTestUser: state.page.user.isTestUser,
+  country: state.common.internationalisation.countryId,
 });
 
 
 const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
+  onStripePaymentRequestApiPaymentAuthorised:
+    (token) => { dispatch(onStripePaymentRequestApiPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
@@ -117,6 +124,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
     (canMakeApplePayPayment) => { dispatch(setCanMakeApplePayPayment(canMakeApplePayPayment)); },
   setPaymentRequest:
     (paymentRequest) => { dispatch(setPaymentRequest(paymentRequest)); },
+  updateEmail: (email: string) => { dispatch(updateEmail(email)); },
 });
 
 // ----- Functions ----- //
@@ -213,7 +221,7 @@ function ContributionForm(props: PropTypes) {
       <NewContributionAmount
         checkOtherAmount={checkAmount}
       />
-      <ApplePay
+      <StripePaymentRequestButton
         setCanMakeApplePayPayment={props.setCanMakeApplePayPayment}
         setPaymentRequest={props.setPaymentRequest}
         stripeCheckout={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
@@ -222,6 +230,11 @@ function ContributionForm(props: PropTypes) {
         contributionType={props.contributionType}
         paymentRequest={props.paymentRequest}
         amount={getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType)}
+        onPaymentAuthorised={props.onStripePaymentRequestApiPaymentAuthorised}
+        updateEmail={props.updateEmail}
+        //TODO: set this correctly
+        isTestUser={true}
+        country={props.country}
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
