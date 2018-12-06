@@ -24,7 +24,8 @@ const setTab = (tab: PaperDeliveryMethod): TabActions => {
 };
 
 const redirectToCheckout = () =>
-  (dispatch: Function, getState: () => State) => {
+  (dispatch: Dispatch<{||}>, getState: () => State) => {
+    /* this action does not dipatch anything at the moment */
     const state = getState();
     const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
     const location = state.page.plan.plan ? getPaperCheckout(
