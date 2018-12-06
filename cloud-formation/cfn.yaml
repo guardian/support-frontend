@@ -121,6 +121,13 @@ Resources:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
+                Action: cloudwatch:PutMetricData
+                Resource: '*'
+        - PolicyName: CloudwatchMetrics
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
                 Action:
                 - logs:CreateLogGroup
                 - logs:CreateLogStream
@@ -298,7 +305,7 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: Warnings support-frontend
+      AlarmName: !Sub Warnings support-frontend in ${Stage}
       AlarmDescription: This alerts when non critical events happen. These should be dealt with in the next sprint.
       MetricName: WarningCount
       Namespace: support-frontend
