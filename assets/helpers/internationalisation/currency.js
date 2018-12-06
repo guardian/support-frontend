@@ -31,6 +31,11 @@ export type SpokenCurrency = {|
   plural: string,
 |};
 
+export type Price = $ReadOnly<{|
+  value: number,
+  currency: IsoCurrency,
+|}>;
+
 
 // ----- Config ----- //
 
@@ -129,6 +134,13 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
   return fromQueryParameter() || fromCountryGroupId(countryGroup) || 'GBP';
 }
 
+const GBP = (value: number): Price => ({ value, currency: 'GBP' });
+const USD = (value: number): Price => ({ value, currency: 'USD' });
+const AUD = (value: number): Price => ({ value, currency: 'AUD' });
+const EUR = (value: number): Price => ({ value, currency: 'EUR' });
+const NZD = (value: number): Price => ({ value, currency: 'NZD' });
+const CAD = (value: number): Price => ({ value, currency: 'CAD' });
+
 
 // ----- Exports ----- //
 
@@ -137,4 +149,10 @@ export {
   spokenCurrencies,
   fromCountryGroupId,
   currencies,
+  GBP,
+  USD,
+  AUD,
+  EUR,
+  NZD,
+  CAD,
 };

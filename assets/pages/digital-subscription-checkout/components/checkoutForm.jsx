@@ -64,9 +64,9 @@ function getPrice(country: Option<IsoCountry>, frequency: DigitalBillingPeriod):
 
   if (cgId) {
 
-    const glyph = currencies[countryGroups[cgId].currency].extendedGlyph;
-    const price = getDigitalPrice(cgId, frequency).toFixed(2);
-    return `${glyph}${price} `;
+    const price = getDigitalPrice(cgId, frequency);
+    const glyph = currencies[price.currency].extendedGlyph;
+    return `${glyph}${price.value.toFixed(2)} `;
 
   }
 
