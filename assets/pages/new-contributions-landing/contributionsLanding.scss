@@ -192,6 +192,10 @@ footer[role="contentinfo"] a {
 
 $progess-bar-height: 10px;
 
+.contributions-landing-ticker--hidden {
+  visibility: hidden;
+}
+
 .contributions-landing-ticker {
   @include mq($until: tablet) {
     display: none;

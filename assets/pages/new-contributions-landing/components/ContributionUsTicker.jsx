@@ -86,26 +86,42 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
 
 
   render() {
-    return (
-      <div className="contributions-landing-ticker">
-        <div className="contributions-landing-ticker__values">
-          <div className="contributions-landing-ticker__so-far">
-            <div className="contributions-landing-ticker__count">${Math.floor(this.state.totalSoFar).toLocaleString()}</div>
-            <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">so far</div>
-          </div>
+    let wrapperClassName = "contributions-landing-ticker--hidden";
+    if (this.state && this.state.totalSoFar && this.state.totalSoFar != 0) {
+       wrapperClassName = "contributions-landing-ticker";
+    }
 
-          <div className="contributions-landing-ticker__goal">
-            <div className="contributions-landing-ticker__count">${Math.floor(this.state.goal).toLocaleString()}</div>
-            <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">our goal</div>
-          </div>
-        </div>
-        <div className="contributions-landing-ticker__progress-bar">
-          <div className="contributions-landing-ticker__progress">
-            <div ref={(filledProgressBar) => { this.filledProgressBar = filledProgressBar; }} className="js-contributions-landing-ticker__filled-progress contributions-landing-ticker__filled-progress" />
-          </div>
-        </div>
-        <div className="contributions-landing-ticker__border" />
-      </div>
+    return (
+       <div className={wrapperClassName}>
+         <div className="contributions-landing-ticker__values">
+           <div className="contributions-landing-ticker__so-far">
+             <div
+               className="contributions-landing-ticker__count">${Math.floor(this.state.totalSoFar).toLocaleString()}</div>
+             <div
+               className="contributions-landing-ticker__count-label contributions-landing-ticker__label">so
+               far
+             </div>
+           </div>
+
+           <div className="contributions-landing-ticker__goal">
+             <div
+               className="contributions-landing-ticker__count">${Math.floor(this.state.goal).toLocaleString()}</div>
+             <div
+               className="contributions-landing-ticker__count-label contributions-landing-ticker__label">our
+               goal
+             </div>
+           </div>
+         </div>
+         <div className="contributions-landing-ticker__progress-bar">
+           <div className="contributions-landing-ticker__progress">
+             <div ref={(filledProgressBar) => {
+               this.filledProgressBar = filledProgressBar;
+             }}
+                  className="js-contributions-landing-ticker__filled-progress contributions-landing-ticker__filled-progress"/>
+           </div>
+         </div>
+         <div className="contributions-landing-ticker__border"/>
+       </div>
     );
   }
 }
