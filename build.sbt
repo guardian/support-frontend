@@ -4,11 +4,6 @@ import sbtrelease.ReleaseStateTransformations._
 
 skip in publish := true
 
-scmInfo := Some(ScmInfo(
-  url("https://github.com/guardian/support-libraries"),
-  "scm:git:git@github.com:guardian/support-libraries.git"
-))
-
 val release = Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
@@ -40,8 +35,10 @@ lazy val commonSettings = Seq(
   releaseProcess := release,
   releaseUseGlobalVersion := false,
   releaseVersionFile := file(name.value + "/version.sbt"),
-  publishConfiguration := publishConfiguration.value.withOverwrite(true),
-  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
+  scmInfo := Some(ScmInfo(
+    url("https://github.com/guardian/support-libraries"),
+    "scm:git:git@github.com:guardian/support-libraries.git"
+  )),
   releaseTagName := {
     val versionInThisBuild = (version in ThisBuild).value
     val versionValue = version.value
@@ -65,6 +62,11 @@ lazy val supportConfig = (project in file("support-config"))
     libraryDependencies ++= commonDependencies
   )
 lazy val supportServices = (project in file("support-services"))
+  .settings(
+    commonSettings,
+    libraryDependencies ++= commonDependencies
+  )
+lazy val supportInternationalisation = (project in file("support-internationalisation"))
   .settings(
     commonSettings,
     libraryDependencies ++= commonDependencies

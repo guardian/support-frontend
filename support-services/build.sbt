@@ -4,11 +4,6 @@ name := "support-services"
 
 description := "Scala library to provide shared services to Guardian Support projects."
 
-scmInfo := Some(ScmInfo(
-  url("https://github.com/guardian/support-services"),
-  "scm:git:git@github.com:guardian/support-services.git"
-))
-
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "com.amazonaws" % "aws-java-sdk-dynamodb" % awsClientVersion,

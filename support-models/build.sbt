@@ -2,11 +2,6 @@ import LibraryVersions.{circeVersion, catsVersion}
 
 name := "support-models"
 
-scmInfo := Some(ScmInfo(
-  url("https://github.com/guardian/support-models"),
-  "scm:git:git@github.com:guardian/support-models.git"
-))
-
 description := "Scala library to provide shared step-function models to Guardian Support projects."
 
 libraryDependencies ++= Seq(
