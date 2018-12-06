@@ -124,9 +124,6 @@
   @include mq($from: desktop) {
     left: gu-span(8) + $gu-h-spacing;
   }
-  @include mq($from: wide) {
-    width: gu-span(5);
-  }
   bottom: ($gu-v-spacing*2)*-1;
   .component-grid-image {
     display: block;
