@@ -9,6 +9,9 @@ import { compose } from 'redux';
 import { countries, usStates, caStates, type IsoCountry } from 'helpers/internationalisation/country';
 import { type FormError, firstError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
+import { fromCountry, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getDigitalPrice, type DigitalBillingPeriod } from 'helpers/subscriptions';
+import { currencies } from 'helpers/internationalisation/currency';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
@@ -50,6 +53,24 @@ function mapStateToProps(state: State) {
     ...getFormFields(state),
     errors: state.page.checkout.errors,
   };
+}
+
+
+// ----- Functions ----- //
+
+function getPrice(country: Option<IsoCountry>, frequency: DigitalBillingPeriod): string {
+
+  const cgId: ?CountryGroupId = fromCountry(country || '');
+
+  if (cgId) {
+
+    const glyph = currencies[countryGroups[cgId].currency].extendedGlyph;
+    const price = getDigitalPrice(cgId, frequency).toFixed(2);
+    return `${glyph}${price} `;
+
+  }
+
+  return '';
 }
 
 
@@ -132,16 +153,16 @@ function CheckoutForm(props: PropTypes) {
         <h2 className="checkout-form__heading">How often would you like to pay?</h2>
         <Fieldset>
           <RadioInput
-            text="£11.99 Every month"
+            text={`${getPrice(props.country, 'month')}Every month`}
             name="paymentFrequency"
-            checked={props.paymentFrequency === 'monthly'}
-            onChange={() => props.setPaymentFrequency('monthly')}
+            checked={props.paymentFrequency === 'month'}
+            onChange={() => props.setPaymentFrequency('month')}
           />
           <RadioInput
-            text="£119.90 Every year"
+            text={`${getPrice(props.country, 'year')}Every year`}
             name="paymentFrequency"
-            checked={props.paymentFrequency === 'yearly'}
-            onChange={() => props.setPaymentFrequency('yearly')}
+            checked={props.paymentFrequency === 'year'}
+            onChange={() => props.setPaymentFrequency('year')}
           />
         </Fieldset>
       </LeftMarginSection>
