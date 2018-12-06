@@ -204,7 +204,7 @@ $progess-bar-height: 10px;
 .contributions-landing-ticker__values {
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
 }
 
 .contributions-landing-ticker__goal, .contributions-landing-ticker__so-far {
@@ -220,7 +220,7 @@ $progess-bar-height: 10px;
 }
 
 .contributions-landing-ticker__goal {
-  align-items: end;
+  align-items: flex-end;
 
   .contributions-landing-ticker__count {
     font-weight: bold;
