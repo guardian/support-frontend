@@ -245,7 +245,7 @@ const withParams = ({
   optimizeExperiments,
 }: {
   referrerAcquisitionData: ReferrerAcquisitionData,
-  cgId: Option<CountryGroupId>,
+  cgId?: Option<CountryGroupId>,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
 }) => (url: string) => {

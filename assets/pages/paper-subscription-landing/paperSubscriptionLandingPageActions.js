@@ -9,6 +9,8 @@ import { paperSubsUrl } from 'helpers/routes';
 import { getPaperCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
+import { type State } from './paperSubscriptionLandingPageReducer';
+
 // ----- Types ----- //
 export type TabActions = { type: 'SET_TAB', tab: PaperDeliveryMethod }
 
@@ -25,7 +27,7 @@ const redirectToCheckout = () =>
   (dispatch: Function, getState: () => State) => {
     const state = getState();
     const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
-    const location = state.page.plan ? getPaperCheckout(
+    const location = state.page.plan.plan ? getPaperCheckout(
       state.page.plan.plan,
       referrerAcquisitionData,
       abParticipations,
