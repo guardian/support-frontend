@@ -49,7 +49,7 @@
 
 .component-product-page-content-block--grey {
   @include block-colours(
-    $border: gu-colour(garnett-neutral-4),
+    $border: transparent,
     $bg: gu-colour(garnett-neutral-3),
   );
 }
