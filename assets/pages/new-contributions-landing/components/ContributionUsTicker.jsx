@@ -29,7 +29,8 @@ const percentageTotalAsNegative = (total: number, goal: number) => {
   if (percentage > 0) {
     percentage = 0;
   }
-  return percentage;
+const percentage = ((total / goal) * 100) - 100;
+return percentage > 0 ? 0 : percentage;
 };
 
 
