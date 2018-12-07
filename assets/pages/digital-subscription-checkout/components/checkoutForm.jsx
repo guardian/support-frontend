@@ -9,9 +9,9 @@ import { compose } from 'redux';
 import { countries, usStates, caStates, type IsoCountry } from 'helpers/internationalisation/country';
 import { type FormError, firstError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
-import { fromCountry, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { fromCountry, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getDigitalPrice, type DigitalBillingPeriod } from 'helpers/subscriptions';
-import { currencies } from 'helpers/internationalisation/currency';
+import { showPrice } from 'helpers/internationalisation/price';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
@@ -64,13 +64,13 @@ function getPrice(country: Option<IsoCountry>, frequency: DigitalBillingPeriod):
 
   if (cgId) {
 
-    const glyph = currencies[countryGroups[cgId].currency].extendedGlyph;
-    const price = getDigitalPrice(cgId, frequency).toFixed(2);
-    return `${glyph}${price} `;
+    const price = getDigitalPrice(cgId, frequency);
+    return `${showPrice(price, true)} `;
 
   }
 
   return '';
+
 }
 
 

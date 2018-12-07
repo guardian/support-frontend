@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Price, GBP, USD, AUD, EUR, NZD, CAD } from 'helpers/internationalisation/price';
 
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
@@ -103,32 +104,32 @@ const discountPricesForDefaultBillingPeriod: {
 
 const digitalSubscriptionPrices = {
   GBPCountries: {
-    month: 11.99,
-    year: 119.90,
+    month: GBP(11.99),
+    year: GBP(119.90),
   },
   UnitedStates: {
-    month: 19.99,
-    year: 199.90,
+    month: USD(19.99),
+    year: USD(199.90),
   },
   AUDCountries: {
-    month: 21.50,
-    year: 215.00,
+    month: AUD(21.50),
+    year: AUD(215.00),
   },
   EURCountries: {
-    month: 14.99,
-    year: 149.90,
+    month: EUR(14.99),
+    year: EUR(149.90),
   },
   International: {
-    month: 19.99,
-    year: 199.90,
+    month: USD(19.99),
+    year: USD(199.90),
   },
   NZDCountries: {
-    month: 23.50,
-    year: 235.00,
+    month: NZD(23.50),
+    year: NZD(235.00),
   },
   Canada: {
-    month: 21.95,
-    year: 219.50,
+    month: CAD(21.95),
+    year: CAD(219.50),
   },
 };
 
@@ -195,7 +196,7 @@ function fixDecimals(number: number): string {
   return number.toFixed(2);
 }
 
-function getDigitalPrice(cgId: CountryGroupId, frequency: DigitalBillingPeriod): number {
+function getDigitalPrice(cgId: CountryGroupId, frequency: DigitalBillingPeriod): Price {
   return digitalSubscriptionPrices[cgId][frequency];
 }
 
