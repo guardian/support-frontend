@@ -194,6 +194,9 @@ $progess-bar-height: 10px;
 
 .contributions-landing-ticker--hidden {
   visibility: hidden;
+  .contributions-landing-ticker__border {
+    visibility: visible;
+  }
 }
 
 .contributions-landing-ticker {

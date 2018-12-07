@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 import React, { Component } from 'react';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 // ---- Types ----- //
 type StateTypes = {|
@@ -25,12 +26,8 @@ const getInitialTickerValues = (): Promise<{| totalSoFar: number, goal: number |
     });
 
 const percentageTotalAsNegative = (total: number, goal: number) => {
-  let percentage = ((total / goal) * 100) - 100;
-  if (percentage > 0) {
-    percentage = 0;
-  }
-const percentage = ((total / goal) * 100) - 100;
-return percentage > 0 ? 0 : percentage;
+  const percentage = ((total / goal) * 100) - 100;
+  return percentage > 0 ? 0 : percentage;
 };
 
 
@@ -87,10 +84,10 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
 
 
   render() {
-    let wrapperClassName = 'contributions-landing-ticker contributions-landing-ticker--hidden';
-    if (this.state && this.state.totalSoFar && this.state.totalSoFar !== 0) {
-      wrapperClassName = 'contributions-landing-ticker';
-    }
+    const baseClassName = 'contributions-landing-ticker';
+    const wrapperClassName = (this.state && this.state.totalSoFar && this.state.totalSoFar !== 0) ?
+       baseClassName :
+       classNameWithModifiers(baseClassName, ['hidden']);
 
     return (
       <div className={wrapperClassName}>
