@@ -52,6 +52,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  usTickerLandingPageTestVariant: string,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -68,6 +69,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
+  usTickerLandingPageTestVariant: state.common.abParticipations.usTickerLandingPage,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -94,12 +96,14 @@ function ContributionFormContainer(props: PropTypes) {
 
   const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
 
+  const displayTicker = (props.countryGroupId === 'UnitedStates' && props.usTickerLandingPageTestVariant === 'ticker');
+
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content">
         <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
-        { props.countryGroupId === 'UnitedStates' ? <ContributionUsTicker /> : null }
+        { displayTicker ? <ContributionUsTicker /> : null }
         { countryGroupDetails.contributeCopy ?
           <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
         }

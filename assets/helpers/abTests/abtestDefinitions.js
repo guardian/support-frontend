@@ -8,6 +8,19 @@ export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'not
 
 export const tests: Tests = {
 
+  usTickerLandingPage: {
+    variants: ['ticker'],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 2,
+  },
+
   usSingleContributionsAmounts: {
     variants: ['control', 'singleD100', 'single3575'],
     audiences: {
