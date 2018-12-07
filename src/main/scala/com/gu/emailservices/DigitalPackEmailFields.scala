@@ -2,7 +2,7 @@ package com.gu.emailservices
 
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.workers.model._
+import com.gu.support.workers._
 import org.joda.time.DateTime
 
 // Output Json should look like this:

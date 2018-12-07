@@ -1,8 +1,7 @@
 package com.gu.support.workers
 
 import com.gu.stripe.Stripe.StripeError
-import com.gu.support.workers.model.{PayPalReferenceTransaction, PaymentMethod}
-import com.gu.zuora.encoding.CustomCodecs._
+import com.gu.support.encoding.CustomCodecs._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
 import io.circe.syntax._

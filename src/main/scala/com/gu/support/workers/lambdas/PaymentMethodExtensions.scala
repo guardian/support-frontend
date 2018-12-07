@@ -1,6 +1,6 @@
 package com.gu.support.workers.lambdas
 
-import com.gu.support.workers.model.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction, PaymentMethod}
+import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction, PaymentMethod}
 
 object PaymentMethodExtensions {
   implicit class PaymentMethodExtension[T <: PaymentMethod](self: T) {

@@ -4,20 +4,18 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.GetRecurringSubscription
-import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
-import com.gu.support.workers.model.{Contribution, DigitalPack, RequestInfo}
-import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
-import com.gu.zuora.GetSubscription.DomainSubscription
-import com.gu.zuora.ZuoraConfig.RatePlanId
-import com.gu.zuora.model._
-import com.gu.zuora.model.response.SubscribeResponseAccount
-import org.joda.time.{DateTimeZone, LocalDate}
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.promotions.PromotionService
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers._
+import com.gu.support.zuora.api._
+import com.gu.support.zuora.api.response.{SubscribeResponseAccount, ZuoraAccountNumber}
+import com.gu.support.zuora.domain.DomainSubscription
+import com.gu.zuora.ProductSubscriptionBuilders._
+import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Try
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendThankYouEmailState](servicesProvider) {
@@ -54,7 +52,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   }
 
   def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
-    singleSubscribe(services.zuoraService.subscribe)(buildSubscribeRequest(state))
+    singleSubscribe(services.zuoraService.subscribe)(buildSubscribeRequest(state, services.promotionService))
       .map(response =>
         HandlerResult(getEmailState(state, response.domainAccountNumber), requestInfo))
 
@@ -69,60 +67,24 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.acquisitionData
     )
 
-  private def buildSubscribeRequest(state: CreateZuoraSubscriptionState) = {
+  private def buildSubscribeRequest(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
     SubscribeItem(
       buildAccount(state),
       buildContactDetails(state),
       state.paymentMethod,
-      buildSubscriptionData(state),
+      buildSubscriptionData(state, promotionService),
       SubscribeOptions()
     )
   }
 
-  private def buildSubscriptionData(state: CreateZuoraSubscriptionState) = {
+  private def buildSubscriptionData(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
     val config = zuoraConfigProvider.get(state.user.isTestUser)
     state.product match {
-      case c: Contribution =>
-        val contributionConfig = config.contributionConfig(c.billingPeriod)
-        buildProductSubscription(
-          contributionConfig.productRatePlanId,
-          List(
-            RatePlanChargeData(
-              RatePlanCharge(contributionConfig.productRatePlanChargeId, Some(c.amount)) //Pass the amount the user selected into Zuora
-            )
-          )
-        )
-      case d: DigitalPack =>
-        val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
-        val contractAcceptanceDate = contractEffectiveDate
-          .plusDays(config.digitalPack.defaultFreeTrialPeriod)
-          .plusDays(config.digitalPack.paymentGracePeriod)
-
-        buildProductSubscription(
-          config.digitalPackRatePlan(d.billingPeriod),
-          contractAcceptanceDate = contractAcceptanceDate,
-          contractEffectiveDate = contractEffectiveDate
-        )
+      case c: Contribution => c.build(config)
+      case d: DigitalPack => d.build(config, state.user.country, state.promoCode, promotionService)
     }
   }
-
-  private def buildProductSubscription(
-    ratePlanId: RatePlanId,
-    ratePlanCharges: List[RatePlanChargeData] = Nil,
-    contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
-  ) =
-    SubscriptionData(
-      List(
-        RatePlanData(
-          RatePlan(ratePlanId),
-          ratePlanCharges,
-          Nil
-        )
-      ),
-      Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate)
-    )
 
   private def buildContactDetails(state: CreateZuoraSubscriptionState) = {
     ContactDetails(
@@ -143,12 +105,4 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
     state.requestId.toString
   )
-}
-
-case class IdentityId(value: String)
-object IdentityId {
-
-  def apply(wire: String): Try[IdentityId] =
-    Try(wire.toLong).map(_.toString).map(new IdentityId(_))
-
 }

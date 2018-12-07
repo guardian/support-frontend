@@ -5,10 +5,10 @@ import java.io.ByteArrayInputStream
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{email, idId}
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
-import com.gu.support.workers.model.{BillingPeriod, Monthly, RequestInfo}
-import com.gu.zuora.encoding.CustomCodecs.jsonWrapperEncoder
+import io.circe.generic.auto._
 import io.circe.syntax._
 
 //noinspection TypeAnnotation
@@ -155,14 +155,6 @@ object Fixtures {
           "sessionId": "testingToken"
         }"""
 
-  val oldSchemaContributionJson =
-    s"""{
-          $requestIdJson,
-          $userJson,
-          "contribution": ${contribution()},
-          "paymentFields": $stripeJson
-        }"""
-
   val createPayPalPaymentMethodDigitalPackJson =
     s"""{
           $requestIdJson,
@@ -221,13 +213,25 @@ object Fixtures {
             "salesForceContact": $salesforceContactJson
             }
         """
-  def createDigiPackZuoraSubscriptionJson =
+  val createDigiPackZuoraSubscriptionJson =
     s"""
           {
             $requestIdJson,
             $userJson,
             "product": ${digitalPackJson},
             "paymentMethod": $stripePaymentMethod,
+            "salesForceContact": $salesforceContactJson
+            }
+        """
+
+  val createDigiPackSubscriptionWithPromoJson =
+    s"""
+          {
+            $requestIdJson,
+            $userJson,
+            "product": ${digitalPackJson},
+            "paymentMethod": $stripePaymentMethod,
+            "promoCode": "DJP8L27FY",
             "salesForceContact": $salesforceContactJson
             }
         """

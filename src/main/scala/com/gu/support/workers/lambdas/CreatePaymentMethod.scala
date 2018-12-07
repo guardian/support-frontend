@@ -6,10 +6,11 @@ import com.gu.monitoring.SafeLogger
 import com.gu.paypal.PayPalService
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
-import com.gu.support.workers.encoding.StateCodecs._
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.model._
-import com.gu.support.workers.model.states.{CreatePaymentMethodState, CreateSalesforceContactState}
+import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
+import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -48,6 +49,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.user,
       state.product,
       paymentMethod,
+      state.promoCode,
       state.acquisitionData
     )
 

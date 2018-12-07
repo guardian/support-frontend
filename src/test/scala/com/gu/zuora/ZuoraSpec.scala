@@ -5,14 +5,11 @@ import java.util.UUID
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
-import com.gu.support.workers.GetRecurringSubscription
-import com.gu.support.workers.lambdas.IdentityId
-import com.gu.support.workers.model.Monthly
+import com.gu.support.workers.{GetRecurringSubscription, IdentityId, Monthly}
+import com.gu.support.zuora.api.SubscribeRequest
+import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
-import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
-import com.gu.zuora.model.SubscribeRequest
-import com.gu.zuora.model.response.ZuoraErrorResponse
 import org.scalatest.{AsyncFlatSpec, Matchers}
 
 import scala.concurrent.duration._

@@ -2,7 +2,7 @@ package com.gu.support.workers
 
 import java.util.UUID
 
-import com.gu.zuora.GetAccountForIdentity.CreatedRequestId
+import com.gu.support.zuora.domain.CreatedRequestId
 import org.scalatest.{FlatSpec, Matchers}
 
 class IsSameRequestSpec extends FlatSpec with Matchers {

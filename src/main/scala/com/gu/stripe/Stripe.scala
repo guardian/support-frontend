@@ -1,7 +1,7 @@
 package com.gu.stripe
 
-import com.gu.support.workers.encoding.Codec
-import com.gu.support.workers.encoding.Helpers.deriveCodec
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._

@@ -4,7 +4,6 @@ import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.support.config._
-import com.gu.zuora.ZuoraConfigProvider
 import com.typesafe.config.ConfigFactory
 
 import scala.util.Try
@@ -29,6 +28,7 @@ object Configuration {
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)
   val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
+  val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
 
   val contributionThanksQueueName = config.getString("email.thankYou.queueName")
 }

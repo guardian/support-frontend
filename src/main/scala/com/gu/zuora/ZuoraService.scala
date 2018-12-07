@@ -4,11 +4,11 @@ import cats.data.OptionT
 import cats.implicits._
 import com.gu.helpers.WebServiceHelper
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.support.workers.lambdas.IdentityId
-import com.gu.zuora.GetAccountForIdentity.{DomainAccount, ZuoraAccountNumber}
-import com.gu.zuora.GetSubscription.DomainSubscription
-import com.gu.zuora.model.response._
-import com.gu.zuora.model.{QueryData, SubscribeRequest}
+import com.gu.support.config.ZuoraConfig
+import com.gu.support.workers.IdentityId
+import com.gu.support.zuora.api.response._
+import com.gu.support.zuora.api.{QueryData, SubscribeRequest}
+import com.gu.support.zuora.domain.{DomainAccount, DomainSubscription}
 import io.circe
 import io.circe.Decoder
 import io.circe.parser.decode
@@ -32,12 +32,12 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   def getAccountFields(identityId: IdentityId): Future[List[DomainAccount]] = {
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.
     val queryData = QueryData(s"select AccountNumber, CreatedRequestId__c from account where IdentityId__c = '${identityId.value}'")
-    postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromWireAccount))
+    postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromAccountRecord))
   }
 
   def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[DomainSubscription]] =
     get[SubscriptionsResponse](s"subscriptions/accounts/${accountNumber.value}", authHeaders).map { subscriptionsResponse =>
-      subscriptionsResponse.subscriptions.map(DomainSubscription.fromWireSubscription)
+      subscriptionsResponse.subscriptions.map(DomainSubscription.fromSubscription)
     }
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
@@ -69,38 +69,4 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     //a ZuoraErrorResponse but actually it returns a list of those.
     decode[List[ZuoraErrorResponse]](responseBody).map(_.head)
 
-}
-
-object GetAccountForIdentity {
-
-  case class ZuoraAccountNumber(value: String)
-  case class CreatedRequestId(value: String)
-
-  case class DomainAccount(accountNumber: ZuoraAccountNumber, existingAccountRequestId: Option[CreatedRequestId])
-
-  object DomainAccount {
-
-    def fromWireAccount(accountRecord: AccountRecord): DomainAccount =
-      DomainAccount(
-        ZuoraAccountNumber(accountRecord.AccountNumber),
-        accountRecord.CreatedRequestId__c.filter(_.length > 0).map(CreatedRequestId.apply)
-      )
-
-  }
-
-}
-
-object GetSubscription {
-
-  case class ZuoraIsActive(value: Boolean) extends AnyVal
-
-  case class DomainSubscription(accountNumber: ZuoraAccountNumber, isActive: ZuoraIsActive, ratePlans: List[RatePlan])
-  object DomainSubscription {
-    def fromWireSubscription(subscription: Subscription): DomainSubscription =
-      DomainSubscription(
-        ZuoraAccountNumber(subscription.accountNumber),
-        ZuoraIsActive(subscription.status == "Active"),
-        subscription.ratePlans //this can be changed to map to a DomainRatePlan if necessary
-      )
-  }
 }

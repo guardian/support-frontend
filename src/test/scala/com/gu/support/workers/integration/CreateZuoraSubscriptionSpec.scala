@@ -2,21 +2,22 @@ package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.config.Configuration.zuoraConfigProvider
+import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.encoding.StateCodecs._
 import com.gu.support.workers.errors.MockServicesCreator
-import com.gu.support.workers.lambdas.{CreateZuoraSubscription, IdentityId}
-import com.gu.support.workers.model.states.SendThankYouEmailState
-import com.gu.support.workers.model.{Annual, Monthly}
+import com.gu.support.workers.lambdas.CreateZuoraSubscription
+import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.{Annual, IdentityId, LambdaSpec, Monthly}
+import com.gu.support.zuora.api.SubscribeRequest
+import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.GetAccountForIdentity.ZuoraAccountNumber
 import com.gu.zuora.ZuoraService
-import com.gu.zuora.model.SubscribeRequest
+import io.circe.generic.auto._
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
@@ -61,7 +62,20 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     sendThankYouEmail._1.accountNumber.length should be > 0
   }
 
-  val realService = new ZuoraService(zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
+  it should "create a Digital Pack subscription with a discount" in {
+    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
+
+    val outStream = new ByteArrayOutputStream()
+
+    createZuora.handleRequest(wrapFixture(createDigiPackSubscriptionWithPromoJson), outStream, context)
+
+    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
+    sendThankYouEmail._1.accountNumber.length should be > 0
+  }
+
+  val realZuoraService = new ZuoraService(zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
+
+  val realPromotionService = new PromotionService(promotionsConfigProvider.get(false))
 
   val mockZuoraService = {
     val mockZuora = mock[ZuoraService]
@@ -73,13 +87,15 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     when(mockZuora.getSubscriptions(any[ZuoraAccountNumber]))
       .thenReturn(Future.successful(Nil))
     when(mockZuora.subscribe(any[SubscribeRequest]))
-      .thenAnswer((invocation: InvocationOnMock) => realService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
-    when(mockZuora.config).thenReturn(realService.config)
+      .thenAnswer((invocation: InvocationOnMock) => realZuoraService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
+    when(mockZuora.config).thenReturn(realZuoraService.config)
     mockZuora
   }
 
-  val mockServiceProvider = mockServices(
-    s => s.zuoraService,
-    mockZuoraService
+  val mockServiceProvider = mockServices[Any](
+    (s => s.zuoraService,
+      mockZuoraService),
+    (s => s.promotionService,
+      realPromotionService)
   )
 }

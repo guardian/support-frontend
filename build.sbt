@@ -1,3 +1,4 @@
+
 import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import sbt.Keys.{libraryDependencies, resolvers}
@@ -50,8 +51,9 @@ lazy val root = (project in file("."))
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "io.symphonia" % "lambda-logging" % "1.0.1",
       "com.gu" %% "support-internationalisation" % "0.9",
-      "com.gu" %% "support-models" % "0.38",
-      "com.gu" %% "support-config" % "0.16",
+      "com.gu" %% "support-models" % "0.39",
+      "com.gu" %% "support-config" % "0.17",
+      "com.gu" %% "support-services" % "0.1",
       "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
       "com.netaporter" %% "scala-uri" % "0.4.16",
       "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",

@@ -7,11 +7,12 @@ import com.gu.aws.CredentialsProvider
 import com.gu.config.Configuration.stage
 import com.gu.monitoring.SafeLogger
 import com.gu.support.config.Stages
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.workers.User
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Encoding
-import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model.User
-import com.gu.support.workers.model.states.CreatePaymentMethodState
+import com.gu.support.workers.states.CreatePaymentMethodState
+import io.circe.generic.auto._
 
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}

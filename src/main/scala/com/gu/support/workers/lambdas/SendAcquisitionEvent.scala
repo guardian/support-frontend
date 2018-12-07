@@ -8,9 +8,10 @@ import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.encoding.StateCodecs._
-import com.gu.support.workers.model._
-import com.gu.support.workers.model.states.SendAcquisitionEventState
+import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.workers._
+import com.gu.support.workers.states.SendAcquisitionEventState
+import io.circe.generic.auto._
 import ophan.thrift.event.{Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 

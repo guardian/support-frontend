@@ -5,11 +5,11 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.monitoring.SafeLogger
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.lambdas._
-import com.gu.support.workers.model.JsonWrapper
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.encoding.CustomCodecs.jsonWrapperDecoder
+import io.circe.generic.auto._
 import io.circe.parser._
 
 import scala.io.Source
