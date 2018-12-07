@@ -86,8 +86,8 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
   render() {
     const baseClassName = 'contributions-landing-ticker';
     const wrapperClassName = (this.state && this.state.totalSoFar && this.state.totalSoFar !== 0) ?
-       baseClassName :
-       classNameWithModifiers(baseClassName, ['hidden']);
+      baseClassName :
+      classNameWithModifiers(baseClassName, ['hidden']);
 
     return (
       <div className={wrapperClassName}>
