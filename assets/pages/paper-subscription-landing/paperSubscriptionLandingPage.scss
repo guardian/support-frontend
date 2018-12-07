@@ -21,6 +21,9 @@
 
 
 .component-product-page-hero--paper {
+  .component-left-margin-section__content {
+    border-color: transparent;
+  }
   @include mq($from: tablet) {
     .component-heading-block {
       margin-top: 24em;

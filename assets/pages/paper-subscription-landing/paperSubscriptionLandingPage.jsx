@@ -66,7 +66,7 @@ const content = (
           sources={[
             {
               gridId: 'paperLandingHeroMobile',
-              srcSizes: [500, 924],
+              srcSizes: [500, 922],
               imgType: 'png',
               sizes: '100vw',
               media: '(max-width: 739px)',
