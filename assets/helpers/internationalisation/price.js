@@ -22,9 +22,9 @@ const EUR = (value: number): Price => ({ value, currency: 'EUR' });
 const NZD = (value: number): Price => ({ value, currency: 'NZD' });
 const CAD = (value: number): Price => ({ value, currency: 'CAD' });
 
-function showPrice(p: Price, extended: boolean = false): string {
+function showPrice(p: Price, isExtended: boolean = false): string {
 
-  const showGlyph = extended ? extendedGlyph : glyph;
+  const showGlyph = isExtended ? extendedGlyph : glyph;
   return `${showGlyph(p.currency)}${p.value.toFixed(2)}`;
 
 }
