@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageContentBlockDivider from 'components/productPage/productPageContentBlock/productPageContentBlockDivider';
 import ProductPageTextBlock, { sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
