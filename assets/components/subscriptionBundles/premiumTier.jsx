@@ -33,25 +33,25 @@ function PremiumTier(props: {
       headingSize={props.headingSize}
       benefits={{
         list: false,
-        copy: 'The ad-free, premium app, designed especially for your smartphone and tablet',
+        copy: 'The ad-free, Premium App, designed especially for your smartphone and tablet',
       }}
       gridImage={{
         gridId: 'premiumTierCircle',
-        altText: 'premium app',
+        altText: 'Premium App',
         ...gridImageProperties,
       }}
       ctas={[
         {
           text: 'Buy in the App Store',
           url: addQueryParamsToURL(getIosAppUrl(props.countryGroupId), { referrer: props.referrer }),
-          accessibilityHint: 'Proceed to buy the premium app in the app store',
+          accessibilityHint: 'Proceed to buy the Premium App in the app store',
           modifierClasses: ['border', 'ios'],
           onClick: trackAppStoreLink('premium_tier_ios_cta', 'PremiumTier', props.abTest),
         },
         {
           text: 'Buy on Google Play',
           url: addQueryParamsToURL(androidAppUrl, { referrer: props.referrer }),
-          accessibilityHint: 'Proceed to buy the premium app in the play store',
+          accessibilityHint: 'Proceed to buy the Premium App in the play store',
           modifierClasses: ['border', 'android'],
           onClick: trackAppStoreLink('premium_tier_android_cta', 'PremiumTier', props.abTest),
         },
