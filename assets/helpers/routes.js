@@ -5,7 +5,6 @@
 import type { CountryGroupId } from './internationalisation/countryGroup';
 import { countryGroups } from './internationalisation/countryGroup';
 import { getOrigin } from './url';
-import { type PaperDeliveryMethod } from './subscriptions';
 
 const routes: {
   [string]: string,
@@ -28,8 +27,8 @@ const routes: {
   payPalRestReturnURL: '/paypal/rest/return',
 };
 
-function paperSubsUrl(deliveryMethod: PaperDeliveryMethod): string {
-  return `${getOrigin()}/uk/subscribe/paper/${deliveryMethod}`;
+function paperSubsUrl(withDelivery: boolean = false): string {
+  return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
 }
 
 function payPalCancelUrl(cgId: CountryGroupId): string {

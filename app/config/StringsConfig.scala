@@ -11,4 +11,5 @@ class StringsConfig {
   val subscriptionsLandingDescription = config.getOptionalString("subscriptionsLanding.description")
   val digitalPackLandingDescription = config.getOptionalString("digitalPackLanding.description")
   val weeklyLandingDescription = config.getOptionalString("weeklyLanding.description")
+  val paperLandingDescription = config.getOptionalString("paperLanding.description")
 }
