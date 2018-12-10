@@ -46,6 +46,7 @@ import {
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
+import { ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -73,6 +74,7 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   isTestUser: boolean,
   country: IsoCountry,
+  applePayTestVariant: ApplePayTestVariant,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -100,6 +102,7 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
+  applePayTestVariant: state.common.abParticipations.applePay,
 });
 
 
@@ -211,6 +214,7 @@ function ContributionForm(props: PropTypes) {
         // TODO: set this correctly
         isTestUser={props.isTestUser}
         country={props.country}
+        applePayTestVariant={props.applePayTestVariant}
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />

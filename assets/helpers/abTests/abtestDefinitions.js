@@ -6,6 +6,8 @@ import type { Tests } from './abtest';
 
 export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
 
+export type ApplePayTestVariant = 'control' | 'applePay' | 'notintest';
+
 export const tests: Tests = {
   annualContributionsRoundThree: {
     variants: ['control', 'annualAmountsA'],
@@ -50,5 +52,18 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 5,
+  },
+
+  applePay: {
+    variants: ['control', 'applePay'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    independent: true,
+    seed: 6,
   },
 };

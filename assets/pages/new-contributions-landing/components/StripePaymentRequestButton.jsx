@@ -13,16 +13,17 @@ import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/co
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
+import type { ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { hiddenIf } from 'helpers/utilities';
 import type { State } from '../contributionsLandingReducer';
 import {
-  setCanMakeApplePayPayment,
-  setStripePaymentRequestButtonClicked,
-  setPaymentRequest,
-  onStripePaymentRequestApiPaymentAuthorised,
-  updateEmail,
+setCanMakeApplePayPayment,
+setStripePaymentRequestButtonClicked,
+setPaymentRequest,
+onStripePaymentRequestApiPaymentAuthorised,
+updateEmail,
 } from '../contributionsLandingActions';
 
 
@@ -35,6 +36,7 @@ type PropTypes = {|
   isTestUser: boolean,
   stripeCheckout: Object | null,
   contributionType: ContributionType,
+  applePayTestVariant: ApplePayTestVariant,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -185,8 +187,13 @@ function paymentRequestButton(props: {
 
 function StripePaymentRequestButton(props: PropTypes) {
 
+  const showApplePay = props.stripeCheckout
+    && isInStripePaymentRequestAllowedCountries(props.country)
+    && props.currency !== 'AUD'
+    && props.applePayTestVariant === 'applePay';
+
   // TODO: set up for AU
-  if (props.stripeCheckout && isInStripePaymentRequestAllowedCountries(props.country) && props.currency !== 'AUD') {
+  if (showApplePay) {
     const key = getStripeKey('ONE_OFF', props.currency, props.isTestUser);
 
     return (
