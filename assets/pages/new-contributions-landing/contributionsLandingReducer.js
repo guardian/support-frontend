@@ -51,6 +51,12 @@ type SetPasswordData = {
   passwordError: boolean,
 }
 
+type StripePaymentRequestButtonData = {
+  canMakeApplePayPayment: boolean,
+  paymentRequest: Object | null,
+  stripePaymentRequestButtonClicked: boolean,
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
@@ -58,6 +64,7 @@ type FormState = {
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
+  stripePaymentRequestButtonData: StripePaymentRequestButtonData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   paymentError: ErrorReason | null,
@@ -68,8 +75,6 @@ type FormState = {
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
-  canMakeApplePayPayment: boolean,
-  paymentRequest: Object | null,
 };
 
 type PageState = {
@@ -130,6 +135,11 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       state: null,
       checkoutFormHasBeenSubmitted: false,
     },
+    stripePaymentRequestButtonData: {
+      canMakeApplePayPayment: false,
+      paymentRequest: null,
+      stripePaymentRequestButtonClicked: false,
+    },
     setPasswordData: {
       password: '',
       passwordHasBeenSubmitted: false,
@@ -147,8 +157,6 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
     formIsSubmittable: true,
-    canMakeApplePayPayment: false,
-    paymentRequest: null,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -208,10 +216,32 @@ function createFormReducer(countryGroupId: CountryGroupId) {
         return { ...state, formData: { ...state.formData, state: action.state } };
 
       case 'SET_CAN_MAKE_APPLE_PAY_PAYMENT':
-        return { ...state, canMakeApplePayPayment: action.canMakeApplePayPayment };
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            canMakeApplePayPayment: action.canMakeApplePayPayment,
+          },
+        };
 
       case 'SET_PAYMENT_REQUEST':
-        return { ...state, paymentRequest: action.paymentRequest };
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            paymentRequest:
+            action.paymentRequest,
+          },
+        };
+
+      case 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED':
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            stripePaymentRequestButtonClicked: true,
+          },
+        };
 
       case 'UPDATE_USER_FORM_DATA':
         return { ...state, formData: { ...state.formData, ...action.userFormData } };

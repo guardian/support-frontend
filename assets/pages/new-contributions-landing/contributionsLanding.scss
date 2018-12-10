@@ -1083,6 +1083,13 @@ form {
   }
 }
 
+
+/* Stripe Payment Request Button */
+
+.stripe-payment-request-button--hidden {
+  display: none;
+}
+
 /* Small header test */
 
 @include mq($from: mobile, $until: tablet) {

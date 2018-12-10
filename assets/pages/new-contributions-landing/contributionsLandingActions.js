@@ -74,6 +74,7 @@ export type Action =
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_PAYMENT_REQUEST', paymentRequest: Object }
   | { type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment: boolean }
+  | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -121,6 +122,7 @@ const setCanMakeApplePayPayment = (canMakeApplePayPayment: boolean): Action => (
 
 const setPaymentRequest = (paymentRequest: Object): Action => ({ type: 'SET_PAYMENT_REQUEST', paymentRequest});
 
+const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 
 const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -491,4 +493,5 @@ export {
   setCanMakeApplePayPayment,
   setPaymentRequest,
   onStripePaymentRequestApiPaymentAuthorised,
+  setStripePaymentRequestButtonClicked,
 };

@@ -15,6 +15,7 @@ import {
   logInvalidCombination,
 } from 'helpers/contributions';
 import { type ErrorReason } from 'helpers/errorReasons';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
@@ -39,15 +40,12 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { type State } from '../contributionsLandingReducer';
 
 import {
-  paymentWaiting,
-  onStripePaymentRequestApiPaymentAuthorised,
-  setCheckoutFormHasBeenSubmitted,
-  createOneOffPayPalPayment,
+paymentWaiting,
+setCheckoutFormHasBeenSubmitted,
+createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
-import { setPaymentRequest, setCanMakeApplePayPayment, updateEmail } from '../../new-contributions-landing/contributionsLandingActions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
@@ -63,22 +61,16 @@ type PropTypes = {|
   currency: IsoCurrency,
   paymentError: ErrorReason | null,
   selectedAmounts: SelectedAmounts,
-  onStripePaymentRequestApiPaymentAuthorised: PaymentAuthorisation => void,
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
-  setCheckoutFormHasBeenSubmitted: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
+  setCheckoutFormHasBeenSubmitted: () => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   isSignedIn: boolean,
   formIsValid: boolean,
   isPostDeploymentTestUser: boolean,
   formIsSubmittable: boolean,
-  canMakeApplePayPayment: boolean,
-  setCanMakeApplePayPayment: (boolean) => void,
-  setPaymentRequest: (Object) => void,
-  paymentRequest: Object | null,
-  updateEmail: string => void,
   isTestUser: boolean,
   country: IsoCountry,
 |};
@@ -106,25 +98,16 @@ const mapStateToProps = (state: State) => ({
   formIsValid: state.page.form.formIsValid,
   isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
   formIsSubmittable: state.page.form.formIsSubmittable,
-  canMakeApplePayPayment: state.page.form.canMakeApplePayPayment,
-  paymentRequest: state.page.form.paymentRequest,
-  isTestUser: state.page.user.isTestUser,
+  isTestUser: state.page.user.isTestUser || true,
   country: state.common.internationalisation.countryId,
 });
 
 
 const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  onStripePaymentRequestApiPaymentAuthorised:
-    (token) => { dispatch(onStripePaymentRequestApiPaymentAuthorised(token)); },
-  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
+  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setCanMakeApplePayPayment:
-    (canMakeApplePayPayment) => { dispatch(setCanMakeApplePayPayment(canMakeApplePayPayment)); },
-  setPaymentRequest:
-    (paymentRequest) => { dispatch(setPaymentRequest(paymentRequest)); },
-  updateEmail: (email: string) => { dispatch(updateEmail(email)); },
 });
 
 // ----- Functions ----- //
@@ -222,18 +205,11 @@ function ContributionForm(props: PropTypes) {
         checkOtherAmount={checkAmount}
       />
       <StripePaymentRequestButton
-        setCanMakeApplePayPayment={props.setCanMakeApplePayPayment}
-        setPaymentRequest={props.setPaymentRequest}
         stripeCheckout={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
-        canMakeApplePayPayment={props.canMakeApplePayPayment}
         currency={props.currency}
         contributionType={props.contributionType}
-        paymentRequest={props.paymentRequest}
-        amount={getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType)}
-        onPaymentAuthorised={props.onStripePaymentRequestApiPaymentAuthorised}
-        updateEmail={props.updateEmail}
-        //TODO: set this correctly
-        isTestUser={true}
+        // TODO: set this correctly
+        isTestUser={props.isTestUser}
         country={props.country}
       />
       <ContributionFormFields />

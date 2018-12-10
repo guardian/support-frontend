@@ -32,6 +32,7 @@ type PropTypes = {|
   checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
+  stripePaymentRequestButtonClicked: boolean,
   annualTestVariant: AnnualContributionsTestVariant,
 |};
 
@@ -44,6 +45,7 @@ const mapStateToProps = state => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
   annualTestVariant: state.common.abParticipations.annualContributionsRoundThree,
 });
 
@@ -128,7 +130,7 @@ function ContributionAmount(props: PropTypes) {
           icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value, props.countryGroupId, props.contributionType)}
           isValid={props.checkOtherAmount(props.otherAmount || '', props.countryGroupId, props.contributionType)}
-          formHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+          formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"
           step={0.01}
