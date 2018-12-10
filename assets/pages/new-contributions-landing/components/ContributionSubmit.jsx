@@ -34,7 +34,13 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   csrf: CsrfState,
   sendFormSubmitEventForPayPalRecurring: () => void,
-  setupRecurringPayPalPayment: (resolve: string => void, reject: Error => void, IsoCurrency, CsrfState) => void,
+  setupRecurringPayPalPayment: (
+    resolve: string => void,
+    reject: Error => void,
+    IsoCurrency,
+    CsrfState,
+    contributionType: ContributionType
+  ) => void,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
@@ -63,7 +69,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
     reject: Function,
     currencyId: IsoCurrency,
     csrf: CsrfState,
-  ) => { dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf)); },
+    contributionType: ContributionType,
+  ) => { dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, contributionType)); },
 });
 
 
@@ -116,6 +123,7 @@ function ContributionSubmit(props: PropTypes) {
             formClassName={formClassName}
             isTestUser={props.isTestUser}
             setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+            contributionType={props.contributionType}
           />
         </div>
         <ButtonWithRightArrow

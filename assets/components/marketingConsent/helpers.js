@@ -25,15 +25,18 @@ function sendMarketingPreferencesToIdentity(
   csrf: CsrfState,
   scope: string,
 ): void {
-  const { setConfirmMarketingConsent, setAPIError } = marketingConsentActionsFor(scope);
+  const { setConfirmMarketingConsent, setAPIError, setRequestPending } = marketingConsentActionsFor(scope);
 
   if (!optIn) {
     dispatch(setConfirmMarketingConsent(false));
     return;
   }
 
+  dispatch(setRequestPending(true));
   fetch(`${routes.contributionsSendMarketing}`, requestData(email, csrf))
     .then((response) => {
+
+      dispatch(setRequestPending(false));
       if (response.status === 200) {
         dispatch(setConfirmMarketingConsent(optIn));
       } else {
@@ -42,6 +45,7 @@ function sendMarketingPreferencesToIdentity(
       }
     })
     .catch(() => {
+      dispatch(setRequestPending(false));
       logException('Error while trying to interact with the marketing preference API');
       dispatch(setAPIError(true));
     });

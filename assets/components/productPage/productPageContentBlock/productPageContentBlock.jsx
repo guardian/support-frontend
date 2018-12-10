@@ -12,11 +12,11 @@ import './productPageContentBlock.scss';
 // ---- Types ----- //
 
 type PropTypes = {|
-  type: 'white' | 'grey' | 'feature' | 'dark',
+  type: 'white' | 'grey' | 'feature' | 'dark' | 'feature-secondary',
   id?: Option<string>,
   children: Node,
   image: Option<Node>,
-  modifierClasses: Array<string>,
+  modifierClasses: Array<string>
 |};
 
 
@@ -25,7 +25,7 @@ type PropTypes = {|
 const ProductPageContentBlock = ({
   type, children, id, modifierClasses, image,
 }: PropTypes) => (
-  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, ...modifierClasses])}>
+  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, image ? 'overflow-hidden' : null, ...modifierClasses])}>
     <LeftMarginSection>
       <div className="component-product-page-content-block__content">
         {children}
@@ -47,7 +47,6 @@ ProductPageContentBlock.defaultProps = {
 
 // ---- Exports ----- //
 
-export const outsetClassName = 'component-product-page-content-block__outset';
-export const bgClassName = 'component-product-page-content-block__bg';
+export const bgClassName = 'component-product-page-content-block-bg';
 
 export default ProductPageContentBlock;

@@ -30,6 +30,7 @@ Object {
   "marketingConsent": Object {
     "confirmOptIn": null,
     "error": false,
+    "requestPending": false,
   },
   "regularContrib": Object {
     "amount": 20,

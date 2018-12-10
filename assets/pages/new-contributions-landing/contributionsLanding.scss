@@ -421,7 +421,7 @@ header[role="banner"] {
     bottom: 0;
     height: 580px;
     left: 50%;
-    position: absolute;
+    position: fixed;
     transform: translate(-50%,0);
     width: 1400px;
   }
@@ -1075,6 +1075,11 @@ form {
   background-color: transparent;
 }
 
+.button--newsletter__request-pending {
+  color: gu-colour(garnett-neutral-4);
+  background-color: transparent;
+}
+
 .button--right-arrow {
   width: 100%;
   padding: 0 50px 0 $gu-h-spacing;
@@ -1209,5 +1214,28 @@ form {
     .form__radio-group-list {
       padding-top: 0;
     }
+  }
+}
+
+.us-campaign__background {
+  display: none;
+  position: absolute;
+  z-index: -1;
+
+  @include mq($from: tablet) {
+    display: block;
+    transform: translate(200px, -135px);
+  }
+
+  @include mq($from: desktop) {
+    transform: translate(200px, -135px);
+  }
+
+  @include mq($from: leftCol) {
+    transform: translate(215px, -225px);
+  }
+
+  @include mq($from: wide) {
+    transform: translate(215px, -300px);
   }
 }

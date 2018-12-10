@@ -14,7 +14,16 @@
   scroll-behavior: smooth;
 }
 
+.component-product-page-content-block__image {
+  max-width: gu-span(5);
+  min-width: gu-span(4);
+}
+
+
 .component-product-page-hero--paper {
+  .component-left-margin-section__content {
+    border-color: transparent;
+  }
   @include mq($from: tablet) {
     .component-heading-block {
       margin-top: 24em;

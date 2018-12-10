@@ -1,7 +1,9 @@
 package monitoring
 
 import app.BuildInfo
+import com.gu.i18n.Country
 import com.gu.support.config.Stages.PROD
+import com.gu.support.workers.model.{DirectDebitPaymentFields, PayPalPaymentFields, PaymentFields, StripePaymentFields}
 import com.gu.tip.{Tip, TipConfig, TipFactory, TipResponse}
 import config.Configuration
 
@@ -41,10 +43,16 @@ object PathVerification {
   sealed trait MonitoredPaymentMethod { val tipString: String }
   case object DirectDebit extends MonitoredPaymentMethod { val tipString = "Direct Debit" }
   case object PayPal extends MonitoredPaymentMethod { val tipString = "PayPal" }
-  case object Stripe extends MonitoredPaymentMethod { val tipString = "Stripe" }
+  case object Card extends MonitoredPaymentMethod { val tipString = "Card" }
 
-  case class TipPath(region: MonitoredRegion, product: MonitoredProduct, paymentMethod: MonitoredPaymentMethod) {
-    val configPath: String = s"${region.tipString} ${product.tipString} with ${paymentMethod.tipString}"
+  case class TipPath(
+      region: MonitoredRegion,
+      product: MonitoredProduct,
+      paymentMethod: MonitoredPaymentMethod,
+      guestCheckout: Boolean = false
+  ) {
+    val productLabel: String = if (guestCheckout) s"${product.tipString} (Guest)" else product.tipString
+    val configPath: String = s"${region.tipString} $productLabel with ${paymentMethod.tipString}"
   }
 
   def monitoredRegion(country: String): Option[MonitoredRegion] = country.toUpperCase match {
@@ -52,6 +60,19 @@ object PathVerification {
     case "UK" => Some(UK)
     case "US" => Some(US)
     case _ => None
+  }
+
+  def monitoredRegion(country: Country): Option[MonitoredRegion] = country match {
+    case Country.Australia => Some(AU)
+    case Country.UK => Some(UK)
+    case Country.US => Some(US)
+    case _ => None
+  }
+
+  def monitoredPaymentMethod(paymentFields: PaymentFields): MonitoredPaymentMethod = paymentFields match {
+    case DirectDebitPaymentFields(_, _, _) => DirectDebit
+    case PayPalPaymentFields(_) => PayPal
+    case StripePaymentFields(_) => Card
   }
 
   def verify(tipPath: TipPath, verifier: VerifyPath): Future[TipResponse] = {

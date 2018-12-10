@@ -7,6 +7,7 @@ import { compose, combineReducers, type Dispatch } from 'redux';
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type DigitalBillingPeriod } from 'helpers/subscriptions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import csrf from 'helpers/csrf/csrfReducer';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
@@ -33,7 +34,6 @@ import {
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou';
-type PaymentFrequency = 'monthly' | 'yearly';
 type PaymentMethod = 'card' | 'directDebit';
 
 export type FormFields = {|
@@ -42,7 +42,7 @@ export type FormFields = {|
   country: Option<IsoCountry>,
   stateProvince: Option<StateProvince>,
   telephone: string,
-  paymentFrequency: PaymentFrequency,
+  paymentFrequency: DigitalBillingPeriod,
   paymentMethod: PaymentMethod,
 |};
 
@@ -68,7 +68,7 @@ export type Action =
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
-  | { type: 'SET_PAYMENT_FREQUENCY', paymentFrequency: PaymentFrequency }
+  | { type: 'SET_PAYMENT_FREQUENCY', paymentFrequency: DigitalBillingPeriod }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
 
@@ -126,7 +126,7 @@ const formActionCreators = {
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
-  setPaymentFrequency: (paymentFrequency: PaymentFrequency): Action => ({ type: 'SET_PAYMENT_FREQUENCY', paymentFrequency }),
+  setPaymentFrequency: (paymentFrequency: DigitalBillingPeriod): Action => ({ type: 'SET_PAYMENT_FREQUENCY', paymentFrequency }),
   setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) =>
     compose(dispatch, setFormErrors, getErrors, getFormFields)(getState()),
@@ -144,7 +144,7 @@ const initialState = {
   country: null,
   stateProvince: null,
   telephone: '',
-  paymentFrequency: 'monthly',
+  paymentFrequency: 'month',
   paymentMethod: 'directDebit',
   errors: [],
 };

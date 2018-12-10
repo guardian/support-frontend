@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Price, GBP, USD, AUD, EUR, NZD, CAD } from 'helpers/internationalisation/price';
 
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
@@ -10,6 +11,7 @@ import { currencies, detect } from './internationalisation/currency';
 
 
 // ----- Types ------ //
+
 export type SubscriptionProduct =
   'DigitalPack' |
   'PremiumTier' |
@@ -25,15 +27,14 @@ export type ComponentAbTest = {
   variant: string,
 };
 
-
-// ----- Config ----- //
+export type DigitalBillingPeriod = 'month' | 'year';
 export type BillingPeriod = 'sixweek' | 'quarter' | 'year' | 'month';
 export type WeeklyBillingPeriod = 'sixweek' | 'quarter' | 'year';
 
 export type PaperBillingPlan =
   'collectionEveryday' | 'collectionSixday' | 'collectionWeekend' | 'collectionSunday' |
   'deliveryEveryday' | 'deliverySixday' | 'deliveryWeekend' | 'deliverySunday';
-
+export type PaperDeliveryMethod = 'collection' | 'delivery';
 export type PaperNewsstandTiers = 'weekly' | 'saturday' | 'sunday';
 
 const newsstandPrices: {[PaperNewsstandTiers]: number} = {
@@ -41,6 +42,9 @@ const newsstandPrices: {[PaperNewsstandTiers]: number} = {
   saturday: 2.9,
   sunday: 3,
 };
+
+
+// ----- Config ----- //
 
 const subscriptionPricesForDefaultBillingPeriod: {
   [SubscriptionProduct]: {
@@ -98,6 +102,48 @@ const discountPricesForDefaultBillingPeriod: {
   },
 };
 
+const digitalSubscriptionPrices = {
+  GBPCountries: {
+    month: GBP(11.99),
+    year: GBP(119.90),
+  },
+  UnitedStates: {
+    month: USD(19.99),
+    year: USD(199.90),
+  },
+  AUDCountries: {
+    month: AUD(21.50),
+    year: AUD(215.00),
+  },
+  EURCountries: {
+    month: EUR(14.99),
+    year: EUR(149.90),
+  },
+  International: {
+    month: USD(19.99),
+    year: USD(199.90),
+  },
+  NZDCountries: {
+    month: NZD(23.50),
+    year: NZD(235.00),
+  },
+  Canada: {
+    month: CAD(21.95),
+    year: CAD(219.50),
+  },
+};
+
+const paperSubscriptionPrices = {
+  collectionEveryday: GBP(47.62),
+  collectionSixday: GBP(41.12),
+  collectionWeekend: GBP(20.76),
+  collectionSunday: GBP(10.79),
+  deliveryEveryday: GBP(62.79),
+  deliverySixday: GBP(54.12),
+  deliveryWeekend: GBP(25.09),
+  deliverySunday: GBP(15.12),
+};
+
 const subscriptionPricesForGuardianWeekly: {
   [CountryGroupId]: {
     [WeeklyBillingPeriod]: number,
@@ -140,7 +186,6 @@ const subscriptionPricesForGuardianWeekly: {
   },
 };
 
-
 const defaultBillingPeriods: {
   [SubscriptionProduct]: BillingPeriod
 } = {
@@ -160,6 +205,10 @@ function fixDecimals(number: number): string {
     return number.toString();
   }
   return number.toFixed(2);
+}
+
+function getDigitalPrice(cgId: CountryGroupId, frequency: DigitalBillingPeriod): Price {
+  return digitalSubscriptionPrices[cgId][frequency];
 }
 
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
@@ -183,6 +232,10 @@ function discountedDisplayPrice(product: SubscriptionProduct, countryGroupId: Co
 
 function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
   return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
+}
+
+function getPaperPrice(billingPlan: PaperBillingPlan): Price {
+  return paperSubscriptionPrices[billingPlan];
 }
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
@@ -253,4 +306,6 @@ export {
   getWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
+  getDigitalPrice,
+  getPaperPrice,
 };

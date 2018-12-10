@@ -16,16 +16,56 @@ import { logException } from 'helpers/logger';
 
 // ----- Types ----- //
 
-type PropTypes = {|
+type ButtonPropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
   csrf: CsrfState,
   onClick: (?string, CsrfState) => void,
+  requestPending: boolean,
+|};
+
+type PropTypes = {|
+  ...ButtonPropTypes,
   error: boolean,
 |};
 
-
 // ----- Render ----- //
+
+function Button(props: ButtonPropTypes) {
+  if (props.confirmOptIn === true) {
+    return (
+      <button
+        disabled="disabled"
+        className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
+      >
+        <SvgSubscribed />
+        Signed up
+      </button>
+    );
+  } else if (props.requestPending === true) {
+    return (
+      <button
+        disabled="disabled"
+        className={classNameWithModifiers('button', ['newsletter', 'newsletter__request-pending'])}
+      >
+        <SvgSubscribe />
+        Pending...
+      </button>
+    );
+  }
+  return (
+    <button
+      className={classNameWithModifiers('button', ['newsletter'])}
+      onClick={
+          () => props.onClick(props.email, props.csrf)
+        }
+    >
+      <SvgSubscribe />
+        Sign me up
+    </button>
+  );
+
+}
 
 function MarketingConsent(props: PropTypes) {
 
@@ -46,24 +86,13 @@ function MarketingConsent(props: PropTypes) {
           contributor or would like to become one.
         </p>
 
-        {props.confirmOptIn === true ?
-          <button
-            disabled="disabled"
-            className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
-          >
-            <SvgSubscribed />
-            Signed up
-          </button> :
-          <button
-            className={classNameWithModifiers('button', ['newsletter'])}
-            onClick={
-              () => props.onClick(props.email, props.csrf)
-            }
-          >
-            <SvgSubscribe />
-            Sign me up
-          </button>
-        }
+        {Button({
+          confirmOptIn: props.confirmOptIn,
+          email: props.email,
+          csrf: props.csrf,
+          onClick: props.onClick,
+          requestPending: props.requestPending,
+        })}
 
         <p className="confirmation__meta">
           <small>
@@ -87,6 +116,7 @@ function MarketingConsent(props: PropTypes) {
 
 MarketingConsent.defaultProps = {
   error: false,
+  requestPending: false,
 };
 
 
