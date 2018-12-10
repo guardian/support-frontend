@@ -21,6 +21,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
+import { type ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
@@ -46,7 +47,6 @@ import {
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
-import { ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //

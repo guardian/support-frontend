@@ -19,11 +19,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { hiddenIf } from 'helpers/utilities';
 import type { State } from '../contributionsLandingReducer';
 import {
-setCanMakeApplePayPayment,
-setStripePaymentRequestButtonClicked,
-setPaymentRequest,
-onStripePaymentRequestApiPaymentAuthorised,
-updateEmail,
+  setCanMakeApplePayPayment,
+  setStripePaymentRequestButtonClicked,
+  setPaymentRequest,
+  onStripePaymentRequestApiPaymentAuthorised,
+  updateEmail,
 } from '../contributionsLandingActions';
 
 
