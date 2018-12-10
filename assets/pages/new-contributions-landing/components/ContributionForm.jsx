@@ -211,7 +211,6 @@ function ContributionForm(props: PropTypes) {
         stripeCheckout={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
         currency={props.currency}
         contributionType={props.contributionType}
-        // TODO: set this correctly
         isTestUser={props.isTestUser}
         country={props.country}
         applePayTestVariant={props.applePayTestVariant}

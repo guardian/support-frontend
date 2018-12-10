@@ -12,6 +12,7 @@ import { getAmount } from 'helpers/contributions';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
+import { type PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
 import type { ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -49,7 +50,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
-    (token) => { dispatch(onStripePaymentRequestApiPaymentAuthorised(token)); },
+    (token, complete) => { dispatch(onStripePaymentRequestApiPaymentAuthorised(token, complete)); },
   setCanMakeApplePayPayment:
     (canMakeApplePayPayment) => { dispatch(setCanMakeApplePayPayment(canMakeApplePayPayment)); },
   setPaymentRequest:
@@ -67,6 +68,13 @@ function updateUserEmail(data: Object, setEmail: string => void) {
   }
 }
 
+const onComplete = (complete: Function) => (res: PaymentResult) => {
+  if (res.paymentStatus === 'success') {
+    complete('success');
+  } else if (res.paymentStatus === 'failure') {
+    complete('fail');
+  }
+};
 
 function initialisePaymentRequest(props: {
   stripe: Object,
@@ -75,7 +83,7 @@ function initialisePaymentRequest(props: {
   amount: number,
   setCanMakeApplePayPayment: (boolean) => void,
   setPaymentRequest: Object => void,
-  onPaymentAuthorised: PaymentAuthorisation => void,
+  onPaymentAuthorised: (PaymentAuthorisation, Function) => void,
   updateEmail: (string) => void,
   isTestUser: boolean,
 }) {
@@ -92,14 +100,12 @@ function initialisePaymentRequest(props: {
     // We need to do this so that we can offer marketing permissions on the thank you page
     updateUserEmail(data, props.updateEmail);
     const tokenId = props.isTestUser ? 'tok_visa' : token.id;
-    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId });
-
-    window.completeStripePaymentRequest = complete;
+    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId }, onComplete(complete));
   });
 
   paymentRequest.canMakePayment().then((result) => {
-    // To enable Google Pay/Payment Request API, only check that result is not null
-    if (result && result.applePay === true) {
+    // To restrict to just Apple Pay, limit it to result && result.applePay === true
+    if (result) {
       props.setCanMakeApplePayPayment(true);
     }
   });

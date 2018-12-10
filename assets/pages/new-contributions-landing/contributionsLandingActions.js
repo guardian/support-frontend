@@ -272,19 +272,11 @@ const regularPaymentRequestFromAuthorisation = (
   supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
 });
 
-// This function closes the payment window
-const runStripePaymentRequestButtonCompleteFunction =
-  (res: 'success' | 'fail') => {
-    if (window.completeStripePaymentRequest) {
-      window.completeStripePaymentRequest(res);
-    }
-  };
-
 // A PaymentResult represents the end state of the checkout process,
 // standardised across payment methods & contribution types.
 // This will execute at the end of every checkout, with the exception
 // of PayPal one-off where this happens on the backend after the user is redirected to our site.
-const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
+const onPaymentResult = (paymentResult: Promise<PaymentResult>, onComplete?: PaymentResult => void) =>
   (dispatch: Dispatch<Action>, getState: () => State): void => {
     paymentResult.then((result) => {
 
@@ -294,14 +286,16 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
         case 'success':
           trackConversion(state.common.abParticipations, '/contribute/thankyou');
           dispatch(paymentSuccess());
-          runStripePaymentRequestButtonCompleteFunction('success');
           break;
 
         case 'failure':
         default:
           dispatch(paymentFailure(result.error));
           dispatch(paymentWaiting(false));
-          runStripePaymentRequestButtonCompleteFunction('fail');
+      }
+
+      if (onComplete) {
+        onComplete(result);
       }
     });
   };
@@ -350,9 +344,9 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
     dispatch(onCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
   };
 
-const executeStripeOneOffPayment = (data: StripeChargeData) =>
+const executeStripeOneOffPayment = (data: StripeChargeData, onComplete?: PaymentResult => void) =>
   (dispatch: Dispatch<Action>): void => {
-    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
+    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data), onComplete));
   };
 
 // This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
@@ -424,15 +418,25 @@ const recurringPaymentAuthorisationHandlers = {
   DirectDebit: recurringPaymentAuthorisationHandler,
 };
 
-const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, PaymentAuthorisation) => void> = {
+const paymentAuthorisationHandlers: PaymentMatrix<(
+  Dispatch<Action>,
+  State,
+  PaymentAuthorisation,
+  onComplete?: PaymentResult => void,
+) => void> = {
   ONE_OFF: {
     PayPal: () => {
       // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
       // endpoint, after PayPal redirects the browser back to our site.
       logException('Paypal one-off has no authorisation handler');
     },
-    Stripe: (dispatch: Dispatch<Action>, state: State, paymentAuthorisation: PaymentAuthorisation): void => {
-      dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
+    Stripe: (
+      dispatch: Dispatch<Action>,
+      state: State,
+      paymentAuthorisation: PaymentAuthorisation,
+      onComplete?: Function,
+    ): void => {
+      dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state), onComplete));
     },
     DirectDebit: () => {
       logInvalidCombination('ONE_OFF', 'DirectDebit');
@@ -465,15 +469,17 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
     );
   };
 
-const onStripePaymentRequestApiPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
-    paymentAuthorisationHandlers.ONE_OFF.Stripe(
-      dispatch,
-      state,
-      paymentAuthorisation,
-    );
-  };
+const onStripePaymentRequestApiPaymentAuthorised =
+  (paymentAuthorisation: PaymentAuthorisation, onComplete: PaymentResult => void) =>
+    (dispatch: Function, getState: () => State): void => {
+      const state = getState();
+      paymentAuthorisationHandlers.ONE_OFF.Stripe(
+        dispatch,
+        state,
+        paymentAuthorisation,
+        onComplete,
+      );
+    };
 
 export {
   updateContributionTypeAndPaymentMethod,
