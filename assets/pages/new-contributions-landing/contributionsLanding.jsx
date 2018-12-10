@@ -105,7 +105,7 @@ const router = (
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
                 <ContributionThankYouContainer />
-                <NewContributionBackground countryGroupId={countryGroupId} />
+                <NewContributionBackground usBackgroundTestVariant={usBackgroundImage} countryGroupId={countryGroupId} />
               </Page>
             );
           }}
