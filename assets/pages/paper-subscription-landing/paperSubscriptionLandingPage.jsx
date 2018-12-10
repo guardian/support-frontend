@@ -38,14 +38,13 @@ const reactElementId: {
 };
 
 
-// ----- Prices ----- //
+// ----- Initial selection? ----- //
 
-const { dataset } = document.querySelector(`#${reactElementId[method]}`) || { dataset: {} };
 const promoInUrl = getQueryParameter('promo');
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer(method, dataset, promoInUrl), true);
+const store = pageInit(reducer(method, promoInUrl), true);
 
 
 // ----- Render ----- //

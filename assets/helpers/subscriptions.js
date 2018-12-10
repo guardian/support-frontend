@@ -133,6 +133,17 @@ const digitalSubscriptionPrices = {
   },
 };
 
+const paperSubscriptionPrices = {
+  collectionEveryday: GBP(47.62),
+  collectionSixday: GBP(41.12),
+  collectionWeekend: GBP(20.76),
+  collectionSunday: GBP(10.79),
+  deliveryEveryday: GBP(62.79),
+  deliverySixday: GBP(54.12),
+  deliveryWeekend: GBP(25.09),
+  deliverySunday: GBP(15.12),
+};
+
 const subscriptionPricesForGuardianWeekly: {
   [CountryGroupId]: {
     [WeeklyBillingPeriod]: number,
@@ -223,6 +234,10 @@ function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: We
   return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
 }
 
+function getPaperPrice(billingPlan: PaperBillingPlan): Price {
+  return paperSubscriptionPrices[billingPlan];
+}
+
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
 
   switch (product) {
@@ -292,4 +307,5 @@ export {
   getNewsstandSaving,
   getNewsstandPrice,
   getDigitalPrice,
+  getPaperPrice,
 };
