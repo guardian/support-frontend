@@ -134,7 +134,8 @@ class Application(
       mainId = "showcase-landing-page",
       mainJsBundle = "showcasePage.js",
       mainStyleBundle = "showcasePage.css",
-      description = stringsConfig.supportLandingDescription
+      description = stringsConfig.supportLandingDescription,
+      canonicalLink = Some("/showcase")
     )).withSettingsSurrogateKey
   }
 
