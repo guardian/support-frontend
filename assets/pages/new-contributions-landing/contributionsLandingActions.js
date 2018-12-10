@@ -50,8 +50,6 @@ import {
   type UserFormData,
   type ThankYouPageStage,
 } from './contributionsLandingReducer';
-import { type StripePaymentRequestPaymentResult } from '../new-contributions-landing/components/StripePaymentRequestButton';
-import type { StripePaymentRequestPaymentResultFunction } from '../new-contributions-landing/components/StripePaymentRequestButton';
 
 
 export type Action =
@@ -78,7 +76,6 @@ export type Action =
   | { type: 'SET_PAYMENT_REQUEST', paymentRequest: Object }
   | { type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment: boolean }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
-  | { type: 'SET_STRIPE_PAYMENT_REQUEST_COMPLETE_FUNCTION', completeFunction: StripePaymentRequestPaymentResultFunction }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -123,8 +120,6 @@ const updateEmail = (email: string): ((Function) => void) =>
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
 const setCanMakeApplePayPayment = (canMakeApplePayPayment: boolean): Action => ({ type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment });
-
-const setStripePaymentRequestCompleteFunction = (completeFunction: StripePaymentRequestPaymentResultFunction): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_COMPLETE_FUNCTION', completeFunction });
 
 const setPaymentRequest = (paymentRequest: Object): Action => ({ type: 'SET_PAYMENT_REQUEST', paymentRequest });
 
@@ -279,9 +274,9 @@ const regularPaymentRequestFromAuthorisation = (
 
 // This function closes the payment window
 const runStripePaymentRequestButtonCompleteFunction =
-  (res: StripePaymentRequestPaymentResult, completeFunction: null | (StripePaymentRequestPaymentResult) => void) => {
-    if (completeFunction) {
-      completeFunction(res);
+  (res: 'success' | 'fail') => {
+    if (window.completeStripePaymentRequest) {
+      window.completeStripePaymentRequest(res);
     }
   };
 
@@ -295,21 +290,18 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
 
       const state = getState();
 
-      const stripePaymentRequestButtonCompleteFunction =
-          state.page.form.stripePaymentRequestButtonData.completeFunction;
-
       switch (result.paymentStatus) {
         case 'success':
           trackConversion(state.common.abParticipations, '/contribute/thankyou');
           dispatch(paymentSuccess());
-          runStripePaymentRequestButtonCompleteFunction('success', stripePaymentRequestButtonCompleteFunction);
+          runStripePaymentRequestButtonCompleteFunction('success');
           break;
 
         case 'failure':
         default:
           dispatch(paymentFailure(result.error));
           dispatch(paymentWaiting(false));
-          runStripePaymentRequestButtonCompleteFunction('success', stripePaymentRequestButtonCompleteFunction);
+          runStripePaymentRequestButtonCompleteFunction('fail');
       }
     });
   };
@@ -383,7 +375,7 @@ const setupRecurringPayPalPayment = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     );
-	  const billingPeriod = billingPeriodFromContrib(contributionType);
+    const billingPeriod = billingPeriodFromContrib(contributionType);
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
       amount,
@@ -515,5 +507,4 @@ export {
   setPaymentRequest,
   onStripePaymentRequestApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
-  setStripePaymentRequestCompleteFunction,
 };
