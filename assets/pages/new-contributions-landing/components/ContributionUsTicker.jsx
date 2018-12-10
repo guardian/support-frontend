@@ -15,7 +15,7 @@ type PropTypes = {}
 
 // ---- Helpers ----- //
 
-const getInitialTickerValues = (): Promise<{| totalSoFar: number, goal: number |}> =>
+const getInitialTickerValues = (): Promise<StateTypes> =>
   fetch('https://interactive.guim.co.uk/docsdata-test/1ySn7Ol2NQLvvSw_eAnVrPuuRnaGOxUmaUs6svtu_irU.json')
     .then(resp => resp.json())
     .then((data) => {
@@ -45,12 +45,11 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
   }
 
   componentDidMount(): void {
-    const self = this;
     getInitialTickerValues().then(({ totalSoFar, goal }) => {
       const initialTotal = totalSoFar * 0.8;
       this.count = initialTotal;
       this.totalSoFar = totalSoFar;
-      self.setState({ totalSoFar: initialTotal, goal });
+      this.setState({ totalSoFar: initialTotal, goal });
       window.setTimeout(() => {
         window.requestAnimationFrame(this.increaseCounter);
         this.animateBar(totalSoFar, goal);
@@ -91,6 +90,7 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
 
     return (
       <div className={wrapperClassName}>
+        <div className="contributions-landing-ticker__border" />
         <div className="contributions-landing-ticker__values">
           <div className="contributions-landing-ticker__so-far">
             <div className="contributions-landing-ticker__count">${Math.floor(this.state.totalSoFar).toLocaleString()}</div>
@@ -111,7 +111,6 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
             />
           </div>
         </div>
-        <div className="contributions-landing-ticker__border" />
       </div>
     );
   }
