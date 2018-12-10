@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { type Amount, getAmount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { getAmount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -40,9 +40,9 @@ import { NewContributionSubmit } from './ContributionSubmit';
 import { type State } from '../contributionsLandingReducer';
 
 import {
-paymentWaiting,
-setCheckoutFormHasBeenSubmitted,
-createOneOffPayPalPayment,
+  paymentWaiting,
+  setCheckoutFormHasBeenSubmitted,
+  createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
@@ -98,7 +98,7 @@ const mapStateToProps = (state: State) => ({
   formIsValid: state.page.form.formIsValid,
   isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
   formIsSubmittable: state.page.form.formIsSubmittable,
-  isTestUser: state.page.user.isTestUser || true,
+  isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
 });
 

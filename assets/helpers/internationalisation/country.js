@@ -387,7 +387,8 @@ const stripePaymentRequestAllowedCountries = [
   'US',
 ];
 
-export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) => stripePaymentRequestAllowedCountries.includes(country);
+export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) =>
+  stripePaymentRequestAllowedCountries.includes(country);
 
 // ----- Functions ----- /
 

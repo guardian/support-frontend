@@ -49,7 +49,6 @@ import {
   type UserFormData,
   type ThankYouPageStage,
 } from './contributionsLandingReducer';
-import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -120,7 +119,7 @@ const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD',
 
 const setCanMakeApplePayPayment = (canMakeApplePayPayment: boolean): Action => ({ type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment });
 
-const setPaymentRequest = (paymentRequest: Object): Action => ({ type: 'SET_PAYMENT_REQUEST', paymentRequest});
+const setPaymentRequest = (paymentRequest: Object): Action => ({ type: 'SET_PAYMENT_REQUEST', paymentRequest });
 
 const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 
@@ -452,7 +451,7 @@ const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisatio
     );
   };
 
-const onStripePaymentRequestApiPaymentAuthorised =  (paymentAuthorisation: PaymentAuthorisation) =>
+const onStripePaymentRequestApiPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
     paymentAuthorisationHandlers.ONE_OFF.Stripe(

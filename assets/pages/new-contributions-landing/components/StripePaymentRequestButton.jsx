@@ -185,8 +185,9 @@ function paymentRequestButton(props: {
 
 function StripePaymentRequestButton(props: PropTypes) {
 
-  if (props.stripeCheckout && isInStripePaymentRequestAllowedCountries(props.country)) {
-    const key = getStripeKey(props.contributionType, props.currency, props.isTestUser);
+  // TODO: set up for AU
+  if (props.stripeCheckout && isInStripePaymentRequestAllowedCountries(props.country) && props.currency !== 'AUD') {
+    const key = getStripeKey('ONE_OFF', props.currency, props.isTestUser);
 
     return (
       <div className={hiddenIf(props.contributionType !== 'ONE_OFF', 'stripe-payment-request-button')}>
