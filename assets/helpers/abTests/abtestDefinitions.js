@@ -9,7 +9,7 @@ export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'not
 export const tests: Tests = {
 
   usBackgroundImage: {
-    variants: ['control', 'backgroundImage'],
+    variants: ['backgroundImage'],
     audiences: {
       UnitedStates: {
         offset: 0,
