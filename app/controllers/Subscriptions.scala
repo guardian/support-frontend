@@ -163,7 +163,7 @@ class Subscriptions(
     }
 
   def buildCanonicalPaperSubscriptionLink(method: Option[String] = None): String =
-    s"${supportUrl}/uk/subscribe/paper/${method.getOrElse("collection")}"
+    s"${supportUrl}/uk/subscribe/paper"
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"
