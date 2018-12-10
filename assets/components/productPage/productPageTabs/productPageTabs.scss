@@ -30,11 +30,11 @@
   color: gu-colour(garnett-neutral-1);
   text-align: left;
   appearance: none;
-  min-width: gu-span(3) + $gu-h-spacing/2;
   box-sizing: border-box;
   cursor: pointer;
-  position: relative;
-  z-index: 99999;;
+  @include mq($from:phablet) {
+    min-width: gu-span(3) + $gu-h-spacing/2;
+  }
 }
 
 .component-product-page-tabs__tab:focus {
