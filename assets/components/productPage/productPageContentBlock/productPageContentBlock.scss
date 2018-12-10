@@ -30,7 +30,7 @@
   classname (because React makes you do that sometimes)
 
   I hope this explains it:
-  
+
   +----------------+
   | blue block     |
   +----------------+
@@ -139,7 +139,7 @@
     /*
     cancel out padding if this is the first child then
     overlap under the top border to avoid the first multiline
-    merging with it and looking as a 2px border 
+    merging with it and looking like a 2px border 
     */
   }
 }
@@ -161,4 +161,18 @@
     display: block;
     width: 100%;
   }
+  /*
+  If you are implementing an image in a page and you want
+  it to look just a teeny tiny bit bigger or smaller or plain move it, 
+  try to avoid overriding `left` to do fine positioning and 
+  instead use transforms and max-width.
+
+  `left` here is built to put images to the right of the max grid width. 
+  This width might change in the future and ideally tweaking these global 
+  values should not break any images on any page.
+
+  If your image is not grid aligned feel free to override these values
+  but also consider if using this image prop is the best approach. You can
+  put your image as a normal child of `ContentBlock`
+  */
 }
