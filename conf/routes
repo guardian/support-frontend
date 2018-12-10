@@ -20,6 +20,7 @@ GET /int                                            controllers.Application.redi
 GET /nz                                             controllers.Application.redirect(location="/nz/contribute")
 GET /ca                                             controllers.Application.redirect(location="/ca/contribute")
 GET /                                               controllers.Application.geoRedirect()
+GET /showcase                                       controllers.Application.showcase()
 
 GET /sitemap.xml                                    controllers.SiteMap.sitemap
 
