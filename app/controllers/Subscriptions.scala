@@ -127,7 +127,7 @@ class Subscriptions(
   }
 
   def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
-    Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
+    Redirect(buildCanonicalPaperSubscriptionLink(Some("collection")), request.queryString, status = FOUND)
   }
 
   def paperMethodRedirectTo(method: String): Action[AnyContent] = Action { implicit request =>
@@ -164,7 +164,9 @@ class Subscriptions(
     }
 
   def buildCanonicalPaperSubscriptionLink(method: Option[String] = None): String =
-    s"${supportUrl}/uk/subscribe/paper"
+    method
+      .map(m => s"${supportUrl}/uk/subscribe/paper/${m}")
+      .getOrElse(s"${supportUrl}/uk/subscribe/paper")
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"
