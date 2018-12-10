@@ -136,11 +136,12 @@ class Subscriptions(
 
   def paper(method: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
-    val title = "The Guardian Subscriptions | The Guardian"
+    val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
     val id = "paper-subscription-landing-page-" + method
     val js = "paperSubscriptionLandingPage.js"
     val css = "paperSubscriptionLandingPage.css"
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
+    val description = stringsConfig.paperLandingDescription
 
     Ok(views.html.main(title, id, js, css, None, canonicalLink)).withSettingsSurrogateKey
   }
