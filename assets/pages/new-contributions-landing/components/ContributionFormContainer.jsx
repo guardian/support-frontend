@@ -5,7 +5,7 @@
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { isUsCampaignTest, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -90,7 +90,6 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  console.log('variant: ', props.usDesktopEOYCampaignVariant);
   const countryGroupDetails = props.usDesktopEOYCampaignVariant ?
     usCampaignDetails :
     countryGroupSpecificDetails[props.countryGroupId];
