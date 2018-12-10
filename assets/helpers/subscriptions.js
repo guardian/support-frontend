@@ -133,7 +133,7 @@ const digitalSubscriptionPrices = {
   },
 };
 
-const PaperSubscriptionPrices = {
+const paperSubscriptionPrices = {
   collectionEveryday: GBP(47.62),
   collectionSixday: GBP(41.12),
   collectionWeekend: GBP(20.76),
@@ -235,7 +235,7 @@ function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: We
 }
 
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
-  return PaperSubscriptionPrices[billingPlan];
+  return paperSubscriptionPrices[billingPlan];
 }
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
