@@ -7,13 +7,6 @@ Disallow: /au/subscribe/premium-tier
 Disallow: /int/subscribe/premium-tier
 Disallow: /contribute/recurring-guest
 
-Disallow: /subscribe/paper
-Disallow: /subscribe/paper/delivery
-Disallow: /subscribe/paper/collection
-Disallow: /uk/subscribe/paper
-Disallow: /uk/subscribe/paper/delivery
-Disallow: /uk/subscribe/paper/collection
-
 Disallow: /uk/subscribe/digital/checkout
 Disallow: /us/subscribe/digital/checkout
 Disallow: /au/subscribe/digital/checkout
