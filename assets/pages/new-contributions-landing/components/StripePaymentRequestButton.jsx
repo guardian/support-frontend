@@ -18,6 +18,7 @@ import type { ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { hiddenIf } from 'helpers/utilities';
+import { logException } from 'helpers/logger';
 import type { State } from '../contributionsLandingReducer';
 import {
   setCanMakeApplePayPayment,
@@ -60,11 +61,12 @@ const mapDispatchToProps = (dispatch: Function) => ({
 });
 
 
-/* eslint-enable react/no-unused-prop-types */
 function updateUserEmail(data: Object, setEmail: string => void) {
   const email = data.payerEmail;
   if (email && isValidEmail(email)) {
     setEmail(email);
+  } else {
+    logException(`Failed to set email for stripe payment request user with data: ${data}`);
   }
 }
 
