@@ -1056,7 +1056,6 @@ form {
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   margin: 0 -10px;
   padding: 0 10px;
-  color: #121212;
 
   h3 {
     font-family: $gu-text-egyptian-web;
@@ -1072,7 +1071,7 @@ form {
     margin-top: $gu-v-spacing;
 
     .button--survey {
-      background-color: #121212;
+      background-color: gu-colour(garnett-neutral-1);
       color: white;
     }
   }
