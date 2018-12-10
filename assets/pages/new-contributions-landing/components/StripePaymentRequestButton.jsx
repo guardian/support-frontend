@@ -98,7 +98,8 @@ function initialisePaymentRequest(props: {
   });
 
   paymentRequest.canMakePayment().then((result) => {
-    if (result) {
+    // To enable Google Pay/Payment Request API, only check that result is not null
+    if (result && result.applePay === true) {
       props.setCanMakeApplePayPayment(true);
     }
   });
