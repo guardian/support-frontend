@@ -7,6 +7,16 @@ import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 
 import './productPageButton.scss';
 
+/*
+This button will be rendered as an <a> element or a <button> element
+depending on whether it has an `onClick` poaremeters or a `href` parameter.
+This helps preserve the semantics of the underlying HTML.
+
+Sometimes it is helpful to have both an `href` and `onClick` on an <a>
+element for side effects such as sending tracking information.
+In that case you can use the `trackingOnClick` prop.
+*/
+
 // ---- Types ----- //
 
 type PropTypes = {|
