@@ -139,6 +139,8 @@ class RegularContributions(
     result.fold(
       { error =>
         SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.body.email}, due to $error")
+        // This means we do not return the guest account registration token, meaning that users will not be able to
+        // set their password on the thank you page
         InternalServerError
       },
       response => {
