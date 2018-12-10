@@ -11,6 +11,7 @@ import ProductPageContentBlock from 'components/productPage/productPageContentBl
 import ProductPageContentBlockDivider from 'components/productPage/productPageContentBlock/productPageContentBlockDivider';
 import ProductPageTextBlock, { sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
+import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import SvgInfo from 'components/svgs/information';
 import GridImage from 'components/gridImage/gridImage';
 import { paperSubsUrl } from 'helpers/routes';
@@ -51,6 +52,9 @@ const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) =>
       </ProductPageTextBlock>
     }
     <Form />
+    <ProductPageInfoChip>
+      You can cancel your subscription at any time
+    </ProductPageInfoChip>
   </ProductPageContentBlock>
 );
 ContentForm.defaultProps = { text: null };

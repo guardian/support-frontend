@@ -109,7 +109,8 @@
   .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)
   }
-  .component-product-page-text-block--heading-only + .component-product-page-content-block-divider {
+  .component-product-page-text-block--heading-only + .component-product-page-content-block-divider,
+  .component-product-page-plan-form + .component-product-page-info-chip {
     margin-top: ($gu-v-spacing*-1)
   }
   .component-product-page-content-block__content > .component-product-page-content-block-divider:first-child {
