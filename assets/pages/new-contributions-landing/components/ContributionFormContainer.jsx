@@ -52,7 +52,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  usTickerLandingPageTestVariant: string,
+  usDesktopEOYCampaignVariant: string,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -69,7 +69,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
-  usTickerLandingPageTestVariant: state.common.abParticipations.usTickerLandingPage,
+  usDesktopEOYCampaignVariant: state.common.abParticipations.usDesktopEOYCampaign,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -90,13 +90,15 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = isUsCampaignTest(props.referrerAcquisitionData) ?
+  console.log('variant: ', props.usDesktopEOYCampaignVariant);
+  const countryGroupDetails = props.usDesktopEOYCampaignVariant ?
     usCampaignDetails :
     countryGroupSpecificDetails[props.countryGroupId];
 
   const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
 
-  const displayTicker = (props.countryGroupId === 'UnitedStates' && props.usTickerLandingPageTestVariant === 'ticker');
+  const isInTickerVariant: boolean = ['copyAndTicker', 'copyAndTickerAndBackgroundImage'].includes(props.usDesktopEOYCampaignVariant);
+  const displayTicker = (props.countryGroupId === 'UnitedStates' && isInTickerVariant);
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
