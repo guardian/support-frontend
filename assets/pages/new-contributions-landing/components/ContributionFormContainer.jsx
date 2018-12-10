@@ -20,6 +20,7 @@ import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions'
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
+import { ContributionUsTicker } from './ContributionUsTicker';
 import { setPayPalHasLoaded } from '../contributionsLandingActions';
 
 import {
@@ -51,6 +52,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  usTickerLandingPageTestVariant: string,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -67,6 +69,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
+  usTickerLandingPageTestVariant: state.common.abParticipations.usTickerLandingPage,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -93,11 +96,14 @@ function ContributionFormContainer(props: PropTypes) {
 
   const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
 
+  const displayTicker = (props.countryGroupId === 'UnitedStates' && props.usTickerLandingPageTestVariant === 'ticker');
+
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content">
         <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
+        { displayTicker ? <ContributionUsTicker /> : null }
         { countryGroupDetails.contributeCopy ?
           <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
         }
