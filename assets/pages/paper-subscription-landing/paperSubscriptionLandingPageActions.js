@@ -20,7 +20,7 @@ export type TabActions = { type: 'SET_TAB', tab: PaperDeliveryMethod }
 const { setPlan } = ProductPagePlanFormActionsFor<PaperBillingPlan>('Paper', 'Paper');
 const setTab = (tab: PaperDeliveryMethod): TabActions => {
   sendTrackingEventsOnClick(`switch_tab_${tab}`, 'Paper', null)();
-  window.history.replaceState({}, null, paperSubsUrl(tab));
+  window.history.replaceState({}, null, paperSubsUrl(tab === 'delivery'));
   return { type: 'SET_TAB', tab };
 };
 

@@ -126,18 +126,14 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
   }
 
-  def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
-    Redirect(buildCanonicalPaperSubscriptionLink(Some("collection")), request.queryString, status = FOUND)
+  def paperMethodRedirect(withDelivery: Boolean = false): Action[AnyContent] = Action { implicit request =>
+    Redirect(buildCanonicalPaperSubscriptionLink(withDelivery), request.queryString, status = FOUND)
   }
 
-  def paperMethodRedirectTo(method: String): Action[AnyContent] = Action { implicit request =>
-    Redirect(buildCanonicalPaperSubscriptionLink(Some(method)), request.queryString, status = FOUND)
-  }
-
-  def paper(method: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def paper(withDelivery: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
     val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
-    val id = "paper-subscription-landing-page-" + method
+    val id = if (withDelivery) "paper-subscription-landing-page-delivery" else "paper-subscription-landing-page-collection"
     val js = "paperSubscriptionLandingPage.js"
     val css = "paperSubscriptionLandingPage.css"
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
@@ -163,10 +159,9 @@ class Subscriptions(
       }
     }
 
-  def buildCanonicalPaperSubscriptionLink(method: Option[String] = None): String =
-    method
-      .map(m => s"${supportUrl}/uk/subscribe/paper/${m}")
-      .getOrElse(s"${supportUrl}/uk/subscribe/paper")
+  def buildCanonicalPaperSubscriptionLink(withDelivery: Boolean = false): String =
+    if (withDelivery) s"${supportUrl}/uk/subscribe/paper/delivery"
+    else s"${supportUrl}/uk/subscribe/paper"
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"

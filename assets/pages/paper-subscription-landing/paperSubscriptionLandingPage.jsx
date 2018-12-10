@@ -28,7 +28,7 @@ import './paperSubscriptionLandingPage.scss';
 
 // ----- Collection or delivery ----- //
 
-const method: PaperDeliveryMethod = window.location.pathname.includes('collection') ? 'collection' : 'delivery';
+const method: PaperDeliveryMethod = window.location.pathname.includes('delivery') ? 'delivery' : 'collection';
 
 const reactElementId: {
   [PaperDeliveryMethod]: string,
