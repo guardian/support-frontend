@@ -85,7 +85,7 @@ const content = (
           fallbackImgType="png"
         />
       </ProductPagehero>
-      <ProductPageContentBlock>
+      <ProductPageContentBlock needsHigherZindex>
         <ProductPageTextBlock>
           <p className={largeParagraphClassName}>
           We offer two different subscription types: voucher booklets and home delivery.

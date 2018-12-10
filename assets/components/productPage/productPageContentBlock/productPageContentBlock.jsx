@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
+import React, { Children, type Node } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Option } from 'helpers/types/option';
@@ -16,16 +16,17 @@ type PropTypes = {|
   id?: Option<string>,
   children: Node,
   image: Option<Node>,
-  modifierClasses: Array<string>
+  modifierClasses: Array<string>,
+  needsHigherZindex: boolean
 |};
 
 
 // ----- Render ----- //
 
 const ProductPageContentBlock = ({
-  type, children, id, modifierClasses, image,
+  type, children, id, modifierClasses, image, needsHigherZindex,
 }: PropTypes) => (
-  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, image ? 'overflow-hidden' : null, ...modifierClasses])}>
+  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, image ? 'overflow-hidden' : null, needsHigherZindex ? 'higher' : null, ...modifierClasses])}>
     <LeftMarginSection>
       <div className="component-product-page-content-block__content">
         {children}
@@ -42,6 +43,7 @@ ProductPageContentBlock.defaultProps = {
   id: null,
   image: null,
   modifierClasses: [],
+  needsHigherZindex: false,
 };
 
 
