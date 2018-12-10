@@ -56,7 +56,7 @@ const defaultImages: GridImages = {
     },
     desktop: {
       gridId: 'digitalSubscriptionHeaderDesktop',
-      srcSizes: [500, 1000, 2000, 4045],
+      srcSizes: [500, 1000, 2000],
       imgType: 'png',
     },
   },
