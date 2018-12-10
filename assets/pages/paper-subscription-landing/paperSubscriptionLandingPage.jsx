@@ -58,7 +58,7 @@ const content = (
     >
       <ProductPagehero
         overheading="The Guardian paper subscriptions"
-        heading="Save up to 31% on The Guardian and The Observer’s newspaper retail price all year round"
+        heading="Save up to 31% on The Guardian and The Observer - all year round"
         type="feature"
         modifierClasses={['paper']}
       >
@@ -87,9 +87,8 @@ const content = (
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock>
-          <p className={largeParagraphClassName}>Pick between voucher and home delivery.
-          If you live within London some more info about the two options at a glance There’s
-           one for each newspaper in the package you choose.
+          <p className={largeParagraphClassName}>
+          We offer two different subscription types: voucher booklets and home delivery.
           </p>
         </ProductPageTextBlock>
         <Tabs />

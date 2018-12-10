@@ -29,10 +29,12 @@ type PropTypes = {|
 
 // ----- Auxiliary Components ----- //
 const ContentHelpBlock = () => (
-  <ProductPageContentBlock type="feature" >
+  <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
     <ProductPageTextBlock title="FAQ and help" icon={<SvgInfo />}>
       <p className={sansParagraphClassName}>
       If you’ve got any more questions, you might well find the answers in the <a href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions">Subscriptions FAQs</a>.
+      </p>
+      <p className={sansParagraphClassName}>
        If you can’t find the answer to your question here, please call our customer services team on <a href="tel:+4403303336767">0330 333 6767</a>.
       </p>
     </ProductPageTextBlock>
@@ -43,7 +45,6 @@ const ContentHelpBlock = () => (
 const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (
   <ProductPageContentBlock type="feature">
     <ProductPageTextBlock {...{ title }} />
-    <ProductPageContentBlockDivider />
     {text &&
       <ProductPageTextBlock>
         <p>{text}</p>
@@ -70,7 +71,7 @@ const ContentVoucherFaqBlock = () => (
         'When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter',
         'You can exchange these vouchers for that day’s newspaper at retailers across the UK. That includes most independent newsagents, a range of petrol stations, and most supermarkets',
         'Your newsagent won’t lose out; we’ll pay them the same amount that they’d receive if you paid cash for your paper',
-        'You can pause your subscription for up to four weeks a year. So if you’re going away, you won’t have to pay for the papers that you miss.',
+        'You can pause your subscription for up to four weeks a year. So if you’re going away, you won’t have to pay for the papers that you miss',
       ]}
       />
     </ProductPageTextBlock>
@@ -143,7 +144,7 @@ class Content extends Component<PropTypes> {
     const collectionPage = (
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentVoucherFaqBlock />
-        <ContentForm title="Now pick your perfect voucher subscription package" text="When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter" />
+        <ContentForm title="Now pick your perfect voucher subscription package" />
         <ContentHelpBlock />
       </div>
     );
@@ -151,7 +152,7 @@ class Content extends Component<PropTypes> {
     const deliveryPage = (
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentDeliveryFaqBlock setTabAction={setTabAction} />
-        <ContentForm title="Now pick your perfect delivery subscription package" />
+        <ContentForm title="Now pick your perfect home delivery package" />
         <ContentHelpBlock />
       </div>
     );
