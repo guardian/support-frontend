@@ -8,18 +8,19 @@ import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
+import GridPicture from 'components/gridPicture/gridPicture';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 
+import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 
-import SvgInfo from 'components/svgs/information';
-import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { largeParagraphClassName, sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
-import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
 
-import Form from './components/form';
 import Tabs from './components/tabs';
+import Content from './components/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
@@ -27,21 +28,23 @@ import './paperSubscriptionLandingPage.scss';
 
 // ----- Collection or delivery ----- //
 
-type Method = 'collection' | 'delivery';
-
-const method: Method = window.location.pathname.includes('collection') ? 'collection' : 'delivery';
+const method: PaperDeliveryMethod = window.location.pathname.includes('delivery') ? 'delivery' : 'collection';
 
 const reactElementId: {
-  [Method]: string,
+  [PaperDeliveryMethod]: string,
 } = {
   collection: 'paper-subscription-landing-page-collection',
   delivery: 'paper-subscription-landing-page-delivery',
 };
 
 
+// ----- Initial selection? ----- //
+
+const promoInUrl = getQueryParameter('promo');
+
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer(), true);
+const store = pageInit(reducer(method, promoInUrl), true);
 
 
 // ----- Render ----- //
@@ -54,10 +57,33 @@ const content = (
     >
       <ProductPagehero
         overheading="The Guardian paper subscriptions"
-        heading="Save up to 31% on the Guardian and the Observer’s newspaper retail price all year round"
+        heading="Save up to 31% on The Guardian and The Observer’s newspaper retail price all year round"
         type="feature"
         modifierClasses={['paper']}
-      />
+      >
+        <GridPicture
+          sources={[
+            {
+              gridId: 'paperLandingHeroMobile',
+              srcSizes: [500, 922],
+              imgType: 'png',
+              sizes: '100vw',
+              media: '(max-width: 739px)',
+            },
+            {
+              gridId: 'paperLandingHero',
+              srcSizes: [1000, 2000],
+              imgType: 'png',
+              sizes: '(min-width: 1000px) 2000px, 1000px',
+              media: '(min-width: 740px)',
+            },
+          ]}
+          fallback="paperLandingHero"
+          fallbackSize={1000}
+          altText=""
+          fallbackImgType="png"
+        />
+      </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock>
           <p className={largeParagraphClassName}>Pick between voucher and home delivery.
@@ -67,41 +93,7 @@ const content = (
         </ProductPageTextBlock>
         <Tabs />
       </ProductPageContentBlock>
-      <ProductPageContentBlock>
-        <ProductPageTextBlock title="How do vouchers work?">
-          <ProductPageTextBlockList items={[
-            `When you take out a voucher subscription, we’ll send you a book of vouchers.
-               There’s one for each newspaper in the package you choose. So if you choose a
-               Sixday package, for example, you’ll receive six vouchers for each week,
-               delivered every quarter.
-            `,
-            `You can exchange these vouchers for that day’s newspaper at retailers
-              across the UK. That includes most independent newsagents, a range of petrol
-              stations, and most supermarkets, including Tesco, Sainsbury’s and
-              Waitrose & Partners.
-            `,
-            `Your newsagent won’t lose out; we’ll pay them the same amount that
-              they receive if you pay cash for your paper.
-            `,
-            'You’ll receive your vouchers within 14 days of subscribing.',
-            `You can pause your subscription for up to four weeks a year. So if
-              you’re heading away, you won’t have to pay for the papers you’ll miss.
-            `]}
-          />
-        </ProductPageTextBlock>
-      </ProductPageContentBlock>
-      <ProductPageContentBlock type="feature">
-        <ProductPageTextBlock title="Subscribe to Guardian Paper today">
-          <p>Now pick your perfect voucher subscription package</p>
-        </ProductPageTextBlock>
-        <Form />
-      </ProductPageContentBlock>
-      <ProductPageContentBlock type="feature" >
-        <ProductPageTextBlock title="FAQ and help" icon={<SvgInfo />}>
-          <p className={sansParagraphClassName}>Lorem <a href="#top">Ipsum</a>
-          </p>
-        </ProductPageTextBlock>
-      </ProductPageContentBlock>
+      <Content />
     </Page>
   </Provider>
 );

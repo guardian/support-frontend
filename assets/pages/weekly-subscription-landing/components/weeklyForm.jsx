@@ -48,6 +48,8 @@ const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => (
       title: billingPeriods[k].title,
       copy: billingPeriods[k].copy(state.common.internationalisation.countryGroupId),
       offer: billingPeriods[k].offer || null,
+      price: null,
+      saving: null,
     },
   }), {}),
   selectedPlan: state.page.plan,

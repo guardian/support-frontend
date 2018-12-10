@@ -15,10 +15,10 @@ import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { checkEmail, emailRegexPattern } from 'helpers/formValidation';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
-import { NewContributionTextInput } from '../ContributionTextInput';
-import { type ThankYouPageStage } from '../../contributionsLandingReducer';
-import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../../contributionsLandingActions';
-import { ButtonWithRightArrow } from '../ButtonWithRightArrow';
+import { NewContributionTextInput } from './ContributionTextInput';
+import { type ThankYouPageStage } from '../contributionsLandingReducer';
+import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../contributionsLandingActions';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 
 const passwordErrorHeading = 'Account set up failure';
 const passwordErrorMessage = 'Sorry, we are unable to register you at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your registration. Thank you.';
@@ -139,8 +139,8 @@ function SetPasswordForm(props: PropTypes) {
           buttonCopy="Create an account"
         />
         <ButtonWithRightArrow
-          componentClassName={classNameWithModifiers('form__submit', ['no-thanks'])}
-          buttonClassName={classNameWithModifiers('form__submit-button', ['no-thanks'])}
+          componentClassName="form_no-submit"
+          buttonClassName="button--no-thanks"
           accessibilityHintId="accessibility-hint-no-thanks"
           type="button"
           buttonCopy="No, thank you"

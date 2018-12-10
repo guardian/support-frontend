@@ -1,54 +1,81 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+@mixin block-colours($border, $bg: null, $text: null) {
+  @if($text){
+    color: $text;
+  }
+  @if($bg){
+    &, .component-product-page-content-block-bg {
+      background-color: $bg;
+    }
+  }
+  &, .component-product-page-content-block-bg,
+  & .component-left-margin-section__content,
+  & .component-product-page-features .component-product-page-features__item {
+    border-color: $border;
+  }
+  & .component-product-page-content-block-divider__line {
+    @include multiline(4, $border);
+  }
+  /*
+  div > $selector adds some leeway to use react elements with extra divs 
+  until preact.fragment gets here
+  */
+  & + &,
+  & + div > &  {
+    .component-left-margin-section__content {
+      border-top: 1px solid $border;
+    }
+  }    
+}
+
 .component-product-page-content-block .component-left-margin-section__content {
   max-width: 100%;
+  position: relative;
   @include mq($from: tablet) {
     border-left: 1px solid gu-colour(garnett-neutral-4);
   }
 }
 
-.component-product-page-content-block--white + .component-product-page-content-block--white {
-  .component-left-margin-section__content {
-    border-top: 1px solid gu-colour(garnett-neutral-4);
-  }
+.component-product-page-content-block--overflow-hidden .component-left-margin-section__content {
+  overflow: hidden;
+}
+
+.component-product-page-content-block--white {
+  @include block-colours(
+    $border: gu-colour(garnett-neutral-4)
+  );
 }
 
 .component-product-page-content-block--grey {
-  &, .component-product-page-content-block__bg {
-    background-color: gu-colour(garnett-neutral-3);
-  }
-  .component-left-margin-section__content {
-    border-left: 0;
-    margin-left: -1px;
-  }
+  @include block-colours(
+    $border: transparent,
+    $bg: gu-colour(garnett-neutral-3),
+  );
 }
 
 .component-product-page-content-block--feature {
-  color: gu-colour(garnett-neutral-5);
-  &, .component-product-page-content-block__bg {
-    background-color: gu-colour(header-dark);
-  }
-  .component-left-margin-section__content {
-    border-color: gu-colour(header-border);
-  }
-  .component-product-page-features .component-product-page-features__item {
-    border-color: gu-colour(garnett-neutral-5);
-  }
+  @include block-colours(
+    $border: gu-colour(header-border),
+    $bg: gu-colour(header-dark),
+    $text: gu-colour(garnett-neutral-5),
+  );
 }
-.component-product-page-content-block--feature + .component-product-page-content-block--feature {
-  .component-left-margin-section__content {
-    border-top: 1px solid gu-colour(header-border);
-  }
+
+.component-product-page-content-block--feature-secondary {
+  @include block-colours(
+    $border: gu-colour(header-border),
+    $bg: gu-colour(news-garnett-highlight),
+    $text: gu-colour(garnett-neutral-1)
+  );
 }
 
 .component-product-page-content-block--dark {
-  color: gu-colour(garnett-neutral-5);
-  &, .component-product-page-content-block__bg {
-    background-color: gu-colour(garnett-neutral-7);
-  }
-  .component-left-margin-section__content {
-    border-color: gu-colour(garnett-neutral-5);
-  }
+  @include block-colours(
+    $border: gu-colour(garnett-neutral-5),
+    $text: gu-colour(garnett-neutral-5),
+    $bg: gu-colour(garnett-neutral-7),
+  );
 }
 
 .component-product-page-content-block__content {
@@ -56,9 +83,22 @@
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
 }
 
-.component-product-page-content-block__outset {
+.component-product-page-content-block-outset {
   margin-left: ($gu-h-spacing / 2 * -1);
   margin-right: ($gu-h-spacing / 2 * -1);
+}
+
+.component-product-page-content-block-divider {
+  height: 20px;
+  margin-bottom: ($gu-v-spacing*.33);
+}
+
+.component-product-page-content-block-divider__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border: 0;
+  margin: 0;
 }
 
 // ----- Vertical rhythm ------ //
@@ -68,5 +108,33 @@
   .component-product-page-plan-form,
   .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)
+  }
+  .component-product-page-text-block--heading-only + .component-product-page-content-block-divider {
+    margin-top: ($gu-v-spacing*-1)
+  }
+  .component-product-page-content-block__content > .component-product-page-content-block-divider:first-child {
+    margin-top: ($gu-v-spacing*-.5) - 1px;
+    /*cancel out padding if this is the first child then
+    overlap under the top border to avoid the first multiline
+    merging with it and looking as a 2px border */
+  }
+}
+
+
+// ----- Images ------ //
+
+.component-product-page-content-block__image {
+  max-width: gu-span(6);
+  @include mq($from: tablet) {
+    position: absolute;
+    left: gu-span(7) + $gu-h-spacing;
+  }
+  @include mq($from: desktop) {
+    left: gu-span(8) + $gu-h-spacing;
+  }
+  bottom: ($gu-v-spacing*2)*-1;
+  .component-grid-image {
+    display: block;
+    width: 100%;
   }
 }

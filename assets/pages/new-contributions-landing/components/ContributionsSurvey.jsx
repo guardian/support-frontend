@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import CtaLink from 'components/ctaLink/ctaLink';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 
 // ----- Component ----- //
 
@@ -15,11 +15,17 @@ export default function ContributionsSurvey() {
       <h3>
         Please tell us about your contribution to The Guardian by filling out this short form.
       </h3>
-      <CtaLink
-        text="Share your thoughts"
-        url="https://www.surveymonkey.co.uk/r/QVKCKXQ"
-        accessibilityHint="Please tell us about your contribution to The Guardian by filling out this short form."
-        modifierClasses={['survey']}
+      <ButtonWithRightArrow
+        componentClassName="component-contributions-survey__button"
+        buttonClassName="button--survey"
+        accessibilityHintId="Please tell us about your contribution to The Guardian by filling out this short form."
+        type="button"
+        buttonCopy="Share your thoughts"
+        onClick={
+          () => {
+            window.location.assign('https://www.surveymonkey.co.uk/r/QVKCKXQ');
+          }
+        }
       />
     </div>
   );

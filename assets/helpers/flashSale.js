@@ -62,10 +62,6 @@ const saleDetails: SaleDetails = {
   },
 };
 
-function getCountdownAbTestParticipation(): boolean {
-  return getQueryParameter('ab_timer') === 'variant';
-}
-
 function getPromoCode(product: SubscriptionProduct, defaultCode: string): string {
   if (flashSaleIsActive(product)) {
     return saleDetails[product].promoCode;
@@ -84,6 +80,5 @@ export {
   flashSaleIsActive,
   getPromoCode,
   getIntcmp,
-  getCountdownAbTestParticipation,
   getEndTime,
 };

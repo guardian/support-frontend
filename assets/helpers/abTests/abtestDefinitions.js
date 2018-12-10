@@ -9,6 +9,33 @@ export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'not
 export type ApplePayTestVariant = 'control' | 'applePay' | 'notintest';
 
 export const tests: Tests = {
+
+  usDesktopEOYCampaign: {
+    variants: ['campaignCopy', 'copyAndTicker', 'copyAndTickerAndBackgroundImage'],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 2,
+  },
+
+  usSingleContributionsAmounts: {
+    variants: ['control', 'singleD100', 'single3575'],
+    audiences: {
+      UnitedStates: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 5,
+  },
+
   annualContributionsRoundThree: {
     variants: ['control', 'annualAmountsA'],
     audiences: {
@@ -49,7 +76,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: true,
+    isActive: false,
     independent: true,
     seed: 5,
   },

@@ -19,6 +19,7 @@
 
 .component-product-page-tabs__tab {
   @include gu-fontset-heading-sans;
+  text-decoration: none;
   padding: ($gu-v-spacing)/1.5 $gu-h-spacing/2;
   display: block;
   width: 100%;

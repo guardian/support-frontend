@@ -7,9 +7,12 @@ import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
+import models.ZuoraCatalog.ZuoraCatalogPricePlan
 import utils.RequestCountry._
 import views.html.helper.CSRF
+
 import scala.concurrent.ExecutionContext
+import services.ZuoraCatalogService.getPaperPrices
 
 class Subscriptions(
     actionRefiners: CustomActionBuilders,
@@ -123,21 +126,18 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
   }
 
-  def paperMethodRedirect(): Action[AnyContent] = Action { implicit request =>
-    Redirect(buildCanonicalPaperSubscriptionLink(), request.queryString, status = FOUND)
+  def paperMethodRedirect(withDelivery: Boolean = false): Action[AnyContent] = Action { implicit request =>
+    Redirect(buildCanonicalPaperSubscriptionLink(withDelivery), request.queryString, status = FOUND)
   }
 
-  def paperMethodRedirectTo(method: String): Action[AnyContent] = Action { implicit request =>
-    Redirect(buildCanonicalPaperSubscriptionLink(Some(method)), request.queryString, status = FOUND)
-  }
-
-  def paper(method: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def paper(withDelivery: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
-    val title = "The Guardian Subscriptions | The Guardian"
-    val id = "paper-subscription-landing-page-" + method
+    val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
+    val id = if (withDelivery) "paper-subscription-landing-page-delivery" else "paper-subscription-landing-page-collection"
     val js = "paperSubscriptionLandingPage.js"
     val css = "paperSubscriptionLandingPage.css"
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
+    val description = stringsConfig.paperLandingDescription
 
     Ok(views.html.main(title, id, js, css, None, canonicalLink)).withSettingsSurrogateKey
   }
@@ -159,8 +159,9 @@ class Subscriptions(
       }
     }
 
-  def buildCanonicalPaperSubscriptionLink(method: Option[String] = None): String =
-    s"${supportUrl}/uk/subscribe/paper/${method.getOrElse("collection")}"
+  def buildCanonicalPaperSubscriptionLink(withDelivery: Boolean = false): String =
+    if (withDelivery) s"${supportUrl}/uk/subscribe/paper/delivery"
+    else s"${supportUrl}/uk/subscribe/paper"
 
   def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/digital"

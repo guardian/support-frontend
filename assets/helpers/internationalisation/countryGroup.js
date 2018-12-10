@@ -170,4 +170,5 @@ export {
   countryGroups,
   detect,
   stringToCountryGroupId,
+  fromCountry,
 };

@@ -15,7 +15,9 @@ import {
   getContributionTypeFromSessionOrElse,
 } from 'helpers/checkouts';
 import { type Participations } from 'helpers/abTests/abtest';
-import { amounts, type Amount, type PaymentMethod, type ContributionType } from 'helpers/contributions';
+import { getUsSingleAmounts } from 'helpers/abTests/helpers/usSingleContributionsAmounts';
+import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
+import { type Amount, type PaymentMethod, type ContributionType } from 'helpers/contributions';
 import {
   type Action,
   paymentWaiting,
@@ -102,9 +104,19 @@ function selectInitialAnnualAmount(state: State, dispatch: Function) {
   const annualTestVariant = state.common.abParticipations.annualContributionsRoundThree;
 
   if (annualTestVariant) {
-    const annualAmounts: Amount[] = amounts(annualTestVariant).ANNUAL[countryGroupId];
+    const annualAmounts: Amount[] = getAnnualAmounts(annualTestVariant)[countryGroupId];
 
     dispatch(selectAmount(annualAmounts.find(amount => amount.isDefault) || annualAmounts[0], 'ANNUAL'));
+  }
+}
+
+function selectInitialUsSingleAmount(state: State, dispatch: Function) {
+  const usSingleContributionAmountsTestVariant = state.common.abParticipations.usSingleContributionsAmounts;
+
+  if (usSingleContributionAmountsTestVariant) {
+    const usSingleAmounts: Amount[] = getUsSingleAmounts(usSingleContributionAmountsTestVariant);
+
+    dispatch(selectAmount(usSingleAmounts.find(amount => amount.isDefault) || usSingleAmounts[1], 'ONE_OFF'));
   }
 }
 
@@ -127,6 +139,7 @@ const init = (store: Store<State, Action, Function>) => {
   initialisePaymentMethods(state, dispatch);
 
   selectInitialAnnualAmount(state, dispatch);
+  selectInitialUsSingleAmount(state, dispatch);
   selectInitialContributionTypeAndPaymentMethod(state, dispatch);
 
   const {

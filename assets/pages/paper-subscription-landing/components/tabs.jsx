@@ -2,32 +2,71 @@
 
 // ----- Imports ----- //
 
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { outsetClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
+import { type PaperDeliveryMethod } from 'helpers/subscriptions';
+import { paperSubsUrl } from 'helpers/routes';
 
-class Tabs extends Component<any, any> {
-  state = {
-    active: 0,
-  }
-  onChange(active: any) {
-    this.setState({ active });
-  }
-  render() {
-    return (
-      <div className={outsetClassName}>
-        <ProductPageTabs
-          active={this.state.active}
-          onChange={(t) => { this.onChange(t); }}
-          tabs={[
-            { name: 'Voucher' },
-            { name: 'Home Delivery' },
-          ]}
-        />
-      </div>
-    );
-  }
-}
+import { type State } from '../paperSubscriptionLandingPageReducer';
+import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
 
-export default Tabs;
+// ----- Tabs ----- //
+
+export const tabs: {[PaperDeliveryMethod]: {name: string, href: string}} = {
+  collection: {
+    name: 'Voucher Book',
+    href: paperSubsUrl(false),
+  },
+  delivery: {
+    name: 'Home Delivery',
+    href: paperSubsUrl(true),
+  },
+};
+
+type StatePropTypes = {|
+  selectedTab: number,
+|};
+
+type DispatchPropTypes = {|
+  setTabAction: (PaperDeliveryMethod) => TabActions,
+|};
+
+type PropTypes = {|
+  ...StatePropTypes,
+  ...DispatchPropTypes,
+|};
+
+// ----- Component ----- //
+
+const Tabs = ({ selectedTab, setTabAction }: PropTypes) => (
+  <ProductPageContentBlockOutset>
+    <ProductPageTabs
+      active={selectedTab}
+      onChange={(t) => { setTabAction(Object.keys(tabs)[t]); }}
+      tabs={Object.keys(tabs).map(k => ({
+        name: tabs[k].name,
+        href: tabs[k].href,
+      }))}
+    />
+  </ProductPageContentBlockOutset>
+);
+
+// ----- State/Props Maps ----- //
+
+const mapStateToProps = (state: State) => ({
+  selectedTab: Object.keys(tabs).indexOf(state.page.tab),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<TabActions>) =>
+  ({
+    setTabAction: bindActionCreators(setTab, dispatch),
+  });
+
+
+// ----- Exports ----- //
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tabs);

@@ -3,9 +3,9 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import CtaLink from 'components/ctaLink/ctaLink';
 import MarketingConsent from './MarketingConsentContainer';
 import ContributionsSurvey from '../components/ContributionsSurvey';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 
 // ----- Render ----- //
 
@@ -21,14 +21,18 @@ function ContributionThankYouPasswordSet() {
       </section>
       <ContributionsSurvey />
       <MarketingConsent />
-      <div className="confirmation confirmation--backtothegu">
-        <CtaLink
-          modifierClasses={['backtothegu']}
-          accessibilityHint="accessibility-hint-return-to-guardian"
-          url="https://www.theguardian.com"
-          text="Return to The Guardian&nbsp;"
-        />
-      </div>
+      <ButtonWithRightArrow
+        componentClassName="confirmation confirmation--backtothegu"
+        buttonClassName=""
+        accessibilityHintId="accessibility-hint-return-to-guardian"
+        type="button"
+        buttonCopy="Return to The Guardian&nbsp;"
+        onClick={
+          () => {
+            window.location.assign('https://www.theguardian.com');
+          }
+        }
+      />
     </div>
   );
 }

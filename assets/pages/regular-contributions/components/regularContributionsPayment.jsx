@@ -17,7 +17,7 @@ import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Node } from 'react';
-import type { ContributionType } from 'helpers/contributions';
+import type { RegularContributionType } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
@@ -36,7 +36,7 @@ type PropTypes = {|
   errorReason: ?ErrorReason,
   isTestUser: boolean,
   isPostDeploymentTestUser: boolean,
-  contributionType: ContributionType,
+  regularContributionType: RegularContributionType,
   paymentStatus: PaymentStatus,
   currencyId: IsoCurrency,
   amount: number,
@@ -90,7 +90,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
           props.amount,
           props.csrf,
           props.currencyId,
-          props.contributionType,
+          props.regularContributionType,
           props.dispatch,
           'DirectDebit',
           props.referrerAcquisitionData,
@@ -110,7 +110,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.amount,
       props.csrf,
       props.currencyId,
-      props.contributionType,
+      props.regularContributionType,
       props.dispatch,
       'Stripe',
       props.referrerAcquisitionData,
@@ -136,7 +136,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
       props.amount,
       props.csrf,
       props.currencyId,
-      props.contributionType,
+      props.regularContributionType,
       props.dispatch,
       'PayPal',
       props.referrerAcquisitionData,
@@ -148,6 +148,7 @@ function RegularContributionsPayment(props: PropTypes, context) {
     switchStatus={props.payPalSwitchStatus}
     canOpen={props.canOpen}
     whenUnableToOpen={props.whenUnableToOpen}
+    regularContributionType={props.regularContributionType}
   />);
 
   return (
@@ -174,7 +175,7 @@ function mapStateToProps(state) {
     paymentStatus: state.page.regularContrib.paymentStatus,
     amount: state.page.regularContrib.amount,
     currencyId: state.common.internationalisation.currencyId,
-    contributionType: state.page.regularContrib.contributionType,
+    regularContributionType: state.page.regularContrib.contributionType,
     regularContrib: state.page.regularContrib,
     csrf: state.page.csrf,
     country: state.common.internationalisation.countryId,

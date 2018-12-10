@@ -2,22 +2,54 @@
 
 // ----- Imports ----- //
 
+import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type PaperBillingPlan } from 'helpers/subscriptions';
-import { getQueryParameter } from 'helpers/url';
+import { type PaperDeliveryMethod, type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
+
+import { type TabActions } from './paperSubscriptionLandingPageActions';
+
+
+// ----- Types ----- //
+
+type ActiveTabState = PaperDeliveryMethod;
 
 export type State = {
   common: CommonState,
-  page: FormState<PaperBillingPlan>,
+  page: {
+    tab: ActiveTabState,
+    plan: FormState<PaperBillingPlan>,
+  }
 };
 
 
-export default () => {
-  const promoInUrl = getQueryParameter('promo');
+// ----- Helpers ----- //
+
+const getTabsReducer = (initialTab: PaperDeliveryMethod) =>
+  (state: ActiveTabState = initialTab, action: TabActions): ActiveTabState => {
+
+    switch (action.type) {
+      case 'SET_TAB':
+        return action.tab;
+      default:
+        return state;
+    }
+
+  };
+
+
+// ----- Exports ----- //
+
+export default (initialTab: PaperDeliveryMethod, promoInUrl: ?string) => {
 
   const initialPeriod: ?PaperBillingPlan =
-    promoInUrl === 'sixday' || promoInUrl === 'weekend' || promoInUrl === 'sunday' || promoInUrl === 'everyday' ? promoInUrl : null;
+    promoInUrl === 'collectionEveryday' || promoInUrl === 'collectionSixday' ||
+    promoInUrl === 'collectionWeekend' || promoInUrl === 'collectionSunday' ||
+    promoInUrl === 'deliveryEveryday' || promoInUrl === 'deliverySixday' ||
+    promoInUrl === 'deliveryWeekend' || promoInUrl === 'deliverySunday' ? promoInUrl : null;
 
-  return ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod);
+  return combineReducers({
+    plan: ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod),
+    tab: getTabsReducer(initialTab),
+  });
 };

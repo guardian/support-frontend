@@ -2,13 +2,13 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  items: string[]
+  items: (Node)[]
 |};
 
 

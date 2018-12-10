@@ -27,6 +27,10 @@ const routes: {
   payPalRestReturnURL: '/paypal/rest/return',
 };
 
+function paperSubsUrl(withDelivery: boolean = false): string {
+  return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
+}
+
 function payPalCancelUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
 }
@@ -38,4 +42,4 @@ function payPalReturnUrl(cgId: CountryGroupId): string {
 
 // ----- Exports ----- //
 
-export { routes, payPalCancelUrl, payPalReturnUrl };
+export { routes, payPalCancelUrl, payPalReturnUrl, paperSubsUrl };

@@ -16,7 +16,7 @@ import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { discountedDisplayPrice, displayPrice } from 'helpers/subscriptions';
-import { flashSaleIsActive, getCountdownAbTestParticipation } from 'helpers/flashSale';
+import { flashSaleIsActive } from 'helpers/flashSale';
 import CtaSwitch from './ctaSwitch';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
@@ -176,7 +176,7 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             </p>
           </div>
         </div>
-        {flashSaleIsActive('DigitalPack') && getCountdownAbTestParticipation() &&
+        {flashSaleIsActive('DigitalPack') &&
           <div className="digital-subscription-landing-header__countdown">
             <FlashSaleCountdown />
           </div>

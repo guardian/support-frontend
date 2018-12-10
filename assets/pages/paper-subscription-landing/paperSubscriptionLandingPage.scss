@@ -14,6 +14,45 @@
   scroll-behavior: smooth;
 }
 
-.component-product-page-hero--paper .component-left-margin-section__content {
-  padding-top: 20em;
+.component-product-page-content-block__image {
+  max-width: gu-span(5);
+  min-width: gu-span(4);
+}
+
+
+.component-product-page-hero--paper {
+  .component-left-margin-section__content {
+    border-color: transparent;
+  }
+  @include mq($from: tablet) {
+    .component-heading-block {
+      margin-top: 24em;
+    }
+    .component-grid-picture {
+      position: absolute;
+      top: 0;
+      min-width: 100%;
+      height: 100%;
+      @include mq($from: wide) {
+        left: gu-span(2) * -1;
+      }
+    }
+    .component-grid-picture__image {
+      height: 100%;
+      display: block;
+    }
+  }
+  @include mq($until: tablet) {
+    .component-grid-picture {
+      max-height: 20em;
+      overflow: hidden;
+      display: block;
+    }
+    .component-grid-picture__image {
+      max-width: gu-span(8);
+      margin: auto;
+      float: none;
+      display: block;
+    }
+  }
 }

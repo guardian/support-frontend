@@ -4,15 +4,18 @@ import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
+import cats.data.EitherT
 import cats.implicits._
 import codecs.CirceDecoders.statusEncoder
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.model.User
+import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import cookies.RecurringContributionCookie
 import io.circe.syntax._
 import lib.PlayImplicits._
+import monitoring.PathVerification._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
@@ -35,7 +38,8 @@ class RegularContributions(
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
-    settingsProvider: SettingsProvider
+    settingsProvider: SettingsProvider,
+    tipMonitoring: Tip
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -110,42 +114,46 @@ class RegularContributions(
   }
 
   private def createContributorWithUser(fullUser: AuthenticatedIdUser)(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]) = {
-    SafeLogger.info(s"[${request.uuid}] User ${fullUser.id} is attempting to create a new ${request.body.contribution.billingPeriod} contribution")
-
+    val billingPeriod = request.body.contribution.billingPeriod
+    SafeLogger.info(s"[${request.uuid}] User ${fullUser.id} is attempting to create a new $billingPeriod contribution")
     val result = for {
       user <- identityService.getUser(fullUser)
-      response <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
-    } yield response
-
-    result.fold(
-      { error =>
-        SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${fullUser.id}, due to $error")
-        InternalServerError
-      },
-      response =>
-        Accepted(response.asJson)
-          .withCookies(RecurringContributionCookie.create(guardianDomain, request.body.contribution.billingPeriod))
-    )
-
+      statusResponse <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+    } yield statusResponse
+    respondToClient(result, request.body, guestCheckout = false)
   }
 
   private def createContributorAndUser()(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]) = {
+    val billingPeriod = request.body.contribution.billingPeriod
+    SafeLogger.info(s"[${request.uuid}] Guest user: ${request.body.email} is attempting to create a new $billingPeriod contribution")
     val result = for {
       userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email)
       user <- identityService.getUser(IdMinimalUser(userIdWithOptionalToken.userId, None))
-      response <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
-    } yield StatusResponse.fromStatusResponseAndToken(response, userIdWithOptionalToken.guestAccountRegistrationToken)
+      initialStatusResponse <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+    } yield StatusResponse.fromStatusResponseAndToken(initialStatusResponse, userIdWithOptionalToken.guestAccountRegistrationToken)
+    respondToClient(result, request.body, guestCheckout = true)
+  }
 
+  private def respondToClient(
+    result: EitherT[Future, String, StatusResponse],
+    body: CreateRegularContributorRequest,
+    guestCheckout: Boolean
+  )(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]): Future[Result] = {
+    val billingPeriod = body.contribution.billingPeriod
     result.fold(
       { error =>
-        SafeLogger.error(scrub"Failed to create new ${request.body.contribution.billingPeriod} contribution for ${request.body.email}, due to $error")
+        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod contribution, due to $error")
         InternalServerError
       },
-      response => {
-        Accepted(response.asJson)
-          .withCookies(RecurringContributionCookie.create(guardianDomain, request.body.contribution.billingPeriod))
+      { statusResponse =>
+        if (!testUsers.isTestUser(request)) {
+          monitoredRegion(body.country).map { region =>
+            val tipPath = TipPath(region, RecurringContribution, monitoredPaymentMethod(body.paymentFields), guestCheckout)
+            verify(tipPath, tipMonitoring.verify)
+          }
+        }
+        Accepted(statusResponse.asJson).withCookies(RecurringContributionCookie.create(guardianDomain, billingPeriod))
       }
-
     )
   }
 
