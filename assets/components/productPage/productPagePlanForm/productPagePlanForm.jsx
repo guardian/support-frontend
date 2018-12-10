@@ -11,6 +11,7 @@ import { type Option } from 'helpers/types/option';
 import ProductPageButton from '../productPageButton/productPageButton';
 import ProductPagePlanFormLabel from './productPagePlanFormLabel';
 import ProductPagePlanFormPrice from './productPagePlanFormPrice';
+import { showPrice } from 'helpers/internationalisation/price';
 
 import './productPagePlanForm.scss';
 
