@@ -42,12 +42,12 @@ function getCopy(countryGroupId: CountryGroupId) {
   if (countryGroupId === 'GBPCountries') {
     return {
       subHeading: displayPrice('DigitalPack', countryGroupId),
-      description: 'The premium app and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
+      description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
     };
   }
   return {
     subHeading: '14-day free trial',
-    description: 'The premium app and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
+    description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
   };
 }
 
