@@ -24,6 +24,7 @@ import {
   setPaymentRequest,
   onStripePaymentRequestApiPaymentAuthorised,
   updateEmail,
+  setStripePaymentRequestCompleteFunction,
 } from '../contributionsLandingActions';
 
 
@@ -47,6 +48,8 @@ const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
 });
 
+export type StripePaymentRequestPaymentResult = 'success' | 'fail';
+export type StripePaymentRequestPaymentResultFunction= StripePaymentRequestPaymentResult => void;
 
 const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
@@ -57,6 +60,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
     (paymentRequest) => { dispatch(setPaymentRequest(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
   setStripePaymentRequestButtonClicked: () => { dispatch(setStripePaymentRequestButtonClicked()); },
+  setStripePaymentRequestCompleteFunction: (completeFunction: StripePaymentRequestPaymentResultFunction) => {
+    dispatch(setStripePaymentRequestCompleteFunction(completeFunction));
+  },
 });
 
 
@@ -76,6 +82,7 @@ function initialisePaymentRequest(props: {
   amount: number,
   setCanMakeApplePayPayment: (boolean) => void,
   setPaymentRequest: Object => void,
+  setStripePaymentRequestCompleteFunction: StripePaymentRequestPaymentResultFunction,
   onPaymentAuthorised: PaymentAuthorisation => void,
   updateEmail: (string) => void,
   isTestUser: boolean,
@@ -94,12 +101,12 @@ function initialisePaymentRequest(props: {
     updateUserEmail(data, props.updateEmail);
     const tokenId = props.isTestUser ? 'tok_visa' : token.id;
     props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId });
-    complete('success');
+    props.setStripePaymentRequestCompleteFunction(complete);
   });
 
   paymentRequest.canMakePayment().then((result) => {
     // To enable Google Pay/Payment Request API, only check that result is not null
-    if (result && result.applePay === true) {
+    if (result) {
       props.setCanMakeApplePayPayment(true);
     }
   });
@@ -117,6 +124,7 @@ function paymentRequestButton(props: {
   setPaymentRequest: (Object) => void,
   onPaymentAuthorised: PaymentAuthorisation => void,
   setStripePaymentRequestButtonClicked: () => void,
+  setStripePaymentRequestCompleteFunction: StripePaymentRequestPaymentResultFunction,
   isTestUser: boolean,
   updateEmail: string => void,
   selectedAmounts: SelectedAmounts,
@@ -138,6 +146,7 @@ function paymentRequestButton(props: {
       onPaymentAuthorised: props.onPaymentAuthorised,
       isTestUser: props.isTestUser,
       updateEmail: props.updateEmail,
+      setStripePaymentRequestCompleteFunction: props.setStripePaymentRequestCompleteFunction,
     });
     return null;
   }

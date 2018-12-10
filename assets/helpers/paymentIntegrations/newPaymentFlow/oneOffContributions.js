@@ -111,7 +111,7 @@ function paymentResultFromObject(json: Object): Promise<PaymentResult> {
 
 // Sends a one-off payment request to the payment API and standardises the result
 // https://github.com/guardian/payment-api/blob/master/src/main/resources/routes#L17
-function postOneOffStripeExecutePaymentRequest(data: StripeChargeData): Promise<PaymentResult> {
+function postOneOffStripeExecutePaymentRequest(data: StripeChargeData, callBack?: Function): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
     requestOptions(data, 'omit', 'POST', null),

@@ -21,6 +21,7 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
+import { type StripePaymentRequestPaymentResult } from '../new-contributions-landing/components/StripePaymentRequestButton';
 
 // ----- Types ----- //
 
@@ -55,6 +56,7 @@ type StripePaymentRequestButtonData = {
   canMakeApplePayPayment: boolean,
   paymentRequest: Object | null,
   stripePaymentRequestButtonClicked: boolean,
+  completeFunction: (StripePaymentRequestPaymentResult => void) | null,
 }
 
 type FormState = {
@@ -139,6 +141,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       canMakeApplePayPayment: false,
       paymentRequest: null,
       stripePaymentRequestButtonClicked: false,
+      completeFunction: null,
     },
     setPasswordData: {
       password: '',
@@ -240,6 +243,15 @@ function createFormReducer(countryGroupId: CountryGroupId) {
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
             stripePaymentRequestButtonClicked: true,
+          },
+        };
+
+      case 'SET_STRIPE_PAYMENT_REQUEST_COMPLETE_FUNCTION':
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            completeFunction: action.completeFunction,
           },
         };
 
