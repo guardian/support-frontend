@@ -82,7 +82,7 @@ export default function ContributionPaymentCtas(props: PropTypes) {
         />
         <OneOffCta {...props} />
         <ErrorMessage message={props.error} />
-        <TermsPrivacy countryGroupId={props.countryGroupId} />
+        <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} />
       </div>
     );
 
