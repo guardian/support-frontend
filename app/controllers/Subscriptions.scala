@@ -139,7 +139,7 @@ class Subscriptions(
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
     val description = stringsConfig.paperLandingDescription
 
-    Ok(views.html.main(title, id, js, css, None, canonicalLink)).withSettingsSurrogateKey
+    Ok(views.html.main(title, id, js, css, description, canonicalLink)).withSettingsSurrogateKey
   }
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
