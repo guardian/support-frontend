@@ -153,15 +153,14 @@ class Subscriptions(
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
-  private def digitalSubscriptionFormHtml(idUser: Option[IdUser], countryCode: String)(implicit request: RequestHeader, settings: Settings): Html = {
+  private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: Settings): Html = {
     val title = "Support the Guardian | Digital Subscription"
     val id = "digital-subscription-checkout-page-" + countryCode
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPageStyles.css"
     val csrf = CSRF.getToken.value
-    val user = idUser
 
-    digitalSubscription(title, id, js, css, Some(csrf), user)
+    digitalSubscription(title, id, js, css, Some(csrf), idUser)
   }
 
   def displayForm(countryCode: String, displayCheckout: String, isCsrf: Boolean = false): Action[AnyContent] = {
@@ -173,7 +172,7 @@ class Subscriptions(
             SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
             InternalServerError
           },
-          user => Ok(digitalSubscriptionFormHtml(Some(user), countryCode))
+          user => Ok(digitalSubscriptionFormHtml(user, countryCode))
         ).map(_.withSettingsSurrogateKey)
       } else {
         Future.successful(Redirect(routes.Subscriptions.geoRedirect))
