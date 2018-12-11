@@ -13,6 +13,8 @@ import services.IdentityService
 import utils.RequestCountry._
 import views.html.helper.CSRF
 import cats.implicits._
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 
 import scala.concurrent.{ExecutionContext, Future}
 import views.html.digitalSubscription
@@ -151,7 +153,7 @@ class Subscriptions(
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
-  private def formHtml(idUser: Option[IdUser], countryCode: String)(implicit request: RequestHeader, settings: Settings): Html = {
+  private def digitalSubscriptionFormHtml(idUser: Option[IdUser], countryCode: String)(implicit request: RequestHeader, settings: Settings): Html = {
     val title = "Support the Guardian | Digital Subscription"
     val id = "digital-subscription-checkout-page-" + countryCode
     val js = "digitalSubscriptionCheckoutPage.js"
@@ -163,16 +165,16 @@ class Subscriptions(
   }
 
   def displayForm(countryCode: String, displayCheckout: String, isCsrf: Boolean = false): Action[AnyContent] = {
-    maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
+    authenticatedAction(recurringIdentityClientId).async { implicit request =>
       implicit val settings: Settings = settingsProvider.settings()
       if (displayCheckout == "true") {
-        request.user
-          .fold(Future.successful(Ok(formHtml(None, countryCode)))) { minimalUser =>
-            identityService.getUser(minimalUser).fold(
-              _ => Ok(formHtml(None, countryCode)),
-              user => Ok(formHtml(Some(user), countryCode))
-            )
-          }.map(_.withSettingsSurrogateKey)
+        identityService.getUser(request.user).fold(
+          error => {
+            SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
+            InternalServerError
+          },
+          user => Ok(digitalSubscriptionFormHtml(Some(user), countryCode))
+        ).map(_.withSettingsSurrogateKey)
       } else {
         Future.successful(Redirect(routes.Subscriptions.geoRedirect))
       }
