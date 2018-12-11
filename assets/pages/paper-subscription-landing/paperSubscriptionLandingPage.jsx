@@ -56,7 +56,7 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        overheading="The Guardian paper subscriptions"
+        overheading="The Guardian Newspaper Subscriptions"
         heading="Save up to 31% on The Guardian and The Observer - all year round"
         type="feature"
         modifierClasses={['paper']}
