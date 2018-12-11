@@ -146,8 +146,20 @@ const paymentButtonStyle = {
   },
 };
 
-// ---- Component ----- //
+function updateAmount(amount: number, paymentRequest: Object) {
+  // When the other tab is clicked, the value of amount is NaN
+  if (!Number.isNaN(amount) && paymentRequest) {
+    paymentRequest.update({
+      total: {
+        label: 'The Guardian',
+        amount: amount * 100,
+      },
+    });
+  }
+}
 
+
+// ---- Component ----- //
 function paymentRequestButton(props: PropTypes) {
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
   // until the async canMakePayment() function has been called on the paymentRequest object.
@@ -156,15 +168,7 @@ function paymentRequestButton(props: PropTypes) {
     return null;
   }
 
-  // When the other tab is clicked, the value of amount is NaN
-  if (!Number.isNaN(props.amount) && props.paymentRequest) {
-    props.paymentRequest.update({
-      total: {
-        label: 'The Guardian',
-        amount: props.amount * 100,
-      },
-    });
-  }
+  updateAmount(props.amount, props.paymentRequest);
 
   return (props.canMakeApplePayPayment === true) ? (
     <div className="stripe-payment-request-button__container">
