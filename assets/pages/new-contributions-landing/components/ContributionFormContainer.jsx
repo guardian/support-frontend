@@ -5,7 +5,7 @@
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { isUsCampaignTest, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -52,7 +52,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  usTickerLandingPageTestVariant: string,
+  usDesktopEOYCampaignVariant: string,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -69,7 +69,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
-  usTickerLandingPageTestVariant: state.common.abParticipations.usTickerLandingPage,
+  usDesktopEOYCampaignVariant: state.common.abParticipations.usDesktopEOYCampaign,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -90,13 +90,14 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = isUsCampaignTest(props.referrerAcquisitionData) ?
+  const countryGroupDetails = (props.countryGroupId === 'UnitedStates' && props.usDesktopEOYCampaignVariant !== 'notintest') ?
     usCampaignDetails :
     countryGroupSpecificDetails[props.countryGroupId];
 
   const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
 
-  const displayTicker = (props.countryGroupId === 'UnitedStates' && props.usTickerLandingPageTestVariant === 'ticker');
+  const isInTickerVariant: boolean = ['copyAndTicker', 'copyAndTickerAndBackgroundImage'].includes(props.usDesktopEOYCampaignVariant);
+  const displayTicker = (props.countryGroupId === 'UnitedStates' && isInTickerVariant);
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />

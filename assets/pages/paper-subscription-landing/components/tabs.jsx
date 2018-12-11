@@ -18,12 +18,12 @@ import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions'
 
 export const tabs: {[PaperDeliveryMethod]: {name: string, href: string}} = {
   collection: {
-    name: 'Voucher Book',
-    href: paperSubsUrl('collection'),
+    name: 'Voucher Booklet',
+    href: paperSubsUrl(false),
   },
   delivery: {
     name: 'Home Delivery',
-    href: paperSubsUrl('delivery'),
+    href: paperSubsUrl(true),
   },
 };
 

@@ -9,13 +9,13 @@ import GridPicture from 'components/gridPicture/gridPicture';
 
 type PropTypes = {|
   countryGroupId: CountryGroupId,
-  usBackgroundTestVariant: string,
+  usDesktopEOYCampaignVariant: string,
 |};
 
 // ----- Render ----- //
 
 function NewContributionBackground(props: PropTypes) {
-  const showUsBackground = (props.countryGroupId === 'UnitedStates' && props.usBackgroundTestVariant === 'backgroundImage');
+  const showUsBackground = (props.countryGroupId === 'UnitedStates' && props.usDesktopEOYCampaignVariant === 'copyAndTickerAndBackgroundImage');
 
   if (showUsBackground) {
     return (

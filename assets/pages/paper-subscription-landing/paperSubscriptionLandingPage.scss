@@ -19,6 +19,12 @@
   min-width: gu-span(4);
 }
 
+.component-product-page-content-block--faqs .component-product-page-text-block {
+  max-width: gu-span(5);
+  a {
+    white-space: nowrap;
+  }
+}
 
 .component-product-page-hero--paper {
   .component-left-margin-section__content {
@@ -30,7 +36,7 @@
     }
     .component-grid-picture {
       position: absolute;
-      top: 0;
+      top: -50px;
       min-width: 100%;
       height: 100%;
       @include mq($from: wide) {

@@ -48,7 +48,7 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 const selectedCountryGroup = countryGroups[countryGroupId];
 
-const { smallMobileHeaderNotEpicOrBanner, usBackgroundImage } = store.getState().common.abParticipations;
+const { smallMobileHeaderNotEpicOrBanner, usDesktopEOYCampaign } = store.getState().common.abParticipations;
 
 let extraClasses = [];
 if (smallMobileHeaderNotEpicOrBanner) {
@@ -85,7 +85,10 @@ const router = (
               <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
               />
-              <NewContributionBackground usBackgroundTestVariant={usBackgroundImage} countryGroupId={countryGroupId} />
+              <NewContributionBackground
+                usDesktopEOYCampaignVariant={usDesktopEOYCampaign}
+                countryGroupId={countryGroupId}
+              />
             </Page>
           )
         }
@@ -106,7 +109,7 @@ const router = (
               >
                 <ContributionThankYouContainer />
                 <NewContributionBackground
-                  usBackgroundTestVariant={usBackgroundImage}
+                  usDesktopEOYCampaignVariant={usDesktopEOYCampaign}
                   countryGroupId={countryGroupId}
                 />
               </Page>

@@ -192,6 +192,15 @@ footer[role="contentinfo"] a {
 
 $progess-bar-height: 10px;
 
+.contributions-landing-ticker {
+  padding-bottom: $gu-h-spacing;
+}
+
+.contributions-landing-ticker__border {
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+  margin: 0 -10px;
+}
+
 .contributions-landing-ticker--hidden {
   visibility: hidden;
   .contributions-landing-ticker__border {
@@ -261,12 +270,6 @@ $progess-bar-height: 10px;
   transition: transform 3s cubic-bezier(.25, .55, .2, .85);
 }
 
-.contributions-landing-ticker__border {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-  margin: 0 -10px;
-  padding: $gu-v-spacing 0;
-}
-
 /*= CONTENT */
 .gu-content__content {
   background: gu-colour(garnett-neutral-5);
@@ -276,7 +279,7 @@ $progess-bar-height: 10px;
 
 /*= TYPOGRAPHY */
 body {
-  color: gu-colour(media-garnett-main-1);
+  color: gu-colour(garnett-neutral-1);
   font: normal 16px/1.5 $gu-text-egyptian-web;
 }
 
@@ -1148,6 +1151,11 @@ form {
     display: inline-block;
     margin-bottom: $gu-v-spacing * 3;
     margin-top: $gu-v-spacing;
+
+    .button--survey {
+      background-color: gu-colour(garnett-neutral-1);
+      color: white;
+    }
   }
 
   .component-cta-link__text {

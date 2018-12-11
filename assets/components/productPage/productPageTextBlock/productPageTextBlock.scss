@@ -34,6 +34,9 @@
 
 .component-product-page-text-block__sans {
   @include gu-fontset-body-sans;
+  & + & {
+    margin-top: $gu-v-spacing / 2;
+  }
 }
 
 .component-product-page-text-block__li {

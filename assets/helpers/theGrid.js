@@ -20,9 +20,9 @@ export const imageCatalogue: {
   paperDigitalBundle: '1199912112859eecf3f2d94edc6fdd73843d10e9/0_0_600_360',
   protestorsWide: 'bce7d14f7f837a4f6c854d95efc4b1eab93a8c65/0_0_5200_720',
   protestorsNarrow: 'd1a7088f8f2a367b0321528f081777c9b5618412/0_0_3578_2013',
-  premiumTierCircle: '3e3b59228c3467b01dd09b9f79de28c586fe0ea6/0_0_825_825',
-  dailyEditionCircle: '64ba1a800e4c2975054b33ba07c4fe3c64d4b5f4/0_0_825_825',
-  digitalCircleOrange: '0b5ded2325275e25f5b38198766c57363bddfa21/0_0_825_825',
+  premiumTierCircle: '5e3ddbfe39cd6d6bf1dbb20b08a17fe275575728/0_0_3260_3260',
+  dailyEditionCircle: '9e992e4ebca7a837976fe55d091e0f38e7e595c2/0_0_3260_3260',
+  digitalCircleOrange: 'd7d1820af432c48329d214d0cff7c6fe9cd21101/0_0_3260_3260',
   digitalCirclePink: '7d404c1920f065c1b7e71b903cc3899f388acb22/0_0_825_825',
   paperCircle: 'c462d60f2962b745b1e206d5ede998dfb166a8ed/0_0_825_825',
   paperDigitalCircleOrange: 'd94c0f9bade09487b9afca5ee8149efb33f34ccf/0_0_825_825',
@@ -34,7 +34,7 @@ export const imageCatalogue: {
   windrush: '4addd475d3af57d908fa87124e556ab96fddb2e7/0_0_370_370',
   windrushGreyscale: '8637bed472263161e35de986b463ed0c3675987d/0_0_830_830',
   zuck: 'e6142101bc909caee866be05ced677c54e9d3b4e/0_0_374_374',
-  digitalSubscriptionHeaderDesktop: '01f9a081d0f78cb057ca585725f2742bed5a98fb/0_0_4045_1945',
+  digitalSubscriptionHeaderDesktop: 'f9665e14b5927ee8ed94cc92204831b4f792c6dc/1407_0_7856_4260',
   digitalSubscriptionHeaderDesktopAU: 'f46b1e2c498ac4f1ebec1b2620b6e80583e4348f/0_0_4045_1945',
   digitalSubscriptionHeaderTablet: '4d588918cae445d7ded1e68960286fd91217434b/0_0_2035_1660',
   digitalSubscriptionHeaderTabletAU: 'dbe3974508706a41e710f198b1da02f44e6141a1/0_0_2035_1660',
@@ -58,6 +58,8 @@ export const imageCatalogue: {
   paperDeliveryFeature: 'c0f1558455e0f5a9df19280e2ea17779db945a33/0_0_920_820',
   paperVoucherFeature: '33ce22d8c3b65e830b91ab089f5c0670cbd6a7d9/0_0_920_820',
   UsCampaignLanding: '56fbd07b8e3b7090853dce5aa47c7153bd5c6e05/0_0_1500_1454',
+  showcase: '0cc7b8c019bc0585ca9d0f079961c0961402b56c/0_0_5400_2692',
+  showcaseSubscribe: '2abea0fc492779a0f790994b9525632a0bd91ee6/0_0_2664_1288',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
