@@ -160,17 +160,20 @@ function updateAmount(amount: number, paymentRequest: Object) {
 
 
 // ---- Component ----- //
-function paymentRequestButton(props: PropTypes) {
+function PaymentRequestButton(props: PropTypes) {
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
   // until the async canMakePayment() function has been called on the paymentRequest object.
   if (!props.paymentRequest) {
     initialisePaymentRequest({ ...props });
     return null;
   }
+  if (!props.canMakeApplePayPayment) {
+    return null;
+  }
+
 
   updateAmount(props.amount, props.paymentRequest);
-
-  return (props.canMakeApplePayPayment === true) ? (
+  return (
     <div className="stripe-payment-request-button__container">
       <PaymentRequestButtonElement
         paymentRequest={props.paymentRequest}
@@ -182,7 +185,7 @@ function paymentRequestButton(props: PropTypes) {
         or
       </div>
     </div>
-  ) : null;
+  );
 }
 
 // ----- Auxiliary components ----- //
@@ -190,6 +193,6 @@ function paymentRequestButton(props: PropTypes) {
 // ----- Default props----- //
 
 const StripePaymentRequestButton =
-  injectStripe(connect(mapStateToProps, mapDispatchToProps)(paymentRequestButton));
+  injectStripe(connect(mapStateToProps, mapDispatchToProps)(PaymentRequestButton));
 
 export default StripePaymentRequestButton;
