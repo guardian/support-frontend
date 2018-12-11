@@ -21,5 +21,9 @@ object AnalyticsServiceError {
       s"HTTP request failed: ${failedResponse.code}"
     }
   }
+
+  case class KinesisError(e: Throwable) extends AnalyticsServiceError {
+    override def getMessage: String = s"Kinesis put error: $e"
+  }
 }
 

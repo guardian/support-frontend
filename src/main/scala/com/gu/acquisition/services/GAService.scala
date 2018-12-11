@@ -6,7 +6,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.acquisition.model._
 import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
-import com.gu.acquisition.services.AnalyticsService.RequestData
+import com.gu.acquisition.services.HttpAnalyticsService.RequestData
 import com.gu.acquisition.services.GAService.clientIdPattern
 import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
 import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
@@ -22,7 +22,7 @@ private[services] object GAService {
 }
 
 private[services] class GAService(implicit client: OkHttpClient)
-  extends AnalyticsService with LazyLogging {
+  extends HttpAnalyticsService with LazyLogging {
 
   private val gaPropertyId: String = "UA-51507017-5"
   private val endpoint: HttpUrl = HttpUrl.parse("https://www.google-analytics.com")

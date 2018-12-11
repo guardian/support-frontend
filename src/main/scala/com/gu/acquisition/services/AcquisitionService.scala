@@ -14,6 +14,6 @@ trait AcquisitionService {
 
 object AcquisitionService {
 
-  def prod(implicit client: OkHttpClient): DefaultAcquisitionService =
-    new DefaultAcquisitionService()
+  def prod(config: DefaultAcquisitionServiceConfig)(implicit client: OkHttpClient): DefaultAcquisitionService =
+    new DefaultAcquisitionService(config)
 }

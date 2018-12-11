@@ -1,5 +1,6 @@
 package com.gu.acquisition.services
 
+import com.amazonaws.auth.{AWSCredentialsProviderChain, EnvironmentVariableCredentialsProvider}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
 import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
@@ -11,7 +12,10 @@ import org.scalatest.{AsyncWordSpecLike, Matchers}
 class DefaultAcquisitionServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
   implicit val client: OkHttpClient = new OkHttpClient()
 
-  val service = AcquisitionService.prod
+  private val service = AcquisitionService.prod(DefaultAcquisitionServiceConfig(
+    credentialsProvider = new AWSCredentialsProviderChain(new EnvironmentVariableCredentialsProvider()),
+    kinesisStreamName = "stream"
+  ))
 
   val submission = AcquisitionSubmission(
     OphanIds(None, None, Some("None")),
@@ -38,7 +42,7 @@ class DefaultAcquisitionServiceSpec extends AsyncWordSpecLike with Matchers with
       val e1: Either[AnalyticsServiceError, AcquisitionSubmission] = Left(BuildError("blah1"))
       val e2: Either[AnalyticsServiceError, AcquisitionSubmission] = Left(BuildError("blah2"))
 
-      val merged = service.mergeEithers(e1, e2)
+      val merged = service.mergeEithers(List(e1, e2))
       merged.isLeft shouldBe true
       merged.left.get.size shouldBe 2
 
@@ -48,7 +52,7 @@ class DefaultAcquisitionServiceSpec extends AsyncWordSpecLike with Matchers with
       val e1: Either[AnalyticsServiceError, AcquisitionSubmission] = Left(BuildError("blah1"))
       val e2: Either[AnalyticsServiceError, AcquisitionSubmission] = Right(submission)
 
-      val merged = service.mergeEithers(e1, e2)
+      val merged = service.mergeEithers(List(e1, e2))
       merged.isLeft shouldBe true
       merged.left.get.size shouldBe 1
 
@@ -58,7 +62,7 @@ class DefaultAcquisitionServiceSpec extends AsyncWordSpecLike with Matchers with
       val e1: Either[AnalyticsServiceError, AcquisitionSubmission] = Right(submission)
       val e2: Either[AnalyticsServiceError, AcquisitionSubmission] = Right(submission)
 
-      val merged = service.mergeEithers(e1, e2)
+      val merged = service.mergeEithers(List(e1, e2))
       merged.isRight shouldBe true
     }
   }

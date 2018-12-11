@@ -15,6 +15,8 @@ val commonSettings: Seq[SettingsDefinition] = Seq(
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "org.scalactic" %% "scalactic" % "3.0.1",
     "org.typelevel" %% "cats-core" % "1.0.1",
+    "com.amazonaws" % "aws-java-sdk-kinesis" % "1.11.465",
+    "com.gu" %% "thrift-serializer" % "3.0.0",
     compilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
   ),
 

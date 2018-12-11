@@ -4,7 +4,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.acquisition.model.errors.AnalyticsServiceError.BuildError
 import com.gu.acquisition.model.{AcquisitionSubmission, SyntheticPageviewId}
-import com.gu.acquisition.services.AnalyticsService.RequestData
+import com.gu.acquisition.services.HttpAnalyticsService.RequestData
 import okhttp3._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -14,7 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * Uses OkHttp for executing the Http request.
   */
 private [acquisition] class OphanService(endpointOverride: Option[HttpUrl] = None)(implicit client: OkHttpClient)
-  extends AnalyticsService {
+  extends HttpAnalyticsService {
 
   private val endpoint: HttpUrl = endpointOverride getOrElse HttpUrl.parse("https://ophan.theguardian.com")
 
