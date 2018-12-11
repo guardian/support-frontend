@@ -96,7 +96,7 @@ function initialisePaymentRequest(props: {
     country: props.country,
     currency: props.currency,
     total: {
-      label: 'Demo total',
+      label: 'Contribution amount',
       amount: props.amount,
     },
     requestPayerEmail: true,
@@ -172,8 +172,8 @@ function paymentRequestButton(props: {
       className="PaymentRequestButton"
       style={{
         paymentRequestButton: {
-          theme: 'light',
-            height: '64px',
+          theme: 'dark',
+          height: '42px',
         },
       }}
       onClick={

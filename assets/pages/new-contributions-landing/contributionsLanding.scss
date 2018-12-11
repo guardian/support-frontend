@@ -1162,6 +1162,11 @@ form {
 
 /* Stripe Payment Request Button */
 
+.stripe-payment-request-button {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
 .stripe-payment-request-button--hidden {
   display: none;
 }

@@ -351,6 +351,8 @@ export type CaState = $Keys<typeof caStates>;
 export type IsoCountry = $Keys<typeof countries>;
 export type StateProvince = UsState | CaState;
 
+// Annoyingly, this isn't Stripe's documentation, but if you try and submit
+// a country that isn't on this list, you get an error
 const stripePaymentRequestAllowedCountries = [
   'AT',
   'AU',
