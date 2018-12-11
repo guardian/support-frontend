@@ -195,7 +195,8 @@ function buildSubsUrls(
 
   const countryId = countryGroups[countryGroupId].supportInternationalisationId;
 
-  const paper = `${subsUrl}/p/${promoCodes.Paper}?${buildParamString('Paper', intCmp, referrerAcquisitionData)}`;
+  // paper only applies to uk, so hardcode the country
+  const paper = `/uk/subscribe/paper?${buildParamString('Paper', intCmp, referrerAcquisitionData)}`;
   const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', intCmp, referrerAcquisitionData)}`;
   const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', intCmp, null)}`;
   const weekly = `/${countryId}/subscribe/weekly?${buildParamString('GuardianWeekly', intCmp, referrerAcquisitionData)}`;
