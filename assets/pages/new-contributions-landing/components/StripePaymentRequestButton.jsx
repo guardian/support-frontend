@@ -66,7 +66,10 @@ function updateUserEmail(data: Object, setEmail: string => void) {
   if (email && isValidEmail(email)) {
     setEmail(email);
   } else {
-    logException(`Failed to set email for stripe payment request user with data: ${data}`);
+    const msg = email
+      ? `Failed to set email for stripe payment request user with email: ${email}`
+      : 'Failed to set email: no email in data object';
+    logException(msg);
   }
 }
 
@@ -105,9 +108,12 @@ function initialisePaymentRequest(props: {
     props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId }, onComplete(complete));
   });
 
+  // The returned value from canMakePayment will either be:
+  // . null - browser has no compatible payment method)
+  // . {applePay: true} - applePay is available
+  // . {applePay: false} - GooglePay or PaymentRequestApi available
   paymentRequest.canMakePayment().then((result) => {
-    // To restrict to just Apple Pay, limit it to result && result.applePay === true
-    if (result) {
+    if (result && result.applePay === true) {
       props.setCanMakeApplePayPayment(true);
     }
   });
@@ -134,7 +140,8 @@ function paymentRequestButton(props: {
 }) {
   const amount = getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType);
 
-  // If we haven't initialised the payment request, initialise it and return null
+  // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
+  // until the async canMakePayment() function has been called on the paymentRequest object.
   if (!props.paymentRequest) {
     initialisePaymentRequest({
       stripe: props.stripe,
@@ -164,8 +171,6 @@ function paymentRequestButton(props: {
       paymentRequest={props.paymentRequest}
       className="PaymentRequestButton"
       style={{
-        // For more details on how to style the Payment Request Button, see:
-        // https://stripe.com/docs/elements/payment-request-button#styling-the-element
         paymentRequestButton: {
           theme: 'light',
             height: '64px',
