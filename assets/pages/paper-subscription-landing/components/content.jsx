@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { Component } from 'react';
+import React, { Component, type Element } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -14,6 +14,7 @@ import ProductPageTextBlockList from 'components/productPage/productPageTextBloc
 import SvgInfo from 'components/svgs/information';
 import GridImage from 'components/gridImage/gridImage';
 import { paperSubsUrl } from 'helpers/routes';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
@@ -28,12 +29,12 @@ type PropTypes = {|
 |};
 
 // ----- Auxiliary Components ----- //
-const ContentHelpBlock = () => (
+const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>, telephoneLink: Element<string>}) => (
   <ProductPageContentBlock type="feature" >
     <ProductPageTextBlock title="FAQ and help" icon={<SvgInfo />}>
       <p className={sansParagraphClassName}>
-      If you’ve got any more questions, you might well find the answers in the <a href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions">Subscriptions FAQs</a>.
-       If you can’t find the answer to your question here, please call our customer services team on <a href="tel:+4403303336767">0330 333 6767</a>.
+        If you’ve got any more questions, you might well find the answers in the {faqLink}.
+       If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
       </p>
     </ProductPageTextBlock>
   </ProductPageContentBlock>
@@ -121,6 +122,10 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
   );
 };
 
+function trackedLink(href: string, text: string, onClick: Function) {
+  return <a href={href} onClick={onClick}>{text}</a>;
+}
+
 
 // ----- Render ----- //
 
@@ -144,7 +149,18 @@ class Content extends Component<PropTypes> {
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentVoucherFaqBlock />
         <ContentForm title="Now pick your perfect voucher subscription package" text="When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter" />
-        <ContentHelpBlock />
+        <ContentHelpBlock
+          faqLink={trackedLink(
+            'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions',
+            'Subscriptions FAQs',
+            sendClickedEvent('paper_subscription_collection_page-subscription_faq_link'),
+          )}
+          telephoneLink={trackedLink(
+            'tel:+4403303336767',
+            '0330 333 6767',
+            sendClickedEvent('paper_subscription_collection_page-telephone_link'),
+          )}
+        />
       </div>
     );
 
@@ -152,7 +168,18 @@ class Content extends Component<PropTypes> {
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentDeliveryFaqBlock setTabAction={setTabAction} />
         <ContentForm title="Now pick your perfect delivery subscription package" />
-        <ContentHelpBlock />
+        <ContentHelpBlock
+          faqLink={trackedLink(
+            'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions',
+            'Subscriptions FAQs',
+            sendClickedEvent('paper_subscription_delivery_page-subscription_faq_link'),
+          )}
+          telephoneLink={trackedLink(
+            'tel:+4403303336767', // yes, we're using a phone number as a link
+            '0330 333 6767',
+            sendClickedEvent('paper_subscription_delivery_page-telephone_link'),
+          )}
+        />
       </div>
     );
 

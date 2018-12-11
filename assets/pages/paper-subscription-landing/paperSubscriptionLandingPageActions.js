@@ -7,7 +7,7 @@ import { ProductPagePlanFormActionsFor } from 'components/productPage/productPag
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { paperSubsUrl } from 'helpers/routes';
 import { getPaperCheckout } from 'helpers/externalLinks';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { type State } from './paperSubscriptionLandingPageReducer';
 
@@ -36,7 +36,9 @@ const redirectToCheckout = () =>
     ) : null;
 
     if (location) {
-      sendTrackingEventsOnClick('main_cta_click', 'Paper', null)();
+      // this is annoying because we *know* state.page.plan.plan exists --------------v
+      const clickContext = 'paperSubscriptionLandingPage-'.concat(state.page.plan.plan ? state.page.plan.plan : '');
+      sendClickedEvent(clickContext.concat('-subscribe_now_cta'))();
       window.location.href = location;
     }
   };
