@@ -96,7 +96,7 @@ function initialisePaymentRequest(props: {
     country: props.country,
     currency: props.currency,
     total: {
-      label: 'Contribution amount',
+      label: 'The Guardian',
       amount: props.amount,
     },
     requestPayerEmail: true,
@@ -160,39 +160,44 @@ function paymentRequestButton(props: {
   if (!Number.isNaN(amount) && props.paymentRequest) {
     props.paymentRequest.update({
       total: {
-        label: 'Amount to pay',
+        label: 'The Guardian',
         amount: amount * 100,
       },
     });
   }
 
   return (props.canMakeApplePayPayment === true) ? (
-    <PaymentRequestButtonElement
-      paymentRequest={props.paymentRequest}
-      className="PaymentRequestButton"
-      style={{
-        paymentRequestButton: {
-          theme: 'dark',
-          height: '42px',
-        },
-      }}
-      onClick={
-        (event) => {
-          event.preventDefault();
-          props.setStripePaymentRequestButtonClicked();
-          const amountIsValid =
-            checkAmountOrOtherAmount(
-              props.selectedAmounts,
-              props.otherAmounts,
-              props.contributionType,
-              props.countryGroupId,
-            );
-          if (props.paymentRequest && amountIsValid) {
-            props.paymentRequest.show();
+    <div className="stripe-payment-request-button__container">
+      <PaymentRequestButtonElement
+        paymentRequest={props.paymentRequest}
+        className="stripe-payment-request-button__button"
+        style={{
+          paymentRequestButton: {
+            theme: 'dark',
+            height: '42px',
+          },
+        }}
+        onClick={
+          (event) => {
+            event.preventDefault();
+            props.setStripePaymentRequestButtonClicked();
+            const amountIsValid =
+              checkAmountOrOtherAmount(
+                props.selectedAmounts,
+                props.otherAmounts,
+                props.contributionType,
+                props.countryGroupId,
+              );
+            if (props.paymentRequest && amountIsValid) {
+              props.paymentRequest.show();
+            }
           }
         }
-      }
-    />
+      />
+      <div className="stripe-payment-request-button__divider">
+        or
+      </div>
+    </div>
   ) : null;
 }
 
