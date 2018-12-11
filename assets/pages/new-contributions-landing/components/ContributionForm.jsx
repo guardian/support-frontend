@@ -46,7 +46,7 @@ import {
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
-import StripePaymentRequestButton from './StripePaymentRequestButton';
+import StripePaymentRequestButtonContainer from './StripePaymentRequestButtonContainer';
 
 
 // ----- Types ----- //
@@ -207,13 +207,15 @@ function ContributionForm(props: PropTypes) {
       <NewContributionAmount
         checkOtherAmount={checkAmount}
       />
-      <StripePaymentRequestButton
+      <StripePaymentRequestButtonContainer
         stripeCheckout={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
         currency={props.currency}
         contributionType={props.contributionType}
         isTestUser={props.isTestUser}
         country={props.country}
         applePayTestVariant={props.applePayTestVariant}
+        otherAmounts={props.otherAmounts}
+        selectedAmounts={props.selectedAmounts}
       />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />

@@ -5,19 +5,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { PaymentRequestButtonElement, StripeProvider, Elements, injectStripe } from 'react-stripe-elements';
+import { PaymentRequestButtonElement, injectStripe } from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { getStripeKey } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { getAmount } from 'helpers/contributions';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import { type PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
-import type { ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { hiddenIf } from 'helpers/utilities';
 import { logException } from 'helpers/logger';
 import type { State } from '../contributionsLandingReducer';
 import {
@@ -33,13 +28,24 @@ import {
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
+  stripe: Object,
+  paymentRequest: Object | null,
+  canMakeApplePayPayment: boolean,
   country: IsoCountry,
   currency: IsoCurrency,
+  setCanMakeApplePayPayment: (boolean) => void,
+  setPaymentRequest: (Object) => void,
+  onPaymentAuthorised: (PaymentAuthorisation, Function) => void,
+  setStripePaymentRequestButtonClicked: () => void,
   isTestUser: boolean,
-  stripeCheckout: Object | null,
+  updateEmail: string => void,
+  selectedAmounts: SelectedAmounts,
+  otherAmounts: OtherAmounts,
   contributionType: ContributionType,
-  applePayTestVariant: ApplePayTestVariant,
+  countryGroupId: CountryGroupId,
+  amount: number,
 |};
+
 
 const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
@@ -47,6 +53,10 @@ const mapStateToProps = (state: State) => ({
   canMakeApplePayPayment: state.page.form.stripePaymentRequestButtonData.canMakeApplePayPayment,
   paymentRequest: state.page.form.stripePaymentRequestButtonData.paymentRequest,
   countryGroupId: state.common.internationalisation.countryGroupId,
+  country: state.common.internationalisation.countryId,
+  currency: state.common.internationalisation.currencyId.toLowerCase(),
+  isTestUser: state.page.user.isTestUser || false,
+  contributionType: state.page.form.contributionType,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -61,15 +71,19 @@ const mapDispatchToProps = (dispatch: Function) => ({
 });
 
 
+// ----- Functions -----//
+
+
 function updateUserEmail(data: Object, setEmail: string => void) {
   const email = data.payerEmail;
-  if (email && isValidEmail(email)) {
-    setEmail(email);
+  if (email) {
+    if (isValidEmail(email)) {
+      setEmail(email);
+    } else {
+      logException(`Failed to set email for stripe payment request user with email: ${email}`);
+    }
   } else {
-    const msg = email
-      ? `Failed to set email for stripe payment request user with email: ${email}`
-      : 'Failed to set email: no email in data object';
-    logException(msg);
+    logException('Failed to set email: no email in data object');
   }
 }
 
@@ -81,17 +95,22 @@ const onComplete = (complete: Function) => (res: PaymentResult) => {
   }
 };
 
-function initialisePaymentRequest(props: {
-  stripe: Object,
-  country: string,
-  currency: string,
-  amount: number,
-  setCanMakeApplePayPayment: (boolean) => void,
-  setPaymentRequest: Object => void,
-  onPaymentAuthorised: (PaymentAuthorisation, Function) => void,
-  updateEmail: (string) => void,
-  isTestUser: boolean,
-}) {
+function onClick(event, props: PropTypes) {
+  event.preventDefault();
+  props.setStripePaymentRequestButtonClicked();
+  const amountIsValid =
+    checkAmountOrOtherAmount(
+      props.selectedAmounts,
+      props.otherAmounts,
+      props.contributionType,
+      props.countryGroupId,
+    );
+  if (props.paymentRequest && amountIsValid) {
+    props.paymentRequest.show();
+  }
+}
+
+function initialisePaymentRequest(props: PropTypes) {
   const paymentRequest = props.stripe.paymentRequest({
     country: props.country,
     currency: props.currency,
@@ -120,48 +139,29 @@ function initialisePaymentRequest(props: {
   props.setPaymentRequest(paymentRequest);
 }
 
-// ---- Auxiliary functions ----- //
-function paymentRequestButton(props: {
-  stripe: Object,
-  paymentRequest: Object | null,
-  canMakeApplePayPayment: boolean,
-  country: IsoCountry,
-  currency: IsoCurrency,
-  setCanMakeApplePayPayment: (boolean) => void,
-  setPaymentRequest: (Object) => void,
-  onPaymentAuthorised: PaymentAuthorisation => void,
-  setStripePaymentRequestButtonClicked: () => void,
-  isTestUser: boolean,
-  updateEmail: string => void,
-  selectedAmounts: SelectedAmounts,
-  otherAmounts: OtherAmounts,
-  contributionType: ContributionType,
-  countryGroupId: CountryGroupId,
-}) {
-  const amount = getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType);
+const paymentButtonStyle = {
+  paymentRequestButton: {
+    theme: 'dark',
+    height: '42px',
+  },
+};
 
+// ---- Component ----- //
+
+function paymentRequestButton(props: PropTypes) {
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
   // until the async canMakePayment() function has been called on the paymentRequest object.
   if (!props.paymentRequest) {
-    initialisePaymentRequest({
-      stripe: props.stripe,
-      country: props.country,
-      currency: props.currency,
-      amount,
-      setCanMakeApplePayPayment: props.setCanMakeApplePayPayment,
-      setPaymentRequest: props.setPaymentRequest,
-      onPaymentAuthorised: props.onPaymentAuthorised,
-      isTestUser: props.isTestUser,
-      updateEmail: props.updateEmail,
-    });
+    initialisePaymentRequest({ ...props });
     return null;
   }
 
-  if (!Number.isNaN(amount) && props.paymentRequest) {
+  // When the other tab is clicked, the value of amount is NaN
+  if (!Number.isNaN(props.amount) && props.paymentRequest) {
     props.paymentRequest.update({
       total: {
         label: 'The Guardian',
-        amount: amount * 100,
+        amount: props.amount * 100,
       },
     });
   }
@@ -171,28 +171,8 @@ function paymentRequestButton(props: {
       <PaymentRequestButtonElement
         paymentRequest={props.paymentRequest}
         className="stripe-payment-request-button__button"
-        style={{
-          paymentRequestButton: {
-            theme: 'dark',
-            height: '42px',
-          },
-        }}
-        onClick={
-          (event) => {
-            event.preventDefault();
-            props.setStripePaymentRequestButtonClicked();
-            const amountIsValid =
-              checkAmountOrOtherAmount(
-                props.selectedAmounts,
-                props.otherAmounts,
-                props.contributionType,
-                props.countryGroupId,
-              );
-            if (props.paymentRequest && amountIsValid) {
-              props.paymentRequest.show();
-            }
-          }
-        }
+        style={paymentButtonStyle}
+        onClick={(event) => { onClick(event, props); }}
       />
       <div className="stripe-payment-request-button__divider">
         or
@@ -201,42 +181,11 @@ function paymentRequestButton(props: {
   ) : null;
 }
 
-
-// ----- Component ----- //
-
-function StripePaymentRequestButton(props: PropTypes) {
-
-  const showApplePay = props.stripeCheckout
-    && isInStripePaymentRequestAllowedCountries(props.country)
-    && props.currency !== 'AUD'
-    && props.applePayTestVariant === 'applePay';
-
-  // TODO: set up for AU
-  if (showApplePay) {
-    const key = getStripeKey('ONE_OFF', props.currency, props.isTestUser);
-
-    return (
-      <div className={hiddenIf(props.contributionType !== 'ONE_OFF', 'stripe-payment-request-button')}>
-        <StripeProvider apiKey={key}>
-          <Elements>
-            <PaymentRequestButton
-              country={props.country}
-              currency={props.currency.toLowerCase()}
-              isTestUser={props.isTestUser}
-              contributionType={props.contributionType}
-            />
-          </Elements>
-        </StripeProvider>
-      </div>
-    );
-  }
-  return null;
-}
-
 // ----- Auxiliary components ----- //
 
-const PaymentRequestButton = injectStripe(connect(mapStateToProps, mapDispatchToProps)(paymentRequestButton));
-
 // ----- Default props----- //
+
+const StripePaymentRequestButton =
+  injectStripe(connect(mapStateToProps, mapDispatchToProps)(paymentRequestButton));
 
 export default StripePaymentRequestButton;
