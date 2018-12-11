@@ -83,7 +83,7 @@ const ContentVoucherFaqBlock = () => (
 const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => {
   const linkToVouchers = (
     <a
-      href={paperSubsUrl('collection')}
+      href={paperSubsUrl(false)}
       onClick={(ev) => {
         ev.preventDefault();
         setTabAction('collection');

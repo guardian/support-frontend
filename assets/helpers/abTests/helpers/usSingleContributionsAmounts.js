@@ -1,4 +1,5 @@
 // @flow
+
 import type { Amount } from 'helpers/contributions';
 
 /* eslint-disable quote-props */

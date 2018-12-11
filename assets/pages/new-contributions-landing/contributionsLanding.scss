@@ -188,6 +188,88 @@ footer[role="contentinfo"] a {
   padding-top: $gu-v-spacing;
 }
 
+/*= US TICKER */
+
+$progess-bar-height: 10px;
+
+.contributions-landing-ticker {
+  padding-bottom: $gu-h-spacing;
+}
+
+.contributions-landing-ticker__border {
+  border-top: 1px solid gu-colour(garnett-neutral-4);
+  margin: 0 -10px;
+}
+
+.contributions-landing-ticker--hidden {
+  visibility: hidden;
+  .contributions-landing-ticker__border {
+    visibility: visible;
+  }
+}
+
+.contributions-landing-ticker {
+  @include mq($until: tablet) {
+    display: none;
+  }
+
+  display: flex;
+  flex-direction: column;
+}
+
+.contributions-landing-ticker__values {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.contributions-landing-ticker__goal, .contributions-landing-ticker__so-far {
+  display: flex;
+  flex-direction: column;
+}
+
+.contributions-landing-ticker__so-far .contributions-landing-ticker__count {
+  font-family: $gu-titlepiece;
+  font-size: 32px;
+  font-weight: 800;
+  color: gu-colour(opinion-garnett-media-main-1);
+}
+
+.contributions-landing-ticker__goal {
+  align-items: flex-end;
+
+  .contributions-landing-ticker__count {
+    font-weight: bold;
+  }
+}
+
+.contributions-landing-ticker__label {
+  font-style: italic;
+}
+
+.contributions-landing-ticker__progress-bar {
+  position: relative;
+}
+
+.contributions-landing-ticker__progress {
+  width: calc(100%);
+  height: $progess-bar-height;
+  overflow: hidden;
+  background-color: #dcdcdc;
+  position: absolute;
+}
+
+.contributions-landing-ticker__filled-progress {
+  background-color: gu-colour(opinion-garnett-media-main-1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateX(-100%);
+  transition: transform 3s cubic-bezier(.25, .55, .2, .85);
+}
+
 /*= CONTENT */
 .gu-content__content {
   background: gu-colour(garnett-neutral-5);
@@ -197,7 +279,7 @@ footer[role="contentinfo"] a {
 
 /*= TYPOGRAPHY */
 body {
-  color: gu-colour(media-garnett-main-1);
+  color: gu-colour(garnett-neutral-1);
   font: normal 16px/1.5 $gu-text-egyptian-web;
 }
 
@@ -342,7 +424,7 @@ header[role="banner"] {
     bottom: 0;
     height: 580px;
     left: 50%;
-    position: absolute;
+    position: fixed;
     transform: translate(-50%,0);
     width: 1400px;
   }
@@ -1069,6 +1151,11 @@ form {
     display: inline-block;
     margin-bottom: $gu-v-spacing * 3;
     margin-top: $gu-v-spacing;
+
+    .button--survey {
+      background-color: gu-colour(garnett-neutral-1);
+      color: white;
+    }
   }
 
   .component-cta-link__text {
@@ -1135,5 +1222,28 @@ form {
     .form__radio-group-list {
       padding-top: 0;
     }
+  }
+}
+
+.us-campaign__background {
+  display: none;
+  position: absolute;
+  z-index: -1;
+
+  @include mq($from: tablet) {
+    display: block;
+    transform: translate(200px, -135px);
+  }
+
+  @include mq($from: desktop) {
+    transform: translate(200px, -135px);
+  }
+
+  @include mq($from: leftCol) {
+    transform: translate(215px, -225px);
+  }
+
+  @include mq($from: wide) {
+    transform: translate(215px, -300px);
   }
 }

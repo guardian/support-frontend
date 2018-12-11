@@ -5,7 +5,7 @@
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { isUsCampaignTest, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -20,6 +20,7 @@ import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions'
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
+import { ContributionUsTicker } from './ContributionUsTicker';
 import { setPayPalHasLoaded } from '../contributionsLandingActions';
 
 import {
@@ -51,6 +52,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  usDesktopEOYCampaignVariant: string,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -67,6 +69,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
+  usDesktopEOYCampaignVariant: state.common.abParticipations.usDesktopEOYCampaign,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -87,17 +90,21 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = isUsCampaignTest(props.referrerAcquisitionData) ?
+  const countryGroupDetails = (props.countryGroupId === 'UnitedStates' && props.usDesktopEOYCampaignVariant !== 'notintest') ?
     usCampaignDetails :
     countryGroupSpecificDetails[props.countryGroupId];
 
   const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
+
+  const isInTickerVariant: boolean = ['copyAndTicker', 'copyAndTickerAndBackgroundImage'].includes(props.usDesktopEOYCampaignVariant);
+  const displayTicker = (props.countryGroupId === 'UnitedStates' && isInTickerVariant);
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content">
         <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
+        { displayTicker ? <ContributionUsTicker /> : null }
         { countryGroupDetails.contributeCopy ?
           <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
         }
