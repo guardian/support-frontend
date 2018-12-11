@@ -279,7 +279,7 @@ $progess-bar-height: 10px;
 
 /*= TYPOGRAPHY */
 body {
-  color: gu-colour(media-garnett-main-1);
+  color: gu-colour(garnett-neutral-1);
   font: normal 16px/1.5 $gu-text-egyptian-web;
 }
 
@@ -1151,6 +1151,11 @@ form {
     display: inline-block;
     margin-bottom: $gu-v-spacing * 3;
     margin-top: $gu-v-spacing;
+
+    .button--survey {
+      background-color: gu-colour(garnett-neutral-1);
+      color: white;
+    }
   }
 
   .component-cta-link__text {
