@@ -2,6 +2,7 @@
 
 .component-product-page-info-chip {
   @include gu-fontset-body-sans;
+  font-style: italic;
   .svg-information {
     display: inline-block;
     vertical-align: text-bottom;
