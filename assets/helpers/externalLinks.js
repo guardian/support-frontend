@@ -322,7 +322,7 @@ function getPaperCheckout(
   optimizeExperiments: OptimizeExperiments,
 ) {
   const urls = {
-    collectionEveryday: 'delivery-everyday',
+    collectionEveryday: 'voucher-everyday',
     collectionSixday: 'voucher-sixday',
     collectionWeekend: 'voucher-weekend',
     collectionSunday: 'voucher-sunday',
