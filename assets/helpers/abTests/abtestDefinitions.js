@@ -1,6 +1,5 @@
 // @flow
 import { isFromEpicOrBanner } from 'helpers/referrerComponent';
-import * as cookie from 'helpers/cookie';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
