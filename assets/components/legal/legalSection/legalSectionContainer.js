@@ -10,7 +10,7 @@ import LegalSection from './legalSection';
 
 const mapStateToProps = state => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
-  contributionType: state.page.form.contributionType,
+  contributionType: state.page.form ? state.page.form.contributionType : '',
 });
 
 // ----- Exports ----- //
