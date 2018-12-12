@@ -163,10 +163,10 @@ class Subscriptions(
     digitalSubscription(title, id, js, css, Some(csrf), idUser)
   }
 
-  def displayForm(countryCode: String, displayCheckout: String, isCsrf: Boolean = false): Action[AnyContent] = {
+  def displayForm(countryCode: String, displayCheckout: Boolean, isCsrf: Boolean = false): Action[AnyContent] = {
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
       implicit val settings: Settings = settingsProvider.settings()
-      if (displayCheckout == "true") {
+      if (displayCheckout) {
         identityService.getUser(request.user).fold(
           error => {
             SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
