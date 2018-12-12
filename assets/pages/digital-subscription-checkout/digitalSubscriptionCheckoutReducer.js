@@ -6,11 +6,9 @@ import { compose, combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type DigitalBillingPeriod } from 'helpers/subscriptions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import csrf from 'helpers/csrf/csrfReducer';
-import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import {
   type IsoCountry,
   fromString,
@@ -29,6 +27,8 @@ import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
+
+import { type User } from './helpers/user';
 
 
 // ----- Types ----- //
@@ -51,12 +51,12 @@ export type FormField = $Keys<FormFields>;
 type CheckoutState = {|
   stage: Stage,
   ...FormFields,
+  email: string,
   errors: FormError<FormField>[],
 |};
 
 export type State = ReduxState<{|
   checkout: CheckoutState,
-  user: UserState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
 |}>;
@@ -85,6 +85,10 @@ function getFormFields(state: State): FormFields {
     paymentFrequency: state.page.checkout.paymentFrequency,
     paymentMethod: state.page.checkout.paymentMethod,
   };
+}
+
+function getEmail(state: State): string {
+  return state.page.checkout.email;
 }
 
 
@@ -137,60 +141,60 @@ export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
-const initialState = {
-  stage: 'checkout',
-  firstName: '',
-  lastName: '',
-  country: null,
-  stateProvince: null,
-  telephone: '',
-  paymentFrequency: 'month',
-  paymentMethod: 'directDebit',
-  errors: [],
-};
+function initReducer(user: User) {
+  const initialState = {
+    stage: 'checkout',
+    email: user.email || '',
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
+    country: null,
+    stateProvince: null,
+    telephone: '',
+    paymentFrequency: 'month',
+    paymentMethod: 'directDebit',
+    errors: [],
+  };
 
-function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
+  function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
 
-  switch (action.type) {
+    switch (action.type) {
 
-    case 'SET_STAGE':
-      return { ...state, stage: action.stage };
+      case 'SET_STAGE':
+        return { ...state, stage: action.stage };
 
-    case 'SET_FIRST_NAME':
-      return { ...state, firstName: action.firstName };
+      case 'SET_FIRST_NAME':
+        return { ...state, firstName: action.firstName };
 
-    case 'SET_LAST_NAME':
-      return { ...state, lastName: action.lastName };
+      case 'SET_LAST_NAME':
+        return { ...state, lastName: action.lastName };
 
-    case 'SET_TELEPHONE':
-      return { ...state, telephone: action.telephone };
+      case 'SET_TELEPHONE':
+        return { ...state, telephone: action.telephone };
 
-    case 'SET_COUNTRY':
-      return { ...state, country: fromString(action.country), stateProvince: null };
+      case 'SET_COUNTRY':
+        return { ...state, country: fromString(action.country), stateProvince: null };
 
-    case 'SET_STATE_PROVINCE':
-      return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
+      case 'SET_STATE_PROVINCE':
+        return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
 
-    case 'SET_PAYMENT_FREQUENCY':
-      return { ...state, paymentFrequency: action.paymentFrequency };
+      case 'SET_PAYMENT_FREQUENCY':
+        return { ...state, paymentFrequency: action.paymentFrequency };
 
-    case 'SET_PAYMENT_METHOD':
-      return { ...state, paymentMethod: action.paymentMethod };
+      case 'SET_PAYMENT_METHOD':
+        return { ...state, paymentMethod: action.paymentMethod };
 
-    case 'SET_ERRORS':
-      return { ...state, errors: action.errors };
+      case 'SET_ERRORS':
+        return { ...state, errors: action.errors };
 
-    default:
-      return state;
+      default:
+        return state;
+
+    }
 
   }
 
-}
-
-function initReducer(countryGroupId: CountryGroupId = detect()) {
   return combineReducers({
     checkout: reducer,
-    user: createUserReducer(countryGroupId),
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
@@ -203,5 +207,6 @@ export {
   initReducer,
   setStage,
   getFormFields,
+  getEmail,
   formActionCreators,
 };

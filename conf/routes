@@ -73,7 +73,7 @@ GET  /:country/subscribe                           controllers.Subscriptions.leg
 
 GET  /subscribe/digital                            controllers.Subscriptions.digitalGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.Subscriptions.digital(country: String)
-GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscriptions.displayForm(country: String, displayCheckout: String ?= "false")
+GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscriptions.displayForm(country: String, displayCheckout: Boolean ?= false)
 
 GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)

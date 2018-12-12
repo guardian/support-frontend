@@ -9,11 +9,12 @@ import type { Dispatch } from 'redux';
 import type { Action } from 'helpers/user/userActions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
+import { getEmail } from '../digitalSubscriptionCheckoutReducer';
 
 
 const mapStateToProps = state => ({
   confirmOptIn: state.page.marketingConsent.confirmOptIn,
-  email: state.page.user.email,
+  email: getEmail(state),
   csrf: state.page.csrf,
 });
 
