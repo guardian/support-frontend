@@ -6,7 +6,8 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
-import countrySwitcherHeaderContainerWithTracking from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainerWithTracking';
+import countrySwitcherContainerWithTracking from 'components/countryGroupSwitcher/countryGroupSwitcherContainer';
+import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -50,7 +51,8 @@ const reactElementId: {
   International: 'weekly-landing-page-int',
 };
 
-const CountrySwitcherHeader = countrySwitcherHeaderContainerWithTracking(
+
+const CountrySelector = countrySwitcherContainerWithTracking(
   '/subscribe/weekly',
   [
     'GBPCountries',
@@ -69,7 +71,7 @@ const CountrySwitcherHeader = countrySwitcherHeaderContainerWithTracking(
 const content = (
   <Provider store={store}>
     <Page
-      header={<CountrySwitcherHeader />}
+      header={<SimpleHeader utility={<CountrySelector />} />}
       footer={<Footer />}
     >
       <ProductPagehero

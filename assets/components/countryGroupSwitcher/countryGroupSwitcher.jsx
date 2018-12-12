@@ -20,7 +20,7 @@ import type { SelectOption } from 'components/selectInput/selectInput';
 
 // ----- Props ----- //
 
-type PropTypes = {|
+export type PropTypes = {|
   countryGroupIds: CountryGroupId[],
   selectedCountryGroup: CountryGroupId,
   onCountryGroupSelect: CountryGroupId => void,
