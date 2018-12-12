@@ -8,32 +8,30 @@
   }
 }
 
+.component-simple-header__utility {
+  float: left;
+  height: 100%;
+}
+
 .component-simple-header__link {
   float: right;
   height: 100%;
 }
 
 .component-simple-header__content {
-  @extend .gu-content-margin;
-  padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
+  max-width: gu-span(12);
+  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) $gu-v-spacing;
   height: 68px;
 
-  @include mq($from: mobileMedium) {
-    height: 78px;
+  @include mq($from: leftCol) {
+    max-width: gu-span(13);
   }
 
-  @include mq($from: mobileLandscape) {
-    height: 85px;
-    padding-left: $gu-h-spacing;
-    padding-right: $gu-h-spacing;
-  }
-
-  @include mq($from: phablet) {
-    padding-left: 0;
-    padding-right: 0;
+  @include mq($from: wide) {
+    max-width: gu-span(14);
   }
 
   @include mq($from: tablet) {
-    height: 104px;
+    height: 86px;
   }
 }

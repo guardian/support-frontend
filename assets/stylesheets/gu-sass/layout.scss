@@ -25,26 +25,11 @@ $cta-height: 44px;
 // =============================================================================
 
 // Standard sizes and margins for the content and headers.
-.gu-content-margin {
+.gu-content-max-width {
+  width: gu-breakpoint(mobileLandscape);
   box-sizing: border-box;
-  padding: 0 ($gu-h-spacing / 2);
 
-  @include mq($from: mobileLandscape) {
-    width: gu-breakpoint(mobileLandscape);
-    margin: 0 auto;
-    padding: 0 $gu-h-spacing;
-  }
-
-  @include mq($from: phablet) {
-    width: gu-breakpoint(phablet);
-    margin: 0 auto;
-    padding: 0 auto;
-  }
-
-  @include mq($from: tablet) {
-    width: gu-breakpoint(tablet);
-    padding: 0 $gu-h-spacing;
-  }
+  width: 100%;
 
   @include mq($from: desktop) {
     width: gu-breakpoint(desktop);
@@ -57,6 +42,33 @@ $cta-height: 44px;
   @include mq($from: wide) {
     width: gu-breakpoint(wide);
   }
+}
+.gu-content-margin {
+  padding: 0 ($gu-h-spacing / 2);
+  @extend .gu-content-max-width;
+
+  @include mq($from: phablet) {
+    width: gu-breakpoint(phablet);
+  }
+
+  @include mq($from: tablet) {
+    width: gu-breakpoint(tablet);
+  }
+
+  @include mq($from: mobileLandscape) {
+    margin: 0 auto;
+    padding: 0 $gu-h-spacing;
+  }
+
+  @include mq($from: phablet) {
+    margin: 0 auto;
+    padding: 0 auto;
+  }
+
+  @include mq($from: tablet) {
+    padding: 0 $gu-h-spacing;
+  }
+
 }
 
 .gu-content {
