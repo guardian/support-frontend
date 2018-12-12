@@ -35,7 +35,7 @@ type PropTypes = {|
   currency: IsoCurrency,
   setCanMakeApplePayPayment: (boolean) => void,
   setPaymentRequest: (Object) => void,
-  onPaymentAuthorised: (PaymentAuthorisation, Function) => void,
+  onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   setStripePaymentRequestButtonClicked: () => void,
   isTestUser: boolean,
   updateEmail: string => void,
@@ -57,11 +57,12 @@ const mapStateToProps = (state: State) => ({
   currency: state.common.internationalisation.currencyId.toLowerCase(),
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
+
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
-    (token, complete) => { dispatch(onStripePaymentRequestApiPaymentAuthorised(token, complete)); },
+    token => dispatch(onStripePaymentRequestApiPaymentAuthorised(token)),
   setCanMakeApplePayPayment:
     (canMakeApplePayPayment) => { dispatch(setCanMakeApplePayPayment(canMakeApplePayPayment)); },
   setPaymentRequest:
@@ -87,6 +88,7 @@ function updateUserEmail(data: Object, setEmail: string => void) {
   }
 }
 
+// Calling the complete function will close the pop up payment window
 const onComplete = (complete: Function) => (res: PaymentResult) => {
   if (res.paymentStatus === 'success') {
     complete('success');
@@ -95,8 +97,24 @@ const onComplete = (complete: Function) => (res: PaymentResult) => {
   }
 };
 
+
+function updateAmount(amount: number, paymentRequest: Object | null) {
+  // When the other tab is clicked, the value of amount is NaN
+  if (!Number.isNaN(amount) && paymentRequest) {
+    paymentRequest.update({
+      total: {
+        label: 'The Guardian',
+        amount: amount * 100,
+      },
+    });
+  }
+}
+
+// We need to intercept the click ourselves because we need to check
+// that the user has entered a valid amount before we allow them to continue
 function onClick(event, props: PropTypes) {
   event.preventDefault();
+  updateAmount(props.amount, props.paymentRequest);
   props.setStripePaymentRequestButtonClicked();
   const amountIsValid =
     checkAmountOrOtherAmount(
@@ -109,6 +127,18 @@ function onClick(event, props: PropTypes) {
     props.paymentRequest.show();
   }
 }
+const weAreSupportingGooglePay = true;
+
+// The value of result will either be:
+// . null - browser has no compatible payment method)
+// . {applePay: true} - applePay is available
+// . {applePay: false} - GooglePay or PaymentRequestApi available
+const browserIsCompatible = (result: Object) => {
+  if (weAreSupportingGooglePay) {
+    return result !== null;
+  }
+  return result && result.applePay === true;
+};
 
 function initialisePaymentRequest(props: PropTypes) {
   const paymentRequest = props.stripe.paymentRequest({
@@ -124,15 +154,12 @@ function initialisePaymentRequest(props: PropTypes) {
     // We need to do this so that we can offer marketing permissions on the thank you page
     updateUserEmail(data, props.updateEmail);
     const tokenId = props.isTestUser ? 'tok_visa' : token.id;
-    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId }, onComplete(complete));
+    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId })
+      .then(onComplete(complete));
   });
 
-  // The returned value from canMakePayment will either be:
-  // . null - browser has no compatible payment method)
-  // . {applePay: true} - applePay is available
-  // . {applePay: false} - GooglePay or PaymentRequestApi available
   paymentRequest.canMakePayment().then((result) => {
-    if (result && result.applePay === true) {
+    if (browserIsCompatible(result)) {
       props.setCanMakeApplePayPayment(true);
     }
   });
@@ -146,33 +173,23 @@ const paymentButtonStyle = {
   },
 };
 
-function updateAmount(amount: number, paymentRequest: Object) {
-  // When the other tab is clicked, the value of amount is NaN
-  if (!Number.isNaN(amount) && paymentRequest) {
-    paymentRequest.update({
-      total: {
-        label: 'The Guardian',
-        amount: amount * 100,
-      },
-    });
-  }
-}
-
 
 // ---- Component ----- //
 function PaymentRequestButton(props: PropTypes) {
+
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
   // until the async canMakePayment() function has been called on the paymentRequest object.
   if (!props.paymentRequest) {
     initialisePaymentRequest({ ...props });
     return null;
   }
+
+  // We don't want to check this until we have initialised the payment request object, so the check has to come
+  // after the initialisation of the payment request object
   if (!props.canMakeApplePayPayment) {
     return null;
   }
 
-
-  updateAmount(props.amount, props.paymentRequest);
   return (
     <div className="stripe-payment-request-button__container">
       <PaymentRequestButtonElement

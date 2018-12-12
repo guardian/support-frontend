@@ -22,7 +22,7 @@ type PropTypes = {|
   country: IsoCountry,
   currency: IsoCurrency,
   isTestUser: boolean,
-  stripeCheckout: Object | null,
+  stripeCheckoutLibrary: Object | null,
   contributionType: ContributionType,
   applePayTestVariant: ApplePayTestVariant,
   selectedAmounts: SelectedAmounts,
@@ -33,10 +33,10 @@ type PropTypes = {|
 
 function StripePaymentRequestButtonContainer(props: PropTypes) {
 
-  const showApplePay = props.stripeCheckout
-    && isInStripePaymentRequestAllowedCountries(props.country)
+  const showApplePay = isInStripePaymentRequestAllowedCountries(props.country)
     && props.currency !== 'AUD'
-    && props.applePayTestVariant === 'applePay';
+    && props.applePayTestVariant === 'applePay'
+    && props.stripeCheckoutLibrary;
 
   // TODO: set up for AU
   if (showApplePay) {

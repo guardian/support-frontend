@@ -208,7 +208,7 @@ function ContributionForm(props: PropTypes) {
         checkOtherAmount={checkAmount}
       />
       <StripePaymentRequestButtonContainer
-        stripeCheckout={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
+        stripeCheckoutLibrary={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
         currency={props.currency}
         contributionType={props.contributionType}
         isTestUser={props.isTestUser}
