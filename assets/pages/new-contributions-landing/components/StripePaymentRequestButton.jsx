@@ -62,11 +62,12 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
-    token => dispatch(onStripePaymentRequestApiPaymentAuthorised(token)),
+    (paymentAuthorisation: PaymentAuthorisation) =>
+      dispatch(onStripePaymentRequestApiPaymentAuthorised(paymentAuthorisation)),
   setCanMakeStripePaymentRequestPayment:
-    (canMakePayment) => { dispatch(setCanMakeStripePaymentRequestPayment(canMakePayment)); },
+    (canMakePayment: boolean) => { dispatch(setCanMakeStripePaymentRequestPayment(canMakePayment)); },
   setStripePaymentRequestObject:
-    (paymentRequest) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
+    (paymentRequest: Object) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
   setStripePaymentRequestButtonClicked: () => { dispatch(setStripePaymentRequestButtonClicked()); },
 });
