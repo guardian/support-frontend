@@ -128,7 +128,9 @@ function onClick(event, props: PropTypes) {
     props.stripePaymentRequestObject.show();
   }
 }
-const weAreSupportingGooglePay = true;
+
+// Set this to true to enable Google Pay (good for development)
+const weAreSupportingGooglePay = false;
 
 // The value of result will either be:
 // . null - browser has no compatible payment method)
