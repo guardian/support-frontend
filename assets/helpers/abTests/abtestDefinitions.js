@@ -1,6 +1,5 @@
 // @flow
 import { isFromEpicOrBanner } from 'helpers/referrerComponent';
-import * as cookie from 'helpers/cookie';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
@@ -109,6 +108,5 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 7,
-    canRun: () => cookie.get('_test_username') !== null,
   },
 };
