@@ -78,4 +78,21 @@ export const tests: Tests = {
     independent: true,
     seed: 5,
   },
+
+  showOneOffNameFields: {
+    variants: [
+      'control',
+      'hidden',
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 6,
+  },
+
 };
