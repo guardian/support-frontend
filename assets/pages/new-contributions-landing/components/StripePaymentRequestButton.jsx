@@ -18,7 +18,7 @@ import type { State } from '../contributionsLandingReducer';
 import {
   setCanMakeApplePayPayment,
   setStripePaymentRequestButtonClicked,
-  setPaymentRequest,
+  setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
   updateEmail,
 } from '../contributionsLandingActions';
@@ -29,12 +29,12 @@ import {
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   stripe: Object,
-  paymentRequest: Object | null,
+  stripePaymentRequestObject: Object | null,
   canMakeApplePayPayment: boolean,
   country: IsoCountry,
   currency: IsoCurrency,
   setCanMakeApplePayPayment: (boolean) => void,
-  setPaymentRequest: (Object) => void,
+  setStripePaymentRequestObject: (Object) => void,
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   setStripePaymentRequestButtonClicked: () => void,
   isTestUser: boolean,
@@ -51,7 +51,7 @@ const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
   canMakeApplePayPayment: state.page.form.stripePaymentRequestButtonData.canMakeApplePayPayment,
-  paymentRequest: state.page.form.stripePaymentRequestButtonData.paymentRequest,
+  stripePaymentRequestObject: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestObject,
   countryGroupId: state.common.internationalisation.countryGroupId,
   country: state.common.internationalisation.countryId,
   currency: state.common.internationalisation.currencyId.toLowerCase(),
@@ -65,8 +65,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
     token => dispatch(onStripePaymentRequestApiPaymentAuthorised(token)),
   setCanMakeApplePayPayment:
     (canMakeApplePayPayment) => { dispatch(setCanMakeApplePayPayment(canMakeApplePayPayment)); },
-  setPaymentRequest:
-    (paymentRequest) => { dispatch(setPaymentRequest(paymentRequest)); },
+  setStripePaymentRequestObject:
+    (paymentRequest) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
   setStripePaymentRequestButtonClicked: () => { dispatch(setStripePaymentRequestButtonClicked()); },
 });
@@ -114,7 +114,7 @@ function updateAmount(amount: number, paymentRequest: Object | null) {
 // that the user has entered a valid amount before we allow them to continue
 function onClick(event, props: PropTypes) {
   event.preventDefault();
-  updateAmount(props.amount, props.paymentRequest);
+  updateAmount(props.amount, props.stripePaymentRequestObject);
   props.setStripePaymentRequestButtonClicked();
   const amountIsValid =
     checkAmountOrOtherAmount(
@@ -123,8 +123,8 @@ function onClick(event, props: PropTypes) {
       props.contributionType,
       props.countryGroupId,
     );
-  if (props.paymentRequest && amountIsValid) {
-    props.paymentRequest.show();
+  if (props.stripePaymentRequestObject && amountIsValid) {
+    props.stripePaymentRequestObject.show();
   }
 }
 const weAreSupportingGooglePay = true;
@@ -163,7 +163,7 @@ function initialisePaymentRequest(props: PropTypes) {
       props.setCanMakeApplePayPayment(true);
     }
   });
-  props.setPaymentRequest(paymentRequest);
+  props.setStripePaymentRequestObject(paymentRequest);
 }
 
 const paymentButtonStyle = {
@@ -178,8 +178,8 @@ const paymentButtonStyle = {
 function PaymentRequestButton(props: PropTypes) {
 
   // If we haven't initialised the payment request, initialise it and return null, as we can't insert the button
-  // until the async canMakePayment() function has been called on the paymentRequest object.
-  if (!props.paymentRequest) {
+  // until the async canMakePayment() function has been called on the stripePaymentRequestObject object.
+  if (!props.stripePaymentRequestObject) {
     initialisePaymentRequest({ ...props });
     return null;
   }
@@ -193,7 +193,7 @@ function PaymentRequestButton(props: PropTypes) {
   return (
     <div className="stripe-payment-request-button__container">
       <PaymentRequestButtonElement
-        paymentRequest={props.paymentRequest}
+        paymentRequest={props.stripePaymentRequestObject}
         className="stripe-payment-request-button__button"
         style={paymentButtonStyle}
         onClick={(event) => { onClick(event, props); }}

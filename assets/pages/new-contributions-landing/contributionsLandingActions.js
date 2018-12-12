@@ -73,7 +73,7 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
-  | { type: 'SET_PAYMENT_REQUEST', paymentRequest: Object }
+  | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object }
   | { type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment: boolean }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
@@ -121,7 +121,8 @@ const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD',
 
 const setCanMakeApplePayPayment = (canMakeApplePayPayment: boolean): Action => ({ type: 'SET_CAN_MAKE_APPLE_PAY_PAYMENT', canMakeApplePayPayment });
 
-const setPaymentRequest = (paymentRequest: Object): Action => ({ type: 'SET_PAYMENT_REQUEST', paymentRequest });
+const setStripePaymentRequestObject =
+  (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });
 
 const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 
@@ -509,7 +510,7 @@ export {
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
   setCanMakeApplePayPayment,
-  setPaymentRequest,
+  setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
 };

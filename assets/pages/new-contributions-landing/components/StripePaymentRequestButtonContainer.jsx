@@ -1,5 +1,7 @@
 // @flow
 
+// Docs: https://github.com/stripe/react-stripe-elements#using-the-paymentrequestbuttonelement
+
 // ----- Imports ----- //
 
 import React from 'react';
