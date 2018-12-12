@@ -37,7 +37,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
       Given("The user fills in their details correctly")
       landingPage.clearForm()
-      landingPage.fillInPersonalDetails()
+      landingPage.fillInPersonalDetails(hasNameFields = true)
 
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
@@ -69,7 +69,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
       Given("The user fills in their details correctly")
       landingPage.clearForm()
-      landingPage.fillInPersonalDetails()
+      landingPage.fillInPersonalDetails(hasNameFields = true)
       landingPage.selectState
 
       Given("that the user selects to pay with PayPal")

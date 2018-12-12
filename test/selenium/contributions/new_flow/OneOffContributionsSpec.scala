@@ -45,7 +45,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       landingPage.enterAmount(stripePayment)
 
       Given("The user fills in their details correctly")
-      landingPage.fillInPersonalDetails()
+      landingPage.fillInPersonalDetails(hasNameFields = false)
 
       Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
