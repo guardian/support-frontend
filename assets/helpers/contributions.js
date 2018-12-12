@@ -51,9 +51,9 @@ export const logInvalidCombination = (contributionType: ContributionType, paymen
 };
 
 export type ThirdPartyPaymentLibraries = {
-  ONE_OFF: { Stripe: Object },
-  MONTHLY: { Stripe: Object, PayPal: Object },
-  ANNUAL: { Stripe: Object, PayPal: Object },
+  ONE_OFF: { Stripe: Object | null },
+  MONTHLY: { Stripe: Object | null, PayPal: Object | null },
+  ANNUAL: { Stripe: Object | null, PayPal: Object | null },
 };
 
 export type BillingPeriod = 'Monthly' | 'Annual';
@@ -87,6 +87,11 @@ export type OtherAmounts = {
 
 export type SelectedAmounts = { [ContributionType]: Amount | 'other' };
 
+
+const getAmount = (selectedAmounts: SelectedAmounts, otherAmounts: OtherAmounts, contributionType: ContributionType) =>
+  parseFloat(selectedAmounts[contributionType] === 'other'
+    ? otherAmounts[contributionType].amount
+    : selectedAmounts[contributionType].value);
 
 // ----- Setup ----- //
 
@@ -496,4 +501,5 @@ export {
   contributionTypeRadios,
   getContributionAmountRadios,
   parseRegularContributionType,
+  getAmount,
 };
