@@ -56,7 +56,9 @@ export default function ContributionsCheckout(props: PropTypes) {
         <PageSection heading="Payment methods" modifierClass="payment-methods">
           {props.payment}
         </PageSection>
-        <LegalSectionContainer />
+        <LegalSectionContainer
+          contributionType={props.contributionType}
+        />
       </Page>
     </div>
   );

@@ -106,7 +106,9 @@ export default function ContributionsCheckout(props: PropTypes) {
           currencyId={props.currencyId}
         />
         {checkoutStage()}
-        <LegalSectionContainer />
+        <LegalSectionContainer
+          contributionType={props.contributionType}
+        />
       </Page>
     </div>
   );
