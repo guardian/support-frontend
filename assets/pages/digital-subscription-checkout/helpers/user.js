@@ -10,14 +10,13 @@ export type User = {|
 function getUser(): User {
 
   if (window && window.guardian && window.guardian.user) {
-    const firstName = window.guardian.user.firstName;
-    const lastName = window.guardian.user.lastName;
-    const email = window.guardian.user.email;
+
+    const { firstName, lastName, email } = window.guardian.user;
 
     return {
-      firstName: typeof firstName === "string" ? firstName : null,
-      lastName: typeof lastName === "string" ? lastName : null,
-      email: typeof email === "string" ? email : null,
+      firstName: typeof firstName === 'string' ? firstName : null,
+      lastName: typeof lastName === 'string' ? lastName : null,
+      email: typeof email === 'string' ? email : null,
     };
   }
 
