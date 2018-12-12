@@ -16,7 +16,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type { State } from '../contributionsLandingReducer';
 import {
-  setCanMakeApplePayPayment,
+  setCanMakeStripePaymentRequestPayment,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
@@ -29,28 +29,28 @@ import {
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   stripe: Object,
-  stripePaymentRequestObject: Object | null,
-  canMakeApplePayPayment: boolean,
   country: IsoCountry,
   currency: IsoCurrency,
-  setCanMakeApplePayPayment: (boolean) => void,
-  setStripePaymentRequestObject: (Object) => void,
-  onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
-  setStripePaymentRequestButtonClicked: () => void,
-  isTestUser: boolean,
-  updateEmail: string => void,
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
+  isTestUser: boolean,
   amount: number,
+  stripePaymentRequestObject: Object | null,
+  canMakeStripePaymentRequestPayment: boolean,
+  setCanMakeStripePaymentRequestPayment: (boolean) => void,
+  setStripePaymentRequestObject: (Object) => void,
+  onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
+  setStripePaymentRequestButtonClicked: () => void,
+  updateEmail: string => void,
 |};
 
 
 const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
-  canMakeApplePayPayment: state.page.form.stripePaymentRequestButtonData.canMakeApplePayPayment,
+  canMakeStripePaymentRequestPayment: state.page.form.stripePaymentRequestButtonData.canMakeStripePaymentRequestPayment,
   stripePaymentRequestObject: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestObject,
   countryGroupId: state.common.internationalisation.countryGroupId,
   country: state.common.internationalisation.countryId,
@@ -63,8 +63,8 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
     token => dispatch(onStripePaymentRequestApiPaymentAuthorised(token)),
-  setCanMakeApplePayPayment:
-    (canMakeApplePayPayment) => { dispatch(setCanMakeApplePayPayment(canMakeApplePayPayment)); },
+  setCanMakeStripePaymentRequestPayment:
+    (canMakePayment) => { dispatch(setCanMakeStripePaymentRequestPayment(canMakePayment)); },
   setStripePaymentRequestObject:
     (paymentRequest) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
@@ -160,7 +160,7 @@ function initialisePaymentRequest(props: PropTypes) {
 
   paymentRequest.canMakePayment().then((result) => {
     if (browserIsCompatible(result)) {
-      props.setCanMakeApplePayPayment(true);
+      props.setCanMakeStripePaymentRequestPayment(true);
     }
   });
   props.setStripePaymentRequestObject(paymentRequest);
@@ -186,7 +186,7 @@ function PaymentRequestButton(props: PropTypes) {
 
   // We don't want to check this until we have initialised the payment request object, so the check has to come
   // after the initialisation of the payment request object
-  if (!props.canMakeApplePayPayment) {
+  if (!props.canMakeStripePaymentRequestPayment) {
     return null;
   }
 
@@ -198,6 +198,7 @@ function PaymentRequestButton(props: PropTypes) {
         style={paymentButtonStyle}
         onClick={(event) => { onClick(event, props); }}
       />
+
       <div className="stripe-payment-request-button__divider">
         or
       </div>

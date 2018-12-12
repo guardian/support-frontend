@@ -115,7 +115,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded) },
+  setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded); },
 });
 
 // ----- Functions ----- //

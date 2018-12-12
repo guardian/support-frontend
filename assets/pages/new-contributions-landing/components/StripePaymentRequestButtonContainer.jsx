@@ -33,7 +33,7 @@ type PropTypes = {|
 |};
 
 
-const setupStripeInlineForm = (setStripeHasLoaded: () => void) => {
+const setupStripe = (setStripeHasLoaded: () => void) => {
   const htmlElement = document.getElementById('stripe-js');
   if (htmlElement !== null) {
     htmlElement.addEventListener(
@@ -47,15 +47,14 @@ const setupStripeInlineForm = (setStripeHasLoaded: () => void) => {
 
 function StripePaymentRequestButtonContainer(props: PropTypes) {
 
-  const showApplePay = isInStripePaymentRequestAllowedCountries(props.country)
+  const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country)
     && props.currency !== 'AUD'
     && props.applePayTestVariant === 'applePay';
 
-  // TODO: set up for AU
-  if (showApplePay) {
+  if (showStripePaymentRequestButton) {
 
     if (props.stripeHasLoaded === false && window.Stripe === undefined) {
-      setupStripeInlineForm(props.setStripeHasLoaded);
+      setupStripe(props.setStripeHasLoaded);
       return null;
     }
 

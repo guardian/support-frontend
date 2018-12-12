@@ -52,7 +52,7 @@ type SetPasswordData = {
 }
 
 type StripePaymentRequestButtonData = {
-  canMakeApplePayPayment: boolean,
+  canMakeStripePaymentRequestPayment: boolean,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
   stripeV3HasLoaded: boolean,
@@ -137,7 +137,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       checkoutFormHasBeenSubmitted: false,
     },
     stripePaymentRequestButtonData: {
-      canMakeApplePayPayment: false,
+      canMakeStripePaymentRequestPayment: false,
       stripePaymentRequestObject: null,
       stripePaymentRequestButtonClicked: false,
       stripeV3HasLoaded: false,
@@ -217,12 +217,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
-      case 'SET_CAN_MAKE_APPLE_PAY_PAYMENT':
+      case 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT':
         return {
           ...state,
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
-            canMakeApplePayPayment: action.canMakeApplePayPayment,
+            canMakeStripePaymentRequestPayment: action.canMakePayment,
           },
         };
 
