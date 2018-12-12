@@ -11,8 +11,8 @@ import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/co
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import { type PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type { State } from '../contributionsLandingReducer';
@@ -93,7 +93,7 @@ function updateUserEmail(data: Object, setEmail: string => void) {
 // Calling the complete function will close the pop up payment window
 const onComplete = (complete: Function) => (res: PaymentResult) => {
   if (res.paymentStatus === 'success') {
-    sendClickedEvent('apple-pay-payment-complete');
+    trackComponentClick('apple-pay-payment-complete');
     complete('success');
   } else if (res.paymentStatus === 'failure') {
     complete('fail');
@@ -117,7 +117,7 @@ function updateAmount(amount: number, paymentRequest: Object | null) {
 // that the user has entered a valid amount before we allow them to continue
 function onClick(event, props: PropTypes) {
   event.preventDefault();
-  sendClickedEvent('apple-pay-clicked');
+  trackComponentClick('apple-pay-clicked');
   updateAmount(props.amount, props.stripePaymentRequestObject);
   props.setStripePaymentRequestButtonClicked();
   const amountIsValid =
@@ -166,7 +166,7 @@ function initialisePaymentRequest(props: PropTypes) {
 
   paymentRequest.canMakePayment().then((result) => {
     if (browserIsCompatible(result)) {
-      sendClickedEvent('apple-pay-loaded');
+      trackComponentClick('apple-pay-loaded');
       props.setCanMakeStripePaymentRequestPayment(true);
     }
   });
