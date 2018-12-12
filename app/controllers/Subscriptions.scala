@@ -6,16 +6,22 @@ import com.gu.i18n.CountryGroup._
 import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax, SwitchState}
-import models.ZuoraCatalog.ZuoraCatalogPricePlan
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import com.gu.identity.play.IdUser
+import play.twirl.api.Html
+import services.IdentityService
 import utils.RequestCountry._
 import views.html.helper.CSRF
+import cats.implicits._
+import monitoring.SafeLogger
+import monitoring.SafeLogger._
 
-import scala.concurrent.ExecutionContext
-import services.ZuoraCatalogService.getPaperPrices
+import scala.concurrent.{ExecutionContext, Future}
+import views.html.digitalSubscription
 
 class Subscriptions(
     actionRefiners: CustomActionBuilders,
+    identityService: IdentityService,
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
@@ -139,25 +145,37 @@ class Subscriptions(
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
     val description = stringsConfig.paperLandingDescription
 
-    Ok(views.html.main(title, id, js, css, None, canonicalLink)).withSettingsSurrogateKey
+    Ok(views.html.main(title, id, js, css, description, canonicalLink)).withSettingsSurrogateKey
   }
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
-  def displayForm(countryCode: String, displayCheckout: String, isCsrf: Boolean = false): Action[AnyContent] =
-    authenticatedAction(recurringIdentityClientId) { implicit request =>
-      if (displayCheckout == "true") {
-        implicit val settings: Settings = settingsProvider.settings()
-        val title = "Support the Guardian | Digital Subscription"
-        val id = "digital-subscription-checkout-page-" + countryCode
-        val js = "digitalSubscriptionCheckoutPage.js"
-        val css = "digitalSubscriptionCheckoutPageStyles.css"
-        val csrf = CSRF.getToken.value
-        Ok(views.html.main(title, id, js, css, csrf = Some(csrf))).withSettingsSurrogateKey
+  private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: Settings): Html = {
+    val title = "Support the Guardian | Digital Subscription"
+    val id = "digital-subscription-checkout-page-" + countryCode
+    val js = "digitalSubscriptionCheckoutPage.js"
+    val css = "digitalSubscriptionCheckoutPageStyles.css"
+    val csrf = CSRF.getToken.value
+
+    digitalSubscription(title, id, js, css, Some(csrf), idUser)
+  }
+
+  def displayForm(countryCode: String, displayCheckout: Boolean, isCsrf: Boolean = false): Action[AnyContent] = {
+    authenticatedAction(recurringIdentityClientId).async { implicit request =>
+      implicit val settings: Settings = settingsProvider.settings()
+      if (displayCheckout) {
+        identityService.getUser(request.user).fold(
+          error => {
+            SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
+            InternalServerError
+          },
+          user => Ok(digitalSubscriptionFormHtml(user, countryCode))
+        ).map(_.withSettingsSurrogateKey)
       } else {
-        Redirect(routes.Subscriptions.geoRedirect)
+        Future.successful(Redirect(routes.Subscriptions.geoRedirect))
       }
     }
+  }
 
   def buildCanonicalPaperSubscriptionLink(withDelivery: Boolean = false): String =
     if (withDelivery) s"${supportUrl}/uk/subscribe/paper/delivery"

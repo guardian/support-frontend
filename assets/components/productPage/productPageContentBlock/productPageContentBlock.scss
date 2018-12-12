@@ -78,6 +78,11 @@
   );
 }
 
+.component-product-page-content-block--higher {
+  position: relative;
+  z-index: 10;
+}
+
 .component-product-page-content-block__content {
   max-width: gu-span(12);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
@@ -111,6 +116,9 @@
   }
   .component-product-page-text-block--heading-only + .component-product-page-content-block-divider {
     margin-top: ($gu-v-spacing*-1)
+  }
+  .component-product-page-plan-form + .component-product-page-info-chip {
+    margin-top: ($gu-v-spacing*-1.5)
   }
   .component-product-page-content-block__content > .component-product-page-content-block-divider:first-child {
     margin-top: ($gu-v-spacing*-.5) - 1px;

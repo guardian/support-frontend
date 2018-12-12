@@ -54,6 +54,7 @@ export type FormIsValidParameters = {
   firstName: string | null,
   lastName: string | null,
   email: string | null,
+  showOneOffNameFields: boolean,
 }
 
 const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
@@ -66,11 +67,14 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
     firstName,
     lastName,
     email,
+    showOneOffNameFields,
   } = formIsValidParameters;
 
-  return checkFirstName(firstName)
-    && checkLastName(lastName)
-    && checkEmail(email)
+  return (
+    showOneOffNameFields ?
+      checkFirstName(firstName) && checkLastName(lastName) :
+      true
+  ) && checkEmail(email)
     && checkStateIfApplicable(state, countryGroupId)
     && checkAmountOrOtherAmount(selectedAmounts, otherAmounts, contributionType, countryGroupId);
 };
@@ -85,6 +89,7 @@ const formIsValidParameters = (state: State) => ({
   firstName: state.page.form.formData.firstName,
   lastName: state.page.form.formData.lastName,
   email: state.page.form.formData.email,
+  showOneOffNameFields: state.common.abParticipations.showOneOffNameFields === 'control' || state.page.form.contributionType !== 'ONE_OFF',
 });
 
 function enableOrDisableForm() {

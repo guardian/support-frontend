@@ -143,6 +143,8 @@ class RegularContributions(
     result.fold(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod contribution, due to $error")
+        // This means we do not return the guest account registration token, meaning that the client won't be able to
+        // use it to create a password for this identity id.
         InternalServerError
       },
       { statusResponse =>

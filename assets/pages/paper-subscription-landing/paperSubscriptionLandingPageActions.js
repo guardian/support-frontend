@@ -7,7 +7,7 @@ import { ProductPagePlanFormActionsFor } from 'components/productPage/productPag
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { paperSubsUrl } from 'helpers/routes';
 import { getPaperCheckout } from 'helpers/externalLinks';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { type State } from './paperSubscriptionLandingPageReducer';
 
@@ -19,7 +19,7 @@ export type TabActions = { type: 'SET_TAB', tab: PaperDeliveryMethod }
 
 const { setPlan } = ProductPagePlanFormActionsFor<PaperBillingPlan>('Paper', 'Paper');
 const setTab = (tab: PaperDeliveryMethod): TabActions => {
-  sendTrackingEventsOnClick(`switch_tab_${tab}`, 'Paper', null)();
+  sendClickedEvent(`paper_subscription_landing_page-switch_tab-${tab}`)();
   window.history.replaceState({}, null, paperSubsUrl(tab === 'delivery'));
   return { type: 'SET_TAB', tab };
 };
@@ -37,7 +37,9 @@ const redirectToCheckout = () =>
     ) : null;
 
     if (location) {
-      sendTrackingEventsOnClick('main_cta_click', 'Paper', null)();
+      // this is annoying because we *know* state.page.plan.plan exists --------------v
+      const clickContext = 'paperSubscriptionLandingPage-'.concat(state.page.plan.plan ? state.page.plan.plan : '');
+      sendClickedEvent(clickContext.concat('-subscribe_now_cta'))();
       window.location.href = location;
     }
   };

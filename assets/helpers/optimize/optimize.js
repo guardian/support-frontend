@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import * as storage from 'helpers/storage';
+import { getQueryParameter } from 'helpers/url';
 
 // ----- Types ----- //
 
@@ -16,6 +17,8 @@ export type OptimizeExperiments = OptimizeExperiment[];
 const OPTIMIZE_STORAGE_KEY = 'optimizeExperiments';
 
 const EXPERIMENTS_UPDATED = 'OPTIMIZE_EXPERIMENTS_UPDATED';
+
+const OPTIMIZE_QUERY_PARAMETER = 'utm_expid';
 
 // ----- Functions ----- //
 
@@ -75,12 +78,27 @@ function addExperimentUpdateListener(addToStoreCallback: OptimizeExperiment => v
   );
 }
 
-function addOptimizeExperiments(addToStoreCallback: OptimizeExperiment => void) {
+function getExperimentsFromUrl(addToStoreCallback: (OptimizeExperiment) => void) {
+  // This function gets experiments from redirect tests as these are not
+  // currently returned by Optimize's JS api
+  const queryParameter = getQueryParameter(OPTIMIZE_QUERY_PARAMETER);
+  if (queryParameter) {
+    // eslint-disable-next-line no-unused-vars
+    const [_, experimentId, variantId] = queryParameter.split('.');
+    if (experimentId && variantId) {
+      addToStoreCallback({ id: experimentId, variant: variantId });
+    }
+  }
+}
+
+function addOptimizeExperiments(addToStoreCallback: (OptimizeExperiment) => void) {
   // Store experiments in the session as well as Redux
   const withSessionStorageCallback = (exp: OptimizeExperiment) => {
     storeExperimentInSession(exp);
     addToStoreCallback(exp);
   };
+
+  getExperimentsFromUrl(withSessionStorageCallback);
 
   if (optimizeIsLoaded()) {
     getExperimentsFromApi((variant, id) => withSessionStorageCallback({ id, variant }));
@@ -104,6 +122,7 @@ function getOptimizeExperiments() {
 // ----- Exports ----- //
 
 export {
+  OPTIMIZE_QUERY_PARAMETER,
   addOptimizeExperiments,
   readExperimentsFromSession,
   getOptimizeExperiments,

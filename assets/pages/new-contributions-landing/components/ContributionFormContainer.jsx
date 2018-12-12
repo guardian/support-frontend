@@ -90,7 +90,7 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = props.usDesktopEOYCampaignVariant ?
+  const countryGroupDetails = (props.countryGroupId === 'UnitedStates' && props.usDesktopEOYCampaignVariant !== 'notintest') ?
     usCampaignDetails :
     countryGroupSpecificDetails[props.countryGroupId];
 

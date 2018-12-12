@@ -50,6 +50,7 @@ type PropTypes = {|
   updateState: Event => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
+  showOneOffNameFields: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -69,6 +70,7 @@ const mapStateToProps = (state: State) => ({
   isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
+  showOneOffNameFields: state.common.abParticipations.showOneOffNameFields === 'control',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -90,6 +92,7 @@ function FormFields(props: PropTypes) {
     isSignedIn,
     state,
     checkoutFormHasBeenSubmitted,
+    showOneOffNameFields,
   } = props;
   return (
     <div className="form-fields">
@@ -119,34 +122,38 @@ function FormFields(props: PropTypes) {
         checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
         email={props.email}
       />
-      <NewContributionTextInput
-        id="contributionFirstName"
-        name="contribution-fname"
-        label="First name"
-        value={firstName}
-        icon={<SvgUser />}
-        autoComplete="given-name"
-        autoCapitalize="words"
-        onInput={props.updateFirstName}
-        isValid={checkFirstName(firstName)}
-        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        errorMessage="Please provide your first name"
-        required
-      />
-      <NewContributionTextInput
-        id="contributionLastName"
-        name="contribution-lname"
-        label="Last name"
-        value={lastName}
-        icon={<SvgUser />}
-        autoComplete="family-name"
-        autoCapitalize="words"
-        onInput={props.updateLastName}
-        isValid={checkLastName(lastName)}
-        formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-        errorMessage="Please provide your last name"
-        required
-      />
+      {showOneOffNameFields || props.contributionType !== 'ONE_OFF' ?
+        <div>
+          <NewContributionTextInput
+            id="contributionFirstName"
+            name="contribution-fname"
+            label="First name"
+            value={firstName}
+            icon={<SvgUser />}
+            autoComplete="given-name"
+            autoCapitalize="words"
+            onInput={props.updateFirstName}
+            isValid={checkFirstName(firstName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your first name"
+            required
+          />
+          <NewContributionTextInput
+            id="contributionLastName"
+            name="contribution-lname"
+            label="Last name"
+            value={lastName}
+            icon={<SvgUser />}
+            autoComplete="family-name"
+            autoCapitalize="words"
+            onInput={props.updateLastName}
+            isValid={checkLastName(lastName)}
+            formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+            errorMessage="Please provide your last name"
+            required
+          />
+        </div> : null
+      }
       <NewContributionState
         onChange={props.updateState}
         selectedState={state}

@@ -3,8 +3,7 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-
-import SvgInfo from 'components/svgs/information';
+import { type Option } from 'helpers/types/option';
 
 import './productPageInfoChip.scss';
 
@@ -12,17 +11,24 @@ import './productPageInfoChip.scss';
 
 
 type PropTypes = {|
-  children: Node
+  children: Node,
+  icon: Option<Node>
 |};
 
 
 // ----- Render ----- //
 
-export default({
-  children,
+const ProductPageInfoChip = ({
+  children, icon,
 }: PropTypes) => (
   <div className="component-product-page-info-chip">
-    <SvgInfo />
+    {icon}
     {children}
   </div>
 );
+
+ProductPageInfoChip.defaultProps = {
+  icon: null,
+};
+
+export default ProductPageInfoChip;

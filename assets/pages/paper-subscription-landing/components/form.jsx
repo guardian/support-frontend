@@ -18,7 +18,7 @@ import { setPlan, redirectToCheckout } from '../paperSubscriptionLandingPageActi
 // ---- Helpers ----- //
 
 const getPriceStr = (price: Price): string =>
-  `From ${showPrice(price)} per month`;
+  `Monthly price ${showPrice(price)}`;
 
 const getSavingStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> =>
   (subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0 ? `Save £${getNewsstandSaving(subscription, newsstand)} a month on retail price` : null);

@@ -32,7 +32,7 @@
 
 .component-product-page-plan-form-label__title {
   @include gu-fontset-heading-sans;
-  padding: $gu-v-spacing/3 $gu-h-spacing/2 $gu-v-spacing/4;
+  padding: $gu-v-spacing/2.15 $gu-h-spacing/2;
   background-color: gu-colour(garnett-neutral-4);
   position: relative;
 }
@@ -56,8 +56,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $gu-v-spacing * 2;
-  height: $gu-v-spacing * 2;
+  width: $gu-v-spacing * 1.666;
+  height: $gu-v-spacing * 1.666;
   border-radius: 100%;
   background: gu-colour(garnett-neutral-1);
   position: absolute;
@@ -69,8 +69,8 @@
   opacity: 0;
   transition: .2s;
   svg {
-    width: 75%;
-    fill: gu-colour(news-garnett-highlight);
+    width: 50%;
+    fill: gu-colour(garnett-neutral-5);
   }
 }
 .component-product-page-plan-form-label__input:hover + .component-product-page-plan-form-label__box,

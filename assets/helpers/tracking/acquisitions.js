@@ -11,6 +11,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import { OPTIMIZE_QUERY_PARAMETER } from 'helpers/optimize/optimize';
 
 
 // ----- Types ----- //
@@ -189,7 +190,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     getQueryParameter('INTCMP');
 
   const parameterExclusions =
-    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', 'utm_expid'];
+    ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', OPTIMIZE_QUERY_PARAMETER];
 
   const queryParameters =
     acquisitionData.queryParameters ||

@@ -2,18 +2,18 @@
 
 // ----- Imports ----- //
 
-import React, { Component } from 'react';
+import React, { Component, type Element } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageContentBlockDivider from 'components/productPage/productPageContentBlock/productPageContentBlockDivider';
 import ProductPageTextBlock, { sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
-import SvgInfo from 'components/svgs/information';
+import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import GridImage from 'components/gridImage/gridImage';
 import { paperSubsUrl } from 'helpers/routes';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
@@ -28,12 +28,14 @@ type PropTypes = {|
 |};
 
 // ----- Auxiliary Components ----- //
-const ContentHelpBlock = () => (
-  <ProductPageContentBlock type="feature" >
-    <ProductPageTextBlock title="FAQ and help" icon={<SvgInfo />}>
+const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>, telephoneLink: Element<string>}) => (
+  <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
+    <ProductPageTextBlock title="FAQ and help">
       <p className={sansParagraphClassName}>
-      If you’ve got any more questions, you might well find the answers in the <a href="https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions">Subscriptions FAQs</a>.
-       If you can’t find the answer to your question here, please call our customer services team on <a href="tel:+4403303336767">0330 333 6767</a>.
+      If you’ve got any more questions, you might well find the answers in the {faqLink}.
+      </p>
+      <p className={sansParagraphClassName}>
+       If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
       </p>
     </ProductPageTextBlock>
   </ProductPageContentBlock>
@@ -43,13 +45,15 @@ const ContentHelpBlock = () => (
 const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (
   <ProductPageContentBlock type="feature">
     <ProductPageTextBlock {...{ title }} />
-    <ProductPageContentBlockDivider />
     {text &&
       <ProductPageTextBlock>
         <p>{text}</p>
       </ProductPageTextBlock>
     }
     <Form />
+    <ProductPageInfoChip>
+      You can cancel your subscription at any time
+    </ProductPageInfoChip>
   </ProductPageContentBlock>
 );
 ContentForm.defaultProps = { text: null };
@@ -64,13 +68,12 @@ const ContentVoucherFaqBlock = () => (
   />
   }
   >
-    <ProductPageContentBlockDivider />
     <ProductPageTextBlock title="How do vouchers work?">
       <ProductPageTextBlockList items={[
         'When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter',
         'You can exchange these vouchers for that day’s newspaper at retailers across the UK. That includes most independent newsagents, a range of petrol stations, and most supermarkets',
         'Your newsagent won’t lose out; we’ll pay them the same amount that they’d receive if you paid cash for your paper',
-        'You can pause your subscription for up to four weeks a year. So if you’re going away, you won’t have to pay for the papers that you miss.',
+        'You can pause your subscription for up to four weeks a year. So if you’re going away, you won’t have to pay for the papers that you miss',
       ]}
       />
     </ProductPageTextBlock>
@@ -99,7 +102,6 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     />
     }
     >
-      <ProductPageContentBlockDivider />
       <ProductPageTextBlock title="How does delivery work?">
         <ProductPageTextBlockList items={[
           (
@@ -120,6 +122,10 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
 
   );
 };
+
+function trackedLink(href: string, text: string, onClick: Function) {
+  return <a href={href} onClick={onClick}>{text}</a>;
+}
 
 
 // ----- Render ----- //
@@ -143,16 +149,38 @@ class Content extends Component<PropTypes> {
     const collectionPage = (
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentVoucherFaqBlock />
-        <ContentForm title="Now pick your perfect voucher subscription package" text="When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter" />
-        <ContentHelpBlock />
+        <ContentForm title="Now pick your perfect voucher subscription package" />
+        <ContentHelpBlock
+          faqLink={trackedLink(
+            'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions',
+            'Subscriptions FAQs',
+            sendClickedEvent('paper_subscription_collection_page-subscription_faq_link'),
+          )}
+          telephoneLink={trackedLink(
+            'tel:+4403303336767',
+            '0330 333 6767',
+            sendClickedEvent('paper_subscription_collection_page-telephone_link'),
+          )}
+        />
       </div>
     );
 
     const deliveryPage = (
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentDeliveryFaqBlock setTabAction={setTabAction} />
-        <ContentForm title="Now pick your perfect delivery subscription package" />
-        <ContentHelpBlock />
+        <ContentForm title="Now pick your perfect home delivery package" />
+        <ContentHelpBlock
+          faqLink={trackedLink(
+            'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions',
+            'Subscriptions FAQs',
+            sendClickedEvent('paper_subscription_delivery_page-subscription_faq_link'),
+          )}
+          telephoneLink={trackedLink(
+            'tel:+4403303336767', // yes, we're using a phone number as a link
+            '0330 333 6767',
+            sendClickedEvent('paper_subscription_delivery_page-telephone_link'),
+          )}
+        />
       </div>
     );
 

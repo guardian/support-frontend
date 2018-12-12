@@ -82,6 +82,22 @@ export const tests: Tests = {
     seed: 5,
   },
 
+  showOneOffNameFields: {
+    variants: [
+      'control',
+      'hidden',
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 6,
+  },
+
   applePay: {
     variants: ['control', 'applePay'],
     audiences: {
@@ -92,7 +108,7 @@ export const tests: Tests = {
     },
     isActive: true,
     independent: true,
-    seed: 6,
+    seed: 7,
     canRun: () => cookie.get('_test_username') !== null,
   },
 };

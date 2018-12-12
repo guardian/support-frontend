@@ -28,6 +28,7 @@ trait Controllers {
 
   lazy val subscriptionsController = new Subscriptions(
     actionRefiners,
+    identityService,
     assetsResolver,
     controllerComponents,
     stringsConfig,
