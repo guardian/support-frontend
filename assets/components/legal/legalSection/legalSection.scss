@@ -19,6 +19,10 @@
     line-height: 18px;
     color: gu-colour(media-garnett-main-1);
 
+    .component-terms-privacy__change {
+      padding-bottom: 4px;
+    }
+
     @include mq($from: desktop) {
       width: 550px;
     }

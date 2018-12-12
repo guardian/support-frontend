@@ -227,7 +227,7 @@ function ContributionForm(props: PropTypes) {
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
       <ContributionErrorMessage />
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
-      <TermsPrivacy countryGroupId={props.countryGroupId} />
+      <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
   );
