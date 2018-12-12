@@ -55,6 +55,7 @@ type StripePaymentRequestButtonData = {
   canMakeApplePayPayment: boolean,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
+  stripeV3HasLoaded: boolean,
 }
 
 type FormState = {
@@ -139,7 +140,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       canMakeApplePayPayment: false,
       stripePaymentRequestObject: null,
       stripePaymentRequestButtonClicked: false,
-      completeFunction: null,
+      stripeV3HasLoaded: false,
     },
     setPasswordData: {
       password: '',
@@ -240,6 +241,16 @@ function createFormReducer(countryGroupId: CountryGroupId) {
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
             stripePaymentRequestButtonClicked: true,
+          },
+        };
+
+
+      case 'SET_STRIPE_V3_HAS_LOADED':
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            stripeV3HasLoaded: true,
           },
         };
 

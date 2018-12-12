@@ -44,6 +44,7 @@ import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  setStripeV3HasLoaded,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButtonContainer';
@@ -65,6 +66,8 @@ type PropTypes = {|
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
+  setStripeV3HasLoaded: () => void,
+  stripeV3HasLoaded: boolean,
   setCheckoutFormHasBeenSubmitted: () => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
@@ -103,6 +106,7 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   applePayTestVariant: state.common.abParticipations.applePay,
+  stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
 });
 
 
@@ -111,6 +115,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded) },
 });
 
 // ----- Functions ----- //
@@ -208,7 +213,8 @@ function ContributionForm(props: PropTypes) {
         checkOtherAmount={checkAmount}
       />
       <StripePaymentRequestButtonContainer
-        stripeCheckoutLibrary={props.thirdPartyPaymentLibraries.ONE_OFF.Stripe}
+        setStripeHasLoaded={props.setStripeV3HasLoaded}
+        stripeHasLoaded={props.stripeV3HasLoaded}
         currency={props.currency}
         contributionType={props.contributionType}
         isTestUser={props.isTestUser}

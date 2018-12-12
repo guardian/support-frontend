@@ -24,12 +24,24 @@ type PropTypes = {|
   country: IsoCountry,
   currency: IsoCurrency,
   isTestUser: boolean,
-  stripeCheckoutLibrary: Object | null,
   contributionType: ContributionType,
   applePayTestVariant: ApplePayTestVariant,
+  setStripeHasLoaded: () => void,
+  stripeHasLoaded: boolean,
   selectedAmounts: SelectedAmounts,
   otherAmounts: OtherAmounts,
 |};
+
+
+const setupStripeInlineForm = (setStripeHasLoaded: () => void) => {
+  const htmlElement = document.getElementById('stripe-js');
+  if (htmlElement !== null) {
+    htmlElement.addEventListener(
+      'load',
+      setStripeHasLoaded,
+    );
+  }
+};
 
 // ----- Component ----- //
 
@@ -37,11 +49,16 @@ function StripePaymentRequestButtonContainer(props: PropTypes) {
 
   const showApplePay = isInStripePaymentRequestAllowedCountries(props.country)
     && props.currency !== 'AUD'
-    && props.applePayTestVariant === 'applePay'
-    && props.stripeCheckoutLibrary;
+    && props.applePayTestVariant === 'applePay';
 
   // TODO: set up for AU
   if (showApplePay) {
+
+    if (props.stripeHasLoaded === false && window.Stripe === undefined) {
+      setupStripeInlineForm(props.setStripeHasLoaded);
+      return null;
+    }
+
     const key = getStripeKey('ONE_OFF', props.currency, props.isTestUser);
     const amount = getAmount(props.selectedAmounts, props.otherAmounts, props.contributionType);
 
