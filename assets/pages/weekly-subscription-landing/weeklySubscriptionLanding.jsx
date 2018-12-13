@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
-import countrySwitcherHeaderContainer from 'components/headers/countrySwitcherHeader/countrySwitcherHeaderContainer';
+import simpleHeaderWithCountrySwitcherContainer from 'components/headers/simpleHeader/simpleHeaderWithCountrySwitcher';
 import Footer from 'components/footer/footer';
 
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -51,7 +51,7 @@ const reactElementId: {
 };
 
 
-const Header = countrySwitcherHeaderContainer(
+const Header = simpleHeaderWithCountrySwitcherContainer(
   '/subscribe/weekly',
   [
     'GBPCountries',
