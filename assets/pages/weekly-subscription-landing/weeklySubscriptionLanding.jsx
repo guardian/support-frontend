@@ -113,14 +113,14 @@ const content = (
         </ProductPageTextBlock>
         <WeeklyForm />
         <ProductPageInfoChip>
-          You can cancel your subscription at any time
+          <p>Gifting is available for quarterly and annual subscriptions</p>
+          <p>You can cancel your subscription at any time</p>
         </ProductPageInfoChip>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Gift subscriptions">
-          <p className={largeParagraphClassName}>A Guardian Weekly subscription
-          makes a great gift. To&nbsp;buy&nbsp;one, just get in touch with your local customer
-          service team:
+        <ProductPageTextBlock title="Buying as a gift?">
+          <p className={largeParagraphClassName}>If you'd like to buy a Guardian Weekly subscription as a gift,
+            just get in touch with your local customer service team:
           </p>
         </ProductPageTextBlock>
         <ProductPageContentBlockOutset>
