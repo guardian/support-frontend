@@ -344,8 +344,6 @@ const countries = {
   SH: 'Saint Helena',
 };
 
-const isoCountries = Object.keys(countries).reduce((obj, key) => Object.assign({}, obj, { [countries[key]]: key }), {});
-
 // ----- Types ----- //
 
 export type UsState = $Keys<typeof usStates>;
@@ -415,6 +413,11 @@ function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option
       return null;
   }
 
+}
+
+function findIsoCountry(country: string): Option<IsoCountry> {
+  const maybeIsoCountry = Object.keys(countries).find(key => countries[key] === country);
+  return maybeIsoCountry !== undefined ? maybeIsoCountry : null;
 }
 
 function fromString(s: string): ?IsoCountry {
@@ -555,7 +558,7 @@ export {
   usStates,
   caStates,
   countries,
-  isoCountries,
+  findIsoCountry,
   fromString,
   stateProvinceFromString,
 };

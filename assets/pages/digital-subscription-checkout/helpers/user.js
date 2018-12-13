@@ -1,7 +1,7 @@
 // @flow
 import { type Option } from 'helpers/types/option';
 import {
-  isoCountries,
+  findIsoCountry,
   detect,
   type IsoCountry,
   fromString,
@@ -16,8 +16,8 @@ export type User = {|
 |};
 
 function getCountry(country: Option<string>, countryGroupId: CountryGroupId): Option<IsoCountry> {
-  const countryCode = country != null ? isoCountries[country] : null;
-  const maybeCountryFromIdentity = countryCode != null ? fromString(countryCode) : null;
+  const countryCode = country !== null ? findIsoCountry(country) : null;
+  const maybeCountryFromIdentity = countryCode !== null ? fromString(countryCode) : null;
   const optionCountryFromIdentity = typeof maybeCountryFromIdentity === 'string' ? maybeCountryFromIdentity : null;
   const countryFromCountryGroupId = detect(countryGroupId);
 
@@ -36,7 +36,7 @@ function getUser(countryGroupId: CountryGroupId): User {
       firstName: typeof firstName === 'string' ? firstName : null,
       lastName: typeof lastName === 'string' ? lastName : null,
       email: typeof email === 'string' ? email : null,
-      country: getCountry(country, countryGroupId),
+      country: typeof country === 'string' ? getCountry(country, countryGroupId) : null,
     };
   }
 
