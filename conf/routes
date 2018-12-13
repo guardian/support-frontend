@@ -81,11 +81,15 @@ GET  /$country<(uk|us|au|int)>/subscribe/premium-tier   controllers.Subscription
 GET  /subscribe/weekly                            controllers.Subscriptions.weeklyGeoRedirect()
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly   controllers.Subscriptions.weekly(country: String)
 
-GET  /subscribe/paper          controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper/delivery          controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = true)
-GET  /uk/subscribe/paper          controllers.Subscriptions.paper(withDelivery: Boolean = false)
-GET  /uk/subscribe/paper/delivery          controllers.Subscriptions.paper(withDelivery: Boolean = true)
+GET  /subscribe/paper                             controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = false)
+GET  /subscribe/paper/delivery                    controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = true)
+GET  /uk/subscribe/paper                          controllers.Subscriptions.paper(withDelivery: Boolean = false)
+GET  /uk/subscribe/paper/delivery                 controllers.Subscriptions.paper(withDelivery: Boolean = true)
 
+GET  /subscribe/print                             controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = false)
+GET  /subscribe/print/delivery                    controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = true)
+GET  /uk/subscribe/print                          controllers.Subscriptions.paper(withDelivery: Boolean = false)
+GET  /uk/subscribe/print/delivery                 controllers.Subscriptions.paper(withDelivery: Boolean = true)
 
 # ----- Authentication ----- #
 
