@@ -8,8 +8,9 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 
 import Heading from 'components/heading/heading';
-import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
+import { FlashSaleCountdown } from 'components/flashSaleCountdown/flashSaleCountdown';
 import type { HeadingSize } from 'components/heading/heading';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -17,11 +18,12 @@ type PropTypes = {
   hasTimer?: boolean,
   headingSize: HeadingSize,
   headingText: string,
+  countryGroupId: CountryGroupId,
   subheadingText?: ?string,
   bodyText: string,
   cta?: Node,
   image?: Node,
-  product?: ?SubscriptionProduct,
+  product: SubscriptionProduct,
 };
 
 export default function FeaturedProductHero(props: PropTypes) {
@@ -65,7 +67,10 @@ export default function FeaturedProductHero(props: PropTypes) {
             </Heading>
           }
           <div className={timerClassName}>
-            <FlashSaleCountdown />
+            <FlashSaleCountdown
+              product={props.product}
+              countryGroupId={props.countryGroupId}
+            />
             <p className="component-featured-product-hero__copy">
               {bodyText}
             </p>

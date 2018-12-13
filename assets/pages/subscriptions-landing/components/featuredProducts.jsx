@@ -5,11 +5,11 @@ import React, { type Node } from 'react';
 
 import { type SubsUrls } from 'helpers/externalLinks';
 import { getQueryParameter } from 'helpers/url';
-import { discountedDisplayPrice, type SubscriptionProduct } from 'helpers/subscriptions';
+import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import GridPicture from 'components/gridPicture/gridPicture';
-import { flashSaleIsActive } from 'helpers/flashSale';
+import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
 
 // ----- Types ----- //
@@ -96,22 +96,42 @@ const paperImage = (
     fallbackImgType="png"
   />);
 
-const getDigitalPackSubHeadingAndBody = (countryGroupId: CountryGroupId) => {
-  if (flashSaleIsActive('DigitalPack')) {
+const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId: CountryGroupId) => {
+  if (flashSaleIsActive(product, countryGroupId)) {
+    const saleCopy = getSaleCopy(product, countryGroupId);
     return {
-      subheadingText: 'Save 50% for three months',
-      bodyText: `Read the Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. ${discountedDisplayPrice('DigitalPack', countryGroupId)} for your first three months.`,
+      headingText: `${saleCopy.bundle.heading}`,
+      subheadingText: `${saleCopy.bundle.subHeading}`,
+      bodyText: `${saleCopy.bundle.description}`,
     };
   }
 
-  return {
-    subheadingText: 'Screen time well spent',
-    bodyText: (countryGroupId === 'GBPCountries') ?
-      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper.' :
-      'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper.',
-  };
-};
+  if (product === 'DigitalPack') {
+    return {
+      headingText: 'Digital Pack',
+      subheadingText: 'Screen time well spent',
+      bodyText: (countryGroupId === 'GBPCountries') ?
+        'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper.' :
+        'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper.',
+    };
+  }
 
+  if (product === 'Paper') {
+    return {
+      headingText: 'Paper subscription',
+      subheadingText: 'Enjoy every word for less',
+      bodyText: 'Save on The Guardian and The Observer retail price all year round.',
+    };
+  }
+
+  // if (product === 'GuardianWeekly') {
+  return {
+    headingText: 'Guardian Weekly',
+    subheadingText: 'Open up your world view',
+    bodyText: 'Discover our essential new magazine with free worldwide delivery.',
+  };
+  // }
+};
 
 const getProducts = (
   subsLinks: SubsUrls,
@@ -119,25 +139,19 @@ const getProducts = (
 ): {DigitalPack: Product, Paper: Product, GuardianWeekly: Product} => ({
   DigitalPack: {
     name: 'DigitalPack',
-    headingText: 'Digital Pack',
-    ...getDigitalPackSubHeadingAndBody(countryGroupId),
+    ...getProductHeadingsAndBody('DigitalPack', countryGroupId),
     link: subsLinks.DigitalPack,
     image: dpImage,
   },
   Paper: {
     name: 'Paper',
-    headingText: flashSaleIsActive('Paper') ? 'Paper subscription 50% off' : 'Paper subscription',
-    subheadingText: 'Enjoy every word for less',
-    bodyText: flashSaleIsActive('Paper') ? 'Save 50% for three months on subscriptions to The Guardian and The Observer' :
-      'Save on The Guardian and The Observer retail price all year round.',
+    ...getProductHeadingsAndBody('Paper', countryGroupId),
     link: subsLinks.Paper,
     image: paperImage,
   },
   GuardianWeekly: {
     name: 'GuardianWeekly',
-    headingText: 'Guardian Weekly',
-    subheadingText: 'Open up your world view',
-    bodyText: 'Discover our essential new magazine with free worldwide delivery.',
+    ...getProductHeadingsAndBody('GuardianWeekly', countryGroupId),
     link: subsLinks.GuardianWeekly,
     image: weeklyImage,
   },
@@ -153,10 +167,10 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
     case 'GuardianWeekly':
       return products.GuardianWeekly;
     default:
-      if (countryGroupId === 'GBPCountries' && flashSaleIsActive('Paper')) {
+      if (countryGroupId === 'GBPCountries') {
         return products.Paper;
       }
-      if (countryGroupId !== 'GBPCountries' && flashSaleIsActive('DigitalPack')) {
+      if (countryGroupId !== 'GBPCountries' && flashSaleIsActive('DigitalPack', countryGroupId)) {
         return products.DigitalPack;
       }
       return products.GuardianWeekly;

@@ -1,79 +1,143 @@
 // @flow
 
 import { getQueryParameter } from 'helpers/url';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { fixDecimals } from 'helpers/subscriptions';
 
 import type { SubscriptionProduct } from './subscriptions';
 
-// Get end time
-function getEndTime(): number {
-  return new Date(2018, 11, 3, 0, 0).getTime(); // include all of 2nd Dec 2018
-}
-
-// Which products are included in the current sale?
-const includedProducts: SubscriptionProduct[] = ['DigitalPack', 'Paper', 'PaperAndDigital'];
-
-function flashSaleIsActive(product: SubscriptionProduct): boolean {
-  // Days are 1 based, months are 0 based
-  const startTime = new Date(2018, 10, 19, 0, 0).getTime(); // 19th Nov 2018
-  const endTime = getEndTime();
-  const now = Date.now();
-  const included = includedProducts.includes(product);
-
-  return (now > startTime && now < endTime && included) || (included && getQueryParameter('flash_sale') === 'true');
-}
-
-type PriceList = {
-  [CountryGroupId]: number
+export type SaleCopy = {
+  landingPage: {
+    heading: string,
+    subHeading: string,
+  },
+  bundle: {
+    heading: string,
+    subHeading: string,
+    description: string,
+  },
 }
 
 type SaleDetails = {
-  [SubscriptionProduct]: {
-    promoCode: string,
-    intcmp: string,
-    prices?: PriceList,
+  [CountryGroupId]: {
+    [SubscriptionProduct]: {
+      promoCode: string,
+      intcmp: string,
+      price: number,
+      saleCopy: SaleCopy,
+    },
   },
 };
 
-const saleDetails: SaleDetails = {
-  DigitalPack: {
-    promoCode: 'DDPBF80X',
-    intcmp: '',
-  },
-  Paper: {
-    promoCode: 'GCA80F',
-    intcmp: 'gdnwb_macqn_other_subs_SubscribeLandingPagePrintOnlySupporterLandingPagePrintOnly_',
-  },
-  PaperAndDigital: {
-    promoCode: 'GCA80G',
-    intcmp: 'gdnwb_macqn_other_subs_SubscribeLandingPagePrint+digitalSupporterLandingPagePrint+digital_',
-  },
-  DailyEdition: {
-    promoCode: '',
-    intcmp: '',
-  },
-  GuardianWeekly: {
-    promoCode: '',
-    intcmp: '',
-  },
-  PremiumTier: {
-    promoCode: '',
-    intcmp: '',
-  },
+type Sale = {
+  includedProducts: SubscriptionProduct[],
+  activeRegions: CountryGroupId[],
+  startTime: number,
+  endTime: number,
+  saleDetails: SaleDetails,
 };
 
-function getPromoCode(product: SubscriptionProduct, defaultCode: string): string {
-  if (flashSaleIsActive(product)) {
-    return saleDetails[product].promoCode;
+// Days are 1 based, months are 0 based
+const Sales: Sale[] = [
+  {
+    includedProducts: ['DigitalPack'],
+    activeRegions: ['GBPCountries'],
+    startTime: new Date(2018, 11, 12).getTime(), // 20 Dec 2018
+    endTime: new Date(2019, 0, 3).getTime(), // 3 Jan 2019
+    saleDetails: {
+      GBPCountries: {
+        DigitalPack: {
+          promoCode: 'DDPCS99X',
+          intcmp: '',
+          price: 8.99,
+          saleCopy: {
+            landingPage: {
+              heading: 'Digital Pack',
+              subHeading: 'Save 25% for a year',
+            },
+            bundle: {
+              heading: 'Digital Pack',
+              subHeading: '£8.99/month for a year then £11.99/month',
+              description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
+            },
+          },
+        },
+      },
+    },
+  },
+];
+
+function sortSalesByStartTimes(a: Sale, b: Sale) {
+  return a.startTime - b.startTime;
+}
+
+function getSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
+  return Sales.filter(sale =>
+    sale.includedProducts.includes(product) &&
+    sale.activeRegions.includes(countryGroupId)).sort(sortSalesByStartTimes);
+}
+
+function flashSaleIsActive(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): boolean {
+  const now = Date.now();
+  const sales = getSales(product, countryGroupId).filter(sale =>
+    (now > sale.startTime && now < sale.endTime) ||
+    getQueryParameter('flash_sale') === 'true');
+
+  return sales.length > 0;
+}
+
+function getPromoCode(
+  product: SubscriptionProduct,
+  countryGroupId?: CountryGroupId = detect(),
+  defaultCode: string,
+): string {
+  if (flashSaleIsActive(product, countryGroupId)) {
+    const sale = getSales(product, countryGroupId)[0];
+    return sale && sale.saleDetails[countryGroupId][product].promoCode;
   }
   return defaultCode;
 }
 
-function getIntcmp(product: SubscriptionProduct, intcmp: ?string, defaultIntcmp: string): string {
+function getIntcmp(
+  product: SubscriptionProduct,
+  countryGroupId: CountryGroupId = detect(),
+  intcmp: ?string,
+  defaultIntcmp: string,
+): string {
   if (flashSaleIsActive(product)) {
-    return saleDetails[product].intcmp || intcmp || defaultIntcmp;
+    const sale = getSales(product, countryGroupId)[0];
+    return (sale && sale.saleDetails[countryGroupId][product].intcmp) || intcmp || defaultIntcmp;
   }
   return intcmp || defaultIntcmp;
+}
+
+function getEndTime(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
+  const sale = getSales(product, countryGroupId)[0];
+  return sale && sale.endTime;
+}
+
+function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupId): SaleCopy {
+  const emptyCopy = {
+    landingPage: {
+      heading: '',
+      subHeading: '',
+    },
+    bundle: {
+      heading: '',
+      subHeading: '',
+      description: '',
+    },
+  };
+  if (flashSaleIsActive(product, countryGroupId)) {
+    const sale = getSales(product, countryGroupId)[0];
+    return sale.saleDetails[countryGroupId][product].saleCopy;
+  }
+  return emptyCopy;
+}
+
+function getFormattedFlashSalePrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
+  const sale = getSales(product, countryGroupId)[0];
+  return fixDecimals(sale.saleDetails[countryGroupId][product].price);
 }
 
 export {
@@ -81,4 +145,6 @@ export {
   getPromoCode,
   getIntcmp,
   getEndTime,
+  getSaleCopy,
+  getFormattedFlashSalePrice,
 };

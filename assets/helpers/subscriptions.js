@@ -308,4 +308,5 @@ export {
   getNewsstandPrice,
   getDigitalPrice,
   getPaperPrice,
+  fixDecimals,
 };

@@ -3,9 +3,9 @@
 import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import type { ComponentAbTest } from 'helpers/subscriptions';
-import { discountedDisplayPrice, displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
-import { flashSaleIsActive } from 'helpers/flashSale';
+import { flashSaleIsActive, getSaleCopy, getFormattedFlashSalePrice } from 'helpers/flashSale';
 
 // ----- Types ----- //
 
@@ -19,10 +19,12 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function getCopy() {
-  if (flashSaleIsActive('Paper')) {
+  if (flashSaleIsActive('Paper', 'GBPCountries')) {
+    const saleCopy = getSaleCopy('Paper', 'GBPCountries');
+    const salePrice = getFormattedFlashSalePrice('Paper', 'GBPCountries');
     return {
-      subHeading: `from ${discountedDisplayPrice('Paper', 'GBPCountries')}`,
-      description: 'Save 50% for three months on subscriptions to The Guardian and The Observer, then the standard subscription price.',
+      subHeading: `from ${salePrice}`,
+      description: `${saleCopy.bundle.description}`,
     };
   }
   return {

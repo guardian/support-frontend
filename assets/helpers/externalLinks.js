@@ -92,9 +92,9 @@ const memUrls: {
 };
 
 const defaultPromos: PromoCodes = {
-  DigitalPack: getPromoCode('DigitalPack', 'DXX83X'),
-  Paper: getPromoCode('Paper', 'GXX83P'),
-  PaperAndDigital: getPromoCode('PaperAndDigital', 'GXX83X'),
+  DigitalPack: getPromoCode('DigitalPack', 'GBPCountries', 'DXX83X'),
+  Paper: getPromoCode('Paper', 'GBPCountries', 'GXX83P'),
+  PaperAndDigital: getPromoCode('PaperAndDigital', 'GBPCountries', 'GXX83X'),
 };
 
 const customPromos: {
@@ -170,12 +170,13 @@ function getPatronsLink(intCmp: ?string): string {
 
 function buildParamString(
   product: SubscriptionProduct,
+  countryGroupId: CountryGroupId,
   intCmp: ?string,
   referrerAcquisitionData: ReferrerAcquisitionData | null,
 ): string {
   const params = new URLSearchParams(window.location.search);
 
-  const maybeCustomIntcmp = getIntcmp(product, intCmp, defaultIntCmp);
+  const maybeCustomIntcmp = getIntcmp(product, countryGroupId, intCmp, defaultIntCmp);
   params.set('INTCMP', maybeCustomIntcmp);
 
   if (referrerAcquisitionData) {
@@ -196,10 +197,10 @@ function buildSubsUrls(
   const countryId = countryGroups[countryGroupId].supportInternationalisationId;
 
   // paper only applies to uk, so hardcode the country
-  const paper = `/uk/subscribe/paper?${buildParamString('Paper', intCmp, referrerAcquisitionData)}`;
-  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', intCmp, referrerAcquisitionData)}`;
-  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', intCmp, null)}`;
-  const weekly = `/${countryId}/subscribe/weekly?${buildParamString('GuardianWeekly', intCmp, referrerAcquisitionData)}`;
+  const paper = `/uk/subscribe/paper?${buildParamString('Paper', 'GBPCountries', intCmp, referrerAcquisitionData)}`;
+  const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', countryGroupId, intCmp, referrerAcquisitionData)}`;
+  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', countryGroupId, intCmp, null)}`;
+  const weekly = `/${countryId}/subscribe/weekly?${buildParamString('GuardianWeekly', countryGroupId, intCmp, referrerAcquisitionData)}`;
 
   return {
     DigitalPack: digital,
