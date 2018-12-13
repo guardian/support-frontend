@@ -17,7 +17,7 @@ import CountryGroupSwitcher, { type PropTypes } from './countryGroupSwitcher';
 export default function (
   subPath: string,
   listOfCountries: CountryGroupId[],
-  trackProduct: Option<SubscriptionProduct>,
+  trackProduct?: Option<SubscriptionProduct>,
 ) {
 
   function handleChange(cgId: CountryGroupId): void {
