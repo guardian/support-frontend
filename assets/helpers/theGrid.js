@@ -58,7 +58,7 @@ export const imageCatalogue: {
   paperDeliveryFeature: 'e7527a726b840eeb1f94cfc6fdd004a31b90df20/0_0_920_820',
   paperVoucherFeature: '33ce22d8c3b65e830b91ab089f5c0670cbd6a7d9/0_0_920_820',
   UsCampaignLanding: '56fbd07b8e3b7090853dce5aa47c7153bd5c6e05/0_0_1500_1454',
-  showcase: '0cc7b8c019bc0585ca9d0f079961c0961402b56c/0_0_5400_2692',
+  showcase: 'b72ef7a4c8764a163fc604d7b8edcedfdd7682f4/0_0_7100_3500',
   showcaseSubscribe: '2abea0fc492779a0f790994b9525632a0bd91ee6/0_0_2664_1288',
 };
 
