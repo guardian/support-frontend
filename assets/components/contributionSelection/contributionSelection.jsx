@@ -42,7 +42,6 @@ type PropTypes = {|
   onKeyPress: Object => void,
   error: ContributionError,
   annualTestVariant: AnnualContributionsTestVariant,
-  usSingleContributionsTestVariant: string,
 |};
 
 
@@ -73,7 +72,6 @@ function ContributionSelection(props: PropTypes) {
               props.currencyId,
               props.countryGroupId,
               props.annualTestVariant,
-              props.usSingleContributionsTestVariant,
             )}
           checked={props.isCustomAmount ? null : props.selectedAmount.toString()}
           toggleAction={props.setAmount}

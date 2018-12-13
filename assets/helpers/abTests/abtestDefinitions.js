@@ -23,19 +23,6 @@ export const tests: Tests = {
     seed: 2,
   },
 
-  usSingleContributionsAmounts: {
-    variants: ['control', 'singleD100', 'single3575'],
-    audiences: {
-      UnitedStates: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 5,
-  },
-
   annualContributionsRoundThree: {
     variants: ['control', 'annualAmountsA'],
     audiences: {

@@ -11,7 +11,6 @@ import type { Radio } from 'components/radioToggle/radioToggle';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
-import { getUsSingleAmounts } from 'helpers/abTests/helpers/usSingleContributionsAmounts';
 
 // ----- Types ----- //
 
@@ -107,13 +106,16 @@ const numbersInWords = {
   '20': 'twenty',
   '25': 'twenty five',
   '30': 'thirty',
+  '35': 'thirty five',
   '40': 'forty',
   '50': 'fifty',
   '75': 'seventy five',
   '100': 'one hundred',
+  '125': 'one hundred and twenty five',
   '166': 'one hundred and sixty six',
   '200': 'two hundred',
   '250': 'two hundred and fifty',
+  '275': 'two hundred and seventy five',
   '500': 'five hundred',
   '750': 'seven hundred and fifty',
   '2000': 'two thousand',
@@ -234,10 +236,15 @@ const defaultMonthlyAmount = [
   { value: '30', spoken: numbersInWords['30'], isDefault: false },
 ];
 
-const amounts = (annualTestVariant: string, usSingleAmountTestVariant: string) => ({
+const amounts = (annualTestVariant: string) => ({
   ONE_OFF: {
     GBPCountries: defaultOneOffAmount,
-    UnitedStates: getUsSingleAmounts(usSingleAmountTestVariant),
+    UnitedStates: [
+      { value: '35', spoken: numbersInWords['35'], isDefault: false },
+      { value: '75', spoken: numbersInWords['75'], isDefault: true },
+      { value: '125', spoken: numbersInWords['125'], isDefault: false },
+      { value: '275', spoken: numbersInWords['275'], isDefault: false },
+    ],
     EURCountries: defaultOneOffAmount,
     AUDCountries: [
       { value: '50', spoken: numbersInWords['50'], isDefault: false },
@@ -471,10 +478,9 @@ function getContributionAmountRadios(
   currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   annualTestVariant: AnnualContributionsTestVariant,
-  usSingleAmountTestVariant: string,
 ): Radio[] {
 
-  return amounts(annualTestVariant, usSingleAmountTestVariant)[contributionType][countryGroupId].map(amount => ({
+  return amounts(annualTestVariant)[contributionType][countryGroupId].map(amount => ({
     value: amount.value,
     text: `${currencies[currencyId].glyph}${amount.value}`,
     accessibilityHint: getAmountA11yHint(contributionType, currencyId, amount.spoken),
