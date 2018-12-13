@@ -18,6 +18,7 @@ describe('Digital Subscription Checkout Reducer', () => {
       email: null,
       firstName: null,
       lastName: null,
+      country: null,
     };
 
     const newState = initReducer(user)(undefined, action);
@@ -34,6 +35,7 @@ describe('Digital Subscription Checkout Reducer', () => {
       email: null,
       firstName: null,
       lastName: null,
+      country: null,
     };
 
     const newState = initReducer(user)(undefined, action);

@@ -344,6 +344,8 @@ const countries = {
   SH: 'Saint Helena',
 };
 
+const isoCountries = Object.keys(countries).reduce((obj, key) => Object.assign({}, obj, { [countries[key]]: key }), {});
+
 // ----- Types ----- //
 
 export type UsState = $Keys<typeof usStates>;
@@ -553,6 +555,7 @@ export {
   usStates,
   caStates,
   countries,
+  isoCountries,
   fromString,
   stateProvinceFromString,
 };

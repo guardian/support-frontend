@@ -20,10 +20,6 @@ import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
 import { getUser } from './helpers/user';
 
-// ----- Redux Store ----- //
-
-const store = pageInit(initReducer(getUser()), true);
-
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detect();
@@ -37,6 +33,9 @@ const reactElementId: {
   International: 'digital-subscription-checkout-page-int',
 };
 
+// ----- Redux Store ----- //
+
+const store = pageInit(initReducer(getUser(countryGroupId)), true);
 
 // ----- Render ----- //
 
