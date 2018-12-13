@@ -22,7 +22,7 @@ export default function SimpleHeader({ utility }: PropTypes) {
     <header className="component-simple-header">
       <LeftMarginSection>
         <div className="component-simple-header__content">
-          {utility && <div className="component-simple-header__utility">{utility}</div>}
+          <div className="component-simple-header__utility">{utility}</div>
           <a className="component-simple-header__link" href="https://www.theguardian.com">
             <div className="accessibility-hint">The guardian logo</div>
             <SvgGuardianLogo />
