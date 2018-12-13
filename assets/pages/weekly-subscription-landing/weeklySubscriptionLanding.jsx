@@ -118,9 +118,10 @@ const content = (
         </ProductPageInfoChip>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Buying as a gift?">
-          <p className={largeParagraphClassName}>If you’d like to buy a Guardian Weekly subscription as a gift,
-            just get in touch with your local customer service team:
+        <ProductPageTextBlock title="Gift subscriptions">
+          <p className={largeParagraphClassName}>A quarterly or annual Guardian Weekly subscription makes a great gift.
+            To&nbsp;buy&nbsp;one, just select the gift option at checkout or get in touch with your local customer
+            service team:
           </p>
         </ProductPageTextBlock>
         <ProductPageContentBlockOutset>
