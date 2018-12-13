@@ -119,7 +119,7 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Buying as a gift?">
-          <p className={largeParagraphClassName}>If you'd like to buy a Guardian Weekly subscription as a gift,
+          <p className={largeParagraphClassName}>If you’d like to buy a Guardian Weekly subscription as a gift,
             just get in touch with your local customer service team:
           </p>
         </ProductPageTextBlock>
