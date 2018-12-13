@@ -18,7 +18,7 @@ export type User = {|
 function getCountry(country: Option<string>, countryGroupId: CountryGroupId): Option<IsoCountry> {
   const countryCode = country != null ? isoCountries[country] : null;
   const maybeCountryFromIdentity = countryCode != null ? fromString(countryCode) : null;
-  const optionCountryFromIdentity = maybeCountryFromIdentity != null && typeof maybeCountryFromIdentity === 'string' ? maybeCountryFromIdentity : null;
+  const optionCountryFromIdentity = typeof maybeCountryFromIdentity === 'string' ? maybeCountryFromIdentity : null;
   const countryFromCountryGroupId = detect(countryGroupId);
 
   return optionCountryFromIdentity || countryFromCountryGroupId;
