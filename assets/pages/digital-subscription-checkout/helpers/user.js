@@ -36,7 +36,7 @@ function getUser(countryGroupId: CountryGroupId): User {
       firstName: typeof firstName === 'string' ? firstName : null,
       lastName: typeof lastName === 'string' ? lastName : null,
       email: typeof email === 'string' ? email : null,
-      country: typeof country === 'string' ? getCountry(country, countryGroupId) : null,
+      country: typeof country === 'string' ? getCountry(country, countryGroupId) : getCountry(null, countryGroupId),
     };
   }
 
