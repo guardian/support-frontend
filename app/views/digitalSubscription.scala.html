@@ -16,10 +16,11 @@
   window.guardian = window.guardian || {};
 
     window.guardian.user = {
-      @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
+      @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName; country <- fields.country) {
         firstName: "@firstName",
         lastName: "@lastName",
-        email: "@user.primaryEmailAddress"
+        email: "@user.primaryEmailAddress",
+        country: "@country"
       }
   }
 

@@ -415,6 +415,11 @@ function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option
 
 }
 
+function findIsoCountry(country: string): Option<IsoCountry> {
+  const maybeIsoCountry = Object.keys(countries).find(key => countries[key] === country);
+  return maybeIsoCountry !== undefined ? maybeIsoCountry : null;
+}
+
 function fromString(s: string): ?IsoCountry {
   const candidateIso = s.toUpperCase();
   const isoCountryArray: Array<IsoCountry> = Object.keys(countries);
@@ -553,6 +558,7 @@ export {
   usStates,
   caStates,
   countries,
+  findIsoCountry,
   fromString,
   stateProvinceFromString,
 };

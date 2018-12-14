@@ -147,7 +147,7 @@ function initReducer(user: User) {
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    country: null,
+    country: user.country || null,
     stateProvince: null,
     telephone: '',
     paymentFrequency: 'month',
