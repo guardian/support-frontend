@@ -21,14 +21,14 @@ import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
-import services.stepfunctions.{CreateRegularContributorRequest, RegularContributionsClient, StatusResponse}
+import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient, StatusResponse}
 import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegularContributions(
-    client: RegularContributionsClient,
+    client: SupportWorkersClient,
     val assets: AssetsResolver,
     actionRefiners: CustomActionBuilders,
     membersDataService: MembersDataService,
@@ -104,7 +104,7 @@ class RegularContributions(
     )
   }
 
-  def create: Action[CreateRegularContributorRequest] = maybeAuthenticatedAction().async(circe.json[CreateRegularContributorRequest]) {
+  def create: Action[CreateSupportWorkersRequest] = maybeAuthenticatedAction().async(circe.json[CreateSupportWorkersRequest]) {
     implicit request =>
       request.user.fold {
         createContributorAndUser()
@@ -113,33 +113,33 @@ class RegularContributions(
       }
   }
 
-  private def createContributorWithUser(fullUser: AuthenticatedIdUser)(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]) = {
-    val billingPeriod = request.body.contribution.billingPeriod
+  private def createContributorWithUser(fullUser: AuthenticatedIdUser)(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]) = {
+    val billingPeriod = request.body.product.billingPeriod
     SafeLogger.info(s"[${request.uuid}] User ${fullUser.id} is attempting to create a new $billingPeriod contribution")
     val result = for {
       user <- identityService.getUser(fullUser)
-      statusResponse <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+      statusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
     } yield statusResponse
     respondToClient(result, request.body, guestCheckout = false)
   }
 
-  private def createContributorAndUser()(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]) = {
-    val billingPeriod = request.body.contribution.billingPeriod
+  private def createContributorAndUser()(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]) = {
+    val billingPeriod = request.body.product.billingPeriod
     SafeLogger.info(s"[${request.uuid}] Guest user: ${request.body.email} is attempting to create a new $billingPeriod contribution")
     val result = for {
       userIdWithOptionalToken <- identityService.getOrCreateUserIdFromEmail(request.body.email)
       user <- identityService.getUser(IdMinimalUser(userIdWithOptionalToken.userId, None))
-      initialStatusResponse <- client.createContributor(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+      initialStatusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
     } yield StatusResponse.fromStatusResponseAndToken(initialStatusResponse, userIdWithOptionalToken.guestAccountRegistrationToken)
     respondToClient(result, request.body, guestCheckout = true)
   }
 
   private def respondToClient(
     result: EitherT[Future, String, StatusResponse],
-    body: CreateRegularContributorRequest,
+    body: CreateSupportWorkersRequest,
     guestCheckout: Boolean
-  )(implicit request: OptionalAuthRequest[CreateRegularContributorRequest]): Future[Result] = {
-    val billingPeriod = body.contribution.billingPeriod
+  )(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
+    val billingPeriod = body.product.billingPeriod
     result.fold(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod contribution, due to $error")
@@ -159,7 +159,7 @@ class RegularContributions(
     )
   }
 
-  private def contributor(user: IdUser, request: CreateRegularContributorRequest) = {
+  private def contributor(user: IdUser, request: CreateSupportWorkersRequest) = {
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
