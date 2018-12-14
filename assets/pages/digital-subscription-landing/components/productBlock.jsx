@@ -128,7 +128,7 @@ function ProductBlock(props: PropTypes) {
           imageProps={{
             gridId: 'dailyEdition',
             altText: 'the guardian daily edition app',
-            srcSizes: [644, 500, 140],
+            srcSizes: [500, 140],
             sizes: imageSlot,
             imgType: 'png',
           }}
