@@ -57,7 +57,7 @@ type RegularContribFields = {|
   lastName: ?string,
   country: IsoCountry,
   state?: UsState,
-  contribution: ContributionRequest,
+  product: ContributionRequest,
   paymentFields: PayPalDetails | StripeDetails | DirectDebitDetails,
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -155,7 +155,7 @@ function requestData(
     firstName: user.firstName,
     lastName: user.lastName,
     country,
-    contribution: {
+    product: {
       amount,
       currency,
       billingPeriod: billingPeriodFromContrib(contributionType),

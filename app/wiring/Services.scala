@@ -22,13 +22,13 @@ trait Services {
 
   lazy val goCardlessServiceProvider = new GoCardlessServiceProvider(appConfig.goCardlessConfigProvider)
 
-  lazy val regularContributionsClient = {
+  lazy val supportWorkersClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws), appConfig.aws.useEncryption)
     SupportWorkersClient(
       appConfig.stepFunctionArn,
       stateWrapper,
       appConfig.supportUrl,
-      controllers.routes.RegularContributions.status
+      controllers.routes.SupportWorkersStatus.status
     )
   }
 

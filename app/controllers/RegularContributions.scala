@@ -94,16 +94,6 @@ class RegularContributions(
       request.user.fold(displayFormWithoutUser())(displayFormWithUser).map(_.withSettingsSurrogateKey)
     }
 
-  def status(jobId: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
-    client.status(jobId, request.uuid).fold(
-      { error =>
-        SafeLogger.error(scrub"Failed to get status of step function execution for job ${jobId} due to $error")
-        InternalServerError
-      },
-      response => Ok(response.asJson)
-    )
-  }
-
   def create: Action[CreateSupportWorkersRequest] = maybeAuthenticatedAction().async(circe.json[CreateSupportWorkersRequest]) {
     implicit request =>
       request.user.fold {
