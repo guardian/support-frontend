@@ -30,7 +30,7 @@ export const imageCatalogue: {
   weeklyCircle: '1be07b6ab77eccd128c720d013e5436e6e8eca61/0_0_2210_2210',
   premiumTier: 'fb0c788ddee28f8e0e66d814595cf81d6aa21ec6/0_0_644_448',
   premiumTierAU: '4b6fd9805c7d0a88b4b71a683c4b46279a410b9d/0_0_1610_1120',
-  dailyEdition: '168cab5197d7b4c5d9e05eb3ff2801b2929f2995/0_0_644_448',
+  dailyEdition: '6c6bf7598935803cd9922af05bb35b435552d239/0_0_6440_4486',
   windrush: '4addd475d3af57d908fa87124e556ab96fddb2e7/0_0_370_370',
   windrushGreyscale: '8637bed472263161e35de986b463ed0c3675987d/0_0_830_830',
   zuck: 'e6142101bc909caee866be05ced677c54e9d3b4e/0_0_374_374',
