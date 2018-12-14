@@ -13,7 +13,7 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import GridImage from 'components/gridImage/gridImage';
+import GridPicture from 'components/gridPicture/gridPicture';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
@@ -73,18 +73,35 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        headline="Become a Guardian Weekly subscriber"
+        type="feature"
         overheading="Guardian Weekly subscriptions"
         heading="Get a clearer, global perspective on the issues that matter, in one magazine."
         modifierClasses={['weekly']}
         cta={<ProductPageButton trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</ProductPageButton>}
       >
-        <GridImage
-          gridId="weeklyLandingHero"
-          srcSizes={[946, 473]}
-          sizes="(max-width: 740px) 90vw, 600px"
-          imgType="png"
+        <GridPicture
+          sources={[
+            {
+              gridId: 'weeklyLandingHero',
+              srcSizes: [500, 1000],
+              imgType: 'png',
+              sizes: '100vw',
+              media: '(max-width: 739px)',
+            },
+            {
+              gridId: 'weeklyLandingHero',
+              srcSizes: [1000, 2000],
+              imgType: 'png',
+              sizes: '(min-width: 1000px) 2000px, 1000px',
+              media: '(min-width: 740px)',
+            },
+          ]}
+          fallback="weeklyLandingHero"
+          fallbackSize={1000}
+          altText=""
+          fallbackImgType="png"
         />
+
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
