@@ -13,8 +13,8 @@ import com.gu.i18n.Country
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.{Status, _}
 import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
@@ -63,6 +63,8 @@ case class StatusResponse(
 object StatusResponse {
   def fromStatusResponseAndToken(statusResponse: StatusResponse, token: Option[String]): StatusResponse =
     StatusResponse(statusResponse.status, statusResponse.trackingUri, statusResponse.failureReason, token)
+
+  implicit val statusEncoder: Encoder[StatusResponse] = deriveEncoder
 }
 
 class SupportWorkersClient(
@@ -88,7 +90,7 @@ class SupportWorkersClient(
     user: User,
     requestId: UUID
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
-
+    import io.circe.generic.auto._
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
@@ -168,6 +170,7 @@ object StepFunctionExecutionStatus {
   }
 
   def getFailureDetails(stateWrapper: StateWrapper, eventDetails: StateExitedEventDetails): Option[CheckoutFailureReason] = {
+    import io.circe.generic.auto._
     SafeLogger.info(s"Event details are: $eventDetails")
     stateWrapper.unWrap[CheckoutFailureState](eventDetails.getOutput) match {
       case Success(checkoutFailureState) =>

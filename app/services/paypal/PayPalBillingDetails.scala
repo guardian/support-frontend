@@ -1,12 +1,13 @@
 package services.paypal
 
-import codecs.Codec
-import codecs.CirceDecoders.deriveCodec
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec._
+
 import com.gu.i18n.Currency
 
 case class PayPalBillingDetails(amount: Float, billingPeriod: String, currency: Currency)
 
 object PayPalBillingDetails {
-  import codecs.CirceDecoders.{encodeCurrency, decodeCurrency}
+  import com.gu.support.encoding.CustomCodecs.{encodeCurrency, decodeCurrency}
   implicit val codec: Codec[PayPalBillingDetails] = deriveCodec
 }

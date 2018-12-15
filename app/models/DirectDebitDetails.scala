@@ -1,7 +1,7 @@
 package models
 
-import codecs.CirceDecoders.deriveCodec
-import codecs.Codec
+import com.gu.support.encoding.Codec._
+import com.gu.support.encoding.Codec
 import io.circe.{Decoder, Encoder}
 
 case class AccountNumber(private val underlying: String) {

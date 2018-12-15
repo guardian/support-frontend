@@ -8,7 +8,7 @@ import com.gu.support.workers.{CheckoutFailureReasons, Status, User}
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
-import codecs.CirceDecoders.checkoutFailureStateCodec
+import io.circe.generic.auto._
 import StepFunctionExecutionStatus._
 import scala.util.{Failure, Success}
 

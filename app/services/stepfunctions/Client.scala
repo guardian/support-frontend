@@ -16,7 +16,6 @@ import services.stepfunctions.StateMachineErrors.Fail
 import scala.collection.JavaConversions._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
-import codecs.CirceDecoders._
 
 object Client {
 
