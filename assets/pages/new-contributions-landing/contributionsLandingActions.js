@@ -263,7 +263,7 @@ const regularPaymentRequestFromAuthorisation = (
   country: state.common.internationalisation.countryId,
   state: state.page.form.formData.state,
   email: state.page.form.formData.email || '',
-  contribution: {
+  product: {
     amount: getAmount(
       state.page.form.selectedAmounts,
       state.page.form.formData.otherAmounts,

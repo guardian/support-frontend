@@ -45,6 +45,7 @@ trait AppComponents extends PlayComponents
     applicationController,
     siteMapController,
     regularContributionsController,
+    supportWorkersStatusController,
     identityController,
     oneOffContributions,
     subscriptionsController,
@@ -57,5 +58,5 @@ trait AppComponents extends PlayComponents
   )
 
   SentryLogging.init(appConfig)
-  new StateMachineMonitor(regularContributionsClient, actorSystem).start()
+  new StateMachineMonitor(supportWorkersClient, actorSystem).start()
 }

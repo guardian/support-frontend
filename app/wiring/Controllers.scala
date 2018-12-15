@@ -36,8 +36,14 @@ trait Controllers {
     appConfig.supportUrl
   )
 
+  lazy val supportWorkersStatusController = new SupportWorkersStatus(
+    supportWorkersClient,
+    controllerComponents,
+    actionRefiners
+  )
+
   lazy val regularContributionsController = new RegularContributions(
-    regularContributionsClient,
+    supportWorkersClient,
     assetsResolver,
     actionRefiners,
     membersDataService,

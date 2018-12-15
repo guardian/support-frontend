@@ -46,7 +46,7 @@ GET  /contribute/recurring-guest                    controllers.RegularContribut
 GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayFormMaybeAuthenticated()
 GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js", css="regularContributionsExistingPageStyles.css")
 POST /contribute/recurring/create                   controllers.RegularContributions.create
-GET  /contribute/recurring/status                   controllers.RegularContributions.status(jobId: String)
+GET  /support-workers/status                        controllers.SupportWorkersStatus.status(jobId: String)
 GET  /contribute/recurring/pending                  controllers.RegularContributions.displayFormMaybeAuthenticated()
 
 # this endpoint should be removed once identity remove

@@ -13,7 +13,7 @@ import org.mockito.ArgumentMatchers.any
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.mvc.Result
-import services.stepfunctions.RegularContributionsClient
+import services.stepfunctions.SupportWorkersClient
 import services.{HttpIdentityService, MembersDataService}
 import services.MembersDataService._
 import com.gu.support.config._
@@ -51,7 +51,7 @@ class RegularContributionsTest extends WordSpec with MustMatchers {
       )
 
       new RegularContributions(
-        mock[RegularContributionsClient],
+        mock[SupportWorkersClient],
         assetResolver,
         actionRefiner,
         membersDataService,
