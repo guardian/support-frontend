@@ -2,9 +2,9 @@ package services.stepfunctions
 
 import com.amazonaws.AmazonServiceException
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
-import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.model.states.CheckoutFailureState
-import com.gu.support.workers.model.{CheckoutFailureReasons, Status, User}
+import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
+import com.gu.support.workers.states.CheckoutFailureState
+import com.gu.support.workers.{CheckoutFailureReasons, Status, User}
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._

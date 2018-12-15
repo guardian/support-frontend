@@ -1,20 +1,20 @@
 package codecs
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.workers.model._
+import com.gu.support.workers._
 import io.circe.{Decoder, Encoder, Json}
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import com.gu.support.workers.model.Contribution
-import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
+import com.gu.support.workers.Contribution
+import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedObjectEncoder
 import io.circe.generic.semiauto._
 import cats.syntax.functor._
 import shapeless.Lazy
-import com.gu.support.workers.model.Status
+import com.gu.support.workers.Status
 import ophan.thrift.event.{AbTest, AcquisitionSource}
 import com.gu.fezziwig.CirceScroogeMacros.{decodeThriftEnum, decodeThriftStruct, encodeThriftEnum, encodeThriftStruct}
-import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
+import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import ophan.thrift.componentEvent.ComponentType
 import services.stepfunctions.StatusResponse
 import admin._

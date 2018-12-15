@@ -2,7 +2,7 @@ package services.stepfunctions
 
 import java.util.Base64
 
-import com.gu.support.workers.model.{ExecutionError, JsonWrapper, RequestInfo}
+import com.gu.support.workers.{ExecutionError, JsonWrapper, RequestInfo}
 import cats.syntax.either._
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}

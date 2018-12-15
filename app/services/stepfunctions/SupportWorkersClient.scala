@@ -10,9 +10,9 @@ import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
-import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.model.{Status, _}
-import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
+import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
+import com.gu.support.workers.{Status, _}
+import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import monitoring.SafeLogger
@@ -98,7 +98,8 @@ class SupportWorkersClient(
         ophanIds = request.body.ophanIds,
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
         supportAbTests = request.body.supportAbTests
-      ))
+      )),
+      promoCode = None
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>

@@ -3,7 +3,7 @@ package monitoring
 import app.BuildInfo
 import com.gu.i18n.Country
 import com.gu.support.config.Stages.PROD
-import com.gu.support.workers.model.{DirectDebitPaymentFields, PayPalPaymentFields, PaymentFields, StripePaymentFields}
+import com.gu.support.workers.{DirectDebitPaymentFields, PayPalPaymentFields, PaymentFields, StripePaymentFields}
 import com.gu.tip.{Tip, TipConfig, TipFactory, TipResponse}
 import config.Configuration
 

@@ -4,7 +4,7 @@ import admin._
 import cats.syntax.either._
 import codecs.CirceDecoders._
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import com.gu.support.workers.model.DirectDebitPaymentFields
+import com.gu.support.workers.DirectDebitPaymentFields
 import io.circe.parser.parse
 import io.circe.parser._
 import io.circe.syntax._

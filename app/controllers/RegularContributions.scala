@@ -9,7 +9,7 @@ import cats.implicits._
 import codecs.CirceDecoders.statusEncoder
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.workers.model.User
+import com.gu.support.workers.User
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import cookies.RecurringContributionCookie
