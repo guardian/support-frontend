@@ -3,7 +3,6 @@ package com.gu.acquisition.services
 import java.nio.ByteBuffer
 
 import cats.data.EitherT
-import com.amazonaws.auth.AWSCredentialsProviderChain
 import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.services.kinesis.AmazonKinesisAsyncClientBuilder
 import com.amazonaws.services.kinesis.model.{PutRecordRequest, PutRecordResult}
@@ -16,11 +15,14 @@ import com.gu.thrift.serializer.ThriftSerializer
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
 
-private [acquisition] class KinesisService(credentialsProvider: AWSCredentialsProviderChain, streamName: String, region: String = "eu-west-1") extends AnalyticsService {
+private [acquisition] class KinesisService(config: DefaultAcquisitionServiceConfig, region: String = "eu-west-1") extends AnalyticsService {
 
   private val kinesisClient = {
-    val builder = AmazonKinesisAsyncClientBuilder.standard()
-    builder.withCredentials(credentialsProvider).withRegion(region).build
+    val builder = AmazonKinesisAsyncClientBuilder.standard().withRegion(region)
+    config match {
+      case Ec2OrLocalConfig(provider, _, _) => builder.withCredentials(provider).build
+      case _: LambdaConfig => builder.build
+    }
   }
 
   private def putAcquisition(acquisitionSubmission: AcquisitionSubmission): EitherT[Future, AnalyticsServiceError, AcquisitionSubmission] = {
@@ -32,7 +34,7 @@ private [acquisition] class KinesisService(credentialsProvider: AWSCredentialsPr
       }
 
       new PutRecordRequest()
-        .withStreamName(streamName)
+        .withStreamName(config.kinesisStreamName)
         .withPartitionKey(acquisitionSubmission.acquisition.identityId.getOrElse(acquisitionSubmission.acquisition.amount.toString))
         .withData(buffer)
     }
