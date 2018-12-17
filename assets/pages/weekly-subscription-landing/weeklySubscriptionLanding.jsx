@@ -22,6 +22,8 @@ import ProductPageTextBlock, { largeParagraphClassName } from 'components/produc
 import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
+import SvgInformation from 'components/svgs/information';
+import SvgGift from 'components/svgs/gift';
 
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
@@ -129,9 +131,11 @@ const content = (
           <p>Choose how you’d like to pay</p>
         </ProductPageTextBlock>
         <WeeklyForm />
-        <ProductPageInfoChip>
-          <p>Gifting is available for quarterly and annual subscriptions</p>
-          <p>You can cancel your subscription at any time</p>
+        <ProductPageInfoChip icon={<SvgGift />}>
+              Gifting is available for quarterly and annual subscriptions
+        </ProductPageInfoChip>
+        <ProductPageInfoChip icon={<SvgInformation />}>
+              You can cancel your subscription at any time
         </ProductPageInfoChip>
       </ProductPageContentBlock>
       <ProductPageContentBlock>

@@ -3,12 +3,25 @@
 .component-product-page-info-chip {
   @include gu-fontset-body-sans;
   font-style: italic;
-  .svg-information {
-    display: inline-block;
-    vertical-align: text-bottom;
-    margin-right: $gu-h-spacing / 4;
-    circle {
-      fill: gu-colour(header-border);
-    }
+}
+
+.component-product-page-info-chip__icon {
+  width: $gu-h-spacing;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: text-bottom;
+  margin-right: $gu-h-spacing / 4;
+}
+
+.component-product-page-info-chip__icon > svg {
+  display: block;
+  &.svg-information path {
+    fill: currentColor;
   }
+  &.svg-gift {
+    transform: translateY(7.5%);
+    fill: currentColor;
+  }
+
 }
