@@ -51,6 +51,13 @@ type SetPasswordData = {
   passwordError: boolean,
 }
 
+type StripePaymentRequestButtonData = {
+  canMakeStripePaymentRequestPayment: boolean,
+  stripePaymentRequestObject: Object | null,
+  stripePaymentRequestButtonClicked: boolean,
+  stripeV3HasLoaded: boolean,
+}
+
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
@@ -58,6 +65,7 @@ type FormState = {
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
   formData: FormData,
+  stripePaymentRequestButtonData: StripePaymentRequestButtonData,
   setPasswordData: SetPasswordData,
   paymentComplete: boolean,
   paymentError: ErrorReason | null,
@@ -87,9 +95,9 @@ export type State = {
 
 function createFormReducer(countryGroupId: CountryGroupId) {
   const amountsForCountry: { [ContributionType]: Amount[] } = {
-    ONE_OFF: amounts('notintest', 'notintest').ONE_OFF[countryGroupId],
-    MONTHLY: amounts('notintest', 'notintest').MONTHLY[countryGroupId],
-    ANNUAL: amounts('notintest', 'notintest').ANNUAL[countryGroupId],
+    ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId],
+    MONTHLY: amounts('notintest').MONTHLY[countryGroupId],
+    ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
   };
 
   const initialAmount: { [ContributionType]: Amount | 'other' } = {
@@ -105,15 +113,15 @@ function createFormReducer(countryGroupId: CountryGroupId) {
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {
-        Stripe: {},
+        Stripe: null,
       },
       MONTHLY: {
-        Stripe: {},
-        PayPal: {},
+        Stripe: null,
+        PayPal: null,
       },
       ANNUAL: {
-        Stripe: {},
-        PayPal: {},
+        Stripe: null,
+        PayPal: null,
       },
     },
     formData: {
@@ -127,6 +135,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       },
       state: null,
       checkoutFormHasBeenSubmitted: false,
+    },
+    stripePaymentRequestButtonData: {
+      canMakeStripePaymentRequestPayment: false,
+      stripePaymentRequestObject: null,
+      stripePaymentRequestButtonClicked: false,
+      stripeV3HasLoaded: false,
     },
     setPasswordData: {
       password: '',
@@ -202,6 +216,43 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
+
+      case 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT':
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            canMakeStripePaymentRequestPayment: action.canMakePayment,
+          },
+        };
+
+      case 'SET_STRIPE_PAYMENT_REQUEST_OBJECT':
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            stripePaymentRequestObject: action.stripePaymentRequestObject,
+          },
+        };
+
+      case 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED':
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            stripePaymentRequestButtonClicked: true,
+          },
+        };
+
+
+      case 'SET_STRIPE_V3_HAS_LOADED':
+        return {
+          ...state,
+          stripePaymentRequestButtonData: {
+            ...state.stripePaymentRequestButtonData,
+            stripeV3HasLoaded: true,
+          },
+        };
 
       case 'UPDATE_USER_FORM_DATA':
         return { ...state, formData: { ...state.formData, ...action.userFormData } };

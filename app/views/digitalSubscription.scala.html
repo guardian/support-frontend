@@ -1,0 +1,30 @@
+@import assets.AssetsResolver
+@import com.gu.identity.play.IdUser
+
+@import admin.Settings
+@(
+  title: String,
+  id: String,
+  js: String,
+  css: String,
+  csrf: Option[String],
+  user: IdUser
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: Settings)
+
+@scripts = {
+  <script type="text/javascript">
+  window.guardian = window.guardian || {};
+
+    window.guardian.user = {
+      @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName; country <- fields.country) {
+        firstName: "@firstName",
+        lastName: "@lastName",
+        email: "@user.primaryEmailAddress",
+        country: "@country"
+      }
+  }
+
+  </script>
+}
+
+@main(title = title, scripts = scripts, mainJsBundle = js, mainId = id, mainStyleBundle = css, csrf = csrf)

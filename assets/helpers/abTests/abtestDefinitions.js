@@ -6,6 +6,8 @@ import type { Tests } from './abtest';
 
 export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
 
+export type ApplePayTestVariant = 'control' | 'applePay' | 'notintest';
+
 export const tests: Tests = {
 
   usDesktopEOYCampaign: {
@@ -19,19 +21,6 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 2,
-  },
-
-  usSingleContributionsAmounts: {
-    variants: ['control', 'singleD100', 'single3575'],
-    audiences: {
-      UnitedStates: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 5,
   },
 
   annualContributionsRoundThree: {
@@ -77,5 +66,34 @@ export const tests: Tests = {
     isActive: false,
     independent: true,
     seed: 5,
+  },
+
+  showOneOffNameFields: {
+    variants: [
+      'control',
+      'hidden',
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 6,
+  },
+
+  applePay: {
+    variants: ['control', 'applePay'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 7,
   },
 };

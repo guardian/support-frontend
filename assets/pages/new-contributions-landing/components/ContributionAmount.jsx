@@ -32,8 +32,8 @@ type PropTypes = {|
   checkOtherAmount: (string, CountryGroupId, ContributionType) => boolean,
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
+  stripePaymentRequestButtonClicked: boolean,
   annualTestVariant: AnnualContributionsTestVariant,
-  usSingleContributionsTestVariant: string,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -45,8 +45,8 @@ const mapStateToProps = state => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
+  stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
   annualTestVariant: state.common.abParticipations.annualContributionsRoundThree,
-  usSingleContributionsTestVariant: state.common.abParticipations.usSingleContributionsAmounts,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -96,10 +96,7 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
 
 
 function ContributionAmount(props: PropTypes) {
-  const validAmounts: Amount[] = amounts(
-    props.annualTestVariant,
-    props.usSingleContributionsTestVariant,
-  )[props.contributionType][props.countryGroupId];
+  const validAmounts: Amount[] = amounts(props.annualTestVariant)[props.contributionType][props.countryGroupId];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString(), spoken: '', isDefault: false }, false);
@@ -133,7 +130,7 @@ function ContributionAmount(props: PropTypes) {
           icon={iconForCountryGroup(props.countryGroupId)}
           onInput={e => props.updateOtherAmount((e.target: any).value, props.countryGroupId, props.contributionType)}
           isValid={props.checkOtherAmount(props.otherAmount || '', props.countryGroupId, props.contributionType)}
-          formHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+          formHasBeenSubmitted={(props.checkoutFormHasBeenSubmitted || props.stripePaymentRequestButtonClicked)}
           errorMessage={`Please provide an amount between ${minAmount} and ${maxAmount}`}
           autoComplete="off"
           step={0.01}

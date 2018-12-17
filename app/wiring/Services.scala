@@ -7,7 +7,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import services.{IdentityService, _}
 import services.aws.AwsS3Client.s3
 import services.paypal.PayPalNvpServiceProvider
-import services.stepfunctions.{Encryption, RegularContributionsClient, StateWrapper}
+import services.stepfunctions.{Encryption, SupportWorkersClient, StateWrapper}
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -22,13 +22,13 @@ trait Services {
 
   lazy val goCardlessServiceProvider = new GoCardlessServiceProvider(appConfig.goCardlessConfigProvider)
 
-  lazy val regularContributionsClient = {
+  lazy val supportWorkersClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws), appConfig.aws.useEncryption)
-    RegularContributionsClient(
+    SupportWorkersClient(
       appConfig.stepFunctionArn,
       stateWrapper,
       appConfig.supportUrl,
-      controllers.routes.RegularContributions.status
+      controllers.routes.SupportWorkersStatus.status
     )
   }
 

@@ -18,11 +18,33 @@
     @include multiline(4, $border);
   }
   /*
-  div > $selector adds some leeway to use react elements with extra divs 
-  until preact.fragment gets here
+  All our ContentBlocks have the behaviour of rendering 
+  with a border between them if there's two with the same 
+  background colour in a row.
+
+  These selectors attempt to enforce this by applying the 
+  border to .selector + .selector (adjacent sibling) 
+  
+  The second selector applies the rule to the first child 
+  of an element wrapped in an extra div if it matches the 
+  classname (because React makes you do that sometimes)
+
+  I hope this explains it:
+
+  +----------------+
+  | blue block     |
+  +----------------+
+  +----------------+
+  | wrapping div   |
+  |+--------------+|
+  || another blue ||
+  || block        ||
+  |+--------------+|
+  +----------------+
+
   */
   & + &,
-  & + div > &  {
+  & + div > &:first-child  {
     .component-left-margin-section__content {
       border-top: 1px solid $border;
     }
@@ -114,15 +136,19 @@
   .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)
   }
-  .component-product-page-text-block--heading-only + .component-product-page-content-block-divider,
-  .component-product-page-plan-form + .component-product-page-info-chip {
+  .component-product-page-text-block--heading-only + .component-product-page-content-block-divider {
     margin-top: ($gu-v-spacing*-1)
+  }
+  .component-product-page-plan-form + .component-product-page-info-chip {
+    margin-top: ($gu-v-spacing*-1.5)
   }
   .component-product-page-content-block__content > .component-product-page-content-block-divider:first-child {
     margin-top: ($gu-v-spacing*-.5) - 1px;
-    /*cancel out padding if this is the first child then
+    /*
+    cancel out padding if this is the first child then
     overlap under the top border to avoid the first multiline
-    merging with it and looking as a 2px border */
+    merging with it and looking like a 2px border 
+    */
   }
 }
 
@@ -143,4 +169,18 @@
     display: block;
     width: 100%;
   }
+  /*
+  If you are implementing an image in a page and you want
+  it to look just a teeny tiny bit bigger or smaller or plain move it, 
+  try to avoid overriding `left` to do fine positioning and 
+  instead use transforms and max-width.
+
+  `left` here is built to put images to the right of the max grid width. 
+  This width might change in the future and ideally tweaking these global 
+  values should not break any images on any page.
+
+  If your image is not grid aligned feel free to override these values
+  but also consider if using this image prop is the best approach. You can
+  put your image as a normal child of `ContentBlock`
+  */
 }

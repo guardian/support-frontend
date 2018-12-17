@@ -18,7 +18,7 @@ object StatusResults {
   val pending = StatusResponse(Status.Pending, "tracking123", None)
 }
 
-class RegularContributionsClientTest extends FlatSpec with Matchers with MockitoSugar {
+class SupportWorkersClientTest extends FlatSpec with Matchers with MockitoSugar {
 
   val mockStateWrapper = mock[StateWrapper]
 

@@ -19,20 +19,20 @@ import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
 import play.api.mvc.Call
-import services.stepfunctions.RegularContributionsClient._
+import services.stepfunctions.SupportWorkersClient._
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-object CreateRegularContributorRequest {
-  implicit val decoder: Decoder[CreateRegularContributorRequest] = deriveDecoder
+object CreateSupportWorkersRequest {
+  implicit val decoder: Decoder[CreateSupportWorkersRequest] = deriveDecoder
 }
-case class CreateRegularContributorRequest(
+case class CreateSupportWorkersRequest(
     firstName: String,
     lastName: String,
     country: Country,
     state: Option[String],
-    contribution: Contribution,
+    product: ProductType,
     paymentFields: PaymentFields,
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
@@ -40,17 +40,17 @@ case class CreateRegularContributorRequest(
     email: String
 )
 
-object RegularContributionsClient {
-  sealed trait RegularContributionError
-  case object StateMachineFailure extends RegularContributionError
+object SupportWorkersClient {
+  sealed trait SupportWorkersError
+  case object StateMachineFailure extends SupportWorkersError
 
   def apply(
     arn: StateMachineArn,
     stateWrapper: StateWrapper,
     supportUrl: String,
     call: String => Call
-  )(implicit system: ActorSystem): RegularContributionsClient =
-    new RegularContributionsClient(arn, stateWrapper, supportUrl, call)
+  )(implicit system: ActorSystem): SupportWorkersClient =
+    new SupportWorkersClient(arn, stateWrapper, supportUrl, call)
 }
 
 case class StatusResponse(
@@ -65,7 +65,7 @@ object StatusResponse {
     StatusResponse(statusResponse.status, statusResponse.trackingUri, statusResponse.failureReason, token)
 }
 
-class RegularContributionsClient(
+class SupportWorkersClient(
     arn: StateMachineArn,
     stateWrapper: StateWrapper,
     supportUrl: String,
@@ -75,7 +75,7 @@ class RegularContributionsClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
-  private def referrerAcquisitionDataWithGAFields(request: OptionalAuthRequest[CreateRegularContributorRequest]): ReferrerAcquisitionData = {
+  private def referrerAcquisitionDataWithGAFields(request: OptionalAuthRequest[CreateSupportWorkersRequest]): ReferrerAcquisitionData = {
     val hostname = request.host
     val gaClientId = request.cookies.get("_ga").map(_.value)
     val userAgent = request.headers.get("user-agent")
@@ -83,16 +83,16 @@ class RegularContributionsClient(
     request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
   }
 
-  def createContributor(
-    request: OptionalAuthRequest[CreateRegularContributorRequest],
+  def createSubscription(
+    request: OptionalAuthRequest[CreateSupportWorkersRequest],
     user: User,
     requestId: UUID
-  ): EitherT[Future, RegularContributionError, StatusResponse] = {
+  ): EitherT[Future, SupportWorkersError, StatusResponse] = {
 
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
-      product = request.body.contribution,
+      product = request.body.product,
       paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.body.ophanIds,
@@ -103,7 +103,7 @@ class RegularContributionsClient(
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] Failed to create regular contribution for ${user.id} - $error")
-        StateMachineFailure: RegularContributionError
+        StateMachineFailure: SupportWorkersError
       },
       { success =>
         SafeLogger.info(s"[$requestId] Creating regular contribution for ${user.id} ($success)")
@@ -125,7 +125,7 @@ class RegularContributionsClient(
     )
   }
 
-  def status(jobId: String, requestId: UUID): EitherT[Future, RegularContributionError, StatusResponse] = {
+  def status(jobId: String, requestId: UUID): EitherT[Future, SupportWorkersError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse): StatusResponse = {
       SafeLogger.info(s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}")
@@ -135,7 +135,7 @@ class RegularContributionsClient(
     underlying.history(jobId).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
-        StateMachineFailure: RegularContributionError
+        StateMachineFailure: SupportWorkersError
       },
       { events =>
         val trackingUri = supportUrl + statusCall(jobId).url

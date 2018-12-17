@@ -10,7 +10,7 @@ import {
   billingPeriodFromContrib,
   type ContributionType,
   type PaymentMethod,
-  type PaymentMatrix,
+  type PaymentMatrix, getAmount,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getUserTypeFromIdentity } from 'helpers/identityApis';
@@ -51,6 +51,7 @@ import {
   type ThankYouPageStage,
 } from './contributionsLandingReducer';
 
+
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
@@ -72,6 +73,10 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
+  | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object }
+  | { type: 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT', canMakePayment: boolean }
+  | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
+  | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
@@ -114,6 +119,17 @@ const updateEmail = (email: string): ((Function) => void) =>
   };
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
+
+const setCanMakeStripePaymentRequestPayment =
+  (canMakePayment: boolean): Action => ({ type: 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT', canMakePayment });
+
+const setStripePaymentRequestObject =
+  (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });
+
+const setStripeV3HasLoaded =
+  (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
+
+const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 
 const updateUserFormData = (userFormData: UserFormData): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -217,19 +233,17 @@ const sendFormSubmitEventForPayPalRecurring = () =>
     onFormSubmit(formSubmitParameters);
   };
 
-
-const getAmount = (state: State) =>
-  parseFloat(state.page.form.selectedAmounts[state.page.form.contributionType] === 'other'
-    ? state.page.form.formData.otherAmounts[state.page.form.contributionType].amount
-    : state.page.form.selectedAmounts[state.page.form.contributionType].value);
-
 const stripeChargeDataFromAuthorisation = (
   authorisation: PaymentAuthorisation,
   state: State,
 ): StripeChargeData => ({
   paymentData: {
     currency: state.common.internationalisation.currencyId,
-    amount: getAmount(state),
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    ),
     token: authorisation.paymentMethod === 'Stripe' ? authorisation.token : '',
     email: state.page.form.formData.email || '',
   },
@@ -249,8 +263,12 @@ const regularPaymentRequestFromAuthorisation = (
   country: state.common.internationalisation.countryId,
   state: state.page.form.formData.state,
   email: state.page.form.formData.email || '',
-  contribution: {
-    amount: getAmount(state),
+  product: {
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    ),
     currency: state.common.internationalisation.currencyId,
     billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
   },
@@ -265,8 +283,9 @@ const regularPaymentRequestFromAuthorisation = (
 // This will execute at the end of every checkout, with the exception
 // of PayPal one-off where this happens on the backend after the user is redirected to our site.
 const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
-  (dispatch: Dispatch<Action>, getState: () => State): void => {
+  (dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
     paymentResult.then((result) => {
+
       const state = getState();
 
       switch (result.paymentStatus) {
@@ -279,10 +298,9 @@ const onPaymentResult = (paymentResult: Promise<PaymentResult>) =>
         default:
           dispatch(paymentFailure(result.error));
           dispatch(paymentWaiting(false));
-
       }
+      return result;
     });
-  };
 
 const onCreateOneOffPayPalPaymentResponse =
   (paymentResult: Promise<CreatePayPalPaymentResponse>) =>
@@ -329,9 +347,9 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
   };
 
 const executeStripeOneOffPayment = (data: StripeChargeData) =>
-  (dispatch: Dispatch<Action>): void => {
+  (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
-  };
+
 
 // This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
 // It happens when the user clicks the recurring PayPal button,
@@ -348,7 +366,11 @@ const setupRecurringPayPalPayment = (
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
     const csrfToken = csrf.token;
-    const amount = getAmount(state);
+    const amount = getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    );
     const billingPeriod = billingPeriodFromContrib(contributionType);
     storage.setSession('paymentMethod', 'PayPal');
     const requestBody = {
@@ -375,10 +397,10 @@ function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
   state: State,
   paymentAuthorisation: PaymentAuthorisation,
-): void {
+): Promise<PaymentResult> {
   const request = regularPaymentRequestFromAuthorisation(paymentAuthorisation, state);
 
-  dispatch(onPaymentResult(postRegularPaymentRequest(
+  return dispatch(onPaymentResult(postRegularPaymentRequest(
     request,
     state.common.abParticipations,
     state.page.csrf,
@@ -398,47 +420,71 @@ const recurringPaymentAuthorisationHandlers = {
   DirectDebit: recurringPaymentAuthorisationHandler,
 };
 
-const paymentAuthorisationHandlers: PaymentMatrix<(Dispatch<Action>, State, PaymentAuthorisation) => void> = {
+const error = { paymentStatus: 'failure', error: 'internal_error' };
+
+const paymentAuthorisationHandlers: PaymentMatrix<(
+  Dispatch<Action>,
+  State,
+  PaymentAuthorisation,
+) => Promise<PaymentResult>> = {
   ONE_OFF: {
     PayPal: () => {
       // Executing a one-off PayPal payment happens on the backend in the /paypal/rest/return
       // endpoint, after PayPal redirects the browser back to our site.
       logException('Paypal one-off has no authorisation handler');
+      return Promise.resolve(error);
     },
-    Stripe: (dispatch: Dispatch<Action>, state: State, paymentAuthorisation: PaymentAuthorisation): void => {
-      dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
-    },
+    Stripe: (
+      dispatch: Dispatch<Action>,
+      state: State,
+      paymentAuthorisation: PaymentAuthorisation,
+    ): Promise<PaymentResult> =>
+      dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state))),
     DirectDebit: () => {
       logInvalidCombination('ONE_OFF', 'DirectDebit');
+      return Promise.resolve(error);
     },
     None: () => {
       logInvalidCombination('ONE_OFF', 'None');
+      return Promise.resolve(error);
     },
   },
   ANNUAL: {
     ...recurringPaymentAuthorisationHandlers,
     None: () => {
       logInvalidCombination('ANNUAL', 'None');
+      return Promise.resolve(error);
     },
   },
   MONTHLY: {
     ...recurringPaymentAuthorisationHandlers,
     None: () => {
       logInvalidCombination('MONTHLY', 'None');
+      return Promise.resolve(error);
     },
   },
 };
 
 const onThirdPartyPaymentAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
-  (dispatch: Function, getState: () => State): void => {
+  (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
     const state = getState();
-
-    paymentAuthorisationHandlers[state.page.form.contributionType][state.page.form.paymentMethod](
+    return paymentAuthorisationHandlers[state.page.form.contributionType][state.page.form.paymentMethod](
       dispatch,
       state,
       paymentAuthorisation,
     );
   };
+
+const onStripePaymentRequestApiPaymentAuthorised =
+  (paymentAuthorisation: PaymentAuthorisation) =>
+    (dispatch: Function, getState: () => State): Promise<PaymentResult> => {
+      const state = getState();
+      return paymentAuthorisationHandlers.ONE_OFF.Stripe(
+        dispatch,
+        state,
+        paymentAuthorisation,
+      );
+    };
 
 export {
   updateContributionTypeAndPaymentMethod,
@@ -468,4 +514,9 @@ export {
   checkIfEmailHasPassword,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
+  setCanMakeStripePaymentRequestPayment,
+  setStripePaymentRequestObject,
+  onStripePaymentRequestApiPaymentAuthorised,
+  setStripePaymentRequestButtonClicked,
+  setStripeV3HasLoaded,
 };

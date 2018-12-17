@@ -46,7 +46,7 @@ export type RegularPaymentRequest = {|
   country: IsoCountry,
   state: UsState | CaState | null,
   email: string,
-  contribution: RegularContribution,
+  product: RegularContribution,
   paymentFields: RegularPaymentFields,
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,

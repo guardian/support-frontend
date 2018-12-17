@@ -11,7 +11,6 @@ import ProductPageContentBlock from 'components/productPage/productPageContentBl
 import ProductPageTextBlock, { sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
-import SvgInfo from 'components/svgs/information';
 import GridImage from 'components/gridImage/gridImage';
 import { paperSubsUrl } from 'helpers/routes';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
@@ -31,7 +30,7 @@ type PropTypes = {|
 // ----- Auxiliary Components ----- //
 const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>, telephoneLink: Element<string>}) => (
   <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
-    <ProductPageTextBlock title="FAQ and help" icon={<SvgInfo />}>
+    <ProductPageTextBlock title="FAQ and help">
       <p className={sansParagraphClassName}>
       If you’ve got any more questions, you might well find the answers in the {faqLink}.
       </p>

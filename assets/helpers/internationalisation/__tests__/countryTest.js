@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { detect } from '../country';
+import { detect, findIsoCountry } from '../country';
 
 const { jsdom } = global;
 
@@ -300,3 +300,12 @@ describe('detect country', () => {
   });
 });
 
+describe('find iso country', () => {
+  it('should return the isoCountry for a country name as a string, if it is in the list of countries', () => {
+    expect(findIsoCountry('France')).toBe('FR');
+  });
+
+  it('should return null for a country name as a string that is not in the list of countries', () => {
+    expect(findIsoCountry('Simple And Coherent Land')).toBe(null);
+  });
+});

@@ -344,7 +344,6 @@ const countries = {
   SH: 'Saint Helena',
 };
 
-
 // ----- Types ----- //
 
 export type UsState = $Keys<typeof usStates>;
@@ -352,6 +351,46 @@ export type CaState = $Keys<typeof caStates>;
 export type IsoCountry = $Keys<typeof countries>;
 export type StateProvince = UsState | CaState;
 
+// Annoyingly, this isn't Stripe's documentation, but if you try and submit
+// a country that isn't on this list, you get an error
+const stripePaymentRequestAllowedCountries = [
+  'AT',
+  'AU',
+  'BE',
+  'BR',
+  'CA',
+  'CH',
+  'DE',
+  'DK',
+  'EE',
+  'ES',
+  'FI',
+  'FR',
+  'GB',
+  'HK',
+  'IE',
+  'IN',
+  'IT',
+  'JP',
+  'LT',
+  'LU',
+  'LV',
+  'MX',
+  'NL',
+  'NZ',
+  'NO',
+  'PH',
+  'PL',
+  'PT',
+  'RO',
+  'SE',
+  'SG',
+  'SK',
+  'US',
+];
+
+export const isInStripePaymentRequestAllowedCountries = (country: IsoCountry) =>
+  stripePaymentRequestAllowedCountries.includes(country);
 
 // ----- Functions ----- /
 
@@ -374,6 +413,11 @@ function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option
       return null;
   }
 
+}
+
+function findIsoCountry(country: string): Option<IsoCountry> {
+  const maybeIsoCountry = Object.keys(countries).find(key => countries[key] === country);
+  return maybeIsoCountry !== undefined ? maybeIsoCountry : null;
 }
 
 function fromString(s: string): ?IsoCountry {
@@ -514,6 +558,7 @@ export {
   usStates,
   caStates,
   countries,
+  findIsoCountry,
   fromString,
   stateProvinceFromString,
 };

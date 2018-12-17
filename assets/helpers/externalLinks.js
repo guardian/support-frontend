@@ -197,10 +197,10 @@ function buildSubsUrls(
   const countryId = countryGroups[countryGroupId].supportInternationalisationId;
 
   // paper only applies to uk, so hardcode the country
-  const paper = `/uk/subscribe/paper?${buildParamString('Paper', 'GBPCountries', intCmp, referrerAcquisitionData)}`;
+  const paper = '/uk/subscribe/paper';
   const paperDig = `${subsUrl}/p/${promoCodes.PaperAndDigital}?${buildParamString('PaperAndDigital', countryGroupId, intCmp, referrerAcquisitionData)}`;
-  const digital = `/${countryId}/subscribe/digital?${buildParamString('DigitalPack', countryGroupId, intCmp, null)}`;
-  const weekly = `/${countryId}/subscribe/weekly?${buildParamString('GuardianWeekly', countryGroupId, intCmp, referrerAcquisitionData)}`;
+  const digital = `/${countryId}/subscribe/digital`;
+  const weekly = `/${countryId}/subscribe/weekly`;
 
   return {
     DigitalPack: digital,
@@ -323,7 +323,7 @@ function getPaperCheckout(
   optimizeExperiments: OptimizeExperiments,
 ) {
   const urls = {
-    collectionEveryday: 'delivery-everyday',
+    collectionEveryday: 'voucher-everyday',
     collectionSixday: 'voucher-sixday',
     collectionWeekend: 'voucher-weekend',
     collectionSunday: 'voucher-sunday',

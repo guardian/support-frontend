@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import { initReducer, setStage, type Stage } from '../digitalSubscriptionCheckoutReducer';
+import { type User } from '../helpers/user';
 
 
 // ----- Tests ----- //
@@ -13,8 +14,14 @@ describe('Digital Subscription Checkout Reducer', () => {
 
     const stage: Stage = 'thankyou';
     const action = setStage(stage);
+    const user: User = {
+      email: null,
+      firstName: null,
+      lastName: null,
+      country: null,
+    };
 
-    const newState = initReducer()(undefined, action);
+    const newState = initReducer(user)(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
@@ -24,8 +31,14 @@ describe('Digital Subscription Checkout Reducer', () => {
 
     const stage: Stage = 'checkout';
     const action = setStage(stage);
+    const user: User = {
+      email: null,
+      firstName: null,
+      lastName: null,
+      country: null,
+    };
 
-    const newState = initReducer()(undefined, action);
+    const newState = initReducer(user)(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 

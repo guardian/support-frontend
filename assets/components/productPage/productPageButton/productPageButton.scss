@@ -6,14 +6,13 @@
   align-items: center;
   text-decoration: none;
   font-weight: bold;
-  padding: ($gu-v-spacing) $gu-h-spacing;
+  height: $gu-v-spacing*3.5;
+  padding: ($gu-v-spacing/2) $gu-h-spacing;
   background-color: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
   border: none;
   border-radius: 600px;
   cursor: pointer;
-  transition: background-color .2s;
-  will-change: background-color;
 
   &:hover, &:focus {
     background-color: gu-colour(highlight-dark);
@@ -21,6 +20,7 @@
   }
 
   &[disabled], &[data-disabled] {
+    background-color: gu-colour(garnett-neutral-5);
     opacity: .5;
     pointer-events: none;
   }
@@ -33,6 +33,6 @@
 }
 
 .component-product-page-button svg {
-  width: $gu-h-spacing * 1.5;
+  width: $gu-h-spacing * 1.075;
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
 }

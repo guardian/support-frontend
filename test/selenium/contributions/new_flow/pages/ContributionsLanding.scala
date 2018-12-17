@@ -27,11 +27,13 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     private val lastName = id("contributionLastName")
     private val email = id("contributionEmail")
 
-    def fillIn() {
+    def fillIn(hasNameFields: Boolean) {
 
       setValue(email, s"${testUser.username}@gu.com", clear = true)
-      setValue(firstName, testUser.username, clear = true)
-      setValue(lastName, testUser.username, clear = true)
+      if (hasNameFields || pageHasElement(firstName)) {
+        setValue(firstName, testUser.username, clear = true)
+        setValue(lastName, testUser.username, clear = true)
+      }
     }
 
     def clear(): Unit = {
@@ -41,7 +43,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     }
   }
 
-  def fillInPersonalDetails() { RegisterFields.fillIn() }
+  def fillInPersonalDetails(hasNameFields: Boolean) { RegisterFields.fillIn(hasNameFields) }
 
   def clearForm(): Unit = RegisterFields.clear()
 

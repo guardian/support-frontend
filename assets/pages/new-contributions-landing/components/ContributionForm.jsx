@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { type Amount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { getAmount, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -15,11 +15,13 @@ import {
   logInvalidCombination,
 } from 'helpers/contributions';
 import { type ErrorReason } from 'helpers/errorReasons';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
+import { type ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
@@ -28,6 +30,7 @@ import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import { checkAmount } from 'helpers/formValidation';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import ContributionTypeTabs from './ContributionTypeTabs';
@@ -39,11 +42,12 @@ import { type State } from '../contributionsLandingReducer';
 
 import {
   paymentWaiting,
-  onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  setStripeV3HasLoaded,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
+import StripePaymentRequestButtonContainer from './StripePaymentRequestButtonContainer';
 
 
 // ----- Types ----- //
@@ -52,24 +56,28 @@ type PropTypes = {|
   isWaiting: boolean,
   countryGroupId: CountryGroupId,
   email: string,
-  otherAmount: string | null,
+  otherAmounts: OtherAmounts,
   paymentMethod: PaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   contributionType: ContributionType,
   currency: IsoCurrency,
   paymentError: ErrorReason | null,
-  selectedAmounts: { [ContributionType]: Amount | 'other' },
-  onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
+  selectedAmounts: SelectedAmounts,
   setPaymentIsWaiting: boolean => void,
   openDirectDebitPopUp: () => void,
-  setCheckoutFormHasBeenSubmitted: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
+  setStripeV3HasLoaded: () => void,
+  stripeV3HasLoaded: boolean,
+  setCheckoutFormHasBeenSubmitted: () => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   isSignedIn: boolean,
   formIsValid: boolean,
   isPostDeploymentTestUser: boolean,
   formIsSubmittable: boolean,
+  isTestUser: boolean,
+  country: IsoCountry,
+  applePayTestVariant: ApplePayTestVariant,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -83,7 +91,7 @@ const mapStateToProps = (state: State) => ({
   isWaiting: state.page.form.isWaiting,
   countryGroupId: state.common.internationalisation.countryGroupId,
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
-  otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
+  otherAmounts: state.page.form.formData.otherAmounts,
   paymentMethod: state.page.form.paymentMethod,
   thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
   contributionType: state.page.form.contributionType,
@@ -95,33 +103,37 @@ const mapStateToProps = (state: State) => ({
   formIsValid: state.page.form.formIsValid,
   isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
   formIsSubmittable: state.page.form.formIsSubmittable,
+  isTestUser: state.page.user.isTestUser || false,
+  country: state.common.internationalisation.countryId,
+  applePayTestVariant: state.common.abParticipations.applePay,
+  stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
 });
 
 
 const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
-  onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
-  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
+  setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
+  setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded); },
 });
 
 // ----- Functions ----- //
-
-// TODO: we've got this and a similar function in contributionLandingActions
-// I think a better model would be to represent the amount as a number in
-// the state, and use this logic to keep it in sync with the view-level selectedAmounts and otherAmounts.
-const getAmount = (props: PropTypes) =>
-  parseFloat(props.selectedAmounts[props.contributionType] === 'other'
-    ? props.otherAmount
-    : props.selectedAmounts[props.contributionType].value);
 
 // ----- Event handlers ----- //
 
 function openStripePopup(props: PropTypes) {
   const paymentLibraries = props.thirdPartyPaymentLibraries[props.contributionType];
   if (paymentLibraries && paymentLibraries.Stripe) {
-    openDialogBox(paymentLibraries.Stripe, getAmount(props), props.email);
+    openDialogBox(
+      paymentLibraries.Stripe,
+      getAmount(
+        props.selectedAmounts,
+        props.otherAmounts,
+        props.contributionType,
+      ),
+      props.email,
+    );
   }
 }
 
@@ -147,7 +159,11 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       props.setPaymentIsWaiting(true);
       props.createOneOffPayPalPayment({
         currency: props.currency,
-        amount: getAmount(props),
+        amount: getAmount(
+          props.selectedAmounts,
+          props.otherAmounts,
+          props.contributionType,
+        ),
         returnURL: payPalReturnUrl(props.countryGroupId),
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
@@ -196,11 +212,22 @@ function ContributionForm(props: PropTypes) {
       <NewContributionAmount
         checkOtherAmount={checkAmount}
       />
+      <StripePaymentRequestButtonContainer
+        setStripeHasLoaded={props.setStripeV3HasLoaded}
+        stripeHasLoaded={props.stripeV3HasLoaded}
+        currency={props.currency}
+        contributionType={props.contributionType}
+        isTestUser={props.isTestUser}
+        country={props.country}
+        applePayTestVariant={props.applePayTestVariant}
+        otherAmounts={props.otherAmounts}
+        selectedAmounts={props.selectedAmounts}
+      />
       <ContributionFormFields />
       <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
       <ContributionErrorMessage />
       <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
-      <TermsPrivacy countryGroupId={props.countryGroupId} />
+      <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} />
       {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
     </form>
   );

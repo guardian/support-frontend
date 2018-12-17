@@ -1,12 +1,12 @@
 package monitoring
 
 import akka.actor.ActorSystem
-import services.stepfunctions.RegularContributionsClient
+import services.stepfunctions.SupportWorkersClient
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 import SafeLogger._
 
-class StateMachineMonitor(client: RegularContributionsClient, actorSystem: ActorSystem) {
+class StateMachineMonitor(client: SupportWorkersClient, actorSystem: ActorSystem) {
 
   val cloudwatchMetricsPattern = "regular-contributions-state-machine-unavailable"
 

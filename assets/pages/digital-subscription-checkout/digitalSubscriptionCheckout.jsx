@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
-import * as user from 'helpers/user/user';
 
 import Page from 'components/page/page';
 import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
@@ -19,13 +18,7 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
-
-
-// ----- Redux Store ----- //
-
-const store = pageInit(initReducer(), true);
-
-user.init(store.dispatch);
+import { getUser } from './helpers/user';
 
 // ----- Internationalisation ----- //
 
@@ -40,6 +33,9 @@ const reactElementId: {
   International: 'digital-subscription-checkout-page-int',
 };
 
+// ----- Redux Store ----- //
+
+const store = pageInit(initReducer(getUser(countryGroupId)), true);
 
 // ----- Render ----- //
 
