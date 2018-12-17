@@ -36,3 +36,4 @@ assets/images/inline-svgs/*.svg
 /public/**/*.js.map
 /assets/javascripts/lib/bower-components/
 .yarnclean
+.test-screenshots
