@@ -4,19 +4,26 @@
 
 import { connect } from 'react-redux';
 
-import CountrySwitcherHeader from 'components/headers/countrySwitcherHeader/countrySwitcherHeader';
-
+import { type Option } from 'helpers/types/option';
 import { countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
-import type { PropTypes } from './countrySwitcherHeader';
+
+import CountryGroupSwitcher, { type PropTypes } from './countryGroupSwitcher';
+
 
 // ------ Component ----- //
 
-export default function (subPath: string, listOfCountries: CountryGroupId[], product: SubscriptionProduct) {
+export default function (
+  subPath: string,
+  listOfCountries: CountryGroupId[],
+  trackProduct?: Option<SubscriptionProduct>,
+) {
 
   function handleChange(cgId: CountryGroupId): void {
-    sendTrackingEventsOnClick(`toggle_country_${cgId}`, product, null)();
+    if (trackProduct) {
+      sendTrackingEventsOnClick(`toggle_country_${cgId}`, trackProduct, null)();
+    }
     window.location.pathname = `/${countryGroups[cgId].supportInternationalisationId}${subPath}`;
   }
 
@@ -24,11 +31,11 @@ export default function (subPath: string, listOfCountries: CountryGroupId[], pro
 
     return {
       countryGroupIds: listOfCountries,
-      selectedCountryGroupId: state.common.internationalisation.countryGroupId,
+      selectedCountryGroup: state.common.internationalisation.countryGroupId,
       onCountryGroupSelect: handleChange,
     };
   }
 
-  return connect(mapStateToProps)(CountrySwitcherHeader);
+  return connect(mapStateToProps)(CountryGroupSwitcher);
 
 }
