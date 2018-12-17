@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export default function SvgInformation() {
+export default function SvgGift() {
 
   return (
     <svg width="17px" height="20px" className="svg-gift" version="1.1" viewbox="17 20 0 0">
