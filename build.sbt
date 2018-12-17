@@ -63,6 +63,7 @@ lazy val root = (project in file("."))
       // This is required to force aws libraries to use the latest version of jackson
       "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
       "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7",
+      "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % "2.9.7",
       "org.scalatest" %% "scalatest" % "3.0.5" % "it,test",
       "org.mockito" % "mockito-core" % "1.9.5" % "it,test",
       "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",

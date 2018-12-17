@@ -31,4 +31,6 @@ object Configuration {
   val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
 
   val contributionThanksQueueName = config.getString("email.thankYou.queueName")
+
+  val kinesisStreamName = config.getString("kinesis.streamName")
 }

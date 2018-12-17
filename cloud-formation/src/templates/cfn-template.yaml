@@ -16,6 +16,9 @@ Parameters:
   OphanRole:
     Type: String
     Description: ARN of the Ophan cross-account role
+  KinesisStreamArn:
+    Type: String
+    Description: ARN of the kinesis stream to write acquisition events to
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
@@ -85,6 +88,13 @@ Resources:
               Action: sts:AssumeRole
               Resource:
                 Ref: OphanRole
+        - PolicyName: Kinesis
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: kinesis:*
+              Resource:
+                Ref: KinesisStreamArn
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
