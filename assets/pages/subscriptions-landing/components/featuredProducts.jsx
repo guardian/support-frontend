@@ -100,9 +100,9 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
   if (flashSaleIsActive(product, countryGroupId)) {
     const saleCopy = getSaleCopy(product, countryGroupId);
     return {
-      headingText: `${saleCopy.bundle.heading}`,
-      subheadingText: `${saleCopy.bundle.subHeading}`,
-      bodyText: `${saleCopy.bundle.description}`,
+      headingText: `${saleCopy.featuredProduct.heading}`,
+      subheadingText: `${saleCopy.featuredProduct.subHeading}`,
+      bodyText: `${saleCopy.featuredProduct.description}`,
     };
   }
 
@@ -167,6 +167,9 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
     case 'GuardianWeekly':
       return products.GuardianWeekly;
     default:
+      if (countryGroupId === 'GBPCountries' && flashSaleIsActive('DigitalPack', 'GBPCountries')) {
+        return products.DigitalPack;
+      }
       if (countryGroupId === 'GBPCountries') {
         return products.Paper;
       }

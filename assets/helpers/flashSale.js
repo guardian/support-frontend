@@ -7,6 +7,11 @@ import { fixDecimals } from 'helpers/subscriptions';
 import type { SubscriptionProduct } from './subscriptions';
 
 export type SaleCopy = {
+  featuredProduct: {
+    heading: string,
+    subHeading: string,
+    description: string,
+  },
   landingPage: {
     heading: string,
     subHeading: string,
@@ -40,7 +45,7 @@ const Sales: Sale[] = [
   {
     subscriptionProduct: 'DigitalPack',
     activeRegions: ['GBPCountries'],
-    startTime: new Date(2018, 11, 12).getTime(), // 20 Dec 2018
+    startTime: new Date(2018, 11, 20).getTime(), // 20 Dec 2018
     endTime: new Date(2019, 0, 3).getTime(), // 3 Jan 2019
     saleDetails: {
       GBPCountries: {
@@ -48,9 +53,14 @@ const Sales: Sale[] = [
         intcmp: '',
         price: 8.99,
         saleCopy: {
-          landingPage: {
+          featuredProduct: {
             heading: 'Digital Pack',
             subHeading: 'Save 25% for a year',
+            description: 'Read The Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. £8.99/month for your first year.',
+          },
+          landingPage: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% - £8.99/month for a year, then £11.99/month',
           },
           bundle: {
             heading: 'Digital Pack',
@@ -114,6 +124,11 @@ function getEndTime(product: SubscriptionProduct, countryGroupId: CountryGroupId
 
 function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupId): SaleCopy {
   const emptyCopy = {
+    featuredProduct: {
+      heading: '',
+      subHeading: '',
+      description: '',
+    },
     landingPage: {
       heading: '',
       subHeading: '',
