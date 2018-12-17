@@ -101,11 +101,7 @@ object SendAcquisitionEvent {
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
               abTests = Some(thrift.AbTestInfo(
-                data.supportAbTests
-                  // abTest is deprecated and support-frontend now sends abTests.
-                  // but let's add abTest as well just in case.
-                  ++ data.referrerAcquisitionData.abTests.getOrElse(Set())
-                  ++ Set(data.referrerAcquisitionData.abTest).flatten
+                data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set())
               )),
               countryCode = Some(state.user.country.alpha2),
               referrerPageViewId = data.referrerAcquisitionData.referrerPageviewId,
