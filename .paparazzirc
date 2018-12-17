@@ -1,32 +1,32 @@
 {
-	"routes": [
-		"uk",
-		"showcase",
-		"uk/subscribe",
-		"uk/subscribe/paper",
-		"uk/subscribe/digital",
-		"uk/subscribe/weekly",
-		"uk/contribute",
-		"uk/contribute/recurring",
-		"paypal/return"
-	],
-	"out": ".test-screenshots",
-	"prefix": "https://support.thegulocal.com/",
-	"screenshot": {
-		"fullPage": true
-	},
-	"sizes": {
-		"desktop": {
-			"width": 1440,
-			"height": 900
-		},
-		"phone": {
-			"width": 375,
-			"height": 1100
-		},
-		"tablet": {
-			"height": 1024,
-			"width": 768
-		}
-	}
+  "routes": [
+    "uk",
+    "showcase",
+    "uk/subscribe",
+    "uk/subscribe/paper",
+    "uk/subscribe/digital",
+    "uk/subscribe/weekly",
+    "uk/contribute",
+    "uk/contribute/recurring",
+    "paypal/return"
+  ],
+  "out": ".test-screenshots",
+  "prefix": "https://support.thegulocal.com/",
+  "screenshot": {
+    "fullPage": true
+  },
+  "sizes": {
+    "desktop": {
+      "width": 1440,
+      "height": 900
+    },
+    "phone": {
+      "width": 375,
+      "height": 1100
+    },
+    "tablet": {
+      "height": 1024,
+      "width": 768
+    }
+  }
 }
