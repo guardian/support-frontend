@@ -52,6 +52,7 @@ object RetryImplicits {
         case BuildError(message) => new RetryNone(message)
         case _: NetworkFailure => new RetryUnlimited(error.getMessage, error)
         case _: ResponseUnsuccessful => new RetryLimited(error.getMessage, error)
+        case kinesisError: KinesisError => new RetryNone(kinesisError.getMessage)
       }
   }
 }

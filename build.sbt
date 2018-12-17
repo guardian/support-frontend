@@ -51,7 +51,7 @@ lazy val root = (project in file("."))
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "io.symphonia" % "lambda-logging" % "1.0.1",
       "com.gu" %% "support-internationalisation" % "0.9",
-      "com.gu" %% "support-models" % "0.39",
+      "com.gu" %% "support-models" % "0.41",
       "com.gu" %% "support-config" % "0.17",
       "com.gu" %% "support-services" % "0.1",
       "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
@@ -63,6 +63,7 @@ lazy val root = (project in file("."))
       // This is required to force aws libraries to use the latest version of jackson
       "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
       "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7",
+      "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % "2.9.7",
       "org.scalatest" %% "scalatest" % "3.0.5" % "it,test",
       "org.mockito" % "mockito-core" % "1.9.5" % "it,test",
       "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",
