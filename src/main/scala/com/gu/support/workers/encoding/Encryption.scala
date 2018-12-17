@@ -2,6 +2,7 @@ package com.gu.support.workers.encoding
 
 import java.nio.ByteBuffer
 
+import com.amazonaws.regions.Regions
 import com.amazonaws.services.kms.AWSKMSClientBuilder
 import com.amazonaws.services.kms.model._
 import com.gu.aws.CredentialsProvider
@@ -33,6 +34,7 @@ class AwsEncryptionProvider(encryptionKeyId: String) extends EncryptionProvider 
   private val kms = AWSKMSClientBuilder
     .standard()
     .withCredentials(CredentialsProvider)
+    .withRegion(Regions.EU_WEST_1)
     .build()
 
   override def encrypt(data: String): Array[Byte] = {
