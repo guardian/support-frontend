@@ -20,17 +20,15 @@ export type SaleCopy = {
 
 type SaleDetails = {
   [CountryGroupId]: {
-    [SubscriptionProduct]: {
-      promoCode: string,
-      intcmp: string,
-      price: number,
-      saleCopy: SaleCopy,
-    },
+    promoCode: string,
+    intcmp: string,
+    price: number,
+    saleCopy: SaleCopy,
   },
 };
 
 type Sale = {
-  includedProducts: SubscriptionProduct[],
+  subscriptionProduct: SubscriptionProduct,
   activeRegions: CountryGroupId[],
   startTime: number,
   endTime: number,
@@ -40,26 +38,24 @@ type Sale = {
 // Days are 1 based, months are 0 based
 const Sales: Sale[] = [
   {
-    includedProducts: ['DigitalPack'],
+    subscriptionProduct: 'DigitalPack',
     activeRegions: ['GBPCountries'],
     startTime: new Date(2018, 11, 12).getTime(), // 20 Dec 2018
     endTime: new Date(2019, 0, 3).getTime(), // 3 Jan 2019
     saleDetails: {
       GBPCountries: {
-        DigitalPack: {
-          promoCode: 'DDPCS99X',
-          intcmp: '',
-          price: 8.99,
-          saleCopy: {
-            landingPage: {
-              heading: 'Digital Pack',
-              subHeading: 'Save 25% for a year',
-            },
-            bundle: {
-              heading: 'Digital Pack',
-              subHeading: '£8.99/month for a year then £11.99/month',
-              description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
-            },
+        promoCode: 'DDPCS99X',
+        intcmp: '',
+        price: 8.99,
+        saleCopy: {
+          landingPage: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+          },
+          bundle: {
+            heading: 'Digital Pack',
+            subHeading: '£8.99/month for a year then £11.99/month',
+            description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
           },
         },
       },
@@ -67,14 +63,14 @@ const Sales: Sale[] = [
   },
 ];
 
-function sortSalesByStartTimes(a: Sale, b: Sale) {
-  return a.startTime - b.startTime;
+function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
+  return b.startTime - a.startTime;
 }
 
 function getSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
   return Sales.filter(sale =>
-    sale.includedProducts.includes(product) &&
-    sale.activeRegions.includes(countryGroupId)).sort(sortSalesByStartTimes);
+    sale.subscriptionProduct === product &&
+    sale.activeRegions.includes(countryGroupId)).sort(sortSalesByStartTimesDescending);
 }
 
 function flashSaleIsActive(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): boolean {
@@ -93,7 +89,7 @@ function getPromoCode(
 ): string {
   if (flashSaleIsActive(product, countryGroupId)) {
     const sale = getSales(product, countryGroupId)[0];
-    return sale && sale.saleDetails[countryGroupId][product].promoCode;
+    return sale && sale.saleDetails[countryGroupId].promoCode;
   }
   return defaultCode;
 }
@@ -106,7 +102,7 @@ function getIntcmp(
 ): string {
   if (flashSaleIsActive(product)) {
     const sale = getSales(product, countryGroupId)[0];
-    return (sale && sale.saleDetails[countryGroupId][product].intcmp) || intcmp || defaultIntcmp;
+    return (sale && sale.saleDetails[countryGroupId].intcmp) || intcmp || defaultIntcmp;
   }
   return intcmp || defaultIntcmp;
 }
@@ -130,14 +126,14 @@ function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupI
   };
   if (flashSaleIsActive(product, countryGroupId)) {
     const sale = getSales(product, countryGroupId)[0];
-    return sale.saleDetails[countryGroupId][product].saleCopy;
+    return sale.saleDetails[countryGroupId].saleCopy;
   }
   return emptyCopy;
 }
 
 function getFormattedFlashSalePrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   const sale = getSales(product, countryGroupId)[0];
-  return fixDecimals(sale.saleDetails[countryGroupId][product].price);
+  return fixDecimals(sale.saleDetails[countryGroupId].price);
 }
 
 export {
