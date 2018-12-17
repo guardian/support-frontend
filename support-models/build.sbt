@@ -6,7 +6,7 @@ description := "Scala library to provide shared step-function models to Guardian
 
 libraryDependencies ++= Seq(
   "com.gu" %% "support-internationalisation" % "0.9" % "provided",
-  "com.gu" %% "acquisition-event-producer-play26" % "4.0.13",
+  "com.gu" %% "acquisition-event-producer-play26" % "4.0.14",
   "org.typelevel" %% "cats-core" % catsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
