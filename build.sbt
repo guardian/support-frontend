@@ -11,7 +11,7 @@ addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
 val circeVersion = "0.9.1"
-val AWSJavaSDKVersion = "1.11.295"
+val AWSJavaSDKVersion = "1.11.465"
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -38,13 +38,13 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
   "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7",
   "com.fasterxml.jackson.core" % "jackson-core" % "2.9.7",
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % "2.9.7",
   "com.google.guava" % "guava" % "25.0-jre", //-- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
-  "com.gu" %% "support-models" % "0.36",
+  "com.gu" %% "support-models" % "0.40",
   "com.gu" %% "ophan-event-model" % "0.0.6",
   "com.gu" %% "fezziwig" % "0.6" excludeAll ExclusionRule(organization = "com.twitter"),
-  "com.gu" %% "acquisition-event-producer-play26" % "4.0.11",
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,

@@ -104,6 +104,9 @@ Parameters:
   OphanRole:
     Type: String
     Description: ARN of the Ophan cross-account role
+  KinesisStreamArn:
+    Type: String
+    Description: ARN of the kinesis stream to write events to
 
 
 Conditions:
@@ -229,6 +232,13 @@ Resources:
               Action: sts:AssumeRole
               Resource:
                 Ref: OphanRole
+        - PolicyName: KinesisPut
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: kinesis:*
+              Resource:
+                Ref: KinesisStreamArn
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile

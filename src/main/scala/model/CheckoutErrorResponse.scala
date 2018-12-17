@@ -1,7 +1,7 @@
 package model
 
-import com.gu.support.workers.model.CheckoutFailureReasons
-import com.gu.support.workers.model.CheckoutFailureReasons.{CheckoutFailureReason, Unknown}
+import com.gu.support.workers.CheckoutFailureReasons
+import com.gu.support.workers.CheckoutFailureReasons.{CheckoutFailureReason, Unknown}
 import io.circe.generic.semiauto._
 import io.circe.Encoder
 import model.stripe.StripeApiError

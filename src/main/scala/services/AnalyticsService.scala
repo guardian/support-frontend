@@ -2,15 +2,17 @@ package services
 
 import cats.data.{EitherT, Validated}
 import cats.implicits._
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.acquisition.services.DefaultAcquisitionService
+import com.gu.acquisition.services.{DefaultAcquisitionService, DefaultAcquisitionServiceConfig}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder.ops._
 import com.typesafe.scalalogging.StrictLogging
-import conf.OphanConfig
+import conf.{ConfigLoader, KinesisConfig, OphanConfig}
 import io.circe.Encoder
-import model.{DefaultThreadPool, InitializationError, InitializationResult}
+import model.{DefaultThreadPool, Environment, InitializationError, InitializationResult}
 import okhttp3.{HttpUrl, OkHttpClient}
 import io.circe.syntax._
 
@@ -36,18 +38,45 @@ class AnalyticsService(val ophanClient: DefaultAcquisitionService)(implicit pool
   }
 }
 
-object AnalyticsService {
+object AnalyticsService extends StrictLogging {
   implicit val acquisitionSubmissionEncoder: Encoder[AcquisitionSubmission] = {
     import com.gu.acquisition.instances.acquisition.acquisitionEncoder
     io.circe.generic.semiauto.deriveEncoder[AcquisitionSubmission]
   }
 
-  def fromOphanConfig(config: OphanConfig)(implicit pool: DefaultThreadPool): InitializationResult[AnalyticsService] = {
+  private def getAnalyticsServiceConfig(configLoader: ConfigLoader, env: Environment)(implicit pool: DefaultThreadPool): InitializationResult[(OphanConfig, KinesisConfig)] = {
+    import ConfigLoader.environmentShow
+    val ophanResult = configLoader.loadConfig[Environment, OphanConfig](env)
+    val kinesisResult = configLoader.loadConfig[Environment, KinesisConfig](env)
+
+    import cats.syntax.apply._
+    (ophanResult, kinesisResult)
+      .mapN((ophan, kinesis) => (ophan, kinesis))
+  }
+
+  def fromConfig(ophanConfig: OphanConfig, kinesisConfig: KinesisConfig)(implicit pool: DefaultThreadPool): InitializationResult[AnalyticsService] = {
     Validated.catchNonFatal {
       implicit val client = new OkHttpClient()
-      new AnalyticsService(new DefaultAcquisitionService(Some(HttpUrl.parse(config.ophanEndpoint))))
+
+      val credentialsProvider = new AWSCredentialsProviderChain(
+        new ProfileCredentialsProvider("membership"),
+        InstanceProfileCredentialsProvider.getInstance()
+      )
+
+      val acquisitionConfig = DefaultAcquisitionServiceConfig(
+        credentialsProvider,
+        kinesisStreamName = kinesisConfig.streamName,
+        ophanEndpoint = Some(HttpUrl.parse(ophanConfig.ophanEndpoint))
+      )
+
+      new AnalyticsService(new DefaultAcquisitionService(acquisitionConfig))
     }.leftMap { err =>
-      InitializationError(s"unable to instantiate OphanService for config: ${config}. Error trace: ${err.getMessage}")
+      InitializationError(s"unable to instantiate AnalyticsService for config: $ophanConfig, $kinesisConfig. Error trace: ${err.getMessage}")
     }
   }
+
+  def apply(configLoader: ConfigLoader, env: Environment)(implicit pool: DefaultThreadPool): InitializationResult[AnalyticsService] =
+    getAnalyticsServiceConfig(configLoader, env).andThen {
+      case (ophan, kinesis) => fromConfig(ophan, kinesis)
+    }
 }

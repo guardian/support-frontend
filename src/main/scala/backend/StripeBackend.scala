@@ -166,9 +166,7 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      configLoader
-        .loadConfig[Environment, OphanConfig](env)
-        .andThen(AnalyticsService.fromOphanConfig): InitializationResult[AnalyticsService],
+      services.AnalyticsService(configLoader, env),
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
