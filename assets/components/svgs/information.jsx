@@ -5,13 +5,9 @@ import React from 'react';
 export default function SvgInformation() {
 
   return (
-    <svg width="17" height="17" className="svg-information" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none" fillRule="evenodd">
-        <circle fill="#00B2FF" cx="8.5" cy="8.5" r="8.5" />
-        <text fontFamily="GHGuardianHeadline-Bold, GH Guardian Headline" fontSize="12" fontWeight="bold" fill="#FFF">
-          <tspan x="6.6" y="12.9">i</tspan>
-        </text>
-      </g>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="17px" height="17px" className="svg-information" version="1.1" viewBox="0 0 16 16">
+      <path fill="#00B2FF" fillRule="evenodd" stroke="none" strokeWidth="1" d="M8 16c-4.418278 0-8-3.581722-8-8s3.581722-8 8-8 8 3.581722 8 8-3.581722 8-8 8zm.79121082-11.15454545c.71416161 0 1.36094948-.43119192 1.36094948-1.19925253C10.1521603 2.98593939 9.6940189 2.42 8.79121082 2.42c-.70068687 0-1.34747475.44466667-1.34747475 1.21272727 0 .63331313.47161616 1.21272728 1.34747475 1.21272728zM7.0260189 13.092c.78153535 0 1.65739394-.1751717 2.27723232-.4716162l.20212121-.6737373-1.23967677.053899 1.23967677-5.34947479c.20212121-.83543435-.04042424-1.23967677-.84890909-1.23967677-.64678788 0-1.73824242.22907071-2.51977778.47161616l-.12127272.70068687 1.03755555-.0269495-1.15882828 5.01260603C5.6650694 12.5799596 5.9480391 13.092 7.0260189 13.092z" />
     </svg>
   );
 }

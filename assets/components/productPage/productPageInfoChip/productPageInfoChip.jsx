@@ -22,7 +22,7 @@ const ProductPageInfoChip = ({
   children, icon,
 }: PropTypes) => (
   <div className="component-product-page-info-chip">
-    {icon}
+    {icon && <span className="component-product-page-info-chip__icon">{icon}</span>}
     {children}
   </div>
 );
