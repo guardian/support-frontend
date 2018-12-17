@@ -72,42 +72,42 @@ const Sales: Sale[] = [
       UnitedStates: {
         promoCode: 'DDPCS99X',
         intcmp: '',
-        price: 11.99,
+        price: 14.99,
         saleCopy: {
           featuredProduct: {
             heading: 'Digital Pack',
             subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. $11.99/month for your first year.',
+            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
           },
           landingPage: {
             heading: 'Digital Pack',
-            subHeading: 'Save 25% - $11.99/month for a year, then $14.99/month',
+            subHeading: 'Save 25% - $14.99/month for a year, then $19.99/month',
           },
           bundle: {
             heading: 'Digital Pack',
-            subHeading: '$11.99/month for a year then $14.99/month',
-            description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
+            subHeading: 'Save 25% for a year',
+            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
       },
       International: {
         promoCode: 'DDPCS99X',
         intcmp: '',
-        price: 11.99,
+        price: 14.99,
         saleCopy: {
           featuredProduct: {
             heading: 'Digital Pack',
             subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. $11.99/month for your first year.',
+            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
           },
           landingPage: {
             heading: 'Digital Pack',
-            subHeading: 'Save 25% - $11.99/month for a year, then $14.99/month',
+            subHeading: 'Save 25% - $14.99/month for a year, then $19.99/month',
           },
           bundle: {
             heading: 'Digital Pack',
-            subHeading: '$11.99/month for a year then $14.99/month',
-            description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
+            subHeading: 'Save 25% for a year',
+            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
       },
@@ -119,7 +119,7 @@ const Sales: Sale[] = [
           featuredProduct: {
             heading: 'Digital Pack',
             subHeading: 'Save 25% for a year',
-            description: 'Read The Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. $16.13/month for your first year.',
+            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
           },
           landingPage: {
             heading: 'Digital Pack',
@@ -127,8 +127,8 @@ const Sales: Sale[] = [
           },
           bundle: {
             heading: 'Digital Pack',
-            subHeading: '$16.13/month for a year then $21.50/month',
-            description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
+            subHeading: 'Save 25% for a year',
+            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
       },
