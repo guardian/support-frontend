@@ -44,7 +44,7 @@ type Sale = {
 const Sales: Sale[] = [
   {
     subscriptionProduct: 'DigitalPack',
-    activeRegions: ['GBPCountries','UnitedStates','AUDCountries','International'],
+    activeRegions: ['GBPCountries', 'UnitedStates', 'AUDCountries', 'International'],
     startTime: new Date(2018, 11, 17).getTime(), // TODO: 20 Dec 2018
     endTime: new Date(2019, 0, 3).getTime(), // 3 Jan 2019
     saleDetails: {
