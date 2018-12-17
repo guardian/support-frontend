@@ -62,3 +62,7 @@
     }
   }
 }
+
+.component-product-page-plan-form + .component-product-page-info-chip {
+  margin-top: ($gu-v-spacing*-1.5)
+}
