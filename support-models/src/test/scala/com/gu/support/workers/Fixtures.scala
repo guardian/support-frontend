@@ -92,7 +92,6 @@ object Fixtures {
           "componentId":null,
           "componentType":null,
           "source":null,
-          "abTest":null,
           "abTests":[{
             "name":"fakeTest",
             "variant":"fakeVariant"
