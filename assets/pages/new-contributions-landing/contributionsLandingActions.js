@@ -246,6 +246,8 @@ const stripeChargeDataFromAuthorisation = (
     ),
     token: authorisation.paymentMethod === 'Stripe' ? authorisation.token : '',
     email: state.page.form.formData.email || '',
+    paymentMethod: authorisation.paymentMethod === 'Stripe'
+      ? authorisation.stripePaymentMethod : null,
   },
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,

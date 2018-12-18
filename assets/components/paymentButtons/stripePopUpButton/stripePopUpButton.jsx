@@ -58,6 +58,7 @@ function Button(props: PropTypes) {
   const tokenToAuthorisation = (token: string): StripeAuthorisation => ({
     paymentMethod: 'Stripe',
     token,
+    stripePaymentMethod: 'StripeCheckout',
   });
 
   const onPaymentAuthorisation = (token: string): void => {
