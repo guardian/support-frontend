@@ -5,11 +5,11 @@ import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.CheckoutFailureState
 import com.gu.support.workers.{CheckoutFailureReasons, Status, User}
-import org.scalatest.{FlatSpec, Matchers}
-import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
-import io.circe.generic.auto._
-import StepFunctionExecutionStatus._
+import org.scalatest.mockito.MockitoSugar
+import org.scalatest.{FlatSpec, Matchers}
+import services.stepfunctions.StepFunctionExecutionStatus._
+
 import scala.util.{Failure, Success}
 
 object StatusResults {

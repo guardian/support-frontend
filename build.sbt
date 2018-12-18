@@ -65,7 +65,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion,
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
-  "com.gu" %% "support-models" % "0.40",
+  "com.gu" %% "support-models" % "0.43",
   "com.gu" %% "support-config" % "0.16",
   "com.gu" %% "fezziwig" % "0.8",
   "com.typesafe.akka" %% "akka-agent" % "2.5.14",
@@ -124,8 +124,7 @@ javaOptions in Universal ++= Seq(
 javaOptions in Test += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import scalariform.formatter.preferences.{DanglingCloseParenthesis, DoubleIndentConstructorArguments, SpacesAroundMultiImports}
-import scalariform.formatter.preferences.Force
+import scalariform.formatter.preferences.{DanglingCloseParenthesis, DoubleIndentConstructorArguments, Force, SpacesAroundMultiImports}
 
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(SpacesAroundMultiImports, false)
