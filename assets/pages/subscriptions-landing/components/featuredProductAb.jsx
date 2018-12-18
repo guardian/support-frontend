@@ -83,7 +83,8 @@ function FeaturedProductAb(props: PropTypes) {
       cta={getCta(product)}
       headingSize={headingSize}
       product={product.name}
-      hasTimer={flashSaleIsActive(product.name)}
+      hasTimer={flashSaleIsActive(product.name, countryGroupId)}
+      countryGroupId={countryGroupId}
     />) : null;
 
 }

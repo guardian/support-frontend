@@ -5,40 +5,24 @@
 import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
-import { flashSaleIsActive } from 'helpers/flashSale';
+import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
 import { type ImageId } from 'helpers/theGrid';
 import {
   type ComponentAbTest,
-  discountedDisplayPrice,
   displayPrice,
   sendTrackingEventsOnClick,
 } from 'helpers/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-function getFlashSaleCopy(countryGroupId: CountryGroupId) {
-  if (countryGroupId === 'GBPCountries') {
+function getCopy(countryGroupId: CountryGroupId) {
+  if (flashSaleIsActive('DigitalPack', countryGroupId)) {
+    const saleCopy = getSaleCopy('DigitalPack', countryGroupId);
     return {
-      subHeading: <span>{discountedDisplayPrice('DigitalPack', countryGroupId)} - save 50%</span>,
-      description:
-      // eslint-disable-next-line react/jsx-indent
-        <span>Ad-free reading on all devices, including the Premium App and Daily Edition iPad app.
-          <strong> Free 14 day trial, then save 50% for three months.</strong>
-        </span>,
-
+      subHeading: <span>{saleCopy.bundle.subHeading}</span>,
+      description: <span>{saleCopy.bundle.description}</span>,
     };
   }
-  return {
-    subHeading: 'Save 50% for three months',
-    description: 'The Guardian ad-free on all devices, including the Premium App and Daily Edition iPad app. Free 14 day trial, then save 50% for three months.',
-  };
-}
-
-function getCopy(countryGroupId: CountryGroupId) {
-  if (flashSaleIsActive('DigitalPack')) {
-    return getFlashSaleCopy(countryGroupId);
-  }
-
   if (countryGroupId === 'GBPCountries') {
     return {
       subHeading: displayPrice('DigitalPack', countryGroupId),

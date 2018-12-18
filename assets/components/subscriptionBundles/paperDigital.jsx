@@ -4,8 +4,8 @@ import React from 'react';
 import SubscriptionBundle from 'components/subscriptionBundle/subscriptionBundle';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 import type { ComponentAbTest } from 'helpers/subscriptions';
-import { discountedDisplayPrice, displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { flashSaleIsActive } from 'helpers/flashSale';
+import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { flashSaleIsActive, getFormattedFlashSalePrice, getSaleCopy } from 'helpers/flashSale';
 
 // ----- Types ----- //
 
@@ -20,10 +20,11 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function getCopy() {
-  if (flashSaleIsActive('PaperAndDigital')) {
+  if (flashSaleIsActive('PaperAndDigital', 'GBPCountries')) {
+    const flashSaleCopy = getSaleCopy('PaperAndDigital', 'GBPCountries');
     return {
-      subHeading: `from ${discountedDisplayPrice('PaperAndDigital', 'GBPCountries')}`,
-      description: 'Save 50% for three months on a combined paper and digital subscription, then the standard subscription price.',
+      subHeading: `from ${getFormattedFlashSalePrice('PaperAndDigital', 'GBPCountries')}`,
+      description: `${flashSaleCopy.bundle.description}`,
     };
   }
   return {

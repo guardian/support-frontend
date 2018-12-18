@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import FlashSaleCountdown from 'components/flashSaleCountdown/flashSaleCountdown';
+import { FlashSaleCountdown } from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
   type GridImage,
@@ -15,8 +15,8 @@ import GridPicture, {
 import { type ImageId as GridId } from 'helpers/theGrid';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { discountedDisplayPrice, displayPrice } from 'helpers/subscriptions';
-import { flashSaleIsActive } from 'helpers/flashSale';
+import { displayPrice, type SubscriptionProduct } from 'helpers/subscriptions';
+import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import CtaSwitch from './ctaSwitch';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
@@ -131,22 +131,19 @@ function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
 }
 
-function getFlashSaleCopy(countryGroupId: CountryGroupId) {
-  return {
-    heading: 'Digital Pack Sale',
-    subHeading: `${discountedDisplayPrice('DigitalPack', countryGroupId)} for three months, then ${displayPrice('DigitalPack', countryGroupId)}`,
-  };
-}
-
-function getCopy(country: CountryGroupId) {
+function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   if (showUpgradeMessage()) {
     return {
       heading: 'Digital Pack',
       subHeading: 'Upgrade your subscription to Paper+Digital now',
     };
   }
-  if (flashSaleIsActive('DigitalPack')) {
-    return getFlashSaleCopy(country);
+  if (flashSaleIsActive(product, country)) {
+    const saleCopy = getSaleCopy(product, country);
+    return {
+      heading: `${saleCopy.landingPage.heading}`,
+      subHeading: `${saleCopy.landingPage.subHeading}`,
+    };
   }
   return {
     heading: 'Digital Pack',
@@ -157,7 +154,8 @@ function getCopy(country: CountryGroupId) {
 // ----- Component ----- //
 
 export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
-  const copy = getCopy(props.countryGroupId);
+  const product: SubscriptionProduct = 'DigitalPack';
+  const copy = getCopy(product, props.countryGroupId);
   return (
     <div className="digital-subscription-landing-header">
       <LeftMarginSection modifierClasses={['header-block', 'grey']}>
@@ -176,9 +174,12 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             </p>
           </div>
         </div>
-        {flashSaleIsActive('DigitalPack') &&
+        {flashSaleIsActive(product, props.countryGroupId) &&
           <div className="digital-subscription-landing-header__countdown">
-            <FlashSaleCountdown />
+            <FlashSaleCountdown
+              product={product}
+              countryGroupId={props.countryGroupId}
+            />
           </div>
         }
         <CtaSwitch referringCta="support_digipack_page_header" />
