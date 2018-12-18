@@ -32,9 +32,9 @@ class LocalFileSettingsProvider private (initialSettings: Settings) extends Sett
 
 object LocalFileSettingsProvider {
 
-  def fromLocalFile(localFile: SettingsSource.LocalFile): Either[Throwable, SettingsProvider] = {
+  def fromLocalFile(localFile: SettingsSource.LocalFile): Either[Throwable, SettingsProvider] =
     Settings.fromLocalFile(localFile).map(new LocalFileSettingsProvider(_))
-  }
+
 }
 
 class S3SettingsProvider private (
