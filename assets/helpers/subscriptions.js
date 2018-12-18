@@ -83,25 +83,6 @@ const subscriptionPricesForDefaultBillingPeriod: {
   },
 };
 
-const discountPricesForDefaultBillingPeriod: {
-  [SubscriptionProduct]: {
-    [CountryGroupId]: number,
-  }
-} = {
-  DigitalPack: {
-    GBPCountries: 6,
-    UnitedStates: 10,
-    AUDCountries: 10.75,
-    International: 10,
-  },
-  Paper: {
-    GBPCountries: 5.40,
-  },
-  PaperAndDigital: {
-    GBPCountries: 10.81,
-  },
-};
-
 const digitalSubscriptionPrices = {
   GBPCountries: {
     month: GBP(11.99),
@@ -220,16 +201,6 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
 }
 
-function getDiscountedPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  return fixDecimals(discountPricesForDefaultBillingPeriod[product][countryGroupId]);
-}
-
-function discountedDisplayPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  const currency = currencies[detect(countryGroupId)].glyph;
-  const price = getDiscountedPrice(product, countryGroupId);
-  return `${currency}${price}/${defaultBillingPeriods[product]}`;
-}
-
 function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
   return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
 }
@@ -301,7 +272,6 @@ const getNewsstandPrice = (tiers: PaperNewsstandTiers[]) =>
 export {
   sendTrackingEventsOnClick,
   displayPrice,
-  discountedDisplayPrice,
   getProductPrice,
   getWeeklyProductPrice,
   getNewsstandSaving,
