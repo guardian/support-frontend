@@ -1,6 +1,8 @@
 package com.gu.support.workers
 
 import com.gu.i18n.Country
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
 
 case class User(
   id: String,
@@ -14,3 +16,8 @@ case class User(
   allowGURelatedMail: Boolean = false,
   isTestUser: Boolean = false
 )
+
+object User {
+  import com.gu.support.encoding.CustomCodecs._
+  implicit val decoder: Codec[User] = deriveCodec
+}

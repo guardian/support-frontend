@@ -1,7 +1,6 @@
 package com.gu.support.workers.states
 
-import com.gu.support.workers.{PaymentMethod, User}
-import com.gu.support.workers._
+import com.gu.support.workers.{PaymentMethod, User, _}
 
 case class SendAcquisitionEventState(
   user: User,
@@ -9,3 +8,10 @@ case class SendAcquisitionEventState(
   paymentMethod: PaymentMethod,
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
+
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec._
+
+object SendAcquisitionEventState {
+  implicit val codec: Codec[SendAcquisitionEventState] = deriveCodec
+}
