@@ -1,6 +1,6 @@
 package cookies
 
-import com.gu.support.workers.model.BillingPeriod
+import com.gu.support.workers.BillingPeriod
 import config.Configuration.GuardianDomain
 import play.api.mvc.Cookie
 

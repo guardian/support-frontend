@@ -6,15 +6,14 @@ import actions.CustomActionBuilders.OptionalAuthRequest
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
-import codecs.CirceDecoders._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
-import com.gu.support.workers.model.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.model.{Status, _}
-import com.gu.support.workers.model.states.{CheckoutFailureState, CreatePaymentMethodState}
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec._
+import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
+import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
+import com.gu.support.workers.{Status, _}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
@@ -25,7 +24,8 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
-  implicit val decoder: Decoder[CreateSupportWorkersRequest] = deriveDecoder
+  import codecs.CirceDecoders._
+  implicit val codec: Codec[CreateSupportWorkersRequest] = deriveCodec
 }
 case class CreateSupportWorkersRequest(
     firstName: String,
@@ -63,6 +63,8 @@ case class StatusResponse(
 object StatusResponse {
   def fromStatusResponseAndToken(statusResponse: StatusResponse, token: Option[String]): StatusResponse =
     StatusResponse(statusResponse.status, statusResponse.trackingUri, statusResponse.failureReason, token)
+
+  implicit val codec: Codec[StatusResponse] = deriveCodec
 }
 
 class SupportWorkersClient(
@@ -88,7 +90,6 @@ class SupportWorkersClient(
     user: User,
     requestId: UUID
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
-
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
@@ -98,7 +99,8 @@ class SupportWorkersClient(
         ophanIds = request.body.ophanIds,
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
         supportAbTests = request.body.supportAbTests
-      ))
+      )),
+      promoCode = None
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>

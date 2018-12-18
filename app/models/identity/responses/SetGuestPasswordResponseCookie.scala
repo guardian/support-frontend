@@ -1,6 +1,8 @@
 package models.identity.responses
 
 import config.Configuration.GuardianDomain
+import io.circe.Encoder
+import io.circe.generic.semiauto.deriveEncoder
 import org.joda.time.{DateTime, Seconds}
 import play.api.libs.json.{Json, Reads}
 import play.api.mvc.{Cookie => PlayCookie}
@@ -11,6 +13,10 @@ import scala.concurrent.ExecutionContext
 // of the identity api
 case class SetGuestPasswordResponseCookie(key: String, value: String, sessionCookie: Option[Boolean] = None) {
   val isSessionCookie = sessionCookie.getOrElse(false)
+}
+
+object SetGuestPasswordResponseCookie {
+  implicit val cookieResponseEncoder: Encoder[SetGuestPasswordResponseCookie] = deriveEncoder
 }
 
 // Models the cookies field of a successful response from the set guest password endpoint of the identity api

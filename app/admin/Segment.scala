@@ -1,6 +1,7 @@
 package admin
 
 import com.typesafe.config.Config
+import io.circe.{Decoder, Encoder}
 
 sealed abstract class Segment(val name: String)
 
@@ -17,4 +18,6 @@ object Segment {
     case "Perc50" => Perc50
     case _ => Perc50
   }
+  implicit val segmentEncoder: Encoder[Segment] = Encoder.encodeString.contramap[Segment](_.toString)
+  implicit val segmentDecoder: Decoder[Segment] = Decoder.decodeString.map(Segment.fromString)
 }

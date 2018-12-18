@@ -4,19 +4,27 @@ import cats.data.EitherT
 import monitoring.SafeLogger._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
-
 import services.ExecutePaymentBody._
 import codecs.CirceDecoders._
 import io.circe.Decoder
 import io.circe.parser.decode
 import monitoring.SafeLogger
 import cats.implicits._
+import io.circe.generic.semiauto.deriveDecoder
 
 import scala.concurrent.{ExecutionContext, Future}
 
 case class PayPalSuccess(email: Option[String])
 
+object PayPalSuccess {
+  implicit val payPalSuccessDecoder: Decoder[PayPalSuccess] = deriveDecoder
+}
+
 case class PayPalError(responseCode: Option[Int], errorName: Option[String], message: String)
+
+object PayPalError {
+  implicit val payPalErrorBodyDecoder: Decoder[PayPalError] = deriveDecoder
+}
 
 sealed trait PaymentAPIResponseError[+A]
 

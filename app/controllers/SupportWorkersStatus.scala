@@ -2,7 +2,6 @@ package controllers
 
 import actions.CustomActionBuilders
 import cats.instances.future._
-import codecs.CirceDecoders.statusEncoder
 import io.circe.syntax._
 import lib.PlayImplicits._
 import monitoring.SafeLogger

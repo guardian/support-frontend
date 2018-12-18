@@ -6,9 +6,12 @@ import java.nio.file.{Files, Paths}
 import cats.implicits._
 import codecs.CirceDecoders._
 import com.amazonaws.services.s3.AmazonS3
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
 import com.typesafe.config.Config
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser._
+import io.circe.{Decoder, Encoder}
 
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
@@ -20,10 +23,13 @@ case class Switches(
     optimize: SwitchState
 )
 
+object Switches {
+  implicit val switchesCodec: Codec[Switches] = deriveCodec
+}
+
 case class Settings(switches: Switches)
 
 object Settings {
-
   private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Settings] = {
     val settings = decode[Settings](buf.mkString)
     Try(buf.close())
@@ -46,6 +52,7 @@ object Settings {
       }
       settings <- fromBufferedSource(buf)
     } yield settings
+  implicit val settingsCodec: Codec[Settings] = deriveCodec
 }
 
 sealed trait SettingsSource
@@ -110,6 +117,7 @@ object PaymentMethodsSwitch {
       else
         None
     )
+  implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
 }
 
 object ExperimentSwitch {
@@ -119,6 +127,7 @@ object ExperimentSwitch {
       config.getString("description"),
       SwitchState.fromConfig(config, "state")
     )
+  implicit val experimentSwitchCodec: Codec[ExperimentSwitch] = deriveCodec
 }
 
 sealed trait SwitchState {
@@ -133,6 +142,9 @@ object SwitchState {
   case object On extends SwitchState { val isOn = true }
 
   case object Off extends SwitchState { val isOn = false }
+
+  implicit val switchStateEncoder: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
+  implicit val switchStateDecoder: Decoder[SwitchState] = Decoder.decodeString.map(SwitchState.fromString)
 
 }
 

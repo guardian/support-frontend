@@ -1,7 +1,7 @@
 package models
 
-import codecs.CirceDecoders.deriveCodec
-import codecs.Codec
+import com.gu.support.encoding.Codec._
+import com.gu.support.encoding.Codec
 
 case class Autofill(id: Option[String], name: Option[String], email: Option[String])
 
