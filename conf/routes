@@ -71,16 +71,21 @@ GET  /$country<(uk|us|au|int)>/subscribe           controllers.Subscriptions.lan
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
 GET  /:country/subscribe                           controllers.Subscriptions.legacyRedirect(country: String)
 
-GET  /subscribe/digital                            controllers.Subscriptions.digitalGeoRedirect()
-GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.Subscriptions.digital(country: String)
-GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Subscriptions.displayForm(country: String, displayCheckout: Boolean ?= false)
+GET  /digital                            controllers.DigitalPack.digitalGeoRedirect()
+GET  /subscribe/digital                            controllers.DigitalPack.digitalGeoRedirect()
+GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.DigitalPack.digital(country: String)
+GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.DigitalPack.displayForm(country: String, displayCheckout: Boolean ?= false)
+POST  /$country<(uk|us|au|int)>/subscribe/digital/create  controllers.DigitalPack.create(country: String)
 
+GET  /premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
 
+GET  /weekly                            controllers.Subscriptions.weeklyGeoRedirect()
 GET  /subscribe/weekly                            controllers.Subscriptions.weeklyGeoRedirect()
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly   controllers.Subscriptions.weekly(country: String)
 
+GET  /paper          controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = false)
 GET  /subscribe/paper          controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = false)
 GET  /subscribe/paper/delivery          controllers.Subscriptions.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper          controllers.Subscriptions.paper(withDelivery: Boolean = false)

@@ -1,15 +1,15 @@
 package wiring
 
-import play.api.routing.Router
+import controllers.AssetsComponents
 import filters.{CacheHeadersCheck, SetCookiesCheck}
 import lib.CustomHttpErrorHandler
+import monitoring.{SentryLogging, StateMachineMonitor}
+import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
-import play.filters.gzip.GzipFilter
-import play.api.BuiltInComponentsFromContext
-import controllers.AssetsComponents
-import monitoring.{SentryLogging, StateMachineMonitor}
+import play.api.routing.Router
 import play.filters.HttpFiltersComponents
+import play.filters.gzip.GzipFilter
 
 trait AppComponents extends PlayComponents
   with AhcWSComponents
@@ -49,6 +49,7 @@ trait AppComponents extends PlayComponents
     identityController,
     oneOffContributions,
     subscriptionsController,
+    digitalPackController,
     loginController,
     testUsersController,
     payPalRegularController,
