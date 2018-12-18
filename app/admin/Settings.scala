@@ -1,14 +1,16 @@
 package admin
 
-import scala.io.{BufferedSource, Source}
-import com.typesafe.config.Config
+import java.io.FileNotFoundException
+import java.nio.file.{Files, Paths}
 
-import play.api.mvc.RequestHeader
-import codecs.CirceDecoders._
-import io.circe.parser._
 import cats.implicits._
+import codecs.CirceDecoders._
 import com.amazonaws.services.s3.AmazonS3
+import com.typesafe.config.Config
+import com.typesafe.scalalogging.LazyLogging
+import io.circe.parser._
 
+import scala.io.{BufferedSource, Source}
 import scala.util.Try
 
 case class Switches(
@@ -40,9 +42,7 @@ object Settings {
   def fromLocalFile(source: SettingsSource.LocalFile): Either[Throwable, Settings] =
     for {
       buf <- Either.catchNonFatal {
-        val homeDir = System.getProperty("user.home")
-        val localPath = source.path.replaceFirst("~", homeDir)
-        Source.fromFile(localPath)
+        Source.fromFile(source.path)
       }
       settings <- fromBufferedSource(buf)
     } yield settings
@@ -50,7 +50,7 @@ object Settings {
 
 sealed trait SettingsSource
 
-object SettingsSource {
+object SettingsSource extends LazyLogging {
 
   case class S3(bucket: String, key: String) extends SettingsSource {
     override def toString: String = s"s3://$bucket/$key"
@@ -65,7 +65,19 @@ object SettingsSource {
       .leftMap(err => new Error(s"settingsSource was not correctly set in config. $err"))
 
   private def fromLocalFile(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
-    LocalFile(config.getString("settingsSource.local.path"))
+    val localFile = expandHomeDirectory(config.getString("settingsSource.local.path"))
+    if (Files.exists(Paths.get(localFile))) {
+      logger.info(s"Loading settings from $localFile")
+      LocalFile(localFile)
+    } else {
+      logger.info(s"Local settings file doesn't exist: $localFile")
+      throw new FileNotFoundException(localFile)
+    }
+  }
+
+  private def expandHomeDirectory(path: String) = {
+    val homeDir = System.getProperty("user.home")
+    path.replaceFirst("~", homeDir)
   }
 
   private def fromS3(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {

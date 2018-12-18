@@ -3,21 +3,20 @@ package admin
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 
+import admin.SettingsProvider._
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import com.amazonaws.services.s3.AmazonS3
 import config.{Configuration, FastlyConfig}
 import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
-
 import services.fastly.FastlyService
+
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
-
-import SettingsProvider._
-import SafeLogger._
 
 abstract class SettingsProvider {
 
@@ -33,8 +32,9 @@ class LocalFileSettingsProvider private (initialSettings: Settings) extends Sett
 
 object LocalFileSettingsProvider {
 
-  def fromLocalFile(localFile: SettingsSource.LocalFile): Either[Throwable, SettingsProvider] =
+  def fromLocalFile(localFile: SettingsSource.LocalFile): Either[Throwable, SettingsProvider] = {
     Settings.fromLocalFile(localFile).map(new LocalFileSettingsProvider(_))
+  }
 }
 
 class S3SettingsProvider private (
