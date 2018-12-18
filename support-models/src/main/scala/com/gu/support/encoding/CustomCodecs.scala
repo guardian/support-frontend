@@ -3,14 +3,12 @@ package com.gu.support.encoding
 import java.util.UUID
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.encoding.Codec._
-import com.gu.support.workers._
 import io.circe.{Decoder, Encoder}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
 import scala.util.Try
 
-object CustomCodecs extends InternationalisationCodecs with ModelsCodecs with HelperCodecs
+object CustomCodecs extends InternationalisationCodecs with HelperCodecs
 
 trait InternationalisationCodecs {
   implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
@@ -21,16 +19,6 @@ trait InternationalisationCodecs {
   implicit val encodeCountryAsAlpha2: Encoder[Country] = Encoder.encodeString.contramap[Country](_.alpha2)
   implicit val decodeCountry: Decoder[Country] =
     Decoder.decodeString.emap { code => CountryGroup.countryByCode(code).toRight(s"Unrecognised country code '$code'") }
-}
-
-trait ModelsCodecs {
-  self: InternationalisationCodecs with HelperCodecs =>
-
-  implicit val acquisitionDataCodec: Codec[AcquisitionData] = {
-    import com.gu.acquisition.instances.abTest._
-    deriveCodec
-  }
-
 }
 
 trait HelperCodecs {
