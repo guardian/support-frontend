@@ -60,7 +60,7 @@ export type StripeChargeData = {|
     amount: number,
     token: string,
     email: string,
-    paymentMethod: StripePaymentMethod | null,
+    paymentMethod: StripePaymentMethod,
   },
   acquisitionData: PaymentAPIAcquisitionData,
 |};
