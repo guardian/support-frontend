@@ -24,6 +24,8 @@ In order to connect to the test database, before running the app:
   ```
   127.0.0.1   contributions-store-code.c0gunnrs6vkk.eu-west-1.rds.amazonaws.com
   ```
+- `gem install prism-marauder`
+- set up your `~/.config/marauder/defaults.yaml` file with contents `prism-url: http://<prism-host>` (ask to find the right host)
 - clone the repo [contributions-platform](https://github.com/guardian/contributions-platform) and from the root 
   directory of the project run:
   ```
