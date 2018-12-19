@@ -8,8 +8,8 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import router.Routes
 import util.RequestBasedProvider
 import aws.AWSClientBuilder
-import backend.{PaypalBackend, StripeBackend}
-import _root_.controllers.{AppController, ErrorHandler, PaypalController, StripeController}
+import backend.{GoCardlessBackend, PaypalBackend, StripeBackend}
+import _root_.controllers.{AppController, ErrorHandler, PaypalController, StripeController, GoCardlessController}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{ConfigLoader, PlayConfigUpdater}
@@ -76,6 +76,11 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
+  val goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend] =
+    new GoCardlessBackend.Builder(configLoader, cloudWatchClient)
+      .buildRequestBasedProvider(requestEnvironments)
+      .valueOr(throw _)
+
   implicit val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
 
   override val router =
@@ -83,6 +88,7 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       httpErrorHandler,
       new AppController(controllerComponents),
       new StripeController(controllerComponents, stripeBackendProvider),
-      new PaypalController(controllerComponents, paypalBackendProvider)
+      new PaypalController(controllerComponents, paypalBackendProvider),
+      new GoCardlessController(controllerComponents, goCardlessBackendProvider)
     )
 }

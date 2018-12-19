@@ -2,10 +2,9 @@ package controllers
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
-import backend.{PaypalBackend, StripeBackend}
+import backend.{BackendError, GoCardlessBackend, PaypalBackend, StripeBackend}
 import cats.data.EitherT
 import cats.implicits._
-import backend.BackendError
 import com.stripe.exception.{CardException, InvalidRequestException}
 import com.stripe.model.{Charge, Event}
 import model.DefaultThreadPool
@@ -69,11 +68,15 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
     mock[RequestBasedProvider[PaypalBackend]]
 
+  val goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend] =
+    mock[RequestBasedProvider[GoCardlessBackend]]
+
   override def router: Router = new Routes(
     httpErrorHandler,
     new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
     stripeController,
-    new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty)
+    new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty),
+    new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty)
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty

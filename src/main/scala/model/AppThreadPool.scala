@@ -61,6 +61,13 @@ object PaypalThreadPool extends CustomThreadPoolLoader[PaypalThreadPool] {
   override val threadPoolId: String = "paypal"
 }
 
+// Should be used as the execution context for all requests made to GoCardless.
+case class GoCardlessThreadPool private (underlying: ExecutionContext) extends AppThreadPool
+
+object GoCardlessThreadPool extends CustomThreadPoolLoader[GoCardlessThreadPool] {
+  override val threadPoolId: String = "gocardless"
+}
+
 // Should be used as the execution context for database IO.
 case class JdbcThreadPool private (underlying: ExecutionContext) extends AppThreadPool
 
@@ -73,6 +80,7 @@ case class AppThreadPools private (
   default: DefaultThreadPool,
   stripe: StripeThreadPool,
   paypal: PaypalThreadPool,
+  goCardless: GoCardlessThreadPool,
   jdbc: JdbcThreadPool
 )
 
@@ -82,6 +90,7 @@ object AppThreadPools {
     DefaultThreadPool(playExecutionContext).valid: InitializationResult[DefaultThreadPool],
     StripeThreadPool.load(),
     PaypalThreadPool.load(),
+    GoCardlessThreadPool.load(),
     JdbcThreadPool.load()
   ).mapN(AppThreadPools.apply)
 }
@@ -96,5 +105,6 @@ trait AppThreadPoolsProvider {
   implicit lazy val defaultThreadPool: DefaultThreadPool = threadPools.default
   implicit lazy val stripeThreadPool: StripeThreadPool = threadPools.stripe
   implicit lazy val paypalThreadPool: PaypalThreadPool = threadPools.paypal
+  implicit lazy val goCardlessThreadPool: GoCardlessThreadPool = threadPools.goCardless
   implicit lazy val jdbcThreadPool: JdbcThreadPool = threadPools.jdbc
 }

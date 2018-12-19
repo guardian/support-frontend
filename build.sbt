@@ -24,6 +24,7 @@ libraryDependencies ++= Seq(
   "com.dripower" %% "play-circe" % "2609.0",
   "com.github.mpilquist" %% "simulacrum" % "0.11.0",
   "com.stripe" % "stripe-java" % "5.28.0",
+  "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,

@@ -40,3 +40,11 @@ POST     /contribute/one-off/paypal/capture-payment           controllers.Paypal
 
 # This endpoint is called by PayPal via a webhook to notify us of refunds
 POST     /contribute/one-off/paypal/refund                    controllers.PaypalController.processRefund
+
+#############################################
+# GO CARDLESS
+#############################################
+
+# Performs a bank details validation check against GoCardless
+POST     /direct-debit/check-account                          controllers.GoCardlessController.checkBankAccount
+OPTIONS  /direct-debit/check-account                          controllers.AppController.corsOptions
