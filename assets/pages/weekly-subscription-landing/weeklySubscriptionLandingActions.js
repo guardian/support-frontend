@@ -24,6 +24,7 @@ function redirectToWeeklyPage() {
       countryGroupId,
       abParticipations,
       optimizeExperiments,
+      (state.page.plan === 'year' ? '10ANNUAL' : undefined),
     ) : null;
 
     if (location) {

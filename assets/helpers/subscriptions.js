@@ -125,6 +125,54 @@ const paperSubscriptionPrices = {
   deliverySunday: GBP(15.12),
 };
 
+export type WeeklyPromoCode = '10ANNUAL';
+
+const subscriptionPromoPricesForGuardianWeekly: {
+  [WeeklyPromoCode]: {
+    [CountryGroupId]: {
+      [WeeklyBillingPeriod]: number,
+    }
+  }
+} = {
+  '10ANNUAL': {
+    GBPCountries: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
+      sixweek: 6,
+      year: 135,
+    },
+    EURCountries: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
+      sixweek: 6,
+      year: 220.68,
+    },
+    UnitedStates: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
+      sixweek: 6,
+      year: 270,
+    },
+    Canada: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
+      sixweek: 6,
+      year: 288,
+    },
+    AUDCountries: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
+      sixweek: 6,
+      year: 351,
+    },
+    NZDCountries: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
+      sixweek: 6,
+      year: 442.8,
+    },
+    International: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
+      sixweek: 6,
+      year: 292.68,
+    },
+  },
+};
+
 const subscriptionPricesForGuardianWeekly: {
   [CountryGroupId]: {
     [WeeklyBillingPeriod]: number,
@@ -205,6 +253,14 @@ function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: We
   return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
 }
 
+function getPromotionWeeklyProductPrice(
+  countryGroupId: CountryGroupId,
+  billingPeriod: WeeklyBillingPeriod,
+  promoCode: WeeklyPromoCode,
+): string {
+  return subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod].toFixed(2);
+}
+
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
   return paperSubscriptionPrices[billingPlan];
 }
@@ -274,6 +330,7 @@ export {
   displayPrice,
   getProductPrice,
   getWeeklyProductPrice,
+  getPromotionWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
   getDigitalPrice,
