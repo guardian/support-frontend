@@ -16,11 +16,11 @@ type PropTypes = {}
 // ---- Helpers ----- //
 
 const getInitialTickerValues = (): Promise<StateTypes> =>
-  fetch('https://interactive.guim.co.uk/docsdata-test/1ySn7Ol2NQLvvSw_eAnVrPuuRnaGOxUmaUs6svtu_irU.json')
+  fetch('/ticker.json')
     .then(resp => resp.json())
     .then((data) => {
-      const totalSoFar = parseInt(data.sheets.Sheet1[0].total, 10);
-      const goal = parseInt(data.sheets.Sheet1[0].goal, 10);
+      const totalSoFar = parseInt(data.total, 10);
+      const goal = parseInt(data.goal, 10);
 
       return { totalSoFar, goal };
     });
