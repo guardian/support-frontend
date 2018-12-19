@@ -1,30 +1,45 @@
 package controllers
 
 import actions.CustomActionBuilders
+import actions.CustomActionBuilders.AuthRequest
 import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
+import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
+import com.gu.support.workers.User
+import com.gu.tip.Tip
+import config.Configuration.GuardianDomain
 import config.StringsConfig
+import cookies.RecurringContributionCookie
+import io.circe.syntax._
+import lib.PlayImplicits._
+import monitoring.PathVerification._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
-import play.api.mvc.{Action, AnyContent, ControllerComponents, RequestHeader}
+import play.api.libs.circe.Circe
+import play.api.mvc._
 import play.twirl.api.Html
-import services.IdentityService
+import services.{IdentityService, TestUserService}
+import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import views.html.digitalSubscription
 import views.html.helper.CSRF
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalPack(
-    actionRefiners: CustomActionBuilders,
+    client: SupportWorkersClient,
+    val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
+    testUsers: TestUserService,
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider,
-    val supportUrl: String
-)(implicit val ec: ExecutionContext) extends GeoRedirect(components, actionRefiners) with CanonicalLinks with SettingsSurrogateKeySyntax {
+    val supportUrl: String,
+    tipMonitoring: Tip,
+    guardianDomain: GuardianDomain
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
@@ -75,9 +90,57 @@ class DigitalPack(
     digitalSubscription(title, id, js, css, Some(csrf), idUser)
   }
 
-  def create(countryCode: String): Action[AnyContent] = authenticatedAction(recurringIdentityClientId).async {
-    implicit request =>
-      Future.successful(Ok("test"))
+  def create(countryCode: String): Action[CreateSupportWorkersRequest] =
+    authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
+      implicit request =>
+        val body = request.body
+        val billingPeriod = request.body.product.billingPeriod
+        SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod contribution")
+        val result = for {
+          user <- identityService.getUser(request.user)
+          statusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+        } yield statusResponse
+        respondToClient(result, request.body, guestCheckout = false)
+    }
+
+  private def contributor(user: IdUser, request: CreateSupportWorkersRequest) = {
+    User(
+      id = user.id,
+      primaryEmailAddress = user.primaryEmailAddress,
+      firstName = request.firstName,
+      lastName = request.lastName,
+      country = request.country,
+      state = request.state,
+      allowMembershipMail = false,
+      allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
+      allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
+      isTestUser = false // testUsers.isTestUser(user.publicFields.displayName)
+    )
+  }
+
+  protected def respondToClient(
+    result: EitherT[Future, String, StatusResponse],
+    body: CreateSupportWorkersRequest,
+    guestCheckout: Boolean
+  )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
+    val billingPeriod = body.product.billingPeriod
+    result.fold(
+      { error =>
+        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod contribution, due to $error")
+        // This means we do not return the guest account registration token, meaning that the client won't be able to
+        // use it to create a password for this identity id.
+        InternalServerError
+      },
+      { statusResponse =>
+        if (!testUsers.isTestUser(request.user)) {
+          monitoredRegion(body.country).map { region =>
+            val tipPath = TipPath(region, RecurringContribution, monitoredPaymentMethod(body.paymentFields), guestCheckout)
+            verify(tipPath, tipMonitoring.verify)
+          }
+        }
+        Accepted(statusResponse.asJson).withCookies(RecurringContributionCookie.create(guardianDomain, billingPeriod))
+      }
+    )
   }
 
 }

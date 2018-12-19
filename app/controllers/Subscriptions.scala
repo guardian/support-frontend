@@ -10,14 +10,14 @@ import services.IdentityService
 import scala.concurrent.ExecutionContext
 
 class Subscriptions(
-    actionRefiners: CustomActionBuilders,
+    val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider,
     val supportUrl: String
-)(implicit val ec: ExecutionContext) extends GeoRedirect(components, actionRefiners) with CanonicalLinks with SettingsSurrogateKeySyntax {
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 

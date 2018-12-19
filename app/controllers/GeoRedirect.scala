@@ -2,9 +2,13 @@ package controllers
 
 import actions.CustomActionBuilders
 import com.gu.i18n.CountryGroup._
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import play.api.mvc.{AbstractController, Action, AnyContent}
 import utils.RequestCountry._
-abstract class GeoRedirect(components: ControllerComponents, actionRefiners: CustomActionBuilders) extends AbstractController(components) {
+
+trait GeoRedirect {
+  self: AbstractController =>
+  val actionRefiners: CustomActionBuilders
+
   import actionRefiners._
 
   def geoRedirect(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
@@ -18,7 +22,6 @@ abstract class GeoRedirect(components: ControllerComponents, actionRefiners: Cus
     }
 
     Redirect(redirectUrl, request.queryString, status = FOUND)
-
   }
 
   def geoRedirectAllMarkets(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>

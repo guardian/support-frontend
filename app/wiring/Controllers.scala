@@ -37,13 +37,17 @@ trait Controllers {
   )
 
   lazy val digitalPackController = new DigitalPack(
+    supportWorkersClient,
     actionRefiners,
     identityService,
+    testUsers,
     assetsResolver,
     controllerComponents,
     stringsConfig,
     settingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    tipMonitoring,
+    appConfig.guardianDomain
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(

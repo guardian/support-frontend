@@ -4,6 +4,8 @@ import actions.CustomActionBuilders
 import admin.SwitchState.On
 import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
 import cats.implicits._
+import com.gu.tip.Tip
+import config.Configuration.GuardianDomain
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.mockito.Mockito.when
@@ -13,7 +15,8 @@ import org.scalatest.{MustMatchers, WordSpec}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
-import services.HttpIdentityService
+import services.stepfunctions.SupportWorkersClient
+import services.{HttpIdentityService, TestUserService}
 
 import scala.concurrent.Future
 
@@ -33,14 +36,22 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
         Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
       )
 
+      val client = mock[SupportWorkersClient]
+      val testUserService = mock[TestUserService]
+      val tip = mock[Tip]
+
       new DigitalPack(
+        client,
         actionRefiner,
         identityService,
+        testUserService,
         assetResolver,
         stubControllerComponents(),
         new StringsConfig(),
         settingsProvider,
-        "support.thegulocal.com"
+        "support.thegulocal.com",
+        tip,
+        GuardianDomain(".thegulocal.com")
       )
     }
 

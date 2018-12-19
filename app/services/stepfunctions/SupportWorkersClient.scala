@@ -2,7 +2,7 @@ package services.stepfunctions
 
 import java.util.UUID
 
-import actions.CustomActionBuilders.OptionalAuthRequest
+import actions.CustomActionBuilders.AnyAuthRequest
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
@@ -77,7 +77,7 @@ class SupportWorkersClient(
   private implicit val ec = system.dispatcher
   private val underlying = Client(arn)
 
-  private def referrerAcquisitionDataWithGAFields(request: OptionalAuthRequest[CreateSupportWorkersRequest]): ReferrerAcquisitionData = {
+  private def referrerAcquisitionDataWithGAFields(request: AnyAuthRequest[CreateSupportWorkersRequest]): ReferrerAcquisitionData = {
     val hostname = request.host
     val gaClientId = request.cookies.get("_ga").map(_.value)
     val userAgent = request.headers.get("user-agent")
@@ -86,7 +86,7 @@ class SupportWorkersClient(
   }
 
   def createSubscription(
-    request: OptionalAuthRequest[CreateSupportWorkersRequest],
+    request: AnyAuthRequest[CreateSupportWorkersRequest],
     user: User,
     requestId: UUID
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {

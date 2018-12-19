@@ -8,14 +8,15 @@ import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
 import play.filters.csrf._
 import services.TestUserService
+import services.stepfunctions.CreateSupportWorkersRequest
 import utils.RequestCountry
 
-import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
   type OptionalAuthRequest[A] = AuthenticatedRequest[A, Option[AuthenticatedIdUser]]
+  type AnyAuthRequest[A] = AuthenticatedRequest[CreateSupportWorkersRequest, _]
 }
 
 class CustomActionBuilders(
