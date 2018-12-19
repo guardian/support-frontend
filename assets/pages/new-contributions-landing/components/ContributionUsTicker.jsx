@@ -16,7 +16,7 @@ type PropTypes = {}
 // ---- Helpers ----- //
 
 const getInitialTickerValues = (): Promise<StateTypes> =>
-  fetch('https://support.theguardian.com/ticker.json')
+  fetch('/ticker.json')
     .then(resp => resp.json())
     .then((data) => {
       const totalSoFar = parseInt(data.total, 10);
