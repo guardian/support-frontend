@@ -3,7 +3,7 @@ package selenium.subscriptions
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.subscriptions.pages.PaperSubs
+import selenium.subscriptions.pages.{PaperSubs, WeeklySubs}
 import selenium.util._
 
 class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
@@ -22,13 +22,20 @@ class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a one-off contribution") {
+  feature("Subscription landing pages") {
 
-    scenario("One-off contribution sign-up with Stripe - AUD") {
+    scenario("Basic loading") {
 
-      eventually {
-        assert(new PaperSubs().pageHasLoaded)
-      }
+      val paperSubsPage = new PaperSubs()
+      val weeklySubsPage = new WeeklySubs()
+      Given("that a test user goes to the paper subs landing page")
+      goTo(paperSubsPage)
+      assert(paperSubsPage.pageHasLoaded)
+
+      Given("that a test user goes to the GW landing page")
+      goTo(weeklySubsPage)
+      assert(weeklySubsPage.pageHasLoaded)
+
     }
 
   }
