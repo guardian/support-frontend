@@ -125,10 +125,8 @@ const paperSubscriptionPrices = {
   deliverySunday: GBP(15.12),
 };
 
-export type WeeklyPromoCode = '10ANNUAL';
-
 const subscriptionPromoPricesForGuardianWeekly: {
-  [WeeklyPromoCode]: {
+  [string]: {
     [CountryGroupId]: {
       [WeeklyBillingPeriod]: number,
     }
@@ -256,7 +254,7 @@ function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: We
 function getPromotionWeeklyProductPrice(
   countryGroupId: CountryGroupId,
   billingPeriod: WeeklyBillingPeriod,
-  promoCode: WeeklyPromoCode,
+  promoCode: string,
 ): string {
   return subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod].toFixed(2);
 }

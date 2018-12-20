@@ -19,7 +19,6 @@ import type {
   SubscriptionProduct,
   WeeklyBillingPeriod,
   PaperBillingPlan,
-  WeeklyPromoCode,
 } from 'helpers/subscriptions';
 
 import { getPromoCode, getIntcmp } from './flashSale';
@@ -100,6 +99,7 @@ const defaultPromos: PromoCodes = {
   DigitalPack: getPromoCode('DigitalPack', 'GBPCountries', 'DXX83X'),
   Paper: getPromoCode('Paper', 'GBPCountries', 'GXX83P'),
   PaperAndDigital: getPromoCode('PaperAndDigital', 'GBPCountries', 'GXX83X'),
+  GuardianWeekly: getPromoCode('GuardianWeekly', 'GBPCountries', '10ANNUAL'),
 };
 
 const customPromos: {
@@ -303,7 +303,7 @@ function getWeeklyCheckout(
   cgId: CountryGroupId,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
-  promoCode?: ?WeeklyPromoCode,
+  promoCode: Option<string>,
 ): string {
   const acquisitionData = deriveSubsAcquisitionData(
     referrerAcquisitionData,
