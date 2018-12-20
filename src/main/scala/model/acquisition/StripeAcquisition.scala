@@ -8,7 +8,7 @@ import ophan.thrift.event.Acquisition
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import model.ClientBrowserInfo
-import model.stripe.StripeChargeData
+import model.stripe.{StripeChargeData, StripePaymentMethod}
 
 
 case class StripeAcquisition(stripeChargeData: StripeChargeData, charge: Charge, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo)
@@ -17,6 +17,15 @@ object StripeAcquisition extends StrictLogging {
 
   implicit val submissionBuilder: AcquisitionSubmissionBuilder[StripeAcquisition] =
     new AcquisitionSubmissionBuilder[StripeAcquisition] {
+
+
+      def getStripePaymentProvider(data: StripeChargeData) = {
+        data.paymentData.stripePaymentMethod match {
+          case Some(StripePaymentMethod.StripeCheckout) | None => ophan.thrift.event.PaymentProvider.Stripe
+          case Some(StripePaymentMethod.StripeApplePay) => ophan.thrift.event.PaymentProvider.StripeApplePay
+          case Some(StripePaymentMethod.StripePaymentRequestButton) => ophan.thrift.event.PaymentProvider.StripePaymentRequestButton
+        }
+      }
 
       override def buildOphanIds(stripeAcquisition: StripeAcquisition): Either[String, OphanIds] = {
         Right(OphanIds(
@@ -33,12 +42,13 @@ object StripeAcquisition extends StrictLogging {
         Either.catchNonFatal {
           val paymentData = stripeAcquisition.stripeChargeData.paymentData
           val acquisitionData = stripeAcquisition.stripeChargeData.acquisitionData
+          val paymentProvider = getStripePaymentProvider(stripeAcquisition.stripeChargeData)
           Acquisition(
             product = Product.Contribution,
             paymentFrequency = PaymentFrequency.OneOff,
             currency = paymentData.currency.toString,
             amount = paymentData.amount.toDouble,
-            paymentProvider = Some(ophan.thrift.event.PaymentProvider.Stripe),
+            paymentProvider = Some(paymentProvider),
             campaignCode = acquisitionData.campaignCodes,
             abTests = acquisitionData.abTests.map(AbTestInfo(_)),
             countryCode = StripeSource.getCountryCode(stripeAcquisition.charge),

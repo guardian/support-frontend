@@ -1,11 +1,15 @@
 package model.stripe
 
+import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.Decoder
 import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto._
+import model.Currency.findValues
 import model.{AcquisitionData, Currency}
 import ophan.thrift.componentEvent.ComponentType
 import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}
+
+import scala.collection.immutable.IndexedSeq
 
 object StripeJsonDecoder {
 
@@ -42,7 +46,9 @@ object StripeJsonDecoder {
           email = email,
           currency = Currency.withName(currency),
           amount = amount,
-          token = token
+          token = token,
+          // This will never be sent from the old contributions-frontend API.
+          stripePaymentMethod = None
         ),
         acquisitionData = AcquisitionData(
           platform = platform,
@@ -71,12 +77,25 @@ object StripeJsonDecoder {
 
 // https://stripe.com/docs/api/java#create_charge
 @JsonCodec case class StripePaymentData(
-    email: String,
-    currency: Currency,
-    amount: BigDecimal,
-    token: String
-)
+  email: String,
+  currency: Currency,
+  amount: BigDecimal,
+  token: String,
+  stripePaymentMethod: Option[StripePaymentMethod])
 
+sealed trait StripePaymentMethod extends EnumEntry
+
+object StripePaymentMethod extends Enum[StripePaymentMethod] with CirceEnum[StripePaymentMethod] {
+
+  override val values: IndexedSeq[StripePaymentMethod] = findValues
+
+  case object StripeCheckout extends StripePaymentMethod
+
+  case object StripeApplePay extends StripePaymentMethod
+
+  case object StripePaymentRequestButton extends StripePaymentMethod
+
+}
 // Fields are grouped by what they're used for:
 // - paymentData - required to create a Stripe charge
 // - acquisitionData - required to create an acquisition event (used for analytics)

@@ -44,7 +44,7 @@ libraryDependencies ++= Seq(
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude("org.apache.logging.log4j", "log4j-slf4j-impl"),
   "com.gu" %% "support-internationalisation" % "0.9",
   "com.gu" %% "support-models" % "0.40",
-  "com.gu" %% "ophan-event-model" % "0.0.6",
+  "com.gu" %% "ophan-event-model" % "0.0.7",
   "com.gu" %% "fezziwig" % "0.6" excludeAll ExclusionRule(organization = "com.twitter"),
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support

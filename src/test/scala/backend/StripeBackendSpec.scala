@@ -26,7 +26,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   //-- entities
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
-  val stripePaymentData = StripePaymentData("email@email.com", Currency.USD, 12, "token")
+  val stripePaymentData = StripePaymentData("email@email.com", Currency.USD, 12, "token", None)
   val stripeChargeData = StripeChargeData(stripePaymentData, acquisitionData, None)
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo =  ClientBrowserInfo("","",None,"",countrySubdivisionCode)
