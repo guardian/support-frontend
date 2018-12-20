@@ -341,5 +341,6 @@ Resources:
       Period: 60
       EvaluationPeriods: 2
       Statistic: Sum
+      TreatMissingData: notBreaching
     DependsOn:
     - StateMachineUnavailableMetric
