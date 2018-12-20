@@ -105,12 +105,12 @@ class DigitalPack(
     )
   }
 
-  def create(countryCode: String): Action[CreateSupportWorkersRequest] =
+  def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
       implicit request =>
         val body = request.body
         val billingPeriod = request.body.product.billingPeriod
-        SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod contribution")
+        SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
         val result = for {
           user <- identityService.getUser(request.user)
           statusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)

@@ -22,12 +22,10 @@
   window.guardian = window.guardian || {};
 
     window.guardian.user = {
-      @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName; country <- fields.country) {
-        firstName: "@firstName",
-        lastName: "@lastName",
+        firstName: "@user.privateFields.map(_.firstName).getOrElse("")",
+        lastName: "@user.privateFields.map(_.secondName).getOrElse("")",
         email: "@user.primaryEmailAddress",
-        country: "@country"
-      }
+        country: "@user.privateFields.map(_.country).getOrElse("")"
   };
 
   window.guardian.stripeKeyDefaultCurrencies = {

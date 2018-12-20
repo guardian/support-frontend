@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { combineReducers, compose, type Dispatch } from 'redux';
+import { combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
@@ -126,11 +126,12 @@ const formActionCreators = {
   setPaymentFrequency: (paymentFrequency: DigitalBillingPeriod): Action => ({ type: 'SET_PAYMENT_FREQUENCY', paymentFrequency }),
   setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => {
-    const errors = compose(getErrors, getFormFields)(getState());
+    const state = getState();
+    const errors = getErrors(getFormFields(state));
     if (errors.length > 0) {
       dispatch(setFormErrors(errors));
     } else {
-      showPaymentMethod();
+      showPaymentMethod(state);
     }
   },
 };
