@@ -7,6 +7,7 @@ import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.User
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
@@ -20,8 +21,8 @@ import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import play.twirl.api.Html
-import services.{IdentityService, TestUserService}
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
+import services.{IdentityService, TestUserService}
 import views.html.digitalSubscription
 import views.html.helper.CSRF
 
@@ -29,10 +30,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalPack(
     client: SupportWorkersClient,
+    val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     testUsers: TestUserService,
-    val assets: AssetsResolver,
+    stripeConfigProvider: StripeConfigProvider,
+    payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider,
@@ -86,8 +89,20 @@ class DigitalPack(
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPageStyles.css"
     val csrf = CSRF.getToken.value
+    val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
 
-    digitalSubscription(title, id, js, css, Some(csrf), idUser)
+    digitalSubscription(
+      title,
+      id,
+      js,
+      css,
+      Some(csrf),
+      idUser,
+      uatMode,
+      stripeConfigProvider.get(false),
+      stripeConfigProvider.get(true),
+      payPalConfigProvider.get(uatMode)
+    )
   }
 
   def create(countryCode: String): Action[CreateSupportWorkersRequest] =

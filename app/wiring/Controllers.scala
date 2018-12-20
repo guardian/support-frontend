@@ -38,10 +38,12 @@ trait Controllers {
 
   lazy val digitalPackController = new DigitalPack(
     supportWorkersClient,
+    assetsResolver,
     actionRefiners,
     identityService,
     testUsers,
-    assetsResolver,
+    appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
     controllerComponents,
     stringsConfig,
     settingsProvider,

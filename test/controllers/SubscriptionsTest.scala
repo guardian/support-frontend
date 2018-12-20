@@ -4,6 +4,7 @@ import actions.CustomActionBuilders
 import admin.SwitchState.On
 import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
 import cats.implicits._
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.StringsConfig
@@ -39,13 +40,17 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       val client = mock[SupportWorkersClient]
       val testUserService = mock[TestUserService]
       val tip = mock[Tip]
+      val stripe = mock[StripeConfigProvider]
+      val payPal = mock[PayPalConfigProvider]
 
       new DigitalPack(
         client,
+        assetResolver,
         actionRefiner,
         identityService,
         testUserService,
-        assetResolver,
+        stripe,
+        payPal,
         stubControllerComponents(),
         new StringsConfig(),
         settingsProvider,
