@@ -10,7 +10,7 @@ import { addQueryParamsToURL } from 'helpers/url';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 import { PaymentSuccess } from './readerRevenueApis';
-import type { PaymentResult } from './readerRevenueApis';
+import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
 
 // ----- Types ----- //
 
@@ -59,7 +59,8 @@ export type StripeChargeData = {|
     currency: IsoCurrency,
     amount: number,
     token: string,
-    email: string
+    email: string,
+    paymentMethod: StripePaymentMethod,
   },
   acquisitionData: PaymentAPIAcquisitionData,
 |};

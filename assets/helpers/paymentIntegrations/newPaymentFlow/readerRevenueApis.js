@@ -53,7 +53,10 @@ export type RegularPaymentRequest = {|
   supportAbTests: AcquisitionABTest[]
 |};
 
-export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string |};
+export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
+
+
+export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string, stripePaymentMethod: StripePaymentMethod|};
 export type PayPalAuthorisation = {| paymentMethod: 'PayPal', token: string |};
 export type DirectDebitAuthorisation = {|
   paymentMethod: 'DirectDebit',

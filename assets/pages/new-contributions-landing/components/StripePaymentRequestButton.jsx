@@ -160,7 +160,7 @@ function initialisePaymentRequest(props: PropTypes) {
     // We need to do this so that we can offer marketing permissions on the thank you page
     updateUserEmail(data, props.updateEmail);
     const tokenId = props.isTestUser ? 'tok_visa' : token.id;
-    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId })
+    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId, stripePaymentMethod: 'StripeApplePay' })
       .then(onComplete(complete));
   });
 

@@ -17,7 +17,10 @@ import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
-import type { RegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type {
+  RegularPaymentRequest,
+  StripeAuthorisation,
+} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
   regularPaymentFieldsFromAuthorisation,
@@ -234,7 +237,7 @@ const sendFormSubmitEventForPayPalRecurring = () =>
   };
 
 const stripeChargeDataFromAuthorisation = (
-  authorisation: PaymentAuthorisation,
+  authorisation: StripeAuthorisation,
   state: State,
 ): StripeChargeData => ({
   paymentData: {
@@ -244,8 +247,9 @@ const stripeChargeDataFromAuthorisation = (
       state.page.form.formData.otherAmounts,
       state.page.form.contributionType,
     ),
-    token: authorisation.paymentMethod === 'Stripe' ? authorisation.token : '',
+    token: authorisation.token,
     email: state.page.form.formData.email || '',
+    paymentMethod: authorisation.stripePaymentMethod,
   },
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
@@ -438,8 +442,13 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       dispatch: Dispatch<Action>,
       state: State,
       paymentAuthorisation: PaymentAuthorisation,
-    ): Promise<PaymentResult> =>
-      dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state))),
+    ): Promise<PaymentResult> => {
+      if (paymentAuthorisation.paymentMethod === 'Stripe') {
+        return dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
+      }
+      logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
+      return Promise.resolve(error);
+    },
     DirectDebit: () => {
       logInvalidCombination('ONE_OFF', 'DirectDebit');
       return Promise.resolve(error);
