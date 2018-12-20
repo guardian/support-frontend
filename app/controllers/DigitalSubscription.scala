@@ -28,7 +28,7 @@ import views.html.helper.CSRF
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DigitalPack(
+class DigitalSubscription(
     client: SupportWorkersClient,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,

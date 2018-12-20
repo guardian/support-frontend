@@ -34,14 +34,14 @@ import {
 } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
-import { derivePaymentApiAcquisitionData, getOphanIds, getSupportAbTests, } from 'helpers/tracking/acquisitions';
+import { derivePaymentApiAcquisitionData, getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/cookie';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import { type State, type ThankYouPageStage, type UserFormData, } from './contributionsLandingReducer';
+import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
 
 
 export type Action =

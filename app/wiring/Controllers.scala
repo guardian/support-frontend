@@ -36,7 +36,7 @@ trait Controllers {
     appConfig.supportUrl
   )
 
-  lazy val digitalPackController = new DigitalPack(
+  lazy val digitalPackController = new DigitalSubscription(
     supportWorkersClient,
     assetsResolver,
     actionRefiners,

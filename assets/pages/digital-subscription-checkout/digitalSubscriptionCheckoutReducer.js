@@ -14,13 +14,13 @@ import {
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import { formError, type FormError, nonEmptyString, notNull, validate, } from 'helpers/subscriptionsForms/validation';
+import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 
 import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
-import { showPaymentMethod } from 'pages/digital-subscription-checkout/helpers/paymentProviders';
+import { showPaymentMethod } from './helpers/paymentProviders';
 import { type User } from './helpers/user';
 
 

@@ -4,11 +4,12 @@ import actions.CustomActionBuilders
 import admin.SwitchState.On
 import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
 import cats.implicits._
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config._
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.StringsConfig
 import fixtures.TestCSRFComponents
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.OptionValues._
 import org.scalatest.mockito.MockitoSugar.mock
@@ -30,7 +31,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
-    ): DigitalPack = {
+    ): DigitalSubscription = {
 
       val settingsProvider = mock[SettingsProvider]
       when(settingsProvider.settings()).thenReturn(
@@ -41,9 +42,14 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       val testUserService = mock[TestUserService]
       val tip = mock[Tip]
       val stripe = mock[StripeConfigProvider]
+      val stripeAccountConfig = StripeAccountConfig("", "")
+      when(stripe.get(any[Boolean])).thenReturn(
+        StripeConfig(stripeAccountConfig, stripeAccountConfig, None)
+      )
       val payPal = mock[PayPalConfigProvider]
+      when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
 
-      new DigitalPack(
+      new DigitalSubscription(
         client,
         assetResolver,
         actionRefiner,
