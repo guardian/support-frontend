@@ -49,7 +49,8 @@ libraryDependencies ++= Seq(
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,
-  ws
+  ws,
+  "com.lihaoyi" %% "pprint" % "0.5.3"
 )
 
 lazy val TeamCityTest = config("teamcity").extend(Test)

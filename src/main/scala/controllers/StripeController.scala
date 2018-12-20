@@ -4,11 +4,12 @@ import actions.CorsActionProvider
 import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.circe.Circe
-import play.api.mvc.{AbstractController, Action, ControllerComponents}
+import play.api.mvc._
 import util.RequestBasedProvider
 import backend.StripeBackend
 import model.stripe.{StripeChargeData, StripeRefundHook}
 import model.{CheckoutErrorResponse, ClientBrowserInfo, DefaultThreadPool, ResultBody}
+import ActionOps.Extension
 
 class StripeController(
   cc: ControllerComponents,
@@ -31,7 +32,7 @@ class StripeController(
           charge => Ok(ResultBody.Success(charge))
         )
       }
-    }
+    }.withLogging(this.getClass.getCanonicalName, "executePayment")
 
   def processRefund: Action[StripeRefundHook] = Action(circe.json[StripeRefundHook]).async { request =>
     stripeBackendProvider.getInstanceFor(request)
@@ -40,7 +41,7 @@ class StripeController(
         err => InternalServerError(ResultBody.Error(err.getMessage)),
         _ => Ok(ResultBody.Success("successfully processed Stripe refund webhook"))
       )
-  }
+  }.withLogging(this.getClass.getCanonicalName, "processRefund")
 
   override implicit val controllerComponents: ControllerComponents = cc
   override implicit val corsUrls: List[String] = allowedCorsUrls

@@ -9,6 +9,7 @@ import model.{DefaultThreadPool, ResultBody}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
+import ActionOps.Extension
 
 class GoCardlessController(
   cc: ControllerComponents,
@@ -28,7 +29,7 @@ class GoCardlessController(
           accountValidation => Ok(ResultBody.Success(accountValidation))
         )
     }
-  }
+  }.withLogging(this.getClass.getCanonicalName, "checkBankAccount")
 
   private def checkBankAccountErrorToResponse(error: Throwable) = error match {
     case goCardlessApiException: GoCardlessApiException =>

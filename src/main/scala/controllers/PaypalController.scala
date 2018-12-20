@@ -9,6 +9,7 @@ import model.paypal._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents, Result}
 import util.RequestBasedProvider
+import ActionOps.Extension
 
 class PaypalController(
   cc: ControllerComponents,
@@ -33,7 +34,7 @@ class PaypalController(
           err => toErrorResult(err),
           payment => Ok(ResultBody.Success(payment))
         )
-    }
+    }.withLogging(this.getClass.getCanonicalName, "createPayment")
 
   def capturePayment(): Action[CapturePaypalPaymentData] = Action.async(circe.json[CapturePaypalPaymentData]) {
     captureRequest =>
@@ -44,7 +45,7 @@ class PaypalController(
         err => toErrorResult(err),
         _ => Ok(ResultBody.Success(()))
       )
-    }
+    }.withLogging(this.getClass.getCanonicalName, "capturePayment")
 
   // We return the email that we track the acquisition with so that we can offer the user the chance to sign up
   // to marketing emails with the same email that we associate with the acquisition in our database
@@ -57,7 +58,7 @@ class PaypalController(
           err => toErrorResult(err),
           payment => Ok(ResultBody.Success(ExecutePaymentResponse(payment.email)))
         )
-      }
+      }.withLogging(this.getClass.getCanonicalName, "executePayment")
 
   def processRefund: Action[PaypalRefundWebHookBody] = Action.async(circe.json[PaypalRefundWebHookBody]) { request =>
     paypalBackendProvider.getInstanceFor(request)
@@ -68,7 +69,7 @@ class PaypalController(
         },
         _ => Ok(ResultBody.Success("paypal payment successfully refunded"))
       )
-  }
+  }.withLogging(this.getClass.getCanonicalName, "processRefund")
 
   override implicit val controllerComponents: ControllerComponents = cc
   override implicit val corsUrls: List[String] = allowedCorsUrls
