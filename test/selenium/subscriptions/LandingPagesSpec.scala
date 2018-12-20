@@ -28,13 +28,15 @@ class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
       val paperSubsPage = new PaperSubs()
       val weeklySubsPage = new WeeklySubs()
-      
+
       Given("that a test user goes to the paper subs landing page")
       goTo(paperSubsPage)
+      Then("the page should display")
       assert(paperSubsPage.pageHasLoaded)
 
       Given("that a test user goes to the GW landing page")
       goTo(weeklySubsPage)
+      Then("the page should display")
       assert(weeklySubsPage.pageHasLoaded)
 
     }
