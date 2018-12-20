@@ -22,25 +22,31 @@ class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Subscription landing pages") {
-
+  feature("Paper landing page") {
     scenario("Basic loading") {
 
       val paperSubsPage = new PaperSubs()
-      val weeklySubsPage = new WeeklySubs()
 
-      Given("that a test user goes to the paper subs landing page")
+      Given("that a user goes to the page")
       goTo(paperSubsPage)
-      Then("the page should display")
+      Then("it should display")
       assert(paperSubsPage.pageHasLoaded)
 
-      Given("that a test user goes to the GW landing page")
+    }
+  }
+
+  feature("Weekly landing page") {
+    scenario("Basic loading") {
+
+      val weeklySubsPage = new WeeklySubs()
+
+      Given("that a user goes to the page")
       goTo(weeklySubsPage)
-      Then("the page should display")
+      Then("it should display")
       assert(weeklySubsPage.pageHasLoaded)
 
     }
-
   }
+
 
 }
