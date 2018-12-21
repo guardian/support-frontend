@@ -248,7 +248,7 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
 }
 
 function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
-  return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
+  return fixDecimals(subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod]);
 }
 
 function getPromotionWeeklyProductPrice(
@@ -256,7 +256,7 @@ function getPromotionWeeklyProductPrice(
   billingPeriod: WeeklyBillingPeriod,
   promoCode: string,
 ): string {
-  return subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod].toFixed(2);
+  return fixDecimals(subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod]);
 }
 
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
