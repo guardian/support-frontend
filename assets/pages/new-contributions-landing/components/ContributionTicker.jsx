@@ -10,13 +10,16 @@ type StateTypes = {|
   goal: number,
 |}
 
-type PropTypes = {}
+type PropTypes = {|
+  // URL to fetch ticker JSON from
+  tickerJsonUrl: string,
+|}
 
 
 // ---- Helpers ----- //
 
-const getInitialTickerValues = (): Promise<StateTypes> =>
-  fetch('/ticker.json')
+const getInitialTickerValues = (tickerJsonUrl: string): Promise<StateTypes> =>
+  fetch(tickerJsonUrl)
     .then(resp => resp.json())
     .then((data) => {
       const totalSoFar = parseInt(data.total, 10);
@@ -32,10 +35,12 @@ const percentageTotalAsNegative = (total: number, goal: number) => {
 
 
 // ----- Component ----- //
-export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
+export class ContributionTicker extends Component<PropTypes, StateTypes> {
 
   constructor(props: PropTypes) {
     super(props);
+
+    this.tickerJsonUrl = props.tickerJsonUrl;
 
     this.state = {
       totalSoFar: 0,
@@ -45,7 +50,7 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
   }
 
   componentDidMount(): void {
-    getInitialTickerValues().then(({ totalSoFar, goal }) => {
+    getInitialTickerValues(this.tickerJsonUrl).then(({ totalSoFar, goal }) => {
       const initialTotal = totalSoFar * 0.8;
       this.count = initialTotal;
       this.totalSoFar = totalSoFar;
@@ -61,6 +66,7 @@ export class ContributionUsTicker extends Component<PropTypes, StateTypes> {
   filledProgressBar: ?HTMLDivElement;
   count = 0;
   totalSoFar: number;
+  tickerJsonUrl: string;
 
   animateBar(totalSoFar: number, goal: number) {
     const progressBarElement = this.filledProgressBar;

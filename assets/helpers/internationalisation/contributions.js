@@ -12,6 +12,8 @@ export type CountryMetaData = {
   headerCopy: string,
   contributeCopy?: string,
   headerClasses?: string,
+  // URL to fetch ticker data from. null/undefined implies no ticker
+  tickerJsonUrl?: string,
 };
 
 const countryGroupSpecificDetails: {
@@ -28,6 +30,7 @@ const countryGroupSpecificDetails: {
   UnitedStates: {
     headerCopy: 'Make a year-end gift to The Guardian and invest in our independent journalism for 2019 and beyond.',
     headerClasses: 'header__us-campaign',
+    tickerJsonUrl: '/ticker.json',
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
