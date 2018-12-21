@@ -1,10 +1,6 @@
 // @flow
 import { routes } from 'helpers/routes';
-import {
-  type AcquisitionABTest,
-  type OphanIds,
-  type ReferrerAcquisitionData,
-} from 'helpers/tracking/acquisitions';
+import { type AcquisitionABTest, type OphanIds, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/contributions';
@@ -24,6 +20,13 @@ type RegularContribution = {|
   currency: string,
   billingPeriod: BillingPeriod,
 |};
+
+type DigitalSubscription = {|
+  currency: string,
+  billingPeriod: BillingPeriod,
+|};
+
+type ProductFields = RegularContribution | DigitalSubscription
 
 type RegularPayPalPaymentFields = {| baid: string |};
 
@@ -46,7 +49,7 @@ export type RegularPaymentRequest = {|
   country: IsoCountry,
   state: UsState | CaState | null,
   email: string,
-  product: RegularContribution,
+  product: ProductFields,
   paymentFields: RegularPaymentFields,
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -162,6 +165,7 @@ function checkRegularStatus(
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
 function postRegularPaymentRequest(
+  uri: string,
   data: RegularPaymentRequest,
   participations: Participations,
   csrf: CsrfState,
@@ -169,7 +173,7 @@ function postRegularPaymentRequest(
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
-    routes.recurringContribCreate,
+    uri,
     requestOptions(data, 'same-origin', 'POST', csrf),
   ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage)));
 }

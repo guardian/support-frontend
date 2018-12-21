@@ -6,14 +6,15 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   type Amount,
-  logInvalidCombination,
   billingPeriodFromContrib,
   type ContributionType,
+  getAmount,
+  logInvalidCombination,
+  type PaymentMatrix,
   type PaymentMethod,
-  type PaymentMatrix, getAmount,
 } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
+import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
@@ -23,9 +24,9 @@ import type {
 } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
-  regularPaymentFieldsFromAuthorisation,
   type PaymentResult,
   postRegularPaymentRequest,
+  regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import {
@@ -36,23 +37,14 @@ import {
 } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
-import {
-  derivePaymentApiAcquisitionData,
-  getOphanIds,
-  getSupportAbTests,
-} from 'helpers/tracking/acquisitions';
+import { derivePaymentApiAcquisitionData, getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { logException } from 'helpers/logger';
 import trackConversion from 'helpers/tracking/conversions';
-import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
-import { onFormSubmit, type FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
+import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/cookie';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import {
-  type State,
-  type UserFormData,
-  type ThankYouPageStage,
-} from './contributionsLandingReducer';
+import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
 
 
 export type Action =
@@ -405,6 +397,7 @@ function recurringPaymentAuthorisationHandler(
   const request = regularPaymentRequestFromAuthorisation(paymentAuthorisation, state);
 
   return dispatch(onPaymentResult(postRegularPaymentRequest(
+    routes.recurringContribCreate,
     request,
     state.common.abParticipations,
     state.page.csrf,

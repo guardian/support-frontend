@@ -10,12 +10,12 @@ import play.filters.csrf._
 import services.TestUserService
 import utils.RequestCountry
 
-import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
   type OptionalAuthRequest[A] = AuthenticatedRequest[A, Option[AuthenticatedIdUser]]
+  type AnyAuthRequest[A] = AuthenticatedRequest[A, _]
 }
 
 class CustomActionBuilders(

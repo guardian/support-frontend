@@ -1,64 +1,29 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
-import com.gu.i18n.CountryGroup._
-import com.typesafe.scalalogging.LazyLogging
 import config.StringsConfig
 import play.api.mvc._
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
-import com.gu.identity.play.IdUser
-import play.twirl.api.Html
 import services.IdentityService
-import utils.RequestCountry._
-import views.html.helper.CSRF
-import cats.implicits._
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
 
-import scala.concurrent.{ExecutionContext, Future}
-import views.html.digitalSubscription
+import scala.concurrent.ExecutionContext
 
 class Subscriptions(
-    actionRefiners: CustomActionBuilders,
+    val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: SettingsProvider,
-    supportUrl: String
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with LazyLogging with SettingsSurrogateKeySyntax {
+    val supportUrl: String
+)(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
 
   def geoRedirect: Action[AnyContent] = geoRedirect("subscribe")
-
-  def geoRedirect(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    // If we implement endpoints for EU, CA & NZ we could replace this match with
-    // request.fastlyCountry.map(_.id).getOrDefault("int")
-    val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => s"/uk/$path"
-      case Some(US) => s"/us/$path"
-      case Some(Australia) => s"/au/$path"
-      case _ => s"/int/$path"
-    }
-    Redirect(redirectUrl, request.queryString, status = FOUND)
-  }
-
-  def geoRedirectAllMarkets(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => s"/uk/$path"
-      case Some(US) => s"/us/$path"
-      case Some(Australia) => s"/au/$path"
-      case Some(Europe) => s"/eu/$path"
-      case Some(Canada) => s"/ca/$path"
-      case Some(NewZealand) => s"/nz/$path"
-      case _ => s"/int/$path"
-    }
-    Redirect(redirectUrl, request.queryString, status = FOUND)
-  }
 
   def legacyRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     // Country code is required here because it's a parameter in the route.
@@ -80,26 +45,6 @@ class Subscriptions(
     )).withSettingsSurrogateKey
 
   }
-
-  def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
-    val title = "Support the Guardian | Digital Pack Subscription"
-    val id = "digital-subscription-landing-page-" + countryCode
-    val js = "digitalSubscriptionLandingPage.js"
-    val css = "digitalSubscriptionLandingPageStyles.css"
-    val description = stringsConfig.digitalPackLandingDescription
-    val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
-    val hrefLangLinks = Map(
-      "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
-      "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),
-      "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
-      "en" -> buildCanonicalDigitalSubscriptionLink("int")
-    )
-
-    Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
-  }
-
-  def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
   def premiumTier(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: Settings = settingsProvider.settings()
@@ -149,42 +94,5 @@ class Subscriptions(
   }
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
-
-  private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: Settings): Html = {
-    val title = "Support the Guardian | Digital Subscription"
-    val id = "digital-subscription-checkout-page-" + countryCode
-    val js = "digitalSubscriptionCheckoutPage.js"
-    val css = "digitalSubscriptionCheckoutPageStyles.css"
-    val csrf = CSRF.getToken.value
-
-    digitalSubscription(title, id, js, css, Some(csrf), idUser)
-  }
-
-  def displayForm(countryCode: String, displayCheckout: Boolean, isCsrf: Boolean = false): Action[AnyContent] = {
-    authenticatedAction(recurringIdentityClientId).async { implicit request =>
-      implicit val settings: Settings = settingsProvider.settings()
-      if (displayCheckout) {
-        identityService.getUser(request.user).fold(
-          error => {
-            SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
-            InternalServerError
-          },
-          user => Ok(digitalSubscriptionFormHtml(user, countryCode))
-        ).map(_.withSettingsSurrogateKey)
-      } else {
-        Future.successful(Redirect(routes.Subscriptions.geoRedirect))
-      }
-    }
-  }
-
-  def buildCanonicalPaperSubscriptionLink(withDelivery: Boolean = false): String =
-    if (withDelivery) s"${supportUrl}/uk/subscribe/paper/delivery"
-    else s"${supportUrl}/uk/subscribe/paper"
-
-  def buildCanonicalDigitalSubscriptionLink(countryCode: String): String =
-    s"${supportUrl}/${countryCode}/subscribe/digital"
-
-  def buildCanonicalWeeklySubscriptionLink(countryCode: String): String =
-    s"${supportUrl}/${countryCode}/subscribe/weekly"
 
 }

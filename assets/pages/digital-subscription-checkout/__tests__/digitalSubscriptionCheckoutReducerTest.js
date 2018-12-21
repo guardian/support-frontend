@@ -5,6 +5,7 @@
 import { initReducer, setStage, type Stage } from '../digitalSubscriptionCheckoutReducer';
 import { type User } from '../helpers/user';
 
+jest.mock('ophan', () => {});
 
 // ----- Tests ----- //
 

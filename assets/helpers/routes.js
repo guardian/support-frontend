@@ -25,6 +25,7 @@ const routes: {
   payPalCreateAgreement: '/paypal/create-agreement',
   directDebitCheckAccount: '/direct-debit/check-account',
   payPalRestReturnURL: '/paypal/rest/return',
+  digitalSubscriptionCreate: '/subscribe/digital/create',
 };
 
 function paperSubsUrl(withDelivery: boolean = false): string {

@@ -20,7 +20,7 @@ import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.MembersDataService.UserNotFound
-import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient, StatusResponse}
+import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.recurringContributions
 

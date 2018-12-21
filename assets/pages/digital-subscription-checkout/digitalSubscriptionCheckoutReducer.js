@@ -2,32 +2,25 @@
 
 // ----- Imports ----- //
 
-import { compose, combineReducers, type Dispatch } from 'redux';
+import { combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import { type DigitalBillingPeriod } from 'helpers/subscriptions';
-import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import csrf from 'helpers/csrf/csrfReducer';
+import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
-  type IsoCountry,
   fromString,
+  type IsoCountry,
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import {
-  validate,
-  nonEmptyString,
-  notNull,
-  formError,
-  type FormError,
-} from 'helpers/subscriptionsForms/validation';
+import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 
 import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
-
+import { showPaymentMethod } from './helpers/paymentProviders';
 import { type User } from './helpers/user';
 
 
@@ -132,8 +125,15 @@ const formActionCreators = {
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
   setPaymentFrequency: (paymentFrequency: DigitalBillingPeriod): Action => ({ type: 'SET_PAYMENT_FREQUENCY', paymentFrequency }),
   setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
-  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) =>
-    compose(dispatch, setFormErrors, getErrors, getFormFields)(getState()),
+  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => {
+    const state = getState();
+    const errors = getErrors(getFormFields(state));
+    if (errors.length > 0) {
+      dispatch(setFormErrors(errors));
+    } else {
+      showPaymentMethod(state);
+    }
+  },
 };
 
 export type FormActionCreators = typeof formActionCreators;

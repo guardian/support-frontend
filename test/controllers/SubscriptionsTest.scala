@@ -1,21 +1,24 @@
 package controllers
 
 import actions.CustomActionBuilders
-import config.StringsConfig
-import org.scalatest.mockito.MockitoSugar.mock
-import play.api.test.Helpers.{contentAsString, status, stubControllerComponents}
-import scala.concurrent.ExecutionContext.Implicits.global
-import cats.implicits._
-import org.scalatest.{MustMatchers, WordSpec}
-import org.scalatest.OptionValues._
-import org.mockito.Mockito.when
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import play.api.mvc.Result
-import services.HttpIdentityService
-import fixtures.TestCSRFComponents
 import admin.SwitchState.On
 import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
+import cats.implicits._
+import com.gu.support.config._
+import com.gu.tip.Tip
+import config.Configuration.GuardianDomain
+import config.StringsConfig
+import fixtures.TestCSRFComponents
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalatest.OptionValues._
+import org.scalatest.mockito.MockitoSugar.mock
+import org.scalatest.{MustMatchers, WordSpec}
+import play.api.mvc.Result
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
+import services.stepfunctions.SupportWorkersClient
+import services.{HttpIdentityService, TestUserService}
 
 import scala.concurrent.Future
 
@@ -25,24 +28,41 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     val checkoutEndpoint = "subscribe/digital/checkout?displayCheckout=true"
 
-    def fakeSubscriptions(
+    def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
-    ): Subscriptions = {
+    ): DigitalSubscription = {
 
       val settingsProvider = mock[SettingsProvider]
       when(settingsProvider.settings()).thenReturn(
         Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
       )
 
-      new Subscriptions(
+      val client = mock[SupportWorkersClient]
+      val testUserService = mock[TestUserService]
+      val tip = mock[Tip]
+      val stripe = mock[StripeConfigProvider]
+      val stripeAccountConfig = StripeAccountConfig("", "")
+      when(stripe.get(any[Boolean])).thenReturn(
+        StripeConfig(stripeAccountConfig, stripeAccountConfig, None)
+      )
+      val payPal = mock[PayPalConfigProvider]
+      when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
+
+      new DigitalSubscription(
+        client,
+        assetResolver,
         actionRefiner,
         identityService,
-        assetResolver,
+        testUserService,
+        stripe,
+        payPal,
         stubControllerComponents(),
         new StringsConfig(),
         settingsProvider,
-        "support.thegulocal.com"
+        "support.thegulocal.com",
+        tip,
+        GuardianDomain(".thegulocal.com")
       )
     }
 
@@ -50,7 +70,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): Future[Result] = {
-      fakeSubscriptions(actionRefiner, identityService).displayForm("UK", true, true)(FakeRequest())
+      fakeDigitalPack(actionRefiner, identityService).displayForm("UK", true, true)(FakeRequest())
     }
   }
 

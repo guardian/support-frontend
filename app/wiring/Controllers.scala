@@ -36,6 +36,22 @@ trait Controllers {
     appConfig.supportUrl
   )
 
+  lazy val digitalPackController = new DigitalSubscription(
+    supportWorkersClient,
+    assetsResolver,
+    actionRefiners,
+    identityService,
+    testUsers,
+    appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
+    controllerComponents,
+    stringsConfig,
+    settingsProvider,
+    appConfig.supportUrl,
+    tipMonitoring,
+    appConfig.guardianDomain
+  )
+
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
     supportWorkersClient,
     controllerComponents,
