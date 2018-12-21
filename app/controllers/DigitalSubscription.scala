@@ -111,12 +111,12 @@ class DigitalSubscription(
         SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
         val result = for {
           user <- identityService.getUser(request.user)
-          statusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
+          statusResponse <- client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
         } yield statusResponse
         respondToClient(result, request.body.product.billingPeriod)
     }
 
-  private def contributor(user: IdUser, request: CreateSupportWorkersRequest) = {
+  private def createUser(user: IdUser, request: CreateSupportWorkersRequest) = {
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
