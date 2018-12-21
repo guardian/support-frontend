@@ -20,12 +20,12 @@ function buildRegularPaymentRequest(state: State, token: string) {
     email,
     country,
     stateProvince,
-    paymentFrequency,
+    billingPeriod,
   } = state.page.checkout;
 
   const product = {
     currency: currencyId,
-    billingPeriod: paymentFrequency,
+    billingPeriod,
   };
   return {
     firstName,
@@ -58,7 +58,7 @@ function create(state: State, token: string) {
 function showPaymentMethod(state: State) {
   const { currencyId, countryGroupId } = state.common.internationalisation;
   const { paymentMethod, isTestUser } = state.page.checkout;
-  const price = getDigitalPrice(countryGroupId, state.page.checkout.paymentFrequency);
+  const price = getDigitalPrice(countryGroupId, state.page.checkout.billingPeriod);
   switch (paymentMethod) {
     case 'Stripe':
       loadStripe()
