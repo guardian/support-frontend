@@ -9,7 +9,6 @@ export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'not
 export type ApplePayTestVariant = 'control' | 'applePay' | 'notintest';
 
 export const tests: Tests = {
-  
   annualContributionsRoundThree: {
     variants: ['control', 'annualAmountsA'],
     audiences: {
