@@ -9,7 +9,6 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import {
   type WeeklyBillingPeriod,
-  type WeeklyPromoCode,
   getWeeklyProductPrice,
   getPromotionWeeklyProductPrice,
 } from 'helpers/subscriptions';
@@ -27,7 +26,7 @@ const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) =
   getWeeklyProductPrice(countryGroupId, period),
 ].join('');
 
-const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod, promoCode: WeeklyPromoCode) => [
+const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod, promoCode: string) => [
   currencies[detect(countryGroupId)].extendedGlyph,
   getPromotionWeeklyProductPrice(countryGroupId, period, promoCode),
 ].join('');
