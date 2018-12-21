@@ -2,26 +2,16 @@
 
 // ----- Imports ----- //
 
-import {
-  type Campaign,
-  type ReferrerAcquisitionData,
-  deriveSubsAcquisitionData,
-} from 'helpers/tracking/acquisitions';
-import {
-  countryGroups,
-  type CountryGroupId,
-} from 'helpers/internationalisation/countryGroup';
+import { type Campaign, deriveSubsAcquisitionData, type ReferrerAcquisitionData, } from 'helpers/tracking/acquisitions';
+import { type CountryGroupId, countryGroups, } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
-import type {
-  SubscriptionProduct,
-  WeeklyBillingPeriod,
-  PaperBillingPlan,
-} from 'helpers/subscriptions';
+import { WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import type { PaperBillingPlan, SubscriptionProduct, } from 'helpers/subscriptions';
 
-import { getPromoCode, getIntcmp } from './flashSale';
+import { getIntcmp, getPromoCode } from './flashSale';
 
 
 // ----- Types ----- //

@@ -3,9 +3,12 @@
 // ----- Imports ----- //
 
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
+import { type WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
-import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
+import {
+  ProductPagePlanFormReducerFor,
+  type State as FormState
+} from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 export type State = {
   common: CommonState,
@@ -17,9 +20,9 @@ export type State = {
 
 const promoInUrl = getQueryParameter('promo');
 
-const initialPeriod: WeeklyBillingPeriod = promoInUrl === 'sixweek' || promoInUrl === 'quarter' || promoInUrl === 'year'
+const initialPeriod: WeeklyBillingPeriod = promoInUrl === 'SixForSix' || promoInUrl === 'Quarterly' || promoInUrl === 'Annual'
   ? promoInUrl
-  : 'sixweek';
+  : 'SixForSix';
 
 
 // ----- Export ----- //

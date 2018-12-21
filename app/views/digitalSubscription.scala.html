@@ -17,29 +17,33 @@
   payPalConfig: PayPalConfig
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: Settings)
 
-@scripts = {
-  <script type="text/javascript">
-  window.guardian = window.guardian || {};
+  @scripts = {
+    <script type="text/javascript">
+      window.guardian = window.guardian || {};
 
-    window.guardian.user = {
+      window.guardian.user = {
         firstName: "@user.privateFields.map(_.firstName).getOrElse("")",
         lastName: "@user.privateFields.map(_.secondName).getOrElse("")",
         email: "@user.primaryEmailAddress",
         country: "@user.privateFields.map(_.country).getOrElse("")"
-  };
+      };
 
-  window.guardian.stripeKeyDefaultCurrencies = {
+
+      window.guardian.stripeKeyDefaultCurrencies = {
+        REGULAR: {
           default: "@defaultStripeConfig.forCurrency(None).publicKey",
           uat: "@uatStripeConfig.forCurrency(None).publicKey"
-        };
-        window.guardian.stripeKeyAustralia = {
+        }
+      };
+      window.guardian.stripeKeyAustralia = {
+        REGULAR: {
           default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
           uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
-        };
-        window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
-        window.guardian.csrf = { token: "@CSRF.getToken.value" };
-
+        }
+      };
+      window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
+      window.guardian.csrf = { token: "@CSRF.getToken.value" };
   </script>
-}
+  }
 
-@main(title = title, scripts = scripts, mainJsBundle = js, mainId = id, mainStyleBundle = css, csrf = csrf)
+  @main(title = title, scripts = scripts, mainJsBundle = js, mainId = id, mainStyleBundle = css, csrf = csrf)

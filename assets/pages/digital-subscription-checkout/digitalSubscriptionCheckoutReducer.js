@@ -6,7 +6,7 @@ import { combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
-import { type DigitalBillingPeriod } from 'helpers/subscriptions';
+import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
   fromString,
@@ -20,6 +20,7 @@ import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
+import { isTestUser } from 'helpers/user/user';
 import { showPaymentMethod } from './helpers/paymentProviders';
 import { type User } from './helpers/user';
 
@@ -27,7 +28,7 @@ import { type User } from './helpers/user';
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou';
-type PaymentMethod = 'card' | 'directDebit';
+type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 export type FormFields = {|
   firstName: string,
@@ -46,6 +47,7 @@ type CheckoutState = {|
   ...FormFields,
   email: string,
   errors: FormError<FormField>[],
+  isTestUser: boolean,
 |};
 
 export type State = ReduxState<{|
@@ -150,9 +152,10 @@ function initReducer(user: User) {
     country: user.country || null,
     stateProvince: null,
     telephone: '',
-    paymentFrequency: 'month',
-    paymentMethod: 'directDebit',
+    paymentFrequency: 'Monthly',
+    paymentMethod: 'DirectDebit',
     errors: [],
+    isTestUser: isTestUser(),
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
@@ -188,9 +191,7 @@ function initReducer(user: User) {
 
       default:
         return state;
-
     }
-
   }
 
   return combineReducers({

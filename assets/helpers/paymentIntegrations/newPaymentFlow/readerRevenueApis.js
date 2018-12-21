@@ -3,7 +3,7 @@ import { routes } from 'helpers/routes';
 import { type AcquisitionABTest, type OphanIds, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type BillingPeriod } from 'helpers/contributions';
+import { type BillingPeriod } from 'helpers/billingPeriods';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type CaState, type IsoCountry, type UsState } from 'helpers/internationalisation/country';
 import { logPromise, pollUntilPromise } from 'helpers/promise';

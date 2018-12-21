@@ -11,6 +11,7 @@ import type { Radio } from 'components/radioToggle/radioToggle';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
+import { BillingPeriod } from 'helpers/billingPeriods';
 
 // ----- Types ----- //
 
@@ -54,8 +55,6 @@ export type ThirdPartyPaymentLibraries = {
   MONTHLY: { Stripe: Object | null, PayPal: Object | null },
   ANNUAL: { Stripe: Object | null, PayPal: Object | null },
 };
-
-export type BillingPeriod = 'Monthly' | 'Annual';
 
 export type Amount = { value: string, spoken: string, isDefault: boolean };
 

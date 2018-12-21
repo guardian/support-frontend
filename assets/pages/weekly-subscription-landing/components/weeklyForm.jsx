@@ -7,13 +7,13 @@ import { bindActionCreators } from 'redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
-import {
-  type WeeklyBillingPeriod,
-  getWeeklyProductPrice,
-  getPromotionWeeklyProductPrice,
-} from 'helpers/subscriptions';
+import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import { getPromotionWeeklyProductPrice, getWeeklyProductPrice, } from 'helpers/subscriptions';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
+import ProductPagePlanForm, {
+  type DispatchPropTypes,
+  type StatePropTypes
+} from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
 import { redirectToWeeklyPage, setPlan } from '../weeklySubscriptionLandingActions';
@@ -35,16 +35,16 @@ export const billingPeriods = {
   sixweek: {
     title: '6 for 6',
     offer: 'Introductory offer',
-    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'sixweek')} for the first 6 issues (then ${getPrice(countryGroupId, 'quarter')} quarterly)`,
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'SixForSix')} for the first 6 issues (then ${getPrice(countryGroupId, 'Quarterly')} quarterly)`,
   },
   quarter: {
     title: 'Quarterly',
-    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'quarter')} every 3 months`,
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'Quarterly')} every 3 months`,
   },
   year: {
     title: 'Annually',
     offer: 'Save 10%',
-    copy: (countryGroupId: CountryGroupId) => `${getPromotionPrice(countryGroupId, 'year', '10ANNUAL')} for 1 year, then standard rate (${getPrice(countryGroupId, 'year')} every year)`,
+    copy: (countryGroupId: CountryGroupId) => `${getPromotionPrice(countryGroupId, 'Annual', '10ANNUAL')} for 1 year, then standard rate (${getPrice(countryGroupId, 'Annual')} every year)`,
   },
 };
 
