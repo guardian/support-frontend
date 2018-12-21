@@ -9,20 +9,6 @@ export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'not
 export type ApplePayTestVariant = 'control' | 'applePay' | 'notintest';
 
 export const tests: Tests = {
-
-  usDesktopEOYCampaign: {
-    variants: ['campaignCopy', 'copyAndTicker', 'copyAndTickerAndBackgroundImage'],
-    audiences: {
-      UnitedStates: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 2,
-  },
-
   annualContributionsRoundThree: {
     variants: ['control', 'annualAmountsA'],
     audiences: {

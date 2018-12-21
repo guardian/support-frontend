@@ -1,0 +1,5 @@
+{
+  "total": 500000,
+  "goal": 1000000,
+  "whyIsThisFileHere?": "This is just a dummy file for local dev. In CODE & PROD Fastly will route this request direct to S3, so this file will not be accessed."
+}
