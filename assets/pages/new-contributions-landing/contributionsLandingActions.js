@@ -249,7 +249,7 @@ const stripeChargeDataFromAuthorisation = (
     ),
     token: authorisation.token,
     email: state.page.form.formData.email || '',
-    paymentMethod: authorisation.stripePaymentMethod,
+    stripePaymentMethod: authorisation.stripePaymentMethod,
   },
   acquisitionData: derivePaymentApiAcquisitionData(
     state.common.referrerAcquisitionData,
