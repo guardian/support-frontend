@@ -43,7 +43,7 @@ export const billingPeriods = {
   },
   year: {
     title: 'Annually',
-    offer: 'Introductory offer',
+    offer: 'Save 10%',
     copy: (countryGroupId: CountryGroupId) => `${getPromotionPrice(countryGroupId, 'year', '10ANNUAL')} for 1 year, then standard rate (${getPrice(countryGroupId, 'year')} every year)`,
   },
 };
