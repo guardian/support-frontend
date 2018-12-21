@@ -6,6 +6,7 @@ import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
 import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
+import { getPromoCode } from 'helpers/flashSale';
 
 import { type State } from './weeklySubscriptionLandingReducer';
 
@@ -24,6 +25,7 @@ function redirectToWeeklyPage() {
       countryGroupId,
       abParticipations,
       optimizeExperiments,
+      (state.page.plan === 'year' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
     ) : null;
 
     if (location) {

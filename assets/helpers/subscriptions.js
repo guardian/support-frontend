@@ -125,6 +125,52 @@ const paperSubscriptionPrices = {
   deliverySunday: GBP(15.12),
 };
 
+const subscriptionPromoPricesForGuardianWeekly: {
+  [string]: {
+    [CountryGroupId]: {
+      [WeeklyBillingPeriod]: number,
+    }
+  }
+} = {
+  '10ANNUAL': {
+    GBPCountries: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
+      sixweek: 6,
+      year: 135,
+    },
+    EURCountries: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
+      sixweek: 6,
+      year: 220.68,
+    },
+    UnitedStates: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
+      sixweek: 6,
+      year: 270,
+    },
+    Canada: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
+      sixweek: 6,
+      year: 288,
+    },
+    AUDCountries: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
+      sixweek: 6,
+      year: 351,
+    },
+    NZDCountries: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
+      sixweek: 6,
+      year: 442.8,
+    },
+    International: {
+      quarter: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
+      sixweek: 6,
+      year: 292.68,
+    },
+  },
+};
+
 const subscriptionPricesForGuardianWeekly: {
   [CountryGroupId]: {
     [WeeklyBillingPeriod]: number,
@@ -202,7 +248,15 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
 }
 
 function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
-  return subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod].toFixed(2);
+  return fixDecimals(subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod]);
+}
+
+function getPromotionWeeklyProductPrice(
+  countryGroupId: CountryGroupId,
+  billingPeriod: WeeklyBillingPeriod,
+  promoCode: string,
+): string {
+  return fixDecimals(subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod]);
 }
 
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
@@ -274,6 +328,7 @@ export {
   displayPrice,
   getProductPrice,
   getWeeklyProductPrice,
+  getPromotionWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
   getDigitalPrice,

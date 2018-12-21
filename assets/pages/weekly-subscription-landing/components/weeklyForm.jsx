@@ -7,7 +7,11 @@ import { bindActionCreators } from 'redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
-import { type WeeklyBillingPeriod, getWeeklyProductPrice } from 'helpers/subscriptions';
+import {
+  type WeeklyBillingPeriod,
+  getWeeklyProductPrice,
+  getPromotionWeeklyProductPrice,
+} from 'helpers/subscriptions';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
@@ -22,6 +26,11 @@ const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) =
   getWeeklyProductPrice(countryGroupId, period),
 ].join('');
 
+const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod, promoCode: string) => [
+  currencies[detect(countryGroupId)].extendedGlyph,
+  getPromotionWeeklyProductPrice(countryGroupId, period, promoCode),
+].join('');
+
 export const billingPeriods = {
   sixweek: {
     title: '6 for 6',
@@ -34,7 +43,8 @@ export const billingPeriods = {
   },
   year: {
     title: 'Annually',
-    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'year')} every 12 months`,
+    offer: 'Save 10%',
+    copy: (countryGroupId: CountryGroupId) => `${getPromotionPrice(countryGroupId, 'year', '10ANNUAL')} for 1 year, then standard rate (${getPrice(countryGroupId, 'year')} every year)`,
   },
 };
 

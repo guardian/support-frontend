@@ -15,7 +15,11 @@ import { type Option } from 'helpers/types/option';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
-import type { SubscriptionProduct, WeeklyBillingPeriod, PaperBillingPlan } from 'helpers/subscriptions';
+import type {
+  SubscriptionProduct,
+  WeeklyBillingPeriod,
+  PaperBillingPlan,
+} from 'helpers/subscriptions';
 
 import { getPromoCode, getIntcmp } from './flashSale';
 
@@ -95,6 +99,7 @@ const defaultPromos: PromoCodes = {
   DigitalPack: getPromoCode('DigitalPack', 'GBPCountries', 'DXX83X'),
   Paper: getPromoCode('Paper', 'GBPCountries', 'GXX83P'),
   PaperAndDigital: getPromoCode('PaperAndDigital', 'GBPCountries', 'GXX83X'),
+  GuardianWeekly: getPromoCode('GuardianWeekly', 'GBPCountries', '10ANNUAL'),
 };
 
 const customPromos: {
@@ -298,6 +303,7 @@ function getWeeklyCheckout(
   cgId: CountryGroupId,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
+  promoCode: Option<string>,
 ): string {
   const acquisitionData = deriveSubsAcquisitionData(
     referrerAcquisitionData,
@@ -310,6 +316,10 @@ function getWeeklyCheckout(
 
   params.set('acquisitionData', JSON.stringify(acquisitionData));
   params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
+
+  if (promoCode) {
+    params.set('promoCode', promoCode);
+  }
 
   return `${subsUrl}/checkout/${url}?${params.toString()}`;
 }
