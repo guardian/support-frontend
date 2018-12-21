@@ -8,14 +8,12 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.workers.User
+import com.gu.support.workers.{BillingPeriod, User}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.StringsConfig
-import cookies.RecurringContributionCookie
 import io.circe.syntax._
 import lib.PlayImplicits._
-import monitoring.PathVerification._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
@@ -43,6 +41,7 @@ class DigitalSubscription(
     tipMonitoring: Tip,
     guardianDomain: GuardianDomain
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
+
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
@@ -108,14 +107,13 @@ class DigitalSubscription(
   def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
       implicit request =>
-        val body = request.body
         val billingPeriod = request.body.product.billingPeriod
         SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
         val result = for {
           user <- identityService.getUser(request.user)
           statusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
         } yield statusResponse
-        respondToClient(result, request.body, guestCheckout = false)
+        respondToClient(result, request.body.product.billingPeriod)
     }
 
   private def contributor(user: IdUser, request: CreateSupportWorkersRequest) = {
@@ -129,33 +127,23 @@ class DigitalSubscription(
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
-      isTestUser = false // testUsers.isTestUser(user.publicFields.displayName)
+      isTestUser = testUsers.isTestUser(user.publicFields.displayName)
     )
   }
 
   protected def respondToClient(
     result: EitherT[Future, String, StatusResponse],
-    body: CreateSupportWorkersRequest,
-    guestCheckout: Boolean
-  )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
-    val billingPeriod = body.product.billingPeriod
+    billingPeriod: BillingPeriod
+  )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] =
     result.fold(
       { error =>
-        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod contribution, due to $error")
-        // This means we do not return the guest account registration token, meaning that the client won't be able to
-        // use it to create a password for this identity id.
+        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod Digital Subscription, due to $error")
         InternalServerError
       },
       { statusResponse =>
-        if (!testUsers.isTestUser(request.user)) {
-          monitoredRegion(body.country).map { region =>
-            val tipPath = TipPath(region, RecurringContribution, monitoredPaymentMethod(body.paymentFields), guestCheckout)
-            verify(tipPath, tipMonitoring.verify)
-          }
-        }
-        Accepted(statusResponse.asJson).withCookies(RecurringContributionCookie.create(guardianDomain, billingPeriod))
+        SafeLogger.error(scrub"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
+        Accepted(statusResponse.asJson)
       }
     )
-  }
 
 }
