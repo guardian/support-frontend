@@ -9,7 +9,7 @@ import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { countryGroupSpecificDetails, usCampaignDetails } from 'helpers/internationalisation/contributions';
+import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -52,7 +52,6 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  usDesktopEOYCampaignVariant: string,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -69,7 +68,6 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
-  usDesktopEOYCampaignVariant: state.common.abParticipations.usDesktopEOYCampaign,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -90,21 +88,16 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = (props.countryGroupId === 'UnitedStates' && props.usDesktopEOYCampaignVariant !== 'notintest') ?
-    usCampaignDetails :
-    countryGroupSpecificDetails[props.countryGroupId];
+  const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
   const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
-
-  const isInTickerVariant: boolean = ['copyAndTicker', 'copyAndTickerAndBackgroundImage'].includes(props.usDesktopEOYCampaignVariant);
-  const displayTicker = (props.countryGroupId === 'UnitedStates' && isInTickerVariant);
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content">
         <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
-        { displayTicker ? <ContributionUsTicker /> : null }
+        { props.countryGroupId === 'UnitedStates' ? <ContributionUsTicker /> : null }
         { countryGroupDetails.contributeCopy ?
           <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
         }

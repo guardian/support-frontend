@@ -26,8 +26,8 @@ const countryGroupSpecificDetails: {
     contributeCopy: defaultContributeCopy,
   },
   UnitedStates: {
-    headerCopy: defaultHeaderCopy,
-    contributeCopy: defaultContributeCopy,
+    headerCopy: 'Make a year-end gift to The Guardian and invest in our independent journalism for 2019 and beyond.',
+    headerClasses: 'header__us-campaign',
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
@@ -47,9 +47,4 @@ const countryGroupSpecificDetails: {
   },
 };
 
-const usCampaignDetails: CountryMetaData = {
-  headerCopy: 'Make a year-end gift to The Guardian and invest in our independent journalism for 2019 and beyond.',
-  headerClasses: 'header__us-campaign',
-};
-
-export { countryGroupSpecificDetails, usCampaignDetails };
+export { countryGroupSpecificDetails };
