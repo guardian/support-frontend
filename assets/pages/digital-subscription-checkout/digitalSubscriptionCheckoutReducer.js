@@ -6,7 +6,7 @@ import { combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
-import { type DigitalBillingPeriod } from 'helpers/subscriptions';
+import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
   fromString,
@@ -20,6 +20,7 @@ import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
+import { isTestUser } from 'helpers/user/user';
 import { showPaymentMethod } from './helpers/paymentProviders';
 import { type User } from './helpers/user';
 
@@ -27,7 +28,7 @@ import { type User } from './helpers/user';
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou';
-type PaymentMethod = 'card' | 'directDebit';
+type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 export type FormFields = {|
   firstName: string,
@@ -35,7 +36,7 @@ export type FormFields = {|
   country: Option<IsoCountry>,
   stateProvince: Option<StateProvince>,
   telephone: string,
-  paymentFrequency: DigitalBillingPeriod,
+  billingPeriod: DigitalBillingPeriod,
   paymentMethod: PaymentMethod,
 |};
 
@@ -46,6 +47,7 @@ type CheckoutState = {|
   ...FormFields,
   email: string,
   errors: FormError<FormField>[],
+  isTestUser: boolean,
 |};
 
 export type State = ReduxState<{|
@@ -61,7 +63,7 @@ export type Action =
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
-  | { type: 'SET_PAYMENT_FREQUENCY', paymentFrequency: DigitalBillingPeriod }
+  | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
 
@@ -75,7 +77,7 @@ function getFormFields(state: State): FormFields {
     country: state.page.checkout.country,
     stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
-    paymentFrequency: state.page.checkout.paymentFrequency,
+    billingPeriod: state.page.checkout.billingPeriod,
     paymentMethod: state.page.checkout.paymentMethod,
   };
 }
@@ -123,7 +125,7 @@ const formActionCreators = {
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
-  setPaymentFrequency: (paymentFrequency: DigitalBillingPeriod): Action => ({ type: 'SET_PAYMENT_FREQUENCY', paymentFrequency }),
+  setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => {
     const state = getState();
@@ -150,9 +152,10 @@ function initReducer(user: User) {
     country: user.country || null,
     stateProvince: null,
     telephone: '',
-    paymentFrequency: 'month',
-    paymentMethod: 'directDebit',
+    billingPeriod: Monthly,
+    paymentMethod: 'DirectDebit',
     errors: [],
+    isTestUser: isTestUser(),
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
@@ -177,8 +180,8 @@ function initReducer(user: User) {
       case 'SET_STATE_PROVINCE':
         return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
 
-      case 'SET_PAYMENT_FREQUENCY':
-        return { ...state, paymentFrequency: action.paymentFrequency };
+      case 'SET_BILLING_PERIOD':
+        return { ...state, billingPeriod: action.billingPeriod };
 
       case 'SET_PAYMENT_METHOD':
         return { ...state, paymentMethod: action.paymentMethod };
@@ -188,9 +191,7 @@ function initReducer(user: User) {
 
       default:
         return state;
-
     }
-
   }
 
   return combineReducers({

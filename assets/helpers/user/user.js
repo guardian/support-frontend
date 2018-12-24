@@ -4,13 +4,20 @@
 
 import { routes } from 'helpers/routes';
 import * as cookie from 'helpers/cookie';
-import { getSession } from 'helpers/storage';
 import { get as getCookie } from 'helpers/cookie';
+import { getSession } from 'helpers/storage';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import type { UserSetStateActions } from 'helpers/user/userActions';
 
 
 // ----- Functions ----- //
+
+function isTestUser(): boolean {
+  const isDefined = x => x !== null && x !== undefined;
+  const uatMode = window.guardian && window.guardian.uatMode;
+  const testCookie = cookie.get('_test_username');
+  return isDefined(uatMode) || isDefined(testCookie);
+}
 
 const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
 
@@ -30,8 +37,6 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
   const windowHasUser = window.guardian && window.guardian.user;
   const userAppearsLoggedIn = cookie.get('GU_U');
 
-  const uatMode = window.guardian && window.guardian.uatMode;
-
   function getEmailFromBrowser(): ?string {
     if (window.guardian && window.guardian.email) {
       return window.guardian.email;
@@ -41,15 +46,11 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
 
   const emailFromBrowser = getEmailFromBrowser();
 
-  const isUndefinedOrNull = x => x === null || x === undefined;
-
-  const testUserCondition = (isUndefinedOrNull(uatMode) && cookie.get('_test_username')) || uatMode;
-
-  if (testUserCondition) {
+  if (isTestUser()) {
     dispatch(setTestUser(true));
   }
 
-  if (testUserCondition && cookie.get('_post_deploy_user')) {
+  if (isTestUser() && cookie.get('_post_deploy_user')) {
     dispatch(setPostDeploymentTestUser(true));
   }
 
@@ -93,4 +94,4 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
 
 // ----- Exports ----- //
 
-export { init };
+export { init, isTestUser };

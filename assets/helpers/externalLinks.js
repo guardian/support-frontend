@@ -2,26 +2,16 @@
 
 // ----- Imports ----- //
 
-import {
-  type Campaign,
-  type ReferrerAcquisitionData,
-  deriveSubsAcquisitionData,
-} from 'helpers/tracking/acquisitions';
-import {
-  countryGroups,
-  type CountryGroupId,
-} from 'helpers/internationalisation/countryGroup';
+import { type Campaign, deriveSubsAcquisitionData, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
-import type {
-  SubscriptionProduct,
-  WeeklyBillingPeriod,
-  PaperBillingPlan,
-} from 'helpers/subscriptions';
+import { Annual, Quarterly, SixForSix, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
 
-import { getPromoCode, getIntcmp } from './flashSale';
+import { getIntcmp, getPromoCode } from './flashSale';
 
 
 // ----- Types ----- //
@@ -57,7 +47,7 @@ function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGr
   const yearRow = 'weeklyrestofworld-gwoct18-quarterly-row';
 
   const urls = {
-    sixweek: {
+    [SixForSix]: {
       GBPCountries: sixWeekDomestic,
       UnitedStates: sixWeekDomestic,
       AUDCountries: sixWeekDomestic,
@@ -66,7 +56,7 @@ function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGr
       Canada: sixWeekDomestic,
       International: sixWeekRow,
     },
-    quarter: {
+    [Quarterly]: {
       GBPCountries: quarterDomestic,
       UnitedStates: quarterDomestic,
       AUDCountries: quarterDomestic,
@@ -75,7 +65,7 @@ function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGr
       Canada: quarterDomestic,
       International: quarterRow,
     },
-    year: {
+    [Annual]: {
       GBPCountries: yearDomestic,
       UnitedStates: yearDomestic,
       AUDCountries: yearDomestic,

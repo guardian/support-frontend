@@ -19,8 +19,11 @@
  */
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type ContributionType } from 'helpers/contributions';
-import { type PaymentAuthorisation } from './readerRevenueApis';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+
+// ----- Types ----- //
+
+export type StripeAccount = 'ONE_OFF' | 'REGULAR';
 
 // ----- Functions ----- //
 
@@ -42,22 +45,22 @@ function loadStripe(): Promise<void> {
 
 }
 
-function getStripeKey(contributionType: ContributionType, currency: IsoCurrency, isTestUser: boolean): string {
-  const key = contributionType === 'ONE_OFF' ? contributionType : 'REGULAR';
+function getStripeKey(stripeAccount: StripeAccount, currency: IsoCurrency, isTestUser: boolean): string {
   switch (currency) {
     case 'AUD':
       return isTestUser ?
-        window.guardian.stripeKeyAustralia[key].uat : window.guardian.stripeKeyAustralia[key].default;
+        window.guardian.stripeKeyAustralia[stripeAccount].uat :
+        window.guardian.stripeKeyAustralia[stripeAccount].default;
     default:
       return isTestUser ?
-        window.guardian.stripeKeyDefaultCurrencies[key].uat :
-        window.guardian.stripeKeyDefaultCurrencies[key].default;
+        window.guardian.stripeKeyDefaultCurrencies[stripeAccount].uat :
+        window.guardian.stripeKeyDefaultCurrencies[stripeAccount].default;
   }
 }
 
 function setupStripeCheckout(
-  onPaymentAuthorisation: PaymentAuthorisation => void,
-  contributionType: ContributionType,
+  onPaymentAuthorisation: StripeAuthorisation => void,
+  stripeAccount: StripeAccount,
   currency: IsoCurrency,
   isTestUser: boolean,
 ): Object {
@@ -65,7 +68,7 @@ function setupStripeCheckout(
     onPaymentAuthorisation({ paymentMethod: 'Stripe', token: token.id, stripePaymentMethod: 'StripeCheckout' });
   };
 
-  const stripeKey = getStripeKey(contributionType, currency, isTestUser);
+  const stripeKey = getStripeKey(stripeAccount, currency, isTestUser);
 
   return window.StripeCheckout.configure({
     name: 'Guardian',

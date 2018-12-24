@@ -4,23 +4,28 @@
 
 
 import { routes } from 'helpers/routes';
-import { getOphanIds } from 'helpers/tracking/acquisitions';
+import type { AcquisitionABTest, OphanIds, ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import type { Dispatch } from 'redux';
-import type { BillingPeriod, ContributionType } from 'helpers/contributions';
-import type { ReferrerAcquisitionData, OphanIds, AcquisitionABTest } from 'helpers/tracking/acquisitions';
-import type { UsState, IsoCountry } from 'helpers/internationalisation/country';
-import { getSupportAbTests } from 'helpers/tracking/acquisitions';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import type { ContributionType, PaymentMethod } from 'helpers/contributions';
+import { billingPeriodFromContrib } from 'helpers/contributions';
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { User as UserState } from 'helpers/user/userReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import trackConversion from 'helpers/tracking/conversions';
-import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { PaymentMethod } from 'helpers/contributions';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
-import { checkoutPending, checkoutSuccess, checkoutError, creatingContributor, setGuestAccountCreationToken } from '../regularContributionsActions';
+import {
+  checkoutError,
+  checkoutPending,
+  checkoutSuccess,
+  creatingContributor,
+  setGuestAccountCreationToken,
+} from '../regularContributionsActions';
 
 // ----- Setup ----- //
 

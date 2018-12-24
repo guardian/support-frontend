@@ -4,29 +4,30 @@
 import { type Store } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
-import { setupStripeCheckout, loadStripe } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import type { StripeAccount } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import { loadStripe, setupStripeCheckout } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import {
-  type ThirdPartyPaymentLibrary,
-  getValidPaymentMethods,
+  getContributionTypeFromSessionOrElse,
   getPaymentMethodFromSession,
   getValidContributionTypes,
-  getContributionTypeFromSessionOrElse,
+  getValidPaymentMethods,
+  type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
 import { type Participations } from 'helpers/abTests/abtest';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
-import { type Amount, type PaymentMethod, type ContributionType } from 'helpers/contributions';
+import { type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import {
   type Action,
-  paymentWaiting,
-  onThirdPartyPaymentAuthorised,
-  setThirdPartyPaymentLibrary,
-  updateUserFormData,
-  setPayPalHasLoaded,
-  selectAmount,
   checkIfEmailHasPassword,
+  onThirdPartyPaymentAuthorised,
+  paymentWaiting,
+  selectAmount,
+  setPayPalHasLoaded,
+  setThirdPartyPaymentLibrary,
   updateContributionTypeAndPaymentMethod,
+  updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 
@@ -76,6 +77,10 @@ function initialiseStripeCheckout(onPaymentAuthorisation, contributionType, curr
   dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
 
+function stripeAccountForContributionType(contribType: ContributionType): StripeAccount {
+  return contribType === 'ONE_OFF' ? 'ONE_OFF' : 'REGULAR';
+}
+
 function initialisePaymentMethods(state: State, dispatch: Function) {
   const { countryId, currencyId } = state.common.internationalisation;
   const { switches } = state.common.settings;
@@ -90,13 +95,20 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
       const validPayments = getValidPaymentMethods(contribType, switches, countryId);
       if (validPayments.includes('Stripe')) {
-        initialiseStripeCheckout(onPaymentAuthorisation, contribType, currencyId, !!isTestUser, dispatch);
+        initialiseStripeCheckout(
+          onPaymentAuthorisation,
+          stripeAccountForContributionType(contribType),
+          currencyId,
+          !!isTestUser,
+          dispatch,
+        );
       }
     });
   });
 
   loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 }
+
 
 function selectInitialAnnualAmount(state: State, dispatch: Function) {
   const { countryGroupId } = state.common.internationalisation;

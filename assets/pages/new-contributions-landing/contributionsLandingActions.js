@@ -43,9 +43,9 @@ import trackConversion from 'helpers/tracking/conversions';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/cookie';
+import { Annual, Monthly } from 'helpers/billingPeriods';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
-
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -266,7 +266,7 @@ const regularPaymentRequestFromAuthorisation = (
       state.page.form.contributionType,
     ),
     currency: state.common.internationalisation.currencyId,
-    billingPeriod: state.page.form.contributionType === 'MONTHLY' ? 'Monthly' : 'Annual',
+    billingPeriod: state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
   },
   paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
   ophanIds: getOphanIds(),

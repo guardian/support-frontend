@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { type WeeklyBillingPeriod } from 'helpers/subscriptions';
+import { type WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
@@ -25,7 +25,7 @@ function redirectToWeeklyPage() {
       countryGroupId,
       abParticipations,
       optimizeExperiments,
-      (state.page.plan === 'year' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
+      (state.page.plan === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
     ) : null;
 
     if (location) {

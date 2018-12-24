@@ -6,11 +6,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { countries, usStates, caStates, type IsoCountry } from 'helpers/internationalisation/country';
-import { type FormError, firstError } from 'helpers/subscriptionsForms/validation';
+import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
+import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
-import { fromCountry, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getDigitalPrice, type DigitalBillingPeriod } from 'helpers/subscriptions';
+import { type CountryGroupId, fromCountry } from 'helpers/internationalisation/countryGroup';
+import { Annual, type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
+import { getDigitalPrice } from 'helpers/subscriptions';
 import { showPrice } from 'helpers/internationalisation/price';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
@@ -28,12 +29,12 @@ import { withArrow } from 'components/forms/formHOCs/withArrow';
 import { canShow } from 'components/forms/formHOCs/canShow';
 
 import {
-  type State,
-  type FormFields,
-  type FormField,
   type FormActionCreators,
-  getFormFields,
   formActionCreators,
+  type FormField,
+  type FormFields,
+  getFormFields,
+  type State,
 } from '../digitalSubscriptionCheckoutReducer';
 
 
@@ -153,16 +154,16 @@ function CheckoutForm(props: PropTypes) {
         <h2 className="checkout-form__heading">How often would you like to pay?</h2>
         <Fieldset>
           <RadioInput
-            text={`${getPrice(props.country, 'month')}Every month`}
-            name="paymentFrequency"
-            checked={props.paymentFrequency === 'month'}
-            onChange={() => props.setPaymentFrequency('month')}
+            text={`${getPrice(props.country, Monthly)}Every month`}
+            name="billingPeriod"
+            checked={props.billingPeriod === Monthly}
+            onChange={() => props.setBillingPeriod(Monthly)}
           />
           <RadioInput
-            text={`${getPrice(props.country, 'year')}Every year`}
-            name="paymentFrequency"
-            checked={props.paymentFrequency === 'year'}
-            onChange={() => props.setPaymentFrequency('year')}
+            text={`${getPrice(props.country, Annual)}Every year`}
+            name="billingPeriod"
+            checked={props.billingPeriod === Annual}
+            onChange={() => props.setBillingPeriod(Annual)}
           />
         </Fieldset>
       </LeftMarginSection>
@@ -172,14 +173,14 @@ function CheckoutForm(props: PropTypes) {
           <RadioInput
             text="Direct debit"
             name="paymentMethod"
-            checked={props.paymentMethod === 'directDebit'}
-            onChange={() => props.setPaymentMethod('directDebit')}
+            checked={props.paymentMethod === 'DirectDebit'}
+            onChange={() => props.setPaymentMethod('DirectDebit')}
           />
           <RadioInput
             text="Credit/Debit card"
             name="paymentMethod"
-            checked={props.paymentMethod === 'card'}
-            onChange={() => props.setPaymentMethod('card')}
+            checked={props.paymentMethod === 'Stripe'}
+            onChange={() => props.setPaymentMethod('Stripe')}
           />
         </Fieldset>
         <CheckoutCopy
