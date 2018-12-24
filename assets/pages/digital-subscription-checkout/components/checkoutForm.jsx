@@ -10,7 +10,7 @@ import { caStates, countries, type IsoCountry, usStates } from 'helpers/internat
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
 import { type CountryGroupId, fromCountry } from 'helpers/internationalisation/countryGroup';
-import { DigitalBillingPeriod } from 'helpers/billingPeriods';
+import { Annual, type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
 import { getDigitalPrice } from 'helpers/subscriptions';
 import { showPrice } from 'helpers/internationalisation/price';
 
@@ -154,16 +154,16 @@ function CheckoutForm(props: PropTypes) {
         <h2 className="checkout-form__heading">How often would you like to pay?</h2>
         <Fieldset>
           <RadioInput
-            text={`${getPrice(props.country, 'Monthly')}Every month`}
+            text={`${getPrice(props.country, Monthly)}Every month`}
             name="billingPeriod"
-            checked={props.billingPeriod === 'Monthly'}
-            onChange={() => props.setBillingPeriod('Monthly')}
+            checked={props.billingPeriod === Monthly}
+            onChange={() => props.setBillingPeriod(Monthly)}
           />
           <RadioInput
-            text={`${getPrice(props.country, 'Annual')}Every year`}
+            text={`${getPrice(props.country, Annual)}Every year`}
             name="billingPeriod"
-            checked={props.billingPeriod === 'Annual'}
-            onChange={() => props.setBillingPeriod('Annual')}
+            checked={props.billingPeriod === Annual}
+            onChange={() => props.setBillingPeriod(Annual)}
           />
         </Fieldset>
       </LeftMarginSection>

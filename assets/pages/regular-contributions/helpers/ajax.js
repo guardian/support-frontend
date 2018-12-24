@@ -24,7 +24,7 @@ import {
   checkoutPending,
   checkoutSuccess,
   creatingContributor,
-  setGuestAccountCreationToken
+  setGuestAccountCreationToken,
 } from '../regularContributionsActions';
 
 // ----- Setup ----- //

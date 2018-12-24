@@ -4,11 +4,18 @@
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { AUD, CAD, EUR, GBP, NZD, type Price, USD } from 'helpers/internationalisation/price';
-import { BillingPeriod, DigitalBillingPeriod, WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import {
+  Annual,
+  type BillingPeriod,
+  type DigitalBillingPeriod,
+  Monthly,
+  Quarterly,
+  SixForSix,
+  type WeeklyBillingPeriod,
+} from 'helpers/billingPeriods';
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
-
 
 // ----- Types ------ //
 
@@ -81,32 +88,32 @@ const subscriptionPricesForDefaultBillingPeriod: {
 
 const digitalSubscriptionPrices = {
   GBPCountries: {
-    Monthly: GBP(11.99),
-    Annual: GBP(119.90),
+    [Monthly]: GBP(11.99),
+    [Annual]: GBP(119.90),
   },
   UnitedStates: {
-    Monthly: USD(19.99),
-    Annual: USD(199.90),
+    [Monthly]: USD(19.99),
+    [Annual]: USD(199.90),
   },
   AUDCountries: {
-    Monthly: AUD(21.50),
-    Annual: AUD(215.00),
+    [Monthly]: AUD(21.50),
+    [Annual]: AUD(215.00),
   },
   EURCountries: {
-    Monthly: EUR(14.99),
-    Annual: EUR(149.90),
+    [Monthly]: EUR(14.99),
+    [Annual]: EUR(149.90),
   },
   International: {
-    Monthly: USD(19.99),
-    Annual: USD(199.90),
+    [Monthly]: USD(19.99),
+    [Annual]: USD(199.90),
   },
   NZDCountries: {
-    Monthly: NZD(23.50),
-    Annual: NZD(235.00),
+    [Monthly]: NZD(23.50),
+    [Annual]: NZD(235.00),
   },
   Canada: {
-    Monthly: CAD(21.95),
-    Annual: CAD(219.50),
+    [Monthly]: CAD(21.95),
+    [Annual]: CAD(219.50),
   },
 };
 
@@ -130,39 +137,39 @@ const subscriptionPromoPricesForGuardianWeekly: {
 } = {
   '10ANNUAL': {
     GBPCountries: {
-      Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
-      SixForSix: 6,
-      Annual: 135,
+      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
+      [SixForSix]: 6,
+      [Annual]: 135,
     },
     EURCountries: {
-      Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
-      SixForSix: 6,
-      Annual: 220.68,
+      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
+      [SixForSix]: 6,
+      [Annual]: 220.68,
     },
     UnitedStates: {
-      Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
-      SixForSix: 6,
-      Annual: 270,
+      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
+      [SixForSix]: 6,
+      [Annual]: 270,
     },
     Canada: {
-      Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
-      SixForSix: 6,
-      Annual: 288,
+      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
+      [SixForSix]: 6,
+      [Annual]: 288,
     },
     AUDCountries: {
-      Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
-      SixForSix: 6,
-      Annual: 351,
+      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
+      [SixForSix]: 6,
+      [Annual]: 351,
     },
     NZDCountries: {
-      Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
-      SixForSix: 6,
-      Annual: 442.8,
+      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
+      [SixForSix]: 6,
+      [Annual]: 442.8,
     },
     International: {
-      Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
-      SixForSix: 6,
-      Annual: 292.68,
+      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
+      [SixForSix]: 6,
+      [Annual]: 292.68,
     },
   },
 };
@@ -173,51 +180,51 @@ const subscriptionPricesForGuardianWeekly: {
   }
 } = {
   GBPCountries: {
-    Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
-    SixForSix: 6,
-    Annual: 150,
+    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
+    [SixForSix]: 6,
+    [Annual]: 150,
   },
   EURCountries: {
-    Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
-    SixForSix: 6,
-    Annual: 245.20,
+    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
+    [SixForSix]: 6,
+    [Annual]: 245.20,
   },
   UnitedStates: {
-    Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
-    SixForSix: 6,
-    Annual: 300,
+    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
+    [SixForSix]: 6,
+    [Annual]: 300,
   },
   Canada: {
-    Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
-    SixForSix: 6,
-    Annual: 320,
+    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
+    [SixForSix]: 6,
+    [Annual]: 320,
   },
   AUDCountries: {
-    Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
-    SixForSix: 6,
-    Annual: 390,
+    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
+    [SixForSix]: 6,
+    [Annual]: 390,
   },
   NZDCountries: {
-    Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
-    SixForSix: 6,
-    Annual: 492,
+    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
+    [SixForSix]: 6,
+    [Annual]: 492,
   },
   International: {
-    Quarterly: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
-    SixForSix: 6,
-    Annual: 325.20,
+    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
+    [SixForSix]: 6,
+    [Annual]: 325.20,
   },
 };
 
 const defaultBillingPeriods: {
   [SubscriptionProduct]: BillingPeriod
 } = {
-  PremiumTier: 'Monthly',
-  DigitalPack: 'Monthly',
-  GuardianWeekly: 'Quarterly',
-  Paper: 'Monthly',
-  PaperAndDigital: 'Monthly',
-  DailyEdition: 'Monthly',
+  PremiumTier: Monthly,
+  DigitalPack: Monthly,
+  GuardianWeekly: Quarterly,
+  Paper: Monthly,
+  PaperAndDigital: Monthly,
+  DailyEdition: Monthly,
 };
 
 

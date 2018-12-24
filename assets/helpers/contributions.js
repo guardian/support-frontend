@@ -11,7 +11,7 @@ import type { Radio } from 'components/radioToggle/radioToggle';
 import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import { logException } from 'helpers/logger';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
-import { BillingPeriod } from 'helpers/billingPeriods';
+import { Annual, type BillingPeriod, Monthly } from 'helpers/billingPeriods';
 
 // ----- Types ----- //
 
@@ -352,8 +352,8 @@ function parseRegularContributionType(s: string): RegularContributionType {
 
 function billingPeriodFromContrib(contributionType: ContributionType): BillingPeriod {
   switch (contributionType) {
-    case 'ANNUAL': return 'Annual';
-    default: return 'Monthly';
+    case 'ANNUAL': return Annual;
+    default: return Monthly;
   }
 }
 

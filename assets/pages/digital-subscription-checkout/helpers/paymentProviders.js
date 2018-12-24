@@ -63,7 +63,7 @@ function showPaymentMethod(state: State) {
     case 'Stripe':
       loadStripe()
         .then(() => setupStripeCheckout((authorisation: StripeAuthorisation) => create(state, authorisation.token), 'REGULAR', currencyId, isTestUser))
-        .then(stripe => openDialogBox(stripe, price, state.page.checkout.email));
+        .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
       break;
     case 'DirectDebit':
       console.log('Direct Debit');

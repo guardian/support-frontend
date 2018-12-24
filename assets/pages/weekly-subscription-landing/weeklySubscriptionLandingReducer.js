@@ -7,7 +7,7 @@ import { type WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
 import {
   ProductPagePlanFormReducerFor,
-  type State as FormState
+  type State as FormState,
 } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 export type State = {

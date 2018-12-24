@@ -19,7 +19,7 @@
  */
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PaymentAuthorisation } from './readerRevenueApis';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 
 // ----- Types ----- //
 
@@ -59,7 +59,7 @@ function getStripeKey(stripeAccount: StripeAccount, currency: IsoCurrency, isTes
 }
 
 function setupStripeCheckout(
-  onPaymentAuthorisation: PaymentAuthorisation => void,
+  onPaymentAuthorisation: StripeAuthorisation => void,
   stripeAccount: StripeAccount,
   currency: IsoCurrency,
   isTestUser: boolean,

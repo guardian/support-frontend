@@ -8,11 +8,12 @@ import { bindActionCreators } from 'redux';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
-import { getPromotionWeeklyProductPrice, getWeeklyProductPrice, } from 'helpers/subscriptions';
+import { Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
+import { getPromotionWeeklyProductPrice, getWeeklyProductPrice } from 'helpers/subscriptions';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, {
   type DispatchPropTypes,
-  type StatePropTypes
+  type StatePropTypes,
 } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
@@ -32,16 +33,16 @@ const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBilling
 ].join('');
 
 export const billingPeriods = {
-  sixweek: {
+  [SixForSix]: {
     title: '6 for 6',
     offer: 'Introductory offer',
     copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'SixForSix')} for the first 6 issues (then ${getPrice(countryGroupId, 'Quarterly')} quarterly)`,
   },
-  quarter: {
+  [Quarterly]: {
     title: 'Quarterly',
     copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'Quarterly')} every 3 months`,
   },
-  year: {
+  [Annual]: {
     title: 'Annually',
     offer: 'Save 10%',
     copy: (countryGroupId: CountryGroupId) => `${getPromotionPrice(countryGroupId, 'Annual', '10ANNUAL')} for 1 year, then standard rate (${getPrice(countryGroupId, 'Annual')} every year)`,
