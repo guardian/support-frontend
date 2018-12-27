@@ -9,7 +9,7 @@
 @import '~components/ctaLink/ctaLink';
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/generalErrorMessage/generalErrorMessage';
-@import '~components/ContributionThankYouPasswordSet/ContributionThankYouPasswordSet';
+@import '~pages/new-contributions-landing/components/ContributionThankYouPasswordSet/ContributionThankYouPasswordSet';
 
 body {
   min-height: 100vh;
@@ -27,10 +27,36 @@ body {
 
 .gu-content__main {
   position: relative;
+
+  @include mq($from: mobile, $until: tablet) {
+    display: flex;
+    flex-direction: column-reverse;
+  }
 }
 
-.gu-content__bg svg {
-  display: block;
+.gu-content__bg {
+
+  svg {
+    display: block;
+  }
+
+  @include mq($from: mobile, $until: tablet) {
+    display: none;
+
+    .svg-contributions-bg-desktop {
+      display: none;
+    }
+
+    .svg-contributions-bg-mobile {
+      bottom: 0;
+      height: 223px;
+      left: 50%;
+      position: absolute;
+      transform: translate(-50%,0);
+      width: 100%;
+    }
+
+  }
 }
 
 .gu-content--shrink {
@@ -59,12 +85,20 @@ body {
       font-size: 16px;
       margin: 0;
     }
+
+    header[role="banner"] {
+      height: $header-height;
+
+      // to match .gu-content__content
+      padding: 0 10px;
+    }
   }
 }
 
-/*= HEADER */
+  /*= HEADER */
 
 header[role="banner"] {
+
   background-color: gu-colour(header-dark);
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   position: relative;
@@ -89,12 +123,6 @@ header[role="banner"] {
     width: 1240px;
   }
 
-  @include mq($from: mobile, $until: tablet) {
-    height: $header-height;
-
-    // to match .gu-content__content
-    padding: 0 10px;
-  }
 }
 
 .glogo {
@@ -109,6 +137,11 @@ header[role="banner"] {
 
   .svg-roundel__g {
     fill: gu-colour(header-dark);
+  }
+
+  @include mq($from: mobile, $until: tablet) {
+    top: 7px;
+    right: 10px;
   }
 }
 
@@ -387,34 +420,6 @@ footer[role="contentinfo"] {
 }
 
 @include mq($from: mobile, $until: tablet) {
-
-  // TODO: center with flex-box instead!
-  .glogo {
-    top: 7px;
-    right: 10px;
-  }
-
-  .gu-content__main {
-    display: flex;
-    flex-direction: column-reverse;
-  }
-
-  .gu-content__bg {
-    display: none;
-  }
-
-  .gu-content__bg .svg-contributions-bg-desktop {
-    display: none;
-  }
-
-  .gu-content__bg .svg-contributions-bg-mobile {
-    bottom: 0;
-    height: 223px;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%,0);
-    width: 100%;
-  }
 
   .countryGroups {
     margin-left: 10px;
@@ -879,7 +884,7 @@ form {
 }
 
 .set-password__form {
- padding-bottom: 30px;
+  padding-bottom: 30px;
 }
 
 .form__submit.form__submit--create-account {
@@ -1093,3 +1098,4 @@ form {
     }
   }
 }
+
