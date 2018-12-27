@@ -10,6 +10,7 @@
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~pages/new-contributions-landing/components/ContributionThankYouPasswordSet/ContributionThankYouPasswordSet';
+@import '~pages/new-contributions-landing/components/ContributionTicker/ContributionTicker';
 
 body {
   min-height: 100vh;
@@ -120,16 +121,40 @@ body {
 
 /*= HEADER */
 
+.header {
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  color: gu-colour(garnett-neutral-1);
+  font: bold 36px/1.15 $gu-headline;
+  margin: 0 -10px;
+  padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
+
+  @include mq($from: mobile, $until: tablet) {
+    border: 0;
+    left: 10px;
+    font-size: 22px;
+    padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+    width: 100%;
+    background-color: gu-colour(news-garnett-highlight);
+  }
+}
+
+.header__us-campaign {
+  font-size: 27px;
+  border-bottom: none;
+}
+
 header[role="banner"] {
 
   background-color: gu-colour(header-dark);
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   position: relative;
   height: 75px;
+  display: flex;
   align-items: flex-start;
   flex-direction: row-reverse;
   justify-content: space-between;
   z-index: 1;
+
 
   @include mq($from: tablet) {
     padding: 0 calc(50% - 350px);
@@ -198,115 +223,6 @@ header[role="banner"] {
   }
 }
 
-.countryGroups__label {
-  color: #fff;
-}
-
-// Safari doesn't respect styles applied to <summary> so we need this wrapper div
-.countryGroups__summary-wrapper {
-  align-items: center;
-  display: flex;
-  height: 40px;
-  outline: none;
-  transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
-
-  // this is to fix IE bug where events on svgs don't bubble up
-  & svg {
-    pointer-events: none;
-  }
-}
-
-.countryGroups:not([open]) > :not(summary) {
-  display: none;
-}
-
-.countryGroups .icon {
-  text-align: center;
-  width: 40px;
-}
-
-.countryGroups .svg-chevron {
-  width: 19px;
-  height: 10px;
-  fill: #fff;
-}
-
-.countryGroups[open] .svg-chevron {
-  transform: rotate(180deg);
-}
-
-.countryGroups .svg-checkmark {
-  width: 18px;
-  height: 14px;
-  fill: gu-colour(news-garnett-main-1);
-}
-
-.countryGroups .svg-globe {
-  padding: 0 $gu-v-spacing;
-  width: 14px;
-  height: 14px;
-  fill: gu-colour(garnett-neutral-1);
-  fill: #fff;
-}
-
-.countryGroups summary {
-  list-style: none;
-  outline: none;
-}
-
-.countryGroups summary:hover,
-.countryGroups summary:focus {
-  box-shadow: none;
-  color: inherit;
-}
-
-.countryGroups summary::-webkit-details-marker {
-  display: none;
-}
-
-.countryGroups__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  background: gu-colour(garnett-neutral-5);
-  border: 1px solid gu-colour(garnett-neutral-4);
-}
-
-.countryGroups__item:first-child > a {
-  &:before {
-    content: none;
-  }
-}
-
-.countryGroups__item > a {
-  color: inherit;
-  display: flex;
-  padding: 0 15px;
-  line-height: 40px;
-  text-decoration: none;
-  justify-content: space-between;
-  position: relative;
-
-  &:before {
-    content: '';
-    border-top: 1px solid gu-colour(garnett-neutral-4);
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 15px;
-    right: 0;
-  }
-
-  @include mq($from: mobile, $until: tablet) {
-    padding-left: 10px;
-  }
-}
-
-.countryGroups__item > a:hover,
-.countryGroups__item > a:focus {
-  background: gu-colour(garnett-neutral-3);
-  font-weight: bold;
-}
 
 /*= FOOTER */
 
@@ -315,6 +231,7 @@ footer[role="contentinfo"] {
   color: gu-colour(garnett-neutral-2);
   padding-bottom: $gu-v-spacing * 2;
   font-size: 12px;
+  display: flex;
 
   @include mq($from: leftCol) {
     padding: 0 calc(50% - 550px) ($gu-v-spacing * 2) calc(50% - 390px);
@@ -330,87 +247,6 @@ footer[role="contentinfo"] a {
   padding-top: $gu-v-spacing;
 }
 
-/*= US TICKER */
-
-$progess-bar-height: 10px;
-
-.contributions-landing-ticker {
-  padding-bottom: $gu-h-spacing;
-}
-
-.contributions-landing-ticker__border {
-  border-top: 1px solid gu-colour(garnett-neutral-4);
-  margin: 0 -10px;
-}
-
-.contributions-landing-ticker--hidden {
-  visibility: hidden;
-  .contributions-landing-ticker__border {
-    visibility: visible;
-  }
-}
-
-.contributions-landing-ticker {
-  @include mq($until: tablet) {
-    display: none;
-  }
-
-  display: flex;
-  flex-direction: column;
-}
-
-.contributions-landing-ticker__values {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.contributions-landing-ticker__goal, .contributions-landing-ticker__so-far {
-  display: flex;
-  flex-direction: column;
-}
-
-.contributions-landing-ticker__so-far .contributions-landing-ticker__count {
-  font-family: $gu-titlepiece;
-  font-size: 32px;
-  font-weight: 800;
-  color: gu-colour(opinion-garnett-media-main-1);
-}
-
-.contributions-landing-ticker__goal {
-  align-items: flex-end;
-
-  .contributions-landing-ticker__count {
-    font-weight: bold;
-  }
-}
-
-.contributions-landing-ticker__label {
-  font-style: italic;
-}
-
-.contributions-landing-ticker__progress-bar {
-  position: relative;
-}
-
-.contributions-landing-ticker__progress {
-  width: calc(100%);
-  height: $progess-bar-height;
-  overflow: hidden;
-  background-color: #dcdcdc;
-  position: absolute;
-}
-
-.contributions-landing-ticker__filled-progress {
-  background-color: gu-colour(opinion-garnett-media-main-1);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transform: translateX(-100%);
-  transition: transform 3s cubic-bezier(.25, .55, .2, .85);
-}
 
 /*= CONTENT */
 .gu-content__content {
@@ -436,28 +272,6 @@ $progess-bar-height: 10px;
 body {
   color: gu-colour(garnett-neutral-1);
   font: normal 16px/1.5 $gu-text-egyptian-web;
-}
-
-.header {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-  color: gu-colour(garnett-neutral-1);
-  font: bold 36px/1.15 $gu-headline;
-  margin: 0 -10px;
-  padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
-
-  @include mq($from: mobile, $until: tablet) {
-    border: 0;
-    left: 10px;
-    font-size: 22px;
-    padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
-    width: 100%;
-    background-color: gu-colour(news-garnett-highlight);
-  }
-}
-
-.header__us-campaign {
-  font-size: 27px;
-  border-bottom: none;
 }
 
 input,
@@ -487,13 +301,6 @@ footer[role="contentinfo"] {
 
 }
 
-/*= BREAKPOINTS */
-
-
-header[role="banner"],
-footer[role="contentinfo"] {
-  display: flex;
-}
 
 /*= CONTENT */
 .content {
