@@ -209,6 +209,14 @@ header[role="banner"] {
   width: 100%;
   cursor: pointer;
 
+  .svg-globe {
+    padding: 0 $gu-v-spacing;
+    width: 14px;
+    height: 14px;
+    fill: gu-colour(garnett-neutral-1);
+    fill: #fff;
+  }
+
   @include mq($from: mobile, $until: tablet) {
     margin-left: 10px;
     text-overflow: ellipsis;
