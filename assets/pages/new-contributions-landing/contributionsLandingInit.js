@@ -4,8 +4,11 @@
 import { type Store } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
-import type { StripeAccount } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { loadStripe, setupStripeCheckout } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import {
+  loadStripe,
+  setupStripeCheckout,
+  type StripeAccount,
+} from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import {
@@ -18,6 +21,7 @@ import {
 import { type Participations } from 'helpers/abTests/abtest';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
 import { type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   type Action,
   checkIfEmailHasPassword,
@@ -71,15 +75,29 @@ function getInitialContributionType(abParticipations: Participations): Contribut
   );
 }
 
-function initialiseStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser, dispatch) {
+const stripeAccountForContributionType: {[ContributionType]: StripeAccount } = {
+  ONE_OFF: 'ONE_OFF',
+  MONTHLY: 'REGULAR',
+  ANNUAL: 'REGULAR',
+};
+
+
+function initialiseStripeCheckout(
+  onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void,
+  contributionType: ContributionType,
+  currencyId: IsoCurrency,
+  isTestUser: boolean,
+  dispatch: Function,
+) {
   const library: ThirdPartyPaymentLibrary =
-    setupStripeCheckout(onPaymentAuthorisation, contributionType, currencyId, isTestUser);
+    setupStripeCheckout(
+      onPaymentAuthorisation,
+      stripeAccountForContributionType[contributionType],
+      currencyId, isTestUser,
+    );
   dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
 
-function stripeAccountForContributionType(contribType: ContributionType): StripeAccount {
-  return contribType === 'ONE_OFF' ? 'ONE_OFF' : 'REGULAR';
-}
 
 function initialisePaymentMethods(state: State, dispatch: Function) {
   const { countryId, currencyId } = state.common.internationalisation;
@@ -97,7 +115,7 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
       if (validPayments.includes('Stripe')) {
         initialiseStripeCheckout(
           onPaymentAuthorisation,
-          stripeAccountForContributionType(contribType),
+          contribType,
           currencyId,
           !!isTestUser,
           dispatch,
