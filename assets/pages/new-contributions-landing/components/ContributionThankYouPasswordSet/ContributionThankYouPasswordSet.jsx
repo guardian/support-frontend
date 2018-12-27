@@ -4,8 +4,8 @@
 
 import React from 'react';
 import MarketingConsent from '../MarketingConsentContainer';
-import ContributionsSurvey from '../ContributionsSurvey';
-import { ButtonWithRightArrow } from '../ButtonWithRightArrow';
+import ContributionsSurvey from '../ContributionSurvey/ContributionsSurvey';
+import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArrow';
 
 // ----- Render ----- //
 
