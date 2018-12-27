@@ -9,7 +9,7 @@
 @import '~components/ctaLink/ctaLink';
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/generalErrorMessage/generalErrorMessage';
-@import '~pages/new-contributions-landing/components/ContributionThankYouPasswordSet/ContributionThankYouPasswordSet';
+@import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYou';
 @import '~pages/new-contributions-landing/components/ContributionTicker/ContributionTicker';
 @import '~pages/new-contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
 @import '~pages/new-contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
@@ -750,136 +750,10 @@ form {
   fill: inherit;
 }
 
-/*= THANK YOU PAGE */
-
 .hidden {
   display: none;
 }
 
-.confirmation, .marketing-permissions {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-  font-weight: 300;
-  margin: 0 -10px;
-  padding: 0 10px;
-}
-
-.confirmation__title {
-  font-weight: 900;
-  font-size: 1;
-  margin: ($gu-v-spacing / 3) 0;
-}
-
-.confirmation__message {
-  font: 300 22px/1.2 $gu-headline;
-  margin: ($gu-v-spacing / 4) 0 $gu-v-spacing * 2;
-}
-
-.confirmation__message--direct-debit {
-  margin-left: -10px;
-  margin-right: -10px;
-  padding: 0 10px $gu-v-spacing;
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-}
-
-.marketing-permissions__message, .set-password__message {
-  font-family: $gu-text-egyptian-web;
-  letter-spacing: -0.5px;
-  margin-bottom: 24px;
-  line-height: 20px;
-}
-
-.set-password__message {
-  margin-bottom: 0;
-}
-
-.set-password__form {
-  padding-bottom: 30px;
-}
-
-.form__submit.form__submit--create-account {
-  padding-bottom: $gu-v-spacing;
-}
-
-.marketing-permissions__title, .set-password__title {
-  font-family: $gu-text-egyptian-web;
-  letter-spacing: -0.5px;
-  font-weight: 900;
-  font-size: 17px;
-  margin: ($gu-v-spacing / 3) 0;
-}
-
-.confirmation--backtothegu {
-  margin-bottom: $gu-v-spacing + 20px;
-  padding-bottom: $gu-v-spacing;
-  padding-top: $gu-v-spacing;
-  border-bottom: 0;
-}
-
-.confirmation__meta {
-  font-family: $gu-text-sans-web;
-  font-size: 12px;
-}
-
-.button {
-  align-items: center;
-  border: 1px solid currentColor;
-  background-color: gu-colour(garnett-neutral-5);
-  border-radius: $gu-v-spacing * 2;
-  font-family: $gu-text-sans-web;
-  height: $gu-v-spacing * 3.5;
-  line-height: 1;
-  padding: 0 $gu-h-spacing;
-  text-decoration: none;
-  position: relative;
-
-  svg {
-    position: absolute;
-    fill: currentColor;
-    overflow: visible;
-  }
-
-  &:enabled {
-    cursor: pointer;
-
-    &:hover {
-      filter: brightness(90%);
-    }
-  }
-}
-
-.button--newsletter {
-  color: gu-colour(garnett-neutral-5);
-  background-color: gu-colour(green-dark);
-  border-color: gu-colour(green-dark);
-  text-align: right;
-  width: 140px;
-
-  svg {
-    right: calc(100% - 33px);
-    height: 16px;
-  }
-}
-
-.button--newsletter__subscribed {
-  color: gu-colour(green-dark);
-  background-color: transparent;
-}
-
-.button--newsletter__request-pending {
-  color: gu-colour(garnett-neutral-4);
-  background-color: transparent;
-}
-
-.svg-subscribe, .svg-lock {
-  width: 23px;
-  height: 20px;
-  fill: currentColor;
-}
-
-.svg-newsletters {
-  display: block;
-  margin: ($gu-v-spacing * 2) -10px 0;
-}
 
 /* = SIGN OUT link */
 
