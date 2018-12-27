@@ -32,6 +32,12 @@ body {
     display: flex;
     flex-direction: column-reverse;
   }
+
+  @include mq($from: tablet) {
+    .svg-contributions-bg-mobile {
+      display: none;
+    }
+  }
 }
 
 .gu-content__bg {
@@ -52,10 +58,27 @@ body {
       height: 223px;
       left: 50%;
       position: absolute;
-      transform: translate(-50%,0);
+      transform: translate(-50%, 0);
       width: 100%;
     }
+  }
 
+  @include mq($from: tablet) {
+    height: 580px;
+    left: 0;
+    position: absolute;
+    top: 245px;
+    width: 100%;
+    z-index: -1;
+
+    svg {
+      bottom: 0;
+      height: 580px;
+      left: 50%;
+      position: fixed;
+      transform: translate(-50%,0);
+      width: 1400px;
+    }
   }
 }
 
@@ -95,7 +118,7 @@ body {
   }
 }
 
-  /*= HEADER */
+/*= HEADER */
 
 header[role="banner"] {
 
@@ -143,6 +166,10 @@ header[role="banner"] {
     top: 7px;
     right: 10px;
   }
+
+  @include mq($from: tablet) {
+    top: 7px;
+  }
 }
 
 .countryGroups {
@@ -152,6 +179,23 @@ header[role="banner"] {
   padding: 0;
   width: 100%;
   cursor: pointer;
+
+  @include mq($from: mobile, $until: tablet) {
+    margin-left: 10px;
+    text-overflow: ellipsis;
+    width: 185px;
+    white-space: nowrap;
+
+    summary {
+      padding-left: 10px;
+    }
+
+    .svg-globe {
+      display: none;
+    }
+
+
+  }
 }
 
 .countryGroups__label {
@@ -243,7 +287,6 @@ header[role="banner"] {
   justify-content: space-between;
   position: relative;
 
-
   &:before {
     content: '';
     border-top: 1px solid gu-colour(garnett-neutral-4);
@@ -252,6 +295,10 @@ header[role="banner"] {
     top: 0;
     left: 15px;
     right: 0;
+  }
+
+  @include mq($from: mobile, $until: tablet) {
+    padding-left: 10px;
   }
 }
 
@@ -268,6 +315,11 @@ footer[role="contentinfo"] {
   color: gu-colour(garnett-neutral-2);
   padding-bottom: $gu-v-spacing * 2;
   font-size: 12px;
+
+  @include mq($from: leftCol) {
+    padding: 0 calc(50% - 550px) ($gu-v-spacing * 2) calc(50% - 390px);
+    width: 940px;
+  }
 }
 
 footer[role="contentinfo"] a {
@@ -365,6 +417,19 @@ $progess-bar-height: 10px;
   background: gu-colour(garnett-neutral-5);
   padding: 0 10px;
   overflow: hidden;
+
+  @include mq($from: leftCol) {
+    width: 380px;
+    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
+  }
+
+  @include mq($from: tablet) {
+    border-color: gu-colour(garnett-neutral-4);
+    border-style: none solid;
+    border-width: 0 1px;
+    width: 380px;
+    margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
+  }
 }
 
 /*= TYPOGRAPHY */
@@ -409,6 +474,17 @@ button {
 
 footer[role="contentinfo"] {
   font-family: $gu-text-sans-web;
+
+  @include mq($from: wide) {
+    padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
+    width: 1240px;
+  }
+
+  @include mq($from: tablet) {
+    padding: 0 calc(50% - 350px) ($gu-v-spacing * 2);
+    width: 700px;
+  }
+
 }
 
 /*= BREAKPOINTS */
@@ -417,91 +493,6 @@ footer[role="contentinfo"] {
 header[role="banner"],
 footer[role="contentinfo"] {
   display: flex;
-}
-
-@include mq($from: mobile, $until: tablet) {
-
-  .countryGroups {
-    margin-left: 10px;
-    text-overflow: ellipsis;
-    width: 185px;
-    white-space: nowrap;
-  }
-
-  .countryGroups summary {
-    padding-left: 10px;
-  }
-
-  .countryGroups .svg-globe {
-    display: none;
-  }
-
-  .countryGroups__item > a {
-    padding-left: 10px;
-  }
-}
-
-@include mq($from: tablet) {
-
-  footer[role="contentinfo"] {
-    padding: 0 calc(50% - 350px) ($gu-v-spacing * 2);
-    width: 700px;
-  }
-
-  .glogo {
-    top: 7px;
-  }
-
-  .gu-content__content {
-    border-color: gu-colour(garnett-neutral-4);
-    border-style: none solid;
-    border-width: 0 1px;
-    width: 380px;
-    margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
-  }
-
-  .gu-content__bg {
-    height: 580px;
-    left: 0;
-    position: absolute;
-    top: 245px;
-    width: 100%;
-    z-index: -1;
-  }
-
-  .gu-content__bg svg {
-    bottom: 0;
-    height: 580px;
-    left: 50%;
-    position: fixed;
-    transform: translate(-50%,0);
-    width: 1400px;
-  }
-
-  .gu-content__main .svg-contributions-bg-mobile {
-    display: none;
-  }
-}
-
-@include mq($from: leftCol) {
-
-  footer[role="contentinfo"] {
-    padding: 0 calc(50% - 550px) ($gu-v-spacing * 2) calc(50% - 390px);
-    width: 940px;
-  }
-
-  .gu-content__content {
-    width: 380px;
-    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
-  }
-}
-
-@include mq($from: wide) {
-
-  footer[role="contentinfo"] {
-    padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
-    width: 1240px;
-  }
 }
 
 /*= CONTENT */
@@ -1078,7 +1069,6 @@ form {
 
 /* Small header test */
 @include mq($from: mobile, $until: tablet) {
-
 
   .gu-content--contribution-form.gu-content--no-blurb {
     .blurb {
