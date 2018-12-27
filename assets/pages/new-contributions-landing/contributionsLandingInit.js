@@ -93,7 +93,8 @@ function initialiseStripeCheckout(
     setupStripeCheckout(
       onPaymentAuthorisation,
       stripeAccountForContributionType[contributionType],
-      currencyId, isTestUser,
+      currencyId,
+      isTestUser,
     );
   dispatch(setThirdPartyPaymentLibrary({ [contributionType]: { Stripe: library } }));
 }
