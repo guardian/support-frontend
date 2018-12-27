@@ -209,14 +209,6 @@ header[role="banner"] {
   width: 100%;
   cursor: pointer;
 
-  .svg-globe {
-    padding: 0 $gu-v-spacing;
-    width: 14px;
-    height: 14px;
-    fill: gu-colour(garnett-neutral-1);
-    fill: #fff;
-  }
-
   @include mq($from: mobile, $until: tablet) {
     margin-left: 10px;
     text-overflow: ellipsis;
@@ -233,6 +225,113 @@ header[role="banner"] {
 
 
   }
+}
+
+.countryGroups__label {
+  color: #fff;
+}
+
+// Safari doesn't respect styles applied to <summary> so we need this wrapper div
+.countryGroups__summary-wrapper {
+  align-items: center;
+  display: flex;
+  height: 40px;
+  outline: none;
+  transition: box-shadow .2s ease-in-out, color .2s ease-in-out;
+
+  // this is to fix IE bug where events on svgs don't bubble up
+  & svg {
+    pointer-events: none;
+  }
+}
+
+.countryGroups:not([open]) > :not(summary) {
+  display: none;
+}
+
+.countryGroups .icon {
+  text-align: center;
+  width: 40px;
+}
+
+.countryGroups .svg-chevron {
+  width: 19px;
+  height: 10px;
+  fill: #fff;
+}
+
+.countryGroups[open] .svg-chevron {
+  transform: rotate(180deg);
+}
+
+.countryGroups .svg-checkmark {
+  width: 18px;
+  height: 14px;
+  fill: gu-colour(news-garnett-main-1);
+}
+
+.countryGroups .svg-globe {
+  padding: 0 $gu-v-spacing;
+  width: 14px;
+  height: 14px;
+  fill: gu-colour(garnett-neutral-1);
+  fill: #fff;
+}
+
+.countryGroups summary {
+  list-style: none;
+  outline: none;
+}
+
+.countryGroups summary:hover,
+.countryGroups summary:focus {
+  box-shadow: none;
+  color: inherit;
+}
+
+.countryGroups summary::-webkit-details-marker {
+  display: none;
+}
+
+.countryGroups__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: gu-colour(garnett-neutral-5);
+  border: 1px solid gu-colour(garnett-neutral-4);
+}
+
+.countryGroups__item:first-child > a {
+  &:before {
+    content: none;
+  }
+}
+
+.countryGroups__item > a {
+  color: inherit;
+  display: flex;
+  padding: 0 15px;
+  line-height: 40px;
+  text-decoration: none;
+  justify-content: space-between;
+  position: relative;
+
+
+  &:before {
+    content: '';
+    border-top: 1px solid gu-colour(garnett-neutral-4);
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 15px;
+    right: 0;
+  }
+}
+
+.countryGroups__item > a:hover,
+.countryGroups__item > a:focus {
+  background: gu-colour(garnett-neutral-3);
+  font-weight: bold;
 }
 
 
