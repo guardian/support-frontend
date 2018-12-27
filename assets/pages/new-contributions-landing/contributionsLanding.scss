@@ -8,6 +8,8 @@
 @import '~components/errorMessage/errorMessage';
 @import '~components/ctaLink/ctaLink';
 @import '~components/generalErrorMessage/generalErrorMessage';
+@import '~components/generalErrorMessage/generalErrorMessage';
+@import '~components/ContributionThankYouPasswordSet/ContributionThankYouPasswordSet';
 
 body {
   min-height: 100vh;
@@ -29,6 +31,35 @@ body {
 
 .gu-content__bg svg {
   display: block;
+}
+
+.gu-content--shrink {
+  @include mq($from: mobile, $until: tablet) {
+    $header-height: 44px;
+    grid-template-rows: [header-t] $header-height [header-b] 1fr [footer-t] auto [footer-b];
+
+    .glogo {
+      width: 30px;
+      height: 30px;
+      right: 0;
+    }
+
+    .countryGroups {
+      margin-left: 0;
+
+      // TODO: this is basically just vertical centering. use flex-box!
+      margin-top: 4px;
+
+      summary {
+        padding-left: 0;
+      }
+    }
+
+    .blurb {
+      font-size: 16px;
+      margin: 0;
+    }
+  }
 }
 
 /*= HEADER */
@@ -322,6 +353,7 @@ body {
     font-size: 22px;
     padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
     width: 100%;
+    background-color: gu-colour(news-garnett-highlight);
   }
 }
 
@@ -355,10 +387,6 @@ footer[role="contentinfo"] {
 }
 
 @include mq($from: mobile, $until: tablet) {
-
-  .thank-you__container .header {
-    background-color: gu-colour(news-garnett-highlight);
-  }
 
   // TODO: center with flex-box instead!
   .glogo {
@@ -1044,35 +1072,8 @@ form {
 }
 
 /* Small header test */
-
 @include mq($from: mobile, $until: tablet) {
-  .gu-content--shrink {
-    $header-height: 44px;
-    grid-template-rows: [header-t] $header-height [header-b] 1fr [footer-t] auto [footer-b];
 
-    .glogo {
-      width: 30px;
-      height: 30px;
-      right: 0;
-    }
-
-    .countryGroups {
-      margin-left: 0;
-
-      // TODO: this is basically just vertical centering. use flex-box!
-      margin-top: 4px;
-
-      summary {
-        padding-left: 0;
-      }
-    }
-
-
-    .blurb {
-      font-size: 16px;
-      margin: 0;
-    }
-  }
 
   .gu-content--contribution-form.gu-content--no-blurb {
     .blurb {

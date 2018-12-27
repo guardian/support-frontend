@@ -3,9 +3,9 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import MarketingConsent from './MarketingConsentContainer';
-import ContributionsSurvey from '../components/ContributionsSurvey';
-import { ButtonWithRightArrow } from './ButtonWithRightArrow';
+import MarketingConsent from '../MarketingConsentContainer';
+import ContributionsSurvey from '../ContributionsSurvey';
+import { ButtonWithRightArrow } from '../ButtonWithRightArrow';
 
 // ----- Render ----- //
 
