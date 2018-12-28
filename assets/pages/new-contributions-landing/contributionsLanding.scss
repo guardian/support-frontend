@@ -8,7 +8,7 @@
 @import '~components/errorMessage/errorMessage';
 @import '~components/ctaLink/ctaLink';
 @import '~components/generalErrorMessage/generalErrorMessage';
-@import '~components/generalErrorMessage/generalErrorMessage';
+@import '~components/marketingConsentNew/marketingConsent';
 @import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYou';
 @import '~pages/new-contributions-landing/components/ContributionTicker/ContributionTicker';
 @import '~pages/new-contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
@@ -772,11 +772,6 @@ form {
 
 .component-paypal-button-checkout--hidden {
   display: none;
-}
-
-.information__message {
-  vertical-align: top;
-  padding-left: 5px;
 }
 
 .component-password-failure-message {

@@ -6,7 +6,7 @@
   }
 }
 
-.confirmation, .marketing-permissions {
+.confirmation {
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   font-weight: 300;
   margin: 0 -10px;
@@ -31,7 +31,7 @@
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
 }
 
-.marketing-permissions__title, .set-password__title {
+.set-password__title {
   font-family: $gu-text-egyptian-web;
   letter-spacing: -0.5px;
   font-weight: 900;
@@ -45,13 +45,6 @@
   padding-top: $gu-v-spacing;
   border-bottom: 0;
 }
-
-.confirmation__meta {
-  font-family: $gu-text-sans-web;
-  font-size: 12px;
-}
-
-
 
 .button {
   align-items: center;
@@ -114,7 +107,7 @@
   margin: ($gu-v-spacing * 2) -10px 0;
 }
 
-.marketing-permissions__message, .set-password__message {
+.set-password__message {
   font-family: $gu-text-egyptian-web;
   letter-spacing: -0.5px;
   margin-bottom: 24px;
