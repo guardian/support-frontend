@@ -40,6 +40,7 @@ object StripeJsonDecoder {
       nativeAbTests <- downField("nativeAbTests").as[Option[Set[AbTest]]]
       queryParameters <- downField("queryParameters").as[Option[Set[QueryParameter]]]
       gaId <- downField("gaId").as[Option[String]]
+      stripePaymentMethod <- downField("stripePaymentMethod").as[Option[StripePaymentMethod]]
     } yield {
       StripeChargeData(
         paymentData = StripePaymentData(
@@ -47,8 +48,7 @@ object StripeJsonDecoder {
           currency = Currency.withName(currency),
           amount = amount,
           token = token,
-          // This will never be sent from the old contributions-frontend API.
-          stripePaymentMethod = None
+          stripePaymentMethod = stripePaymentMethod
         ),
         acquisitionData = AcquisitionData(
           platform = platform,

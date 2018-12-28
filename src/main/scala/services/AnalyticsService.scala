@@ -6,7 +6,7 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import com.gu.acquisition.services.{DefaultAcquisitionService, DefaultAcquisitionServiceConfig}
+import com.gu.acquisition.services.{DefaultAcquisitionService, Ec2OrLocalConfig}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder.ops._
 import com.typesafe.scalalogging.StrictLogging
@@ -63,7 +63,7 @@ object AnalyticsService extends StrictLogging {
         InstanceProfileCredentialsProvider.getInstance()
       )
 
-      val acquisitionConfig = DefaultAcquisitionServiceConfig(
+      val acquisitionConfig = Ec2OrLocalConfig(
         credentialsProvider,
         kinesisStreamName = kinesisConfig.streamName,
         ophanEndpoint = Some(HttpUrl.parse(ophanConfig.ophanEndpoint))

@@ -10,9 +10,9 @@ import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 
 import scala.util.Try
-
 import model.acquisition.StripeSource
 import model.paypal.PaypalApiError
+import model.stripe.StripePaymentMethod
 import model.{Currency, PaymentProvider, PaymentStatus}
 
 case class ContributionData private (
@@ -39,10 +39,14 @@ object ContributionData extends StrictLogging {
     LocalDateTime.parse(dateTime, formatter)
   }
 
-  def fromStripeCharge(identityId: Option[Long], charge: Charge, countrySubdivisionCode: Option[String]): ContributionData =
+  def fromStripeCharge(
+    identityId: Option[Long],
+    charge: Charge, countrySubdivisionCode: Option[String],
+    paymentProvider: PaymentProvider,
+  ): ContributionData =
     // TODO: error handling
     ContributionData(
-      paymentProvider = PaymentProvider.Stripe,
+      paymentProvider = paymentProvider,
       paymentStatus = PaymentStatus.Paid,
       paymentId = charge.getId,
       identityId = identityId,

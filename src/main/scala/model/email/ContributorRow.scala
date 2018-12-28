@@ -7,7 +7,7 @@ import java.util.Date
 import io.circe.syntax._
 import io.circe.generic.JsonCodec
 import model.PaymentProvider
-import model.PaymentProvider.{Paypal, Stripe}
+import model.PaymentProvider.{Paypal, Stripe, StripeApplePay, StripePaymentRequestButton}
 
 /*
  * Variable name capitalisation due to the expected JSON structure
@@ -81,7 +81,7 @@ case class ContributorRow(
   private def formattedDate: String = new SimpleDateFormat("d MMMM yyyy").format(Date.from(Instant.now))
 
   private def renderPaymentMethod: String = paymentMethod match {
-    case Stripe => "credit / debit card"
+    case Stripe | StripeApplePay | StripePaymentRequestButton => "credit / debit card"
     case Paypal => "PayPal"
   }
 

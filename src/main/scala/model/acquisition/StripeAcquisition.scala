@@ -19,8 +19,8 @@ object StripeAcquisition extends StrictLogging {
     new AcquisitionSubmissionBuilder[StripeAcquisition] {
 
 
-      def getStripePaymentProvider(data: StripeChargeData) = {
-        data.paymentData.stripePaymentMethod match {
+      def getStripePaymentProvider(stripePaymentMethod: Option[StripePaymentMethod]): ophan.thrift.event.PaymentProvider = {
+        stripePaymentMethod match {
           case Some(StripePaymentMethod.StripeCheckout) | None => ophan.thrift.event.PaymentProvider.Stripe
           case Some(StripePaymentMethod.StripeApplePay) => ophan.thrift.event.PaymentProvider.StripeApplePay
           case Some(StripePaymentMethod.StripePaymentRequestButton) => ophan.thrift.event.PaymentProvider.StripePaymentRequestButton
@@ -43,6 +43,7 @@ object StripeAcquisition extends StrictLogging {
           val paymentData = stripeAcquisition.stripeChargeData.paymentData
           val acquisitionData = stripeAcquisition.stripeChargeData.acquisitionData
           val paymentProvider = getStripePaymentProvider(stripeAcquisition.stripeChargeData)
+          val paymentProvider = getStripePaymentProvider(stripeAcquisition.stripeChargeData.paymentData.stripePaymentMethod)
           Acquisition(
             product = Product.Contribution,
             paymentFrequency = PaymentFrequency.OneOff,
@@ -62,7 +63,7 @@ object StripeAcquisition extends StrictLogging {
             queryParameters = acquisitionData.queryParameters
           )
         }.leftMap{ error =>
-          s"Failed to build an acquisition submission from an instance of PaypalAcquisition - cause: $error"
+          s"Failed to build an acquisition submission from an instance of Stripe Acquisition - cause: $error"
         }
       }
     }

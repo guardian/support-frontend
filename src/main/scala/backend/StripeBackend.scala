@@ -14,7 +14,7 @@ import model._
 import model.acquisition.StripeAcquisition
 import model.db.ContributionData
 import model.email.ContributorRow
-import model.stripe.{StripeApiError, StripeChargeData, StripeChargeSuccess, StripeRefundHook}
+import model.stripe._
 import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
@@ -93,7 +93,14 @@ class StripeBackend(
 
   private def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  =
     BackendError.combineResults(
-      insertContributionDataIntoDatabase(ContributionData.fromStripeCharge(identityId, charge, clientBrowserInfo.countrySubdivisionCode)),
+      insertContributionDataIntoDatabase(
+        ContributionData.fromStripeCharge(
+          identityId,
+          charge,
+          clientBrowserInfo.countrySubdivisionCode,
+          PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod)
+        )
+      ),
       submitAcquisitionToOphan(StripeAcquisition(data, charge, identityId, clientBrowserInfo))
     )
 
