@@ -42,7 +42,6 @@ object StripeAcquisition extends StrictLogging {
         Either.catchNonFatal {
           val paymentData = stripeAcquisition.stripeChargeData.paymentData
           val acquisitionData = stripeAcquisition.stripeChargeData.acquisitionData
-          val paymentProvider = getStripePaymentProvider(stripeAcquisition.stripeChargeData)
           val paymentProvider = getStripePaymentProvider(stripeAcquisition.stripeChargeData.paymentData.stripePaymentMethod)
           Acquisition(
             product = Product.Contribution,
