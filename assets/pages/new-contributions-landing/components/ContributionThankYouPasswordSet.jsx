@@ -3,13 +3,18 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import MarketingConsent from './MarketingConsentContainer';
 import ContributionsSurvey from '../components/ContributionsSurvey';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 
+type PropTypes = {|
+  countryGroupId: CountryGroupId,
+|};
+
 // ----- Render ----- //
 
-function ContributionThankYouPasswordSet() {
+function ContributionThankYouPasswordSet(props: PropTypes) {
   return (
     <div className="thank-you__container">
       <h1 className="header">You now have a Guardian account</h1>
@@ -20,7 +25,7 @@ function ContributionThankYouPasswordSet() {
         </p>
       </section>
       <MarketingConsent />
-      <ContributionsSurvey />
+      <ContributionsSurvey countryGroupId={props.countryGroupId} />
       <ButtonWithRightArrow
         componentClassName="confirmation confirmation--backtothegu"
         buttonClassName=""

@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ThankYouPageStageMap, type ThankYouPageStage } from '../contributionsLandingReducer';
 import ContributionThankYou from './ContributionThankYou';
 import ContributionThankYouSetPassword from './ContributionThankYouSetPassword';
@@ -14,11 +15,13 @@ import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   thankYouPageStage: ThankYouPageStage,
+  countryGroupId: CountryGroupId,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   thankYouPageStage: state.page.form.thankYouPageStage,
+  countryGroupId: state.common.internationalisation.countryGroupId,
 });
 
 // ----- Render ----- //
@@ -29,7 +32,7 @@ function ContributionThankYouContainer(props: PropTypes) {
     thankYou: (<ContributionThankYou />),
     thankYouSetPassword: (<ContributionThankYouSetPassword />),
     thankYouPasswordDeclinedToSet: (<ContributionThankYou />),
-    thankYouPasswordSet: (<ContributionThankYouPasswordSet />),
+    thankYouPasswordSet: (<ContributionThankYouPasswordSet countryGroupId={props.countryGroupId} />),
   };
 
 
