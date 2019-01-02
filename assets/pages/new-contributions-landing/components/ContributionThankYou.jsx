@@ -7,6 +7,7 @@ import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType, getSpokenType } from 'helpers/contributions';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 import MarketingConsent from './MarketingConsentContainer';
 import ContributionsSurvey from '../components/ContributionsSurvey';
@@ -20,6 +21,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
+  countryGroupId: CountryGroupId,
   |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -27,6 +29,7 @@ const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
+  countryGroupId: state.common.internationalisation.countryGroupId,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -61,7 +64,7 @@ function ContributionThankYou(props: PropTypes) {
         </section>
       ) : null}
       <MarketingConsent />
-      <ContributionsSurvey />
+      <ContributionsSurvey countryGroupId={props.countryGroupId} />
       <ButtonWithRightArrow
         componentClassName="confirmation confirmation--backtothegu"
         buttonClassName=""
