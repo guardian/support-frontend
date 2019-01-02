@@ -1,7 +1,7 @@
 // @flow
 
 import { getQueryParameter } from 'helpers/url';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId, detect } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
 
 import type { SubscriptionProduct } from './subscriptions';
@@ -46,7 +46,7 @@ const Sales: Sale[] = [
     subscriptionProduct: 'DigitalPack',
     activeRegions: ['GBPCountries', 'UnitedStates', 'AUDCountries', 'International'],
     startTime: new Date(2018, 11, 20).getTime(), // 20 Dec 2018
-    endTime: new Date(2019, 0, 3).getTime(), // 3 Jan 2019
+    endTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
     saleDetails: {
       GBPCountries: {
         promoCode: 'DDPCS99X',
