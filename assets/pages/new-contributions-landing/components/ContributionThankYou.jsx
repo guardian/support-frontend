@@ -60,8 +60,8 @@ function ContributionThankYou(props: PropTypes) {
           </p>
         </section>
       ) : null}
-      <ContributionsSurvey />
       <MarketingConsent />
+      <ContributionsSurvey />
       <ButtonWithRightArrow
         componentClassName="confirmation confirmation--backtothegu"
         buttonClassName=""
