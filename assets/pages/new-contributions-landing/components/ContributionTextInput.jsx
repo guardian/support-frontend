@@ -35,7 +35,7 @@ type PropTypes = {|
 // ----- Render ----- //
 
 function NewContributionTextInput(props: PropTypes) {
-  const showError = !props.isValid && props.formHasBeenSubmitted;
+  const showError = !props.isValid && props.formSubmitted;
   const modifiersArray = showError ? ['invalid', props.id] : [props.id];
 
   return (

@@ -21,6 +21,7 @@ import {
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
 import { isTestUser } from 'helpers/user/user';
+import { PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { showPaymentMethod } from './helpers/paymentProviders';
 import { type User } from './helpers/user';
 
@@ -47,6 +48,7 @@ type CheckoutState = {|
   ...FormFields,
   email: string,
   errors: FormError<FormField>[],
+  formSubmitted: boolean,
   isTestUser: boolean,
 |};
 
@@ -65,7 +67,8 @@ export type Action =
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
   | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
-  | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
+  | { type: 'SET_ERRORS', errors: FormError<FormField>[] }
+  | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean };
 
 
 // ----- Selectors ----- //
@@ -118,6 +121,27 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
 const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_ERRORS', errors });
+const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
+
+function mapResultToAction(result: PaymentResult): Action {
+  switch (result.paymentStatus) {
+    case 'success': return setStage('thankyou');
+    default: return setFormErrors([]);
+  }
+}
+
+function submitForm(dispatch: Dispatch<Action>, state: State) {
+  const errors = getErrors(getFormFields(state));
+  if (errors.length > 0) {
+    dispatch(setFormErrors(errors));
+  } else {
+    showPaymentMethod(
+      state,
+      () => dispatch(setFormSubmitted(true)),
+      pr => dispatch(mapResultToAction(pr)),
+    );
+  }
+}
 
 const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
@@ -127,15 +151,7 @@ const formActionCreators = {
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
-  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => {
-    const state = getState();
-    const errors = getErrors(getFormFields(state));
-    if (errors.length > 0) {
-      dispatch(setFormErrors(errors));
-    } else {
-      showPaymentMethod(state);
-    }
-  },
+  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
 };
 
 export type FormActionCreators = typeof formActionCreators;
@@ -155,6 +171,7 @@ function initReducer(user: User) {
     billingPeriod: Monthly,
     paymentMethod: 'DirectDebit',
     errors: [],
+    formHasBeenSubmitted: false,
     isTestUser: isTestUser(),
   };
 
@@ -188,6 +205,9 @@ function initReducer(user: User) {
 
       case 'SET_ERRORS':
         return { ...state, errors: action.errors };
+
+      case 'SET_FORM_SUBMITTED':
+        return { ...state, formSubmitted: action.formSubmitted };
 
       default:
         return state;

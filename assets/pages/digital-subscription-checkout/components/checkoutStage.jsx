@@ -8,13 +8,11 @@ import { connect } from 'react-redux';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import ReturnSection from 'components/returnSection/returnSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import ProductHero, {
-  type GridImages,
-  type ImagesByCountry,
-} from 'components/productHero/productHero';
+import ProductHero, { type GridImages, type ImagesByCountry, } from 'components/productHero/productHero';
 import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
@@ -85,6 +83,7 @@ function mapStateToProps(state: State): PropTypes {
 
   return {
     stage: state.page.checkout.stage,
+    formSubmitted: state.page.checkout.formSubmitted,
     countryGroupId: state.common.internationalisation.countryGroupId,
   };
 
@@ -131,6 +130,7 @@ function CheckoutStage(props: PropTypes) {
             </p>
           </LeftMarginSection>
           <CheckoutForm />
+          {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>
       );
 

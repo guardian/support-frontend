@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { usStates, caStates, type UsState, type CaState } from 'helpers/internationalisation/country';
+import { type CaState, caStates, type UsState, usStates } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -59,7 +59,7 @@ const renderStatesField = (
 );
 
 function ContributionState(props: PropTypes) {
-  const showError = !props.isValid && props.formHasBeenSubmitted;
+  const showError = !props.isValid && props.formSubmitted;
   switch (props.countryGroupId) {
     case 'UnitedStates':
       return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
