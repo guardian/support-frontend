@@ -326,7 +326,6 @@ function getPaperCheckout(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
-  optimizeExperiments: OptimizeExperiments,
 ) {
   const promoCode = getPromoCode('Paper', 'GBPCountries', defaultPromos.Paper);
 
