@@ -27,6 +27,7 @@ import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { withArrow } from 'components/forms/formHOCs/withArrow';
 import { canShow } from 'components/forms/formHOCs/canShow';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 import {
   type FormActionCreators,
@@ -42,7 +43,7 @@ import {
 
 type PropTypes = {|
   ...FormFields,
-  errors: FormError<FormField>[],
+  formErrors: FormError<FormField>[],
   ...FormActionCreators,
 |};
 
@@ -52,7 +53,8 @@ type PropTypes = {|
 function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
-    errors: state.page.checkout.errors,
+    formErrors: state.page.checkout.formErrors,
+    submissionError: state.page.checkout.submissionError,
   };
 }
 
@@ -100,6 +102,10 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
 
 function CheckoutForm(props: PropTypes) {
 
+  const errorState = props.submissionError ?
+    <GeneralErrorMessage errorReason={props.submissionError} /> :
+    null;
+
   return (
     <div className="checkout-form">
       <LeftMarginSection modifierClasses={['your-details']}>
@@ -110,7 +116,7 @@ function CheckoutForm(props: PropTypes) {
           type="text"
           value={props.firstName}
           setValue={props.setFirstName}
-          error={firstError('firstName', props.errors)}
+          error={firstError('firstName', props.formErrors)}
         />
         <Input1
           id="last-name"
@@ -118,14 +124,14 @@ function CheckoutForm(props: PropTypes) {
           type="text"
           value={props.lastName}
           setValue={props.setLastName}
-          error={firstError('lastName', props.errors)}
+          error={firstError('lastName', props.formErrors)}
         />
         <Select1
           id="country"
           label="Country"
           value={props.country}
           setValue={props.setCountry}
-          error={firstError('country', props.errors)}
+          error={firstError('country', props.formErrors)}
         >
           <option value="">--</option>
           {sortedOptions(countries)}
@@ -135,7 +141,7 @@ function CheckoutForm(props: PropTypes) {
           label={props.country === 'CA' ? 'Province/Territory' : 'State'}
           value={props.stateProvince}
           setValue={props.setStateProvince}
-          error={firstError('stateProvince', props.errors)}
+          error={firstError('stateProvince', props.formErrors)}
           isShown={props.country === 'US' || props.country === 'CA'}
         >
           <option value="">--</option>
@@ -147,7 +153,7 @@ function CheckoutForm(props: PropTypes) {
           type="tel"
           value={props.telephone}
           setValue={props.setTelephone}
-          error={firstError('telephone', props.errors)}
+          error={firstError('telephone', props.formErrors)}
         />
       </LeftMarginSection>
       <LeftMarginSection>
@@ -191,6 +197,7 @@ function CheckoutForm(props: PropTypes) {
           strong="Cancel any time you want. "
           copy="There is no set time on your agreement so you can stop your subscription anytime."
         />
+        {errorState}
         <Button1 onClick={() => props.submitForm()}>Continue to payment</Button1>
       </LeftMarginSection>
     </div>

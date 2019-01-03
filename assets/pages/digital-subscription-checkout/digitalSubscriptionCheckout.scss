@@ -28,6 +28,7 @@
 @import '~components/forms/formHOCs/withArrow';
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
+@import '~components/generalErrorMessage/generalErrorMessage';
 
 
 // ----- Page-Specific Styles ----- //
@@ -97,6 +98,9 @@
     }
   }
 
+  .component-general-error-message {
+    margin-top: $gu-v-spacing * 2;
+  }
 
   // ----- Thank You
 

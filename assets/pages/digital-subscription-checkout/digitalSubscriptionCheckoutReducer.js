@@ -47,7 +47,8 @@ type CheckoutState = {|
   stage: Stage,
   ...FormFields,
   email: string,
-  errors: FormError<FormField>[],
+  formErrors: FormError<FormField>[],
+  submissionError: string,
   formSubmitted: boolean,
   isTestUser: boolean,
 |};
@@ -67,7 +68,8 @@ export type Action =
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
   | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
-  | { type: 'SET_ERRORS', errors: FormError<FormField>[] }
+  | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
+  | { type: 'SET_SUBMISSION_ERROR', error: string }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean };
 
 
@@ -120,13 +122,14 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_ERRORS', errors });
+const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
+const setSubmissionError = (error: string): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
 function mapResultToAction(result: PaymentResult): Action {
   switch (result.paymentStatus) {
     case 'success': return setStage('thankyou');
-    default: return setFormErrors([]);
+    default: return setSubmissionError(result.error);
   }
 }
 
@@ -170,7 +173,8 @@ function initReducer(user: User) {
     telephone: '',
     billingPeriod: Monthly,
     paymentMethod: 'DirectDebit',
-    errors: [],
+    formErrors: [],
+    submissionError: null,
     formHasBeenSubmitted: false,
     isTestUser: isTestUser(),
   };
@@ -203,8 +207,11 @@ function initReducer(user: User) {
       case 'SET_PAYMENT_METHOD':
         return { ...state, paymentMethod: action.paymentMethod };
 
-      case 'SET_ERRORS':
-        return { ...state, errors: action.errors };
+      case 'SET_FORM_ERRORS':
+        return { ...state, formErrors: action.errors };
+
+      case 'SET_SUBMISSION_ERROR':
+        return { ...state, submissionError: action.error, formSubmitted: false };
 
       case 'SET_FORM_SUBMITTED':
         return { ...state, formSubmitted: action.formSubmitted };
