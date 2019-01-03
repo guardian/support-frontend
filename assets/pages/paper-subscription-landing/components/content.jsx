@@ -17,6 +17,7 @@ import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 import Form from './form';
 
@@ -41,6 +42,12 @@ const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>,
   </ProductPageContentBlock>
 );
 
+function flashSaleAwareProductPageInfoChip(): string {
+  if(flashSaleIsActive('Paper', 'GBPCountries')){
+    return "You can cancel your subscription at any time. Offer is for the first year. Standard subscription rates apply thereafter.";
+  }
+  return "You can cancel your subscription at any time.";
+}
 
 const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (
   <ProductPageContentBlock type="feature">
@@ -52,7 +59,7 @@ const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) =>
     }
     <Form />
     <ProductPageInfoChip>
-      You can cancel your subscription at any time
+      {flashSaleAwareProductPageInfoChip()}
     </ProductPageInfoChip>
   </ProductPageContentBlock>
 );

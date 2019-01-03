@@ -3,8 +3,10 @@
 import { getQueryParameter } from 'helpers/url';
 import { type CountryGroupId, detect } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
+import { type Option } from 'helpers/types/option';
 
 import type { SubscriptionProduct } from './subscriptions';
+import { PaperBillingPlan } from "./subscriptions";
 
 export type SaleCopy = {
   featuredProduct: {
@@ -29,6 +31,7 @@ type SaleDetails = {
     intcmp: string,
     price: number,
     saleCopy: SaleCopy,
+    planPrices: Option<PlanPrices>,
   },
 };
 
@@ -39,6 +42,11 @@ type Sale = {
   endTime: number,
   saleDetails: SaleDetails,
 };
+
+
+type PlanPrices = {
+  [PaperBillingPlan]: number,
+}
 
 // Days are 1 based, months are 0 based
 const Sales: Sale[] = [
@@ -138,8 +146,8 @@ const Sales: Sale[] = [
   {
     subscriptionProduct: 'Paper',
     activeRegions: ['GBPCountries'],
-    startTime: new Date(2019, 0, 5).getTime(), // 4 Jan 2019
-    endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
+    startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
+    endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019
     saleDetails: {
       GBPCountries: {
         promoCode: 'GCB80X',
@@ -162,13 +170,23 @@ const Sales: Sale[] = [
           },
         },
       },
+      planPrices: {
+        collectionEveryday: 35.71,
+        collectionSixday: 30.84,
+        collectionWeekend: 15.57,
+        collectionSunday: 8.09,
+        deliveryEveryday: 47.09,
+        deliverySixday: 40.69,
+        deliveryWeekend: 18.82,
+        deliverySunday: 11.34,
+      }
     },
   },
   {
     subscriptionProduct: 'PaperAndDigital',
     activeRegions: ['GBPCountries'],
-    startTime: new Date(2019, 0, 5).getTime(), // 4 Jan 2019
-    endTime: new Date(2019, 1, 3).getTime(), // 3 Feb 2019
+    startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
+    endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019
     saleDetails: {
       GBPCountries: {
         promoCode: 'GCB56X',
@@ -239,6 +257,11 @@ function getIntcmp(
   return intcmp || defaultIntcmp;
 }
 
+function getPlanPrices(product: SubscriptionProduct, countryGroupId: CountryGroupId): PlanPrices {
+  const sale = getSales(product, countryGroupId)[0];
+  return sale && sale.saleDetails.planPrices;
+}
+
 function getEndTime(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
   const sale = getSales(product, countryGroupId)[0];
   return sale && sale.endTime;
@@ -280,4 +303,5 @@ export {
   getEndTime,
   getSaleCopy,
   getFormattedFlashSalePrice,
+  getPlanPrices,
 };
