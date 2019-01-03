@@ -23,7 +23,7 @@ function getCopy() {
     const saleCopy = getSaleCopy('Paper', 'GBPCountries');
     const salePrice = getFormattedFlashSalePrice('Paper', 'GBPCountries');
     return {
-      subHeading: `from ${salePrice}`,
+      subHeading: `from £${salePrice}/Monthly`,
       description: `${saleCopy.bundle.description}`,
     };
   }

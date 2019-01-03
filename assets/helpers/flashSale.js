@@ -135,6 +135,64 @@ const Sales: Sale[] = [
 
     },
   },
+  {
+    subscriptionProduct: 'Paper',
+    activeRegions: ['GBPCountries'],
+    startTime: new Date(2019, 0, 5).getTime(), // 4 Jan 2019
+    endTime: new Date(2019, 1, 3).getTime(), // 3 Feb 2019
+    saleDetails: {
+      GBPCountries: {
+        promoCode: 'GCB80X',
+        intcmp: '',
+        price: 8.09,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Paper subscriptions',
+            subHeading: 'Buy yourself some quality time',
+            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save 25% for a year.',
+          },
+          landingPage: {
+            heading: 'The Guardian newspaper subscriptions',
+            subHeading: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
+          },
+          bundle: {
+            heading: 'Paper',
+            subHeading: 'From £8.09/month',
+            description: 'Save 25% for a year on subscriptions to The Guardian and The Observer, and get up to an additional £11.91 off the cover price.',
+          },
+        },
+      },
+    },
+  },
+  {
+    subscriptionProduct: 'PaperAndDigital',
+    activeRegions: ['GBPCountries'],
+    startTime: new Date(2019, 0, 5).getTime(), // 4 Jan 2019
+    endTime: new Date(2019, 1, 3).getTime(), // 3 Feb 2019
+    saleDetails: {
+      GBPCountries: {
+        promoCode: 'GCB56X',
+        intcmp: '',
+        price: 16.22,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Paper subscriptions',
+            subHeading: 'Buy yourself some quality time',
+            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save 25% for a year.',
+          },
+          landingPage: {
+            heading: 'The Guardian newspaper subscriptions',
+            subHeading: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
+          },
+          bundle: {
+            heading: 'Paper+Digital',
+            subHeading: 'From £16.22/month',
+            description: 'Save 25% for a year on a Paper + Digital subscription and get all the benefits of a paper subscription, plus access to the Digital Pack.',
+          },
+        },
+      },
+    },
+  },
 ];
 
 function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
