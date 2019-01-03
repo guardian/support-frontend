@@ -23,7 +23,7 @@ class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
   override def afterAll(): Unit = { driverConfig.quit() }
 
   feature("Paper landing page") {
-    scenario("Basic loading") {
+    ignore("Basic loading") {
 
       val paperSubsPage = new PaperSubs()
 
@@ -47,6 +47,5 @@ class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
     }
   }
-
 
 }
