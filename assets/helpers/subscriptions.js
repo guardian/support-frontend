@@ -13,10 +13,10 @@ import {
   SixForSix,
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
+import { getPlanPrices, flashSaleIsActive } from 'helpers/flashSale';
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
-import { getPlanPrices, flashSaleIsActive } from 'helpers/flashSale';
 
 
 // ----- Types ------ //
@@ -267,7 +267,7 @@ function getPromotionWeeklyProductPrice(
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
   const planPrices = getPlanPrices('Paper', 'GBPCountries');
 
-  if(flashSaleIsActive('Paper', 'GBPCountries')) {
+  if (flashSaleIsActive('Paper', 'GBPCountries')) {
     return GBP(planPrices[billingPlan]);
   }
 

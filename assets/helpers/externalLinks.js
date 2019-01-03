@@ -345,7 +345,7 @@ function getPaperCheckout(
     cgId: null,
     nativeAbParticipations,
     optimizeExperiments,
-    promoCode
+    promoCode,
   })([subsUrl, 'checkout', urls[billingPlan]].join('/'));
 }
 

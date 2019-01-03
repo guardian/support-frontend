@@ -5,8 +5,7 @@ import { type CountryGroupId, detect } from 'helpers/internationalisation/countr
 import { fixDecimals } from 'helpers/subscriptions';
 import { type Option } from 'helpers/types/option';
 
-import type { SubscriptionProduct } from './subscriptions';
-import { PaperBillingPlan } from "./subscriptions";
+import { type SubscriptionProduct, type PaperBillingPlan } from './subscriptions';
 
 export type SaleCopy = {
   featuredProduct: {
@@ -23,6 +22,10 @@ export type SaleCopy = {
     subHeading: string,
     description: string,
   },
+}
+
+type PlanPrices = {
+  [PaperBillingPlan]: number,
 }
 
 type SaleDetails = {
@@ -42,11 +45,6 @@ type Sale = {
   endTime: number,
   saleDetails: SaleDetails,
 };
-
-
-type PlanPrices = {
-  [PaperBillingPlan]: number,
-}
 
 // Days are 1 based, months are 0 based
 const Sales: Sale[] = [
@@ -76,6 +74,7 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
           },
         },
+        planPrices: null,
       },
       UnitedStates: {
         promoCode: 'DDPCS99X',
@@ -97,6 +96,7 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
+        planPrices: null,
       },
       International: {
         promoCode: 'DDPCS99X',
@@ -118,6 +118,7 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
+        planPrices: null,
       },
       AUDCountries: {
         promoCode: 'DDPCS99X',
@@ -139,6 +140,7 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
+        planPrices: null,
       },
 
     },
@@ -179,7 +181,7 @@ const Sales: Sale[] = [
         deliverySixday: 40.69,
         deliveryWeekend: 18.82,
         deliverySunday: 11.34,
-      }
+      },
     },
   },
   {
@@ -208,6 +210,7 @@ const Sales: Sale[] = [
             description: 'Save 25% for a year on a Paper + Digital subscription and get all the benefits of a paper subscription, plus access to the Digital Pack.',
           },
         },
+        planPrices: null,
       },
     },
   },

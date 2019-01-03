@@ -14,10 +14,10 @@ import ProductPageInfoChip from 'components/productPage/productPageInfoChip/prod
 import GridImage from 'components/gridImage/gridImage';
 import { paperSubsUrl } from 'helpers/routes';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
+import { flashSaleIsActive } from 'helpers/flashSale';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
-import { flashSaleIsActive } from 'helpers/flashSale';
 
 import Form from './form';
 
@@ -43,10 +43,10 @@ const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>,
 );
 
 function flashSaleAwareProductPageInfoChip(): string {
-  if(flashSaleIsActive('Paper', 'GBPCountries')){
-    return "You can cancel your subscription at any time. Offer is for the first year. Standard subscription rates apply thereafter.";
+  if (flashSaleIsActive('Paper', 'GBPCountries')) {
+    return 'You can cancel your subscription at any time. Offer is for the first year. Standard subscription rates apply thereafter.';
   }
-  return "You can cancel your subscription at any time.";
+  return 'You can cancel your subscription at any time.';
 }
 
 const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (

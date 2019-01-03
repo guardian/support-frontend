@@ -51,12 +51,12 @@ const store = pageInit(reducer(method, promoInUrl), true);
 // ----- Render ----- //
 
 function flashSaleAwareHeading(): string {
-  if(flashSaleIsActive('Paper', 'GBPCountries')) {
+  if (flashSaleIsActive('Paper', 'GBPCountries')) {
     const saleCopy = getSaleCopy('Paper', 'GBPCountries');
     return saleCopy.landingPage.subHeading;
   }
 
-  return "Save up to 31% on The Guardian and The Observer - all year round";
+  return 'Save up to 31% on The Guardian and The Observer - all year round';
 }
 
 const content = (
