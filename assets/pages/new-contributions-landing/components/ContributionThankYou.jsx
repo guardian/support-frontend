@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { type ContributionType, getSpokenType } from 'helpers/contributions';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 import MarketingConsent from './MarketingConsentContainer';
-import ContributionsSurvey from '../components/ContributionsSurvey';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 
 // ----- Types ----- //
@@ -61,7 +60,6 @@ function ContributionThankYou(props: PropTypes) {
         </section>
       ) : null}
       <MarketingConsent />
-      <ContributionsSurvey />
       <ButtonWithRightArrow
         componentClassName="confirmation confirmation--backtothegu"
         buttonClassName=""
