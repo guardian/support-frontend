@@ -89,7 +89,7 @@ const formIsValidParameters = (state: State) => ({
   firstName: state.page.form.formData.firstName,
   lastName: state.page.form.formData.lastName,
   email: state.page.form.formData.email,
-  showOneOffNameFields: state.common.abParticipations.showOneOffNameFields === 'control' || state.page.form.contributionType !== 'ONE_OFF',
+  showOneOffNameFields: state.page.form.contributionType !== 'ONE_OFF',
 });
 
 function enableOrDisableForm() {

@@ -50,7 +50,6 @@ type PropTypes = {|
   updateState: Event => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
-  showOneOffNameFields: boolean,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -70,7 +69,6 @@ const mapStateToProps = (state: State) => ({
   isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
-  showOneOffNameFields: state.common.abParticipations.showOneOffNameFields === 'control',
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -92,7 +90,6 @@ function FormFields(props: PropTypes) {
     isSignedIn,
     state,
     checkoutFormHasBeenSubmitted,
-    showOneOffNameFields,
   } = props;
   return (
     <div className="form-fields">
@@ -122,7 +119,7 @@ function FormFields(props: PropTypes) {
         checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
         email={props.email}
       />
-      {showOneOffNameFields || props.contributionType !== 'ONE_OFF' ?
+      {props.contributionType !== 'ONE_OFF' ?
         <div>
           <NewContributionTextInput
             id="contributionFirstName"

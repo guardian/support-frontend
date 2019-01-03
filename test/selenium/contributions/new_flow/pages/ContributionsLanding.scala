@@ -30,7 +30,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     def fillIn(hasNameFields: Boolean) {
 
       setValue(email, s"${testUser.username}@gu.com", clear = true)
-      if (hasNameFields || pageHasElement(firstName)) {
+      if (hasNameFields) {
         setValue(firstName, testUser.username, clear = true)
         setValue(lastName, testUser.username, clear = true)
       }
