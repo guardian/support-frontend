@@ -19,8 +19,8 @@ function ContributionThankYouPasswordSet() {
           preferences.
         </p>
       </section>
-      <ContributionsSurvey />
       <MarketingConsent />
+      <ContributionsSurvey />
       <ButtonWithRightArrow
         componentClassName="confirmation confirmation--backtothegu"
         buttonClassName=""
