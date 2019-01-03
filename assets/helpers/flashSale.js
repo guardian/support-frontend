@@ -139,7 +139,7 @@ const Sales: Sale[] = [
     subscriptionProduct: 'Paper',
     activeRegions: ['GBPCountries'],
     startTime: new Date(2019, 0, 5).getTime(), // 4 Jan 2019
-    endTime: new Date(2019, 1, 3).getTime(), // 3 Feb 2019
+    endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
     saleDetails: {
       GBPCountries: {
         promoCode: 'GCB80X',
