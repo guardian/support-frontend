@@ -4,7 +4,6 @@ import enumeratum.{CirceEnum, Enum, EnumEntry}
 import io.circe.Decoder
 import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto._
-import model.Currency.findValues
 import model.{AcquisitionData, Currency}
 import ophan.thrift.componentEvent.ComponentType
 import ophan.thrift.event.{AbTest, AcquisitionSource, QueryParameter}

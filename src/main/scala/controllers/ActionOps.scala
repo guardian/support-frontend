@@ -26,14 +26,14 @@ object ActionOps {
 
     def withLogging(class1: String, message: String, logId: LogId = LogId.unsafe): Action[A] = new Action[A] {
       override def parser: BodyParser[A] = new BodyParser[A] {
-        override def apply(v1: RequestHeader): Accumulator[ByteString, Either[Result, A]] = {
-          val parsed = action.parser.apply(v1)
+        override def apply(requestHeader: RequestHeader): Accumulator[ByteString, Either[Result, A]] = {
+          val parsed = action.parser.apply(requestHeader)
           parsed.map {
             case Left(result) =>
               logger.info(s"${logId.value}: action $class1.$message failed with: $result")
               Left(result)
             case Right(a) =>
-              logger.info(s"${logId.value}: action $class1.$message started with: ${formatter.tokenize(a).mkString}")
+              logger.info(s"${logId.value}: action $class1.$message started with:\n${prettyPrint(a)}")
               Right(a)
           }(executionContext)
         }
@@ -42,7 +42,7 @@ object ActionOps {
       override def apply(request: Request[A]): Future[Result] = {
         val result = action.apply(request)
         result.onComplete { result =>
-          logger.info(s"${logId.value}: action $class1.$message completed with: ${formatter.tokenize(result).mkString}")
+          logger.info(s"${logId.value}: action $class1.$message completed with:\n${prettyPrint(result)}")
         }(executionContext)
         result
       }
@@ -52,4 +52,9 @@ object ActionOps {
     }
   }
 
+  private def prettyPrint[A](a: A) = {
+    val lines = formatter.tokenize(a)
+    val indented = lines.map(str => str.plainText).mkString.replaceAll("  ", ". ")
+    " |" + indented.replaceAll("""\n""", "\n |")
+  }
 }

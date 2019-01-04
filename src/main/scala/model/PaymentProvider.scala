@@ -1,7 +1,7 @@
 package model
 
 import enumeratum.{Enum, EnumEntry}
-import model.stripe.{StripeChargeData, StripePaymentMethod}
+import model.stripe.StripePaymentMethod
 
 import scala.collection.immutable.IndexedSeq
 
