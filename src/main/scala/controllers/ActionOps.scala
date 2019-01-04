@@ -14,9 +14,7 @@ object ActionOps {
     pprint.copy(
       additionalHandlers = {
         case value: ByteString =>  pprint.Tree.Literal(s"""ByteString("${value.utf8String}")""")
-      },
-      colorLiteral = fansi.Attrs.Empty,
-      colorApplyPrefix = fansi.Attrs.Empty
+      }
     )
 
   case class LogId(value: String) extends AnyVal
