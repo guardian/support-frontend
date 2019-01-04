@@ -16,7 +16,6 @@ import { type Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { type CommonState } from 'helpers/page/commonReducer';
 import FeaturedProductHero from 'components/featuredProductHero/featuredProductHero';
-import { flashSaleIsActive } from 'helpers/flashSale';
 import { getProduct, type Product } from './featuredProducts';
 
 
@@ -83,7 +82,7 @@ function FeaturedProductAb(props: PropTypes) {
       cta={getCta(product)}
       headingSize={headingSize}
       product={product.name}
-      hasTimer={flashSaleIsActive(product.name, countryGroupId)}
+      hasTimer={false}
       countryGroupId={countryGroupId}
     />) : null;
 
