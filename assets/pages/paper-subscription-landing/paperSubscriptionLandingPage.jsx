@@ -50,7 +50,7 @@ const store = pageInit(reducer(method, promoInUrl), true);
 
 // ----- Render ----- //
 
-function flashSaleAwareHeading(): string {
+function getHeading(): string {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
     const saleCopy = getSaleCopy('Paper', 'GBPCountries');
     return saleCopy.landingPage.subHeading;
@@ -67,7 +67,7 @@ const content = (
     >
       <ProductPagehero
         overheading="The Guardian newspaper subscriptions"
-        heading={flashSaleAwareHeading()}
+        heading={getHeading()}
         type="feature"
         modifierClasses={['paper']}
       >

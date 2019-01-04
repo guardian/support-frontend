@@ -42,7 +42,7 @@ const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>,
   </ProductPageContentBlock>
 );
 
-function flashSaleAwareProductPageInfoChip(): string {
+function getPageInfoChip(): string {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
     return 'You can cancel your subscription at any time. Offer is for the first year. Standard subscription rates apply thereafter.';
   }
@@ -59,7 +59,7 @@ const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) =>
     }
     <Form />
     <ProductPageInfoChip>
-      {flashSaleAwareProductPageInfoChip()}
+      {getPageInfoChip()}
     </ProductPageInfoChip>
   </ProductPageContentBlock>
 );
