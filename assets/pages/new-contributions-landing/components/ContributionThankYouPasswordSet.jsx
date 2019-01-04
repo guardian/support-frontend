@@ -4,7 +4,6 @@
 
 import React from 'react';
 import MarketingConsent from './MarketingConsentContainer';
-import ContributionsSurvey from '../components/ContributionsSurvey';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 
 // ----- Render ----- //
@@ -20,7 +19,6 @@ function ContributionThankYouPasswordSet() {
         </p>
       </section>
       <MarketingConsent />
-      <ContributionsSurvey />
       <ButtonWithRightArrow
         componentClassName="confirmation confirmation--backtothegu"
         buttonClassName=""
