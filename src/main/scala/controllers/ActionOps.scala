@@ -14,7 +14,9 @@ object ActionOps {
     pprint.copy(
       additionalHandlers = {
         case value: ByteString =>  pprint.Tree.Literal(s"""ByteString("${value.utf8String}")""")
-      }
+      },
+      colorLiteral = fansi.Attrs.Empty,
+      colorApplyPrefix = fansi.Attrs.Empty
     )
 
   case class LogId(value: String) extends AnyVal
@@ -26,8 +28,8 @@ object ActionOps {
 
     def withLogging(class1: String, message: String, logId: LogId = LogId.unsafe): Action[A] = new Action[A] {
       override def parser: BodyParser[A] = new BodyParser[A] {
-        override def apply(v1: RequestHeader): Accumulator[ByteString, Either[Result, A]] = {
-          val parsed = action.parser.apply(v1)
+        override def apply(requestHeader: RequestHeader): Accumulator[ByteString, Either[Result, A]] = {
+          val parsed = action.parser.apply(requestHeader)
           parsed.map {
             case Left(result) =>
               logger.info(s"${logId.value}: action $class1.$message failed with: $result")

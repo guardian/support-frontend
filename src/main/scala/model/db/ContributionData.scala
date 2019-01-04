@@ -8,12 +8,11 @@ import cats.implicits._
 import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
-
-import scala.util.Try
 import model.acquisition.StripeSource
 import model.paypal.PaypalApiError
-import model.stripe.StripePaymentMethod
 import model.{Currency, PaymentProvider, PaymentStatus}
+
+import scala.util.Try
 
 case class ContributionData private (
     paymentProvider: PaymentProvider,
