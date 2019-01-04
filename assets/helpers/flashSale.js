@@ -176,7 +176,7 @@ const Sales: Sale[] = [
           { collectionWeekend: 15.57 },
           { collectionSunday: 8.09 },
           { deliveryEveryday: 47.09 },
-          { deliverySixday: 40.69 },
+          { deliverySixday: 40.59 },
           { deliveryWeekend: 18.82 },
           { deliverySunday: 11.34 },
         ],
