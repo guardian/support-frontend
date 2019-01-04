@@ -28,6 +28,8 @@ import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { withArrow } from 'components/forms/formHOCs/withArrow';
 import { canShow } from 'components/forms/formHOCs/canShow';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
   type FormActionCreators,
@@ -200,6 +202,9 @@ function CheckoutForm(props: PropTypes) {
         />
         {errorState}
         <Button1 onClick={() => props.submitForm()}>Continue to payment</Button1>
+        <DirectDebitPopUpForm
+          onPaymentAuthorisation={(pr) => { props.onPaymentAuthorised(pr); }}
+        />
       </LeftMarginSection>
     </div>
   );
