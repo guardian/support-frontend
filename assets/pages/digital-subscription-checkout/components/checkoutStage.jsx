@@ -15,6 +15,7 @@ import ProductHero, {
 import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
@@ -25,6 +26,7 @@ import CheckoutForm from './checkoutForm';
 
 type PropTypes = {|
   stage: Stage,
+  formSubmitted: boolean,
   countryGroupId: CountryGroupId,
 |};
 
@@ -85,6 +87,7 @@ function mapStateToProps(state: State): PropTypes {
 
   return {
     stage: state.page.checkout.stage,
+    formSubmitted: state.page.checkout.formSubmitted,
     countryGroupId: state.common.internationalisation.countryGroupId,
   };
 
@@ -131,6 +134,7 @@ function CheckoutStage(props: PropTypes) {
             </p>
           </LeftMarginSection>
           <CheckoutForm />
+          {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>
       );
 

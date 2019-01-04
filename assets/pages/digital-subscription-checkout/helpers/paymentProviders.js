@@ -6,7 +6,10 @@ import {
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import { postRegularPaymentRequest } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import {
+  type PaymentResult,
+  postRegularPaymentRequest,
+} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { routes } from 'helpers/routes';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { getDigitalPrice } from 'helpers/subscriptions';
@@ -41,10 +44,14 @@ function buildRegularPaymentRequest(state: State, token: string) {
   };
 }
 
-function create(state: State, token: string) {
-
+function create(
+  state: State,
+  token: string,
+  beginCreateHandler: () => void,
+  resultHandler: (PaymentResult) => void,
+): void {
   const data = buildRegularPaymentRequest(state, token);
-
+  beginCreateHandler();
   postRegularPaymentRequest(
     routes.digitalSubscriptionCreate,
     data,
@@ -52,19 +59,29 @@ function create(state: State, token: string) {
     state.page.csrf,
     () => {},
     () => {},
-  ).then(pr => console.log(pr));
+  ).then(pr => resultHandler(pr));
 }
 
-function showPaymentMethod(state: State) {
+function showPaymentMethod(
+  state: State,
+  beginCreateHandler: () => void,
+  resultHandler: (PaymentResult) => void,
+): void {
+
   const { currencyId, countryGroupId } = state.common.internationalisation;
   const { paymentMethod, isTestUser } = state.page.checkout;
   const price = getDigitalPrice(countryGroupId, state.page.checkout.billingPeriod);
+
   switch (paymentMethod) {
-    case 'Stripe':
+    case 'Stripe': {
+      const onAuthorisation = (authorisation: StripeAuthorisation) => {
+        create(state, authorisation.token, beginCreateHandler, resultHandler);
+      };
       loadStripe()
-        .then(() => setupStripeCheckout((authorisation: StripeAuthorisation) => create(state, authorisation.token), 'REGULAR', currencyId, isTestUser))
+        .then(() => setupStripeCheckout(onAuthorisation, 'REGULAR', currencyId, isTestUser))
         .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
       break;
+    }
     case 'DirectDebit':
       console.log('Direct Debit');
       break;
@@ -73,6 +90,4 @@ function showPaymentMethod(state: State) {
   }
 }
 
-export {
-  showPaymentMethod,
-};
+export { showPaymentMethod };

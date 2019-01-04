@@ -21,6 +21,8 @@ import {
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
 import { isTestUser } from 'helpers/user/user';
+import type { ErrorReason } from 'helpers/errorReasons';
+import { type PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { showPaymentMethod } from './helpers/paymentProviders';
 import { type User } from './helpers/user';
 
@@ -46,7 +48,9 @@ type CheckoutState = {|
   stage: Stage,
   ...FormFields,
   email: string,
-  errors: FormError<FormField>[],
+  formErrors: FormError<FormField>[],
+  submissionError: ErrorReason | null,
+  formSubmitted: boolean,
   isTestUser: boolean,
 |};
 
@@ -65,7 +69,9 @@ export type Action =
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
   | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
-  | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
+  | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
+  | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
+  | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean };
 
 
 // ----- Selectors ----- //
@@ -117,7 +123,34 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_ERRORS', errors });
+const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
+const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
+const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
+
+function submitForm(dispatch: Dispatch<Action>, state: State) {
+  const errors = getErrors(getFormFields(state));
+  if (errors.length > 0) {
+    dispatch(setFormErrors(errors));
+  } else {
+    const beginCreateHandler = () => {
+      dispatch(setFormSubmitted(true));
+    };
+
+    const resultHandler = (result: PaymentResult) => {
+      switch (result.paymentStatus) {
+        case 'success': dispatch(setStage('thankyou'));
+          break;
+        default: dispatch(setSubmissionError(result.error));
+      }
+    };
+
+    showPaymentMethod(
+      state,
+      beginCreateHandler,
+      resultHandler,
+    );
+  }
+}
 
 const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
@@ -127,15 +160,7 @@ const formActionCreators = {
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
-  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => {
-    const state = getState();
-    const errors = getErrors(getFormFields(state));
-    if (errors.length > 0) {
-      dispatch(setFormErrors(errors));
-    } else {
-      showPaymentMethod(state);
-    }
-  },
+  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
 };
 
 export type FormActionCreators = typeof formActionCreators;
@@ -154,7 +179,9 @@ function initReducer(user: User) {
     telephone: '',
     billingPeriod: Monthly,
     paymentMethod: 'DirectDebit',
-    errors: [],
+    formErrors: [],
+    submissionError: null,
+    formSubmitted: false,
     isTestUser: isTestUser(),
   };
 
@@ -186,8 +213,14 @@ function initReducer(user: User) {
       case 'SET_PAYMENT_METHOD':
         return { ...state, paymentMethod: action.paymentMethod };
 
-      case 'SET_ERRORS':
-        return { ...state, errors: action.errors };
+      case 'SET_FORM_ERRORS':
+        return { ...state, formErrors: action.errors };
+
+      case 'SET_SUBMISSION_ERROR':
+        return { ...state, submissionError: action.error, formSubmitted: false };
+
+      case 'SET_FORM_SUBMITTED':
+        return { ...state, formSubmitted: action.formSubmitted };
 
       default:
         return state;
