@@ -52,7 +52,9 @@ val circeVersion = "0.9.1"
 
 resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
 
-val awsVersion = "1.11.221"
+val awsVersion = "1.11.475"
+val jacksonVersion = "2.9.8"
+
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "org.mockito" % "mockito-core" % "2.11.0" % Test,
@@ -86,8 +88,8 @@ libraryDependencies ++= Seq(
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.gu" %% "tip" % "0.5.1",
   // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
-  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7",
+  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   filters,
   ws
 )
