@@ -167,7 +167,7 @@ const Sales: Sale[] = [
           bundle: {
             heading: 'Paper',
             subHeading: 'From £8.09/month',
-            description: 'Save 25% for a year on subscriptions to The Guardian and The Observer, and get up to an additional £11.91 off the cover price.',
+            description: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
           },
         },
         planPrices: [
