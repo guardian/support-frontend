@@ -17,6 +17,7 @@ import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
+import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
 
 import Tabs from './components/tabs';
@@ -49,6 +50,15 @@ const store = pageInit(reducer(method, promoInUrl), true);
 
 // ----- Render ----- //
 
+function getHeading(): string {
+  if (flashSaleIsActive('Paper', 'GBPCountries')) {
+    const saleCopy = getSaleCopy('Paper', 'GBPCountries');
+    return saleCopy.landingPage.subHeading;
+  }
+
+  return 'Save up to 31% on The Guardian and The Observer - all year round';
+}
+
 const content = (
   <Provider store={store}>
     <Page
@@ -57,7 +67,7 @@ const content = (
     >
       <ProductPagehero
         overheading="The Guardian newspaper subscriptions"
-        heading="Save up to 31% on The Guardian and The Observer - all year round"
+        heading={getHeading()}
         type="feature"
         modifierClasses={['paper']}
       >

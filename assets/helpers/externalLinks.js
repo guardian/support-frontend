@@ -240,11 +240,13 @@ const withParams = ({
   cgId,
   nativeAbParticipations,
   optimizeExperiments,
+  promoCode,
 }: {
   referrerAcquisitionData: ReferrerAcquisitionData,
   cgId: Option<CountryGroupId>,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
+  promoCode: Option<string>,
 }) => (url: string) => {
   const acquisitionData = deriveSubsAcquisitionData(
     referrerAcquisitionData,
@@ -257,6 +259,9 @@ const withParams = ({
   params.set('acquisitionData', JSON.stringify(acquisitionData));
   if (cgId) {
     params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
+  }
+  if (promoCode) {
+    params.set('promoCode', promoCode);
   }
   return [url, params.toString()].join('?');
 };
@@ -322,6 +327,8 @@ function getPaperCheckout(
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
 ) {
+  const promoCode = getPromoCode('Paper', 'GBPCountries', defaultPromos.Paper);
+
   const urls = {
     collectionEveryday: 'voucher-everyday',
     collectionSixday: 'voucher-sixday',
@@ -338,6 +345,7 @@ function getPaperCheckout(
     cgId: null,
     nativeAbParticipations,
     optimizeExperiments,
+    promoCode,
   })([subsUrl, 'checkout', urls[billingPlan]].join('/'));
 }
 
