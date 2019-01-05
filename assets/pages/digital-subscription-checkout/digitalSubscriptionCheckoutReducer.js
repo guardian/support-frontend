@@ -21,7 +21,8 @@ import {
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
 import { isTestUser } from 'helpers/user/user';
-import { PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { ErrorReason } from 'helpers/errorReasons';
+import { type PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { showPaymentMethod } from './helpers/paymentProviders';
 import { type User } from './helpers/user';
 
@@ -48,7 +49,7 @@ type CheckoutState = {|
   ...FormFields,
   email: string,
   formErrors: FormError<FormField>[],
-  submissionError: string,
+  submissionError: ErrorReason | null,
   formSubmitted: boolean,
   isTestUser: boolean,
 |};
@@ -69,7 +70,7 @@ export type Action =
   | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
-  | { type: 'SET_SUBMISSION_ERROR', error: string }
+  | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean };
 
 
@@ -123,25 +124,30 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
 const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
-const setSubmissionError = (error: string): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
+const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
-
-function mapResultToAction(result: PaymentResult): Action {
-  switch (result.paymentStatus) {
-    case 'success': return setStage('thankyou');
-    default: return setSubmissionError(result.error);
-  }
-}
 
 function submitForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
   if (errors.length > 0) {
     dispatch(setFormErrors(errors));
   } else {
+    const beginCreateHandler = () => {
+      dispatch(setFormSubmitted(true));
+    };
+
+    const resultHandler = (result: PaymentResult) => {
+      switch (result.paymentStatus) {
+        case 'success': dispatch(setStage('thankyou'));
+          break;
+        default: dispatch(setSubmissionError(result.error));
+      }
+    };
+
     showPaymentMethod(
       state,
-      () => dispatch(setFormSubmitted(true)),
-      pr => dispatch(mapResultToAction(pr)),
+      beginCreateHandler,
+      resultHandler,
     );
   }
 }
@@ -175,7 +181,7 @@ function initReducer(user: User) {
     paymentMethod: 'DirectDebit',
     formErrors: [],
     submissionError: null,
-    formHasBeenSubmitted: false,
+    formSubmitted: false,
     isTestUser: isTestUser(),
   };
 

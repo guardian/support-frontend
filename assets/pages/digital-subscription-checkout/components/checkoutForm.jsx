@@ -28,7 +28,7 @@ import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { withArrow } from 'components/forms/formHOCs/withArrow';
 import { canShow } from 'components/forms/formHOCs/canShow';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-
+import type { ErrorReason } from 'helpers/errorReasons';
 import {
   type FormActionCreators,
   formActionCreators,
@@ -44,6 +44,7 @@ import {
 type PropTypes = {|
   ...FormFields,
   formErrors: FormError<FormField>[],
+  submissionError: ErrorReason | null,
   ...FormActionCreators,
 |};
 

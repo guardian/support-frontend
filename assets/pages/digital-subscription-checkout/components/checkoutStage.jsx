@@ -8,7 +8,10 @@ import { connect } from 'react-redux';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import ReturnSection from 'components/returnSection/returnSection';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import ProductHero, { type GridImages, type ImagesByCountry, } from 'components/productHero/productHero';
+import ProductHero, {
+  type GridImages,
+  type ImagesByCountry,
+} from 'components/productHero/productHero';
 import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -23,6 +26,7 @@ import CheckoutForm from './checkoutForm';
 
 type PropTypes = {|
   stage: Stage,
+  formSubmitted: boolean,
   countryGroupId: CountryGroupId,
 |};
 
