@@ -20,13 +20,16 @@ import { type State, setSubmissionError, setFormSubmitted, type Action, setStage
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation) {
   const { currencyId } = state.common.internationalisation;
   const {
-    firstName,
-    lastName,
-    email,
     country,
     stateProvince,
     billingPeriod,
   } = state.page.checkout;
+
+  const {
+    firstName,
+    lastName,
+    email,
+  } = state.page.user;
 
   const product = {
     currency: currencyId,
@@ -76,13 +79,13 @@ function showStripe(
   state: State,
 ) {
   const { currencyId, countryGroupId } = state.common.internationalisation;
-  const { isTestUser } = state.page.checkout;
+  const isTestUser = state.page.user.isTestUser || false;
   const price = getDigitalPrice(countryGroupId, state.page.checkout.billingPeriod);
   const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(pa, dispatch, state);
 
   loadStripe()
     .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currencyId, isTestUser))
-    .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
+    .then(stripe => openDialogBox(stripe, price.value, state.page.user.email));
 }
 
 function showPaymentMethod(

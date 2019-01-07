@@ -8,45 +8,18 @@ import {
 } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-export type User = {|
-  firstName: Option<string>,
-  lastName: Option<string>,
-  email: Option<string>,
-  country: Option<IsoCountry>,
-|};
-
-function getCountry(country: Option<string>, countryGroupId: CountryGroupId): Option<IsoCountry> {
-  const countryCode = country !== null ? findIsoCountry(country) : null;
-  const maybeCountryFromIdentity = countryCode !== null ? fromString(countryCode) : null;
-  const optionCountryFromIdentity = typeof maybeCountryFromIdentity === 'string' ? maybeCountryFromIdentity : null;
-  const countryFromCountryGroupId = detect(countryGroupId);
-
-  return optionCountryFromIdentity || countryFromCountryGroupId;
-}
-
-function getUser(countryGroupId: CountryGroupId): User {
-
+function getCountryFromIdentity(): Option<IsoCountry> {
   if (window && window.guardian && window.guardian.user) {
-
-    const {
-      firstName, lastName, email, country,
-    } = window.guardian.user;
-
-    return {
-      firstName: typeof firstName === 'string' ? firstName : null,
-      lastName: typeof lastName === 'string' ? lastName : null,
-      email: typeof email === 'string' ? email : null,
-      country: typeof country === 'string' ? getCountry(country, countryGroupId) : getCountry(null, countryGroupId),
-    };
+    const { country } = window.guardian.user;
+    const countryCode = country !== null ? findIsoCountry(country) : null;
+    const maybeCountryFromIdentity = countryCode !== null ? fromString(countryCode) : null;
+    return typeof maybeCountryFromIdentity === 'string' ? maybeCountryFromIdentity : null;
   }
-
-  return {
-    firstName: null,
-    lastName: null,
-    email: null,
-    country: null,
-  };
-
+  return null;
 }
 
-export { getUser, getCountry };
+function getCountry(countryGroupId: CountryGroupId): Option<IsoCountry> {
+  return getCountryFromIdentity() || detect(countryGroupId);
+}
+
+export { getCountry };

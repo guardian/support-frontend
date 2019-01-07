@@ -15,6 +15,7 @@ import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import * as user from 'helpers/user/user';
 
 import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
@@ -35,6 +36,7 @@ const reactElementId: {
 // ----- Redux Store ----- //
 
 const store = pageInit(initReducer(countryGroupId), true);
+user.init(store.dispatch);
 
 // ----- Render ----- //
 

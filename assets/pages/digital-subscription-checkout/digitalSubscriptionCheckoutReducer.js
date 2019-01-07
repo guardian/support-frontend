@@ -21,14 +21,15 @@ import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
-import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getUser } from './helpers/user';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
+import type { User } from 'helpers/user/userReducer';
+import type { Action as UserAction } from 'helpers/user/userActions';
 import { showPaymentMethod, onPaymentAuthorised } from './helpers/paymentProviders';
-
+import { getCountry } from './helpers/user';
 
 // ----- Types ----- //
 
@@ -50,23 +51,20 @@ export type FormField = $Keys<FormFields>;
 type CheckoutState = {|
   stage: Stage,
   ...FormFields,
-  email: string,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   formSubmitted: boolean,
-  isTestUser: boolean,
 |};
 
 export type State = ReduxState<{|
   checkout: CheckoutState,
+  user: User,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
 |}>;
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
-  | { type: 'SET_FIRST_NAME', firstName: string }
-  | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
@@ -75,15 +73,16 @@ export type Action =
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | DDAction;
+  | DDAction
+  | UserAction;
 
 
 // ----- Selectors ----- //
 
 function getFormFields(state: State): FormFields {
   return {
-    firstName: state.page.checkout.firstName,
-    lastName: state.page.checkout.lastName,
+    firstName: state.page.user.firstName,
+    lastName: state.page.user.lastName,
     country: state.page.checkout.country,
     stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
@@ -93,7 +92,7 @@ function getFormFields(state: State): FormFields {
 }
 
 function getEmail(state: State): string {
-  return state.page.checkout.email;
+  return state.page.user.email;
 }
 
 
@@ -141,8 +140,8 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
 }
 
 const formActionCreators = {
-  setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
-  setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
+  setFirstName: (firstName: string): Action => defaultUserActionFunctions.setFirstName(firstName),
+  setLastName: (lastName: string): Action => defaultUserActionFunctions.setLastName(lastName),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
@@ -159,13 +158,11 @@ export type FormActionCreators = typeof formActionCreators;
 // ----- Reducer ----- //
 
 function initReducer(countryGroupId: CountryGroupId) {
-  const user = getUser(countryGroupId); // TODO: this is unnecessary, it should use the user reducer
   const initialState = {
+    firstName: '',
+    lastName: '',
     stage: 'checkout',
-    email: user.email || '',
-    firstName: user.firstName || '',
-    lastName: user.lastName || '',
-    country: user.country || null,
+    country: getCountry(countryGroupId),
     stateProvince: null,
     telephone: '',
     billingPeriod: Monthly,
@@ -173,7 +170,6 @@ function initReducer(countryGroupId: CountryGroupId) {
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
-    isTestUser: isTestUser(),
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
@@ -182,12 +178,6 @@ function initReducer(countryGroupId: CountryGroupId) {
 
       case 'SET_STAGE':
         return { ...state, stage: action.stage };
-
-      case 'SET_FIRST_NAME':
-        return { ...state, firstName: action.firstName };
-
-      case 'SET_LAST_NAME':
-        return { ...state, lastName: action.lastName };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
