@@ -35,8 +35,9 @@ lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
 )
 
 lazy val circeVersion = "0.10.1"
-lazy val awsVersion = "1.11.331"
+lazy val awsVersion = "1.11.475"
 lazy val okhttpVersion = "3.10.0"
+val jacksonVersion = "2.9.8"
 
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
@@ -61,9 +62,9 @@ lazy val root = (project in file("."))
       "com.amazonaws" % "aws-java-sdk-sqs" % awsVersion,
       "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
       // This is required to force aws libraries to use the latest version of jackson
-      "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.7",
-      "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.7",
-      "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % "2.9.7",
+      "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+      "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
       "org.scalatest" %% "scalatest" % "3.0.5" % "it,test",
       "org.mockito" % "mockito-core" % "1.9.5" % "it,test",
       "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",
