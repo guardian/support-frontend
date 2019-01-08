@@ -29,7 +29,7 @@ const countryGroupSpecificDetails: {
   },
   UnitedStates: {
     headerCopy: defaultHeaderCopy,
-    headerClasses: defaultContributeCopy,
+    contributeCopy: defaultContributeCopy,
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
