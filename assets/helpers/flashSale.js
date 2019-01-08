@@ -15,6 +15,7 @@ export type SaleCopy = {
   landingPage: {
     heading: string,
     subHeading: string,
+    standfirst?: string,
   },
   bundle: {
     heading: string,
@@ -163,6 +164,7 @@ const Sales: Sale[] = [
           landingPage: {
             heading: 'The Guardian newspaper subscriptions',
             subHeading: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
+            standfirst: 'Test standfirst',
           },
           bundle: {
             heading: 'Paper',
