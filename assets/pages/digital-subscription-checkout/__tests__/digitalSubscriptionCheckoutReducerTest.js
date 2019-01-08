@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import { initReducer, setStage, type Stage } from '../digitalSubscriptionCheckoutReducer';
-import { type User } from '../helpers/user';
 
 jest.mock('ophan', () => {});
 
@@ -15,14 +14,8 @@ describe('Digital Subscription Checkout Reducer', () => {
 
     const stage: Stage = 'thankyou';
     const action = setStage(stage);
-    const user: User = {
-      email: null,
-      firstName: null,
-      lastName: null,
-      country: null,
-    };
 
-    const newState = initReducer(user)(undefined, action);
+    const newState = initReducer('GBPCountries')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
@@ -32,14 +25,8 @@ describe('Digital Subscription Checkout Reducer', () => {
 
     const stage: Stage = 'checkout';
     const action = setStage(stage);
-    const user: User = {
-      email: null,
-      firstName: null,
-      lastName: null,
-      country: null,
-    };
 
-    const newState = initReducer(user)(undefined, action);
+    const newState = initReducer('GBPCountries')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
