@@ -3,7 +3,11 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/url';
-import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import {
+  type ContributionType,
+  type PaymentMethod,
+  toContributionType
+} from 'helpers/contributions';
 import {
   getMinContribution,
   parseContribution,
@@ -57,17 +61,20 @@ function getAmount(contributionType: ContributionType, countryGroup: CountryGrou
 
 }
 
-function getValidContributionTypes(abParticipations: Participations): ContributionType[] {
-  const { usContributionTypes } = abParticipations;
-  const params = usContributionTypes
-    ? usContributionTypes.split('_')
-    : [];
-
-  if (params.includes('no-monthly')) {
-    return ['ONE_OFF', 'ANNUAL'];
+function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): ContributionType[] {
+  const contributionTypesFromUrl = getQueryParameter('contributionTypes');
+  if (contributionTypesFromUrl) {
+    return contributionTypesFromUrl
+      .split(',')
+      .map(toContributionType)
+      .filter(Boolean);
   }
 
-  return ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
+  return fallback;
+}
+
+function getValidContributionTypes(): ContributionType[] {
+  return getValidContributionTypesFromUrlOrElse(['ONE_OFF', 'MONTHLY', 'ANNUAL']);
 }
 
 function toHumanReadableContributionType(contributionType: ContributionType): 'Single' | 'Monthly' | 'Annual' {
@@ -81,6 +88,10 @@ function toHumanReadableContributionType(contributionType: ContributionType): 'S
 
 function getContributionTypeFromSessionOrElse(fallback: ContributionType): ContributionType {
   return toContributionTypeOrElse(storage.getSession('contributionType'), fallback);
+}
+
+function getContributionTypeFromUrlOrElse(fallback: ContributionType): ContributionType {
+  return toContributionTypeOrElse(getQueryParameter('defaultContributionType', fallback), fallback);
 }
 
 // Returns an array of Payment Methods, in the order of preference,
@@ -152,6 +163,7 @@ export {
   getAmount,
   getValidContributionTypes,
   getContributionTypeFromSessionOrElse,
+  getContributionTypeFromUrlOrElse,
   toHumanReadableContributionType,
   getValidPaymentMethods,
   getPaymentMethodToSelect,

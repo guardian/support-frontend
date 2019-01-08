@@ -12,7 +12,7 @@ import {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import {
-  getContributionTypeFromSessionOrElse,
+  getContributionTypeFromSessionOrElse, getContributionTypeFromUrlOrElse,
   getPaymentMethodFromSession,
   getValidContributionTypes,
   getValidPaymentMethods,
@@ -53,19 +53,8 @@ function getInitialPaymentMethod(
 }
 
 function getInitialContributionType(abParticipations: Participations): ContributionType {
-  const { usContributionTypes } = abParticipations;
-  const abTestParams = usContributionTypes
-    ? usContributionTypes.split('_')
-    : [];
-
-  let contributionType: ContributionType;
-  if (abTestParams.includes('default-annual')) {
-    contributionType = getContributionTypeFromSessionOrElse('ANNUAL');
-  } else if (abTestParams.includes('default-single')) {
-    contributionType = getContributionTypeFromSessionOrElse('ONE_OFF');
-  } else {
-    contributionType = getContributionTypeFromSessionOrElse('MONTHLY');
-  }
+  const contributionType: ContributionType =
+    getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
 
   return (
     // make sure we don't select a contribution type which isn't on the page
