@@ -36,24 +36,6 @@ export const tests: Tests = {
     canRun: () => !isFromEpicOrBanner,
   },
 
-  usContributionTypes: {
-    variants: [
-      'control',
-      'default-annual',
-      'default-single',
-      'default-annual_no-monthly',
-    ],
-    audiences: {
-      UnitedStates: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: false,
-    independent: true,
-    seed: 5,
-  },
-
   applePay: {
     variants: ['control', 'applePay'],
     audiences: {

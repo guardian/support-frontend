@@ -331,23 +331,26 @@ function getMinContribution(contributionType: ContributionType, countryGroupId: 
   return config[countryGroupId][contributionType].min;
 }
 
-function toContributionTypeOrElse(s: ?string, fallback: ContributionType): ContributionType {
-  switch ((s || fallback).toUpperCase()) {
+function toContributionType(s: string): ?ContributionType {
+  switch (s.toUpperCase()) {
     case 'ANNUAL': return 'ANNUAL';
     case 'MONTHLY': return 'MONTHLY';
     case 'ONE_OFF': return 'ONE_OFF';
-    default: return fallback;
+    default: return null;
   }
 }
 
-function parseRegularContributionType(s: string): RegularContributionType {
+function toContributionTypeOrElse(s: ?string, fallback: ContributionType): ContributionType {
+  const contributionType = toContributionType(s || fallback);
+  return contributionType || fallback;
+}
 
+function parseRegularContributionType(s: string): RegularContributionType {
   if (s === 'ANNUAL') {
     return 'ANNUAL';
   }
 
   return 'MONTHLY';
-
 }
 
 function billingPeriodFromContrib(contributionType: ContributionType): BillingPeriod {
@@ -493,6 +496,7 @@ function getContributionAmountRadios(
 export {
   config,
   amounts,
+  toContributionType,
   toContributionTypeOrElse,
   validateContribution,
   parseContribution,
