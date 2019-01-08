@@ -18,7 +18,6 @@ import {
   getValidPaymentMethods,
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
-import { type Participations } from 'helpers/abTests/abtest';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
 import { type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -52,15 +51,15 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(abParticipations: Participations): ContributionType {
+function getInitialContributionType(): ContributionType {
   const contributionType: ContributionType =
     getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
 
   return (
     // make sure we don't select a contribution type which isn't on the page
-    getValidContributionTypes(abParticipations).includes(contributionType)
+    getValidContributionTypes().includes(contributionType)
       ? contributionType
-      : getValidContributionTypes(abParticipations)[0]
+      : getValidContributionTypes()[0]
   );
 }
 
@@ -130,11 +129,10 @@ function selectInitialAnnualAmount(state: State, dispatch: Function) {
 }
 
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
-  const { abParticipations } = state.common;
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
 
-  const contributionType = getInitialContributionType(abParticipations);
+  const contributionType = getInitialContributionType();
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
 
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));

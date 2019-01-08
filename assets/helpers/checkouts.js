@@ -6,7 +6,7 @@ import { getQueryParameter } from 'helpers/url';
 import {
   type ContributionType,
   type PaymentMethod,
-  toContributionType
+  toContributionType,
 } from 'helpers/contributions';
 import {
   getMinContribution,
@@ -18,7 +18,6 @@ import * as storage from 'helpers/storage';
 import { type Switches, type SwitchObject } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //
