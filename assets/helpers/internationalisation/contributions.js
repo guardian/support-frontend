@@ -28,9 +28,8 @@ const countryGroupSpecificDetails: {
     contributeCopy: defaultContributeCopy,
   },
   UnitedStates: {
-    headerCopy: 'Invest in our independent journalism for 2019 and beyond',
-    headerClasses: 'header__us-campaign',
-    tickerJsonUrl: '/ticker.json',
+    headerCopy: defaultHeaderCopy,
+    headerClasses: defaultContributeCopy,
   },
   AUDCountries: {
     headerCopy: 'Help us deliver the independent journalism Australia needs',
