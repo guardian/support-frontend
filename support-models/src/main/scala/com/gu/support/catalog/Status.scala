@@ -1,6 +1,6 @@
 package com.gu.support.catalog
 
-import io.circe.Decoder
+import io.circe.{Decoder, Encoder}
 
 sealed trait Status
 
@@ -17,5 +17,7 @@ object Status {
     case "expired" => Some(Expired)
     case _ => None
   }
+
+  implicit val encoder: Encoder[Status] = Encoder.encodeString.contramap[Status](_.toString)
 
 }

@@ -20,6 +20,13 @@ object JsonHelpers {
         .map(_ => jsonObject.remove(key))
         .getOrElse(jsonObject)
 
+    def defaultIfNull(key: String, default: Json) =
+      jsonObject(key)
+        .filter(_ == Json.Null)
+        .map(_ => jsonObject.remove(key))
+        .map(_ => jsonObject.add(key, default))
+        .getOrElse(jsonObject)
+
     def checkKeyExists(key: String, default: Json) =
       if (jsonObject.contains(key))
         jsonObject

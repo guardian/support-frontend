@@ -2,8 +2,7 @@ package com.gu.support.catalog
 
 import java.time.DayOfWeek
 
-import com.typesafe.scalalogging.LazyLogging
-import io.circe.Decoder
+import io.circe.{Decoder, Encoder}
 
 sealed trait ProductRatePlanChargeType {
   val id: String
@@ -67,10 +66,13 @@ object ProductRatePlanChargeType {
         .find(_.id == id)
   }
 
-  implicit val productRatePlanChargeTypeDecoder: Decoder[ProductRatePlanChargeType] =
+  implicit val decoder: Decoder[ProductRatePlanChargeType] =
     Decoder.decodeString.emap(
       id => fromId(id).toRight{
         s"Unknown ProductRatePlanChargeType: $id"
       }
     )
+
+  implicit val encoder: Encoder[ProductRatePlanChargeType] =
+    Encoder.encodeString.contramap[ProductRatePlanChargeType](_.toString)
 }

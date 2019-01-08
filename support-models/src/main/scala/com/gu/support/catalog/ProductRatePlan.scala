@@ -8,7 +8,7 @@ case class ProductRatePlan(
   name: Option[String],
   productRatePlanCharges: List[ProductRatePlanCharge]
 ) {
-  def price: Double = {
+  def price: BigDecimal = {
     productRatePlanCharges
       .filter(_.endDateCondition.contains("Subscription_End"))
       .map(
@@ -17,4 +17,11 @@ case class ProductRatePlan(
           .map(_.price).sum
       ).sum
   }
+}
+
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec._
+
+object ProductRatePlan {
+  implicit val codec: Codec[ProductRatePlan] = deriveCodec
 }
