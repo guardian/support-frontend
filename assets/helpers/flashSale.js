@@ -158,18 +158,18 @@ const Sales: Sale[] = [
         saleCopy: {
           featuredProduct: {
             heading: 'Paper subscriptions',
-            subHeading: 'Buy yourself some quality time',
-            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save 25% for a year.',
+            subHeading: 'Save up to 52% on your newspaper',
+            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save an additional 25% for a year.',
           },
           landingPage: {
             heading: 'The Guardian newspaper subscriptions',
-            subHeading: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
-            standfirst: 'Test standfirst',
+            subHeading: 'Subscribe and save up to 52% off the retail price of your newspaper',
+            standfirst: 'Subscribers already save up to 37% off the retail price. With this limited time offer, you\'ll enjoy and additional 25% off for the first year of your subscription. We offer two different subscription types: voucher booklets and home delivery.',
           },
           bundle: {
             heading: 'Paper',
             subHeading: 'From £8.09/month',
-            description: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
+            description: 'Save an additional 25% for the first year of your subscription to The Guardian and The Observer',
           },
         },
         planPrices: [
@@ -198,17 +198,18 @@ const Sales: Sale[] = [
         saleCopy: {
           featuredProduct: {
             heading: 'Paper subscriptions',
-            subHeading: 'Buy yourself some quality time',
-            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save 25% for a year.',
+            subHeading: 'Save up to 52% on your newspaper',
+            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save an additional 25% for a year.',
           },
           landingPage: {
             heading: 'The Guardian newspaper subscriptions',
-            subHeading: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
+            subHeading: 'Subscribe and save up to 52% off the retail price of your newspaper',
+            standfirst: 'Subscribers already save up to 37% off the retail price. With this limited time offer, you\'ll enjoy and additional 25% off for the first year of your subscription. We offer two different subscription types: voucher booklets and home delivery.',
           },
           bundle: {
             heading: 'Paper+Digital',
             subHeading: 'From £16.22/month',
-            description: 'Save 25% for a year on a Paper + Digital subscription and get all the benefits of a paper subscription, plus access to the Digital Pack.',
+            description: 'The Paper + Digital subscription includes all the benefits of a paper subscription, plus access to the Digital Pack. Save 25% for your first year.',
           },
         },
         planPrices: [],
