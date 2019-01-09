@@ -132,8 +132,8 @@ install_js_deps() {
 }
 
 fetch_dev_cert() {
-  aws s3 cp s3://identity-local-ssl/wildcard-thegulocal-com-exp2019-01-09.crt ${NGINX_ROOT} --profile membership
-  aws s3 cp s3://identity-local-ssl/wildcard-thegulocal-com-exp2019-01-09.key ${NGINX_ROOT} --profile membership
+  aws s3 cp s3://identity-local-ssl/STAR_thegulocal_com_exp2020-01-09.crt ${NGINX_ROOT} --profile membership
+  aws s3 cp s3://identity-local-ssl/STAR_thegulocal_com_exp2020-01-09.key ${NGINX_ROOT} --profile membership
 }
 
 link_nginx_config() {
