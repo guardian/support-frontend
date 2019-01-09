@@ -106,6 +106,15 @@
 
   // ----- Thank You
 
+  .thank-you-stage {
+    .component-checkout-heading {
+      position: relative;
+      .component-left-margin-section__content {
+        box-sizing: border-box;  
+      }  
+    }
+  }
+
   .thank-you-content {
     // Makes sure the circle SVGs stay behind the heading.
     position: relative;
