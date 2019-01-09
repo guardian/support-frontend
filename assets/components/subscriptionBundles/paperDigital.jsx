@@ -23,7 +23,7 @@ function getCopy() {
   if (flashSaleIsActive('PaperAndDigital', 'GBPCountries')) {
     const flashSaleCopy = getSaleCopy('PaperAndDigital', 'GBPCountries');
     return {
-      subHeading: `from ${getFormattedFlashSalePrice('PaperAndDigital', 'GBPCountries')}`,
+      subHeading: `from £${getFormattedFlashSalePrice('PaperAndDigital', 'GBPCountries')}/Monthly`,
       description: `${flashSaleCopy.bundle.description}`,
     };
   }

@@ -141,7 +141,7 @@ class DigitalSubscription(
         InternalServerError
       },
       { statusResponse =>
-        SafeLogger.error(scrub"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
+        SafeLogger.info("[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
         Accepted(statusResponse.asJson)
       }
     )

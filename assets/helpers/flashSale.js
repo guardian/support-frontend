@@ -1,10 +1,10 @@
 // @flow
 
 import { getQueryParameter } from 'helpers/url';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId, detect } from 'helpers/internationalisation/countryGroup';
 import { fixDecimals } from 'helpers/subscriptions';
 
-import type { SubscriptionProduct } from './subscriptions';
+import { type SubscriptionProduct, type PaperBillingPlan } from './subscriptions';
 
 export type SaleCopy = {
   featuredProduct: {
@@ -23,12 +23,17 @@ export type SaleCopy = {
   },
 }
 
+export type PlanPrice = {
+  [PaperBillingPlan]: number,
+}
+
 type SaleDetails = {
   [CountryGroupId]: {
     promoCode: string,
     intcmp: string,
     price: number,
     saleCopy: SaleCopy,
+    planPrices: PlanPrice[],
   },
 };
 
@@ -46,7 +51,7 @@ const Sales: Sale[] = [
     subscriptionProduct: 'DigitalPack',
     activeRegions: ['GBPCountries', 'UnitedStates', 'AUDCountries', 'International'],
     startTime: new Date(2018, 11, 20).getTime(), // 20 Dec 2018
-    endTime: new Date(2019, 0, 3).getTime(), // 3 Jan 2019
+    endTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
     saleDetails: {
       GBPCountries: {
         promoCode: 'DDPCS99X',
@@ -68,6 +73,7 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',
           },
         },
+        planPrices: [],
       },
       UnitedStates: {
         promoCode: 'DDPCS99X',
@@ -89,6 +95,7 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
+        planPrices: [],
       },
       International: {
         promoCode: 'DDPCS99X',
@@ -110,6 +117,7 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
+        planPrices: [],
       },
       AUDCountries: {
         promoCode: 'DDPCS99X',
@@ -131,8 +139,78 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
+        planPrices: [],
       },
 
+    },
+  },
+  {
+    subscriptionProduct: 'Paper',
+    activeRegions: ['GBPCountries'],
+    startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
+    endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
+    saleDetails: {
+      GBPCountries: {
+        promoCode: 'GCB80X',
+        intcmp: '',
+        price: 8.09,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Paper subscriptions',
+            subHeading: 'Buy yourself some quality time',
+            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save 25% for a year.',
+          },
+          landingPage: {
+            heading: 'The Guardian newspaper subscriptions',
+            subHeading: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
+          },
+          bundle: {
+            heading: 'Paper',
+            subHeading: 'From £8.09/month',
+            description: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
+          },
+        },
+        planPrices: [
+          { collectionEveryday: 35.71 },
+          { collectionSixday: 30.84 },
+          { collectionWeekend: 15.57 },
+          { collectionSunday: 8.09 },
+          { deliveryEveryday: 47.09 },
+          { deliverySixday: 40.59 },
+          { deliveryWeekend: 18.82 },
+          { deliverySunday: 11.34 },
+        ],
+      },
+    },
+  },
+  {
+    subscriptionProduct: 'PaperAndDigital',
+    activeRegions: ['GBPCountries'],
+    startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
+    endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
+    saleDetails: {
+      GBPCountries: {
+        promoCode: 'GCB56X',
+        intcmp: '',
+        price: 16.22,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Paper subscriptions',
+            subHeading: 'Buy yourself some quality time',
+            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save 25% for a year.',
+          },
+          landingPage: {
+            heading: 'The Guardian newspaper subscriptions',
+            subHeading: 'Save 25% for a year on subscriptions to The Guardian and The Observer',
+          },
+          bundle: {
+            heading: 'Paper+Digital',
+            subHeading: 'From £16.22/month',
+            description: 'Save 25% for a year on a Paper + Digital subscription and get all the benefits of a paper subscription, plus access to the Digital Pack.',
+          },
+        },
+        planPrices: [],
+      },
     },
   },
 ];
@@ -181,6 +259,11 @@ function getIntcmp(
   return intcmp || defaultIntcmp;
 }
 
+function getPlanPrices(product: SubscriptionProduct, countryGroupId: CountryGroupId): PlanPrice[] {
+  const sale = getSales(product, countryGroupId)[0];
+  return sale && sale.saleDetails[countryGroupId].planPrices;
+}
+
 function getEndTime(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
   const sale = getSales(product, countryGroupId)[0];
   return sale && sale.endTime;
@@ -222,4 +305,5 @@ export {
   getEndTime,
   getSaleCopy,
   getFormattedFlashSalePrice,
+  getPlanPrices,
 };

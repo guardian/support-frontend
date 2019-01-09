@@ -18,7 +18,6 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
-import { getUser } from './helpers/user';
 
 // ----- Internationalisation ----- //
 
@@ -35,7 +34,7 @@ const reactElementId: {
 
 // ----- Redux Store ----- //
 
-const store = pageInit(initReducer(getUser(countryGroupId)), true);
+const store = pageInit(initReducer(countryGroupId), true);
 
 // ----- Render ----- //
 

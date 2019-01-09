@@ -15,14 +15,19 @@ import {
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
-
+import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
+import { type Action as DDAction } from 'components/directDebit/directDebitActions';
 import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
 import { isTestUser } from 'helpers/user/user';
-import { showPaymentMethod } from './helpers/paymentProviders';
-import { type User } from './helpers/user';
+import type { ErrorReason } from 'helpers/errorReasons';
+import { createUserReducer } from 'helpers/user/userReducer';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getUser } from './helpers/user';
+import { showPaymentMethod, onPaymentAuthorised } from './helpers/paymentProviders';
 
 
 // ----- Types ----- //
@@ -46,7 +51,9 @@ type CheckoutState = {|
   stage: Stage,
   ...FormFields,
   email: string,
-  errors: FormError<FormField>[],
+  formErrors: FormError<FormField>[],
+  submissionError: ErrorReason | null,
+  formSubmitted: boolean,
   isTestUser: boolean,
 |};
 
@@ -65,7 +72,10 @@ export type Action =
   | { type: 'SET_STATE_PROVINCE', stateProvince: string }
   | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
-  | { type: 'SET_ERRORS', errors: FormError<FormField>[] };
+  | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
+  | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
+  | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
+  | DDAction;
 
 
 // ----- Selectors ----- //
@@ -117,7 +127,18 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_ERRORS', errors });
+const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
+const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
+const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
+
+function submitForm(dispatch: Dispatch<Action>, state: State) {
+  const errors = getErrors(getFormFields(state));
+  if (errors.length > 0) {
+    dispatch(setFormErrors(errors));
+  } else {
+    showPaymentMethod(dispatch, state);
+  }
+}
 
 const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
@@ -127,15 +148,9 @@ const formActionCreators = {
   setStateProvince: (stateProvince: string): Action => ({ type: 'SET_STATE_PROVINCE', stateProvince }),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod): Action => ({ type: 'SET_PAYMENT_METHOD', paymentMethod }),
-  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => {
-    const state = getState();
-    const errors = getErrors(getFormFields(state));
-    if (errors.length > 0) {
-      dispatch(setFormErrors(errors));
-    } else {
-      showPaymentMethod(state);
-    }
-  },
+  onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
+    (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
+  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
 };
 
 export type FormActionCreators = typeof formActionCreators;
@@ -143,7 +158,8 @@ export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
-function initReducer(user: User) {
+function initReducer(countryGroupId: CountryGroupId) {
+  const user = getUser(countryGroupId); // TODO: this is unnecessary, it should use the user reducer
   const initialState = {
     stage: 'checkout',
     email: user.email || '',
@@ -154,7 +170,9 @@ function initReducer(user: User) {
     telephone: '',
     billingPeriod: Monthly,
     paymentMethod: 'DirectDebit',
-    errors: [],
+    formErrors: [],
+    submissionError: null,
+    formSubmitted: false,
     isTestUser: isTestUser(),
   };
 
@@ -186,8 +204,14 @@ function initReducer(user: User) {
       case 'SET_PAYMENT_METHOD':
         return { ...state, paymentMethod: action.paymentMethod };
 
-      case 'SET_ERRORS':
-        return { ...state, errors: action.errors };
+      case 'SET_FORM_ERRORS':
+        return { ...state, formErrors: action.errors };
+
+      case 'SET_SUBMISSION_ERROR':
+        return { ...state, submissionError: action.error, formSubmitted: false };
+
+      case 'SET_FORM_SUBMITTED':
+        return { ...state, formSubmitted: action.formSubmitted };
 
       default:
         return state;
@@ -196,6 +220,8 @@ function initReducer(user: User) {
 
   return combineReducers({
     checkout: reducer,
+    user: createUserReducer(countryGroupId),
+    directDebit,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
@@ -209,5 +235,7 @@ export {
   setStage,
   getFormFields,
   getEmail,
+  setSubmissionError,
+  setFormSubmitted,
   formActionCreators,
 };

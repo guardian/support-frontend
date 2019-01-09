@@ -3,9 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import MarketingConsent from '../MarketingConsentContainer';
-import ContributionsSurvey from '../ContributionSurvey/ContributionsSurvey';
-import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArrow';
+import MarketingConsent from './MarketingConsentContainer';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 
 // ----- Render ----- //
 
@@ -19,7 +18,6 @@ function ContributionThankYouPasswordSet() {
           preferences.
         </p>
       </section>
-      <ContributionsSurvey />
       <MarketingConsent />
       <ButtonWithRightArrow
         componentClassName="confirmation confirmation--backtothegu"
