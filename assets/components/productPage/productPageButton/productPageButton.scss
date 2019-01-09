@@ -12,6 +12,7 @@
   color: gu-colour(garnett-neutral-1);
   border: none;
   border-radius: 600px;
+  box-sizing: border-box;
   cursor: pointer;
 
   &:hover, &:focus {

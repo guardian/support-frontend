@@ -122,6 +122,8 @@
 
       .wrapper {
         display: flex;
+        position: relative;
+        z-index: 10;
 
         @include mq($from: tablet) {
           width: gu-span(14);
@@ -154,6 +156,7 @@
         left: -220px;
         width: 300px;
         height: 300px;
+        z-index: 9;
 
         @include mq($until: tablet) {
           transform: rotate(-70deg);
