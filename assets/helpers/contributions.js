@@ -238,12 +238,7 @@ const defaultMonthlyAmount = [
 const amounts = (annualTestVariant: string) => ({
   ONE_OFF: {
     GBPCountries: defaultOneOffAmount,
-    UnitedStates: [
-      { value: '35', spoken: numbersInWords['35'], isDefault: false },
-      { value: '75', spoken: numbersInWords['75'], isDefault: true },
-      { value: '125', spoken: numbersInWords['125'], isDefault: false },
-      { value: '275', spoken: numbersInWords['275'], isDefault: false },
-    ],
+    UnitedStates: defaultOneOffAmount,
     EURCountries: defaultOneOffAmount,
     AUDCountries: [
       { value: '50', spoken: numbersInWords['50'], isDefault: false },
