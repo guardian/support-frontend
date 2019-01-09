@@ -32,11 +32,8 @@ body {
 
 .gu-content__main {
   position: relative;
-
-  @include mq($from: mobile, $until: tablet) {
-    display: flex;
-    flex-direction: column-reverse;
-  }
+   display: flex;
+   flex-direction: column-reverse;
 
   @include mq($from: tablet) {
     .svg-contributions-bg-mobile {
@@ -47,26 +44,25 @@ body {
 
 .gu-content__bg {
 
+  display: none;
+
   svg {
     display: block;
   }
 
-  @include mq($from: mobile, $until: tablet) {
+  .svg-contributions-bg-desktop {
     display: none;
-
-    .svg-contributions-bg-desktop {
-      display: none;
-    }
-
-    .svg-contributions-bg-mobile {
-      bottom: 0;
-      height: 223px;
-      left: 50%;
-      position: absolute;
-      transform: translate(-50%, 0);
-      width: 100%;
-    }
   }
+
+  .svg-contributions-bg-mobile {
+    bottom: 0;
+    height: 223px;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, 0);
+    width: 100%;
+  }
+
 
   @include mq($from: tablet) {
     height: 580px;
@@ -90,7 +86,6 @@ body {
 .gu-content--shrink {
   @include mq($from: mobile, $until: tablet) {
     $header-height: 44px;
-    grid-template-rows: [header-t] $header-height [header-b] 1fr [footer-t] auto [footer-b];
 
     .glogo {
       width: 30px;
@@ -126,19 +121,20 @@ body {
 /*= HEADER */
 
 .header {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-  color: gu-colour(garnett-neutral-1);
-  font: bold 36px/1.15 $gu-headline;
-  margin: 0 -10px;
-  padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
 
-  @include mq($from: mobile, $until: tablet) {
-    border: 0;
-    left: 10px;
-    font-size: 22px;
-    padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
-    width: 100%;
-    background-color: gu-colour(news-garnett-highlight);
+  border: 0;
+  left: 10px;
+  font-size: 22px;
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+  width: 100%;
+  background-color: gu-colour(news-garnett-highlight);
+
+  @include mq($from: tablet) {
+    border-bottom: 1px solid gu-colour(garnett-neutral-4);
+    color: gu-colour(garnett-neutral-1);
+    font: bold 36px/1.15 $gu-headline;
+    margin: 0 -10px;
+    padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
   }
 }
 
@@ -181,6 +177,8 @@ header[role="banner"] {
   width: 60px;
   height: 60px;
   position: relative;
+  top: 7px;
+  right: 10px;
 
   .svg-roundel {
     width: 100%;
@@ -191,39 +189,32 @@ header[role="banner"] {
     fill: gu-colour(header-dark);
   }
 
-  @include mq($from: mobile, $until: tablet) {
-    top: 7px;
-    right: 10px;
-  }
-
   @include mq($from: tablet) {
     top: 7px;
   }
 }
 
 .countryGroups {
-  font-family: $gu-text-sans-web;
-  margin-top: $gu-v-spacing * 2.5;
-  max-width: 355px;
-  padding: 0;
-  width: 100%;
-  cursor: pointer;
+  margin-left: 10px;
+  text-overflow: ellipsis;
+  width: 185px;
+  white-space: nowrap;
 
-  @include mq($from: mobile, $until: tablet) {
-    margin-left: 10px;
-    text-overflow: ellipsis;
-    width: 185px;
-    white-space: nowrap;
+  summary {
+    padding-left: 10px;
+  }
 
-    summary {
-      padding-left: 10px;
-    }
+  .svg-globe {
+    display: none;
+  }
 
-    .svg-globe {
-      display: none;
-    }
-
-
+  @include mq($from: tablet) {
+    font-family: $gu-text-sans-web;
+    margin-top: $gu-v-spacing * 2.5;
+    max-width: 355px;
+    padding: 0;
+    width: 100%;
+    cursor: pointer;
   }
 }
 
@@ -365,11 +356,6 @@ footer[role="contentinfo"] a {
   padding: 0 10px;
   overflow: hidden;
 
-  @include mq($from: leftCol) {
-    width: 380px;
-    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
-  }
-
   @include mq($from: tablet) {
     border-color: gu-colour(garnett-neutral-4);
     border-style: none solid;
@@ -377,6 +363,12 @@ footer[role="contentinfo"] a {
     width: 380px;
     margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
   }
+
+  @include mq($from: leftCol) {
+    width: 380px;
+    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
+  }
+
 }
 
 /*= TYPOGRAPHY */
@@ -400,14 +392,14 @@ button {
 footer[role="contentinfo"] {
   font-family: $gu-text-sans-web;
 
-  @include mq($from: wide) {
-    padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
-    width: 1240px;
-  }
-
   @include mq($from: tablet) {
     padding: 0 calc(50% - 350px) ($gu-v-spacing * 2);
     width: 700px;
+  }
+
+  @include mq($from: wide) {
+    padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
+    width: 1240px;
   }
 
 }
