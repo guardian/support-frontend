@@ -187,10 +187,10 @@ object Fixtures {
        |  "product": ${product},
        |  "paymentMethod": $stripePaymentMethod,
        |  "salesForceContact": {
-       |    "Id": "123",
-       |    "AccountId": "123"
+       |    "Id": "sfContactId123",
+       |    "AccountId": "sfAccountId321"
        |  },
-       |  "accountNumber": "123"
+       |  "subscriptionNumber": "A-S12345678"
        |}
      """.stripMargin
 
