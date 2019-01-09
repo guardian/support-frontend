@@ -45,7 +45,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       new DateTime(1999, 12, 31, 11, 59),
       20,
       Currency.GBP,
-      "UK", "", Monthly, SfContactId("sfContactId"), dd, Some(mandateId)
+      "UK", "", Monthly, SfContactId("0036E00000WK8fDQAT"), dd, Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)
@@ -63,7 +63,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       user,
       GBP,
       dd,
-      SfContactId("sfContactId"),
+      SfContactId("0036E00000WK8fDQAT"),
       Some(mandateId)
     )
     val service = new EmailService

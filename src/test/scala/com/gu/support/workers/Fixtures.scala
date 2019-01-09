@@ -190,6 +190,7 @@ object Fixtures {
        |    "Id": "sfContactId123",
        |    "AccountId": "sfAccountId321"
        |  },
+       |  "accountNumber": "A-00123",
        |  "subscriptionNumber": "A-S12345678"
        |}
      """.stripMargin
