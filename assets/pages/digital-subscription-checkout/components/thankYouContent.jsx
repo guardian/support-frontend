@@ -36,7 +36,9 @@ function ThankYouContent(props: PropTypes) {
         </p>
       </LeftMarginSection>
       <AppsSection countryGroupId={props.countryGroupId} />
-      <MarketingConsent />
+      <LeftMarginSection modifierClasses={['thank-you-consent']}>
+        <MarketingConsent />
+      </LeftMarginSection>
     </div>
   );
 
