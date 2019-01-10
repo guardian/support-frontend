@@ -45,7 +45,7 @@ body {
   top: 245px;
   width: 100%;
   z-index: -1;
-  
+
   .svg-contributions-bg-desktop {
     display: block;
     bottom: 0;
@@ -135,8 +135,8 @@ header[role="banner"] {
 
 
   @include mq($from: tablet) {
-    padding: 0 calc(50% - 350px);
-    width: 700px;
+    padding: 0;
+    width: auto;
   }
 
   @include mq($from: leftCol) {
@@ -190,7 +190,6 @@ header[role="banner"] {
   }
 
   @include mq($from: tablet) {
-    margin-left: auto;
     padding: 0;
     width: 100%;
     cursor: pointer;
