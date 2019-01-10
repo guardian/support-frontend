@@ -38,28 +38,28 @@ body {
 
 .gu-content__bg {
 
-  display: none;
-
-  @include mq($from: tablet) {
-    display: flex;
+  display: flex;
+  height: 580px;
+  left: 0;
+  position: absolute;
+  top: 245px;
+  width: 100%;
+  z-index: -1;
+  
+  .svg-contributions-bg-desktop {
+    display: block;
+    bottom: 0;
     height: 580px;
-    left: 0;
-    position: absolute;
-    top: 245px;
-    width: 100%;
-    z-index: -1;
-
-
-    .svg-contributions-bg-desktop {
-      display: block;
-      bottom: 0;
-      height: 580px;
-      left: 50%;
-      position: fixed;
-      transform: translate(-50%,0);
-      width: 1400px;
-    }
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%,0);
+    width: 1400px;
   }
+
+  @include mq($from: mobile, $until: tablet) {
+    display: none;
+  }
+
 }
 
 .gu-content--shrink {
