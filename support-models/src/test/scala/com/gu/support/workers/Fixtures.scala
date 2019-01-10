@@ -183,7 +183,8 @@ object Fixtures {
        |    "Id": "123",
        |    "AccountId": "123"
        |  },
-       |  "accountNumber": "123"
+       |  "accountNumber": "A-123",
+       |  "subscriptionNumber": "A-S123"
        |}
      """.stripMargin
 

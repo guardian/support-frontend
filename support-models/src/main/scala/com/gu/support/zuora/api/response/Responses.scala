@@ -79,6 +79,7 @@ object SubscribeResponseAccount {
 }
 
 case class ZuoraAccountNumber(value: String)
+case class ZuoraSubscriptionNumber(value: String)
 
 case class SubscribeResponseAccount(
     accountNumber: String,
@@ -89,8 +90,8 @@ case class SubscribeResponseAccount(
     accountId: String,
     success: Boolean
 ) extends ZuoraResponse {
-
   def domainAccountNumber: ZuoraAccountNumber = ZuoraAccountNumber(accountNumber)
+  def domainSubscriptionNumber: ZuoraSubscriptionNumber = ZuoraSubscriptionNumber(subscriptionNumber)
 }
 
 object InvoiceResult {
