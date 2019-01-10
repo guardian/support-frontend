@@ -1,0 +1,32 @@
+// -----  gu-sass ----- //
+
+.stripe-payment-request-button__button {
+  margin-top: $gu-v-spacing * 2;
+  margin-bottom: $gu-h-spacing;
+}
+
+.stripe-payment-request-button__divider {
+  line-height: 32px;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.stripe-payment-request-button__divider:before,.stripe-payment-request-button__divider:after {
+  content:" ";
+  position: absolute;
+  top: 50%;
+  margin-left: -999em;
+  height: 2px;
+  width: 998em;
+  border-top: solid 1px gu-colour(garnett-neutral-4);
+}
+.stripe-payment-request-button__divider:after {
+  left: auto;
+  width: 999em;
+  margin: 0 0 0 1em;
+}
+
+.stripe-payment-request-button--hidden {
+  display: none;
+}
