@@ -1,0 +1,31 @@
+// -----  gu-sass ----- //
+
+.component-contributions-survey {
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  margin: 0 -10px;
+  padding: 0 10px;
+
+  h3 {
+    font-family: $gu-text-egyptian-web;
+    letter-spacing: -0.5px;
+    font-weight: 900;
+    font-size: 17px;
+    margin: ($gu-v-spacing / 3) 0;
+  }
+
+  .component-contributions-survey__button {
+    display: inline-block;
+    margin-bottom: $gu-v-spacing * 3;
+    margin-top: $gu-v-spacing;
+
+    .button--survey {
+      background-color: gu-colour(garnett-neutral-1);
+      color: white;
+    }
+  }
+
+  .component-cta-link__text {
+    padding-right: 25px;
+    font-size: 16px;
+  }
+}
