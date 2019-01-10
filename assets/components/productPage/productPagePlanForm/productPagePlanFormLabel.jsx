@@ -38,7 +38,11 @@ export default ({
           <div aria-hidden="true" className="component-product-page-plan-form-label__check"><SvgCheckmark /></div>
         </div>
         <div className="component-product-page-plan-form-label__content">
-          {offer && <strong className="component-product-page-plan-form-label__offer">{offer}</strong>}
+          {offer && 
+            <strong className="component-product-page-plan-form-label-offer">
+              <span className="component-product-page-plan-form-label-offer__inside">{offer}</span>
+            </strong>
+          }
           <div>{children}</div>
         </div>
         {footer &&
