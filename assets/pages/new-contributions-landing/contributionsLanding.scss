@@ -65,6 +65,7 @@ body {
 
 
   @include mq($from: tablet) {
+    display: flex;
     height: 580px;
     left: 0;
     position: absolute;
@@ -72,7 +73,12 @@ body {
     width: 100%;
     z-index: -1;
 
-    svg {
+
+    .svg-contributions-bg-desktop {
+      display: block;
+    }
+
+      svg {
       bottom: 0;
       height: 580px;
       left: 50%;
