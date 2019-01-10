@@ -36,48 +36,36 @@ type PropTypes = {|
 function Button(props: ButtonPropTypes) {
   if (props.confirmOptIn === true) {
     return (
-      <div>
-        <button
-          disabled="disabled"
-          className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
-        >
-          <SvgSubscribed />
+      <ProductPageButton
+        appearance="greenHollow"
+        iconSide="left"
+        icon={<SvgSubscribed />}
+      >
         Signed up
-        </button>
-        <ProductPageButton
-          appearance="greenHollow"
-          iconSide="left"
-          icon={<SvgSubscribed />}
-        >Signed up
-        </ProductPageButton>
-
-      </div>
+      </ProductPageButton>
     );
   } else if (props.requestPending === true) {
     return (
-      <button
-        disabled="disabled"
-        className={classNameWithModifiers('button', ['newsletter', 'newsletter__request-pending'])}
+      <ProductPageButton
+        appearance="greyHollow"
+        iconSide="left"
+        icon={<SvgSubscribe />}
       >
-        <SvgSubscribe />
         Pending...
-      </button>
+      </ProductPageButton>
     );
   }
   return (
-    <div>
-      <ProductPageButton icon={<SvgSubscribe />}>Sign me up</ProductPageButton>
-      <button
-        className={classNameWithModifiers('button', ['newsletter'])}
-        onClick={
+    <ProductPageButton
+      appearance="green"
+      iconSide="left"
+      onClick={
           () => props.onClick(props.email, props.csrf)
         }
-      >
-        <SvgSubscribe />
+      icon={<SvgSubscribe />}
+    >
         Sign me up
-      </button>
-
-    </div>
+    </ProductPageButton>
   );
 
 }

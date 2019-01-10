@@ -49,6 +49,11 @@
   border: 1px solid gu-colour(green-dark);
 }
 
+.component-product-page-button--greyHollow {
+  color: gu-colour(garnett-neutral-1);
+  border: 1px solid gu-colour(garnett-neutral-4);
+}
+
 .component-product-page-button__content,
 .component-product-page-button svg {
   flex: 0 0 auto;
