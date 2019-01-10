@@ -1061,29 +1061,6 @@ form {
   }
 }
 
-.button--newsletter {
-  color: gu-colour(garnett-neutral-5);
-  background-color: gu-colour(green-dark);
-  border-color: gu-colour(green-dark);
-  text-align: right;
-  width: 140px;
-
-  svg {
-    right: calc(100% - 33px);
-    height: 16px;
-  }
-}
-
-.button--newsletter__subscribed {
-  color: gu-colour(green-dark);
-  background-color: transparent;
-}
-
-.button--newsletter__request-pending {
-  color: gu-colour(garnett-neutral-4);
-  background-color: transparent;
-}
-
 .button--right-arrow {
   width: 100%;
   padding: 0 50px 0 $gu-h-spacing;
