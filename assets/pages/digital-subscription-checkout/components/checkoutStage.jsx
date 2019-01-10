@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import ReturnSection from 'components/returnSection/returnSection';
-import HeadingBlock from 'components/headingBlock/headingBlock';
 import ProductHero, {
   type GridImages,
   type ImagesByCountry,
@@ -102,18 +101,17 @@ function CheckoutStage(props: PropTypes) {
 
     case 'thankyou':
       return (
-        <div>
+        <div className="thank-you-stage">
           <ProductHero
             countryGroupId={props.countryGroupId}
             imagesByCountry={heroesByCountry}
             altText="digital subscription"
             fallbackImgType="png"
           />
-          <LeftMarginSection>
-            <HeadingBlock overheading="Thank You" heading="Your Digital Pack subscription is now live">
-              <p>Thank you for supporting our journalism</p>
-            </HeadingBlock>
-          </LeftMarginSection>
+          <CheckoutHeading
+            heading="Your Digital Pack subscription is now live"
+            copy="Thank you for supporting our journalism"
+          />
           <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
