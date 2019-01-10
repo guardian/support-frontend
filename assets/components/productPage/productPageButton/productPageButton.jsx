@@ -4,6 +4,7 @@
 
 import React, { type Node } from 'react';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import './productPageButton.scss';
 
@@ -25,6 +26,8 @@ type PropTypes = {|
   type: 'submit' | 'button',
   href: ?string,
   disabled: boolean,
+  appearance: 'primary' | 'green' | 'greenHollow',
+  iconSide: 'left' | 'right',
   onClick: ?(void => void),
   trackingOnClick: ?(void => void),
 |};
@@ -33,28 +36,50 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const ProductPageButton = ({
-  children, icon, type, onClick, href, disabled, trackingOnClick,
-}: PropTypes) => (href ? (
-  <a
-    href={href}
-    data-disabled={disabled}
-    className="component-product-page-button"
-    onClick={trackingOnClick}
-  >
-    <span className="component-product-page-button__content">{children}</span>
-    {icon}
-  </a>
-) : (
-  <button
-    disabled={disabled}
-    onClick={(ev) => { if (onClick) { onClick(ev); } if (trackingOnClick) { trackingOnClick(); } }}
-    type={type}
-    className="component-product-page-button"
-  >
-    <span className="component-product-page-button__content">{children}</span>
-    {icon}
-  </button>
-));
+  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide,
+}: PropTypes) => {
+
+  const getClassName = (modifiers: string[] = []) =>
+    classNameWithModifiers('component-product-page-button', [
+      appearance,
+      `icon-${iconSide}`,
+      ...modifiers,
+    ]);
+
+  if (!href && !onClick) {
+    return (
+      <div
+        className={getClassName(['static'])}
+      >
+        <span className="component-product-page-button__content">{children}</span>
+        {icon}
+      </div>
+    );
+  } else if (href) {
+    return (
+      <a
+        href={href}
+        data-disabled={disabled}
+        className={getClassName()}
+        onClick={trackingOnClick}
+      >
+        <span className="component-product-page-button__content">{children}</span>
+        {icon}
+      </a>
+    );
+  }
+  return (
+    <button
+      disabled={disabled}
+      onClick={(ev) => { if (onClick) { onClick(ev); } if (trackingOnClick) { trackingOnClick(); } }}
+      type={type}
+      className={getClassName()}
+    >
+      <span className="component-product-page-button__content">{children}</span>
+      {icon}
+    </button>
+  );
+};
 
 ProductPageButton.defaultProps = {
   icon: <SvgArrowRightStraight />,
@@ -63,6 +88,8 @@ ProductPageButton.defaultProps = {
   trackingOnClick: null,
   href: null,
   disabled: false,
+  appearance: 'primary',
+  iconSide: 'right',
 };
 
 export default ProductPageButton;

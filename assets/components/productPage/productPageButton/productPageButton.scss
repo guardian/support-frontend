@@ -8,15 +8,12 @@
   font-weight: bold;
   height: $gu-v-spacing*3.5;
   padding: ($gu-v-spacing/2) $gu-h-spacing;
-  background-color: gu-colour(news-garnett-highlight);
-  color: gu-colour(garnett-neutral-1);
   border: none;
   border-radius: 600px;
   box-sizing: border-box;
   cursor: pointer;
 
   &:hover, &:focus {
-    background-color: gu-colour(highlight-dark);
     outline: 0;
   }
 
@@ -25,6 +22,31 @@
     opacity: .5;
     pointer-events: none;
   }
+}
+
+.component-product-page-button--static {
+  pointer-events: none;
+}
+
+.component-product-page-button--primary {
+  background-color: gu-colour(news-garnett-highlight);
+  color: gu-colour(garnett-neutral-1);
+  &:hover, &:focus {
+    background-color: gu-colour(highlight-dark);
+  }
+}
+
+.component-product-page-button--green {
+  color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(green-dark);
+  &:hover, &:focus {
+    background-color: darken(gu-colour(green-dark), 10%);
+  }
+}
+
+.component-product-page-button--greenHollow {
+  color: gu-colour(green-dark);
+  border: 1px solid gu-colour(green-dark);
 }
 
 .component-product-page-button__content,
@@ -36,4 +58,12 @@
 .component-product-page-button svg {
   width: $gu-h-spacing * 1.075;
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
+}
+
+.component-product-page-button--icon-left {
+  flex-direction: row-reverse;
+}
+
+.component-product-page-button--icon-left svg {
+  margin: $gu-v-spacing * -1 $gu-h-spacing * .5 $gu-v-spacing * -1 $gu-h-spacing * -.5;
 }

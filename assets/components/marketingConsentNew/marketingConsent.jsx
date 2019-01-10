@@ -12,7 +12,9 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { checkEmail } from 'helpers/formValidation';
 import { logException } from 'helpers/logger';
+import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
 
+import './marketingConsent.scss';
 
 // ----- Types ----- //
 
@@ -34,13 +36,22 @@ type PropTypes = {|
 function Button(props: ButtonPropTypes) {
   if (props.confirmOptIn === true) {
     return (
-      <button
-        disabled="disabled"
-        className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
-      >
-        <SvgSubscribed />
+      <div>
+        <button
+          disabled="disabled"
+          className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
+        >
+          <SvgSubscribed />
         Signed up
-      </button>
+        </button>
+        <ProductPageButton
+          appearance="greenHollow"
+          iconSide="left"
+          icon={<SvgSubscribed />}
+        >Signed up
+        </ProductPageButton>
+
+      </div>
     );
   } else if (props.requestPending === true) {
     return (
@@ -54,15 +65,19 @@ function Button(props: ButtonPropTypes) {
     );
   }
   return (
-    <button
-      className={classNameWithModifiers('button', ['newsletter'])}
-      onClick={
+    <div>
+      <ProductPageButton icon={<SvgSubscribe />}>Sign me up</ProductPageButton>
+      <button
+        className={classNameWithModifiers('button', ['newsletter'])}
+        onClick={
           () => props.onClick(props.email, props.csrf)
         }
-    >
-      <SvgSubscribe />
+      >
+        <SvgSubscribe />
         Sign me up
-    </button>
+      </button>
+
+    </div>
   );
 
 }
