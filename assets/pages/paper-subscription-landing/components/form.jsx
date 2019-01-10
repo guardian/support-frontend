@@ -28,13 +28,13 @@ const getSavingStr = (subscription: Option<number>, newsstand: Option<number>): 
 
 const allPlans = {
   collectionEveryday: {
-    title: 'Everyday',
+    title: 'Every day',
     copy: 'Every issue of The Guardian and The Observer, from Monday to Sunday',
     newsstand: getNewsstandPrice(['weekly', 'saturday', 'sunday']),
     price: getPaperPrice('collectionEveryday'),
   },
   collectionSixday: {
-    title: 'Sixday',
+    title: 'Monday to Saturday',
     copy: 'Every issue of The Guardian, from Monday to Saturday',
     newsstand: getNewsstandPrice(['weekly', 'saturday']),
     price: getPaperPrice('collectionSixday'),
@@ -52,13 +52,13 @@ const allPlans = {
     price: getPaperPrice('collectionSunday'),
   },
   deliveryEveryday: {
-    title: 'Everyday',
+    title: 'Every day',
     copy: 'Every issue of The Guardian and The Observer, from Monday to Sunday',
     newsstand: getNewsstandPrice(['weekly', 'saturday', 'sunday']),
     price: getPaperPrice('deliveryEveryday'),
   },
   deliverySixday: {
-    title: 'Sixday',
+    title: 'Monday to Saturday',
     copy: 'Every issue of The Guardian, from Monday to Saturday',
     newsstand: getNewsstandPrice(['weekly', 'saturday']),
     price: getPaperPrice('deliverySixday'),
