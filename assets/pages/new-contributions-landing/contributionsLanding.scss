@@ -34,35 +34,11 @@ body {
   position: relative;
    display: flex;
    flex-direction: column-reverse;
-
-  @include mq($from: tablet) {
-    .svg-contributions-bg-mobile {
-      display: none;
-    }
-  }
 }
 
 .gu-content__bg {
 
   display: none;
-
-  svg {
-    display: block;
-  }
-
-  .svg-contributions-bg-desktop {
-    display: none;
-  }
-
-  .svg-contributions-bg-mobile {
-    bottom: 0;
-    height: 223px;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, 0);
-    width: 100%;
-  }
-
 
   @include mq($from: tablet) {
     display: flex;
@@ -76,9 +52,6 @@ body {
 
     .svg-contributions-bg-desktop {
       display: block;
-    }
-
-      svg {
       bottom: 0;
       height: 580px;
       left: 50%;
