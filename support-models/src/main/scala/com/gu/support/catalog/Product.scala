@@ -1,64 +1,63 @@
 package com.gu.support.catalog
 
-import com.gu.support.catalog.Catalog.mapFields
-import com.gu.support.encoding.Codec
-import com.gu.support.encoding.Codec._
-import com.gu.support.workers.Contribution
-import io.circe.{Decoder, DecodingFailure, Encoder, HCursor}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import com.gu.support.workers._
 
-sealed trait Product {
-  def id: ProductId
+sealed trait Product
 
-  def name: String
+sealed trait DigitalProduct extends Product
 
-  def productRatePlans: List[ProductRatePlan]
-}
+case object DigitalPack extends DigitalProduct {
+  lazy val ratePlans: List[ProductRatePlan[DigitalProduct]] =
+    List(
+      ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, DigitalFulfilment, DigitalPackOption),
+      ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, DigitalFulfilment, DigitalPackOption),
 
-case class DigitalPack(id: ProductId, name: String, productRatePlans: List[ProductRatePlan]) extends Product
-
-object DigitalPack {
-  val productId = "2c92a0fb4edd70c8014edeaa4ddb21e7"
-}
-
-case class Contribution(id: ProductId, name: String, productRatePlans: List[ProductRatePlan]) extends Product
-
-object Contribution {
-  val productId = "2c92a0fe5aacfabe015ad24bf6e15ff6"
-}
-
-object Product {
-  implicit val digitalPackDecoder: Decoder[DigitalPack] = deriveDecoder
-  implicit val contributionDecoder: Decoder[Contribution] = deriveDecoder
-
-  implicit val encoder: Encoder[Product] = deriveEncoder
-  implicit val decoder: Decoder[Product] = Decoder.instance {
-    cursor =>
-      val product = for {
-        id <- cursor.downField("id").as[String].toOption
-        decoder <- decoderForProduct(id)
-      } yield decoder.decodeJson(cursor.value)
-
-      product.getOrElse(Left(decodingFailure(cursor)))
-  }
-
-  private def decodingFailure(cursor: HCursor) = {
-    val id = cursor.downField("id").as[String].toOption.getOrElse("in this product")
-    DecodingFailure(
-      s"""
-        The product id $id does not have a corresponding case class.
-        Supported ids are defined in the companion objects of subclasses
-        of the Product trait.
-        Unsupported product ids should be filtered out by the Circe decoder of
-        the Catalog class
-        """, Nil
     )
-  }
+}
 
+case object Contribution extends DigitalProduct {
+  lazy val ratePlans: List[ProductRatePlan[DigitalProduct]] =
+    List(
+      ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, DigitalFulfilment, ContributionOption),
+      ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, DigitalFulfilment, ContributionOption),
+    )
+}
 
-  private def decoderForProduct(id: String) = id match {
-    case DigitalPack.productId => Some(digitalPackDecoder)
-    case Contribution.productId => Some(contributionDecoder)
-    case _ => None
-  }
+case object Paper extends Product {
+  lazy val ratePlans: List[ProductRatePlan[Paper.type]] =
+    List(
+      ProductRatePlan("2c92a0fd6205707201621fa1350710e3", Monthly, Collection, SaturdayPlus),
+      ProductRatePlan("2c92a0fd6205707201621f9f6d7e0116", Monthly, Collection, Saturday),
+      ProductRatePlan("2c92a0fe56fe33ff0157040d4b824168", Monthly, Collection, SundayPlus),
+      ProductRatePlan("2c92a0fe5af9a6b9015b0fe1ecc0116c", Monthly, Collection, Sunday),
+      ProductRatePlan("2c92a0fd56fe26b60157040cdd323f76", Monthly, Collection, WeekendPlus),
+      ProductRatePlan("2c92a0ff56fe33f00157040f9a537f4b", Monthly, Collection, Weekend),
+      ProductRatePlan("2c92a0fc56fe26ba0157040c5ea17f6a", Monthly, Collection, SixdayPlus),
+      ProductRatePlan("2c92a0fd56fe270b0157040e42e536ef", Monthly, Collection, Sixday),
+      ProductRatePlan("2c92a0ff56fe33f50157040bbdcf3ae4", Monthly, Collection, EverydayPlus),
+      ProductRatePlan("2c92a0fd56fe270b0157040dd79b35da", Monthly, Collection, Everyday),
+      ProductRatePlan("2c92a0ff6205708e01622484bb2c4613", Monthly, HomeDelivery, SaturdayPlus),
+      ProductRatePlan("2c92a0fd5e1dcf0d015e3cb39d0a7ddb", Monthly, HomeDelivery, Saturday),
+      ProductRatePlan("2c92a0fd560d13880156136b8e490f8b", Monthly, HomeDelivery, SundayPlus),
+      ProductRatePlan("2c92a0ff5af9b657015b0fea5b653f81", Monthly, HomeDelivery, Sunday),
+      ProductRatePlan("2c92a0ff560d311b0156136b9f5c3968", Monthly, HomeDelivery, WeekendPlus),
+      ProductRatePlan("2c92a0fd5614305c01561dc88f3275be", Monthly, HomeDelivery, Weekend),
+      ProductRatePlan("2c92a0ff560d311b0156136b697438a9", Monthly, HomeDelivery, SixdayPlus),
+      ProductRatePlan("2c92a0ff560d311b0156136f2afe5315", Monthly, HomeDelivery, Sixday),
+      ProductRatePlan("2c92a0fd560d132301560e43cf041a3c", Monthly, HomeDelivery, EverydayPlus),
+      ProductRatePlan("2c92a0fd560d13880156136b72e50f0c", Monthly, HomeDelivery, Everyday),
+
+    )
+}
+
+case object GuardianWeekly extends Product {
+  lazy val ratePlans: List[ProductRatePlan[GuardianWeeklyOption.type]] =
+    List(
+      ProductRatePlan("2c92a0086619bf8901661ab545f51b21", SixWeekly, RestOfWorld, GuardianWeeklyOption), //TODO: remove SixWeekly and use promotions instead
+      ProductRatePlan("2c92a0fe6619b4b601661ab300222651", Annual, RestOfWorld, GuardianWeeklyOption),
+      ProductRatePlan("2c92a0086619bf8901661ab02752722f", Quarterly, RestOfWorld, GuardianWeeklyOption),
+      ProductRatePlan("2c92a0086619bf8901661aaac94257fe", SixWeekly, Domestic, GuardianWeeklyOption),
+      ProductRatePlan("2c92a0fe6619b4b901661aa8e66c1692", Annual, Domestic, GuardianWeeklyOption),
+      ProductRatePlan("2c92a0fe6619b4b301661aa494392ee2", Quarterly, Domestic, GuardianWeeklyOption),
+    )
 }
