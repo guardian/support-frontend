@@ -26,7 +26,7 @@ type PropTypes = {|
   type: 'submit' | 'button',
   href: ?string,
   disabled: boolean,
-  appearance: 'primary' | 'green' | 'greenHollow',
+  appearance: 'primary' | 'green' | 'greenHollow' | 'greyHollow',
   iconSide: 'left' | 'right',
   onClick: ?(void => void),
   trackingOnClick: ?(void => void),
