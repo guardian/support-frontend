@@ -133,9 +133,9 @@ body {
   font-size: 22px;
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
   width: 100%;
-  background-color: gu-colour(news-garnett-highlight);
 
   @include mq($from: tablet) {
+    width: auto;
     border-bottom: 1px solid gu-colour(garnett-neutral-4);
     color: gu-colour(garnett-neutral-1);
     font: bold 36px/1.15 $gu-headline;
