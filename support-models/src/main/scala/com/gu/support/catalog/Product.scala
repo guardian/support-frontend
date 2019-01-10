@@ -4,22 +4,20 @@ import com.gu.support.workers._
 
 sealed trait Product
 
-sealed trait DigitalProduct extends Product
-
-case object DigitalPack extends DigitalProduct {
-  lazy val ratePlans: List[ProductRatePlan[DigitalProduct]] =
+case object DigitalPack extends Product {
+  lazy val ratePlans: List[ProductRatePlan[DigitalPack.type]] =
     List(
-      ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, DigitalFulfilment, DigitalPackOption),
-      ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, DigitalFulfilment, DigitalPackOption),
+      ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions),
+      ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions),
 
     )
 }
 
-case object Contribution extends DigitalProduct {
-  lazy val ratePlans: List[ProductRatePlan[DigitalProduct]] =
+case object Contribution extends Product {
+  lazy val ratePlans: List[ProductRatePlan[Contribution.type]] =
     List(
-      ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, DigitalFulfilment, ContributionOption),
-      ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, DigitalFulfilment, ContributionOption),
+      ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions),
+      ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions),
     )
 }
 
@@ -51,13 +49,13 @@ case object Paper extends Product {
 }
 
 case object GuardianWeekly extends Product {
-  lazy val ratePlans: List[ProductRatePlan[GuardianWeeklyOption.type]] =
+  lazy val ratePlans: List[ProductRatePlan[GuardianWeekly.type]] =
     List(
-      ProductRatePlan("2c92a0086619bf8901661ab545f51b21", SixWeekly, RestOfWorld, GuardianWeeklyOption), //TODO: remove SixWeekly and use promotions instead
-      ProductRatePlan("2c92a0fe6619b4b601661ab300222651", Annual, RestOfWorld, GuardianWeeklyOption),
-      ProductRatePlan("2c92a0086619bf8901661ab02752722f", Quarterly, RestOfWorld, GuardianWeeklyOption),
-      ProductRatePlan("2c92a0086619bf8901661aaac94257fe", SixWeekly, Domestic, GuardianWeeklyOption),
-      ProductRatePlan("2c92a0fe6619b4b901661aa8e66c1692", Annual, Domestic, GuardianWeeklyOption),
-      ProductRatePlan("2c92a0fe6619b4b301661aa494392ee2", Quarterly, Domestic, GuardianWeeklyOption),
+      ProductRatePlan("2c92a0086619bf8901661ab545f51b21", SixWeekly, RestOfWorld, NoProductOptions), //TODO: remove SixWeekly and use promotions instead
+      ProductRatePlan("2c92a0fe6619b4b601661ab300222651", Annual, RestOfWorld, NoProductOptions),
+      ProductRatePlan("2c92a0086619bf8901661ab02752722f", Quarterly, RestOfWorld, NoProductOptions),
+      ProductRatePlan("2c92a0086619bf8901661aaac94257fe", SixWeekly, Domestic, NoProductOptions),
+      ProductRatePlan("2c92a0fe6619b4b901661aa8e66c1692", Annual, Domestic, NoProductOptions),
+      ProductRatePlan("2c92a0fe6619b4b301661aa494392ee2", Quarterly, Domestic, NoProductOptions),
     )
 }

@@ -1,12 +1,8 @@
 package com.gu.support.catalog
 
-sealed trait ProductOptions[T <: Product]
+sealed trait ProductOptions[+T <: Product]
 
-case object GuardianWeeklyOption extends ProductOptions[GuardianWeeklyOption.type]
-
-case object DigitalPackOption extends ProductOptions[DigitalPack.type]
-
-case object ContributionOption extends ProductOptions[Contribution.type]
+case object NoProductOptions extends ProductOptions[GuardianWeekly.type with DigitalPack.type with Contribution.type]
 
 case object Saturday extends ProductOptions[Paper.type]
 

@@ -1,47 +1,47 @@
 package com.gu.support.catalog
 
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe._
 import com.gu.support.encoding.JsonHelpers._
+import io.circe._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 case class Catalog(
-  products: List[Product]
+  prices: List[Pricelist]
 )
 
 object Catalog {
-  val supportedProducts: List[ProductId] = List(
-    DigitalPack.productId,
-    Contribution.productId,
-  )
+  lazy val productRatePlansWithPrices: List[ProductRatePlanId] =
+    List(DigitalPack.ratePlans, Paper.ratePlans, GuardianWeekly.ratePlans).flatten.map(_.id)
+
   implicit val encoder: Encoder[Catalog] = deriveEncoder
   implicit val decoder: Decoder[Catalog] = deriveDecoder[Catalog].prepare(mapFields)
 
-  private def mapFields(c: ACursor) = c.withFocus {
-    _.mapObject { jsonObject =>
-      val filteredProducts = jsonObject("products")
-        .map(json => json
-          .asArray
-          .map(filterProducts)
-          .getOrElse(json)
-        )
-
-      filteredProducts
-        .map(jsonObject.updateField("products", _))
-        .getOrElse(jsonObject)
-    }
-  }
-
-  private def filterProducts(products: Vector[Json]) = {
-    val filtered = products.filter(isSupportedProduct)
-    Json.fromValues(filtered)
-  }
-
-  private def isSupportedProduct(productJson: Json) = {
-    productJson
-      .getField("id")
-      .exists{
-        idJson =>
-          supportedProducts.exists(Json.fromString(_) == idJson)
+  private def mapFields(c: ACursor) = c.withFocus { json =>
+    val productRatePlans: List[Json] = json.\\("productRatePlans")
+      .foldLeft(List[Json]()) {
+        (acc: List[Json], element: Json) =>
+          val expanded = element.asArray.getOrElse(Nil)
+          acc ++ expanded.toList
       }
+
+    val active = productRatePlans.filter(_.getField("id")
+        .exists(id => productRatePlansWithPrices.exists(Json.fromString(_) == id)))
+
+    val converted = active.map {
+      productRatePlan =>
+        productRatePlan.mapObject {
+          jsonObject =>
+            val pricing = jsonObject("productRatePlanCharges")
+              .flatMap { json =>
+                json.\\("pricing").headOption
+              }
+              .getOrElse(Json.Null)
+
+            jsonObject
+              .renameField("id", "productRatePlanId")
+              .add("prices", pricing)
+        }
+
+    }
+    Json.fromJsonObject(JsonObject.singleton("prices", Json.fromValues(converted)))
   }
 }
