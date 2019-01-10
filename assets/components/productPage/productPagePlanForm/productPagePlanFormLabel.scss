@@ -94,10 +94,15 @@
   font-style: italic;
 }
 
-$vertical-padding: $gu-v-spacing / 4;
-$horizontal-padding: $gu-h-spacing / 4;
+.component-product-page-plan-form-label__content {
+  .component-product-page-plan-form-label__children:not(:first-child) {
+    margin-top: $gu-v-spacing / 4;
+  }
+}
 
 .component-product-page-plan-form-label-offer {
+  $vertical-padding: $gu-v-spacing / 4;
+  $horizontal-padding: $gu-h-spacing / 4;
   color: gu-colour(garnett-neutral-5);
   font-weight: 600;
   display: inline;
@@ -107,10 +112,10 @@ $horizontal-padding: $gu-h-spacing / 4;
   $horizontal-padding ($vertical-padding * -1) 0 0 gu-colour(garnett-neutral-1), 
   ($horizontal-padding * -1) $vertical-padding 0 0 gu-colour(garnett-neutral-1),
   ($horizontal-padding * -1) ($vertical-padding * -1) 0 0 gu-colour(garnett-neutral-1);
-}
-
-.component-product-page-plan-form-label-offer__inside {
-  background: gu-colour(garnett-neutral-1);
-  line-height: 1.4;
-  padding: $vertical-padding 0;
+  
+  .component-product-page-plan-form-label-offer__inside {
+    background: gu-colour(garnett-neutral-1);
+    line-height: 1.4;
+    padding: $vertical-padding 0;
+  }  
 }

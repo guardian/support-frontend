@@ -87,6 +87,7 @@ const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => {
       copy: allPlans[k].copy,
       price: getPriceStr(allPlans[k].price),
       offer: getSavingStr(allPlans[k].price.value, allPlans[k].newsstand ? allPlans[k].newsstand : null),
+      saving: null,
     },
   }), {});
 

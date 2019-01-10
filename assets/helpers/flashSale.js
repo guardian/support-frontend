@@ -33,6 +33,7 @@ type SaleDetails = {
     promoCode: string,
     intcmp: string,
     price: number,
+    discountPercentage?: number,
     saleCopy: SaleCopy,
     planPrices: PlanPrice[],
   },
@@ -43,6 +44,7 @@ type Sale = {
   activeRegions: CountryGroupId[],
   startTime: number,
   endTime: number,
+  duration?: string,
   saleDetails: SaleDetails,
 };
 
@@ -150,11 +152,13 @@ const Sales: Sale[] = [
     activeRegions: ['GBPCountries'],
     startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
     endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
+    duration: '12 months',
     saleDetails: {
       GBPCountries: {
         promoCode: 'GCB80X',
         intcmp: '',
         price: 8.09,
+        discountPercentage: 0.25,
         saleCopy: {
           featuredProduct: {
             heading: 'Paper subscriptions',
@@ -226,6 +230,16 @@ function getSales(product: SubscriptionProduct, countryGroupId: CountryGroupId =
   return Sales.filter(sale =>
     sale.subscriptionProduct === product &&
     sale.activeRegions.includes(countryGroupId)).sort(sortSalesByStartTimesDescending);
+}
+
+function getDiscount(product: SubscriptionProduct, countryGroupId: CountryGroupId): ?number {
+  const sale = getSales(product, countryGroupId)[0];
+  return sale && sale.saleDetails[countryGroupId] && sale.saleDetails[countryGroupId].discountPercentage;
+}
+
+function getDuration(product: SubscriptionProduct, countryGroupId: CountryGroupId): ?string {
+  const sale = getSales(product, countryGroupId)[0];
+  return sale && sale.duration;
 }
 
 function flashSaleIsActive(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): boolean {
@@ -309,4 +323,6 @@ export {
   getSaleCopy,
   getFormattedFlashSalePrice,
   getPlanPrices,
+  getDiscount,
+  getDuration,
 };

@@ -14,7 +14,7 @@ import ProductPageInfoChip from 'components/productPage/productPageInfoChip/prod
 import GridImage from 'components/gridImage/gridImage';
 import { paperSubsUrl } from 'helpers/routes';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
-import { flashSaleIsActive } from 'helpers/flashSale';
+import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
@@ -49,9 +49,27 @@ function getPageInfoChip(): string {
   return 'You can cancel your subscription at any time.';
 }
 
+const getSaleTitle = (): ?string => {
+
+  if (!flashSaleIsActive('Paper', 'GBPCountries')) {
+    return null;
+  }
+
+  const discount = getDiscount('Paper', 'GBPCountries');
+  const duration = getDuration('Paper', 'GBPCountries');
+
+  if (discount && duration) {
+    return `Save an extra ${Math.round(discount * 100)}% for ${duration}`;
+  } else if (discount) {
+    return `Save an extra ${Math.round(discount * 100)}%`;
+  }
+  return null;
+
+};
+
 const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (
   <ProductPageContentBlock type="feature">
-    <ProductPageTextBlock {...{ title }} />
+    <ProductPageTextBlock {...{ title }} callout={getSaleTitle()} />
     {text &&
       <ProductPageTextBlock>
         <p>{text}</p>
