@@ -59,6 +59,16 @@ function getHeading(): string {
   return 'Save up to 31% on The Guardian and The Observer - all year round';
 }
 
+function getStandfirst(): string {
+  const defaultWording = 'We offer two different subscription types: voucher booklets and home delivery.';
+  if (flashSaleIsActive('Paper', 'GBPCountries')) {
+    const saleCopy = getSaleCopy('Paper', 'GBPCountries');
+    return saleCopy.landingPage.standfirst || defaultWording;
+  }
+
+  return defaultWording;
+}
+
 const content = (
   <Provider store={store}>
     <Page
@@ -97,7 +107,7 @@ const content = (
       <ProductPageContentBlock needsHigherZindex>
         <ProductPageTextBlock>
           <p className={largeParagraphClassName}>
-          We offer two different subscription types: voucher booklets and home delivery.
+            {getStandfirst()}
           </p>
         </ProductPageTextBlock>
         <Tabs />
