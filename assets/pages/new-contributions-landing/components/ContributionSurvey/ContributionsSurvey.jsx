@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { ButtonWithRightArrow } from './ButtonWithRightArrow';
+import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArrow';
 
 // ----- Component ----- //
 

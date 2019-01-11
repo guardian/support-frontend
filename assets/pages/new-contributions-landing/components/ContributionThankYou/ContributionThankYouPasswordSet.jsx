@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import MarketingConsent from './MarketingConsentContainer';
-import { ButtonWithRightArrow } from './ButtonWithRightArrow';
+import MarketingConsent from '../MarketingConsentContainer';
+import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArrow';
 
 // ----- Render ----- //
 
