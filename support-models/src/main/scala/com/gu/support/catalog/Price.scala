@@ -20,4 +20,8 @@ object Price {
   }
 
   implicit val encoder: Encoder[Price] = deriveEncoder
+
+  implicit class PriceExtensions(price: Price) {
+    def update(value: BigDecimal): Price = Price(value, price.currency)
+  }
 }

@@ -6,7 +6,6 @@ sealed trait Product {
   val ratePlans: List[ProductRatePlan[Product]]
 
   def getProductRatePlan[T <: Product](
-    product: T,
     billingPeriod: BillingPeriod,
     fulfilmentOptions: FulfilmentOptions[T],
     productOptions: ProductOptions[T]

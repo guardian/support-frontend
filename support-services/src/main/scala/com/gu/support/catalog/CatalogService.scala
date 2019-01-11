@@ -28,7 +28,7 @@ class CatalogService(stage: Stage) {
     productOptions: ProductOptions[T]
   ): Option[Price] = {
     for {
-      productRatePlan <- product.getProductRatePlan(product, billingPeriod, fulfilmentOptions, productOptions)
+      productRatePlan <- product.getProductRatePlan(billingPeriod, fulfilmentOptions, productOptions)
       priceList <- getPriceList(productRatePlan)
       price <- priceList.prices.find(_.currency == currency)
     } yield price
