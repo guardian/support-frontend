@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { type ThankYouPageStageMap, type ThankYouPageStage } from '../../contributionsLandingReducer';
+import { type ThankYouPageStageMap, type ThankYouPageStage } from '../contributionsLandingReducer';
 import ContributionThankYou from './ContributionThankYou';
 import ContributionThankYouSetPassword from './ContributionThankYouSetPassword';
 import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';

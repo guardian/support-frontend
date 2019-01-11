@@ -23,7 +23,7 @@ import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import { NewContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
-import ContributionThankYouContainer from './components/ContributionThankYou/ContributionThankYouContainer';
+import ContributionThankYouContainer from './components/ContributionThankYouContainer';
 import { NewContributionBackground } from './components/ContributionBackground';
 import { setUserStateActions } from './setUserStateActions';
 

@@ -7,9 +7,9 @@ import type { PaymentMethod } from 'helpers/contributions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType, getSpokenType } from 'helpers/contributions';
-import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArrow';
-import MarketingConsent from '../MarketingConsentContainer';
-import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow';
+import MarketingConsent from './MarketingConsentContainer';
+import { type Action, setHasSeenDirectDebitThankYouCopy } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 

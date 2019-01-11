@@ -18,7 +18,7 @@ import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTrackin
 import { NewContributionTextInput } from './ContributionTextInput';
 import { type ThankYouPageStage } from '../contributionsLandingReducer';
 import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../contributionsLandingActions';
-import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow';
 
 const passwordErrorHeading = 'Account set up failure';
 const passwordErrorMessage = 'Sorry, we are unable to register you at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your registration. Thank you.';

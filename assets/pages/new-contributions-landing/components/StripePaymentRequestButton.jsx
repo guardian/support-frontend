@@ -15,14 +15,14 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
-import type { State } from '../../contributionsLandingReducer';
+import type { State } from '../contributionsLandingReducer';
 import {
   setCanMakeStripePaymentRequestPayment,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
   updateEmail,
-} from '../../contributionsLandingActions';
+} from '../contributionsLandingActions';
 
 
 // ----- Types -----//
