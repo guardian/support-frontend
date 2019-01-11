@@ -1,9 +1,13 @@
 package com.gu.support.encoding
 
 import com.gu.support.promotions.{DiscountBenefit, FreeTrialBenefit, IncentiveBenefit}
-import io.circe.{Json, JsonObject}
+import io.circe.{ACursor, Json, JsonObject}
 
 object JsonHelpers {
+
+  implicit class CursorExtensions(cursor: ACursor) {
+    def renameField(from: String, to: String) = cursor.withFocus(_.mapObject(_.renameField(from, to)))
+  }
 
   implicit class JsonObjectExtensions(jsonObject: JsonObject) {
     def renameField(from: String, to: String) =
@@ -14,10 +18,22 @@ object JsonHelpers {
         .map(json => jsonObject.add(to, json))
         .getOrElse(jsonObject)
 
+    def updateField(key: String, json: Json) =
+      jsonObject
+        .remove(key)
+        .add(key, json)
+
     def removeIfNull(key: String) =
       jsonObject(key)
         .filter(_ == Json.Null)
         .map(_ => jsonObject.remove(key))
+        .getOrElse(jsonObject)
+
+    def defaultIfNull(key: String, default: Json) =
+      jsonObject(key)
+        .filter(_ == Json.Null)
+        .map(_ => jsonObject.remove(key))
+        .map(_ => jsonObject.add(key, default))
         .getOrElse(jsonObject)
 
     def checkKeyExists(key: String, default: Json) =
@@ -68,6 +84,14 @@ object JsonHelpers {
     }
 
     private def string(json: Json) = json.noSpaces.replace("\"", "")
+  }
+
+  implicit class JsonListExtensions(jsonList: List[Json]) {
+    def flattenJsonArrays = jsonList.foldLeft(List[Json]()) {
+      (acc: List[Json], element: Json) =>
+        val expanded = element.asArray.getOrElse(Nil)
+        acc ++ expanded.toList
+    }
   }
 
   implicit class JsonExtensions(json: Json) {

@@ -1,20 +1,10 @@
 package com.gu.support.catalog
 
-import com.gu.i18n.Currency.GBP
+import com.gu.support.workers.BillingPeriod
 
-case class ProductRatePlan(
-  id: String,
-  status: Status,
-  name: Option[String],
-  productRatePlanCharges: List[ProductRatePlanCharge]
-) {
-  def price: Double = {
-    productRatePlanCharges
-      .filter(_.endDateCondition.contains("Subscription_End"))
-      .map(
-        _.pricing
-          .filter(_.currency == GBP)
-          .map(_.price).sum
-      ).sum
-  }
-}
+case class ProductRatePlan[+T <: Product](
+  id: ProductRatePlanId,
+  billingPeriod: BillingPeriod,
+  fulfilmentOptions: FulfilmentOptions[T],
+  productOptions: ProductOptions[T]
+)
