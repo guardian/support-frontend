@@ -37,7 +37,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     createZuora.handleRequest(in, outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.accountNumber.length should be > 0
+    sendThankYouEmail._1.subscriptionNumber.length should be > 0
   }
 
   "CreateZuoraSubscription lambda" should "create an annual Zuora subscription" in {
@@ -48,7 +48,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     createZuora.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson(billingPeriod = Annual)), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.accountNumber.length should be > 0
+    sendThankYouEmail._1.subscriptionNumber.length should be > 0
   }
 
   "CreateZuoraSubscription lambda" should "create a Digital Pack subscription" in {
@@ -59,7 +59,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     createZuora.handleRequest(wrapFixture(createDigiPackZuoraSubscriptionJson), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.accountNumber.length should be > 0
+    sendThankYouEmail._1.subscriptionNumber.length should be > 0
   }
 
   it should "create a Digital Pack subscription with a discount" in {
@@ -70,7 +70,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     createZuora.handleRequest(wrapFixture(createDigiPackSubscriptionWithPromoJson), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.accountNumber.length should be > 0
+    sendThankYouEmail._1.subscriptionNumber.length should be > 0
   }
 
   val realZuoraService = new ZuoraService(zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))

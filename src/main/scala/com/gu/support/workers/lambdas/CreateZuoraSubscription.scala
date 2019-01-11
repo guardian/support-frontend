@@ -9,7 +9,7 @@ import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers._
 import com.gu.support.zuora.api._
-import com.gu.support.zuora.api.response.{SubscribeResponseAccount, ZuoraAccountNumber}
+import com.gu.support.zuora.api.response.{SubscribeResponseAccount, ZuoraAccountNumber, ZuoraSubscriptionNumber}
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
 import io.circe.generic.auto._
@@ -39,7 +39,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   def skipSubscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, subscription: DomainSubscription): FutureHandlerResult = {
     val message = "Skipping subscribe for user because they are already an active contributor"
     SafeLogger.info(message)
-    FutureHandlerResult(getEmailState(state, subscription.accountNumber), requestInfo.appendMessage(message))
+    FutureHandlerResult(getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber), requestInfo.appendMessage(message))
   }
 
   def singleSubscribe(
@@ -54,9 +54,9 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
     singleSubscribe(services.zuoraService.subscribe)(buildSubscribeRequest(state, services.promotionService))
       .map(response =>
-        HandlerResult(getEmailState(state, response.domainAccountNumber), requestInfo))
+        HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber), requestInfo))
 
-  private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: ZuoraAccountNumber) =
+  private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber) =
     SendThankYouEmailState(
       state.requestId,
       state.user,
@@ -64,6 +64,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.paymentMethod,
       state.salesForceContact,
       accountNumber.value,
+      subscriptionNumber.value,
       state.acquisitionData
     )
 

@@ -56,7 +56,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           directDebitMandateId = directDebitMandateId
         )
         case d: DigitalPack => DigitalPackEmailFields(
-          accountId = state.accountNumber,
+          subscriptionNumber = state.subscriptionNumber,
           billingPeriod = d.billingPeriod,
           user = state.user,
           currency = d.currency,

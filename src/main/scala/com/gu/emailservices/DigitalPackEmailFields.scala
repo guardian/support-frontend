@@ -37,7 +37,7 @@ import org.joda.time.DateTime
 //}
 
 case class DigitalPackEmailFields(
-    accountId: String,
+    subscriptionNumber: String,
     billingPeriod: BillingPeriod,
     user: User,
     currency: Currency,
@@ -61,7 +61,7 @@ case class DigitalPackEmailFields(
   }
 
   override val fields = List(
-    "ZuoraSubscriberId" -> accountId,
+    "ZuoraSubscriberId" -> subscriptionNumber,
     "SubscriberKey" -> user.primaryEmailAddress,
     "EmailAddress" -> user.primaryEmailAddress,
     "Subscription term" -> billingPeriod.noun,
