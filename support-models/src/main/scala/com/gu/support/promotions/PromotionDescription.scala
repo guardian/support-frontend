@@ -12,3 +12,11 @@ case class PromotionDescription(
   originalPrice: Price,
   discountedPrice: Option[Price]
 )
+
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec._
+import com.gu.support.encoding.CustomCodecs._
+
+object PromotionDescription {
+  implicit val codec: Codec[PromotionDescription] = deriveCodec
+}

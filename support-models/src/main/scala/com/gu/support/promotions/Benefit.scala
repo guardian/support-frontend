@@ -1,9 +1,11 @@
 package com.gu.support.promotions
 
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
-import org.joda.time.{Days, Months}
 import cats.syntax.functor._
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
+import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
+import org.joda.time.{Days, Months}
 
 sealed trait Benefit
 
@@ -26,10 +28,18 @@ object IncentiveBenefit {
 }
 
 object Benefit {
+
   import com.gu.support.encoding.CustomCodecs._
-  implicit val discountDecoder: Decoder[DiscountBenefit] = deriveDecoder
-  implicit val freeTrialDecoder: Decoder[FreeTrialBenefit] = deriveDecoder
-  implicit val incentiveDecoder: Decoder[IncentiveBenefit] = deriveDecoder
+
+  implicit val discountCodec: Codec[DiscountBenefit] = deriveCodec
+  implicit val freeTrialCodec: Codec[FreeTrialBenefit] = deriveCodec
+  implicit val incentiveCodec: Codec[IncentiveBenefit] = deriveCodec
+
+  implicit val encoder: Encoder[Benefit] = Encoder.instance {
+    case d: DiscountBenefit => d.asJson
+    case f: FreeTrialBenefit => f.asJson
+    case i: IncentiveBenefit => i.asJson
+  }
 
   implicit val decoder: Decoder[Benefit] = List[Decoder[Benefit]](
     Decoder[DiscountBenefit].widen,
