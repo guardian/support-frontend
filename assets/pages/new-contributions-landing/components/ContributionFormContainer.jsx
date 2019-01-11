@@ -20,7 +20,7 @@ import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions'
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
-import { ContributionTicker } from './ContributionTicker/ContributionTicker';
+import { ContributionTicker } from './ContributionTicker';
 import { setPayPalHasLoaded } from '../contributionsLandingActions';
 
 import {

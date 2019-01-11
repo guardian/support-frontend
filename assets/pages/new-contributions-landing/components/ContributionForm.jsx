@@ -47,7 +47,7 @@ import {
   setStripeV3HasLoaded,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
-import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
+import StripePaymentRequestButtonContainer from './StripePaymentRequestButtonContainer';
 
 
 // ----- Types ----- //
