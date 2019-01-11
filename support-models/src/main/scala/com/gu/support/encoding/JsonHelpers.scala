@@ -86,6 +86,14 @@ object JsonHelpers {
     private def string(json: Json) = json.noSpaces.replace("\"", "")
   }
 
+  implicit class JsonListExtensions(jsonList: List[Json]) {
+    def flattenJsonArrays = jsonList.foldLeft(List[Json]()) {
+      (acc: List[Json], element: Json) =>
+        val expanded = element.asArray.getOrElse(Nil)
+        acc ++ expanded.toList
+    }
+  }
+
   implicit class JsonExtensions(json: Json) {
     def getField(key: String) = json.hcursor.downField(key).focus
   }

@@ -2,7 +2,21 @@ package com.gu.support.catalog
 
 import com.gu.support.workers._
 
-sealed trait Product
+sealed trait Product {
+  val ratePlans: List[ProductRatePlan[Product]]
+
+  def getProductRatePlan[T <: Product](
+    product: T,
+    billingPeriod: BillingPeriod,
+    fulfilmentOptions: FulfilmentOptions[T],
+    productOptions: ProductOptions[T]
+  ): Option[ProductRatePlan[Product]] =
+    ratePlans.find(prp =>
+      prp.billingPeriod == billingPeriod &&
+        prp.fulfilmentOptions == fulfilmentOptions &&
+        prp.productOptions == productOptions
+    )
+}
 
 case object DigitalPack extends Product {
   lazy val ratePlans: List[ProductRatePlan[DigitalPack.type]] =
