@@ -38,7 +38,6 @@ class PromotionDescriptionService(promotionService: PromotionService, catalogSer
       discountedPrice
     )
   }
-
 }
 
 object PromotionDescriptionService {
