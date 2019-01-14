@@ -133,8 +133,7 @@ const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTE
 
 function submitForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
-  // if (errors.length > 0) {  put me back!
-  if (false) {
+  if (errors.length > 0) {
     dispatch(setFormErrors(errors));
   } else {
     showPaymentMethod(dispatch, state);

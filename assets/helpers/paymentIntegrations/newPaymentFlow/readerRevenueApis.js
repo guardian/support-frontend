@@ -174,7 +174,6 @@ function postRegularPaymentRequest(
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
-  //todo do not poll if the call to create a digital subscription fails
   return logPromise(fetchJson(
     uri,
     requestOptions(data, 'same-origin', 'POST', csrf),

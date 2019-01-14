@@ -4,37 +4,31 @@ import actions.CustomActionBuilders
 import admin.SwitchState.On
 import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
 import cats.implicits._
-import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import com.gu.i18n.Country
-import com.gu.i18n.Currency.GBP
 import com.gu.support.config._
-import com.gu.support.workers._
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.StringsConfig
 import fixtures.TestCSRFComponents
-import ophan.thrift.event.AbTest
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.OptionValues._
 import org.scalatest.mockito.MockitoSugar.mock
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.mvc.Result
-import play.api.test.{FakeHeaders, FakeRequest}
+import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
-import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient}
+import services.stepfunctions.SupportWorkersClient
 import services.{HttpIdentityService, TestUserService}
 
 import scala.concurrent.Future
 
-class DigitalSubscriptionTest extends WordSpec with MustMatchers with TestCSRFComponents {
-  trait DigitalSubscriptionsMocks extends DisplayFormMocks {
+class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
+  trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
     import scala.concurrent.ExecutionContext.Implicits.global
 
     val checkoutEndpoint = "subscribe/digital/checkout?displayCheckout=true"
-    val createDigitalSubscriptionEndpoint = "subscribe/digital/create"
 
-    def fakeDigitalSubscription(
+    def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): DigitalSubscription = {
@@ -72,76 +66,36 @@ class DigitalSubscriptionTest extends WordSpec with MustMatchers with TestCSRFCo
       )
     }
 
-    def fakeShowCheckoutRequestAuthenticatedWith(
+    def fakeRequestAuthenticatedWith(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): Future[Result] = {
-      fakeDigitalSubscription(actionRefiner, identityService).displayForm("UK", true, true)(FakeRequest()) //calls subscribe/digital/checkout
-    }
-
-    val testBody = CreateSupportWorkersRequest(
-      firstName = "blah",
-      lastName = "bleh",
-      country = Country("FR", "France"),
-      state = None,
-      product = DigitalPack(GBP, Monthly),
-      paymentFields = StripePaymentFields("some token"),
-      ophanIds = OphanIds(None, None, None),
-      referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
-      supportAbTests = Set(),
-      email = "bleh@blah.com"
-    )
-
-    implicit val req = FakeRequest(
-      method = "POST",
-      uri = createDigitalSubscriptionEndpoint,
-      headers = FakeHeaders(
-        Seq("Content-type" -> "application/json")
-      ),
-      body = testBody
-    )
-    //    implicit val fakeRequest = FakeRequest().withBody(testBody)
-
-    def fakeCreateDigitalPackRequest(
-      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
-      supportWorkersRequest: CreateSupportWorkersRequest = testBody
-    ): Future[Result] = {
-      fakeDigitalSubscription(actionRefiner, identityService).create(req) //calls subscribe/digital/create
+      fakeDigitalPack(actionRefiner, identityService).displayForm("UK", true, true)(FakeRequest())
     }
   }
 
   "GET subscribe/digital/checkout?displayCheckout=true" should {
 
-    "redirect unauthenticated user to signup page" in new DigitalSubscriptionsMocks {
-      val result = fakeShowCheckoutRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)
+    "redirect unauthenticated user to signup page" in new DigitalSubscriptionsDisplayForm {
+      val result = fakeRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)
       status(result) mustBe 303
       header("Location", result).value must startWith("https://identity-url.local")
     }
 
-    "return a 500 if the call to get additional data from identity fails" in new DigitalSubscriptionsMocks {
-      val result = fakeShowCheckoutRequestAuthenticatedWith(
+    "return a 500 if the call to get additional data from identity fails" in new DigitalSubscriptionsDisplayForm {
+      val result = fakeRequestAuthenticatedWith(
         identityService = mockedIdentityService(authenticatedIdUser.user -> "not found".asLeft)
       )
       status(result) mustBe 500
     }
 
-    "return form if user is signed in and call to identity is successful" in new DigitalSubscriptionsMocks {
-      val result = fakeShowCheckoutRequestAuthenticatedWith(actionRefiner = loggedInActionRefiner)
+    "return form if user is signed in and call to identity is successful" in new DigitalSubscriptionsDisplayForm {
+      val result = fakeRequestAuthenticatedWith(actionRefiner = loggedInActionRefiner)
 
       status(result) mustBe 200
       contentAsString(result) must include("digitalSubscriptionCheckoutPage.js")
     }
 
-  }
-
-  "POST subscribe/digital/create" should {
-    "do something reasonable" in new DigitalSubscriptionsMocks {
-      val result: Future[Result] = fakeCreateDigitalPackRequest(actionRefiner = loggedInActionRefiner)
-
-      status(result) mustBe 200
-      contentAsString(result) mustBe ""
-    }
   }
 
 }

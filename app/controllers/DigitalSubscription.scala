@@ -25,6 +25,7 @@ import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, Supp
 import services.{IdentityService, TestUserService}
 import views.html.digitalSubscription
 import views.html.helper.CSRF
+import utils.SimpleValidator._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -106,33 +107,22 @@ class DigitalSubscription(
     )
   }
 
-  private def requestIsOK(request: CreateSupportWorkersRequest): Boolean = {
-    if (request.firstName.isEmpty) {
-      SafeLogger.info("FIRST NAME IS REQUIRED!")
-    } else if (request.lastName.isEmpty) {
-      SafeLogger.info("LAST NAME IS REQUIRED!")
-    } else if (request.country.name.isEmpty) {
-      SafeLogger.info("COUNTRY IS REQUIRED!")
-    }
-
-    !request.firstName.isEmpty && !request.lastName.isEmpty && !request.country.name.isEmpty
-  }
-
   def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
       implicit request: AuthRequest[CreateSupportWorkersRequest] =>
         val billingPeriod = request.body.product.billingPeriod
         SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
 
-        if (requestIsOK(request.body)) {
-          val result: EitherT[Future, String, StatusResponse] = for {
-            user <- identityService.getUser(request.user)
-            statusResponse <- client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
-          } yield statusResponse
-          respondToClient(result, request.body.product.billingPeriod)
-        } else {
-          respondToClient(EitherT.leftT("request body validation failed"), request.body.product.billingPeriod)
-        }
+        val result: EitherT[Future, String, StatusResponse] = for {
+          user <- identityService.getUser(request.user)
+          statusResponse <- {
+            if(validationPasses(request.body))
+              client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
+            else EitherT.leftT("request body had invalid fields")
+          }
+        } yield statusResponse
+        respondToClient(result, request.body.product.billingPeriod)
+
     }
 
   private def createUser(user: IdUser, request: CreateSupportWorkersRequest) = {
