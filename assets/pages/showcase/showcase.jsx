@@ -13,7 +13,7 @@ import Heading from 'components/heading/heading';
 
 import ProductPageHero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
+import UiButton from 'components/ui/uiButton/uiButton';
 
 import SvgChevron from 'components/svgs/chevron';
 import GridPicture from 'components/gridPicture/gridPicture';
@@ -42,7 +42,7 @@ const content = (
       overheading="Support The Guardian"
       heading="Help us deliver independent investigative journalism"
       type="feature"
-      cta={<ProductPageButton icon={<SvgChevron />} href="#support">Ways to support</ProductPageButton>}
+      cta={<UiButton icon={<SvgChevron />} href="#support">Ways to support</UiButton>}
     >
       <GridPicture
         sources={[

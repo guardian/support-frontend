@@ -1,0 +1,77 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-ui-button {
+  @include gu-fontset-body-sans;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: bold;
+  height: $gu-v-spacing*3.5;
+  padding: ($gu-v-spacing/2) $gu-h-spacing;
+  border: none;
+  border-radius: 600px;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    outline: 0;
+  }
+
+  &[disabled], &[data-disabled] {
+    background-color: gu-colour(garnett-neutral-5);
+    opacity: .5;
+    pointer-events: none;
+  }
+}
+
+.component-ui-button--static {
+  pointer-events: none;
+}
+
+.component-ui-button--primary {
+  background-color: gu-colour(news-garnett-highlight);
+  color: gu-colour(garnett-neutral-1);
+  &:hover, &:focus {
+    background-color: gu-colour(highlight-dark);
+  }
+}
+
+.component-ui-button--green {
+  color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(green-dark);
+  svg {
+    fill: gu-colour(garnett-neutral-5);
+  }
+  &:hover, &:focus {
+    background-color: darken(gu-colour(green-dark), 10%);
+  }
+}
+
+.component-ui-button--greenHollow {
+  color: gu-colour(green-dark);
+  border: 1px solid gu-colour(green-dark);
+}
+
+.component-ui-button--greyHollow {
+  color: gu-colour(garnett-neutral-1);
+  border: 1px solid gu-colour(garnett-neutral-4);
+}
+
+.component-ui-button__content,
+.component-ui-button svg {
+  flex: 0 0 auto;
+  display: block;
+}
+
+.component-ui-button svg {
+  width: $gu-h-spacing * 1.075;
+  margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
+}
+
+.component-ui-button--icon-left {
+  flex-direction: row-reverse;
+}
+
+.component-ui-button--icon-left svg {
+  margin: $gu-v-spacing * -1 $gu-h-spacing * .5 $gu-v-spacing * -1 $gu-h-spacing * -.5;
+}

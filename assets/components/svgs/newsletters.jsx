@@ -6,7 +6,7 @@ import React from 'react';
 export default function SvgNewsletters() {
 
   return (
-    <svg className="svg-newsletters" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 357 158">
+    <svg className="svg-newsletters" xmlns="http://www.w3.org/2000/svg" width="357px" height="158px" viewBox="0 0 357 158">
       <defs>
         <path id="a" d="M0 0h375v169H0z" />
       </defs>

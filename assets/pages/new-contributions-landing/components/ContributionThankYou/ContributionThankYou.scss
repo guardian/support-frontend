@@ -57,6 +57,7 @@
   padding: 0 $gu-h-spacing;
   text-decoration: none;
   position: relative;
+  font-weight: 600;
 
   svg {
     position: absolute;
@@ -71,29 +72,6 @@
       filter: brightness(90%);
     }
   }
-}
-
-.button--newsletter {
-  color: gu-colour(garnett-neutral-5);
-  background-color: gu-colour(green-dark);
-  border-color: gu-colour(green-dark);
-  text-align: right;
-  width: 140px;
-
-  svg {
-    right: calc(100% - 33px);
-    height: 16px;
-  }
-}
-
-.button--newsletter__subscribed {
-  color: gu-colour(green-dark);
-  background-color: transparent;
-}
-
-.button--newsletter__request-pending {
-  color: gu-colour(garnett-neutral-4);
-  background-color: transparent;
 }
 
 .svg-subscribe, .svg-lock {
@@ -126,3 +104,21 @@
   padding-bottom: $gu-v-spacing;
 }
 
+.component-marketing-consent.component-marketing-consent--newsletter {
+  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+}
+
+.component-marketing-consent__message {
+  font-family: $gu-text-egyptian-web;
+  letter-spacing: -0.5px;
+  margin-bottom: $gu-v-spacing * 2;
+  line-height: 20px;
+}
+
+.component-marketing-consent__title {
+  font-family: $gu-text-egyptian-web;
+  letter-spacing: -0.5px;
+  font-weight: 900;
+  font-size: 17px;
+  margin: ($gu-v-spacing / 3) 0;
+}

@@ -12,7 +12,9 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { checkEmail } from 'helpers/formValidation';
 import { logException } from 'helpers/logger';
+import UiButton from 'components/ui/uiButton/uiButton';
 
+import './marketingConsent.scss';
 
 // ----- Types ----- //
 
@@ -34,35 +36,36 @@ type PropTypes = {|
 function Button(props: ButtonPropTypes) {
   if (props.confirmOptIn === true) {
     return (
-      <button
-        disabled="disabled"
-        className={classNameWithModifiers('button', ['newsletter', 'newsletter__subscribed'])}
+      <UiButton
+        appearance="greenHollow"
+        iconSide="left"
+        icon={<SvgSubscribed />}
       >
-        <SvgSubscribed />
         Signed up
-      </button>
+      </UiButton>
     );
   } else if (props.requestPending === true) {
     return (
-      <button
-        disabled="disabled"
-        className={classNameWithModifiers('button', ['newsletter', 'newsletter__request-pending'])}
+      <UiButton
+        appearance="greyHollow"
+        iconSide="left"
+        icon={<SvgSubscribe />}
       >
-        <SvgSubscribe />
         Pending...
-      </button>
+      </UiButton>
     );
   }
   return (
-    <button
-      className={classNameWithModifiers('button', ['newsletter'])}
+    <UiButton
+      appearance="green"
+      iconSide="left"
       onClick={
           () => props.onClick(props.email, props.csrf)
         }
+      icon={<SvgSubscribe />}
     >
-      <SvgSubscribe />
         Sign me up
-    </button>
+    </UiButton>
   );
 
 }
@@ -79,9 +82,9 @@ function MarketingConsent(props: PropTypes) {
 
   if (checkEmail(props.email)) {
     return (
-      <section className={classNameWithModifiers('marketing-permissions', ['newsletter'])}>
-        <h3 className="marketing-permissions__title">Subscriptions, membership and contributions</h3>
-        <p className="marketing-permissions__message">
+      <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
+        <h3 className="component-marketing-consent__title">Subscriptions, membership and contributions</h3>
+        <p className="component-marketing-consent__message">
           Get related news and offers – whether you are a subscriber, member,
           contributor or would like to become one.
         </p>
@@ -94,13 +97,13 @@ function MarketingConsent(props: PropTypes) {
           requestPending: props.requestPending,
         })}
 
-        <p className="confirmation__meta">
+        <p className="component-marketing-consent-confirmation">
           <small>
             {props.confirmOptIn === true ?
               'We\'ll be in touch. Check your inbox for a confirmation link.' :
               <div>
                 <SvgInformation />
-                <span className="information__message">You can unsubscribe at any time</span>
+                <span className="component-marketing-consent-confirmation__message">You can unsubscribe at any time</span>
               </div>
             }
           </small>
