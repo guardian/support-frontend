@@ -8,6 +8,13 @@
 @import '~components/errorMessage/errorMessage';
 @import '~components/ctaLink/ctaLink';
 @import '~components/generalErrorMessage/generalErrorMessage';
+@import '~components/marketingConsentNew/marketingConsent';
+@import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYou';
+@import '~pages/new-contributions-landing/components/ContributionTicker/ContributionTicker';
+@import '~pages/new-contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
+@import '~pages/new-contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
+@import '~pages/new-contributions-landing/components/ContributionSurvey/ContributionSurvey';
+
 
 body {
   min-height: 100vh;
@@ -25,25 +32,131 @@ body {
 
 .gu-content__main {
   position: relative;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
-.gu-content__bg svg {
-  display: block;
+.gu-content__bg {
+
+  display: flex;
+  height: 580px;
+  left: 0;
+  position: absolute;
+  top: 245px;
+  width: 100%;
+  z-index: -1;
+
+  .svg-contributions-bg-desktop {
+    display: block;
+    bottom: 0;
+    height: 580px;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%,0);
+    width: 1400px;
+  }
+
+  @include mq($from: mobile, $until: tablet) {
+    display: none;
+  }
+
+}
+
+.gu-content--shrink {
+  @include mq($from: mobile, $until: tablet) {
+    $header-height: 44px;
+
+    .glogo {
+      width: 30px;
+      height: 30px;
+      right: 0;
+    }
+
+    .countryGroups {
+      margin-left: 0;
+
+      // TODO: this is basically just vertical centering. use flex-box!
+      margin-top: 4px;
+
+      summary {
+        padding-left: 0;
+      }
+    }
+
+    .blurb {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    header[role="banner"] {
+      height: $header-height;
+
+      // to match .gu-content__content
+      padding: 0 10px;
+    }
+  }
 }
 
 /*= HEADER */
 
+.header {
+
+  border: 0;
+  left: 10px;
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+  width: 100%;
+  margin: 0 -10px;
+  font: bold 22px/1.15 $gu-headline;
+  color: gu-colour(garnett-neutral-1);
+
+  @include mq($from: tablet) {
+    border-bottom: 1px solid gu-colour(garnett-neutral-4);
+    font-size: 36px;
+    padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
+  }
+}
+
+.header__us-campaign {
+  font-size: 27px;
+  border-bottom: none;
+}
+
 header[role="banner"] {
+
   background-color: gu-colour(header-dark);
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   position: relative;
+  height: 75px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row-reverse;
+  justify-content: space-between;
   z-index: 1;
+
+
+  @include mq($from: tablet) {
+    padding: 0;
+    width: auto;
+  }
+
+  @include mq($from: leftCol) {
+    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
+    width: 940px;
+  }
+
+  @include mq($from: wide) {
+    padding: 0 calc(50% - 620px);
+    width: 1240px;
+  }
+
 }
 
 .glogo {
   width: 60px;
   height: 60px;
   position: relative;
+  top: 7px;
+  right: 10px;
 
   .svg-roundel {
     width: 100%;
@@ -53,15 +166,34 @@ header[role="banner"] {
   .svg-roundel__g {
     fill: gu-colour(header-dark);
   }
+
+  @include mq($from: tablet) {
+    top: 7px;
+  }
 }
 
 .countryGroups {
   font-family: $gu-text-sans-web;
   margin-top: $gu-v-spacing * 2.5;
   max-width: 355px;
-  padding: 0;
-  width: 100%;
-  cursor: pointer;
+  margin-left: 10px;
+  text-overflow: ellipsis;
+  width: 185px;
+  white-space: nowrap;
+
+  summary {
+    padding-left: 10px;
+  }
+
+  .svg-globe {
+    display: none;
+  }
+
+  @include mq($from: tablet) {
+    padding: 0;
+    width: 100%;
+    cursor: pointer;
+  }
 }
 
 .countryGroups__label {
@@ -171,13 +303,25 @@ header[role="banner"] {
   font-weight: bold;
 }
 
+
 /*= FOOTER */
 
 footer[role="contentinfo"] {
+  padding: 0 ($gu-h-spacing / 2);
   background: gu-colour(media-garnett-main-1);
   color: gu-colour(garnett-neutral-2);
-  padding-bottom: $gu-v-spacing * 2;
   font-size: 12px;
+  display: flex;
+
+  @include mq($from: tablet) {
+    padding: 0 0 ($gu-v-spacing * 2);
+    width: auto;
+  }
+
+  @include mq($from: leftCol) {
+    padding: 0 calc(50% - 550px) ($gu-v-spacing * 2) calc(50% - 390px);
+    width: 940px;
+  }
 }
 
 footer[role="contentinfo"] a {
@@ -188,107 +332,33 @@ footer[role="contentinfo"] a {
   padding-top: $gu-v-spacing;
 }
 
-/*= US TICKER */
-
-$progess-bar-height: 10px;
-
-.contributions-landing-ticker {
-  padding-bottom: $gu-h-spacing;
-}
-
-.contributions-landing-ticker__border {
-  border-top: 1px solid gu-colour(garnett-neutral-4);
-  margin: 0 -10px;
-}
-
-.contributions-landing-ticker--hidden {
-  visibility: hidden;
-  .contributions-landing-ticker__border {
-    visibility: visible;
-  }
-}
-
-.contributions-landing-ticker {
-  @include mq($until: tablet) {
-    display: none;
-  }
-
-  display: flex;
-  flex-direction: column;
-}
-
-.contributions-landing-ticker__values {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.contributions-landing-ticker__goal, .contributions-landing-ticker__so-far {
-  display: flex;
-  flex-direction: column;
-}
-
-.contributions-landing-ticker__so-far .contributions-landing-ticker__count {
-  font-family: $gu-titlepiece;
-  font-size: 32px;
-  font-weight: 800;
-  color: gu-colour(opinion-garnett-media-main-1);
-}
-
-.contributions-landing-ticker__goal {
-  align-items: flex-end;
-
-  .contributions-landing-ticker__count {
-    font-weight: bold;
-  }
-}
-
-.contributions-landing-ticker__label {
-  font-style: italic;
-}
-
-.contributions-landing-ticker__progress-bar {
-  position: relative;
-}
-
-.contributions-landing-ticker__progress {
-  width: calc(100%);
-  height: $progess-bar-height;
-  overflow: hidden;
-  background-color: #dcdcdc;
-  position: absolute;
-}
-
-.contributions-landing-ticker__filled-progress {
-  background-color: gu-colour(opinion-garnett-media-main-1);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transform: translateX(-100%);
-  transition: transform 3s cubic-bezier(.25, .55, .2, .85);
-}
 
 /*= CONTENT */
 .gu-content__content {
   background: gu-colour(garnett-neutral-5);
   padding: 0 10px;
   overflow: hidden;
+  flex-grow: 1;
+
+  @include mq($from: tablet) {
+    border-color: gu-colour(garnett-neutral-4);
+    border-style: none solid;
+    border-width: 0 1px;
+    width: 380px;
+    margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
+  }
+
+  @include mq($from: leftCol) {
+    width: 380px;
+    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
+  }
+
 }
 
 /*= TYPOGRAPHY */
 body {
   color: gu-colour(garnett-neutral-1);
   font: normal 16px/1.5 $gu-text-egyptian-web;
-}
-
-.header {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-  color: gu-colour(garnett-neutral-1);
-  font: bold 36px/1.15 $gu-headline;
-  margin: 0 -10px;
-  padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
 }
 
 input,
@@ -305,326 +375,19 @@ button {
 
 footer[role="contentinfo"] {
   font-family: $gu-text-sans-web;
-}
 
-/*= BREAKPOINTS */
-
-header[role="banner"] {
-  height: 75px;
-}
-
-header[role="banner"],
-footer[role="contentinfo"] {
-  display: flex;
-}
-
-header[role="banner"] {
-  align-items: flex-start;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-}
-
-@include mq($from: mobile, $until: tablet) {
-  .header {
-    border: 0;
-    left: 10px;
-    width: 100%;
-  }
-
-  .thank-you__container .header {
-    background-color: gu-colour(news-garnett-highlight);
-  }
-
-  // TODO: center with flex-box instead!
-  .glogo {
-    top: 7px;
-    right: 10px;
-  }
-
-  .gu-content__main {
-    display: flex;
-    flex-direction: column-reverse;
-  }
-
-  .gu-content__bg {
-    display: none;
-  }
-
-  .gu-content__bg .svg-contributions-bg-desktop {
-    display: none;
-  }
-
-  .gu-content__bg .svg-contributions-bg-mobile {
-    bottom: 0;
-    height: 223px;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%,0);
-    width: 100%;
-  }
-
-  .countryGroups {
-    margin-left: 10px;
-    text-overflow: ellipsis;
-    width: 185px;
-    white-space: nowrap;
-  }
-
-  .countryGroups summary {
-    padding-left: 10px;
-  }
-
-  .countryGroups .svg-globe {
-    display: none;
-  }
-
-  .countryGroups__item > a {
-    padding-left: 10px;
-  }
-}
-
-@include mq($from: tablet) {
-  header[role="banner"] {
-    padding: 0 calc(50% - 350px);
-    width: 700px;
-  }
-
-  footer[role="contentinfo"] {
+  @include mq($from: tablet) {
     padding: 0 calc(50% - 350px) ($gu-v-spacing * 2);
     width: 700px;
   }
 
-  .glogo {
-    top: 7px;
-  }
-
-  .gu-content__content {
-    border-color: gu-colour(garnett-neutral-4);
-    border-style: none solid;
-    border-width: 0 1px;
-    width: 380px;
-    margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
-  }
-
-  .gu-content__bg {
-    height: 580px;
-    left: 0;
-    position: absolute;
-    top: 245px;
-    width: 100%;
-    z-index: -1;
-  }
-
-  .gu-content__bg svg {
-    bottom: 0;
-    height: 580px;
-    left: 50%;
-    position: fixed;
-    transform: translate(-50%,0);
-    width: 1400px;
-  }
-
-  .gu-content__main .svg-contributions-bg-mobile {
-    display: none;
-  }
-}
-
-@include mq($from: leftCol) {
-  header[role="banner"] {
-    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
-    width: 940px;
-  }
-
-  footer[role="contentinfo"] {
-    padding: 0 calc(50% - 550px) ($gu-v-spacing * 2) calc(50% - 390px);
-    width: 940px;
-  }
-
-  .gu-content__content {
-    width: 380px;
-    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
-  }
-}
-
-@include mq($from: wide) {
-  header[role="banner"] {
-    padding: 0 calc(50% - 620px);
-    width: 1240px;
-  }
-
-  footer[role="contentinfo"] {
+  @include mq($from: wide) {
     padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
     width: 1240px;
   }
+
 }
 
-@supports(display: grid) {
-  .gu-content {
-    display: grid;
-    grid-template-rows: [header-t] 75px [header-b] 1fr [footer-t] auto [footer-b];
-    grid-template-columns: 1fr;
-  }
-
-  header[role="banner"] {
-    height: auto;
-    grid-row: header-t / header-b;
-  }
-
-  footer[role="contentinfo"] {
-    grid-row: footer-t / footer-b;
-  }
-
-  .gu-content__main {
-    grid-row: header-b / footer-t;
-  }
-
-  header[role="banner"],
-  footer[role="contentinfo"],
-  .gu-content__main {
-    display: grid;
-  }
-
-  @include mq($from: mobile, $until: tablet) {
-    .gu-content__bg {
-      grid-row: 1;
-    }
-
-    .gu-content__content {
-      grid-row: 2;
-    }
-
-    .gu-content__header {
-      justify-content: none;
-    }
-
-    footer[role="contentinfo"] {
-      padding: 0 ($gu-h-spacing / 2);
-    }
-
-    .countryGroups {
-      grid-area: 1 / 1;
-    }
-
-    .glogo {
-      grid-area: 1 / 2;
-    }
-  }
-
-  @include mq($from: tablet) {
-    .gu-content,
-    header[role="banner"] {
-      padding: 0;
-      width: auto;
-    }
-
-    footer[role="contentinfo"] {
-      padding: 0 0 ($gu-v-spacing * 2);
-      width: auto;
-    }
-
-    .gu-content__main,
-    footer[role="contentinfo"] {
-      grid-column-gap: $gu-h-spacing;
-      grid-template-columns: 1fr repeat(8, 70px) 1fr;
-    }
-
-    header[role="banner"],
-    footer[role="contentinfo"] {
-      display: grid;
-      grid-column: span 10;
-    }
-
-    .glogo {
-      grid-column: 9;
-    }
-
-    .countryGroups {
-      grid-column: 4 / 7;
-      grid-row: 1;
-    }
-
-    .gu-content__content {
-      margin: 0;
-      grid-row: 1;
-      grid-column: 2 / 7;
-    }
-
-    .component-footer__content {
-      grid-column: 2 / 9;
-    }
-
-    .gu-content__bg {
-      align-items: flex-end;
-      display: flex;
-      grid-column: 1 / 11;
-      grid-row: 1;
-      justify-content: center;
-    }
-  }
-
-  @include mq($from: leftCol) {
-    .gu-content__main,
-    header[role="banner"],
-    footer[role="contentinfo"] {
-      grid-column-gap: $gu-h-spacing;
-      grid-template-columns: 1fr repeat(14, 60px) 1fr;
-      width: auto;
-    }
-
-    header[role="banner"],
-    footer[role="contentinfo"] {
-      grid-column: span 16;
-    }
-
-    .glogo {
-      grid-column: 14;
-      justify-self: flex-end;
-    }
-
-    .gu-content__content {
-      width: auto;
-      grid-column: 4 / 9;
-    }
-
-    .component-footer__content {
-      grid-column: 2 / 11;
-    }
-
-    .gu-content__bg {
-      grid-column: 1 / 17;
-    }
-  }
-
-  @include mq($from: wide) {
-    .gu-content__main,
-    header[role="banner"],
-    footer[role="contentinfo"] {
-      grid-column-gap: $gu-h-spacing;
-      grid-template-columns: 1fr repeat(16, 60px) 1fr;
-    }
-
-    .glogo {
-      grid-column: 16;
-    }
-
-    header[role="banner"],
-    footer[role="contentinfo"] {
-        grid-column: span 18;
-    }
-
-    .gu-content__content {
-      grid-column: 5 / 10;
-    }
-
-    .component-footer__content {
-      grid-column: 2 / 12;
-    }
-
-    .gu-content__bg {
-      grid-column: 1 / 19;
-    }
-  }
-}
 
 /*= CONTENT */
 .content {
@@ -963,147 +726,10 @@ form {
   fill: inherit;
 }
 
-/*= THANK YOU PAGE */
-
 .hidden {
   display: none;
 }
 
-.confirmation, .marketing-permissions {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-  font-weight: 300;
-  margin: 0 -10px;
-  padding: 0 10px;
-}
-
-.confirmation__title {
-  font-weight: 900;
-  font-size: 1;
-  margin: ($gu-v-spacing / 3) 0;
-}
-
-.confirmation__message {
-  font: 300 22px/1.2 $gu-headline;
-  margin: ($gu-v-spacing / 4) 0 $gu-v-spacing * 2;
-}
-
-.confirmation__message--direct-debit {
-  margin-left: -10px;
-  margin-right: -10px;
-  padding: 0 10px $gu-v-spacing;
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-}
-
-.marketing-permissions__message, .set-password__message {
-  font-family: $gu-text-egyptian-web;
-  letter-spacing: -0.5px;
-  margin-bottom: 24px;
-  line-height: 20px;
-}
-
-.set-password__message {
-  margin-bottom: 0;
-}
-
-.set-password__form {
- padding-bottom: 30px;
-}
-
-.form__submit.form__submit--create-account {
-  padding-bottom: $gu-v-spacing;
-}
-
-.marketing-permissions__title, .set-password__title {
-  font-family: $gu-text-egyptian-web;
-  letter-spacing: -0.5px;
-  font-weight: 900;
-  font-size: 17px;
-  margin: ($gu-v-spacing / 3) 0;
-}
-
-.confirmation--backtothegu {
-  margin-bottom: $gu-v-spacing + 20px;
-  padding-bottom: $gu-v-spacing;
-  padding-top: $gu-v-spacing;
-  border-bottom: 0;
-}
-
-.confirmation__meta {
-  font-family: $gu-text-sans-web;
-  font-size: 12px;
-}
-
-.button {
-  align-items: center;
-  border: 1px solid currentColor;
-  background-color: gu-colour(garnett-neutral-5);
-  border-radius: $gu-v-spacing * 2;
-  font-family: $gu-text-sans-web;
-  height: $gu-v-spacing * 3.5;
-  line-height: 1;
-  padding: 0 $gu-h-spacing;
-  text-decoration: none;
-  position: relative;
-
-  svg {
-    position: absolute;
-    fill: currentColor;
-    overflow: visible;
-  }
-
-  &:enabled {
-    cursor: pointer;
-
-    &:hover {
-      filter: brightness(90%);
-    }
-  }
-}
-
-.button--newsletter {
-  color: gu-colour(garnett-neutral-5);
-  background-color: gu-colour(green-dark);
-  border-color: gu-colour(green-dark);
-  text-align: right;
-  width: 140px;
-
-  svg {
-    right: calc(100% - 33px);
-    height: 16px;
-  }
-}
-
-.button--newsletter__subscribed {
-  color: gu-colour(green-dark);
-  background-color: transparent;
-}
-
-.button--newsletter__request-pending {
-  color: gu-colour(garnett-neutral-4);
-  background-color: transparent;
-}
-
-.button--right-arrow {
-  width: 100%;
-  padding: 0 50px 0 $gu-h-spacing;
-  text-align: left;
-
-  .svg-arrow-right-straight {
-    left: calc(100% - 34px);
-    height: 16px;
-  }
-}
-
-.svg-subscribe, .svg-lock {
-  width: 23px;
-  height: 20px;
-  fill: currentColor;
-}
-
-.svg-newsletters {
-  display: block;
-  margin: ($gu-v-spacing * 2) -10px 0;
-}
 
 /* = SIGN OUT link */
 
@@ -1124,121 +750,14 @@ form {
   display: none;
 }
 
-.information__message {
-  vertical-align: top;
-  padding-left: 5px;
-}
-
 .component-password-failure-message {
   padding: 0 $gu-h-spacing $gu-v-spacing;
   margin-top: $gu-v-spacing;
 }
 
-.component-contributions-survey {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
-  margin: 0 -10px;
-  padding: 0 10px;
-
-  h3 {
-    font-family: $gu-text-egyptian-web;
-    letter-spacing: -0.5px;
-    font-weight: 900;
-    font-size: 17px;
-    margin: ($gu-v-spacing / 3) 0;
-  }
-
-  .component-contributions-survey__button {
-    display: inline-block;
-    margin-bottom: $gu-v-spacing * 3;
-    margin-top: $gu-v-spacing;
-
-    .button--survey {
-      background-color: gu-colour(garnett-neutral-1);
-      color: white;
-    }
-  }
-
-  .component-cta-link__text {
-    padding-right: 25px;
-    font-size: 16px;
-  }
-}
-
-
-/* Stripe Payment Request Button */
-
-.stripe-payment-request-button__button {
-  margin-top: $gu-v-spacing * 2;
-  margin-bottom: $gu-h-spacing;
-}
-
-.stripe-payment-request-button__divider {
-  line-height: 32px;
-  padding: 0;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-}
-.stripe-payment-request-button__divider:before,.stripe-payment-request-button__divider:after {
-  content:" ";
-  position: absolute;
-  top: 50%;
-  margin-left: -999em;
-  height: 2px;
-  width: 998em;
-  border-top: solid 1px gu-colour(garnett-neutral-4);
-}
-.stripe-payment-request-button__divider:after {
-  left: auto;
-  width: 999em;
-  margin: 0 0 0 1em;
-}
-
-.stripe-payment-request-button--hidden {
-  display: none;
-}
 
 /* Small header test */
-
 @include mq($from: mobile, $until: tablet) {
-  .gu-content--shrink {
-    $header-height: 44px;
-    grid-template-rows: [header-t] $header-height [header-b] 1fr [footer-t] auto [footer-b];
-
-    .glogo {
-      width: 30px;
-      height: 30px;
-      right: 0;
-    }
-
-    header[role="banner"] {
-      height: $header-height;
-
-      // to match .gu-content__content
-      padding: 0 10px;
-    }
-
-    .countryGroups {
-      margin-left: 0;
-
-      // TODO: this is basically just vertical centering. use flex-box!
-      margin-top: 4px;
-
-      summary {
-        padding-left: 0;
-      }
-    }
-
-    .header {
-      font-size: 22px;
-      padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
-    }
-
-    .blurb {
-      font-size: 16px;
-      margin: 0;
-    }
-  }
 
   .gu-content--contribution-form.gu-content--no-blurb {
     .blurb {
