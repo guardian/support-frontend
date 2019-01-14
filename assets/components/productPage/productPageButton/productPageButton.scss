@@ -39,6 +39,9 @@
 .component-product-page-button--green {
   color: gu-colour(garnett-neutral-5);
   background-color: gu-colour(green-dark);
+  svg {
+    fill: gu-colour(garnett-neutral-5);
+  }
   &:hover, &:focus {
     background-color: darken(gu-colour(green-dark), 10%);
   }
