@@ -37,7 +37,7 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const UiButton = ({
-  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic
+  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic,
 }: PropTypes) => {
 
   const getClassName = (modifiers: string[] = []) =>
