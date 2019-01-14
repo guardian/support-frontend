@@ -123,6 +123,7 @@ function checkRegularStatus(
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
+    console.log(json);
     switch (json.status) {
       case 'success':
       case 'pending':
@@ -163,6 +164,7 @@ function checkRegularStatus(
   };
 }
 
+
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
 function postRegularPaymentRequest(
   uri: string,
@@ -172,6 +174,7 @@ function postRegularPaymentRequest(
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
+  //todo do not poll if the call to create a digital subscription fails
   return logPromise(fetchJson(
     uri,
     requestOptions(data, 'same-origin', 'POST', csrf),

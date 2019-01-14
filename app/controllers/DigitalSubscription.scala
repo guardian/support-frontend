@@ -8,6 +8,8 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.workers.CheckoutFailureReasons.Unknown
+import com.gu.support.workers.Status.Failure
 import com.gu.support.workers.{BillingPeriod, User}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
@@ -17,7 +19,7 @@ import lib.PlayImplicits._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
-import play.api.mvc._
+import play.api.mvc.{request, _}
 import play.twirl.api.Html
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
@@ -104,16 +106,33 @@ class DigitalSubscription(
     )
   }
 
+  private def requestIsOK(request: CreateSupportWorkersRequest): Boolean = {
+    if (request.firstName.isEmpty) {
+      SafeLogger.info("FIRST NAME IS REQUIRED!")
+    } else if (request.lastName.isEmpty) {
+      SafeLogger.info("LAST NAME IS REQUIRED!")
+    } else if (request.country.name.isEmpty) {
+      SafeLogger.info("COUNTRY IS REQUIRED!")
+    }
+
+    !request.firstName.isEmpty && !request.lastName.isEmpty && !request.country.name.isEmpty
+  }
+
   def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
-      implicit request =>
+      implicit request: AuthRequest[CreateSupportWorkersRequest] =>
         val billingPeriod = request.body.product.billingPeriod
         SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
-        val result = for {
-          user <- identityService.getUser(request.user)
-          statusResponse <- client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
-        } yield statusResponse
-        respondToClient(result, request.body.product.billingPeriod)
+
+        if (requestIsOK(request.body)) {
+          val result: EitherT[Future, String, StatusResponse] = for {
+            user <- identityService.getUser(request.user)
+            statusResponse <- client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
+          } yield statusResponse
+          respondToClient(result, request.body.product.billingPeriod)
+        } else {
+          respondToClient(EitherT.leftT("request body validation failed"), request.body.product.billingPeriod)
+        }
     }
 
   private def createUser(user: IdUser, request: CreateSupportWorkersRequest) = {
@@ -134,16 +153,21 @@ class DigitalSubscription(
   protected def respondToClient(
     result: EitherT[Future, String, StatusResponse],
     billingPeriod: BillingPeriod
-  )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] =
+  )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
+
     result.fold(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod Digital Subscription, due to $error")
         InternalServerError
       },
       { statusResponse =>
-        SafeLogger.info("[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
+        SafeLogger.info(statusResponse.toString)
+        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
         Accepted(statusResponse.asJson)
+
       }
     )
+
+  }
 
 }
