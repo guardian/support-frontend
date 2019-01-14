@@ -11,7 +11,6 @@ import { getStripeKey } from 'helpers/paymentIntegrations/newPaymentFlow/stripeC
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import { isInStripePaymentRequestAllowedCountries } from 'helpers/internationalisation/country';
-import type { ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { hiddenIf } from 'helpers/utilities';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
@@ -25,7 +24,6 @@ type PropTypes = {|
   currency: IsoCurrency,
   isTestUser: boolean,
   contributionType: ContributionType,
-  applePayTestVariant: ApplePayTestVariant,
   setStripeHasLoaded: () => void,
   stripeHasLoaded: boolean,
   selectedAmounts: SelectedAmounts,
@@ -47,9 +45,7 @@ const setupStripe = (setStripeHasLoaded: () => void) => {
 
 function StripePaymentRequestButtonContainer(props: PropTypes) {
 
-  const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country)
-    && props.currency !== 'AUD'
-    && props.applePayTestVariant === 'applePay';
+  const showStripePaymentRequestButton = isInStripePaymentRequestAllowedCountries(props.country);
 
   if (showStripePaymentRequestButton) {
 
