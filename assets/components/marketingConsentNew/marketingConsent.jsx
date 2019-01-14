@@ -82,9 +82,9 @@ function MarketingConsent(props: PropTypes) {
 
   if (checkEmail(props.email)) {
     return (
-      <section className={classNameWithModifiers('marketing-permissions', ['newsletter'])}>
-        <h3 className="marketing-permissions__title">Subscriptions, membership and contributions</h3>
-        <p className="marketing-permissions__message">
+      <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
+        <h3 className="component-marketing-consent__title">Subscriptions, membership and contributions</h3>
+        <p className="component-marketing-consent__message">
           Get related news and offers – whether you are a subscriber, member,
           contributor or would like to become one.
         </p>
@@ -97,13 +97,13 @@ function MarketingConsent(props: PropTypes) {
           requestPending: props.requestPending,
         })}
 
-        <p className="confirmation__meta">
+        <p className="component-marketing-consent-confirmation">
           <small>
             {props.confirmOptIn === true ?
               'We\'ll be in touch. Check your inbox for a confirmation link.' :
               <div>
                 <SvgInformation />
-                <span className="information__message">You can unsubscribe at any time</span>
+                <span className="component-marketing-consent-confirmation__message">You can unsubscribe at any time</span>
               </div>
             }
           </small>

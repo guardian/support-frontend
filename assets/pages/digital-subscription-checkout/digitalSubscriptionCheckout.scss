@@ -185,7 +185,7 @@
   }
 
   .thank-you-content__heading,
-  .marketing-permissions__title {
+  .component-marketing-consent__title {
     font-size: 22px;
     line-height: 1.18;
     font-weight: 300;
@@ -218,7 +218,7 @@
   }
 
   .thank-you-content__copy,
-  .marketing-permissions__message {
+  .component-marketing-consent__message {
     font-size: 17px;
     line-height: 1.25;
     font-family: $gu-headline;
@@ -252,7 +252,7 @@
     color: gu-colour(garnett-neutral-6);
   }
   
-  .marketing-permissions {
+  .component-marketing-consent {
     border-bottom: 0;
     @include mq($from: desktop) {
       position: relative;

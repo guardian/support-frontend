@@ -1,7 +1,7 @@
 // -----  gu-sass ----- //	
 @import '~stylesheets/gu-sass/gu-sass';
 
-.marketing-permissions {
+.component-marketing-consent {
   font-weight: 300;
   margin: 0 -10px;
   padding: 0 10px;
@@ -10,12 +10,12 @@
   }
 }
 
-.confirmation__meta {
+.component-marketing-consent-confirmation {
   font-family: $gu-text-sans-web;
   font-size: 12px;
 }
 
-.information__message {
+.component-marketing-consent-confirmation__message {
   vertical-align: top;
   padding-left: 5px;
 }
