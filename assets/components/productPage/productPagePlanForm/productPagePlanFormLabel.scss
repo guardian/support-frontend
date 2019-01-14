@@ -37,16 +37,6 @@
   position: relative;
 }
 
-.component-product-page-plan-form-label__offer {
-  color: gu-colour(garnett-neutral-5);
-  font-weight: 600;
-  display: inline-block;
-  background: gu-colour(garnett-neutral-1);
-  margin: 0 -6px;
-  padding: 0 6px;
-  line-height: 1.4;
-}
-
 .component-product-page-plan-form-label__content {
   flex: 1 1 auto;
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing/1.5;  
@@ -102,4 +92,30 @@
 
 .component-product-page-plan-form-price__copy { 
   font-style: italic;
+}
+
+.component-product-page-plan-form-label__content {
+  .component-product-page-plan-form-label__children:not(:first-child) {
+    margin-top: $gu-v-spacing / 4;
+  }
+}
+
+.component-product-page-plan-form-label-offer {
+  $vertical-padding: $gu-v-spacing / 4;
+  $horizontal-padding: $gu-h-spacing / 4;
+  color: gu-colour(garnett-neutral-5);
+  font-weight: 600;
+  display: inline;
+  line-height: 1.4;
+  box-shadow: 
+  $horizontal-padding $vertical-padding 0 0 gu-colour(garnett-neutral-1), 
+  $horizontal-padding ($vertical-padding * -1) 0 0 gu-colour(garnett-neutral-1), 
+  ($horizontal-padding * -1) $vertical-padding 0 0 gu-colour(garnett-neutral-1),
+  ($horizontal-padding * -1) ($vertical-padding * -1) 0 0 gu-colour(garnett-neutral-1);
+  
+  .component-product-page-plan-form-label-offer__inside {
+    background: gu-colour(garnett-neutral-1);
+    line-height: 1.4;
+    padding: $vertical-padding 0;
+  }  
 }

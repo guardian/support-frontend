@@ -33,8 +33,8 @@ body {
 
 .gu-content__main {
   position: relative;
-   display: flex;
-   flex-direction: column-reverse;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .gu-content__bg {
@@ -339,6 +339,7 @@ footer[role="contentinfo"] a {
   background: gu-colour(garnett-neutral-5);
   padding: 0 10px;
   overflow: hidden;
+  flex-grow: 1;
 
   @include mq($from: tablet) {
     border-color: gu-colour(garnett-neutral-4);
