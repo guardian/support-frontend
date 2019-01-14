@@ -8,8 +8,6 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.workers.CheckoutFailureReasons.Unknown
-import com.gu.support.workers.Status.Failure
 import com.gu.support.workers.{BillingPeriod, User}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
@@ -113,15 +111,15 @@ class DigitalSubscription(
         val billingPeriod = request.body.product.billingPeriod
         SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
 
-        val result: EitherT[Future, String, StatusResponse] = for {
-          user <- identityService.getUser(request.user)
-          statusResponse <- {
-            if(validationPasses(request.body))
-              client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
-            else EitherT.leftT("request body had invalid fields")
-          }
-        } yield statusResponse
-        respondToClient(result, request.body.product.billingPeriod)
+        if (validationPasses(request.body)) {
+          val result: EitherT[Future, String, StatusResponse] = for {
+            user <- identityService.getUser(request.user)
+            statusResponse <- client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
+          } yield statusResponse
+          respondToClient(result, request.body.product.billingPeriod)
+        } else {
+          respondToClient(EitherT.leftT("request body validation failed"), request.body.product.billingPeriod)
+        }
 
     }
 

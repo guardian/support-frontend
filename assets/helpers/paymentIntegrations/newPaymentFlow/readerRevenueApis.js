@@ -123,7 +123,6 @@ function checkRegularStatus(
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Object => Promise<PaymentResult> {
   const handleCompletion = (json) => {
-    console.log(json);
     switch (json.status) {
       case 'success':
       case 'pending':
@@ -163,7 +162,6 @@ function checkRegularStatus(
     }
   };
 }
-
 
 /** Sends a regular payment request to the recurring contribution endpoint and checks the result */
 function postRegularPaymentRequest(
