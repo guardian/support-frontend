@@ -39,6 +39,7 @@ function Button(props: ButtonPropTypes) {
       <UiButton
         appearance="greenHollow"
         iconSide="left"
+        isStatic
         icon={<SvgSubscribed />}
       >
         Signed up
@@ -49,6 +50,7 @@ function Button(props: ButtonPropTypes) {
       <UiButton
         appearance="greyHollow"
         iconSide="left"
+        isStatic
         icon={<SvgSubscribe />}
       >
         Pending...
