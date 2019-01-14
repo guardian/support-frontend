@@ -4,8 +4,10 @@ import com.gu.support.encoding.Codec
 import io.circe.parser._
 import io.circe.syntax._
 import com.gu.support.encoding.Codec._
+import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
+import org.joda.time.LocalDate
 
 sealed trait ZuoraResponse {
   def success: Boolean
@@ -105,3 +107,21 @@ object Invoice {
 }
 
 case class Invoice(invoiceNumber: String, id: String)
+
+object InvoiceDataItem {
+  implicit val codec: Codec[InvoiceDataItem] = capitalizingCodec
+}
+
+case class InvoiceDataItem(invoiceItem: List[Charge])
+
+object Charge {
+  implicit val codec: Codec[Charge] = capitalizingCodec
+}
+
+case class Charge(serviceStartDate: LocalDate, serviceEndDate: LocalDate, taxAmount: Double, chargeAmount: Double)
+
+object PreviewSubscribeResponse {
+  implicit val codec: Codec[PreviewSubscribeResponse] = capitalizingCodec
+}
+
+case class PreviewSubscribeResponse(invoiceData: List[InvoiceDataItem], success: Boolean) extends ZuoraResponse
