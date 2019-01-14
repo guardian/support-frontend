@@ -178,7 +178,7 @@ function postRegularPaymentRequest(
   return logPromise(fetchJson(
     uri,
     requestOptions(data, 'same-origin', 'POST', csrf),
-  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage)));
+  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage)).catch(() => ({ paymentStatus: 'failure', error: 'personal_details_incorrect' })));
 }
 
 function setPasswordGuest(
