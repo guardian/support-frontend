@@ -111,7 +111,7 @@
 .component-marketing-consent__message {
   font-family: $gu-text-egyptian-web;
   letter-spacing: -0.5px;
-  margin-bottom: 24px;
+  margin-bottom: $gu-v-spacing * 2;
   line-height: 20px;
 }
 
