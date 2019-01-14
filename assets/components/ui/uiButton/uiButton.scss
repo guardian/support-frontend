@@ -1,6 +1,6 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-product-page-button {
+.component-ui-button {
   @include gu-fontset-body-sans;
   display: inline-flex;
   align-items: center;
@@ -24,11 +24,11 @@
   }
 }
 
-.component-product-page-button--static {
+.component-ui-button--static {
   pointer-events: none;
 }
 
-.component-product-page-button--primary {
+.component-ui-button--primary {
   background-color: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
   &:hover, &:focus {
@@ -36,7 +36,7 @@
   }
 }
 
-.component-product-page-button--green {
+.component-ui-button--green {
   color: gu-colour(garnett-neutral-5);
   background-color: gu-colour(green-dark);
   svg {
@@ -47,31 +47,31 @@
   }
 }
 
-.component-product-page-button--greenHollow {
+.component-ui-button--greenHollow {
   color: gu-colour(green-dark);
   border: 1px solid gu-colour(green-dark);
 }
 
-.component-product-page-button--greyHollow {
+.component-ui-button--greyHollow {
   color: gu-colour(garnett-neutral-1);
   border: 1px solid gu-colour(garnett-neutral-4);
 }
 
-.component-product-page-button__content,
-.component-product-page-button svg {
+.component-ui-button__content,
+.component-ui-button svg {
   flex: 0 0 auto;
   display: block;
 }
 
-.component-product-page-button svg {
+.component-ui-button svg {
   width: $gu-h-spacing * 1.075;
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
 }
 
-.component-product-page-button--icon-left {
+.component-ui-button--icon-left {
   flex-direction: row-reverse;
 }
 
-.component-product-page-button--icon-left svg {
+.component-ui-button--icon-left svg {
   margin: $gu-v-spacing * -1 $gu-h-spacing * .5 $gu-v-spacing * -1 $gu-h-spacing * -.5;
 }

@@ -40,7 +40,7 @@ const UiButton = ({
 }: PropTypes) => {
 
   const getClassName = (modifiers: string[] = []) =>
-    classNameWithModifiers('component-product-page-button', [
+    classNameWithModifiers('component-ui-button', [
       appearance,
       `icon-${iconSide}`,
       ...modifiers,
@@ -51,7 +51,7 @@ const UiButton = ({
       <div
         className={getClassName(['static'])}
       >
-        <span className="component-product-page-button__content">{children}</span>
+        <span className="component-ui-button__content">{children}</span>
         {icon}
       </div>
     );
@@ -63,7 +63,7 @@ const UiButton = ({
         className={getClassName()}
         onClick={trackingOnClick}
       >
-        <span className="component-product-page-button__content">{children}</span>
+        <span className="component-ui-button__content">{children}</span>
         {icon}
       </a>
     );
@@ -75,7 +75,7 @@ const UiButton = ({
       type={type}
       className={getClassName()}
     >
-      <span className="component-product-page-button__content">{children}</span>
+      <span className="component-ui-button__content">{children}</span>
       {icon}
     </button>
   );
