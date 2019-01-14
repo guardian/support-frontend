@@ -26,6 +26,7 @@ type PropTypes = {|
   type: 'submit' | 'button',
   href: ?string,
   disabled: boolean,
+  isStatic: boolean,
   appearance: 'primary' | 'green' | 'greenHollow' | 'greyHollow',
   iconSide: 'left' | 'right',
   onClick: ?(void => void),
@@ -36,7 +37,7 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const UiButton = ({
-  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide,
+  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic
 }: PropTypes) => {
 
   const getClassName = (modifiers: string[] = []) =>
@@ -46,7 +47,7 @@ const UiButton = ({
       ...modifiers,
     ]);
 
-  if (!href && !onClick) {
+  if (isStatic) {
     return (
       <div
         className={getClassName(['static'])}
@@ -88,6 +89,7 @@ UiButton.defaultProps = {
   trackingOnClick: null,
   href: null,
   disabled: false,
+  isStatic: false,
   appearance: 'primary',
   iconSide: 'right',
 };
