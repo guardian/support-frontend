@@ -13,7 +13,7 @@ import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.{Annual, IdentityId, LambdaSpec, Monthly}
-import com.gu.support.zuora.api.SubscribeRequest
+import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
@@ -86,6 +86,8 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
       .thenReturn(Future.successful(Nil))
     when(mockZuora.getSubscriptions(any[ZuoraAccountNumber]))
       .thenReturn(Future.successful(Nil))
+    when(mockZuora.previewSubscribe(any[PreviewSubscribeRequest]))
+      .thenAnswer((invocation: InvocationOnMock) => realZuoraService.previewSubscribe(invocation.getArguments.head.asInstanceOf[PreviewSubscribeRequest]))
     when(mockZuora.subscribe(any[SubscribeRequest]))
       .thenAnswer((invocation: InvocationOnMock) => realZuoraService.subscribe(invocation.getArguments.head.asInstanceOf[SubscribeRequest]))
     when(mockZuora.config).thenReturn(realZuoraService.config)

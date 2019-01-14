@@ -9,7 +9,7 @@ import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers._
 import com.gu.support.zuora.api._
-import com.gu.support.zuora.api.response.{SubscribeResponseAccount, ZuoraAccountNumber, ZuoraSubscriptionNumber}
+import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ProductSubscriptionBuilders._
 import io.circe.generic.auto._
@@ -27,36 +27,57 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     requestInfo: RequestInfo,
     context: Context,
     services: Services
-  ): FutureHandlerResult = for {
-    identityId <- Future.fromTry(IdentityId(state.user.id))
-    maybeDomainSubscription <- GetRecurringSubscription(services.zuoraService, state.requestId, identityId, state.product.billingPeriod)
-    thankYouState <- maybeDomainSubscription match {
-      case Some(domainSubscription) => skipSubscribe(state, requestInfo, domainSubscription)
-      case None => subscribe(state, requestInfo, services)
-    }
-  } yield thankYouState
+  ): FutureHandlerResult = {
+    val subscribeItem = buildSubscribeItem(state, services.promotionService)
+    for {
+      identityId <- Future.fromTry(IdentityId(state.user.id))
+      maybeDomainSubscription <- GetRecurringSubscription(services.zuoraService, state.requestId, identityId, state.product.billingPeriod)
+      previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
+      thankYouState <- maybeDomainSubscription match {
+        case Some(domainSubscription) => skipSubscribe(state, requestInfo, domainSubscription)
+        case None => subscribe(state, subscribeItem, previewPaymentSchedule, requestInfo, services)
+      }
+    } yield thankYouState
+  }
 
   def skipSubscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, subscription: DomainSubscription): FutureHandlerResult = {
     val message = "Skipping subscribe for user because they are already an active contributor"
     SafeLogger.info(message)
-    FutureHandlerResult(getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber), requestInfo.appendMessage(message))
+    FutureHandlerResult(
+      getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber, PaymentSchedule(Nil)), requestInfo.appendMessage(message)
+    )
   }
 
   def singleSubscribe(
     multiSubscribe: SubscribeRequest => Future[List[SubscribeResponseAccount]]
   ): SubscribeItem => Future[SubscribeResponseAccount] = { subscribeItem =>
-    multiSubscribe(SubscribeRequest(List(subscribeItem))) flatMap {
+    checkSingleResponse(multiSubscribe(SubscribeRequest(List(subscribeItem))))
+  }
+
+  def checkSingleResponse[ResponseItem](response: Future[List[ResponseItem]]): Future[ResponseItem] = {
+    response.flatMap {
       case result :: Nil => Future.successful(result)
       case results => Future.failed(new RuntimeException(s"didn't get a single response item, got: $results"))
     }
   }
 
-  def subscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, services: Services): FutureHandlerResult =
-    singleSubscribe(services.zuoraService.subscribe)(buildSubscribeRequest(state, services.promotionService))
+  def subscribe(
+    state: CreateZuoraSubscriptionState,
+    subscribeItem: SubscribeItem,
+    previewedPaymentSchedule: PaymentSchedule,
+    requestInfo: RequestInfo,
+    services: Services
+  ): FutureHandlerResult =
+    singleSubscribe(services.zuoraService.subscribe)(subscribeItem)
       .map(response =>
-        HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber), requestInfo))
+        HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber, previewedPaymentSchedule), requestInfo))
 
-  private def getEmailState(state: CreateZuoraSubscriptionState, accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber) =
+  private def getEmailState(
+    state: CreateZuoraSubscriptionState,
+    accountNumber: ZuoraAccountNumber,
+    subscriptionNumber: ZuoraSubscriptionNumber,
+    paymentSchedule: PaymentSchedule
+  ) =
     SendThankYouEmailState(
       state.requestId,
       state.user,
@@ -65,10 +86,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.salesForceContact,
       accountNumber.value,
       subscriptionNumber.value,
+      paymentSchedule,
       state.acquisitionData
     )
 
-  private def buildSubscribeRequest(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
+  private def buildSubscribeItem(state: CreateZuoraSubscriptionState, promotionService: PromotionService): SubscribeItem = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
     SubscribeItem(
       buildAccount(state),

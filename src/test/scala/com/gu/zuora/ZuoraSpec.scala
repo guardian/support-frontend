@@ -6,7 +6,7 @@ import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.{GetRecurringSubscription, IdentityId, Monthly}
-import com.gu.support.zuora.api.SubscribeRequest
+import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
@@ -114,20 +114,23 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
     }
   }
 
-  "Subscribe request" should "succeed" in doRequest(creditCardSubscriptionRequest(GBP))
+  "Preview request" should "succeed" in doRequest(Left(previewRequest(GBP)))
 
-  it should "work for $USD contributions" in doRequest(creditCardSubscriptionRequest(USD))
+  "Subscribe request" should "succeed" in doRequest(Right(creditCardSubscriptionRequest(GBP)))
 
-  it should "work for €Euro contributions" in doRequest(creditCardSubscriptionRequest(EUR))
+  it should "work for $USD contributions" in doRequest(Right(creditCardSubscriptionRequest(USD)))
 
-  it should "work for AUD contributions" in doRequest(creditCardSubscriptionRequest(AUD))
+  it should "work for €Euro contributions" in doRequest(Right(creditCardSubscriptionRequest(EUR)))
 
-  it should "work with Direct Debit" in doRequest(directDebitSubscriptionRequest)
+  it should "work for AUD contributions" in doRequest(Right(creditCardSubscriptionRequest(AUD)))
 
-  def doRequest(subscribeRequest: SubscribeRequest) = {
-    //Accounts will be created in Sandbox
+  it should "work with Direct Debit" in doRequest(Right(directDebitSubscriptionRequest))
+
+  def doRequest(request: Either[PreviewSubscribeRequest, SubscribeRequest]) = {
+    //Accounts will be created (or previewed) in Sandbox
     val zuoraService = new ZuoraService(zuoraConfigProvider.get(), RequestRunners.configurableFutureRunner(30.seconds))
-    zuoraService.subscribe(subscribeRequest).map {
+    val futureResponse = request.fold(zuoraService.previewSubscribe, zuoraService.subscribe)
+    futureResponse.map {
       response =>
         response.head.success should be(true)
     }.recover {
