@@ -263,7 +263,8 @@
       @include mq($from: desktop) {
         position: absolute;
         bottom: 0;
-        max-height: 90%;
+        width: auto;
+        max-height: 95%;
         left: gu-span(7); 
       }
     }

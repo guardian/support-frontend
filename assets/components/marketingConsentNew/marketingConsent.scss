@@ -1,26 +1,13 @@
 // -----  gu-sass ----- //	
 @import '~stylesheets/gu-sass/gu-sass';
 
-.marketing-permissions__message {
-  font-family: $gu-text-egyptian-web;
-  letter-spacing: -0.5px;
-  margin-bottom: 24px;
-  line-height: 20px;
-}
-
-.marketing-permissions__title {
-  font-family: $gu-text-egyptian-web;
-  letter-spacing: -0.5px;
-  font-weight: 900;
-  font-size: 17px;
-  margin: ($gu-v-spacing / 3) 0;
-}
-
 .marketing-permissions {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
   font-weight: 300;
   margin: 0 -10px;
   padding: 0 10px;
+  .svg-newsletters {
+    width: 100%;
+  }
 }
 
 .confirmation__meta {
