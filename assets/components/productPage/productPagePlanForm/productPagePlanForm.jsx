@@ -6,9 +6,10 @@ import React from 'react';
 
 import { bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
+import UiButton from 'components/ui/uiButton/uiButton';
+
 import { type Option } from 'helpers/types/option';
 
-import ProductPageButton from '../productPageButton/productPageButton';
 import ProductPagePlanFormLabel from './productPagePlanFormLabel';
 import ProductPagePlanFormPrice from './productPagePlanFormPrice';
 
@@ -85,9 +86,9 @@ export default function ProductPagePlanForm<P:string>({
         </div>
       </ProductPageContentBlockOutset>
       <div className={['component-product-page-plan-form__cta', bgClassName].join(' ')} data-disabled={selectedPlan === null}>
-        <ProductPageButton disabled={!selectedPlanTitle} type="submit">
+        <UiButton disabled={!selectedPlanTitle} type="submit">
           Subscribe now{selectedPlanTitle && ` – ${selectedPlanTitle}`}
-        </ProductPageButton>
+        </UiButton>
       </div>
     </form>
   );

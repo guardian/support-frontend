@@ -12,7 +12,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { checkEmail } from 'helpers/formValidation';
 import { logException } from 'helpers/logger';
-import ProductPageButton from 'components/productPage/productPageButton/productPageButton';
+import UiButton from 'components/ui/uiButton/uiButton';
 
 import './marketingConsent.scss';
 
@@ -36,27 +36,27 @@ type PropTypes = {|
 function Button(props: ButtonPropTypes) {
   if (props.confirmOptIn === true) {
     return (
-      <ProductPageButton
+      <UiButton
         appearance="greenHollow"
         iconSide="left"
         icon={<SvgSubscribed />}
       >
         Signed up
-      </ProductPageButton>
+      </UiButton>
     );
   } else if (props.requestPending === true) {
     return (
-      <ProductPageButton
+      <UiButton
         appearance="greyHollow"
         iconSide="left"
         icon={<SvgSubscribe />}
       >
         Pending...
-      </ProductPageButton>
+      </UiButton>
     );
   }
   return (
-    <ProductPageButton
+    <UiButton
       appearance="green"
       iconSide="left"
       onClick={
@@ -65,7 +65,7 @@ function Button(props: ButtonPropTypes) {
       icon={<SvgSubscribe />}
     >
         Sign me up
-    </ProductPageButton>
+    </UiButton>
   );
 
 }

@@ -6,7 +6,7 @@ import React, { type Node } from 'react';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities';
 
-import './productPageButton.scss';
+import './uiButton.scss';
 
 /*
 This button will be rendered as an <a> element or a <button> element
@@ -35,7 +35,7 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-const ProductPageButton = ({
+const UiButton = ({
   children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide,
 }: PropTypes) => {
 
@@ -81,7 +81,7 @@ const ProductPageButton = ({
   );
 };
 
-ProductPageButton.defaultProps = {
+UiButton.defaultProps = {
   icon: <SvgArrowRightStraight />,
   type: 'button',
   onClick: null,
@@ -92,4 +92,4 @@ ProductPageButton.defaultProps = {
   iconSide: 'right',
 };
 
-export default ProductPageButton;
+export default UiButton;
