@@ -15,6 +15,10 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
+
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
@@ -66,8 +70,16 @@ const content = (
       <DigitalSubscriptionLandingHeader
         countryGroupId={countryGroupId}
       />
-      <Form />
       <ProductBlock countryGroupId={countryGroupId} />
+      <ProductPageContentBlock type="feature" id="subscribe">
+        <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
+          <p>Choose how you’d like to pay</p>
+        </ProductPageTextBlock>
+        <Form />
+        <ProductPageInfoChip >
+              You can cancel your subscription at any time
+        </ProductPageInfoChip>
+      </ProductPageContentBlock>
       <AdFreeSection headingSize={2} />
       <IndependentJournalismSection />
       <PromotionPopUp />
