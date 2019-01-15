@@ -1,6 +1,5 @@
 .component-independent-journalism {
   @include gu-fontset-heading;
-  border-top: 1px solid gu-colour(neutral-4);
   color: #121212;
   @include mq($from: desktop) {
     border-left: 1px solid gu-colour(garnett-neutral-4);
