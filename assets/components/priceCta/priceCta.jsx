@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import CtaLink from 'components/ctaLink/ctaLink';
+import UiButton from 'components/ui/uiButton/uiButton';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -27,12 +27,11 @@ function PriceCta(props: PropTypes) {
 
   return (
     <div className={classNameWithModifiers('component-price-cta', withSecondary ? ['with-secondary'] : [])}>
-      <CtaLink
-        text={props.ctaText}
-        url={props.url}
+      <UiButton
+        href={props.url}
         accessibilityHint={`${props.ctaText} for only ${props.price} per month`}
-        id="price-cta"
-      />
+      >{props.ctaText}
+      </UiButton>
       {withSecondary ? <p className="component-price-cta__secondary">{props.secondaryCopy}</p> : null}
     </div>
   );

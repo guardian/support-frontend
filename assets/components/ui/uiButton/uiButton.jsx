@@ -31,13 +31,14 @@ type PropTypes = {|
   iconSide: 'left' | 'right',
   onClick: ?(void => void),
   trackingOnClick: ?(void => void),
+  accessibilityHint: ?string,
 |};
 
 
 // ----- Render ----- //
 
 const UiButton = ({
-  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic,
+  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic, accessibilityHint,
 }: PropTypes) => {
 
   const getClassName = (modifiers: string[] = []) =>
@@ -61,6 +62,7 @@ const UiButton = ({
       <a
         href={href}
         data-disabled={disabled}
+        aria-label={accessibilityHint}
         className={getClassName()}
         onClick={trackingOnClick}
       >
@@ -73,6 +75,7 @@ const UiButton = ({
     <button
       disabled={disabled}
       onClick={(ev) => { if (onClick) { onClick(ev); } if (trackingOnClick) { trackingOnClick(); } }}
+      aria-label={accessibilityHint}
       type={type}
       className={getClassName()}
     >
@@ -88,6 +91,7 @@ UiButton.defaultProps = {
   onClick: null,
   trackingOnClick: null,
   href: null,
+  accessibilityHint: null,
   disabled: false,
   isStatic: false,
   appearance: 'primary',
