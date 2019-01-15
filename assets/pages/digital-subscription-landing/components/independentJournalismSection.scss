@@ -1,5 +1,5 @@
 .component-independent-journalism {
-  font-family: $gu-headline;
+  @include gu-fontset-heading;
   border-top: 1px solid gu-colour(neutral-4);
   color: #121212;
   @include mq($from: desktop) {
@@ -17,27 +17,20 @@
 
 .component-independent-journalism__header {
   width: 100%;
-  font-size: 26px;
   font-weight: bold;
-  line-height: 1.12;
 
   @include mq($from: leftCol) {
-    width: 620px;
-    font-size: 36px;
-    line-height: 1.17;
+    width: gu-span(6);
   }
 }
 
 .component-independent-journalism__copy {
   width: 100%;
-  font-size: 22px;
   font-weight: 300;
-  line-height: 1.18;
   padding-right: 18px;
   @include mq($from: leftCol) {
-    width: 620px;
-    font-size: 36px;
-    line-height: 1.11;
+    width: gu-span(6);
+    margin-right: gu-span(2);
   }
 }
 
@@ -55,7 +48,7 @@
 
 .svg-windrush {
   position: relative;
-  top: -81px;
+  top: -51px;
   margin-bottom: -143px;
   z-index: 1;
   @include mq($until: leftCol) {
