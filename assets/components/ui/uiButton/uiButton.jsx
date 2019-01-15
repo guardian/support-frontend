@@ -20,24 +20,22 @@ In that case you can use the `trackingOnClick` prop.
 
 // ---- Types ----- //
 
-type PropTypes = {|
+type PropTypes = {
   children: Node,
   icon?: Node,
-  type: 'submit' | 'button',
-  href: ?string,
-  disabled: boolean,
   isStatic: boolean,
+  href: ?string,
   appearance: 'primary' | 'green' | 'greenHollow' | 'greyHollow',
   iconSide: 'left' | 'right',
-  onClick: ?(void => void),
   trackingOnClick: ?(void => void),
-|};
+  onClick: ?(void => void),
+};
 
 
 // ----- Render ----- //
 
 const UiButton = ({
-  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic,
+  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic, ...otherProps
 }: PropTypes) => {
 
   const getClassName = (modifiers: string[] = []) =>
@@ -59,10 +57,10 @@ const UiButton = ({
   } else if (href) {
     return (
       <a
-        href={href}
-        data-disabled={disabled}
         className={getClassName()}
         onClick={trackingOnClick}
+        href={href}
+        {...otherProps}
       >
         <span className="component-ui-button__content">{children}</span>
         {icon}
@@ -71,9 +69,8 @@ const UiButton = ({
   }
   return (
     <button
-      disabled={disabled}
+      {...otherProps}
       onClick={(ev) => { if (onClick) { onClick(ev); } if (trackingOnClick) { trackingOnClick(); } }}
-      type={type}
       className={getClassName()}
     >
       <span className="component-ui-button__content">{children}</span>
@@ -84,14 +81,12 @@ const UiButton = ({
 
 UiButton.defaultProps = {
   icon: <SvgArrowRightStraight />,
-  type: 'button',
-  onClick: null,
   trackingOnClick: null,
   href: null,
-  disabled: false,
   isStatic: false,
   appearance: 'primary',
   iconSide: 'right',
+  onClick: null,
 };
 
 export default UiButton;
