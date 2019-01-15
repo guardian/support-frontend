@@ -4,7 +4,7 @@
 
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import {
   ProductPagePlanFormReducerFor,
   type State as FormState,
@@ -14,7 +14,7 @@ import promotionPopUpReducer, { type FindOutMoreState } from './components/promo
 export type State = {
   common: CommonState,
   page: {
-    plan: FormState<WeeklyBillingPeriod>,
+    plan: FormState<DigitalBillingPeriod>,
     promotion: FindOutMoreState
   }
 };
@@ -24,12 +24,12 @@ export type State = {
 
 export default (promoInUrl: ?string) => {
 
-  const initialPeriod: WeeklyBillingPeriod = promoInUrl === 'SixForSix' || promoInUrl === 'Quarterly' || promoInUrl === 'Annual'
+  const initialPeriod: DigitalBillingPeriod = promoInUrl === 'Monthly' || promoInUrl === 'Annual'
     ? promoInUrl
-    : 'SixForSix';
+    : 'Annual';
 
   return combineReducers({
-    plan: ProductPagePlanFormReducerFor<WeeklyBillingPeriod>('GuardianWeekly', initialPeriod),
+    plan: ProductPagePlanFormReducerFor<DigitalBillingPeriod>('GuardianWeekly', initialPeriod),
     promotion: promotionPopUpReducer,
   });
 };

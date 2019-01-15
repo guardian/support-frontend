@@ -2,34 +2,21 @@
 
 // ----- Imports ----- //
 
-import { type WeeklyBillingPeriod } from 'helpers/billingPeriods';
-import { getWeeklyCheckout } from 'helpers/externalLinks';
+import { type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import { getPromoCode } from 'helpers/flashSale';
 
-import { type State } from './digitalSubscriptionLandingReducer';
 
 // ----- Action Creators ----- //
 
-const { setPlan } = ProductPagePlanFormActionsFor<WeeklyBillingPeriod>('GuardianWeekly', 'GuardianWeekly');
+const { setPlan } = ProductPagePlanFormActionsFor<DigitalBillingPeriod>('GuardianWeekly', 'GuardianWeekly');
 
-function redirectToWeeklyPage() {
-  return (dispatch: Function, getState: () => State) => {
-    const state = getState();
-    const { countryGroupId } = state.common.internationalisation;
-    const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
-    const location = state.page.plan.plan ? getWeeklyCheckout(
-      referrerAcquisitionData,
-      state.page.plan.plan,
-      countryGroupId,
-      abParticipations,
-      optimizeExperiments,
-      (state.page.plan === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
-    ) : null;
+function redirectToDigitalPage() {
+  return () => {
+    const location = null;
 
     if (location) {
-      sendTrackingEventsOnClick('main_cta_click', 'GuardianWeekly', null)();
+      sendTrackingEventsOnClick('main_cta_click', 'DigitalPack', null)();
       window.location.href = location;
     }
   };
@@ -38,4 +25,4 @@ function redirectToWeeklyPage() {
 
 // ----- Exports ----- //
 
-export { setPlan, redirectToWeeklyPage };
+export { setPlan, redirectToDigitalPage };

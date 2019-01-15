@@ -71,6 +71,7 @@ const content = (
         countryGroupId={countryGroupId}
       />
       <ProductBlock countryGroupId={countryGroupId} />
+      <AdFreeSection headingSize={2} />
       <ProductPageContentBlock type="feature" id="subscribe">
         <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
           <p>Choose how you’d like to pay</p>
@@ -80,7 +81,6 @@ const content = (
               You can cancel your subscription at any time
         </ProductPageInfoChip>
       </ProductPageContentBlock>
-      <AdFreeSection headingSize={2} />
       <IndependentJournalismSection />
       <PromotionPopUp />
     </Page>

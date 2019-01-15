@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { currencies, detect } from 'helpers/internationalisation/currency';
-import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
-import { Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
-import { getPromotionWeeklyProductPrice, getWeeklyProductPrice } from 'helpers/subscriptions';
+import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
+import { Annual, Monthly } from 'helpers/billingPeriods';
+import { getDigitalPrice } from 'helpers/subscriptions';
+import { showPrice, type Price } from 'helpers/internationalisation/price';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, {
   type DispatchPropTypes,
@@ -17,42 +17,37 @@ import ProductPagePlanForm, {
 } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../digitalSubscriptionLandingReducer';
-import { redirectToWeeklyPage, setPlan } from '../digitalSubscriptionLandingActions';
+import { redirectToDigitalPage, setPlan } from '../digitalSubscriptionLandingActions';
 
 
 // ---- Plans ----- //
 
-const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
-  currencies[detect(countryGroupId)].extendedGlyph,
-  getWeeklyProductPrice(countryGroupId, period),
-].join('');
+const getPrice = (countryGroupId: CountryGroupId, period: DigitalBillingPeriod) =>
+  showPrice(getDigitalPrice(countryGroupId, period));
 
-const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod, promoCode: string) => [
-  currencies[detect(countryGroupId)].extendedGlyph,
-  getPromotionWeeklyProductPrice(countryGroupId, period, promoCode),
-].join('');
+const getAnnualSaving = (countryGroupId: CountryGroupId): Price => {
+  const annualizedMonthlyCost = getDigitalPrice(countryGroupId, Monthly).value * 12;
+  const annualCost = getDigitalPrice(countryGroupId, Annual);
+
+  return { ...annualCost, value: Math.ceil(annualizedMonthlyCost - annualCost.value) };
+};
 
 export const billingPeriods = {
-  [SixForSix]: {
-    title: '6 for 6',
-    offer: 'Introductory offer',
-    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'SixForSix')} for the first 6 issues (then ${getPrice(countryGroupId, 'Quarterly')} quarterly)`,
-  },
-  [Quarterly]: {
-    title: 'Quarterly',
-    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'Quarterly')} every 3 months`,
+  [Monthly]: {
+    title: 'Monthly',
+    copy: (countryGroupId: CountryGroupId) => `14 day free trial, then ${getPrice(countryGroupId, Monthly)} a month`,
   },
   [Annual]: {
     title: 'Annually',
-    offer: 'Save 10%',
-    copy: (countryGroupId: CountryGroupId) => `${getPromotionPrice(countryGroupId, 'Annual', '10ANNUAL')} for 1 year, then standard rate (${getPrice(countryGroupId, 'Annual')} every year)`,
+    offer: 'Now save 20%',
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, Annual)} every 12 months (save ${showPrice(getAnnualSaving(countryGroupId))} per year)`,
   },
 };
 
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => ({
+const mapStateToProps = (state: State): StatePropTypes<DigitalBillingPeriod> => ({
   plans: Object.keys(billingPeriods).reduce((ps, k) => ({
     ...ps,
     [k]: {
@@ -66,10 +61,11 @@ const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => (
   selectedPlan: state.page.plan.plan,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action<WeeklyBillingPeriod>>): DispatchPropTypes<WeeklyBillingPeriod> =>
+const mapDispatchToProps =
+(dispatch: Dispatch<Action<DigitalBillingPeriod>>): DispatchPropTypes<DigitalBillingPeriod> =>
   ({
     setPlanAction: bindActionCreators(setPlan, dispatch),
-    onSubmitAction: bindActionCreators(redirectToWeeklyPage, dispatch),
+    onSubmitAction: bindActionCreators(redirectToDigitalPage, dispatch),
   });
 
 
