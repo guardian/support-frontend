@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Heading from 'components/heading/heading';
-import UiButton from 'components/ui/uiButton/uiButton';
+import UiAnchorButton from 'components/ui/uiButton/uiAnchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -18,12 +18,12 @@ export default function OtherProduct(props: PropTypes) {
     <div className={classNameWithModifiers('other-product', [props.modifierClass])}>
       <Heading size={3} className="product-title">{props.title}</Heading>
       <div>{props.description}</div>
-      <UiButton
+      <UiAnchorButton
         icon={<ArrowRightStraight />}
         href={props.destination}
       >
         Find out more
-      </UiButton>
+      </UiAnchorButton>
     </div>
   );
 }
