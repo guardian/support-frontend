@@ -179,7 +179,8 @@ function postRegularPaymentRequest(
         return ({ paymentStatus: 'failure', error: 'internal_error' });
       }
 
-      return checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage)(response);
+      return response.json().then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage));
+
     })
     .catch(() => {
       logException(`Error while trying to interact with ${uri}`);
