@@ -256,7 +256,9 @@
       border-top: 1px solid #fff;
     }
     .component-price-cta__secondary {
-      border-left: 1px solid gu-colour(garnett-neutral-4);
+      color: gu-colour(garnett-neutral-3);
+      padding: ($gu-v-spacing / 2) 0;
+      font-size: .9em;
     }
     .component-flash-sale-countdown {
       z-index: 10;
