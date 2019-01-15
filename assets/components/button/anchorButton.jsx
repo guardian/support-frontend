@@ -11,6 +11,7 @@ import './button.scss';
 
 type AllPropTypes = {
   ...PropTypes,
+  'aria-label': ?string,
 };
 
 const AnchorButton = (props: AllPropTypes) => (

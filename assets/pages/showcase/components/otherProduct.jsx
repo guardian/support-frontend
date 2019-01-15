@@ -19,6 +19,7 @@ export default function OtherProduct(props: PropTypes) {
       <Heading size={3} className="product-title">{props.title}</Heading>
       <div>{props.description}</div>
       <AnchorButton
+        aria-label={null}
         icon={<ArrowRightStraight />}
         href={props.destination}
       >

@@ -42,7 +42,7 @@ const content = (
       overheading="Support The Guardian"
       heading="Help us deliver independent investigative journalism"
       type="feature"
-      cta={<AnchorButton icon={<SvgChevron />} href="#support">Ways to support</AnchorButton>}
+      cta={<AnchorButton aria-label={null} icon={<SvgChevron />} href="#support">Ways to support</AnchorButton>}
     >
       <GridPicture
         sources={[

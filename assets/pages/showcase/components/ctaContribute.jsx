@@ -25,6 +25,7 @@ export default function CtaContribute() {
           </p>
           <AnchorButton
             icon={<ArrowRightStraight />}
+            aria-label={null}
             href="/contribute"
           >
             Make a Contribution

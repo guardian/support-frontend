@@ -20,7 +20,7 @@ export default function CtaSubscribe() {
           From the Digital Pack, to the new Guardian Weekly magazine to the daily newspaper,
           you can subscribe to the Guardian <strong>for as little as 99p a day.</strong>
         </p>
-        <AnchorButton icon={<ArrowRightStraight />} href="/subscribe">Choose a Subscription</AnchorButton>
+        <AnchorButton aria-label={null} icon={<ArrowRightStraight />} href="/subscribe">Choose a Subscription</AnchorButton>
       </ProductPageTextBlock>
     </ProductPageContentBlock>
   );

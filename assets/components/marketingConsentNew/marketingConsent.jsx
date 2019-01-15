@@ -60,6 +60,7 @@ function MarketingButton(props: ButtonPropTypes) {
     <Button
       appearance="green"
       iconSide="left"
+      aria-label="Sign me up to news and offers from The Guardian"
       onClick={
           () => props.onClick(props.email, props.csrf)
         }
