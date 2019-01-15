@@ -13,6 +13,7 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import { checkEmail } from 'helpers/formValidation';
 import { logException } from 'helpers/logger';
 import UiButton from 'components/ui/uiButton/uiButton';
+import UiPlaceholderButton from 'components/ui/uiButton/uiPlaceholderButton';
 
 import './marketingConsent.scss';
 
@@ -36,25 +37,23 @@ type PropTypes = {|
 function Button(props: ButtonPropTypes) {
   if (props.confirmOptIn === true) {
     return (
-      <UiButton
+      <UiPlaceholderButton
         appearance="greenHollow"
         iconSide="left"
-        isStatic
         icon={<SvgSubscribed />}
       >
         Signed up
-      </UiButton>
+      </UiPlaceholderButton>
     );
   } else if (props.requestPending === true) {
     return (
-      <UiButton
+      <UiPlaceholderButton
         appearance="greyHollow"
         iconSide="left"
-        isStatic
         icon={<SvgSubscribe />}
       >
         Pending...
-      </UiButton>
+      </UiPlaceholderButton>
     );
   }
   return (

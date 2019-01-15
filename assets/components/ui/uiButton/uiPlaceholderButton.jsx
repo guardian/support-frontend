@@ -9,19 +9,16 @@ import './uiButton.scss';
 
 // ----- Render ----- //
 
-type AllPropTypes = {
-  ...PropTypes,
-};
-
-const UiButton = (props: AllPropTypes) => (
+const UiPlaceholderButton = ({ modifierClasses, ...props }: PropTypes) => (
   <DangerouslySetButtonOnAnyElement
-    element="button"
+    element="div"
+    modifierClasses={['placeholder', ...modifierClasses]}
     {...props}
   />
 );
 
-UiButton.defaultProps = {
+UiPlaceholderButton.defaultProps = {
   ...defaultProps,
 };
 
-export default UiButton;
+export default UiPlaceholderButton;
