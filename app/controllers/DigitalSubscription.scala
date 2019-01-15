@@ -141,21 +141,16 @@ class DigitalSubscription(
   protected def respondToClient(
     result: EitherT[Future, String, StatusResponse],
     billingPeriod: BillingPeriod
-  )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
-
+  )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] =
     result.fold(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod Digital Subscription, due to $error")
         InternalServerError
       },
       { statusResponse =>
-        SafeLogger.info(statusResponse.toString)
         SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
         Accepted(statusResponse.asJson)
-
       }
     )
-
-  }
 
 }
