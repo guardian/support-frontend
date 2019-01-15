@@ -51,7 +51,7 @@ class DigitalSubscription(
     val title = "Support the Guardian | Digital Pack Subscription"
     val id = "digital-subscription-landing-page-" + countryCode
     val js = "digitalSubscriptionLandingPage.js"
-    val css = "digitalSubscriptionLandingPageStyles.css"
+    val css = "digitalSubscriptionLandingPage.css"
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
     val hrefLangLinks = Map(

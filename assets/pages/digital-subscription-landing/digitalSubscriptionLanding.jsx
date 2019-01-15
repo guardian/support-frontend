@@ -20,10 +20,13 @@ import IndependentJournalismSection from './components/independentJournalismSect
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
 import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
+import Form from './components/form';
+
+import './digitalSubscriptionLanding.scss';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(digitalSubscriptionLandingReducer(null));
+const store = pageInit(digitalSubscriptionLandingReducer(null), true);
 
 // ----- Internationalisation ----- //
 
@@ -63,6 +66,7 @@ const content = (
       <DigitalSubscriptionLandingHeader
         countryGroupId={countryGroupId}
       />
+      <Form />
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
       <IndependentJournalismSection />
