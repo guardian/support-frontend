@@ -5,20 +5,23 @@
 import React from 'react';
 
 import DangerouslySetButtonOnAnyElement, { defaultProps, type PropTypes } from './dangerouslySetButtonOnAnyElement';
-import './uiButton.scss';
+import './button.scss';
 
 // ----- Render ----- //
 
-const UiPlaceholderButton = ({ modifierClasses, ...props }: PropTypes) => (
+type AllPropTypes = {
+  ...PropTypes,
+};
+
+const AnchorButton = (props: AllPropTypes) => (
   <DangerouslySetButtonOnAnyElement
-    element="div"
-    modifierClasses={['placeholder', ...modifierClasses]}
+    element="a"
     {...props}
   />
 );
 
-UiPlaceholderButton.defaultProps = {
+AnchorButton.defaultProps = {
   ...defaultProps,
 };
 
-export default UiPlaceholderButton;
+export default AnchorButton;

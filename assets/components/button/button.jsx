@@ -5,7 +5,7 @@
 import React from 'react';
 
 import DangerouslySetButtonOnAnyElement, { defaultProps, type PropTypes } from './dangerouslySetButtonOnAnyElement';
-import './uiButton.scss';
+import './button.scss';
 
 // ----- Render ----- //
 
@@ -13,15 +13,15 @@ type AllPropTypes = {
   ...PropTypes,
 };
 
-const UiButton = (props: AllPropTypes) => (
+const Button = (props: AllPropTypes) => (
   <DangerouslySetButtonOnAnyElement
     element="button"
     {...props}
   />
 );
 
-UiButton.defaultProps = {
+Button.defaultProps = {
   ...defaultProps,
 };
 
-export default UiButton;
+export default Button;

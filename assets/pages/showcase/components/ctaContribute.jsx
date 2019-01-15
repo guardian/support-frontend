@@ -4,7 +4,7 @@ import React from 'react';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
-import UiAnchorButton from 'components/ui/uiButton/uiAnchorButton';
+import AnchorButton from 'components/button/anchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 
 import WithSupport from 'components/svgs/withSupport';
@@ -23,12 +23,12 @@ export default function CtaContribute() {
             If everyone who reads our reporting, who likes it, helps to support it, our future would be much
             more secure. <strong>Make a single or recurrent payment, and help us to change the story.</strong>
           </p>
-          <UiAnchorButton
+          <AnchorButton
             icon={<ArrowRightStraight />}
             href="/contribute"
           >
             Make a Contribution
-          </UiAnchorButton>
+          </AnchorButton>
         </ProductPageTextBlock>
       </div>
       <OneMillionCircles />

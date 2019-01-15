@@ -19,7 +19,7 @@ import ProductPagehero from 'components/productPage/productPageHero/productPageH
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
 import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
-import UiAnchorButton from 'components/ui/uiButton/uiAnchorButton';
+import AnchorButton from 'components/button/anchorButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import SvgInformation from 'components/svgs/information';
@@ -80,7 +80,7 @@ const content = (
         overheading="Guardian Weekly subscriptions"
         heading="Get a clearer, global perspective on the issues that matter, in one magazine."
         modifierClasses={['weekly']}
-        cta={<UiAnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</UiAnchorButton>}
+        cta={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       >
         <GridPicture
           sources={[

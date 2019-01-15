@@ -7,7 +7,7 @@ import React, { type Node } from 'react';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities';
 
-import './uiButton.scss';
+import './button.scss';
 
 // ----- PropTypes ----- //
 
@@ -42,14 +42,14 @@ const DangerouslySetButtonOnAnyElement = ({
   const El = element;
   return (
     <El
-      className={classNameWithModifiers('component-ui-button', [
+      className={classNameWithModifiers('component-button', [
         appearance,
         `icon-${iconSide}`,
         ...modifierClasses,
       ])}
       {...otherProps}
     >
-      <span className="component-ui-button__content">{children}</span>
+      <span className="component-button__content">{children}</span>
       {icon}
     </El>
   );
