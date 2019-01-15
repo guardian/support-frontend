@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { type CommonState } from 'helpers/page/commonReducer';
 import type { Action, PromotionOptions } from './promotionPopUpActions';
 
 // ----- Setup ----- //
@@ -10,11 +9,6 @@ import type { Action, PromotionOptions } from './promotionPopUpActions';
 export type FindOutMoreState = {
   isPopUpOpen: boolean,
   expandedOption: PromotionOptions,
-};
-
-export type State = {
-  common: CommonState,
-  page: FindOutMoreState,
 };
 
 const initialState: FindOutMoreState = {

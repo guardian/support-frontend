@@ -19,12 +19,11 @@ import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLa
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
-import promotionPopUpReducer from './components/promotionPopUpReducer';
-
+import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(promotionPopUpReducer);
+const store = pageInit(digitalSubscriptionLandingReducer(null));
 
 // ----- Internationalisation ----- //
 
