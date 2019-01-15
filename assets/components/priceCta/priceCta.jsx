@@ -29,7 +29,7 @@ function PriceCta(props: PropTypes) {
     <div className={classNameWithModifiers('component-price-cta', withSecondary ? ['with-secondary'] : [])}>
       <UiButton
         href={props.url}
-        accessibilityHint={`${props.ctaText} for only ${props.price} per month`}
+        aria-label={`${props.ctaText} for only ${props.price} per month`}
       >{props.ctaText}
       </UiButton>
       {withSecondary ? <p className="component-price-cta__secondary">{props.secondaryCopy}</p> : null}
