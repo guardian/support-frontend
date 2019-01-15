@@ -179,7 +179,8 @@ function postRegularPaymentRequest(
         return ({ paymentStatus: 'failure', error: 'internal_error' });
       }
 
-      return response.json().then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage));
+      return response.json()
+        .then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage));
 
     })
     .catch(() => {
