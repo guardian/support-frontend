@@ -4,13 +4,13 @@
 
 import React from 'react';
 
-import DangerouslySetButtonOnAnyElement, { defaultProps, type GenericPropTypes } from './dangerouslySetButtonOnAnyElement';
+import SharedButton, { defaultProps, type SharedButtonPropTypes } from './_sharedButton';
 import './button.scss';
 
 // ----- Render ----- //
 
-const PlaceholderButton = ({ modifierClasses, ...props }: GenericPropTypes) => (
-  <DangerouslySetButtonOnAnyElement
+const PlaceholderButton = ({ modifierClasses, ...props }: SharedButtonPropTypes) => (
+  <SharedButton
     element="div"
     modifierClasses={['placeholder', ...modifierClasses]}
     {...props}

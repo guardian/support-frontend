@@ -4,18 +4,19 @@
 
 import React from 'react';
 
-import DangerouslySetButtonOnAnyElement, { defaultProps, type GenericPropTypes } from './dangerouslySetButtonOnAnyElement';
+import SharedButton, { defaultProps, type SharedButtonPropTypes } from './_sharedButton';
 import './button.scss';
 
 // ----- Render ----- //
 
 type PropTypes = {
-  ...GenericPropTypes,
+  ...SharedButtonPropTypes,
   'aria-label': ?string,
+  href: string,
 };
 
 const AnchorButton = (props: PropTypes) => (
-  <DangerouslySetButtonOnAnyElement
+  <SharedButton
     element="a"
     {...props}
   />

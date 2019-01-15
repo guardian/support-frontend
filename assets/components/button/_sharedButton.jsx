@@ -14,7 +14,7 @@ import './button.scss';
 type Appearance = 'primary' | 'green' | 'greenHollow' | 'greyHollow';
 type IconSide = 'left' | 'right';
 
-type GenericPropTypes = {|
+type SharedButtonPropTypes = {|
   children: Node,
   icon?: Node,
   appearance: Appearance,
@@ -24,12 +24,12 @@ type GenericPropTypes = {|
 
 type PropTypes = {
   element: 'a' | 'button' | 'div',
-  ...GenericPropTypes,
+  ...SharedButtonPropTypes,
 };
 
 // ----- Render ----- //
 
-const DangerouslySetButtonOnAnyElement = ({
+const SharedButton = ({
   element: HtmlElement, appearance, iconSide, modifierClasses, children, icon, ...otherProps
 }: PropTypes) => (
   <HtmlElement
@@ -52,7 +52,7 @@ export const defaultProps = {
   modifierClasses: [],
 };
 
-DangerouslySetButtonOnAnyElement.defaultProps = { ...defaultProps };
+SharedButton.defaultProps = { ...defaultProps };
 
-export type { GenericPropTypes, IconSide, Appearance };
-export default DangerouslySetButtonOnAnyElement;
+export type { SharedButtonPropTypes, IconSide, Appearance };
+export default SharedButton;

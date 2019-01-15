@@ -13,7 +13,7 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import { checkEmail } from 'helpers/formValidation';
 import { logException } from 'helpers/logger';
 import Button from 'components/button/button';
-import PlaceholderButton from 'components/button/placeholderButton';
+import NonInteractiveButton from 'components/button/nonInteractiveButton';
 
 import './marketingConsent.scss';
 
@@ -37,23 +37,23 @@ type PropTypes = {|
 function MarketingButton(props: ButtonPropTypes) {
   if (props.confirmOptIn === true) {
     return (
-      <PlaceholderButton
+      <NonInteractiveButton
         appearance="greenHollow"
         iconSide="left"
         icon={<SvgSubscribed />}
       >
         Signed up
-      </PlaceholderButton>
+      </NonInteractiveButton>
     );
   } else if (props.requestPending === true) {
     return (
-      <PlaceholderButton
+      <NonInteractiveButton
         appearance="greyHollow"
         iconSide="left"
         icon={<SvgSubscribe />}
       >
         Pending...
-      </PlaceholderButton>
+      </NonInteractiveButton>
     );
   }
   return (

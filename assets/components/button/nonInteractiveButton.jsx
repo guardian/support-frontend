@@ -9,20 +9,16 @@ import './button.scss';
 
 // ----- Render ----- //
 
-type PropTypes = {
-  ...SharedButtonPropTypes,
-  'aria-label': ?string,
-};
-
-const Button = (props: PropTypes) => (
+const NonInteractiveButton = ({ modifierClasses, ...props }: SharedButtonPropTypes) => (
   <SharedButton
-    element="button"
+    element="div"
+    modifierClasses={['placeholder', ...modifierClasses]}
     {...props}
   />
 );
 
-Button.defaultProps = {
+NonInteractiveButton.defaultProps = {
   ...defaultProps,
 };
 
-export default Button;
+export default NonInteractiveButton;
