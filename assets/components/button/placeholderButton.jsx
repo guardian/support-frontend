@@ -4,12 +4,12 @@
 
 import React from 'react';
 
-import DangerouslySetButtonOnAnyElement, { defaultProps, type PropTypes } from './dangerouslySetButtonOnAnyElement';
+import DangerouslySetButtonOnAnyElement, { defaultProps, type GenericPropTypes } from './dangerouslySetButtonOnAnyElement';
 import './button.scss';
 
 // ----- Render ----- //
 
-const PlaceholderButton = ({ modifierClasses, ...props }: PropTypes) => (
+const PlaceholderButton = ({ modifierClasses, ...props }: GenericPropTypes) => (
   <DangerouslySetButtonOnAnyElement
     element="div"
     modifierClasses={['placeholder', ...modifierClasses]}

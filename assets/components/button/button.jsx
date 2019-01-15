@@ -4,17 +4,17 @@
 
 import React from 'react';
 
-import DangerouslySetButtonOnAnyElement, { defaultProps, type PropTypes } from './dangerouslySetButtonOnAnyElement';
+import DangerouslySetButtonOnAnyElement, { defaultProps, type GenericPropTypes } from './dangerouslySetButtonOnAnyElement';
 import './button.scss';
 
 // ----- Render ----- //
 
-type AllPropTypes = {
-  ...PropTypes,
+type PropTypes = {
+  ...GenericPropTypes,
   'aria-label': ?string,
 };
 
-const Button = (props: AllPropTypes) => (
+const Button = (props: PropTypes) => (
   <DangerouslySetButtonOnAnyElement
     element="button"
     {...props}

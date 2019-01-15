@@ -14,7 +14,7 @@ import './button.scss';
 type Appearance = 'primary' | 'green' | 'greenHollow' | 'greyHollow';
 type IconSide = 'left' | 'right';
 
-type PropTypes = {|
+type GenericPropTypes = {|
   children: Node,
   icon?: Node,
   appearance: Appearance,
@@ -22,12 +22,28 @@ type PropTypes = {|
   modifierClasses: string[],
 |};
 
-type DangerousPropTypes = {
+type PropTypes = {
   element: 'a' | 'button' | 'div',
-  ...PropTypes,
+  ...GenericPropTypes,
 };
 
 // ----- Render ----- //
+
+const DangerouslySetButtonOnAnyElement = ({
+  element: HtmlElement, appearance, iconSide, modifierClasses, children, icon, ...otherProps
+}: PropTypes) => (
+  <HtmlElement
+    className={classNameWithModifiers('component-button', [
+        appearance,
+        `icon-${iconSide}`,
+        ...modifierClasses,
+      ])}
+    {...otherProps}
+  >
+    <span className="component-button__content">{children}</span>
+    {icon}
+  </HtmlElement>
+);
 
 export const defaultProps = {
   icon: <SvgArrowRightStraight />,
@@ -36,26 +52,7 @@ export const defaultProps = {
   modifierClasses: [],
 };
 
-const DangerouslySetButtonOnAnyElement = ({
-  element, appearance, iconSide, modifierClasses, children, icon, ...otherProps
-}: DangerousPropTypes) => {
-  const El = element;
-  return (
-    <El
-      className={classNameWithModifiers('component-button', [
-        appearance,
-        `icon-${iconSide}`,
-        ...modifierClasses,
-      ])}
-      {...otherProps}
-    >
-      <span className="component-button__content">{children}</span>
-      {icon}
-    </El>
-  );
-};
-
 DangerouslySetButtonOnAnyElement.defaultProps = { ...defaultProps };
 
-export type { PropTypes, IconSide, Appearance };
+export type { GenericPropTypes, IconSide, Appearance };
 export default DangerouslySetButtonOnAnyElement;
