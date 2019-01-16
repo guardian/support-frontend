@@ -68,10 +68,10 @@
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
 }
 
-.component-button--icon-left {
+.component-button--hasicon-left {
   flex-direction: row-reverse;
 }
 
-.component-button--icon-left svg {
+.component-button--hasicon-left svg {
   margin: $gu-v-spacing * -1 $gu-h-spacing * .5 $gu-v-spacing * -1 $gu-h-spacing * -.5;
 }

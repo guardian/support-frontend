@@ -35,7 +35,7 @@ const SharedButton = ({
   <HtmlElement
     className={classNameWithModifiers('component-button', [
         appearance,
-        `icon-${iconSide}`,
+        `hasicon-${iconSide}`,
         ...modifierClasses,
       ])}
     {...otherProps}
