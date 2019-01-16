@@ -5,11 +5,9 @@
 import React from 'react';
 
 import { flashSaleIsActive } from 'helpers/flashSale';
-import OptimizeExperimentWrapper from 'components/optimizeExperimentWrapper/optimizeExperimentWrapper';
+import CtaAbTestWrapper from './ctaAbTestWrapper';
 import PriceCtaContainer from './priceCtaContainer';
 import FindOutMoreCta from './findOutMoreCta';
-
-import { experimentId } from '../helpers/ctaTypeAb';
 
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
@@ -30,11 +28,11 @@ function CtaSwitch(props: { referringCta: string }) {
   );
 
   return (
-    <OptimizeExperimentWrapper experimentId={experimentId}>
+    <CtaAbTestWrapper>
       {PriceCta}
       {PriceCta}
       <div />
-    </OptimizeExperimentWrapper>
+    </CtaAbTestWrapper>
   );
 
 }

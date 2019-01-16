@@ -9,7 +9,6 @@ import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
-import OptimizeExperimentWrapper from 'components/optimizeExperimentWrapper/optimizeExperimentWrapper';
 import Page from 'components/page/page';
 import simpleHeaderWithCountrySwitcherContainer from 'components/headers/simpleHeader/simpleHeaderWithCountrySwitcher';
 import CustomerService from 'components/customerService/customerService';
@@ -26,7 +25,7 @@ import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
 import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 import Form from './components/form';
-import { experimentId } from './helpers/ctaTypeAb';
+import CtaAbTestWrapper from './components/ctaAbTestWrapper';
 
 import './digitalSubscriptionLanding.scss';
 
@@ -74,7 +73,7 @@ const content = (
       />
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
-      <OptimizeExperimentWrapper experimentId={experimentId}>
+      <CtaAbTestWrapper>
         <div />
         <div />
         <ProductPageContentBlock type="feature" id="subscribe">
@@ -86,7 +85,7 @@ const content = (
               You can cancel your subscription at any time
           </ProductPageInfoChip>
         </ProductPageContentBlock>
-      </OptimizeExperimentWrapper>
+      </CtaAbTestWrapper>
       <IndependentJournalismSection />
       <PromotionPopUp />
     </Page>
