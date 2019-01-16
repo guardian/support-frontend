@@ -189,7 +189,6 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         }
         <CtaAbTestWrapper>
           <CtaSwitch referringCta="support_digipack_page_header" />
-          <CtaSwitch referringCta="support_digipack_page_header" />
           <div className="digital-subscription-landing-header__cta">
             <UiButton trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</UiButton>
           </div>

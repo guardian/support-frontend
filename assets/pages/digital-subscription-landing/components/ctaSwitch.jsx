@@ -30,7 +30,6 @@ function CtaSwitch(props: { referringCta: string }) {
   return (
     <CtaAbTestWrapper>
       {PriceCta}
-      {PriceCta}
       <div />
     </CtaAbTestWrapper>
   );

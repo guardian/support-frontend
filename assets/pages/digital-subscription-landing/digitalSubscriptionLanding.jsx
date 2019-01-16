@@ -75,7 +75,6 @@ const content = (
       <AdFreeSection headingSize={2} />
       <CtaAbTestWrapper>
         <div />
-        <div />
         <ProductPageContentBlock type="feature" id="subscribe">
           <ProductPageTextBlock title="Subscribe to Digital Pack today">
             <p>Choose how you’d like to pay</p>
