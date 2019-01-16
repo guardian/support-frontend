@@ -21,17 +21,20 @@ function redirectToDigitalPage() {
 
     const { countryGroupId } = state.common.internationalisation;
     const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
+    const { plan } = state.page.plan;
 
-    const location = getDigitalCheckout(
-      referrerAcquisitionData,
-      countryGroupId,
-      null,
-      abParticipations,
-      optimizeExperiments,
-    );
+    if (plan) {
 
-    if (location) {
-      sendTrackingEventsOnClick('main_cta_click', 'DigitalPack', null)();
+      const location = getDigitalCheckout(
+        referrerAcquisitionData,
+        countryGroupId,
+        null,
+        abParticipations,
+        optimizeExperiments,
+        plan,
+      );
+
+      sendTrackingEventsOnClick(`main_cta_click_${plan}`, 'DigitalPack', null)();
       window.location.href = location;
     }
   };
