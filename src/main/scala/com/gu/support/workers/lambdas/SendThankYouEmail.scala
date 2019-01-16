@@ -8,7 +8,7 @@ import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.states.SendThankYouEmailState
-import com.gu.support.workers.{Contribution, DigitalPack, DirectDebitPaymentMethod, RequestInfo}
+import com.gu.support.workers._
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
@@ -59,6 +59,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           subscriptionNumber = state.subscriptionNumber,
           billingPeriod = d.billingPeriod,
           user = state.user,
+          paymentSchedule = state.paymentSchedule,
           currency = d.currency,
           paymentMethod = state.paymentMethod,
           directDebitMandateId = directDebitMandateId,

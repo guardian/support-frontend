@@ -24,7 +24,7 @@ case class ContributionEmailFields(
       "account number" -> mask(dd.bankTransferAccountNumber),
       "sort code" -> hyphenate(dd.bankCode),
       "Mandate ID" -> directDebitMandateId.getOrElse(""),
-      "first payment date" -> formatDate(created.plusDays(10)),
+      "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
       "payment method" -> "Direct Debit"
     )
     case _: PayPalReferenceTransaction => List("payment method" -> "PayPal")
