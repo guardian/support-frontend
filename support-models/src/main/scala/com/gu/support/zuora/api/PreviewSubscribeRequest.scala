@@ -28,7 +28,8 @@ object PreviewSubscribeRequest {
           subscribeItem.account,
           subscribeItem.billToContact,
           subscribeItem.paymentMethod,
-          subscribeItem.subscriptionData,
+          // This hack allows us to preview invoices further into the future (required to get a helpful payment schedule)
+          subscribeItem.subscriptionData.copy(subscription = subscribeItem.subscriptionData.subscription.copy(initialTerm = 24)),
           subscribeItem.subscribeOptions,
           PreviewOptions(numberOfPeriods = numberOfBillingPeriodsToPreview)
         )
