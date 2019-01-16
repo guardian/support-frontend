@@ -12,6 +12,7 @@ import './button.scss';
 type PropTypes = {
   ...SharedButtonPropTypes,
   'aria-label': ?string,
+  type: ?('button' | 'submit'),
 };
 
 const Button = (props: PropTypes) => (
@@ -23,6 +24,7 @@ const Button = (props: PropTypes) => (
 
 Button.defaultProps = {
   ...defaultProps,
+  type: 'button',
 };
 
 export default Button;
