@@ -53,19 +53,6 @@ object Fixtures {
     Subscription(date, date, date)
   )
 
-  def previewRequest(currency: Currency = GBP): PreviewSubscribeRequest = PreviewSubscribeRequest(
-    List(
-      PreviewSubscribeItem(
-        account(currency),
-        contactDetails,
-        creditCardPaymentMethod,
-        monthlySubscriptionData,
-        SubscribeOptions(),
-        PreviewOptions(numberOfPeriods = 3)
-      )
-    )
-  )
-
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
     SubscribeRequest(List(
       SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())

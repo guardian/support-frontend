@@ -114,7 +114,7 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
     }
   }
 
-  "Preview request" should "succeed" in doRequest(Left(previewRequest(GBP)))
+  "Preview request" should "succeed" in doRequest(Left(PreviewSubscribeRequest.fromSubscribe(creditCardSubscriptionRequest(GBP).subscribes.head, 13)))
 
   "Subscribe request" should "succeed" in doRequest(Right(creditCardSubscriptionRequest(GBP)))
 
