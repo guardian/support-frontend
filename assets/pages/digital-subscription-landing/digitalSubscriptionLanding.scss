@@ -22,6 +22,10 @@
 
 // ----- Page-Specific Styles ----- //
 
+:root {
+  scroll-behavior: smooth;
+}
+
 #digital-subscription-landing-page-int,
 #digital-subscription-landing-page-uk,
 #digital-subscription-landing-page-us,
@@ -290,6 +294,13 @@
     }
   }
 
+  .digital-subscription-landing-header__cta {
+    position: relative;
+    background-color: gu-colour(garnett-neutral-1);
+    border-top: 1px solid #fff;
+    padding: $gu-v-spacing $gu-v-spacing;
+  }
+
   .digital-subscription-landing-header__product {
     background-color: gu-colour(news-garnett-highlight);
     position: absolute;
@@ -441,4 +452,5 @@
 
 .component-left-margin-section--grey {
   background: gu-colour(neutral-6);
+  overflow: hidden;
 }

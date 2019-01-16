@@ -78,7 +78,7 @@ const content = (
         <div />
         <div />
         <ProductPageContentBlock type="feature" id="subscribe">
-          <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
+          <ProductPageTextBlock title="Subscribe to Digital Pack today">
             <p>Choose how you’d like to pay</p>
           </ProductPageTextBlock>
           <Form />

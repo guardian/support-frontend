@@ -24,12 +24,12 @@ export type State = {
 
 export default (promoInUrl: ?string) => {
 
-  const initialPeriod: DigitalBillingPeriod = promoInUrl === 'Monthly' || promoInUrl === 'Annual'
+  const initialPeriod: ?DigitalBillingPeriod = promoInUrl === 'Monthly' || promoInUrl === 'Annual'
     ? promoInUrl
-    : 'Annual';
+    : null;
 
   return combineReducers({
-    plan: ProductPagePlanFormReducerFor<DigitalBillingPeriod>('GuardianWeekly', initialPeriod),
+    plan: ProductPagePlanFormReducerFor<?DigitalBillingPeriod>('GuardianWeekly', initialPeriod),
     promotion: promotionPopUpReducer,
   });
 };

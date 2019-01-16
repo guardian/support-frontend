@@ -5,6 +5,7 @@ import type { OptimizeExperiments, OptimizeExperiment } from 'helpers/optimize/o
 import type { CommonState } from 'helpers/page/commonReducer';
 import type { Node } from 'react';
 import React from 'react';
+import { getQueryParameter } from 'helpers/url';
 
 export type ExperimentWrapperProps = {
   experimentId: string,
@@ -25,11 +26,13 @@ function getExperiment(props: ExperimentWrapperProps): OptimizeExperiment | null
 function OptimizeExperimentWrapper(props: ExperimentWrapperProps) {
   const experiment = getExperiment(props);
 
+  const defaultVariant = Number(getQueryParameter('force_optimize_ab_variant')) || 0;
+
   if (experiment === null) {
-    return React.Children.toArray(props.children)[0];
+    return React.Children.toArray(props.children)[defaultVariant];
   }
 
-  const variant = Number(experiment.variant) || 0;
+  const variant = Number(experiment.variant) || defaultVariant;
   return React.Children.toArray(props.children)[variant];
 }
 

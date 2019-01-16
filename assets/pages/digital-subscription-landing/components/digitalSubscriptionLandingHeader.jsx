@@ -13,12 +13,18 @@ import GridPicture, {
   type Source as GridSource,
 } from 'components/gridPicture/gridPicture';
 import { type ImageId as GridId } from 'helpers/theGrid';
+
+import SvgChevron from 'components/svgs/chevron';
+import OptimizeExperimentWrapper from 'components/optimizeExperimentWrapper/optimizeExperimentWrapper';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
+import UiButton from 'components/ui/uiButton/uiButton';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { displayPrice, type SubscriptionProduct } from 'helpers/subscriptions';
+import { displayPrice, sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+
 import CtaSwitch from './ctaSwitch';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
+import { experimentId } from '../helpers/ctaTypeAb';
 
 // ----- Types ----- //
 
@@ -182,7 +188,13 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             />
           </div>
         }
-        <CtaSwitch referringCta="support_digipack_page_header" />
+        <OptimizeExperimentWrapper experimentId={experimentId}>
+          <CtaSwitch referringCta="support_digipack_page_header" />
+          <CtaSwitch referringCta="support_digipack_page_header" />
+          <div className="digital-subscription-landing-header__cta">
+            <UiButton trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</UiButton>
+          </div>
+        </OptimizeExperimentWrapper>
       </LeftMarginSection>
     </div>
   );
