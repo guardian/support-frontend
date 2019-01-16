@@ -20,6 +20,7 @@ object PreviewPaymentSchedule {
       case Monthly => 13
       case Quarterly => 5
       case com.gu.support.workers.Annual => 2
+      case SixWeekly => 2
     }
     singleResponseCheck(
       services.zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfInvoicesToPreview))
