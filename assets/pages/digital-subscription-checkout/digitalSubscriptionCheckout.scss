@@ -28,9 +28,11 @@
 @import '~components/forms/formHOCs/withArrow';
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
+@import '~components/marketingConsentNew/marketingConsent';
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 @import '~components/directDebit/directDebitForm/directDebitForm';
+@import '~components/ui/uiButton/uiButton';
 
 
 // ----- Page-Specific Styles ----- //
@@ -168,13 +170,22 @@
 
   }
 
-  .component-left-margin-section--thank-you-apps {
+  .component-left-margin-section--thank-you-apps,
+  .component-left-margin-section--thank-you-consent {
     .component-left-margin-section__content {
       border-top: 1px solid gu-colour(garnett-neutral-4);
     }
   }
 
-  .thank-you-content__heading {
+  .component-left-margin-section--thank-you-consent {
+    .component-left-margin-section__content {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  .thank-you-content__heading,
+  .component-marketing-consent__title {
     font-size: 22px;
     line-height: 1.18;
     font-weight: 300;
@@ -206,12 +217,15 @@
     }
   }
 
-  .thank-you-content__copy {
+  .thank-you-content__copy,
+  .component-marketing-consent__message {
     font-size: 17px;
     line-height: 1.25;
     font-family: $gu-headline;
     color: gu-colour(media-garnett-main-1);
     margin: $gu-v-spacing 0;
+    letter-spacing: 0;
+    font-weight: 400;
 
     @include mq($from: phablet) {
       width: 560px;
@@ -237,5 +251,23 @@
   .thank-you-content__link {
     color: gu-colour(garnett-neutral-6);
   }
-
+  
+  .component-marketing-consent {
+    border-bottom: 0;
+    @include mq($from: desktop) {
+      position: relative;
+      padding-bottom: $gu-v-spacing * 4;  
+    }
+    .svg-newsletters {
+      display: block;
+      @include mq($from: desktop) {
+        position: absolute;
+        bottom: 0;
+        width: auto;
+        max-height: 95%;
+        left: gu-span(7); 
+      }
+    }
+  }
+  
 }

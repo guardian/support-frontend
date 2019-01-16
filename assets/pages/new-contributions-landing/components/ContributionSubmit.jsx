@@ -19,7 +19,7 @@ import {
   sendFormSubmitEventForPayPalRecurring,
   setupRecurringPayPalPayment,
 } from '../contributionsLandingActions';
-import { ButtonWithRightArrow } from './ButtonWithRightArrow';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
 
 
 // ----- Types ----- //

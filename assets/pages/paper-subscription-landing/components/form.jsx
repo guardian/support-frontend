@@ -28,50 +28,50 @@ const getSavingStr = (subscription: Option<number>, newsstand: Option<number>): 
 
 const allPlans = {
   collectionEveryday: {
-    title: 'Everyday',
-    copy: 'Receive vouchers to enjoy every issue of The Guardian and The Observer, from Monday to Sunday',
+    title: 'Every day',
+    copy: 'Every issue of The Guardian and The Observer, from Monday to Sunday',
     newsstand: getNewsstandPrice(['weekly', 'saturday', 'sunday']),
     price: getPaperPrice('collectionEveryday'),
   },
   collectionSixday: {
-    title: 'Sixday',
-    copy: 'We\'ll send you vouchers to pick up every issue of The Guardian, from Monday to Saturday',
+    title: 'Monday to Saturday',
+    copy: 'Every issue of The Guardian, from Monday to Saturday',
     newsstand: getNewsstandPrice(['weekly', 'saturday']),
     price: getPaperPrice('collectionSixday'),
   },
   collectionWeekend: {
     title: 'Weekend',
-    copy: 'Make more of your weekend, with vouchers for The Guardian every Saturday and The Observer every Sunday',
+    copy: 'The Guardian every Saturday and The Observer every Sunday',
     newsstand: getNewsstandPrice(['saturday', 'sunday']),
     price: getPaperPrice('collectionWeekend'),
   },
   collectionSunday: {
     title: 'Sunday',
-    copy: 'Get vouchers to pick up The Observer newspaper every Sunday',
+    copy: 'The Observer every Sunday',
     newsstand: getNewsstandPrice(['sunday']),
     price: getPaperPrice('collectionSunday'),
   },
   deliveryEveryday: {
-    title: 'Everyday',
-    copy: 'Enjoy every issue of The Guardian and Observer newspapers from Monday to Sunday, delivered to your home',
+    title: 'Every day',
+    copy: 'Every issue of The Guardian and The Observer, from Monday to Sunday',
     newsstand: getNewsstandPrice(['weekly', 'saturday', 'sunday']),
     price: getPaperPrice('deliveryEveryday'),
   },
   deliverySixday: {
-    title: 'Sixday',
-    copy: 'Get every issue of The Guardian delivered to your front door, from Monday to Saturday',
+    title: 'Monday to Saturday',
+    copy: 'Every issue of The Guardian, from Monday to Saturday',
     newsstand: getNewsstandPrice(['weekly', 'saturday']),
     price: getPaperPrice('deliverySixday'),
   },
   deliveryWeekend: {
     title: 'Weekend',
-    copy: 'Make more of every weekend with The Guardian on Saturday and The Observer on Sunday, delivered to your home',
+    copy: 'The Guardian every Saturday and The Observer every Sunday',
     newsstand: getNewsstandPrice(['saturday', 'sunday']),
     price: getPaperPrice('deliveryWeekend'),
   },
   deliverySunday: {
     title: 'Sunday',
-    copy: 'Relax with The Observer every Sunday, delivered to your doormat',
+    copy: 'The Observer every Sunday',
     newsstand: getNewsstandPrice(['sunday']),
     price: getPaperPrice('deliverySunday'),
   },
@@ -85,9 +85,9 @@ const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => {
     [k]: {
       title: allPlans[k].title,
       copy: allPlans[k].copy,
-      offer: null,
       price: getPriceStr(allPlans[k].price),
-      saving: getSavingStr(allPlans[k].price.value, allPlans[k].newsstand ? allPlans[k].newsstand : null),
+      offer: getSavingStr(allPlans[k].price.value, allPlans[k].newsstand ? allPlans[k].newsstand : null),
+      saving: null,
     },
   }), {});
 

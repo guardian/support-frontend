@@ -21,7 +21,6 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymen
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
-import { type ApplePayTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
@@ -47,7 +46,7 @@ import {
   setStripeV3HasLoaded,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
-import StripePaymentRequestButtonContainer from './StripePaymentRequestButtonContainer';
+import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
 
 
 // ----- Types ----- //
@@ -77,7 +76,6 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   isTestUser: boolean,
   country: IsoCountry,
-  applePayTestVariant: ApplePayTestVariant,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -105,7 +103,6 @@ const mapStateToProps = (state: State) => ({
   formIsSubmittable: state.page.form.formIsSubmittable,
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
-  applePayTestVariant: state.common.abParticipations.applePay,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
 });
 
@@ -219,7 +216,6 @@ function ContributionForm(props: PropTypes) {
         contributionType={props.contributionType}
         isTestUser={props.isTestUser}
         country={props.country}
-        applePayTestVariant={props.applePayTestVariant}
         otherAmounts={props.otherAmounts}
         selectedAmounts={props.selectedAmounts}
       />

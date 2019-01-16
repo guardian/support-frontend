@@ -43,9 +43,9 @@ export type PaperDeliveryMethod = 'collection' | 'delivery';
 export type PaperNewsstandTiers = 'weekly' | 'saturday' | 'sunday';
 
 const newsstandPrices: {[PaperNewsstandTiers]: number} = {
-  weekly: 2 * 5,
-  saturday: 2.9,
-  sunday: 3,
+  weekly: 2.20 * 5,
+  saturday: 3.20,
+  sunday: 3.20,
 };
 
 
