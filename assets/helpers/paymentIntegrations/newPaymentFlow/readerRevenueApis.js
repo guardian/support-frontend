@@ -172,10 +172,21 @@ function postRegularPaymentRequest(
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
-  return logPromise(fetchJson(
-    uri,
-    requestOptions(data, 'same-origin', 'POST', csrf),
-  ).then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage)));
+  return logPromise(fetch(uri, requestOptions(data, 'same-origin', 'POST', csrf)))
+    .then((response) => {
+      if (response.status === 500) {
+        logException(`500 Error while trying to post to ${uri}`);
+        return ({ paymentStatus: 'failure', error: 'internal_error' });
+      }
+
+      return response.json()
+        .then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage));
+
+    })
+    .catch(() => {
+      logException(`Error while trying to interact with ${uri}`);
+      return ({ paymentStatus: 'failure', error: 'unknown' });
+    });
 }
 
 function setPasswordGuest(
