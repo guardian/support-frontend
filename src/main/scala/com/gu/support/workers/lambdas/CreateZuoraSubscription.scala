@@ -34,17 +34,23 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       maybeDomainSubscription <- GetRecurringSubscription(services.zuoraService, state.requestId, identityId, state.product.billingPeriod)
       previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
       thankYouState <- maybeDomainSubscription match {
-        case Some(domainSubscription) => skipSubscribe(state, requestInfo, domainSubscription)
+        case Some(domainSubscription) => skipSubscribe(state, requestInfo, previewPaymentSchedule, domainSubscription)
         case None => subscribe(state, subscribeItem, previewPaymentSchedule, requestInfo, services)
       }
     } yield thankYouState
   }
 
-  def skipSubscribe(state: CreateZuoraSubscriptionState, requestInfo: RequestInfo, subscription: DomainSubscription): FutureHandlerResult = {
+  def skipSubscribe(
+    state: CreateZuoraSubscriptionState,
+    requestInfo: RequestInfo,
+    previewedPaymentSchedule: PaymentSchedule,
+    subscription: DomainSubscription
+  ): FutureHandlerResult = {
     val message = "Skipping subscribe for user because they are already an active contributor"
     SafeLogger.info(message)
     FutureHandlerResult(
-      getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber, PaymentSchedule(Nil)), requestInfo.appendMessage(message)
+      getEmailState(state, subscription.accountNumber, subscription.subscriptionNumber, previewedPaymentSchedule),
+      requestInfo.appendMessage(message)
     )
   }
 
