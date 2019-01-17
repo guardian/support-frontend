@@ -17,12 +17,13 @@ import lib.PlayImplicits._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
-import play.api.mvc._
+import play.api.mvc.{request, _}
 import play.twirl.api.Html
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
 import views.html.digitalSubscription
 import views.html.helper.CSRF
+import utils.SimpleValidator._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -106,14 +107,20 @@ class DigitalSubscription(
 
   def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
-      implicit request =>
+      implicit request: AuthRequest[CreateSupportWorkersRequest] =>
         val billingPeriod = request.body.product.billingPeriod
         SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
-        val result = for {
-          user <- identityService.getUser(request.user)
-          statusResponse <- client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
-        } yield statusResponse
-        respondToClient(result, request.body.product.billingPeriod)
+
+        if (validationPasses(request.body)) {
+          val result: EitherT[Future, String, StatusResponse] = for {
+            user <- identityService.getUser(request.user)
+            statusResponse <- client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
+          } yield statusResponse
+          respondToClient(result, request.body.product.billingPeriod)
+        } else {
+          respondToClient(EitherT.leftT("validation of the request body failed"), request.body.product.billingPeriod)
+        }
+
     }
 
   private def createUser(user: IdUser, request: CreateSupportWorkersRequest) = {
@@ -141,7 +148,7 @@ class DigitalSubscription(
         InternalServerError
       },
       { statusResponse =>
-        SafeLogger.info("[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
+        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
         Accepted(statusResponse.asJson)
       }
     )

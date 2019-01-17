@@ -6,6 +6,7 @@
 export type ErrorReason =
   'insufficient_funds' |
   'payment_details_incorrect' |
+  'personal_details_incorrect' |
   'payment_method_temporarily_declined' |
   'payment_method_unacceptable' |
   'payment_provider_unavailable' |
@@ -25,6 +26,8 @@ function appropriateErrorMessage(errorReason: ?ErrorReason): ?string {
       return 'The transaction was declined due to insufficient funds in your account. Please use a different card or contact your bank.';
     case 'payment_details_incorrect':
       return 'An error occurred while trying to process your payment. Please double check your card details and try again. Alternatively, try another card or payment method.';
+    case 'personal_details_incorrect':
+      return 'Please double check the name and contact details you provided and try again.';
     case 'payment_method_temporarily_declined':
       return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
     case 'payment_method_unacceptable':

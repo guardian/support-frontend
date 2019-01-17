@@ -177,6 +177,9 @@ function postRegularPaymentRequest(
       if (response.status === 500) {
         logException(`500 Error while trying to post to ${uri}`);
         return ({ paymentStatus: 'failure', error: 'internal_error' });
+      } else if (response.status === 400) {
+        logException(`Bad request error while trying to post to ${uri}`);
+        return ({ paymentStatus: 'failure', error: 'personal_details_incorrect' });
       }
 
       return response.json()

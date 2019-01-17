@@ -105,8 +105,10 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
 
 function CheckoutForm(props: PropTypes) {
 
+  const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
+    'Payment Attempt Failed';
   const errorState = props.submissionError ?
-    <GeneralErrorMessage errorReason={props.submissionError} /> :
+    <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
   return (
