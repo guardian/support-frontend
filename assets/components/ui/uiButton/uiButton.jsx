@@ -20,16 +20,19 @@ In that case you can use the `trackingOnClick` prop.
 
 // ---- Types ----- //
 
-type PropTypes = {
+type PropTypes = {|
   children: Node,
   icon?: Node,
-  isStatic: boolean,
+  type: 'submit' | 'button',
   href: ?string,
+  disabled: boolean,
+  isStatic: boolean,
   appearance: 'primary' | 'green' | 'greenHollow' | 'greyHollow',
   iconSide: 'left' | 'right',
-  trackingOnClick: ?(void => void),
   onClick: ?(void => void),
-};
+  trackingOnClick: ?(void => void),
+  'aria-label': ?string,
+|};
 
 
 // ----- Render ----- //
@@ -57,10 +60,10 @@ const UiButton = ({
   } else if (href) {
     return (
       <a
+        href={href}
+        data-disabled={disabled}
         className={getClassName()}
         onClick={trackingOnClick}
-        href={href}
-        {...otherProps}
       >
         <span className="component-ui-button__content">{children}</span>
         {icon}
@@ -69,9 +72,11 @@ const UiButton = ({
   }
   return (
     <button
-      {...otherProps}
+      disabled={disabled}
       onClick={(ev) => { if (onClick) { onClick(ev); } if (trackingOnClick) { trackingOnClick(); } }}
+      type={type}
       className={getClassName()}
+      {...otherProps}
     >
       <span className="component-ui-button__content">{children}</span>
       {icon}
@@ -81,12 +86,15 @@ const UiButton = ({
 
 UiButton.defaultProps = {
   icon: <SvgArrowRightStraight />,
+  type: 'button',
+  onClick: null,
   trackingOnClick: null,
   href: null,
+  disabled: false,
   isStatic: false,
   appearance: 'primary',
   iconSide: 'right',
-  onClick: null,
+  'aria-label': null, // eslint-disable-line react/default-props-match-prop-types
 };
 
 export default UiButton;
