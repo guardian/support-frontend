@@ -15,7 +15,7 @@ type Appearance = 'primary' | 'green' | 'greenHollow' | 'greyHollow';
 type IconSide = 'left' | 'right';
 
 type SharedButtonPropTypes = {|
-  children: Node,
+  children: string,
   icon?: Node,
   appearance: Appearance,
   iconSide: IconSide,

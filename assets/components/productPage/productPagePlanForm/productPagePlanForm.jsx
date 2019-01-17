@@ -87,7 +87,7 @@ export default function ProductPagePlanForm<P:string>({
       </ProductPageContentBlockOutset>
       <div className={['component-product-page-plan-form__cta', bgClassName].join(' ')} data-disabled={selectedPlan === null}>
         <Button aria-label={null} disabled={!selectedPlanTitle} type="submit">
-          Subscribe now{selectedPlanTitle && ` – ${selectedPlanTitle}`}
+          {['Subscribe now', ...(selectedPlanTitle ? [selectedPlanTitle] : [])].join(' - ')}
         </Button>
       </div>
     </form>
