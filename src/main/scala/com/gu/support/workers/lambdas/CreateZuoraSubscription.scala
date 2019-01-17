@@ -35,7 +35,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       previewPaymentSchedule <- PreviewPaymentSchedule(subscribeItem, state.product.billingPeriod, services, checkSingleResponse)
       thankYouState <- maybeDomainSubscription match {
         case Some(domainSubscription) => skipSubscribe(state, requestInfo, previewPaymentSchedule, domainSubscription)
-        case None => subscribe(state, subscribeItem, previewPaymentSchedule, requestInfo, services)
+        case None => subscribe(state, subscribeItem, services).map(response => toHandlerResult(state, response, previewPaymentSchedule, requestInfo))
       }
     } yield thankYouState
   }
@@ -67,16 +67,15 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     }
   }
 
-  def subscribe(
-    state: CreateZuoraSubscriptionState,
-    subscribeItem: SubscribeItem,
-    previewedPaymentSchedule: PaymentSchedule,
-    requestInfo: RequestInfo,
-    services: Services
-  ): FutureHandlerResult =
+  def subscribe(state: CreateZuoraSubscriptionState, subscribeItem: SubscribeItem, services: Services): Future[SubscribeResponseAccount] =
     singleSubscribe(services.zuoraService.subscribe)(subscribeItem)
-      .map(response =>
-        HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber, previewedPaymentSchedule), requestInfo))
+
+  def toHandlerResult(
+    state: CreateZuoraSubscriptionState,
+    response: SubscribeResponseAccount,
+    previewedPaymentSchedule: PaymentSchedule,
+    requestInfo: RequestInfo
+  ): HandlerResult = HandlerResult(getEmailState(state, response.domainAccountNumber, response.domainSubscriptionNumber, previewedPaymentSchedule), requestInfo)
 
   private def getEmailState(
     state: CreateZuoraSubscriptionState,
