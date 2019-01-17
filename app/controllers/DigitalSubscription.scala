@@ -118,7 +118,7 @@ class DigitalSubscription(
           } yield statusResponse
           respondToClient(result, request.body.product.billingPeriod)
         } else {
-          respondToClient(EitherT.leftT("validation-failure"), request.body.product.billingPeriod)
+          respondToClient(EitherT.leftT("validation of the request body failed"), request.body.product.billingPeriod)
         }
 
     }
@@ -145,10 +145,7 @@ class DigitalSubscription(
     result.fold(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod Digital Subscription, due to $error")
-        error match {
-          case "validation-failure" => BadRequest
-          case _ => InternalServerError
-        }
+        InternalServerError
       },
       { statusResponse =>
         SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
