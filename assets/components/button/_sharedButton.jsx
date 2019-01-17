@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type Node } from 'react';
+import React, { createElement, type Node } from 'react';
 
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -30,20 +30,25 @@ type PropTypes = {
 // ----- Render ----- //
 
 const SharedButton = ({
-  element: HtmlElement, appearance, iconSide, modifierClasses, children, icon, ...otherProps
-}: PropTypes) => (
-  <HtmlElement
-    className={classNameWithModifiers('component-button', [
-        appearance,
-        `hasicon-${iconSide}`,
-        ...modifierClasses,
-      ])}
-    {...otherProps}
-  >
-    <span className="component-button__content">{children}</span>
-    {icon}
-  </HtmlElement>
-);
+  element, appearance, iconSide, modifierClasses, children, icon, ...otherProps
+}: PropTypes) => {
+
+  const className = classNameWithModifiers('component-button', [
+    appearance,
+    `hasicon-${iconSide}`,
+    ...modifierClasses,
+  ]);
+
+  const contents = [
+    (<span className="component-button__content">{children}</span>),
+    icon,
+  ];
+
+  return createElement(element, {
+    className,
+    ...otherProps,
+  }, contents);
+};
 
 export const defaultProps = {
   icon: <SvgArrowRightStraight />,
