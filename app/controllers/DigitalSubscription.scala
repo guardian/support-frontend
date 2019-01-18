@@ -105,20 +105,32 @@ class DigitalSubscription(
     )
   }
 
+  sealed abstract class CreateDigitalSubscriptionError(message: String)
+  case class ServerError(message: String) extends CreateDigitalSubscriptionError(message)
+  case class RequestValidationError(message: String) extends CreateDigitalSubscriptionError(message)
+
   def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
       implicit request: AuthRequest[CreateSupportWorkersRequest] =>
         val billingPeriod = request.body.product.billingPeriod
         SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
 
+        type ApiResponseOrError[RES] = EitherT[Future, CreateDigitalSubscriptionError, RES]
+
         if (validationPasses(request.body)) {
-          val result: EitherT[Future, String, StatusResponse] = for {
-            user <- identityService.getUser(request.user)
-            statusResponse <- client.createSubscription(request, createUser(user, request.body), request.uuid).leftMap(_.toString)
+          val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user).leftMap(ServerError(_))
+          def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
+            client.createSubscription(request, createUser(idUser, request.body), request.uuid).leftMap(error => ServerError(error.toString))
+          }
+
+          val result: ApiResponseOrError[StatusResponse] = for {
+            user <- userOrError
+            statusResponse <- subscriptionStatusOrError(user)
           } yield statusResponse
+
           respondToClient(result, request.body.product.billingPeriod)
         } else {
-          respondToClient(EitherT.leftT("validation of the request body failed"), request.body.product.billingPeriod)
+          respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), request.body.product.billingPeriod)
         }
 
     }
@@ -139,13 +151,16 @@ class DigitalSubscription(
   }
 
   protected def respondToClient(
-    result: EitherT[Future, String, StatusResponse],
+    result: EitherT[Future, CreateDigitalSubscriptionError, StatusResponse],
     billingPeriod: BillingPeriod
   )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] =
     result.fold(
       { error =>
         SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod Digital Subscription, due to $error")
-        InternalServerError
+        error match {
+          case _: RequestValidationError => BadRequest
+          case _: ServerError => InternalServerError
+        }
       },
       { statusResponse =>
         SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
