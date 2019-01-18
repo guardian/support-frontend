@@ -17,6 +17,11 @@ object SubscriptionEmailFieldHelpers {
 
   def firstPayment(paymentSchedule: PaymentSchedule): Payment = paymentSchedule.payments.minBy(_.date)
 
+  def introductoryPeriod(introductoryBillingPeriods: Int, billingPeriod: BillingPeriod): String = {
+    val pluraliseIfRequired = if (introductoryBillingPeriods > 1) "s" else ""
+    s"$introductoryBillingPeriods ${billingPeriod.noun}$pluraliseIfRequired"
+  }
+
   def describe(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency): String = {
     val initialPrice = firstPayment(paymentSchedule).amount
     val (paymentsWithInitialPrice, paymentsWithDifferentPrice) = paymentSchedule.payments.partition(_.amount == initialPrice)
@@ -27,13 +32,12 @@ object SubscriptionEmailFieldHelpers {
         val firstIntroductoryPayment = paymentsWithInitialPrice.minBy(_.date)
         val firstDifferentPayment = paymentsWithDifferentPrice.minBy(_.date)
         val monthsAtIntroductoryPrice = Months.monthsBetween(firstIntroductoryPayment.date, firstDifferentPayment.date).getMonths
-        val introductoryBillingPeriods = billingPeriod match {
-          case Annual => monthsAtIntroductoryPrice / 12
-          case Quarterly => monthsAtIntroductoryPrice / 3
-          case Monthly => monthsAtIntroductoryPrice
+        billingPeriod match {
+          case Annual => introductoryPeriod(monthsAtIntroductoryPrice / 12, billingPeriod)
+          case Quarterly => introductoryPeriod(monthsAtIntroductoryPrice / 3, billingPeriod)
+          case Monthly => introductoryPeriod(monthsAtIntroductoryPrice, billingPeriod)
+          case SixWeekly => throw new RuntimeException("Six for six is currently unsupported")
         }
-        val pluraliseIfRequired = if (introductoryBillingPeriods > 1) "s" else ""
-        s"$introductoryBillingPeriods ${billingPeriod.noun}$pluraliseIfRequired"
       }
       s"${priceWithCurrency(currency, initialPrice)} for $introductoryTimespan, " +
         s"then ${priceWithCurrency(currency, paymentsWithDifferentPrice.head.amount)} every ${billingPeriod.noun}"
