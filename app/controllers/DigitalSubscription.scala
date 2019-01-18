@@ -105,15 +105,9 @@ class DigitalSubscription(
     )
   }
 
-  sealed trait CreateDigitalSubscriptionError {
-    def asString: String
-  }
-  case class ServerError(message: String) extends CreateDigitalSubscriptionError {
-    override def asString: String = message
-  }
-  case class RequestValidationError(message: String) extends CreateDigitalSubscriptionError {
-    override def asString: String = message
-  }
+  sealed class CreateDigitalSubscriptionError(message: String)
+  case class ServerError(message: String) extends CreateDigitalSubscriptionError(message)
+  case class RequestValidationError(message: String) extends CreateDigitalSubscriptionError(message)
 
   def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
@@ -121,14 +115,16 @@ class DigitalSubscription(
         val billingPeriod = request.body.product.billingPeriod
         SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
 
+        type ApiResponseOrError[RES] = EitherT[Future, CreateDigitalSubscriptionError, RES]
+
         if (validationPasses(request.body)) {
-          val userOrError: EitherT[Future, CreateDigitalSubscriptionError, IdUser] = identityService.getUser(request.user).leftMap(ServerError(_))
-          def subscriptionStatusOrError(idUser: IdUser): EitherT[Future, CreateDigitalSubscriptionError, StatusResponse] = {
+          val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user).leftMap(ServerError(_))
+          def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
             client.createSubscription(request, createUser(idUser, request.body), request.uuid).leftMap(error => ServerError(error.toString))
           }
 
           val result: EitherT[Future, CreateDigitalSubscriptionError, StatusResponse] = for {
-            user <- identityService.getUser(request.user).leftMap(ServerError(_))
+            user <- userOrError
             statusResponse <- subscriptionStatusOrError(user)
           } yield statusResponse
 
