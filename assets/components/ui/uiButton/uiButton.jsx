@@ -31,13 +31,14 @@ type PropTypes = {|
   iconSide: 'left' | 'right',
   onClick: ?(void => void),
   trackingOnClick: ?(void => void),
+  'aria-label': ?string,
 |};
 
 
 // ----- Render ----- //
 
 const UiButton = ({
-  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic,
+  children, icon, type, onClick, href, disabled, trackingOnClick, appearance, iconSide, isStatic, ...otherProps
 }: PropTypes) => {
 
   const getClassName = (modifiers: string[] = []) =>
@@ -75,6 +76,7 @@ const UiButton = ({
       onClick={(ev) => { if (onClick) { onClick(ev); } if (trackingOnClick) { trackingOnClick(); } }}
       type={type}
       className={getClassName()}
+      {...otherProps}
     >
       <span className="component-ui-button__content">{children}</span>
       {icon}
@@ -92,6 +94,7 @@ UiButton.defaultProps = {
   isStatic: false,
   appearance: 'primary',
   iconSide: 'right',
+  'aria-label': null, // eslint-disable-line react/default-props-match-prop-types
 };
 
 export default UiButton;

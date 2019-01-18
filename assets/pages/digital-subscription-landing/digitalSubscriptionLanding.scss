@@ -22,6 +22,10 @@
 
 // ----- Page-Specific Styles ----- //
 
+:root {
+  scroll-behavior: smooth;
+}
+
 #digital-subscription-landing-page-int,
 #digital-subscription-landing-page-uk,
 #digital-subscription-landing-page-us,
@@ -133,6 +137,7 @@
 
   .product-block__copy {
     padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
+    font-size: 17px;
   }
 
   .product-block__product-heading {
@@ -146,22 +151,20 @@
 
   .product-block__product-description {
     margin: $gu-v-spacing / 2 0 $gu-v-spacing;
-    font-size: 16px;
     line-height: 1.25;
     font-family: $gu-headline;
   }
 
   .component-feature-list {
-    font-size: 16px;
     line-height: 1.25;
     font-family: $gu-headline;
     list-style-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ff4e36"/></svg>');
     margin-left: 26px;
-    display: flex;
-    flex-flow: column wrap;
 
-    @include mq($from: leftCol) {
-      height: 200px;
+    @include mq($from: desktop) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-row-gap: $gu-v-spacing;
     }
 
   }
@@ -175,8 +178,8 @@
   .component-feature-list__item {
     margin-bottom: $gu-v-spacing / 2;
 
-    @include mq($from: leftCol) {
-      width: 200px;
+    @include mq($from: desktop) {
+      padding-right: 40px;
     }
   }
 
@@ -256,7 +259,9 @@
       border-top: 1px solid #fff;
     }
     .component-price-cta__secondary {
-      border-left: 1px solid gu-colour(garnett-neutral-4);
+      color: gu-colour(garnett-neutral-3);
+      padding: ($gu-v-spacing / 2) 0;
+      font-size: .9em;
     }
     .component-flash-sale-countdown {
       z-index: 10;
@@ -286,6 +291,13 @@
     @include mq($from: leftCol) {
       height: 389px;
     }
+  }
+
+  .digital-subscription-landing-header__cta {
+    position: relative;
+    background-color: gu-colour(garnett-neutral-1);
+    border-top: 1px solid #fff;
+    padding: $gu-v-spacing $gu-v-spacing;
   }
 
   .digital-subscription-landing-header__product {
@@ -439,4 +451,5 @@
 
 .component-left-margin-section--grey {
   background: gu-colour(neutral-6);
+  overflow: hidden;
 }

@@ -8,7 +8,7 @@ import { type Option } from 'helpers/types/option';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
-import { Annual, Quarterly, SixForSix, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
 
 import { getIntcmp, getPromoCode } from './flashSale';
@@ -274,6 +274,7 @@ function getDigitalCheckout(
   referringCta: ?string,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
+  billingPeriod: DigitalBillingPeriod = Monthly,
 ): string {
   const acquisitionData = deriveSubsAcquisitionData(
     referrerAcquisitionData,
@@ -287,6 +288,9 @@ function getDigitalCheckout(
   params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
   params.set('startTrialButton', referringCta || '');
 
+  if (billingPeriod === Annual) {
+    return `${subsUrl}/checkout/digitalpack-digitalpackannual?${params.toString()}`;
+  }
   return `${subsUrl}/checkout?${params.toString()}`;
 }
 

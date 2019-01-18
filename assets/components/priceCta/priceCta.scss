@@ -2,29 +2,7 @@
   padding-top: $gu-v-spacing;
   padding-bottom: $gu-v-spacing;
   position: relative;
-
-  .component-cta-link {
-    width: 200px;
-    background-color: gu-colour(news-garnett-highlight);
-    color: gu-colour(garnett-neutral-1);
-    margin-left: $gu-h-spacing / 2;
-
-    &:hover {
-      background-color: darken(gu-colour(news-garnett-highlight), 5%);
-    }
-
-    @include mq($from: mobileMedium) {
-      width: 200px;
-    }
-
-    @include mq($from: desktop) {
-      width: 220px;
-    }
-  }
-
-  .svg-arrow-right-straight {
-    fill: gu-colour(garnett-neutral-1);
-  }
+  padding-left: $gu-h-spacing / 2;
 }
 
 .component-price-cta--with-secondary {
@@ -36,12 +14,10 @@
 }
 
 .component-price-cta__secondary {
-  background-color: gu-colour(garnett-neutral-3);
-  font-size: 14px;
+  @include gu-fontset-body-sans;
   font-style: italic;
-  line-height: 24px;
-  padding-bottom: $gu-v-spacing / 2;
-  padding-left: $gu-h-spacing / 2;
+  padding-bottom: $gu-v-spacing * 2;
+  padding-top: $gu-v-spacing * 2;
   width: 100%;
   box-sizing: border-box;
 }
