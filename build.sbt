@@ -71,7 +71,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "support-config" % "0.16",
   "com.gu" %% "fezziwig" % "0.8",
   "com.typesafe.akka" %% "akka-agent" % "2.5.14",
-  "com.gu" %% "support-internationalisation" % "0.9",
+  "com.gu" %% "support-internationalisation" % "0.10",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
