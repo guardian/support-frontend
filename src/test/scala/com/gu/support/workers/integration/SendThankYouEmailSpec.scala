@@ -13,13 +13,13 @@ import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.SendThankYouEmail
-import com.gu.support.workers.{DirectDebitPaymentMethod, LambdaSpec, Monthly, User}
+import com.gu.support.workers._
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json
 import io.circe.generic.auto._
 import io.circe.parser._
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, LocalDate}
 
 @IntegrationTest
 class SendThankYouEmailSpec extends LambdaSpec {
@@ -59,8 +59,9 @@ class SendThankYouEmailSpec extends LambdaSpec {
     val user = User("1234", addressToSendTo, "Mickey", "Mouse", UK)
     val ef = DigitalPackEmailFields(
       "A-S00045678",
-      Monthly,
+      Annual,
       user,
+      PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
       GBP,
       dd,
       SfContactId("0036E00000WK8fDQAT"),

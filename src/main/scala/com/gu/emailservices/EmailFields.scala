@@ -1,6 +1,6 @@
 package com.gu.emailservices
 
-import org.joda.time.DateTime
+import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -38,6 +38,5 @@ trait EmailFields {
 
   protected def mask(s: String): String = s.replace(s.substring(0, 6), "******")
   protected def hyphenate(s: String): String = s"${s.substring(0, 2)}-${s.substring(2, 4)}-${s.substring(4, 6)}"
-  protected def formatPrice(price: BigDecimal): String = price.bigDecimal.stripTrailingZeros.toPlainString
-  protected def formatDate(d: DateTime): String = DateTimeFormat.forPattern("EEEE, d MMMM yyyy").print(d)
+  protected def formatDate(d: LocalDate): String = DateTimeFormat.forPattern("EEEE, d MMMM yyyy").print(d)
 }

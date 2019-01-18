@@ -3,7 +3,6 @@ package com.gu.emailservices
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
-import org.joda.time.DateTime
 
 // Output Json should look like this:
 //
@@ -40,14 +39,13 @@ case class DigitalPackEmailFields(
     subscriptionNumber: String,
     billingPeriod: BillingPeriod,
     user: User,
+    paymentSchedule: PaymentSchedule,
     currency: Currency,
     paymentMethod: PaymentMethod,
     sfContactId: SfContactId,
     directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 
-  val amount = 11.99F //TODO: Get the real price
-  val subscriptionDetails = s"${currency.glyph}$amount every ${billingPeriod.noun}"
   val paymentFields = paymentMethod match {
     case dd: DirectDebitPaymentMethod => List(
       "Account number" -> mask(dd.bankTransferAccountNumber),
@@ -65,7 +63,7 @@ case class DigitalPackEmailFields(
     "SubscriberKey" -> user.primaryEmailAddress,
     "EmailAddress" -> user.primaryEmailAddress,
     "Subscription term" -> billingPeriod.noun,
-    "Payment amount" -> formatPrice(amount),
+    "Payment amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
     "First Name" -> user.firstName,
     "Last Name" -> user.lastName,
     "Address 1" -> "", //TODO: We don't have this
@@ -73,10 +71,10 @@ case class DigitalPackEmailFields(
     "City" -> "", //TODO: We don't have this
     "Post Code" -> "", //TODO: We don't have this
     "Country" -> user.country.name,
-    "Date of first payment" -> formatDate(DateTime.now), //TODO: work this out using trial period
+    "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
     "Currency" -> currency.glyph,
     "Trial period" -> "14", //TODO: depends on Promo code
-    "Subscription details" -> subscriptionDetails
+    "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency)
   ) ++ paymentFields //TODO: ++ promotionFields
 
   override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
