@@ -105,7 +105,7 @@ class DigitalSubscription(
     )
   }
 
-  sealed class CreateDigitalSubscriptionError(message: String)
+  sealed abstract class CreateDigitalSubscriptionError(message: String)
   case class ServerError(message: String) extends CreateDigitalSubscriptionError(message)
   case class RequestValidationError(message: String) extends CreateDigitalSubscriptionError(message)
 
