@@ -22,12 +22,11 @@ export default function AdFreeSection(props: PropTypes) {
 
   return (
     <div className="component-ad-free-section">
-      <LeftMarginSection modifierClasses={['blue']}>
+      <LeftMarginSection>
         <div className="component-ad-free-section__content">
           <div className="component-ad-free-section__wrapper">
             <div className="component-ad-free-section__col">
               <Heading size={headingSize} className="component-ad-free-section__header">No ads, no interruptions</Heading>
-              <strong className="component-ad-free-section__badge">New</strong>
               <p className="component-ad-free-section__copy">
                 Avoid the adverts and read without interruptions
                 when you&#39;re signed in on your apps and theguardian.com

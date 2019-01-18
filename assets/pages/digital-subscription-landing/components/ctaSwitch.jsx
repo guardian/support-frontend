@@ -5,6 +5,7 @@
 import React from 'react';
 
 import { flashSaleIsActive } from 'helpers/flashSale';
+import CtaAbTestWrapper from './ctaAbTestWrapper';
 import PriceCtaContainer from './priceCtaContainer';
 import FindOutMoreCta from './findOutMoreCta';
 
@@ -19,12 +20,18 @@ function CtaSwitch(props: { referringCta: string }) {
     return <FindOutMoreCta />;
   }
 
+  const PriceCta = (<PriceCtaContainer
+    ctaText={flashSaleIsActive('DigitalPack') ? 'Start your 14-day free trial' : null}
+    referringCta={props.referringCta}
+    secondaryCopy="You can cancel your subscription at any time"
+  />
+  );
+
   return (
-    <PriceCtaContainer
-      ctaText={flashSaleIsActive('DigitalPack') ? 'Start your 14-day free trial' : null}
-      referringCta={props.referringCta}
-      secondaryCopy="You can cancel your subscription at any time"
-    />
+    <CtaAbTestWrapper>
+      {PriceCta}
+      <div />
+    </CtaAbTestWrapper>
   );
 
 }

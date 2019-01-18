@@ -15,16 +15,23 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
+
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
-import promotionPopUpReducer from './components/promotionPopUpReducer';
+import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
+import Form from './components/form';
+import CtaAbTestWrapper from './components/ctaAbTestWrapper';
 
+import './digitalSubscriptionLanding.scss';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(promotionPopUpReducer);
+const store = pageInit(digitalSubscriptionLandingReducer(null), true);
 
 // ----- Internationalisation ----- //
 
@@ -66,6 +73,18 @@ const content = (
       />
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
+      <CtaAbTestWrapper>
+        <div />
+        <ProductPageContentBlock type="feature" id="subscribe">
+          <ProductPageTextBlock title="Subscribe to Digital Pack today">
+            <p>Choose how you’d like to pay</p>
+          </ProductPageTextBlock>
+          <Form />
+          <ProductPageInfoChip >
+              You can cancel your subscription at any time
+          </ProductPageInfoChip>
+        </ProductPageContentBlock>
+      </CtaAbTestWrapper>
       <IndependentJournalismSection />
       <PromotionPopUp />
     </Page>
