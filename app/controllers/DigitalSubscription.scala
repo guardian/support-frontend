@@ -123,7 +123,7 @@ class DigitalSubscription(
             client.createSubscription(request, createUser(idUser, request.body), request.uuid).leftMap(error => ServerError(error.toString))
           }
 
-          val result: EitherT[Future, CreateDigitalSubscriptionError, StatusResponse] = for {
+          val result: ApiResponseOrError[StatusResponse] = for {
             user <- userOrError
             statusResponse <- subscriptionStatusOrError(user)
           } yield statusResponse
