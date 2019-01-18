@@ -59,7 +59,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
     val user = User("1234", addressToSendTo, "Mickey", "Mouse", UK)
     val ef = DigitalPackEmailFields(
       "A-S00045678",
-      Monthly,
+      Annual,
       user,
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
       GBP,
