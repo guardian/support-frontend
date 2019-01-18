@@ -7,7 +7,7 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.config.ZuoraConfig
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._
-import com.gu.support.zuora.api.{QueryData, SubscribeRequest}
+import com.gu.support.zuora.api.{PreviewSubscribeRequest, QueryData, SubscribeRequest}
 import com.gu.support.zuora.domain.{DomainAccount, DomainSubscription}
 import io.circe
 import io.circe.Decoder
@@ -39,6 +39,9 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     get[SubscriptionsResponse](s"subscriptions/accounts/${accountNumber.value}", authHeaders).map { subscriptionsResponse =>
       subscriptionsResponse.subscriptions.map(DomainSubscription.fromSubscription)
     }
+
+  def previewSubscribe(previewSubscribeRequest: PreviewSubscribeRequest): Future[List[PreviewSubscribeResponse]] =
+    postJson[List[PreviewSubscribeResponse]]("action/subscribe", previewSubscribeRequest.asJson, authHeaders)
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     postJson[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson, authHeaders)

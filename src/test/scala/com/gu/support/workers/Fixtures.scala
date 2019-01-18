@@ -191,7 +191,23 @@ object Fixtures {
        |    "AccountId": "sfAccountId321"
        |  },
        |  "accountNumber": "A-00123",
-       |  "subscriptionNumber": "A-S12345678"
+       |  "subscriptionNumber": "A-S12345678",
+       |  "paymentSchedule": {
+       |    "payments": [
+       |      {
+       |        "date": "2019-01-14",
+       |        "amount": 11.99
+       |      },
+       |      {
+       |        "date": "2019-02-14",
+       |        "amount": 11.99
+       |      },
+       |      {
+       |        "date": "2019-03-14",
+       |        "amount": 11.99
+       |      }
+       |    ]
+       |  }
        |}
      """.stripMargin
 
