@@ -1,6 +1,7 @@
 package utils
 
 import com.gu.i18n.Country
+import com.gu.support.workers.{DirectDebitPaymentFields, PaymentFields, StripePaymentFields}
 import services.stepfunctions.CreateSupportWorkersRequest
 
 object SimpleValidator {
@@ -14,6 +15,12 @@ object SimpleValidator {
       } else true
     }
 
-    noEmptyNameFields && hasStateIfRequired
+    def noEmptyPaymentFields: Boolean = request.paymentFields match {
+      case directDebitDetails: DirectDebitPaymentFields =>
+        !directDebitDetails.accountHolderName.isEmpty && !directDebitDetails.accountNumber.isEmpty && !directDebitDetails.sortCode.isEmpty
+      case stripeDetails: StripePaymentFields => !stripeDetails.stripeToken.isEmpty
+    }
+
+    noEmptyNameFields && hasStateIfRequired && noEmptyPaymentFields
   }
 }

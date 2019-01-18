@@ -45,4 +45,9 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
     SimpleValidator.validationPasses(requestMissingState) shouldBe true
   }
 
+  "validate" should "fail if the payment field received is an empty string" in {
+    val requestMissingState = validRequest.copy(paymentFields = StripePaymentFields(""))
+    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
 }
