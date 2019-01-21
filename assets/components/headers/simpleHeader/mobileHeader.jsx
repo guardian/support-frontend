@@ -19,6 +19,7 @@ const MobileHeader = ({ onClose }: PropTypes) => (
           </li>
         ))}
       </ul>
+      <button className="component-mobile-header-close" onClick={onClose} >Close</button>
     </div>
     <button aria-hidden className="component-mobile-header-bg" onClick={onClose} />
   </nav>
