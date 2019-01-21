@@ -22,7 +22,7 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     paymentAPIService,
     stringsConfig,
-    settingsProvider,
+    allSettingsProvider,
     appConfig.guardianDomain
   )
 
@@ -32,7 +32,7 @@ trait Controllers {
     assetsResolver,
     controllerComponents,
     stringsConfig,
-    settingsProvider,
+    allSettingsProvider,
     appConfig.supportUrl
   )
 
@@ -46,7 +46,7 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     stringsConfig,
-    settingsProvider,
+    allSettingsProvider,
     appConfig.supportUrl,
     tipMonitoring,
     appConfig.guardianDomain
@@ -69,7 +69,7 @@ trait Controllers {
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     appConfig.guardianDomain,
-    settingsProvider,
+    allSettingsProvider,
     tipMonitoring
   )
 
@@ -79,7 +79,7 @@ trait Controllers {
     payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
-    settingsProvider
+    allSettingsProvider
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
@@ -89,7 +89,7 @@ trait Controllers {
     controllerComponents,
     paymentAPIService,
     identityService,
-    settingsProvider,
+    allSettingsProvider,
     tipMonitoring
   )
 
@@ -102,7 +102,7 @@ trait Controllers {
     paymentAPIService,
     authAction,
     controllerComponents,
-    settingsProvider
+    allSettingsProvider
   )
 
   lazy val testUsersController = new TestUsersManagement(

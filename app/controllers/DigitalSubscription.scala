@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.AuthRequest
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
@@ -37,7 +37,7 @@ class DigitalSubscription(
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
-    settingsProvider: SettingsProvider,
+    settingsProvider: AllSettingsProvider,
     val supportUrl: String,
     tipMonitoring: Tip,
     guardianDomain: GuardianDomain
@@ -48,7 +48,7 @@ class DigitalSubscription(
   implicit val a: AssetsResolver = assets
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Pack Subscription"
     val id = "digital-subscription-landing-page-" + countryCode
     val js = "digitalSubscriptionLandingPage.js"
@@ -69,7 +69,7 @@ class DigitalSubscription(
 
   def displayForm(countryCode: String, displayCheckout: Boolean, isCsrf: Boolean = false): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
-      implicit val settings: Settings = settingsProvider.settings()
+      implicit val settings: AllSettings = settingsProvider.getAllSettings()
       if (displayCheckout) {
         identityService.getUser(request.user).fold(
           error => {
@@ -83,7 +83,7 @@ class DigitalSubscription(
       }
     }
 
-  private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: Settings): Html = {
+  private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Digital Subscription"
     val id = "digital-subscription-checkout-page-" + countryCode
     val js = "digitalSubscriptionCheckoutPage.js"

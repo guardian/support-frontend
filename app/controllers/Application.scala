@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.{ServersideAbTest, Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import admin.{ServersideAbTest, AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
@@ -31,7 +31,7 @@ class Application(
     payPalConfigProvider: PayPalConfigProvider,
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
-    settingsProvider: SettingsProvider,
+    settingsProvider: AllSettingsProvider,
     guardianDomain: GuardianDomain
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging with ServersideAbTestCookie {
 
@@ -88,7 +88,7 @@ class Application(
   }
 
   def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       title = "Support the Guardian",
       mainId = "support-landing-page",
@@ -101,14 +101,14 @@ class Application(
 
   def contributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
       _ => Ok(contributionsHtml(countryCode, None)),
       user => Ok(contributionsHtml(countryCode, user))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: AllSettings) = {
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
@@ -128,7 +128,7 @@ class Application(
   }
 
   def showcase: Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       title = "Support the Guardian",
       mainId = "showcase-landing-page",
@@ -139,7 +139,7 @@ class Application(
   }
 
   def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 

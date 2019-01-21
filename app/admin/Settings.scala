@@ -4,7 +4,6 @@ import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
 
 import cats.implicits._
-import codecs.CirceDecoders._
 import com.amazonaws.services.s3.AmazonS3
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
@@ -27,16 +26,20 @@ object Switches {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
 }
 
-case class Settings(switches: Switches)
+case class AllSettings(switches: Switches)
+
+object AllSettings {
+  implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec
+}
 
 object Settings {
-  private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Settings] = {
-    val settings = decode[Settings](buf.mkString)
+  private def fromBufferedSource[T: Decoder](buf: BufferedSource): Either[Throwable, T] = {
+    val settings = decode[T](buf.mkString)
     Try(buf.close())
     settings
   }
 
-  def fromS3(source: SettingsSource.S3)(implicit s3: AmazonS3): Either[Throwable, Settings] =
+  def fromS3[T: Decoder](source: SettingsSource.S3)(implicit s3: AmazonS3): Either[Throwable, T] =
     for {
       buf <- Either.catchNonFatal {
         val inputStream = s3.getObject(source.bucket, source.key).getObjectContent
@@ -45,14 +48,23 @@ object Settings {
       settings <- fromBufferedSource(buf)
     } yield settings
 
-  def fromLocalFile(source: SettingsSource.LocalFile): Either[Throwable, Settings] =
+  def fromLocalFile[T: Decoder](source: SettingsSource.LocalFile): Either[Throwable, T] =
     for {
       buf <- Either.catchNonFatal {
         Source.fromFile(source.path)
       }
       settings <- fromBufferedSource(buf)
     } yield settings
-  implicit val settingsCodec: Codec[Settings] = deriveCodec
+}
+
+case class SettingsSources(switches: SettingsSource)
+
+object SettingsSources {
+  def fromConfig(config: Config): Either[Throwable, SettingsSources] = {
+    for {
+      switchesSource <- SettingsSource.fromConfig(config, "switches")
+    } yield SettingsSources(switchesSource)
+  }
 }
 
 sealed trait SettingsSource
@@ -67,12 +79,12 @@ object SettingsSource extends LazyLogging {
     override def toString: String = s"local file at $path"
   }
 
-  def fromConfig(config: Config): Either[Throwable, SettingsSource] =
-    fromLocalFile(config).orElse(fromS3(config))
+  def fromConfig(config: Config, name: String): Either[Throwable, SettingsSource] =
+    fromLocalFile(config, name).orElse(fromS3(config, name))
       .leftMap(err => new Error(s"settingsSource was not correctly set in config. $err"))
 
-  private def fromLocalFile(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
-    val localFile = expandHomeDirectory(config.getString("settingsSource.local.path"))
+  private def fromLocalFile(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
+    val localFile = expandHomeDirectory(config.getString(s"settings.$name.local.path"))
     if (Files.exists(Paths.get(localFile))) {
       logger.info(s"Loading settings from $localFile")
       LocalFile(localFile)
@@ -87,10 +99,10 @@ object SettingsSource extends LazyLogging {
     path.replaceFirst("~", homeDir)
   }
 
-  private def fromS3(config: Config): Either[Throwable, SettingsSource] = Either.catchNonFatal {
+  private def fromS3(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
     S3(
-      config.getString("settingsSource.s3.bucket"),
-      config.getString("settingsSource.s3.key")
+      config.getString(s"settings.$name.s3.bucket"),
+      config.getString(s"settings.$name.s3.key")
     )
   }
 
