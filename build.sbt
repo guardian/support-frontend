@@ -19,6 +19,12 @@ val release = Seq[ReleaseStep](
   pushChanges
 )
 
+lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
+  scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
+  javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
+  testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
+)
+
 lazy val commonSettings = Seq(
   organization := "com.gu",
   scalaVersion := "2.12.7",
@@ -48,26 +54,34 @@ lazy val commonSettings = Seq(
 
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.3.2",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.5" % "it, test"
 )
 
 lazy val supportModels = (project in file("support-models"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
+    testSettings,
     libraryDependencies ++= commonDependencies
   )
 lazy val supportConfig = (project in file("support-config"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
+    testSettings,
     libraryDependencies ++= commonDependencies
   )
 lazy val supportServices = (project in file("support-services"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
+    testSettings,
     libraryDependencies ++= commonDependencies
   )
 lazy val supportInternationalisation = (project in file("support-internationalisation"))
+  .configs(IntegrationTest)
   .settings(
     commonSettings,
+    testSettings,
     libraryDependencies ++= commonDependencies
   )

@@ -13,6 +13,12 @@ This repo holds shared libraries used by [support-frontend](https://github.com/g
 ## [support-internationalisation](./support-internationalisation/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-internationalisation_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-internationalisation_2.12)
 
+## Tests
+
+`sbt test` - runs unit tests only and excludes integration tests.
+
+`sbt it:test` - runs all tests including integration tests (i.e. those which talk to real services e.g. AWS S3).
+
 ## Releasing
 ### Releasing to local repo
 

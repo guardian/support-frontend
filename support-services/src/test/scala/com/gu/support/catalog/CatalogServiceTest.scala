@@ -3,8 +3,10 @@ package com.gu.support.catalog
 import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.support.config.Stages.PROD
 import com.gu.support.workers.{Annual, Monthly, Quarterly}
+import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.{FlatSpec, Matchers}
 
+@IntegrationTest
 class CatalogServiceTest extends FlatSpec with Matchers {
 
   "CatalogService" should "fetch the catalog from S3" in {
