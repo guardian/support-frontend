@@ -12,7 +12,8 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { checkEmail } from 'helpers/formValidation';
 import { logException } from 'helpers/logger';
-import UiButton from 'components/ui/uiButton/uiButton';
+import Button from 'components/button/button';
+import NonInteractiveButton from 'components/button/nonInteractiveButton';
 
 import './marketingConsent.scss';
 
@@ -33,41 +34,40 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-function Button(props: ButtonPropTypes) {
+function MarketingButton(props: ButtonPropTypes) {
   if (props.confirmOptIn === true) {
     return (
-      <UiButton
+      <NonInteractiveButton
         appearance="greenHollow"
         iconSide="left"
-        isStatic
         icon={<SvgSubscribed />}
       >
         Signed up
-      </UiButton>
+      </NonInteractiveButton>
     );
   } else if (props.requestPending === true) {
     return (
-      <UiButton
+      <NonInteractiveButton
         appearance="greyHollow"
         iconSide="left"
-        isStatic
         icon={<SvgSubscribe />}
       >
         Pending...
-      </UiButton>
+      </NonInteractiveButton>
     );
   }
   return (
-    <UiButton
+    <Button
       appearance="green"
       iconSide="left"
+      aria-label="Sign me up to news and offers from The Guardian"
       onClick={
           () => props.onClick(props.email, props.csrf)
         }
       icon={<SvgSubscribe />}
     >
         Sign me up
-    </UiButton>
+    </Button>
   );
 
 }
@@ -91,7 +91,7 @@ function MarketingConsent(props: PropTypes) {
           contributor or would like to become one.
         </p>
 
-        {Button({
+        {MarketingButton({
           confirmOptIn: props.confirmOptIn,
           email: props.email,
           csrf: props.csrf,

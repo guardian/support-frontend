@@ -16,7 +16,7 @@ import { type ImageId as GridId } from 'helpers/theGrid';
 
 import SvgChevron from 'components/svgs/chevron';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
-import UiButton from 'components/ui/uiButton/uiButton';
+import AnchorButton from 'components/button/anchorButton';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { displayPrice, sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
@@ -190,7 +190,7 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         <CtaAbTestWrapper>
           <CtaSwitch referringCta="support_digipack_page_header" />
           <div className="digital-subscription-landing-header__cta">
-            <UiButton trackingOnClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</UiButton>
+            <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
           </div>
         </CtaAbTestWrapper>
       </LeftMarginSection>
