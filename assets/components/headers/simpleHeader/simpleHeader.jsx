@@ -6,6 +6,7 @@ import React, { Component, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
+import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
 import { links } from './links';
@@ -21,7 +22,6 @@ export type State = {|
 |};
 
 
-// ----- Observer ----- //
 
 const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
   const [logoWidth, menuWidth, containerWidth] = [
@@ -34,25 +34,6 @@ const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
   );
 };
 
-const onElementResize = (elements: (?Element)[], onResize) => {
-
-  const observer = window.ResizeObserver ? new window.ResizeObserver(onResize) : null;
-  if (observer) {
-    elements.forEach((el) => {
-      observer.observe(el);
-    });
-  } else {
-    window.addEventListener('resize', onResize);
-  }
-
-  return {
-    stopListening: () => {
-      if (observer) { observer.disconnect(); } else { window.removeEventListener('resize', onResize); }
-    },
-  };
-
-
-};
 
 // ----- Component ----- //
 
@@ -107,18 +88,16 @@ export default class SimpleHeader extends Component<PropTypes, State> {
   };
 
   componentDidMount() {
-
-    this.observer = onElementResize([this.logoRef, this.menuRef, this.containerRef], () => {
-      if (this.menuRef && this.logoRef && this.containerRef) {
-        this.setState({
-          fitsLinksInOneRow: willMenuFitInOneRow({
-            menuRef: this.menuRef,
-            logoRef: this.logoRef,
-            containerRef: this.containerRef,
-          }),
-        });
-      }
-    });
+    if (this.menuRef && this.logoRef && this.containerRef) {
+      this.observer = onElementResize(
+        [this.logoRef, this.menuRef, this.containerRef],
+        ([logoRef, menuRef, containerRef]) => {
+          this.setState({
+            fitsLinksInOneRow: willMenuFitInOneRow({ menuRef, logoRef, containerRef }),
+          });
+        },
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -128,9 +107,7 @@ export default class SimpleHeader extends Component<PropTypes, State> {
   logoRef: ?Element;
   menuRef: ?Element;
   containerRef: ?Element;
-  observer: {
-    stopListening: () => void
-  };
+  observer: ElementResizer;
 
   render() {
     const { utility, displayNavigation } = this.props;
