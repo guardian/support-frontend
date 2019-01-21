@@ -62,7 +62,7 @@
     width: gu-span(5);
     background-color: gu-colour(header-dark);
     float: right;
-    .component-simple-header--oneRow & {
+    .component-simple-header--one-row & {
       border-left: 1px solid gu-colour(header-border);
     }
   }
@@ -78,6 +78,7 @@
 }
 
 .component-simple-header-nav {
+  display: none;
   display: block;
   clear: both;
   background-color: gu-colour(header-dark);
@@ -88,7 +89,7 @@
   @include mq($until: tablet) {
     @include accessibility-hint;
   }
-  .component-simple-header--oneRow & {
+  .component-simple-header--one-row & {
     position: absolute;
     bottom: 0;
     left: $gu-h-spacing / 2;
