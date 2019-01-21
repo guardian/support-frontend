@@ -8,6 +8,8 @@ import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
+import { links } from './links';
+
 import './simpleHeader.scss';
 
 export type PropTypes = {|
@@ -17,33 +19,6 @@ export type State = {|
   fitsLinksInOneRow: boolean,
 |};
 
-const links = [
-  {
-    href: '/showcase',
-    text: 'Support',
-  },
-  {
-    href: '/subscribe',
-    text: 'Subscriptions',
-  },
-  {
-    href: '/subscribe/digital',
-    text: 'Digital',
-  },
-  {
-    href: '/subscribe/paper',
-    text: 'Paper',
-  },
-  {
-    href: '/subscribe/weekly',
-    text: 'Guardian Weekly',
-  },
-  {
-    href: '/subscribe/patrons',
-    text: 'Patrons',
-  },
-];
-
 // ----- Component ----- //
 
 export default class SimpleHeader extends Component<PropTypes, State> {
@@ -52,7 +27,7 @@ export default class SimpleHeader extends Component<PropTypes, State> {
   };
 
   state = {
-    fitsLinksInOneRow: true,
+    fitsLinksInOneRow: false,
   };
 
   componentDidMount() {

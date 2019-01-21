@@ -1,33 +1,15 @@
 .component-country-group-switcher {
   display: inline-flex;
 
-  .svg-globe {
-    height: 20px;
-    width: 20px;
-    border-radius: 600px;
-    border: solid 1px;
-    padding: 7px;
-    margin-right: 5px;
-    border: #fff solid 1px;
-    fill: #fff;
-  }
-
   .component-select-input__select {
-    margin-top: 8px;
-    font-size: 12px;
-    font-family: $gu-headline;
-    font-weight: 500;
-    line-height: 20px;
+    @include gu-fontset-body-sans;
     cursor: pointer;
     background-color: transparent;
     background: none;
     padding: 0;
+    margin: 0;
     height: auto;
     color: #fff;
-
-    @include mq($from: mobileLandscape) {
-      font-size: 14px;
-    }    
 
     &:hover {
       text-decoration: underline;

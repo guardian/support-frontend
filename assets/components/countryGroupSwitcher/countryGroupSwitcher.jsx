@@ -6,7 +6,6 @@ import React from 'react';
 import { compose } from 'redux';
 
 import SelectInput from 'components/selectInput/selectInput';
-import SvgGlobe from 'components/svgs/globe';
 
 import {
   countryGroups,
@@ -41,7 +40,6 @@ function CountryGroupSwitcher(props: PropTypes) {
 
   return (
     <div className="component-country-group-switcher">
-      <SvgGlobe />
       <SelectInput
         id="qa-country-group-dropdown"
         onChange={compose(props.onCountryGroupSelect, stringToCountryGroupId)}

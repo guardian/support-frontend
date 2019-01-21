@@ -21,14 +21,13 @@
 
 .component-simple-header__content {
   width: 100%;
-  max-width: gu-span(8) + ($gu-h-spacing * 2);
   margin: auto;
   padding: 0 ($gu-h-spacing / 2);
   position: relative;
   flex: 1 1 auto;
 
-  @include mq($from: desktop) {
-    max-width: gu-span(12);
+  @include mq($from: tablet) {
+    max-width: gu-span(11);
   }
 
   @include mq($from: leftCol) {
@@ -101,7 +100,7 @@
   position: relative;
   box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
   transition: .2s linear;
-  
+
   .component-simple-header-nav__li--active &,
   &:hover {
     box-shadow: inset 0 3px 0 gu-colour(news-garnett-highlight);
