@@ -84,7 +84,7 @@ object SettingsSource extends LazyLogging {
       .leftMap(err => new Error(s"settingsSource was not correctly set in config. $err"))
 
   private def fromLocalFile(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
-    val localFile = expandHomeDirectory(config.getString(s"settings.$name.local.path"))
+    val localFile = expandHomeDirectory(config.getString(s"settingsSource.$name.local.path"))
     if (Files.exists(Paths.get(localFile))) {
       logger.info(s"Loading settings from $localFile")
       LocalFile(localFile)
@@ -101,8 +101,8 @@ object SettingsSource extends LazyLogging {
 
   private def fromS3(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
     S3(
-      config.getString(s"settings.$name.s3.bucket"),
-      config.getString(s"settings.$name.s3.key")
+      config.getString(s"settingsSource.$name.s3.bucket"),
+      config.getString(s"settingsSource.$name.s3.key")
     )
   }
 
