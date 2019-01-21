@@ -34,20 +34,34 @@ const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
   );
 };
 
-const getResizeObserver = () => (window.ResizeObserver ?
-  window.ResizeObserver :
-  function ResizeObserverPolyfill(onResize: () => void) {
-    window.addEventListener('resize', onResize);
-    onResize();
-    this.disconnect = () => {
-      window.removeEventListener('resize', onResize);
-    };
-  });
+const onElementResize = (elements: (?Element)[], onResize) => {
 
+  const observer = window.ResizeObserver ? new window.ResizeObserver(onResize) : null;
+  if (observer) {
+    elements.forEach((el) => {
+      observer.observe(el);
+    });
+  } else {
+    window.addEventListener('resize', onResize);
+  }
+
+  return {
+    stopListening: () => {
+      if (observer) { observer.disconnect(); } else { window.removeEventListener('resize', onResize); }
+    },
+  };
+
+
+};
 
 // ----- Component ----- //
 
-const HeaderTopNavigation = ({ getLogoRef, utility }: {utility: Option<Node>, getLogoRef: (?Element) => void}) => (
+type HeaderTopNavigationPropTypes = {|
+  utility: Option<Node>,
+  getLogoRef: (?Element) => void
+|};
+
+const HeaderTopNavigation = ({ getLogoRef, utility }: HeaderTopNavigationPropTypes) => (
   <div className="component-simple-header-topnav">
     <div className="component-simple-header-topnav__utility">{utility}</div>
     <div className="component-simple-header-topnav-logo" ref={getLogoRef}>
@@ -57,10 +71,13 @@ const HeaderTopNavigation = ({ getLogoRef, utility }: {utility: Option<Node>, ge
       </a>
     </div>
   </div>
-
 );
 
-const HeaderNavigation = ({ getMenuRef }: {getMenuRef: (?Element) => void}) => (
+type HeaderBottomNavigationPropTypes = {|
+  getMenuRef: (?Element) => void
+|};
+
+const HeaderBottomNavigation = ({ getMenuRef }: HeaderBottomNavigationPropTypes) => (
   <nav className="component-simple-header-bottomnav">
     <ul className="component-simple-header-bottomnav__ul" ref={getMenuRef}>
       {links.map(({ href, text }) => (
@@ -91,7 +108,7 @@ export default class SimpleHeader extends Component<PropTypes, State> {
 
   componentDidMount() {
 
-    this.observer = new (getResizeObserver())(() => {
+    this.observer = onElementResize([this.logoRef, this.menuRef, this.containerRef], () => {
       if (this.menuRef && this.logoRef && this.containerRef) {
         this.setState({
           fitsLinksInOneRow: willMenuFitInOneRow({
@@ -102,21 +119,18 @@ export default class SimpleHeader extends Component<PropTypes, State> {
         });
       }
     });
-    if (this.logoRef && this.menuRef && this.containerRef) {
-      this.observer.observe(this.logoRef);
-      this.observer.observe(this.menuRef);
-      this.observer.observe(this.containerRef);
-    }
   }
 
   componentWillUnmount() {
-    this.observer.disconnect();
+    this.observer.stopListening();
   }
 
   logoRef: ?Element;
   menuRef: ?Element;
   containerRef: ?Element;
-  observer: any;
+  observer: {
+    stopListening: () => void
+  };
 
   render() {
     const { utility, displayNavigation } = this.props;
@@ -133,7 +147,7 @@ export default class SimpleHeader extends Component<PropTypes, State> {
         <div className="component-simple-header__wrapper" ref={(el) => { this.containerRef = el; }}>
           <HeaderTopNavigation utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
           {displayNavigation &&
-            <HeaderNavigation getMenuRef={(el) => { this.menuRef = el; }} />
+            <HeaderBottomNavigation getMenuRef={(el) => { this.menuRef = el; }} />
           }
         </div>
       </header>
