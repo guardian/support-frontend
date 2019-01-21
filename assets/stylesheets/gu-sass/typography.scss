@@ -70,6 +70,14 @@ $gu-fonts: (
 // Use these to get uniform responsive type across pages
 
 
+// ----- Nav ----- //
+@mixin gu-fontset-nav-desktop($size-only: false) {
+	@include gu-typeface(headline, 20, $size-only);
+	@if $size-only == false {
+		font-weight: 700;
+	}
+}
+
 
 // ----- Headings ----- //
 @mixin gu-fontset-heading-sans($size-only: false) {

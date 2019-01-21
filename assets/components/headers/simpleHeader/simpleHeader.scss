@@ -5,37 +5,27 @@
   background-color: gu-colour(header-dark);
 
   .svg-guardian-logo {
-    height: 100%;
+    display: block;
+    height: 95px;
+    margin-top: $gu-v-spacing / 2.4;
+    margin-bottom: $gu-v-spacing * 1.5;
+    @include mq($from: wide) {
+      margin-right: gu-span(1) + $gu-h-spacing / 2;
+    }  
   }
 }
 
 .component-simple-header__content {
   max-width: gu-span(12);
-  padding: ($gu-v-spacing/4) ($gu-h-spacing / 2) ($gu-v-spacing /2);
-  height: 42px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  @include mq($from: mobileMedium) {
-    height: 52px;
-  }
-
-  @include mq($from: mobileLandscape) {
-    height: 68px;
-  }
-
-  @include mq($from: tablet) {
-    height: 86px;
-    padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) $gu-v-spacing;
-  }
+  margin: auto;
+  padding: 0 ($gu-h-spacing / 2);
 
   @include mq($from: leftCol) {
     max-width: gu-span(13);
   }
 
   @include mq($from: wide) {
-    max-width: gu-span(14);
+    max-width: gu-span(16);
   }
 }
 
@@ -49,4 +39,55 @@
   float: right;
   height: 100%;
   flex: 0 1 auto;
+}
+
+.component-simple-header__logo {
+  float: right;
+  overflow: hidden;
+}
+
+.component-simple-header-nav {
+  display: block;
+  clear: both;
+  background-color: gu-colour(header-dark);
+  border: 1px solid gu-colour(header-border);
+  border-bottom: none;
+  margin: 0 ($gu-h-spacing* -1);
+}
+
+.component-simple-header-nav__ul {
+  list-style: none;
+  display: flex;
+}
+
+.component-simple-header-nav__link {
+  @include gu-fontset-nav-desktop;
+  color: gu-colour(news-garnett-highlight);
+  text-decoration: none;
+  display: block;
+  padding: ($gu-v-spacing/1.5) ($gu-h-spacing/1.5);
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
+  transition: .2s linear;
+  &:hover {
+    box-shadow: inset 0 3px 0 gu-colour(news-garnett-highlight);
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    top: 0;
+    width: 1px;
+    background-color: gu-colour(header-border);
+  }
+}
+
+.component-simple-header-nav__li:first-child > .component-simple-header-nav__link {
+  padding-left: $gu-h-spacing;
+}
+
+.component-simple-header-nav__li:last-child > .component-simple-header-nav__link {
+  padding-right: $gu-h-spacing;
 }
