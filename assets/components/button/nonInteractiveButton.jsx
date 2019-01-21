@@ -12,7 +12,7 @@ import './button.scss';
 const NonInteractiveButton = ({ modifierClasses, ...props }: SharedButtonPropTypes) => (
   <SharedButton
     element="div"
-    modifierClasses={['nonInteractive', ...modifierClasses]}
+    modifierClasses={['non-interactive', ...modifierClasses]}
     {...props}
   />
 );
