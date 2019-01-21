@@ -9,36 +9,44 @@
 
   .svg-guardian-logo {
     display: block;
-    height: 95px;
+    float: right;
     margin-top: $gu-v-spacing / 2.4;
     margin-bottom: $gu-v-spacing * 1.5;
-    @include mq($from: wide) {
-      margin-right: gu-span(1) + $gu-h-spacing / 2;
+    height: 72px;
+    @include mq($from: desktop) {
+      height: 95px;
     }  
   }
 }
 
 .component-simple-header__content {
   width: 100%;
-  max-width: gu-span(12);
+  max-width: gu-span(8) + ($gu-h-spacing * 2);
   margin: auto;
   padding: 0 ($gu-h-spacing / 2);
   position: relative;
   flex: 1 1 auto;
 
+  @include mq($from: desktop) {
+    max-width: gu-span(12);
+  }
+
   @include mq($from: leftCol) {
-    max-width: gu-span(13);
+    max-width: gu-span(14) - ($gu-h-spacing);
   }
 
   @include mq($from: wide) {
-    max-width: gu-span(16);
+    max-width: gu-span(16) - ($gu-h-spacing);
   }
 }
 
 .component-simple-header__utility {
-  float: left;
-  height: 100%;
-  flex: 0 0 auto;
+  @include mq($until: desktop) {
+    display: none;
+  }
+  position: absolute;
+  top: 0;
+  left: 260px;
 }
 
 .component-simple-header__link {
@@ -53,6 +61,10 @@
   background-color: gu-colour(header-dark);
   z-index: 10;
   position: relative;
+  width: gu-span(5);
+  @include mq($from: wide) {
+    padding-right: gu-span(1) + $gu-h-spacing / 2;
+  }  
   .component-simple-header--oneRow & {
     border-left: 1px solid gu-colour(header-border);
   }
@@ -70,7 +82,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    right: 0;
+    right: gu-span(1);
   }
 }
 

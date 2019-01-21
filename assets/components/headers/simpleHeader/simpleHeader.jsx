@@ -59,6 +59,7 @@ export default class SimpleHeader extends Component<PropTypes, State> {
     this.observer = new ResizeObserver(() => {
       if (this.menuRef && this.logoRef && this.containerRef) {
         const [logoWidth, menuWidth, containerWidth] = [
+          // $FlowIgnore
           this.logoRef.getBoundingClientRect().width,
           // $FlowIgnore
           this.menuRef.getBoundingClientRect().width,
