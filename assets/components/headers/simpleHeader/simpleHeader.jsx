@@ -19,28 +19,28 @@ export type State = {|
 
 const links = [
   {
-    href: '/subscribe/digital',
+    href: '/showcase',
+    text: 'Support',
+  },
+  {
+    href: '/subscribe',
     text: 'Subscriptions',
   },
   {
     href: '/subscribe/digital',
-    text: 'Bananas',
+    text: 'Digital',
   },
   {
-    href: '/subscribe/digital',
-    text: 'Donuts',
+    href: '/subscribe/paper',
+    text: 'Paper',
   },
   {
-    href: '/subscribe/digital',
-    text: 'Pretzels',
+    href: '/subscribe/weekly',
+    text: 'Guardian Weekly',
   },
   {
-    href: '/subscribe/digital',
-    text: 'Pears',
-  },
-  {
-    href: '/subscribe/digital',
-    text: 'Apples',
+    href: '/subscribe/patrons',
+    text: 'Patrons',
   },
 ];
 
@@ -59,7 +59,6 @@ export default class SimpleHeader extends Component<PropTypes, State> {
     this.observer = new ResizeObserver(() => {
       if (this.menuRef && this.logoRef && this.containerRef) {
         const [logoWidth, menuWidth, containerWidth] = [
-          // $FlowIgnore
           this.logoRef.getBoundingClientRect().width,
           // $FlowIgnore
           this.menuRef.getBoundingClientRect().width,
@@ -87,9 +86,10 @@ export default class SimpleHeader extends Component<PropTypes, State> {
     const { utility } = this.props;
     const { fitsLinksInOneRow } = this.state;
     return (
-      <header className={
-      classNameWithModifiers('component-simple-header', [fitsLinksInOneRow ? 'oneRow' : null])
-    }
+      <header
+        className={
+          classNameWithModifiers('component-simple-header', [fitsLinksInOneRow ? 'oneRow' : null])
+        }
       >
         <div className="component-simple-header__content" ref={(d) => { this.containerRef = d; }}>
           <div className="component-simple-header__logo" ref={(d) => { this.logoRef = d; }}>
@@ -102,7 +102,14 @@ export default class SimpleHeader extends Component<PropTypes, State> {
           <nav className="component-simple-header-nav">
             <ul className="component-simple-header-nav__ul" ref={(d) => { this.menuRef = d; }}>
               {links.map(({ href, text }) => (
-                <li className="component-simple-header-nav__li">
+                <li
+                  className={
+                    classNameWithModifiers(
+                      'component-simple-header-nav__li',
+                      [window.location.href.endsWith(href) ? 'active' : null],
+                    )
+                  }
+                >
                   <a className="component-simple-header-nav__link" href={href}>{text}</a>
                 </li>
               ))}
