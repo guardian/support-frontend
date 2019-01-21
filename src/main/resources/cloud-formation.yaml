@@ -366,7 +366,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub No healthy instances for ${App} in ${Stage}
       MetricName: HealthyHostCount
       Namespace: AWS/ApplicationELB
@@ -389,7 +389,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub High 5XX rate for ${App} in ${Stage}
       MetricName: HTTPCode_Target_5XX_Count
       Namespace: AWS/ApplicationELB
@@ -452,7 +452,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub ${App} ${Stage} No successful paypal payments via payment-api for an hour
       MetricName: payment-success
       Namespace: support-payment-api-PROD
@@ -471,7 +471,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub ${App} ${Stage} No successful stripe payments via payment-api for an hour
       MetricName: payment-success
       Namespace: support-payment-api-PROD
@@ -490,7 +490,7 @@ Resources:
       Condition: CreateProdResources
       Properties:
         AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
         AlarmName: !Sub ${App} ${Stage} Multiple paypal errors in the last fifteen minutes for one-off contributions via the payment-api
         MetricName: payment-error
         Namespace: support-payment-api-PROD
@@ -509,7 +509,7 @@ Resources:
       Condition: CreateProdResources
       Properties:
         AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
         AlarmName: !Sub ${App} ${Stage} Multiple stripe errors in the last fifteen minutes for one-off contributions via the payment-api
         MetricName: payment-error
         Namespace: support-payment-api-PROD
