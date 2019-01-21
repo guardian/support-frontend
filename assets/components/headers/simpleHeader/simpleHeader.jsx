@@ -47,6 +47,19 @@ const getResizeObserver = () => (window.ResizeObserver ?
 
 // ----- Component ----- //
 
+const HeaderTopNavigation = ({ getLogoRef, utility }: {utility: Option<Node>, getLogoRef: (?Element) => void}) => (
+  <div className="component-simple-header-topnav">
+    <div className="component-simple-header-topnav__utility">{utility}</div>
+    <div className="component-simple-header-topnav-logo" ref={getLogoRef}>
+      <a className="component-simple-header-topnav-logo__graun" href="https://www.theguardian.com">
+        <div className="accessibility-hint">The Guardian logo</div>
+        <SvgGuardianLogo />
+      </a>
+    </div>
+  </div>
+
+);
+
 const HeaderNavigation = ({ getMenuRef }: {getMenuRef: (?Element) => void}) => (
   <nav className="component-simple-header-bottomnav">
     <ul className="component-simple-header-bottomnav__ul" ref={getMenuRef}>
@@ -118,15 +131,7 @@ export default class SimpleHeader extends Component<PropTypes, State> {
         }
       >
         <div className="component-simple-header__wrapper" ref={(el) => { this.containerRef = el; }}>
-          <div className="component-simple-header-topnav">
-            <div className="component-simple-header-topnav__utility">{utility}</div>
-            <div className="component-simple-header-topnav-logo" ref={(el) => { this.logoRef = el; }}>
-              <a className="component-simple-header-topnav-logo__graun" href="https://www.theguardian.com">
-                <div className="accessibility-hint">The Guardian logo</div>
-                <SvgGuardianLogo />
-              </a>
-            </div>
-          </div>
+          <HeaderTopNavigation utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
           {displayNavigation &&
             <HeaderNavigation getMenuRef={(el) => { this.menuRef = el; }} />
           }
