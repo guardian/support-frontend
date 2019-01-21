@@ -1,4 +1,6 @@
 // @flow
+import { routes } from 'helpers/routes';
+import { getPatronsLink } from 'helpers/externalLinks';
 
 type HeaderNavLink = {
   href: string,
@@ -7,27 +9,27 @@ type HeaderNavLink = {
 
 export const links: HeaderNavLink[] = [
   {
-    href: '/showcase',
+    href: routes.showcase,
     text: 'Support',
   },
   {
-    href: '/subscribe',
+    href: routes.subscriptionsLanding,
     text: 'Subscriptions',
   },
   {
-    href: '/subscribe/digital',
+    href: routes.digitalSubscriptionLanding,
     text: 'Digital',
   },
   {
-    href: '/subscribe/paper',
+    href: routes.paperSubscriptionLanding,
     text: 'Paper',
   },
   {
-    href: '/subscribe/weekly',
+    href: routes.guardianWeeklySubscriptionLanding,
     text: 'Guardian Weekly',
   },
   {
-    href: '/subscribe/patrons',
+    href: getPatronsLink(),
     text: 'Patrons',
   },
 ];
