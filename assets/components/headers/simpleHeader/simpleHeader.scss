@@ -3,6 +3,9 @@
 
 .component-simple-header {
   background-color: gu-colour(header-dark);
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
 
   .svg-guardian-logo {
     display: block;
@@ -16,9 +19,12 @@
 }
 
 .component-simple-header__content {
+  width: 100%;
   max-width: gu-span(12);
   margin: auto;
   padding: 0 ($gu-h-spacing / 2);
+  position: relative;
+  flex: 1 1 auto;
 
   @include mq($from: leftCol) {
     max-width: gu-span(13);
@@ -44,6 +50,12 @@
 .component-simple-header__logo {
   float: right;
   overflow: hidden;
+  background-color: gu-colour(header-dark);
+  z-index: 10;
+  position: relative;
+  .component-simple-header--oneRow & {
+    border-left: 1px solid gu-colour(header-border);
+  }
 }
 
 .component-simple-header-nav {
@@ -53,11 +65,18 @@
   border: 1px solid gu-colour(header-border);
   border-bottom: none;
   margin: 0 ($gu-h-spacing* -1);
+  z-index: 9;
+  .component-simple-header--oneRow & {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 }
 
 .component-simple-header-nav__ul {
   list-style: none;
-  display: flex;
+  display: inline-flex;
 }
 
 .component-simple-header-nav__link {
@@ -89,5 +108,7 @@
 }
 
 .component-simple-header-nav__li:last-child > .component-simple-header-nav__link {
-  padding-right: $gu-h-spacing;
+  &:after {
+    display: none;
+  }
 }
