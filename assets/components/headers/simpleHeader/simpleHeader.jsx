@@ -48,18 +48,18 @@ const getResizeObserver = () => (window.ResizeObserver ?
 // ----- Component ----- //
 
 const HeaderNavigation = ({ getMenuRef }: {getMenuRef: (?Element) => void}) => (
-  <nav className="component-simple-header-nav">
-    <ul className="component-simple-header-nav__ul" ref={getMenuRef}>
+  <nav className="component-simple-header-bottomnav">
+    <ul className="component-simple-header-bottomnav__ul" ref={getMenuRef}>
       {links.map(({ href, text }) => (
         <li
           className={
           classNameWithModifiers(
-            'component-simple-header-nav__li',
+            'component-simple-header-bottomnav__li',
             [window.location.href.endsWith(href) ? 'active' : null],
           )
         }
         >
-          <a className="component-simple-header-nav__link" href={href}>{text}</a>
+          <a className="component-simple-header-bottomnav__link" href={href}>{text}</a>
         </li>
     ))}
     </ul>
@@ -117,7 +117,7 @@ export default class SimpleHeader extends Component<PropTypes, State> {
           ])
         }
       >
-        <div className="component-simple-header__content" ref={(el) => { this.containerRef = el; }}>
+        <div className="component-simple-header__wrapper" ref={(el) => { this.containerRef = el; }}>
           <div className="component-simple-header-topnav">
             <div className="component-simple-header-topnav__utility">{utility}</div>
             <div className="component-simple-header-topnav-logo" ref={(el) => { this.logoRef = el; }}>
