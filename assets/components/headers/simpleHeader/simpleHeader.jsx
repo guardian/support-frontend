@@ -19,6 +19,21 @@ export type State = {|
   fitsLinksInOneRow: boolean,
 |};
 
+
+// ----- Observer ----- //
+
+const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
+  const [logoWidth, menuWidth, containerWidth] = [
+    logoRef.getBoundingClientRect().width,
+    menuRef.getBoundingClientRect().width,
+    containerRef.getBoundingClientRect().width,
+  ];
+  return (
+    containerWidth - logoWidth - menuWidth > 0
+  );
+};
+
+
 // ----- Component ----- //
 
 export default class SimpleHeader extends Component<PropTypes, State> {
@@ -32,22 +47,24 @@ export default class SimpleHeader extends Component<PropTypes, State> {
 
   componentDidMount() {
 
-    const ResizeObserverOrResize = window.ResizeObserver ? window.ResizeObserver : (fn) => {
-      window.addEventListener('resize', fn);
-      fn();
-    };
+    const ResizeObserverOrResize = window.ResizeObserver ?
+      window.ResizeObserver :
+      function ResizeObserverPolyfill(onResize) {
+        window.addEventListener('resize', onResize);
+        onResize();
+        this.disconnect = () => {
+          window.removeEventListener('resize', onResize);
+        };
+      };
 
     this.observer = new ResizeObserverOrResize(() => {
       if (this.menuRef && this.logoRef && this.containerRef) {
-        const [logoWidth, menuWidth, containerWidth] = [
-          this.logoRef.getBoundingClientRect().width,
-          // $FlowIgnore
-          this.menuRef.getBoundingClientRect().width,
-          // $FlowIgnore
-          this.containerRef.getBoundingClientRect().width,
-        ];
         this.setState({
-          fitsLinksInOneRow: containerWidth - logoWidth - menuWidth > 0,
+          fitsLinksInOneRow: willMenuFitInOneRow({
+            menuRef: this.menuRef,
+            logoRef: this.logoRef,
+            containerRef: this.containerRef,
+          }),
         });
       }
     });
@@ -56,6 +73,10 @@ export default class SimpleHeader extends Component<PropTypes, State> {
       this.observer.observe(this.menuRef);
       this.observer.observe(this.containerRef);
     }
+  }
+
+  componentWillUnmount() {
+    this.observer.disconnect();
   }
 
   logoRef: ?Element;
@@ -72,16 +93,20 @@ export default class SimpleHeader extends Component<PropTypes, State> {
           classNameWithModifiers('component-simple-header', [fitsLinksInOneRow ? 'oneRow' : null])
         }
       >
-        <div className="component-simple-header__content" ref={(d) => { this.containerRef = d; }}>
-          <div className="component-simple-header__logo" ref={(d) => { this.logoRef = d; }}>
-            <div className="component-simple-header__utility">{utility}</div>
-            <a className="component-simple-header__link" href="https://www.theguardian.com">
-              <div className="accessibility-hint">The Guardian logo</div>
-              <SvgGuardianLogo />
-            </a>
+        <div className="component-simple-header__content" ref={(el) => { this.containerRef = el; }}>
+          <div className="component-simple-header-topnav">
+            {utility &&
+              <div className="component-simple-header-topnav__utility">{utility}</div>
+            }
+            <div className="component-simple-header-topnav-logo" ref={(el) => { this.logoRef = el; }}>
+              <a className="component-simple-header-topnav-logo__graun" href="https://www.theguardian.com">
+                <div className="accessibility-hint">The Guardian logo</div>
+                <SvgGuardianLogo />
+              </a>
+            </div>
           </div>
           <nav className="component-simple-header-nav">
-            <ul className="component-simple-header-nav__ul" ref={(d) => { this.menuRef = d; }}>
+            <ul className="component-simple-header-nav__ul" ref={(el) => { this.menuRef = el; }}>
               {links.map(({ href, text }) => (
                 <li
                   className={

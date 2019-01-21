@@ -6,6 +6,7 @@ import React from 'react';
 import { compose } from 'redux';
 
 import SelectInput from 'components/selectInput/selectInput';
+import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 
 import {
   countryGroups,
@@ -46,6 +47,7 @@ function CountryGroupSwitcher(props: PropTypes) {
         options={options}
         label="Select your region"
       />
+      <SvgDropdownArrow />
     </div>
   );
 }

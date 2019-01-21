@@ -6,13 +6,20 @@
   display: flex;
   align-items: center;
   justify-content: stretch;
+  overflow: hidden;
 
   .svg-guardian-logo {
     display: block;
     float: right;
     margin-top: $gu-v-spacing / 2.4;
     margin-bottom: $gu-v-spacing * 1.5;
-    height: 72px;
+    height: 48px;
+    @include mq($from: mobileLandscape) {
+      height: 56px;
+    }  
+    @include mq($from: tablet) {
+      height: 72px;
+    }  
     @include mq($from: desktop) {
       height: 95px;
     }  
@@ -39,34 +46,35 @@
   }
 }
 
-.component-simple-header__utility {
-  @include mq($until: desktop) {
-    display: none;
-  }
-  position: absolute;
-  top: 0;
-  left: 260px;
+.component-simple-header-topnav {
+  display: flex;
+  justify-content: space-between
 }
 
-.component-simple-header__link {
+.component-simple-header-topnav__utility {
+  padding-top: $gu-v-spacing / 2;
+}
+
+.component-simple-header-topnav-logo {
+  z-index: 10;
+  position: relative;
+  @include mq($from: tablet) {
+    width: gu-span(5);
+    background-color: gu-colour(header-dark);
+    float: right;
+    .component-simple-header--oneRow & {
+      border-left: 1px solid gu-colour(header-border);
+    }
+  }
+  @include mq($from: wide) {
+    padding-right: gu-span(1) + $gu-h-spacing / 2;
+  }
+}
+
+.component-simple-header-topnav-logo__graun {
   float: right;
   height: 100%;
   flex: 0 1 auto;
-}
-
-.component-simple-header__logo {
-  float: right;
-  overflow: hidden;
-  background-color: gu-colour(header-dark);
-  z-index: 10;
-  position: relative;
-  width: gu-span(5);
-  @include mq($from: wide) {
-    padding-right: gu-span(1) + $gu-h-spacing / 2;
-  }  
-  .component-simple-header--oneRow & {
-    border-left: 1px solid gu-colour(header-border);
-  }
 }
 
 .component-simple-header-nav {
@@ -75,12 +83,15 @@
   background-color: gu-colour(header-dark);
   border: 1px solid gu-colour(header-border);
   border-bottom: none;
-  margin: 0 ($gu-h-spacing* -1);
+  margin: 0 ($gu-h-spacing * -1);
   z-index: 9;
+  @include mq($until: tablet) {
+    @include accessibility-hint;
+  }
   .component-simple-header--oneRow & {
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: $gu-h-spacing / 2;
     right: gu-span(1);
   }
 }
@@ -105,6 +116,7 @@
   &:hover {
     box-shadow: inset 0 3px 0 gu-colour(news-garnett-highlight);
   }
+
   &:after {
     content: '';
     position: absolute;
