@@ -22,6 +22,7 @@ export type State = {|
 |};
 
 
+// ----- Metrics ----- //
 
 const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
   const [logoWidth, menuWidth, containerWidth] = [
