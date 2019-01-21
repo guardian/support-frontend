@@ -30,4 +30,24 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
     SimpleValidator.validationPasses(requestMissingFirstName) shouldBe false
   }
 
+  "validate" should "fail if the country is US and there is no state selected" in {
+    val requestMissingState = validRequest.copy(state = None)
+    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
+  "validate" should "also fail if the country is Canada and there is no state selected" in {
+    val requestMissingState = validRequest.copy(country = Country.Canada, state = None)
+    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
+  "validate" should "pass if there is no state selected and the country is Australia" in {
+    val requestMissingState = validRequest.copy(country = Country.Australia, state = None)
+    SimpleValidator.validationPasses(requestMissingState) shouldBe true
+  }
+
+  "validate" should "fail if the payment field received is an empty string" in {
+    val requestMissingState = validRequest.copy(paymentFields = StripePaymentFields(""))
+    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
 }
