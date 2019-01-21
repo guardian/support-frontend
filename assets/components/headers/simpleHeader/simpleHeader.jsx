@@ -9,7 +9,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
 import { links } from './links';
-import MobileHeader from './mobileHeader';
 
 import './simpleHeader.scss';
 
@@ -18,7 +17,6 @@ export type PropTypes = {|
 |};
 export type State = {|
   fitsLinksInOneRow: boolean,
-  menuOpen: boolean,
 |};
 
 // ----- Component ----- //
@@ -30,11 +28,16 @@ export default class SimpleHeader extends Component<PropTypes, State> {
 
   state = {
     fitsLinksInOneRow: false,
-    menuOpen: false,
   };
 
   componentDidMount() {
-    this.observer = new ResizeObserver(() => {
+
+    const ResizeObserverOrResize = window.ResizeObserver ? window.ResizeObserver : (fn) => {
+      window.addEventListener('resize', fn);
+      fn();
+    };
+
+    this.observer = new ResizeObserverOrResize(() => {
       if (this.menuRef && this.logoRef && this.containerRef) {
         const [logoWidth, menuWidth, containerWidth] = [
           this.logoRef.getBoundingClientRect().width,
@@ -62,19 +65,13 @@ export default class SimpleHeader extends Component<PropTypes, State> {
 
   render() {
     const { utility } = this.props;
-    const { fitsLinksInOneRow, menuOpen } = this.state;
+    const { fitsLinksInOneRow } = this.state;
     return (
       <header
         className={
           classNameWithModifiers('component-simple-header', [fitsLinksInOneRow ? 'oneRow' : null])
         }
       >
-        {menuOpen && <MobileHeader onClose={
-          () => this.setState({
-            menuOpen: false,
-          })
-        }
-        />}
         <div className="component-simple-header__content" ref={(d) => { this.containerRef = d; }}>
           <div className="component-simple-header__logo" ref={(d) => { this.logoRef = d; }}>
             <div className="component-simple-header__utility">{utility}</div>
@@ -82,13 +79,6 @@ export default class SimpleHeader extends Component<PropTypes, State> {
               <div className="accessibility-hint">The Guardian logo</div>
               <SvgGuardianLogo />
             </a>
-            <button onClick={() => {
-                this.setState(state => ({
-                  menuOpen: !state.menuOpen,
-                }));
-              }}
-            >menu
-            </button>
           </div>
           <nav className="component-simple-header-nav">
             <ul className="component-simple-header-nav__ul" ref={(d) => { this.menuRef = d; }}>
