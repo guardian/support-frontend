@@ -69,7 +69,7 @@ const HeaderNavigation = ({ getMenuRef }: {getMenuRef: (?Element) => void}) => (
 export default class SimpleHeader extends Component<PropTypes, State> {
   static defaultProps = {
     utility: null,
-    displayNavigation: true,
+    displayNavigation: false,
   };
 
   state = {
