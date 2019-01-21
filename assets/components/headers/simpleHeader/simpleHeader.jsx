@@ -119,9 +119,7 @@ export default class SimpleHeader extends Component<PropTypes, State> {
       >
         <div className="component-simple-header__content" ref={(el) => { this.containerRef = el; }}>
           <div className="component-simple-header-topnav">
-            {utility &&
-              <div className="component-simple-header-topnav__utility">{utility}</div>
-            }
+            <div className="component-simple-header-topnav__utility">{utility}</div>
             <div className="component-simple-header-topnav-logo" ref={(el) => { this.logoRef = el; }}>
               <a className="component-simple-header-topnav-logo__graun" href="https://www.theguardian.com">
                 <div className="accessibility-hint">The Guardian logo</div>
