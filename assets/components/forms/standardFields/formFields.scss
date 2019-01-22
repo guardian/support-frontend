@@ -3,13 +3,21 @@
   font-family: $gu-text-sans-web;
   border: 1px solid gu-colour(garnett-neutral-4);
   transition: box-shadow .2s;
+  background-color: gu-colour(garnett-neutral-5);
+  border-radius: 0;
 
   &:hover {
     box-shadow: 0 0 0 2px lighten(gu-colour(garnett-neutral-4), 6%);
   }
 
   &:focus, &:active {
+    outline-color: rgba(255,255,255,0);
     box-shadow: 0 0 0 2px lighten(gu-colour(news-garnett-highlight), 6%);
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    background-color: gu-colour(garnett-neutral-3);
   }
 }
 
