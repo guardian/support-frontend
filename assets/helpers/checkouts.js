@@ -18,6 +18,7 @@ import * as storage from 'helpers/storage';
 import { type Switches, type SwitchObject } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //
@@ -72,7 +73,11 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
   return fallback;
 }
 
-function getValidContributionTypes(): ContributionType[] {
+function getValidContributionTypes(abParticipations: Participations): ContributionType[] {
+  const { globalContributionTypes } = abParticipations;
+  if (globalContributionTypes === 'default-annual_no-monthly') {
+    return ['ONE_OFF', 'ANNUAL'];
+  }
   return getValidContributionTypesFromUrlOrElse(['ONE_OFF', 'MONTHLY', 'ANNUAL']);
 }
 
