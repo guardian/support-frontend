@@ -36,6 +36,7 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import {
   type FormActionCreators,
   formActionCreators,
+  signOut,
   type FormField,
   type FormFields,
   getFormFields,
@@ -46,6 +47,7 @@ import {
 
 type PropTypes = {|
   ...FormFields,
+  signOut: typeof signOut,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   ...FormActionCreators,
@@ -239,4 +241,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, formActionCreators)(CheckoutForm);
+export default connect(mapStateToProps, { ...formActionCreators, signOut })(CheckoutForm);

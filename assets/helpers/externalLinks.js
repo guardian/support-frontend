@@ -31,9 +31,11 @@ export type SubsUrls = {
 
 const subsUrl = 'https://subscribe.theguardian.com';
 const patronsUrl = 'https://patrons.theguardian.com';
+const profileUrl = `https://profile.${getBaseDomain()}`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
-const emailPreferencesUrl = `https://profile.${getBaseDomain()}/email-prefs`;
+const emailPreferencesUrl = `${profileUrl}/email-prefs`;
+const logoutUrl = `${profileUrl}/logout`;
 
 function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGroupId) {
 
@@ -394,6 +396,7 @@ export {
   getDigitalCheckout,
   getIosAppUrl,
   androidAppUrl,
+  logoutUrl,
   getDailyEditionUrl,
   emailPreferencesUrl,
   getWeeklyCheckout,

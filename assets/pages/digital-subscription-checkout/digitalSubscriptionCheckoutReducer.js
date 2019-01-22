@@ -23,6 +23,7 @@ import {
 } from 'components/marketingConsent/marketingConsentReducer';
 import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
+import { logoutUrl } from 'helpers/externalLinks';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -133,6 +134,8 @@ const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
+const signOut = () => { window.location.href = logoutUrl; };
+
 function submitForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
   if (errors.length > 0) {
@@ -239,5 +242,6 @@ export {
   getEmail,
   setSubmissionError,
   setFormSubmitted,
+  signOut,
   formActionCreators,
 };
