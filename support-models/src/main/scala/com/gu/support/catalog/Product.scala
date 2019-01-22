@@ -1,9 +1,10 @@
 package com.gu.support.catalog
 
-import com.gu.support.workers._
+import com.gu.support.workers.{Annual, BillingPeriod, Monthly, SixWeekly, Quarterly}
+import io.circe.{Decoder, Encoder}
 
 sealed trait Product {
-  val ratePlans: List[ProductRatePlan[Product]]
+  def ratePlans: List[ProductRatePlan[Product]]
 
   def getProductRatePlan[T <: Product](
     billingPeriod: BillingPeriod,
@@ -18,16 +19,18 @@ sealed trait Product {
 }
 
 case object DigitalPack extends Product {
-  lazy val ratePlans: List[ProductRatePlan[DigitalPack.type]] =
+  def ratePlans: List[ProductRatePlan[DigitalPack.type]] =
     List(
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions),
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions),
 
     )
+
+  implicit val encoder: Encoder[DigitalPack.type] = Encoder.encodeString.contramap(_ => "DigitalPack")
 }
 
 case object Contribution extends Product {
-  lazy val ratePlans: List[ProductRatePlan[Contribution.type]] =
+  def ratePlans: List[ProductRatePlan[Contribution.type]] =
     List(
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions),
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions),
@@ -35,7 +38,7 @@ case object Contribution extends Product {
 }
 
 case object Paper extends Product {
-  lazy val ratePlans: List[ProductRatePlan[Paper.type]] =
+  def ratePlans: List[ProductRatePlan[Paper.type]] =
     List(
       ProductRatePlan("2c92a0fd6205707201621fa1350710e3", Monthly, Collection, SaturdayPlus),
       ProductRatePlan("2c92a0fd6205707201621f9f6d7e0116", Monthly, Collection, Saturday),
@@ -62,7 +65,7 @@ case object Paper extends Product {
 }
 
 case object GuardianWeekly extends Product {
-  lazy val ratePlans: List[ProductRatePlan[GuardianWeekly.type]] =
+  def ratePlans: List[ProductRatePlan[GuardianWeekly.type]] =
     List(
       ProductRatePlan("2c92a0086619bf8901661ab545f51b21", SixWeekly, RestOfWorld, NoProductOptions), //TODO: remove SixWeekly and use promotions instead
       ProductRatePlan("2c92a0fe6619b4b601661ab300222651", Annual, RestOfWorld, NoProductOptions),
@@ -71,4 +74,13 @@ case object GuardianWeekly extends Product {
       ProductRatePlan("2c92a0fe6619b4b901661aa8e66c1692", Annual, Domestic, NoProductOptions),
       ProductRatePlan("2c92a0fe6619b4b301661aa494392ee2", Quarterly, Domestic, NoProductOptions),
     )
+}
+
+object Product {
+  def fromString(code: String) = List(DigitalPack, Contribution, GuardianWeekly, Paper)
+    .find(_.getClass.getSimpleName == s"$code$$")
+
+  implicit val decode: Decoder[Product] =
+    Decoder.decodeString.emap(code => fromString(code).toRight(s"unrecognised product '$code'"))
+  implicit val encode: Encoder[Product] = Encoder.encodeString.contramap[Product](_.toString)
 }

@@ -6,6 +6,7 @@ import com.gu.i18n.Currency
 import com.gu.support.config.Stage
 import com.gu.support.workers.BillingPeriod
 import io.circe.generic.auto._
+import FulfilmentOptions._
 
 object CatalogService {
   def apply(stage: Stage): CatalogService = new CatalogService(stage)
@@ -33,6 +34,31 @@ class CatalogService(stage: Stage) {
       price <- priceList.prices.find(_.currency == currency)
     } yield price
   }
+
+  def getPrices[T <: Product](product: T): Map[FulfilmentOptions[Product], Map[ProductOptions[Product], Map[BillingPeriod, List[Price]]]] = {
+
+    val grouped = product.ratePlans.groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
+      case (keys, list) =>
+        val prices = list.flatMap(p => getPriceList(p).map(_.prices))
+        (keys, prices.flatten)
+    }
+
+    nestPriceLists(grouped)
+  }
+
+  private def nestPriceLists(groupedPriceList: Map[(FulfilmentOptions[Product], ProductOptions[Product], BillingPeriod), List[Price]]) =
+    groupedPriceList
+      .foldLeft(Map.empty[FulfilmentOptions[Product], Map[ProductOptions[Product], Map[BillingPeriod, List[Price]]]]) {
+        case (acc, ((fulfilment, productOptions, billing), list)) =>
+
+          val existingProducts = acc.getOrElse(fulfilment, Map.empty[ProductOptions[Product], Map[BillingPeriod, List[Price]]])
+          val existingBillingPeriods = existingProducts.getOrElse(productOptions, Map.empty[BillingPeriod, List[Price]])
+
+          val newBillingPeriods = existingBillingPeriods ++ Map(billing -> list)
+          val newProducts = existingProducts ++ Map(productOptions -> newBillingPeriods)
+
+          acc ++ Map(fulfilment -> newProducts)
+      }
 
   private def getPriceList[T <: Product](productRatePlan: ProductRatePlan[T]): Option[Pricelist] =
     catalog.flatMap(_.prices.find(_.productRatePlanId == productRatePlan.id))
