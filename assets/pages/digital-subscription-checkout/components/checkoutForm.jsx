@@ -16,17 +16,17 @@ import { showPrice } from 'helpers/internationalisation/price';
 
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
+import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
+import Button from 'components/button/button';
 import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
 import { Fieldset } from 'components/forms/standardFields/fieldset';
-import { Button } from 'components/forms/standardFields/button';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
 import { withFooter } from 'components/forms/formHOCs/withFooter';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
-import { withArrow } from 'components/forms/formHOCs/withArrow';
 import { canShow } from 'components/forms/formHOCs/canShow';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
@@ -88,7 +88,6 @@ const InputWithFooter = withFooter(InputWithLabel);
 const Input1 = compose(asControlled, withError)(InputWithLabel);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
-const Button1 = withArrow(Button);
 
 function statesForCountry(country: Option<IsoCountry>): React$Node {
 
@@ -141,7 +140,16 @@ function CheckoutForm(props: PropTypes) {
           disabled
           value={props.email}
           footer={(
-            <span>not your email?</span>
+            <span>
+              <CheckoutExpander copy="Want to use a different email address?">
+                <p>You will be able to edit this in your account once you have completed this checkout.</p>
+              </CheckoutExpander>
+              <CheckoutExpander copy="Not you?">
+                <p>
+                  <Button appearance="greyHollow" icon={null} type="button" aria-label={null} onClick={() => props.signOut()}>Sign out</Button> and create a new account.
+                </p>
+              </CheckoutExpander>
+            </span>
           )}
         />
         <Select1
@@ -216,7 +224,9 @@ function CheckoutForm(props: PropTypes) {
           copy="There is no set time on your agreement so you can stop your subscription anytime."
         />
         {errorState}
-        <Button1 onClick={() => props.submitForm()}>Continue to payment</Button1>
+        <div className="checkout-form__actions">
+          <Button aria-label={null} onClick={() => props.submitForm()}>Continue to payment</Button>
+        </div>
         <DirectDebitPopUpForm
           onPaymentAuthorisation={(pa: PaymentAuthorisation) => { props.onPaymentAuthorised(pa); }}
         />
