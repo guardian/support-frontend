@@ -5,6 +5,7 @@ import {
   openDialogBox,
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentResult,
@@ -103,4 +104,6 @@ function showPaymentMethod(
   }
 }
 
-export { showPaymentMethod, onPaymentAuthorised };
+const countrySupportsDirectDebit = (country: ?IsoCountry) => country && country === 'GB';
+
+export { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit };
