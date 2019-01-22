@@ -6,7 +6,7 @@ import { combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
-import { type DigitalBillingPeriod, Monthly, Annual } from 'helpers/billingPeriods';
+import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
@@ -28,7 +28,7 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getUser } from './helpers/user';
-import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import { showPaymentMethod, onPaymentAuthorised } from './helpers/paymentProviders';
 
 
 // ----- Types ----- //
@@ -160,7 +160,7 @@ export type FormActionCreators = typeof formActionCreators;
 function initReducer(countryGroupId: CountryGroupId) {
   const billingPeriodInurl = getQueryParameter('period');
   const user = getUser(countryGroupId); // TODO: this is unnecessary, it should use the user reducer
-  const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInurl === Monthly || billingPeriodInurl === Annual
+  const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInurl === 'Monthly' || billingPeriodInurl === 'Annual'
     ? billingPeriodInurl
     : Monthly;
 
@@ -197,12 +197,7 @@ function initReducer(countryGroupId: CountryGroupId) {
         return { ...state, telephone: action.telephone };
 
       case 'SET_COUNTRY':
-        return {
-          ...state,
-          country: fromString(action.country),
-          stateProvince: null,
-          paymentMethod: countrySupportsDirectDebit(fromString(action.country)) ? state.paymentMethod : 'Stripe',
-        };
+        return { ...state, country: fromString(action.country), stateProvince: null };
 
       case 'SET_STATE_PROVINCE':
         return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
@@ -211,10 +206,7 @@ function initReducer(countryGroupId: CountryGroupId) {
         return { ...state, billingPeriod: action.billingPeriod };
 
       case 'SET_PAYMENT_METHOD':
-        return {
-          ...state,
-          paymentMethod: countrySupportsDirectDebit(state.country) ? action.paymentMethod : 'Stripe',
-        };
+        return { ...state, paymentMethod: action.paymentMethod };
 
       case 'SET_FORM_ERRORS':
         return { ...state, formErrors: action.errors };
