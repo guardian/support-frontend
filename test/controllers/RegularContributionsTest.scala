@@ -18,7 +18,7 @@ import services.{HttpIdentityService, MembersDataService}
 import services.MembersDataService._
 import com.gu.support.config._
 import admin.SwitchState.On
-import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
+import admin.{PaymentMethodsSwitch, AllSettings, AllSettingsProvider, Switches}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 
@@ -45,9 +45,9 @@ class RegularContributionsTest extends WordSpec with MustMatchers {
         signature = ""
       ))
 
-      val settingsProvider = mock[SettingsProvider]
-      when(settingsProvider.settings()).thenReturn(
-        Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
+      val settingsProvider = mock[AllSettingsProvider]
+      when(settingsProvider.getAllSettings()).thenReturn(
+        AllSettings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
       )
 
       new RegularContributions(
