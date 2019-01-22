@@ -75,10 +75,13 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
 
 function getValidContributionTypes(abParticipations: Participations): ContributionType[] {
   const { globalContributionTypes } = abParticipations;
+  let validContributionTypes;
   if (globalContributionTypes === 'default-annual_no-monthly') {
-    return ['ONE_OFF', 'ANNUAL'];
+    validContributionTypes = ['ONE_OFF', 'ANNUAL'];
+  } else {
+    validContributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
   }
-  return getValidContributionTypesFromUrlOrElse(['ONE_OFF', 'MONTHLY', 'ANNUAL']);
+  return getValidContributionTypesFromUrlOrElse(validContributionTypes);
 }
 
 function toHumanReadableContributionType(contributionType: ContributionType): 'Single' | 'Monthly' | 'Annual' {

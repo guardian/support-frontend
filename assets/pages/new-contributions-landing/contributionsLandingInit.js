@@ -59,12 +59,8 @@ function getInitialContributionType(abParticipations: Participations): Contribut
     ? globalContributionTypes.split('_')
     : [];
 
-  let contributionType: ContributionType;
-  if (abTestParams.includes('default-annual')) {
-    contributionType = getContributionTypeFromSessionOrElse('ANNUAL');
-  } else {
-    contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
-  }
+  const fallback = abTestParams.includes('default-annual') ? 'ANNUAL' : 'MONTHLY';
+  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse(fallback));
 
   return (
     // make sure we don't select a contribution type which isn't on the page
