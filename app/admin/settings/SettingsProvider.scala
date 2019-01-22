@@ -1,9 +1,9 @@
-package admin
+package admin.settings
 
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 
-import admin.SettingsProvider._
+import admin.settings.SettingsProvider._
 import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
@@ -27,17 +27,18 @@ abstract class SettingsProvider[T] {
   def settings(): T
 }
 
-class AllSettingsProvider private (switchesProvider: SettingsProvider[Switches]) {
+class AllSettingsProvider private (switchesProvider: SettingsProvider[Switches], amountsProvider: SettingsProvider[Amounts]) {
   def getAllSettings(): AllSettings = {
-    AllSettings(switchesProvider.settings)
+    AllSettings(switchesProvider.settings(), amountsProvider.settings())
   }
 }
 
 object AllSettingsProvider {
   def fromConfig(config: Configuration)(implicit client: AmazonS3, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
-    SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config).map { switchesProvider =>
-      new AllSettingsProvider(switchesProvider)
-    }
+    for {
+      switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
+      amountsProvider <- SettingsProvider.fromAppConfig[Amounts](config.settingsSources.amounts, config)
+    } yield new AllSettingsProvider(switchesProvider, amountsProvider)
   }
 }
 

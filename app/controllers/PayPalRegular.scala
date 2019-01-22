@@ -2,17 +2,16 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import io.circe.syntax._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
-import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 
 import scala.concurrent.ExecutionContext
 

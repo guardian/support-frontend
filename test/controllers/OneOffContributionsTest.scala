@@ -1,6 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.settings.AllSettingsProvider
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -18,12 +19,10 @@ import assets.AssetsResolver
 import com.gu.googleauth.AuthAction
 import com.gu.identity.play.{PrivateFields, PublicFields}
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-
 import services.{HttpIdentityService, PaymentAPIService, TestUserService}
 import com.gu.support.config.StripeConfigProvider
 import fixtures.TestCSRFComponents
 import play.api.libs.json.JsString
-import admin.AllSettingsProvider
 
 class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFComponents {
 

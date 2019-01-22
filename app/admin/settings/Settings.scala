@@ -1,8 +1,9 @@
-package admin
+package admin.settings
 
 import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
 
+import admin.ServersideAbTest
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
 import com.gu.support.encoding.Codec
@@ -15,18 +16,7 @@ import io.circe.{Decoder, Encoder}
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
 
-case class Switches(
-    oneOffPaymentMethods: PaymentMethodsSwitch,
-    recurringPaymentMethods: PaymentMethodsSwitch,
-    experiments: Map[String, ExperimentSwitch],
-    optimize: SwitchState
-)
-
-object Switches {
-  implicit val switchesCodec: Codec[Switches] = deriveCodec
-}
-
-case class AllSettings(switches: Switches)
+case class AllSettings(switches: Switches, amounts: Amounts)
 
 object AllSettings {
   implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec
@@ -57,13 +47,14 @@ object Settings {
     } yield settings
 }
 
-case class SettingsSources(switches: SettingsSource)
+case class SettingsSources(switches: SettingsSource, amounts: SettingsSource)
 
 object SettingsSources {
   def fromConfig(config: Config): Either[Throwable, SettingsSources] = {
     for {
       switchesSource <- SettingsSource.fromConfig(config, "switches")
-    } yield SettingsSources(switchesSource)
+      amountsSource <- SettingsSource.fromConfig(config, "amounts")
+    } yield SettingsSources(switchesSource, amountsSource)
   }
 }
 

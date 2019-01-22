@@ -1,12 +1,12 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import play.api.mvc._
 import play.api.libs.circe.Circe
 
 import scala.concurrent.{ExecutionContext, Future}
-
 import services.{IdentityService, PaymentAPIService, TestUserService}
 import views.html.oneOffContributions
 import com.gu.support.config.StripeConfigProvider
@@ -16,7 +16,6 @@ import com.gu.identity.play.IdUser
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 
 class OneOffContributions(
     val assets: AssetsResolver,

@@ -1,6 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.settings.AllSettingsProvider
 import org.scalatest.WordSpec
 import org.scalatest.MustMatchers
 import play.api.test.FakeRequest
@@ -13,7 +14,6 @@ import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
 import services.{HttpIdentityService, PaymentAPIService, TestUserService}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import admin.AllSettingsProvider
 import config.Configuration.GuardianDomain
 
 import scala.concurrent.ExecutionContext

@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.{ServersideAbTest, AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
