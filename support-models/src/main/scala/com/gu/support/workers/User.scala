@@ -15,7 +15,7 @@ case class User(
   allowThirdPartyMail: Boolean = false,
   allowGURelatedMail: Boolean = false,
   isTestUser: Boolean = false,
-  telphoneNumber: Option[String] = None
+  telephoneNumber: Option[String] = None
 )
 
 object User {
