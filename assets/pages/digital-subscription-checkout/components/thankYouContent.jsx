@@ -3,12 +3,14 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import {
   getIosAppUrl,
   androidAppUrl,
   getDailyEditionUrl,
 } from 'helpers/externalLinks';
+
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -17,10 +19,16 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import MarketingConsent from './MarketingConsentContainer';
 
+import {
+  getFormFields,
+  type FormFields,
+} from '../digitalSubscriptionCheckoutReducer';
+
 // ----- Types ----- //
 
 type PropTypes = {
-  countryGroupId: CountryGroupId;
+  countryGroupId: CountryGroupId,
+    ...FormFields,
 };
 
 
@@ -32,7 +40,7 @@ function ThankYouContent(props: PropTypes) {
     <div className="thank-you-content">
       <LeftMarginSection>
         <p className={classNameWithModifiers('thank-you-content__copy', ['italic'])}>
-          We have sent you an email with everything you need to know
+          {props.paymentMethod === 'DirectDebit' ? 'Look out for an email within three business days confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements.' : 'We have sent you an email with everything you need to know'}
         </p>
       </LeftMarginSection>
       <AppsSection countryGroupId={props.countryGroupId} />
@@ -90,4 +98,5 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
 
 // ----- Export ----- //
 
-export default ThankYouContent;
+
+export default connect(state => ({ ...getFormFields(state) }))(ThankYouContent);
