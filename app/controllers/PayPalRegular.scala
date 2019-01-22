@@ -12,7 +12,7 @@ import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 
 import scala.concurrent.ExecutionContext
 
@@ -22,7 +22,7 @@ class PayPalRegular(
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
-    settingsProvider: SettingsProvider
+    settingsProvider: AllSettingsProvider
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
@@ -63,7 +63,7 @@ class PayPalRegular(
   // The endpoint corresponding to the PayPal return url, hit if the user is
   // redirected and needs to come back.
   def returnUrl: Action[AnyContent] = PrivateAction { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     SafeLogger.error(scrub"User hit the PayPal returnUrl.")
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
@@ -77,7 +77,7 @@ class PayPalRegular(
   // redirected and the payment fails.
   def cancelUrl: Action[AnyContent] = PrivateAction { implicit request =>
     SafeLogger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",

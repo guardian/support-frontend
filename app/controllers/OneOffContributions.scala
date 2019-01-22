@@ -16,7 +16,7 @@ import com.gu.identity.play.IdUser
 import models.Autofill
 import io.circe.syntax._
 import play.twirl.api.Html
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 
 class OneOffContributions(
     val assets: AssetsResolver,
@@ -27,7 +27,7 @@ class OneOffContributions(
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
-    settingsProvider: SettingsProvider
+    settingsProvider: AllSettingsProvider
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -41,7 +41,7 @@ class OneOffContributions(
     )
   }
 
-  private def formHtml(idUser: Option[IdUser])(implicit request: RequestHeader, settings: Settings) = {
+  private def formHtml(idUser: Option[IdUser])(implicit request: RequestHeader, settings: AllSettings) = {
     oneOffContributions(
       title = "Support the Guardian | Single Contribution",
       id = "oneoff-contributions-page",
@@ -56,7 +56,7 @@ class OneOffContributions(
   }
 
   def displayForm(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user
       .fold(Future.successful(Ok(formHtml(None)))) { minimalUser =>
         identityService.getUser(minimalUser).fold(

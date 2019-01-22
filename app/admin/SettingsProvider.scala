@@ -9,6 +9,7 @@ import cats.data.EitherT
 import cats.instances.future._
 import com.amazonaws.services.s3.AmazonS3
 import config.{Configuration, FastlyConfig}
+import io.circe.Decoder
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.ws.WSClient
@@ -18,38 +19,52 @@ import services.fastly.FastlyService
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class SettingsProvider {
+abstract class SettingsProvider[T] {
 
   // Models the possibility of settings changing over the application life cycle.
   // For example, if settings are read from S3, the file can be polled for changes,
   // so that the setting updates can propagated without having to re-deploy the app.
-  def settings(): Settings
+  def settings(): T
 }
 
-class LocalFileSettingsProvider private (initialSettings: Settings) extends SettingsProvider {
-  override def settings(): Settings = initialSettings
+class AllSettingsProvider private (switchesProvider: SettingsProvider[Switches]) {
+  def getAllSettings(): AllSettings = {
+    AllSettings(switchesProvider.settings)
+  }
+}
+
+object AllSettingsProvider {
+  def fromConfig(config: Configuration)(implicit client: AmazonS3, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
+    SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config).map { switchesProvider =>
+      new AllSettingsProvider(switchesProvider)
+    }
+  }
+}
+
+class LocalFileSettingsProvider[T: Decoder] private (initialSettings: T) extends SettingsProvider[T] {
+  override def settings(): T = initialSettings
 }
 
 object LocalFileSettingsProvider {
 
-  def fromLocalFile(localFile: SettingsSource.LocalFile): Either[Throwable, SettingsProvider] =
-    Settings.fromLocalFile(localFile).map(new LocalFileSettingsProvider(_))
+  def fromLocalFile[T: Decoder](localFile: SettingsSource.LocalFile): Either[Throwable, SettingsProvider[T]] =
+    Settings.fromLocalFile(localFile).map(new LocalFileSettingsProvider[T](_))
 
 }
 
-class S3SettingsProvider private (
-    initialSettings: Settings,
+class S3SettingsProvider[T: Decoder] private (
+    initialSettings: T,
     source: SettingsSource.S3,
     fastlyService: Option[FastlyService]
-)(implicit ec: ExecutionContext, s3Client: AmazonS3, system: ActorSystem) extends SettingsProvider {
+)(implicit ec: ExecutionContext, s3Client: AmazonS3, system: ActorSystem) extends SettingsProvider[T] {
 
-  private val cachedSettings = new AtomicReference[Settings](initialSettings)
+  private val cachedSettings = new AtomicReference[T](initialSettings)
 
-  def getAndSetSettings(): EitherT[Future, Throwable, SettingsUpdate] =
-    EitherT.fromEither(Settings.fromS3(source))
+  def getAndSetSettings(): EitherT[Future, Throwable, SettingsUpdate[T]] =
+    EitherT.fromEither(Settings.fromS3[T](source))
       .map(settings => SettingsUpdate(cachedSettings.getAndSet(settings), settings))
 
-  def purgeIfChanged(diff: SettingsUpdate): EitherT[Future, Throwable, SettingsUpdate] =
+  def purgeIfChanged(diff: SettingsUpdate[T]): EitherT[Future, Throwable, SettingsUpdate[T]] =
     fastlyService
       // Only consider using the service if there has been a change
       .filter(_ => diff.isChange)
@@ -84,17 +99,17 @@ class S3SettingsProvider private (
         )
     }
 
-  override def settings(): Settings = cachedSettings.get
+  override def settings(): T = cachedSettings.get
 }
 
 object S3SettingsProvider {
 
-  def fromS3(s3: SettingsSource.S3, fastlyConfig: Option[FastlyConfig])(
+  def fromS3[T: Decoder](s3: SettingsSource.S3, fastlyConfig: Option[FastlyConfig])(
     implicit
     client: AmazonS3,
     system: ActorSystem,
     wsClient: WSClient
-  ): Either[Throwable, SettingsProvider] = {
+  ): Either[Throwable, SettingsProvider[T]] = {
     // Ok using a single threaded execution context,
     // since the only one task is getting executed periodically (pollS3())
     implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(1))
@@ -105,7 +120,7 @@ object S3SettingsProvider {
     }
 
     Settings.fromS3(s3).map { settings =>
-      val service = new S3SettingsProvider(settings, s3, fastlyService)
+      val service = new S3SettingsProvider[T](settings, s3, fastlyService)
       service.startPollingS3()
       service
     }
@@ -114,15 +129,16 @@ object S3SettingsProvider {
 
 object SettingsProvider {
 
-  def fromAppConfig(config: Configuration)(implicit client: AmazonS3, system: ActorSystem, wsClient: WSClient): Either[Throwable, SettingsProvider] = {
-    SafeLogger.info(s"loading settings from ${config.settingsSource}")
-    config.settingsSource match {
-      case s3: SettingsSource.S3 => S3SettingsProvider.fromS3(s3, config.fastlyConfig)
-      case localFile: SettingsSource.LocalFile => LocalFileSettingsProvider.fromLocalFile(localFile)
+  def fromAppConfig[T: Decoder](settingsSource: SettingsSource, config: Configuration)
+                               (implicit client: AmazonS3, system: ActorSystem, wsClient: WSClient): Either[Throwable, SettingsProvider[T]] = {
+    SafeLogger.info(s"loading settings from $settingsSource")
+    settingsSource match {
+      case s3: SettingsSource.S3 => S3SettingsProvider.fromS3[T](s3, config.fastlyConfig)
+      case localFile: SettingsSource.LocalFile => LocalFileSettingsProvider.fromLocalFile[T](localFile)
     }
   }
 
-  case class SettingsUpdate(old: Settings, current: Settings) {
+  case class SettingsUpdate[T](old: T, current: T) {
     def isChange: Boolean = old != current
   }
 }

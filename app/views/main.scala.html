@@ -1,6 +1,6 @@
 @import assets.AssetsResolver
 @import views.ViewHelpers._
-@import admin.Settings
+@import admin.AllSettings
 
 @(
 	title: String,
@@ -14,7 +14,7 @@
 	scripts: Html = Html(""),
   data: Map[String, String] = Map.empty,
   csrf: Option[String] = None
-)(implicit assets: AssetsResolver, request: RequestHeader, settings: Settings)
+)(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
 <html lang="en">

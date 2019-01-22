@@ -1,4 +1,4 @@
-@import admin.Settings
+@import admin.AllSettings
 @import assets.AssetsResolver
 @import com.gu.i18n.Currency.AUD
 @import com.gu.identity.play.IdUser
@@ -15,7 +15,7 @@
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
-)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: Settings)
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @scripts = {
     <script type="text/javascript">

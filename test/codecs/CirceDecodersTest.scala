@@ -161,7 +161,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |  }
           |}""".stripMargin
 
-      val settings = Settings(
+      val settings = AllSettings(
         Switches(
           oneOffPaymentMethods = PaymentMethodsSwitch(
             stripe = On,
@@ -184,7 +184,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
         )
       )
 
-      decode[Settings](json).right.value mustBe settings
+      decode[AllSettings](json).right.value mustBe settings
     }
   }
 }

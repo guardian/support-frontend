@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.SwitchState.On
-import admin.{PaymentMethodsSwitch, Settings, SettingsProvider, Switches}
+import admin.{PaymentMethodsSwitch, AllSettings, AllSettingsProvider, Switches}
 import cats.implicits._
 import com.gu.support.config._
 import com.gu.tip.Tip
@@ -33,9 +33,9 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): DigitalSubscription = {
 
-      val settingsProvider = mock[SettingsProvider]
-      when(settingsProvider.settings()).thenReturn(
-        Settings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
+      val settingsProvider = mock[AllSettingsProvider]
+      when(settingsProvider.getAllSettings()).thenReturn(
+        AllSettings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
       )
 
       val client = mock[SupportWorkersClient]

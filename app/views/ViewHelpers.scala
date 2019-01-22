@@ -2,8 +2,8 @@ package views
 
 import play.api.mvc.RequestHeader
 import play.twirl.api.{HtmlFormat, Html}
-import admin.Settings
-import codecs.CirceDecoders._
+import admin.AllSettings
+import admin.AllSettings.allSettingsCodec
 import io.circe.Printer
 import io.circe.syntax._
 
@@ -14,7 +14,7 @@ object ViewHelpers {
       case (key, value) =>
         Html(s"""data-${HtmlFormat.escape(key.replaceAll("[^a-zA-Z0-9\\-]", ""))}="${HtmlFormat.escape(value)}" """)
     }
-  def printSettings(settings: Settings): String =
+  def printSettings(settings: AllSettings): String =
     settings
       .asJson
       .pretty(Printer.spaces2.copy(dropNullValues = true))
