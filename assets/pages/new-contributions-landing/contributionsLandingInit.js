@@ -33,6 +33,7 @@ import {
   updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
+import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Functions ----- //
 
@@ -51,15 +52,24 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(): ContributionType {
-  const contributionType: ContributionType =
-    getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
+function getInitialContributionType(abParticipations: Participations): ContributionType {
+  const { globalContributionTypes } = abParticipations;
+  const abTestParams = globalContributionTypes
+    ? globalContributionTypes.split('_')
+    : [];
+
+  let contributionType: ContributionType;
+  if (abTestParams.includes('default-annual')) {
+    contributionType = getContributionTypeFromSessionOrElse('ANNUAL');
+  } else {
+    contributionType = getContributionTypeFromSessionOrElse('MONTHLY');
+  }
 
   return (
     // make sure we don't select a contribution type which isn't on the page
-    getValidContributionTypes().includes(contributionType)
+    getValidContributionTypes(abParticipations).includes(contributionType)
       ? contributionType
-      : getValidContributionTypes()[0]
+      : getValidContributionTypes(abParticipations)[0]
   );
 }
 
@@ -131,8 +141,8 @@ function selectInitialAnnualAmount(state: State, dispatch: Function) {
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
-
-  const contributionType = getInitialContributionType();
+  const { abParticipations } = state.common;
+  const contributionType = getInitialContributionType(abParticipations);
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
 
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
