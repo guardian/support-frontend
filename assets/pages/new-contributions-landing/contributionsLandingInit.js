@@ -12,28 +12,29 @@ import {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import {
-  getContributionTypeFromSessionOrElse, getContributionTypeFromUrlOrElse,
+  getContributionTypeFromSessionOrElse,
+  getContributionTypeFromUrlOrElse,
   getPaymentMethodFromSession,
   getValidContributionTypes,
   getValidPaymentMethods,
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
+import type { Participations } from 'helpers/abTests/abtest';
 import { type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
-  type Action,
-  checkIfEmailHasPassword,
-  onThirdPartyPaymentAuthorised,
-  paymentWaiting,
-  selectAmount,
-  setPayPalHasLoaded,
-  setThirdPartyPaymentLibrary,
-  updateContributionTypeAndPaymentMethod,
-  updateUserFormData,
+type Action,
+checkIfEmailHasPassword,
+onThirdPartyPaymentAuthorised,
+paymentWaiting,
+selectAmount,
+setPayPalHasLoaded,
+setThirdPartyPaymentLibrary,
+updateContributionTypeAndPaymentMethod,
+updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
-import type { Participations } from 'helpers/abTests/abtest';
 
 // ----- Functions ----- //
 
@@ -62,7 +63,7 @@ function getInitialContributionType(abParticipations: Participations): Contribut
   if (abTestParams.includes('default-annual')) {
     contributionType = getContributionTypeFromSessionOrElse('ANNUAL');
   } else {
-    contributionType = getContributionTypeFromSessionOrElse('MONTHLY');
+    contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
   }
 
   return (
