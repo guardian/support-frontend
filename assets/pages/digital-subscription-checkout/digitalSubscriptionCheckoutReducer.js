@@ -38,6 +38,7 @@ type PaymentMethod = 'Stripe' | 'DirectDebit';
 export type FormFields = {|
   firstName: string,
   lastName: string,
+  email: string,
   country: Option<IsoCountry>,
   stateProvince: Option<StateProvince>,
   telephone: string,
@@ -83,6 +84,7 @@ export type Action =
 function getFormFields(state: State): FormFields {
   return {
     firstName: state.page.checkout.firstName,
+    email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
     country: state.page.checkout.country,
     stateProvince: state.page.checkout.stateProvince,

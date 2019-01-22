@@ -23,6 +23,7 @@ import { Button } from 'components/forms/standardFields/button';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
+import { withFooter } from 'components/forms/formHOCs/withFooter';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { withArrow } from 'components/forms/formHOCs/withArrow';
@@ -82,7 +83,9 @@ function getPrice(country: Option<IsoCountry>, frequency: DigitalBillingPeriod):
 
 // ----- Form Fields ----- //
 
-const Input1 = compose(asControlled, withError, withLabel)(Input);
+const InputWithLabel = withLabel(Input);
+const InputWithFooter = withFooter(InputWithLabel);
+const Input1 = compose(asControlled, withError)(InputWithLabel);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
 const Button1 = withArrow(Button);
@@ -130,6 +133,16 @@ function CheckoutForm(props: PropTypes) {
           value={props.lastName}
           setValue={props.setLastName}
           error={firstError('lastName', props.formErrors)}
+        />
+        <InputWithFooter
+          id="email"
+          label="Email"
+          type="email"
+          disabled
+          value={props.email}
+          footer={(
+            <span>not your email?</span>
+          )}
         />
         <Select1
           id="country"

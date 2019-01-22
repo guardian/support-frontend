@@ -87,7 +87,7 @@ class DigitalSubscription(
     val title = "Support the Guardian | Digital Subscription"
     val id = "digital-subscription-checkout-page-" + countryCode
     val js = "digitalSubscriptionCheckoutPage.js"
-    val css = "digitalSubscriptionCheckoutPageStyles.css"
+    val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
 

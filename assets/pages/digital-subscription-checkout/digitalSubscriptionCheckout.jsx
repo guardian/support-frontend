@@ -19,6 +19,8 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
 
+import './digitalSubscriptionCheckout.scss';
+
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detect();
