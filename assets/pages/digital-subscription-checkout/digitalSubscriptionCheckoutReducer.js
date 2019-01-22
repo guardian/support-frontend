@@ -6,7 +6,8 @@ import { combineReducers, type Dispatch } from 'redux';
 
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
-import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
+import { type DigitalBillingPeriod, Monthly, Annual } from 'helpers/billingPeriods';
+import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
   fromString,
@@ -154,11 +155,15 @@ const formActionCreators = {
 
 export type FormActionCreators = typeof formActionCreators;
 
-
 // ----- Reducer ----- //
 
 function initReducer(countryGroupId: CountryGroupId) {
+  const billingPeriodInurl = getQueryParameter('period');
   const user = getUser(countryGroupId); // TODO: this is unnecessary, it should use the user reducer
+  const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInurl === Monthly || billingPeriodInurl === Annual
+    ? billingPeriodInurl
+    : Monthly;
+
   const initialState = {
     stage: 'checkout',
     email: user.email || '',
@@ -167,7 +172,7 @@ function initReducer(countryGroupId: CountryGroupId) {
     country: user.country || null,
     stateProvince: null,
     telephone: '',
-    billingPeriod: Monthly,
+    billingPeriod: initialBillingPeriod,
     paymentMethod: 'DirectDebit',
     formErrors: [],
     submissionError: null,
