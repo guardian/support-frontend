@@ -75,11 +75,7 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
 
 function getValidContributionTypes(abParticipations: Participations): ContributionType[] {
   const { globalContributionTypes } = abParticipations;
-  const params = globalContributionTypes
-    ? globalContributionTypes.split('_')
-    : [];
-
-  if (params.includes('no-monthly')) {
+  if (globalContributionTypes === 'default-annual_no-monthly') {
     return ['ONE_OFF', 'ANNUAL'];
   }
   return getValidContributionTypesFromUrlOrElse(['ONE_OFF', 'MONTHLY', 'ANNUAL']);

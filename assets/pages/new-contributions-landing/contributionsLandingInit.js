@@ -24,15 +24,15 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
-type Action,
-checkIfEmailHasPassword,
-onThirdPartyPaymentAuthorised,
-paymentWaiting,
-selectAmount,
-setPayPalHasLoaded,
-setThirdPartyPaymentLibrary,
-updateContributionTypeAndPaymentMethod,
-updateUserFormData,
+  type Action,
+  checkIfEmailHasPassword,
+  onThirdPartyPaymentAuthorised,
+  paymentWaiting,
+  selectAmount,
+  setPayPalHasLoaded,
+  setThirdPartyPaymentLibrary,
+  updateContributionTypeAndPaymentMethod,
+  updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 
