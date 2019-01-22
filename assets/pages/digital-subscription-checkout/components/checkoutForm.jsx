@@ -40,6 +40,8 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
+import { countrySupportsDirectDebit } from '../helpers/paymentProviders';
+
 
 // ----- Types ----- //
 
@@ -179,21 +181,25 @@ function CheckoutForm(props: PropTypes) {
         </Fieldset>
       </LeftMarginSection>
       <LeftMarginSection>
-        <h2 className="checkout-form__heading">How would you like to pay?</h2>
-        <Fieldset>
-          <RadioInput
-            text="Direct debit"
-            name="paymentMethod"
-            checked={props.paymentMethod === 'DirectDebit'}
-            onChange={() => props.setPaymentMethod('DirectDebit')}
-          />
-          <RadioInput
-            text="Credit/Debit card"
-            name="paymentMethod"
-            checked={props.paymentMethod === 'Stripe'}
-            onChange={() => props.setPaymentMethod('Stripe')}
-          />
-        </Fieldset>
+        {countrySupportsDirectDebit(props.country) &&
+          <div>
+            <h2 className="checkout-form__heading">How would you like to pay?</h2>
+            <Fieldset>
+              <RadioInput
+                text="Direct debit"
+                name="paymentMethod"
+                checked={props.paymentMethod === 'DirectDebit'}
+                onChange={() => props.setPaymentMethod('DirectDebit')}
+              />
+              <RadioInput
+                text="Credit/Debit card"
+                name="paymentMethod"
+                checked={props.paymentMethod === 'Stripe'}
+                onChange={() => props.setPaymentMethod('Stripe')}
+              />
+            </Fieldset>
+          </div>
+        }
         <CheckoutCopy
           strong="Money Back Guarantee "
           copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."

@@ -27,7 +27,7 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getUser } from './helpers/user';
-import { showPaymentMethod, onPaymentAuthorised } from './helpers/paymentProviders';
+import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
 
 
 // ----- Types ----- //
@@ -123,7 +123,6 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
-
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
@@ -193,7 +192,12 @@ function initReducer(countryGroupId: CountryGroupId) {
         return { ...state, telephone: action.telephone };
 
       case 'SET_COUNTRY':
-        return { ...state, country: fromString(action.country), stateProvince: null };
+        return {
+          ...state,
+          country: fromString(action.country),
+          stateProvince: null,
+          paymentMethod: countrySupportsDirectDebit(fromString(action.country)) ? state.paymentMethod : 'Stripe',
+        };
 
       case 'SET_STATE_PROVINCE':
         return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
@@ -202,7 +206,10 @@ function initReducer(countryGroupId: CountryGroupId) {
         return { ...state, billingPeriod: action.billingPeriod };
 
       case 'SET_PAYMENT_METHOD':
-        return { ...state, paymentMethod: action.paymentMethod };
+        return {
+          ...state,
+          paymentMethod: countrySupportsDirectDebit(state.country) ? action.paymentMethod : 'Stripe',
+        };
 
       case 'SET_FORM_ERRORS':
         return { ...state, formErrors: action.errors };
