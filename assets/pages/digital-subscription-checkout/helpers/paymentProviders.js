@@ -6,8 +6,6 @@ import {
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import { fromCountry } from 'helpers/internationalisation/countryGroup';
-import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentResult,
@@ -74,37 +72,18 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
   ).then(handleSubscribeResult);
 }
 
-function getISOIdsFromCountry(country: ?string) {
-  if (!country) {
-    throw new Error();
-  }
-  const countryGroupId = fromCountry(country);
-  if (!countryGroupId) {
-    throw new Error();
-  }
-  const currencyId = fromCountryGroupId(countryGroupId);
-  if (!currencyId) {
-    throw new Error();
-  }
-  return { countryGroupId, currencyId };
-}
-
 function showStripe(
   dispatch: Dispatch<Action>,
   state: State,
 ) {
-  try {
-    const { countryGroupId, currencyId } = getISOIdsFromCountry(state.page.checkout.country);
-    const { isTestUser } = state.page.checkout;
-    const price = getDigitalPrice(countryGroupId, state.page.checkout.billingPeriod);
-    const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(pa, dispatch, state);
+  const { countryGroupId, currencyId } = state.common.internationalisation;
+  const { isTestUser } = state.page.checkout;
+  const price = getDigitalPrice(countryGroupId, state.page.checkout.billingPeriod);
+  const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(pa, dispatch, state);
 
-    loadStripe()
-      .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currencyId, isTestUser))
-      .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
-  } catch (e) {
-    dispatch(setSubmissionError('unknown'));
-  }
+  loadStripe()
+    .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currencyId, isTestUser))
+    .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
 }
 
 function showPaymentMethod(

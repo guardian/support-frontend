@@ -10,6 +10,8 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { Settings } from 'helpers/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Action } from 'helpers/page/commonActions';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
+import { fromCountry } from 'helpers/internationalisation/countryGroup';
 
 export type Internationalisation = {|
   currencyId: IsoCurrency,
@@ -27,6 +29,12 @@ export type CommonState = {
   optimizeExperiments: OptimizeExperiments,
 };
 
+const getInternationalisationFromCountry = (countryId: IsoCountry, state: CommonState) => {
+  const countryGroupId = fromCountry(countryId) || state.internationalisation.countryGroupId;
+  const currencyId = fromCountryGroupId(countryGroupId) || state.internationalisation.currencyId;
+  return { countryGroupId, currencyId, countryId };
+};
+
 // Sets up the common reducer with its initial state.
 function createCommonReducer(initialState: CommonState): (state?: CommonState, action: Action) => CommonState {
 
@@ -40,7 +48,10 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
       case 'SET_COUNTRY':
         return {
           ...state,
-          internationalisation: { ...state.internationalisation, countryId: action.country },
+          internationalisation: {
+            ...state.internationalisation,
+            ...getInternationalisationFromCountry(action.country, state),
+          },
         };
       case 'SET_OPTIMIZE_EXPERIMENT_VARIANT': {
         const optimizeExperiments = state.optimizeExperiments
