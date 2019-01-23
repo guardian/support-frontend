@@ -21,7 +21,6 @@
 @import '~components/productHero/productHero';
 @import '~components/forms/standardFields/input';
 @import '~components/forms/standardFields/select';
-@import '~components/forms/standardFields/button';
 @import '~components/forms/customFields/radioInput';
 @import '~components/forms/formHOCs/withLabel';
 @import '~components/forms/formHOCs/withError';
@@ -32,7 +31,6 @@
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 @import '~components/directDebit/directDebitForm/directDebitForm';
-@import '~components/button/button';
 
 
 // ----- Page-Specific Styles ----- //
@@ -69,6 +67,12 @@
       padding-left: $gu-h-spacing / 2;
       padding-bottom: $gu-v-spacing * 3;
       border-top: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
+  .checkout-form__actions {
+    .component-button {
+      margin-top: $gu-v-spacing * 2;
     }
   }
 

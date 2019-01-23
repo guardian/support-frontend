@@ -1,0 +1,24 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-checkout-expander ::-webkit-details-marker {
+  display:none;
+}
+
+.component-checkout-expander__summary {
+  display: block;
+  cursor: pointer;
+  margin-top: $gu-v-spacing / 2;
+  margin-bottom: $gu-v-spacing / 4;
+}
+
+.component-checkout-expander__strong {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.component-checkout-expander__expando {
+  margin-bottom: $gu-v-spacing;
+  .component-button {
+    margin-right: $gu-h-spacing /4;
+  }
+}
