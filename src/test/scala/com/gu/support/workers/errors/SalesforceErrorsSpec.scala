@@ -25,7 +25,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
 
   it should "throw a SalesforceAuthenticationErrorResponse if the authentication fails" in {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
-    val upsertData = UpsertData.create(idId, email, name, name, None, us, allowMail, allowMail, allowMail)
+    val upsertData = UpsertData.create(idId, email, name, name, None, us, allowMail, allowMail, allowMail, None)
     val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
 
     assertThrows[SalesforceAuthenticationErrorResponse] {
@@ -39,7 +39,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
       override def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder =
         req.url(s"${auth.instance_url}/$upsertEndpoint") //We still need to set the base url
     }
-    val upsertData = UpsertData.create(idId, email, name, name, None, us, allowMail, allowMail, allowMail)
+    val upsertData = UpsertData.create(idId, email, name, name, None, us, allowMail, allowMail, allowMail, None)
 
     recoverToSucceededIf[SalesforceErrorResponse] {
       service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
