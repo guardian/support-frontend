@@ -29,7 +29,7 @@ const getAnnualSaving = (countryGroupId: CountryGroupId): Price => {
   const annualizedMonthlyCost = getDigitalPrice(countryGroupId, Monthly).value * 12;
   const annualCost = getDigitalPrice(countryGroupId, Annual);
 
-  return { ...annualCost, value: Math.ceil(annualizedMonthlyCost - annualCost.value) };
+  return { ...annualCost, value: (annualizedMonthlyCost - annualCost.value) };
 };
 
 export const billingPeriods = {
@@ -39,7 +39,7 @@ export const billingPeriods = {
   },
   [Annual]: {
     title: 'Annually',
-    offer: 'Now save 20%',
+    offer: 'Save 17%',
     copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, Annual)} every 12 months (save ${showPrice(getAnnualSaving(countryGroupId))} per year)`,
   },
 };
