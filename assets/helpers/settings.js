@@ -1,5 +1,7 @@
 // @flow
 
+import { type Amounts } from 'helpers/contributions';
+
 export type Status = 'On' | 'Off';
 
 export type SwitchObject = {
@@ -19,6 +21,7 @@ export type Switches = {
 
 export type Settings = {
   switches: Switches,
+  amounts: Amounts,
 };
 
 export function isTestSwitchedOn(settings: Settings, testName: string): boolean {

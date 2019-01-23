@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { config, amounts, type Amount, type ContributionType } from 'helpers/contributions';
+import { config, type Amounts, type Amount, type ContributionType } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -26,6 +26,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: ContributionType,
+  amounts: Amounts,
   selectedAmounts: { [ContributionType]: Amount | 'other' },
   selectAmount: (Amount | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmount: string | null,
@@ -42,6 +43,7 @@ const mapStateToProps = state => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   currency: state.common.internationalisation.currencyId,
   contributionType: state.page.form.contributionType,
+  amounts: state.common.settings.amounts,
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
@@ -67,6 +69,14 @@ const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount
     `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
     `${currency.glyph}${amount.value}`);
 
+const isSelected = (amount: Amount, props: PropTypes) => {
+  if (props.selectedAmounts[props.contributionType]) {
+    return props.selectedAmounts[props.contributionType] !== 'other' &&
+      amount.value === props.selectedAmounts[props.contributionType].value;
+  }
+  return amount.isDefault;
+};
+
 const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props: PropTypes) => (amount: Amount) => (
   <li className="form__radio-group-item">
     <input
@@ -76,7 +86,7 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
       name="contributionAmount"
       value={amount.value}
       /* eslint-disable react/prop-types */
-      checked={props.selectedAmounts[props.contributionType] !== 'other' && amount.value === props.selectedAmounts[props.contributionType].value}
+      checked={isSelected(amount, props)}
       onChange={props.selectAmount(amount, props.countryGroupId, props.contributionType)}
       /* eslint-enable react/prop-types */
     />
@@ -96,11 +106,13 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
 
 
 function ContributionAmount(props: PropTypes) {
-  const validAmounts: Amount[] = amounts(props.annualTestVariant)[props.contributionType][props.countryGroupId];
+  const validAmounts: Amount[] = props.amounts[props.contributionType][props.countryGroupId];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
-  const minAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString(), spoken: '', isDefault: false }, false);
-  const maxAmount: string = formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString(), spoken: '', isDefault: false }, false);
+  const minAmount: string =
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
+  const maxAmount: string =
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>

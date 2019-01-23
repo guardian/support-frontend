@@ -2,7 +2,7 @@ package admin.settings
 
 import io.circe.{Decoder, Encoder}
 
-case class Amount(value: Int, isDefault: Option[Boolean])
+case class Amount(value: String, isDefault: Option[Boolean])
 case class AmountsRegions(
   GBPCountries: List[Amount],
   UnitedStates: List[Amount],

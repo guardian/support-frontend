@@ -20,6 +20,7 @@ function mapStateToProps(state: State) {
     countryGroupId: state.common.internationalisation.countryGroupId,
     currencyId: state.common.internationalisation.currencyId,
     contributionType: state.page.selection.contributionType,
+    amounts: state.common.settings.amounts,
     selectedAmount: getAmount(state.page.selection),
     isCustomAmount: state.page.selection.isCustomAmount,
     error: state.page.selection.error,

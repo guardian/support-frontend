@@ -14,6 +14,7 @@ import {
   contributionTypeRadios,
   getContributionAmountRadios,
   getCustomAmountA11yHint,
+  type Amounts,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -34,6 +35,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   currencyId: IsoCurrency,
   contributionType: ContributionType,
+  amounts: Amounts,
   selectedAmount: number,
   isCustomAmount: boolean,
   setContributionType: (string, CountryGroupId) => void,
@@ -68,10 +70,9 @@ function ContributionSelection(props: PropTypes) {
           name="contribution-amount-toggle"
           radios={
             getContributionAmountRadios(
+              props.amounts[props.contributionType][props.countryGroupId],
               props.contributionType,
               props.currencyId,
-              props.countryGroupId,
-              props.annualTestVariant,
             )}
           checked={props.isCustomAmount ? null : props.selectedAmount.toString()}
           toggleAction={props.setAmount}
