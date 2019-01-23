@@ -25,7 +25,7 @@ import { redirectToDigitalPage, setPlan } from '../digitalSubscriptionLandingAct
 const getPrice = (countryGroupId: CountryGroupId, period: DigitalBillingPeriod) =>
   showPrice(getDigitalPrice(countryGroupId, period));
 
-  const getAnnualSaving = (countryGroupId: CountryGroupId): Price => {
+const getAnnualSaving = (countryGroupId: CountryGroupId): Price => {
   const annualizedMonthlyCost = getDigitalPrice(countryGroupId, Monthly).value * 12;
   const annualCost = getDigitalPrice(countryGroupId, Annual);
 
