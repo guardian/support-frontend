@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] {
 
   override protected def servicesHandler(state: CreateSalesforceContactState, requestInfo: RequestInfo, context: Context, services: Services) = {
-    SafeLogger.info(s"CreateSalesforceContact state: $state")
+    SafeLogger.debug(s"CreateSalesforceContact state: $state")
     services.salesforceService.upsert(UpsertData.create(
       state.user.id,
       state.user.primaryEmailAddress,
@@ -23,20 +23,18 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user.lastName,
       state.user.state,
       state.user.country.name,
+      state.user.telephoneNumber,
       state.user.allowMembershipMail,
       state.user.allowThirdPartyMail,
-      state.user.allowGURelatedMail,
-      state.user.telephoneNumber
-    )).map {response =>
-      SafeLogger.info(s"response on salesforce contact upsert $response")
+      state.user.allowGURelatedMail
+    )).map(response =>
       if (response.Success) {
         HandlerResult(getCreateZuoraSubscriptionState(state, response), requestInfo)
       } else {
         val errorMessage = response.ErrorString.getOrElse("No error message returned")
         SafeLogger.warn(s"Error creating Salesforce contact:\n$errorMessage")
         throw new SalesforceException(errorMessage)
-      }
-    }
+      })
   }
 
   private def getCreateZuoraSubscriptionState(state: CreateSalesforceContactState, response: SalesforceContactResponse) =

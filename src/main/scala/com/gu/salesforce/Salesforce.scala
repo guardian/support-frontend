@@ -27,10 +27,10 @@ object Salesforce {
       lastName: String,
       mailingState: Option[String],
       mailingCountry: String,
+      telephoneNumber: Option[String],
       allowMembershipMail: Boolean,
       allow3rdPartyMail: Boolean,
-      allowGuardianRelatedMail: Boolean,
-      telephoneNumber: Option[String]
+      allowGuardianRelatedMail: Boolean
     ): UpsertData =
       UpsertData(
         NewContact(
@@ -40,10 +40,10 @@ object Salesforce {
           lastName,
           mailingState,
           mailingCountry,
+          telephoneNumber,
           allowMembershipMail,
           allow3rdPartyMail,
-          allowGuardianRelatedMail,
-          telephoneNumber
+          allowGuardianRelatedMail
         )
       )
     // scalastyle:on parameter.number
@@ -60,10 +60,10 @@ object Salesforce {
     LastName: String,
     MailingState: Option[String],
     MailingCountry: String,
+    Phone: Option[String],
     Allow_Membership_Mail__c: Boolean,
     Allow_3rd_Party_Mail__c: Boolean,
-    Allow_Guardian_Related_Mail__c: Boolean,
-    Phone: Option[String]
+    Allow_Guardian_Related_Mail__c: Boolean
   )
 
   trait SalesforceResponse {
