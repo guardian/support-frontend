@@ -25,7 +25,8 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
       state.user.country.name,
       state.user.allowMembershipMail,
       state.user.allowThirdPartyMail,
-      state.user.allowGURelatedMail
+      state.user.allowGURelatedMail,
+      state.user.telephoneNumber
     )).map(response =>
       if (response.Success) {
         HandlerResult(getCreateZuoraSubscriptionState(state, response), requestInfo)
