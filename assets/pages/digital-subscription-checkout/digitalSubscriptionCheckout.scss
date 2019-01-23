@@ -63,40 +63,9 @@
     }
   }
 
-  .checkout-content {
-    .component-left-margin-section__content {
-      box-sizing: border-box;
-      border-left: 1px solid gu-colour(garnett-neutral-4);
-    }
-  }
-
-  .checkout-form__actions {
-    .component-button {
-      margin-top: $gu-v-spacing * 2;
-    }
-  }
-
   .checkout-form__heading {
     @include gu-fontset-heading;
     margin-bottom: ($gu-v-spacing/2);
-  }
-
-  .checkout-content__free-trial {
-    @include gu-fontset-body-large;
-    font-style: italic;
-    font-weight: 300;
-    padding-left: $gu-h-spacing / 2;
-    margin-bottom: $gu-v-spacing * 2;
-
-    @include mq($from: mobileLandscape) {
-      width: 460px;
-    }
-  }
-
-  .component-left-margin-section--your-details {
-    .component-left-margin-section__content {
-      border-top: none;
-    }
   }
 
   .component-general-error-message {
@@ -118,6 +87,13 @@
     // Makes sure the circle SVGs stay behind the heading.
     position: relative;
     background-color: #fff;
+
+    .component-left-margin-section__content {
+      box-sizing: border-box;
+      border-left: 1px solid gu-colour(garnett-neutral-4);
+      padding-left: $gu-h-spacing / 2;
+      padding-bottom: $gu-v-spacing * 3;
+    }
 
     .component-cta-link {
       background-color: transparent;

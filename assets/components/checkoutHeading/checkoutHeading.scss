@@ -3,15 +3,15 @@
 
   .component-left-margin-section__content {
     background-color: gu-colour(garnett-neutral-1);
-    padding: 0 0 4px ($gu-h-spacing / 2);
   }
 
 }
 
 .component-checkout-heading__heading {
   @include gu-fontset-heading-large;
-  margin-bottom: $gu-v-spacing * 3;
+  margin-bottom: $gu-v-spacing * 2;
   width: gu-span(4);
+  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
 
   @include mq($from: tablet) {
     width: gu-span(6);
@@ -20,6 +20,7 @@
 
 .component-checkout-heading__copy {
   @include gu-fontset-body-sans;
-
+  padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
+  border-top: 1px solid gu-colour(garnett-neutral-5);
   color: gu-colour(news-garnett-highlight);
 }

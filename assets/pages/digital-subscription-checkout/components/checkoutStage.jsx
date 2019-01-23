@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import ReturnSection from 'components/returnSection/returnSection';
 import ProductHero, {
   type GridImages,
@@ -15,6 +14,8 @@ import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
@@ -125,12 +126,14 @@ function CheckoutStage(props: PropTypes) {
             heading="Digital Pack Subscription"
             copy="Cancel your subscription at any time"
           />
-          <LeftMarginSection modifierClasses={['free-trial']}>
-            <p className="checkout-content__free-trial">
-              You can use all the features free for the next 14 days,
-              and then your first payment will be taken.
-            </p>
-          </LeftMarginSection>
+          <ProductPageContentBlock>
+            <ProductPageTextBlock>
+              <p className={largeParagraphClassName}>
+                You can use all the features free for the next 14 days,
+                and then your first payment will be taken.
+              </p>
+            </ProductPageTextBlock>
+          </ProductPageContentBlock>
           <CheckoutForm />
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>

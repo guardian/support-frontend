@@ -192,8 +192,7 @@ function CheckoutForm(props: PropTypes) {
                   error={firstError('telephone', props.formErrors)}
                 />
               </FormSection>
-              <FormSection>
-                <h2 className="checkout-form__heading">How often would you like to pay?</h2>
+              <FormSection title="How often would you like to pay?">
                 <Fieldset>
                   <RadioInput
                     text={`${getPrice(props.country, Monthly)}Every month`}
@@ -209,10 +208,9 @@ function CheckoutForm(props: PropTypes) {
                   />
                 </Fieldset>
               </FormSection>
-              <FormSection>
+              <FormSection title={countrySupportsDirectDebit(props.country) ? 'How would you like to pay?' : null}>
                 {countrySupportsDirectDebit(props.country) &&
                 <div>
-                  <h2 className="checkout-form__heading">How would you like to pay?</h2>
                   <Fieldset>
                     <RadioInput
                       text="Direct debit"
