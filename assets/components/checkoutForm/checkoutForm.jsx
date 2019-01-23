@@ -4,7 +4,7 @@ import React, { type Node, type Element, type ChildrenArray } from 'react';
 import { type Option } from 'helpers/types/option';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 
-import './form.scss';
+import './checkoutForm.scss';
 
 /*
 Form Section
@@ -18,8 +18,8 @@ type FormSectionPropTypes = {|
 |};
 
 const FormSection = ({ children, title, headingSize }: FormSectionPropTypes) => (
-  <div className="component-form-section">
-    {title && <Heading className="component-form-section__heading" size={headingSize}>{title}</Heading>}
+  <div className="component-checkout-form-section">
+    {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
     {children}
   </div>
 );
@@ -36,7 +36,7 @@ the top level form itself
 type FormPropTypes = {
   children: ChildrenArray<Element<typeof FormSection>>,
 };
-const Form = ({ children, ...otherProps }: FormPropTypes) => (<form {...otherProps} className="component-form">{children}</form>);
+const Form = ({ children, ...otherProps }: FormPropTypes) => (<form {...otherProps} className="component-checkout-form">{children}</form>);
 
 export default Form;
 export { FormSection };

@@ -139,17 +139,19 @@
   .component-product-page-text-block--heading-only + .component-product-page-content-block-divider {
     margin-top: ($gu-v-spacing*-1)
   }
-  .component-product-page-info-chip + .component-product-page-info-chip,
-  .checkout-form {
+  .component-product-page-info-chip + .component-product-page-info-chip {
     margin-top: ($gu-v-spacing * -1);
   }
-  .component-product-page-content-block__content > .component-product-page-content-block-divider:first-child {
+  .component-product-page-content-block-divider:last-child {
+    margin-bottom: ($gu-v-spacing*-.5) - 2px;
+    margin-top: ($gu-v-spacing*.5) + 2px;
+  }
+  /*
+  cancel out initial padding
+  */
+  .component-product-page-content-block__content > .component-product-page-content-block-divider:first-child,
+  .component-checkout {
     margin-top: ($gu-v-spacing*-.5) - 1px;
-    /*
-    cancel out padding if this is the first child then
-    overlap under the top border to avoid the first multiline
-    merging with it and looking like a 2px border 
-    */
   }
 }
 

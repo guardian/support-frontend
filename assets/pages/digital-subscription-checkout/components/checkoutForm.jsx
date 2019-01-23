@@ -15,7 +15,6 @@ import { getDigitalPrice } from 'helpers/subscriptions';
 import { showPrice } from 'helpers/internationalisation/price';
 
 import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
-import ProductPageContentBlockDivider from 'components/productPage/productPageContentBlock/productPageContentBlockDivider';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
@@ -29,7 +28,8 @@ import { withFooter } from 'components/forms/formHOCs/withFooter';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { canShow } from 'components/forms/formHOCs/canShow';
-import Form, { FormSection } from 'components/forms/form';
+import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
+import Checkout from 'components/checkout/checkout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -121,131 +121,128 @@ function CheckoutForm(props: PropTypes) {
 
   return (
     <ProductPageContentBlock modifierClasses={['your-details']}>
-      <ProductPageContentBlockDivider />
       <ProductPageContentBlockOutset>
-        <div className="checkout-form">
-          <div className="checkout-form__form">
-            <Form onSubmit={(ev) => { ev.preventDefault(); props.submitForm(); }}>
-              <FormSection title="Your details" >
-                <Input1
-                  id="first-name"
-                  label="First name"
-                  type="text"
-                  value={props.firstName}
-                  setValue={props.setFirstName}
-                  error={firstError('firstName', props.formErrors)}
+        <Checkout>
+          <Form onSubmit={(ev) => { ev.preventDefault(); props.submitForm(); }}>
+            <FormSection title="Your details" >
+              <Input1
+                id="first-name"
+                label="First name"
+                type="text"
+                value={props.firstName}
+                setValue={props.setFirstName}
+                error={firstError('firstName', props.formErrors)}
+              />
+              <Input1
+                id="last-name"
+                label="Last name"
+                type="text"
+                value={props.lastName}
+                setValue={props.setLastName}
+                error={firstError('lastName', props.formErrors)}
+              />
+              <InputWithFooter
+                id="email"
+                label="Email"
+                type="email"
+                disabled
+                value={props.email}
+                footer={(
+                  <span>
+                    <CheckoutExpander copy="Want to use a different email address?">
+                      <p>You will be able to edit this in your account once you have completed this checkout.</p>
+                    </CheckoutExpander>
+                    <CheckoutExpander copy="Not you?">
+                      <p>
+                        <Button appearance="greyHollow" icon={null} type="button" aria-label={null} onClick={() => props.signOut()}>Sign out</Button> and create a new account.
+                      </p>
+                    </CheckoutExpander>
+                  </span>
+              )}
+              />
+              <Select1
+                id="country"
+                label="Country"
+                value={props.country}
+                setValue={props.setCountry}
+                error={firstError('country', props.formErrors)}
+              >
+                <option value="">--</option>
+                {sortedOptions(countries)}
+              </Select1>
+              <Select2
+                id="stateProvince"
+                label={props.country === 'CA' ? 'Province/Territory' : 'State'}
+                value={props.stateProvince}
+                setValue={props.setStateProvince}
+                error={firstError('stateProvince', props.formErrors)}
+                isShown={props.country === 'US' || props.country === 'CA'}
+              >
+                <option value="">--</option>
+                {statesForCountry(props.country)}
+              </Select2>
+              <Input1
+                id="telephone"
+                label="Telephone (optional)"
+                type="tel"
+                value={props.telephone}
+                setValue={props.setTelephone}
+                error={firstError('telephone', props.formErrors)}
+              />
+            </FormSection>
+            <FormSection title="How often would you like to pay?">
+              <Fieldset>
+                <RadioInput
+                  text={`${getPrice(props.country, Monthly)}Every month`}
+                  name="billingPeriod"
+                  checked={props.billingPeriod === Monthly}
+                  onChange={() => props.setBillingPeriod(Monthly)}
                 />
-                <Input1
-                  id="last-name"
-                  label="Last name"
-                  type="text"
-                  value={props.lastName}
-                  setValue={props.setLastName}
-                  error={firstError('lastName', props.formErrors)}
+                <RadioInput
+                  text={`${getPrice(props.country, Annual)}Every year`}
+                  name="billingPeriod"
+                  checked={props.billingPeriod === Annual}
+                  onChange={() => props.setBillingPeriod(Annual)}
                 />
-                <InputWithFooter
-                  id="email"
-                  label="Email"
-                  type="email"
-                  disabled
-                  value={props.email}
-                  footer={(
-                    <span>
-                      <CheckoutExpander copy="Want to use a different email address?">
-                        <p>You will be able to edit this in your account once you have completed this checkout.</p>
-                      </CheckoutExpander>
-                      <CheckoutExpander copy="Not you?">
-                        <p>
-                          <Button appearance="greyHollow" icon={null} type="button" aria-label={null} onClick={() => props.signOut()}>Sign out</Button> and create a new account.
-                        </p>
-                      </CheckoutExpander>
-                    </span>
-                )}
-                />
-                <Select1
-                  id="country"
-                  label="Country"
-                  value={props.country}
-                  setValue={props.setCountry}
-                  error={firstError('country', props.formErrors)}
-                >
-                  <option value="">--</option>
-                  {sortedOptions(countries)}
-                </Select1>
-                <Select2
-                  id="stateProvince"
-                  label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-                  value={props.stateProvince}
-                  setValue={props.setStateProvince}
-                  error={firstError('stateProvince', props.formErrors)}
-                  isShown={props.country === 'US' || props.country === 'CA'}
-                >
-                  <option value="">--</option>
-                  {statesForCountry(props.country)}
-                </Select2>
-                <Input1
-                  id="telephone"
-                  label="Telephone (optional)"
-                  type="tel"
-                  value={props.telephone}
-                  setValue={props.setTelephone}
-                  error={firstError('telephone', props.formErrors)}
-                />
-              </FormSection>
-              <FormSection title="How often would you like to pay?">
+              </Fieldset>
+            </FormSection>
+            <FormSection title={countrySupportsDirectDebit(props.country) ? 'How would you like to pay?' : null}>
+              {countrySupportsDirectDebit(props.country) &&
+              <div>
                 <Fieldset>
                   <RadioInput
-                    text={`${getPrice(props.country, Monthly)}Every month`}
-                    name="billingPeriod"
-                    checked={props.billingPeriod === Monthly}
-                    onChange={() => props.setBillingPeriod(Monthly)}
+                    text="Direct debit"
+                    name="paymentMethod"
+                    checked={props.paymentMethod === 'DirectDebit'}
+                    onChange={() => props.setPaymentMethod('DirectDebit')}
                   />
                   <RadioInput
-                    text={`${getPrice(props.country, Annual)}Every year`}
-                    name="billingPeriod"
-                    checked={props.billingPeriod === Annual}
-                    onChange={() => props.setBillingPeriod(Annual)}
+                    text="Credit/Debit card"
+                    name="paymentMethod"
+                    checked={props.paymentMethod === 'Stripe'}
+                    onChange={() => props.setPaymentMethod('Stripe')}
                   />
                 </Fieldset>
-              </FormSection>
-              <FormSection title={countrySupportsDirectDebit(props.country) ? 'How would you like to pay?' : null}>
-                {countrySupportsDirectDebit(props.country) &&
-                <div>
-                  <Fieldset>
-                    <RadioInput
-                      text="Direct debit"
-                      name="paymentMethod"
-                      checked={props.paymentMethod === 'DirectDebit'}
-                      onChange={() => props.setPaymentMethod('DirectDebit')}
-                    />
-                    <RadioInput
-                      text="Credit/Debit card"
-                      name="paymentMethod"
-                      checked={props.paymentMethod === 'Stripe'}
-                      onChange={() => props.setPaymentMethod('Stripe')}
-                    />
-                  </Fieldset>
-                </div>
-            }
-                <CheckoutCopy
-                  strong="Money Back Guarantee "
-                  copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
-                />
-                <CheckoutCopy
-                  strong="Cancel any time you want. "
-                  copy="There is no set time on your agreement so you can stop your subscription anytime."
-                />
-                <DirectDebitPopUpForm
-                  onPaymentAuthorisation={(pa: PaymentAuthorisation) => { props.onPaymentAuthorised(pa); }}
-                />
-              </FormSection>
-              <FormSection>
-                {errorState}
-                <Button aria-label={null} type="submit">Continue to payment</Button>
-              </FormSection>
-            </Form>
-          </div>
-        </div>
+              </div>
+          }
+              <CheckoutCopy
+                strong="Money Back Guarantee "
+                copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
+              />
+              <CheckoutCopy
+                strong="Cancel any time you want. "
+                copy="There is no set time on your agreement so you can stop your subscription anytime."
+              />
+              <DirectDebitPopUpForm
+                onPaymentAuthorisation={(pa: PaymentAuthorisation) => { props.onPaymentAuthorised(pa); }}
+              />
+            </FormSection>
+            <FormSection>
+              {errorState}
+              <Button aria-label={null} type="submit">Continue to payment</Button>
+            </FormSection>
+          </Form>
+        </Checkout>
       </ProductPageContentBlockOutset>
     </ProductPageContentBlock>
   );

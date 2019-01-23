@@ -11,6 +11,7 @@ import ProductHero, {
   type ImagesByCountry,
 } from 'components/productHero/productHero';
 import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
+import ProductPageContentBlockDivider from 'components/productPage/productPageContentBlock/productPageContentBlockDivider';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ProgressMessage from 'components/progressMessage/progressMessage';
@@ -133,6 +134,7 @@ function CheckoutStage(props: PropTypes) {
                 and then your first payment will be taken.
               </p>
             </ProductPageTextBlock>
+            <ProductPageContentBlockDivider />
           </ProductPageContentBlock>
           <CheckoutForm />
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}

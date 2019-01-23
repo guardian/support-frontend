@@ -54,15 +54,6 @@
 
   // ----- Checkout
 
-  .checkout-form__form {
-    @include mq($from:tablet) {
-      max-width: gu-span(5);  
-    }
-    @include mq($from:desktop) {
-      border-right: 1px solid gu-colour(garnett-neutral-4);
-    }
-  }
-
   .component-general-error-message {
     margin-top: $gu-v-spacing * 2;
   }
