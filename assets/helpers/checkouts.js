@@ -75,10 +75,13 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
 
 function getValidContributionTypes(abParticipations: Participations): ContributionType[] {
   const { globalContributionTypes } = abParticipations;
+  let validContributionTypes;
   if (globalContributionTypes === 'default-annual_no-monthly') {
-    return ['ONE_OFF', 'ANNUAL'];
+    validContributionTypes = ['ONE_OFF', 'ANNUAL'];
+  } else {
+    validContributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
   }
-  return getValidContributionTypesFromUrlOrElse(['ONE_OFF', 'MONTHLY', 'ANNUAL']);
+  return getValidContributionTypesFromUrlOrElse(validContributionTypes);
 }
 
 function toHumanReadableContributionType(contributionType: ContributionType): 'Single' | 'Monthly' | 'Annual' {
@@ -91,11 +94,11 @@ function toHumanReadableContributionType(contributionType: ContributionType): 'S
 }
 
 function getContributionTypeFromSessionOrElse(fallback: ContributionType): ContributionType {
-  return toContributionTypeOrElse(storage.getSession('contributionType'), fallback);
+  return toContributionTypeOrElse(storage.getSession('selectedContributionType'), fallback);
 }
 
 function getContributionTypeFromUrlOrElse(fallback: ContributionType): ContributionType {
-  return toContributionTypeOrElse(getQueryParameter('defaultContributionType', fallback), fallback);
+  return toContributionTypeOrElse(getQueryParameter('selectedContributionType', fallback), fallback);
 }
 
 // Returns an array of Payment Methods, in the order of preference,
@@ -130,7 +133,7 @@ function getPaymentMethodToSelect(
 }
 
 function getPaymentMethodFromSession(): ?PaymentMethod {
-  const pm: ?string = storage.getSession('paymentMethod');
+  const pm: ?string = storage.getSession('selectedPaymentMethod');
   if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal') {
     return (pm: PaymentMethod);
   }
