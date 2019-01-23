@@ -115,7 +115,7 @@ function OneOffCta(props: {
 
   const clickUrl = addQueryParamsToURL(routes.oneOffContribCheckout, {
     contributionValue: props.amount.toString(),
-    selectedContributionType: props.contributionType,
+    contribType: props.contributionType,
     currency: props.currencyId,
   });
 
@@ -147,7 +147,7 @@ function RegularCta(props: {
   const spokenType = getSpokenType(props.contributionType);
   const clickUrl = addQueryParamsToURL(routes.recurringContribCheckoutGuest, {
     contributionValue: props.amount.toString(),
-    selectedContributionType: props.contributionType,
+    contribType: props.contributionType,
     currency: props.currencyId,
   });
 

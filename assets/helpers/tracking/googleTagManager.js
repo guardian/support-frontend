@@ -42,11 +42,11 @@ function getOrderId() {
 }
 
 function getContributionType() {
-  const param = getQueryParameter('selectedContributionType');
+  const param = getQueryParameter('contribType');
   if (param) {
-    storage.setSession('selectedContributionType', param);
+    storage.setSession('contribType', param);
   }
-  return (storage.getSession('selectedContributionType') || 'one_off').toLowerCase(); // PayPal route doesn't set the selectedContributionType
+  return (storage.getSession('contribType') || 'one_off').toLowerCase(); // PayPal route doesn't set the contribType
 }
 
 function getCurrency(): string {

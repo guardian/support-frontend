@@ -27,7 +27,7 @@ import { checkIfEmailHasPassword } from './regularContributionsActions';
 import { setCheckoutFormHasBeenSubmitted } from './helpers/checkoutForm/checkoutFormActions';
 // ----- Page Startup ----- //
 
-const contributionType = parseRegularContributionType(getQueryParameter('selectedContributionType') || 'MONTHLY');
+const contributionType = parseRegularContributionType(getQueryParameter('contribType') || 'MONTHLY');
 const countryGroup = detectCountryGroup();
 
 const store = pageInit(reducer(
