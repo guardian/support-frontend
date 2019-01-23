@@ -1,4 +1,5 @@
 // @flow
+import { getQueryParameter } from 'helpers/url';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
@@ -34,6 +35,7 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 5,
+    canRun: () => !getQueryParameter('contributionTypes') && !getQueryParameter('selectedContributionType'),
   },
 
 };

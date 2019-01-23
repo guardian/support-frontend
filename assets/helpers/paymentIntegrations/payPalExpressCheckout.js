@@ -58,7 +58,7 @@ function setupPayment(
   const billingPeriod = billingPeriodFromContrib(regularContributionType);
 
   return (resolve, reject) => {
-    storage.setSession('paymentMethod', 'PayPal');
+    storage.setSession('selectedPaymentMethod', 'PayPal');
     const requestBody = {
       amount: amountToPay,
       billingPeriod,

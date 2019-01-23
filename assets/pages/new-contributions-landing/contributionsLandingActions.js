@@ -90,7 +90,7 @@ const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
   // PayPal one-off redirects away from the site before hitting the thank you page
   // so we need to store the payment method in the storage so that it is available on the
   // thank you page in all scenarios.
-  storage.setSession('paymentMethod', paymentMethod);
+  storage.setSession('selectedPaymentMethod', paymentMethod);
   return ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
 };
 
@@ -192,8 +192,8 @@ const updateContributionTypeAndPaymentMethod =
       // PayPal one-off redirects away from the site before hitting the thank you page
       // so we need to store the contrib type & payment method in the storage so that it is available on the
       // thank you page in all scenarios.
-      storage.setSession('contributionType', contributionType);
-      storage.setSession('paymentMethod', paymentMethodToSelect);
+      storage.setSession('selectedContributionType', contributionType);
+      storage.setSession('selectedPaymentMethod', paymentMethodToSelect);
       dispatch(updateContributionType(contributionType));
       dispatch(updatePaymentMethod(paymentMethodToSelect));
     };
@@ -368,7 +368,7 @@ const setupRecurringPayPalPayment = (
       state.page.form.contributionType,
     );
     const billingPeriod = billingPeriodFromContrib(contributionType);
-    storage.setSession('paymentMethod', 'PayPal');
+    storage.setSession('selectedPaymentMethod', 'PayPal');
     const requestBody = {
       amount,
       billingPeriod,

@@ -137,7 +137,7 @@ function sendData(
       orderId,
       currency,
       value,
-      paymentMethod: storage.getSession('paymentMethod') || undefined,
+      paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
       campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
       campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
       internalCampaignCode: getQueryParameter('INTCMP') || undefined,
