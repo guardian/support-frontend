@@ -722,7 +722,6 @@ form {
 }
 
 .gu-content--contribution-form.gu-content {
-  /* Shrink the header, hide the blurb and on mobile */
   @include mq($from: mobile, $until: tablet) {
 
     .header {
