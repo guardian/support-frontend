@@ -29,7 +29,7 @@ import { withFooter } from 'components/forms/formHOCs/withFooter';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { canShow } from 'components/forms/formHOCs/canShow';
-import { FormSection, Form } from 'components/forms/form';
+import Form, { FormSection } from 'components/forms/form';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
@@ -125,7 +125,7 @@ function CheckoutForm(props: PropTypes) {
       <ProductPageContentBlockOutset>
         <div className="checkout-form">
           <div className="checkout-form__form">
-            <Form>
+            <Form onSubmit={(ev) => { ev.preventDefault(); props.submitForm(); }}>
               <FormSection title="Your details" >
                 <Input1
                   id="first-name"
@@ -241,7 +241,7 @@ function CheckoutForm(props: PropTypes) {
               </FormSection>
               <FormSection>
                 {errorState}
-                <Button aria-label={null} onClick={() => props.submitForm()}>Continue to payment</Button>
+                <Button aria-label={null} type="submit">Continue to payment</Button>
               </FormSection>
             </Form>
           </div>
