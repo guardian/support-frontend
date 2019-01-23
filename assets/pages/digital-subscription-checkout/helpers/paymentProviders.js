@@ -76,7 +76,7 @@ function showStripe(
   dispatch: Dispatch<Action>,
   state: State,
 ) {
-  const { countryGroupId, currencyId } = state.common.internationalisation;
+  const { currencyId, countryGroupId } = state.common.internationalisation;
   const { isTestUser } = state.page.checkout;
   const price = getDigitalPrice(countryGroupId, state.page.checkout.billingPeriod);
   const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(pa, dispatch, state);
