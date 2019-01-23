@@ -11,6 +11,7 @@ case class User(
   lastName: String,
   country: Country,
   state: Option[String] = None,
+  telephoneNumber: Option[String] = None,
   allowMembershipMail: Boolean = false,
   allowThirdPartyMail: Boolean = false,
   allowGURelatedMail: Boolean = false,
