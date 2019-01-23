@@ -63,7 +63,7 @@ object Salesforce {
     Allow_Membership_Mail__c: Boolean,
     Allow_3rd_Party_Mail__c: Boolean,
     Allow_Guardian_Related_Mail__c: Boolean,
-    Phone: Option[String]
+    Department: Option[String]
   )
 
   trait SalesforceResponse {
