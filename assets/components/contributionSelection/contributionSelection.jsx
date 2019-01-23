@@ -25,7 +25,6 @@ import type {
   ContributionType,
   ContributionError,
 } from 'helpers/contributions';
-import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Props ----- //
@@ -43,7 +42,6 @@ type PropTypes = {|
   setCustomAmount: (string, CountryGroupId) => void,
   onKeyPress: Object => void,
   error: ContributionError,
-  annualTestVariant: AnnualContributionsTestVariant,
 |};
 
 
@@ -52,7 +50,6 @@ type PropTypes = {|
 function ContributionSelection(props: PropTypes) {
 
   const modifierClassArray = [getContributionTypeClassName(props.contributionType)];
-  modifierClassArray.push('annual-test');
 
   return (
     <div className={classNameWithModifiers('component-contribution-selection', modifierClassArray)}>

@@ -84,7 +84,7 @@ type Config = {
     minInWords: string,
     max: number,
     maxInWords: string,
-    default: number,
+    default: number, // TODO - remove this field once old payment flow has gone
   }
 }
 

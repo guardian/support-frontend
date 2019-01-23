@@ -9,7 +9,6 @@ import { config, type Amounts, type Amount, type ContributionType } from 'helper
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
-import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
 import SvgDollar from 'components/svgs/dollar';
@@ -34,7 +33,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  annualTestVariant: AnnualContributionsTestVariant,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -48,7 +46,6 @@ const mapStateToProps = state => ({
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
-  annualTestVariant: state.common.abParticipations.annualContributionsRoundThree,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

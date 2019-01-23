@@ -12,7 +12,6 @@ import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import WhySupport from 'components/whySupport/whySupport';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
 import Contribute from 'components/contribute/contribute';
-import { setInitialAmountsForAnnualVariants } from 'helpers/abTests/helpers/annualContributions';
 
 // React components connected to redux store
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
@@ -98,5 +97,4 @@ const content = (
   </Provider>
 );
 
-setInitialAmountsForAnnualVariants(store);
 renderPage(content, 'support-landing-page');
