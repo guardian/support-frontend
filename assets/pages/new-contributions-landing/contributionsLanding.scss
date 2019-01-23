@@ -63,41 +63,6 @@ body {
 
 }
 
-.gu-content--shrink {
-  @include mq($from: mobile, $until: tablet) {
-    $header-height: 44px;
-
-    .glogo {
-      width: 30px;
-      height: 30px;
-      right: 0;
-    }
-
-    .countryGroups {
-      margin-left: 0;
-
-      // TODO: this is basically just vertical centering. use flex-box!
-      margin-top: 4px;
-
-      summary {
-        padding-left: 0;
-      }
-    }
-
-    .blurb {
-      font-size: 16px;
-      margin: 0;
-    }
-
-    header[role="banner"] {
-      height: $header-height;
-
-      // to match .gu-content__content
-      padding: 0 10px;
-    }
-  }
-}
-
 /*= HEADER */
 
 .header {
@@ -756,24 +721,55 @@ form {
   margin-top: $gu-v-spacing;
 }
 
+.gu-content--contribution-form.gu-content {
+  /* Shrink the header, hide the blurb and on mobile */
+  @include mq($from: mobile, $until: tablet) {
 
-@include mq($from: mobile, $until: tablet) {
-
-  .gu-content--contribution-form.gu-content--no-blurb {
-    .blurb {
-      display: none;
-    }
-  }
-
-  .gu-content--contribution-form.gu-content--no-header {
     .header {
       display: none;
     }
-  }
 
-  .gu-content--contribution-form.gu-content--no-blurb.gu-content--no-header {
     .form__radio-group-list {
       padding-top: 0;
+    }
+
+    .blurb {
+      display: none;
+    }
+
+    .form__radio-group-list {
+      padding-top: 0;
+    }
+
+    $header-height: 44px;
+
+    .glogo {
+      width: 30px;
+      height: 30px;
+      right: 0;
+    }
+
+    .countryGroups {
+      margin-left: 0;
+
+      // TODO: this is basically just vertical centering. use flex-box!
+      margin-top: 4px;
+
+      summary {
+        padding-left: 0;
+      }
+    }
+
+    .blurb {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    header[role="banner"] {
+      height: $header-height;
+
+      // to match .gu-content__content
+      padding: 0 10px;
     }
   }
 }
