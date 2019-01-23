@@ -65,15 +65,23 @@ body {
 
 /*= HEADER */
 
-.header {
+.contribution-form.header {
   display: none;
+  @include mq($from: tablet) {
+    display: block;
+  }
+}
+
+.header {
+  border: 0;
+  left: 10px;
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+  width: 100%;
+  margin: 0 -10px;
+  font: bold 22px/1.15 $gu-headline;
+  color: gu-colour(garnett-neutral-1);
 
   @include mq($from: tablet) {
-    left: 10px;
-    width: 100%;
-    font: bold 22px/1.15 $gu-headline;
-    color: gu-colour(garnett-neutral-1);
-    margin: 0 -10px;
     border-bottom: 1px solid gu-colour(garnett-neutral-4);
     font-size: 36px;
     padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
@@ -134,7 +142,10 @@ header[role="banner"] {
   }
 
   @include mq($from: tablet) {
+    width: 60px;
+    height: 60px;
     top: 7px;
+    right: 10px;
   }
 }
 
@@ -343,8 +354,7 @@ button {
 
 .blurb {
   display: none;
-
-
+  
   @include mq($from: tablet) {
     display: block;
     font: 100 17px/1.25 $gu-text-egyptian-web;
