@@ -11,8 +11,18 @@ import './button.scss';
 
 // ----- PropTypes ----- //
 
-type Appearance = 'primary' | 'green' | 'greenHollow' | 'greyHollow';
-type IconSide = 'left' | 'right';
+export const Appearances = {
+  primary: 'primary',
+  green: 'green',
+  greenHollow: 'greenHollow',
+  greyHollow: 'greyHollow',
+};
+export const Sides = {
+  right: 'right', left: 'left',
+};
+
+type Appearance = $Keys<typeof Appearances>;
+type IconSide = $Keys<typeof Sides>;
 
 type SharedButtonPropTypes = {|
   children: string,
@@ -52,8 +62,8 @@ const SharedButton = ({
 
 export const defaultProps = {
   icon: <SvgArrowRightStraight />,
-  appearance: 'primary',
-  iconSide: 'right',
+  appearance: Object.keys(Appearances)[0],
+  iconSide: Object.keys(Sides)[0],
   modifierClasses: [],
 };
 
