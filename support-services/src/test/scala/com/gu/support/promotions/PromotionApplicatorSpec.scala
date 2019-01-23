@@ -1,7 +1,7 @@
 package com.gu.support.promotions
 
 import com.gu.support.config.PromotionsDiscountConfig
-import com.gu.support.promotions.Fixtures._
+import com.gu.support.promotions.ServicesFixtures._
 import org.scalatest.{FlatSpec, Matchers}
 
 class PromotionApplicatorSpec extends FlatSpec with Matchers {

@@ -1,6 +1,6 @@
 package com.gu.support.promotions
 
-import com.gu.support.catalog.ProductRatePlanId
+import com.gu.support.catalog.{DigitalPack, ProductRatePlanId}
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
@@ -8,7 +8,7 @@ import org.joda.time.{DateTime, Days, LocalDate, Months}
  * Promotions are quite laborious to construct
  * So these are helper methods for unit tests
  */
-object Fixtures {
+object ServicesFixtures {
 
   val freeTrialPromoCode = "FREE_TRIAL_CODE"
   val discountPromoCode = "DISCOUNT_CODE"
@@ -18,7 +18,7 @@ object Fixtures {
   val trackingPromoCode = "TRACKING_CODE"
   val validProductRatePlanId = "12345"
   val invalidProductRatePlanId = "67890"
-  val prpIds = List(validProductRatePlanId)
+  val prpIds = DigitalPack.ratePlans.map(_.id)
 
   val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))
   val discountBenefit = Some(DiscountBenefit(30, Some(Months.months(3))))

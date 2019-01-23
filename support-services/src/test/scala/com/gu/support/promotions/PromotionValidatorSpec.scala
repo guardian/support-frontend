@@ -1,7 +1,7 @@
 package com.gu.support.promotions
 
 import com.gu.i18n.Country.{UK, US}
-import com.gu.support.promotions.Fixtures.{promotion, _}
+import com.gu.support.promotions.ServicesFixtures.{promotion, _}
 import com.gu.support.promotions.PromotionValidator.PromotionExtensions
 import org.joda.time.DateTime
 import org.scalatest.FlatSpec
