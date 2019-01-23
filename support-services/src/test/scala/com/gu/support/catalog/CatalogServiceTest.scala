@@ -4,8 +4,8 @@ import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.support.config.Stages.PROD
 import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import com.gu.test.tags.annotations.IntegrationTest
-import org.scalatest.{FlatSpec, Matchers}
 import io.circe.syntax._
+import org.scalatest.{FlatSpec, Matchers}
 
 @IntegrationTest
 class CatalogServiceTest extends FlatSpec with Matchers {
@@ -55,15 +55,12 @@ class CatalogServiceTest extends FlatSpec with Matchers {
   it should "return prices" in {
     val service = CatalogService(PROD)
     val paper = service.getPrices(Paper)
-    paper(HomeDelivery)(Sixday)(Monthly).head shouldBe Price(54.12, GBP)
+    paper(HomeDelivery)(Sixday)(Monthly).find(_.currency == GBP).map(_.value) shouldBe Some(54.12)
 
     val guardianWeekly = service.getPrices(GuardianWeekly)
-    //paper(Domestic)
+    guardianWeekly(Domestic)(NoProductOptions)(Quarterly).find(_.currency == GBP).map(_.value) shouldBe Some(37.50)
 
     val digitalPack = service.getPrices(DigitalPack)
-    val f: FulfilmentOptions[_] = Domestic
-    import FulfilmentOptions.{decoder, encoder}
-    println(f.asJson(FulfilmentOptions.encoder))
-    //println(guardianWeekly.asJson)
+    digitalPack(NoFulfilmentOptions)(NoProductOptions)(Monthly).find(_.currency == GBP).map(_.value) shouldBe Some(11.99)
   }
 }

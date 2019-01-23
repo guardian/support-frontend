@@ -8,8 +8,8 @@ sealed trait Product {
 
   def getProductRatePlan[T <: Product](
     billingPeriod: BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions[T],
-    productOptions: ProductOptions[T]
+    fulfilmentOptions: FulfilmentOptions,
+    productOptions: ProductOptions
   ): Option[ProductRatePlan[Product]] =
     ratePlans.find(prp =>
       prp.billingPeriod == billingPeriod &&

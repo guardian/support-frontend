@@ -5,6 +5,6 @@ import com.gu.support.workers.BillingPeriod
 case class ProductRatePlan[+T <: Product](
   id: ProductRatePlanId,
   billingPeriod: BillingPeriod,
-  fulfilmentOptions: FulfilmentOptions[T],
-  productOptions: ProductOptions[T]
+  fulfilmentOptions: FulfilmentOptions,
+  productOptions: ProductOptions
 )

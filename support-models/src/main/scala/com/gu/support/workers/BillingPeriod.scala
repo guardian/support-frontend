@@ -1,9 +1,9 @@
 package com.gu.support.workers
 
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
 
-sealed trait BillingPeriod{
+sealed trait BillingPeriod {
   val noun: String
 }
 
@@ -13,8 +13,12 @@ object BillingPeriod {
 
   implicit val decodePeriod: Decoder[BillingPeriod] =
     Decoder.decodeString.emap(code => BillingPeriod.fromString(code).toRight(s"unrecognised billing period '$code'"))
+
   implicit val encodePeriod: Encoder[BillingPeriod] = Encoder.encodeString.contramap[BillingPeriod](_.toString)
 
+  implicit val keyEncoder: KeyEncoder[BillingPeriod] = (billingPeriod: BillingPeriod) => billingPeriod.toString
+
+  implicit val keyDecoder: KeyDecoder[BillingPeriod]  = (key: String) => fromString(key)
 }
 
 case object Monthly extends BillingPeriod {

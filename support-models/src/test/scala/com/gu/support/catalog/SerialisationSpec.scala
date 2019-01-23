@@ -37,11 +37,8 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
   }
 
   "FulfilmentOptions" should "roundtrip successfully" in {
-    import io.circe.syntax._
     import FulfilmentOptions.{decoder, encoder}
-    testRoundTripSerialisation[FulfilmentOptions[_]](Domestic)
-    val f: FulfilmentOptions[Product] = Domestic
-    val j = Domestic.asInstanceOf[FulfilmentOptions[Product]].asJson
+    testRoundTripSerialisation[FulfilmentOptions](Domestic)
   }
 }
 

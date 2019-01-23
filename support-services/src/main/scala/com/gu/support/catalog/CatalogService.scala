@@ -7,17 +7,27 @@ import com.gu.support.config.Stage
 import com.gu.support.workers.BillingPeriod
 import io.circe.generic.auto._
 import FulfilmentOptions._
+import com.typesafe.scalalogging.LazyLogging
 
 object CatalogService {
   def apply(stage: Stage): CatalogService = new CatalogService(stage)
 }
 
-class CatalogService(stage: Stage) {
+class CatalogService(stage: Stage) extends LazyLogging {
   private lazy val catalog = {
     val catalog = new GetObjectRequest(s"gu-zuora-catalog/$stage/Zuora-$stage", "catalog.json")
     fetchJson(s3, catalog).flatMap { c =>
       val attempt = c.as[Catalog]
-      attempt.toOption
+      attempt.fold(
+        err => {
+          logger.error(s"Failed to load the catalog, error was: $err")
+          None
+        },
+        c => {
+          logger.info(s"Successfully loaded the catalog")
+          Some(c)
+        }
+      )
     }
   }
 
@@ -25,8 +35,8 @@ class CatalogService(stage: Stage) {
     product: T,
     currency: Currency,
     billingPeriod: BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions[T],
-    productOptions: ProductOptions[T]
+    fulfilmentOptions: FulfilmentOptions,
+    productOptions: ProductOptions
   ): Option[Price] = {
     for {
       productRatePlan <- product.getProductRatePlan(billingPeriod, fulfilmentOptions, productOptions)
@@ -35,7 +45,7 @@ class CatalogService(stage: Stage) {
     } yield price
   }
 
-  def getPrices[T <: Product](product: T): Map[FulfilmentOptions[Product], Map[ProductOptions[Product], Map[BillingPeriod, List[Price]]]] = {
+  def getPrices[T <: Product](product: T): Map[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, List[Price]]]] = {
 
     val grouped = product.ratePlans.groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, list) =>
@@ -46,12 +56,12 @@ class CatalogService(stage: Stage) {
     nestPriceLists(grouped)
   }
 
-  private def nestPriceLists(groupedPriceList: Map[(FulfilmentOptions[Product], ProductOptions[Product], BillingPeriod), List[Price]]) =
+  private def nestPriceLists(groupedPriceList: Map[(FulfilmentOptions, ProductOptions, BillingPeriod), List[Price]]) =
     groupedPriceList
-      .foldLeft(Map.empty[FulfilmentOptions[Product], Map[ProductOptions[Product], Map[BillingPeriod, List[Price]]]]) {
+      .foldLeft(Map.empty[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, List[Price]]]]) {
         case (acc, ((fulfilment, productOptions, billing), list)) =>
 
-          val existingProducts = acc.getOrElse(fulfilment, Map.empty[ProductOptions[Product], Map[BillingPeriod, List[Price]]])
+          val existingProducts = acc.getOrElse(fulfilment, Map.empty[ProductOptions, Map[BillingPeriod, List[Price]]])
           val existingBillingPeriods = existingProducts.getOrElse(productOptions, Map.empty[BillingPeriod, List[Price]])
 
           val newBillingPeriods = existingBillingPeriods ++ Map(billing -> list)

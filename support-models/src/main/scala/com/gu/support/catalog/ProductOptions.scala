@@ -1,44 +1,51 @@
 package com.gu.support.catalog
 
-import io.circe.{Decoder, Encoder}
+import com.gu.support.workers.BillingPeriod
+import com.gu.support.workers.BillingPeriod.fromString
+import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
-sealed trait ProductOptions[+T <: Product] {
+sealed trait ProductOptions {
   def isNoneType = false
 }
 
-case object NoProductOptions extends ProductOptions[GuardianWeekly.type with DigitalPack.type with Contribution.type]{
+case object NoProductOptions extends ProductOptions{
   override def isNoneType = true
 }
 
-case object Saturday extends ProductOptions[Paper.type]
+case object Saturday extends ProductOptions
 
-case object SaturdayPlus extends ProductOptions[Paper.type]
+case object SaturdayPlus extends ProductOptions
 
-case object Sunday extends ProductOptions[Paper.type]
+case object Sunday extends ProductOptions
 
-case object SundayPlus extends ProductOptions[Paper.type]
+case object SundayPlus extends ProductOptions
 
-case object Weekend extends ProductOptions[Paper.type]
+case object Weekend extends ProductOptions
 
-case object WeekendPlus extends ProductOptions[Paper.type]
+case object WeekendPlus extends ProductOptions
 
-case object SixdayPlus extends ProductOptions[Paper.type]
+case object SixdayPlus extends ProductOptions
 
-case object Sixday extends ProductOptions[Paper.type]
+case object Sixday extends ProductOptions
 
-case object EverydayPlus extends ProductOptions[Paper.type]
+case object EverydayPlus extends ProductOptions
 
-case object Everyday extends ProductOptions[Paper.type]
+case object Everyday extends ProductOptions
 
 object ProductOptions {
   def fromString(code: String) = List(Saturday, SaturdayPlus, Sunday, SundayPlus, Weekend, WeekendPlus, Sixday, SixdayPlus, Everyday, EverydayPlus)
     .find(_.getClass.getSimpleName == s"$code$$")
 
-  implicit val decode: Decoder[ProductOptions[_]] =
+  implicit val decode: Decoder[ProductOptions] =
     Decoder.decodeString.emap(code => fromString(code).toRight(s"unrecognised product options '$code'"))
-  implicit val encode: Encoder[ProductOptions[_]] = Encoder.encodeString.contramap[ProductOptions[_]](_.toString)
 
-  implicit class Extensions[+T <: Product](productOptions: ProductOptions[T]) {
+  implicit val encode: Encoder[ProductOptions] = Encoder.encodeString.contramap[ProductOptions](_.toString)
+
+  implicit val keyEncoder: KeyEncoder[ProductOptions] = (productOptions: ProductOptions) => productOptions.toString
+
+  implicit val keyDecoder: KeyDecoder[ProductOptions] = (key: String) => fromString(key)
+
+  implicit class Extensions[+T <: Product](productOptions: ProductOptions) {
     def toOption = if (productOptions.isNoneType){
       None
     } else {

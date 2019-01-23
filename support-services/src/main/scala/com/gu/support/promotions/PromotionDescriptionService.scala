@@ -13,8 +13,8 @@ class PromotionDescriptionService(promotionService: PromotionService, catalogSer
     product: T,
     country: Country,
     billingPeriod: BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions[T],
-    productOptions: ProductOptions[T],
+    fulfilmentOptions: FulfilmentOptions,
+    productOptions: ProductOptions,
     isRenewal: Boolean): Option[PromotionDescription] =
     for {
       productRatePlan <- product.getProductRatePlan(billingPeriod, fulfilmentOptions, productOptions)
