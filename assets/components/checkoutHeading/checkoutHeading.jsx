@@ -11,7 +11,6 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 type PropTypes = {|
   heading: string,
-  copy: string,
 |};
 
 
@@ -23,7 +22,6 @@ function CheckoutHeading(props: PropTypes) {
     <div className="component-checkout-heading">
       <LeftMarginSection>
         <h1 className="component-checkout-heading__heading">{props.heading}</h1>
-        <p className="component-checkout-heading__copy">{props.copy}</p>
       </LeftMarginSection>
     </div>
   );

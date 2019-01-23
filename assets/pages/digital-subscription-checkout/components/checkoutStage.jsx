@@ -110,7 +110,6 @@ function CheckoutStage(props: PropTypes) {
           />
           <CheckoutHeading
             heading="Your Digital Pack subscription is now live"
-            copy="Thank you for supporting our journalism"
           />
           <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
@@ -122,13 +121,11 @@ function CheckoutStage(props: PropTypes) {
       return (
         <div className="checkout-content">
           <CheckoutHeading
-            heading="Digital Pack Subscription"
-            copy="Cancel your subscription at any time"
+            heading="Digital Pack"
           />
           <LeftMarginSection modifierClasses={['free-trial']}>
             <p className="checkout-content__free-trial">
-              You can use all the features free for the next 14 days,
-              and then your first payment will be taken.
+              Please enter your details below to complete your Digital Pack subscription.
             </p>
           </LeftMarginSection>
           <CheckoutForm />

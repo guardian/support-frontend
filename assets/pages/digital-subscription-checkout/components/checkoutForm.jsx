@@ -177,13 +177,18 @@ function CheckoutForm(props: PropTypes) {
           <option value="">--</option>
           {statesForCountry(props.country)}
         </Select2>
-        <Input1
+        <InputWithFooter
           id="telephone"
           label="Telephone (optional)"
           type="tel"
           value={props.telephone}
           setValue={props.setTelephone}
           error={firstError('telephone', props.formErrors)}
+          footer={
+            <CheckoutExpander copy="What will my phone number be used for?">
+              <p>We may use this to get in touch with you about your subscription.</p>
+            </CheckoutExpander>
+          }
         />
       </LeftMarginSection>
       <LeftMarginSection>
@@ -224,7 +229,7 @@ function CheckoutForm(props: PropTypes) {
           </div>
         }
         <CheckoutCopy
-          strong="Money Back Guarantee "
+          strong="Money Back Guarantee. "
           copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
         />
         <CheckoutCopy
