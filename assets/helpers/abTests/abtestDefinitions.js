@@ -1,5 +1,4 @@
 // @flow
-import { isFromEpicOrBanner } from 'helpers/referrerComponent';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
