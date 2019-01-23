@@ -11,7 +11,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
   "UpsertData" should "serialise to correct UK json" in {
-    val upsertData = UpsertData(NewContact(idId, email, name, name, None, uk, allowMail, allowMail, allowMail, Some("07987654321")))
+    val upsertData = UpsertData(NewContact(idId, email, name, name, None, uk, allowMail, allowMail, allowMail, None))
     upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJson).right.get.noSpaces)
   }
 
