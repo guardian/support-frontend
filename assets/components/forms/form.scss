@@ -1,0 +1,14 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-form-section {
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing*2;
+}
+
+.component-form-section + .component-form-section {
+  border-top: 1px solid gu-colour(neutral-4);
+}
+
+.component-form-section__heading {
+  @include gu-fontset-heading;
+  margin-bottom: ($gu-v-spacing/2);
+}

@@ -10,7 +10,6 @@
 @import '~components/ctaLink/ctaLink';
 @import '~components/footer/footer';
 @import '~components/headers/simpleHeader/simpleHeader';
-@import '~components/leftMarginSection/leftMarginSection';
 @import '~components/checkoutHeading/checkoutHeading';
 @import '~components/checkoutCopy/checkoutCopy';
 @import '~components/customerService/customerService';
@@ -64,12 +63,6 @@
 
   .checkout-form {
     .component-left-margin-section__content {
-      padding-left: $gu-h-spacing / 2;
-      padding-bottom: $gu-v-spacing * 3;
-      border-top: 1px solid gu-colour(garnett-neutral-4);
-    }
-  }
-
   .checkout-form__actions {
     .component-button {
       margin-top: $gu-v-spacing * 2;
@@ -77,15 +70,8 @@
   }
 
   .checkout-form__heading {
-    @include gu-fontset-body-large;
-
-    margin-bottom: $gu-v-spacing;
-  }
-
-  .component-left-margin-section--free-trial {
-    .component-left-margin-section__content {
-      @include multiline-bottom-border;
-    }
+    @include gu-fontset-heading;
+    margin-bottom: ($gu-v-spacing/2);
   }
 
   .checkout-content__free-trial {
@@ -125,15 +111,6 @@
     // Makes sure the circle SVGs stay behind the heading.
     position: relative;
     background-color: #fff;
-
-    .component-left-margin-section__content {
-      padding: 2px ($gu-h-spacing / 2) ($gu-v-spacing * 2);
-      box-sizing: border-box;
-
-      @include mq($from: tablet) {
-        border-left: 1px solid gu-colour(garnett-neutral-4);
-      }
-    }
 
     .component-cta-link {
       background-color: transparent;
