@@ -187,7 +187,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |  }
           |}""".stripMargin
 
-      val amount = Amount(value = 25, isDefault = Some(true))
+      val amount = Amount(value = "25", isDefault = Some(true))
       val amountsRegions = AmountsRegions(
         GBPCountries = List(amount),
         UnitedStates = List(amount),
