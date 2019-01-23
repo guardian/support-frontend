@@ -54,6 +54,15 @@
 
   // ----- Checkout
 
+  .checkout-form__form {
+    @include mq($from:tablet) {
+      max-width: gu-span(5);  
+    }
+    @include mq($from:desktop) {
+      border-right: 1px solid gu-colour(garnett-neutral-4);
+    }
+  }
+
   .checkout-content {
     .component-left-margin-section__content {
       box-sizing: border-box;
@@ -61,8 +70,6 @@
     }
   }
 
-  .checkout-form {
-    .component-left-margin-section__content {
   .checkout-form__actions {
     .component-button {
       margin-top: $gu-v-spacing * 2;
