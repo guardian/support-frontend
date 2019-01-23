@@ -757,7 +757,6 @@ form {
 }
 
 
-/* Small header test */
 @include mq($from: mobile, $until: tablet) {
 
   .gu-content--contribution-form.gu-content--no-blurb {

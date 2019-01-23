@@ -20,20 +20,6 @@ export const tests: Tests = {
     seed: 3,
   },
 
-  smallMobileHeaderNotEpicOrBanner: {
-    variants: ['control', 'shrink', 'shrink_no-blurb', 'shrink_no-blurb_no-header'],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 4,
-    canRun: () => !isFromEpicOrBanner,
-  },
-
   globalContributionTypes: {
     variants: [
       'control',

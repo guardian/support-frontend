@@ -48,15 +48,6 @@ const reactElementId = `new-contributions-landing-page-${countryGroups[countryGr
 
 const selectedCountryGroup = countryGroups[countryGroupId];
 
-const { smallMobileHeaderNotEpicOrBanner } = store.getState().common.abParticipations;
-
-let extraClasses = [];
-if (smallMobileHeaderNotEpicOrBanner) {
-  extraClasses = smallMobileHeaderNotEpicOrBanner.split('_').filter(x => x !== 'control' && x !== 'notintest');
-} else if (isFromEpicOrBanner) {
-  extraClasses = ['shrink', 'no-blurb', 'no-header'];
-}
-
 // ----- Render ----- //
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
@@ -78,7 +69,7 @@ const router = (
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
           render={() => (
             <Page
-              classModifiers={['contribution-form', ...extraClasses]}
+              classModifiers={['contribution-form', 'shrink', 'no-blurb', 'no-header']}
               header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
@@ -100,7 +91,7 @@ const router = (
             }
             return (
               <Page
-                classModifiers={['contribution-thankyou', ...extraClasses]}
+                classModifiers={['contribution-thankyou', 'shrink', 'no-blurb', 'no-header']}
                 header={<NewHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
