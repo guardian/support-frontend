@@ -68,7 +68,7 @@ const router = (
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
           render={() => (
             <Page
-              classModifiers={['contribution-form', 'shrink', 'no-blurb', 'no-header']}
+              classModifiers={['contribution-form']}
               header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
@@ -90,7 +90,7 @@ const router = (
             }
             return (
               <Page
-                classModifiers={['contribution-thankyou', 'shrink', 'no-blurb', 'no-header']}
+                classModifiers={['contribution-thankyou']}
                 header={<NewHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
