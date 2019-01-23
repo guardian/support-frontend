@@ -50,7 +50,7 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 5,
-    canRun: () => !getQueryParameter('contributionTypes'),
+    canRun: () => !getQueryParameter('contributionTypes') && !getQueryParameter('selectedContributionType'),
   },
 
 };

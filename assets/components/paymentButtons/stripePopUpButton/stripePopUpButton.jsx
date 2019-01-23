@@ -74,7 +74,7 @@ function Button(props: PropTypes) {
     if (props.isPostDeploymentTestUser) {
       onPaymentAuthorisation('tok_visa');
     } else if (props.canOpen()) {
-      storage.setSession('paymentMethod', 'Stripe');
+      storage.setSession('selectedPaymentMethod', 'Stripe');
       openDialogBox(props.amount, props.email);
     } else {
       props.whenUnableToOpen();

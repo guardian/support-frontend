@@ -42,11 +42,11 @@ function getOrderId() {
 }
 
 function getContributionType() {
-  const param = getQueryParameter('contribType');
+  const param = getQueryParameter('selectedContributionType');
   if (param) {
-    storage.setSession('contribType', param);
+    storage.setSession('selectedContributionType', param);
   }
-  return (storage.getSession('contribType') || 'one_off').toLowerCase(); // PayPal route doesn't set the contribType
+  return (storage.getSession('selectedContributionType') || 'one_off').toLowerCase(); // PayPal route doesn't set the selectedContributionType
 }
 
 function getCurrency(): string {
@@ -137,7 +137,7 @@ function sendData(
       orderId,
       currency,
       value,
-      paymentMethod: storage.getSession('paymentMethod') || undefined,
+      paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
       campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
       campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
       internalCampaignCode: getQueryParameter('INTCMP') || undefined,

@@ -6,7 +6,7 @@ import org.scalatest.selenium.Page
 
 case class OneOffContributionForm(testUser: TestUser, amount: Int, currency: String)(implicit val webDriver: WebDriver) extends Page with Browser {
 
-  val url = s"${Config.supportFrontendUrl}/contribute/one-off?contributionValue=${amount}&contribType=ONE_OFF&currency=${currency}"
+  val url = s"${Config.supportFrontendUrl}/contribute/one-off?contributionValue=${amount}&selectedContributionType=ONE_OFF&currency=${currency}"
 
   private val paymentAmountDisplay = className("component-payment-amount")
   private val payWithCard = id("qa-pay-with-card")

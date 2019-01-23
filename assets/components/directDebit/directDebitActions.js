@@ -28,7 +28,7 @@ export type Action =
 // ----- Actions ----- //
 
 const openDirectDebitPopUp = (): Action => {
-  storage.setSession('paymentMethod', 'DirectDebit');
+  storage.setSession('selectedPaymentMethod', 'DirectDebit');
   return { type: 'DIRECT_DEBIT_POP_UP_OPEN' };
 };
 

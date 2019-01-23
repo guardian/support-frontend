@@ -95,7 +95,7 @@ const router = (
           path="/:countryId(uk|us|au|eu|int|nz|ca)/thankyou"
           render={() => {
             // we set the recurring cookie server side
-            if (storage.getSession('contributionType') === 'ONE_OFF') {
+            if (storage.getSession('selectedContributionType') === 'ONE_OFF') {
               setOneOffContributionCookie();
             }
             return (
