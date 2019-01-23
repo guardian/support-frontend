@@ -59,4 +59,14 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       response.ContactRecord.Id should be(salesforceId)
     }
   }
+
+  "SalesforceService" should "be able to upsert a customer that has an optional field" in {
+    val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+    val upsertData = UpsertData.create(idId, email, name, name, None, uk, Some(telephoneNumber), allowMail, allowMail, allowMail)
+
+    service.upsert(upsertData).map { response: SalesforceContactResponse =>
+      response.Success should be(true)
+      response.ContactRecord.Id should be(salesforceId)
+    }
+  }
 }
