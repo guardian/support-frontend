@@ -29,9 +29,9 @@ export type CommonState = {
   optimizeExperiments: OptimizeExperiments,
 };
 
-const getInternationalisationFromCountry = (countryId: IsoCountry, state: CommonState) => {
-  const countryGroupId = fromCountry(countryId) || state.internationalisation.countryGroupId;
-  const currencyId = fromCountryGroupId(countryGroupId) || state.internationalisation.currencyId;
+const getInternationalisationFromCountry = (countryId: IsoCountry, internationalisation: Internationalisation) => {
+  const countryGroupId = fromCountry(countryId) || internationalisation.countryGroupId;
+  const currencyId = fromCountryGroupId(countryGroupId) || internationalisation.currencyId;
   return { countryGroupId, currencyId, countryId };
 };
 
@@ -50,7 +50,7 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
           ...state,
           internationalisation: {
             ...state.internationalisation,
-            ...getInternationalisationFromCountry(action.country, state),
+            ...getInternationalisationFromCountry(action.country, state.internationalisation),
           },
         };
       case 'SET_OPTIMIZE_EXPERIMENT_VARIANT': {
