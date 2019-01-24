@@ -14,7 +14,6 @@ import {
 
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Participations } from 'helpers/abTests/abtest';
 import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
@@ -28,7 +27,6 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   switches: Switches,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
-  abParticipations: Participations,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -36,7 +34,6 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
-  abParticipations: state.common.abParticipations,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -59,7 +56,7 @@ function ContributionTypeTabs(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list">
-        {getValidContributionTypes(props.abParticipations).map((contributionType: ContributionType) => (
+        {getValidContributionTypes().map((contributionType: ContributionType) => (
           <li className="form__radio-group-item">
             <input
               id={`contributionType-${contributionType}`}
