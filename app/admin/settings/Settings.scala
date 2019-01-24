@@ -16,10 +16,12 @@ import io.circe.{Decoder, Encoder}
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
 
-case class AllSettings(switches: Switches, amounts: Amounts)
+case class AllSettings(switches: Switches, amounts: AmountsRegions)
 
 object AllSettings {
-  implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec
+  import Amounts._  // intellij doesn't think this is needed, but it is
+
+  implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec[AllSettings]
 }
 
 object Settings {

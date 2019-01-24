@@ -115,72 +115,80 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |    "optimize": "Off"
           |  },
           |  "amounts": {
-          |    "ONE_OFF": {
-          |        "GBPCountries": [
+          |    "GBPCountries": {
+          |        "ONE_OFF": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "UnitedStates": [
+          |        "MONTHLY": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "EURCountries": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "AUDCountries": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "International": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "NZDCountries": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "Canada": [
+          |        "ANNUAL": [
           |            { "value": "25", "isDefault": true }
           |        ]
           |    },
-          |    "MONTHLY": {
-          |        "GBPCountries": [
+          |    "UnitedStates": {
+          |        "ONE_OFF": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "UnitedStates": [
+          |        "MONTHLY": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "EURCountries": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "AUDCountries": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "International": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "NZDCountries": [
-          |            { "value": "25", "isDefault": true }
-          |        ],
-          |        "Canada": [
+          |        "ANNUAL": [
           |            { "value": "25", "isDefault": true }
           |        ]
           |    },
-          |    "ANNUAL": {
-          |        "GBPCountries": [
+          |    "EURCountries": {
+          |        "ONE_OFF": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "UnitedStates": [
+          |        "MONTHLY": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "EURCountries": [
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "AUDCountries": {
+          |        "ONE_OFF": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "AUDCountries": [
+          |        "MONTHLY": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "International": [
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "International": {
+          |        "ONE_OFF": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "NZDCountries": [
+          |        "MONTHLY": [
           |            { "value": "25", "isDefault": true }
           |        ],
-          |        "Canada": [
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "NZDCountries": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "Canada": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
           |            { "value": "25", "isDefault": true }
           |        ]
           |    }
@@ -188,14 +196,19 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |}""".stripMargin
 
       val amount = Amount(value = "25", isDefault = Some(true))
+      val amounts = Amounts(
+        ONE_OFF = List(amount),
+        MONTHLY = List(amount),
+        ANNUAL = List(amount)
+      )
       val amountsRegions = AmountsRegions(
-        GBPCountries = List(amount),
-        UnitedStates = List(amount),
-        EURCountries = List(amount),
-        AUDCountries = List(amount),
-        International = List(amount),
-        NZDCountries = List(amount),
-        Canada = List(amount)
+        GBPCountries = amounts,
+        UnitedStates = amounts,
+        EURCountries = amounts,
+        AUDCountries = amounts,
+        International = amounts,
+        NZDCountries = amounts,
+        Canada = amounts
       )
 
       val settings = AllSettings(
@@ -219,11 +232,7 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           ),
           optimize = Off
         ),
-        Amounts(
-          ONE_OFF = amountsRegions,
-          MONTHLY = amountsRegions,
-          ANNUAL = amountsRegions
-        )
+        amountsRegions
       )
 
       decode[AllSettings](json).right.value mustBe settings

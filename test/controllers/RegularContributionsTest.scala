@@ -45,11 +45,13 @@ class RegularContributionsTest extends WordSpec with MustMatchers {
         signature = ""
       ))
 
+      val amounts = Amounts(Nil,Nil,Nil)
+
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(
         AllSettings(
           Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On),
-          Amounts(AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil),AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil),AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil))
+          AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts)
         )
       )
 

@@ -27,17 +27,19 @@ abstract class SettingsProvider[T] {
   def settings(): T
 }
 
-class AllSettingsProvider private (switchesProvider: SettingsProvider[Switches], amountsProvider: SettingsProvider[Amounts]) {
+class AllSettingsProvider private (switchesProvider: SettingsProvider[Switches], amountsProvider: SettingsProvider[AmountsRegions]) {
   def getAllSettings(): AllSettings = {
     AllSettings(switchesProvider.settings(), amountsProvider.settings())
   }
 }
 
 object AllSettingsProvider {
+  import admin.settings.Amounts.amountsDecoder
+
   def fromConfig(config: Configuration)(implicit client: AmazonS3, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
-      amountsProvider <- SettingsProvider.fromAppConfig[Amounts](config.settingsSources.amounts, config)
+      amountsProvider <- SettingsProvider.fromAppConfig[AmountsRegions](config.settingsSources.amounts, config)
     } yield new AllSettingsProvider(switchesProvider, amountsProvider)
   }
 }

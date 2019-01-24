@@ -39,11 +39,13 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): DigitalSubscription = {
 
+      val amounts = Amounts(Nil,Nil,Nil)
+
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(
         AllSettings(
           Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On),
-          Amounts(AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil),AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil),AmountsRegions(Nil,Nil,Nil,Nil,Nil,Nil,Nil))
+          AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts)
         )
       )
 

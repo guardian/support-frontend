@@ -3,20 +3,22 @@ package admin.settings
 import io.circe.{Decoder, Encoder}
 
 case class Amount(value: String, isDefault: Option[Boolean])
+
+case class Amounts(ONE_OFF: List[Amount], MONTHLY: List[Amount], ANNUAL: List[Amount])
+
 case class AmountsRegions(
-  GBPCountries: List[Amount],
-  UnitedStates: List[Amount],
-  EURCountries: List[Amount],
-  AUDCountries: List[Amount],
-  International: List[Amount],
-  NZDCountries: List[Amount],
-  Canada: List[Amount]
+  GBPCountries: Amounts,
+  UnitedStates: Amounts,
+  EURCountries: Amounts,
+  AUDCountries: Amounts,
+  International: Amounts,
+  NZDCountries: Amounts,
+  Canada: Amounts
 )
-case class Amounts(ONE_OFF: AmountsRegions, MONTHLY: AmountsRegions, ANNUAL: AmountsRegions)
 
 object Amounts {
   import io.circe.generic.auto._
 
-  implicit val amountsEncoder = Encoder[Amounts]
-  implicit val amountsDecoder = Decoder[Amounts]
+  implicit val amountsEncoder = Encoder[AmountsRegions]
+  implicit val amountsDecoder = Decoder[AmountsRegions]
 }
