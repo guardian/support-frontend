@@ -4,13 +4,9 @@ import com.gu.support.workers.BillingPeriod
 import com.gu.support.workers.BillingPeriod.fromString
 import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
-sealed trait ProductOptions {
-  def isNoneType = false
-}
+sealed trait ProductOptions
 
-case object NoProductOptions extends ProductOptions{
-  override def isNoneType = true
-}
+case object NoProductOptions extends ProductOptions
 
 case object Saturday extends ProductOptions
 
@@ -44,14 +40,6 @@ object ProductOptions {
   implicit val keyEncoder: KeyEncoder[ProductOptions] = (productOptions: ProductOptions) => productOptions.toString
 
   implicit val keyDecoder: KeyDecoder[ProductOptions] = (key: String) => fromString(key)
-
-  implicit class Extensions[+T <: Product](productOptions: ProductOptions) {
-    def toOption = if (productOptions.isNoneType){
-      None
-    } else {
-      Some(productOptions)
-    }
-  }
 }
 
 

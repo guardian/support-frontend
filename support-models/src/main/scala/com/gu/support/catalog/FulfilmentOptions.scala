@@ -2,9 +2,7 @@ package com.gu.support.catalog
 
 import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
-sealed trait FulfilmentOptions {
-  def isNoneType = false
-}
+sealed trait FulfilmentOptions
 
 case object HomeDelivery extends FulfilmentOptions
 
@@ -14,9 +12,7 @@ case object Domestic extends FulfilmentOptions
 
 case object RestOfWorld extends FulfilmentOptions
 
-case object NoFulfilmentOptions extends FulfilmentOptions {
-  override def isNoneType = true
-}
+case object NoFulfilmentOptions extends FulfilmentOptions
 
 object FulfilmentOptions {
   def fromString(code: String) = List(HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions)
@@ -30,12 +26,4 @@ object FulfilmentOptions {
   implicit val keyEncoder: KeyEncoder[FulfilmentOptions] = (fulfilmentOptions: FulfilmentOptions) => fulfilmentOptions.toString
 
   implicit val keyDecoder: KeyDecoder[FulfilmentOptions]  = (key: String) => fromString(key)
-
-  implicit class Extensions[+T <: Product](fulfilmentOptions: FulfilmentOptions) {
-    def toOption = if (fulfilmentOptions.isNoneType){
-      None
-    } else {
-      Some(fulfilmentOptions)
-    }
-  }
 }

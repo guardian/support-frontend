@@ -87,16 +87,4 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
       }
     )
   }
-
-  it should "be able to round trip a PromotionDescription" in {
-    val promotionDescription = PromotionDescription(
-      description = "Test promotion",
-      discount = Some(DiscountBenefit(25, Some(Months.THREE))),
-      freeTrial = None,
-      billingPeriod = Monthly,
-      originalPrice = Price(100, GBP),
-      discountedPrice = Some(Price(75, GBP))
-    )
-    testRoundTripSerialisation(promotionDescription)
-  }
 }

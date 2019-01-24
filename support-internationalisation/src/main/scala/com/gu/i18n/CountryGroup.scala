@@ -4,12 +4,15 @@ package com.gu.i18n
 import java.util.Locale
 
 case class CountryGroup(name: String,
-                        id: String,
-                        defaultCountry: Option[Country],
-                        countries: List[Country],
-                        currency: Currency,
-                        postalCode: PostalCode
-                       )
+  id: String,
+  defaultCountry: Option[Country],
+  countries: List[Country],
+  currency: Currency,
+  postalCode: PostalCode,
+  additionalCurrencies: List[Currency] = Nil
+) {
+  def supportedCurrencies : List[Currency] = currency :: additionalCurrencies
+}
 
 object CountryGroup {
 
@@ -280,7 +283,7 @@ object CountryGroup {
     Country("ZA", "South Africa"),
     Country("ZM", "Zambia"),
     Country("ZW", "Zimbabwe")
-  ), USD, PostCode)
+  ), USD, PostCode, List(GBP))
 
   val allGroups = List(
     UK,
@@ -294,7 +297,7 @@ object CountryGroup {
 
   val countries: List[Country] = allGroups.flatMap(_.countries).sortBy(_.name)
 
-  val countriesByISO2: Map[String, Country] = countries.map{c => c.alpha2 -> c}.toMap
+  val countriesByISO2: Map[String, Country] = countries.map { c => c.alpha2 -> c }.toMap
 
   val countriesByISO3 = countries.map { country =>
     val locale = new Locale("", country.alpha2)
@@ -306,11 +309,15 @@ object CountryGroup {
     countriesByISO2.get(code) orElse countriesByISO3.get(code)
   }
 
-  def countryByName(str: String): Option[Country] = countries.find { _.name.equalsIgnoreCase(str) }
+  def countryByName(str: String): Option[Country] = countries.find {
+    _.name.equalsIgnoreCase(str)
+  }
 
   // This is because there was an inconsistency in the code where we were writing a country name
   // in Identity but then trying to find it by code. It's not clear anymore which we have in our systems; probably both
-  def countryByNameOrCode(str: String): Option[Country] = countries.find { _.name == str } orElse countryByCode(str)
+  def countryByNameOrCode(str: String): Option[Country] = countries.find {
+    _.name == str
+  } orElse countryByCode(str)
 
   def byCountryCode(c: String): Option[CountryGroup] = allGroups.find(_.countries.exists(_.alpha2 == c))
 
@@ -321,6 +328,8 @@ object CountryGroup {
     allGroups.find(_.countries.exists(_.name == str)) orElse byCountryCode(str)
 
   def byId(id: String): Option[CountryGroup] = allGroups.find(_.id == id)
+
+  def byName(name: String): Option[CountryGroup] = allGroups.find(_.name == name)
 
   def availableCurrency(currencies: Set[Currency])(country: Country) =
     byCountryCode(country.alpha2).map(_.currency).filter(currencies)
