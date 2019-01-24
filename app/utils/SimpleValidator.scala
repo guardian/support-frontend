@@ -21,6 +21,8 @@ object SimpleValidator {
       case stripeDetails: StripePaymentFields => !stripeDetails.stripeToken.isEmpty
     }
 
-    noEmptyNameFields && hasStateIfRequired && noEmptyPaymentFields
+    val telephoneNumberShortEnough = request.telephoneNumber.forall(_.length < 40)
+
+    noEmptyNameFields && hasStateIfRequired && noEmptyPaymentFields && telephoneNumberShortEnough
   }
 }

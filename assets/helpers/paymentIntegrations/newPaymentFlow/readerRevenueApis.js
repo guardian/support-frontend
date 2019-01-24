@@ -6,6 +6,7 @@ import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type CaState, type IsoCountry, type UsState } from 'helpers/internationalisation/country';
+import { type Option } from 'helpers/types/option';
 import { logPromise, pollUntilPromise } from 'helpers/promise';
 import { logException } from 'helpers/logger';
 import { fetchJson, getRequestOptions, requestOptions } from 'helpers/fetch';
@@ -53,7 +54,8 @@ export type RegularPaymentRequest = {|
   paymentFields: RegularPaymentFields,
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  supportAbTests: AcquisitionABTest[]
+  supportAbTests: AcquisitionABTest[],
+  telephoneNumber: Option<string>,
 |};
 
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
