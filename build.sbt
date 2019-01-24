@@ -112,6 +112,7 @@ riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffArtifactResources += (file(".out/"), "storybook/")
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
