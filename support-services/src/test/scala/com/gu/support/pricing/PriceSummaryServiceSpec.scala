@@ -11,11 +11,11 @@ import io.circe.syntax._
 import com.gu.support.encoding.CustomCodecs._
 
 
-class ProductPriceServiceSpec extends FlatSpec with Matchers {
+class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
-  "ProductPriceService" should "return prices" in {
+  "PriceSummaryService" should "return prices" in {
 
-    val catalogService = new ProductPriceService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+    val catalogService = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
     val paper = catalogService.getPrices(Paper, Some("DISCOUNT_CODE"))
     paper(UK)(HomeDelivery)(Sixday)(Monthly).find(_.currency == GBP).map(_.price) shouldBe Some(54.12)
@@ -47,5 +47,5 @@ class ProductPriceServiceSpec extends FlatSpec with Matchers {
   }
 
   def checkPrice(discount: DiscountBenefit, original: BigDecimal, expected: BigDecimal) =
-    ProductPriceService.getDiscountedPrice(Price(original, GBP), discount).value shouldBe expected
+    PriceSummaryService.getDiscountedPrice(Price(original, GBP), discount).value shouldBe expected
 }

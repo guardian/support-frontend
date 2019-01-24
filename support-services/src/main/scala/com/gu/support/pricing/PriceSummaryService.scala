@@ -1,14 +1,14 @@
 package com.gu.support.pricing
 
-import com.gu.i18n.{Country, CountryGroup}
+import com.gu.i18n.CountryGroup
 import com.gu.support.catalog._
-import ProductPriceService.getDiscountedPrice
+import com.gu.support.pricing.PriceSummaryService.getDiscountedPrice
 import com.gu.support.promotions._
 import com.gu.support.workers.BillingPeriod
 
 import scala.math.BigDecimal.RoundingMode
 
-class ProductPriceService(promotionService: PromotionService, catalogService: CatalogService) {
+class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) {
   type CountryPricing = Map[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, List[PriceSummary]]]]
   type ProductPricing = Map[CountryGroup, CountryPricing]
 
@@ -82,7 +82,7 @@ class ProductPriceService(promotionService: PromotionService, catalogService: Ca
     }
 }
 
-object ProductPriceService {
+object PriceSummaryService {
   def getDiscountedPrice(originalPrice: Price, discountBenefit: DiscountBenefit): Price = {
     val multiplier = (100 - discountBenefit.amount) / 100
     val newPrice = originalPrice.value * multiplier
