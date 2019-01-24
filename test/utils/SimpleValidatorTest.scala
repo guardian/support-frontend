@@ -18,7 +18,8 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
-    email = "grace@gracehopper.com"
+    email = "grace@gracehopper.com",
+    telephoneNumber = None
   )
 
   "validate" should "return true when there are no empty strings" in {
@@ -48,6 +49,16 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
   "validate" should "fail if the payment field received is an empty string" in {
     val requestMissingState = validRequest.copy(paymentFields = StripePaymentFields(""))
     SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
+  "validate" should "fail if the telephone number is longer than 40 characters " in {
+    val requestWithTooLongTelephoneNumber = validRequest.copy(telephoneNumber = Some("12345678901234567890123456789012345678901"))
+    SimpleValidator.validationPasses(requestWithTooLongTelephoneNumber) shouldBe false
+  }
+
+  "validate" should "not check what the characters are in a telephone number" in {
+    val requestWithTooLongTelephoneNumber = validRequest.copy(telephoneNumber = Some("abcdef"))
+    SimpleValidator.validationPasses(requestWithTooLongTelephoneNumber) shouldBe true
   }
 
 }
