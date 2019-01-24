@@ -12,6 +12,7 @@
   border-radius: 600px;
   box-sizing: border-box;
   cursor: pointer;
+  transition: .2s;
 
   &:hover, &:focus {
     outline: 0;
@@ -50,11 +51,17 @@
 .component-button--greenHollow {
   color: gu-colour(green-dark);
   border: 1px solid gu-colour(green-dark);
+  &:hover, &:focus {
+    background: gu-colour(garnett-neutral-3);
+  }
 }
 
 .component-button--greyHollow {
   color: gu-colour(garnett-neutral-1);
   border: 1px solid gu-colour(garnett-neutral-4);
+  &:hover, &:focus {
+    background: gu-colour(garnett-neutral-3);
+  }
 }
 
 .component-button__content,
@@ -74,4 +81,16 @@
 
 .component-button--hasicon-left svg {
   margin: $gu-v-spacing * -1 $gu-h-spacing * .5 $gu-v-spacing * -1 $gu-h-spacing * -.5;
+}
+
+
+/* icon-specific animations & transitions */
+.component-button {
+  .svg-arrow-right-straight {
+    transition: .2s transform;
+    will-change: transform;
+  }
+  &:hover .svg-arrow-right-straight, &:focus .svg-arrow-right-straight {
+    transform: translateX(5%);
+  }
 }
