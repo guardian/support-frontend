@@ -1,12 +1,8 @@
 package com.gu.support.promotions
 
-import com.gu.i18n.Currency.GBP
 import com.gu.support.SerialisationTestHelpers
-import com.gu.support.catalog.Price
-import com.gu.support.workers.Monthly
 import com.typesafe.scalalogging.LazyLogging
 import org.joda.time.Days.days
-import org.joda.time.Months
 import org.joda.time.Months.months
 import org.scalatest.FlatSpec
 

@@ -297,7 +297,7 @@ object CountryGroup {
 
   val countries: List[Country] = allGroups.flatMap(_.countries).sortBy(_.name)
 
-  val countriesByISO2: Map[String, Country] = countries.map { c => c.alpha2 -> c }.toMap
+  val countriesByISO2: Map[String, Country] = countries.map{c => c.alpha2 -> c}.toMap
 
   val countriesByISO3 = countries.map { country =>
     val locale = new Locale("", country.alpha2)
@@ -309,15 +309,11 @@ object CountryGroup {
     countriesByISO2.get(code) orElse countriesByISO3.get(code)
   }
 
-  def countryByName(str: String): Option[Country] = countries.find {
-    _.name.equalsIgnoreCase(str)
-  }
+  def countryByName(str: String): Option[Country] = countries.find { _.name.equalsIgnoreCase(str) }
 
   // This is because there was an inconsistency in the code where we were writing a country name
   // in Identity but then trying to find it by code. It's not clear anymore which we have in our systems; probably both
-  def countryByNameOrCode(str: String): Option[Country] = countries.find {
-    _.name == str
-  } orElse countryByCode(str)
+  def countryByNameOrCode(str: String): Option[Country] = countries.find { _.name == str } orElse countryByCode(str)
 
   def byCountryCode(c: String): Option[CountryGroup] = allGroups.find(_.countries.exists(_.alpha2 == c))
 

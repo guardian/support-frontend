@@ -29,8 +29,6 @@ case object DigitalPack extends Product {
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions),
 
     )
-
-  implicit val encoder: Encoder[DigitalPack.type] = Encoder.encodeString.contramap(_ => "DigitalPack")
 }
 
 case object Contribution extends Product {

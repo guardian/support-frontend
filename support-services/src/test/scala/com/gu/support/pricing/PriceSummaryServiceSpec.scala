@@ -3,13 +3,11 @@ package com.gu.support.pricing
 import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
-import com.gu.support.workers.{Monthly, Quarterly}
+import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import org.joda.time.Months
 import org.scalatest.{FlatSpec, Matchers}
-import io.circe.syntax._
-import com.gu.support.encoding.CustomCodecs._
-
 
 class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
@@ -21,10 +19,11 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
     paper(UK)(HomeDelivery)(Sixday)(Monthly).find(_.currency == GBP).map(_.price) shouldBe Some(54.12)
 
     val guardianWeekly = catalogService.getPrices(GuardianWeekly, Some("DISCOUNT_CODE"))
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly).find(_.currency == GBP).map(_.price) shouldBe Some(37.50)
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).map(_.price) shouldBe Some(37.50)
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).flatMap(_.promotion.flatMap(_.discountedPrice)) shouldBe Some(105)
 
     val digitalPack = catalogService.getPrices(DigitalPack, Some("DISCOUNT_CODE"))
-    val priceSummary = digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly).find(_.currency == GBP).get
+    val priceSummary = digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).get
     priceSummary.price shouldBe 11.99
     priceSummary.promotion.get.discountedPrice shouldBe Some(8.39)
   }

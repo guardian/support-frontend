@@ -9,20 +9,21 @@ import com.gu.support.workers.BillingPeriod
 import scala.math.BigDecimal.RoundingMode
 
 class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) {
-  type CountryPricing = Map[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, List[PriceSummary]]]]
-  type ProductPricing = Map[CountryGroup, CountryPricing]
+  type CountryGroupPrices = Map[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, List[PriceSummary]]]]
+  type ProductPrices = Map[CountryGroup, CountryGroupPrices]
+  type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), List[PriceSummary]]
 
-  def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPricing =
+  def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPrices =
     product.supportedCountries.map(
       countryGroup =>
         countryGroup -> getPricesForCountryGroup(product, countryGroup, maybePromoCode)
     ).toMap
 
-  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, maybePromoCode: Option[PromoCode]): CountryPricing = {
+  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, maybePromoCode: Option[PromoCode]): CountryGroupPrices = {
     val grouped = product.ratePlans.groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, productRatePlans) =>
         val priceSummaries = for {
-          productRatePlan <- productRatePlans.filter(p => p.supportedTerritories.contains(countryGroup))
+          productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)
           price <- filterCurrencies(catalogService.getPriceList(productRatePlan).map(_.prices), countryGroup)
         } yield getPriceSummary(maybePromoCode, countryGroup, productRatePlan.id, price)
         (keys, priceSummaries)
@@ -30,17 +31,18 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
     nestPriceLists(grouped)
   }
 
-  private def filterCurrencies(maybePrices: Option[List[Price]], countryGroup: CountryGroup) = {
-    // Try to filter the prices we return to only include the currency for the current country group
-    // For some combinations of product and country group this will not be possible
-    // eg. for Guardian Weekly ROW product rate plans there is no price list for any country group other
-    // than RestOfTheWorld as they should buy a Domestic rate plan instead
-    val prices = maybePrices.getOrElse(Nil)
-    prices.filter(price => countryGroup.supportedCurrencies.contains(price.currency))
-  }
+  private def getSupportedRatePlansForCountryGroup(productRatePlans: List[ProductRatePlan[Product]], countryGroup: CountryGroup) =
+    productRatePlans.filter(p => p.supportedTerritories.contains(countryGroup))
+
+  private def filterCurrencies(maybePrices: Option[List[Price]], countryGroup: CountryGroup) =
+  // Filter the prices we return to only include the supported currencies for the current country group
+    maybePrices
+      .getOrElse(Nil)
+      .filter(price => countryGroup.supportedCurrencies.contains(price.currency))
+
 
   private def getPriceSummary(maybePromoCode: Option[PromoCode], countryGroup: CountryGroup, productRatePlanId: ProductRatePlanId, price: Price) = {
-    val promotion: Option[PromotionSummary] = for {
+    val promotionSummary: Option[PromotionSummary] = for {
       promoCode <- maybePromoCode
       country <- countryGroup.defaultCountry.orElse(countryGroup.countries.headOption)
       validPromotion <- promotionService.validatePromoCode(promoCode, country, productRatePlanId, isRenewal = false).toOption //Not dealing with renewals for now
@@ -49,7 +51,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
     PriceSummary(
       price.value,
       price.currency,
-      promotion
+      promotionSummary
     )
   }
 
@@ -66,9 +68,8 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
     )
   }
 
-  private def nestPriceLists(groupedPriceList: Map[(FulfilmentOptions, ProductOptions, BillingPeriod), List[PriceSummary]]): CountryPricing =
-    groupedPriceList
-      .filter(_._2.nonEmpty) // Remove invalid pricing options eg. Guardian Weekly Domestic rate plans in RestOfTheWorld countries
+  private def nestPriceLists(groupedPriceList: GroupedPriceList): CountryGroupPrices =
+    removeInvalidPricingOptions(groupedPriceList)
       .foldLeft(Map.empty[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, List[PriceSummary]]]]) {
       case (acc, ((fulfilment, productOptions, billing), list)) =>
 
@@ -80,12 +81,15 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
 
         acc ++ Map(fulfilment -> newProducts)
     }
+
+  private def removeInvalidPricingOptions(groupedPriceList: GroupedPriceList) =
+    groupedPriceList.filter(_._2.nonEmpty) // eg. Guardian Weekly Domestic rate plans in RestOfTheWorld countries
 }
 
 object PriceSummaryService {
   def getDiscountedPrice(originalPrice: Price, discountBenefit: DiscountBenefit): Price = {
     val multiplier = (100 - discountBenefit.amount) / 100
     val newPrice = originalPrice.value * multiplier
-    originalPrice.update(newPrice.setScale(2, RoundingMode.HALF_DOWN))
+    originalPrice.copy(value = newPrice.setScale(2, RoundingMode.HALF_DOWN))
   }
 }

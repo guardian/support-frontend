@@ -1,6 +1,7 @@
 package com.gu.support.promotions
 
-import com.gu.support.catalog.{DigitalPack, ProductRatePlanId}
+import com.gu.support.catalog._
+import com.gu.support.workers.Annual
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
@@ -16,21 +17,23 @@ object ServicesFixtures {
   val invalidPromoCode = "INVALID_CODE"
   val renewalPromoCode = "RENEWAL_CODE"
   val trackingPromoCode = "TRACKING_CODE"
-  val digitalPackProductRatePlanIds = DigitalPack.ratePlans.map(_.id)
-  val validProductRatePlanId = digitalPackProductRatePlanIds.head
+
+  val validProductRatePlanIds = DigitalPack.ratePlans.map(_.id) ++
+    GuardianWeekly.getProductRatePlan(Annual, Domestic, NoProductOptions).map(prp => List(prp.id)).getOrElse(Nil)
+  val validProductRatePlanId = validProductRatePlanIds.head
   val invalidProductRatePlanId = "67890"
 
   val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))
   val discountBenefit = Some(DiscountBenefit(30, Some(Months.months(3))))
 
-  val freeTrial = promotion(digitalPackProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
+  val freeTrial = promotion(validProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
   val validFreeTrial = ValidatedPromotion(freeTrialPromoCode, freeTrial)
-  val discount = promotion(digitalPackProductRatePlanIds, discountPromoCode, discountBenefit)
+  val discount = promotion(validProductRatePlanIds, discountPromoCode, discountBenefit)
   val validDiscount = ValidatedPromotion(discountPromoCode, discount)
-  val double = promotion(digitalPackProductRatePlanIds, doublePromoCode, discountBenefit, freeTrialBenefit)
+  val double = promotion(validProductRatePlanIds, doublePromoCode, discountBenefit, freeTrialBenefit)
   val validDouble = ValidatedPromotion(doublePromoCode, double)
-  val tracking = promotion(digitalPackProductRatePlanIds, trackingPromoCode, tracking = true)
-  val renewal = promotion(digitalPackProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true)
+  val tracking = promotion(validProductRatePlanIds, trackingPromoCode, tracking = true)
+  val renewal = promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true)
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(
@@ -41,7 +44,7 @@ object ServicesFixtures {
   )
 
   def promotion(
-    ids: List[ProductRatePlanId] = digitalPackProductRatePlanIds,
+    ids: List[ProductRatePlanId] = validProductRatePlanIds,
     code: PromoCode = freeTrialPromoCode,
     discount: Option[DiscountBenefit] = None,
     freeTrial: Option[FreeTrialBenefit] = None,
@@ -52,7 +55,7 @@ object ServicesFixtures {
   ): Promotion = {
     Promotion(
       name = "Test promotion",
-      description = s"$freeTrialPromoCode description",
+      description = s"$code description",
       appliesTo = AppliesTo.ukOnly(ids.toSet),
       campaignCode = "C",
       channelCodes = Map("testChannel" -> Set(code)),
