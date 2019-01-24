@@ -1,9 +1,5 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-form-footer {
-  width: calc(100vw - 46px);
   @include gu-fontset-body-sans;
-  @include mq($from: mobileMedium) {
-    width: 314px;
-  }
 }

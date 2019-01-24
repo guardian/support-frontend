@@ -5,16 +5,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import ReturnSection from 'components/returnSection/returnSection';
 import ProductHero, {
   type GridImages,
   type ImagesByCountry,
 } from 'components/productHero/productHero';
 import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
+import ProductPageContentBlockDivider from 'components/productPage/productPageContentBlock/productPageContentBlockDivider';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
@@ -123,11 +125,14 @@ function CheckoutStage(props: PropTypes) {
           <CheckoutHeading
             heading="Digital Pack"
           />
-          <LeftMarginSection modifierClasses={['free-trial']}>
-            <p className="checkout-content__free-trial">
-              Please enter your details below to complete your Digital Pack subscription.
-            </p>
-          </LeftMarginSection>
+          <ProductPageContentBlock>
+            <ProductPageTextBlock>
+              <p className={largeParagraphClassName}>
+                Please enter your details below to complete your Digital Pack subscription.
+              </p>
+            </ProductPageTextBlock>
+            <ProductPageContentBlockDivider />
+          </ProductPageContentBlock>
           <CheckoutForm />
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>
