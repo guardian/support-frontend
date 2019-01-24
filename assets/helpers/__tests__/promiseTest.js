@@ -4,9 +4,7 @@
 
 import {
   repeatPromise,
-  sleepPromise,
   pollUntilPromise,
-  // logPromise,
   bracketPromise,
 } from '../promise';
 
@@ -55,19 +53,6 @@ describe('promise', () => {
     });
 
   });
-
-  // Don't know how if it's possible to mock Raven?
-  // describe('logging', () => {
-
-  //   it('log and rethrow exceptions', done => {
-
-  //     const error = new Error('Oh noes!')
-
-  //     logPromise(Promise.reject(error)).catch(done);
-
-  //   });
-
-  // });
 
   describe('bracket', () => {
 
