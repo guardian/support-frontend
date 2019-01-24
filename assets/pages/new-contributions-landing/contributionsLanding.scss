@@ -65,7 +65,7 @@ body {
 
 /*= HEADER */
 
-.contribution-form.header {
+.gu-content--contribution-form .header {
   display: none;
   @include mq($from: tablet) {
     display: block;
