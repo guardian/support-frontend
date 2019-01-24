@@ -181,12 +181,13 @@ function CheckoutForm(props: PropTypes) {
                 <option value="">--</option>
                 {statesForCountry(props.country)}
               </Select2>
-              <Input1
+              <InputWithFooter
                 id="telephone"
                 label="Telephone (optional)"
                 type="tel"
                 value={props.telephone}
                 setValue={props.setTelephone}
+                footer="We may use this to get in touch with you about your subscription."
                 error={firstError('telephone', props.formErrors)}
               />
             </FormSection>
@@ -226,11 +227,11 @@ function CheckoutForm(props: PropTypes) {
               </div>
           }
               <CheckoutCopy
-                strong="Money Back Guarantee "
+                strong="Money Back Guarantee."
                 copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
               />
               <CheckoutCopy
-                strong="Cancel any time you want. "
+                strong="Cancel any time you want."
                 copy="There is no set time on your agreement so you can stop your subscription anytime."
               />
               <DirectDebitPopUpForm

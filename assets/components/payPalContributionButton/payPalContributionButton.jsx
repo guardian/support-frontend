@@ -50,7 +50,7 @@ function payWithPayPal(props: PropTypes) {
     }
 
     if (props.canClick) {
-      storage.setSession('paymentMethod', 'PayPal');
+      storage.setSession('selectedPaymentMethod', 'PayPal');
       paypalPaymentAPIRedirect(
         props.amount,
         props.referrerAcquisitionData,

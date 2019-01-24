@@ -27,6 +27,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     country,
     stateProvince,
     billingPeriod,
+    telephone,
   } = state.page.checkout;
 
   const product = {
@@ -42,6 +43,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     country: country || 'GB',
     state: stateProvince,
     email,
+    telephoneNumber: telephone,
     product,
     paymentFields,
     ophanIds: getOphanIds(),

@@ -143,6 +143,7 @@ class DigitalSubscription(
       lastName = request.lastName,
       country = request.country,
       state = request.state,
+      telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
