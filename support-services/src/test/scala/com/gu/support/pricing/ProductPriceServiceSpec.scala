@@ -27,7 +27,6 @@ class ProductPriceServiceSpec extends FlatSpec with Matchers {
     val priceSummary = digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly).find(_.currency == GBP).get
     priceSummary.price shouldBe 11.99
     priceSummary.promotion.get.discountedPrice shouldBe Some(8.39)
-    println(digitalPack.asJson)
   }
 
   it should "work out a discount correctly" in {

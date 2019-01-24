@@ -16,21 +16,21 @@ object ServicesFixtures {
   val invalidPromoCode = "INVALID_CODE"
   val renewalPromoCode = "RENEWAL_CODE"
   val trackingPromoCode = "TRACKING_CODE"
-  val validProductRatePlanId = "12345"
+  val digitalPackProductRatePlanIds = DigitalPack.ratePlans.map(_.id)
+  val validProductRatePlanId = digitalPackProductRatePlanIds.head
   val invalidProductRatePlanId = "67890"
-  val prpIds = DigitalPack.ratePlans.map(_.id)
 
   val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))
   val discountBenefit = Some(DiscountBenefit(30, Some(Months.months(3))))
 
-  val freeTrial = promotion(prpIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
+  val freeTrial = promotion(digitalPackProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
   val validFreeTrial = ValidatedPromotion(freeTrialPromoCode, freeTrial)
-  val discount = promotion(prpIds, discountPromoCode, discountBenefit)
+  val discount = promotion(digitalPackProductRatePlanIds, discountPromoCode, discountBenefit)
   val validDiscount = ValidatedPromotion(discountPromoCode, discount)
-  val double = promotion(prpIds, doublePromoCode, discountBenefit, freeTrialBenefit)
+  val double = promotion(digitalPackProductRatePlanIds, doublePromoCode, discountBenefit, freeTrialBenefit)
   val validDouble = ValidatedPromotion(doublePromoCode, double)
-  val tracking = promotion(prpIds, trackingPromoCode, tracking = true)
-  val renewal = promotion(prpIds, renewalPromoCode, discountBenefit, renewal = true)
+  val tracking = promotion(digitalPackProductRatePlanIds, trackingPromoCode, tracking = true)
+  val renewal = promotion(digitalPackProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true)
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(
@@ -41,7 +41,7 @@ object ServicesFixtures {
   )
 
   def promotion(
-    ids: List[ProductRatePlanId] = prpIds,
+    ids: List[ProductRatePlanId] = digitalPackProductRatePlanIds,
     code: PromoCode = freeTrialPromoCode,
     discount: Option[DiscountBenefit] = None,
     freeTrial: Option[FreeTrialBenefit] = None,
