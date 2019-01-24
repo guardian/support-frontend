@@ -100,7 +100,7 @@ header[role="banner"] {
   position: relative;
   height: 44px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row-reverse;
   justify-content: space-between;
   z-index: 1;
@@ -128,9 +128,6 @@ header[role="banner"] {
 .glogo {
   width: 30px;
   height: 30px;
-  right: 0;
-  position: relative;
-  top: 7px;
 
   .svg-roundel {
     width: 100%;
@@ -144,8 +141,7 @@ header[role="banner"] {
   @include mq($from: tablet) {
     width: 60px;
     height: 60px;
-    top: 7px;
-    right: 10px;
+    margin-right: 10px;
   }
 }
 
@@ -155,9 +151,6 @@ header[role="banner"] {
   text-overflow: ellipsis;
   width: 185px;
   white-space: nowrap;
-  margin-left: 0;
-  // TODO: this is basically just vertical centering. use flex-box!
-  margin-top: 4px;
 
   summary {
     padding-left: 0;
@@ -170,9 +163,9 @@ header[role="banner"] {
   @include mq($from: tablet) {
     padding: 0;
     width: 100%;
-    margin-top: $gu-v-spacing * 2.5;
     margin-left: 10px;
     cursor: pointer;
+    align-self: flex-end;
 
     summary {
       padding-left: 10px;
@@ -252,6 +245,7 @@ header[role="banner"] {
   padding: 0;
   background: gu-colour(garnett-neutral-5);
   border: 1px solid gu-colour(garnett-neutral-4);
+  position: absolute;
 }
 
 .countryGroups__item:first-child > a {
@@ -354,7 +348,7 @@ button {
 
 .blurb {
   display: none;
-  
+
   @include mq($from: tablet) {
     display: block;
     font: 100 17px/1.25 $gu-text-egyptian-web;
