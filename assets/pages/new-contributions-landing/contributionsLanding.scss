@@ -17,6 +17,9 @@
 @import '~pages/new-contributions-landing/components/ContributionSurvey/ContributionSurvey';
 
 
+$content-left-margin-tablet: calc(50% - 361px);
+$content-left-margin-leftCol: calc(50% - 401px);
+
 body {
   min-height: 100vh;
 }
@@ -109,18 +112,15 @@ header[role="banner"] {
 
   @include mq($from: tablet) {
     height: 75px;
-    padding: 0;
-    width: auto;
+    padding: 0 0 0 $content-left-margin-tablet;
   }
 
   @include mq($from: leftCol) {
-    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
-    width: 940px;
+    padding: 0 calc(50% - 550px) 0 $content-left-margin-leftCol;
   }
 
   @include mq($from: wide) {
-    padding: 0 calc(50% - 620px);
-    width: 1240px;
+    padding-right: calc(50% - 620px);
   }
 
 }
@@ -164,7 +164,6 @@ header[role="banner"] {
   @include mq($from: tablet) {
     padding: 0;
     width: 100%;
-    margin-left: 10px;
     align-self: flex-end;
 
     summary {
@@ -323,12 +322,12 @@ footer[role="contentinfo"] a {
     border-style: none solid;
     border-width: 0 1px;
     width: 380px;
-    margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
+    margin-left: $content-left-margin-tablet
   }
 
   @include mq($from: leftCol) {
     width: 380px;
-    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
+    margin-left: $content-left-margin-leftCol
   }
 
 }
