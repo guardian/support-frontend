@@ -9,7 +9,7 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 
-import './returnSection.scss'
+import './returnSection.scss';
 
 // ----- Component ----- //
 

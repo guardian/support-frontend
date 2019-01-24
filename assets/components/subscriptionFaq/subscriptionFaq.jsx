@@ -8,7 +8,6 @@ import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 
-
 // ----- Props ----- //
 
 type PropTypes = {|
