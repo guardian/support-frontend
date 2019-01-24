@@ -64,9 +64,9 @@ function getInitialContributionType(abParticipations: Participations): Contribut
 
   return (
     // make sure we don't select a contribution type which isn't on the page
-    getValidContributionTypes(abParticipations).includes(contributionType)
+    getValidContributionTypes().includes(contributionType)
       ? contributionType
-      : getValidContributionTypes(abParticipations)[0]
+      : getValidContributionTypes()[0]
   );
 }
 

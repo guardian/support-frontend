@@ -18,7 +18,6 @@ import * as storage from 'helpers/storage';
 import { type Switches, type SwitchObject } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { Participations } from 'helpers/abTests/abtest';
 
 
 // ----- Types ----- //
@@ -73,15 +72,8 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
   return fallback;
 }
 
-function getValidContributionTypes(abParticipations: Participations): ContributionType[] {
-  const { globalContributionTypes } = abParticipations;
-  let validContributionTypes;
-  if (globalContributionTypes === 'default-annual_no-monthly') {
-    validContributionTypes = ['ONE_OFF', 'ANNUAL'];
-  } else {
-    validContributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
-  }
-  return getValidContributionTypesFromUrlOrElse(validContributionTypes);
+function getValidContributionTypes(): ContributionType[] {
+  return getValidContributionTypesFromUrlOrElse(['ONE_OFF', 'MONTHLY', 'ANNUAL']);
 }
 
 function toHumanReadableContributionType(contributionType: ContributionType): 'Single' | 'Monthly' | 'Annual' {
