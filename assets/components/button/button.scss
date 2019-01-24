@@ -12,6 +12,7 @@
   border-radius: 600px;
   box-sizing: border-box;
   cursor: pointer;
+  transition: .2s;
 
   &:hover, &:focus {
     outline: 0;
@@ -50,11 +51,17 @@
 .component-button--greenHollow {
   color: gu-colour(green-dark);
   border: 1px solid gu-colour(green-dark);
+  &:hover, &:focus {
+    background: gu-colour(garnett-neutral-3);
+  }
 }
 
 .component-button--greyHollow {
   color: gu-colour(garnett-neutral-1);
   border: 1px solid gu-colour(garnett-neutral-4);
+  &:hover, &:focus {
+    background: gu-colour(garnett-neutral-3);
+  }
 }
 
 .component-button__content,
