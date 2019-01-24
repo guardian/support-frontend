@@ -184,11 +184,7 @@ function CheckoutForm(props: PropTypes) {
           value={props.telephone}
           setValue={props.setTelephone}
           error={firstError('telephone', props.formErrors)}
-          footer={
-            <CheckoutExpander copy="What will my phone number be used for?">
-              <p>We may use this to get in touch with you about your subscription.</p>
-            </CheckoutExpander>
-          }
+          footer="We may use this to get in touch with you about your subscription."
         />
       </LeftMarginSection>
       <LeftMarginSection>
