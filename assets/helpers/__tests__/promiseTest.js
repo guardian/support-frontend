@@ -41,20 +41,6 @@ describe('promise', () => {
 
   });
 
-  describe('sleepPromise', () => {
-
-    it('should run the promise after 100ms', (done) => {
-
-      const t1 = Date.now();
-
-      sleepPromise(100, () => Promise.resolve(Date.now()))
-        .then(t2 => expect(t2 - t1).toBeGreaterThanOrEqual(100))
-        .then(done);
-
-    });
-
-  });
-
   describe('polling', () => {
 
     it('return a successful action', (done, fail) => {
