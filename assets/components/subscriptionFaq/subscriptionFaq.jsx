@@ -5,6 +5,8 @@
 import React from 'react';
 import { subscriptionsTermsLinks } from 'helpers/legal';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+
 
 
 // ----- Props ----- //
@@ -33,7 +35,7 @@ function SubscriptionFaq(props: PropTypes) {
         <div className="component-subscription-faq">
           <div className="component-subscription-faq__text">
             You may also find help in our
-            <a className="component-subscription-faq__href" href={faqLink(props)}> Frequently Asked Questions</a>.
+            <a className="component-subscription-faq__href" href={faqLink(props)} onClick={sendTrackingEventsOnClick('onward_faq', 'GuardianWeekly', null)}> Frequently Asked Questions</a>.
           </div>
         </div>
       );
@@ -42,9 +44,9 @@ function SubscriptionFaq(props: PropTypes) {
         <div className="component-subscription-faq">
           <div className="component-subscription-faq__text">
             You may also find help in our
-            <a className="component-subscription-faq__href" href={faqLink(props)}> Frequently Asked Questions</a> and
+            <a className="component-subscription-faq__href" href={faqLink(props)} onClick={sendTrackingEventsOnClick('onward_faq', 'DigitalPack', null)}> Frequently Asked Questions</a> and
             in the&nbsp;
-            <a className="component-subscription-faq__href" href={subscriptionsTermsLinks.DigitalPack}>
+            <a className="component-subscription-faq__href" href={subscriptionsTermsLinks.DigitalPack} onClick={sendTrackingEventsOnClick('onward_tos', 'DigitalPack', null)}>
             Digital Pack terms and conditions
             </a>.
           </div>
