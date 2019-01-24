@@ -27,13 +27,23 @@ object Salesforce {
       lastName: String,
       mailingState: Option[String],
       mailingCountry: String,
+      telephoneNumber: Option[String],
       allowMembershipMail: Boolean,
       allow3rdPartyMail: Boolean,
       allowGuardianRelatedMail: Boolean
     ): UpsertData =
       UpsertData(
         NewContact(
-          identityId, email, firstName, lastName, mailingState, mailingCountry, allowMembershipMail, allow3rdPartyMail, allowGuardianRelatedMail
+          identityId,
+          email,
+          firstName,
+          lastName,
+          mailingState,
+          mailingCountry,
+          telephoneNumber,
+          allowMembershipMail,
+          allow3rdPartyMail,
+          allowGuardianRelatedMail
         )
       )
     // scalastyle:on parameter.number
@@ -50,6 +60,7 @@ object Salesforce {
     LastName: String,
     MailingState: Option[String],
     MailingCountry: String,
+    Phone: Option[String],
     Allow_Membership_Mail__c: Boolean,
     Allow_3rd_Party_Mail__c: Boolean,
     Allow_Guardian_Related_Mail__c: Boolean

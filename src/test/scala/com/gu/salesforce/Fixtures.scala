@@ -4,6 +4,7 @@ object Fixtures {
   val idId = "9999999"
   val salesforceId = "0036E00000Uc1IhQAJ"
   val email = "yjcysqxfcqqytuzupjc@gu.com"
+  val telephoneNumber = "0123456789"
   val name = "YJCysqXFCqqYtuzuPJc"
   val uk = "UK"
   val us = "US"
@@ -31,6 +32,20 @@ object Fixtures {
         "LastName": "$name",
         "MailingState": "$state",
         "MailingCountry": "$us",
+        "Allow_Membership_Mail__c": $allowMail,
+        "Allow_3rd_Party_Mail__c": $allowMail,
+        "Allow_Guardian_Related_Mail__c": $allowMail
+       }
+      }"""
+  val upsertJsonWithTelephoneNumber =
+    s"""{
+      "newContact": {
+        "IdentityID__c": "$idId",
+        "Email": "$email",
+        "FirstName": "$name",
+        "LastName": "$name",
+        "MailingCountry": "$uk",
+        "Phone": "$telephoneNumber",
         "Allow_Membership_Mail__c": $allowMail,
         "Allow_3rd_Party_Mail__c": $allowMail,
         "Allow_Guardian_Related_Mail__c": $allowMail
