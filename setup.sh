@@ -101,7 +101,7 @@ install_node() {
 install_nginx() {
   if ! installed nginx; then
     brew install nginx
-    EXTRA_STEPS+=("nginx has been installed. Ensure you have 'include sites-enabled/*' in your nginx configuration ${NGINX_ROOT}/nginx.conf and add '127.0.0.1 support.thegulocal.com' to /etc/hosts")
+    EXTRA_STEPS+=("nginx has been installed. Ensure you have 'include sites-enabled/*' in your nginx configuration ${NGINX_ROOT}/nginx.conf and add '127.0.0.1 support.thegulocal.com' and '127.0.0.1 support-ui.thegulocal.com' to /etc/hosts")
   fi
 }
 

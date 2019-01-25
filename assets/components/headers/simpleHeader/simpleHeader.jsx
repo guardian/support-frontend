@@ -102,7 +102,9 @@ export default class SimpleHeader extends Component<PropTypes, State> {
   }
 
   componentWillUnmount() {
-    this.observer.stopListening();
+    if (this.observer) {
+      this.observer.stopListening();
+    }
   }
 
   logoRef: ?Element;
