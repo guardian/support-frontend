@@ -14,7 +14,7 @@
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook-static": "build-storybook -c .storybook -o storybook-out",
+    "storybook-static": "build-storybook -c .storybook -o storybook-static",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
     "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle"
   },
