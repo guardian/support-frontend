@@ -7,6 +7,7 @@ import { combineReducers, type Dispatch } from 'redux';
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
+import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
   fromString,
@@ -23,11 +24,12 @@ import {
 } from 'components/marketingConsent/marketingConsentReducer';
 import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
+import { logoutUrl } from 'helpers/externalLinks';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getUser } from './helpers/user';
-import { showPaymentMethod, onPaymentAuthorised } from './helpers/paymentProviders';
+import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
 
 
 // ----- Types ----- //
@@ -38,6 +40,7 @@ type PaymentMethod = 'Stripe' | 'DirectDebit';
 export type FormFields = {|
   firstName: string,
   lastName: string,
+  email: string,
   country: Option<IsoCountry>,
   stateProvince: Option<StateProvince>,
   telephone: string,
@@ -83,6 +86,7 @@ export type Action =
 function getFormFields(state: State): FormFields {
   return {
     firstName: state.page.checkout.firstName,
+    email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
     country: state.page.checkout.country,
     stateProvince: state.page.checkout.stateProvince,
@@ -123,13 +127,14 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
-
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
 const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
+
+const signOut = () => { window.location.href = logoutUrl; };
 
 function submitForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
@@ -155,11 +160,15 @@ const formActionCreators = {
 
 export type FormActionCreators = typeof formActionCreators;
 
-
 // ----- Reducer ----- //
 
 function initReducer(countryGroupId: CountryGroupId) {
+  const billingPeriodInurl = getQueryParameter('period');
   const user = getUser(countryGroupId); // TODO: this is unnecessary, it should use the user reducer
+  const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInurl === 'Monthly' || billingPeriodInurl === 'Annual'
+    ? billingPeriodInurl
+    : Monthly;
+
   const initialState = {
     stage: 'checkout',
     email: user.email || '',
@@ -168,8 +177,8 @@ function initReducer(countryGroupId: CountryGroupId) {
     country: user.country || null,
     stateProvince: null,
     telephone: '',
-    billingPeriod: Monthly,
-    paymentMethod: 'DirectDebit',
+    billingPeriod: initialBillingPeriod,
+    paymentMethod: countrySupportsDirectDebit(user.country || null) ? 'DirectDebit' : 'Stripe',
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -193,7 +202,12 @@ function initReducer(countryGroupId: CountryGroupId) {
         return { ...state, telephone: action.telephone };
 
       case 'SET_COUNTRY':
-        return { ...state, country: fromString(action.country), stateProvince: null };
+        return {
+          ...state,
+          country: fromString(action.country),
+          stateProvince: null,
+          paymentMethod: countrySupportsDirectDebit(fromString(action.country)) ? state.paymentMethod : 'Stripe',
+        };
 
       case 'SET_STATE_PROVINCE':
         return { ...state, stateProvince: stateProvinceFromString(state.country, action.stateProvince) };
@@ -202,7 +216,10 @@ function initReducer(countryGroupId: CountryGroupId) {
         return { ...state, billingPeriod: action.billingPeriod };
 
       case 'SET_PAYMENT_METHOD':
-        return { ...state, paymentMethod: action.paymentMethod };
+        return {
+          ...state,
+          paymentMethod: countrySupportsDirectDebit(state.country) ? action.paymentMethod : 'Stripe',
+        };
 
       case 'SET_FORM_ERRORS':
         return { ...state, formErrors: action.errors };
@@ -237,5 +254,6 @@ export {
   getEmail,
   setSubmissionError,
   setFormSubmitted,
+  signOut,
   formActionCreators,
 };

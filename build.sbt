@@ -67,11 +67,11 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion,
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
-  "com.gu" %% "support-models" % "0.43",
+  "com.gu" %% "support-models" % "0.49",
   "com.gu" %% "support-config" % "0.16",
   "com.gu" %% "fezziwig" % "0.8",
   "com.typesafe.akka" %% "akka-agent" % "2.5.14",
-  "com.gu" %% "support-internationalisation" % "0.9",
+  "com.gu" %% "support-internationalisation" % "0.10",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
@@ -112,6 +112,16 @@ riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
+ 
+
+def getFiles(f: File):Seq[(File,String)] = {
+  f match {
+    case file if file.isFile => Seq((file,file.toString))
+    case dir if dir.isDirectory => dir.listFiles.toSeq.flatMap(getFiles)
+  }
+}
+
+riffRaffArtifactResources ++= getFiles(file("storybook-static"))
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
@@ -124,19 +134,5 @@ javaOptions in Universal ++= Seq(
 )
 
 javaOptions in Test += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
-
-import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import scalariform.formatter.preferences.{DanglingCloseParenthesis, DoubleIndentConstructorArguments, Force, SpacesAroundMultiImports}
-
-ScalariformKeys.preferences := ScalariformKeys.preferences.value
-  .setPreference(SpacesAroundMultiImports, false)
-  .setPreference(DoubleIndentConstructorArguments, true)
-  .setPreference(DanglingCloseParenthesis, Force)
-
-excludeFilter in scalariformFormat := (excludeFilter in scalariformFormat).value ||
-  "Routes.scala" ||
-  "ReverseRoutes.scala" ||
-  "JavaScriptReverseRoutes.scala" ||
-  "RoutesPrefix.scala"
 
 addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!

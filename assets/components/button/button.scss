@@ -1,6 +1,6 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-ui-button {
+.component-button {
   @include gu-fontset-body-sans;
   display: inline-flex;
   align-items: center;
@@ -12,6 +12,7 @@
   border-radius: 600px;
   box-sizing: border-box;
   cursor: pointer;
+  transition: .2s;
 
   &:hover, &:focus {
     outline: 0;
@@ -24,11 +25,11 @@
   }
 }
 
-.component-ui-button--static {
+.component-button--non-interactive {
   pointer-events: none;
 }
 
-.component-ui-button--primary {
+.component-button--primary {
   background-color: gu-colour(news-garnett-highlight);
   color: gu-colour(garnett-neutral-1);
   &:hover, &:focus {
@@ -36,7 +37,7 @@
   }
 }
 
-.component-ui-button--green {
+.component-button--green {
   color: gu-colour(garnett-neutral-5);
   background-color: gu-colour(green-dark);
   svg {
@@ -47,31 +48,49 @@
   }
 }
 
-.component-ui-button--greenHollow {
+.component-button--greenHollow {
   color: gu-colour(green-dark);
   border: 1px solid gu-colour(green-dark);
+  &:hover, &:focus {
+    background: gu-colour(garnett-neutral-3);
+  }
 }
 
-.component-ui-button--greyHollow {
+.component-button--greyHollow {
   color: gu-colour(garnett-neutral-1);
   border: 1px solid gu-colour(garnett-neutral-4);
+  &:hover, &:focus {
+    background: gu-colour(garnett-neutral-3);
+  }
 }
 
-.component-ui-button__content,
-.component-ui-button svg {
+.component-button__content,
+.component-button svg {
   flex: 0 0 auto;
   display: block;
 }
 
-.component-ui-button svg {
+.component-button svg {
   width: $gu-h-spacing * 1.075;
   margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
 }
 
-.component-ui-button--icon-left {
+.component-button--hasicon-left {
   flex-direction: row-reverse;
 }
 
-.component-ui-button--icon-left svg {
+.component-button--hasicon-left svg {
   margin: $gu-v-spacing * -1 $gu-h-spacing * .5 $gu-v-spacing * -1 $gu-h-spacing * -.5;
+}
+
+
+/* icon-specific animations & transitions */
+.component-button {
+  .svg-arrow-right-straight {
+    transition: .2s transform;
+    will-change: transform;
+  }
+  &:hover .svg-arrow-right-straight, &:focus .svg-arrow-right-straight {
+    transform: translateX(5%);
+  }
 }

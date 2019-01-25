@@ -12,13 +12,15 @@ import {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import {
-  getContributionTypeFromSessionOrElse, getContributionTypeFromUrlOrElse,
+  getContributionTypeFromSessionOrElse,
+  getContributionTypeFromUrlOrElse,
   getPaymentMethodFromSession,
   getValidContributionTypes,
   getValidPaymentMethods,
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
 import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
+import type { Participations } from 'helpers/abTests/abtest';
 import { type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
@@ -51,9 +53,14 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(): ContributionType {
-  const contributionType: ContributionType =
-    getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
+function getInitialContributionType(abParticipations: Participations): ContributionType {
+  const { globalContributionTypes } = abParticipations;
+  const abTestParams = globalContributionTypes
+    ? globalContributionTypes.split('_')
+    : [];
+
+  const fallback = abTestParams.includes('default-annual') ? 'ANNUAL' : 'MONTHLY';
+  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse(fallback));
 
   return (
     // make sure we don't select a contribution type which isn't on the page
@@ -131,8 +138,8 @@ function selectInitialAnnualAmount(state: State, dispatch: Function) {
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
-
-  const contributionType = getInitialContributionType();
+  const { abParticipations } = state.common;
+  const contributionType = getInitialContributionType(abParticipations);
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
 
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));

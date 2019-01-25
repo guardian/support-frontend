@@ -1,5 +1,5 @@
 // @flow
-import { isFromEpicOrBanner } from 'helpers/referrerComponent';
+import { getQueryParameter } from 'helpers/url';
 import type { Tests } from './abtest';
 
 // ----- Tests ----- //
@@ -20,8 +20,11 @@ export const tests: Tests = {
     seed: 3,
   },
 
-  smallMobileHeaderNotEpicOrBanner: {
-    variants: ['control', 'shrink', 'shrink_no-blurb', 'shrink_no-blurb_no-header'],
+  globalContributionTypes: {
+    variants: [
+      'control',
+      'default-annual',
+    ],
     audiences: {
       ALL: {
         offset: 0,
@@ -30,8 +33,8 @@ export const tests: Tests = {
     },
     isActive: true,
     independent: true,
-    seed: 4,
-    canRun: () => !isFromEpicOrBanner,
+    seed: 5,
+    canRun: () => !getQueryParameter('contributionTypes') && !getQueryParameter('selectedContributionType'),
   },
 
 };

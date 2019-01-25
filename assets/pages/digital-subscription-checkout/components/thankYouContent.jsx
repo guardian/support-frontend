@@ -3,12 +3,14 @@
 // ----- Imports ----- //
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import {
   getIosAppUrl,
   androidAppUrl,
   getDailyEditionUrl,
 } from 'helpers/externalLinks';
+
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -17,10 +19,16 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import CtaLink from 'components/ctaLink/ctaLink';
 import MarketingConsent from './MarketingConsentContainer';
 
+import {
+  getFormFields,
+  type FormFields,
+} from '../digitalSubscriptionCheckoutReducer';
+
 // ----- Types ----- //
 
 type PropTypes = {
-  countryGroupId: CountryGroupId;
+  countryGroupId: CountryGroupId,
+    ...FormFields,
 };
 
 
@@ -32,7 +40,11 @@ function ThankYouContent(props: PropTypes) {
     <div className="thank-you-content">
       <LeftMarginSection>
         <p className={classNameWithModifiers('thank-you-content__copy', ['italic'])}>
-          We have sent you an email with everything you need to know
+          {
+            props.paymentMethod === 'DirectDebit' ?
+            'Look out for an email within three business days confirming your recurring payment. Your first payment will be taken in 14 days and will appear as \'Guardian Media Group\' on your bank statement.' :
+            'We have sent you an email with everything you need to know. Your first payment will be taken in 14 days.'
+          }
         </p>
       </LeftMarginSection>
       <AppsSection countryGroupId={props.countryGroupId} />
@@ -56,10 +68,6 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
       </h2>
       <p className="thank-you-content__copy">
         Just download the apps and log in with your Guardian account details.
-      </p>
-      <p className="thank-you-content__copy">
-        You can use all the features free for the next 14 days,
-        and then your first payment will be taken.
       </p>
       <h3 className="thank-you-content__subheading">
         Premium App
@@ -90,4 +98,5 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
 
 // ----- Export ----- //
 
-export default ThankYouContent;
+
+export default connect(state => ({ ...getFormFields(state) }))(ThankYouContent);

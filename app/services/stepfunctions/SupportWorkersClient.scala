@@ -37,7 +37,8 @@ case class CreateSupportWorkersRequest(
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
     supportAbTests: Set[AbTest],
-    email: String
+    email: String,
+    telephoneNumber: Option[String]
 )
 
 object SupportWorkersClient {

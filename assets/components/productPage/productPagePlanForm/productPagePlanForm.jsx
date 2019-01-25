@@ -4,9 +4,8 @@
 
 import React from 'react';
 
-import { bgClassName } from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
-import UiButton from 'components/ui/uiButton/uiButton';
+import { bgClassName, Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Button from 'components/button/button';
 
 import { type Option } from 'helpers/types/option';
 
@@ -58,7 +57,7 @@ export default function ProductPagePlanForm<P:string>({
         onSubmitAction();
       }}
     >
-      <ProductPageContentBlockOutset>
+      <Outset>
         <div className="component-product-page-plan-form__items">
           {keys.map((key: P) => {
             const {
@@ -84,11 +83,11 @@ export default function ProductPagePlanForm<P:string>({
               );
             })}
         </div>
-      </ProductPageContentBlockOutset>
+      </Outset>
       <div className={['component-product-page-plan-form__cta', bgClassName].join(' ')} data-disabled={selectedPlan === null}>
-        <UiButton disabled={!selectedPlanTitle} type="submit">
-          Subscribe now{selectedPlanTitle && ` – ${selectedPlanTitle}`}
-        </UiButton>
+        <Button aria-label={null} disabled={!selectedPlanTitle} type="submit">
+          {['Subscribe now', ...(selectedPlanTitle ? [selectedPlanTitle] : [])].join(' - ')}
+        </Button>
       </div>
     </form>
   );

@@ -12,7 +12,7 @@ import cats.data.EitherT
 import cats.implicits._
 import monitoring.SafeLogger
 import monitoring.PathVerification.{TipPath, PayPal, OneOffContribution, monitoredRegion, verify}
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import services.{IdentityService, PaymentAPIService, TestUserService}
@@ -25,7 +25,7 @@ class PayPalOneOff(
     components: ControllerComponents,
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
-    settingsProvider: SettingsProvider,
+    settingsProvider: AllSettingsProvider,
     tipMonitoring: Tip
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
@@ -36,7 +36,7 @@ class PayPalOneOff(
   private val fallbackAcquisitionData: JsValue = JsObject(Seq("platform" -> JsString("SUPPORT")))
 
   def paypalError: Action[AnyContent] = PrivateAction { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       "paypal-error-page",

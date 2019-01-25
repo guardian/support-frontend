@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import ReturnSection from 'components/returnSection/returnSection';
 import ProductHero, {
   type GridImages,
@@ -15,6 +14,8 @@ import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 import ThankYouContent from './thankYouContent';
@@ -57,6 +58,9 @@ const heroesByCountry: ImagesByCountry = {
   GBPCountries: defaultHeroes,
   UnitedStates: defaultHeroes,
   International: defaultHeroes,
+  EURCountries: defaultHeroes,
+  NZDCountries: defaultHeroes,
+  Canada: defaultHeroes,
   AUDCountries: {
     breakpoints: {
       mobile: {
@@ -110,7 +114,6 @@ function CheckoutStage(props: PropTypes) {
           />
           <CheckoutHeading
             heading="Your Digital Pack subscription is now live"
-            copy="Thank you for supporting our journalism"
           />
           <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
@@ -122,15 +125,16 @@ function CheckoutStage(props: PropTypes) {
       return (
         <div className="checkout-content">
           <CheckoutHeading
-            heading="Digital Pack Subscription"
-            copy="Cancel your subscription at any time"
+            heading="Digital Pack"
           />
-          <LeftMarginSection modifierClasses={['free-trial']}>
-            <p className="checkout-content__free-trial">
-              You can use all the features free for the next 14 days,
-              and then your first payment will be taken.
-            </p>
-          </LeftMarginSection>
+          <ProductPageContentBlock>
+            <ProductPageTextBlock>
+              <LargeParagraph>
+                Please enter your details below to complete your Digital Pack subscription.
+              </LargeParagraph>
+            </ProductPageTextBlock>
+            <Divider />
+          </ProductPageContentBlock>
           <CheckoutForm />
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>

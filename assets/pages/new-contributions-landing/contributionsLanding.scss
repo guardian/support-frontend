@@ -8,7 +8,7 @@
 @import '~components/errorMessage/errorMessage';
 @import '~components/ctaLink/ctaLink';
 @import '~components/generalErrorMessage/generalErrorMessage';
-@import '~components/ui/uiButton/uiButton';
+@import '~components/button/button';
 @import '~components/marketingConsentNew/marketingConsent';
 @import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYou';
 @import '~pages/new-contributions-landing/components/ContributionTicker/ContributionTicker';
@@ -16,6 +16,9 @@
 @import '~pages/new-contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
 @import '~pages/new-contributions-landing/components/ContributionSurvey/ContributionSurvey';
 
+
+$content-left-margin-tablet: calc(50% - 361px);
+$content-left-margin-leftCol: calc(50% - 401px);
 
 body {
   min-height: 100vh;
@@ -63,45 +66,16 @@ body {
 
 }
 
-.gu-content--shrink {
-  @include mq($from: mobile, $until: tablet) {
-    $header-height: 44px;
+/*= HEADER */
 
-    .glogo {
-      width: 30px;
-      height: 30px;
-      right: 0;
-    }
-
-    .countryGroups {
-      margin-left: 0;
-
-      // TODO: this is basically just vertical centering. use flex-box!
-      margin-top: 4px;
-
-      summary {
-        padding-left: 0;
-      }
-    }
-
-    .blurb {
-      font-size: 16px;
-      margin: 0;
-    }
-
-    header[role="banner"] {
-      height: $header-height;
-
-      // to match .gu-content__content
-      padding: 0 10px;
-    }
+.gu-content--contribution-form .header {
+  display: none;
+  @include mq($from: tablet) {
+    display: block;
   }
 }
 
-/*= HEADER */
-
 .header {
-
   border: 0;
   left: 10px;
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
@@ -127,37 +101,33 @@ header[role="banner"] {
   background-color: gu-colour(header-dark);
   border-bottom: 1px solid gu-colour(garnett-neutral-4);
   position: relative;
-  height: 75px;
+  height: 44px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row-reverse;
   justify-content: space-between;
   z-index: 1;
+  padding: 0 10px;
 
 
   @include mq($from: tablet) {
-    padding: 0;
-    width: auto;
+    height: 75px;
+    padding: 0 0 0 $content-left-margin-tablet;
   }
 
   @include mq($from: leftCol) {
-    padding: 0 calc(50% - 550px) 0 calc(50% - 390px);
-    width: 940px;
+    padding: 0 calc(50% - 550px) 0 $content-left-margin-leftCol;
   }
 
   @include mq($from: wide) {
-    padding: 0 calc(50% - 620px);
-    width: 1240px;
+    padding-right: calc(50% - 620px);
   }
 
 }
 
 .glogo {
-  width: 60px;
-  height: 60px;
-  position: relative;
-  top: 7px;
-  right: 10px;
+  width: 30px;
+  height: 30px;
 
   .svg-roundel {
     width: 100%;
@@ -169,21 +139,22 @@ header[role="banner"] {
   }
 
   @include mq($from: tablet) {
-    top: 7px;
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
   }
 }
 
 .countryGroups {
   font-family: $gu-text-sans-web;
-  margin-top: $gu-v-spacing * 2.5;
   max-width: 355px;
-  margin-left: 10px;
   text-overflow: ellipsis;
   width: 185px;
   white-space: nowrap;
+  cursor: pointer;
 
   summary {
-    padding-left: 10px;
+    padding-left: 0;
   }
 
   .svg-globe {
@@ -193,7 +164,11 @@ header[role="banner"] {
   @include mq($from: tablet) {
     padding: 0;
     width: 100%;
-    cursor: pointer;
+    align-self: flex-end;
+
+    summary {
+      padding-left: 10px;
+    }
   }
 }
 
@@ -269,6 +244,7 @@ header[role="banner"] {
   padding: 0;
   background: gu-colour(garnett-neutral-5);
   border: 1px solid gu-colour(garnett-neutral-4);
+  position: absolute;
 }
 
 .countryGroups__item:first-child > a {
@@ -346,12 +322,12 @@ footer[role="contentinfo"] a {
     border-style: none solid;
     border-width: 0 1px;
     width: 380px;
-    margin-left: calc(50% - 361px); /* account for the 11px of negative margin */
+    margin-left: $content-left-margin-tablet
   }
 
   @include mq($from: leftCol) {
     width: 380px;
-    margin-left: calc(50% - 401px); /* account for the 11px of negative margin */
+    margin-left: $content-left-margin-leftCol
   }
 
 }
@@ -370,8 +346,13 @@ button {
 }
 
 .blurb {
-  font: 100 17px/1.25 $gu-text-egyptian-web;
-  margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
+  display: none;
+
+  @include mq($from: tablet) {
+    display: block;
+    font: 100 17px/1.25 $gu-text-egyptian-web;
+    margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
+  }
 }
 
 footer[role="contentinfo"] {
@@ -455,8 +436,11 @@ form {
 
 .form__radio-group-list {
   list-style: none;
-  margin: 0;
-  padding: $gu-v-spacing 0 0 0;
+  padding: 0;
+
+  @include mq($from: tablet) {
+    padding: $gu-v-spacing 0 0 0;
+  }
 }
 
 .form__radio-group-input {
@@ -754,27 +738,4 @@ form {
 .component-password-failure-message {
   padding: 0 $gu-h-spacing $gu-v-spacing;
   margin-top: $gu-v-spacing;
-}
-
-
-/* Small header test */
-@include mq($from: mobile, $until: tablet) {
-
-  .gu-content--contribution-form.gu-content--no-blurb {
-    .blurb {
-      display: none;
-    }
-  }
-
-  .gu-content--contribution-form.gu-content--no-header {
-    .header {
-      display: none;
-    }
-  }
-
-  .gu-content--contribution-form.gu-content--no-blurb.gu-content--no-header {
-    .form__radio-group-list {
-      padding-top: 0;
-    }
-  }
 }

@@ -5,6 +5,7 @@ import {
   openDialogBox,
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentResult,
@@ -26,6 +27,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     country,
     stateProvince,
     billingPeriod,
+    telephone,
   } = state.page.checkout;
 
   const product = {
@@ -41,6 +43,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     country: country || 'GB',
     state: stateProvince,
     email,
+    telephoneNumber: telephone,
     product,
     paymentFields,
     ophanIds: getOphanIds(),
@@ -103,4 +106,6 @@ function showPaymentMethod(
   }
 }
 
-export { showPaymentMethod, onPaymentAuthorised };
+const countrySupportsDirectDebit = (country: ?IsoCountry) => country && country === 'GB';
+
+export { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit };

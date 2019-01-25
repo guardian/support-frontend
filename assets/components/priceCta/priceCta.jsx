@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import UiButton from 'components/ui/uiButton/uiButton';
+import AnchorButton from 'components/button/anchorButton';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -27,11 +27,11 @@ function PriceCta(props: PropTypes) {
 
   return (
     <div className={classNameWithModifiers('component-price-cta', withSecondary ? ['with-secondary'] : [])}>
-      <UiButton
+      <AnchorButton
         href={props.url}
         aria-label={`${props.ctaText} for only ${props.price} per month`}
       >{props.ctaText}
-      </UiButton>
+      </AnchorButton>
       {withSecondary ? <p className="component-price-cta__secondary">{props.secondaryCopy}</p> : null}
     </div>
   );

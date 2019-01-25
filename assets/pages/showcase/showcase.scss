@@ -79,7 +79,7 @@
     }
 
     &--subscribe {
-      .component-ui-button {
+      .component-button {
         margin-top: $gu-v-spacing * 2;
         color: gu-colour(garnett-neutral-1);
       }
@@ -140,7 +140,7 @@
         }
       }
 
-      .component-ui-button {
+      .component-button {
         margin-top: $gu-v-spacing * 2;
         background-color: gu-colour(garnett-neutral-1);
         color: gu-colour(garnett-neutral-3);
@@ -185,7 +185,7 @@
           margin-bottom: $gu-v-spacing;
         }
 
-        .component-ui-button {
+        .component-button {
           margin-top: $gu-v-spacing;
           background-color: gu-colour(garnett-neutral-5);
           border: 1px solid gu-colour(garnett-neutral-1);

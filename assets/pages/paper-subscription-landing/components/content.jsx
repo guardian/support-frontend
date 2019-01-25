@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { sansParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import GridImage from 'components/gridImage/gridImage';
@@ -32,12 +32,12 @@ type PropTypes = {|
 const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>, telephoneLink: Element<string>}) => (
   <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
     <ProductPageTextBlock title="FAQ and help">
-      <p className={sansParagraphClassName}>
+      <SansParagraph>
       If you’ve got any more questions, you might well find the answers in the {faqLink}.
-      </p>
-      <p className={sansParagraphClassName}>
+      </SansParagraph>
+      <SansParagraph>
        If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
-      </p>
+      </SansParagraph>
     </ProductPageTextBlock>
   </ProductPageContentBlock>
 );

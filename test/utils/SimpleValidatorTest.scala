@@ -18,7 +18,8 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
-    email = "grace@gracehopper.com"
+    email = "grace@gracehopper.com",
+    telephoneNumber = None
   )
 
   "validate" should "return true when there are no empty strings" in {
@@ -28,6 +29,36 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
   "validate" should "reject empty strings in the name field" in {
     val requestMissingFirstName = validRequest.copy(firstName = "")
     SimpleValidator.validationPasses(requestMissingFirstName) shouldBe false
+  }
+
+  "validate" should "fail if the country is US and there is no state selected" in {
+    val requestMissingState = validRequest.copy(state = None)
+    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
+  "validate" should "also fail if the country is Canada and there is no state selected" in {
+    val requestMissingState = validRequest.copy(country = Country.Canada, state = None)
+    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
+  "validate" should "pass if there is no state selected and the country is Australia" in {
+    val requestMissingState = validRequest.copy(country = Country.Australia, state = None)
+    SimpleValidator.validationPasses(requestMissingState) shouldBe true
+  }
+
+  "validate" should "fail if the payment field received is an empty string" in {
+    val requestMissingState = validRequest.copy(paymentFields = StripePaymentFields(""))
+    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
+  "validate" should "fail if the telephone number is longer than 40 characters " in {
+    val requestWithTooLongTelephoneNumber = validRequest.copy(telephoneNumber = Some("12345678901234567890123456789012345678901"))
+    SimpleValidator.validationPasses(requestWithTooLongTelephoneNumber) shouldBe false
+  }
+
+  "validate" should "not check what the characters are in a telephone number" in {
+    val requestWithTooLongTelephoneNumber = validRequest.copy(telephoneNumber = Some("abcdef"))
+    SimpleValidator.validationPasses(requestWithTooLongTelephoneNumber) shouldBe true
   }
 
 }

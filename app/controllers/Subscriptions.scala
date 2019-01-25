@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import config.StringsConfig
 import play.api.mvc._
@@ -15,7 +15,7 @@ class Subscriptions(
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
-    settingsProvider: SettingsProvider,
+    settingsProvider: AllSettingsProvider,
     val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
@@ -32,7 +32,7 @@ class Subscriptions(
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Get a Subscription"
     val id = "subscriptions-landing-page"
     val js = "subscriptionsLandingPage.js"
@@ -47,7 +47,7 @@ class Subscriptions(
   }
 
   def premiumTier(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Premium Tier"
     val id = "premium-tier-landing-page-" + countryCode
     val js = "premiumTierLandingPage.js"
@@ -58,7 +58,7 @@ class Subscriptions(
   def weeklyGeoRedirect: Action[AnyContent] = geoRedirectAllMarkets("subscribe/weekly")
 
   def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "The Guardian Weekly Subscriptions | The Guardian"
     val id = "weekly-landing-page-" + countryCode
     val js = "weeklySubscriptionLandingPage.js"
@@ -82,7 +82,7 @@ class Subscriptions(
   }
 
   def paper(withDelivery: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: Settings = settingsProvider.settings()
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
     val id = if (withDelivery) "paper-subscription-landing-page-delivery" else "paper-subscription-landing-page-collection"
     val js = "paperSubscriptionLandingPage.js"

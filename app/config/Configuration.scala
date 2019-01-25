@@ -1,6 +1,6 @@
 package config
 
-import admin.SettingsSource
+import admin.{SettingsSource, SettingsSources}
 import cats.syntax.either._
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.config.ConfigFactory
@@ -41,7 +41,7 @@ class Configuration {
 
   lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
-  lazy val settingsSource: SettingsSource = SettingsSource.fromConfig(config).valueOr(throw _)
+  lazy val settingsSources: SettingsSources = SettingsSources.fromConfig(config).valueOr(throw _)
 
   lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
 }

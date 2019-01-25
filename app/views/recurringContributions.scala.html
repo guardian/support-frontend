@@ -4,7 +4,7 @@
 @import helper.CSRF
 
 @import com.gu.i18n.Currency.AUD
-@import admin.Settings
+@import admin.AllSettings
 @(
   title: String,
   id: String,
@@ -15,7 +15,7 @@
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
-)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: Settings)
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
 @scripts = {
     <script type="text/javascript">

@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
-import admin.{Settings, SettingsProvider, SettingsSurrogateKeySyntax}
+import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
@@ -37,7 +37,7 @@ class RegularContributions(
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
-    settingsProvider: SettingsProvider,
+    settingsProvider: AllSettingsProvider,
     tipMonitoring: Tip
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
@@ -45,7 +45,7 @@ class RegularContributions(
 
   implicit val a: AssetsResolver = assets
 
-  def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: RequestHeader, settings: Settings): Result = {
+  def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: RequestHeader, settings: AllSettings): Result = {
     Ok(recurringContributions(
       title = "Support the Guardian | Recurring Contributions",
       id = "regular-contributions-page",
@@ -59,7 +59,7 @@ class RegularContributions(
     ))
   }
 
-  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: RequestHeader, settings: Settings): Future[Result] =
+  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: RequestHeader, settings: AllSettings): Future[Result] =
     identityService.getUser(user).semiflatMap { fullUser =>
       isRegularContributor(user.credentials) map {
         case Some(true) =>
@@ -74,7 +74,7 @@ class RegularContributions(
       InternalServerError
     }
 
-  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent], settings: Settings): Future[Result] = {
+  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings): Future[Result] = {
     val uatMode = testUsers.isTestUser(request)
     Future.successful(
       monthlyContributionsPage(None, uatMode)
@@ -83,13 +83,13 @@ class RegularContributions(
 
   def displayFormAuthenticated(): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
-      implicit val settings: Settings = settingsProvider.settings()
+      implicit val settings: AllSettings = settingsProvider.getAllSettings()
       displayFormWithUser(request.user).map(_.withSettingsSurrogateKey)
     }
 
   def displayFormMaybeAuthenticated(): Action[AnyContent] =
     maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
-      implicit val settings: Settings = settingsProvider.settings()
+      implicit val settings: AllSettings = settingsProvider.getAllSettings()
       request.user.fold(displayFormWithoutUser())(displayFormWithUser).map(_.withSettingsSurrogateKey)
     }
 
