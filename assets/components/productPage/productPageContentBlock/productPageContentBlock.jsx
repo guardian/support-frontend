@@ -72,7 +72,6 @@ export const Outset = ({ children }: {children: Node}) => (
 A css class that sets the background colour to match the block.
 Use on children that need to match the background of the parent
 */
-
 export const bgClassName = 'component-product-page-content-block-bg';
 
 // ---- Exports ----- //

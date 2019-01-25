@@ -21,9 +21,6 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-export const LargeParagraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block__large">{children}</p>;
-export const SansParagraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block__sans">{children}</p>;
-
 const ProductPageTextBlock = ({
   title, children, headingSize, icon, callout,
 }: PropTypes) => (
@@ -41,5 +38,14 @@ ProductPageTextBlock.defaultProps = {
   icon: null,
   title: null,
 };
+
+
+// ----- Children ----- //
+
+export const LargeParagraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block__large">{children}</p>;
+export const SansParagraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block__sans">{children}</p>;
+
+
+// ----- Exports ----- //
 
 export default ProductPageTextBlock;
