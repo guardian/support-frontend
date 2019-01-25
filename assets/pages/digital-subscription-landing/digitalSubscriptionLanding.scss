@@ -40,12 +40,26 @@
   // ----- Product Block
 
   .product-block {
+
+    .product-block__heading-wrapper {
+      @include mq($from: phablet) {
+        width: 100%; 
+      }
+    }
+
     .component-left-margin-section__content {
       position: relative;
+      
+      @include mq($from: phablet) {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;  
+      }
 
       @include mq($from: desktop) {
         border-left: 1px solid gu-colour(garnett-neutral-4);
       }
+      
     }
 
     .component-grid-image {
@@ -63,6 +77,8 @@
     }
 
     .component-price-cta {
+      width: 100%;
+      
       @include mq($until: desktop) {
         margin-top: $gu-v-spacing * 2;
       }
@@ -323,33 +339,31 @@
     font-family: $gu-headline;
     font-weight: bold;
     margin-left: 10px;
-    padding-top: 2px;
+    padding: $gu-v-spacing/6 0 $gu-v-spacing/2;
     font-size: 22px;
     line-height: 29px;
     min-height: 70px;
     width: 250px;
+    
 
     @include mq($from: mobileMedium, $until: tablet) {
       padding-top: 8px;
       font-size: 28px;
       line-height: 34px;
       width: 380px;
-      height: 80px;
     }
 
     @include mq($from: tablet, $until: leftCol) {
       width: 560px;
       font-size: 42px;
       line-height: 48px;
-      height: 106px;
     }
 
     @include mq($from: leftCol) {
-      width: 600px;
+      width: 560px;
       font-size: 44px;
       line-height: 50px;
       margin-left: 12px;
-      height: 108px;
     }
   }
 
