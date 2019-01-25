@@ -59,6 +59,9 @@ const heroesByCountry: ImagesByCountry = {
   GBPCountries: defaultHeroes,
   UnitedStates: defaultHeroes,
   International: defaultHeroes,
+  EURCountries: defaultHeroes,
+  NZDCountries: defaultHeroes,
+  Canada: defaultHeroes,
   AUDCountries: {
     breakpoints: {
       mobile: {
