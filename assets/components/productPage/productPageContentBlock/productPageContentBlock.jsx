@@ -49,6 +49,18 @@ ProductPageContentBlock.defaultProps = {
 
 // ---- Exports ----- //
 
+export const Divider = () => (
+  <div className="component-product-page-content-block-divider">
+    <hr className="component-product-page-content-block-divider__line" />
+  </div>
+);
+
+export const Outset = ({ children }: {children: Node}) => (
+  <div className="component-product-page-content-block-outset">
+    {children}
+  </div>
+);
+
 export const bgClassName = 'component-product-page-content-block-bg';
 
 export default ProductPageContentBlock;
