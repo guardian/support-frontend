@@ -4,7 +4,7 @@
 
 import type { CountryGroupId } from './internationalisation/countryGroup';
 import { countryGroups } from './internationalisation/countryGroup';
-import { getOrigin } from './url';
+import { getBaseDomain, getOrigin } from './url';
 
 const routes: {
   [string]: string,
@@ -32,6 +32,11 @@ function paperSubsUrl(withDelivery: boolean = false): string {
   return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
 }
 
+function signoutUrl(returnUrl: ?string): string {
+  const encodedReturn = encodeURIComponent(returnUrl || window.location);
+  return `https://profile.${getBaseDomain()}/signout?returnUrl=${encodedReturn}`;
+}
+
 function payPalCancelUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
 }
@@ -43,4 +48,4 @@ function payPalReturnUrl(cgId: CountryGroupId): string {
 
 // ----- Exports ----- //
 
-export { routes, payPalCancelUrl, payPalReturnUrl, paperSubsUrl };
+export { routes, signoutUrl, payPalCancelUrl, payPalReturnUrl, paperSubsUrl };
