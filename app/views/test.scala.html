@@ -1,257 +1,258 @@
-@import assets.AssetsResolver
-@import admin.AllSettings
+@*@import assets.AssetsResolver*@
+@*@import admin.AllSettings*@
 
-@()(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
+@*@()(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)*@
 
-<!DOCTYPE html>
-<html lang="en" class=" gr__support_theguardian_com"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg">
-
-
+@*<!DOCTYPE html>*@
+@*<html lang="en" class=" gr__support_theguardian_com"><head>*@
+  @*<meta charset="UTF-8">*@
+  @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+  @*<meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg">*@
 
 
-  <meta name="description" content="Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution.">
-  <meta property="og:description" content="Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution.">
+  @*<meta name="description" content="Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution.">*@
+  @*<meta property="og:description" content="Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution.">*@
 
 
+  @*<script type="text/javascript">*@
+    @*window.guardian = window.guardian || {};*@
+    @*guardian.settings = {*@
+  @*'switches' : {*@
+    @*'oneOffPaymentMethods' : {*@
+      @*'stripe' : 'On',*@
+      @*'payPal' : 'On'*@
+    @*},*@
+    @*'recurringPaymentMethods' : {*@
+      @*'stripe' : 'On',*@
+      @*'payPal' : 'On',*@
+      @*'directDebit' : 'On'*@
+    @*},*@
+    @*'experiments' : {*@
+      @*'newFlow' : {*@
+        @*'name' : 'newFlow',*@
+        @*'description' : 'Redesign of the payment flow UI',*@
+        @*'state' : 'On'*@
+      @*}*@
+    @*},*@
+    @*'optimize' : 'On'*@
+  @*}*@
+@*};*@
+@*</script>*@
 
 
+  @*<title>Support the Guardian | Make a Contribution</title>*@
+  @*<meta property="og:title" content="Support the Guardian | Make a Contribution">*@
 
 
-
-  <script type="text/javascript" src="https://cdn.krxd.net/userdata/get?pub=2196ddf0-947c-45ec-9b0d-0a82fb280cb8&amp;kxfp=56992398591492d17339642d51ab1b215b161f6a&amp;kfuid=%22JhiSfh40%22&amp;callback=Krux.ns._default.kxjsonp_userdata"></script><script type="text/javascript" src="https://beacon.krxd.net/optout_check?callback=Krux.ns._default.kxjsonp_optOutCheck"></script><script type="text/javascript" src="https://beacon.krxd.net/cookie2json?callback=Krux.ns._default.kxjsonp_3pevents"></script><script type="text/javascript" src="https://consumer.krxd.net/consent/get/2196ddf0-947c-45ec-9b0d-0a82fb280cb8?idt=device&amp;dt=kxcookie&amp;callback=Krux.ns._default.kxjsonp_consent_get_0"></script><script async="" src="//cdn.krxd.net/ctjs/controltag.js.09ebc571a022d419934530eaf14c8a78"></script><script type="text/javascript" async="" src="https://www.google-analytics.com/gtm/js?id=GTM-KGKKPS4&amp;cid=448011333.1534833540&amp;gac=_gaexp%3DGAX1.2.0ctCmYiGSGqiUFP0eMFobw.17971.1"></script><script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script><script type="text/javascript" async="" src="https://www.google-analytics.com/plugins/ua/linkid.js"></script><script type="text/javascript" async="" src="https://cdn.krxd.net/controltag/r8nsxz49j.js"></script><script type="text/javascript" async="" src="//static.ads-twitter.com/uwt.js"></script><script type="text/javascript" async="" src="//bat.bing.com/bat.js"></script><script type="text/javascript" async="" src="//www.googleadservices.com/pagead/conversion_async.js"></script><script src="https://connect.facebook.net/signals/config/593826000802199?v=2.8.37&amp;r=stable" async=""></script><script async="" src="https://connect.facebook.net/en_US/fbevents.js"></script><script type="text/javascript" async="" src="https://www.google-analytics.com/gtm/js?id=GTM-NZGXNBL&amp;cid=448011333.1534833540&amp;gac=_gaexp%3DGAX1.2.0ctCmYiGSGqiUFP0eMFobw.17971.1"></script><script async="" src="https://www.google-analytics.com/analytics.js"></script><script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-W6GJ68L&amp;l=googleTagManagerDataLayer"></script><script type="text/javascript">
-    window.guardian = window.guardian || {};
-    guardian.settings = {
-  "switches" : {
-    "oneOffPaymentMethods" : {
-      "stripe" : "On",
-      "payPal" : "On"
-    },
-    "recurringPaymentMethods" : {
-      "stripe" : "On",
-      "payPal" : "On",
-      "directDebit" : "On"
-    },
-    "experiments" : {
-      "newFlow" : {
-        "name" : "newFlow",
-        "description" : "Redesign of the payment flow UI",
-        "state" : "On"
-      }
-    },
-    "optimize" : "On"
-  }
-};
-</script>
+    @*<!--- Optimize scripts, see: https://support.google.com/optimize/answer/7359264 -->*@
+    @*<!-- Page-hiding snippet -->*@
+  @*<style>.async-hide {*@
+    @*opacity: 0 !important*@
+  @*} </style>*@
 
 
-  <title>Support the Guardian | Make a Contribution</title>
-  <meta property="og:title" content="Support the Guardian | Make a Contribution">
+  @*<link rel="stylesheet" href="/assets/stylesheets/newContributionsLandingPageStyles.2966ddd67f6ac3a216c7.css">*@
+  @*<link rel="shortcut icon" type="image/png" href="/assets/images/favicons/32x32.46bd2faa1ab438684a6d4528a655a8bd.ico">*@
+  @*<link rel="apple-touch-icon" sizes="152x152" href="/assets/images/favicons/152x152.fee5e2d638d1c35f6d501fa397e53329.png">*@
+  @*<link rel="apple-touch-icon" sizes="144x144" href="/assets/images/favicons/144x144.1fe70b29879674433702d5266abcb0d4.png">*@
+  @*<link rel="apple-touch-icon" sizes="120x120" href="/assets/images/favicons/120x120.c58143bd2a5b5426b6256cd90ba6eb47.png">*@
+  @*<link rel="apple-touch-icon" sizes="114x114" href="/assets/images/favicons/114x114.68cbd5cf267598abd6a026f229ef6b45.png">*@
+  @*<link rel="apple-touch-icon" sizes="72x72" href="/assets/images/favicons/72x72.873381bf11d58e20f551905d51575117.png">*@
+  @*<link rel="apple-touch-icon-precomposed" href="/assets/images/favicons/57x57.6a2aa0ea5b4b6183e92d0eac49e2f58b.png">*@
+
+  @*<link rel="preload" href="/assets/fonts/GHGuardianHeadline-Bold.woff2" as="font" type="font/woff2" crossorigin="">*@
+  @*<link rel="preload" href="/assets/fonts/GHGuardianHeadline-BoldItalic.woff2" as="font" type="font/woff2" crossorigin="">*@
+  @*<link rel="preload" href="/assets/fonts/GHGuardianHeadline-Light.woff2" as="font" type="font/woff2" crossorigin="">*@
+  @*<link rel="preload" href="/assets/fonts/GHGuardianHeadline-LightItalic.woff2" as="font" type="font/woff2" crossorigin="">*@
+  @*<link rel="preload" href="/assets/fonts/GHGuardianHeadline-Regular.woff2" as="font" type="font/woff2" crossorigin="">*@
+  @*<link rel="preload" href="/assets/fonts/GHGuardianHeadline-Semibold.woff2" as="font" type="font/woff2" crossorigin="">*@
+
+  @*<script type="application/ld+json">*@
+		@*{*@
+			@*"@@context": "http://schema.org",*@
+			@*"@@*@
+    @*type": "Organization",*@
+                @*"name": "Support the Guardian",*@
+                @*"url": "https://support.theguardian.com",*@
+                @*"logo": "https://support.theguardian.com/assets/images/favicons/152x152.fee5e2d638d1c35f6d501fa397e53329.png"*@
+            @*}*@
+@*</script>*@
+
+  @*<body class="header-tweaks" data-gr-c-s-loaded="true" cz-shortcut-listen="true">*@
 
 
-    <!--- Optimize scripts, see: https://support.google.com/optimize/answer/7359264 -->
-    <!-- Page-hiding snippet -->
-  <style>.async-hide {
-    opacity: 0 !important
-  } </style>
-  <script async="" type="text/javascript" src="/assets/javascripts/optimizeScript.b4f4ab49e7817117720b.js"></script>
+    @*<div id="new-contributions-landing-page-uk"><div><div class="gu-content gu-content--contribution-form"><header role="banner" class="gu-content__header"><a class="glogo" href="https://www.theguardian.com"><svg class="svg-roundel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 69 69" preserveAspectRatio="xMinYMid" aria-labelledby="svg-roundel-title"><title id="svg-roundel-title">*@
+      @*The Guardian</title><path class="svg-roundel__bg" d="M34.5 0C15.446 0 0 15.446 0 34.5 0 53.554 15.446 69 34.5 69 53.554 69 69 53.554 69 34.5A34.5 34.5 0 0 0 34.5 0" fill="#fff"></path><path class="svg-roundel__g" d="M40.25 8.552c4.46.711 10.123 3.752 12.15 5.923v9.81h-1.228L40.25 9.655V8.552zm-4.103.613h-.11c-7.802 0-12.04 10.791-12.04 25.335 0 14.556 4.238 25.335 12.04 25.335h.11v1.116c-11.745.797-27.544-8.13-27.139-26.463C8.59 16.179 24.39 7.252 36.147 8.049v1.116zM56 36.793l-3.686 1.594V54.87a29.827 29.827 0 0 1-12.064 5.923V38.08l-4.054-1.337v-1.116H56v1.165z" fill="#121212"></path></svg></a><details class="countryGroups"><summary aria-label="Selected country: United Kingdom (£)"><div class="countryGroups__summary-wrapper"><svg class="svg-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" preserveAspectRatio="xMinYMid"><path d="M23.7,22.4 L45.8,22.4 L45.8,0.5 C40.7,0.7 35.6,1.8 30.8,3.7 C29.3,6 28,8.5 27,11.2 C25.6,14.8 24.5,18.6 23.7,22.4"></path><path d="M22,9.2 C22.2,8.7 22.4,8.2 22.6,7.7 C16.6,11.4 11.6,16.4 7.8,22.4 L18.2,22.4 C19.1,17.9 20.4,13.5 22,9.2"></path><path d="M15.8,50.7 L0.5,50.7 C0.8,56.8 2.3,62.7 4.9,68.2 L17.2,68.2 C16.3,62.4 15.9,56.5 15.8,50.7"></path><path d="M17.2,27.8 L4.9,27.8 C2.3,33.3 0.8,39.2 0.5,45.3 L15.8,45.3 C15.9,39.4 16.4,33.6 17.2,27.8"></path><path d="M78.8,22.4 L88.2,22.4 C84.7,16.9 80.1,12.2 74.7,8.5 C74.8,8.7 74.9,9 75,9.2 C76.6,13.5 77.9,17.9 78.8,22.4"></path><path d="M81.2,45.3 L95.5,45.3 C95.2,39.2 93.7,33.3 91.1,27.8 L79.7,27.8 C80.6,33.6 81.1,39.4 81.2,45.3"></path><path d="M73.3,22.4 C72.5,18.6 71.4,14.8 70,11.2 C69.1,8.7 67.9,6.4 66.5,4.1 C61.6,2.1 56.4,0.9 51.2,0.6 L51.2,22.5 L73.3,22.5 L73.3,22.4 Z"></path><path d="M51.2,68.2 L74.3,68.2 C75.2,62.4 75.7,56.6 75.8,50.7 L51.2,50.7 L51.2,68.2 Z"></path><path d="M79.7,68.2 L91.1,68.2 C93.7,62.7 95.2,56.8 95.5,50.7 L81.2,50.7 C81.1,56.5 80.6,62.4 79.7,68.2"></path><path d="M73.3,73.5 L51.2,73.5 L51.2,95.4 C56.5,95.1 61.6,93.9 66.5,91.9 C67.9,89.7 69.1,87.3 70,84.8 C71.4,81.1 72.5,77.4 73.3,73.5"></path><path d="M23.7,73.5 C24.5,77.3 25.6,81.1 27,84.8 C28,87.5 29.3,90 30.8,92.4 C35.6,94.3 40.7,95.3 45.8,95.6 L45.8,73.6 L23.7,73.5 Z"></path><path d="M45.8,27.8 L22.6,27.8 C21.7,33.6 21.2,39.4 21.1,45.3 L45.8,45.3 L45.8,27.8 Z"></path><path d="M75,86.7 C74.9,87 74.8,87.2 74.7,87.4 C80.1,83.7 84.7,79 88.2,73.5 L78.8,73.5 C77.9,78 76.6,82.4 75,86.7"></path><path d="M75.8,45.3 C75.7,39.4 75.2,33.6 74.3,27.8 L51.2,27.8 L51.2,45.3 L75.8,45.3 Z"></path><path d="M18.2,73.5 L7.8,73.5 C11.6,79.4 16.6,84.5 22.6,88.2 C22.4,87.7 22.1,87.2 22,86.7 C20.4,82.4 19.1,78 18.2,73.5"></path><path d="M21.1,50.7 C21.2,56.6 21.7,62.4 22.6,68.2 L45.7,68.2 L45.7,50.7 L21.1,50.7 Z"></path></svg><span class="countryGroups__label">*@
+      @*United Kingdom (£)</span><span class="icon icon--arrows"><svg class="svg-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 10" preserveAspectRatio="xMinYMid"><path d="M1.25.5l-.75.75L9 9.5h.95l8.55-8.25-.75-.75L9.5 7.25z"></path></svg></span></div></summary><ul class="countryGroups__list"><li class="countryGroups__item"><a href="/uk/contribute">*@
+      @*United Kingdom (£)<span class="icon"><svg class="svg-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 14" preserveAspectRatio="xMinYMid"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z"></path></svg></span></a></li><li class="countryGroups__item"><a href="/us/contribute">*@
+      @*United States (US$)</a></li><li class="countryGroups__item"><a href="/au/contribute">*@
+      @*Australia (AU$)</a></li><li class="countryGroups__item"><a href="/eu/contribute">*@
+      @*Europe (€)</a></li><li class="countryGroups__item"><a href="/int/contribute">*@
+      @*International (US$)</a></li><li class="countryGroups__item"><a href="/nz/contribute">*@
+      @*New Zealand (NZ$)</a></li><li class="countryGroups__item"><a href="/ca/contribute">*@
+      @*Canada (CA$)</a></li></ul></details></header><main role="main" class="gu-content__main"><div class="gu-content__content"><h1 class="header ">*@
+      @*Help us deliver the independent journalism the world needs</h1><p class="blurb">*@
+      @*Make a recurring commitment to support The&nbsp;Guardian long-term or a single contribution*@
+      @*as and when you feel like it – choose the option that suits you best.*@
+    @*</p><form class="form form--contribution" novalidate=""><fieldset class="form__radio-group form__radio-group--tabs form__radio-group--contribution-type"><legend class="form__legend form__legend--radio-group">*@
+      @*Recurrence</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="contributionType-ONE_OFF" class="form__radio-group-input" type="radio" name="contributionType" value="ONE_OFF"><label for="contributionType-ONE_OFF" class="form__radio-group-label">*@
+      @*Single</label></li><li class="form__radio-group-item"><input id="contributionType-MONTHLY" class="form__radio-group-input" type="radio" name="contributionType" value="MONTHLY"><label for="contributionType-MONTHLY" class="form__radio-group-label">*@
+      @*Monthly</label></li><li class="form__radio-group-item"><input id="contributionType-ANNUAL" class="form__radio-group-input" type="radio" name="contributionType" value="ANNUAL"><label for="contributionType-ANNUAL" class="form__radio-group-label">*@
+      @*Annual</label></li></ul></fieldset><fieldset class="form__radio-group form__radio-group--pills form__radio-group--contribution-amount"><legend class="form__legend form__legend--radio-group">*@
+      @*Amount</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="contributionAmount-50" class="form__radio-group-input" type="radio" name="contributionAmount" value="50"><label for="contributionAmount-50" class="form__radio-group-label" aria-label="50 pounds">*@
+      @*£50</label></li><li class="form__radio-group-item"><input id="contributionAmount-100" class="form__radio-group-input" type="radio" name="contributionAmount" value="100"><label for="contributionAmount-100" class="form__radio-group-label" aria-label="100 pounds">*@
+      @*£100</label></li><li class="form__radio-group-item"><input id="contributionAmount-250" class="form__radio-group-input" type="radio" name="contributionAmount" value="250"><label for="contributionAmount-250" class="form__radio-group-label" aria-label="250 pounds">*@
+      @*£250</label></li><li class="form__radio-group-item"><input id="contributionAmount-500" class="form__radio-group-input" type="radio" name="contributionAmount" value="500"><label for="contributionAmount-500" class="form__radio-group-label" aria-label="500 pounds">*@
+      @*£500</label></li><li class="form__radio-group-item"><input id="contributionAmount-other" class="form__radio-group-input" type="radio" name="contributionAmount" value="other"><label for="contributionAmount-other" class="form__radio-group-label">*@
+      @*Other</label></li></ul></fieldset><div class="stripe-payment-request-button stripe-payment-request-button--hidden"></div><div class="form-fields"><div class="form__field form__field--contribution-email"><label class="form__label" for="contributionEmail">*@
+      @*Email address</label><span class="form__input-with-icon"><input id="contributionEmail" class="form__input form__input--contributionEmail" type="email" autocapitalize="none" autocomplete="email" required="" placeholder="example@@domain.com" pattern="^[a-zA-Z0-9\.!#$%&amp;'*+/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$" style="background-image: url(&quot;data: image/png;*@
+      @*base64, iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT / fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ /oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/ wxZKQcGurQs5oNhqLshzVTMBewW / LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d /YP/ g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN / 1 ov+ / drgFWIlfKpVukyYihtgkXNp4mABK+1 GtVr+SBhJDbBIubVw+Cd /TDgKO2DPiN3YUo6y/ nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII =&quot;);*@
+      @*background-repeat: no-repeat;*@
+      @*background-attachment: scroll;*@
+      @*background-size: 16px 18px;*@
+      @*background-position: 98% 50%;*@
+      @*cursor: auto;"><span class="form__icon"><svg class="svg-envelope" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 10" preserveAspectRatio="xMinYMid"><path d="M.902 0L8 6.213 15.098 0H.902zM0 .787v8.42l4.787-4.232L0 .787zm16 0l-4.787 4.188L16 9.206V.787zM5.689 5.763L.896 10h14.208L10.31 5.763 8.378 7.456a.575.575 0 0 1-.756 0L5.689 5.763z"></path></svg></span></span></div><div><div class="form__field form__field--contribution-fname"><label class="form__label" for="contributionFirstName">*@
+      @*First name</label><span class="form__input-with-icon"><input id="contributionFirstName" class="form__input form__input--contributionFirstName" type="text" autocapitalize="words" autocomplete="given-name" required=""><span class="form__icon"><svg class="svg-user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" preserveAspectRatio="xMinYMid"><path d="M10 8.3c1.55 0 3.4-1.75 3.4-3.9S12.15 1 10 1 6.6 2.25 6.6 4.4s2 3.9 3.4 3.9zm5.86 3.4l-.86-.82c-1.67-.58-3.14-.88-5-.88-1.87 0-3.32.3-5 .86l-.86.85L2 18.16l.86.84h14.28l.86-.86-2.14-6.42v-.02z"></path></svg></span></span></div><div class="form__field form__field--contribution-lname"><label class="form__label" for="contributionLastName">*@
+      @*Last name</label><span class="form__input-with-icon"><input id="contributionLastName" class="form__input form__input--contributionLastName" type="text" autocapitalize="words" autocomplete="family-name" required=""><span class="form__icon"><svg class="svg-user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" preserveAspectRatio="xMinYMid"><path d="M10 8.3c1.55 0 3.4-1.75 3.4-3.9S12.15 1 10 1 6.6 2.25 6.6 4.4s2 3.9 3.4 3.9zm5.86 3.4l-.86-.82c-1.67-.58-3.14-.88-5-.88-1.87 0-3.32.3-5 .86l-.86.85L2 18.16l.86.84h14.28l.86-.86-2.14-6.42v-.02z"></path></svg></span></span></div></div></div><fieldset class="form__radio-group form__radio-group--buttons form__radio-group--contribution-pay"><legend class="form__legend">*@
+      @*Payment method</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="paymentMethodSelector-DirectDebit" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="DirectDebit"><label for="paymentMethodSelector-DirectDebit" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">*@
+      @*Direct debit</span><svg class="svg-new-credit-card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14" preserveAspectRatio="xMinYMid"><path d="M22 3.652H0V1.326C0 .594.58 0 1.295 0h19.41C21.42 0 22 .594 22 1.326v2.326zm0 1.826v7.196c0 .733-.58 1.326-1.295 1.326H1.295C.58 14 0 13.407 0 12.674V5.478h22zM2.494 9.74a.609.609 0 0 0 0 1.218h3.183a.609.609 0 1 0 0-1.218H2.494z" fill="#00B2FF"></path></svg></label></li><li class="form__radio-group-item"><input id="paymentMethodSelector-Stripe" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="Stripe"><label for="paymentMethodSelector-Stripe" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">*@
+      @*Credit/Debit card</span><svg class="svg-new-credit-card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14" preserveAspectRatio="xMinYMid"><path d="M22 3.652H0V1.326C0 .594.58 0 1.295 0h19.41C21.42 0 22 .594 22 1.326v2.326zm0 1.826v7.196c0 .733-.58 1.326-1.295 1.326H1.295C.58 14 0 13.407 0 12.674V5.478h22zM2.494 9.74a.609.609 0 0 0 0 1.218h3.183a.609.609 0 1 0 0-1.218H2.494z" fill="#00B2FF"></path></svg></label></li><li class="form__radio-group-item"><input id="paymentMethodSelector-PayPal" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="PayPal"><label for="paymentMethodSelector-PayPal" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">*@
+      @*PayPal</span><svg class="svg-paypal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 18" preserveAspectRatio="xMinYMid"><path d="M2.334.637L.01 15.407c-.074.458.27.687 1.032.687h2.875l.804-5.483c.114-.366.313-.549.597-.549h2.674C11 9.735 12.835 8.029 13.5 4.942 14.495.313 10.031 0 8.783 0H3.036C2.8.048 2.631.124 2.53.23a.773.773 0 0 0-.196.407z" fill="#27346A"></path><path d="M5.633 4.554l-1.925 12.85c-.061.397.224.596.855.596h2.382c.34-.073.537-.205.59-.395.053-.19.298-1.628.734-4.312.087-.21.27-.314.55-.314s.891-.04 1.836-.12c2.268-.355 3.676-1.875 4.226-4.56C15.706 4.274 12.01 4 10.975 4h-4.76c-.196.041-.335.108-.419.2a.687.687 0 0 0-.163.354z" fill="#2790C3"></path><path d="M13.564 4.604a7.13 7.13 0 0 1-.065.338c-.664 3.087-2.5 4.793-5.507 5.12H5.318c-.276 0-.472.173-.588.52l.903-6.028a.687.687 0 0 1 .163-.354c.084-.092.223-.159.419-.2h4.76c.506 0 1.65.065 2.589.604zm-9.067 7.53l-.58 3.96h-.013l.593-3.96z" fill="#1F264F"></path></svg></label></li></ul></fieldset><div class="form__submit"><div id="component-paypal-button-checkout" class="component-paypal-button-checkout component-paypal-button-checkout--hidden"><div><div id="zoid-paypal-button-261ab8a12b" class="paypal-button paypal-button-context-iframe paypal-button-label-pay paypal-button-size-responsive paypal-button-layout-horizontal" style="height: 33px;"><style>*@
+      @*#zoid-paypal-button-261ab8a12b {*@
+        @*font-size: 0;*@
+        @*width: 100%;*@
+        @*overflow: hidden;*@
+        @*min-width: 75px;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b.paypal-button-size-responsive {*@
+        @*text-align: center;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b > .zoid-outlet {*@
+        @*display: inline-block;*@
+        @*min-width: 75px;*@
+        @*max-width: 750px;*@
+        @*position: relative;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b.paypal-button-layout-vertical > .zoid-outlet {*@
+        @*min-width: 75px;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b > .zoid-outlet {*@
+        @*width: 150px;*@
+        @*height: 25px;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b.paypal-button-size-responsive > .zoid-outlet {*@
+        @*width: 100%;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe {*@
+        @*min-width: 100%;*@
+        @*max-width: 100%;*@
+        @*width: 75px;*@
+        @*height: 100%;*@
+        @*position: absolute;*@
+        @*top: 0;*@
+        @*left: 0;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-component-frame {*@
+        @*z-index: 100;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-prerender-frame {*@
+        @*transition: opacity .2s linear;*@
+        @*z-index: 200;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-visible {*@
+        @*opacity: 1;*@
+      @*}*@
+
+      @*#zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-invisible {*@
+        @*opacity: 0;*@
+        @*pointer-events: none;*@
+      @*}*@
+    @*</style><div class="zoid-outlet" style="height: 33px;*@
+      @*transition: all 0.5s ease-in-out 0.3s;"><iframe class="zoid-component-frame zoid-visible" frameborder="0" allowtransparency="true" name="xcomponent__ppbutton__4__pmrhk2leei5ceyzxgy4tiyzvmfrdeirmej2gczzchirhaylzobqwyllcov2hi33oeiwcey3pnvyg63tfnz2faylsmvxhiir2pmrhezlgei5ce5dpoarh2lbcojsw4zdfojigc4tfnz2ceot3ejzgkzrchirhi33qej6syitqojxxa4zchj5se5dzobsseorcojqxoirmej3gc3dvmurdu6zcmvxhmir2ejyhe33eovrxi2lpnyrcyittor4wyzjchj5sey3pnrxxeir2ejrgy5lfeiwce43jpjsseorcojsxg4dpnzzws5tfeiwce3dbmjswyir2ejygc6jcfqrgyylzn52xiir2ejug64tjpjxw45dbnqrcyitgovxgi2lom5uwg33oomrduztbnrzwk7jmejrw63lnnf2ceotuoj2wklbcozqwy2lemf2gkir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitgovxgi2lom4rdu6zcmfwgy33xmvsceos3luwcezdjonqwy3dpo5swiir2lmrgg4tfmruxiirmej3gk3tnn4rf2lbcojsw2zlnmjsxezleei5fwitqmf4xaylmeiwcey3smvsgs5bcluwce4tfnvsw2ytfoirdu6zcl5pxi6lqmvpv6ir2ejpv6ztvnzrxi2lpnzpv6it5puwce33oinwgsy3lei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejygc6lnmvxhiir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitpnzaxk5din5zgs6tfei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejsg63lbnfxceorcon2xa4dpoj2c45dimvtxkylsmruwc3romnxw2irmejzwk43tnfxw4skeei5cemjymyzwcmbqgu4dgx3hme2hi5lnpj4wq2jsoryselbcmj2xi5dpnzjwk43tnfxw4skeei5cenzqgbtdgodgg5rdox3hme2hi5lnpj4wq2jsoryselbcnvsxiyjchj5x2lbconxxk4tdmurduitnmfxhkylmeiwce4dsmvtgk5ddnbgg6z3jnyrduztbnrzwklbcn5xfezlomrsxeir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitpnzcxe4tpoirdu6zcl5pxi6lqmvpv6ir2ejpv6ztvnzrxi2lpnzpv6it5fqrg63sdmfxggzlmei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejwg6y3bnrsseorcmvxf6vkteiwce3dpm5ggk5tfnqrduitxmfzg4irmejqxoyljorig64dvobbhe2lem5sseot3ejpv65dzobsv6xzchirf6x3govxgg5djn5xf6xzcpuwce43vobygyzlnmvxhiir2pmrgozlukbqxs3lfnz2e64dunfxw44zchj5sex27or4xazk7l4rduis7l5thk3tdoruw63s7l4rh2lbcmfsgiudbpfwwk3tuirsxiyljnrzseot3ejpv65dzobsv6xzchirf6x3govxgg5djn5xf6xzcpuwcez3forigc6lnmvxhirdforqws3dtei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7l5fqrhizltoqrdu6zcmfrxi2lpnyrduitdnbswg23pov2ce7jmej2wszbchirdenrrmfrdqyjrgjrcelbcozsxe43jn5xceorcgqrh27jmejuwiir2eiydqyzvmi3dgmdcgercyiten5wwc2loei5ce2duoryhgorpf5zxk4dqn5zhiltunbswo5lbojsgsylofzrw63jcpu__" title="ppbutton" scrolling="no" allowpaymentrequest="allowpaymentrequest" src="https://www.paypal.com/webapps/hermes/button?env=production&amp;style.color=blue&amp;style.size=responsive&amp;style.label=pay&amp;style.layout=horizontal&amp;style.fundingicons=false&amp;commit=1&amp;funding.disallowed=credit%2Cvenmo&amp;funding.remembered=paypal%2Ccredit&amp;domain=support.theguardian.com&amp;sessionID=18f3a00583_ga4tumzyhi2tq&amp;buttonSessionID=700f38f7b7_ga4tumzyhi2tq&amp;locale.x=en_US&amp;logLevel=warn&amp;sdkMeta=eyJ1cmwiOiJodHRwczovL3d3dy5wYXlwYWxvYmplY3RzLmNvbS9hcGkvY2hlY2tvdXQuanMifQ%3D%3D&amp;uid=261ab8a12b&amp;version=4&amp;xcomponent=1" style="background-color: transparent;"></iframe></div></div></div></div><div class="form__submit--contribution"><button class="button button--right-arrow form__submit-button" type="submit" aria-describedby="accessibility-hint-submit-contribution">*@
+      @*Contribute £100 a year <p id="accessibility-hint-submit-contribution" class="accessibility-hint">*@
+      @*Contribute £100 a year </p><svg class="svg-arrow-right-straight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 17.89" preserveAspectRatio="xMinYMid"><path d="M20 9.35l-9.08 8.54-.86-.81 6.54-7.31H0V8.12h16.6L10.06.81l.86-.81L20 8.51v.84z"></path></svg></button></div></div><div class="component-terms-privacy"><div class="component-terms-privacy__change">*@
+      @*Monthly contributions are billed each month and annual contributions are billed once a year. You can change how much you give or cancel your contributions at any time.</div><div class="component-terms-privacy__terms">*@
+      @*By proceeding, you are agreeing to our <a href="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions">*@
+      @*Terms and Conditions</a>*@
+      @*. To find out what personal data we collect and how we use it, please visit our <a href="https://www.theguardian.com/help/privacy-policy">*@
+      @*Privacy Policy</a>*@
+      @*.</div></div></form></div><div class="gu-content__bg"><svg class="svg-contributions-bg-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620"><circle fill="#E7D4B9" cx="213" cy="273" r="70"></circle><circle fill="#FEC8D3" cx="1280" cy="369" r="140"></circle><circle fill="#BB3B7F" cx="1152" cy="136" r="125"></circle><circle fill="#00B2FF" cx="138" cy="475" r="145"></circle><circle fill="#FF4E36" cx="748" cy="165" r="58"></circle><circle fill="#FAB375" cx="915" cy="395" r="225"></circle><circle fill="#FFFFFF" cx="1169" cy="549" r="70"></circle></svg></div></main><footer class="component-footer" role="contentinfo"><div class="component-footer__content"><small class="component-footer__copyright">*@
+      @*© 2019 Guardian News and Media Limited or its*@
+      @*affiliated companies. All rights reserved.</small><p class="component-contrib-legal">*@
+      @*The ultimate owner of the Guardian is The Scott Trust Limited, whose role it is to secure the editorial and financial independence of the Guardian in perpetuity. Reader contributions support the Guardian’s journalism. Please note that your support of the Guardian’s journalism does not constitute a charitable donation, as such your contribution is not eligible for Gift Aid in the UK nor a tax-deduction elsewhere. If you have any questions about contributing to the Guardian, please <a href="mailto:contribution.support@@theguardian.com">*@
+      @*contact us here</a>.</p></div></footer></div></div></div>*@
+
+    @*<script type="text/javascript">*@
+    @*window.guardian = window.guardian || {};*@
+    @*window.guardian.gitCommitId = '1ef1d80313355bf2f2d136a8258d8def6f98dffc';*@
+	@*</script>*@
 
 
+    @*<script type="text/javascript">*@
+    @*window.guardian = window.guardian || {};*@
+    @*;*@
+    @*window.guardian.stripeKeyDefaultCurrencies = {*@
+      @*ONE_OFF: {*@
+        @*default: "pk_live_auSwLB4KBzbN3JOUVHvKMe6f",*@
+        @*uat: "pk_test_35RZz9AAyqErQshL410RDZMs"*@
+      @*},*@
+      @*REGULAR: {*@
+        @*default: "pk_live_2O6zPMHXNs2AGea4bAmq5R7Z",*@
+        @*uat: "pk_test_Qm3CGRdrV4WfGYCpm0sftR0f"*@
+      @*}*@
+    @*};*@
+    @*window.guardian.stripeKeyAustralia = {*@
+      @*ONE_OFF: {*@
+        @*default: "pk_live_HRYGcMzpbqY7ehLuUkdqvIDE",*@
+        @*uat: "pk_test_I1ts3iShWrjssTavL0b7QXQ6"*@
+      @*},*@
+      @*REGULAR: {*@
+        @*default: "pk_live_57xV50eFjPIA990PEGWJwoHp",*@
+        @*uat: "pk_test_m0sjR1tGM22fpaz48csa49us"*@
+      @*}*@
+    @*};*@
+    @*window.guardian.payPalEnvironment = {*@
+      @*default: "production",*@
+      @*uat: "sandbox"*@
+    @*};*@
+    @*window.guardian.paymentApiStripeEndpoint = "https://payment.guardianapis.com/contribute/one-off/stripe/execute-payment";*@
+    @*window.guardian.paymentApiPayPalEndpoint = "https://payment.guardianapis.com/contribute/one-off/paypal/create-payment";*@
+    @*window.guardian.csrf = { token: "5536a5dda4c2473a53797b71b724af80dd61d9d6-1548409130986-1f978b234633dc5093cf60e3" };*@
+  @*</script>*@
 
-  <link rel="stylesheet" href="/assets/stylesheets/newContributionsLandingPageStyles.2966ddd67f6ac3a216c7.css">
-  <link rel="shortcut icon" type="image/png" href="/assets/images/favicons/32x32.46bd2faa1ab438684a6d4528a655a8bd.ico">
-  <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/favicons/152x152.fee5e2d638d1c35f6d501fa397e53329.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="/assets/images/favicons/144x144.1fe70b29879674433702d5266abcb0d4.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="/assets/images/favicons/120x120.c58143bd2a5b5426b6256cd90ba6eb47.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="/assets/images/favicons/114x114.68cbd5cf267598abd6a026f229ef6b45.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="/assets/images/favicons/72x72.873381bf11d58e20f551905d51575117.png">
-  <link rel="apple-touch-icon-precomposed" href="/assets/images/favicons/57x57.6a2aa0ea5b4b6183e92d0eac49e2f58b.png">
+      @*<!-- build-commit-id: 1ef1d80313355bf2f2d136a8258d8def6f98dffc -->*@
+    @*<div id="teleporter-wrapper"></div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeController1" allowpaymentrequest="true" src="https://js.stripe.com/v3/controller-8640d537ef5b287656b3c45ceb0f89f9.html#apiKey=pk_live_auSwLB4KBzbN3JOUVHvKMe6f&amp;stripeJsId=9ea875fc-f2dc-4877-a93a-a688fe59a8f3&amp;origin=https%3A%2F%2Fsupport.theguardian.com&amp;referrer=https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fcontribute&amp;controllerId=__privateStripeController1" aria-hidden="true" tabindex="-1" style="border: none !important;*@
+    @*margin: 0px !important;*@
+    @*padding: 0px !important;*@
+    @*width: 1px !important;*@
+    @*min-width: 100% !important;*@
+    @*overflow: hidden !important;*@
+    @*display: block !important;*@
+    @*visibility: hidden !important;*@
+    @*position: fixed !important;*@
+    @*height: 1px !important;*@
+    @*pointer-events: none !important;"></iframe><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeFrame3" allowpaymentrequest="true" src="https://js.stripe.com/v3/payment-request-inner-d069d2b4f83f2becee7b2230f66beb31.html#authentication[apiKey]=pk_live_auSwLB4KBzbN3JOUVHvKMe6f&amp;mids[guid]=NA&amp;mids[muid]=c42568bd-d9d9-4c55-883b-bef200195e8a&amp;mids[sid]=64de7fee-92e8-4dd9-baff-68ced1af35a8&amp;origin=https%3A%2F%2Fsupport.theguardian.com&amp;referrer=https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fcontribute&amp;controllerId=__privateStripeController1" aria-hidden="true" tabindex="-1" style="border: none !important;*@
+    @*margin: 0px !important;*@
+    @*padding: 0px !important;*@
+    @*width: 1px !important;*@
+    @*min-width: 100% !important;*@
+    @*overflow: hidden !important;*@
+    @*display: block !important;*@
+    @*visibility: hidden !important;*@
+    @*position: fixed !important;*@
+    @*height: 1px !important;*@
+    @*pointer-events: none !important;"></iframe>*@
 
-  <link rel="preload" href="/assets/fonts/GHGuardianHeadline-Bold.woff2" as="font" type="font/woff2" crossorigin="">
-  <link rel="preload" href="/assets/fonts/GHGuardianHeadline-BoldItalic.woff2" as="font" type="font/woff2" crossorigin="">
-  <link rel="preload" href="/assets/fonts/GHGuardianHeadline-Light.woff2" as="font" type="font/woff2" crossorigin="">
-  <link rel="preload" href="/assets/fonts/GHGuardianHeadline-LightItalic.woff2" as="font" type="font/woff2" crossorigin="">
-  <link rel="preload" href="/assets/fonts/GHGuardianHeadline-Regular.woff2" as="font" type="font/woff2" crossorigin="">
-  <link rel="preload" href="/assets/fonts/GHGuardianHeadline-Semibold.woff2" as="font" type="font/woff2" crossorigin="">
+    @*// Using Globals __exst.prtcl to produce page attribute __exst.prtcl*@
 
-  <script type="application/ld+json">
-		{
-			"@@context": "http://schema.org",
-			"@@type": "Organization",
-			"name": "Support the Guardian",
-			"url": "https://support.theguardian.com",
-			"logo": "https://support.theguardian.com/assets/images/favicons/152x152.fee5e2d638d1c35f6d501fa397e53329.png"
-		}
-	</script>
-
-  <script async="" type="text/javascript" src="/assets/javascripts/googleTagManagerScript.df9d6a008f819a689ff8.js"></script>
-
-  <link rel="preload" as="script" href="/assets/javascripts/newContributionsLandingPage.5036c588096990c44e95.js">
-
-
-  <script src="https://checkout.stripe.com/checkout.js"></script><script src="https://www.paypalobjects.com/api/checkout.js"></script><script src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/971225648/?random=1548409138367&amp;cv=9&amp;fst=1548409138367&amp;num=1&amp;guid=ON&amp;resp=GooglemKTybQhCsO&amp;u_h=800&amp;u_w=1280&amp;u_ah=777&amp;u_aw=1280&amp;u_cd=24&amp;u_his=2&amp;u_tz=0&amp;u_java=false&amp;u_nplug=3&amp;u_nmime=4&amp;gtm=2wg1d1&amp;sendb=1&amp;frm=0&amp;url=https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fcontribute&amp;tiba=Support%20the%20Guardian%20%7C%20Make%20a%20Contribution&amp;async=1&amp;rfmt=3&amp;fmt=4"></script><script async="true" id="xo-pptm" src="https://www.paypal.com/tagmanager/pptm.js?id=support.theguardian.com&amp;t=xo"></script></head>
-  <body class="header-tweaks" data-gr-c-s-loaded="true" cz-shortcut-listen="true">
-    <noscript>
-      <div style="text-align: center;
-        font-size: 30px;
-        padding-left: 20px;
-        padding-right: 20px;
-        background-color: #e9e939;">
-      Please enable JavaScript - we use it to provide the best experience for Guardian&nbsp;Supporters.<br/>
-        <a href="https://www.enable-javascript.com/">Click here for instructions to do so in your browser.</a>
-    </div>
-    </noscript>
-
-    <div id="new-contributions-landing-page-uk"><div><div class="gu-content gu-content--contribution-form"><header role="banner" class="gu-content__header"><a class="glogo" href="https://www.theguardian.com"><svg class="svg-roundel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 69 69" preserveAspectRatio="xMinYMid" aria-labelledby="svg-roundel-title"><title id="svg-roundel-title">The Guardian</title><path class="svg-roundel__bg" d="M34.5 0C15.446 0 0 15.446 0 34.5 0 53.554 15.446 69 34.5 69 53.554 69 69 53.554 69 34.5A34.5 34.5 0 0 0 34.5 0" fill="#fff"></path><path class="svg-roundel__g" d="M40.25 8.552c4.46.711 10.123 3.752 12.15 5.923v9.81h-1.228L40.25 9.655V8.552zm-4.103.613h-.11c-7.802 0-12.04 10.791-12.04 25.335 0 14.556 4.238 25.335 12.04 25.335h.11v1.116c-11.745.797-27.544-8.13-27.139-26.463C8.59 16.179 24.39 7.252 36.147 8.049v1.116zM56 36.793l-3.686 1.594V54.87a29.827 29.827 0 0 1-12.064 5.923V38.08l-4.054-1.337v-1.116H56v1.165z" fill="#121212"></path></svg></a><details class="countryGroups"><summary aria-label="Selected country: United Kingdom (£)"><div class="countryGroups__summary-wrapper"><svg class="svg-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" preserveAspectRatio="xMinYMid"><path d="M23.7,22.4 L45.8,22.4 L45.8,0.5 C40.7,0.7 35.6,1.8 30.8,3.7 C29.3,6 28,8.5 27,11.2 C25.6,14.8 24.5,18.6 23.7,22.4"></path><path d="M22,9.2 C22.2,8.7 22.4,8.2 22.6,7.7 C16.6,11.4 11.6,16.4 7.8,22.4 L18.2,22.4 C19.1,17.9 20.4,13.5 22,9.2"></path><path d="M15.8,50.7 L0.5,50.7 C0.8,56.8 2.3,62.7 4.9,68.2 L17.2,68.2 C16.3,62.4 15.9,56.5 15.8,50.7"></path><path d="M17.2,27.8 L4.9,27.8 C2.3,33.3 0.8,39.2 0.5,45.3 L15.8,45.3 C15.9,39.4 16.4,33.6 17.2,27.8"></path><path d="M78.8,22.4 L88.2,22.4 C84.7,16.9 80.1,12.2 74.7,8.5 C74.8,8.7 74.9,9 75,9.2 C76.6,13.5 77.9,17.9 78.8,22.4"></path><path d="M81.2,45.3 L95.5,45.3 C95.2,39.2 93.7,33.3 91.1,27.8 L79.7,27.8 C80.6,33.6 81.1,39.4 81.2,45.3"></path><path d="M73.3,22.4 C72.5,18.6 71.4,14.8 70,11.2 C69.1,8.7 67.9,6.4 66.5,4.1 C61.6,2.1 56.4,0.9 51.2,0.6 L51.2,22.5 L73.3,22.5 L73.3,22.4 Z"></path><path d="M51.2,68.2 L74.3,68.2 C75.2,62.4 75.7,56.6 75.8,50.7 L51.2,50.7 L51.2,68.2 Z"></path><path d="M79.7,68.2 L91.1,68.2 C93.7,62.7 95.2,56.8 95.5,50.7 L81.2,50.7 C81.1,56.5 80.6,62.4 79.7,68.2"></path><path d="M73.3,73.5 L51.2,73.5 L51.2,95.4 C56.5,95.1 61.6,93.9 66.5,91.9 C67.9,89.7 69.1,87.3 70,84.8 C71.4,81.1 72.5,77.4 73.3,73.5"></path><path d="M23.7,73.5 C24.5,77.3 25.6,81.1 27,84.8 C28,87.5 29.3,90 30.8,92.4 C35.6,94.3 40.7,95.3 45.8,95.6 L45.8,73.6 L23.7,73.5 Z"></path><path d="M45.8,27.8 L22.6,27.8 C21.7,33.6 21.2,39.4 21.1,45.3 L45.8,45.3 L45.8,27.8 Z"></path><path d="M75,86.7 C74.9,87 74.8,87.2 74.7,87.4 C80.1,83.7 84.7,79 88.2,73.5 L78.8,73.5 C77.9,78 76.6,82.4 75,86.7"></path><path d="M75.8,45.3 C75.7,39.4 75.2,33.6 74.3,27.8 L51.2,27.8 L51.2,45.3 L75.8,45.3 Z"></path><path d="M18.2,73.5 L7.8,73.5 C11.6,79.4 16.6,84.5 22.6,88.2 C22.4,87.7 22.1,87.2 22,86.7 C20.4,82.4 19.1,78 18.2,73.5"></path><path d="M21.1,50.7 C21.2,56.6 21.7,62.4 22.6,68.2 L45.7,68.2 L45.7,50.7 L21.1,50.7 Z"></path></svg><span class="countryGroups__label">United Kingdom (£)</span><span class="icon icon--arrows"><svg class="svg-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 10" preserveAspectRatio="xMinYMid"><path d="M1.25.5l-.75.75L9 9.5h.95l8.55-8.25-.75-.75L9.5 7.25z"></path></svg></span></div></summary><ul class="countryGroups__list"><li class="countryGroups__item"><a href="/uk/contribute">United Kingdom (£)<span class="icon"><svg class="svg-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 14" preserveAspectRatio="xMinYMid"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z"></path></svg></span></a></li><li class="countryGroups__item"><a href="/us/contribute">United States (US$)</a></li><li class="countryGroups__item"><a href="/au/contribute">Australia (AU$)</a></li><li class="countryGroups__item"><a href="/eu/contribute">Europe (€)</a></li><li class="countryGroups__item"><a href="/int/contribute">International (US$)</a></li><li class="countryGroups__item"><a href="/nz/contribute">New Zealand (NZ$)</a></li><li class="countryGroups__item"><a href="/ca/contribute">Canada (CA$)</a></li></ul></details></header><main role="main" class="gu-content__main"><div class="gu-content__content"><h1 class="header ">Help us deliver the independent journalism the world needs</h1><p class="blurb">
-  Make a recurring commitment to support The&nbsp;Guardian long-term or a single contribution
-      as and when you feel like it – choose the option that suits you best.
-    </p><form class="form form--contribution" novalidate=""><fieldset class="form__radio-group form__radio-group--tabs form__radio-group--contribution-type"><legend class="form__legend form__legend--radio-group">Recurrence</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="contributionType-ONE_OFF" class="form__radio-group-input" type="radio" name="contributionType" value="ONE_OFF"><label for="contributionType-ONE_OFF" class="form__radio-group-label">Single</label></li><li class="form__radio-group-item"><input id="contributionType-MONTHLY" class="form__radio-group-input" type="radio" name="contributionType" value="MONTHLY"><label for="contributionType-MONTHLY" class="form__radio-group-label">Monthly</label></li><li class="form__radio-group-item"><input id="contributionType-ANNUAL" class="form__radio-group-input" type="radio" name="contributionType" value="ANNUAL"><label for="contributionType-ANNUAL" class="form__radio-group-label">Annual</label></li></ul></fieldset><fieldset class="form__radio-group form__radio-group--pills form__radio-group--contribution-amount"><legend class="form__legend form__legend--radio-group">Amount</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="contributionAmount-50" class="form__radio-group-input" type="radio" name="contributionAmount" value="50"><label for="contributionAmount-50" class="form__radio-group-label" aria-label="50 pounds">£50</label></li><li class="form__radio-group-item"><input id="contributionAmount-100" class="form__radio-group-input" type="radio" name="contributionAmount" value="100"><label for="contributionAmount-100" class="form__radio-group-label" aria-label="100 pounds">£100</label></li><li class="form__radio-group-item"><input id="contributionAmount-250" class="form__radio-group-input" type="radio" name="contributionAmount" value="250"><label for="contributionAmount-250" class="form__radio-group-label" aria-label="250 pounds">£250</label></li><li class="form__radio-group-item"><input id="contributionAmount-500" class="form__radio-group-input" type="radio" name="contributionAmount" value="500"><label for="contributionAmount-500" class="form__radio-group-label" aria-label="500 pounds">£500</label></li><li class="form__radio-group-item"><input id="contributionAmount-other" class="form__radio-group-input" type="radio" name="contributionAmount" value="other"><label for="contributionAmount-other" class="form__radio-group-label">Other</label></li></ul></fieldset><div class="stripe-payment-request-button stripe-payment-request-button--hidden"></div><div class="form-fields"><div class="form__field form__field--contribution-email"><label class="form__label" for="contributionEmail">Email address</label><span class="form__input-with-icon"><input id="contributionEmail" class="form__input form__input--contributionEmail" type="email" autocapitalize="none" autocomplete="email" required="" placeholder="example@@domain.com" pattern="^[a-zA-Z0-9\.!#$%&amp;'*+/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT/fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ/oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/wxZKQcGurQs5oNhqLshzVTMBewW/LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d/YP/g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN/1ov+/drgFWIlfKpVukyYihtgkXNp4mABK+1GtVr+SBhJDbBIubVw+Cd/TDgKO2DPiN3YUo6y/nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;"><span class="form__icon"><svg class="svg-envelope" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 10" preserveAspectRatio="xMinYMid"><path d="M.902 0L8 6.213 15.098 0H.902zM0 .787v8.42l4.787-4.232L0 .787zm16 0l-4.787 4.188L16 9.206V.787zM5.689 5.763L.896 10h14.208L10.31 5.763 8.378 7.456a.575.575 0 0 1-.756 0L5.689 5.763z"></path></svg></span></span></div><div><div class="form__field form__field--contribution-fname"><label class="form__label" for="contributionFirstName">First name</label><span class="form__input-with-icon"><input id="contributionFirstName" class="form__input form__input--contributionFirstName" type="text" autocapitalize="words" autocomplete="given-name" required=""><span class="form__icon"><svg class="svg-user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" preserveAspectRatio="xMinYMid"><path d="M10 8.3c1.55 0 3.4-1.75 3.4-3.9S12.15 1 10 1 6.6 2.25 6.6 4.4s2 3.9 3.4 3.9zm5.86 3.4l-.86-.82c-1.67-.58-3.14-.88-5-.88-1.87 0-3.32.3-5 .86l-.86.85L2 18.16l.86.84h14.28l.86-.86-2.14-6.42v-.02z"></path></svg></span></span></div><div class="form__field form__field--contribution-lname"><label class="form__label" for="contributionLastName">Last name</label><span class="form__input-with-icon"><input id="contributionLastName" class="form__input form__input--contributionLastName" type="text" autocapitalize="words" autocomplete="family-name" required=""><span class="form__icon"><svg class="svg-user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" preserveAspectRatio="xMinYMid"><path d="M10 8.3c1.55 0 3.4-1.75 3.4-3.9S12.15 1 10 1 6.6 2.25 6.6 4.4s2 3.9 3.4 3.9zm5.86 3.4l-.86-.82c-1.67-.58-3.14-.88-5-.88-1.87 0-3.32.3-5 .86l-.86.85L2 18.16l.86.84h14.28l.86-.86-2.14-6.42v-.02z"></path></svg></span></span></div></div></div><fieldset class="form__radio-group form__radio-group--buttons form__radio-group--contribution-pay"><legend class="form__legend">Payment method</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="paymentMethodSelector-DirectDebit" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="DirectDebit"><label for="paymentMethodSelector-DirectDebit" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">Direct debit</span><svg class="svg-new-credit-card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14" preserveAspectRatio="xMinYMid"><path d="M22 3.652H0V1.326C0 .594.58 0 1.295 0h19.41C21.42 0 22 .594 22 1.326v2.326zm0 1.826v7.196c0 .733-.58 1.326-1.295 1.326H1.295C.58 14 0 13.407 0 12.674V5.478h22zM2.494 9.74a.609.609 0 0 0 0 1.218h3.183a.609.609 0 1 0 0-1.218H2.494z" fill="#00B2FF"></path></svg></label></li><li class="form__radio-group-item"><input id="paymentMethodSelector-Stripe" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="Stripe"><label for="paymentMethodSelector-Stripe" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">Credit/Debit card</span><svg class="svg-new-credit-card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14" preserveAspectRatio="xMinYMid"><path d="M22 3.652H0V1.326C0 .594.58 0 1.295 0h19.41C21.42 0 22 .594 22 1.326v2.326zm0 1.826v7.196c0 .733-.58 1.326-1.295 1.326H1.295C.58 14 0 13.407 0 12.674V5.478h22zM2.494 9.74a.609.609 0 0 0 0 1.218h3.183a.609.609 0 1 0 0-1.218H2.494z" fill="#00B2FF"></path></svg></label></li><li class="form__radio-group-item"><input id="paymentMethodSelector-PayPal" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="PayPal"><label for="paymentMethodSelector-PayPal" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">PayPal</span><svg class="svg-paypal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 18" preserveAspectRatio="xMinYMid"><path d="M2.334.637L.01 15.407c-.074.458.27.687 1.032.687h2.875l.804-5.483c.114-.366.313-.549.597-.549h2.674C11 9.735 12.835 8.029 13.5 4.942 14.495.313 10.031 0 8.783 0H3.036C2.8.048 2.631.124 2.53.23a.773.773 0 0 0-.196.407z" fill="#27346A"></path><path d="M5.633 4.554l-1.925 12.85c-.061.397.224.596.855.596h2.382c.34-.073.537-.205.59-.395.053-.19.298-1.628.734-4.312.087-.21.27-.314.55-.314s.891-.04 1.836-.12c2.268-.355 3.676-1.875 4.226-4.56C15.706 4.274 12.01 4 10.975 4h-4.76c-.196.041-.335.108-.419.2a.687.687 0 0 0-.163.354z" fill="#2790C3"></path><path d="M13.564 4.604a7.13 7.13 0 0 1-.065.338c-.664 3.087-2.5 4.793-5.507 5.12H5.318c-.276 0-.472.173-.588.52l.903-6.028a.687.687 0 0 1 .163-.354c.084-.092.223-.159.419-.2h4.76c.506 0 1.65.065 2.589.604zm-9.067 7.53l-.58 3.96h-.013l.593-3.96z" fill="#1F264F"></path></svg></label></li></ul></fieldset><div class="form__submit"><div id="component-paypal-button-checkout" class="component-paypal-button-checkout component-paypal-button-checkout--hidden"><div><div id="zoid-paypal-button-261ab8a12b" class="paypal-button paypal-button-context-iframe paypal-button-label-pay paypal-button-size-responsive paypal-button-layout-horizontal" style="height: 33px;"><style>
-                    #zoid-paypal-button-261ab8a12b {
-                      font-size: 0;
-                      width: 100%;
-                      overflow: hidden;
-                      min-width: 75px;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b.paypal-button-size-responsive {
-                      text-align: center;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b > .zoid-outlet {
-                      display: inline-block;
-                      min-width: 75px;
-                      max-width: 750px;
-                      position: relative;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b.paypal-button-layout-vertical > .zoid-outlet {
-                      min-width: 75px;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b > .zoid-outlet {
-                      width:  150px;
-                      height: 25px;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b.paypal-button-size-responsive > .zoid-outlet {
-                      width: 100%;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe {
-                      min-width: 100%;
-                      max-width: 100%;
-                      width: 75px;
-                      height: 100%;
-                      position: absolute;
-                      top: 0;
-                      left: 0;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-component-frame {
-                      z-index: 100;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-prerender-frame {
-                      transition: opacity .2s linear;
-                      z-index: 200;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-visible {
-                      opacity: 1;
-                    }
-
-                    #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-invisible {
-                      opacity: 0;
-                      pointer-events: none;
-                    }
-                </style><div class="zoid-outlet" style="height: 33px; transition: all 0.5s ease-in-out 0.3s;"><iframe class="zoid-component-frame zoid-visible" frameborder="0" allowtransparency="true" name="xcomponent__ppbutton__4__pmrhk2leei5ceyzxgy4tiyzvmfrdeirmej2gczzchirhaylzobqwyllcov2hi33oeiwcey3pnvyg63tfnz2faylsmvxhiir2pmrhezlgei5ce5dpoarh2lbcojsw4zdfojigc4tfnz2ceot3ejzgkzrchirhi33qej6syitqojxxa4zchj5se5dzobsseorcojqxoirmej3gc3dvmurdu6zcmvxhmir2ejyhe33eovrxi2lpnyrcyittor4wyzjchj5sey3pnrxxeir2ejrgy5lfeiwce43jpjsseorcojsxg4dpnzzws5tfeiwce3dbmjswyir2ejygc6jcfqrgyylzn52xiir2ejug64tjpjxw45dbnqrcyitgovxgi2lom5uwg33oomrduztbnrzwk7jmejrw63lnnf2ceotuoj2wklbcozqwy2lemf2gkir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitgovxgi2lom4rdu6zcmfwgy33xmvsceos3luwcezdjonqwy3dpo5swiir2lmrgg4tfmruxiirmej3gk3tnn4rf2lbcojsw2zlnmjsxezleei5fwitqmf4xaylmeiwcey3smvsgs5bcluwce4tfnvsw2ytfoirdu6zcl5pxi6lqmvpv6ir2ejpv6ztvnzrxi2lpnzpv6it5puwce33oinwgsy3lei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejygc6lnmvxhiir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitpnzaxk5din5zgs6tfei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejsg63lbnfxceorcon2xa4dpoj2c45dimvtxkylsmruwc3romnxw2irmejzwk43tnfxw4skeei5cemjymyzwcmbqgu4dgx3hme2hi5lnpj4wq2jsoryselbcmj2xi5dpnzjwk43tnfxw4skeei5cenzqgbtdgodgg5rdox3hme2hi5lnpj4wq2jsoryselbcnvsxiyjchj5x2lbconxxk4tdmurduitnmfxhkylmeiwce4dsmvtgk5ddnbgg6z3jnyrduztbnrzwklbcn5xfezlomrsxeir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitpnzcxe4tpoirdu6zcl5pxi6lqmvpv6ir2ejpv6ztvnzrxi2lpnzpv6it5fqrg63sdmfxggzlmei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejwg6y3bnrsseorcmvxf6vkteiwce3dpm5ggk5tfnqrduitxmfzg4irmejqxoyljorig64dvobbhe2lem5sseot3ejpv65dzobsv6xzchirf6x3govxgg5djn5xf6xzcpuwce43vobygyzlnmvxhiir2pmrgozlukbqxs3lfnz2e64dunfxw44zchj5sex27or4xazk7l4rduis7l5thk3tdoruw63s7l4rh2lbcmfsgiudbpfwwk3tuirsxiyljnrzseot3ejpv65dzobsv6xzchirf6x3govxgg5djn5xf6xzcpuwcez3forigc6lnmvxhirdforqws3dtei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7l5fqrhizltoqrdu6zcmfrxi2lpnyrduitdnbswg23pov2ce7jmej2wszbchirdenrrmfrdqyjrgjrcelbcozsxe43jn5xceorcgqrh27jmejuwiir2eiydqyzvmi3dgmdcgercyiten5wwc2loei5ce2duoryhgorpf5zxk4dqn5zhiltunbswo5lbojsgsylofzrw63jcpu__" title="ppbutton" scrolling="no" allowpaymentrequest="allowpaymentrequest" src="https://www.paypal.com/webapps/hermes/button?env=production&amp;style.color=blue&amp;style.size=responsive&amp;style.label=pay&amp;style.layout=horizontal&amp;style.fundingicons=false&amp;commit=1&amp;funding.disallowed=credit%2Cvenmo&amp;funding.remembered=paypal%2Ccredit&amp;domain=support.theguardian.com&amp;sessionID=18f3a00583_ga4tumzyhi2tq&amp;buttonSessionID=700f38f7b7_ga4tumzyhi2tq&amp;locale.x=en_US&amp;logLevel=warn&amp;sdkMeta=eyJ1cmwiOiJodHRwczovL3d3dy5wYXlwYWxvYmplY3RzLmNvbS9hcGkvY2hlY2tvdXQuanMifQ%3D%3D&amp;uid=261ab8a12b&amp;version=4&amp;xcomponent=1" style="background-color: transparent;"></iframe></div></div></div></div><div class="form__submit--contribution"><button class="button button--right-arrow form__submit-button" type="submit" aria-describedby="accessibility-hint-submit-contribution">Contribute £100 a year <p id="accessibility-hint-submit-contribution" class="accessibility-hint">Contribute £100 a year </p><svg class="svg-arrow-right-straight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 17.89" preserveAspectRatio="xMinYMid"><path d="M20 9.35l-9.08 8.54-.86-.81 6.54-7.31H0V8.12h16.6L10.06.81l.86-.81L20 8.51v.84z"></path></svg></button></div></div><div class="component-terms-privacy"><div class="component-terms-privacy__change">Monthly contributions are billed each month and annual contributions are billed once a year. You can change how much you give or cancel your contributions at any time.</div><div class="component-terms-privacy__terms">By proceeding, you are agreeing to our <a href="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions">Terms and Conditions</a>. To find out what personal data we collect and how we use it, please visit our <a href="https://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.</div></div></form></div><div class="gu-content__bg"><svg class="svg-contributions-bg-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620"><circle fill="#E7D4B9" cx="213" cy="273" r="70"></circle><circle fill="#FEC8D3" cx="1280" cy="369" r="140"></circle><circle fill="#BB3B7F" cx="1152" cy="136" r="125"></circle><circle fill="#00B2FF" cx="138" cy="475" r="145"></circle><circle fill="#FF4E36" cx="748" cy="165" r="58"></circle><circle fill="#FAB375" cx="915" cy="395" r="225"></circle><circle fill="#FFFFFF" cx="1169" cy="549" r="70"></circle></svg></div></main><footer class="component-footer" role="contentinfo"><div class="component-footer__content"><small class="component-footer__copyright">© 2019 Guardian News and Media Limited or its
-      affiliated companies. All rights reserved.</small><p class="component-contrib-legal">The ultimate owner of the Guardian is The Scott Trust Limited, whose role it is to secure the editorial and financial independence of the Guardian in perpetuity. Reader contributions support the Guardian’s journalism. Please note that your support of the Guardian’s journalism does not constitute a charitable donation, as such your contribution is not eligible for Gift Aid in the UK nor a tax-deduction elsewhere. If you have any questions about contributing to the Guardian, please <a href="mailto:contribution.support@@theguardian.com">contact us here</a>.</p></div></footer></div></div></div>
-
-    <script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
-    <script defer="" id="stripe-js" src="https://js.stripe.com/v3/"></script>
-    <script type="text/javascript">
-    window.guardian = window.guardian || {};
-    window.guardian.gitCommitId = '1ef1d80313355bf2f2d136a8258d8def6f98dffc';
-	</script>
-
-
-    <script type="text/javascript">
-    window.guardian = window.guardian || {};
-    ;
-    window.guardian.stripeKeyDefaultCurrencies = {
-      ONE_OFF: {
-        default: "pk_live_auSwLB4KBzbN3JOUVHvKMe6f",
-        uat: "pk_test_35RZz9AAyqErQshL410RDZMs"
-      },
-      REGULAR: {
-        default: "pk_live_2O6zPMHXNs2AGea4bAmq5R7Z",
-        uat: "pk_test_Qm3CGRdrV4WfGYCpm0sftR0f"
-      }
-    };
-    window.guardian.stripeKeyAustralia = {
-      ONE_OFF: {
-        default: "pk_live_HRYGcMzpbqY7ehLuUkdqvIDE",
-        uat: "pk_test_I1ts3iShWrjssTavL0b7QXQ6"
-      },
-      REGULAR: {
-        default: "pk_live_57xV50eFjPIA990PEGWJwoHp",
-        uat: "pk_test_m0sjR1tGM22fpaz48csa49us"
-      }
-    };
-    window.guardian.payPalEnvironment = {
-      default: "production",
-      uat: "sandbox"
-    };
-    window.guardian.paymentApiStripeEndpoint = "https://payment.guardianapis.com/contribute/one-off/stripe/execute-payment";
-    window.guardian.paymentApiPayPalEndpoint = "https://payment.guardianapis.com/contribute/one-off/paypal/create-payment";
-    window.guardian.csrf = { token: "5536a5dda4c2473a53797b71b724af80dd61d9d6-1548409130986-1f978b234633dc5093cf60e3" };
-  </script>
-
-
-
-    <script type="text/javascript" src="/assets/javascripts/newContributionsLandingPage.5036c588096990c44e95.js"></script>
-      <!-- build-commit-id: 1ef1d80313355bf2f2d136a8258d8def6f98dffc -->
-
-
-
-    <div id="teleporter-wrapper"></div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeController1" allowpaymentrequest="true" src="https://js.stripe.com/v3/controller-8640d537ef5b287656b3c45ceb0f89f9.html#apiKey=pk_live_auSwLB4KBzbN3JOUVHvKMe6f&amp;stripeJsId=9ea875fc-f2dc-4877-a93a-a688fe59a8f3&amp;origin=https%3A%2F%2Fsupport.theguardian.com&amp;referrer=https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fcontribute&amp;controllerId=__privateStripeController1" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeFrame3" allowpaymentrequest="true" src="https://js.stripe.com/v3/payment-request-inner-d069d2b4f83f2becee7b2230f66beb31.html#authentication[apiKey]=pk_live_auSwLB4KBzbN3JOUVHvKMe6f&amp;mids[guid]=NA&amp;mids[muid]=c42568bd-d9d9-4c55-883b-bef200195e8a&amp;mids[sid]=64de7fee-92e8-4dd9-baff-68ced1af35a8&amp;origin=https%3A%2F%2Fsupport.theguardian.com&amp;referrer=https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fcontribute&amp;controllerId=__privateStripeController1" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe>
-    <script type="text/javascript" id="">!function(b,e,f,g,a,c,d){b.fbq||(a=b.fbq=function(){a.callMethod?a.callMethod.apply(a,arguments):a.queue.push(arguments)},b._fbq||(b._fbq=a),a.push=a,a.loaded=!0,a.version="2.0",a.queue=[],c=e.createElement(f),c.async=!0,c.src=g,d=e.getElementsByTagName(f)[0],d.parentNode.insertBefore(c,d))}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","593826000802199");fbq("track","PageView");</script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=593826000802199&amp;ev=PageView&amp;noscript=1"></noscript>
-
-
-    <script type="text/javascript" id="">window.Krux||((Krux=function(){Krux.q.push(arguments)}).q=[]);(function(){var a=document.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===location.protocol?"https:":"http:")+"//cdn.krxd.net/controltag/r8nsxz49j.js";var b=document.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)})();</script>
-    <script type="text/javascript" id="">fbq("track","ViewContent");</script><iframe frameborder="0" allowtransparency="true" src="https://checkout.stripe.com/m/v3/index-3f0dc197837628f45156bf4f7ed0f6ad.html?distinct_id=4cf07d3b-8c57-fc91-a6eb-409f02e8fe2e" name="stripe_checkout_app" class="stripe_checkout_app" style="z-index: 2147483647; display: none; background: rgba(0, 0, 0, 0.004); border: 0px none transparent; overflow: hidden auto; visibility: visible; margin: 0px; padding: 0px; -webkit-tap-highlight-color: transparent; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;"></iframe><div style="width:0px; height:0px; display:none; visibility:hidden;" id="batBeacon0.45592561275952903"><img style="width:0px; height:0px; display:none; visibility:hidden;" id="batBeacon0.03486188188721351" width="0" height="0" alt="" src="https://bat.bing.com/action/0?ti=5039324&amp;Ver=2&amp;mid=72616e6c-20fb-df69-5b5a-fe159fbdd511&amp;pi=1200101525&amp;lg=en-US&amp;sw=1280&amp;sh=800&amp;sc=24&amp;tl=Support%20the%20Guardian%20%7C%20Make%20a%20Contribution&amp;p=https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fcontribute&amp;r=&amp;lt=938&amp;evt=pageLoad&amp;msclkid=N&amp;rn=811649"></div><iframe frameborder="0" allowtransparency="true" src="https://checkout.stripe.com/m/v3/index-3f0dc197837628f45156bf4f7ed0f6ad.html?distinct_id=4cf07d3b-8c57-fc91-a6eb-409f02e8fe2e" name="stripe_checkout_app" class="stripe_checkout_app" style="z-index: 2147483647; display: none; background: rgba(0, 0, 0, 0.004); border: 0px none transparent; overflow: hidden auto; visibility: visible; margin: 0px; padding: 0px; -webkit-tap-highlight-color: transparent; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;"></iframe><iframe frameborder="0" allowtransparency="true" src="https://checkout.stripe.com/m/v3/index-3f0dc197837628f45156bf4f7ed0f6ad.html?distinct_id=4cf07d3b-8c57-fc91-a6eb-409f02e8fe2e" name="stripe_checkout_app" class="stripe_checkout_app" style="z-index: 2147483647; display: none; background: rgba(0, 0, 0, 0.004); border: 0px none transparent; overflow: hidden auto; visibility: visible; margin: 0px; padding: 0px; -webkit-tap-highlight-color: transparent; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%;"></iframe><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="https://js.stripe.com/v2/m/outer.html#url=https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fcontribute&amp;title=Support%20the%20Guardian%20%7C%20Make%20a%20Contribution&amp;referrer=&amp;muid=c42568bd-d9d9-4c55-883b-bef200195e8a&amp;sid=64de7fee-92e8-4dd9-baff-68ced1af35a8&amp;preview=false" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe><div class="kxhead" data-id="r8nsxz49j" style="display:none !important;"><span class="kxtag kxinvisible" data-id="21135"><script>
-// Using Globals __exst.prtcl to produce page attribute __exst.prtcl
-Krux('scrape', { 'page_attr___exst.prtcl': {js_global: "__exst.prtcl"}});
-</script></span><span class="kxtag kxinvisible" data-id="21151"><script>
-(function() {
-  // Using Globals F09828._rsiYa to produce page attribute referrer
-  Krux('scrape', { 'page_attr_referrer': {js_global: "F09828._rsiYa"}});
-})();
-</script></span><span class="kxtag kxinvisible" data-id="21161"><script>
-(function() {
-
-    /* Data Transfer Code for telegraph */
-    Krux("set", {
-        "user_attr_dma": Krux('get', 'user_attr_kx_geo_dma')
-    });
-    Krux("set", {
-        "user_attr_country": Krux('get', 'user_attr_kx_geo_country')
-    });
-    Krux("set", {
-        "user_attr_region": Krux('get', 'user_attr_kx_geo_region')
-    });
-
-})();
-</script></span><span class="kxtag kxinvisible" data-id="21162"><script type="text/javascript">Krux('social.init');</script></span><span class="kxtag kxinvisible" data-id="32900"><script>
-(function(){
-
-    Krux('scrape',{'page_attr_support_url_path_1':{'url_path':'1'}});
-    Krux('scrape',{'page_attr_support_url_path_2':{'url_path':'2'}});
-    Krux('scrape',{'page_attr_support_url_path_3':{'url_path':'3'}});
-    Krux('scrape',{'page_attr_support_meta_keywords':{meta_name:'keywords'}});
-    Krux('scrape',{'page_attr_domain':{url_domain: '2'}});
-})();
-</script></span></div></body><iframe id="kx-proxy-r8nsxz49j" src="https://cdn.krxd.net/partnerjs/xdi/proxy.3d2100fd7107262ecb55ce6847f01fa5.html#!kxcid=r8nsxz49j&amp;kxt=https%3A%2F%2Fsupport.theguardian.com&amp;kxcl=cdn&amp;kxp=" style="display: none; visibility: hidden; height: 0; width: 0;"></iframe></html>
+  @*</body>*@
+@*</html>*@
