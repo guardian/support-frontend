@@ -15,3 +15,11 @@ deployments:
     dependencies: [cfn]
     parameters:
       bucket: membership-dist
+  storybook-static:
+    type: aws-s3
+    parameters:
+      bucket: support-storybook
+      prefixPackage: false
+      prefixStack: false
+      prefixStage: false
+      publicReadAcl: true
