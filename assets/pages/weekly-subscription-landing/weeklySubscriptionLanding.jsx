@@ -16,9 +16,8 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import GridPicture from 'components/gridPicture/gridPicture';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
-import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageContentBlock, { Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import AnchorButton from 'components/button/anchorButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
@@ -108,16 +107,16 @@ const content = (
       </ProductPagehero>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Open up your world view, Weekly">
-          <p className={largeParagraphClassName}>Inside the essential magazine from
+          <LargeParagraph>Inside the essential magazine from
           The&nbsp;Guardian, you&rsquo;ll find expert opinion, insight and culture, curated to
           bring you a progressive, international perspective. You&rsquo;ll also discover
           challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
-          </p>
+          </LargeParagraph>
         </ProductPageTextBlock>
       </ProductPageContentBlock>
       <ProductPageContentBlock id="benefits">
         <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
-        <ProductPageContentBlockOutset>
+        <Outset>
           <ProductPageFeatures features={[
             { title: 'Up to 35% off the retail cover price' },
             { title: 'Free international shipping' },
@@ -125,7 +124,7 @@ const content = (
             { title: 'Access to every edition on any device, through PressReader' },
           ]}
           />
-        </ProductPageContentBlockOutset>
+        </Outset>
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" id="subscribe">
         <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
@@ -141,19 +140,19 @@ const content = (
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Gift subscriptions">
-          <p className={largeParagraphClassName}>A quarterly or annual Guardian Weekly subscription makes a great gift.
+          <LargeParagraph>A quarterly or annual Guardian Weekly subscription makes a great gift.
             To&nbsp;buy&nbsp;one, just select the gift option at checkout or get in touch with your local customer
             service team:
-          </p>
+          </LargeParagraph>
         </ProductPageTextBlock>
-        <ProductPageContentBlockOutset>
+        <Outset>
           <ProductPageFeatures features={[
             { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
             { title: 'Australia and New Zealand', copy: '+61 2 8076 8599' },
             { title: 'USA and Canada', copy: '+1 917-900-4663' },
           ]}
           />
-        </ProductPageContentBlockOutset>
+        </Outset>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Promotion terms and conditions">

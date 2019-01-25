@@ -47,8 +47,33 @@ ProductPageContentBlock.defaultProps = {
 };
 
 
-// ---- Exports ----- //
+// ---- Children ----- //
 
+/*
+Adds a multiline divider between block children.
+*/
+export const Divider = () => (
+  <div className="component-product-page-content-block-divider">
+    <hr className="component-product-page-content-block-divider__line" />
+  </div>
+);
+
+/*
+Cancels out the horizontal padding
+Wrap full bleed children in this.
+*/
+export const Outset = ({ children }: {children: Node}) => (
+  <div className="component-product-page-content-block-outset">
+    {children}
+  </div>
+);
+
+/*
+A css class that sets the background colour to match the block.
+Use on children that need to match the background of the parent
+*/
 export const bgClassName = 'component-product-page-content-block-bg';
+
+// ---- Exports ----- //
 
 export default ProductPageContentBlock;
