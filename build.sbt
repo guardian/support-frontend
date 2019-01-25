@@ -112,7 +112,16 @@ riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
-riffRaffArtifactResources += (file(".out/index.html"), "storybook/index.html")
+ 
+
+def getFiles(f: File):Seq[(File,String)] = {
+  f match {
+    case file if file.isFile => Seq((file,file.toString))
+    case dir if dir.isDirectory => dir.listFiles.toSeq.flatMap(getFiles)
+  }
+}
+
+riffRaffArtifactResources += getFiles(file("storybook-static"))
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
