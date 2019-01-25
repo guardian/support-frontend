@@ -10,24 +10,29 @@
     cursor: pointer;
     background-color: transparent;
     background: none;
-    padding: 0;
+    padding: 0 $gu-h-spacing 0 0;
     margin: 0;
     height: auto;
     border-radius: 0;
     color: gu-colour(garnett-neutral-5);
+    z-index: 10;
+    position: relative;
 
     option {
       color: gu-colour(garnett-neutral-1);
     }
 
     &::-ms-expand {
-      background-color: transparent;
+      display: none;
     }
   }
 
   .svg-dropdown-arrow {
     position: inline-block;
     padding-top: 2px;
+    margin-left: $gu-h-spacing * -.5;
+    z-index: 9;
+    position: relative;
     path {
       fill: gu-colour(garnett-neutral-5);
     }
