@@ -178,7 +178,7 @@ function initReducer(countryGroupId: CountryGroupId) {
     stateProvince: null,
     telephone: '',
     billingPeriod: initialBillingPeriod,
-    paymentMethod: 'DirectDebit',
+    paymentMethod: countrySupportsDirectDebit(user.country || null) ? 'DirectDebit' : 'Stripe',
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
