@@ -21,5 +21,4 @@ deployments:
       bucket: support-storybook
       prefixPackage: false
       prefixStack: false
-      publicReadAcl: true
       cacheControl: public, max-age=3600
