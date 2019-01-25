@@ -10,7 +10,7 @@ import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
 import Footer from 'components/footer/footer';
 import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 
 import { getQueryParameter } from 'helpers/url';
@@ -106,9 +106,9 @@ const content = (
       </ProductPagehero>
       <ProductPageContentBlock needsHigherZindex>
         <ProductPageTextBlock>
-          <p className={largeParagraphClassName}>
+          <LargeParagraph>
             {getStandfirst()}
-          </p>
+          </LargeParagraph>
         </ProductPageTextBlock>
         <Tabs />
       </ProductPageContentBlock>
