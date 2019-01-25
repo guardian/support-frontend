@@ -6,7 +6,7 @@ import com.gu.support.workers._
 import io.circe.{Decoder, Encoder}
 
 sealed trait Product {
-  def ratePlans: List[ProductRatePlan[Product]]
+  val ratePlans: List[ProductRatePlan[Product]]
 
   def getProductRatePlan[T <: Product](
     billingPeriod: BillingPeriod,
@@ -19,11 +19,11 @@ sealed trait Product {
         prp.productOptions == productOptions
     )
 
-  def supportedCountries = ratePlans.flatMap(productRatePlan => productRatePlan.supportedTerritories).distinct
+  def supportedCountries: List[CountryGroup] = ratePlans.flatMap(productRatePlan => productRatePlan.supportedTerritories).distinct
 }
 
 case object DigitalPack extends Product {
-  def ratePlans: List[ProductRatePlan[DigitalPack.type]] =
+  lazy val ratePlans: List[ProductRatePlan[DigitalPack.type]] =
     List(
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions),
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions),
@@ -32,7 +32,7 @@ case object DigitalPack extends Product {
 }
 
 case object Contribution extends Product {
-  def ratePlans: List[ProductRatePlan[Contribution.type]] =
+  lazy val ratePlans: List[ProductRatePlan[Contribution.type]] =
     List(
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, NoFulfilmentOptions, NoProductOptions),
       ProductRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, NoFulfilmentOptions, NoProductOptions),
@@ -40,9 +40,9 @@ case object Contribution extends Product {
 }
 
 case object Paper extends Product {
-  private val ukOnly = List(CountryGroup.UK)
+  private lazy val ukOnly = List(CountryGroup.UK)
 
-  def ratePlans: List[ProductRatePlan[Paper.type]] =
+  lazy val ratePlans: List[ProductRatePlan[Paper.type]] =
     List(
       ProductRatePlan("2c92a0fd6205707201621fa1350710e3", Monthly, Collection, SaturdayPlus, ukOnly),
       ProductRatePlan("2c92a0fd6205707201621f9f6d7e0116", Monthly, Collection, Saturday, ukOnly),
@@ -68,8 +68,8 @@ case object Paper extends Product {
 }
 
 case object GuardianWeekly extends Product {
-  private val row = List(RestOfTheWorld)
-  private val domestic = List(
+  private lazy val row = List(RestOfTheWorld)
+  private lazy val domestic = List(
     UK,
     US,
     Canada,
@@ -78,7 +78,7 @@ case object GuardianWeekly extends Product {
     Europe
   )
 
-  def ratePlans: List[ProductRatePlan[GuardianWeekly.type]] =
+  lazy val ratePlans: List[ProductRatePlan[GuardianWeekly.type]] =
     List(
       ProductRatePlan("2c92a0086619bf8901661ab545f51b21", SixWeekly, RestOfWorld, NoProductOptions, row), //TODO: remove SixWeekly and use promotions instead
       ProductRatePlan("2c92a0fe6619b4b601661ab300222651", Annual, RestOfWorld, NoProductOptions, row),
@@ -90,8 +90,9 @@ case object GuardianWeekly extends Product {
 }
 
 object Product {
-  def fromString(code: String) = List(DigitalPack, Contribution, GuardianWeekly, Paper)
-    .find(_.getClass.getSimpleName == s"$code$$")
+  lazy val allProducts: List[Product] = List(DigitalPack, Contribution, GuardianWeekly, Paper)
+
+  def fromString(code: String): Option[Product] = allProducts.find(_.getClass.getSimpleName == s"$code$$")
 
   implicit val decode: Decoder[Product] =
     Decoder.decodeString.emap(code => fromString(code).toRight(s"unrecognised product '$code'"))

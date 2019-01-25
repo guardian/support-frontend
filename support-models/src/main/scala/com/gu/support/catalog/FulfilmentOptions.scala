@@ -15,8 +15,9 @@ case object RestOfWorld extends FulfilmentOptions
 case object NoFulfilmentOptions extends FulfilmentOptions
 
 object FulfilmentOptions {
-  def fromString(code: String) = List(HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions)
-    .find(_.getClass.getSimpleName == s"$code$$")
+  lazy val allFulfilmentOptions = List(HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions)
+
+  def fromString(code: String): Option[FulfilmentOptions] = allFulfilmentOptions.find(_.getClass.getSimpleName == s"$code$$")
 
   implicit val decoder: Decoder[FulfilmentOptions] =
     Decoder.decodeString.emap(code => fromString(code).toRight(s"unrecognised fulfilment options '$code'"))

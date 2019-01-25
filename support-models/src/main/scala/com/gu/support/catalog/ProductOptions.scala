@@ -1,7 +1,5 @@
 package com.gu.support.catalog
 
-import com.gu.support.workers.BillingPeriod
-import com.gu.support.workers.BillingPeriod.fromString
 import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
 sealed trait ProductOptions
@@ -29,8 +27,9 @@ case object EverydayPlus extends ProductOptions
 case object Everyday extends ProductOptions
 
 object ProductOptions {
-  def fromString(code: String) = List(Saturday, SaturdayPlus, Sunday, SundayPlus, Weekend, WeekendPlus, Sixday, SixdayPlus, Everyday, EverydayPlus)
-    .find(_.getClass.getSimpleName == s"$code$$")
+  val allProductOptions = List(Saturday, SaturdayPlus, Sunday, SundayPlus, Weekend, WeekendPlus, Sixday, SixdayPlus, Everyday, EverydayPlus)
+
+  def fromString(code: String): Option[ProductOptions] = allProductOptions.find(_.getClass.getSimpleName == s"$code$$")
 
   implicit val decode: Decoder[ProductOptions] =
     Decoder.decodeString.emap(code => fromString(code).toRight(s"unrecognised product options '$code'"))
