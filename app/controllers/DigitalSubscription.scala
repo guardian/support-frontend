@@ -67,20 +67,16 @@ class DigitalSubscription(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  def displayForm(countryCode: String, displayCheckout: Boolean, isCsrf: Boolean = false): Action[AnyContent] =
+  def displayForm(countryCode: String): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      if (displayCheckout) {
-        identityService.getUser(request.user).fold(
-          error => {
-            SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
-            InternalServerError
-          },
-          user => Ok(digitalSubscriptionFormHtml(user, countryCode))
-        ).map(_.withSettingsSurrogateKey)
-      } else {
-        Future.successful(Redirect(routes.Subscriptions.geoRedirect))
-      }
+      identityService.getUser(request.user).fold(
+        error => {
+          SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
+          InternalServerError
+        },
+        user => Ok(digitalSubscriptionFormHtml(user, countryCode))
+      ).map(_.withSettingsSurrogateKey)
     }
 
   private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: AllSettings): Html = {
