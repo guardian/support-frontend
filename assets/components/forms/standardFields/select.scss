@@ -4,6 +4,7 @@
   @include form-field;
 
   min-height: $gu-v-spacing * 3.5;
+  line-height: 1;
   padding: $gu-v-spacing $gu-h-spacing / 2;
   appearance: none;
   background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 10"><path d="M1.25.5l-.75.75L9 9.5h.95l8.55-8.25-.75-.75L9.5 7.25z" /></svg>');
