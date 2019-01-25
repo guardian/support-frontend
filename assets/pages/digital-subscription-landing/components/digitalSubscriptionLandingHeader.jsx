@@ -152,7 +152,7 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   }
   return {
     heading: 'Digital Pack',
-    subHeading: `14-day free trial and then ${displayPrice('DigitalPack', country)}`,
+    subHeading: 'Award-winning, independent journalism, ad-free on all devices',
   };
 }
 
