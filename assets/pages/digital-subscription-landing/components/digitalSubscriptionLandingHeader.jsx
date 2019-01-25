@@ -18,7 +18,7 @@ import SvgChevron from 'components/svgs/chevron';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
 import AnchorButton from 'components/button/anchorButton';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { displayPrice, sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
 import CtaSwitch from './ctaSwitch';
