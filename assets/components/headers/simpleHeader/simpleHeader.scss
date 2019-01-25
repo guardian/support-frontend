@@ -3,50 +3,137 @@
 
 .component-simple-header {
   background-color: gu-colour(header-dark);
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  overflow: hidden;
 
   .svg-guardian-logo {
-    height: 100%;
+    display: block;
+    float: right;
+    margin-top: $gu-v-spacing / 2.4;
+    margin-bottom: $gu-v-spacing * 1.5;
+    height: 48px;
+    @include mq($from: mobileLandscape) {
+      height: 56px;
+    }  
+    @include mq($from: tablet) {
+      height: 72px;
+    }  
+    @include mq($from: desktop) {
+      height: 95px;
+    }  
   }
 }
 
-.component-simple-header__content {
-  max-width: gu-span(12);
-  padding: ($gu-v-spacing/4) ($gu-h-spacing / 2) ($gu-v-spacing /2);
-  height: 42px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  @include mq($from: mobileMedium) {
-    height: 52px;
-  }
-
-  @include mq($from: mobileLandscape) {
-    height: 68px;
-  }
+.component-simple-header__wrapper {
+  width: 100%;
+  margin: auto;
+  padding: 0 ($gu-h-spacing / 2);
+  position: relative;
+  flex: 1 1 auto;
 
   @include mq($from: tablet) {
-    height: 86px;
-    padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) $gu-v-spacing;
+    max-width: gu-span(11);
   }
 
   @include mq($from: leftCol) {
-    max-width: gu-span(13);
+    max-width: gu-span(14) - ($gu-h-spacing);
   }
 
   @include mq($from: wide) {
-    max-width: gu-span(14);
+    max-width: gu-span(16) - ($gu-h-spacing);
   }
 }
 
-.component-simple-header__utility {
-  float: left;
-  height: 100%;
-  flex: 0 0 auto;
+.component-simple-header-topnav {
+  display: flex;
+  justify-content: space-between
 }
 
-.component-simple-header__link {
+.component-simple-header-topnav__utility {
+  padding-top: $gu-v-spacing / 2;
+}
+
+.component-simple-header-topnav-logo {
+  z-index: 10;
+  position: relative;
+  @include mq($from: tablet) {
+    width: gu-span(5);
+    background-color: gu-colour(header-dark);
+    float: right;
+    .component-simple-header--one-row & {
+      border-left: 1px solid gu-colour(header-border);
+    }
+  }
+  @include mq($from: wide) {
+    padding-right: gu-span(1) + $gu-h-spacing / 2;
+  }
+}
+
+.component-simple-header-topnav-logo__graun {
   float: right;
   height: 100%;
   flex: 0 1 auto;
+}
+
+.component-simple-header-bottomnav {
+  display: block;
+  clear: both;
+  background-color: gu-colour(header-dark);
+  border: 1px solid gu-colour(header-border);
+  border-bottom: none;
+  margin: 0 ($gu-h-spacing * -1);
+  z-index: 9;
+  @include mq($until: tablet) {
+    @include accessibility-hint;
+  }
+  .component-simple-header--one-row & {
+    position: absolute;
+    bottom: 0;
+    left: $gu-h-spacing / 2;
+    right: gu-span(1);
+  }
+}
+
+.component-simple-header-bottomnav__ul {
+  list-style: none;
+  display: inline-flex;
+}
+
+.component-simple-header-bottomnav__link {
+  @include gu-fontset-nav-desktop;
+  color: gu-colour(news-garnett-highlight);
+  text-decoration: none;
+  display: block;
+  padding: ($gu-v-spacing/1.5) ($gu-h-spacing/1.5);
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
+  transition: .2s linear;
+
+  .component-simple-header-bottomnav__li--active &,
+  &:hover {
+    box-shadow: inset 0 3px 0 gu-colour(news-garnett-highlight);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    top: 0;
+    width: 1px;
+    background-color: gu-colour(header-border);
+  }
+}
+
+.component-simple-header-bottomnav__li:first-child > .component-simple-header-bottomnav__link {
+  padding-left: $gu-h-spacing;
+}
+
+.component-simple-header-bottomnav__li:last-child > .component-simple-header-bottomnav__link {
+  &:after {
+    display: none;
+  }
 }
