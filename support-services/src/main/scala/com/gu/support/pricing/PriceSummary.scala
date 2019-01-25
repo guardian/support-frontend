@@ -6,7 +6,6 @@ import com.gu.support.promotions._
 
 case class PriceSummary(
   price: BigDecimal,
-  currency: Currency,
   promotion: Option[PromotionSummary]
 )
 
@@ -30,8 +29,4 @@ object PromotionSummary {
 object PriceSummary {
   import com.gu.support.encoding.CustomCodecs._
   implicit val codec: Codec[PriceSummary] = deriveCodec
-
-  implicit class ext(list: List[PriceSummary]){
-    def apply(currency: Currency) = list.find(_.currency == currency)
-  }
 }

@@ -13,17 +13,17 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
   "PriceSummaryService" should "return prices" in {
 
-    val catalogService = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
-    val paper = catalogService.getPrices(Paper, Some("DISCOUNT_CODE"))
-    paper(UK)(HomeDelivery)(Sixday)(Monthly).find(_.currency == GBP).map(_.price) shouldBe Some(54.12)
+    val paper = service.getPrices(Paper, Some("DISCOUNT_CODE"))
+    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 54.12
 
-    val guardianWeekly = catalogService.getPrices(GuardianWeekly, Some("DISCOUNT_CODE"))
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).map(_.price) shouldBe Some(37.50)
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).flatMap(_.promotion.flatMap(_.discountedPrice)) shouldBe Some(105)
+    val guardianWeekly = service.getPrices(GuardianWeekly, Some("DISCOUNT_CODE"))
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 37.50
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotion.flatMap(_.discountedPrice) shouldBe Some(105)
 
-    val digitalPack = catalogService.getPrices(DigitalPack, Some("DISCOUNT_CODE"))
-    val priceSummary = digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).get
+    val digitalPack = service.getPrices(DigitalPack, Some("DISCOUNT_CODE"))
+    val priceSummary = digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP)
     priceSummary.price shouldBe 11.99
     priceSummary.promotion.get.discountedPrice shouldBe Some(8.39)
   }

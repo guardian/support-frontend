@@ -1,17 +1,16 @@
 package com.gu.support.pricing
 
-import com.gu.i18n.CountryGroup
+import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.support.catalog._
 import com.gu.support.pricing.PriceSummaryService.getDiscountedPrice
 import com.gu.support.promotions._
+import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.BillingPeriod
 
 import scala.math.BigDecimal.RoundingMode
 
-class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) {
-  type CountryGroupPrices = Map[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, List[PriceSummary]]]]
-  type ProductPrices = Map[CountryGroup, CountryGroupPrices]
-  type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), List[PriceSummary]]
+class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) extends TouchpointService {
+  private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
   def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPrices =
     product.supportedCountries.map(
@@ -26,7 +25,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)
           price <- filterCurrencies(catalogService.getPriceList(productRatePlan).map(_.prices), countryGroup)
         } yield getPriceSummary(maybePromoCode, countryGroup, productRatePlan.id, price)
-        (keys, priceSummaries)
+        (keys, priceSummaries.toMap)
     }
     nestPriceLists(grouped)
   }
@@ -48,9 +47,8 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       validPromotion <- promotionService.validatePromoCode(promoCode, country, productRatePlanId, isRenewal = false).toOption //Not dealing with renewals for now
     } yield getPromotionSummary(validPromotion, price)
 
-    PriceSummary(
+    price.currency -> PriceSummary(
       price.value,
-      price.currency,
       promotionSummary
     )
   }
@@ -70,11 +68,11 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
 
   private def nestPriceLists(groupedPriceList: GroupedPriceList): CountryGroupPrices =
     removeInvalidPricingOptions(groupedPriceList)
-      .foldLeft(Map.empty[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, List[PriceSummary]]]]) {
+      .foldLeft(Map.empty[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, Map[Currency, PriceSummary]]]]) {
       case (acc, ((fulfilment, productOptions, billing), list)) =>
 
-        val existingProducts = acc.getOrElse(fulfilment, Map.empty[ProductOptions, Map[BillingPeriod, List[PriceSummary]]])
-        val existingBillingPeriods = existingProducts.getOrElse(productOptions, Map.empty[BillingPeriod, List[PriceSummary]])
+        val existingProducts = acc.getOrElse(fulfilment, Map.empty[ProductOptions, Map[BillingPeriod, Map[Currency, PriceSummary]]])
+        val existingBillingPeriods = existingProducts.getOrElse(productOptions, Map.empty[BillingPeriod, Map[Currency, PriceSummary]])
 
         val newBillingPeriods = existingBillingPeriods ++ Map(billing -> list)
         val newProducts = existingProducts ++ Map(productOptions -> newBillingPeriods)

@@ -16,6 +16,10 @@ trait InternationalisationCodecs {
   implicit val decodeCurrency: Decoder[Currency] =
     Decoder.decodeString.emap { code => Currency.fromString(code).toRight(s"Unrecognised currency code '$code'") }
 
+  implicit val currencyKeyEncoder: KeyEncoder[Currency] = (value: Currency) => value.iso
+
+  implicit val currencyKeyDecoder: KeyDecoder[Currency] = (key: String) => Currency.fromString(key)
+
   implicit val encodeCountryAsAlpha2: Encoder[Country] = Encoder.encodeString.contramap[Country](_.alpha2)
   implicit val decodeCountry: Decoder[Country] =
     Decoder.decodeString.emap { code => CountryGroup.countryByCode(code).toRight(s"Unrecognised country code '$code'") }
@@ -26,7 +30,7 @@ trait InternationalisationCodecs {
 
   implicit val countryGroupKeyEncoder: KeyEncoder[CountryGroup] = (value: CountryGroup) => value.name.toString
 
-  implicit val keyDecoder: KeyDecoder[CountryGroup] = (key: String) => CountryGroup.byName(key)
+  implicit val countryGroupKeyDecoder: KeyDecoder[CountryGroup] = (key: String) => CountryGroup.byName(key)
 }
 
 trait HelperCodecs {
