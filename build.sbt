@@ -51,7 +51,7 @@ lazy val root = (project in file("."))
 val circeVersion = "0.9.1"
 
 resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
-
+//resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
 val awsVersion = "1.11.475"
 val jacksonVersion = "2.9.8"
 
@@ -91,7 +91,9 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   filters,
-  ws
+  ws//,
+  //"org.webjars" %% "webjars-play" % "2.5.0-2",
+  //"org.webjars" % "react" % "0.13.1"
 )
 
 sources in(Compile, doc) := Seq.empty

@@ -12,6 +12,9 @@ GET  /*path/  controllers.Application.removeTrailingSlash(path: String)
 
 # ----- Bundles Landing Page ----- #
 
+
+GET /test                                           controllers.Application.reactPlayTest()
+
 GET /uk                                             controllers.Application.supportLanding()
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")

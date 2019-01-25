@@ -108,6 +108,11 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
+  def reactPlayTest(): Action[AnyContent] =  CachedAction() { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(views.html.test()).withSettingsSurrogateKey
+  }
+
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: AllSettings) = {
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
