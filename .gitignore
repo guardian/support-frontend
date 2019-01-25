@@ -17,6 +17,7 @@ dev
 logs
 target
 project/project
+storybook-static
 
 bower_components
 public/stylesheets
