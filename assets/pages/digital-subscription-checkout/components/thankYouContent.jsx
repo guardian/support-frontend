@@ -16,8 +16,8 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
-import CtaLink from 'components/ctaLink/ctaLink';
+import ProductPageTextBlock, { LargeParagraph, ItemList } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import AnchorButton from 'components/button/anchorButton';
 import MarketingConsent from './MarketingConsentContainer';
 
 import {
@@ -73,30 +73,38 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         Just download the apps and log in with your Guardian account details.
         </LargeParagraph>
       </ProductPageTextBlock>
-      <h3 className="thank-you-content__subheading">
-        Premium App
-      </h3>
-      <CtaLink
-        text="Download from the App Store"
-        accessibilityHint="Click to download the app on the Apple App Store"
-        url={getIosAppUrl(props.countryGroupId)}
-        onClick={sendTrackingEventsOnClick('checkout_thankyou_app_store', 'DigitalPack', null)}
-      />
-      <CtaLink
-        text="Download from Google Play"
-        accessibilityHint="Click to download the app on the Google Play store"
-        url={androidAppUrl}
-        onClick={sendTrackingEventsOnClick('checkout_thankyou_play_store', 'DigitalPack', null)}
-      />
-      <h3 className="thank-you-content__subheading">
-        Daily Edition (iPad only)
-      </h3>
-      <CtaLink
-        text="Download the Daily Edition"
-        accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
-        url={getDailyEditionUrl(props.countryGroupId)}
-        onClick={sendTrackingEventsOnClick('checkout_thankyou_daily_edition', 'DigitalPack', null)}
-      />
+      <ProductPageTextBlock title="Premium App" headingSize={3}>
+        <ItemList>
+          <AnchorButton
+            appearance="greyHollow"
+            aria-label="Click to download the app on the Apple App Store"
+            href={getIosAppUrl(props.countryGroupId)}
+            onClick={sendTrackingEventsOnClick('checkout_thankyou_app_store', 'DigitalPack', null)}
+          >
+            Download from the App Store
+          </AnchorButton>
+          <AnchorButton
+            aria-label="Click to download the app on the Google Play store"
+            appearance="greyHollow"
+            href={androidAppUrl}
+            onClick={sendTrackingEventsOnClick('checkout_thankyou_play_store', 'DigitalPack', null)}
+          >
+            Download from Google Play
+          </AnchorButton>
+        </ItemList>
+      </ProductPageTextBlock>
+      <ProductPageTextBlock title="Daily Edition (iPad only)" headingSize={3}>
+        <ItemList>
+          <AnchorButton
+            appearance="greyHollow"
+            aria-label="Click to download the Daily Tablet Edition app on the Apple App Store"
+            href={getDailyEditionUrl(props.countryGroupId)}
+            onClick={sendTrackingEventsOnClick('checkout_thankyou_daily_edition', 'DigitalPack', null)}
+          >
+            Download the Daily Edition
+          </AnchorButton>
+        </ItemList>
+      </ProductPageTextBlock>
     </div>
   );
 

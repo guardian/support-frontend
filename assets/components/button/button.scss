@@ -13,7 +13,7 @@
   box-sizing: border-box;
   cursor: pointer;
   transition: .2s;
-
+  justify-content: space-between;
   &:hover, &:focus {
     outline: 0;
   }
