@@ -24,7 +24,6 @@ export const tests: Tests = {
     variants: [
       'control',
       'default-annual',
-      'default-annual_no-monthly',
     ],
     audiences: {
       ALL: {

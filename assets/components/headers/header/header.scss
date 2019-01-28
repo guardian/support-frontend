@@ -1,0 +1,139 @@
+@import '~stylesheets/gu-sass/gu-sass';
+@import '~components/leftMarginSection/leftMarginSection';
+
+.component-header {
+  background-color: gu-colour(header-dark);
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  overflow: hidden;
+
+  .svg-guardian-logo {
+    display: block;
+    float: right;
+    margin-top: $gu-v-spacing / 2.4;
+    margin-bottom: $gu-v-spacing * 1.5;
+    height: 48px;
+    @include mq($from: mobileLandscape) {
+      height: 56px;
+    }  
+    @include mq($from: tablet) {
+      height: 72px;
+    }  
+    @include mq($from: desktop) {
+      height: 95px;
+    }  
+  }
+}
+
+.component-header__wrapper {
+  width: 100%;
+  margin: auto;
+  padding: 0 ($gu-h-spacing / 2);
+  position: relative;
+  flex: 1 1 auto;
+
+  @include mq($from: tablet) {
+    max-width: gu-span(11);
+  }
+
+  @include mq($from: leftCol) {
+    max-width: gu-span(14) - ($gu-h-spacing);
+  }
+
+  @include mq($from: wide) {
+    max-width: gu-span(16) - ($gu-h-spacing);
+  }
+}
+
+.component-header-topnav {
+  display: flex;
+  justify-content: space-between
+}
+
+.component-header-topnav__utility {
+  padding-top: $gu-v-spacing / 2;
+}
+
+.component-header-topnav-logo {
+  z-index: 10;
+  position: relative;
+  @include mq($from: tablet) {
+    width: gu-span(5);
+    background-color: gu-colour(header-dark);
+    float: right;
+    .component-header--one-row & {
+      border-left: 1px solid gu-colour(header-border);
+    }
+  }
+  @include mq($from: wide) {
+    padding-right: gu-span(1) + $gu-h-spacing / 2;
+  }
+}
+
+.component-header-topnav-logo__graun {
+  float: right;
+  height: 100%;
+  flex: 0 1 auto;
+}
+
+.component-header-bottomnav {
+  display: block;
+  clear: both;
+  background-color: gu-colour(header-dark);
+  border: 1px solid gu-colour(header-border);
+  border-bottom: none;
+  margin: 0 ($gu-h-spacing * -1);
+  z-index: 9;
+  @include mq($until: tablet) {
+    @include accessibility-hint;
+  }
+  .component-header--one-row & {
+    position: absolute;
+    bottom: 0;
+    left: $gu-h-spacing / 2;
+    right: gu-span(1);
+  }
+}
+
+.component-header-bottomnav__ul {
+  list-style: none;
+  display: inline-flex;
+}
+
+.component-header-bottomnav__link {
+  @include gu-fontset-nav-desktop;
+  color: gu-colour(news-garnett-highlight);
+  text-decoration: none;
+  display: block;
+  padding: ($gu-v-spacing/1.5) ($gu-h-spacing/1.5);
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
+  transition: .2s linear;
+
+  .component-header-bottomnav__li--active &,
+  &:hover {
+    box-shadow: inset 0 3px 0 gu-colour(news-garnett-highlight);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    top: 0;
+    width: 1px;
+    background-color: gu-colour(header-border);
+  }
+}
+
+.component-header-bottomnav__li:first-child > .component-header-bottomnav__link {
+  padding-left: $gu-h-spacing;
+}
+
+.component-header-bottomnav__li:last-child > .component-header-bottomnav__link {
+  &:after {
+    display: none;
+  }
+}

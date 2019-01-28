@@ -40,7 +40,7 @@ export const billingPeriods = {
   [Annual]: {
     title: 'Annually',
     offer: 'Save 17%',
-    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, Annual)} every 12 months (save ${showPrice(getAnnualSaving(countryGroupId))} per year)`,
+    copy: (countryGroupId: CountryGroupId) => `14 day free trial, then ${getPrice(countryGroupId, Annual)} every 12 months (save ${showPrice(getAnnualSaving(countryGroupId))} per year)`,
   },
 };
 

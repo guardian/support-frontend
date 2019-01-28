@@ -6,11 +6,11 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 
 import { getQueryParameter } from 'helpers/url';
@@ -72,7 +72,7 @@ function getStandfirst(): string {
 const content = (
   <Provider store={store}>
     <Page
-      header={<SimpleHeader />}
+      header={<Header />}
       footer={<Footer />}
     >
       <ProductPagehero
@@ -106,9 +106,9 @@ const content = (
       </ProductPagehero>
       <ProductPageContentBlock needsHigherZindex>
         <ProductPageTextBlock>
-          <p className={largeParagraphClassName}>
+          <LargeParagraph>
             {getStandfirst()}
-          </p>
+          </LargeParagraph>
         </ProductPageTextBlock>
         <Tabs />
       </ProductPageContentBlock>

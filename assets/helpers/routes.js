@@ -26,6 +26,11 @@ const routes: {
   directDebitCheckAccount: '/direct-debit/check-account',
   payPalRestReturnURL: '/paypal/rest/return',
   digitalSubscriptionCreate: '/subscribe/digital/create',
+  showcase: '/showcase',
+  subscriptionsLanding: '/subscribe',
+  digitalSubscriptionLanding: '/subscribe/digital',
+  paperSubscriptionLanding: '/subscribe/paper',
+  guardianWeeklySubscriptionLanding: '/subscribe/weekly',
 };
 
 function paperSubsUrl(withDelivery: boolean = false): string {

@@ -14,7 +14,7 @@ import { Annual, type DigitalBillingPeriod, Monthly } from 'helpers/billingPerio
 import { getDigitalPrice } from 'helpers/subscriptions';
 import { showPrice } from 'helpers/internationalisation/price';
 
-import ProductPageContentBlockOutset from 'components/productPage/productPageContentBlock/productPageContentBlockOutset';
+import { Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
@@ -121,7 +121,7 @@ function CheckoutForm(props: PropTypes) {
 
   return (
     <ProductPageContentBlock modifierClasses={['your-details']}>
-      <ProductPageContentBlockOutset>
+      <Outset>
         <Checkout>
           <Form onSubmit={(ev) => { ev.preventDefault(); props.submitForm(); }}>
             <FormSection title="Your details" >
@@ -244,7 +244,7 @@ function CheckoutForm(props: PropTypes) {
             </FormSection>
           </Form>
         </Checkout>
-      </ProductPageContentBlockOutset>
+      </Outset>
     </ProductPageContentBlock>
   );
 

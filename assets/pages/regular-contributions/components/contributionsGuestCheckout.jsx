@@ -6,7 +6,7 @@ import React, { type Node } from 'react';
 
 import Page from 'components/page/page';
 import TestUserBanner from 'components/testUserBanner/testUserBanner';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import YourContribution from 'components/yourContribution/yourContribution';
@@ -93,7 +93,7 @@ export default function ContributionsCheckout(props: PropTypes) {
   return (
     <div className="component-contributions-checkout">
       <Page
-        header={[<TestUserBanner />, <SimpleHeader />]}
+        header={[<TestUserBanner />, <Header />]}
         footer={<Footer />}
       >
         <CirclesIntroduction

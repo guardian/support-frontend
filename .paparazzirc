@@ -11,7 +11,7 @@
     "paypal/return"
   ],
   "out": ".test-screenshots",
-  "prefix": "https://support.thegulocal.com/",
+  "prefix": "https://support.thegulocal.com",
   "screenshot": {
     "fullPage": true
   },

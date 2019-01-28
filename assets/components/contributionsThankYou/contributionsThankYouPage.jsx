@@ -5,7 +5,7 @@
 import React, { type Node } from 'react';
 
 import Page from 'components/page/page';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
@@ -32,7 +32,7 @@ export default function ContributionsThankYouPage(props: PropTypes) {
   return (
     <Page
       id="contributions-thank-you-page"
-      header={<SimpleHeader />}
+      header={<Header />}
       footer={<Footer />}
     >
       <CirclesIntroduction

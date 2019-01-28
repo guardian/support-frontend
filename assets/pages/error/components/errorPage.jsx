@@ -5,7 +5,7 @@
 import React from 'react';
 
 import Page from 'components/page/page';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import SquaresIntroduction from 'components/introduction/squaresIntroduction';
 import PageSection from 'components/pageSection/pageSection';
@@ -30,7 +30,7 @@ export default function ErrorPage(props: PropTypes) {
 
   return (
     <Page
-      header={<SimpleHeader />}
+      header={<Header />}
       footer={<Footer />}
     >
       <SquaresIntroduction

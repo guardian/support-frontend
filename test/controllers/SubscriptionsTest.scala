@@ -70,7 +70,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): Future[Result] = {
-      fakeDigitalPack(actionRefiner, identityService).displayForm("UK", true, true)(FakeRequest())
+      fakeDigitalPack(actionRefiner, identityService).displayForm("UK")(FakeRequest())
     }
   }
 
