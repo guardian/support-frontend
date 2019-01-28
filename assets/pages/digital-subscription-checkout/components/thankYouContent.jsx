@@ -13,9 +13,9 @@ import {
 
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { classNameWithModifiers } from 'helpers/utilities';
 
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import CtaLink from 'components/ctaLink/ctaLink';
 import MarketingConsent from './MarketingConsentContainer';
 
@@ -37,20 +37,24 @@ type PropTypes = {
 function ThankYouContent(props: PropTypes) {
 
   return (
-    <div className="thank-you-content">
-      <LeftMarginSection>
-        <p className={classNameWithModifiers('thank-you-content__copy', ['italic'])}>
-          {
+    <div>
+      <ProductPageContentBlock>
+        <ProductPageTextBlock>
+          <LargeParagraph>
+            {
             props.paymentMethod === 'DirectDebit' ?
             'Look out for an email within three business days confirming your recurring payment. Your first payment will be taken in 14 days and will appear as \'Guardian Media Group\' on your bank statement.' :
             'We have sent you an email with everything you need to know. Your first payment will be taken in 14 days.'
           }
-        </p>
-      </LeftMarginSection>
-      <AppsSection countryGroupId={props.countryGroupId} />
-      <LeftMarginSection modifierClasses={['thank-you-consent']}>
+          </LargeParagraph>
+        </ProductPageTextBlock>
+      </ProductPageContentBlock>
+      <ProductPageContentBlock>
+        <AppsSection countryGroupId={props.countryGroupId} />
+      </ProductPageContentBlock>
+      <ProductPageContentBlock>
         <MarketingConsent />
-      </LeftMarginSection>
+      </ProductPageContentBlock>
     </div>
   );
 
@@ -62,13 +66,12 @@ function ThankYouContent(props: PropTypes) {
 function AppsSection(props: { countryGroupId: CountryGroupId }) {
 
   return (
-    <LeftMarginSection modifierClasses={['thank-you-apps']}>
-      <h2 className="thank-you-content__heading">
-        Can&#39;t wait to get started?
-      </h2>
-      <p className="thank-you-content__copy">
+    <div>
+      <ProductPageTextBlock title="Can&#39;t wait to get started?">
+        <LargeParagraph>
         Just download the apps and log in with your Guardian account details.
-      </p>
+        </LargeParagraph>
+      </ProductPageTextBlock>
       <h3 className="thank-you-content__subheading">
         Premium App
       </h3>
@@ -90,7 +93,7 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
         url={getDailyEditionUrl(props.countryGroupId)}
       />
-    </LeftMarginSection>
+    </div>
   );
 
 }
