@@ -5,7 +5,7 @@
 import React from 'react';
 
 import Page from 'components/page/page';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import CtaLink from 'components/ctaLink/ctaLink';
 import QuestionsContact from 'components/questionsContact/questionsContact';
@@ -32,7 +32,7 @@ pageInit();
 
 const content = (
   <Page
-    header={<SimpleHeader />}
+    header={<Header />}
     footer={<Footer />}
   >
     <CirclesIntroduction

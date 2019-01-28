@@ -11,7 +11,7 @@ import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
 import { links } from './links';
 
-import './simpleHeader.scss';
+import './header.scss';
 
 export type PropTypes = {|
   utility: Option<Node>,
@@ -38,16 +38,16 @@ const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
 
 // ----- Component ----- //
 
-type HeaderTopNavigationPropTypes = {|
+type TopNavPropTypes = {|
   utility: Option<Node>,
   getLogoRef: (?Element) => void
 |};
 
-const HeaderTopNavigation = ({ getLogoRef, utility }: HeaderTopNavigationPropTypes) => (
-  <div className="component-simple-header-topnav">
-    <div className="component-simple-header-topnav__utility">{utility}</div>
-    <div className="component-simple-header-topnav-logo" ref={getLogoRef}>
-      <a className="component-simple-header-topnav-logo__graun" href="https://www.theguardian.com">
+const TopNav = ({ getLogoRef, utility }: TopNavPropTypes) => (
+  <div className="component-header-topnav">
+    <div className="component-header-topnav__utility">{utility}</div>
+    <div className="component-header-topnav-logo" ref={getLogoRef}>
+      <a className="component-header-topnav-logo__graun" href="https://www.theguardian.com">
         <div className="accessibility-hint">The Guardian logo</div>
         <SvgGuardianLogo />
       </a>
@@ -55,30 +55,30 @@ const HeaderTopNavigation = ({ getLogoRef, utility }: HeaderTopNavigationPropTyp
   </div>
 );
 
-type HeaderBottomNavigationPropTypes = {|
+type BottomNavPropTypes = {|
   getMenuRef: (?Element) => void
 |};
 
-const HeaderBottomNavigation = ({ getMenuRef }: HeaderBottomNavigationPropTypes) => (
-  <nav className="component-simple-header-bottomnav">
-    <ul className="component-simple-header-bottomnav__ul" ref={getMenuRef}>
+const BottomNav = ({ getMenuRef }: BottomNavPropTypes) => (
+  <nav className="component-header-bottomnav">
+    <ul className="component-header-bottomnav__ul" ref={getMenuRef}>
       {links.map(({ href, text }) => (
         <li
           className={
           classNameWithModifiers(
-            'component-simple-header-bottomnav__li',
+            'component-header-bottomnav__li',
             [window.location.href.endsWith(href) ? 'active' : null],
           )
         }
         >
-          <a className="component-simple-header-bottomnav__link" href={href}>{text}</a>
+          <a className="component-header-bottomnav__link" href={href}>{text}</a>
         </li>
     ))}
     </ul>
   </nav>
 );
 
-export default class SimpleHeader extends Component<PropTypes, State> {
+export default class Header extends Component<PropTypes, State> {
   static defaultProps = {
     utility: null,
     displayNavigation: false,
@@ -118,16 +118,16 @@ export default class SimpleHeader extends Component<PropTypes, State> {
     return (
       <header
         className={
-          classNameWithModifiers('component-simple-header', [
+          classNameWithModifiers('component-header', [
             fitsLinksInOneRow ? 'one-row' : null,
             displayNavigation ? 'display-navigation' : null,
           ])
         }
       >
-        <div className="component-simple-header__wrapper" ref={(el) => { this.containerRef = el; }}>
-          <HeaderTopNavigation utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
+        <div className="component-header__wrapper" ref={(el) => { this.containerRef = el; }}>
+          <TopNav utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
           {displayNavigation &&
-            <HeaderBottomNavigation getMenuRef={(el) => { this.menuRef = el; }} />
+            <BottomNav getMenuRef={(el) => { this.menuRef = el; }} />
           }
         </div>
       </header>
