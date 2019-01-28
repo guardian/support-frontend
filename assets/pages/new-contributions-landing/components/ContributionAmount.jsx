@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { config, type Amounts, type Amount, type ContributionType } from 'helpers/contributions';
+import { config, type AmountsRegions, type Amount, type ContributionType } from 'helpers/contributions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -25,7 +25,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   currency: IsoCurrency,
   contributionType: ContributionType,
-  amounts: Amounts,
+  amounts: AmountsRegions,
   selectedAmounts: { [ContributionType]: Amount | 'other' },
   selectAmount: (Amount | 'other', CountryGroupId, ContributionType) => (() => void),
   otherAmount: string | null,
@@ -103,7 +103,7 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
 
 
 function ContributionAmount(props: PropTypes) {
-  const validAmounts: Amount[] = props.amounts[props.contributionType][props.countryGroupId];
+  const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =

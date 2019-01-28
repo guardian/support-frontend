@@ -59,12 +59,12 @@ export type Amount = {
   isDefault?: boolean,
 }
 
-export type AmountsRegions = {
-  [CountryGroupId]: Amount[]
+export type Amounts = {
+  [ContributionType]: Amount[]
 }
 
-export type Amounts = {
-  [ContributionType]: AmountsRegions
+export type AmountsRegions = {
+  [CountryGroupId]: Amounts
 }
 
 type ParseError = 'ParseError';
