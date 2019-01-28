@@ -16,7 +16,7 @@ module.exports = {
       'iframe.html?selectedKind=Header&selectedStory=Header%20%28with%20navigation%29&full=0&addons=1&stories=1&panelRight=0&addonPanel=storybooks%2Fstorybook-addon-knobs'
     ].map(route => ['https://support-ui.thegulocal.com', route].join('/'))
   ],
-  "out": ".test-screenshots",
+  "out": "paparazzi",
   "screenshot": {
     "fullPage": true
   },
