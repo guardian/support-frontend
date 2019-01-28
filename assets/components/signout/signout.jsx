@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { getBaseDomain } from 'helpers/url';
+import { getSignoutUrl } from 'helpers/externalLinks';
 
 // ---- Types ----- //
 
@@ -13,18 +13,6 @@ type PropTypes = {
   isSignedIn: boolean,
 };
 
-
-// ----- Functions ----- //
-
-// Build signout URL from given return URL or current location.
-function buildUrl(returnUrl: ?string): string {
-
-  const encodedReturn = encodeURIComponent(returnUrl || window.location);
-
-  return `https://profile.${getBaseDomain()}/signout?returnUrl=${encodedReturn}`;
-
-}
-
 // ----- Component ----- //
 
 const Signout = (props: PropTypes) => {
@@ -32,7 +20,7 @@ const Signout = (props: PropTypes) => {
     return null;
   }
   return (
-    <a className="component-signout" href={buildUrl(props.returnUrl)}>
+    <a className="component-signout" href={getSignoutUrl(props.returnUrl)}>
       Not you? Sign out
     </a>
   );

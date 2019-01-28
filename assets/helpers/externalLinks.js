@@ -35,7 +35,6 @@ const profileUrl = `https://profile.${getBaseDomain()}`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
 const emailPreferencesUrl = `${profileUrl}/email-prefs`;
-const logoutUrl = `${profileUrl}/logout`;
 
 function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGroupId) {
 
@@ -387,6 +386,11 @@ function getDailyEditionUrl(countryGroupId: CountryGroupId) {
   return getAppleStoreUrl('guardian-observer-daily-edition/id452707806', countryGroupId);
 }
 
+function getSignoutUrl(returnUrl: ?string): string {
+  const encodedReturn = encodeURIComponent(returnUrl || window.location);
+  return `https://profile.${getBaseDomain()}/signout?returnUrl=${encodedReturn}`;
+}
+
 // ----- Exports ----- //
 
 export {
@@ -396,8 +400,8 @@ export {
   getDigitalCheckout,
   getIosAppUrl,
   androidAppUrl,
-  logoutUrl,
   getDailyEditionUrl,
+  getSignoutUrl,
   emailPreferencesUrl,
   getWeeklyCheckout,
   getPaperCheckout,
