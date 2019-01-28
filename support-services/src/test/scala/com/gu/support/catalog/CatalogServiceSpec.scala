@@ -5,6 +5,7 @@ import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import io.circe.parser._
 import org.scalatest.{FlatSpec, Matchers}
 import CatalogServiceSpec.serviceWithFixtures
+import com.gu.support.config.TouchPointEnvironments.PROD
 
 class CatalogServiceSpec extends FlatSpec with Matchers {
 
@@ -54,6 +55,6 @@ class CatalogServiceSpec extends FlatSpec with Matchers {
 object CatalogServiceSpec{
   private val json = parse(Fixtures.loadCatalog).right.get
   private val jsonProvider = new SimpleJsonProvider(json)
-  val serviceWithFixtures = new CatalogService(jsonProvider)
+  val serviceWithFixtures = new CatalogService(PROD, jsonProvider)
 }
 

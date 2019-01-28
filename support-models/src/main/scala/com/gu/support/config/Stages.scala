@@ -1,7 +1,8 @@
 package com.gu.support.config
 
-import PartialFunction.condOpt
-import Stages._
+import com.gu.support.config.Stages._
+
+import scala.PartialFunction.condOpt
 
 /**
  * Stage represents a runtime environment either on a local machine (DEV) or in AWS (CODE or PROD)

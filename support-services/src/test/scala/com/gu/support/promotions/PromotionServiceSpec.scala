@@ -1,13 +1,12 @@
 package com.gu.support.promotions
 
 import com.gu.i18n.Country
+import com.gu.i18n.Country.UK
 import com.gu.support.config.{PromotionsConfigProvider, Stages}
+import com.gu.support.promotions.PromotionServiceSpec._
 import com.gu.support.promotions.ServicesFixtures.{freeTrialPromoCode, _}
 import com.typesafe.config.ConfigFactory
 import org.scalatest.{FlatSpec, Matchers}
-import ServicesFixtures._
-import com.gu.i18n.Country.UK
-import PromotionServiceSpec._
 
 //noinspection NameBooleanParameters
 class PromotionServiceSpec extends FlatSpec with Matchers {

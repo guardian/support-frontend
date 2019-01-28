@@ -13,13 +13,13 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
   def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPrices =
-    product.supportedCountries.map(
+    product.supportedCountries(catalogService.environment).map(
       countryGroup =>
         countryGroup -> getPricesForCountryGroup(product, countryGroup, maybePromoCode)
     ).toMap
 
   def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, maybePromoCode: Option[PromoCode]): CountryGroupPrices = {
-    val grouped = product.ratePlans.groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
+    val grouped = product.ratePlans(catalogService.environment).groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, productRatePlans) =>
         val priceSummaries = for {
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)
@@ -69,16 +69,16 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
   private def nestPriceLists(groupedPriceList: GroupedPriceList): CountryGroupPrices =
     removeInvalidPricingOptions(groupedPriceList)
       .foldLeft(Map.empty[FulfilmentOptions, Map[ProductOptions, Map[BillingPeriod, Map[Currency, PriceSummary]]]]) {
-      case (acc, ((fulfilment, productOptions, billing), list)) =>
+        case (acc, ((fulfilment, productOptions, billing), list)) =>
 
-        val existingProducts = acc.getOrElse(fulfilment, Map.empty[ProductOptions, Map[BillingPeriod, Map[Currency, PriceSummary]]])
-        val existingBillingPeriods = existingProducts.getOrElse(productOptions, Map.empty[BillingPeriod, Map[Currency, PriceSummary]])
+          val existingProducts = acc.getOrElse(fulfilment, Map.empty[ProductOptions, Map[BillingPeriod, Map[Currency, PriceSummary]]])
+          val existingBillingPeriods = existingProducts.getOrElse(productOptions, Map.empty[BillingPeriod, Map[Currency, PriceSummary]])
 
-        val newBillingPeriods = existingBillingPeriods ++ Map(billing -> list)
-        val newProducts = existingProducts ++ Map(productOptions -> newBillingPeriods)
+          val newBillingPeriods = existingBillingPeriods ++ Map(billing -> list)
+          val newProducts = existingProducts ++ Map(productOptions -> newBillingPeriods)
 
-        acc ++ Map(fulfilment -> newProducts)
-    }
+          acc ++ Map(fulfilment -> newProducts)
+      }
 
   private def removeInvalidPricingOptions(groupedPriceList: GroupedPriceList) =
     groupedPriceList.filter(_._2.nonEmpty) // eg. Guardian Weekly Domestic rate plans in RestOfTheWorld countries

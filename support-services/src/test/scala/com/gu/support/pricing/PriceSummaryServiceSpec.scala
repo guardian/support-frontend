@@ -5,6 +5,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
+import com.gu.support.config.TouchPointEnvironments.PROD
 import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import org.joda.time.Months
 import org.scalatest.{FlatSpec, Matchers}

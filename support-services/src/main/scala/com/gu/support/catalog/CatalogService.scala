@@ -1,19 +1,17 @@
 package com.gu.support.catalog
 
-import AwsS3Client.{fetchJson, s3}
-import com.amazonaws.services.s3.model.GetObjectRequest
 import com.gu.i18n.Currency
-import com.gu.support.config.Stage
+import com.gu.support.catalog.FulfilmentOptions._
+import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.BillingPeriod
-import io.circe.generic.auto._
-import FulfilmentOptions._
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.generic.auto._
 
 object CatalogService {
-  def apply(stage: Stage): CatalogService = new CatalogService(new S3CatalogProvider(stage))
+  def apply(environment: TouchPointEnvironment): CatalogService = new CatalogService(environment, new S3CatalogProvider(environment))
 }
 
-class CatalogService(jsonProvider: CatalogJsonProvider) extends LazyLogging {
+class CatalogService(val environment: TouchPointEnvironment, jsonProvider: CatalogJsonProvider) extends LazyLogging {
   private lazy val catalog = {
 
     jsonProvider.get.flatMap { json =>
@@ -39,7 +37,7 @@ class CatalogService(jsonProvider: CatalogJsonProvider) extends LazyLogging {
     productOptions: ProductOptions
   ): Option[Price] = {
     for {
-      productRatePlan <- product.getProductRatePlan(billingPeriod, fulfilmentOptions, productOptions)
+      productRatePlan <- product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions)
       priceList <- getPriceList(productRatePlan)
       price <- priceList.prices.find(_.currency == currency)
     } yield price
