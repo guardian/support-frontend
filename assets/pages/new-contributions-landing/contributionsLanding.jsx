@@ -16,7 +16,7 @@ import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
-import { RoundelHeader } from 'components/headers/roundelHeader/Header';
+import { RoundelHeader } from 'components/headers/roundelHeader/header';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
