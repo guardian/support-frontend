@@ -5,21 +5,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import ReturnSection from 'components/returnSection/returnSection';
 import ProductHero, {
   type GridImages,
   type ImagesByCountry,
 } from 'components/productHero/productHero';
 import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
-
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
+
 import ThankYouContent from './thankYouContent';
 import CheckoutForm from './checkoutForm';
+import ReturnSection from './returnSection';
 
 
 // ----- Types ----- //

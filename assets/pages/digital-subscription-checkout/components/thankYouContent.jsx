@@ -13,6 +13,7 @@ import {
 
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
@@ -79,11 +80,13 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         text="Download from the App Store"
         accessibilityHint="Click to download the app on the Apple App Store"
         url={getIosAppUrl(props.countryGroupId)}
+        onClick={sendTrackingEventsOnClick('checkout_thankyou_app_store', 'DigitalPack', null)}
       />
       <CtaLink
         text="Download from Google Play"
         accessibilityHint="Click to download the app on the Google Play store"
         url={androidAppUrl}
+        onClick={sendTrackingEventsOnClick('checkout_thankyou_play_store', 'DigitalPack', null)}
       />
       <h3 className="thank-you-content__subheading">
         Daily Edition (iPad only)
@@ -92,6 +95,7 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         text="Download the Daily Edition"
         accessibilityHint="Click to download the Daily Tablet Edition app on the Apple App Store"
         url={getDailyEditionUrl(props.countryGroupId)}
+        onClick={sendTrackingEventsOnClick('checkout_thankyou_daily_edition', 'DigitalPack', null)}
       />
     </div>
   );
