@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { signoutUrl } from 'helpers/routes';
+import { getSignoutUrl } from 'helpers/externalLinks';
 
 // ---- Types ----- //
 
@@ -20,7 +20,7 @@ const Signout = (props: PropTypes) => {
     return null;
   }
   return (
-    <a className="component-signout" href={signoutUrl(props.returnUrl)}>
+    <a className="component-signout" href={getSignoutUrl(props.returnUrl)}>
       Not you? Sign out
     </a>
   );

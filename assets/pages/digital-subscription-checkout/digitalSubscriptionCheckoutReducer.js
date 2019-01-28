@@ -22,7 +22,7 @@ import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
 } from 'components/marketingConsent/marketingConsentReducer';
-import { signoutUrl } from 'helpers/routes';
+import { getSignoutUrl } from 'helpers/externalLinks';
 import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
@@ -134,7 +134,7 @@ const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
-const signOut = () => { window.location.href = signoutUrl(); };
+const signOut = () => { window.location.href = getSignoutUrl(); };
 
 function submitForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
