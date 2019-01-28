@@ -16,7 +16,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { LargeParagraph, ItemList } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import AnchorButton from 'components/button/anchorButton';
 import MarketingConsent from './MarketingConsentContainer';
 
@@ -74,7 +74,7 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         </LargeParagraph>
       </ProductPageTextBlock>
       <ProductPageTextBlock title="Premium App" headingSize={3}>
-        <ItemList>
+        <div className="thank-you-stage__ctas">
           <AnchorButton
             appearance="greyHollow"
             aria-label="Click to download the app on the Apple App Store"
@@ -91,10 +91,10 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
           >
             Download from Google Play
           </AnchorButton>
-        </ItemList>
+        </div>
       </ProductPageTextBlock>
       <ProductPageTextBlock title="Daily Edition (iPad only)" headingSize={3}>
-        <ItemList>
+        <div className="thank-you-stage__ctas">
           <AnchorButton
             appearance="greyHollow"
             aria-label="Click to download the Daily Tablet Edition app on the Apple App Store"
@@ -103,7 +103,7 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
           >
             Download the Daily Edition
           </AnchorButton>
-        </ItemList>
+        </div>
       </ProductPageTextBlock>
     </div>
   );

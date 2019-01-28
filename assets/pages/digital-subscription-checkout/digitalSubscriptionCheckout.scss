@@ -69,6 +69,18 @@
     }
   }
 
+  .thank-you-stage__ctas {
+    > * {
+      min-width: 100%;
+      @include mq($from: desktop) {
+        min-width: gu-span(5);
+      }
+    }
+    & > * + * {
+      margin-top: $gu-v-spacing / 2;
+    }
+  }  
+
   .component-marketing-consent {
     border-bottom: 0;
     @include mq($from: desktop) {

@@ -37,6 +37,17 @@
   }
 }
 
+.component-button--secondary {
+  color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(garnett-neutral-1);
+  svg {
+    fill: gu-colour(garnett-neutral-5);
+  }
+  &:hover, &:focus {
+    background-color: darken(gu-colour(garnett-neutral-1), 100%);
+  }
+}
+
 .component-button--green {
   color: gu-colour(garnett-neutral-5);
   background-color: gu-colour(green-dark);

@@ -69,6 +69,15 @@ export const Outset = ({ children }: {children: Node}) => (
 );
 
 /*
+A vertical block with max width
+*/
+export const NarrowContent = ({ children }: {children: Node}) => (
+  <div className="component-product-page-content-block__narrowContent">
+    {children}
+  </div>
+);
+
+/*
 A css class that sets the background colour to match the block.
 Use on children that need to match the background of the parent
 */

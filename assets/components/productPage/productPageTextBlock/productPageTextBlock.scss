@@ -64,13 +64,3 @@
     left: 0;
   }
 }
-
-.component-product-page-text-block__itemList {
-  > * {
-    margin-bottom: $gu-v-spacing;
-    min-width: 100%;
-    @include mq($from: desktop) {
-      min-width: gu-span(5);
-    }
-  }
-}
