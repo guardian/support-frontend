@@ -1,7 +1,7 @@
 package com.gu.support.catalog
 
-import com.gu.support.workers.TouchPointEnvironment
-import com.gu.support.workers.TouchPointEnvironments.{PROD, SANDBOX, UAT}
+import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX, UAT}
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.{FlatSpec, Matchers}
 

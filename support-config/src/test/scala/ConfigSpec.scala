@@ -1,5 +1,4 @@
-import com.gu.support.config.PromotionsConfigProvider
-import com.gu.support.workers.Stages
+import com.gu.support.config.{PromotionsConfigProvider, Stages}
 import com.typesafe.config.ConfigFactory
 import org.scalatest.{FlatSpec, Matchers}
 

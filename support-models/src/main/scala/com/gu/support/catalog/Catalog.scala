@@ -2,7 +2,7 @@ package com.gu.support.catalog
 
 import com.gu.i18n.Currency
 import com.gu.support.encoding.JsonHelpers._
-import com.gu.support.workers.TouchPointEnvironments.{PROD, SANDBOX, UAT}
+import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX, UAT}
 import io.circe.Json.fromString
 import io.circe._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}

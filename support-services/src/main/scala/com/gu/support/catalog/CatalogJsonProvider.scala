@@ -2,9 +2,8 @@ package com.gu.support.catalog
 
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.gu.support.catalog.AwsS3Client.{fetchJson, s3}
-import com.gu.support.config.TouchPointEnvironments.PROD
-import com.gu.support.workers.TouchPointEnvironment
-import com.gu.support.workers.TouchPointEnvironments.SANDBOX
+import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
 

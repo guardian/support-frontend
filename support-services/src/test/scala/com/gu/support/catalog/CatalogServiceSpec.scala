@@ -5,13 +5,12 @@ import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import io.circe.parser._
 import org.scalatest.{FlatSpec, Matchers}
 import CatalogServiceSpec.serviceWithFixtures
-import com.gu.support.workers.TouchPointEnvironments.PROD
+import com.gu.support.config.TouchPointEnvironments.PROD
 
 class CatalogServiceSpec extends FlatSpec with Matchers {
 
   "CatalogService" should "load the catalog" in {
     serviceWithFixtures.getPrice(
-      PROD,
       DigitalPack,
       GBP,
       Monthly,
@@ -20,7 +19,6 @@ class CatalogServiceSpec extends FlatSpec with Matchers {
     ) shouldBe Some(Price(11.99, GBP))
 
     serviceWithFixtures.getPrice(
-      PROD,
       Paper,
       GBP,
       Monthly,
@@ -29,7 +27,6 @@ class CatalogServiceSpec extends FlatSpec with Matchers {
     ) shouldBe Some(Price(62.79, GBP))
 
     serviceWithFixtures.getPrice(
-      PROD,
       Paper,
       GBP,
       Monthly,
@@ -38,7 +35,6 @@ class CatalogServiceSpec extends FlatSpec with Matchers {
     ) shouldBe Some(Price(54.12, GBP))
 
     serviceWithFixtures.getPrice(
-      PROD,
       GuardianWeekly,
       GBP,
       Quarterly,
@@ -47,7 +43,6 @@ class CatalogServiceSpec extends FlatSpec with Matchers {
     ) shouldBe Some(Price(37.50, GBP))
 
     serviceWithFixtures.getPrice(
-      PROD,
       GuardianWeekly,
       USD,
       Annual,
@@ -60,6 +55,6 @@ class CatalogServiceSpec extends FlatSpec with Matchers {
 object CatalogServiceSpec{
   private val json = parse(Fixtures.loadCatalog).right.get
   private val jsonProvider = new SimpleJsonProvider(json)
-  val serviceWithFixtures = new CatalogService(jsonProvider)
+  val serviceWithFixtures = new CatalogService(PROD, jsonProvider)
 }
 

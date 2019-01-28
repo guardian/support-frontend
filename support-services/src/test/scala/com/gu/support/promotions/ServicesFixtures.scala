@@ -2,7 +2,7 @@ package com.gu.support.promotions
 
 import com.gu.support.catalog._
 import com.gu.support.workers.Annual
-import com.gu.support.workers.TouchPointEnvironments.PROD
+import com.gu.support.config.TouchPointEnvironments.PROD
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 

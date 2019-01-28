@@ -2,15 +2,16 @@ package com.gu.support.catalog
 
 import com.gu.i18n.Currency
 import com.gu.support.catalog.FulfilmentOptions._
-import com.gu.support.workers.{BillingPeriod, Stage, TouchPointEnvironment}
+import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.workers.BillingPeriod
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.generic.auto._
 
 object CatalogService {
-  def apply(environment: TouchPointEnvironment): CatalogService = new CatalogService(new S3CatalogProvider(environment))
+  def apply(environment: TouchPointEnvironment): CatalogService = new CatalogService(environment, new S3CatalogProvider(environment))
 }
 
-class CatalogService(jsonProvider: CatalogJsonProvider) extends LazyLogging {
+class CatalogService(val environment: TouchPointEnvironment, jsonProvider: CatalogJsonProvider) extends LazyLogging {
   private lazy val catalog = {
 
     jsonProvider.get.flatMap { json =>
@@ -29,7 +30,6 @@ class CatalogService(jsonProvider: CatalogJsonProvider) extends LazyLogging {
   }
 
   def getPrice[T <: Product](
-    environment: TouchPointEnvironment,
     product: T,
     currency: Currency,
     billingPeriod: BillingPeriod,

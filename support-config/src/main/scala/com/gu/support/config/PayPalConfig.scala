@@ -1,6 +1,5 @@
 package com.gu.support.config
 
-import com.gu.support.workers.Stage
 import com.typesafe.config.Config
 
 case class PayPalConfig(
