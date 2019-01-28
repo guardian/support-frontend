@@ -1,6 +1,14 @@
 {
   "routes": [
-    "uk/contribute"
+    "uk",
+    "showcase",
+    "uk/subscribe",
+    "uk/subscribe/paper",
+    "uk/subscribe/digital",
+    "uk/subscribe/weekly",
+    "uk/contribute",
+    "uk/contribute/recurring",
+    "paypal/return"
   ],
   "out": ".test-screenshots",
   "prefix": "https://support.thegulocal.com",
