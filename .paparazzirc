@@ -1,17 +1,9 @@
 {
   "routes": [
-    "uk",
-    "showcase",
-    "uk/subscribe",
-    "uk/subscribe/paper",
-    "uk/subscribe/digital",
-    "uk/subscribe/weekly",
-    "uk/contribute",
-    "uk/contribute/recurring",
-    "paypal/return"
+    "uk/contribute"
   ],
   "out": ".test-screenshots",
-  "prefix": "https://support.thegulocal.com/",
+  "prefix": "https://support.thegulocal.com",
   "screenshot": {
     "fullPage": true
   },
