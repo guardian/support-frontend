@@ -10,7 +10,7 @@ import { type Option } from 'helpers/types/option';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 
-import SimpleHeader from './simpleHeader';
+import Header from './header';
 
 // ------ Component ----- //
 
@@ -22,5 +22,5 @@ export default function (
 
   const Switcher = countrySwitcherContainer(subPath, listOfCountries, trackProduct);
 
-  return () => <SimpleHeader utility={<Switcher />} />;
+  return () => <Header utility={<Switcher />} />;
 }

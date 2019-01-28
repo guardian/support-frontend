@@ -10,7 +10,7 @@ import { detect, type CountryGroupId } from 'helpers/internationalisation/countr
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
@@ -43,7 +43,7 @@ const store = pageInit(initReducer(countryGroupId), true);
 const content = (
   <Provider store={store}>
     <Page
-      header={<SimpleHeader />}
+      header={<Header />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />

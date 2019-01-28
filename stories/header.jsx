@@ -4,14 +4,14 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 
 const stories = storiesOf('Header', module);
 
 stories.add('Header', () => (
-  <SimpleHeader />
+  <Header />
 ));
 
 stories.add('Header (with navigation)', () => (
-  <SimpleHeader displayNavigation />
+  <Header displayNavigation />
 ));

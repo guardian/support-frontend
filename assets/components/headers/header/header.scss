@@ -1,7 +1,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~components/leftMarginSection/leftMarginSection';
 
-.component-simple-header {
+.component-header {
   background-color: gu-colour(header-dark);
   display: flex;
   align-items: center;
@@ -26,7 +26,7 @@
   }
 }
 
-.component-simple-header__wrapper {
+.component-header__wrapper {
   width: 100%;
   margin: auto;
   padding: 0 ($gu-h-spacing / 2);
@@ -46,23 +46,23 @@
   }
 }
 
-.component-simple-header-topnav {
+.component-header-topnav {
   display: flex;
   justify-content: space-between
 }
 
-.component-simple-header-topnav__utility {
+.component-header-topnav__utility {
   padding-top: $gu-v-spacing / 2;
 }
 
-.component-simple-header-topnav-logo {
+.component-header-topnav-logo {
   z-index: 10;
   position: relative;
   @include mq($from: tablet) {
     width: gu-span(5);
     background-color: gu-colour(header-dark);
     float: right;
-    .component-simple-header--one-row & {
+    .component-header--one-row & {
       border-left: 1px solid gu-colour(header-border);
     }
   }
@@ -71,13 +71,13 @@
   }
 }
 
-.component-simple-header-topnav-logo__graun {
+.component-header-topnav-logo__graun {
   float: right;
   height: 100%;
   flex: 0 1 auto;
 }
 
-.component-simple-header-bottomnav {
+.component-header-bottomnav {
   display: block;
   clear: both;
   background-color: gu-colour(header-dark);
@@ -88,7 +88,7 @@
   @include mq($until: tablet) {
     @include accessibility-hint;
   }
-  .component-simple-header--one-row & {
+  .component-header--one-row & {
     position: absolute;
     bottom: 0;
     left: $gu-h-spacing / 2;
@@ -96,12 +96,12 @@
   }
 }
 
-.component-simple-header-bottomnav__ul {
+.component-header-bottomnav__ul {
   list-style: none;
   display: inline-flex;
 }
 
-.component-simple-header-bottomnav__link {
+.component-header-bottomnav__link {
   @include gu-fontset-nav-desktop;
   color: gu-colour(news-garnett-highlight);
   text-decoration: none;
@@ -112,7 +112,7 @@
   box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
   transition: .2s linear;
 
-  .component-simple-header-bottomnav__li--active &,
+  .component-header-bottomnav__li--active &,
   &:hover {
     box-shadow: inset 0 3px 0 gu-colour(news-garnett-highlight);
   }
@@ -128,11 +128,11 @@
   }
 }
 
-.component-simple-header-bottomnav__li:first-child > .component-simple-header-bottomnav__link {
+.component-header-bottomnav__li:first-child > .component-header-bottomnav__link {
   padding-left: $gu-h-spacing;
 }
 
-.component-simple-header-bottomnav__li:last-child > .component-simple-header-bottomnav__link {
+.component-header-bottomnav__li:last-child > .component-header-bottomnav__link {
   &:after {
     display: none;
   }

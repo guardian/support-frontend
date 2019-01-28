@@ -10,7 +10,7 @@ import { detect, type CountryGroupId } from 'helpers/internationalisation/countr
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import simpleHeaderWithCountrySwitcherContainer from 'components/headers/simpleHeader/simpleHeaderWithCountrySwitcher';
+import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
@@ -36,7 +36,7 @@ const reactElementId: {
   International: 'premium-tier-landing-page-int',
 };
 
-const CountrySwitcherHeader = simpleHeaderWithCountrySwitcherContainer(
+const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
   '/subscribe/digital',
   [
     'GBPCountries',
