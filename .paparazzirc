@@ -1,32 +1,37 @@
-{
+module.exports = {
   "routes": [
-    "uk",
-    "showcase",
-    "uk/subscribe",
-    "uk/subscribe/paper",
-    "uk/subscribe/digital",
-    "uk/subscribe/weekly",
-    "uk/contribute",
-    "uk/contribute/recurring",
-    "paypal/return"
+    ...[
+      "uk",
+      "showcase",
+      "uk/subscribe",
+      "uk/subscribe/paper",
+      "uk/subscribe/digital",
+      "uk/subscribe/weekly",
+      "uk/contribute",
+      "uk/contribute/recurring",
+      "paypal/return"
+    ].map(route => ['https://support.thegulocal.com', route].join('/')),
+    ...[
+      'iframe.html?selectedKind=Buttons&selectedStory=Button%20button',
+      'iframe.html?selectedKind=Header&selectedStory=Header%20%28with%20navigation%29&full=0&addons=1&stories=1&panelRight=0&addonPanel=storybooks%2Fstorybook-addon-knobs'
+    ].map(route => ['https://support-ui.thegulocal.com', route].join('/'))
   ],
   "out": ".test-screenshots",
-  "prefix": "https://support.thegulocal.com",
   "screenshot": {
     "fullPage": true
   },
   "sizes": {
     "desktop": {
       "width": 1440,
-      "height": 900
+      "height": 400
     },
     "phone": {
       "width": 375,
-      "height": 1100
+      "height": 400
     },
     "tablet": {
       "height": 1024,
-      "width": 768
+      "width": 400
     }
   }
-}
+};
