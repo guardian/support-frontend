@@ -2,6 +2,7 @@ package com.gu.support.catalog
 
 import com.gu.i18n.Currency
 import com.gu.support.encoding.JsonHelpers._
+import com.gu.support.workers.TouchPointEnvironments.{PROD, SANDBOX, UAT}
 import io.circe.Json.fromString
 import io.circe._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -12,8 +13,11 @@ case class Catalog(
 )
 
 object Catalog {
-  lazy val productRatePlansWithPrices: List[ProductRatePlanId] =
-    List(DigitalPack.ratePlans, Paper.ratePlans, GuardianWeekly.ratePlans).flatten.map(_.id)
+  lazy val productRatePlansWithPrices: List[ProductRatePlanId] = List(
+    DigitalPack.ratePlans(PROD), Paper.ratePlans(PROD), GuardianWeekly.ratePlans(PROD),
+    DigitalPack.ratePlans(UAT), Paper.ratePlans(UAT), GuardianWeekly.ratePlans(UAT),
+    DigitalPack.ratePlans(SANDBOX), Paper.ratePlans(SANDBOX), GuardianWeekly.ratePlans(SANDBOX)
+  ).flatten.map(_.id)
 
   implicit val encoder: Encoder[Catalog] = deriveEncoder
   implicit val decoder: Decoder[Catalog] = deriveDecoder[Catalog].prepare(mapFields)
@@ -22,8 +26,9 @@ object Catalog {
   private def mapFields(c: ACursor) = c.withFocus { json =>
     val allRatePlans: List[Json] = json.\\("productRatePlans").flattenJsonArrays
 
-    val supportedRatePlans = allRatePlans.filter(_.getField("id")
-      .exists(id => productRatePlansWithPrices.exists(fromString(_) == id)))
+    val supportedRatePlans = allRatePlans
+      .filter(_.getField("id")
+        .exists(id => productRatePlansWithPrices.exists(fromString(_) == id)))
 
     val prices = supportedRatePlans.map {
       productRatePlan =>
@@ -47,7 +52,7 @@ object Catalog {
       .flatMap(_.as[Price].toOption) //convert the Json to Price objects as they're easier to work with
       .groupBy(_.currency)
       .map(sumPrices)
-      .map({ case (_, price) => price.asJson}) //convert back to Json
+      .map({ case (_, price) => price.asJson }) //convert back to Json
   }
 
   def sumPrices(currencyPrices: (Currency, List[Price])): (Currency, Price) = currencyPrices match {

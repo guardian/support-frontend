@@ -2,6 +2,7 @@ package com.gu.support.promotions
 
 import com.gu.support.catalog._
 import com.gu.support.workers.Annual
+import com.gu.support.workers.TouchPointEnvironments.PROD
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
@@ -18,8 +19,8 @@ object ServicesFixtures {
   val renewalPromoCode = "RENEWAL_CODE"
   val trackingPromoCode = "TRACKING_CODE"
 
-  val validProductRatePlanIds = DigitalPack.ratePlans.map(_.id) ++
-    GuardianWeekly.getProductRatePlan(Annual, Domestic, NoProductOptions).map(prp => List(prp.id)).getOrElse(Nil)
+  val validProductRatePlanIds = DigitalPack.ratePlans(PROD).map(_.id) ++
+    GuardianWeekly.getProductRatePlan(PROD, Annual, Domestic, NoProductOptions).map(prp => List(prp.id)).getOrElse(Nil)
   val validProductRatePlanId = validProductRatePlanIds.head
   val invalidProductRatePlanId = "67890"
 

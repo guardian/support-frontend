@@ -1,6 +1,7 @@
 package com.gu.support.config
 
-import com.gu.support.config.TouchPointEnvironments.{UAT, fromStage}
+import com.gu.support.workers.TouchPointEnvironments.{UAT, fromStage}
+import com.gu.support.workers.{Stage, TouchPointEnvironment}
 import com.typesafe.config.{Config, ConfigValueFactory}
 
 /**

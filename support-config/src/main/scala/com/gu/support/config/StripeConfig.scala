@@ -2,6 +2,7 @@ package com.gu.support.config
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.AUD
+import com.gu.support.workers.Stage
 import com.typesafe.config.Config
 
 

@@ -5,6 +5,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
+import com.gu.support.workers.TouchPointEnvironments.PROD
 import com.gu.support.workers.{Annual, Monthly, Quarterly}
 import org.joda.time.Months
 import org.scalatest.{FlatSpec, Matchers}
@@ -15,14 +16,14 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
     val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
-    val paper = service.getPrices(Paper, Some("DISCOUNT_CODE"))
+    val paper = service.getPrices(PROD, Paper, Some("DISCOUNT_CODE"))
     paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 54.12
 
-    val guardianWeekly = service.getPrices(GuardianWeekly, Some("DISCOUNT_CODE"))
+    val guardianWeekly = service.getPrices(PROD, GuardianWeekly, Some("DISCOUNT_CODE"))
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 37.50
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotion.flatMap(_.discountedPrice) shouldBe Some(105)
 
-    val digitalPack = service.getPrices(DigitalPack, Some("DISCOUNT_CODE"))
+    val digitalPack = service.getPrices(PROD, DigitalPack, Some("DISCOUNT_CODE"))
     val priceSummary = digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP)
     priceSummary.price shouldBe 11.99
     priceSummary.promotion.get.discountedPrice shouldBe Some(8.39)

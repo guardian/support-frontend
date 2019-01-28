@@ -5,21 +5,21 @@ import com.gu.support.catalog._
 import com.gu.support.pricing.PriceSummaryService.getDiscountedPrice
 import com.gu.support.promotions._
 import com.gu.support.touchpoint.TouchpointService
-import com.gu.support.workers.BillingPeriod
+import com.gu.support.workers.{BillingPeriod, Stage, TouchPointEnvironment}
 
 import scala.math.BigDecimal.RoundingMode
 
 class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
-  def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPrices =
-    product.supportedCountries.map(
+  def getPrices[T <: Product](environment: TouchPointEnvironment, product: T, maybePromoCode: Option[PromoCode]): ProductPrices =
+    product.supportedCountries(environment).map(
       countryGroup =>
-        countryGroup -> getPricesForCountryGroup(product, countryGroup, maybePromoCode)
+        countryGroup -> getPricesForCountryGroup(environment, product, countryGroup, maybePromoCode)
     ).toMap
 
-  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, maybePromoCode: Option[PromoCode]): CountryGroupPrices = {
-    val grouped = product.ratePlans.groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
+  def getPricesForCountryGroup[T <: Product](environment: TouchPointEnvironment, product: T, countryGroup: CountryGroup, maybePromoCode: Option[PromoCode]): CountryGroupPrices = {
+    val grouped = product.ratePlans(environment).groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, productRatePlans) =>
         val priceSummaries = for {
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)

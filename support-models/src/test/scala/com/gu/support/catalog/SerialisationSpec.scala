@@ -4,6 +4,7 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.encoding.CustomCodecs.decodeCurrency
+import com.gu.support.workers.TouchPointEnvironments.PROD
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.FlatSpec
 
@@ -12,10 +13,11 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
   "The full Catalog" should "decode successfully" in {
     val digitalPackId = "2c92a0fb4edd70c8014edeaa4eae220a"
     val guardianWeeklyAnnualDomesticId = "2c92a0fe6619b4b901661aa8e66c1692"
+    val numberOfPriceLists = DigitalPack.ratePlans(PROD).length + Paper.ratePlans(PROD).length + GuardianWeekly.ratePlans(PROD).length
 
     testDecoding[Catalog](Fixtures.loadCatalog,
       catalog => {
-        catalog.prices.length shouldBe Catalog.productRatePlansWithPrices.length
+        catalog.prices.length shouldBe numberOfPriceLists
         checkPrice(catalog, digitalPackId, GBP, 11.99)
         checkPrice(catalog, guardianWeeklyAnnualDomesticId, GBP, 150)
       })

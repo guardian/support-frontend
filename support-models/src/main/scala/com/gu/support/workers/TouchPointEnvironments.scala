@@ -1,4 +1,4 @@
-package com.gu.support.config
+package com.gu.support.workers
 
 /**
  * TouchPointEnvironment represents a logical environment for our backend systems, mainly Zuora and Salesforce.

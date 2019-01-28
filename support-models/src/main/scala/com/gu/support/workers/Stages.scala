@@ -1,4 +1,4 @@
-package com.gu.support.config
+package com.gu.support.workers
 
 import PartialFunction.condOpt
 import Stages._
