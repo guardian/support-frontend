@@ -4,12 +4,15 @@ package com.gu.i18n
 import java.util.Locale
 
 case class CountryGroup(name: String,
-                        id: String,
-                        defaultCountry: Option[Country],
-                        countries: List[Country],
-                        currency: Currency,
-                        postalCode: PostalCode
-                       )
+  id: String,
+  defaultCountry: Option[Country],
+  countries: List[Country],
+  currency: Currency,
+  postalCode: PostalCode,
+  additionalCurrencies: List[Currency] = Nil
+) {
+  def supportedCurrencies : List[Currency] = currency :: additionalCurrencies
+}
 
 object CountryGroup {
 
@@ -280,7 +283,7 @@ object CountryGroup {
     Country("ZA", "South Africa"),
     Country("ZM", "Zambia"),
     Country("ZW", "Zimbabwe")
-  ), USD, PostCode)
+  ), USD, PostCode, List(GBP))
 
   val allGroups = List(
     UK,
@@ -321,6 +324,8 @@ object CountryGroup {
     allGroups.find(_.countries.exists(_.name == str)) orElse byCountryCode(str)
 
   def byId(id: String): Option[CountryGroup] = allGroups.find(_.id == id)
+
+  def byName(name: String): Option[CountryGroup] = allGroups.find(_.name == name)
 
   def availableCurrency(currencies: Set[Currency])(country: Country) =
     byCountryCode(country.alpha2).map(_.currency).filter(currencies)

@@ -1,17 +1,15 @@
 package com.gu.support.catalog
 
 import com.gu.i18n.Currency.{GBP, USD}
-import com.gu.support.config.Stages.PROD
 import com.gu.support.workers.{Annual, Monthly, Quarterly}
-import com.gu.test.tags.annotations.IntegrationTest
+import io.circe.parser._
 import org.scalatest.{FlatSpec, Matchers}
+import CatalogServiceSpec.serviceWithFixtures
 
-@IntegrationTest
-class CatalogServiceTest extends FlatSpec with Matchers {
+class CatalogServiceSpec extends FlatSpec with Matchers {
 
-  "CatalogService" should "fetch the catalog from S3" in {
-    val service = CatalogService(PROD)
-    service.getPrice(
+  "CatalogService" should "load the catalog" in {
+    serviceWithFixtures.getPrice(
       DigitalPack,
       GBP,
       Monthly,
@@ -19,7 +17,7 @@ class CatalogServiceTest extends FlatSpec with Matchers {
       NoProductOptions
     ) shouldBe Some(Price(11.99, GBP))
 
-    service.getPrice(
+    serviceWithFixtures.getPrice(
       Paper,
       GBP,
       Monthly,
@@ -27,7 +25,7 @@ class CatalogServiceTest extends FlatSpec with Matchers {
       Everyday
     ) shouldBe Some(Price(62.79, GBP))
 
-    service.getPrice(
+    serviceWithFixtures.getPrice(
       Paper,
       GBP,
       Monthly,
@@ -35,7 +33,7 @@ class CatalogServiceTest extends FlatSpec with Matchers {
       Sixday
     ) shouldBe Some(Price(54.12, GBP))
 
-    service.getPrice(
+    serviceWithFixtures.getPrice(
       GuardianWeekly,
       GBP,
       Quarterly,
@@ -43,7 +41,7 @@ class CatalogServiceTest extends FlatSpec with Matchers {
       NoProductOptions
     ) shouldBe Some(Price(37.50, GBP))
 
-    service.getPrice(
+    serviceWithFixtures.getPrice(
       GuardianWeekly,
       USD,
       Annual,
@@ -52,3 +50,10 @@ class CatalogServiceTest extends FlatSpec with Matchers {
     ) shouldBe Some(Price(325.20, USD))
   }
 }
+
+object CatalogServiceSpec{
+  private val json = parse(Fixtures.loadCatalog).right.get
+  private val jsonProvider = new SimpleJsonProvider(json)
+  val serviceWithFixtures = new CatalogService(jsonProvider)
+}
+

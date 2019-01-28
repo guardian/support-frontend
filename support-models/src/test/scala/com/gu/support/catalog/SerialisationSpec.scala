@@ -29,6 +29,17 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
       .getOrElse(fail())
       .value shouldBe value
   }
+
+
+  "Products" should "roundtrip successfully" in {
+    testRoundTripSerialisation[Product](DigitalPack)
+    testRoundTripSerialisation[Product](Paper)
+  }
+
+  "FulfilmentOptions" should "roundtrip successfully" in {
+    import FulfilmentOptions.{decoder, encoder}
+    testRoundTripSerialisation[FulfilmentOptions](Domestic)
+  }
 }
 
 

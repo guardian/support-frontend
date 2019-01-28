@@ -6,17 +6,28 @@ import com.gu.i18n.Currency
 import com.gu.support.config.Stage
 import com.gu.support.workers.BillingPeriod
 import io.circe.generic.auto._
+import FulfilmentOptions._
+import com.typesafe.scalalogging.LazyLogging
 
 object CatalogService {
-  def apply(stage: Stage): CatalogService = new CatalogService(stage)
+  def apply(stage: Stage): CatalogService = new CatalogService(new S3CatalogProvider(stage))
 }
 
-class CatalogService(stage: Stage) {
+class CatalogService(jsonProvider: CatalogJsonProvider) extends LazyLogging {
   private lazy val catalog = {
-    val catalog = new GetObjectRequest(s"gu-zuora-catalog/$stage/Zuora-$stage", "catalog.json")
-    fetchJson(s3, catalog).flatMap { c =>
-      val attempt = c.as[Catalog]
-      attempt.toOption
+
+    jsonProvider.get.flatMap { json =>
+      val attempt = json.as[Catalog]
+      attempt.fold(
+        err => {
+          logger.error(s"Failed to load the catalog, error was: $err")
+          None
+        },
+        c => {
+          logger.info(s"Successfully loaded the catalog")
+          Some(c)
+        }
+      )
     }
   }
 
@@ -24,17 +35,18 @@ class CatalogService(stage: Stage) {
     product: T,
     currency: Currency,
     billingPeriod: BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions[T],
-    productOptions: ProductOptions[T]
+    fulfilmentOptions: FulfilmentOptions,
+    productOptions: ProductOptions
   ): Option[Price] = {
     for {
-      productRatePlan <- product.getProductRatePlan(product, billingPeriod, fulfilmentOptions, productOptions)
+      productRatePlan <- product.getProductRatePlan(billingPeriod, fulfilmentOptions, productOptions)
       priceList <- getPriceList(productRatePlan)
       price <- priceList.prices.find(_.currency == currency)
     } yield price
   }
 
-  private def getPriceList[T <: Product](productRatePlan: ProductRatePlan[T]): Option[Pricelist] =
+
+  def getPriceList[T <: Product](productRatePlan: ProductRatePlan[T]): Option[Pricelist] =
     catalog.flatMap(_.prices.find(_.productRatePlanId == productRatePlan.id))
 
 }

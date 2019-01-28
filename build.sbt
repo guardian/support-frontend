@@ -63,14 +63,14 @@ lazy val supportModels = (project in file("support-models"))
     commonSettings,
     testSettings,
     libraryDependencies ++= commonDependencies
-  )
+  ).dependsOn(supportInternationalisation)
 lazy val supportConfig = (project in file("support-config"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
     testSettings,
     libraryDependencies ++= commonDependencies
-  )
+  ).dependsOn(supportModels)
 lazy val supportServices = (project in file("support-services"))
   .configs(IntegrationTest)
   .settings(
@@ -78,6 +78,7 @@ lazy val supportServices = (project in file("support-services"))
     testSettings,
     libraryDependencies ++= commonDependencies
   )
+  .dependsOn(supportModels)
 lazy val supportInternationalisation = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
   .settings(

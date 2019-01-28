@@ -4,10 +4,11 @@ import com.gu.i18n.Country
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.PromotionsConfig
 import com.gu.support.promotions.PromotionValidator.PromotionExtensions
+import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.zuora.api.SubscriptionData
 import com.typesafe.scalalogging.LazyLogging
 
-class PromotionService(config: PromotionsConfig, maybeCollection: Option[PromotionCollection] = None) extends LazyLogging {
+class PromotionService(config: PromotionsConfig, maybeCollection: Option[PromotionCollection] = None) extends TouchpointService with LazyLogging {
   val promotionCollection = maybeCollection.getOrElse(new DynamoPromotionCollection(config.tables))
 
   def findPromotion(promoCode: PromoCode): Option[Promotion] =
@@ -18,7 +19,7 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
       .map(validatePromotion(_, country, productRatePlanId, isRenewal).map(ValidatedPromotion(promoCode, _)))
       .getOrElse(Left(NoSuchCode))
 
-  private[promotions] def validatePromotion(promotion: Promotion, country: Country, productRatePlanId: ProductRatePlanId, isRenewal: Boolean): Either[PromoError, Promotion] =
+  def validatePromotion(promotion: Promotion, country: Country, productRatePlanId: ProductRatePlanId, isRenewal: Boolean): Either[PromoError, Promotion] =
     promotion.validateFor(productRatePlanId, country, isRenewal)
       .headOption
       .map(err => Left(err))
