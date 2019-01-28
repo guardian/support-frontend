@@ -54,7 +54,10 @@ function ThankYouContent(props: PropTypes) {
         <AppsSection countryGroupId={props.countryGroupId} />
       </ProductPageContentBlock>
       <ProductPageContentBlock>
-        <MarketingConsent />
+        <MarketingConsent render={({ title, message }) => (
+          <ProductPageTextBlock title={title}>{message}</ProductPageTextBlock>
+        )}
+        />
       </ProductPageContentBlock>
     </div>
   );

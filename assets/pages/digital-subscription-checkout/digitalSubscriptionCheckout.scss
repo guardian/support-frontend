@@ -87,16 +87,6 @@
       position: relative;
       padding-bottom: $gu-v-spacing * 4;  
     }
-    .component-marketing-consent__title {
-      @include gu-fontset-heading;
-    }
-  
-    .component-marketing-consent__message {
-      @include gu-fontset-body;
-      @include mq($from: phablet) {
-        width: 560px;
-      }
-    }  
     .svg-newsletters {
       display: block;
       @include mq($from: desktop) {
