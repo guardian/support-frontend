@@ -9,6 +9,7 @@
   top: 0;
   left: 0;
   z-index: 100;
+  contain: content;
 }
 
 .component-dialog--modal[data-open=true] {
@@ -17,6 +18,7 @@
   right: 0;
   justify-content: center;
   align-items: center;
+  contain: strict;
 }
 
 .component-dialog__contents {
