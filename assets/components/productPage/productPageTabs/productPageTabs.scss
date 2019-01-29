@@ -59,14 +59,18 @@
   outline: none;
 }
 
+.component-product-page-tabs__tab:focus,
+.component-product-page-tabs__tab:hover {
+  box-shadow: inset 0 4px 0 0 gu-colour(garnett-neutral-4);
+}
+
 .component-product-page-tabs__tab--active {
   box-shadow: inset 0 4px 0 0 gu-colour(news-garnett-highlight);
   text-decoration: none;
   pointer-events: none;
   cursor: default;
+  &:focus {
+    box-shadow: inset 0 4px 0 0 gu-colour(highlight-dark);
+  }
 }
 
-.component-product-page-tabs__tab:focus,
-.component-product-page-tabs__tab:hover {
-  box-shadow: inset 0 4px 0 0 gu-colour(garnett-neutral-4);
-}

@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 
 import { storiesOf } from '@storybook/react';
 import { withKnobs, text, radios } from '@storybook/addon-knobs';
@@ -8,20 +8,38 @@ import ProductPageTabs from 'components/productPage/productPageTabs/productPageT
 
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
-const stories = storiesOf('Buttons', module)
+const stories = storiesOf('Tabs', module)
   .addDecorator(withCenterAlignment)
   .addDecorator(withKnobs);
 
-const appearanceKnob = () => radios('Appearance', Object.keys(Appearances), Object.keys(Appearances)[0]);
-const iconsKnob = () => radios('Icon', Object.keys(icons), Object.keys(icons)[0]);
-const iconSideKnob = () => radios('Icon side', Object.keys(Sides), Object.keys(Sides)[0]);
+class ControlledTabs extends Component {
+  state = {
+    active: 0,
+  }
 
-stories.add('Button button', () => (
-  <ProductPageTabs
-    appearance={appearanceKnob()}
-    aria-label={null}
-    icon={icons[iconsKnob()]}
-    iconSide={iconSideKnob()}
-  >{text('Label', 'Button label')}
-  </ProductPageTabs>
+  render() {
+    return (
+      <ProductPageTabs
+        active={this.state.active}
+        onChange={(active) => { this.setState({ active }); }}
+        tabs={
+          this.props.tabs
+        }
+      />
+    );
+  }
+
+}
+
+stories.add('Tabs', () => (
+  <ControlledTabs
+    tabs={
+    [{
+        name: 'Voucher Booklet',
+      }, {
+        name: 'Home Delivery',
+      },
+    ]
+  }
+  />
 ));
