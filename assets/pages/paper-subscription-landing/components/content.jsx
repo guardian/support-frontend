@@ -95,7 +95,7 @@ const ContentVoucherFaqBlock = () => (
     />
   }
   >
-    <ProductPageTextBlock title="How do vouchers work?">
+    <ProductPageTextBlock title="How to use our vouchers?">
       <ProductPageTextBlockList items={[
         'When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter',
         'You can exchange these vouchers for that day’s newspaper at retailers across the UK. That includes most independent newsagents, a range of petrol stations, and most supermarkets',
