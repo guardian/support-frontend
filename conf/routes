@@ -39,6 +39,8 @@ GET  /monthly-contributions                         controllers.Application.cont
 
 GET  /contribute                                        controllers.Application.contributeGeoRedirect()
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String)
+# this one is just an alias for the above, so we can do a dummy A/A redirect test in Optimize
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/o/contribute    controllers.Application.contributionsLanding(country: String)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String)
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
