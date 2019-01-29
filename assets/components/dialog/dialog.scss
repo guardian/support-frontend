@@ -5,15 +5,18 @@
 
 .component-dialog[data-open=true] {
   display: block;
-  display: flex;
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 100;
+}
+
+.component-dialog--modal[data-open=true] {
+  display: flex;
   bottom: 0;
   right: 0;
   justify-content: center;
   align-items: center;
-  z-index: 100;
 }
 
 .component-dialog__contents {
@@ -21,7 +24,7 @@
   z-index: 10;
 }
 
-.component-dialog__backdrop {
+.component-dialog--modal .component-dialog__backdrop {
   background: rgba(0, 0, 0, 0.6);
   position: absolute;
   top: 0;

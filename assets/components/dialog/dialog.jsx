@@ -4,6 +4,8 @@
 
 import React, { Component, type Node } from 'react';
 
+import { classNameWithModifiers } from 'helpers/utilities';
+
 import './dialog.scss';
 
 
@@ -26,7 +28,7 @@ class Dialog extends Component<PropTypes> {
     onStatusChange: () => {},
     modal: true,
     open: false,
-    dismissOnBackgroundClick: true,
+    dismissOnBackgroundClick: false,
   }
 
   componentDidMount() {
@@ -50,10 +52,10 @@ class Dialog extends Component<PropTypes> {
       } else {
         this.ref.show();
       }
-      requestAnimationFrame(() => {
-        this.ref.focus();
-      });
     }
+    requestAnimationFrame(() => {
+      this.ref.focus();
+    });
   }
 
   close() {
@@ -66,12 +68,12 @@ class Dialog extends Component<PropTypes> {
 
   render() {
     const {
-      open, children, onStatusChange, dismissOnBackgroundClick,
+      open, modal, children, onStatusChange, dismissOnBackgroundClick,
     } = this.props;
 
     return (
       <dialog
-        className="component-dialog"
+        className={classNameWithModifiers('component-dialog', [modal ? 'modal' : null])}
         tabIndex="-1"
         onOpen={() => { onStatusChange(true); }}
         onCancel={() => { onStatusChange(false); }}
@@ -80,12 +82,21 @@ class Dialog extends Component<PropTypes> {
       >
         <div className="component-dialog__contents">
           {children}
+          <div
+            className="end-focus-trap"
+            tabIndex="0" // eslint-disable-line jsx-a11y/no-noninteractive-tabindex
+            onFocus={() => {
+              this.ref.focus();
+            }}
+          />
         </div>
-        <div
-          className="component-dialog__backdrop"
-          aria-hidden
-          onClick={() => dismissOnBackgroundClick && onStatusChange(false)}
-        />
+        {modal &&
+          <div
+            className="component-dialog__backdrop"
+            aria-hidden
+            onClick={() => dismissOnBackgroundClick && onStatusChange(false)}
+          />
+        }
       </dialog>
     );
   }

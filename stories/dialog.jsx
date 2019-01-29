@@ -25,11 +25,17 @@ class ControlledDialogButton extends Component<{modal: boolean}, {open: boolean}
           onStatusChange={(status) => { this.setState({ open: status }); }}
           open={this.state.open}
         >
-          <div style={{ padding: '1em', background: '#fff' }}>
+          <div style={{ padding: '1em', background: '#121212', color: '#fff' }}>
             <ProductPageTextBlock title="im a dialog!">
               i dont do much on my own :(
             </ProductPageTextBlock>
-            <Button aria-label={null} appearance="primary" onClick={() => { this.setState({ open: false }); }}>Close</Button>
+            <Button
+              icon={null}
+              aria-label={null}
+              appearance="primary"
+              onClick={() => { this.setState({ open: false }); }}
+            >Close
+            </Button>
           </div>
         </Dialog>
       </div>
@@ -42,5 +48,16 @@ stories.add('Modal dialog', () => (
 ));
 
 stories.add('Non-modal dialog', () => (
-  <ControlledDialogButton modal={false} />
+  <div>
+    <ProductPageTextBlock title="This is a non-modal dialog example">
+      <p>It opens up but lets you interact
+        with the page under it while it is open
+      </p>
+      <p>You probably do not actually want this,
+        as this dialog does not have the click outside behaviour
+        and makes for a confusing experience for screen readers
+      </p>
+      <ControlledDialogButton modal={false} />
+    </ProductPageTextBlock>
+  </div>
 ));
