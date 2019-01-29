@@ -110,6 +110,9 @@ const content = (
             {getStandfirst()}
           </LargeParagraph>
         </ProductPageTextBlock>
+
+      </ProductPageContentBlock>
+      <ProductPageContentBlock>
         <Tabs />
       </ProductPageContentBlock>
       <Content />

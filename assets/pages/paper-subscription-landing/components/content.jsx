@@ -85,12 +85,14 @@ ContentForm.defaultProps = { text: null };
 
 
 const ContentVoucherFaqBlock = () => (
-  <ProductPageContentBlock image={<GridImage
-    gridId="paperVoucherFeature"
-    srcSizes={[920, 500, 140]}
-    sizes="(max-width: 740px) 100vw, 500px"
-    imgType="png"
-  />
+  <ProductPageContentBlock
+    border
+    image={<GridImage
+      gridId="paperVoucherFeature"
+      srcSizes={[920, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 500px"
+      imgType="png"
+    />
   }
   >
     <ProductPageTextBlock title="How do vouchers work?">
@@ -119,12 +121,14 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
   );
 
   return (
-    <ProductPageContentBlock image={<GridImage
-      gridId="paperDeliveryFeature"
-      srcSizes={[920, 500, 140]}
-      sizes="(max-width: 740px) 100vw, 500px"
-      imgType="png"
-    />
+    <ProductPageContentBlock
+      border
+      image={<GridImage
+        gridId="paperDeliveryFeature"
+        srcSizes={[920, 500, 140]}
+        sizes="(max-width: 740px) 100vw, 500px"
+        imgType="png"
+      />
     }
     >
       <ProductPageTextBlock title="How does delivery work?">
