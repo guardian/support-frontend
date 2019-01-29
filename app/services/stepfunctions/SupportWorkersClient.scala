@@ -105,18 +105,18 @@ class SupportWorkersClient(
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
-        SafeLogger.error(scrub"[$requestId] Failed to create regular contribution for ${user.id} - $error")
+        SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
         StateMachineFailure: SupportWorkersError
       },
       { success =>
-        SafeLogger.info(s"[$requestId] Creating regular contribution for ${user.id} ($success)")
+        SafeLogger.info(s"[$requestId] Successfully triggered Step Function execution for ${user.id} ($success)")
         underlying.jobIdFromArn(success.arn).map { jobId =>
           StatusResponse(
             status = Status.Pending,
             trackingUri = supportUrl + statusCall(jobId).url
           )
         } getOrElse {
-          SafeLogger.error(scrub"[$requestId] Failed to parse ${success.arn} to a jobId when creating new regular contribution for ${user.id} $request")
+          SafeLogger.error(scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id} $request")
           StatusResponse(
             status = Status.Failure,
             trackingUri = "",
