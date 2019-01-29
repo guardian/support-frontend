@@ -8,6 +8,8 @@ import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
+import AnchorButton from 'components/button/anchorButton';
+import SvgChevron from 'components/svgs/chevron';
 import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
@@ -16,6 +18,7 @@ import ProductPagehero from 'components/productPage/productPageHero/productPageH
 import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
@@ -80,6 +83,7 @@ const content = (
         heading={getHeading()}
         type="feature"
         modifierClasses={['paper']}
+        cta={<AnchorButton aria-label={null} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       >
         <GridPicture
           sources={[
@@ -110,7 +114,6 @@ const content = (
             {getStandfirst()}
           </LargeParagraph>
         </ProductPageTextBlock>
-
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <Tabs />

@@ -68,7 +68,7 @@ const getSaleTitle = (): ?string => {
 };
 
 const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (
-  <ProductPageContentBlock type="feature">
+  <ProductPageContentBlock type="feature" id="subscribe">
     <ProductPageTextBlock {...{ title }} callout={getSaleTitle()} />
     {text &&
       <ProductPageTextBlock>
