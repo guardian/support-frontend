@@ -44,6 +44,7 @@ ProductPageTextBlock.defaultProps = {
 
 export const LargeParagraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block__large">{children}</p>;
 export const SansParagraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block__sans">{children}</p>;
+export const Paragraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block">{children}</p>;
 
 
 // ----- Exports ----- //

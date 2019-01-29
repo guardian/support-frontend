@@ -8,8 +8,9 @@ import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { Paragraph, SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
+import ProductPageTextBlockOrderedList from 'components/productPage/productPageTextBlock/productPageTextBlockOrderedList';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import GridImage from 'components/gridImage/gridImage';
 import { paperSubsUrl } from 'helpers/routes';
@@ -96,11 +97,17 @@ const ContentVoucherFaqBlock = () => (
   }
   >
     <ProductPageTextBlock title="How to use our vouchers?">
+      <ProductPageTextBlockOrderedList items={[
+        'Pick your subscription package below',
+        'We’ll send you a book of vouchers that contain one voucher per paper in your subscription',
+        'Take your voucher to your retailer. Your vouchers will be accepted at retailers across the UK, including most independent newsagents',
+      ]}
+      />
+    </ProductPageTextBlock>
+    <ProductPageTextBlock title="Giving you peace of mind">
       <ProductPageTextBlockList items={[
-        'When you take out a voucher subscription, we’ll send you a book of vouchers. There’s one for each newspaper in the package you choose. So if you choose a Sixday package, for example, you’ll receive six vouchers for each week, delivered every quarter',
-        'You can exchange these vouchers for that day’s newspaper at retailers across the UK. That includes most independent newsagents, a range of petrol stations, and most supermarkets',
-        'Your newsagent won’t lose out; we’ll pay them the same amount that they’d receive if you paid cash for your paper',
-        'You can pause your subscription for up to four weeks a year. So if you’re going away, you won’t have to pay for the papers that you miss',
+        'Pick your subscription package belowYour newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper',
+        'You can pause your subscription for up to four weeks a year. So if you’re heading away, you won’t have to pay for the papers you’ll miss',
       ]}
       />
     </ProductPageTextBlock>
@@ -131,19 +138,21 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
       />
     }
     >
-      <ProductPageTextBlock title="How does delivery work?">
+      <ProductPageTextBlock title="How home delivery works">
+        <Paragraph>
+          If you live in Greater London (within the M25), you can use The Guardian’s home delivery service. Don’t worry if you live outside this area you can still {linkToVouchers}.
+        </Paragraph>
+        <ProductPageTextBlockOrderedList items={[
+        'Select your subscription below and checkout',
+        'Your subscribing deliveries will begin as quickly as five days  from you subscribing',
+        ]}
+        />
+      </ProductPageTextBlock>
+      <ProductPageTextBlock title="Giving you peace of mind">
         <ProductPageTextBlockList items={[
-          (
-            <span>
-            If you live in Greater London (within the M25),
-            you can use The Guardian’s home delivery service. Don’t
-            worry if you live outside this area - you can still {linkToVouchers}.
-            </span>
-          ),
-          'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
-          'Your newspaper deliveries will begin as quickly as five days from you subscribing',
-          'Delivery to individual flats, or apartments within blocks, is unavailable as we require access to your post box to deliver your paper',
-          'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',
+        'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
+        'We can’t delivery to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
+        'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',
         ]}
         />
       </ProductPageTextBlock>
@@ -178,7 +187,7 @@ class Content extends Component<PropTypes> {
     const collectionPage = (
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentVoucherFaqBlock />
-        <ContentForm title="Now pick your perfect voucher subscription package" />
+        <ContentForm title="Pick your subscription package below: Voucher" />
         <ContentHelpBlock
           faqLink={trackedLink(
             'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions',
@@ -197,7 +206,7 @@ class Content extends Component<PropTypes> {
     const deliveryPage = (
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentDeliveryFaqBlock setTabAction={setTabAction} />
-        <ContentForm title="Now pick your perfect home delivery package" />
+        <ContentForm title="Pick your subscription package below: Delivery" />
         <ContentHelpBlock
           faqLink={trackedLink(
             'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions',
