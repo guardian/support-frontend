@@ -2,9 +2,10 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.SwitchState.On
-import admin.{PaymentMethodsSwitch, AllSettings, AllSettingsProvider, Switches}
+import admin.{AllSettings, AllSettingsProvider, PaymentMethodsSwitch, Switches}
 import cats.implicits._
 import com.gu.support.config._
+import com.gu.support.pricing.{PriceSummaryService, PriceSummaryServiceProvider}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.StringsConfig
@@ -49,7 +50,10 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
 
+      val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
+
       new DigitalSubscription(
+        priceSummaryServiceProvider,
         client,
         assetResolver,
         actionRefiner,

@@ -43,5 +43,5 @@ trait Services {
   lazy val allSettingsProvider: AllSettingsProvider = AllSettingsProvider.fromConfig(appConfig).valueOr(throw _)
 
   lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =
-    new PriceSummaryServiceProvider(appConfig.promotionsConfigProvider, PROD) //PROD is the only catalog which is complete
+    new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider)
 }

@@ -35,6 +35,9 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import type { ErrorReason } from 'helpers/errorReasons';
+import { digitalPackProductPrice } from 'helpers/productPrice/productPrices';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+
 import {
   type FormActionCreators,
   formActionCreators,
@@ -45,7 +48,7 @@ import {
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
 import { countrySupportsDirectDebit } from '../helpers/paymentProviders';
-
+import { PriceLabel } from 'components/priceLabel/priceLabel';
 
 // ----- Types ----- //
 
@@ -54,6 +57,7 @@ type PropTypes = {|
   signOut: typeof signOut,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
+  productPrices: ProductPrices,
   ...FormActionCreators,
 |};
 
@@ -65,6 +69,7 @@ function mapStateToProps(state: State) {
     ...getFormFields(state),
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
+    productPrices: state.page.checkout.productPrices,
   };
 }
 
@@ -118,6 +123,20 @@ function CheckoutForm(props: PropTypes) {
   const errorState = props.submissionError ?
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
+
+  const monthlyPriceLabel = (<PriceLabel
+    forInput="billingPeriod"
+    country={props.country}
+    productPrice={digitalPackProductPrice(props.productPrices, Monthly, props.country)}
+    billingPeriod={Monthly}
+  />);
+
+  const annualPriceLabel = (<PriceLabel
+    forInput="billingPeriod"
+    country={props.country}
+    productPrice={digitalPackProductPrice(props.productPrices, Annual, props.country)}
+    billingPeriod={Annual}
+  />);
 
   return (
     <ProductPageContentBlock modifierClasses={['your-details']}>
@@ -194,13 +213,13 @@ function CheckoutForm(props: PropTypes) {
             <FormSection title="How often would you like to pay?">
               <Fieldset>
                 <RadioInput
-                  text={`${getPrice(props.country, Monthly)}Every month`}
+                  text={monthlyPriceLabel}
                   name="billingPeriod"
                   checked={props.billingPeriod === Monthly}
                   onChange={() => props.setBillingPeriod(Monthly)}
                 />
                 <RadioInput
-                  text={`${getPrice(props.country, Annual)}Every year`}
+                  text={annualPriceLabel}
                   name="billingPeriod"
                   checked={props.billingPeriod === Annual}
                   onChange={() => props.setBillingPeriod(Annual)}

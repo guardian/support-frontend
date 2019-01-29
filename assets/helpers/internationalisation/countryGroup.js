@@ -13,6 +13,8 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries' | 'Canada';
 
+export type CountryGroupName = 'United Kingdom' | 'United States' | 'Australia' | 'Europe' | 'International' | 'New Zealand' | 'Canada';
+
 /*
   Note: supportInternationalizationId should match an existing
   id from support-internationalisation library. We use it to
