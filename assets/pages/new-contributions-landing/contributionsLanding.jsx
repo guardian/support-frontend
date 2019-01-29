@@ -59,26 +59,33 @@ const setOneOffContributionCookie = () => {
   );
 };
 
+const ContributionLandingPage = (
+  <Page
+    classModifiers={['contribution-form']}
+    header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+    footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+  >
+    <NewContributionFormContainer
+      thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+    />
+    <NewContributionBackground />
+  </Page>
+);
+
 const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
         <Route
           exact
-          path="/:countryId(uk|us|au|eu|int|nz|ca)/(o/)?contribute"
-          render={() => (
-            <Page
-              classModifiers={['contribution-form']}
-              header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-              footer={<Footer disclaimer countryGroupId={countryGroupId} />}
-            >
-              <NewContributionFormContainer
-                thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-              />
-              <NewContributionBackground />
-            </Page>
-          )
-        }
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
+          render={() => ContributionLandingPage}
+        />
+        {/* this is just an alias for the above, so we can do a dummy A/A redirect test in Optimize */ }
+        <Route
+          exact
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/o/contribute"
+          render={() => ContributionLandingPage}
         />
         <Route
           exact
