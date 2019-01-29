@@ -13,6 +13,8 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   private val contributePayPalButton = className("paypal-button")
 
   private val oneOffButton = cssSelector(".form__radio-group-label[for='contributionType-ONE_OFF']")
+  private val monthlyButton = cssSelector(".form__radio-group-label[for='contributionType-MONTHLY']")
+  private val annualButton = cssSelector(".form__radio-group-label[for='contributionType-ANNUAL']")
 
   private val otherAmountButton = cssSelector(".form__radio-group-label[for='contributionAmount-other']")
 
@@ -51,8 +53,6 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   def selectStripePayment(): Unit = clickOn(stripeSelector)
 
-  def selectPayPalPayment(): Unit = clickOn(payPalSelector)
-
   def pageHasLoaded: Boolean = {
     pageHasElement(contributeButton)
     elementIsClickable(contributeButton)
@@ -61,8 +61,8 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   def clickContribute: Unit = clickOn(contributeButton)
 
   def clickOneOff: Unit = clickOn(oneOffButton)
-
-  def clickContributePayPalButton: Unit = clickOn(contributePayPalButton)
+  def clickMonthly: Unit = clickOn(monthlyButton)
+  def clickAnnual: Unit = clickOn(annualButton)
 
   def clickOtherAmount: Unit = clickOn(otherAmountButton)
 

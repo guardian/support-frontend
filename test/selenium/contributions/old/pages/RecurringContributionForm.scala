@@ -2,15 +2,13 @@ package selenium.contributions.old.pages
 
 import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.Page
-import selenium.util.{Browser, Config, PayPalCheckout, TestUser}
+import selenium.util.{Browser, Config, TestUser}
 
 case class RecurringContributionForm(testUser: TestUser)(implicit val webDriver: WebDriver) extends Page with Browser {
 
   val url = s"${Config.supportFrontendUrl}/contribute/recurring-guest"
 
   private val stripeButton = id("qa-pay-with-card")
-
-  private val payPalButton = id("component-paypal-button-checkout")
 
   private object RegisterFields {
     private val firstName = id("first-name")
@@ -34,7 +32,7 @@ case class RecurringContributionForm(testUser: TestUser)(implicit val webDriver:
 
   private val stateSelector = id("qa-state-dropdown")
 
-  def paymentPageHasLoaded: Boolean = pageHasElement(stripeButton) && pageHasElement(payPalButton)
+  def paymentPageHasLoaded: Boolean = pageHasElement(stripeButton)
 
   def detailsPageHasLoaded: Boolean = pageHasElement(nextButton)
 
@@ -49,9 +47,5 @@ case class RecurringContributionForm(testUser: TestUser)(implicit val webDriver:
   // ----- Stripe ----- //
 
   def selectStripePayment(): Unit = clickOn(stripeButton)
-
-  // ----- PayPal ----- //
-
-  def selectPayPalPayment(): Unit = clickOn(payPalButton)
 
 }
