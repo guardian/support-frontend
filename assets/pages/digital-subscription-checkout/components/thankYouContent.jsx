@@ -77,6 +77,7 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         </LargeParagraph>
       </ProductPageTextBlock>
       <ProductPageTextBlock title="Premium App" headingSize={3}>
+        <p>Your enhanced experience of The Guardian for mobile and tablet, with exclusive features and ad-free reading. </p>
         <div className="thank-you-stage__ctas">
           <AnchorButton
             appearance="greyHollow"
@@ -97,6 +98,7 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         </div>
       </ProductPageTextBlock>
       <ProductPageTextBlock title="Daily Edition (iPad only)" headingSize={3}>
+        <p>Every issue of The Guardian and Observer, designed for your iPad and available offline.</p>
         <div className="thank-you-stage__ctas">
           <AnchorButton
             appearance="greyHollow"
