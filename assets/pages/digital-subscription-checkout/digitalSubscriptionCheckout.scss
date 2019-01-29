@@ -70,14 +70,14 @@
   }
 
   .thank-you-stage__ctas {
-    > * {
+    > .component-button {
       min-width: 100%;
       @include mq($from: desktop) {
         min-width: gu-span(5);
       }
-    }
-    & > * + * {
-      margin-top: $gu-v-spacing / 2;
+      & + .component-button {
+        margin-top: $gu-v-spacing / 2;
+      }
     }
   }  
 
