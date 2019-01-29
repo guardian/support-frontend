@@ -22,7 +22,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a Monthly Contribution (New Contributions Flow)") {
+  feature("Sign up for a Recurring Contribution (New Contributions Flow)") {
 
     scenario("Monthly contribution sign-up with Stripe - GBP") {
 
