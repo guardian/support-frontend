@@ -18,7 +18,6 @@ import ProductPagehero from 'components/productPage/productPageHero/productPageH
 import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
