@@ -13,7 +13,7 @@
   box-sizing: border-box;
   cursor: pointer;
   transition: .2s;
-
+  justify-content: space-between;
   &:hover, &:focus {
     outline: 0;
   }
@@ -34,6 +34,17 @@
   color: gu-colour(garnett-neutral-1);
   &:hover, &:focus {
     background-color: gu-colour(highlight-dark);
+  }
+}
+
+.component-button--secondary {
+  color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(garnett-neutral-1);
+  svg {
+    fill: gu-colour(garnett-neutral-5);
+  }
+  &:hover, &:focus {
+    background-color: darken(gu-colour(garnett-neutral-1), 100%);
   }
 }
 

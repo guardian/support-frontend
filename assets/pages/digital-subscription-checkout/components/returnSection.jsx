@@ -6,26 +6,30 @@ import React from 'react';
 
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-import CtaLink from 'components/ctaLink/ctaLink';
+import ProductPageContentBlock, { Divider, NarrowContent } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import AnchorButton from 'components/button/anchorButton';
 
-import './returnSection.scss';
 
 // ----- Component ----- //
 
 function ReturnSection() {
 
   return (
-    <div className="return-section">
-      <LeftMarginSection>
-        <CtaLink
-          text="Return to The Guardian"
-          accessibilityHint="Return to The Guardian home page"
-          url="https://theguardian.com"
-          onClick={sendTrackingEventsOnClick('checkout_return_home', 'DigitalPack', null)}
-        />
-      </LeftMarginSection>
-    </div>
+    <ProductPageContentBlock>
+      <Divider />
+      <NarrowContent>
+        <div className="thank-you-stage__ctas">
+          <AnchorButton
+            appearance="secondary"
+            aria-label="Return to The Guardian home page"
+            href="https://theguardian.com"
+            onClick={sendTrackingEventsOnClick('checkout_return_home', 'DigitalPack', null)}
+          >
+            Return to The Guardian
+          </AnchorButton>
+        </div>
+      </NarrowContent>
+    </ProductPageContentBlock>
   );
 
 }
