@@ -77,7 +77,10 @@ function AppsSection(props: { countryGroupId: CountryGroupId }) {
         </LargeParagraph>
       </ProductPageTextBlock>
       <ProductPageTextBlock title="Premium App" headingSize={3}>
-        <p>Your enhanced experience of The Guardian for mobile and tablet, with exclusive features and ad-free reading. </p>
+        <p>
+          Your enhanced experience of The Guardian
+          for mobile and tablet, with exclusive features and ad-free reading.
+        </p>
         <div className="thank-you-stage__ctas">
           <AnchorButton
             appearance="greyHollow"
