@@ -19,14 +19,10 @@
   }
 }
 
-.component-product-page-tabs__li:last-child {
-  box-shadow: 1px 0 0 0 gu-colour(garnett-neutral-4);
-}
-
 .component-product-page-tabs__li + .component-product-page-tabs__li .component-product-page-tabs__tab {
   &:before {
     position: absolute;
-    bottom: 1.0625rem;
+    bottom: $gu-h-spacing*0.8;
     left: 0;
     width: 1px;
     height: 100%;
@@ -36,6 +32,7 @@
 }
 
 .component-product-page-tabs__tab {
+  @include gu-fontset-tabs;
   position: relative;
   text-decoration: none;
   padding: ($gu-v-spacing)*1.3 $gu-h-spacing/2;
@@ -50,8 +47,6 @@
   appearance: none;
   box-sizing: border-box;
   transition: box-shadow 0.2s;
-  font-family: $gu-headline;
-  font-weight: 700;
   line-height: 1;
 
   cursor: pointer;

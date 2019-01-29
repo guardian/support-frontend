@@ -17,16 +17,30 @@ type PropTypes = {|
   children: Node,
   image: Option<Node>,
   modifierClasses: Array<string>,
-  needsHigherZindex: boolean
+  needsHigherZindex: boolean,
+  border: Option<boolean>,
 |};
 
 
 // ----- Render ----- //
 
 const ProductPageContentBlock = ({
-  type, children, id, modifierClasses, image, needsHigherZindex,
+  type, children, id, modifierClasses, image, needsHigherZindex, border,
 }: PropTypes) => (
-  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, image ? 'overflow-hidden' : null, needsHigherZindex ? 'higher' : null, ...modifierClasses])}>
+  <div
+    id={id}
+    className={classNameWithModifiers(
+'component-product-page-content-block',
+    [
+      type,
+      image ? 'overflow-hidden' : null,
+      needsHigherZindex ? 'higher' : null,
+      border === false ? 'no-border' : null,
+      border === true ? 'force-border' : null,
+      ...modifierClasses,
+    ],
+)}
+  >
     <LeftMarginSection>
       <div className="component-product-page-content-block__content">
         {children}
@@ -44,6 +58,7 @@ ProductPageContentBlock.defaultProps = {
   image: null,
   modifierClasses: [],
   needsHigherZindex: false,
+  border: null,
 };
 
 
