@@ -20,7 +20,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
 import type {
   RegularPaymentRequest,
-  StripeAuthorisation,
+  StripeAuthorisation, StripePaymentMethod,
 } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import {
   type PaymentAuthorisation,
@@ -69,7 +69,7 @@ export type Action =
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object }
-  | { type: 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT', canMakePayment: boolean }
+  | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
@@ -115,8 +115,8 @@ const updateEmail = (email: string): ((Function) => void) =>
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
-const setCanMakeStripePaymentRequestPayment =
-  (canMakePayment: boolean): Action => ({ type: 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT', canMakePayment });
+const setPaymentRequestButtonPaymentMethod =
+  (paymentMethod: StripePaymentMethod): Action => ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod });
 
 const setStripePaymentRequestObject =
   (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });
@@ -517,7 +517,7 @@ export {
   checkIfEmailHasPassword,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
-  setCanMakeStripePaymentRequestPayment,
+  setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
