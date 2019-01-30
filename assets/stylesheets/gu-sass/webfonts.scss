@@ -246,61 +246,57 @@ $guss-webfonts: (
 );
 
 
-// ----- Guardian Headline Web Fonts ----- //
+// ----- Garnett Fonts ----- //
+
+$gu-gt-fonts-url: "//interactive.guim.co.uk/fonts/garnett";
+
+@function gu-font-src($filename) {
+    @return 
+        url("#{$gu-gt-fonts-url + "/" + $filename}.woff2") format("woff2"),
+        url("#{$gu-gt-fonts-url + "/" + $filename}.woff") format("woff"),
+        url("#{$gu-gt-fonts-url + "/" + $filename}.ttf") format("ttf");
+}
 
 @font-face {
     font-family: "Guardian Headline";
-    src: url("/assets/fonts/GHGuardianHeadline-Light.woff2") format("woff2"),
-    url("/assets/fonts/GHGuardianHeadline-Light.woff") format("woff"),
-    url("/assets/fonts/GHGuardianHeadline-Light.ttf") format("ttf");
+    src: gu-font-src("GHGuardianHeadline-Light");
     font-weight: 200;
 }
 
 @font-face {
     font-family: "Guardian Headline";
-    src: url("/assets/fonts/GHGuardianHeadline-LightItalic.woff2") format("woff2"),
-    url("/assets/fonts/GHGuardianHeadline-LightItalic.woff") format("woff"),
-    url("/assets/fonts/GHGuardianHeadline-LightItalic.ttf") format("ttf");
+    src: gu-font-src("GHGuardianHeadline-LightItalic");
     font-weight: 200;
     font-style: italic;
 }
 
 @font-face {
     font-family: "Guardian Headline";
-    src: url("/assets/fonts/GHGuardianHeadline-Regular.woff2") format("woff2"),
-    url("/assets/fonts/GHGuardianHeadline-Regular.woff") format("woff"),
-    url("/assets/fonts/GHGuardianHeadline-Regular.ttf") format("ttf");
+    src: gu-font-src("GHGuardianHeadline-Regular");
     font-weight: 400;
 }
 
 @font-face {
     font-family: "Guardian Headline";
-    src: url("/assets/fonts/GHGuardianHeadline-RegularItalic.woff2") format("woff2"),
-    url("/assets/fonts/GHGuardianHeadline-RegularItalic.woff") format("woff"),
-    url("/assets/fonts/GHGuardianHeadline-RegularItalic.ttf") format("ttf");
+    src: gu-font-src("GHGuardianHeadline-RegularItalic");
     font-weight: 400;
     font-style: italic;
 }
 
 @font-face {
     font-family: "Guardian Headline";
-    src: url("/assets/fonts/GHGuardianHeadline-Semibold.woff2") format("woff2"),
-    url("/assets/fonts/GHGuardianHeadline-Semibold.woff")  format("woff"),
-    url("/assets/fonts/GHGuardianHeadline-Semibold.ttf")   format("ttf");;
+    src: gu-font-src("GHGuardianHeadline-Semibold");
     font-weight: 500;
 }
 
 @font-face {
     font-family: "Guardian Headline";
-    src: url("/assets/fonts/GHGuardianHeadline-Bold.woff2") format("woff2"),
-    url("/assets/fonts/GHGuardianHeadline-Bold.woff") format("woff"),
-    url("/assets/fonts/GHGuardianHeadline-Bold.ttf") format("ttf");
+    src: gu-font-src("GHGuardianHeadline-Bold");
     font-weight: 900;
 }
 
 @font-face {
     font-family: "GT Guardian Titlepiece";
-    src: url("/assets/fonts/GTGuardianTitlepiece-Bold.woff2") format("woff2"),
-    url("/assets/fonts/GTGuardianTitlepiece-Bold.woff") format("woff");
+    src: gu-font-src("GTGuardianTitlepiece-Bold");
     font-weight: 400;
 }
