@@ -6,7 +6,11 @@
   display: flex;
   align-items: center;
   justify-content: stretch;
-  overflow: hidden;
+
+  .component-dialog {
+    align-items: stretch;
+    justify-content: flex-start;
+  }
 
   .svg-guardian-logo {
     display: block;
@@ -46,6 +50,17 @@
   }
 }
 
+.component-header__row {
+  display: flex;
+  width: 100%;
+  .component-header-topnav {
+    flex: 1 1 auto;
+  }
+  .component-header-bottomnav {
+    flex: 1 1 auto;
+  }
+}
+
 .component-header-topnav {
   display: flex;
   justify-content: space-between
@@ -56,14 +71,14 @@
 }
 
 .component-header-topnav-logo {
-  z-index: 10;
-  position: relative;
   @include mq($from: tablet) {
     width: gu-span(5);
     background-color: gu-colour(header-dark);
     float: right;
     .component-header--one-row & {
       border-left: 1px solid gu-colour(header-border);
+      z-index: 10;
+      position: relative;    
     }
   }
   @include mq($from: wide) {
@@ -78,8 +93,8 @@
 }
 
 .component-header-bottomnav {
-  display: block;
-  clear: both;
+  display: flex;
+  justify-content: flex-start;
   background-color: gu-colour(header-dark);
   border: 1px solid gu-colour(header-border);
   border-bottom: none;
@@ -92,7 +107,7 @@
     position: absolute;
     bottom: 0;
     left: $gu-h-spacing / 2;
-    right: gu-span(1);
+    right: gu-span(5);
   }
 }
 
@@ -106,6 +121,7 @@
   color: gu-colour(news-garnett-highlight);
   text-decoration: none;
   display: block;
+  height: $gu-v-spacing * 2;
   padding: ($gu-v-spacing/1.5) ($gu-h-spacing/1.5);
   overflow: hidden;
   position: relative;
@@ -136,4 +152,17 @@
   &:after {
     display: none;
   }
+}
+
+.component-header-veggie__button {
+  $size: ($gu-v-spacing * 2) + (($gu-v-spacing /1.5) *2) + $gu-v-spacing;
+  display: block;
+  height: $size;
+  width: $size;
+  margin: 0;
+  padding: 0;
+  background: gu-colour(news-garnett-highlight);
+  border-radius: 100%;
+  border: 0;
+  cursor: pointer;
 }
