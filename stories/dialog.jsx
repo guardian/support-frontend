@@ -26,8 +26,8 @@ class ControlledDialogButton extends Component<{modal: boolean}, {open: boolean}
           open={this.state.open}
         >
           <div style={{ padding: '1em', background: '#121212', color: '#fff' }}>
-            <ProductPageTextBlock title="im a dialog!">
-              i dont do much on my own :(
+            <ProductPageTextBlock title={'I\'m a dialog!'}>
+              I don&#39;t do much on my own :(
             </ProductPageTextBlock>
             <Button
               icon={null}
