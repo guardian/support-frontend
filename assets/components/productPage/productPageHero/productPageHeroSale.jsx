@@ -32,7 +32,7 @@ const ProductPageHeroSale = ({
   <header>
     <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, type])}>
       <LeftMarginSection>
-        <div className="component-product-page-hero__sale-content">
+        <div className="component-product-page-hero__sale">
 
           <div className="component-product-page-hero__sale-copy">
             <h2>Works with different browsers</h2>
@@ -55,11 +55,12 @@ const ProductPageHeroSale = ({
                       imgType: 'png',
                     },
                   ]}
-                  altText=""
+                  altText="A couple sit together sharing one newspaper"
                   fallbackImgType="png"
                 />
               </div>
             </div>
+
           </div>
         </div>
         <HeadingBlock overheading={overheading} heading={heading} />
