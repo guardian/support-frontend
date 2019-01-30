@@ -13,11 +13,12 @@ import SvgChevron from 'components/svgs/chevron';
 import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
-import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
+import ProductPageHeroSale from 'components/productPage/productPageHero/productPageHeroSale';
 
 import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
@@ -77,12 +78,12 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <ProductPagehero
+      <ProductPageHeroSale
         overheading="The Guardian newspaper subscriptions"
         heading={getHeading()}
-        type="feature"
+        type="sale"
         modifierClasses={['paper']}
-        cta={<AnchorButton aria-label={null} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+        cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       >
         <GridPicture
           sources={[
@@ -106,13 +107,14 @@ const content = (
           altText=""
           fallbackImgType="png"
         />
-      </ProductPagehero>
+      </ProductPageHeroSale>
       <ProductPageContentBlock needsHigherZindex>
         <ProductPageTextBlock>
           <LargeParagraph>
             {getStandfirst()}
           </LargeParagraph>
         </ProductPageTextBlock>
+
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <Tabs />
