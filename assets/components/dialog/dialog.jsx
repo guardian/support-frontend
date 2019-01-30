@@ -4,6 +4,7 @@
 
 import React, { Component, type Node } from 'react';
 
+import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import './dialog.scss';
@@ -15,6 +16,7 @@ export type PropTypes = {|
   onStatusChange: (boolean) => void,
   modal: boolean,
   open: boolean,
+  'aria-label': Option<string>,
   dismissOnBackgroundClick: boolean,
   children: Node
 |};
@@ -70,13 +72,14 @@ class Dialog extends Component<PropTypes> {
 
   render() {
     const {
-      open, modal, children, onStatusChange, dismissOnBackgroundClick,
+      open, modal, children, onStatusChange, dismissOnBackgroundClick, ...otherProps
     } = this.props;
 
     return (
       <dialog // eslint-disable-line jsx-a11y/no-redundant-roles
         aria-modal={modal}
         aria-hidden={!open}
+        {...otherProps}
         role="dialog"
         className={classNameWithModifiers('component-dialog', [modal ? 'modal' : null])}
         tabIndex="-1"

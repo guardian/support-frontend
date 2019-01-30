@@ -27,6 +27,7 @@ class ControlledDialogButton extends Component<{modal: boolean}, {open: boolean}
         >Open it up
         </Button>
         <Dialog
+          aria-label="Modal dialog"
           modal={this.props.modal}
           onStatusChange={(status) => { this.setState({ open: status }); }}
           open={this.state.open}

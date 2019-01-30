@@ -24,6 +24,7 @@ export default class VeggieBurgerButton extends Component<{}, {menuOpen: boolean
           <SvgMenu />
         </button>
         <Dialog
+          aria-label="Menu"
           open={menuOpen}
           modal
           dismissOnBackgroundClick
