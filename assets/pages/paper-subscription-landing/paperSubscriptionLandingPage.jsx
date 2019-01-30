@@ -122,7 +122,7 @@ const content = (
         />
       </ProductPageHero> */}
 
-      {/* Could we do this?
+      {/* TODO Could we do this?
 
         if sale
         show  ProductPageHeroSale
@@ -138,7 +138,7 @@ const content = (
         <Tabs />
       </ProductPageContentBlock>
       <Content />
-      {/* the below needs to be conditonal based on sale */}
+      {/* TODO the below needs to be conditonal based on sale */}
       <ProductPageContentBlock>
         <ProductPageTextBlock title="Promotion terms and conditions">
           <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full 6 for 6 promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
