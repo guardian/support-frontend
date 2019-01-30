@@ -29,6 +29,7 @@ case class PayPalReferenceTransaction(
   `type`: String = "PayPal"
 ) extends PaymentMethod
 
+
 case class DirectDebitPaymentMethod(
   firstName: String,
   lastName: String,
@@ -36,6 +37,11 @@ case class DirectDebitPaymentMethod(
   bankCode: String,
   bankTransferAccountNumber: String,
   country: Country = Country.UK,
+  city: String,
+  postalCode: String,
+  state: String,
+  streetName: String,
+  streetNumber: String,
   bankTransferType: String = "DirectDebitUK",
   `type`: String = "BankTransfer"
 ) extends PaymentMethod
