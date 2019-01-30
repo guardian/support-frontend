@@ -13,7 +13,7 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
-import './heroJoyOfPrint.scss';
+import './joyOfPrint.scss';
 
 function getHeading(): string {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {

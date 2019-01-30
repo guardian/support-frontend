@@ -19,9 +19,9 @@ import { renderPage } from 'helpers/render';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
-import { SaleHeader } from './components/hero';
+import { SaleHeader } from './components/hero/hero';
 import Tabs from './components/tabs';
-import Content from './components/content';
+import Content from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
