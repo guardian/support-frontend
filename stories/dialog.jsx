@@ -9,9 +9,7 @@ import Button from 'components/button/button';
 import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
-const stories = storiesOf('Dialogs', module)
-  .addDecorator(withCenterAlignment);
-
+// This is a barebones stateful wrapper - <Dialog/> needs to be controlled just like inputs
 class ControlledDialogButton extends Component<{modal: boolean}, {open: boolean}> {
   state = {
     open: false,
@@ -37,7 +35,6 @@ class ControlledDialogButton extends Component<{modal: boolean}, {open: boolean}
               I don&#39;t do much on my own :(
             </ProductPageTextBlock>
             <Button
-              aria-haspopup="dialog"
               icon={null}
               aria-label={null}
               appearance="primary"
@@ -50,6 +47,9 @@ class ControlledDialogButton extends Component<{modal: boolean}, {open: boolean}
     );
   }
 }
+
+const stories = storiesOf('Dialogs', module)
+  .addDecorator(withCenterAlignment);
 
 stories.add('Modal dialog', () => (
   <ControlledDialogButton modal />
