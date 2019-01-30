@@ -135,7 +135,7 @@ function onClick(event, props: PropTypes) {
 // . null - browser has no compatible payment method)
 // . {applePay: true} - applePay is available
 // . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
-const availablePaymentRequestButtonPaymentMethod: Object => (StripePaymentMethod | null) = (result: Object) => {
+const availablePaymentRequestButtonPaymentMethod = (result: Object): StripePaymentMethod | null => {
   if (result && result.applePay === true) {
     return 'StripeApplePay';
   } else if (result && result.applePay === false) {
