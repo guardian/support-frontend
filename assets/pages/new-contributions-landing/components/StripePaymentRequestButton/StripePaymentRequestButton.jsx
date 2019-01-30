@@ -169,8 +169,8 @@ function initialisePaymentRequest(props: PropTypes) {
     const paymentMethod = availablePaymentRequestButtonPaymentMethod(result);
     if (paymentMethod !== null) {
       trackComponentClick(`${paymentMethod}-loaded`);
-      props.setPaymentRequestButtonPaymentMethod(paymentMethod);
       setUpPaymentListener(props, paymentRequest, paymentMethod);
+      props.setPaymentRequestButtonPaymentMethod(paymentMethod);
     }
   });
   props.setStripePaymentRequestObject(paymentRequest);
