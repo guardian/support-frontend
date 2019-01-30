@@ -125,9 +125,9 @@
   margin: 0;
 }
 
-.component-product-page-content-block__narrowContent {
+.component-product-page-content-block__narrowContent,
+.component-product-page-content-block .component-product-page-text-block {
   @include narrow-content;
-  
 }
 
 // ----- Vertical rhythm ------ //
