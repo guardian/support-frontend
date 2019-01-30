@@ -10,9 +10,11 @@ import { links } from '../links';
 
 import './mobileHeader.scss';
 
+export type Position = Option<{x: number, y: number}>;
+
 export type PropTypes = {|
   onClose: () => void,
-  closeButtonAt?: Option<{x: number, y: number}>,
+  closeButtonAt?: Position,
 |};
 
 // ----- Component ----- //
