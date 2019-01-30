@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { Component, type Element } from 'react';
+import React, { Component, type Element, type Node } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -17,31 +17,14 @@ import { paperSubsUrl } from 'helpers/routes';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
 
-import { type State } from '../paperSubscriptionLandingPageReducer';
+import { type State, type ActiveTabState } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
 
 import Form from './form';
 
 import './content.scss';
 
-type PropTypes = {|
-  selectedTab: number,
-  setTabAction: typeof setTab
-|};
-
-// ----- Auxiliary Components ----- //
-const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>, telephoneLink: Element<string>}) => (
-  <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
-    <ProductPageTextBlock title="FAQ and help">
-      <SansParagraph>
-      If you’ve got any more questions, you might well find the answers in the {faqLink}.
-      </SansParagraph>
-      <SansParagraph>
-       If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
-      </SansParagraph>
-    </ProductPageTextBlock>
-  </ProductPageContentBlock>
-);
+// ----- Helper functions ----- //
 
 function getPageInfoChip(): string {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
@@ -68,19 +51,73 @@ const getSaleTitle = (): ?string => {
 
 };
 
-const ContentForm = ({ title, text }: {title: string, text?: Option<string>}) => (
-  <ProductPageContentBlock type="feature" id="subscribe">
-    <ProductPageTextBlock {...{ title }} callout={getSaleTitle()} />
-    {text &&
+
+// ----- Auxiliary Components ----- //
+const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>, telephoneLink: Element<string>}) => (
+  <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
+    <ProductPageTextBlock title="FAQ and help">
+      <SansParagraph>
+      If you’ve got any more questions, you might well find the answers in the {faqLink}.
+      </SansParagraph>
+      <SansParagraph>
+       If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
+      </SansParagraph>
+    </ProductPageTextBlock>
+  </ProductPageContentBlock>
+);
+
+const LinkToVouchers = ({ setTabAction, children }: {setTabAction: typeof setTab, children: Node}) => (
+  <a
+    href={paperSubsUrl(false)}
+    onClick={(ev) => {
+      ev.preventDefault();
+      setTabAction('collection');
+    }}
+  >
+    {children}
+  </a>
+);
+
+const LinkToDelivery = ({ setTabAction, children }: {setTabAction: typeof setTab, children: Node}) => (
+  <a
+    href={paperSubsUrl(true)}
+    onClick={(ev) => {
+      ev.preventDefault();
+      setTabAction('delivery');
+    }}
+  >
+    {children}
+  </a>
+);
+
+const ContentForm = ({
+  title, text, setTabAction, selectedTab,
+}: {
+  title: string,
+  text?: Option<string>,
+  selectedTab: ActiveTabState,
+  setTabAction: typeof setTab}) => (
+    <ProductPageContentBlock type="feature" id="subscribe">
+      <ProductPageTextBlock {...{ title }} callout={getSaleTitle()} />
+      {text &&
       <ProductPageTextBlock>
         <p>{text}</p>
       </ProductPageTextBlock>
     }
-    <Form />
-    <ProductPageInfoChip>
-      {getPageInfoChip()}
-    </ProductPageInfoChip>
-  </ProductPageContentBlock>
+      <Form />
+      <ProductPageTextBlock>
+        <SansParagraph>
+          {
+            selectedTab === 'collection'
+            ? <LinkToDelivery setTabAction={setTabAction}>Switch to home delivery</LinkToDelivery>
+            : <LinkToVouchers setTabAction={setTabAction}>Switch to vouchers</LinkToVouchers>
+          }
+        </SansParagraph>
+      </ProductPageTextBlock>
+      <ProductPageInfoChip>
+        {getPageInfoChip()}
+      </ProductPageInfoChip>
+    </ProductPageContentBlock>
 );
 ContentForm.defaultProps = { text: null };
 
@@ -115,55 +152,42 @@ const ContentVoucherFaqBlock = () => (
   </ProductPageContentBlock>
 );
 
-const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => {
-  const linkToVouchers = (
-    <a
-      href={paperSubsUrl(false)}
-      onClick={(ev) => {
-        ev.preventDefault();
-        setTabAction('collection');
-      }}
-    >
-      subscribe using our voucher scheme
-    </a>
-  );
-
-  return (
-    <ProductPageContentBlock
-      border
-      image={<GridImage
-        gridId="paperDeliveryFeature"
-        srcSizes={[920, 500, 140]}
-        sizes="(max-width: 740px) 100vw, 500px"
-        imgType="png"
-      />
+const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => (
+  <ProductPageContentBlock
+    border
+    image={<GridImage
+      gridId="paperDeliveryFeature"
+      srcSizes={[920, 500, 140]}
+      sizes="(max-width: 740px) 100vw, 500px"
+      imgType="png"
+    />
     }
-    >
-      <ProductPageTextBlock title="How home delivery works">
-        <p>
+  >
+    <ProductPageTextBlock title="How home delivery works">
+      <p>
           If you live in Greater London (within the M25), you
           can use The Guardian’s home delivery service. Don’t
-          worry if you live outside this area you can still {linkToVouchers}.
-        </p>
-        <OrderedList items={[
+          worry if you live outside this area you can
+          still <LinkToVouchers setTabAction={setTabAction} >subscribe using our voucher scheme</LinkToVouchers>.
+      </p>
+      <OrderedList items={[
         'Select your subscription below and checkout',
         'Your subscribing deliveries will begin as quickly as five days  from you subscribing',
         ]}
-        />
-      </ProductPageTextBlock>
-      <Divider small />
-      <ProductPageTextBlock title="Giving you peace of mind">
-        <UnorderedList items={[
+      />
+    </ProductPageTextBlock>
+    <Divider small />
+    <ProductPageTextBlock title="Giving you peace of mind">
+      <UnorderedList items={[
         'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
         'We can’t delivery to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
         'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',
         ]}
-        />
-      </ProductPageTextBlock>
-    </ProductPageContentBlock>
+      />
+    </ProductPageTextBlock>
+  </ProductPageContentBlock>
 
-  );
-};
+);
 
 function trackedLink(href: string, text: string, onClick: Function) {
   return <a href={href} onClick={onClick}>{text}</a>;
@@ -171,6 +195,11 @@ function trackedLink(href: string, text: string, onClick: Function) {
 
 
 // ----- Render ----- //
+
+type PropTypes = {|
+  selectedTab: ActiveTabState,
+  setTabAction: typeof setTab
+|};
 
 class Content extends Component<PropTypes> {
 
@@ -191,7 +220,7 @@ class Content extends Component<PropTypes> {
     const collectionPage = (
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentVoucherFaqBlock />
-        <ContentForm title="Pick your subscription package below: Voucher" />
+        <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below: Voucher" />
         <ContentHelpBlock
           faqLink={trackedLink(
             'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions',
@@ -210,7 +239,7 @@ class Content extends Component<PropTypes> {
     const deliveryPage = (
       <div className="paper-subscription-landing-content__focusable" tabIndex={-1} ref={(d) => { this.tabRef = d; }}>
         <ContentDeliveryFaqBlock setTabAction={setTabAction} />
-        <ContentForm title="Pick your subscription package below: Delivery" />
+        <ContentForm selectedTab={selectedTab} setTabAction={setTabAction} title="Pick your subscription package below: Delivery" />
         <ContentHelpBlock
           faqLink={trackedLink(
             'https://www.theguardian.com/subscriber-direct/subscription-frequently-asked-questions',
