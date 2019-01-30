@@ -77,26 +77,23 @@ class Dialog extends Component<PropTypes> {
 
     return (
       <dialog // eslint-disable-line jsx-a11y/no-redundant-roles
+        className={classNameWithModifiers('component-dialog', [modal ? 'modal' : null, open ? 'open' : null])}
         aria-modal={modal}
         aria-hidden={!open}
-        {...otherProps}
-        role="dialog"
-        className={classNameWithModifiers('component-dialog', [modal ? 'modal' : null])}
         tabIndex="-1"
+        role="dialog"
         onOpen={() => { onStatusChange(true); }}
         onCancel={() => { onStatusChange(false); }}
         ref={(d) => { this.ref = (d: any); }}
-        data-open={open}
+        {...otherProps}
       >
         <div className="component-dialog__contents">
           {children}
           <div
-            className="end-focus-trap"
             tabIndex="0" // eslint-disable-line jsx-a11y/no-noninteractive-tabindex
             onFocus={() => {
-              if (this.ref) {
-                this.ref.focus();
-              }
+              /* this acts as a cheap focus trap */
+              if (this.ref) { this.ref.focus(); }
             }}
           />
         </div>

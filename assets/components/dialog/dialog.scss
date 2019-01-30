@@ -7,7 +7,7 @@
   overflow: hidden;
 }
 
-.component-dialog[data-open=true] {
+.component-dialog--open {
   visibility: visible;
   position: fixed;
   height: auto;
@@ -18,7 +18,7 @@
   contain: content;
 }
 
-.component-dialog--modal[data-open=true] {
+.component-dialog--modal.component-dialog--open {
   display: flex;
   bottom: 0;
   right: 0;
