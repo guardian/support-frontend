@@ -16,6 +16,7 @@ import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/pro
 // import ProductPageHero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageHeroSale from 'components/productPage/productPageHero/productPageHeroSale';
 
+import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -41,6 +42,11 @@ const reactElementId: {
   delivery: 'paper-subscription-landing-page-delivery',
 };
 
+// ----- Internationalisation ----- //
+
+const countryGroupId: CountryGroupId = detect();
+const { supportInternationalisationId } = countryGroups[countryGroupId];
+const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supportInternationalisationId : 'gb').toUpperCase();
 
 // ----- Initial selection? ----- //
 
@@ -116,7 +122,7 @@ const content = (
         />
       </ProductPageHero> */}
 
-      {/* Should we do this?
+      {/* Could we do this?
 
         if sale
         show  ProductPageHeroSale
@@ -132,6 +138,13 @@ const content = (
         <Tabs />
       </ProductPageContentBlock>
       <Content />
+      {/* the below needs to be conditonal based on sale */}
+      <ProductPageContentBlock>
+        <ProductPageTextBlock title="Promotion terms and conditions">
+          <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full 6 for 6 promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
+          </p>
+        </ProductPageTextBlock>
+      </ProductPageContentBlock>
     </Page>
   </Provider>
 );
