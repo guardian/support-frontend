@@ -299,10 +299,16 @@ function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
   return b.startTime - a.startTime;
 }
 
-function getSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
-  return Sales.filter(sale =>
+function getActiveFlashSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
+  const now = Date.now();
+
+  const sales = Sales.filter(sale =>
     sale.subscriptionProduct === product &&
     sale.activeRegions.includes(countryGroupId)).sort(sortSalesByStartTimesDescending);
+
+  return sales.filter(sale =>
+    (now > sale.startTime && now < sale.endTime) ||
+    getQueryParameter('flash_sale') === 'true');
 }
 
 function getDiscount(product: SubscriptionProduct, countryGroupId: CountryGroupId): ?number {
@@ -319,15 +325,6 @@ function flashSaleIsActive(product: SubscriptionProduct, countryGroupId: Country
   const sales = getActiveFlashSales(product, countryGroupId);
 
   return sales.length > 0;
-}
-
-function getActiveFlashSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): boolean {
-  const now = Date.now();
-  const sales = getSales(product, countryGroupId).filter(sale =>
-    (now > sale.startTime && now < sale.endTime) ||
-    getQueryParameter('flash_sale') === 'true');
-
-  return sales;
 }
 
 function getPromoCode(
