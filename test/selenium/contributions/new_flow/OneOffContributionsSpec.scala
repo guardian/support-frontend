@@ -22,7 +22,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a one-off contribution") {
+  feature("Sign up for a one-off contribution (New Contributions Flow)") {
 
     scenario("One-off contribution sign-up with Stripe - AUD") {
 
@@ -35,7 +35,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
 
-      When("he/she selects to make a one-time contribution")
+      When("the user selects the one-time option")
       landingPage.clickOneOff
 
       And("he/she clicks the other-amount button")
