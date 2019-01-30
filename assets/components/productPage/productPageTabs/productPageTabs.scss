@@ -14,6 +14,9 @@
 
 .component-product-page-tabs__li {
   overflow: hidden;
+  &:last-child {
+    border-right: 1px solid gu-colour(garnett-neutral-4);
+  }
   @include mq($until:phablet) {
     flex: 1 1 0;
   }
@@ -48,8 +51,8 @@
   box-sizing: border-box;
   transition: box-shadow 0.2s;
   line-height: 1;
-
   cursor: pointer;
+
   @include mq($from:phablet) {
     min-width: gu-span(3) + $gu-h-spacing/2;
   }
