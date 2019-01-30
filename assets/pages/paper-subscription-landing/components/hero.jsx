@@ -31,7 +31,7 @@ const DefaultHeader = () => (
     heading={getHeading()}
     appearance="feature"
     modifierClasses={['paper']}
-    cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+    content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
     <GridPicture
       sources={[
@@ -64,7 +64,7 @@ const SaleHeader = () => (
     heading={getHeading()}
     appearance="custom"
     modifierClasses={['paper-sale']}
-    cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+    content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
     <div className="sale-joy-of-print">
 
