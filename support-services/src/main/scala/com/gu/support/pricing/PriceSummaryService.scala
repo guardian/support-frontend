@@ -92,13 +92,18 @@ object PriceSummaryService {
     originalPrice.copy(value = newPrice.setScale(2, RoundingMode.HALF_DOWN))
   }
 
-  private def getDiscountScaledToPeriod(discountBenefit: DiscountBenefit, billingPeriod: BillingPeriod): Double = {
+  def getDiscountScaledToPeriod(discountBenefit: DiscountBenefit, billingPeriod: BillingPeriod): Double = {
     //If the discount period doesn't cover the whole of the billing period (often the case for annual billing)
     //we need to work out the percentage of the period that is covered and adjust the discount accordingly
+
+    //Also if the discount period isn't an exact multiple of the billing period, eg. a five month discount on
+    //a quarterly rate plan then we need to scale the discount and spread it over any billing periods affected
+
     val percentageOfPeriodDiscounted = discountBenefit.durationMonths.fold(1.toDouble) { durationInMonths =>
-      Math.min(durationInMonths.getMonths.toDouble / billingPeriod.monthsInPeriod.toDouble, 1)
+      durationInMonths.getMonths.toDouble / billingPeriod.monthsInPeriod.toDouble
     }
-    val newDiscountPercent = discountBenefit.amount * percentageOfPeriodDiscounted
+    val numberOfPeriodsDiscounted = Math.ceil(percentageOfPeriodDiscounted)
+    val newDiscountPercent = (discountBenefit.amount * percentageOfPeriodDiscounted) / numberOfPeriodsDiscounted
     BigDecimal(newDiscountPercent).setScale(2, RoundingMode.HALF_DOWN).toDouble
   }
 }

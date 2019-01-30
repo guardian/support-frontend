@@ -41,22 +41,25 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
     // original price but different discounted values - £35.71 & £35.72.
     // We need to work out what they will actually get charged by Zuora
 
-    checkPrice(discountBenefit, 47.62, 35.71, Monthly) //Everyday
-    checkPrice(discountBenefit, 51.96, 38.97, Monthly) //Everyday+
-    checkPrice(discountBenefit, 41.12, 30.84, Monthly) //Sixday
-    //checkPrice(discountBenefit, 47.62, 35.72) //Sixday+
-    checkPrice(discountBenefit, 20.76, 15.57, Monthly) //Weekend
-    //checkPrice(discountBenefit, 29.42, 22.07) //Weekend+
-    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
-    //checkPrice(discountBenefit, 22.06, 16.55) //Sunday+
-    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
-
-    //Digital Pack
-    checkPrice(discountBenefit, 11.99, 8.99, Monthly)
-    checkPrice(discountBenefit, 119.90, 112.41, Annual)
+//    checkPrice(discountBenefit, 47.62, 35.71, Monthly) //Everyday
+//    checkPrice(discountBenefit, 51.96, 38.97, Monthly) //Everyday+
+//    checkPrice(discountBenefit, 41.12, 30.84, Monthly) //Sixday
+//    //checkPrice(discountBenefit, 47.62, 35.72) //Sixday+
+//    checkPrice(discountBenefit, 20.76, 15.57, Monthly) //Weekend
+//    //checkPrice(discountBenefit, 29.42, 22.07) //Weekend+
+//    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
+//    //checkPrice(discountBenefit, 22.06, 16.55) //Sunday+
+//    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
+//
+//    //Digital Pack
+//    checkPrice(discountBenefit, 11.99, 8.99, Monthly)
+//    checkPrice(discountBenefit, 119.90, 112.41, Annual)
+    checkPrice(DiscountBenefit(25, Some(Months.FIVE)), 35.95, 28.46, Quarterly)
 
     //Guardian Weekly domestic
     checkPrice(DiscountBenefit(25, Some(Months.TWO)), 37.50, 31.25, Quarterly)
+
+
   }
 
   def checkPrice(discount: DiscountBenefit, original: BigDecimal, expected: BigDecimal, billingPeriod: BillingPeriod) =
