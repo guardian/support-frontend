@@ -5,8 +5,10 @@
 import React from 'react';
 
 import { type Option } from 'helpers/types/option';
+import SvgClose from 'components/svgs/close';
 
 import { links } from '../links';
+import VeggieButton from '../veggieButton/veggieButton';
 
 import './mobileHeader.scss';
 
@@ -37,13 +39,13 @@ const MobileHeader = ({ onClose, closeButtonAt }: PropTypes) =>
     ))}
         </ul>
       </nav>
-      <button
+      <VeggieButton
         style={closeButtonAt && { top: closeButtonAt.y }}
-        className="component-mobile-header-nav__close"
-        aria-label="close"
+        label="close"
         onClick={onClose}
-      >close
-      </button>
+      >
+        <SvgClose />
+      </VeggieButton>
     </div>
   );
 

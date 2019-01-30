@@ -30,6 +30,36 @@
   }
 }
 
+.component-header-mobile-menu {
+  display: none;
+  .component-header--display-veggie-burger & {
+    display: block;
+  }
+  & > .component-header-veggie-button {
+    margin-left: $gu-h-spacing / 4;
+    /*aligned with the logo*/
+    margin-top: 22px; 
+    @include mq($from: mobileLandscape) {
+      margin-top: 28px;
+    }  
+    @include mq($from: tablet) {
+      margin-top: 40px;
+    }
+  }
+  .component-dialog--open .component-mobile-header {
+    animation: open-menu .2s ease-in-out both;
+  }
+}
+
+@keyframes open-menu {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 .component-header__wrapper {
   width: 100%;
   margin: auto;
@@ -100,7 +130,8 @@
   border-bottom: none;
   margin: 0 ($gu-h-spacing * -1);
   z-index: 9;
-  @include mq($until: tablet) {
+  white-space: nowrap;
+  .component-header--display-veggie-burger & {
     @include accessibility-hint;
   }
   .component-header--one-row & {
@@ -152,17 +183,4 @@
   &:after {
     display: none;
   }
-}
-
-.component-header-veggie__button {
-  $size: ($gu-v-spacing * 2) + (($gu-v-spacing /1.5) *2) + $gu-v-spacing;
-  display: block;
-  height: $size;
-  width: $size;
-  margin: 0;
-  padding: 0;
-  background: gu-colour(news-garnett-highlight);
-  border-radius: 100%;
-  border: 0;
-  cursor: pointer;
 }

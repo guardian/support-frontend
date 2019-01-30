@@ -1,10 +1,16 @@
 @import '~stylesheets/gu-sass/gu-sass';
+@import '~stylesheets/gu-sass/gu-sass';
 
 .component-mobile-header {
   background: gu-colour(header-dark);
   min-height: 100%;
   max-width: 95vw;
   position: relative;
+  .component-header-veggie-button {
+    position: absolute;
+    top: $gu-input-height;
+    right: $gu-input-height/-2;
+  }  
 }
 
 .component-mobile-header-nav {
@@ -21,14 +27,14 @@
   color: gu-colour(news-garnett-highlight);
   text-decoration: none;
   display: block;
-  padding: ($gu-v-spacing/1.5) ($gu-h-spacing/1.5);
+  padding: ($gu-v-spacing/2) $gu-h-spacing ($gu-v-spacing*1.5);
   overflow: hidden;
   position: relative;
   box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
   transition: .2s linear;
 
   &:hover, &:focus {
-    box-shadow: inset 3px 0 0 gu-colour(news-garnett-highlight);
+    text-decoration: underline;
   }
 
   &:after {
@@ -36,24 +42,8 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    left: 0;
+    left: $gu-h-spacing;
     height: 1px;
     background-color: gu-colour(header-border);
   }
-}
-
-.component-mobile-header-nav__close {
-  $size: ($gu-v-spacing * 2) + (($gu-v-spacing /1.5) *2) + $gu-v-spacing;
-  display: block;
-  height: $size;
-  width: $size;
-  margin: 0;
-  padding: 0;
-  background: gu-colour(news-garnett-highlight);
-  border-radius: 100%;
-  border: 0;
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  right: $size/-2;
 }

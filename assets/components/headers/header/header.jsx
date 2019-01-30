@@ -10,7 +10,7 @@ import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
 import { links } from '../links';
-import VeggieBurgerButton from './veggieBurgerButton';
+import MobileMenuButton from './mobileMenuButton';
 
 import './header.scss';
 
@@ -20,20 +20,23 @@ export type PropTypes = {|
 |};
 export type State = {|
   fitsLinksInOneRow: boolean,
+  fitsLinksAtAll: boolean,
 |};
 
 
 // ----- Metrics ----- //
 
-const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
-  const [logoWidth, menuWidth, containerWidth] = [
+const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
+  const [logoLeft, menuWidth, containerLeft, containerWidth] = [
     logoRef.getBoundingClientRect().left,
     menuRef.getBoundingClientRect().width,
     containerRef.getBoundingClientRect().left,
+    containerRef.getBoundingClientRect().width,
   ];
-  return (
-    logoWidth - containerWidth - menuWidth > 0
-  );
+  return ({
+    fitsLinksInOneRow: logoLeft - containerLeft - menuWidth > 0,
+    fitsLinksAtAll: containerWidth - menuWidth > 0,
+  });
 };
 
 
@@ -88,6 +91,7 @@ export default class Header extends Component<PropTypes, State> {
 
   state = {
     fitsLinksInOneRow: false,
+    fitsLinksAtAll: false,
   };
 
   componentDidMount() {
@@ -95,9 +99,7 @@ export default class Header extends Component<PropTypes, State> {
       this.observer = onElementResize(
         [this.logoRef, this.menuRef, this.containerRef],
         ([logoRef, menuRef, containerRef]) => {
-          this.setState({
-            fitsLinksInOneRow: willMenuFitInOneRow({ menuRef, logoRef, containerRef }),
-          });
+          this.setState(getMenuStateMetrics({ menuRef, logoRef, containerRef }));
         },
       );
     }
@@ -116,7 +118,7 @@ export default class Header extends Component<PropTypes, State> {
 
   render() {
     const { utility, displayNavigation } = this.props;
-    const { fitsLinksInOneRow } = this.state;
+    const { fitsLinksInOneRow, fitsLinksAtAll } = this.state;
 
     return (
       <header
@@ -124,6 +126,7 @@ export default class Header extends Component<PropTypes, State> {
           classNameWithModifiers('component-header', [
             fitsLinksInOneRow ? 'one-row' : null,
             displayNavigation ? 'display-navigation' : null,
+            !fitsLinksAtAll ? 'display-veggie-burger' : null,
           ])
         }
       >
@@ -131,7 +134,7 @@ export default class Header extends Component<PropTypes, State> {
           <div className="component-header__row">
             <TopNav utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
             {displayNavigation &&
-              <VeggieBurgerButton />
+              <MobileMenuButton />
             }
           </div>
           {displayNavigation &&
