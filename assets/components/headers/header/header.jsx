@@ -9,8 +9,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
-import { links } from '../links';
-import VeggieBurgerButton from './veggieBurgerButton';
+import { links } from './links';
 
 import './header.scss';
 
@@ -27,12 +26,12 @@ export type State = {|
 
 const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
   const [logoWidth, menuWidth, containerWidth] = [
-    logoRef.getBoundingClientRect().left,
+    logoRef.getBoundingClientRect().width,
     menuRef.getBoundingClientRect().width,
-    containerRef.getBoundingClientRect().left,
+    containerRef.getBoundingClientRect().width,
   ];
   return (
-    logoWidth - containerWidth - menuWidth > 0
+    containerWidth - logoWidth - menuWidth > 0
   );
 };
 
@@ -60,25 +59,24 @@ type BottomNavPropTypes = {|
   getMenuRef: (?Element) => void
 |};
 
-const BottomNav = ({ getMenuRef }: BottomNavPropTypes) =>
-  (
-    <nav className="component-header-bottomnav">
-      <ul className="component-header-bottomnav__ul" ref={getMenuRef}>
-        {links.map(({ href, text }) => (
-          <li
-            className={
-              classNameWithModifiers(
-                'component-header-bottomnav__li',
-                [window.location.href.endsWith(href) ? 'active' : null],
-              )
-            }
-          >
-            <a className="component-header-bottomnav__link" href={href}>{text}</a>
-          </li>
+const BottomNav = ({ getMenuRef }: BottomNavPropTypes) => (
+  <nav className="component-header-bottomnav">
+    <ul className="component-header-bottomnav__ul" ref={getMenuRef}>
+      {links.map(({ href, text }) => (
+        <li
+          className={
+          classNameWithModifiers(
+            'component-header-bottomnav__li',
+            [window.location.href.endsWith(href) ? 'active' : null],
+          )
+        }
+        >
+          <a className="component-header-bottomnav__link" href={href}>{text}</a>
+        </li>
     ))}
-      </ul>
-    </nav>
-  );
+    </ul>
+  </nav>
+);
 
 export default class Header extends Component<PropTypes, State> {
   static defaultProps = {
@@ -117,7 +115,6 @@ export default class Header extends Component<PropTypes, State> {
   render() {
     const { utility, displayNavigation } = this.props;
     const { fitsLinksInOneRow } = this.state;
-
     return (
       <header
         className={
@@ -128,16 +125,9 @@ export default class Header extends Component<PropTypes, State> {
         }
       >
         <div className="component-header__wrapper" ref={(el) => { this.containerRef = el; }}>
-          <div className="component-header__row">
-            <TopNav utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
-            {displayNavigation &&
-              <VeggieBurgerButton />
-            }
-          </div>
+          <TopNav utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
           {displayNavigation &&
-            <div className="component-header__row">
-              <BottomNav getMenuRef={(el) => { this.menuRef = el; }} />
-            </div>
+            <BottomNav getMenuRef={(el) => { this.menuRef = el; }} />
           }
         </div>
       </header>
