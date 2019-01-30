@@ -12,9 +12,6 @@ GET  /*path/  controllers.Application.removeTrailingSlash(path: String)
 
 # ----- Bundles Landing Page ----- #
 
-
-GET /test                                           controllers.Application.reactPlayTest()
-
 GET /uk                                             controllers.Application.supportLanding()
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
@@ -41,8 +38,8 @@ GET  /monthly-contributions                         controllers.Application.cont
 # ----- Contributions ----- #
 
 GET  /contribute                                        controllers.Application.contributeGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String, ssr: Option[String])
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String, ssr: Option[String])
 
 GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
 GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormMaybeAuthenticated()
