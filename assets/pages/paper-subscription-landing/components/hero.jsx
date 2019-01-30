@@ -66,21 +66,21 @@ const SaleHeader = () => (
     modifierClasses={['paper-sale']}
     cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
-    <div className="component-product-page-hero__sale">
+    <div className="sale-joy-of-print">
 
-      <div className="component-product-page-hero__sale-copy">
+      <div className="sale-joy-of-print-copy">
         <h2>Works with different browsers</h2>
         <p>Get your hands on journalism that’s really worth keeping.</p>
       </div>
 
-      <div className="component-product-page-hero__sale-graphic-outer">
-        <div className="component-product-page-hero__sale-graphic-inner">
-          <div className="component-product-page-hero__sale-badge">
+      <div className="sale-joy-of-print-graphic-outer">
+        <div className="sale-joy-of-print-graphic-inner">
+          <div className="sale-joy-of-print-badge">
             <span>Save up to</span>
             <span>52%</span>
             <span>For 3 months</span>
           </div>
-          <div className="component-product-page-hero__sale-graphic">
+          <div className="sale-joy-of-print-graphic">
             <GridImage
               gridId="paperLandingSale"
               srcSizes={[800, 466]}

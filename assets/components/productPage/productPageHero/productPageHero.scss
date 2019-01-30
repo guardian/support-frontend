@@ -32,6 +32,12 @@
   }
 }
 
+.component-product-page-hero--custom {
+  .component-left-margin-section__content {
+    border-left-color: transparent;
+  }
+}
+
 .component-product-page-hero-hanger {
   background: gu-colour(garnett-neutral-5);
   .component-left-margin-section__content {

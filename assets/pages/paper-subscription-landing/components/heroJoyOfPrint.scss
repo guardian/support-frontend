@@ -2,20 +2,17 @@
 
 // "Joy of Print Sale" specific styles below! 
 
-.component-product-page-hero--sale {
+.component-product-page-hero--custom.component-product-page-hero--paper-sale {
   background: #FFEDE0;
-  .component-left-margin-section__content {
-    border-left-color: transparent;
-  }
 }
 
-.component-product-page-hero__sale {
+.sale-joy-of-print {
   display: flex;
   align-items: center;
   padding: $gu-v-spacing*2 0 $gu-v-spacing*4;
 }
 
-.component-product-page-hero__sale-copy {
+.sale-joy-of-print-copy {
   display: none;
   
   @include mq($from: phablet) {
@@ -40,7 +37,7 @@
   }
 }
 
-.component-product-page-hero__sale-graphic-outer {
+.sale-joy-of-print-graphic-outer {
   position: relative;
   display: flex;
   flex-grow: 1;
@@ -57,12 +54,12 @@
 
 }
 
-.component-product-page-hero__sale-graphic-inner {
+.sale-joy-of-print-graphic-inner {
   position: relative;
   margin-top: $gu-v-spacing*2;
 }
 
-.component-product-page-hero__sale-graphic {
+.sale-joy-of-print-graphic {
   position: relative;
   z-index: 1;
 
@@ -82,7 +79,7 @@
   }
 }
 
-.component-product-page-hero__sale-badge {
+.sale-joy-of-print-badge {
   left: -3rem;
   top: -0.4rem;
   position: absolute;
