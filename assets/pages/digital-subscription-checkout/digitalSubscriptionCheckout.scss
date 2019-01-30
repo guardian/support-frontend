@@ -70,7 +70,6 @@
   }
 
   .thank-you-stage__ctas {
-    margin-top: $gu-v-spacing / 2;
     > .component-button {
       min-width: 100%;
       @include mq($from: desktop) {
