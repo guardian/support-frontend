@@ -1,11 +1,16 @@
 .component-dialog {
   all: initial;
-  display: none;
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  width: 0;
 }
 
 .component-dialog[data-open=true] {
-  display: block;
+  visibility: visible;
   position: fixed;
+  height: auto;
+  width: auto;
   top: 0;
   left: 0;
   z-index: 100;

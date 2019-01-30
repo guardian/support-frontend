@@ -19,7 +19,13 @@ class ControlledDialogButton extends Component<{modal: boolean}, {open: boolean}
   render() {
     return (
       <div>
-        <Button aria-label={null} appearance="greyHollow" onClick={() => { this.setState({ open: true }); }}>Open it up</Button>
+        <Button
+          aria-haspopup="dialog"
+          aria-label={null}
+          appearance="greyHollow"
+          onClick={() => { this.setState({ open: true }); }}
+        >Open it up
+        </Button>
         <Dialog
           modal={this.props.modal}
           onStatusChange={(status) => { this.setState({ open: status }); }}
@@ -30,6 +36,7 @@ class ControlledDialogButton extends Component<{modal: boolean}, {open: boolean}
               I don&#39;t do much on my own :(
             </ProductPageTextBlock>
             <Button
+              aria-haspopup="dialog"
               icon={null}
               aria-label={null}
               appearance="primary"

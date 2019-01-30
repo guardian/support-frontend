@@ -16,6 +16,7 @@ export default class VeggieBurgerButton extends Component<{}, {menuOpen: boolean
     return (
       <div className="component-header-veggie">
         <button
+          aria-haspopup="dialog"
           className="component-header-veggie__button"
           onClick={() => { this.setState({ menuOpen: true }); }}
         >

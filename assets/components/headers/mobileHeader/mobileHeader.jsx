@@ -4,13 +4,15 @@
 
 import React from 'react';
 
+import { type Option } from 'helpers/types/option';
+
 import { links } from '../links';
 
 import './mobileHeader.scss';
 
 export type PropTypes = {|
   onClose: () => void,
-  closeButtonAt?: {x: number, y: number},
+  closeButtonAt?: Option<{x: number, y: number}>,
 |};
 
 // ----- Component ----- //

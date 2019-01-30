@@ -74,7 +74,10 @@ class Dialog extends Component<PropTypes> {
     } = this.props;
 
     return (
-      <dialog
+      <dialog // eslint-disable-line jsx-a11y/no-redundant-roles
+        aria-modal={modal}
+        aria-hidden={!open}
+        role="dialog"
         className={classNameWithModifiers('component-dialog', [modal ? 'modal' : null])}
         tabIndex="-1"
         onOpen={() => { onStatusChange(true); }}
