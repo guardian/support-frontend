@@ -122,9 +122,6 @@
   .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)
   }
-  .component-product-page-text-block--heading-only + .component-product-page-content-block-divider {
-    margin-top: ($gu-v-spacing*-1)
-  }
   .component-product-page-info-chip + .component-product-page-info-chip {
     margin-top: ($gu-v-spacing * -1);
   }
@@ -149,10 +146,10 @@
   max-width: gu-span(6);
   @include mq($from: tablet) {
     position: absolute;
-    left: gu-span(7) + $gu-h-spacing;
+    left: gu-span(7) + ($gu-h-spacing * 2);
   }
   @include mq($from: desktop) {
-    left: gu-span(8) + $gu-h-spacing;
+    left: gu-span(8) + ($gu-h-spacing * 2);
   }
   bottom: ($gu-v-spacing*2)*-1;
   .component-grid-image {

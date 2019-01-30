@@ -4,7 +4,7 @@
   position: relative;
   $bullet-size: 16px;
   padding-left: $gu-h-spacing/2 + $bullet-size;
-  margin-bottom: $gu-v-spacing;
+  margin-bottom: $gu-v-spacing / 2;
   &:before {
     content: '';
     width: $bullet-size;
@@ -22,7 +22,7 @@
   list-style: none;
   counter-increment: step-counter;
   padding-left: $gu-h-spacing;
-  margin-bottom: $gu-v-spacing;
+  margin-bottom: $gu-v-spacing / 2;
   &:before {
     position: absolute;
     top: 0;

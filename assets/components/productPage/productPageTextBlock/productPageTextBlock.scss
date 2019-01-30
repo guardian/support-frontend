@@ -10,8 +10,8 @@
   > *:not(:last-child) {
     margin-bottom: $gu-v-spacing
   }
-  > .component-product-page-text-block__heading {
-    margin-bottom: ($gu-v-spacing/2);
+  > .component-product-page-text-block__heading + p {
+    margin-top: ($gu-v-spacing/-2);
   }
 }
 

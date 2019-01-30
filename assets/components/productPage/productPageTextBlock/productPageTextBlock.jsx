@@ -24,7 +24,11 @@ type PropTypes = {|
 const ProductPageTextBlock = ({
   title, children, headingSize, icon, callout,
 }: PropTypes) => (
-  <div className={classNameWithModifiers('component-product-page-text-block', children ? ['heading-only'] : [])}>
+  <div className={
+    classNameWithModifiers('component-product-page-text-block', [
+      !children ? 'heading-only' : null,
+    ])}
+  >
     {title && <Heading className="component-product-page-text-block__heading" size={headingSize}>{title}{icon} </Heading>}
     {callout && <p className="component-product-page-text-block__callout"><strong>{callout}</strong></p>}
     {children}
