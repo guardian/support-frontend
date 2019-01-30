@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { Paragraph, SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock, { SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
 import ProductPageTextBlockOrderedList from 'components/productPage/productPageTextBlock/productPageTextBlockOrderedList';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
@@ -139,9 +139,11 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     }
     >
       <ProductPageTextBlock title="How home delivery works">
-        <Paragraph>
-          If you live in Greater London (within the M25), you can use The Guardian’s home delivery service. Don’t worry if you live outside this area you can still {linkToVouchers}.
-        </Paragraph>
+        <p>
+          If you live in Greater London (within the M25), you
+          can use The Guardian’s home delivery service. Don’t
+          worry if you live outside this area you can still {linkToVouchers}.
+        </p>
         <ProductPageTextBlockOrderedList items={[
         'Select your subscription below and checkout',
         'Your subscribing deliveries will begin as quickly as five days  from you subscribing',
