@@ -18,5 +18,3 @@ addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.2.0")
 
 // dependency tracker plugin - needed for snyk cli integration
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.0")
-
-//addSbtPlugin("com.github.ddispaltro" % "sbt-reactjs" % "0.6.8")
