@@ -16,7 +16,7 @@ import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { type State, type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../../paperSubscriptionLandingPageActions';
 
-import { ContentHelpBlock, LinkToVouchers, ContentForm } from './helpers';
+import { ContentHelpBlock, LinkTo, ContentForm } from './helpers';
 
 import './content.scss';
 
@@ -69,7 +69,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
           If you live in Greater London (within the M25), you
           can use The Guardian’s home delivery service. Don’t
           worry if you live outside this area you can
-          still <LinkToVouchers setTabAction={setTabAction} >subscribe using our voucher scheme</LinkToVouchers>.
+          still <LinkTo tab="collection" setTabAction={setTabAction} >subscribe using our voucher scheme</LinkTo>.
       </p>
       <OrderedList items={[
         'Select your subscription below and checkout',

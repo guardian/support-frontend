@@ -59,24 +59,16 @@ const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>,
   </ProductPageContentBlock>
 );
 
-const LinkToVouchers = ({ setTabAction, children }: {setTabAction: typeof setTab, children: Node}) => (
+const LinkTo = ({ setTabAction, tab, children }: {
+  setTabAction: typeof setTab,
+  tab: ActiveTabState,
+  children: Node
+}) => (
   <a
-    href={paperSubsUrl(false)}
+    href={paperSubsUrl(tab === 'delivery')}
     onClick={(ev) => {
       ev.preventDefault();
-      setTabAction('collection');
-    }}
-  >
-    {children}
-  </a>
-);
-
-const LinkToDelivery = ({ setTabAction, children }: {setTabAction: typeof setTab, children: Node}) => (
-  <a
-    href={paperSubsUrl(true)}
-    onClick={(ev) => {
-      ev.preventDefault();
-      setTabAction('delivery');
+      setTabAction(tab);
     }}
   >
     {children}
@@ -102,8 +94,8 @@ const ContentForm = ({
         <SansParagraph>
           {
             selectedTab === 'collection'
-            ? <LinkToDelivery setTabAction={setTabAction}>Switch to Delivery</LinkToDelivery>
-            : <LinkToVouchers setTabAction={setTabAction}>Switch to Vouchers</LinkToVouchers>
+            ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
+            : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
           }
         </SansParagraph>
       </ProductPageTextBlock>
@@ -114,4 +106,4 @@ const ContentForm = ({
 );
 ContentForm.defaultProps = { text: null };
 
-export { ContentHelpBlock, LinkToDelivery, LinkToVouchers, ContentForm };
+export { ContentHelpBlock, LinkTo, ContentForm };
