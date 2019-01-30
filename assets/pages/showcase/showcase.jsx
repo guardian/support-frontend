@@ -41,7 +41,7 @@ const content = (
     <ProductPageHero
       overheading="Support The Guardian"
       heading="Help us deliver independent investigative journalism"
-      type="feature"
+      appearance="feature"
       cta={<AnchorButton aria-label={null} icon={<SvgChevron />} href="#support">Ways to support</AnchorButton>}
     >
       <GridPicture

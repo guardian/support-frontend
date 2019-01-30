@@ -29,7 +29,7 @@ const DefaultHeader = () => (
   <ProductPageHero
     overheading="The Guardian newspaper subscriptions"
     heading={getHeading()}
-    type="feature"
+    appearance="feature"
     modifierClasses={['paper']}
     cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
@@ -62,7 +62,7 @@ const SaleHeader = () => (
   <ProductPageHero
     overheading="The Guardian newspaper subscriptions"
     heading={getHeading()}
-    type="custom"
+    appearance="custom"
     modifierClasses={['paper-sale']}
     cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >

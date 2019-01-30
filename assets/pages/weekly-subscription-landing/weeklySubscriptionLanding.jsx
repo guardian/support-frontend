@@ -75,7 +75,7 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        type="feature"
+        appearance="feature"
         overheading="Guardian Weekly subscriptions"
         heading="Get a clearer, global perspective on the issues that matter, in one magazine."
         modifierClasses={['weekly']}
