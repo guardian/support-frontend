@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import UnorderedList from 'components/productPage/list/unorderedList';
 import OrderedList from 'components/productPage/list/orderedList';
@@ -104,6 +104,7 @@ const ContentVoucherFaqBlock = () => (
       ]}
       />
     </ProductPageTextBlock>
+    <Divider small />
     <ProductPageTextBlock title="Giving you peace of mind">
       <UnorderedList items={[
         'Pick your subscription package belowYour newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper',
@@ -150,6 +151,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
         ]}
         />
       </ProductPageTextBlock>
+      <Divider small />
       <ProductPageTextBlock title="Giving you peace of mind">
         <UnorderedList items={[
         'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
