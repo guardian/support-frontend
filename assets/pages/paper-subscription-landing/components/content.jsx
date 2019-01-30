@@ -9,8 +9,8 @@ import { bindActionCreators } from 'redux';
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
-import ProductPageTextBlockList from 'components/productPage/productPageTextBlock/productPageTextBlockList';
-import ProductPageTextBlockOrderedList from 'components/productPage/productPageTextBlock/productPageTextBlockOrderedList';
+import UnorderedList from 'components/productPage/list/unorderedList';
+import OrderedList from 'components/productPage/list/orderedList';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import GridImage from 'components/gridImage/gridImage';
 import { paperSubsUrl } from 'helpers/routes';
@@ -97,7 +97,7 @@ const ContentVoucherFaqBlock = () => (
   }
   >
     <ProductPageTextBlock title="How to use our vouchers?">
-      <ProductPageTextBlockOrderedList items={[
+      <OrderedList items={[
         'Pick your subscription package below',
         'We’ll send you a book of vouchers that contain one voucher per paper in your subscription',
         'Take your voucher to your retailer. Your vouchers will be accepted at retailers across the UK, including most independent newsagents',
@@ -105,7 +105,7 @@ const ContentVoucherFaqBlock = () => (
       />
     </ProductPageTextBlock>
     <ProductPageTextBlock title="Giving you peace of mind">
-      <ProductPageTextBlockList items={[
+      <UnorderedList items={[
         'Pick your subscription package belowYour newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper',
         'You can pause your subscription for up to four weeks a year. So if you’re heading away, you won’t have to pay for the papers you’ll miss',
       ]}
@@ -144,14 +144,14 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
           can use The Guardian’s home delivery service. Don’t
           worry if you live outside this area you can still {linkToVouchers}.
         </p>
-        <ProductPageTextBlockOrderedList items={[
+        <OrderedList items={[
         'Select your subscription below and checkout',
         'Your subscribing deliveries will begin as quickly as five days  from you subscribing',
         ]}
         />
       </ProductPageTextBlock>
       <ProductPageTextBlock title="Giving you peace of mind">
-        <ProductPageTextBlockList items={[
+        <UnorderedList items={[
         'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
         'We can’t delivery to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
         'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',

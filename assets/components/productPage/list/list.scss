@@ -1,0 +1,33 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-list-ul__li {
+  position: relative;
+  $bullet-size: 16px;
+  padding-left: $gu-h-spacing/2 + $bullet-size;
+  margin-bottom: $gu-v-spacing;
+  &:before {
+    content: '';
+    width: $bullet-size;
+    height: $bullet-size;
+    background: gu-colour(news-garnett-highlight);
+    border-radius: 100%;
+    position: absolute;
+    top: 3px;
+    left: 0;
+  }
+}
+
+.component-list-ol__li {
+  position: relative;
+  list-style: none;
+  counter-increment: step-counter;
+  padding-left: $gu-h-spacing;
+  margin-bottom: $gu-v-spacing;
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 700;
+    content: counter(step-counter) ".";
+  }
+}

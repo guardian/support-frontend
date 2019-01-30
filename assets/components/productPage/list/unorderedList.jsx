@@ -4,6 +4,7 @@
 
 import React, { type Node } from 'react';
 
+import './list.scss';
 
 // ---- Types ----- //
 
@@ -14,14 +15,14 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-const ProductPageTextBlockOrderedList = ({
+const UnorderedList = ({
   items,
 }: PropTypes) => (
-  <ol className="component-product-page-text-block__ol">
+  <ul className="component-list-ul">
     {items.map(item => (
-      <li className="component-product-page-text-block-ol__li">{item}</li>
+      <li className="component-list-ul__li">{item}</li>
     ))}
-  </ol>
+  </ul>
 );
 
-export default ProductPageTextBlockOrderedList;
+export default UnorderedList;
