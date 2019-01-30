@@ -13,6 +13,7 @@ import './button.scss';
 
 export const Appearances = {
   primary: 'primary',
+  secondary: 'secondary',
   green: 'green',
   greenHollow: 'greenHollow',
   greyHollow: 'greyHollow',

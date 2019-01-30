@@ -1,0 +1,43 @@
+.component-dialog {
+  all: initial;
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.component-dialog--open {
+  visibility: visible;
+  position: fixed;
+  height: auto;
+  width: auto;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  contain: content;
+}
+
+.component-dialog--modal.component-dialog--open {
+  display: flex;
+  bottom: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  contain: strict;
+}
+
+.component-dialog__contents {
+  position: relative;
+  z-index: 10;
+}
+
+.component-dialog--modal .component-dialog__backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 9;
+}

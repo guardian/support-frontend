@@ -69,139 +69,19 @@
     }
   }
 
-  .thank-you-content {
-    // Makes sure the circle SVGs stay behind the heading.
-    position: relative;
-    background-color: #fff;
-
-    .component-left-margin-section__content {
-      box-sizing: border-box;
-      border-left: 1px solid gu-colour(garnett-neutral-4);
-      padding-left: $gu-h-spacing / 2;
-      padding-bottom: $gu-v-spacing * 3;
-    }
-
-    .component-cta-link {
-      background-color: transparent;
-      border: 1px solid gu-colour(garnett-neutral-4);
-      height: $cta-height - 2;
-      box-sizing: border-box;
-      line-height: $cta-height - 2;
-      color: gu-colour(garnett-neutral-1);
-      margin-bottom: $gu-v-spacing;
-
-      @include mq($from: mobileLandscape) {
-        width: 355px;
+  .thank-you-stage__ctas {
+    margin-top: $gu-v-spacing / 2;
+    > .component-button {
+      min-width: 100%;
+      @include mq($from: desktop) {
+        min-width: gu-span(5);
       }
-
-      &:hover {
-        background-color: gu-colour(garnett-neutral-1);
-        border-color: gu-colour(garnett-neutral-1);
-        transition: border-color .3s;
-        color: #fff;
-
-        .svg-arrow-right-straight {
-          fill: #fff;
-        }
-      }
-
-      .svg-arrow-right-straight {
-        fill: gu-colour(garnett-neutral-1);
-        height: 40%;
-        top: 30%;
+      & + .component-button {
+        margin-top: $gu-v-spacing / 2;
       }
     }
+  }  
 
-    .svg-information {
-      display: inline-block;
-      vertical-align: top;
-      margin-right: 5px;
-    }
-
-  }
-
-  .component-left-margin-section--thank-you-apps,
-  .component-left-margin-section--thank-you-consent {
-    .component-left-margin-section__content {
-      border-top: 1px solid gu-colour(garnett-neutral-4);
-    }
-  }
-
-  .component-left-margin-section--thank-you-consent {
-    .component-left-margin-section__content {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-  }
-
-  .thank-you-content__heading,
-  .component-marketing-consent__title {
-    font-size: 22px;
-    line-height: 1.18;
-    font-weight: 300;
-    font-family: $gu-headline;
-
-    @include mq($from: tablet) {
-      font-size: 28px;
-    }
-
-    @include mq($from: desktop) {
-      font-size: 36px;
-      width: 470px;
-    }
-  }
-
-  .thank-you-content__subheading {
-    font-size: 20px;
-    line-height: 1.18;
-    font-weight: 300;
-    font-family: $gu-headline;
-    margin: ($gu-v-spacing * 2) 0 $gu-v-spacing;
-
-    @include mq($from: tablet) {
-      font-size: 22px;
-    }
-
-    @include mq($from: desktop) {
-      font-size: 28px;
-    }
-  }
-
-  .thank-you-content__copy,
-  .component-marketing-consent__message {
-    font-size: 17px;
-    line-height: 1.25;
-    font-family: $gu-headline;
-    color: gu-colour(media-garnett-main-1);
-    margin: $gu-v-spacing 0;
-    letter-spacing: 0;
-    font-weight: 400;
-
-    @include mq($from: phablet) {
-      width: 560px;
-    }
-  }
-
-  .thank-you-content__copy--small {
-    font-family: $gu-text-egyptian-web;
-    color: gu-colour(garnett-neutral-6);
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  .thank-you-content__copy--italic {
-    font-style: italic;
-    margin: 0;
-  }
-
-  .thank-you-content__strong {
-    font-weight: bold;
-  }
-
-  .thank-you-content__link {
-    color: gu-colour(garnett-neutral-6);
-  }
-  
   .component-marketing-consent {
     border-bottom: 0;
     @include mq($from: desktop) {

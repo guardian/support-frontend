@@ -18,7 +18,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a one-off contribution") {
+  feature("Sign up for a one-off contribution (Old Contributions Flow)") {
 
     scenario("One-off contribution sign-up with Stripe - GBP") {
 
