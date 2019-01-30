@@ -10,9 +10,10 @@ import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
-import GridPicture from 'components/gridPicture/gridPicture';
+// import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+// import ProductPageHero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageHeroSale from 'components/productPage/productPageHero/productPageHeroSale';
 
 import { getQueryParameter } from 'helpers/url';
@@ -21,7 +22,6 @@ import { renderPage } from 'helpers/render';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
-
 
 import Tabs from './components/tabs';
 import Content from './components/content';
@@ -82,6 +82,13 @@ const content = (
         overheading="The Guardian newspaper subscriptions"
         heading={getHeading()}
         type="sale"
+        modifierClasses={['paper-sale']}
+        cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+      />
+      {/* <ProductPageHero
+        overheading="The Guardian newspaper subscriptions"
+        heading={getHeading()}
+        type="feature"
         modifierClasses={['paper']}
         cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       >
@@ -107,7 +114,15 @@ const content = (
           altText=""
           fallbackImgType="png"
         />
-      </ProductPageHeroSale>
+      </ProductPageHero> */}
+
+      {/* Should we do this?
+
+        if sale
+        show  ProductPageHeroSale
+        else
+        show ProductPageHero  */}
+
       <ProductPageContentBlock needsHigherZindex>
         <ProductPageTextBlock>
           <LargeParagraph>
