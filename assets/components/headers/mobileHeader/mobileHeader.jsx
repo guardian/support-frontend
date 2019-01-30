@@ -10,15 +10,17 @@ import './mobileHeader.scss';
 
 export type PropTypes = {|
   onClose: () => void,
+  closeButtonAt?: {x: number, y: number},
 |};
 
 // ----- Component ----- //
 
 
-const MobileHeader = ({ onClose }: PropTypes) =>
+const MobileHeader = ({ onClose, closeButtonAt }: PropTypes) =>
   (
     <div
       className="component-mobile-header"
+      style={closeButtonAt && { width: closeButtonAt.x }}
     >
       <nav className="component-mobile-header-nav">
         <ul className="component-mobile-header-nav__ul" >
@@ -31,8 +33,18 @@ const MobileHeader = ({ onClose }: PropTypes) =>
     ))}
         </ul>
       </nav>
-      <button className="component-mobile-header-nav__close" aria-label="close" onClick={onClose}>close</button>
+      <button
+        style={closeButtonAt && { top: closeButtonAt.y }}
+        className="component-mobile-header-nav__close"
+        aria-label="close"
+        onClick={onClose}
+      >close
+      </button>
     </div>
   );
+
+MobileHeader.defaultProps = {
+  closeButtonAt: null,
+};
 
 export default MobileHeader;

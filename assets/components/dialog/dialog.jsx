@@ -54,7 +54,9 @@ class Dialog extends Component<PropTypes> {
       }
     }
     requestAnimationFrame(() => {
-      this.ref.focus();
+      if (this.ref) {
+        this.ref.focus();
+      }
     });
   }
 
@@ -64,7 +66,7 @@ class Dialog extends Component<PropTypes> {
     }
   }
 
-  ref: any;
+  ref: ?(HTMLDialogElement & {focus: Function});
 
   render() {
     const {
@@ -77,7 +79,7 @@ class Dialog extends Component<PropTypes> {
         tabIndex="-1"
         onOpen={() => { onStatusChange(true); }}
         onCancel={() => { onStatusChange(false); }}
-        ref={(d) => { this.ref = d; }}
+        ref={(d) => { this.ref = (d: any); }}
         data-open={open}
       >
         <div className="component-dialog__contents">
@@ -86,7 +88,9 @@ class Dialog extends Component<PropTypes> {
             className="end-focus-trap"
             tabIndex="0" // eslint-disable-line jsx-a11y/no-noninteractive-tabindex
             onFocus={() => {
-              this.ref.focus();
+              if (this.ref) {
+                this.ref.focus();
+              }
             }}
           />
         </div>
