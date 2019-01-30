@@ -45,7 +45,7 @@ const ContentVoucherFaqBlock = () => (
     <Divider small />
     <ProductPageTextBlock title="Giving you peace of mind">
       <UnorderedList items={[
-        'Pick your subscription package belowYour newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper',
+        'Your newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper',
         'You can pause your subscription for up to four weeks a year. So if you’re heading away, you won’t have to pay for the papers you’ll miss',
       ]}
       />
