@@ -14,7 +14,7 @@ import './productPageHero.scss';
 
 type PropTypes = {|
   overheading: string,
-  type: 'grey' | 'feature',
+  type: 'grey' | 'feature' | 'custom',
   heading: string,
   cta?: Option<Node>,
   children?: Option<Node>,

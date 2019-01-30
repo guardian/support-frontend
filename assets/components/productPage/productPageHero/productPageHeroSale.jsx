@@ -17,7 +17,7 @@ import './productPageHeroSale.scss';
 
 type PropTypes = {|
   overheading: string,
-  type: 'grey' | 'feature' | 'sale',
+  type: 'grey' | 'feature' | 'custom',
   heading: string,
   cta?: Option<Node>,
   modifierClasses: Array<?string>,
@@ -32,37 +32,6 @@ const ProductPageHeroSale = ({
   <header>
     <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, type])}>
       <LeftMarginSection>
-        <div className="component-product-page-hero__sale">
-
-          <div className="component-product-page-hero__sale-copy">
-            <h2>Works with different browsers</h2>
-            <p>Get your hands on journalism that’s really worth keeping.</p>
-          </div>
-
-          <div className="component-product-page-hero__sale-graphic-outer">
-            <div className="component-product-page-hero__sale-graphic-inner">
-              <div className="component-product-page-hero__sale-badge">
-                <span>Save up to</span>
-                <span>52%</span>
-                <span>For 3 months</span>
-              </div>
-              <div className="component-product-page-hero__sale-graphic">
-                <GridPicture
-                  sources={[
-                    {
-                      gridId: 'paperLandingSale',
-                      srcSizes: [800, 466],
-                      imgType: 'png',
-                    },
-                  ]}
-                  altText="A couple sit together sharing one newspaper"
-                  fallbackImgType="png"
-                />
-              </div>
-            </div>
-
-          </div>
-        </div>
         <HeadingBlock overheading={overheading} heading={heading} />
       </LeftMarginSection>
     </div>

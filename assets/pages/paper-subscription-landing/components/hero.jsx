@@ -5,12 +5,15 @@
 import React from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPageHero from 'components/productPage/productPageHero/productPageHero';
-import ProductPageHeroSale from 'components/productPage/productPageHero/productPageHeroSale';
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
+import GridImage from 'components/gridImage/gridImage';
+
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+
+import './heroJoyOfPrint.scss';
 
 function getHeading(): string {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
@@ -28,7 +31,7 @@ const DefaultHeader = () => (
     heading={getHeading()}
     type="feature"
     modifierClasses={['paper']}
-    cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+    cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
     <GridPicture
       sources={[
@@ -56,13 +59,41 @@ const DefaultHeader = () => (
 );
 
 const SaleHeader = () => (
-  <ProductPageHeroSale
+  <ProductPageHero
     overheading="The Guardian newspaper subscriptions"
     heading={getHeading()}
-    type="sale"
+    type="custom"
     modifierClasses={['paper-sale']}
-    cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
-  />
+    cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+  >
+    <div className="component-product-page-hero__sale">
+
+      <div className="component-product-page-hero__sale-copy">
+        <h2>Works with different browsers</h2>
+        <p>Get your hands on journalism that’s really worth keeping.</p>
+      </div>
+
+      <div className="component-product-page-hero__sale-graphic-outer">
+        <div className="component-product-page-hero__sale-graphic-inner">
+          <div className="component-product-page-hero__sale-badge">
+            <span>Save up to</span>
+            <span>52%</span>
+            <span>For 3 months</span>
+          </div>
+          <div className="component-product-page-hero__sale-graphic">
+            <GridImage
+              gridId="paperLandingSale"
+              srcSizes={[800, 466]}
+              sizes="(max-width: 740px) 100vw, 800px"
+              imgType="png"
+              altText="A couple sit together sharing one newspaper"
+            />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </ProductPageHero>
 );
 
 
