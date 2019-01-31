@@ -14,7 +14,7 @@ import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
 import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 
-import Form from '../form';
+import Form from './form';
 
 
 // Helper functions
