@@ -4,6 +4,7 @@ import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{Annual, BillingPeriod, Monthly, Quarterly}
 import org.joda.time.Months
@@ -41,25 +42,47 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
     // original price but different discounted values - £35.71 & £35.72.
     // We need to work out what they will actually get charged by Zuora
 
-//    checkPrice(discountBenefit, 47.62, 35.71, Monthly) //Everyday
-//    checkPrice(discountBenefit, 51.96, 38.97, Monthly) //Everyday+
-//    checkPrice(discountBenefit, 41.12, 30.84, Monthly) //Sixday
-//    //checkPrice(discountBenefit, 47.62, 35.72) //Sixday+
-//    checkPrice(discountBenefit, 20.76, 15.57, Monthly) //Weekend
-//    //checkPrice(discountBenefit, 29.42, 22.07) //Weekend+
-//    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
-//    //checkPrice(discountBenefit, 22.06, 16.55) //Sunday+
-//    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
-//
-//    //Digital Pack
-//    checkPrice(discountBenefit, 11.99, 8.99, Monthly)
-//    checkPrice(discountBenefit, 119.90, 112.41, Annual)
+    checkPrice(discountBenefit, 47.62, 35.71, Monthly) //Everyday
+    checkPrice(discountBenefit, 51.96, 38.97, Monthly) //Everyday+
+    checkPrice(discountBenefit, 41.12, 30.84, Monthly) //Sixday
+    //checkPrice(discountBenefit, 47.62, 35.72) //Sixday+
+    checkPrice(discountBenefit, 20.76, 15.57, Monthly) //Weekend
+    //checkPrice(discountBenefit, 29.42, 22.07) //Weekend+
+    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
+    //checkPrice(discountBenefit, 22.06, 16.55) //Sunday+
+    checkPrice(discountBenefit, 10.79, 8.09, Monthly) //Sunday
+
+    //Digital Pack
+    checkPrice(discountBenefit, 11.99, 8.99, Monthly)
+    checkPrice(discountBenefit, 119.90, 112.41, Annual)
     checkPrice(DiscountBenefit(25, Some(Months.FIVE)), 35.95, 28.46, Quarterly)
 
     //Guardian Weekly domestic
     checkPrice(DiscountBenefit(25, Some(Months.TWO)), 37.50, 31.25, Quarterly)
 
 
+  }
+
+  it should "work out the number of discounted billing periods correctly" in {
+    getNumberOfDiscountedPeriods(Months.ONE, Monthly) shouldBe 1
+    getNumberOfDiscountedPeriods(Months.ONE, Quarterly) shouldBe 1
+    getNumberOfDiscountedPeriods(Months.ONE, Annual) shouldBe 1
+
+    getNumberOfDiscountedPeriods(Months.THREE, Monthly) shouldBe 3
+    getNumberOfDiscountedPeriods(Months.THREE, Quarterly) shouldBe 1
+    getNumberOfDiscountedPeriods(Months.THREE, Annual) shouldBe 1
+
+    getNumberOfDiscountedPeriods(Months.FOUR, Monthly) shouldBe 4
+    getNumberOfDiscountedPeriods(Months.FOUR, Quarterly) shouldBe 2
+    getNumberOfDiscountedPeriods(Months.FOUR, Annual) shouldBe 1
+
+    getNumberOfDiscountedPeriods(Months.TWELVE, Monthly) shouldBe 12
+    getNumberOfDiscountedPeriods(Months.TWELVE, Quarterly) shouldBe 4
+    getNumberOfDiscountedPeriods(Months.TWELVE, Annual) shouldBe 1
+
+    getNumberOfDiscountedPeriods(Months.months(13), Monthly) shouldBe 13
+    getNumberOfDiscountedPeriods(Months.months(13), Quarterly) shouldBe 5
+    getNumberOfDiscountedPeriods(Months.months(13), Annual) shouldBe 2
   }
 
   def checkPrice(discount: DiscountBenefit, original: BigDecimal, expected: BigDecimal, billingPeriod: BillingPeriod) =

@@ -2,10 +2,11 @@ package com.gu.support.pricing
 
 import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.support.catalog._
-import com.gu.support.pricing.PriceSummaryService.getDiscountedPrice
+import com.gu.support.pricing.PriceSummaryService.{getDiscountedPrice, getNumberOfDiscountedPeriods}
 import com.gu.support.promotions._
 import com.gu.support.touchpoint.TouchpointService
-import com.gu.support.workers.{BillingPeriod, Monthly}
+import com.gu.support.workers.BillingPeriod
+import org.joda.time.Months
 
 import scala.math.BigDecimal.RoundingMode
 
@@ -60,6 +61,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       promotion.description,
       promoCode,
       promotion.discount.map(getDiscountedPrice(price, _, billingPeriod).value),
+      promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
       promotion.discount,
       promotion.freeTrial,
       promotion.incentive
@@ -91,6 +93,9 @@ object PriceSummaryService {
     val newPrice = originalPrice.value * multiplier
     originalPrice.copy(value = newPrice.setScale(2, RoundingMode.HALF_DOWN))
   }
+
+  def getNumberOfDiscountedPeriods(discountDuration: Months, billingPeriod: BillingPeriod): Int =
+    Math.ceil(discountDuration.getMonths.toDouble / billingPeriod.monthsInPeriod.toDouble).toInt
 
   def getDiscountScaledToPeriod(discountBenefit: DiscountBenefit, billingPeriod: BillingPeriod): Double = {
     //If the discount period doesn't cover the whole of the billing period (often the case for annual billing)

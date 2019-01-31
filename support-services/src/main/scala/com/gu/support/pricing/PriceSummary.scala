@@ -1,6 +1,5 @@
 package com.gu.support.pricing
 
-import com.gu.i18n.Currency
 import com.gu.support.promotions._
 
 
@@ -14,6 +13,7 @@ case class PromotionSummary(
   description: String,
   promoCode: PromoCode,
   discountedPrice: Option[BigDecimal],
+  numberOfDiscountedPeriods: Option[Int],
   discount: Option[DiscountBenefit],
   freeTrialBenefit: Option[FreeTrialBenefit],
   incentive: Option[IncentiveBenefit] = None
