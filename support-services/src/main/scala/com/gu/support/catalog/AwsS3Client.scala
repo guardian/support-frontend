@@ -1,7 +1,6 @@
 package com.gu.support.catalog
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
+import com.gu.aws.CredentialsProvider
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.model.{GetObjectRequest, S3ObjectInputStream}
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
@@ -13,12 +12,6 @@ import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 object AwsS3Client extends LazyLogging{
-  val ProfileName = "membership"
-
-  lazy val CredentialsProvider = new AWSCredentialsProviderChain(
-    new ProfileCredentialsProvider(ProfileName),
-    new InstanceProfileCredentialsProvider(false)
-  )
 
   implicit val s3: AmazonS3 =
     AmazonS3ClientBuilder
