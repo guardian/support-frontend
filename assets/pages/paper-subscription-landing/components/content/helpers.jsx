@@ -18,7 +18,6 @@ import Form from '../form';
 
 
 // Helper functions
-
 const getPageInfoChip = (): string => {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
     return 'You can cancel your subscription at any time. Offer is for the first year. Standard subscription rates apply thereafter.';
@@ -26,24 +25,17 @@ const getPageInfoChip = (): string => {
   return 'You can cancel your subscription at any time.';
 };
 
-const getSaleCallout = (): ?string => {
-  if (flashSaleIsActive('Paper', 'GBPCountries')) {
-
-    const [discount, duration] = [
-      getDiscount('Paper', 'GBPCountries'),
-      getDuration('Paper', 'GBPCountries'),
-    ];
-
-    if (discount && duration) {
-      return `Save an extra ${Math.round(discount * 100)}% for ${duration}`;
-    } else if (discount) {
-      return `Save an extra ${Math.round(discount * 100)}%`;
-    }
-    return null;
-
+const getDiscountCallout = (): ?string => {
+  const [discount, duration] = [
+    getDiscount('Paper', 'GBPCountries'),
+    getDuration('Paper', 'GBPCountries'),
+  ];
+  if (discount && duration) {
+    return `Save an extra ${Math.round(discount * 100)}% for ${duration}`;
+  } else if (discount) {
+    return `Save an extra ${Math.round(discount * 100)}%`;
   }
   return null;
-
 };
 
 
@@ -85,7 +77,10 @@ const ContentForm = ({
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab}) => (
     <ProductPageContentBlock type="feature" id="subscribe">
-      <ProductPageTextBlock {...{ title }} callout={getSaleCallout()} />
+      <ProductPageTextBlock
+        title={title}
+        callout={flashSaleIsActive('Paper', 'GBPCountries') ? getDiscountCallout() : null}
+      />
       {text &&
       <ProductPageTextBlock>
         <p>{text}</p>
