@@ -17,6 +17,18 @@ import { setTab } from '../../paperSubscriptionLandingPageActions';
 import Form from './form';
 
 
+// Types
+export type ContentPropTypes = {|
+  selectedTab: ActiveTabState,
+  setTabAction: typeof setTab
+|};
+
+export type ContentTabPropTypes = {|
+  ...ContentPropTypes,
+  getRef: (?HTMLElement)=> void
+|};
+
+
 // Helper functions
 const getPageInfoChip = (): string => {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
