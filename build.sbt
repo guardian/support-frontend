@@ -16,7 +16,7 @@ val release = Seq[ReleaseStep](
   setNextVersion,
   commitNextVersion,
   ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
-  //pushChanges
+  pushChanges
 )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
