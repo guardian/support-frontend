@@ -8,20 +8,16 @@
 }
 
 .component-dialog--open {
+  display: flex;
   visibility: visible;
   position: fixed;
   height: auto;
   width: auto;
   top: 0;
   left: 0;
-  z-index: 100;
-  contain: content;
-}
-
-.component-dialog--modal.component-dialog--open {
-  display: flex;
   bottom: 0;
   right: 0;
+  z-index: 100;
   justify-content: center;
   align-items: center;
   contain: strict;
@@ -32,7 +28,7 @@
   z-index: 10;
 }
 
-.component-dialog--modal .component-dialog__backdrop {
+.component-dialog__backdrop {
   background: rgba(0, 0, 0, 0.6);
   position: absolute;
   top: 0;

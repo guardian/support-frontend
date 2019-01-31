@@ -49,11 +49,8 @@ class Dialog extends Component<PropTypes> {
 
   open() {
     if (this.ref && this.ref.showModal) {
-      if (this.props.modal) {
-        this.ref.showModal();
-      } else {
-        this.ref.show();
-      }
+      this.ref.showModal();
+    }
     }
     requestAnimationFrame(() => {
       if (this.ref) {
@@ -72,13 +69,13 @@ class Dialog extends Component<PropTypes> {
 
   render() {
     const {
-      open, modal, children, onStatusChange, dismissOnBackgroundClick, ...otherProps
+      open, children, onStatusChange, dismissOnBackgroundClick, ...otherProps
     } = this.props;
 
     return (
       <dialog // eslint-disable-line jsx-a11y/no-redundant-roles
-        className={classNameWithModifiers('component-dialog', [modal ? 'modal' : null, open ? 'open' : null])}
-        aria-modal={modal}
+        className={classNameWithModifiers('component-dialog', [open ? 'open' : null])}
+        aria-modal
         aria-hidden={!open}
         tabIndex="-1"
         role="dialog"
@@ -97,13 +94,11 @@ class Dialog extends Component<PropTypes> {
             }}
           />
         </div>
-        {modal &&
-          <div
-            className="component-dialog__backdrop"
-            aria-hidden
-            onClick={() => dismissOnBackgroundClick && onStatusChange(false)}
-          />
-        }
+        <div
+          className="component-dialog__backdrop"
+          aria-hidden
+          onClick={() => dismissOnBackgroundClick && onStatusChange(false)}
+        />
       </dialog>
     );
   }
