@@ -8,7 +8,6 @@ import { getQueryParameter } from 'helpers/url';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
-
 // ----- Types ----- //
 
 export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries' | 'Canada';
@@ -22,7 +21,7 @@ export type CountryGroupName = 'United Kingdom' | 'United States' | 'Australia' 
   should match the list in support-internationalisation.
  */
 export type CountryGroup = {
-  name: string,
+  name: CountryGroupName,
   currency: IsoCurrency,
   countries: IsoCountry[],
   supportInternationalisationId: string,

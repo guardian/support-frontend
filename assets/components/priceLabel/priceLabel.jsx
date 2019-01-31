@@ -20,12 +20,13 @@ const displayPrice = (glyph: string, price: number) => `${glyph}${fixDecimals(pr
 const displayPriceForPeriod = (glyph: string, price: number, billingPeriod: BillingPeriod) =>
   `${displayPrice(glyph, price)} Every ${billingPeriodNoun(billingPeriod)}`;
 
-function discountedPrice(productPrice: ProductPrice, glyph: String, billingPeriod: BillingPeriod) {
+function discountedPrice(productPrice: ProductPrice, glyph: string, billingPeriod: BillingPeriod) {
   if (productPrice.promotion && productPrice.promotion.discountedPrice) {
+    const discountPrice = productPrice.promotion.discountedPrice;
     return (
       <span>
         <del>{displayPrice(glyph, productPrice.price)}</del>&nbsp;
-        {displayPriceForPeriod(glyph, productPrice.promotion.discountedPrice, billingPeriod)}
+        {displayPriceForPeriod(glyph, discountPrice, billingPeriod)}
       </span>);
   }
   return displayPriceForPeriod(glyph, productPrice.price, billingPeriod);
@@ -33,7 +34,7 @@ function discountedPrice(productPrice: ProductPrice, glyph: String, billingPerio
 
 function PriceLabel(props: PropTypes) {
 
-  const countryGroup = countryGroups[fromCountry(props.country)];
+  const countryGroup = countryGroups[fromCountry(props.country) || 'GBPCountries'];
 
   const { glyph } = currencies[countryGroup.currency];
 

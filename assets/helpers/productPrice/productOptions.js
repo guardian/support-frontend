@@ -1,4 +1,4 @@
-// @ flow
+// @flow
 
 // describes options relating to a product itself - only relevant for paper currently
 
