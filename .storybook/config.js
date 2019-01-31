@@ -4,6 +4,7 @@ function loadStories() {
   require('../stories/button.jsx');
   require('../stories/dialog.jsx');
   require('../stories/header.jsx');
+  require('../stories/list.jsx');
   require('../stories/hero.jsx');
 }
 

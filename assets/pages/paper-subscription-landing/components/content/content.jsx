@@ -8,8 +8,8 @@ import { bindActionCreators, type Dispatch } from 'redux';
 
 import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
-import UnorderedList from 'components/productPage/list/unorderedList';
-import OrderedList from 'components/productPage/list/orderedList';
+import UnorderedList from 'components/list/unorderedList';
+import OrderedList from 'components/list/orderedList';
 import GridImage from 'components/gridImage/gridImage';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
