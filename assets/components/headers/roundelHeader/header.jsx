@@ -33,7 +33,7 @@ const renderCountryGroup = (selectedCountryGroup: CountryGroup) => (countryGroup
   </li>
 );
 
-function NewHeader(props: PropTypes) {
+function RoundelHeader(props: PropTypes) {
   return (
     <header role="banner" className="gu-content__header">
       <a className="glogo" href="https://www.theguardian.com">
@@ -60,8 +60,8 @@ function NewHeader(props: PropTypes) {
   );
 }
 
-NewHeader.defaultProps = {
+RoundelHeader.defaultProps = {
   selectedCountryGroup: null,
 };
 
-export { NewHeader };
+export { RoundelHeader };

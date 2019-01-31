@@ -17,16 +17,30 @@ type PropTypes = {|
   children: Node,
   image: Option<Node>,
   modifierClasses: Array<string>,
-  needsHigherZindex: boolean
+  needsHigherZindex: boolean,
+  border: Option<boolean>,
 |};
 
 
 // ----- Render ----- //
 
 const ProductPageContentBlock = ({
-  type, children, id, modifierClasses, image, needsHigherZindex,
+  type, children, id, modifierClasses, image, needsHigherZindex, border,
 }: PropTypes) => (
-  <div id={id} className={classNameWithModifiers('component-product-page-content-block', [type, image ? 'overflow-hidden' : null, needsHigherZindex ? 'higher' : null, ...modifierClasses])}>
+  <div
+    id={id}
+    className={classNameWithModifiers(
+'component-product-page-content-block',
+    [
+      type,
+      image ? 'overflow-hidden' : null,
+      needsHigherZindex ? 'higher' : null,
+      border === false ? 'no-border' : null,
+      border === true ? 'force-border' : null,
+      ...modifierClasses,
+    ],
+)}
+  >
     <LeftMarginSection>
       <div className="component-product-page-content-block__content">
         {children}
@@ -44,11 +58,46 @@ ProductPageContentBlock.defaultProps = {
   image: null,
   modifierClasses: [],
   needsHigherZindex: false,
+  border: null,
 };
 
 
-// ---- Exports ----- //
+// ---- Children ----- //
 
+/*
+Adds a multiline divider between block children.
+*/
+export const Divider = () => (
+  <div className="component-product-page-content-block-divider">
+    <hr className="component-product-page-content-block-divider__line" />
+  </div>
+);
+
+/*
+Cancels out the horizontal padding
+Wrap full bleed children in this.
+*/
+export const Outset = ({ children }: {children: Node}) => (
+  <div className="component-product-page-content-block-outset">
+    {children}
+  </div>
+);
+
+/*
+A vertical block with max width
+*/
+export const NarrowContent = ({ children }: {children: Node}) => (
+  <div className="component-product-page-content-block__narrowContent">
+    {children}
+  </div>
+);
+
+/*
+A css class that sets the background colour to match the block.
+Use on children that need to match the background of the parent
+*/
 export const bgClassName = 'component-product-page-content-block-bg';
+
+// ---- Exports ----- //
 
 export default ProductPageContentBlock;

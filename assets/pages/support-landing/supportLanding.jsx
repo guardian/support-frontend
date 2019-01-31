@@ -15,7 +15,7 @@ import Contribute from 'components/contribute/contribute';
 import { setInitialAmountsForAnnualVariants } from 'helpers/abTests/helpers/annualContributions';
 
 // React components connected to redux store
-import simpleHeaderWithCountrySwitcherContainer from 'components/headers/simpleHeader/simpleHeaderWithCountrySwitcher';
+import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import PatronsEventsContainer from 'components/patronsEvents/patronsEventsContainer';
 
 import { init as pageInit } from 'helpers/page/page';
@@ -44,7 +44,7 @@ const store = pageInit(pageReducer);
 
 // ----- Internationalisation ----- //
 
-const CountrySwitcherHeader = simpleHeaderWithCountrySwitcherContainer(
+const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
   '/contribute',
   ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
 );

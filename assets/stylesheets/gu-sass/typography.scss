@@ -27,6 +27,7 @@ $gu-fonts: (
 		family: $gu-headline,
 		sizes: (
 			16: 18px,
+			18: 20px,
 			20: 24px,
 			22: 26px,
 			24: 28px,
@@ -69,6 +70,14 @@ $gu-fonts: (
 
 // Use these to get uniform responsive type across pages
 
+
+// ----- Nav ----- //
+@mixin gu-fontset-nav-desktop($size-only: false) {
+	@include gu-typeface(headline, 20, $size-only);
+	@if $size-only == false {
+		font-weight: 700;
+	}
+}
 
 
 // ----- Headings ----- //
@@ -120,6 +129,12 @@ $gu-fonts: (
 	}
 	@if $size-only == false {
 		font-weight: 400;
+	}
+}
+@mixin gu-fontset-tabs($size-only: false) {
+	@include gu-typeface(headline, 17, $size-only);
+	@if $size-only == false {
+		font-weight: 700;
 	}
 }
 

@@ -74,7 +74,7 @@ GET  /:country/subscribe                           controllers.Subscriptions.leg
 GET  /digital                            controllers.DigitalSubscription.digitalGeoRedirect()
 GET  /subscribe/digital                            controllers.DigitalSubscription.digitalGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.DigitalSubscription.digital(country: String)
-GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.DigitalSubscription.displayForm(country: String, displayCheckout: Boolean ?= false)
+GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.DigitalSubscription.displayForm(country: String)
 POST /subscribe/digital/create  controllers.DigitalSubscription.create
 
 GET  /premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()

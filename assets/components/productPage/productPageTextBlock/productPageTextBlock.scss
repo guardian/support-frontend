@@ -64,3 +64,18 @@
     left: 0;
   }
 }
+
+.component-product-page-text-block-ol__li {
+  position: relative;
+  list-style: none;
+  counter-increment: step-counter;
+  padding-left: $gu-h-spacing;
+  margin-bottom: $gu-v-spacing;
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 700;
+    content: counter(step-counter) ".";
+  }
+}

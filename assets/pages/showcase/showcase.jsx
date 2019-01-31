@@ -7,7 +7,7 @@ import { statelessInit as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
 import Page from 'components/page/page';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import Heading from 'components/heading/heading';
 
@@ -35,7 +35,7 @@ pageInit();
 
 const content = (
   <Page
-    header={<SimpleHeader />}
+    header={<Header />}
     footer={<Footer />}
   >
     <ProductPageHero

@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import FooterContainer from 'components/footer/footerContainer';
 import ReadyToSupport from 'components/readyToSupport/readyToSupport';
-import SimpleHeader from 'components/headers/simpleHeader/simpleHeader';
+import Header from 'components/headers/header/header';
 import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
 import WhySupportVideoContainer from 'components/whySupportVideo/whySupportVideoContainer';
 
@@ -26,7 +26,7 @@ const store = pageInit();
 const content = (
   <Provider store={store}>
     <Page
-      header={<SimpleHeader />}
+      header={<Header />}
       footer={<FooterContainer disclaimer privacyPolicy />}
     >
       <FeaturedProductAb

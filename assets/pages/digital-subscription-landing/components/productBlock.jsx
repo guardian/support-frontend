@@ -110,10 +110,12 @@ function ProductBlock(props: PropTypes) {
   return (
     <div className="product-block">
       <LeftMarginSection>
-        <h2 className="product-block__heading">
-          Read the Guardian ad-free on all your devices, plus get all the
-          benefits of the Premium App and Daily Edition iPad app
-        </h2>
+        <div className="product-block__heading-wrapper">
+          <h2 className="product-block__heading">
+            Read the Guardian ad-free on all your devices, plus get all the
+            benefits of the Premium App and Daily Edition iPad app
+          </h2>
+        </div>
         <Product
           modifierClass="premium-app"
           imageProps={appImages[props.countryGroupId]}

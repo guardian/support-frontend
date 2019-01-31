@@ -17,6 +17,8 @@ dev
 logs
 target
 project/project
+storybook-static
+paparazzi
 
 bower_components
 public/stylesheets
@@ -36,4 +38,3 @@ assets/images/inline-svgs/*.svg
 /public/**/*.js.map
 /assets/javascripts/lib/bower-components/
 .yarnclean
-.test-screenshots

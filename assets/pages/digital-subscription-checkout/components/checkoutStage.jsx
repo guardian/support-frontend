@@ -5,22 +5,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import ReturnSection from 'components/returnSection/returnSection';
 import ProductHero, {
   type GridImages,
   type ImagesByCountry,
 } from 'components/productHero/productHero';
 import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
-import ProductPageContentBlockDivider from 'components/productPage/productPageContentBlock/productPageContentBlockDivider';
-
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { largeParagraphClassName } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
+
 import ThankYouContent from './thankYouContent';
 import CheckoutForm from './checkoutForm';
+import ReturnSection from './returnSection';
 
 
 // ----- Types ----- //
@@ -59,6 +59,9 @@ const heroesByCountry: ImagesByCountry = {
   GBPCountries: defaultHeroes,
   UnitedStates: defaultHeroes,
   International: defaultHeroes,
+  EURCountries: defaultHeroes,
+  NZDCountries: defaultHeroes,
+  Canada: defaultHeroes,
   AUDCountries: {
     breakpoints: {
       mobile: {
@@ -127,11 +130,11 @@ function CheckoutStage(props: PropTypes) {
           />
           <ProductPageContentBlock>
             <ProductPageTextBlock>
-              <p className={largeParagraphClassName}>
+              <LargeParagraph>
                 Please enter your details below to complete your Digital Pack subscription.
-              </p>
+              </LargeParagraph>
             </ProductPageTextBlock>
-            <ProductPageContentBlockDivider />
+            <Divider />
           </ProductPageContentBlock>
           <CheckoutForm />
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}

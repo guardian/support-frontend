@@ -13,8 +13,8 @@ import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import Footer from 'components/footer/footer';
 import Contribute from 'components/contribute/contribute';
 // React components connected to redux store
-import simpleHeaderWithCountrySwitcherContainer
-  from 'components/headers/simpleHeader/simpleHeaderWithCountrySwitcher';
+import headerWithCountrySwitcherContainer
+  from 'components/headers/header/headerWithCountrySwitcher';
 // Page-specific react components connected to redux store
 import ContributionSelectionContainer from '../containers/contributionSelectionContainer';
 import ContributionPaymentCtasContainer from '../containers/contributionPaymentCtasContainer';
@@ -68,7 +68,7 @@ const countryGroupSpecificDetails: {
   },
 };
 
-const CountrySwitcherHeader = simpleHeaderWithCountrySwitcherContainer(
+const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
   '/contribute',
   ['GBPCountries', 'UnitedStates', 'EURCountries', 'NZDCountries', 'Canada', 'International', 'AUDCountries'],
 );

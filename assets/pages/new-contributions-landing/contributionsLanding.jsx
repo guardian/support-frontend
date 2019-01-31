@@ -16,7 +16,7 @@ import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
-import { NewHeader } from 'components/headers/new-header/Header';
+import { RoundelHeader } from 'components/headers/roundelHeader/header';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -69,7 +69,7 @@ const router = (
           render={() => (
             <Page
               classModifiers={['contribution-form']}
-              header={<NewHeader selectedCountryGroup={selectedCountryGroup} />}
+              header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
               <NewContributionFormContainer
@@ -91,7 +91,7 @@ const router = (
             return (
               <Page
                 classModifiers={['contribution-thankyou']}
-                header={<NewHeader />}
+                header={<RoundelHeader />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
                 <ContributionThankYouContainer />
