@@ -123,6 +123,27 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
+function getParticipationsFromQuery(): ?Participations {
+
+  const hashUrl = (new URL(document.URL)).search;
+  const index = hashUrl.indexOf('ssr');
+
+  if (index > 0) {
+
+    const [testId, variantEtc] = hashUrl.substr(index).split('=');
+    const test = {};
+    console.log('testId', testId);
+    console.log('variant', variantEtc);
+    const variant = variantEtc.split('&')[0];
+    console.log('actual', variant);
+    test[testId] = variant;
+
+    return test;
+  }
+
+  return { ssr: 'notintest' };
+}
+
 function userInBreakpoint(audience: Audience): boolean {
 
   if (!audience.breakpoint) {
@@ -241,7 +262,8 @@ const init = (
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations));
+  const queryParticipations: ?Participations = getParticipationsFromQuery();
+  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations, queryParticipations));
 
   trackABOphan(participations, false);
 
