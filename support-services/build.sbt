@@ -12,5 +12,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "com.gu" %% "support-config" % "0.17",
+  "com.gu" %% "support-config" % "0.18",
+  "com.gu" %% "support-models" % "0.51",
+  "com.gu" %% "support-internationalisation" % "0.12",
 )
