@@ -90,7 +90,6 @@ class DigitalSubscription(
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
     val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
-    SafeLogger.info(s"promoCode is $promoCode")
 
     digitalSubscription(
       title,
