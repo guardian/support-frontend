@@ -25,8 +25,14 @@ Conditions:
 Mappings:
   StageVariables:
     CODE:
+      DynamoDBTables:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
     PROD:
+      DynamoDBTables:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
 Resources:
   LambdaExecutionRole:
@@ -95,6 +101,16 @@ Resources:
               Action: kinesis:*
               Resource:
                 Ref: KinesisStreamArn
+	- PolicyName: DynamoPromotions
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:Query
+              - dynamodb:DescribeTable
+              Resource: !FindInMap [StageVariables, !Ref Stage, DynamoDBTables]
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"

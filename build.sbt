@@ -25,7 +25,6 @@ lazy val scalaStyleSettings = Seq(
   (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
   ScalariformKeys.preferences := ScalariformKeys.preferences.value
     .setPreference(SpacesAroundMultiImports, false)
-
 )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
@@ -51,10 +50,7 @@ lazy val root = (project in file("."))
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "io.symphonia" % "lambda-logging" % "1.0.1",
-      "com.gu" %% "support-internationalisation" % "0.9",
-      "com.gu" %% "support-models" % "0.49",
-      "com.gu" %% "support-config" % "0.17",
-      "com.gu" %% "support-services" % "0.1",
+      "com.gu" %% "support-services" % "0.5",
       "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
       "com.netaporter" %% "scala-uri" % "0.4.16",
       "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
