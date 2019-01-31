@@ -14,9 +14,9 @@ import './productPageHero.scss';
 
 type PropTypes = {|
   overheading: string,
-  type: 'grey' | 'feature',
+  appearance: 'grey' | 'feature' | 'custom',
   heading: string,
-  cta?: Option<Node>,
+  content?: Option<Node>,
   children?: Option<Node>,
   modifierClasses: Array<?string>,
 |};
@@ -25,20 +25,20 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const ProductPageHero = ({
-  overheading, heading, cta, modifierClasses, children, type,
+  overheading, heading, content, modifierClasses, children, appearance,
 }: PropTypes) => (
   <header>
-    <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, type])}>
+    <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, appearance])}>
       <LeftMarginSection>
         {children}
         <HeadingBlock overheading={overheading} heading={heading} />
       </LeftMarginSection>
     </div>
-    {cta &&
+    {content &&
     <div className="component-product-page-hero-hanger">
       <LeftMarginSection>
         <div className="component-product-page-hero-hanger__content">
-          {cta}
+          {content}
         </div>
       </LeftMarginSection>
     </div>
@@ -49,8 +49,8 @@ const ProductPageHero = ({
 ProductPageHero.defaultProps = {
   modifierClasses: [],
   children: null,
-  cta: null,
-  type: 'grey',
+  content: null,
+  appearance: 'grey',
 };
 
 

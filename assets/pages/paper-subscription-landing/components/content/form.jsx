@@ -11,8 +11,8 @@ import { showPrice, type Price } from 'helpers/internationalisation/price';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
-import { type State } from '../paperSubscriptionLandingPageReducer';
-import { setPlan, redirectToCheckout } from '../paperSubscriptionLandingPageActions';
+import { type State } from '../../paperSubscriptionLandingPageReducer';
+import { setPlan, redirectToCheckout } from '../../paperSubscriptionLandingPageActions';
 
 
 // ---- Helpers ----- //

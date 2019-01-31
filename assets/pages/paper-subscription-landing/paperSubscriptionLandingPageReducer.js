@@ -12,7 +12,7 @@ import { type TabActions } from './paperSubscriptionLandingPageActions';
 
 // ----- Types ----- //
 
-type ActiveTabState = PaperDeliveryMethod;
+export type ActiveTabState = PaperDeliveryMethod;
 
 export type State = {
   common: CommonState,

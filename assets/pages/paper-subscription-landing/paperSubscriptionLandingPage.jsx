@@ -8,20 +8,20 @@ import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
-import GridPicture from 'components/gridPicture/gridPicture';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
-import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 
+
+import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
-
+import { SaleHeader } from './components/hero/hero';
 import Tabs from './components/tabs';
-import Content from './components/content';
+import Content from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
@@ -38,6 +38,11 @@ const reactElementId: {
   delivery: 'paper-subscription-landing-page-delivery',
 };
 
+// ----- Internationalisation ----- //
+
+const countryGroupId: CountryGroupId = detect();
+const { supportInternationalisationId } = countryGroups[countryGroupId];
+const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supportInternationalisationId : 'gb').toUpperCase();
 
 // ----- Initial selection? ----- //
 
@@ -49,15 +54,6 @@ const store = pageInit(reducer(method, promoInUrl), true);
 
 
 // ----- Render ----- //
-
-function getHeading(): string {
-  if (flashSaleIsActive('Paper', 'GBPCountries')) {
-    const saleCopy = getSaleCopy('Paper', 'GBPCountries');
-    return saleCopy.landingPage.subHeading;
-  }
-
-  return 'Save up to 31% on The Guardian and The Observer - all year round';
-}
 
 function getStandfirst(): string {
   const defaultWording = 'We offer two different subscription types: voucher booklets and home delivery.';
@@ -75,47 +71,25 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <ProductPagehero
-        overheading="The Guardian newspaper subscriptions"
-        heading={getHeading()}
-        type="feature"
-        modifierClasses={['paper']}
-      >
-        <GridPicture
-          sources={[
-            {
-              gridId: 'paperLandingHeroMobile',
-              srcSizes: [500, 922],
-              imgType: 'png',
-              sizes: '100vw',
-              media: '(max-width: 739px)',
-            },
-            {
-              gridId: 'paperLandingHero',
-              srcSizes: [1000, 2000],
-              imgType: 'png',
-              sizes: '(min-width: 1000px) 2000px, 1000px',
-              media: '(min-width: 740px)',
-            },
-          ]}
-          fallback="paperLandingHero"
-          fallbackSize={1000}
-          altText=""
-          fallbackImgType="png"
-        />
-      </ProductPagehero>
+      <SaleHeader />
+
       <ProductPageContentBlock needsHigherZindex>
         <ProductPageTextBlock>
           <LargeParagraph>
             {getStandfirst()}
           </LargeParagraph>
         </ProductPageTextBlock>
-
-      </ProductPageContentBlock>
-      <ProductPageContentBlock>
         <Tabs />
       </ProductPageContentBlock>
       <Content />
+      {flashSaleIsActive('Paper', 'GBPCountries') &&
+        <ProductPageContentBlock>
+          <ProductPageTextBlock title="Promotion terms and conditions">
+            <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full 6 for 6 promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
+            </p>
+          </ProductPageTextBlock>
+        </ProductPageContentBlock>
+      }
     </Page>
   </Provider>
 );

@@ -75,11 +75,11 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        type="feature"
+        appearance="feature"
         overheading="Guardian Weekly subscriptions"
         heading="Get a clearer, global perspective on the issues that matter, in one magazine."
         modifierClasses={['weekly']}
-        cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+        content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       >
         <GridPicture
           sources={[
