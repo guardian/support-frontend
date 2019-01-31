@@ -220,33 +220,109 @@ const Sales: Sale[] = [
       },
     },
   },
+  {
+    subscriptionProduct: 'Paper',
+    activeRegions: ['GBPCountries'],
+    startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
+    endTime: new Date(2019, 1, 18).getTime(), // 17 Feb 2019 (to finish at 0:00 in the morning)
+    duration: '3 months',
+    saleDetails: {
+      GBPCountries: {
+        promoCode: 'GCC80X',
+        intcmp: '',
+        price: 5.40,
+        discountPercentage: 0.50,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Paper subscriptions',
+            subHeading: 'Save up to 68% on your newspaper',
+            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save an additional 50% for your first three months.',
+          },
+          landingPage: {
+            heading: 'The Guardian newspaper subscriptions',
+            subHeading: 'Subscribe and save up to 68% off the retail price of your newspaper',
+            standfirst: 'Subscribers already save up to 37% off the retail price. With this limited time offer, you\'ll enjoy and additional 50% off for the first three months of your subscription. We offer two different subscription types: voucher booklets and home delivery.',
+          },
+          bundle: {
+            heading: 'Paper',
+            subHeading: 'From £5.40/month',
+            description: 'Save an additional 50% for the first three months of your subscription to The Guardian and The Observer',
+          },
+        },
+        planPrices: [
+          { collectionEveryday: 23.81 },
+          { collectionSixday: 20.56 },
+          { collectionWeekend: 10.38 },
+          { collectionSunday: 5.40 },
+          { deliveryEveryday: 31.40 },
+          { deliverySixday: 27.06 },
+          { deliveryWeekend: 12.55 },
+          { deliverySunday: 7.56 },
+        ],
+      },
+    },
+  },
+  {
+    subscriptionProduct: 'PaperAndDigital',
+    activeRegions: ['GBPCountries'],
+    startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
+    endTime: new Date(2019, 1, 18).getTime(), // 17 Feb 2019 (to finish at 0:00 in the morning)
+    saleDetails: {
+      GBPCountries: {
+        promoCode: 'GCC56X',
+        intcmp: '',
+        price: 11.03,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Paper subscriptions',
+            subHeading: 'Save up to 68% on your newspaper',
+            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save an additional 50% for your first three months.',
+          },
+          landingPage: {
+            heading: 'The Guardian newspaper subscriptions',
+            subHeading: 'Subscribe and save up to 68% off the retail price of your newspaper',
+            standfirst: 'Subscribers already save up to 37% off the retail price. With this limited time offer, you\'ll enjoy and additional 50% off for the first three months of your subscription. We offer two different subscription types: voucher booklets and home delivery.',
+          },
+          bundle: {
+            heading: 'Paper+Digital',
+            subHeading: 'From £16.22/month',
+            description: 'The Paper + Digital subscription includes all the benefits of a paper subscription, plus access to the Digital Pack. Save 50% for your first three months.',
+          },
+        },
+        planPrices: [],
+      },
+    },
+  },
 ];
 
 function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
   return b.startTime - a.startTime;
 }
 
-function getSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
-  return Sales.filter(sale =>
+function getActiveFlashSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
+  const now = Date.now();
+
+  const sales = Sales.filter(sale =>
     sale.subscriptionProduct === product &&
     sale.activeRegions.includes(countryGroupId)).sort(sortSalesByStartTimesDescending);
+
+  return sales.filter(sale =>
+    (now > sale.startTime && now < sale.endTime) ||
+    getQueryParameter('flash_sale') === 'true');
 }
 
 function getDiscount(product: SubscriptionProduct, countryGroupId: CountryGroupId): ?number {
-  const sale = getSales(product, countryGroupId)[0];
+  const sale = getActiveFlashSales(product, countryGroupId)[0];
   return sale && sale.saleDetails[countryGroupId] && sale.saleDetails[countryGroupId].discountPercentage;
 }
 
 function getDuration(product: SubscriptionProduct, countryGroupId: CountryGroupId): ?string {
-  const sale = getSales(product, countryGroupId)[0];
+  const sale = getActiveFlashSales(product, countryGroupId)[0];
   return sale && sale.duration;
 }
 
 function flashSaleIsActive(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): boolean {
-  const now = Date.now();
-  const sales = getSales(product, countryGroupId).filter(sale =>
-    (now > sale.startTime && now < sale.endTime) ||
-    getQueryParameter('flash_sale') === 'true');
+  const sales = getActiveFlashSales(product, countryGroupId);
 
   return sales.length > 0;
 }
@@ -257,7 +333,7 @@ function getPromoCode(
   defaultCode: string,
 ): string {
   if (flashSaleIsActive(product, countryGroupId)) {
-    const sale = getSales(product, countryGroupId)[0];
+    const sale = getActiveFlashSales(product, countryGroupId)[0];
     return sale && sale.saleDetails[countryGroupId].promoCode;
   }
   return defaultCode;
@@ -270,19 +346,19 @@ function getIntcmp(
   defaultIntcmp: string,
 ): string {
   if (flashSaleIsActive(product)) {
-    const sale = getSales(product, countryGroupId)[0];
+    const sale = getActiveFlashSales(product, countryGroupId)[0];
     return (sale && sale.saleDetails[countryGroupId].intcmp) || intcmp || defaultIntcmp;
   }
   return intcmp || defaultIntcmp;
 }
 
 function getPlanPrices(product: SubscriptionProduct, countryGroupId: CountryGroupId): PlanPrice[] {
-  const sale = getSales(product, countryGroupId)[0];
+  const sale = getActiveFlashSales(product, countryGroupId)[0];
   return sale && sale.saleDetails[countryGroupId].planPrices;
 }
 
 function getEndTime(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
-  const sale = getSales(product, countryGroupId)[0];
+  const sale = getActiveFlashSales(product, countryGroupId)[0];
   return sale && sale.endTime;
 }
 
@@ -304,14 +380,14 @@ function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupI
     },
   };
   if (flashSaleIsActive(product, countryGroupId)) {
-    const sale = getSales(product, countryGroupId)[0];
+    const sale = getActiveFlashSales(product, countryGroupId)[0];
     return sale.saleDetails[countryGroupId].saleCopy;
   }
   return emptyCopy;
 }
 
 function getFormattedFlashSalePrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
-  const sale = getSales(product, countryGroupId)[0];
+  const sale = getActiveFlashSales(product, countryGroupId)[0];
   return fixDecimals(sale.saleDetails[countryGroupId].price);
 }
 
