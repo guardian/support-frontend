@@ -29,11 +29,13 @@ Mappings:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
+      KinesisStreamArn: acquisitions-stream-CODE
     PROD:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
+      KinesisStreamArn: acquisitions-stream-PROD
 Resources:
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -99,8 +101,7 @@ Resources:
             Statement:
             - Effect: Allow
               Action: kinesis:*
-              Resource:
-                Ref: KinesisStreamArn
+              Resource: !FindInMap [StageVariables, !Ref Stage, KinesisStreamArn]
         - PolicyName: DynamoPromotions
           PolicyDocument:
             Statement:
