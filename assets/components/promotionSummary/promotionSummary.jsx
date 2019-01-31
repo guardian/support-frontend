@@ -37,7 +37,7 @@ function getSummary(
   const noun = billingPeriodNoun(billingPeriod).toLowerCase();
 
   if (numberOfDiscountedPeriods !== undefined && numberOfDiscountedPeriods !== null) {
-    const discountCopy = `${discountedPrice}${billingPeriodQuantifier(numberOfDiscountedPeriods, noun)}`;
+    const discountCopy = `${displayPrice(glyph, discountedPrice)}${billingPeriodQuantifier(numberOfDiscountedPeriods, noun)}`;
     const standardCopy = `then standard rate (${displayPrice(glyph, price)}/${noun})`;
     return `${discountCopy}, ${standardCopy}`;
   }
