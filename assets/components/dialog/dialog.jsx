@@ -14,10 +14,10 @@ import './dialog.scss';
 
 export type PropTypes = {|
   onStatusChange: (boolean) => void,
-  modal: boolean,
+  styled: boolean,
   open: boolean,
   'aria-label': Option<string>,
-  dismissOnBackgroundClick: boolean,
+  blocking: boolean,
   children: Node
 |};
 
@@ -28,9 +28,9 @@ class Dialog extends Component<PropTypes> {
 
   static defaultProps = {
     onStatusChange: () => {},
-    modal: true,
+    styled: true,
     open: false,
-    dismissOnBackgroundClick: false,
+    blocking: true,
   }
 
   componentDidMount() {
@@ -75,12 +75,15 @@ class Dialog extends Component<PropTypes> {
 
   render() {
     const {
-      open, children, onStatusChange, dismissOnBackgroundClick, ...otherProps
+      open, children, onStatusChange, blocking, styled, ...otherProps
     } = this.props;
 
     return (
       <dialog // eslint-disable-line jsx-a11y/no-redundant-roles
-        className={classNameWithModifiers('component-dialog', [open ? 'open' : null])}
+        className={classNameWithModifiers('component-dialog', [
+          open ? 'open' : null,
+          styled ? 'styled' : null,
+        ])}
         aria-modal
         aria-hidden={!open}
         tabIndex="-1"
@@ -103,7 +106,7 @@ class Dialog extends Component<PropTypes> {
         <div
           className="component-dialog__backdrop"
           aria-hidden
-          onClick={() => dismissOnBackgroundClick && onStatusChange(false)}
+          onClick={() => !blocking && onStatusChange(false)}
         />
       </dialog>
     );
