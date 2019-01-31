@@ -99,16 +99,44 @@ class Application(
     )).withSettingsSurrogateKey
   }
 
-  def contributionsLanding(countryCode: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  def contributionsLanding(countryCode: String, maybeSSR: Option[String]): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None)),
-      user => Ok(contributionsHtml(countryCode, user))
+      _ => Ok(contributionsHtml(countryCode, None, maybeSSR.contains("on"))),
+      user => Ok(contributionsHtml(countryCode, user, maybeSSR.contains("on")))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])(implicit request: RequestHeader, settings: AllSettings) = {
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isTest: Boolean)(implicit request: RequestHeader, settings: AllSettings) = {
+    if (isTest) {
+      val annualAmounts: Map[String, (String, String, String, String)] = Map(
+        "uk" -> ("£50", "£100", "£250", "£500"),
+        "us" -> ("$50", "$100", "$250", "$500"),
+        "au" -> ("$100", "$250", "$500", "$750"),
+        "eu" -> ("€50", "€100", "€250", "€500"),
+        "int" -> ("£50", "£100", "£250", "£500"),
+        "nz" -> ("$50", "$100", "$250", "$500"),
+        "ca" -> ("$50", "$100", "$250", "$500")
+      )
+      views.html.newContributionsTest(
+        title = "Support the Guardian | Make a Contribution",
+        id = s"new-contributions-landing-page-$countryCode",
+        js = "newContributionsLandingPage.js",
+        css = "newContributionsLandingPageStyles.css",
+        description = stringsConfig.contributionsLandingDescription,
+        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+        oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+        regularUatStripeConfig = regularStripeConfigProvider.get(true),
+        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+        regularUatPayPalConfig = payPalConfigProvider.get(true),
+        paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
+        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+        idUser = idUser,
+        annualAmounts = annualAmounts(countryCode)
+      )
+    } else
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
