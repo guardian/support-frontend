@@ -78,7 +78,7 @@ const SaleHeader = () => (
           <div className="sale-joy-of-print-badge">
             <span>Save up to</span>
             <span>52%</span>
-            <span>For 3 months</span>
+            <span>for a year</span>
           </div>
           <div className="sale-joy-of-print-graphic">
             <GridImage
