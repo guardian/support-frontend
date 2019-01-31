@@ -12,7 +12,7 @@ import ProductPageTextBlock from 'components/productPage/productPageTextBlock/pr
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
 // This is a barebones stateful wrapper - <Dialog/> needs to be controlled just like inputs
-class ControlledDialogButton extends Component<{||}, {open: boolean}> {
+class ControlledDialogButton extends Component<{||}, {|open: boolean|}> {
   state = {
     open: false,
   }
@@ -50,7 +50,7 @@ class ControlledDialogButton extends Component<{||}, {open: boolean}> {
   }
 }
 
-class ControlledPopDialogButton extends Component<{}, {open: boolean, pos: number[]}> {
+class ControlledPopDialogButton extends Component<{||}, {|open: boolean, pos: number[]|}> {
   state = {
     open: false,
     pos: [0, 0],
