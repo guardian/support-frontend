@@ -21,8 +21,6 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 
-import CtaSwitch from './ctaSwitch';
-import CtaAbTestWrapper from './ctaAbTestWrapper';
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
 // ----- Types ----- //
@@ -187,12 +185,9 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             />
           </div>
         }
-        <CtaAbTestWrapper>
-          <CtaSwitch referringCta="support_digipack_page_header" />
-          <div className="digital-subscription-landing-header__cta">
-            <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
-          </div>
-        </CtaAbTestWrapper>
+        <div className="digital-subscription-landing-header__cta">
+          <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
+        </div>
       </LeftMarginSection>
     </div>
   );

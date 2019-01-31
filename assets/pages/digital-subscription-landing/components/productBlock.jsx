@@ -156,7 +156,7 @@ function ProductBlock(props: PropTypes) {
             },
           ]}
         />
-        <CtaSwitch referringCta="support_digipack_page_product_benefits_section" />
+        <CtaSwitch />
       </LeftMarginSection>
     </div>
   );
