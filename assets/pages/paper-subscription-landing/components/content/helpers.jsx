@@ -40,7 +40,12 @@ const getDiscountCallout = (): ?string => {
 
 
 // ----- Auxiliary Components ----- //
-const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>, telephoneLink: Element<string>}) => (
+const ContentHelpBlock = ({
+  faqLink, telephoneLink,
+}: {|
+  faqLink: Element<string>,
+  telephoneLink: Element<string>
+|}) => (
   <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
     <ProductPageTextBlock title="FAQ and help">
       <SansParagraph>
@@ -53,11 +58,13 @@ const ContentHelpBlock = ({ faqLink, telephoneLink }: {faqLink: Element<string>,
   </ProductPageContentBlock>
 );
 
-const LinkTo = ({ setTabAction, tab, children }: {
+const LinkTo = ({
+  setTabAction, tab, children,
+}: {|
   setTabAction: typeof setTab,
   tab: ActiveTabState,
   children: Node
-}) => (
+|}) => (
   <a
     href={paperSubsUrl(tab === 'delivery')}
     onClick={(ev) => {
@@ -71,35 +78,36 @@ const LinkTo = ({ setTabAction, tab, children }: {
 
 const ContentForm = ({
   title, text, setTabAction, selectedTab,
-}: {
+}: {|
   title: string,
   text?: Option<string>,
   selectedTab: ActiveTabState,
-  setTabAction: typeof setTab}) => (
-    <ProductPageContentBlock type="feature" id="subscribe">
-      <ProductPageTextBlock
-        title={title}
-        callout={flashSaleIsActive('Paper', 'GBPCountries') ? getDiscountCallout() : null}
-      />
-      {text &&
+  setTabAction: typeof setTab
+|}) => (
+  <ProductPageContentBlock type="feature" id="subscribe">
+    <ProductPageTextBlock
+      title={title}
+      callout={flashSaleIsActive('Paper', 'GBPCountries') ? getDiscountCallout() : null}
+    />
+    {text &&
       <ProductPageTextBlock>
         <p>{text}</p>
       </ProductPageTextBlock>
     }
-      <Form />
-      <ProductPageTextBlock>
-        <SansParagraph>
-          {
+    <Form />
+    <ProductPageTextBlock>
+      <SansParagraph>
+        {
             selectedTab === 'collection'
             ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
             : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
           }
-        </SansParagraph>
-      </ProductPageTextBlock>
-      <ProductPageInfoChip>
-        {getPageInfoChip()}
-      </ProductPageInfoChip>
-    </ProductPageContentBlock>
+      </SansParagraph>
+    </ProductPageTextBlock>
+    <ProductPageInfoChip>
+      {getPageInfoChip()}
+    </ProductPageInfoChip>
+  </ProductPageContentBlock>
 );
 ContentForm.defaultProps = { text: null };
 
