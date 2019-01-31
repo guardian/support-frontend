@@ -51,12 +51,18 @@ class Dialog extends Component<PropTypes> {
     if (this.ref && this.ref.showModal) {
       this.ref.showModal();
     }
+    /*
+    if the browser supports <dialog>
+    its gonna be better than us
+    at dealing with auto focus
+    */
+    if (this.ref && !this.ref.showModal) {
+      requestAnimationFrame(() => {
+        if (this.ref) {
+          this.ref.focus();
+        }
+      });
     }
-    requestAnimationFrame(() => {
-      if (this.ref) {
-        this.ref.focus();
-      }
-    });
   }
 
   close() {
