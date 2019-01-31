@@ -1,7 +1,7 @@
 package utils
 
-import com.gu.i18n.Country
-import com.gu.support.workers.{DirectDebitPaymentFields, PaymentFields, StripePaymentFields}
+import com.gu.i18n.{Country, CountryGroup}
+import com.gu.support.workers.{DirectDebitPaymentFields, StripePaymentFields}
 import services.stepfunctions.CreateSupportWorkersRequest
 
 object SimpleValidator {
@@ -21,8 +21,13 @@ object SimpleValidator {
       case stripeDetails: StripePaymentFields => !stripeDetails.stripeToken.isEmpty
     }
 
+    def currencyIsSupportedForCountry: Boolean = {
+      val countryGroupsForCurrency = CountryGroup.allGroups.filter(_.currency == request.product.currency)
+      countryGroupsForCurrency.flatMap(_.countries).contains(request.country)
+    }
+
     val telephoneNumberShortEnough = request.telephoneNumber.forall(_.length < 40)
 
-    noEmptyNameFields && hasStateIfRequired && noEmptyPaymentFields && telephoneNumberShortEnough
+    noEmptyNameFields && hasStateIfRequired && noEmptyPaymentFields && telephoneNumberShortEnough && currencyIsSupportedForCountry
   }
 }

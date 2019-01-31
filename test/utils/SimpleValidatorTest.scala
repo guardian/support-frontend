@@ -2,7 +2,7 @@ package utils
 
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.workers.{DigitalPack, Monthly, StripePaymentFields}
+import com.gu.support.workers.{Annual, DigitalPack, Monthly, StripePaymentFields}
 import org.scalatest.{FlatSpec, Matchers}
 import services.stepfunctions.CreateSupportWorkersRequest
 
@@ -42,12 +42,22 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
   }
 
   "validate" should "pass if there is no state selected and the country is Australia" in {
-    val requestMissingState = validRequest.copy(country = Country.Australia, state = None)
+    val requestMissingState = validRequest.copy(country = Country.Australia, product = DigitalPack(Currency.AUD, Monthly), state = None)
     SimpleValidator.validationPasses(requestMissingState) shouldBe true
   }
 
   "validate" should "fail if the payment field received is an empty string" in {
     val requestMissingState = validRequest.copy(paymentFields = StripePaymentFields(""))
+    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+  }
+
+  "validate" should "succeed for a standard country and currency combination" in {
+    val requestMissingState = validRequest.copy(country = Country.UK, product = DigitalPack(Currency.GBP, Annual), state = None)
+    SimpleValidator.validationPasses(requestMissingState) shouldBe true
+  }
+
+  "validate" should "fail if the country and currency combination is unsupported" in {
+    val requestMissingState = validRequest.copy(country = Country.US, product = DigitalPack(Currency.GBP, Annual), state = None)
     SimpleValidator.validationPasses(requestMissingState) shouldBe false
   }
 
