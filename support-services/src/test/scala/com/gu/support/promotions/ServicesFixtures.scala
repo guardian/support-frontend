@@ -19,8 +19,7 @@ object ServicesFixtures {
   val renewalPromoCode = "RENEWAL_CODE"
   val trackingPromoCode = "TRACKING_CODE"
 
-  val validProductRatePlanIds = DigitalPack.ratePlans(PROD).map(_.id) ++
-    GuardianWeekly.getProductRatePlan(PROD, Annual, Domestic, NoProductOptions).map(prp => List(prp.id)).getOrElse(Nil)
+  val validProductRatePlanIds = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
   val validProductRatePlanId = validProductRatePlanIds.head
   val invalidProductRatePlanId = "67890"
 

@@ -5,6 +5,7 @@ import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
 sealed trait BillingPeriod {
   val noun: String
+  val monthsInPeriod: Int
 }
 
 object BillingPeriod {
@@ -23,16 +24,20 @@ object BillingPeriod {
 
 case object Monthly extends BillingPeriod {
   override val noun = "month"
+  override val monthsInPeriod = 1
 }
 
 case object Quarterly extends BillingPeriod {
   override val noun = "quarter"
+  override val monthsInPeriod = 3
 }
 
 case object Annual extends BillingPeriod {
   override val noun = "year"
+  override val monthsInPeriod = 12
 }
 
 case object SixWeekly extends BillingPeriod {
   override val noun = "six weeks"
+  override val monthsInPeriod = 1
 }
