@@ -101,7 +101,7 @@ Resources:
               Action: kinesis:*
               Resource:
                 Ref: KinesisStreamArn
-	- PolicyName: DynamoPromotions
+        - PolicyName: DynamoPromotions
           PolicyDocument:
             Statement:
             - Effect: Allow
