@@ -3,6 +3,8 @@ import type { Tests } from './abtest';
 
 // ----- Tests ----- //
 
+export type AnnualContributionsTestVariant = 'control' | 'annualAmountsA' | 'notintest';
+
 export const tests: Tests = {
 
   annualContributionsRoundThree: {
