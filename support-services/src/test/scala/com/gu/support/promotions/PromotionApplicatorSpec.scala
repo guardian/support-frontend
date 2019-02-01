@@ -20,7 +20,7 @@ class PromotionApplicatorSpec extends FlatSpec with Matchers {
     val result = PromotionApplicator(validFreeTrial, config)
       .applyTo(subscriptionData)
 
-    result.subscription.contractEffectiveDate shouldBe correctDate
+    result.subscription.contractAcceptanceDate shouldBe correctDate
     result.subscription.promoCode shouldBe Some(freeTrialPromoCode)
   }
 
@@ -28,7 +28,7 @@ class PromotionApplicatorSpec extends FlatSpec with Matchers {
     val result = PromotionApplicator(validDouble, config)
       .applyTo(subscriptionData)
 
-    result.subscription.contractEffectiveDate shouldBe correctDate
+    result.subscription.contractAcceptanceDate shouldBe correctDate
     result.subscription.promoCode shouldBe Some(doublePromoCode)
     result.ratePlanData.length shouldBe 2
   }
