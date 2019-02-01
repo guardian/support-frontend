@@ -16,6 +16,7 @@ import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { getDigitalPrice } from 'helpers/subscriptions';
 import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { getQueryParameter } from 'helpers/url';
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation) {
@@ -49,6 +50,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     ophanIds: getOphanIds(),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
     supportAbTests: getSupportAbTests(state.common.abParticipations, state.common.optimizeExperiments),
+    promoCode: getQueryParameter('promoCode'),
   };
 }
 

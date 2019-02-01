@@ -7,7 +7,9 @@ import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
+import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.workers.{BillingPeriod, User}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
@@ -28,6 +30,7 @@ import utils.SimpleValidator._
 import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscription(
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
     client: SupportWorkersClient,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
@@ -86,6 +89,7 @@ class DigitalSubscription(
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
+    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
 
     digitalSubscription(
       title,
@@ -95,6 +99,7 @@ class DigitalSubscription(
       Some(csrf),
       idUser,
       uatMode,
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCode),
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(uatMode)
