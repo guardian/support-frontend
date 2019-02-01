@@ -1,3 +1,6 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+
 .component-heading-block__overheading {
   @include gu-typeface(headline, 16);
   line-height: 1;

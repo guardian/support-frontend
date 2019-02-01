@@ -1,5 +1,17 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+@mixin narrow-content {
+  max-width: gu-span(7);
+  @include mq($from: desktop) {
+    max-width: gu-span(8);
+  }
+}
+
+@mixin outset {
+  margin-left: ($gu-h-spacing / 2 * -1);
+  margin-right: ($gu-h-spacing / 2 * -1);
+}
+
 @mixin block-colours($border, $bg: null, $text: null) {
   @if($text){
     color: $text;
@@ -27,6 +39,7 @@
     border-top: 0 !important;  
   }    
 }
+
 
 .component-product-page-content-block .component-left-margin-section__content {
   max-width: 100%;
@@ -88,13 +101,20 @@
 }
 
 .component-product-page-content-block-outset {
-  margin-left: ($gu-h-spacing / 2 * -1);
-  margin-right: ($gu-h-spacing / 2 * -1);
+  @include outset;
 }
 
 .component-product-page-content-block-divider {
+  @include outset;
   height: 20px;
   margin-bottom: ($gu-v-spacing*.33);
+}
+
+.component-product-page-content-block-divider--small {
+  @include narrow-content;
+  height: 1px;
+  overflow: hidden;
+  position: relative;
 }
 
 .component-product-page-content-block-divider__line {
@@ -105,11 +125,9 @@
   margin: 0;
 }
 
-.component-product-page-content-block__narrowContent {
-  max-width: gu-span(7);
-  @include mq($from: desktop) {
-    max-width: gu-span(8);
-  }
+.component-product-page-content-block__narrowContent,
+.component-product-page-content-block .component-product-page-text-block {
+  @include narrow-content;
 }
 
 // ----- Vertical rhythm ------ //
@@ -120,9 +138,6 @@
   .component-product-page-plan-form,
   .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)
-  }
-  .component-product-page-text-block--heading-only + .component-product-page-content-block-divider {
-    margin-top: ($gu-v-spacing*-1)
   }
   .component-product-page-info-chip + .component-product-page-info-chip {
     margin-top: ($gu-v-spacing * -1);
@@ -148,10 +163,10 @@
   max-width: gu-span(6);
   @include mq($from: tablet) {
     position: absolute;
-    left: gu-span(7) + $gu-h-spacing;
+    left: gu-span(7) + ($gu-h-spacing * 2);
   }
   @include mq($from: desktop) {
-    left: gu-span(8) + $gu-h-spacing;
+    left: gu-span(8) + ($gu-h-spacing * 2);
   }
   bottom: ($gu-v-spacing*2)*-1;
   .component-grid-image {

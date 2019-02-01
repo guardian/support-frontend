@@ -18,7 +18,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a Monthly Contribution") {
+  feature("Sign up for a Monthly Contribution (Old Contributions Flow)") {
 
     scenario("Monthly contribution sign-up with Stripe - GBP") {
 
@@ -53,86 +53,6 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       recurringContributionForm.selectStripePayment()
 
       And("the mock calls the backend using a test Stripe token")
-
-      Then("the thankyou page should display")
-      assert(recurringContributionThankYou.pageHasLoaded)
-
-    }
-
-    scenario("Monthly contribution sign-up with Paypal - GBP") {
-
-      val landingPage = ContributionsLanding("uk")
-      val testUser = new TestUser(driverConfig)
-      val registerPageOne = RegisterPageOne(testUser, 5)
-      val payPalCheckout = new PayPalCheckout
-      val expectedPayment = "5.00"
-      val recurringContributionForm = RecurringContributionForm(testUser)
-      val recurringContributionThankYou = new RecurringContributionThankYou
-
-      goTo(registerPageOne)
-
-      assert(registerPageOne.pageHasLoaded)
-
-      Given("that the user fills in their personal details correctly")
-      registerPageOne.fillInPersonalDetails()
-
-      When("they submit the form to create their Identity account")
-      registerPageOne.submit()
-      Then("they should be redirected to register as an Identity user")
-
-      val registerPageTwo = RegisterPageTwo(testUser, 5)
-      assert(registerPageTwo.pageHasLoaded)
-
-      Given("that the user fills in their personal details correctly")
-      registerPageTwo.fillInPersonalDetails()
-
-      When("they submit the form to create their Identity account")
-
-      registerPageTwo.submit()
-
-      goTo(landingPage)
-
-      Given("that a test user goes to the contributions landing page")
-      goTo(landingPage)
-      assert(landingPage.pageHasLoaded)
-
-      When("they select to contribute the default amount")
-      landingPage.clickContribute
-
-      Then("they should be redirected to the Monthly Contributions page")
-      assert(recurringContributionForm.detailsPageHasLoaded)
-
-      Given("They select next")
-      recurringContributionForm.clickNext
-
-      Then("they should be redirected to the payment page")
-      assert(recurringContributionForm.paymentPageHasLoaded)
-
-      Given("they select to pay with PayPal")
-
-      When("they press the PayPal payment button")
-      recurringContributionForm.selectPayPalPayment
-
-      Then("the PayPal Express Checkout mini-browser should display")
-      payPalCheckout.switchToPayPalPopUp
-      assert(payPalCheckout.initialPageHasLoaded)
-      payPalCheckout.handleGuestRegistrationPage()
-      assert(payPalCheckout.loginContainerHasLoaded)
-
-      Given("that the user fills in their PayPal credentials correctly")
-      payPalCheckout.enterLoginDetails()
-
-      When("the user clicks 'Log In'")
-      payPalCheckout.logIn
-
-      Then("the payment summary appears")
-      assert(payPalCheckout.payPalSummaryHasLoaded)
-
-      Given("that the summary displays the correct details")
-      assert(payPalCheckout.payPalSummaryHasCorrectDetails(expectedPayment))
-
-      When("that the user agrees to payment")
-      payPalCheckout.acceptPayPalPaymentPopUp
 
       Then("the thankyou page should display")
       assert(recurringContributionThankYou.pageHasLoaded)

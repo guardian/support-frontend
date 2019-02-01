@@ -12,6 +12,7 @@ import { type UsState, type CaState } from 'helpers/internationalisation/country
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
+import type { StripePaymentMethod } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
@@ -52,7 +53,7 @@ type SetPasswordData = {
 }
 
 type StripePaymentRequestButtonData = {
-  canMakeStripePaymentRequestPayment: boolean,
+  paymentMethod: StripePaymentMethod | null,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
   stripeV3HasLoaded: boolean,
@@ -137,7 +138,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       checkoutFormHasBeenSubmitted: false,
     },
     stripePaymentRequestButtonData: {
-      canMakeStripePaymentRequestPayment: false,
+      paymentMethod: null,
       stripePaymentRequestObject: null,
       stripePaymentRequestButtonClicked: false,
       stripeV3HasLoaded: false,
@@ -217,12 +218,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
-      case 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT':
+      case 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD':
         return {
           ...state,
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
-            canMakeStripePaymentRequestPayment: action.canMakePayment,
+            paymentMethod: action.paymentMethod,
           },
         };
 

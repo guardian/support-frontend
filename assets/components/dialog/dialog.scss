@@ -5,26 +5,27 @@
   height: 0;
   width: 0;
   overflow: hidden;
+  &::backdrop {
+    background: rgba(0,0,0,0);
+  }  
 }
 
 .component-dialog--open {
   visibility: visible;
   position: fixed;
-  height: auto;
-  width: auto;
+  height: 100%;
+  width: 100%;
   top: 0;
   left: 0;
-  z-index: 100;
-  contain: content;
-}
-
-.component-dialog--modal.component-dialog--open {
-  display: flex;
   bottom: 0;
   right: 0;
-  justify-content: center;
-  align-items: center;
+  z-index: 100;
   contain: strict;
+  &.component-dialog--styled {
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+  }
 }
 
 .component-dialog__contents {
@@ -32,12 +33,16 @@
   z-index: 10;
 }
 
-.component-dialog--modal .component-dialog__backdrop {
-  background: rgba(0, 0, 0, 0.6);
-  position: absolute;
+.component-dialog__backdrop {
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
   z-index: 9;
+  height: 100%;
+  width: 100%;
+  .component-dialog--styled & {
+    background: rgba(0, 0, 0, 0.6);
+  }
 }

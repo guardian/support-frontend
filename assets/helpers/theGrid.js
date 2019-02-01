@@ -56,10 +56,11 @@ export const imageCatalogue: {
   paperLandingHero: 'c09bbbff7ba75ea91b0d9da4ed750ab437f364c3/0_0_2676_1316',
   paperLandingHeroMobile: '7a1f17792f748c139a22321440e1c9294df82349/0_0_922_656',
   paperDeliveryFeature: 'e7527a726b840eeb1f94cfc6fdd004a31b90df20/0_0_920_820',
-  paperVoucherFeature: '33ce22d8c3b65e830b91ab089f5c0670cbd6a7d9/0_0_920_820',
+  paperVoucherFeature: '90004f5940d9683f64216fbd206facc0e02b2fbc/0_0_750_694',
   UsCampaignLanding: '56fbd07b8e3b7090853dce5aa47c7153bd5c6e05/0_0_1500_1454',
   showcase: 'b72ef7a4c8764a163fc604d7b8edcedfdd7682f4/0_0_7100_3500',
   showcaseSubscribe: '2abea0fc492779a0f790994b9525632a0bd91ee6/0_0_2664_1288',
+  paperLandingSale: '6179a30718dab98e96230e39195f3aa2a2784a1d/0_0_800_858',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

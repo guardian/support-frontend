@@ -10,14 +10,14 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
-import { type PaymentResult } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type PaymentResult, type StripePaymentMethod } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type { State } from '../../contributionsLandingReducer';
 import {
-  setCanMakeStripePaymentRequestPayment,
+  setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestButtonClicked,
   setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
@@ -39,19 +39,18 @@ type PropTypes = {|
   isTestUser: boolean,
   amount: number,
   stripePaymentRequestObject: Object | null,
-  canMakeStripePaymentRequestPayment: boolean,
-  setCanMakeStripePaymentRequestPayment: (boolean) => void,
+  paymentRequestButtonPaymentMethod: StripePaymentMethod,
+  setPaymentRequestButtonPaymentMethod: (StripePaymentMethod) => void,
   setStripePaymentRequestObject: (Object) => void,
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   setStripePaymentRequestButtonClicked: () => void,
   updateEmail: string => void,
 |};
 
-
 const mapStateToProps = (state: State) => ({
   selectedAmounts: state.page.form.selectedAmounts,
   otherAmounts: state.page.form.formData.otherAmounts,
-  canMakeStripePaymentRequestPayment: state.page.form.stripePaymentRequestButtonData.canMakeStripePaymentRequestPayment,
+  paymentRequestButtonPaymentMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
   stripePaymentRequestObject: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestObject,
   countryGroupId: state.common.internationalisation.countryGroupId,
   country: state.common.internationalisation.countryId,
@@ -65,8 +64,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onPaymentAuthorised:
     (paymentAuthorisation: PaymentAuthorisation) =>
       dispatch(onStripePaymentRequestApiPaymentAuthorised(paymentAuthorisation)),
-  setCanMakeStripePaymentRequestPayment:
-    (canMakePayment: boolean) => { dispatch(setCanMakeStripePaymentRequestPayment(canMakePayment)); },
+  setPaymentRequestButtonPaymentMethod:
+    (paymentMethod: StripePaymentMethod) => { dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod)); },
   setStripePaymentRequestObject:
     (paymentRequest: Object) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
@@ -132,19 +131,28 @@ function onClick(event, props: PropTypes) {
   }
 }
 
-// Set this to true to enable Google Pay (good for development)
-const weAreSupportingGooglePay = false;
-
 // The value of result will either be:
 // . null - browser has no compatible payment method)
 // . {applePay: true} - applePay is available
-// . {applePay: false} - GooglePay or PaymentRequestApi available
-const browserIsCompatible = (result: Object) => {
-  if (weAreSupportingGooglePay) {
-    return result !== null;
+// . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
+const availablePaymentRequestButtonPaymentMethod = (result: Object): StripePaymentMethod | null => {
+  if (result && result.applePay === true) {
+    return 'StripeApplePay';
+  } else if (result && result.applePay === false) {
+    return 'StripePaymentRequestButton';
   }
-  return result && result.applePay === true;
+  return null;
 };
+
+function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentMethod: StripePaymentMethod) {
+  paymentRequest.on('token', ({ complete, token, ...data }) => {
+    // We need to do this so that we can offer marketing permissions on the thank you page
+    updateUserEmail(data, props.updateEmail);
+    const tokenId = props.isTestUser ? 'tok_visa' : token.id;
+    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId, stripePaymentMethod: paymentMethod })
+      .then(onComplete(complete));
+  });
+}
 
 function initialisePaymentRequest(props: PropTypes) {
   const paymentRequest = props.stripe.paymentRequest({
@@ -156,18 +164,13 @@ function initialisePaymentRequest(props: PropTypes) {
     },
     requestPayerEmail: true,
   });
-  paymentRequest.on('token', ({ complete, token, ...data }) => {
-    // We need to do this so that we can offer marketing permissions on the thank you page
-    updateUserEmail(data, props.updateEmail);
-    const tokenId = props.isTestUser ? 'tok_visa' : token.id;
-    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId, stripePaymentMethod: 'StripeApplePay' })
-      .then(onComplete(complete));
-  });
 
   paymentRequest.canMakePayment().then((result) => {
-    if (browserIsCompatible(result)) {
-      trackComponentClick('apple-pay-loaded');
-      props.setCanMakeStripePaymentRequestPayment(true);
+    const paymentMethod = availablePaymentRequestButtonPaymentMethod(result);
+    if (paymentMethod !== null) {
+      trackComponentClick(`${paymentMethod}-loaded`);
+      setUpPaymentListener(props, paymentRequest, paymentMethod);
+      props.setPaymentRequestButtonPaymentMethod(paymentMethod);
     }
   });
   props.setStripePaymentRequestObject(paymentRequest);
@@ -193,7 +196,7 @@ function PaymentRequestButton(props: PropTypes) {
 
   // We don't want to check this until we have initialised the payment request object, so the check has to come
   // after the initialisation of the payment request object
-  if (!props.canMakeStripePaymentRequestPayment) {
+  if (!props.paymentRequestButtonPaymentMethod) {
     return null;
   }
 

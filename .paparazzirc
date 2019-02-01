@@ -5,6 +5,7 @@ module.exports = {
       "showcase",
       "uk/subscribe",
       "uk/subscribe/paper",
+      "uk/subscribe/paper/delivery",
       "uk/subscribe/digital",
       "uk/subscribe/digital/checkout",
       "uk/subscribe/weekly",

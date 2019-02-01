@@ -22,7 +22,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
   override def afterAll(): Unit = { driverConfig.quit() }
 
-  feature("Sign up for a Monthly Contribution") {
+  feature("Sign up for a Recurring Contribution (New Contributions Flow)") {
 
     scenario("Monthly contribution sign-up with Stripe - GBP") {
 
@@ -34,6 +34,9 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
+
+      When("the user selects the monthly option")
+      landingPage.clickMonthly
 
       Given("The user fills in their details correctly")
       landingPage.clearForm()
@@ -55,50 +58,32 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
     }
 
-    scenario("Monthly contribution sign-up with Paypal - USD") {
+    scenario("Annual contribution sign-up with Stripe - USD") {
 
       val testUser = new TestUser(driverConfig)
       val landingPage = ContributionsLanding("us", testUser)
-      val payPalCheckout = new PayPalCheckout
-      val expectedPayment = "15.00"
       val contributionThankYou = new ContributionThankYou("us")
 
       Given("that a test user goes to the contributions landing page")
       goTo(landingPage)
       assert(landingPage.pageHasLoaded)
 
+      When("the user selects the annual option")
+      landingPage.clickAnnual
+
       Given("The user fills in their details correctly")
       landingPage.clearForm()
       landingPage.fillInPersonalDetails(hasNameFields = true)
       landingPage.selectState
 
-      Given("that the user selects to pay with PayPal")
+      Given("that the user selects to pay with Stripe")
       When("they press the Stripe payment button")
-      landingPage.selectPayPalPayment()
+      landingPage.selectStripePayment()
 
       When("they click contribute")
-      landingPage.clickContributePayPalButton
+      landingPage.clickContribute
 
-      Then("the PayPal Express Checkout mini-browser should display")
-      payPalCheckout.switchToPayPalPopUp
-      assert(payPalCheckout.initialPageHasLoaded)
-      payPalCheckout.handleGuestRegistrationPage()
-      assert(payPalCheckout.loginContainerHasLoaded)
-
-      Given("that the user fills in their PayPal credentials correctly")
-      payPalCheckout.enterLoginDetails()
-
-      When("the user clicks 'Log In'")
-      payPalCheckout.logIn
-
-      Then("the payment summary appears")
-      assert(payPalCheckout.payPalSummaryHasLoaded)
-
-      Given("that the summary displays the correct details")
-      assert(payPalCheckout.payPalSummaryHasCorrectDetails(expectedPayment))
-
-      When("that the user agrees to payment")
-      payPalCheckout.acceptPayPalPaymentPopUp
+      And("the mock calls the backend using a test Stripe token")
 
       Then("the thankyou page should display")
       eventually {

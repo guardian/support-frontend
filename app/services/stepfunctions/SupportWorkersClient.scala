@@ -11,6 +11,7 @@ import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
+import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
@@ -34,6 +35,7 @@ case class CreateSupportWorkersRequest(
     state: Option[String],
     product: ProductType,
     paymentFields: PaymentFields,
+    promoCode: Option[PromoCode],
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
     supportAbTests: Set[AbTest],
@@ -89,7 +91,8 @@ class SupportWorkersClient(
   def createSubscription(
     request: AnyAuthRequest[CreateSupportWorkersRequest],
     user: User,
-    requestId: UUID
+    requestId: UUID,
+    promoCode: Option[PromoCode] = None
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
@@ -101,7 +104,7 @@ class SupportWorkersClient(
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
         supportAbTests = request.body.supportAbTests
       )),
-      promoCode = None
+      promoCode = request.body.promoCode
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>

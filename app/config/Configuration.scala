@@ -2,7 +2,8 @@ package config
 
 import admin.{SettingsSource, SettingsSources}
 import cats.syntax.either._
-import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
+import com.gu.support.config._
+import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
 import config.Configuration.GuardianDomain
@@ -44,6 +45,8 @@ class Configuration {
   lazy val settingsSources: SettingsSources = SettingsSources.fromConfig(config).valueOr(throw _)
 
   lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
+
+  lazy val priceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
 }
 
 object Configuration {

@@ -1,0 +1,2347 @@
+@import assets.AssetsResolver
+@import views.ViewHelpers._
+@import admin.AllSettings
+
+@(
+  title: String,
+  mainId: String,
+  mainJsBundle: String,
+  mainStyleBundle: String,
+  description: Option[String] = None,
+  canonicalLink: Option[String] = None,
+  hrefLangLinks: Map[String, String] = Map(),
+  styles: Html = Html(""),
+  scripts: Html = Html(""),
+  data: Map[String, String] = Map.empty,
+  csrf: Option[String] = None,
+  annualAmounts: (String, String, String, String)
+)(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
+
+    @csrf.map { token =>
+      <script type="text/javascript">
+      window.guardian = window.guardian || {};
+      if(!window.guardian.csrf) {
+        window.guardian.csrf = {token: "@token"}
+      }
+    </script>
+    }
+
+    @description.map { definedDescription =>
+      <meta name="description" content="@definedDescription" />
+      <meta property="og:description" content="@definedDescription" />
+    }
+
+    @canonicalLink.map { definedCanonicalLink =>
+      <link rel="canonical" href="@definedCanonicalLink" />
+    }
+
+    @for((lang, link) <- hrefLangLinks){
+      <link rel="alternate" href="@link" hreflang="@lang" />
+    }
+
+    @settingsScript(settings)
+
+    <title>@title</title>
+    <meta property="og:title" content="@title"/>
+
+    @optimizeScript()
+    <style>
+      .component-progress-message {
+        z-index: 10000;
+        display: block;
+        border: 0 transparent;
+        overflow-x: hidden;
+        overflow-y: auto;
+        visibility: visible;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif
+      }
+
+      .component-progress-message .component-progress-message__dialog {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        position: relative;
+        display: inline-block;
+        color: #fff;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%)
+      }
+
+      .component-progress-message .component-progress-message__dialog .component-progress-message__message {
+        text-align: center
+      }
+
+      .component-progress-message .component-progress-message__background {
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, .6)
+      }
+
+      .component-animated-dots {
+        margin: .625rem auto 0;
+        width: 4.375rem;
+        text-align: center
+      }
+
+      .component-animated-dots div {
+        width: 1.125rem;
+        height: 1.125rem;
+        background-color: #fff;
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: sk-bouncedelay 1.4s ease-in-out infinite both;
+        animation: sk-bouncedelay 1.4s ease-in-out infinite both
+      }
+
+      .component-animated-dots .component-animated-dots__bounce1 {
+        -webkit-animation-delay: -.32s;
+        animation-delay: -.32s
+      }
+
+      .component-animated-dots .component-animated-dots__bounce2 {
+        -webkit-animation-delay: -.16s;
+        animation-delay: -.16s
+      }
+
+      @@-webkit-keyframes sk-bouncedelay {
+      0%, 80%, to {
+                 -webkit-transform: scale(0)
+               }
+      40% {
+        -webkit-transform: scale(1)
+      }
+      }
+
+      @@keyframes sk-bouncedelay {
+      0%, 80%, to {
+                 -webkit-transform: scale(0);
+                 transform: scale(0)
+               }
+      40% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+      }
+      }
+
+      .component-direct-debit-pop-up-form {
+        z-index: 7500;
+        display: block;
+        border: 0 transparent;
+        overflow-x: hidden;
+        overflow-y: auto;
+        visibility: visible;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        background: rgba(0, 0, 0, .6)
+      }
+
+      .focus-target:focus {
+        outline: 0;
+        box-shadow: 0 0 .0625rem .125rem #999
+      }
+
+      .component-direct-debit-pop-up-form__content {
+        position: relative;
+        display: inline-block;
+        width: 18.5rem;
+        padding: .625rem;
+        top: .125rem;
+        min-height: 35.375rem;
+        background-color: #f6f6f6;
+        text-align: left;
+        border-top: .0625rem solid #121212;
+        border-radius: 1.25rem
+      }
+
+      @@media (min-width: 23.4375em) {
+      .component-direct-debit-pop-up-form__content {
+        width: 21.5625rem
+      }
+      }
+
+      @@media (min-width: 30em) {
+      .component-direct-debit-pop-up-form__content {
+        width: 27.8125rem
+      }
+      }
+
+      @@media (min-height: 780px) {
+      .component-direct-debit-pop-up-form__content {
+        top: 25%;
+        -webkit-transform: translateY(-25%);
+        transform: translateY(-25%)
+      }
+      }
+
+      .component-direct-debit-pop-up-form__heading {
+        float: left;
+        font-family: Guardian Headline, Georgia, serif;
+        font-weight: bolder;
+        font-size: 1.5rem;
+        line-height: 1.875rem;
+        max-width: 16.25rem;
+        margin-top: .75rem;
+        margin-bottom: .75rem
+      }
+
+      @@media (min-width: 23.4375em) {
+      .component-direct-debit-pop-up-form__heading {
+        max-width: 17.5rem
+      }
+      }
+
+      @@media (min-width: 30em) {
+      .component-direct-debit-pop-up-form__heading {
+        max-width: 25rem
+      }
+      }
+
+      .component-direct-debit-pop-up-form__heading--title {
+        display: block;
+        margin-left: 1.25rem
+      }
+
+      .component-direct-debit-pop-up-form__close-button {
+        border: .0625rem solid #121212;
+        border-radius: 50rem;
+        background-color: #f6f6f6;
+        height: 2.5rem;
+        width: 2.5rem;
+        float: right;
+        cursor: pointer
+      }
+
+      .component-direct-debit-pop-up-form__close-button span {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-align-items: center;
+        align-items: center
+      }
+
+      .component-direct-debit-pop-up-form__close-button span .svg-cross {
+        height: 1.1875rem
+      }
+
+      .component-direct-debit-form {
+        clear: left;
+        margin-top: 5rem;
+        margin-left: 0
+      }
+
+      @@media (min-width: 30em) {
+      .component-direct-debit-form {
+        margin-left: 1.25rem;
+        margin-right: .625rem
+      }
+      }
+
+      .component-direct-debit-form .component-error-message {
+        background-color: transparent;
+        color: #d61d00;
+        padding: 0;
+        height: 0
+      }
+
+      .component-direct-debit-form .svg-exclamation-alternate {
+        float: left;
+        margin-right: .5rem
+      }
+
+      .component-direct-debit-form .svg-exclamation-alternate__circle {
+        fill: none;
+        stroke: #d61d00
+      }
+
+      .component-direct-debit-form .svg-exclamation-alternate__exclamation-mark {
+        fill: #d61d00
+      }
+
+      .component-direct-debit-form .component-error-message__message {
+        position: relative;
+        left: .0625rem;
+        top: .1875rem
+      }
+
+      .component-direct-debit-form__field-label {
+        display: block;
+        font-family: Guardian Headline, Georgia, serif;
+        font-weight: 600;
+        font-size: .875rem;
+        margin-top: .5rem;
+        margin-bottom: .375rem
+      }
+
+      .component-direct-debit-form__sort-code-field {
+        text-align: center;
+        font-family: Guardian Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .875rem;
+        background-color: #fff;
+        color: #121212;
+        border: .0625rem solid #121212;
+        border-radius: 1.5625rem;
+        height: 2.5625rem;
+        width: 2.9375rem;
+        padding: 0 .9375rem;
+        margin-bottom: 1.5625rem
+      }
+
+      @@media (min-width: 23.4375em) {
+      .component-direct-debit-form__sort-code-field {
+        width: 3.5625rem
+      }
+      }
+
+      .component-direct-debit-form__sort-code-separator {
+        margin: .375rem;
+        font-size: 1.125rem
+      }
+
+      @@media (min-width: 23.4375em) {
+      .component-direct-debit-form__sort-code-separator {
+        margin: .625rem
+      }
+      }
+
+      .component-direct-debit-form__text-field {
+        font-family: Guardian Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .875rem;
+        font-weight: 700;
+        background-color: #fff;
+        color: #000;
+        border: .0625rem solid #121212;
+        border-radius: 1.5625rem;
+        height: 2.5rem;
+        width: 16.625rem;
+        padding: 0 .9375rem
+      }
+
+      @@media (min-width: 23.4375em) {
+      .component-direct-debit-form__text-field {
+        width: 19.5625rem
+      }
+      }
+
+      @@media (min-width: 30em) {
+      .component-direct-debit-form__text-field {
+        width: 23.375rem
+      }
+      }
+
+      .component-direct-debit-form__confirmation-text {
+        font-family: Guardian Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .875rem;
+        color: #333;
+        padding-left: 2.0625rem;
+        display: block;
+        overflow: hidden
+      }
+
+      .component-direct-debit-form__confirmation-css-checkbox {
+        width: 1.5625rem;
+        position: relative;
+        margin-right: .625rem
+      }
+
+      .component-direct-debit-form__confirmation-label {
+        cursor: pointer;
+        position: absolute;
+        width: 1.25rem;
+        height: 1.25rem;
+        top: .125rem;
+        left: 0;
+        background: #fff;
+        border: .0625rem solid #121212;
+        border-radius: .125rem
+      }
+
+      .component-direct-debit-form__confirmation-label:after {
+        opacity: 0;
+        content: "";
+        position: absolute;
+        width: .5625rem;
+        height: .3125rem;
+        background: transparent;
+        top: .25rem;
+        left: .25rem;
+        border: .1875rem solid #333;
+        border-top: none;
+        border-right: none;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg)
+      }
+
+      .component-direct-debit-form__confirmation-label:hover:after {
+        opacity: .5
+      }
+
+      .component-direct-debit-form__confirmation-input {
+        display: none
+      }
+
+      .component-direct-debit-form__confirmation-input:checked + label:after {
+        opacity: 1
+      }
+
+      .component-direct-debit-form__confirmation-guidance {
+        margin-top: 1.125rem
+      }
+
+      .component-direct-debit-form__cta-text {
+        color: #333;
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .875rem;
+        line-height: 3;
+        text-align: left;
+        float: left
+      }
+
+      .component-direct-debit-form__cta-text--inverse {
+        color: #fff
+      }
+
+      .component-direct-debit-form__cta {
+        background-color: #ffe500;
+        border: .0625rem solid #ffed4d;
+        border-radius: 6.25rem;
+        cursor: pointer;
+        position: relative;
+        height: 2.75rem;
+        margin-top: 1.25rem;
+        margin-bottom: .625rem
+      }
+
+      .component-direct-debit-form__cta .svg-arrow-right-straight {
+        width: 1.5rem;
+        fill: #333;
+        position: absolute;
+        right: .9375rem;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%)
+      }
+
+      .component-direct-debit-form__cta:hover {
+        background-color: #ffed4d
+      }
+
+      .component-direct-debit-form__cta--pay-button .svg-direct-debit-symbol {
+        margin: .5rem .5rem 0;
+        float: left
+      }
+
+      @@media (max-width: 23.4275em) {
+      .component-direct-debit-form__cta--pay-button {
+        width: 18.75rem
+      }
+      }
+
+      @@media (min-width: 23.4375em) {
+      .component-direct-debit-form__cta--pay-button {
+        width: 21.4375rem
+      }
+      }
+
+      @@media (min-width: 30em) {
+      .component-direct-debit-form__cta--pay-button {
+        width: 25.4375rem
+      }
+      }
+
+      .component-direct-debit-form__cta--edit-button {
+        background-color: #121212;
+        border: .0625rem solid #121212;
+        color: #fff
+      }
+
+      @@media (max-width: 29.99em) {
+      .component-direct-debit-form__cta--edit-button {
+        width: 8.75rem;
+        padding-left: 3.75rem
+      }
+      }
+
+      @@media (min-width: 30em) {
+      .component-direct-debit-form__cta--edit-button {
+        width: 10rem;
+        padding-left: 4.0625rem
+      }
+      }
+
+      .component-direct-debit-form__cta--edit-button .svg-arrow-right-straight {
+        width: 1.5rem;
+        fill: #fff;
+        position: absolute;
+        left: .9375rem;
+        top: 50%;
+        -webkit-transform: scaleX(-1) translateY(-50%);
+        transform: scaleX(-1) translateY(-50%)
+      }
+
+      .component-direct-debit-form__cta--edit-button:hover {
+        background-color: #000
+      }
+
+      .component-direct-debit-form__cta--confirm-button {
+        float: right
+      }
+
+      @@media (max-width: 29.99em) {
+      .component-direct-debit-form__cta--confirm-button {
+        width: 8.75rem;
+        padding-left: 1.75rem;
+        margin-right: 0
+      }
+      }
+
+      @@media (min-width: 30em) {
+      .component-direct-debit-form__cta--confirm-button {
+        width: 10rem;
+        padding-left: 3rem;
+        margin-right: 1.25rem
+      }
+      }
+
+      .component-direct-debit-form__legal-notice {
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .75rem;
+        color: #999;
+        padding-top: .75rem;
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem
+      }
+
+      .component-direct-debit-form__legal-notice a {
+        color: #999
+      }
+
+      .component-direct-debit-form__open-link {
+        background: none;
+        outline: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font: inherit;
+        text-decoration: underline;
+        cursor: pointer
+      }
+
+      .svg-direct-debit-symbol-and-text {
+        margin-top: .75rem;
+        fill: #999
+      }
+
+      .component-direct-debit-guarantee {
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .75rem;
+        color: #999;
+        margin-bottom: 1.25rem
+      }
+
+      .component-direct-debit-guarantee a {
+        color: #999
+      }
+
+      .component-direct-debit-guarantee__list {
+        list-style-type: disc;
+        margin-left: 1.25rem
+      }
+
+      .component-direct-debit-guarantee__list--closed {
+        display: none
+      }
+
+      .component-error-message {
+        position: relative;
+        border: none;
+        border-radius: 37.5rem;
+        height: 3.75rem;
+        padding: 0 1.25rem;
+        color: #fff;
+        background-color: #d61d00;
+        font-family: Guardian Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .875rem;
+        font-weight: 400;
+        text-align: left;
+        margin-bottom: 1.25rem
+      }
+
+      @@media (min-width: 30em) {
+      .component-error-message {
+        height: 2rem
+      }
+      }
+
+      @@media (min-width: 46.25em) {
+      .component-error-message {
+        width: 16.25rem
+      }
+      }
+
+      .component-error-message .svg-exclamation {
+        height: 1rem;
+        fill: #fff
+      }
+
+      .component-error-message .svg-exclamation, .component-error-message__message {
+        position: absolute;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%)
+      }
+
+      .component-error-message__message {
+        left: 10%
+      }
+
+      .component-error-message--sign-in {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+        justify-items: center;
+        -webkit-align-content: center;
+        align-content: center;
+        -webkit-align-items: center;
+        align-items: center;
+        height: auto;
+        padding: .375rem 1.25rem
+      }
+
+      @@media (min-width: 30em) {
+      .component-error-message--sign-in {
+        height: auto
+      }
+      }
+
+      @@media (min-width: 46.25em) {
+      .component-error-message--sign-in {
+        height: auto
+      }
+      }
+
+      .component-cta-link {
+        text-align: left;
+        background-color: #121212;
+        transition: background-color .3s;
+        border: none;
+        border-radius: 37.5rem;
+        color: #fff;
+        cursor: pointer;
+        display: block;
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .875rem;
+        height: 2.75rem;
+        line-height: 2.75rem;
+        padding: 0 1.25rem;
+        position: relative;
+        text-decoration: none
+      }
+
+      .component-cta-link:hover {
+        background-color: #050505
+      }
+
+      .component-cta-link svg {
+        height: 1rem;
+        position: absolute;
+        left: calc(100% - 2.125rem);
+        top: .875rem;
+        fill: #fff
+      }
+
+      .component-cta-link--border {
+        border: .0625rem solid;
+        height: 2.625rem;
+        line-height: 2.625rem
+      }
+
+      .component-cta-link--border svg {
+        top: .8125rem;
+        left: calc(100% - 2.0625rem)
+      }
+
+      .component-general-error-message {
+        padding: .375rem 1.25rem .75rem;
+        color: #e00000;
+        background-color: #fff4f2;
+        margin-bottom: 1.25rem
+      }
+
+      @@media (min-width: 46.25em) {
+      .component-general-error-message {
+        width: 25.25rem
+      }
+      }
+
+      .component-general-error-message--invalid_form_mobile {
+        padding-top: .75rem;
+        margin-bottom: -.75rem;
+        color: #e00000;
+        background-color: #fff4f2
+      }
+
+      @@media (min-width: 23.4375em) {
+      .component-general-error-message--invalid_form_mobile {
+        display: none
+      }
+      }
+
+      .component-general-error-message--marketing_consent_api_error {
+        margin-top: 1.5rem
+      }
+
+      .gu-content__content .component-general-error-message {
+        width: auto
+      }
+
+      .gu-content__content .component-general-error-message--no-valid-payments {
+        padding: 0
+      }
+
+      .svg-exclamation-alternate {
+        display: inline-block;
+        margin-right: .5rem;
+        vertical-align: bottom
+      }
+
+      .svg-exclamation-alternate__circle {
+        fill: #e00000
+      }
+
+      .svg-exclamation-alternate__exclamation-mark {
+        fill: #fff
+      }
+
+      .component-general-error-message__error-heading {
+        vertical-align: bottom;
+        display: inline-block;
+        font-family: Guardian Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: 1rem;
+        font-weight: 600
+      }
+
+      .component-general-error-message__small-print {
+        display: block;
+        line-height: 1.125rem;
+        font-size: .875rem;
+        margin-top: .75rem
+      }
+
+      .component-button, .component-general-error-message__small-print {
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-weight: 400
+      }
+
+      .component-button {
+        font-size: 1rem;
+        line-height: 1.375rem;
+        display: -webkit-inline-flex;
+        display: inline-flex;
+        -webkit-align-items: center;
+        align-items: center;
+        text-decoration: none;
+        font-weight: 700;
+        height: 2.625rem;
+        padding: .375rem 1.25rem;
+        border: none;
+        border-radius: 37.5rem;
+        box-sizing: border-box;
+        cursor: pointer;
+        transition: .2s
+      }
+
+      .component-button:focus, .component-button:hover {
+        outline: 0
+      }
+
+      .component-button[data-disabled], .component-button[disabled] {
+        background-color: #fff;
+        opacity: .5;
+        pointer-events: none
+      }
+
+      .component-button--non-interactive {
+        pointer-events: none
+      }
+
+      .component-button--primary {
+        background-color: #ffe500;
+        color: #121212
+      }
+
+      .component-button--primary:focus, .component-button--primary:hover {
+        background-color: #ffbb50
+      }
+
+      .component-button--green {
+        color: #fff;
+        background-color: #185e36
+      }
+
+      .component-button--green svg {
+        fill: #fff
+      }
+
+      .component-button--green:focus, .component-button--green:hover {
+        background-color: #0e351f
+      }
+
+      .component-button--greenHollow {
+        color: #185e36;
+        border: .0625rem solid #185e36
+      }
+
+      .component-button--greenHollow:focus, .component-button--greenHollow:hover {
+        background: #f6f6f6
+      }
+
+      .component-button--greyHollow {
+        color: #121212;
+        border: .0625rem solid #dcdcdc
+      }
+
+      .component-button--greyHollow:focus, .component-button--greyHollow:hover {
+        background: #f6f6f6
+      }
+
+      .component-button__content, .component-button svg {
+        -webkit-flex: 0 0 auto;
+        flex: 0 0 auto;
+        display: block
+      }
+
+      .component-button svg {
+        width: 1.34375rem;
+        margin: -.75rem -.625rem -.75rem .625rem
+      }
+
+      .component-button--hasicon-left {
+        -webkit-flex-direction: row-reverse;
+        flex-direction: row-reverse
+      }
+
+      .component-button--hasicon-left svg {
+        margin: -.75rem .625rem -.75rem -.625rem
+      }
+
+      .component-button .svg-arrow-right-straight {
+        transition: transform .2s;
+        will-change: transform
+      }
+
+      .component-button:focus .svg-arrow-right-straight, .component-button:hover .svg-arrow-right-straight {
+        -webkit-transform: translateX(5%);
+        transform: translateX(5%)
+      }
+
+      a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline
+      }
+
+      article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+        display: block
+      }
+
+      body {
+        line-height: 1
+      }
+
+      ol, ul {
+        list-style: none
+      }
+
+      blockquote, q {
+        quotes: none
+      }
+
+      blockquote:after, blockquote:before, q:after, q:before {
+        content: "";
+        content: none
+      }
+
+      table {
+        border-collapse: collapse;
+        border-spacing: 0
+      }
+
+      .gu-content-margin {
+        box-sizing: border-box;
+        padding: 0 .625rem
+      }
+
+      @@media (min-width: 30em) {
+      .gu-content-margin {
+        width: 30rem;
+        margin: 0 auto;
+        padding: 0 1.25rem
+      }
+      }
+
+      @@media (min-width: 41.25em) {
+      .gu-content-margin {
+        width: 41.25rem;
+        margin: 0 auto;
+        padding: 0 auto
+      }
+      }
+
+      @@media (min-width: 46.25em) {
+      .gu-content-margin {
+        width: 46.25rem;
+        padding: 0 1.25rem
+      }
+      }
+
+      @@media (min-width: 61.25em) {
+      .gu-content-margin {
+        width: 61.25rem
+      }
+      }
+
+      @@media (min-width: 71.25em) {
+      .gu-content-margin {
+        width: 71.25rem
+      }
+      }
+
+      @@media (min-width: 81.25em) {
+      .gu-content-margin {
+        width: 81.25rem
+      }
+      }
+
+      @@supports (display:flex) {
+      .gu-content {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        min-height: 100vh
+      }
+      }
+
+      @@supports (display:flex) {
+      .gu-content__main {
+        -webkit-flex: 1 0 auto;
+        flex: 1 0 auto
+      }
+      }
+
+      @@font-face {
+        font-family: Guardian Text Egyptian Web;
+        src: url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextEgyptianWeb/GuardianTextEgyptianWeb-Regular.woff2) format("woff2"), url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextEgyptianWeb/GuardianTextEgyptianWeb-Regular.woff) format("woff");
+        font-weight: 400;
+        font-style: normal;
+        font-stretch: normal;
+        font-display: fallback
+      }
+
+      @@font-face {
+        font-family: Guardian Text Egyptian Web;
+        src: url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextEgyptianWeb/GuardianTextEgyptianWeb-RegularItalic.woff2) format("woff2"), url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextEgyptianWeb/GuardianTextEgyptianWeb-RegularItalic.woff) format("woff");
+        font-weight: 400;
+        font-style: italic;
+        font-stretch: normal;
+        font-display: fallback
+      }
+
+      @@font-face {
+        font-family: Guardian Text Egyptian Web;
+        src: url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextEgyptianWeb/GuardianTextEgyptianWeb-Medium.woff2) format("woff2"), url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextEgyptianWeb/GuardianTextEgyptianWeb-Medium.woff) format("woff");
+        font-weight: 700;
+        font-style: normal;
+        font-stretch: normal;
+        font-display: fallback
+      }
+
+      @@font-face {
+        font-family: Guardian Text Sans Web;
+        src: url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-Regular.woff2) format("woff2"), url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-Regular.woff) format("woff");
+        font-weight: 400;
+        font-style: normal;
+        font-stretch: normal;
+        font-display: fallback
+      }
+
+      @@font-face {
+        font-family: Guardian Text Sans Web;
+        src: url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-RegularItalic.woff2) format("woff2"), url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-RegularItalic.woff) format("woff");
+        font-weight: 400;
+        font-style: italic;
+        font-stretch: normal;
+        font-display: fallback
+      }
+
+      @@font-face {
+        font-family: Guardian Text Sans Web;
+        src: url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-Medium.woff2) format("woff2"), url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-Medium.woff) format("woff");
+        font-weight: 700;
+        font-style: normal;
+        font-stretch: normal;
+        font-display: fallback
+      }
+
+      @@font-face {
+        font-family: Guardian Sans Web;
+        src: url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianSansWeb/GuardianSansWeb-Regular.woff2) format("woff2"), url(//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianSansWeb/GuardianSansWeb-Regular.woff) format("woff");
+        font-weight: 400;
+        font-style: normal;
+        font-stretch: normal;
+        font-display: fallback
+      }
+
+      @@font-face {
+        font-family: Guardian Headline;
+        src: url(/assets/fonts/GHGuardianHeadline-Light.woff2) format("woff2"), url(/assets/fonts/GHGuardianHeadline-Light.woff) format("woff"), url(/assets/fonts/GHGuardianHeadline-Light.ttf) format("ttf");
+        font-weight: 200
+      }
+
+      @@font-face {
+        font-family: Guardian Headline;
+        src: url(/assets/fonts/GHGuardianHeadline-LightItalic.woff2) format("woff2"), url(/assets/fonts/GHGuardianHeadline-LightItalic.woff) format("woff"), url(/assets/fonts/GHGuardianHeadline-LightItalic.ttf) format("ttf");
+        font-weight: 200;
+        font-style: italic
+      }
+
+      @@font-face {
+        font-family: Guardian Headline;
+        src: url(/assets/fonts/GHGuardianHeadline-Regular.woff2) format("woff2"), url(/assets/fonts/GHGuardianHeadline-Regular.woff) format("woff"), url(/assets/fonts/GHGuardianHeadline-Regular.ttf) format("ttf");
+        font-weight: 400
+      }
+
+      @@font-face {
+        font-family: Guardian Headline;
+        src: url(/assets/fonts/GHGuardianHeadline-RegularItalic.woff2) format("woff2"), url(/assets/fonts/GHGuardianHeadline-RegularItalic.woff) format("woff"), url(/assets/fonts/GHGuardianHeadline-RegularItalic.ttf) format("ttf");
+        font-weight: 400;
+        font-style: italic
+      }
+
+      @@font-face {
+        font-family: Guardian Headline;
+        src: url(/assets/fonts/GHGuardianHeadline-Semibold.woff2) format("woff2"), url(/assets/fonts/GHGuardianHeadline-Semibold.woff) format("woff"), url(/assets/fonts/GHGuardianHeadline-Semibold.ttf) format("ttf");
+        font-weight: 500
+      }
+
+      @@font-face {
+        font-family: Guardian Headline;
+        src: url(/assets/fonts/GHGuardianHeadline-Bold.woff2) format("woff2"), url(/assets/fonts/GHGuardianHeadline-Bold.woff) format("woff"), url(/assets/fonts/GHGuardianHeadline-Bold.ttf) format("ttf");
+        font-weight: 900
+      }
+
+      @@font-face {
+        font-family: GT Guardian Titlepiece;
+        src: url(/assets/fonts/GTGuardianTitlepiece-Bold.woff2) format("woff2"), url(/assets/fonts/GTGuardianTitlepiece-Bold.woff) format("woff");
+        font-weight: 400
+      }
+
+      html {
+        font-family: Guardian Text Egyptian Web, Georgia, serif;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased
+      }
+
+      body {
+        line-height: 1.5
+      }
+
+      strong {
+        font-weight: bolder
+      }
+
+      .accessibility-hint {
+        position: absolute;
+        left: -625rem;
+        top: auto;
+        width: .0625rem;
+        height: .0625rem;
+        overflow: hidden
+      }
+
+      .component-marketing-consent {
+        font-weight: 300;
+        margin: 0 -.625rem;
+        padding: 0 .625rem
+      }
+
+      .component-marketing-consent .svg-newsletters {
+        width: 100%
+      }
+
+      .component-marketing-consent-confirmation {
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        font-size: .75rem
+      }
+
+      .component-marketing-consent-confirmation__message {
+        vertical-align: top;
+        padding-left: .3125rem
+      }
+
+      @@media (min-width: 20em) and (max-width: 46.24em) {
+      .thank-you__container .header {
+        background-color: #ffe500
+      }
+      }
+
+      .confirmation {
+        border-bottom: .0625rem solid #dcdcdc;
+        font-weight: 300;
+        margin: 0 -.625rem;
+        padding: 0 .625rem
+      }
+
+      .confirmation__title {
+        font-weight: 900;
+        font-size: 1;
+        margin: .25rem 0
+      }
+
+      .confirmation__message {
+        font: 300 1.375rem/1.2 Guardian Headline, Georgia, serif;
+        margin: .1875rem 0 1.5rem
+      }
+
+      .confirmation__message--direct-debit {
+        margin-left: -.625rem;
+        margin-right: -.625rem;
+        padding: 0 .625rem .75rem;
+        border-bottom: .0625rem solid #dcdcdc
+      }
+
+      .set-password__title {
+        font-family: Guardian Text Egyptian Web, Georgia, serif;
+        letter-spacing: -.03125rem;
+        font-weight: 900;
+        font-size: 1.0625rem;
+        margin: .25rem 0
+      }
+
+      .confirmation--backtothegu {
+        margin-bottom: 2rem;
+        padding-bottom: .75rem;
+        padding-top: .75rem;
+        border-bottom: 0
+      }
+
+      .button {
+        -webkit-align-items: center;
+        align-items: center;
+        border: .0625rem solid;
+        background-color: #fff;
+        border-radius: 1.5rem;
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        height: 2.625rem;
+        line-height: 1;
+        padding: 0 1.25rem;
+        text-decoration: none;
+        position: relative;
+        font-weight: 600
+      }
+
+      .button svg {
+        position: absolute;
+        fill: currentColor;
+        overflow: visible
+      }
+
+      .button:enabled {
+        cursor: pointer
+      }
+
+      .button:enabled:hover {
+        -webkit-filter: brightness(90%);
+        filter: brightness(90%)
+      }
+
+      .svg-lock, .svg-subscribe {
+        width: 1.4375rem;
+        height: 1.25rem;
+        fill: currentColor
+      }
+
+      .svg-newsletters {
+        display: block;
+        margin: 1.5rem -.625rem 0
+      }
+
+      .set-password__message {
+        font-family: Guardian Text Egyptian Web, Georgia, serif;
+        letter-spacing: -.03125rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.25rem;
+        margin-bottom: 0
+      }
+
+      .set-password__form {
+        padding-bottom: 1.875rem
+      }
+
+      .form__submit.form__submit--create-account {
+        padding-bottom: .75rem
+      }
+
+      .component-marketing-consent.component-marketing-consent--newsletter {
+        border-bottom: .0625rem solid #dcdcdc
+      }
+
+      .component-marketing-consent__message {
+        margin-bottom: 1.5rem;
+        line-height: 1.25rem
+      }
+
+      .component-marketing-consent__message, .component-marketing-consent__title {
+        font-family: Guardian Text Egyptian Web, Georgia, serif;
+        letter-spacing: -.03125rem
+      }
+
+      .component-marketing-consent__title {
+        font-weight: 900;
+        font-size: 1.0625rem;
+        margin: .25rem 0
+      }
+
+      .contributions-landing-ticker {
+        padding-bottom: 1.25rem
+      }
+
+      .contributions-landing-ticker__border {
+        border-top: .0625rem solid #dcdcdc;
+        margin: 0 -.625rem
+      }
+
+      .contributions-landing-ticker--hidden {
+        visibility: hidden
+      }
+
+      .contributions-landing-ticker--hidden .contributions-landing-ticker__border {
+        visibility: visible
+      }
+
+      .contributions-landing-ticker {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column
+      }
+
+      @@media (max-width: 46.24em) {
+      .contributions-landing-ticker {
+        display: none
+      }
+      }
+
+      .contributions-landing-ticker__values {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: space-between;
+        justify-content: space-between;
+        -webkit-align-items: flex-end;
+        align-items: flex-end
+      }
+
+      .contributions-landing-ticker__goal, .contributions-landing-ticker__so-far {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column
+      }
+
+      .contributions-landing-ticker__so-far .contributions-landing-ticker__count {
+        font-family: GT Guardian Titlepiece, Georgia, serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #ff7f0f
+      }
+
+      .contributions-landing-ticker__goal {
+        -webkit-align-items: flex-end;
+        align-items: flex-end
+      }
+
+      .contributions-landing-ticker__goal .contributions-landing-ticker__count {
+        font-weight: 700
+      }
+
+      .contributions-landing-ticker__label {
+        font-style: italic
+      }
+
+      .contributions-landing-ticker__progress-bar {
+        position: relative
+      }
+
+      .contributions-landing-ticker__progress {
+        width: 100%;
+        height: .625rem;
+        overflow: hidden;
+        background-color: #dcdcdc;
+        position: absolute
+      }
+
+      .contributions-landing-ticker__filled-progress {
+        background-color: #ff7f0f;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
+        transition: -webkit-transform 3s cubic-bezier(.25, .55, .2, .85);
+        transition: transform 3s cubic-bezier(.25, .55, .2, .85);
+        transition: transform 3s cubic-bezier(.25, .55, .2, .85), -webkit-transform 3s cubic-bezier(.25, .55, .2, .85)
+      }
+
+      .button--right-arrow {
+        width: 100%;
+        padding: 0 3.125rem 0 1.25rem;
+        text-align: left
+      }
+
+      .button--right-arrow .svg-arrow-right-straight {
+        left: calc(100% - 2.125rem);
+        height: 1rem
+      }
+
+      .stripe-payment-request-button__button {
+        margin-top: 1.5rem;
+        margin-bottom: 1.25rem
+      }
+
+      .stripe-payment-request-button__divider {
+        line-height: 2rem;
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+        text-align: center
+      }
+
+      .stripe-payment-request-button__divider:after, .stripe-payment-request-button__divider:before {
+        content: " ";
+        position: absolute;
+        top: 50%;
+        margin-left: -999em;
+        height: .125rem;
+        width: 998em;
+        border-top: .0625rem solid #dcdcdc
+      }
+
+      .stripe-payment-request-button__divider:after {
+        left: auto;
+        width: 999em;
+        margin: 0 0 0 1em
+      }
+
+      .stripe-payment-request-button--hidden {
+        display: none
+      }
+
+      .component-contributions-survey {
+        border-bottom: .0625rem solid #dcdcdc;
+        margin: 0 -.625rem;
+        padding: 0 .625rem
+      }
+
+      .component-contributions-survey h3 {
+        font-family: Guardian Text Egyptian Web, Georgia, serif;
+        letter-spacing: -.03125rem;
+        font-weight: 900;
+        font-size: 1.0625rem;
+        margin: .25rem 0
+      }
+
+      .component-contributions-survey .component-contributions-survey__button {
+        display: inline-block;
+        margin-bottom: 2.25rem;
+        margin-top: .75rem
+      }
+
+      .component-contributions-survey .component-contributions-survey__button .button--survey {
+        background-color: #121212;
+        color: #fff
+      }
+
+      .component-contributions-survey .component-cta-link__text {
+        padding-right: 1.5625rem;
+        font-size: 1rem
+      }
+
+      body {
+        min-height: 100vh
+      }
+
+      .gu-content {
+        position: relative;
+        z-index: 0;
+        overflow: hidden
+      }
+
+      .gu-content--contribution-thankyou {
+        background: #ffe500
+      }
+
+      .gu-content__main {
+        position: relative;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column-reverse;
+        flex-direction: column-reverse
+      }
+
+      .gu-content__bg {
+        display: -webkit-flex;
+        display: flex;
+        height: 36.25rem;
+        left: 0;
+        position: absolute;
+        top: 15.3125rem;
+        width: 100%;
+        z-index: -1
+      }
+
+      .gu-content__bg .svg-contributions-bg-desktop {
+        display: block;
+        bottom: 0;
+        height: 36.25rem;
+        left: 50%;
+        position: fixed;
+        -webkit-transform: translate(-50%);
+        transform: translate(-50%);
+        width: 87.5rem
+      }
+
+      @@media (min-width: 20em) and (max-width: 46.24em) {
+      .gu-content__bg {
+        display: none
+      }
+      }
+
+      .gu-content--contribution-form .header {
+        display: none
+      }
+
+      @@media (min-width: 46.25em) {
+      .gu-content--contribution-form .header {
+        display: block
+      }
+      }
+
+      .header {
+        border: 0;
+        left: .625rem;
+        padding: .375rem .625rem .75rem;
+        width: 100%;
+        margin: 0 -.625rem;
+        font: 700 1.375rem/1.15 Guardian Headline, Georgia, serif;
+        color: #121212
+      }
+
+      @@media (min-width: 46.25em) {
+      .header {
+        border-bottom: .0625rem solid #dcdcdc;
+        font-size: 2.25rem;
+        padding: 0 .625rem 1.125rem
+      }
+      }
+
+      .header__us-campaign {
+        font-size: 1.6875rem;
+        border-bottom: none
+      }
+
+      header[role=banner] {
+        background-color: #052962;
+        border-bottom: .0625rem solid #dcdcdc;
+        position: relative;
+        height: 2.75rem;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-flex-direction: row-reverse;
+        flex-direction: row-reverse;
+        -webkit-justify-content: space-between;
+        justify-content: space-between;
+        z-index: 1;
+        padding: 0 .625rem
+      }
+
+      @@media (min-width: 46.25em) {
+      header[role=banner] {
+        height: 4.6875rem;
+        padding: 0 0 0 calc(50% - 22.5625rem)
+      }
+      }
+
+      @@media (min-width: 71.25em) {
+      header[role=banner] {
+        padding: 0 calc(50% - 34.375rem) 0 calc(50% - 25.0625rem)
+      }
+      }
+
+      @@media (min-width: 81.25em) {
+      header[role=banner] {
+        padding-right: calc(50% - 38.75rem)
+      }
+      }
+
+      .glogo {
+        width: 1.875rem;
+        height: 1.875rem
+      }
+
+      .glogo .svg-roundel {
+        width: 100%;
+        height: 100%
+      }
+
+      .glogo .svg-roundel__g {
+        fill: #052962
+      }
+
+      @@media (min-width: 46.25em) {
+      .glogo {
+        width: 3.75rem;
+        height: 3.75rem;
+        margin-right: .625rem
+      }
+      }
+
+      .countryGroups {
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+        max-width: 22.1875rem;
+        text-overflow: ellipsis;
+        width: 11.5625rem;
+        white-space: nowrap;
+        cursor: pointer
+      }
+
+      .countryGroups summary {
+        padding-left: 0
+      }
+
+      .countryGroups .svg-globe {
+        display: none
+      }
+
+      @@media (min-width: 46.25em) {
+      .countryGroups {
+        padding: 0;
+        width: 100%;
+        -webkit-align-self: flex-end;
+        align-self: flex-end
+      }
+
+      .countryGroups summary {
+        padding-left: .625rem
+      }
+      }
+
+      .countryGroups__label {
+        color: #fff
+      }
+
+      .countryGroups__summary-wrapper {
+        -webkit-align-items: center;
+        align-items: center;
+        display: -webkit-flex;
+        display: flex;
+        height: 2.5rem;
+        outline: none;
+        transition: box-shadow .2s ease-in-out, color .2s ease-in-out
+      }
+
+      .countryGroups__summary-wrapper svg {
+        pointer-events: none
+      }
+
+      .countryGroups:not([open]) > :not(summary) {
+        display: none
+      }
+
+      .countryGroups .icon {
+        text-align: center;
+        width: 2.5rem
+      }
+
+      .countryGroups .svg-chevron {
+        width: 1.1875rem;
+        height: .625rem;
+        fill: #fff
+      }
+
+      .countryGroups[open] .svg-chevron {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg)
+      }
+
+      .countryGroups .svg-checkmark {
+        width: 1.125rem;
+        height: .875rem;
+        fill: #e00000
+      }
+
+      .countryGroups .svg-globe {
+        padding: 0 .75rem;
+        width: .875rem;
+        height: .875rem;
+        fill: #121212;
+        fill: #fff
+      }
+
+      .countryGroups summary {
+        list-style: none;
+        outline: none
+      }
+
+      .countryGroups summary:focus, .countryGroups summary:hover {
+        box-shadow: none;
+        color: inherit
+      }
+
+      .countryGroups summary::-webkit-details-marker {
+        display: none
+      }
+
+      .countryGroups__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        border: .0625rem solid #dcdcdc;
+        position: absolute
+      }
+
+      .countryGroups__item:first-child > a:before {
+        content: none
+      }
+
+      .countryGroups__item > a {
+        color: inherit;
+        display: -webkit-flex;
+        display: flex;
+        padding: 0 .9375rem;
+        line-height: 2.5rem;
+        text-decoration: none;
+        -webkit-justify-content: space-between;
+        justify-content: space-between;
+        position: relative
+      }
+
+      .countryGroups__item > a:before {
+        content: "";
+        border-top: .0625rem solid #dcdcdc;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: .9375rem;
+        right: 0
+      }
+
+      .countryGroups__item > a:focus, .countryGroups__item > a:hover {
+        background: #f6f6f6;
+        font-weight: 700
+      }
+
+      footer[role=contentinfo] {
+        padding: 0 .625rem;
+        background: #333;
+        color: #999;
+        font-size: .75rem;
+        display: -webkit-flex;
+        display: flex
+      }
+
+      @@media (min-width: 46.25em) {
+      footer[role=contentinfo] {
+        padding: 0 0 1.5rem;
+        width: auto
+      }
+      }
+
+      @@media (min-width: 71.25em) {
+      footer[role=contentinfo] {
+        padding: 0 calc(50% - 34.375rem) 1.5rem calc(50% - 24.375rem);
+        width: 58.75rem
+      }
+      }
+
+      footer[role=contentinfo] a {
+        color: #fff
+      }
+
+      .component-footer__content {
+        padding-top: .75rem
+      }
+
+      .gu-content__content {
+        background: #fff;
+        padding: 0 .625rem;
+        overflow: hidden;
+        -webkit-flex-grow: 1;
+        flex-grow: 1
+      }
+
+      @@media (min-width: 46.25em) {
+      .gu-content__content {
+        border-color: #dcdcdc;
+        border-style: none solid;
+        border-width: 0 .0625rem;
+        width: 23.75rem;
+        margin-left: calc(50% - 22.5625rem)
+      }
+      }
+
+      @@media (min-width: 71.25em) {
+      .gu-content__content {
+        width: 23.75rem;
+        margin-left: calc(50% - 25.0625rem)
+      }
+      }
+
+      body {
+        color: #121212;
+        font: normal 1rem/1.5 Guardian Text Egyptian Web, Georgia, serif
+      }
+
+      button, input, select, textarea {
+        font: inherit
+      }
+
+      .blurb {
+        display: none
+      }
+
+      @@media (min-width: 46.25em) {
+      .blurb {
+        display: block;
+        font: 100 1.0625rem/1.25 Guardian Text Egyptian Web, Georgia, serif;
+        margin: .1875rem 0 .5625rem
+      }
+      }
+
+      footer[role=contentinfo] {
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif
+      }
+
+      @@media (min-width: 46.25em) {
+      footer[role=contentinfo] {
+        padding: 0 calc(50% - 21.875rem) 1.5rem;
+        width: 43.75rem
+      }
+      }
+
+      @@media (min-width: 81.25em) {
+      footer[role=contentinfo] {
+        padding: 0 calc(50% - 38.75rem) 1.5rem;
+        width: 77.5rem
+      }
+      }
+
+      .content {
+        background: #fff;
+        padding: 0 .625rem
+      }
+
+      .form--contribution, .form__field {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        flex-direction: column
+      }
+
+      .form__field {
+        -webkit-align-items: stretch;
+        align-items: stretch
+      }
+
+      .form--contribution .component-terms-privacy {
+        margin-bottom: 1.875rem;
+        font-size: .75rem;
+        line-height: 1rem;
+        color: #999
+      }
+
+      .form--contribution .component-terms-privacy a {
+        color: #767676
+      }
+
+      .form--contribution .component-terms-privacy .component-terms-privacy__change {
+        padding-bottom: .25rem
+      }
+
+      form {
+        font-family: Guardian Text Sans Web, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif
+      }
+
+      .form__radio-group--tabs {
+        font-family: Guardian Headline, Georgia, serif;
+        font-weight: 700
+      }
+
+      .form__radio-group {
+        border: 0;
+        margin: 0;
+        padding: 0
+      }
+
+      .form__radio-group--contribution-type:after {
+        background-image: repeating-linear-gradient(180deg, #dcdcdc, #dcdcdc .0625rem, transparent 0, transparent .25rem);
+        background-repeat: repeat-x;
+        background-position: bottom;
+        background-size: .0625rem .8125rem;
+        height: .8125rem;
+        background-color: #fff;
+        display: block;
+        content: "";
+        margin: 0 -.625rem
+      }
+
+      .form__legend--radio-group {
+        display: none
+      }
+
+      .form__radio-group-list {
+        list-style: none;
+        padding: 0
+      }
+
+      @@media (min-width: 46.25em) {
+      .form__radio-group-list {
+        padding: .75rem 0 0
+      }
+      }
+
+      .form__radio-group-input {
+        display: none
+      }
+
+      .form__radio-group-label {
+        cursor: pointer
+      }
+
+      .form__radio-group--tabs .form__radio-group-list {
+        display: -webkit-flex;
+        display: flex;
+        margin: 0 -.625rem
+      }
+
+      .form__radio-group--tabs .form__radio-group-item {
+        border-top: .0625rem solid #dcdcdc;
+        -webkit-flex: 1;
+        flex: 1
+      }
+
+      .form__radio-group--tabs .form__radio-group-item + .form__radio-group-item {
+        border-left: .0625rem solid #dcdcdc
+      }
+
+      .form__radio-group--tabs .form__radio-group-input + .form__radio-group-label {
+        display: block;
+        padding: .25rem .625rem .625rem
+      }
+
+      .form__radio-group--tabs .form__radio-group-input:checked + .form__radio-group-label {
+        background: #ffe500
+      }
+
+      .form__radio-group--pills .form__radio-group-list {
+        display: -webkit-flex;
+        display: flex
+      }
+
+      .form__radio-group--pills .form__radio-group-item {
+        width: 3.125rem;
+        height: 3.125rem
+      }
+
+      .form__radio-group--pills .form__radio-group-item + .form__radio-group-item {
+        margin-left: .625rem
+      }
+
+      .form__radio-group--pills .form__radio-group-input + .form__radio-group-label {
+        border: .0625rem solid #ffe500;
+        border-radius: 1.5625rem;
+        box-sizing: border-box;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-align-items: center;
+        align-items: center;
+        width: 3.125rem;
+        height: 3.125rem
+      }
+
+      .form__radio-group--pills .form__radio-group-input:checked + .form__radio-group-label {
+        background: #ffe500
+      }
+
+      .form__radio-group--buttons .form__radio-group-item + .form__radio-group-item {
+        margin-top: .375rem
+      }
+
+      .form__radio-group--buttons .form__radio-group-label {
+        -webkit-align-items: center;
+        align-items: center;
+        display: -webkit-flex;
+        display: flex;
+        padding: .375rem 0
+      }
+
+      .form__radio-group--buttons .form__radio-group-input:checked + .form__radio-group-label {
+        font-weight: 700
+      }
+
+      .form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .radio-ui {
+        width: .5rem;
+        height: .5rem;
+        border-radius: 100%;
+        display: inline-block;
+        border: .0625rem solid #999;
+        margin-left: .9375rem;
+        margin-right: .9375rem
+      }
+
+      .form__radio-group--buttons .form__radio-group-input:not(:checked) + .form__radio-group-label:hover .radio-ui {
+        border-color: #00b2ff;
+        box-shadow: 0 0 0 .125rem #90dcff
+      }
+
+      .form__radio-group--buttons .form__radio-group-input:not(:checked) + .form__radio-group-label svg {
+        -webkit-filter: grayscale(100%);
+        filter: grayscale(100%)
+      }
+
+      .form__radio-group--buttons .form__radio-group-input:checked + .form__radio-group-label .radio-ui {
+        border-color: #00b2ff;
+        box-shadow: inset 0 0 0 .0625rem #fff;
+        background: #00b2ff
+      }
+
+      .form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .radio-ui__label {
+        -webkit-flex: 1;
+        flex: 1
+      }
+
+      .form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .svg-paypal {
+        height: 1.125rem;
+        width: .9375rem;
+        margin-right: 1rem;
+        margin-left: .3125rem
+      }
+
+      .form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .svg-new-credit-card {
+        height: .875rem;
+        width: 1.375rem;
+        margin-right: .625rem;
+        margin-left: .3125rem
+      }
+
+      .form__label, .form__radio-group--contribution-pay .form__legend {
+        font-weight: 700
+      }
+
+      .form__label {
+        line-height: 1;
+        margin-bottom: .25rem
+      }
+
+      .form__input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background: #fff;
+        border: .0625rem solid #dcdcdc;
+        border-radius: 0;
+        padding: .5625rem .625rem .5625rem 2.375rem;
+        transition: box-shadow .2s ease-in-out
+      }
+
+      .form__input:enabled:hover {
+        box-shadow: 0 0 0 .1875rem #ededed
+      }
+
+      .form__input:disabled {
+        background: #dcdcdc;
+        color: #333
+      }
+
+      .form__input:enabled:focus {
+        box-shadow: 0 0 0 .1875rem #00b2ff;
+        outline: none
+      }
+
+      .form__input--invalid, .form__input--primed:invalid {
+        border-color: #e00000
+      }
+
+      .form__input--placeholder, .form__input::-webkit-input-placeholder {
+        color: #999
+      }
+
+      .form__input--placeholder, .form__input::-moz-placeholder {
+        color: #999
+      }
+
+      .form__input--placeholder, .form__input:-ms-input-placeholder {
+        color: #999
+      }
+
+      .form__input--placeholder, .form__input::-ms-input-placeholder {
+        color: #999
+      }
+
+      .form__input--placeholder, .form__input::placeholder {
+        color: #999
+      }
+
+      .form__error {
+        background-color: #fff4f2;
+        font-size: .875rem;
+        line-height: 1rem;
+        padding: .375rem .625rem
+      }
+
+      .form__error, .form__error a, .form__error a:visited {
+        color: #e00000
+      }
+
+      .form__error--sign-in {
+        display: block;
+        text-decoration: none
+      }
+
+      .form__error--existing-contributor {
+        margin-top: .75rem;
+        display: block;
+        text-decoration: none
+      }
+
+      .underline {
+        text-decoration: underline
+      }
+
+      .form__submit {
+        margin-top: 1.5rem;
+        padding-bottom: 1.25rem
+      }
+
+      .form__submit-button.button {
+        background: #ffe500;
+        border: .0625rem solid #ffe500
+      }
+
+      .form__submit-button--hidden {
+        display: none
+      }
+
+      .form__radio-group--contribution-amount {
+        margin: .75rem 0
+      }
+
+      .form__field {
+        margin-top: .75rem
+      }
+
+      .form__radio-group--contribution-pay {
+        margin-top: 1.25rem
+      }
+
+      .form__input-with-icon {
+        position: relative
+      }
+
+      .form__input-with-icon .form__icon {
+        -webkit-align-items: center;
+        align-items: center;
+        display: -webkit-flex;
+        display: flex;
+        fill: #999;
+        height: 2.5rem;
+        -webkit-justify-content: center;
+        justify-content: center;
+        left: .0625rem;
+        position: absolute;
+        top: .0625rem;
+        width: 2.375rem
+      }
+
+      .form__input-with-icon .form__input {
+        box-sizing: border-box;
+        width: 100%
+      }
+
+      .form__input-with-icon .form__input:focus ~ .form__icon {
+        fill: #00b2ff
+      }
+
+      .form__field .svg-user {
+        width: 1.125rem;
+        height: 1.125rem
+      }
+
+      .form__field .svg-envelope {
+        width: 1rem;
+        height: .625rem
+      }
+
+      .form__field .svg-dollar, .form__field .svg-pound {
+        width: 1.5rem;
+        height: 1.625rem
+      }
+
+      .form__field .svg-euro {
+        width: 1.875rem;
+        height: 2.5rem
+      }
+
+      .form__field .svg-globe {
+        width: .875rem;
+        height: .875rem
+      }
+
+      .icon {
+        fill: inherit
+      }
+
+      .hidden {
+        display: none
+      }
+
+      .component-signout {
+        color: inherit;
+        display: block;
+        text-align: right
+      }
+
+      .component-paypal-button-checkout {
+        width: 100%
+      }
+
+      .component-paypal-button-checkout--hidden {
+        display: none
+      }
+
+      .component-password-failure-message {
+        padding: 0 1.25rem .75rem;
+        margin-top: .75rem
+      }
+    </style>
+    <link rel="shortcut icon" type="image/png" href="@assets("images/favicons/32x32.ico")">
+    <link rel="apple-touch-icon" sizes="152x152" href="@assets("images/favicons/152x152.png")">
+    <link rel="apple-touch-icon" sizes="144x144" href="@assets("images/favicons/144x144.png")">
+    <link rel="apple-touch-icon" sizes="120x120" href="@assets("images/favicons/120x120.png")">
+    <link rel="apple-touch-icon" sizes="114x114" href="@assets("images/favicons/114x114.png")">
+    <link rel="apple-touch-icon" sizes="72x72" href="@assets("images/favicons/72x72.png")">
+    <link rel="apple-touch-icon-precomposed" href="@assets("images/favicons/57x57.png")">
+
+    <link rel="preload" href="//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="//pasteup.guim.co.uk/fonts/1.0.0/hinting-off/kerning-on/original/GuardianTextSansWeb/GuardianTextSansWeb-Medium.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/assets/fonts/GHGuardianHeadline-Bold.woff2" as="font" type="font/woff2" crossorigin>
+
+    <script type="application/ld+json">
+		{
+			"@@context": "http://schema.org",
+			"@@type": "Organization",
+			"name": "Support the Guardian",
+			"url": "https://support.theguardian.com",
+			"logo": "https://support.theguardian.com@assets("images/favicons/152x152.png")"
+		}
+	</script>
+
+    <script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
+
+    <link rel="preload"  as="script" href="@assets(mainJsBundle)">
+
+    @styles
+    </head>
+  <body class="header-tweaks">
+    <noscript>
+      <div style="text-align: center;
+        font-size: 30px;
+        padding-left: 20px;
+        padding-right: 20px;
+        background-color: #e9e939;">
+        Please enable JavaScript - we use it to provide the best experience for Guardian&nbsp;Supporters.<br/>
+        <a href="https://www.enable-javascript.com/">Click here for instructions to do so in your browser.</a>
+      </div>
+    </noscript>
+
+    <div id="@mainId" @{mapToDataset(data)}>
+
+      <div><div class="gu-content gu-content--contribution-form"><header role="banner" class="gu-content__header"><a class="glogo" href="https://www.theguardian.com"><svg class="svg-roundel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 69 69" preserveAspectRatio="xMinYMid" aria-labelledby="svg-roundel-title"><title id="svg-roundel-title">
+        The Guardian</title><path class="svg-roundel__bg" d="M34.5 0C15.446 0 0 15.446 0 34.5 0 53.554 15.446 69 34.5 69 53.554 69 69 53.554 69 34.5A34.5 34.5 0 0 0 34.5 0" fill="#fff"></path><path class="svg-roundel__g" d="M40.25 8.552c4.46.711 10.123 3.752 12.15 5.923v9.81h-1.228L40.25 9.655V8.552zm-4.103.613h-.11c-7.802 0-12.04 10.791-12.04 25.335 0 14.556 4.238 25.335 12.04 25.335h.11v1.116c-11.745.797-27.544-8.13-27.139-26.463C8.59 16.179 24.39 7.252 36.147 8.049v1.116zM56 36.793l-3.686 1.594V54.87a29.827 29.827 0 0 1-12.064 5.923V38.08l-4.054-1.337v-1.116H56v1.165z" fill="#121212"></path></svg></a><details class="countryGroups"><summary aria-label="Selected country: United Kingdom (£)"><div class="countryGroups__summary-wrapper"><svg class="svg-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" preserveAspectRatio="xMinYMid"><path d="M23.7,22.4 L45.8,22.4 L45.8,0.5 C40.7,0.7 35.6,1.8 30.8,3.7 C29.3,6 28,8.5 27,11.2 C25.6,14.8 24.5,18.6 23.7,22.4"></path><path d="M22,9.2 C22.2,8.7 22.4,8.2 22.6,7.7 C16.6,11.4 11.6,16.4 7.8,22.4 L18.2,22.4 C19.1,17.9 20.4,13.5 22,9.2"></path><path d="M15.8,50.7 L0.5,50.7 C0.8,56.8 2.3,62.7 4.9,68.2 L17.2,68.2 C16.3,62.4 15.9,56.5 15.8,50.7"></path><path d="M17.2,27.8 L4.9,27.8 C2.3,33.3 0.8,39.2 0.5,45.3 L15.8,45.3 C15.9,39.4 16.4,33.6 17.2,27.8"></path><path d="M78.8,22.4 L88.2,22.4 C84.7,16.9 80.1,12.2 74.7,8.5 C74.8,8.7 74.9,9 75,9.2 C76.6,13.5 77.9,17.9 78.8,22.4"></path><path d="M81.2,45.3 L95.5,45.3 C95.2,39.2 93.7,33.3 91.1,27.8 L79.7,27.8 C80.6,33.6 81.1,39.4 81.2,45.3"></path><path d="M73.3,22.4 C72.5,18.6 71.4,14.8 70,11.2 C69.1,8.7 67.9,6.4 66.5,4.1 C61.6,2.1 56.4,0.9 51.2,0.6 L51.2,22.5 L73.3,22.5 L73.3,22.4 Z"></path><path d="M51.2,68.2 L74.3,68.2 C75.2,62.4 75.7,56.6 75.8,50.7 L51.2,50.7 L51.2,68.2 Z"></path><path d="M79.7,68.2 L91.1,68.2 C93.7,62.7 95.2,56.8 95.5,50.7 L81.2,50.7 C81.1,56.5 80.6,62.4 79.7,68.2"></path><path d="M73.3,73.5 L51.2,73.5 L51.2,95.4 C56.5,95.1 61.6,93.9 66.5,91.9 C67.9,89.7 69.1,87.3 70,84.8 C71.4,81.1 72.5,77.4 73.3,73.5"></path><path d="M23.7,73.5 C24.5,77.3 25.6,81.1 27,84.8 C28,87.5 29.3,90 30.8,92.4 C35.6,94.3 40.7,95.3 45.8,95.6 L45.8,73.6 L23.7,73.5 Z"></path><path d="M45.8,27.8 L22.6,27.8 C21.7,33.6 21.2,39.4 21.1,45.3 L45.8,45.3 L45.8,27.8 Z"></path><path d="M75,86.7 C74.9,87 74.8,87.2 74.7,87.4 C80.1,83.7 84.7,79 88.2,73.5 L78.8,73.5 C77.9,78 76.6,82.4 75,86.7"></path><path d="M75.8,45.3 C75.7,39.4 75.2,33.6 74.3,27.8 L51.2,27.8 L51.2,45.3 L75.8,45.3 Z"></path><path d="M18.2,73.5 L7.8,73.5 C11.6,79.4 16.6,84.5 22.6,88.2 C22.4,87.7 22.1,87.2 22,86.7 C20.4,82.4 19.1,78 18.2,73.5"></path><path d="M21.1,50.7 C21.2,56.6 21.7,62.4 22.6,68.2 L45.7,68.2 L45.7,50.7 L21.1,50.7 Z"></path></svg><span class="countryGroups__label">
+        United Kingdom (£)</span><span class="icon icon--arrows"><svg class="svg-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 10" preserveAspectRatio="xMinYMid"><path d="M1.25.5l-.75.75L9 9.5h.95l8.55-8.25-.75-.75L9.5 7.25z"></path></svg></span></div></summary><ul class="countryGroups__list"><li class="countryGroups__item"><a href="/uk/contribute">
+        United Kingdom (£)<span class="icon"><svg class="svg-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 14" preserveAspectRatio="xMinYMid"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z"></path></svg></span></a></li><li class="countryGroups__item"><a href="/us/contribute">
+        United States (US$)</a></li><li class="countryGroups__item"><a href="/au/contribute">
+        Australia (AU$)</a></li><li class="countryGroups__item"><a href="/eu/contribute">
+        Europe (€)</a></li><li class="countryGroups__item"><a href="/int/contribute">
+        International (US$)</a></li><li class="countryGroups__item"><a href="/nz/contribute">
+        New Zealand (NZ$)</a></li><li class="countryGroups__item"><a href="/ca/contribute">
+        Canada (CA$)</a></li></ul></details></header><main role="main" class="gu-content__main"><div class="gu-content__content"><h1 class="header ">
+        Help us deliver the independent journalism the world needs</h1><p class="blurb">
+        Make a recurring commitment to support The&nbsp;Guardian long-term or a single contribution
+        as and when you feel like it – choose the option that suits you best.
+      </p>
+        <form class="form form--contribution" novalidate=""><fieldset class="form__radio-group form__radio-group--tabs form__radio-group--contribution-type"><legend class="form__legend form__legend--radio-group">
+          Recurrence</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="contributionType-ONE_OFF" class="form__radio-group-input" type="radio" name="contributionType" value="ONE_OFF"><label for="contributionType-ONE_OFF" class="form__radio-group-label">
+          Single</label></li><li class="form__radio-group-item"><input id="contributionType-MONTHLY" class="form__radio-group-input" type="radio" name="contributionType" value="MONTHLY"><label for="contributionType-MONTHLY" class="form__radio-group-label">
+          Monthly</label></li><li class="form__radio-group-item"><input id="contributionType-ANNUAL" class="form__radio-group-input" type="radio" name="contributionType" value="ANNUAL" checked><label for="contributionType-ANNUAL" class="form__radio-group-label">
+          Annual</label></li></ul></fieldset><fieldset class="form__radio-group form__radio-group--pills form__radio-group--contribution-amount"><legend class="form__legend form__legend--radio-group">
+          Amount</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="contributionAmount-50" class="form__radio-group-input" type="radio" name="contributionAmount" value="50"><label for="contributionAmount-50" class="form__radio-group-label" aria-label="50 pounds">
+          @{annualAmounts._1}</label></li><li class="form__radio-group-item"><input id="contributionAmount-100" class="form__radio-group-input" type="radio" name="contributionAmount" value="100" checked><label for="contributionAmount-100" class="form__radio-group-label" aria-label="100 pounds">
+        @{annualAmounts._2}</label></li><li class="form__radio-group-item"><input id="contributionAmount-250" class="form__radio-group-input" type="radio" name="contributionAmount" value="250"><label for="contributionAmount-250" class="form__radio-group-label" aria-label="250 pounds">
+        @{annualAmounts._3}</label></li><li class="form__radio-group-item"><input id="contributionAmount-500" class="form__radio-group-input" type="radio" name="contributionAmount" value="500"><label for="contributionAmount-500" class="form__radio-group-label" aria-label="500 pounds">
+        @{annualAmounts._4}</label></li><li class="form__radio-group-item"><input id="contributionAmount-other" class="form__radio-group-input" type="radio" name="contributionAmount" value="other"><label for="contributionAmount-other" class="form__radio-group-label">
+          Other</label></li></ul></fieldset><div class="stripe-payment-request-button stripe-payment-request-button--hidden"></div><div class="form-fields"><div class="form__field form__field--contribution-email"><label class="form__label" for="contributionEmail">
+          Email address</label><span class="form__input-with-icon"><input id="contributionEmail" class="form__input form__input--contributionEmail" type="email" autocapitalize="none" autocomplete="email" required="" placeholder="example@@domain.com" pattern="^[a-zA-Z0-9\.!#$%&amp;'*+/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$" style="background-image: url(&quot;data: image/png;
+          base64, iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT / fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ /oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/ wxZKQcGurQs5oNhqLshzVTMBewW / LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d /YP/ g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN / 1 ov+ / drgFWIlfKpVukyYihtgkXNp4mABK+1 GtVr+SBhJDbBIubVw+Cd /TDgKO2DPiN3YUo6y/ nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII =&quot;);
+          background-repeat: no-repeat;
+          background-attachment: scroll;
+          background-size: 16px 18px;
+          background-position: 98% 50%;
+          cursor: auto;"><span class="form__icon"><svg class="svg-envelope" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 10" preserveAspectRatio="xMinYMid"><path d="M.902 0L8 6.213 15.098 0H.902zM0 .787v8.42l4.787-4.232L0 .787zm16 0l-4.787 4.188L16 9.206V.787zM5.689 5.763L.896 10h14.208L10.31 5.763 8.378 7.456a.575.575 0 0 1-.756 0L5.689 5.763z"></path></svg></span></span></div><div><div class="form__field form__field--contribution-fname"><label class="form__label" for="contributionFirstName">
+          First name</label><span class="form__input-with-icon"><input id="contributionFirstName" class="form__input form__input--contributionFirstName" type="text" autocapitalize="words" autocomplete="given-name" required=""><span class="form__icon"><svg class="svg-user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" preserveAspectRatio="xMinYMid"><path d="M10 8.3c1.55 0 3.4-1.75 3.4-3.9S12.15 1 10 1 6.6 2.25 6.6 4.4s2 3.9 3.4 3.9zm5.86 3.4l-.86-.82c-1.67-.58-3.14-.88-5-.88-1.87 0-3.32.3-5 .86l-.86.85L2 18.16l.86.84h14.28l.86-.86-2.14-6.42v-.02z"></path></svg></span></span></div><div class="form__field form__field--contribution-lname"><label class="form__label" for="contributionLastName">
+          Last name</label><span class="form__input-with-icon"><input id="contributionLastName" class="form__input form__input--contributionLastName" type="text" autocapitalize="words" autocomplete="family-name" required=""><span class="form__icon"><svg class="svg-user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" preserveAspectRatio="xMinYMid"><path d="M10 8.3c1.55 0 3.4-1.75 3.4-3.9S12.15 1 10 1 6.6 2.25 6.6 4.4s2 3.9 3.4 3.9zm5.86 3.4l-.86-.82c-1.67-.58-3.14-.88-5-.88-1.87 0-3.32.3-5 .86l-.86.85L2 18.16l.86.84h14.28l.86-.86-2.14-6.42v-.02z"></path></svg></span></span></div></div></div><fieldset class="form__radio-group form__radio-group--buttons form__radio-group--contribution-pay"><legend class="form__legend">
+          Payment method</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="paymentMethodSelector-DirectDebit" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="DirectDebit"><label for="paymentMethodSelector-DirectDebit" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">
+          Direct debit</span><svg class="svg-new-credit-card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14" preserveAspectRatio="xMinYMid"><path d="M22 3.652H0V1.326C0 .594.58 0 1.295 0h19.41C21.42 0 22 .594 22 1.326v2.326zm0 1.826v7.196c0 .733-.58 1.326-1.295 1.326H1.295C.58 14 0 13.407 0 12.674V5.478h22zM2.494 9.74a.609.609 0 0 0 0 1.218h3.183a.609.609 0 1 0 0-1.218H2.494z" fill="#00B2FF"></path></svg></label></li><li class="form__radio-group-item"><input id="paymentMethodSelector-Stripe" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="Stripe"><label for="paymentMethodSelector-Stripe" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">
+          Credit/Debit card</span><svg class="svg-new-credit-card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14" preserveAspectRatio="xMinYMid"><path d="M22 3.652H0V1.326C0 .594.58 0 1.295 0h19.41C21.42 0 22 .594 22 1.326v2.326zm0 1.826v7.196c0 .733-.58 1.326-1.295 1.326H1.295C.58 14 0 13.407 0 12.674V5.478h22zM2.494 9.74a.609.609 0 0 0 0 1.218h3.183a.609.609 0 1 0 0-1.218H2.494z" fill="#00B2FF"></path></svg></label></li><li class="form__radio-group-item"><input id="paymentMethodSelector-PayPal" class="form__radio-group-input" name="paymentMethodSelector" type="radio" value="PayPal"><label for="paymentMethodSelector-PayPal" class="form__radio-group-label"><span class="radio-ui"></span><span class="radio-ui__label">
+          PayPal</span><svg class="svg-paypal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 18" preserveAspectRatio="xMinYMid"><path d="M2.334.637L.01 15.407c-.074.458.27.687 1.032.687h2.875l.804-5.483c.114-.366.313-.549.597-.549h2.674C11 9.735 12.835 8.029 13.5 4.942 14.495.313 10.031 0 8.783 0H3.036C2.8.048 2.631.124 2.53.23a.773.773 0 0 0-.196.407z" fill="#27346A"></path><path d="M5.633 4.554l-1.925 12.85c-.061.397.224.596.855.596h2.382c.34-.073.537-.205.59-.395.053-.19.298-1.628.734-4.312.087-.21.27-.314.55-.314s.891-.04 1.836-.12c2.268-.355 3.676-1.875 4.226-4.56C15.706 4.274 12.01 4 10.975 4h-4.76c-.196.041-.335.108-.419.2a.687.687 0 0 0-.163.354z" fill="#2790C3"></path><path d="M13.564 4.604a7.13 7.13 0 0 1-.065.338c-.664 3.087-2.5 4.793-5.507 5.12H5.318c-.276 0-.472.173-.588.52l.903-6.028a.687.687 0 0 1 .163-.354c.084-.092.223-.159.419-.2h4.76c.506 0 1.65.065 2.589.604zm-9.067 7.53l-.58 3.96h-.013l.593-3.96z" fill="#1F264F"></path></svg></label></li></ul></fieldset><div class="form__submit"><div id="component-paypal-button-checkout" class="component-paypal-button-checkout component-paypal-button-checkout--hidden"><div><div id="zoid-paypal-button-261ab8a12b" class="paypal-button paypal-button-context-iframe paypal-button-label-pay paypal-button-size-responsive paypal-button-layout-horizontal" style="height: 33px;"><style>
+          #zoid-paypal-button-261ab8a12b {
+            font-size: 0;
+            width: 100%;
+            overflow: hidden;
+            min-width: 75px;
+          }
+
+          #zoid-paypal-button-261ab8a12b.paypal-button-size-responsive {
+            text-align: center;
+          }
+
+          #zoid-paypal-button-261ab8a12b > .zoid-outlet {
+            display: inline-block;
+            min-width: 75px;
+            max-width: 750px;
+            position: relative;
+          }
+
+          #zoid-paypal-button-261ab8a12b.paypal-button-layout-vertical > .zoid-outlet {
+            min-width: 75px;
+          }
+
+          #zoid-paypal-button-261ab8a12b > .zoid-outlet {
+            width: 150px;
+            height: 25px;
+          }
+
+          #zoid-paypal-button-261ab8a12b.paypal-button-size-responsive > .zoid-outlet {
+            width: 100%;
+          }
+
+          #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe {
+            min-width: 100%;
+            max-width: 100%;
+            width: 75px;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+
+          #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-component-frame {
+            z-index: 100;
+          }
+
+          #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-prerender-frame {
+            transition: opacity .2s linear;
+            z-index: 200;
+          }
+
+          #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-visible {
+            opacity: 1;
+          }
+
+          #zoid-paypal-button-261ab8a12b > .zoid-outlet > iframe.zoid-invisible {
+            opacity: 0;
+            pointer-events: none;
+          }
+        </style><div class="zoid-outlet" style="height: 33px;
+          transition: all 0.5s ease-in-out 0.3s;"><iframe class="zoid-component-frame zoid-visible" frameborder="0" allowtransparency="true" name="xcomponent__ppbutton__4__pmrhk2leei5ceyzxgy4tiyzvmfrdeirmej2gczzchirhaylzobqwyllcov2hi33oeiwcey3pnvyg63tfnz2faylsmvxhiir2pmrhezlgei5ce5dpoarh2lbcojsw4zdfojigc4tfnz2ceot3ejzgkzrchirhi33qej6syitqojxxa4zchj5se5dzobsseorcojqxoirmej3gc3dvmurdu6zcmvxhmir2ejyhe33eovrxi2lpnyrcyittor4wyzjchj5sey3pnrxxeir2ejrgy5lfeiwce43jpjsseorcojsxg4dpnzzws5tfeiwce3dbmjswyir2ejygc6jcfqrgyylzn52xiir2ejug64tjpjxw45dbnqrcyitgovxgi2lom5uwg33oomrduztbnrzwk7jmejrw63lnnf2ceotuoj2wklbcozqwy2lemf2gkir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitgovxgi2lom4rdu6zcmfwgy33xmvsceos3luwcezdjonqwy3dpo5swiir2lmrgg4tfmruxiirmej3gk3tnn4rf2lbcojsw2zlnmjsxezleei5fwitqmf4xaylmeiwcey3smvsgs5bcluwce4tfnvsw2ytfoirdu6zcl5pxi6lqmvpv6ir2ejpv6ztvnzrxi2lpnzpv6it5puwce33oinwgsy3lei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejygc6lnmvxhiir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitpnzaxk5din5zgs6tfei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejsg63lbnfxceorcon2xa4dpoj2c45dimvtxkylsmruwc3romnxw2irmejzwk43tnfxw4skeei5cemjymyzwcmbqgu4dgx3hme2hi5lnpj4wq2jsoryselbcmj2xi5dpnzjwk43tnfxw4skeei5cenzqgbtdgodgg5rdox3hme2hi5lnpj4wq2jsoryselbcnvsxiyjchj5x2lbconxxk4tdmurduitnmfxhkylmeiwce4dsmvtgk5ddnbgg6z3jnyrduztbnrzwklbcn5xfezlomrsxeir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitpnzcxe4tpoirdu6zcl5pxi6lqmvpv6ir2ejpv6ztvnzrxi2lpnzpv6it5fqrg63sdmfxggzlmei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejwg6y3bnrsseorcmvxf6vkteiwce3dpm5ggk5tfnqrduitxmfzg4irmejqxoyljorig64dvobbhe2lem5sseot3ejpv65dzobsv6xzchirf6x3govxgg5djn5xf6xzcpuwce43vobygyzlnmvxhiir2pmrgozlukbqxs3lfnz2e64dunfxw44zchj5sex27or4xazk7l4rduis7l5thk3tdoruw63s7l4rh2lbcmfsgiudbpfwwk3tuirsxiyljnrzseot3ejpv65dzobsv6xzchirf6x3govxgg5djn5xf6xzcpuwcez3forigc6lnmvxhirdforqws3dtei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7l5fqrhizltoqrdu6zcmfrxi2lpnyrduitdnbswg23pov2ce7jmej2wszbchirdenrrmfrdqyjrgjrcelbcozsxe43jn5xceorcgqrh27jmejuwiir2eiydqyzvmi3dgmdcgercyiten5wwc2loei5ce2duoryhgorpf5zxk4dqn5zhiltunbswo5lbojsgsylofzrw63jcpu__" title="ppbutton" scrolling="no" allowpaymentrequest="allowpaymentrequest" src="https://www.paypal.com/webapps/hermes/button?env=production&amp;style.color=blue&amp;style.size=responsive&amp;style.label=pay&amp;style.layout=horizontal&amp;style.fundingicons=false&amp;commit=1&amp;funding.disallowed=credit%2Cvenmo&amp;funding.remembered=paypal%2Ccredit&amp;domain=support.theguardian.com&amp;sessionID=18f3a00583_ga4tumzyhi2tq&amp;buttonSessionID=700f38f7b7_ga4tumzyhi2tq&amp;locale.x=en_US&amp;logLevel=warn&amp;sdkMeta=eyJ1cmwiOiJodHRwczovL3d3dy5wYXlwYWxvYmplY3RzLmNvbS9hcGkvY2hlY2tvdXQuanMifQ%3D%3D&amp;uid=261ab8a12b&amp;version=4&amp;xcomponent=1" style="background-color: transparent;"></iframe></div></div></div></div><div class="form__submit--contribution"><button class="button button--right-arrow form__submit-button" type="submit" aria-describedby="accessibility-hint-submit-contribution">
+          Contribute £100 a year <p id="accessibility-hint-submit-contribution" class="accessibility-hint">
+          Contribute £100 a year </p><svg class="svg-arrow-right-straight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 17.89" preserveAspectRatio="xMinYMid"><path d="M20 9.35l-9.08 8.54-.86-.81 6.54-7.31H0V8.12h16.6L10.06.81l.86-.81L20 8.51v.84z"></path></svg></button></div></div><div class="component-terms-privacy"><div class="component-terms-privacy__change">
+          Monthly contributions are billed each month and annual contributions are billed once a year. You can change how much you give or cancel your contributions at any time.</div><div class="component-terms-privacy__terms">
+          By proceeding, you are agreeing to our <a href="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions">
+          Terms and Conditions</a>
+          . To find out what personal data we collect and how we use it, please visit our <a href="https://www.theguardian.com/help/privacy-policy">
+          Privacy Policy</a>
+          .</div></div>
+          <div class="component-progress-message">
+            <div class="component-progress-message__dialog">
+
+              <div class="component-progress-message__message">Loading the page</div>
+              <div class="component-animated-dots">
+                <div class="component-animated-dots__bounce1"></div>
+                <div class="component-animated-dots__bounce2"></div>
+                <div class="component-animated-dots__bounce3"></div>
+              </div>
+            </div>
+            <div class="component-progress-message__background"></div>
+          </div>
+        </form></div><div class="gu-content__bg"><svg class="svg-contributions-bg-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620"><circle fill="#E7D4B9" cx="213" cy="273" r="70"></circle><circle fill="#FEC8D3" cx="1280" cy="369" r="140"></circle><circle fill="#BB3B7F" cx="1152" cy="136" r="125"></circle><circle fill="#00B2FF" cx="138" cy="475" r="145"></circle><circle fill="#FF4E36" cx="748" cy="165" r="58"></circle><circle fill="#FAB375" cx="915" cy="395" r="225"></circle><circle fill="#FFFFFF" cx="1169" cy="549" r="70"></circle></svg></div></main><footer class="component-footer" role="contentinfo"><div class="component-footer__content"><small class="component-footer__copyright">
+        © 2019 Guardian News and Media Limited or its
+        affiliated companies. All rights reserved.</small><p class="component-contrib-legal">
+        The ultimate owner of the Guardian is The Scott Trust Limited, whose role it is to secure the editorial and financial independence of the Guardian in perpetuity. Reader contributions support the Guardian’s journalism. Please note that your support of the Guardian’s journalism does not constitute a charitable donation, as such your contribution is not eligible for Gift Aid in the UK nor a tax-deduction elsewhere. If you have any questions about contributing to the Guardian, please <a href="mailto:contribution.support@@theguardian.com">
+        contact us here</a>.</p></div></footer></div></div>
+
+    </div>
+
+    <script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
+    <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+    window.guardian = window.guardian || {};
+    window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
+	</script>
+
+    @scripts
+
+    @* This script is intentionally at the bottom of the file. Please check
+    all the critical flows work correctly if you change its position *@
+    <script type="text/javascript" src="@assets(mainJsBundle)"></script>
+      <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
+  </body>
+</html>
