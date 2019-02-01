@@ -70,7 +70,10 @@
   .component-product-page-content-block {
     &--grey {
       @include mq($from: tablet) {
-        .svg-breaking-the-headlines,
+        .svg-breaking-the-headlines {
+          margin-left: $gu-h-spacing * -4;
+          margin-right: $gu-h-spacing * -4;
+        }
         .svg-no-one {
           margin-left: $gu-h-spacing * -6;
           margin-right: $gu-h-spacing * -6;
@@ -79,11 +82,6 @@
     }
 
     &--subscribe {
-      .component-button {
-        margin-top: $gu-v-spacing * 2;
-        color: gu-colour(garnett-neutral-1);
-      }
-
       .component-product-page-content-block__image {
         max-width: gu-span(5);
         min-width: gu-span(4);
@@ -125,10 +123,6 @@
         position: relative;
         z-index: 10;
 
-        @include mq($from: tablet) {
-          width: gu-span(14);
-        }
-
         .image {
           margin-right: $gu-h-spacing * 6;
           margin-bottom: $gu-v-spacing * 6;
@@ -137,16 +131,6 @@
           @include mq($until: tablet) {
             display: none;
           }
-        }
-      }
-
-      .component-button {
-        margin-top: $gu-v-spacing * 2;
-        background-color: gu-colour(garnett-neutral-1);
-        color: gu-colour(garnett-neutral-3);
-
-        .svg-arrow-right-straight {
-          fill: gu-colour(garnett-neutral-3);
         }
       }
 
@@ -187,8 +171,6 @@
 
         .component-button {
           margin-top: $gu-v-spacing;
-          background-color: gu-colour(garnett-neutral-5);
-          border: 1px solid gu-colour(garnett-neutral-1);
         }
 
         &--patrons {
