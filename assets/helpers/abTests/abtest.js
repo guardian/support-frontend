@@ -132,10 +132,7 @@ function getParticipationsFromQuery(): ?Participations {
 
     const [testId, variantEtc] = hashUrl.substr(index).split('=');
     const test = {};
-    console.log('testId', testId);
-    console.log('variant', variantEtc);
     const variant = variantEtc.split('&')[0];
-    console.log('actual', variant);
     test[testId] = variant;
 
     return test;
