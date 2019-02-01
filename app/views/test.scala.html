@@ -1853,10 +1853,8 @@
         cursor: pointer
       }
 
-      .amounts__placeholder {
-        width: 30px;
-        height: 18px;
-        background-color: #eee;
+      .amounts__placeholder .form__radio-group-label {
+        background-color: #ededed;
       }
 
       .form__radio-group--tabs .form__radio-group-list {
@@ -2228,12 +2226,38 @@
           Single</label></li><li class="form__radio-group-item"><input id="contributionType-MONTHLY" class="form__radio-group-input" type="radio" name="contributionType" value="MONTHLY"><label for="contributionType-MONTHLY" class="form__radio-group-label">
           Monthly</label></li><li class="form__radio-group-item"><input id="contributionType-ANNUAL" class="form__radio-group-input" type="radio" name="contributionType" value="ANNUAL" checked><label for="contributionType-ANNUAL" class="form__radio-group-label">
           Annual</label></li></ul></fieldset><fieldset class="form__radio-group form__radio-group--pills form__radio-group--contribution-amount"><legend class="form__legend form__legend--radio-group">
-          Amount</legend><ul class="form__radio-group-list"><li class="form__radio-group-item"><input id="contributionAmount-50" class="form__radio-group-input" type="radio" name="contributionAmount" value="50"><label for="contributionAmount-50" class="form__radio-group-label" aria-label="50 pounds">
-          <span class="amounts__placeholder"></span></label></li><li class="form__radio-group-item"><input id="contributionAmount-100" class="form__radio-group-input" type="radio" name="contributionAmount" value="100" checked><label for="contributionAmount-100" class="form__radio-group-label" aria-label="100 pounds">
-          <span class="amounts__placeholder"></span></label></li><li class="form__radio-group-item"><input id="contributionAmount-250" class="form__radio-group-input" type="radio" name="contributionAmount" value="250"><label for="contributionAmount-250" class="form__radio-group-label" aria-label="250 pounds">
-          <span class="amounts__placeholder"></span></label></li><li class="form__radio-group-item"><input id="contributionAmount-500" class="form__radio-group-input" type="radio" name="contributionAmount" value="500"><label for="contributionAmount-500" class="form__radio-group-label" aria-label="500 pounds">
-          <span class="amounts__placeholder"></span></label></li><li class="form__radio-group-item"><input id="contributionAmount-other" class="form__radio-group-input" type="radio" name="contributionAmount" value="other"><label for="contributionAmount-other" class="form__radio-group-label">
-          Other</label></li></ul></fieldset><div class="stripe-payment-request-button stripe-payment-request-button--hidden"></div><div class="form-fields"><div class="form__field form__field--contribution-email"><label class="form__label" for="contributionEmail">
+          Amount</legend><ul class="form__radio-group-list">
+          <li class="form__radio-group-item">
+            <span class="amounts__placeholder">
+            <input id="contributionAmount-50" class="form__radio-group-input" type="radio" name="contributionAmount" value="50">
+            <label for="contributionAmount-50" class="form__radio-group-label" aria-label="50 pounds">
+            </label></span>
+          </li>
+          <li class="form__radio-group-item">
+            <span class="amounts__placeholder">
+            <input id="contributionAmount-100" class="form__radio-group-input" type="radio" name="contributionAmount" value="100" checked>
+            <label for="contributionAmount-100" class="form__radio-group-label" aria-label="100 pounds">
+          </label></span>
+          </li>
+          <li class="form__radio-group-item">
+            <span class="amounts__placeholder">
+            <input id="contributionAmount-250" class="form__radio-group-input" type="radio" name="contributionAmount" value="250">
+            <label for="contributionAmount-250" class="form__radio-group-label" aria-label="250 pounds">
+          </label></span>
+          </li>
+          <li class="form__radio-group-item">
+            <span class="amounts__placeholder">
+              <input id="contributionAmount-500" class="form__radio-group-input" type="radio" name="contributionAmount" value="500">
+            <label for="contributionAmount-500" class="form__radio-group-label" aria-label="500 pounds">
+          </label></span>
+          </li>
+          <li class="form__radio-group-item">
+            <span class="amounts__placeholder">
+            <input id="contributionAmount-other" class="form__radio-group-input" type="radio" name="contributionAmount" value="other">
+            <label for="contributionAmount-other" class="form__radio-group-label">
+          </label></span>
+          </li>
+        </ul></fieldset><div class="stripe-payment-request-button stripe-payment-request-button--hidden"></div><div class="form-fields"><div class="form__field form__field--contribution-email"><label class="form__label" for="contributionEmail">
           Email address</label><span class="form__input-with-icon"><input id="contributionEmail" class="form__input form__input--contributionEmail" type="email" autocapitalize="none" autocomplete="email" required="" placeholder="example@@domain.com" pattern="^[a-zA-Z0-9\.!#$%&amp;'*+/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$" style="background-image: url(&quot;data: image/png;
           base64, iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT / fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ /oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/ wxZKQcGurQs5oNhqLshzVTMBewW / LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d /YP/ g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN / 1 ov+ / drgFWIlfKpVukyYihtgkXNp4mABK+1 GtVr+SBhJDbBIubVw+Cd /TDgKO2DPiN3YUo6y/ nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII =&quot;);
           background-repeat: no-repeat;
