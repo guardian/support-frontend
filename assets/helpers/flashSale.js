@@ -299,8 +299,14 @@ function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
   return b.startTime - a.startTime;
 }
 
+function getTimeTravelDays() {
+  return Number(getQueryParameter('timeTravelDays')) * 86400000 || null;
+}
+
 function getActiveFlashSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
-  const now = Date.now();
+
+  const timeTravelDays = getTimeTravelDays();
+  const now = timeTravelDays ? Date.now() + (timeTravelDays) : Date.now();
 
   const sales = Sales.filter(sale =>
     sale.subscriptionProduct === product &&
@@ -401,4 +407,5 @@ export {
   getPlanPrices,
   getDiscount,
   getDuration,
+  getTimeTravelDays,
 };
