@@ -10,7 +10,7 @@ import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import { getDigitalPrice } from 'helpers/subscriptions';
 import { getDiscount, getFormattedFlashSalePrice, flashSaleIsActive } from 'helpers/flashSale';
-import { showPrice, priceByCountryGroupId, USD, type Price } from 'helpers/internationalisation/price';
+import { showPrice, priceByCountryGroupId, type Price } from 'helpers/internationalisation/price';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, {
   type DispatchPropTypes,
@@ -19,13 +19,12 @@ import ProductPagePlanForm, {
 
 import { type State } from '../digitalSubscriptionLandingReducer';
 import { redirectToDigitalPage, setPlan } from '../digitalSubscriptionLandingActions';
-import type {SubscriptionProduct} from "../../../helpers/subscriptions";
 
 
 // ---- Plans ----- //
 
 const getPrice = (countryGroupId: CountryGroupId, period: DigitalBillingPeriod) => {
-  if(flashSaleIsActive('DigitalPack', countryGroupId)) {
+  if (flashSaleIsActive('DigitalPack', countryGroupId)) {
     const priceAsNumber: number = Number(getFormattedFlashSalePrice('DigitalPack', countryGroupId, period));
     const flashSalePrice: Price = priceByCountryGroupId(countryGroupId, priceAsNumber);
     return showPrice(flashSalePrice);
@@ -41,22 +40,22 @@ const getAnnualSaving = (countryGroupId: CountryGroupId): Price => {
 };
 
 const getOfferText = (countryGroupId: CountryGroupId, period: DigitalBillingPeriod): ?string => {
-  const discount = (getDiscount('DigitalPack', countryGroupId)) * 100;
-  if (discount > 0) {
-    return `Save ${discount.toString()}%`
-  } else {
-    if(period === 'Annual') {
-      return 'Save 17%';
-    } else return null;
+  const discount = (getDiscount('DigitalPack', countryGroupId));
+  if (discount && discount > 0) {
+    return `Save ${(discount * 100).toString()}%`;
   }
+  if (period === 'Annual') {
+    return 'Save 17%';
+  } return null;
+
 };
 
 const getAnnualCopy = (countryGroupId: CountryGroupId) => {
-  if(flashSaleIsActive('DigitalPack', countryGroupId)){
-    return `14 day free trial, then ${getPrice(countryGroupId, Annual)} every 12 months`
+  if (flashSaleIsActive('DigitalPack', countryGroupId)) {
+    return `14 day free trial, then ${getPrice(countryGroupId, Annual)} every 12 months`;
   }
 
-  return `14 day free trial, then ${getPrice(countryGroupId, Annual)} every 12 months (save ${showPrice(getAnnualSaving(countryGroupId))} per year)`
+  return `14 day free trial, then ${getPrice(countryGroupId, Annual)} every 12 months (save ${showPrice(getAnnualSaving(countryGroupId))} per year)`;
 };
 
 export const billingPeriods = {

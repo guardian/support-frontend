@@ -26,11 +26,12 @@ const CAD = (value: number): Price => ({ value, currency: 'CAD' });
 function priceByCountryGroupId(countryGroupId: CountryGroupId, price: number): Price {
   switch (countryGroupId) {
     case 'GBPCountries': return GBP(price);
-    case 'UnitedStates': return USD(price);
     case 'AUDCountries': return AUD(price);
     case 'International': return USD(price);
     case 'NZDCountries': return NZD(price);
     case 'Canada': return CAD(price);
+    default:
+    case 'UnitedStates': return USD(price);
   }
 }
 

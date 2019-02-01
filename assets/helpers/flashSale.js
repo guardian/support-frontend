@@ -338,7 +338,9 @@ function getAnnualPlanPromoCode(
 ): string {
   if (flashSaleIsActive(product, countryGroupId)) {
     const sale = getActiveFlashSales(product, countryGroupId)[0];
-    return sale && sale.saleDetails[countryGroupId].annualPlanPromoCode;
+    return (sale
+      && sale.saleDetails[countryGroupId]
+      && sale.saleDetails[countryGroupId].annualPlanPromoCode) || defaultCode;
   }
   return defaultCode;
 }
@@ -390,10 +392,19 @@ function getSaleCopy(product: SubscriptionProduct, countryGroupId: CountryGroupI
   return emptyCopy;
 }
 
-function getFormattedFlashSalePrice(product: SubscriptionProduct, countryGroupId: CountryGroupId, period?: BillingPeriod): string {
+function getFormattedFlashSalePrice(
+  product: SubscriptionProduct,
+  countryGroupId: CountryGroupId,
+  period?: BillingPeriod,
+): string {
   const sale = getActiveFlashSales(product, countryGroupId)[0];
-  if(period === 'Annual') {
-    return fixDecimals(sale.saleDetails[countryGroupId].annualPrice);
+  if (period === 'Annual') {
+    const { annualPrice } = sale.saleDetails[countryGroupId];
+    if (annualPrice) {
+      return fixDecimals(annualPrice);
+    }
+    return fixDecimals(sale.saleDetails[countryGroupId].price);
+
   }
   return fixDecimals(sale.saleDetails[countryGroupId].price);
 }
