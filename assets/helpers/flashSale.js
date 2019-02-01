@@ -295,12 +295,22 @@ const Sales: Sale[] = [
   },
 ];
 
+function getTimeTravelDaysOverride() {
+  return Number(getQueryParameter('flash_sale_time_travel')) || null;
+}
+
+function getFlashSaleActiveOverride() {
+  return getQueryParameter('flash_sale') === 'true';
+}
+
 function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
   return b.startTime - a.startTime;
 }
 
 function getActiveFlashSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
-  const now = Date.now();
+
+  const timeTravelDays = getTimeTravelDaysOverride();
+  const now = timeTravelDays ? Date.now() + (timeTravelDays * 86400000) : Date.now();
 
   const sales = Sales.filter(sale =>
     sale.subscriptionProduct === product &&
@@ -308,7 +318,7 @@ function getActiveFlashSales(product: SubscriptionProduct, countryGroupId: Count
 
   return sales.filter(sale =>
     (now > sale.startTime && now < sale.endTime) ||
-    getQueryParameter('flash_sale') === 'true');
+    getFlashSaleActiveOverride() === true);
 }
 
 function getDiscount(product: SubscriptionProduct, countryGroupId: CountryGroupId): ?number {
@@ -401,4 +411,6 @@ export {
   getPlanPrices,
   getDiscount,
   getDuration,
+  getTimeTravelDaysOverride,
+  getFlashSaleActiveOverride,
 };
