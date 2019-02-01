@@ -27,9 +27,9 @@ import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -162,11 +162,11 @@ export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
-function initReducer(countryGroupId: CountryGroupId) {
-  const billingPeriodInurl = getQueryParameter('period');
-  const user = getUser(countryGroupId); // TODO: this is unnecessary, it should use the user reducer
-  const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInurl === 'Monthly' || billingPeriodInurl === 'Annual'
-    ? billingPeriodInurl
+function initReducer(detectedCountry: IsoCountry, countryGroupId: CountryGroupId) {
+  const billingPeriodInUrl = getQueryParameter('period');
+  const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
+  const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual'
+    ? billingPeriodInUrl
     : Monthly;
 
   const initialState = {
@@ -174,11 +174,11 @@ function initReducer(countryGroupId: CountryGroupId) {
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    country: user.country || null,
+    country: detectedCountry || null,
     stateProvince: null,
     telephone: '',
     billingPeriod: initialBillingPeriod,
-    paymentMethod: countrySupportsDirectDebit(user.country || null) ? 'DirectDebit' : 'Stripe',
+    paymentMethod: countrySupportsDirectDebit(detectedCountry || null) ? 'DirectDebit' : 'Stripe',
     formErrors: [],
     submissionError: null,
     formSubmitted: false,

@@ -15,7 +15,7 @@ describe('Digital Subscription Checkout Reducer', () => {
     const stage: Stage = 'thankyou';
     const action = setStage(stage);
 
-    const newState = initReducer('GBPCountries')(undefined, action);
+    const newState = initReducer('GB', 'GBPCountries')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
@@ -26,7 +26,7 @@ describe('Digital Subscription Checkout Reducer', () => {
     const stage: Stage = 'checkout';
     const action = setStage(stage);
 
-    const newState = initReducer('GBPCountries')(undefined, action);
+    const newState = initReducer('GB', 'GBPCountries')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
