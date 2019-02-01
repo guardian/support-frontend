@@ -11,7 +11,7 @@ import { getBaseDomain } from 'helpers/url';
 import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
 
-import { getIntcmp, getPromoCode } from './flashSale';
+import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
 
 
 // ----- Types ----- //
@@ -267,6 +267,13 @@ const withParams = ({
   return [url, params.toString()].join('?');
 };
 
+function getDigitalPackPromoCode(cgId: CountryGroupId, billingPeriod: DigitalBillingPeriod): string {
+  if (billingPeriod === 'Annual') {
+    return getAnnualPlanPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
+  }
+  return getPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
+
+}
 
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
@@ -282,10 +289,10 @@ function getDigitalCheckout(
     nativeAbParticipations,
     optimizeExperiments,
   );
-
+  const promoCode = getDigitalPackPromoCode(cgId, billingPeriod);
   const params = new URLSearchParams(window.location.search);
   params.set('acquisitionData', JSON.stringify(acquisitionData));
-  params.set('promoCode', defaultPromos.DigitalPack);
+  params.set('promoCode', promoCode);
   params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
   params.set('startTrialButton', referringCta || '');
 
