@@ -27,7 +27,7 @@ const TimeTravelBanner = () => {
     return (
       <div className="component-banner-time-travel">
         <strong>TEST MODE</strong> You are time travelling
-        {Math.abs(timeTravelDays)} days {timeTravelDays > 0 ? 'in the future' : 'in the past'}.
+        {' '}{Math.abs(timeTravelDays)} days {timeTravelDays > 0 ? 'in the future' : 'in the past'}.
         The sales and prices on this page may not be currently active.
       </div>
     );
