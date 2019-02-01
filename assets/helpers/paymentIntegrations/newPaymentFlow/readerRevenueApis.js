@@ -56,7 +56,7 @@ export type RegularPaymentRequest = {|
   referrerAcquisitionData: ReferrerAcquisitionData,
   supportAbTests: AcquisitionABTest[],
   telephoneNumber: Option<string>,
-  promoCode: Option<string>,
+  promoCode?: Option<string>,
 |};
 
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
