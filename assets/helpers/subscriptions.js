@@ -264,6 +264,10 @@ function getPromotionWeeklyProductPrice(
   return fixDecimals(subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod]);
 }
 
+function getRegularPaperPrice(billingPlan: PaperBillingPlan): Price {
+  return paperSubscriptionPrices[billingPlan];
+}
+
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
   const planPrices: PlanPrice[] = getPlanPrices('Paper', 'GBPCountries');
 
@@ -274,7 +278,7 @@ function getPaperPrice(billingPlan: PaperBillingPlan): Price {
     }
   }
 
-  return paperSubscriptionPrices[billingPlan];
+  return getRegularPaperPrice(billingPlan);
 }
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
@@ -347,5 +351,6 @@ export {
   getNewsstandPrice,
   getDigitalPrice,
   getPaperPrice,
+  getRegularPaperPrice,
   fixDecimals,
 };
