@@ -1896,6 +1896,9 @@
         margin-left: .625rem
       }
 
+      .form__radio-group--pills .amounts__placeholder .form__radio-group-input + .form__radio-group-label {
+        border: none;
+      }
       .form__radio-group--pills .form__radio-group-input + .form__radio-group-label {
         border: .0625rem solid #ffe500;
         border-radius: 1.5625rem;
@@ -2207,7 +2210,7 @@
 
     <div id="@mainId" @{mapToDataset(data)}>
 
-      <div><div class="gu-content gu-content--contribution-form"><header role="banner" class="gu-content__header"><a class="glogo" href="https://www.theguardian.com"><svg class="svg-roundel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 69 69" preserveAspectRatio="xMinYMid" aria-labelledby="svg-roundel-title"><title id="svg-roundel-title">
+      <div aria-hidden="true"><div class="gu-content gu-content--contribution-form"><header role="banner" class="gu-content__header"><a class="glogo" href="https://www.theguardian.com"><svg class="svg-roundel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 69 69" preserveAspectRatio="xMinYMid" aria-labelledby="svg-roundel-title"><title id="svg-roundel-title">
         The Guardian</title><path class="svg-roundel__bg" d="M34.5 0C15.446 0 0 15.446 0 34.5 0 53.554 15.446 69 34.5 69 53.554 69 69 53.554 69 34.5A34.5 34.5 0 0 0 34.5 0" fill="#fff"></path><path class="svg-roundel__g" d="M40.25 8.552c4.46.711 10.123 3.752 12.15 5.923v9.81h-1.228L40.25 9.655V8.552zm-4.103.613h-.11c-7.802 0-12.04 10.791-12.04 25.335 0 14.556 4.238 25.335 12.04 25.335h.11v1.116c-11.745.797-27.544-8.13-27.139-26.463C8.59 16.179 24.39 7.252 36.147 8.049v1.116zM56 36.793l-3.686 1.594V54.87a29.827 29.827 0 0 1-12.064 5.923V38.08l-4.054-1.337v-1.116H56v1.165z" fill="#121212"></path></svg></a><details class="countryGroups"><summary aria-label="Selected country: United Kingdom (£)"><div class="countryGroups__summary-wrapper"><svg class="svg-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" preserveAspectRatio="xMinYMid"><path d="M23.7,22.4 L45.8,22.4 L45.8,0.5 C40.7,0.7 35.6,1.8 30.8,3.7 C29.3,6 28,8.5 27,11.2 C25.6,14.8 24.5,18.6 23.7,22.4"></path><path d="M22,9.2 C22.2,8.7 22.4,8.2 22.6,7.7 C16.6,11.4 11.6,16.4 7.8,22.4 L18.2,22.4 C19.1,17.9 20.4,13.5 22,9.2"></path><path d="M15.8,50.7 L0.5,50.7 C0.8,56.8 2.3,62.7 4.9,68.2 L17.2,68.2 C16.3,62.4 15.9,56.5 15.8,50.7"></path><path d="M17.2,27.8 L4.9,27.8 C2.3,33.3 0.8,39.2 0.5,45.3 L15.8,45.3 C15.9,39.4 16.4,33.6 17.2,27.8"></path><path d="M78.8,22.4 L88.2,22.4 C84.7,16.9 80.1,12.2 74.7,8.5 C74.8,8.7 74.9,9 75,9.2 C76.6,13.5 77.9,17.9 78.8,22.4"></path><path d="M81.2,45.3 L95.5,45.3 C95.2,39.2 93.7,33.3 91.1,27.8 L79.7,27.8 C80.6,33.6 81.1,39.4 81.2,45.3"></path><path d="M73.3,22.4 C72.5,18.6 71.4,14.8 70,11.2 C69.1,8.7 67.9,6.4 66.5,4.1 C61.6,2.1 56.4,0.9 51.2,0.6 L51.2,22.5 L73.3,22.5 L73.3,22.4 Z"></path><path d="M51.2,68.2 L74.3,68.2 C75.2,62.4 75.7,56.6 75.8,50.7 L51.2,50.7 L51.2,68.2 Z"></path><path d="M79.7,68.2 L91.1,68.2 C93.7,62.7 95.2,56.8 95.5,50.7 L81.2,50.7 C81.1,56.5 80.6,62.4 79.7,68.2"></path><path d="M73.3,73.5 L51.2,73.5 L51.2,95.4 C56.5,95.1 61.6,93.9 66.5,91.9 C67.9,89.7 69.1,87.3 70,84.8 C71.4,81.1 72.5,77.4 73.3,73.5"></path><path d="M23.7,73.5 C24.5,77.3 25.6,81.1 27,84.8 C28,87.5 29.3,90 30.8,92.4 C35.6,94.3 40.7,95.3 45.8,95.6 L45.8,73.6 L23.7,73.5 Z"></path><path d="M45.8,27.8 L22.6,27.8 C21.7,33.6 21.2,39.4 21.1,45.3 L45.8,45.3 L45.8,27.8 Z"></path><path d="M75,86.7 C74.9,87 74.8,87.2 74.7,87.4 C80.1,83.7 84.7,79 88.2,73.5 L78.8,73.5 C77.9,78 76.6,82.4 75,86.7"></path><path d="M75.8,45.3 C75.7,39.4 75.2,33.6 74.3,27.8 L51.2,27.8 L51.2,45.3 L75.8,45.3 Z"></path><path d="M18.2,73.5 L7.8,73.5 C11.6,79.4 16.6,84.5 22.6,88.2 C22.4,87.7 22.1,87.2 22,86.7 C20.4,82.4 19.1,78 18.2,73.5"></path><path d="M21.1,50.7 C21.2,56.6 21.7,62.4 22.6,68.2 L45.7,68.2 L45.7,50.7 L21.1,50.7 Z"></path></svg><span class="countryGroups__label">
         United Kingdom (£)</span><span class="icon icon--arrows"><svg class="svg-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 10" preserveAspectRatio="xMinYMid"><path d="M1.25.5l-.75.75L9 9.5h.95l8.55-8.25-.75-.75L9.5 7.25z"></path></svg></span></div></summary><ul class="countryGroups__list"><li class="countryGroups__item"><a href="/uk/contribute">
         United Kingdom (£)<span class="icon"><svg class="svg-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 14" preserveAspectRatio="xMinYMid"><path d="M1.36 6.9l-.86.888L4.798 14h.409L17.5.865 16.64 0 5.207 10.694z"></path></svg></span></a></li><li class="countryGroups__item"><a href="/us/contribute">
@@ -2230,25 +2233,25 @@
           <li class="form__radio-group-item">
             <span class="amounts__placeholder">
             <input id="contributionAmount-50" class="form__radio-group-input" type="radio" name="contributionAmount" value="50">
-            <label for="contributionAmount-50" class="form__radio-group-label" aria-label="50 pounds">
+            <label for="contributionAmount-50" class="form__radio-group-label">
             </label></span>
           </li>
           <li class="form__radio-group-item">
             <span class="amounts__placeholder">
             <input id="contributionAmount-100" class="form__radio-group-input" type="radio" name="contributionAmount" value="100" checked>
-            <label for="contributionAmount-100" class="form__radio-group-label" aria-label="100 pounds">
+            <label for="contributionAmount-100" class="form__radio-group-label">
           </label></span>
           </li>
           <li class="form__radio-group-item">
             <span class="amounts__placeholder">
             <input id="contributionAmount-250" class="form__radio-group-input" type="radio" name="contributionAmount" value="250">
-            <label for="contributionAmount-250" class="form__radio-group-label" aria-label="250 pounds">
+            <label for="contributionAmount-250" class="form__radio-group-label">
           </label></span>
           </li>
           <li class="form__radio-group-item">
             <span class="amounts__placeholder">
               <input id="contributionAmount-500" class="form__radio-group-input" type="radio" name="contributionAmount" value="500">
-            <label for="contributionAmount-500" class="form__radio-group-label" aria-label="500 pounds">
+            <label for="contributionAmount-500" class="form__radio-group-label">
           </label></span>
           </li>
           <li class="form__radio-group-item">
@@ -2331,7 +2334,7 @@
           }
         </style><div class="zoid-outlet" style="height: 33px;
           transition: all 0.5s ease-in-out 0.3s;"><iframe class="zoid-component-frame zoid-visible" frameborder="0" allowtransparency="true" name="xcomponent__ppbutton__4__pmrhk2leei5ceyzxgy4tiyzvmfrdeirmej2gczzchirhaylzobqwyllcov2hi33oeiwcey3pnvyg63tfnz2faylsmvxhiir2pmrhezlgei5ce5dpoarh2lbcojsw4zdfojigc4tfnz2ceot3ejzgkzrchirhi33qej6syitqojxxa4zchj5se5dzobsseorcojqxoirmej3gc3dvmurdu6zcmvxhmir2ejyhe33eovrxi2lpnyrcyittor4wyzjchj5sey3pnrxxeir2ejrgy5lfeiwce43jpjsseorcojsxg4dpnzzws5tfeiwce3dbmjswyir2ejygc6jcfqrgyylzn52xiir2ejug64tjpjxw45dbnqrcyitgovxgi2lom5uwg33oomrduztbnrzwk7jmejrw63lnnf2ceotuoj2wklbcozqwy2lemf2gkir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitgovxgi2lom4rdu6zcmfwgy33xmvsceos3luwcezdjonqwy3dpo5swiir2lmrgg4tfmruxiirmej3gk3tnn4rf2lbcojsw2zlnmjsxezleei5fwitqmf4xaylmeiwcey3smvsgs5bcluwce4tfnvsw2ytfoirdu6zcl5pxi6lqmvpv6ir2ejpv6ztvnzrxi2lpnzpv6it5puwce33oinwgsy3lei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejygc6lnmvxhiir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitpnzaxk5din5zgs6tfei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejsg63lbnfxceorcon2xa4dpoj2c45dimvtxkylsmruwc3romnxw2irmejzwk43tnfxw4skeei5cemjymyzwcmbqgu4dgx3hme2hi5lnpj4wq2jsoryselbcmj2xi5dpnzjwk43tnfxw4skeei5cenzqgbtdgodgg5rdox3hme2hi5lnpj4wq2jsoryselbcnvsxiyjchj5x2lbconxxk4tdmurduitnmfxhkylmeiwce4dsmvtgk5ddnbgg6z3jnyrduztbnrzwklbcn5xfezlomrsxeir2pmrf6x3upfygkx27ei5cex27mz2w4y3unfxw4x27ej6syitpnzcxe4tpoirdu6zcl5pxi6lqmvpv6ir2ejpv6ztvnzrxi2lpnzpv6it5fqrg63sdmfxggzlmei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7jmejwg6y3bnrsseorcmvxf6vkteiwce3dpm5ggk5tfnqrduitxmfzg4irmejqxoyljorig64dvobbhe2lem5sseot3ejpv65dzobsv6xzchirf6x3govxgg5djn5xf6xzcpuwce43vobygyzlnmvxhiir2pmrgozlukbqxs3lfnz2e64dunfxw44zchj5sex27or4xazk7l4rduis7l5thk3tdoruw63s7l4rh2lbcmfsgiudbpfwwk3tuirsxiyljnrzseot3ejpv65dzobsv6xzchirf6x3govxgg5djn5xf6xzcpuwcez3forigc6lnmvxhirdforqws3dtei5hwis7l52hs4dfl5pseorcl5pwm5lomn2gs33ol5pse7l5fqrhizltoqrdu6zcmfrxi2lpnyrduitdnbswg23pov2ce7jmej2wszbchirdenrrmfrdqyjrgjrcelbcozsxe43jn5xceorcgqrh27jmejuwiir2eiydqyzvmi3dgmdcgercyiten5wwc2loei5ce2duoryhgorpf5zxk4dqn5zhiltunbswo5lbojsgsylofzrw63jcpu__" title="ppbutton" scrolling="no" allowpaymentrequest="allowpaymentrequest" src="https://www.paypal.com/webapps/hermes/button?env=production&amp;style.color=blue&amp;style.size=responsive&amp;style.label=pay&amp;style.layout=horizontal&amp;style.fundingicons=false&amp;commit=1&amp;funding.disallowed=credit%2Cvenmo&amp;funding.remembered=paypal%2Ccredit&amp;domain=support.theguardian.com&amp;sessionID=18f3a00583_ga4tumzyhi2tq&amp;buttonSessionID=700f38f7b7_ga4tumzyhi2tq&amp;locale.x=en_US&amp;logLevel=warn&amp;sdkMeta=eyJ1cmwiOiJodHRwczovL3d3dy5wYXlwYWxvYmplY3RzLmNvbS9hcGkvY2hlY2tvdXQuanMifQ%3D%3D&amp;uid=261ab8a12b&amp;version=4&amp;xcomponent=1" style="background-color: transparent;"></iframe></div></div></div></div><div class="form__submit--contribution"><button class="button button--right-arrow form__submit-button" type="submit" aria-describedby="accessibility-hint-submit-contribution">
-          &nbsp;<svg class="svg-arrow-right-straight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 17.89" preserveAspectRatio="xMinYMid"><path d="M20 9.35l-9.08 8.54-.86-.81 6.54-7.31H0V8.12h16.6L10.06.81l.86-.81L20 8.51v.84z"></path></svg></button></div></div><div class="component-terms-privacy"><div class="component-terms-privacy__change">
+          &nbsp;</button></div></div><div class="component-terms-privacy"><div class="component-terms-privacy__change">
           Monthly contributions are billed each month and annual contributions are billed once a year. You can change how much you give or cancel your contributions at any time.</div><div class="component-terms-privacy__terms">
           By proceeding, you are agreeing to our <a href="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions">
           Terms and Conditions</a>
