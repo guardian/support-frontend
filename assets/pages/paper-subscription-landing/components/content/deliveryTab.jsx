@@ -30,7 +30,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     <ProductPageTextBlock title="How home delivery works">
       <p>
           If you live in Greater London (within the M25), you
-          can use The Guardian’s home delivery service. If don't, you can
+          can use The Guardian’s home delivery service. If not, you can
           still <LinkTo tab="collection" setTabAction={setTabAction} >subscribe using our voucher scheme</LinkTo>.
       </p>
       <OrderedList items={[
