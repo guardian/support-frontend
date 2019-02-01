@@ -4,7 +4,7 @@ import React, { type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 
-import './veggieButton.scss';
+import './veggieBurgerButton.scss';
 
 
 type PropTypes = {|
@@ -16,12 +16,12 @@ type PropTypes = {|
   style: Option<{}>
 |}
 
-const VeggieButton = ({
+const VeggieBurgerButton = ({
   children, label, getRef, ...otherProps
 }: PropTypes) =>
   (
     <button
-      className="component-header-veggie-button"
+      className="component-veggie-burger-button"
       ref={getRef}
       {...otherProps}
     >
@@ -30,11 +30,11 @@ const VeggieButton = ({
     </button>
   );
 
-VeggieButton.defaultProps = {
+VeggieBurgerButton.defaultProps = {
   'aria-haspopup': null, // eslint-disable-line react/default-props-match-prop-types
   onClick: null,
   style: null,
   getRef: null,
 };
 
-export default VeggieButton;
+export default VeggieBurgerButton;

@@ -30,12 +30,12 @@
   }
 }
 
-.component-header-mobile-menu {
+.component-header-mobile-menu-toggler {
   display: none;
   .component-header--display-veggie-burger & {
     display: block;
   }
-  & > .component-header-veggie-button {
+  & > .component-veggie-burger-button {
     margin-left: $gu-h-spacing / 4;
     /*aligned with the logo*/
     margin-top: 22px; 

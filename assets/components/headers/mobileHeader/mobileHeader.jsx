@@ -8,7 +8,7 @@ import { type Option } from 'helpers/types/option';
 import SvgClose from 'components/svgs/close';
 
 import { links } from '../links';
-import VeggieButton from '../veggieButton/veggieButton';
+import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 
 import './mobileHeader.scss';
 
@@ -39,13 +39,13 @@ const MobileHeader = ({ onClose, closeButtonAt }: PropTypes) =>
     ))}
         </ul>
       </nav>
-      <VeggieButton
+      <VeggieBurgerButton
         style={closeButtonAt && { top: closeButtonAt.y }}
         label="close"
         onClick={onClose}
       >
         <SvgClose />
-      </VeggieButton>
+      </VeggieBurgerButton>
     </div>
   );
 

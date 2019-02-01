@@ -8,9 +8,9 @@ import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
 
 import MobileHeader, { type Position } from '../mobileHeader/mobileHeader';
-import VeggieButton from '../veggieButton/veggieButton';
+import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 
-export default class MobileMenuButton extends Component<{}, {menuOpen: boolean, buttonPosition: Position}> {
+export default class MobileMenuToggler extends Component<{}, {menuOpen: boolean, buttonPosition: Position}> {
 
   state = {
     buttonPosition: null,
@@ -22,8 +22,8 @@ export default class MobileMenuButton extends Component<{}, {menuOpen: boolean, 
   render() {
     const { menuOpen } = this.state;
     return (
-      <div className="component-header-mobile-menu">
-        <VeggieButton
+      <div className="component-header-mobile-menu-toggler">
+        <VeggieBurgerButton
           getRef={(r) => { this.buttonRef = r; }}
           aria-haspopup="dialog"
           label="menu"
@@ -41,7 +41,7 @@ export default class MobileMenuButton extends Component<{}, {menuOpen: boolean, 
           }}
         >
           <SvgMenu />
-        </VeggieButton>
+        </VeggieBurgerButton>
         <Dialog
           aria-label="Menu"
           open={menuOpen}

@@ -10,7 +10,7 @@ import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
 import { links } from '../links';
-import MobileMenuButton from './mobileMenuButton';
+import MobileMenuToggler from './mobileMenuToggler';
 
 import './header.scss';
 
@@ -134,7 +134,7 @@ export default class Header extends Component<PropTypes, State> {
           <div className="component-header__row">
             <TopNav utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
             {displayNavigation &&
-              <MobileMenuButton />
+              <MobileMenuToggler />
             }
           </div>
           {displayNavigation &&
