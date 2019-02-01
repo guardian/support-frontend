@@ -30,13 +30,12 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     <ProductPageTextBlock title="How home delivery works">
       <p>
           If you live in Greater London (within the M25), you
-          can use The Guardian’s home delivery service. Don’t
-          worry if you live outside this area you can
+          can use The Guardian’s home delivery service. If not, you can
           still <LinkTo tab="collection" setTabAction={setTabAction} >subscribe using our voucher scheme</LinkTo>.
       </p>
       <OrderedList items={[
         'Select your subscription below and checkout',
-        'Your subscribing deliveries will begin as quickly as five days from you subscribing',
+        'You’ll receive your first newspaper as quickly as five days from you subscribing',
         ]}
       />
     </ProductPageTextBlock>
@@ -44,7 +43,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     <ProductPageTextBlock title="Giving you peace of mind">
       <UnorderedList items={[
         'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
-        'We can’t delivery to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
+        'We can’t deliver to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
         'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',
         ]}
       />

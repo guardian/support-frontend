@@ -9,10 +9,7 @@ import { compose } from 'redux';
 import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
-import { type CountryGroupId, fromCountry } from 'helpers/internationalisation/countryGroup';
-import { Annual, type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
-import { getDigitalPrice } from 'helpers/subscriptions';
-import { showPrice } from 'helpers/internationalisation/price';
+import { Annual, Monthly } from 'helpers/billingPeriods';
 
 import { Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
@@ -35,6 +32,11 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import type { ErrorReason } from 'helpers/errorReasons';
+import { digitalPackProductPrice } from 'helpers/productPrice/productPrices';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { PriceLabel } from 'components/priceLabel/priceLabel';
+import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
+
 import {
   type FormActionCreators,
   formActionCreators,
@@ -46,7 +48,6 @@ import {
 } from '../digitalSubscriptionCheckoutReducer';
 import { countrySupportsDirectDebit } from '../helpers/paymentProviders';
 
-
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -54,6 +55,7 @@ type PropTypes = {|
   signOut: typeof signOut,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
+  productPrices: ProductPrices,
   ...FormActionCreators,
 |};
 
@@ -65,27 +67,9 @@ function mapStateToProps(state: State) {
     ...getFormFields(state),
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
+    productPrices: state.page.checkout.productPrices,
   };
 }
-
-
-// ----- Functions ----- //
-
-function getPrice(country: Option<IsoCountry>, frequency: DigitalBillingPeriod): string {
-
-  const cgId: ?CountryGroupId = fromCountry(country || '');
-
-  if (cgId) {
-
-    const price = getDigitalPrice(cgId, frequency);
-    return `${showPrice(price, true)} `;
-
-  }
-
-  return '';
-
-}
-
 
 // ----- Form Fields ----- //
 
@@ -119,12 +103,30 @@ function CheckoutForm(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
+  const monthlyPriceLabel = props.country !== null ?
+    (<PriceLabel
+      country={props.country}
+      productPrice={digitalPackProductPrice(props.productPrices, Monthly, props.country)}
+      billingPeriod={Monthly}
+    />) : '';
+
+  const annualPriceLabel = props.country !== null ?
+    (<PriceLabel
+      country={props.country}
+      productPrice={digitalPackProductPrice(props.productPrices, Annual, props.country)}
+      billingPeriod={Annual}
+    />) : '';
+
   return (
     <ProductPageContentBlock modifierClasses={['your-details']}>
       <Outset>
         <Checkout>
-          <Form onSubmit={(ev) => { ev.preventDefault(); props.submitForm(); }}>
-            <FormSection title="Your details" >
+          <Form onSubmit={(ev) => {
+            ev.preventDefault();
+            props.submitForm();
+          }}
+          >
+            <FormSection title="Your details">
               <Input1
                 id="first-name"
                 label="First name"
@@ -154,11 +156,19 @@ function CheckoutForm(props: PropTypes) {
                     </CheckoutExpander>
                     <CheckoutExpander copy="Not you?">
                       <p>
-                        <Button appearance="greyHollow" icon={null} type="button" aria-label={null} onClick={() => props.signOut()}>Sign out</Button> and create a new account.
+                        <Button
+                          appearance="greyHollow"
+                          icon={null}
+                          type="button"
+                          aria-label={null}
+                          onClick={() => props.signOut()}
+                        >
+                          Sign out
+                        </Button> and create a new account.
                       </p>
                     </CheckoutExpander>
                   </span>
-              )}
+                )}
               />
               <Select1
                 id="country"
@@ -194,16 +204,21 @@ function CheckoutForm(props: PropTypes) {
             <FormSection title="How often would you like to pay?">
               <Fieldset>
                 <RadioInput
-                  text={`${getPrice(props.country, Monthly)}Every month`}
+                  text={monthlyPriceLabel}
                   name="billingPeriod"
                   checked={props.billingPeriod === Monthly}
                   onChange={() => props.setBillingPeriod(Monthly)}
                 />
                 <RadioInput
-                  text={`${getPrice(props.country, Annual)}Every year`}
+                  text={annualPriceLabel}
                   name="billingPeriod"
                   checked={props.billingPeriod === Annual}
                   onChange={() => props.setBillingPeriod(Annual)}
+                />
+                <PromotionSummary
+                  country={props.country}
+                  productPrices={props.productPrices}
+                  billingPeriod={props.billingPeriod}
                 />
               </Fieldset>
             </FormSection>
@@ -225,7 +240,7 @@ function CheckoutForm(props: PropTypes) {
                   />
                 </Fieldset>
               </div>
-          }
+              }
               <CheckoutCopy
                 strong="Money Back Guarantee."
                 copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
@@ -235,7 +250,9 @@ function CheckoutForm(props: PropTypes) {
                 copy="There is no set time on your agreement so you can stop your subscription anytime."
               />
               <DirectDebitPopUpForm
-                onPaymentAuthorisation={(pa: PaymentAuthorisation) => { props.onPaymentAuthorised(pa); }}
+                onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
+                  props.onPaymentAuthorised(pa);
+                }}
               />
             </FormSection>
             <FormSection>
@@ -253,4 +270,7 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, { ...formActionCreators, signOut })(CheckoutForm);
+export default connect(mapStateToProps, {
+  ...formActionCreators,
+  signOut,
+})(CheckoutForm);

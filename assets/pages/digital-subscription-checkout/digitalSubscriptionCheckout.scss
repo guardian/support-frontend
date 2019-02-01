@@ -29,6 +29,7 @@
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 @import '~components/directDebit/directDebitForm/directDebitForm';
+@import '~components/promotionSummary/promotionSummary';
 
 
 // ----- Page-Specific Styles ----- //
@@ -64,8 +65,8 @@
     .component-checkout-heading {
       position: relative;
       .component-left-margin-section__content {
-        box-sizing: border-box;  
-      }  
+        box-sizing: border-box;
+      }
     }
   }
 
@@ -79,13 +80,13 @@
         margin-top: $gu-v-spacing / 2;
       }
     }
-  }  
+  }
 
   .component-marketing-consent {
     border-bottom: 0;
     @include mq($from: desktop) {
       position: relative;
-      padding-bottom: $gu-v-spacing * 4;  
+      padding-bottom: $gu-v-spacing * 4;
     }
     .svg-newsletters {
       display: block;
@@ -94,9 +95,9 @@
         bottom: 0;
         width: auto;
         max-height: 95%;
-        left: gu-span(7); 
+        left: gu-span(7);
       }
     }
   }
-  
+
 }

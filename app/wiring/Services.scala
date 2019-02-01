@@ -1,13 +1,15 @@
 package wiring
 
-import admin.{AllSettingsProvider, SettingsProvider}
+import admin.AllSettingsProvider
 import cats.syntax.either._
+import com.gu.support.config.Stages.PROD
+import com.gu.support.pricing.PriceSummaryServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
-import services.{IdentityService, _}
 import services.aws.AwsS3Client.s3
 import services.paypal.PayPalNvpServiceProvider
 import services.stepfunctions.{Encryption, StateWrapper, SupportWorkersClient}
+import services.{IdentityService, _}
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -39,4 +41,7 @@ trait Services {
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
   lazy val allSettingsProvider: AllSettingsProvider = AllSettingsProvider.fromConfig(appConfig).valueOr(throw _)
+
+  lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =
+    new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider)
 }
