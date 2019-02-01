@@ -37,6 +37,7 @@ trait Controllers {
   )
 
   lazy val digitalPackController = new DigitalSubscription(
+    priceSummaryServiceProvider,
     supportWorkersClient,
     assetsResolver,
     actionRefiners,

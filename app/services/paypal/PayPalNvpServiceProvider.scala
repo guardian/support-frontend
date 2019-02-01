@@ -1,9 +1,9 @@
 package services.paypal
 
 import com.gu.support.config.{PayPalConfig, PayPalConfigProvider}
+import com.gu.support.touchpoint.TouchpointServiceProvider
 import play.api.libs.ws.WSClient
 import services.PayPalNvpService
-import services.touchpoint.TouchpointServiceProvider
 
 import scala.concurrent.ExecutionContext
 

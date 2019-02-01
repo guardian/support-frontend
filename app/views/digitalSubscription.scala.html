@@ -4,6 +4,11 @@
 @import com.gu.identity.play.IdUser
 @import com.gu.support.config._
 @import helper.CSRF
+@import com.gu.support.pricing.ProductPrices
+@import views.ViewHelpers._
+@import io.circe.syntax._
+@import com.gu.support.encoding.CustomCodecs._
+
 @(
   title: String,
   id: String,
@@ -12,6 +17,7 @@
   csrf: Option[String],
   user: IdUser,
   uatMode: Boolean,
+  productPrices: ProductPrices,
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
   payPalConfig: PayPalConfig
@@ -27,6 +33,7 @@
         email: "@user.primaryEmailAddress"
       };
 
+      window.guardian.productPrices = @Html(outputJson(productPrices))
 
       window.guardian.stripeKeyDefaultCurrencies = {
         REGULAR: {

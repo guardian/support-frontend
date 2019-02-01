@@ -2,13 +2,13 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import * as React from 'react';
 
 
 // ----- Types ----- //
 
 type PropTypes = {
-  text: string,
+  text: string | React.Node,
 };
 
 

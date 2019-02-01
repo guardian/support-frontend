@@ -9,4 +9,15 @@ export type DigitalBillingPeriod = typeof Monthly | typeof Annual;
 export type WeeklyBillingPeriod = typeof SixForSix | typeof Quarterly | typeof Annual;
 export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
 
-export { Annual, Monthly, Quarterly, SixForSix };
+function billingPeriodNoun(billingPeriod: BillingPeriod) {
+  switch (billingPeriod) {
+    case Annual:
+      return 'Year';
+    case Quarterly:
+      return 'Quarter';
+    default:
+      return 'Month';
+  }
+}
+
+export { Annual, Monthly, Quarterly, SixForSix, billingPeriodNoun };
