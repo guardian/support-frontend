@@ -168,7 +168,7 @@ const Sales: Sale[] = [
           landingPage: {
             heading: 'The Guardian newspaper subscriptions',
             subHeading: 'Subscribe and save on the joy of print',
-            standfirst: 'We offer two different subscription types: collection and home delivery.',
+            standfirst: 'We offer two different subscription types: voucher booklet and home delivery.',
           },
           bundle: {
             heading: 'Paper',
