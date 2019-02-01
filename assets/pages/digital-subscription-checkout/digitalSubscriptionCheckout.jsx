@@ -24,7 +24,7 @@ import './digitalSubscriptionCheckout.scss';
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detectCountryGroup();
-const country: IsoCountry = detectCountry(countryGroupId);
+const country: IsoCountry = detectCountry();
 
 const reactElementId: {
   [CountryGroupId]: string,
