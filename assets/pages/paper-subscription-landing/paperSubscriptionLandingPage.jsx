@@ -85,7 +85,7 @@ const content = (
       {flashSaleIsActive('Paper', 'GBPCountries') &&
         <ProductPageContentBlock>
           <ProductPageTextBlock title="Promotion terms and conditions">
-            <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full 6 for 6 promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
+            <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/GCB80X/terms?country=${subsCountry}`}>here</a>.
             </p>
           </ProductPageTextBlock>
         </ProductPageContentBlock>
