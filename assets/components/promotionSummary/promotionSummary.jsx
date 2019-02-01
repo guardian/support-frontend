@@ -24,7 +24,7 @@ const displayPrice = (glyph: string, price: number) => `${glyph}${fixDecimals(pr
 const billingPeriodQuantifier = (numberOfBillingPeriods: number, noun: string) =>
   (numberOfBillingPeriods > 1 ?
     `/${noun} for ${numberOfBillingPeriods} ${noun}s` :
-    `for 1 ${noun}`);
+    ` for 1 ${noun}`);
 
 
 function getSummary(
@@ -42,7 +42,7 @@ function getSummary(
     return `${discountCopy}, ${standardCopy}`;
   }
 
-  return `${discountedPrice}/${noun}`;
+  return null;
 }
 
 function discountSummary(
@@ -75,8 +75,7 @@ function PromotionSummary(props: PropTypes) {
     const productPrice = digitalPackProductPrice(props.productPrices, props.billingPeriod, country);
     if (productPrice.promotion &&
       productPrice.promotion.discountedPrice &&
-      productPrice.promotion.discount &&
-      productPrice.promotion.numberOfDiscountedPeriods) {
+      productPrice.promotion.discount) {
       return discountSummary(
         productPrice.price,
         productPrice.promotion.promoCode,
@@ -92,4 +91,4 @@ function PromotionSummary(props: PropTypes) {
   return null;
 }
 
-export { PromotionSummary };
+export { PromotionSummary, getSummary };
