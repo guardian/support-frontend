@@ -248,13 +248,14 @@ $guss-webfonts: (
 
 // ----- Garnett Fonts ----- //
 
-$gu-gt-fonts-url: "//interactive.guim.co.uk/fonts/garnett";
+$gu-gt-fonts-url: "//pasteup.guim.co.uk/webfonts/1.0.0/";
+$gu-gt-font-variant: "noalts-not-hinted";
 
 @function gu-font-src($filename) {
     @return 
-        url("#{$gu-gt-fonts-url + "/" + $filename}.woff2") format("woff2"),
-        url("#{$gu-gt-fonts-url + "/" + $filename}.woff") format("woff"),
-        url("#{$gu-gt-fonts-url + "/" + $filename}.ttf") format("ttf");
+        url("#{$gu-gt-fonts-url + "/" + $gu-gt-font-variant + "/" $filename}.woff2") format("woff2"),
+        url("#{$gu-gt-fonts-url + "/" + $gu-gt-font-variant + "/" $filename}.woff") format("woff"),
+        url("#{$gu-gt-fonts-url + "/" + $gu-gt-font-variant + "/" $filename}.ttf") format("ttf");
 }
 
 @font-face {
