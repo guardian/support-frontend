@@ -300,13 +300,13 @@ function sortSalesByStartTimesDescending(a: Sale, b: Sale) {
 }
 
 function getTimeTravelDays() {
-  return Number(getQueryParameter('timeTravelDays')) * 86400000 || null;
+  return Number(getQueryParameter('timeTravelDays')) || null;
 }
 
 function getActiveFlashSales(product: SubscriptionProduct, countryGroupId: CountryGroupId = detect()): Sale[] {
 
   const timeTravelDays = getTimeTravelDays();
-  const now = timeTravelDays ? Date.now() + (timeTravelDays) : Date.now();
+  const now = timeTravelDays ? Date.now() + (timeTravelDays * 86400000) : Date.now();
 
   const sales = Sales.filter(sale =>
     sale.subscriptionProduct === product &&
