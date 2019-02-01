@@ -35,7 +35,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
       </p>
       <OrderedList items={[
         'Select your subscription below and checkout',
-        'You'll receive your first newspaper as quickly as five days from you subscribing',
+        'You\'ll receive your first newspaper as quickly as five days from you subscribing',
         ]}
       />
     </ProductPageTextBlock>
