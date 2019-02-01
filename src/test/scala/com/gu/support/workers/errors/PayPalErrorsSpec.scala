@@ -10,12 +10,10 @@ import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodDigitalPackJson
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import com.gu.test.tags.annotations.IntegrationTest
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
-@IntegrationTest
 class PayPalErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServicesCreator {
   "Timeouts from PayPal" should "throw a NonFatalException" in {
     val createPaymentMethod = new CreatePaymentMethod(timeOutServices)
