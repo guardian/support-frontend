@@ -5,6 +5,7 @@
   height: 0;
   width: 0;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
   &::backdrop {
     background: rgba(0,0,0,0);
   }  

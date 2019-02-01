@@ -10,7 +10,7 @@ import SvgClose from 'components/svgs/close';
 import { links } from '../links';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 
-import './mobileHeader.scss';
+import './mobileMenu.scss';
 
 export type Position = Option<{x: number, y: number}>;
 
@@ -22,7 +22,7 @@ export type PropTypes = {|
 // ----- Component ----- //
 
 
-const MobileHeader = ({ onClose, closeButtonAt }: PropTypes) =>
+const MobileMenu = ({ onClose, closeButtonAt }: PropTypes) =>
   (
     <div
       className="component-mobile-header"
@@ -49,8 +49,8 @@ const MobileHeader = ({ onClose, closeButtonAt }: PropTypes) =>
     </div>
   );
 
-MobileHeader.defaultProps = {
+MobileMenu.defaultProps = {
   closeButtonAt: null,
 };
 
-export default MobileHeader;
+export default MobileMenu;

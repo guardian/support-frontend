@@ -74,7 +74,7 @@ $gu-fonts: (
 @mixin gu-fontset-nav-desktop($size-only: false) {
 	@include gu-typeface(headline, 20, $size-only);
 	@if $size-only == false {
-		font-weight: 700;
+		font-weight: 900;
 	}
 }
 

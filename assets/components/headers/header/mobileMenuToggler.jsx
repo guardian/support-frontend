@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
 
-import MobileHeader, { type Position } from '../mobileHeader/mobileHeader';
+import MobileMenu, { type Position } from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 
 export default class MobileMenuToggler extends Component<{}, {menuOpen: boolean, buttonPosition: Position}> {
@@ -47,7 +47,7 @@ export default class MobileMenuToggler extends Component<{}, {menuOpen: boolean,
           open={menuOpen}
           onStatusChange={(status) => { this.setState({ menuOpen: status }); }}
         >
-          <MobileHeader
+          <MobileMenu
             closeButtonAt={this.state.buttonPosition}
             onClose={() => { this.setState({ menuOpen: false }); }}
           />
