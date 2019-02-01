@@ -77,9 +77,9 @@ class Dialog extends Component<PropTypes> {
     const {
       open, children, onStatusChange, blocking, styled, ...otherProps
     } = this.props;
-
     return (
-      <dialog // eslint-disable-line jsx-a11y/no-redundant-roles
+    // eslint-disable-next-line jsx-a11y/no-redundant-roles, jsx-a11y/no-noninteractive-element-interactions
+      <dialog
         className={classNameWithModifiers('component-dialog', [
           open ? 'open' : null,
           styled ? 'styled' : null,
@@ -91,6 +91,11 @@ class Dialog extends Component<PropTypes> {
         onOpen={() => { onStatusChange(true); }}
         onCancel={() => { onStatusChange(false); }}
         ref={(d) => { this.ref = (d: any); }}
+        onKeyUp={((ev) => {
+          if (ev.key === 'Escape') {
+            onStatusChange(false);
+          }
+        })}
         {...otherProps}
       >
         <div className="component-dialog__contents">
