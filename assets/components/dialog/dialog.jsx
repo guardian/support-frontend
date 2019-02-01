@@ -14,10 +14,10 @@ import './dialog.scss';
 
 export type PropTypes = {|
   onStatusChange: (boolean) => void,
-  modal: boolean,
+  styled: boolean,
   open: boolean,
   'aria-label': Option<string>,
-  dismissOnBackgroundClick: boolean,
+  blocking: boolean,
   children: Node
 |};
 
@@ -28,9 +28,9 @@ class Dialog extends Component<PropTypes> {
 
   static defaultProps = {
     onStatusChange: () => {},
-    modal: true,
+    styled: true,
     open: false,
-    dismissOnBackgroundClick: false,
+    blocking: true,
   }
 
   componentDidMount() {
@@ -49,17 +49,20 @@ class Dialog extends Component<PropTypes> {
 
   open() {
     if (this.ref && this.ref.showModal) {
-      if (this.props.modal) {
-        this.ref.showModal();
-      } else {
-        this.ref.show();
-      }
+      this.ref.showModal();
     }
-    requestAnimationFrame(() => {
-      if (this.ref) {
-        this.ref.focus();
-      }
-    });
+    /*
+    if the browser supports <dialog>
+    its gonna be better than us
+    at dealing with auto focus
+    */
+    if (this.ref && !this.ref.showModal) {
+      requestAnimationFrame(() => {
+        if (this.ref) {
+          this.ref.focus();
+        }
+      });
+    }
   }
 
   close() {
@@ -72,19 +75,27 @@ class Dialog extends Component<PropTypes> {
 
   render() {
     const {
-      open, modal, children, onStatusChange, dismissOnBackgroundClick, ...otherProps
+      open, children, onStatusChange, blocking, styled, ...otherProps
     } = this.props;
-
     return (
-      <dialog // eslint-disable-line jsx-a11y/no-redundant-roles
-        className={classNameWithModifiers('component-dialog', [modal ? 'modal' : null, open ? 'open' : null])}
-        aria-modal={modal}
+    // eslint-disable-next-line jsx-a11y/no-redundant-roles, jsx-a11y/no-noninteractive-element-interactions
+      <dialog
+        className={classNameWithModifiers('component-dialog', [
+          open ? 'open' : null,
+          styled ? 'styled' : null,
+        ])}
+        aria-modal
         aria-hidden={!open}
         tabIndex="-1"
         role="dialog"
         onOpen={() => { onStatusChange(true); }}
         onCancel={() => { onStatusChange(false); }}
         ref={(d) => { this.ref = (d: any); }}
+        onKeyUp={((ev) => {
+          if (ev.key === 'Escape') {
+            onStatusChange(false);
+          }
+        })}
         {...otherProps}
       >
         <div className="component-dialog__contents">
@@ -97,13 +108,11 @@ class Dialog extends Component<PropTypes> {
             }}
           />
         </div>
-        {modal &&
-          <div
-            className="component-dialog__backdrop"
-            aria-hidden
-            onClick={() => dismissOnBackgroundClick && onStatusChange(false)}
-          />
-        }
+        <div
+          className="component-dialog__backdrop"
+          aria-hidden
+          onClick={() => !blocking && onStatusChange(false)}
+        />
       </dialog>
     );
   }

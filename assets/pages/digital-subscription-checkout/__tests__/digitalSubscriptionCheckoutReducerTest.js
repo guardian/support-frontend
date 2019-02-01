@@ -10,6 +10,8 @@ jest.mock('ophan', () => {});
 
 describe('Digital Subscription Checkout Reducer', () => {
 
+  global.guardian = { productPrices: null };
+
   it('should handle SET_STAGE to "thankyou"', () => {
 
     const stage: Stage = 'thankyou';

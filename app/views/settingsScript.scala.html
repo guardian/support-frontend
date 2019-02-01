@@ -1,9 +1,9 @@
 @import admin.AllSettings
-@import views.ViewHelpers.printSettings
+@import views.ViewHelpers.outputJson
 
 @(settings: AllSettings)
 
 <script type="text/javascript">
     window.guardian = window.guardian || {};
-    guardian.settings = @Html(printSettings(settings));
+    guardian.settings = @Html(outputJson(settings));
 </script>

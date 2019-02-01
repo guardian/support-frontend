@@ -28,9 +28,9 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
-
 
 // ----- Types ----- //
 
@@ -58,6 +58,7 @@ type CheckoutState = {|
   submissionError: ErrorReason | null,
   formSubmitted: boolean,
   isTestUser: boolean,
+  productPrices: ProductPrices,
 |};
 
 export type State = ReduxState<{|
@@ -168,6 +169,7 @@ function initReducer(countryGroupId: CountryGroupId) {
   const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInurl === 'Monthly' || billingPeriodInurl === 'Annual'
     ? billingPeriodInurl
     : Monthly;
+  const { productPrices } = window.guardian;
 
   const initialState = {
     stage: 'checkout',
@@ -183,6 +185,7 @@ function initReducer(countryGroupId: CountryGroupId) {
     submissionError: null,
     formSubmitted: false,
     isTestUser: isTestUser(),
+    productPrices,
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
