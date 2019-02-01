@@ -24,7 +24,6 @@ function redirectToDigitalPage() {
     const { plan } = state.page.plan;
 
     if (plan) {
-
       const location = getDigitalCheckout(
         referrerAcquisitionData,
         countryGroupId,

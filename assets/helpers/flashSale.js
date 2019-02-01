@@ -204,7 +204,7 @@ const Sales: Sale[] = [
   {
     subscriptionProduct: 'DigitalPack',
     activeRegions: ['UnitedStates', 'AUDCountries', 'International'],
-    startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
+    startTime: new Date(2019, 0, 4).getTime(), // 4 Feb 2019
     endTime: new Date(2019, 3, 1).getTime(), // 31 Mar 2019
     saleDetails: {
       UnitedStates: {
@@ -331,6 +331,18 @@ function getPromoCode(
   return defaultCode;
 }
 
+function getAnnualPlanPromoCode(
+  product: SubscriptionProduct,
+  countryGroupId?: CountryGroupId = detect(),
+  defaultCode: string,
+): string {
+  if (flashSaleIsActive(product, countryGroupId)) {
+    const sale = getActiveFlashSales(product, countryGroupId)[0];
+    return sale && sale.saleDetails[countryGroupId].annualPlanPromoCode;
+  }
+  return defaultCode;
+}
+
 function getIntcmp(
   product: SubscriptionProduct,
   countryGroupId: CountryGroupId = detect(),
@@ -390,6 +402,7 @@ function getFormattedFlashSalePrice(product: SubscriptionProduct, countryGroupId
 export {
   flashSaleIsActive,
   getPromoCode,
+  getAnnualPlanPromoCode,
   getIntcmp,
   getEndTime,
   getSaleCopy,
