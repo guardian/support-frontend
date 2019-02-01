@@ -44,7 +44,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     <ProductPageTextBlock title="Giving you peace of mind">
       <UnorderedList items={[
         'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
-        'We can’t delivery to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
+        'We can’t deliver to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
         'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',
         ]}
       />

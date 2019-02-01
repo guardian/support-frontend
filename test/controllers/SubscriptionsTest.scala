@@ -2,9 +2,15 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.SwitchState.On
-import admin.{PaymentMethodsSwitch, AllSettings, AllSettingsProvider, Switches}
+import admin.{AllSettings, AllSettingsProvider, PaymentMethodsSwitch, Switches}
 import cats.implicits._
+import com.gu.i18n.CountryGroup
+import com.gu.i18n.Currency.GBP
+import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
+import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
+import com.gu.support.promotions.PromoCode
+import com.gu.support.workers.Monthly
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.StringsConfig
@@ -49,7 +55,19 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
 
+      val prices: ProductPrices = Map(
+        CountryGroup.UK ->
+          Map(NoFulfilmentOptions ->
+            Map(NoProductOptions ->
+              Map(Monthly ->
+                Map(GBP -> PriceSummary(10, None))))))
+      val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
+      val priceSummaryService = mock[PriceSummaryService]
+      when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[Option[PromoCode]])).thenReturn(prices)
+      when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
+
       new DigitalSubscription(
+        priceSummaryServiceProvider,
         client,
         assetResolver,
         actionRefiner,

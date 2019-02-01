@@ -101,7 +101,10 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: s3:GetObject
-                Resource: !Sub arn:aws:s3:::membership-private/${Stage}/support-frontend.private.conf
+                Resource:
+                - !Sub arn:aws:s3:::membership-private/${Stage}/support-frontend.private.conf
+                - !Sub arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json
+                - !Sub arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-UAT/catalog.json
         - PolicyName: SettingsBucket
           PolicyDocument:
             Version: 2012-10-17

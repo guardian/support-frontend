@@ -19,7 +19,8 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
     email = "grace@gracehopper.com",
-    telephoneNumber = None
+    telephoneNumber = None,
+    promoCode = None
   )
 
   "validate" should "return true when there are no empty strings" in {

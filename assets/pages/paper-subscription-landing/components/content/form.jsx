@@ -20,7 +20,6 @@ import { setPlan, redirectToCheckout } from '../../paperSubscriptionLandingPageA
 
 const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
 
-
 const getPriceStr = (price: Price): string => {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
     const duration = getDuration('Paper', 'GBPCountries');
@@ -32,10 +31,19 @@ const getPriceStr = (price: Price): string => {
   return getRegularPriceStr(price);
 };
 
-const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> =>
-  (subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0 ? `Save £${getNewsstandSaving(subscription, newsstand)} a month on retail price` : null);
+const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> => {
+  if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
+    return `Save £${getNewsstandSaving(subscription, newsstand)} a month on retail price`;
+  }
+  return null;
+};
 
-const getSavingStr = (price: Price): Option<string> => (flashSaleIsActive('Paper', 'GBPCountries') && getDuration('Paper', 'GBPCountries') ? `${showPrice(price)} a month thereafter` : null);
+const getSavingStr = (price: Price): Option<string> => {
+  if (flashSaleIsActive('Paper', 'GBPCountries') && getDuration('Paper', 'GBPCountries')) {
+    return `${showPrice(price)} a month thereafter`;
+  }
+  return null;
+};
 
 
 // ---- Plans ----- //
