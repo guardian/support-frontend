@@ -25,7 +25,6 @@ import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
 import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 import Form from './components/form';
-import CtaAbTestWrapper from './components/ctaAbTestWrapper';
 
 import './digitalSubscriptionLanding.scss';
 
@@ -73,18 +72,15 @@ const content = (
       />
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
-      <CtaAbTestWrapper>
-        <div />
-        <ProductPageContentBlock type="feature" id="subscribe">
-          <ProductPageTextBlock title="Subscribe to Digital Pack today">
-            <p>Choose how you’d like to pay</p>
-          </ProductPageTextBlock>
-          <Form />
-          <ProductPageInfoChip >
-              You can cancel your subscription at any time
-          </ProductPageInfoChip>
-        </ProductPageContentBlock>
-      </CtaAbTestWrapper>
+      <ProductPageContentBlock type="feature" id="subscribe">
+        <ProductPageTextBlock title="Subscribe to Digital Pack today">
+          <p>Choose how you’d like to pay</p>
+        </ProductPageTextBlock>
+        <Form />
+        <ProductPageInfoChip >
+            You can cancel your subscription at any time
+        </ProductPageInfoChip>
+      </ProductPageContentBlock>
       <IndependentJournalismSection />
       <PromotionPopUp />
     </Page>
