@@ -39,9 +39,9 @@ case class DirectDebitPaymentMethod(
   country: Country = Country.UK,
   city: String,
   postalCode: String,
-  state: String,
+  state: Option[String],
   streetName: String,
-  streetNumber: String,
+  streetNumber: Option[String],
   bankTransferType: String = "DirectDebitUK",
   `type`: String = "BankTransfer"
 ) extends PaymentMethod
