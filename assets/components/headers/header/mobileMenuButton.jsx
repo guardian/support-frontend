@@ -45,8 +45,6 @@ export default class MobileMenuButton extends Component<{}, {menuOpen: boolean, 
         <Dialog
           aria-label="Menu"
           open={menuOpen}
-          modal
-          dismissOnBackgroundClick
           onStatusChange={(status) => { this.setState({ menuOpen: status }); }}
         >
           <MobileHeader
