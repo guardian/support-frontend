@@ -26,7 +26,7 @@ const ContentVoucherFaqBlock = () => (
     />
   }
   >
-    <ProductPageTextBlock title="How to use our vouchers?">
+    <ProductPageTextBlock title="How to use our vouchers">
       <OrderedList items={[
         'Pick your subscription package below',
         'We’ll send you a book of vouchers that contain one voucher per paper in your subscription',
