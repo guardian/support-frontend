@@ -268,11 +268,11 @@ const withParams = ({
 };
 
 function getDigitalPackPromoCode(cgId: CountryGroupId, billingPeriod: DigitalBillingPeriod): string {
-  if(billingPeriod === 'Annual'){
-    return getAnnualPlanPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack)
-  } else {
-    return getPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack)
+  if (billingPeriod === 'Annual') {
+    return getAnnualPlanPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
   }
+  return getPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
+
 }
 
 // Builds a link to the digital pack checkout.
