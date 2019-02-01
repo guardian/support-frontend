@@ -394,4 +394,20 @@ object Fixtures {
         }"""
   )
 
+  val digipackSubscriptionWithDiscountAndFreeTrialJson =
+    """
+        {
+          "state": "eyJyZXF1ZXN0SWQiOiI5NjViOTU1Zi00MmQ4LWEwMDEtMDAwMC0wMDAwMDAwMDAwMDIiLCJ1c2VyIjp7ImlkIjoiMTAwMDAzNDUzIiwicHJpbWFyeUVtYWlsQWRkcmVzcyI6InNzbGpmc2Rsa2ZzZGxmQGd1LmNvbSIsImZpcnN0TmFtZSI6InNsZmtzZGtsZiIsImxhc3ROYW1lIjoic2xka2ZqZHNsZmoiLCJjb3VudHJ5IjoiR0IiLCJzdGF0ZSI6bnVsbCwidGVsZXBob25lTnVtYmVyIjoiIiwiYWxsb3dNZW1iZXJzaGlwTWFpbCI6ZmFsc2UsImFsbG93VGhpcmRQYXJ0eU1haWwiOmZhbHNlLCJhbGxvd0dVUmVsYXRlZE1haWwiOmZhbHNlLCJpc1Rlc3RVc2VyIjpmYWxzZX0sInByb2R1Y3QiOnsiY3VycmVuY3kiOiJHQlAiLCJiaWxsaW5nUGVyaW9kIjoiTW9udGhseSJ9LCJwYXltZW50TWV0aG9kIjp7IlRva2VuSWQiOiJjYXJkX0VSZjV0dzI0NUZjZDRGIiwiU2Vjb25kVG9rZW5JZCI6ImN1c19FUmY1YzZqMnk5QTBYViIsIkNyZWRpdENhcmROdW1iZXIiOiI0MjQyIiwiQ3JlZGl0Q2FyZENvdW50cnkiOiJVUyIsIkNyZWRpdENhcmRFeHBpcmF0aW9uTW9udGgiOjIsIkNyZWRpdENhcmRFeHBpcmF0aW9uWWVhciI6MjAyMiwiQ3JlZGl0Q2FyZFR5cGUiOiJWaXNhIiwiVHlwZSI6IkNyZWRpdENhcmRSZWZlcmVuY2VUcmFuc2FjdGlvbiJ9LCJwcm9tb0NvZGUiOiJESlJIWU1EUzgiLCJzYWxlc0ZvcmNlQ29udGFjdCI6eyJJZCI6IjAwMzZFMDAwMDBWbE9QRFFBMyIsIkFjY291bnRJZCI6IjAwMTZFMDAwMDBmMTdwWVFBUSJ9LCJhY3F1aXNpdGlvbkRhdGEiOnsib3BoYW5JZHMiOnsicGFnZXZpZXdJZCI6ImpybDFyenJjbmo1Z2szajIxc3R3IiwidmlzaXRJZCI6bnVsbCwiYnJvd3NlcklkIjpudWxsfSwicmVmZXJyZXJBY3F1aXNpdGlvbkRhdGEiOnsiY2FtcGFpZ25Db2RlIjpudWxsLCJyZWZlcnJlclBhZ2V2aWV3SWQiOm51bGwsInJlZmVycmVyVXJsIjpudWxsLCJjb21wb25lbnRJZCI6bnVsbCwiY29tcG9uZW50VHlwZSI6bnVsbCwic291cmNlIjpudWxsLCJhYlRlc3RzIjpudWxsLCJxdWVyeVBhcmFtZXRlcnMiOlt7Im5hbWUiOiJkaXNwbGF5Q2hlY2tvdXQiLCJ2YWx1ZSI6InRydWUifV0sImhvc3RuYW1lIjoic3VwcG9ydC50aGVndWxvY2FsLmNvbSIsImdhQ2xpZW50SWQiOiJHQTEuMi4xNTA2NzAxOTg4LjE1NDU0MDkwNzEiLCJ1c2VyQWdlbnQiOiJNb3ppbGxhLzUuMCAoTWFjaW50b3NoOyBJbnRlbCBNYWMgT1MgWCAxMF8xM18yKSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvNzEuMC4zNTc4Ljk4IFNhZmFyaS81MzcuMzYiLCJpcEFkZHJlc3MiOiIxMjcuMC4wLjEifSwic3VwcG9ydEFiVGVzdHMiOltdfX0=",
+          "error": null,
+          "requestInfo": {
+            "encrypted": false,
+            "testUser": false,
+            "failed": false,
+            "messages": [
+              "Payment method is Stripe"
+            ]
+          }
+        }
+      """.asInputStream
+
 }
