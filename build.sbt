@@ -4,7 +4,7 @@ version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
 
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.8"
 
 import scala.sys.process._
 
