@@ -29,7 +29,7 @@ class FreeTrialApplicator(freeTrial: FreeTrialBenefit) extends BenefitApplicator
     val subscription = subscriptionData.subscription
     subscriptionData.copy(
       subscription = subscription.copy(
-        contractEffectiveDate = subscription.contractEffectiveDate.plusDays(freeTrial.duration.getDays)
+        contractAcceptanceDate = subscription.contractAcceptanceDate.plusDays(freeTrial.duration.getDays)
       )
     )
   }

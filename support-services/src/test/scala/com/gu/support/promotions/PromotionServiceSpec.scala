@@ -31,13 +31,13 @@ class PromotionServiceSpec extends FlatSpec with Matchers {
 
   it should "apply a FreeTrial PromoCode" in {
     val result = serviceWithFixtures.applyPromotion(freeTrialPromoCode, UK, validProductRatePlanId, subscriptionData, false)
-    result.subscription.contractEffectiveDate shouldBe subscriptionData.subscription.contractEffectiveDate.plusDays(freeTrialBenefit.get.duration.getDays)
+    result.subscription.contractAcceptanceDate shouldBe subscriptionData.subscription.contractAcceptanceDate.plusDays(freeTrialBenefit.get.duration.getDays)
     result.subscription.promoCode shouldBe Some(freeTrialPromoCode)
   }
 
   it should "apply a double PromoCode" in {
     val result = serviceWithFixtures.applyPromotion(doublePromoCode, UK, validProductRatePlanId, subscriptionData, false)
-    result.subscription.contractEffectiveDate shouldBe subscriptionData.subscription.contractEffectiveDate.plusDays(freeTrialBenefit.get.duration.getDays)
+    result.subscription.contractAcceptanceDate shouldBe subscriptionData.subscription.contractAcceptanceDate.plusDays(freeTrialBenefit.get.duration.getDays)
     result.ratePlanData.length shouldBe 2
     result.subscription.promoCode shouldBe Some(doublePromoCode)
   }
