@@ -1,0 +1,81 @@
+@@font-face {
+    font-family: Guardian Text Egyptian Web;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-Regular.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-Regular.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-Regular.ttf) format("ttf");
+    font-weight: 400
+}
+
+@@font-face {
+    font-family: Guardian Text Egyptian Web;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-RegularItalic.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-RegularItalic.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-RegularItalic.ttf) format("ttf");
+    font-weight: 400;
+    font-style: italic
+}
+
+@@font-face {
+    font-family: Guardian Text Egyptian Web;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-Medium.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-Medium.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextEgyptian-Medium.ttf) format("ttf");
+    font-weight: 600
+}
+
+@@font-face {
+    font-family: Guardian Headline;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Light.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Light.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Light.ttf) format("ttf");
+    font-weight: 200
+}
+
+@@font-face {
+    font-family: Guardian Headline;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-LightItalic.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-LightItalic.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-LightItalic.ttf) format("ttf");
+    font-weight: 200;
+    font-style: italic
+}
+
+@@font-face {
+    font-family: Guardian Headline;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Regular.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Regular.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Regular.ttf) format("ttf");
+    font-weight: 400
+}
+
+@@font-face {
+    font-family: Guardian Headline;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-RegularItalic.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-RegularItalic.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-RegularItalic.ttf) format("ttf");
+    font-weight: 400;
+    font-style: italic
+}
+
+@@font-face {
+    font-family: Guardian Headline;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Semibold.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Semibold.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Semibold.ttf) format("ttf");
+    font-weight: 500
+}
+
+@@font-face {
+    font-family: Guardian Headline;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Bold.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Bold.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GHGuardianHeadline-Bold.ttf) format("ttf");
+    font-weight: 900
+}
+
+@@font-face {
+    font-family: Guardian Text Sans Web;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-Regular.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-Regular.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-Regular.ttf) format("ttf");
+    font-weight: 400
+}
+
+@@font-face {
+    font-family: Guardian Text Sans Web;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-RegularItalic.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-RegularItalic.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-RegularItalic.ttf) format("ttf");
+    font-weight: 400;
+    font-style: italic
+}
+
+@@font-face {
+    font-family: Guardian Text Sans Web;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-Medium.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-Medium.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GuardianTextSans-Medium.ttf) format("ttf");
+    font-weight: 600
+}
+
+@@font-face {
+    font-family: GT Guardian Titlepiece;
+    src: url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GTGuardianTitlepiece-Bold.woff2) format("woff2"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GTGuardianTitlepiece-Bold.woff) format("woff"),url(//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/GTGuardianTitlepiece-Bold.ttf) format("ttf");
+    font-weight: 400
+}
