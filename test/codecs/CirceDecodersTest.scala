@@ -9,8 +9,6 @@ import io.circe.Json
 import io.circe.parser.{parse, _}
 import io.circe.syntax._
 import models.CheckBankAccountDetails
-import models.ZuoraCatalog._
-import ophan.thrift.componentEvent.ComponentType.{AcquisitionsEpic, EnumUnknownComponentType}
 import ophan.thrift.event.AbTest
 import org.scalatest.EitherValues._
 import org.scalatest.{MustMatchers, WordSpec}
