@@ -240,7 +240,7 @@ const Sales: Sale[] = [
           },
           landingPage: {
             heading: 'The Guardian newspaper subscriptions',
-            subHeading: 'Subscribe and save up to 68% off the retail price of your newspaper',
+            subHeading: 'Subscribe and save on the joy of print',
             standfirst: 'We offer two different subscription types: voucher booklets and home delivery.',
           },
           bundle: {
