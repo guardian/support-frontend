@@ -315,7 +315,7 @@ const Sales: Sale[] = [
           },
         },
         planPrices: [],
-      }
+      },
     },
   },
 ];
