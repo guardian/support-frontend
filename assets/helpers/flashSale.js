@@ -422,8 +422,9 @@ function getFormattedFlashSalePrice(
 function countdownTimerIsActive(flashSaleActive: boolean, showForHowManyDays: number, endTime: number): boolean {
   if (flashSaleActive) {
     const timeTravelDays = getTimeTravelDaysOverride();
-    const now = timeTravelDays ? Date.now() + (timeTravelDays * 86400000) : Date.now();
-    const daysFromNow = now.setDate(now.getDate() + showForHowManyDays);
+    const oneDayInMillis = 86400000;
+    const now = timeTravelDays ? Date.now() + (timeTravelDays * oneDayInMillis) : Date.now();
+    const daysFromNow = now + (showForHowManyDays * oneDayInMillis);
 
     return daysFromNow - endTime > 0;
   }
