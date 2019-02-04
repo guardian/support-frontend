@@ -173,7 +173,7 @@ function CheckoutForm(props: PropTypes) {
                 id="country"
                 label="Country"
                 value={props.country}
-                setValue={props.setCountry}
+                setValue={props.setBillingCountry}
                 error={firstError('country', props.formErrors)}
               >
                 <option value="">--</option>

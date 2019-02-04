@@ -6,8 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
-import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCountryGroup, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';

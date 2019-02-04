@@ -15,6 +15,7 @@ import {
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Action as DDAction } from 'components/directDebit/directDebitActions';
@@ -49,7 +50,7 @@ export type FormFieldsInState = {|
 
 export type FormFields = {|
   ...FormFieldsInState,
-  country: Option<IsoCountry>,
+  country: IsoCountry,
   countrySupportsDirectDebit: boolean,
 |};
 
@@ -78,10 +79,10 @@ export type Action =
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_TELEPHONE', telephone: string }
-  | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string, country: IsoCountry }
   | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod, country: IsoCountry }
+  | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry }
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
@@ -157,7 +158,16 @@ const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
   setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
-  setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
+  setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
+    const country = fromString(countryRaw);
+    if (country) {
+      dispatch(setCountry(country));
+      dispatch({
+        type: 'SET_COUNTRY_CHANGED',
+        country,
+      });
+    }
+  },
   setStateProvince: (stateProvince: string) =>
     (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
       type: 'SET_STATE_PROVINCE',
@@ -219,13 +229,6 @@ function initReducer(initialCountry: IsoCountry, initialCountryGroup: CountryGro
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
 
-      case 'SET_COUNTRY':
-        return {
-          ...state,
-          stateProvince: null,
-          paymentMethod: countrySupportsDirectDebit(fromString(action.country)) ? 'DirectDebit' : 'Stripe',
-        };
-
       case 'SET_STATE_PROVINCE':
         return { ...state, stateProvince: stateProvinceFromString(action.country, action.stateProvince) };
 
@@ -236,6 +239,13 @@ function initReducer(initialCountry: IsoCountry, initialCountryGroup: CountryGro
         return {
           ...state,
           paymentMethod: countrySupportsDirectDebit(action.country) ? action.paymentMethod : 'Stripe',
+        };
+
+      case 'SET_COUNTRY_CHANGED':
+        return {
+          ...state,
+          stateProvince: null,
+          paymentMethod: countrySupportsDirectDebit(action.country) ? 'DirectDebit' : 'Stripe',
         };
 
       case 'SET_FORM_ERRORS':
