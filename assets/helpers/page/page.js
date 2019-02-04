@@ -92,7 +92,7 @@ function statelessInit() {
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
   analyticsInitialisation(participations);
-  addOptimizeExperiments((_: OptimizeExperiment) => {});
+  addOptimizeExperiments(() => {});
 }
 
 // Enables redux devtools extension and optional redux-thunk.
