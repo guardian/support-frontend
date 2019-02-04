@@ -28,7 +28,7 @@ const MobileMenu = ({ onClose, closeButtonAt }: PropTypes) =>
       className="component-mobile-header"
       style={closeButtonAt && { width: closeButtonAt.x }}
     >
-      <Links baseClassName="component-mobile-header-nav" />
+      <Links location="mobile" baseClassName="component-mobile-header-nav" />
       <VeggieBurgerButton
         style={closeButtonAt && { top: closeButtonAt.y }}
         label="close"

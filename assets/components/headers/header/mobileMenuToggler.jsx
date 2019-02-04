@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 
 import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
+import { clickedEvent } from 'helpers/tracking/clickTracking';
 
 import MobileMenu, { type Position } from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
@@ -29,6 +30,7 @@ export default class MobileMenuToggler extends Component<{}, {menuOpen: boolean,
           label="menu"
           onClick={() => {
             this.setState({ menuOpen: true });
+            clickedEvent(['header', 'menu-open'].join(' - '));
             if (this.buttonRef) {
               const bounds = (this.buttonRef.getBoundingClientRect());
               this.setState({
@@ -45,11 +47,19 @@ export default class MobileMenuToggler extends Component<{}, {menuOpen: boolean,
         <Dialog
           aria-label="Menu"
           open={menuOpen}
-          onStatusChange={(status) => { this.setState({ menuOpen: status }); }}
+          onStatusChange={(status) => {
+            this.setState({ menuOpen: status });
+            if (!status) {
+              clickedEvent(['header', 'menu-dismiss'].join(' - '));
+            }
+          }}
         >
           <MobileMenu
             closeButtonAt={this.state.buttonPosition}
-            onClose={() => { this.setState({ menuOpen: false }); }}
+            onClose={() => {
+              this.setState({ menuOpen: false });
+              clickedEvent(['header', 'menu-close'].join(' - '));
+            }}
           />
         </Dialog>
       </div>
