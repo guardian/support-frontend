@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import config.StringsConfig
 import play.api.mvc._

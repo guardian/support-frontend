@@ -37,7 +37,8 @@ const reactElementId: {
 
 // ----- Redux Store ----- //
 
-const store = pageInit(initReducer(country, countryGroupId), true);
+const store = pageInit(commonState =>
+  initReducer(commonState.internationalisation.countryId, commonState.internationalisation.countryGroupId), true);
 
 // ----- Render ----- //
 

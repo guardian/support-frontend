@@ -37,6 +37,7 @@ describe('reducer tests', () => {
         switches: {
           experiments: {},
         },
+        amounts: {},
       },
       optimizeExperiments: [],
     };

@@ -1,6 +1,6 @@
 package wiring
 
-import admin.AllSettingsProvider
+import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.support.config.Stages.PROD
 import com.gu.support.pricing.PriceSummaryServiceProvider

@@ -10,7 +10,6 @@ import { detect } from 'helpers/internationalisation/countryGroup';
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import { setInitialAmountsForAnnualVariants } from 'helpers/abTests/helpers/annualContributions';
 import HorizontalLandingLayout from './pagesVersions/horizontalLayoutLandingPage';
 
 import { createPageReducerFor } from './contributionsLandingReducer';
@@ -20,7 +19,7 @@ import { createPageReducerFor } from './contributionsLandingReducer';
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = pageInit(createPageReducerFor(countryGroupId));
+const store = pageInit(() => createPageReducerFor(countryGroupId));
 
 
 const reactElementId: {
@@ -40,5 +39,4 @@ const reactElementId: {
 
 const content = <HorizontalLandingLayout store={store} countryGroupId={countryGroupId} />;
 
-setInitialAmountsForAnnualVariants(store);
 renderPage(content, reactElementId[countryGroupId]);

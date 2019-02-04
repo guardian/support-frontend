@@ -30,7 +30,7 @@ import type { CountryGroupId } from '../../helpers/internationalisation/countryG
 
 const countryGroupId: CountryGroupId = detectCountryGroupId();
 
-const store = pageInit(reducer(getAmount('ONE_OFF', countryGroupId), countryGroupId), true);
+const store = pageInit(() => reducer(getAmount('ONE_OFF', countryGroupId), countryGroupId), true);
 
 const ONE_OFF_CONTRIBUTION_COOKIE = 'gu.contributions.contrib-timestamp';
 

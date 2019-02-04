@@ -31,7 +31,7 @@ import './weeklySubscriptionLanding.scss';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer, true);
+const store = pageInit(() => reducer, true);
 
 // ----- Internationalisation ----- //
 

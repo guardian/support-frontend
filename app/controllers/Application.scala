@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.{ServersideAbTest, AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
@@ -13,11 +13,11 @@ import config.Configuration.GuardianDomain
 import config.StringsConfig
 import cookies.ServersideAbTestCookie
 import monitoring.SafeLogger
-import monitoring.SafeLogger._
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
+import utils.QueryStringUtils.addServerSideRenderingTestParameterQueryString
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -70,7 +70,7 @@ class Application(
       case _ => "/uk/contribute"
     }
 
-    Redirect(redirectUrl, request.queryString, status = FOUND)
+    Redirect(redirectUrl, addServerSideRenderingTestParameterQueryString(request.queryString), status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>

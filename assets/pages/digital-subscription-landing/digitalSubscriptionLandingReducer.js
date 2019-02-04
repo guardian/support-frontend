@@ -29,7 +29,7 @@ export default (promoInUrl: ?string) => {
     : null;
 
   return combineReducers({
-    plan: ProductPagePlanFormReducerFor<?DigitalBillingPeriod>('GuardianWeekly', initialPeriod),
+    plan: ProductPagePlanFormReducerFor<?DigitalBillingPeriod>('DigitalPack', initialPeriod),
     promotion: promotionPopUpReducer,
   });
 };

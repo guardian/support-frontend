@@ -50,7 +50,7 @@ const promoInUrl = getQueryParameter('promo');
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer(method, promoInUrl), true);
+const store = pageInit(() => reducer(method, promoInUrl), true);
 
 
 // ----- Render ----- //
