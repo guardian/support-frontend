@@ -9,7 +9,8 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
-import { links } from '../links';
+
+import Links from '../links/links';
 import MobileMenuToggler from './mobileMenuToggler';
 
 import './header.scss';
@@ -58,30 +59,6 @@ const TopNav = ({ getLogoRef, utility }: TopNavPropTypes) => (
     </div>
   </div>
 );
-
-type BottomNavPropTypes = {|
-  getMenuRef: (?Element) => void
-|};
-
-const BottomNav = ({ getMenuRef }: BottomNavPropTypes) =>
-  (
-    <nav className="component-header-bottomnav">
-      <ul className="component-header-bottomnav__ul" ref={getMenuRef}>
-        {links.map(({ href, text }) => (
-          <li
-            className={
-              classNameWithModifiers(
-                'component-header-bottomnav__li',
-                [window.location.href.endsWith(href) ? 'active' : null],
-              )
-            }
-          >
-            <a className="component-header-bottomnav__link" href={href}>{text}</a>
-          </li>
-    ))}
-      </ul>
-    </nav>
-  );
 
 export default class Header extends Component<PropTypes, State> {
   static defaultProps = {
@@ -139,7 +116,7 @@ export default class Header extends Component<PropTypes, State> {
           </div>
           {displayNavigation &&
             <div className="component-header__row">
-              <BottomNav getMenuRef={(el) => { this.menuRef = el; }} />
+              <Links baseClassName="component-header-bottomnav" getRef={(el) => { this.menuRef = el; }} />
             </div>
           }
         </div>
