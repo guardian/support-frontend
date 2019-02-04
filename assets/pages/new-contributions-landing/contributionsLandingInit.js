@@ -19,7 +19,6 @@ import {
   getValidPaymentMethods,
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
-import type { Participations } from 'helpers/abTests/abtest';
 import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
