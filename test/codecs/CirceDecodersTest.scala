@@ -1,7 +1,9 @@
 package codecs
 
-import admin.SwitchState._
 import admin._
+import admin.settings.SwitchState.{Off, On}
+import admin.settings._
+import cats.syntax.either._
 import codecs.CirceDecoders._
 import io.circe.Json
 import io.circe.parser.{parse, _}
@@ -109,8 +111,103 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |      }
           |    },
           |    "optimize": "Off"
+          |  },
+          |  "amounts": {
+          |    "GBPCountries": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "UnitedStates": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "EURCountries": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "AUDCountries": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "International": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "NZDCountries": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    },
+          |    "Canada": {
+          |        "ONE_OFF": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "MONTHLY": [
+          |            { "value": "25", "isDefault": true }
+          |        ],
+          |        "ANNUAL": [
+          |            { "value": "25", "isDefault": true }
+          |        ]
+          |    }
           |  }
           |}""".stripMargin
+
+      val amount = Amount(value = "25", isDefault = Some(true))
+      val amounts = Amounts(
+        ONE_OFF = List(amount),
+        MONTHLY = List(amount),
+        ANNUAL = List(amount)
+      )
+      val amountsRegions = AmountsRegions(
+        GBPCountries = amounts,
+        UnitedStates = amounts,
+        EURCountries = amounts,
+        AUDCountries = amounts,
+        International = amounts,
+        NZDCountries = amounts,
+        Canada = amounts
+      )
 
       val settings = AllSettings(
         Switches(
@@ -132,7 +229,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
             )
           ),
           optimize = Off
-        )
+        ),
+        amountsRegions
       )
 
       decode[AllSettings](json).right.value mustBe settings

@@ -30,7 +30,7 @@ import './digitalSubscriptionLanding.scss';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(digitalSubscriptionLandingReducer(null), true);
+const store = pageInit(() => digitalSubscriptionLandingReducer(null), true);
 
 // ----- Internationalisation ----- //
 

@@ -30,7 +30,7 @@ import { setCheckoutFormHasBeenSubmitted } from './helpers/checkoutForm/checkout
 const contributionType = parseRegularContributionType(getQueryParameter('contribType') || 'MONTHLY');
 const countryGroup = detectCountryGroup();
 
-const store = pageInit(reducer(
+const store = pageInit(() => reducer(
   getAmount(contributionType, countryGroup),
   getPaymentMethodFromSession(),
   contributionType,

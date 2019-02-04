@@ -112,7 +112,7 @@ function storeEnhancer(thunk: boolean) {
 
 // Initialises the page.
 function init<S, A>(
-  pageReducer: Reducer<S, A> | null = null,
+  pageReducer?: CommonState => Reducer<S, A> | null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
   const { settings } = window.guardian;
@@ -132,7 +132,7 @@ function init<S, A>(
   const commonReducer = createCommonReducer(initialState);
 
   const store = createStore(
-    combineReducers({ page: pageReducer, common: commonReducer }),
+    combineReducers({ page: pageReducer ? pageReducer(initialState) : null, common: commonReducer }),
     storeEnhancer(thunk),
   );
 
