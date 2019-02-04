@@ -272,7 +272,7 @@ const Sales: Sale[] = [
           },
           landingPage: {
             heading: 'Digital Pack',
-            subHeading: 'Save 25% - $16.13/month for a year, then $21.50/month',
+            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
           },
           bundle: {
             heading: 'Digital Pack',
@@ -306,7 +306,7 @@ const Sales: Sale[] = [
           },
           landingPage: {
             heading: 'Digital Pack subscriptions',
-            subHeading: 'Save 25% - £8.99/month for a year, then £11.99 a month',
+            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
           },
           bundle: {
             heading: 'Digital Pack',
