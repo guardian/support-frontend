@@ -19,7 +19,7 @@ import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLa
 import AnchorButton from 'components/button/anchorButton';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
-import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import { flashSaleIsActive, getSaleCopy, getEndTime, countdownTimerIsActive } from 'helpers/flashSale';
 
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
@@ -154,6 +154,13 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   };
 }
 
+function showTimer(product: SubscriptionProduct, countryGroupId: CountryGroupId): boolean {
+  const flashSaleActive = flashSaleIsActive(product, countryGroupId);
+  const flashSaleEndTime = getEndTime(product, countryGroupId);
+
+  return countdownTimerIsActive(flashSaleActive, 7, flashSaleEndTime);
+}
+
 // ----- Component ----- //
 
 export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
@@ -177,7 +184,7 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             </p>
           </div>
         </div>
-        {flashSaleIsActive(product, props.countryGroupId) &&
+        {showTimer(product, props.countryGroupId) &&
           <div className="digital-subscription-landing-header__countdown">
             <FlashSaleCountdown
               product={product}
