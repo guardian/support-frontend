@@ -419,8 +419,8 @@ function getFormattedFlashSalePrice(
   return fixDecimals(sale.saleDetails[countryGroupId].price);
 }
 
-function showCountdownTimer(flashSaleIsActive: boolean, showForHowManyDays: number, endTime: number): boolean {
-  if(flashSaleIsActive) {
+function showCountdownTimer(flashSaleActive: boolean, showForHowManyDays: number, endTime: number): boolean {
+  if (flashSaleActive) {
     const now = new Date();
     const daysFromNow = now.setDate(now.getDate() + showForHowManyDays);
 
