@@ -18,7 +18,7 @@ describe('Digital Subscription Checkout Reducer', () => {
   });
 
   it('should default to Stripe if the country is US', () => {
-    const reducer = initReducer('US', 'USDCountries');
+    const reducer = initReducer('US', 'UnitedStates');
     expect(reducer(undefined, {}).checkout.paymentMethod).toEqual('Stripe');
   });
 
