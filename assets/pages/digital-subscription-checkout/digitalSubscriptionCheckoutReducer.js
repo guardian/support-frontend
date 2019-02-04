@@ -159,13 +159,13 @@ const formActionCreators = {
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setStateProvince: (stateProvince: string) =>
-    (dispatch: Dispatch<Action>, getState: () => State) => ({
+    (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
       type: 'SET_STATE_PROVINCE',
       stateProvince,
       country: getState().common.internationalisation.countryId,
     }),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
-  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => ({
+  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
     type: 'SET_PAYMENT_METHOD',
     paymentMethod,
     country: getState().common.internationalisation.countryId,
