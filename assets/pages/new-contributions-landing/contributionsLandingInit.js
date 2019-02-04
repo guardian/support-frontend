@@ -19,8 +19,7 @@ import {
   getValidPaymentMethods,
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
-import { getAnnualAmounts } from 'helpers/abTests/helpers/annualContributions';
-import { type Amount, type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   type Action,
@@ -116,16 +115,17 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
   loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 }
 
-
-function selectInitialAnnualAmount(state: State, dispatch: Function) {
+function selectInitialAmounts(state: State, dispatch: Function) {
+  const { amounts } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
-  const annualTestVariant = state.common.abParticipations.annualContributionsRoundThree;
 
-  if (annualTestVariant) {
-    const annualAmounts: Amount[] = getAnnualAmounts(annualTestVariant)[countryGroupId];
+  Object.keys(amounts[countryGroupId]).forEach((contributionType) => {
+    const defaultAmount =
+      amounts[countryGroupId][contributionType].find(amount => amount.isDefault) ||
+      amounts[countryGroupId][contributionType][0];
 
-    dispatch(selectAmount(annualAmounts.find(amount => amount.isDefault) || annualAmounts[0], 'ANNUAL'));
-  }
+    dispatch(selectAmount(defaultAmount, contributionType));
+  });
 }
 
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
@@ -144,7 +144,7 @@ const init = (store: Store<State, Action, Function>) => {
 
   initialisePaymentMethods(state, dispatch);
 
-  selectInitialAnnualAmount(state, dispatch);
+  selectInitialAmounts(state, dispatch);
   selectInitialContributionTypeAndPaymentMethod(state, dispatch);
 
   const {
