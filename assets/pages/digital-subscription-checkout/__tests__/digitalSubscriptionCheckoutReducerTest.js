@@ -12,6 +12,16 @@ describe('Digital Subscription Checkout Reducer', () => {
 
   global.guardian = { productPrices: null };
 
+  it('should default to Direct Debit if the country is GB', () => {
+    const reducer = initReducer('GB', 'GBPCountries');
+    expect(reducer(undefined, {}).checkout.paymentMethod).toEqual('DirectDebit');
+  });
+
+  it('should default to Stripe if the country is US', () => {
+    const reducer = initReducer('US', 'USDCountries');
+    expect(reducer(undefined, {}).checkout.paymentMethod).toEqual('Stripe');
+  });
+
   it('should handle SET_STAGE to "thankyou"', () => {
 
     const stage: Stage = 'thankyou';
