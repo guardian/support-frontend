@@ -99,7 +99,7 @@ function getFormFields(state: State): FormFields {
     stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
     billingPeriod: state.page.checkout.billingPeriod,
-    paymentMethod: state.page.checkout.paymentMethod || countrySupportsDirectDebit(state.common.internationalisation.countryId) ? 'DirectDebit' : 'Stripe',
+    paymentMethod: state.page.checkout.paymentMethod,
     countrySupportsDirectDebit: countrySupportsDirectDebit(state.common.internationalisation.countryId),
   };
 }
@@ -179,7 +179,7 @@ export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
-function initReducer(detectedCountry: IsoCountry, countryGroupId: CountryGroupId) {
+function initReducer(initialCountry: IsoCountry, initialCountryGroup: CountryGroupId) {
   const billingPeriodInUrl = getQueryParameter('period');
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual'
@@ -195,7 +195,7 @@ function initReducer(detectedCountry: IsoCountry, countryGroupId: CountryGroupId
     stateProvince: null,
     telephone: '',
     billingPeriod: initialBillingPeriod,
-    paymentMethod: null,
+    paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -223,7 +223,7 @@ function initReducer(detectedCountry: IsoCountry, countryGroupId: CountryGroupId
         return {
           ...state,
           stateProvince: null,
-          paymentMethod: countrySupportsDirectDebit(fromString(action.country)) ? state.paymentMethod : 'Stripe',
+          paymentMethod: countrySupportsDirectDebit(fromString(action.country)) ? 'DirectDebit' : 'Stripe',
         };
 
       case 'SET_STATE_PROVINCE':
@@ -254,7 +254,7 @@ function initReducer(detectedCountry: IsoCountry, countryGroupId: CountryGroupId
 
   return combineReducers({
     checkout: reducer,
-    user: createUserReducer(countryGroupId),
+    user: createUserReducer(initialCountryGroup),
     directDebit,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),

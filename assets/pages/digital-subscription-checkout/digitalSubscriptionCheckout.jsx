@@ -23,9 +23,6 @@ import './digitalSubscriptionCheckout.scss';
 
 // ----- Internationalisation ----- //
 
-const countryGroupId: CountryGroupId = detectCountryGroup();
-const country: IsoCountry = detectCountry();
-
 const reactElementId: {
   [CountryGroupId]: string,
 } = {
@@ -39,6 +36,8 @@ const reactElementId: {
 
 const store = pageInit(commonState =>
   initReducer(commonState.internationalisation.countryId, commonState.internationalisation.countryGroupId), true);
+
+const { countryGroupId } = store.getState().common.internationalisation;
 
 // ----- Render ----- //
 
