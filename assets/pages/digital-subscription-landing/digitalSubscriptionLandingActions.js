@@ -12,7 +12,7 @@ import { type State } from './digitalSubscriptionLandingReducer';
 
 // ----- Action Creators ----- //
 
-const { setPlan } = ProductPagePlanFormActionsFor<DigitalBillingPeriod>('GuardianWeekly', 'GuardianWeekly');
+const { setPlan } = ProductPagePlanFormActionsFor<DigitalBillingPeriod>('DigitalPack', 'DigitalPack');
 
 function redirectToDigitalPage() {
   return (dispatch: Dispatch<any>, getState: () => State) => {
@@ -24,7 +24,6 @@ function redirectToDigitalPage() {
     const { plan } = state.page.plan;
 
     if (plan) {
-
       const location = getDigitalCheckout(
         referrerAcquisitionData,
         countryGroupId,

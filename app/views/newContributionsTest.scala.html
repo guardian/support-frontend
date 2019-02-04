@@ -18,8 +18,7 @@
   regularUatPayPalConfig: PayPalConfig,
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
-  idUser: Option[IdUser],
-  annualAmounts: (String, String, String, String)
+  idUser: Option[IdUser]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @scripts = {
@@ -68,4 +67,4 @@
   </script>
 }
 
-@test(title = title, scripts = scripts, mainJsBundle = js, description = description, mainId = id, mainStyleBundle = css, annualAmounts = annualAmounts)
+@test(title = title, scripts = scripts, mainJsBundle = js, description = description, mainId = id, mainStyleBundle = css)

@@ -80,34 +80,34 @@
 }
 
 .sale-joy-of-print-badge {
-  left: -3rem;
-  top: -0.4rem;
+  left: -4.8rem;
+  top: -0.1rem;
   position: absolute;
   flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #E05E00;
+  background: #ab8b62;
   color: gu-colour(garnett-neutral-5);
   text-align: center;
   border-radius: 50%;
   line-height: 1;
   font-family: $gu-headline;
-  font-size: 14px;
+  font-size: 0.813rem;
   font-weight: 700;
-  width: 7.5rem;
-  height: 7.5rem;
+  width: 8.6rem;
+  height: 8.6rem;
   
   span {
     display: block;
-    line-height: 1;
+    line-height: 1; 
   }
   
   span:nth-child(2) {
     font-family: $gu-titlepiece;
     position: relative;
-    top: -0.2rem;
-    font-size: 2.8rem;
+    top: -0.1rem;
+    font-size: 3rem;
     font-variant-numeric: lining-nums;
     -moz-font-feature-settings: "lnum";
     -webkit-font-feature-settings: "lnum";
@@ -115,20 +115,20 @@
   }
 
   @include mq($from: phablet) {
-    left: -2.9rem;
-    top: 2.8rem;
+    left: -4.4rem;
+    top: 2.2rem;
   }
   
   @include mq($from: tablet) {
-    left: -4rem;
+    left: -4.4rem;
     top: 2.4rem;
-    width: 9.375rem;
-    height: 9.375rem;
-    font-size: 16px;
+    width: 9.5rem;
+    height: 9.5rem;
+    font-size: 0.875rem;
 
     span:nth-child(2) {
       font-size: 3.8rem;
-      top: -0.4rem;
+      top: -0.1rem;
     }
   }
 }
