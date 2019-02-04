@@ -288,7 +288,7 @@ const Sales: Sale[] = [
   {
     subscriptionProduct: 'DigitalPack',
     activeRegions: ['GBPCountries'],
-    startTime: new Date(2019, 0, 18).getTime(), // 18 Feb 2019
+    startTime: new Date(2019, 1, 18).getTime(), // 18 Feb 2019
     endTime: new Date(2019, 3, 1).getTime(), // 31 Mar 2019
     saleDetails: {
       GBPCountries: {
