@@ -85,8 +85,8 @@
     background: transparent;
     color: gu-colour(garnett-neutral-1);
     border: 1px solid gu-colour(garnett-neutral-1);
-    height: $cta-height - 2;
-    line-height: $cta-height - 2;
+    height: $gu-cta-height;
+    line-height: $gu-cta-height;
     transition: background-color .3s;
 
     &:hover {
