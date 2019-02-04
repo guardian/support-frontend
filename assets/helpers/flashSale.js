@@ -272,7 +272,7 @@ const Sales: Sale[] = [
           },
           landingPage: {
             heading: 'Digital Pack',
-            subHeading: 'Save 25% - $16.13/month for a year, then $21.50/month',
+            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
           },
           bundle: {
             heading: 'Digital Pack',
@@ -283,6 +283,39 @@ const Sales: Sale[] = [
         planPrices: [],
       },
 
+    },
+  },
+  {
+    subscriptionProduct: 'DigitalPack',
+    activeRegions: ['GBPCountries'],
+    startTime: new Date(2019, 1, 18).getTime(), // 18 Feb 2019
+    endTime: new Date(2019, 3, 1).getTime(), // 31 Mar 2019
+    saleDetails: {
+      GBPCountries: {
+        promoCode: 'DDPFM80X',
+        annualPlanPromoCode: 'DDPFMAN80X',
+        intcmp: '',
+        price: 8.99,
+        annualPrice: 107.88,
+        discountPercentage: 0.25,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
+          },
+          landingPage: {
+            heading: 'Digital Pack subscriptions',
+            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
+          },
+          bundle: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
+          },
+        },
+        planPrices: [],
+      },
     },
   },
 ];
