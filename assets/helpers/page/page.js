@@ -112,7 +112,7 @@ function storeEnhancer(thunk: boolean) {
 
 // Initialises the page.
 function init<S, A>(
-  pageReducer: Reducer<S, A> | null = null,
+  pageReducer?: CommonState => Reducer<S, A> | null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
   const { settings } = window.guardian;

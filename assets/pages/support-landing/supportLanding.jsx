@@ -38,7 +38,7 @@ const supporterSectionId = 'supporter-options';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(pageReducer);
+const store = pageInit(() => pageReducer);
 
 
 // ----- Internationalisation ----- //
