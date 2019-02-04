@@ -20,12 +20,11 @@ import { getQueryParameter } from 'helpers/url';
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation) {
-  const { currencyId } = state.common.internationalisation;
+  const { currencyId, countryId } = state.common.internationalisation;
   const {
     firstName,
     lastName,
     email,
-    country,
     stateProvince,
     billingPeriod,
     telephone,
@@ -41,7 +40,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   return {
     firstName,
     lastName,
-    country: country || 'GB',
+    country: countryId || 'GB',
     state: stateProvince,
     email,
     telephoneNumber: telephone,
@@ -103,11 +102,15 @@ function showPaymentMethod(
     case 'DirectDebit':
       dispatch(openDirectDebitPopUp());
       break;
+    case null:
+    case undefined:
+      console.log('Undefined payment method');
+      break;
     default:
       console.log(`Unknown payment method ${paymentMethod}`);
   }
 }
 
-const countrySupportsDirectDebit = (country: ?IsoCountry) => country && country === 'GB';
+const countrySupportsDirectDebit = (country: ?IsoCountry): boolean => country !== null && country === 'GB';
 
 export { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit };
