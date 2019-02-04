@@ -1,6 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.settings._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -17,8 +18,7 @@ import services.stepfunctions.SupportWorkersClient
 import services.{HttpIdentityService, MembersDataService}
 import services.MembersDataService._
 import com.gu.support.config._
-import admin.SwitchState.On
-import admin.{PaymentMethodsSwitch, AllSettings, AllSettingsProvider, Switches}
+import admin.settings.SwitchState.On
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 
@@ -45,9 +45,14 @@ class RegularContributionsTest extends WordSpec with MustMatchers {
         signature = ""
       ))
 
+      val amounts = Amounts(Nil,Nil,Nil)
+
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(
-        AllSettings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
+        AllSettings(
+          Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On),
+          AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts)
+        )
       )
 
       new RegularContributions(

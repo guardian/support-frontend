@@ -29,6 +29,7 @@ Object {
     "source": null,
   },
   "settings": Object {
+    "amounts": Object {},
     "switches": Object {
       "experiments": Object {},
     },

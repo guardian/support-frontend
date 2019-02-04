@@ -14,6 +14,7 @@ jest.mock('ophan', () => ({
 
 const emptySettings: Settings = {
   switches: { experiments: {} },
+  amounts: { },
 };
 
 describe('basic behaviour of init', () => {

@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
-import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._

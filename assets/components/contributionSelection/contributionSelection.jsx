@@ -14,6 +14,7 @@ import {
   contributionTypeRadios,
   getContributionAmountRadios,
   getCustomAmountA11yHint,
+  type AmountsRegions,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 
@@ -24,7 +25,6 @@ import type {
   ContributionType,
   ContributionError,
 } from 'helpers/contributions';
-import type { AnnualContributionsTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Props ----- //
@@ -34,6 +34,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   currencyId: IsoCurrency,
   contributionType: ContributionType,
+  amounts: AmountsRegions,
   selectedAmount: number,
   isCustomAmount: boolean,
   setContributionType: (string, CountryGroupId) => void,
@@ -41,7 +42,6 @@ type PropTypes = {|
   setCustomAmount: (string, CountryGroupId) => void,
   onKeyPress: Object => void,
   error: ContributionError,
-  annualTestVariant: AnnualContributionsTestVariant,
 |};
 
 
@@ -50,7 +50,6 @@ type PropTypes = {|
 function ContributionSelection(props: PropTypes) {
 
   const modifierClassArray = [getContributionTypeClassName(props.contributionType)];
-  modifierClassArray.push('annual-test');
 
   return (
     <div className={classNameWithModifiers('component-contribution-selection', modifierClassArray)}>
@@ -68,10 +67,9 @@ function ContributionSelection(props: PropTypes) {
           name="contribution-amount-toggle"
           radios={
             getContributionAmountRadios(
+              props.amounts[props.countryGroupId][props.contributionType],
               props.contributionType,
               props.currencyId,
-              props.countryGroupId,
-              props.annualTestVariant,
             )}
           checked={props.isCustomAmount ? null : props.selectedAmount.toString()}
           toggleAction={props.setAmount}

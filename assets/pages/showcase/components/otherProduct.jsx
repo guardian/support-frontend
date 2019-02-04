@@ -21,6 +21,7 @@ export default function OtherProduct(props: PropTypes) {
       <AnchorButton
         aria-label={null}
         icon={<ArrowRightStraight />}
+        appearance="greyHollow"
         href={props.destination}
       >
         Find out more
