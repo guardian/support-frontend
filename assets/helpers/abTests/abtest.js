@@ -125,17 +125,10 @@ function getParticipationsFromUrl(): ?Participations {
 
 function getParticipationsFromQuery(): ?Participations {
 
-  const hashUrl = (new URL(document.URL)).search;
-  const index = hashUrl.indexOf('ssr');
+  const ssrParam = (new URL(document.URL)).searchParams.get('ssr');
 
-  if (index > 0) {
-
-    const [testId, variantEtc] = hashUrl.substr(index).split('=');
-    const test = {};
-    const variant = variantEtc.split('&')[0];
-    test[testId] = variant;
-
-    return test;
+  if (ssrParam) {
+    return { ssr: ssrParam };
   }
 
   return { ssr: 'notintest' };
