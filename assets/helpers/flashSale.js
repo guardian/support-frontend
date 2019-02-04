@@ -419,7 +419,7 @@ function getFormattedFlashSalePrice(
   return fixDecimals(sale.saleDetails[countryGroupId].price);
 }
 
-function countdownTimerActive(flashSaleActive: boolean, showForHowManyDays: number, endTime: number): boolean {
+function countdownTimerIsActive(flashSaleActive: boolean, showForHowManyDays: number, endTime: number): boolean {
   if (flashSaleActive) {
     const now = new Date();
     const daysFromNow = now.setDate(now.getDate() + showForHowManyDays);
@@ -443,5 +443,5 @@ export {
   getDuration,
   getTimeTravelDaysOverride,
   getFlashSaleActiveOverride,
-  countdownTimerActive,
+  countdownTimerIsActive,
 };

@@ -19,7 +19,7 @@ import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLa
 import AnchorButton from 'components/button/anchorButton';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
-import { flashSaleIsActive, getSaleCopy, getEndTime, countdownTimerActive } from 'helpers/flashSale';
+import { flashSaleIsActive, getSaleCopy, getEndTime, countdownTimerIsActive } from 'helpers/flashSale';
 
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 
@@ -158,7 +158,7 @@ function showTimer(product: SubscriptionProduct, countryGroupId: CountryGroupId)
   const flashSaleActive = flashSaleIsActive(product, countryGroupId);
   const flashSaleEndTime = getEndTime(product, countryGroupId);
 
-  return countdownTimerActive(flashSaleActive, 7, flashSaleEndTime);
+  return countdownTimerIsActive(flashSaleActive, 7, flashSaleEndTime);
 }
 
 // ----- Component ----- //
