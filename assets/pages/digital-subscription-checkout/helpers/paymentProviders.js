@@ -40,7 +40,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   return {
     firstName,
     lastName,
-    country: countryId || 'GB',
+    country: countryId,
     state: stateProvince,
     email,
     telephoneNumber: telephone,
