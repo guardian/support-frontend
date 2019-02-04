@@ -19,7 +19,7 @@ import { createPageReducerFor } from './contributionsLandingReducer';
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = pageInit(createPageReducerFor(countryGroupId));
+const store = pageInit(() => createPageReducerFor(countryGroupId));
 
 
 const reactElementId: {
