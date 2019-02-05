@@ -1,6 +1,6 @@
 // @flow
 import type { Tests } from './abtest';
-import { annualAmountsControl, annualAmountsA } from './annualAmountsTest';
+import { annualAmountsA } from './annualAmountsTest';
 
 // ----- Tests ----- //
 
@@ -24,7 +24,6 @@ export const tests: Tests = {
     variants: [
       {
         id: 'control',
-        amountsRegions: annualAmountsControl,
       },
       {
         id: 'annualAmountsA',
@@ -37,7 +36,7 @@ export const tests: Tests = {
         size: 1,
       },
     },
-    isActive: false,
+    isActive: true,
     independent: true,
     seed: 3,
   },

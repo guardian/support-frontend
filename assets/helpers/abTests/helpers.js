@@ -10,12 +10,11 @@ function overrideAmountsForTest(
   currentAmountsRegions: AmountsRegions,
 ): AmountsRegions {
 
-  const newAmountsRegions = { ...currentAmountsRegions };
-
   const variant = abTest.variants.find(v => v.id === variantId);
 
   if (variant && variant.amountsRegions) {
     const { amountsRegions } = variant;
+    const newAmountsRegions = { ...currentAmountsRegions };
 
     Object.keys(amountsRegions).forEach((countryGroupId) => {
 
@@ -24,9 +23,11 @@ function overrideAmountsForTest(
         newAmountsRegions[countryGroupId][contributionType] = amountsRegions[countryGroupId][contributionType];
       });
     });
+
+    return newAmountsRegions;
   }
 
-  return newAmountsRegions;
+  return currentAmountsRegions;
 }
 
 // Returns a new AmountsRegions by combining currentAmountsRegions with any test participation amounts

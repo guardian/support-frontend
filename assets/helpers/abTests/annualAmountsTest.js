@@ -2,10 +2,6 @@
 
 import { type AmountsRegions } from 'helpers/contributions';
 
-export const annualAmountsControl: AmountsRegions = {
-  // Use the config from server
-};
-
 export const annualAmountsA: AmountsRegions = {
   GBPCountries: {
     ANNUAL: [
