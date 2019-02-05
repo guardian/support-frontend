@@ -47,7 +47,7 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
 // ----- Component ----- //
 
 type TopNavPropTypes = {|
-  utility: Option<Node>,
+  utility: Node,
   getLogoRef: (?Element) => void
 |};
 
@@ -112,9 +112,12 @@ export default class Header extends Component<PropTypes, State> {
       >
         <div className="component-header__wrapper" ref={(el) => { this.containerRef = el; }}>
           <div className="component-header__row">
-            <TopNav utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
+            <TopNav
+              utility={(displayNavigation && fitsLinksAtAll) ? utility : null}
+              getLogoRef={(el) => { this.logoRef = el; }}
+            />
             {displayNavigation &&
-              <MobileMenuToggler />
+              <MobileMenuToggler utility={utility} />
             }
           </div>
           {displayNavigation &&
