@@ -123,7 +123,7 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
-function getParticipationsFromQuery(): ?Participations {
+function getSSRParticipationsFromQuery(): ?Participations {
 
   const hashUrl = (new URL(document.URL)).search;
   const index = hashUrl.indexOf('ssr');
@@ -259,12 +259,17 @@ const init = (
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  const queryParticipations: ?Participations = getParticipationsFromQuery();
-  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations, queryParticipations));
+  const ssrParticipation: ?Participations = getSSRParticipationsFromQuery();
+  const allParticipations = {
+    ...participations,
+    ...urlParticipations,
+    ...ssrParticipation,
+  };
+  setLocalStorageParticipations(allParticipations);
 
-  trackABOphan(participations, false);
+  trackABOphan(allParticipations, false);
 
-  return participations;
+  return allParticipations;
 };
 
 const getVariantsAsString = (participation: Participations): string => {
