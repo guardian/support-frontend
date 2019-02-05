@@ -69,11 +69,16 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   def createDirectDebitPaymentMethod(dd: DirectDebitPaymentFields, user: User): Future[DirectDebitPaymentMethod] =
     Future.successful(DirectDebitPaymentMethod(
-      user.firstName,
-      user.lastName,
-      dd.accountHolderName,
-      dd.sortCode,
-      dd.accountNumber,
-      user.country
+      firstName = user.firstName,
+      lastName = user.lastName,
+      bankTransferAccountName = dd.accountHolderName,
+      bankCode = dd.sortCode,
+      bankTransferAccountNumber = dd.accountNumber,
+      country = user.country,
+      city = dd.city,
+      postalCode = dd.postalCode,
+      state = dd.state,
+      streetName = dd.streetName,
+      streetNumber = dd.streetNumber
     ))
 }

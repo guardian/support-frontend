@@ -37,7 +37,8 @@ object Fixtures {
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
-  val directDebitPaymentMethod = DirectDebitPaymentMethod("Barry", "Humphreys", "Barry Humphreys", "200000", "55779911")
+  val directDebitPaymentMethod = DirectDebitPaymentMethod("Barry", "Humphreys", "Barry Humphreys", "200000", "55779911",
+    city = Some("Edited city"), postalCode = Some("n19gu"), state = Some("blah"), streetName = Some("easy street"), streetNumber = Some("123"))
 
   val config = Configuration.zuoraConfigProvider.get()
   val monthlySubscriptionData = SubscriptionData(

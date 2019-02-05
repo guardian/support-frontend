@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService}
 import com.gu.i18n.Country.UK
-import com.gu.i18n.Currency
+import com.gu.i18n.{Country, Currency}
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.encoding.CustomCodecs._
@@ -24,6 +24,20 @@ import org.joda.time.{DateTime, LocalDate}
 @IntegrationTest
 class SendThankYouEmailSpec extends LambdaSpec {
 
+  val directDebitPaymentMethod = DirectDebitPaymentMethod(
+    firstName = "Mickey",
+    lastName = "Mouse",
+    bankTransferAccountName = "Mickey Mouse",
+    bankCode = "202020",
+    bankTransferAccountNumber = "55779911",
+    country = Country.UK,
+    city = Some("London"),
+    postalCode = Some("post cde"),
+    state = None,
+    streetName = Some("streetname"),
+    streetNumber = Some("123")
+  )
+
   "SendThankYouEmail lambda" should "add message to sqs queue" in {
     val sendThankYouEmail = new SendThankYouEmail()
 
@@ -38,14 +52,13 @@ class SendThankYouEmailSpec extends LambdaSpec {
   ignore should "send a contribution email" in {
     //This test will send a thank you email to the address below - useful for quickly testing changes
     val addressToSendTo = "rupert.bates@theguardian.com"
-    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
     val mandateId = "65HK26E"
     val ef = ContributionEmailFields(
       addressToSendTo,
       new DateTime(1999, 12, 31, 11, 59),
       20,
       Currency.GBP,
-      "UK", "", Monthly, SfContactId("0036E00000WK8fDQAT"), dd, Some(mandateId)
+      "UK", "", Monthly, SfContactId("0036E00000WK8fDQAT"), directDebitPaymentMethod, Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)
@@ -54,7 +67,6 @@ class SendThankYouEmailSpec extends LambdaSpec {
   ignore should "send a digital pack email" in {
     //This test will send a thank you email to the address below - useful for quickly testing changes
     val addressToSendTo = "rupert.bates+unitTest@theguardian.com"
-    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "202020", "55779911")
     val mandateId = "65HK26E"
     val user = User("1234", addressToSendTo, "Mickey", "Mouse", UK)
     val ef = DigitalPackEmailFields(
@@ -63,7 +75,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       user,
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
       GBP,
-      dd,
+      directDebitPaymentMethod,
       SfContactId("0036E00000WK8fDQAT"),
       Some(mandateId)
     )
@@ -72,7 +84,6 @@ class SendThankYouEmailSpec extends LambdaSpec {
   }
 
   "EmailFields" should "include Direct Debit fields in the payload" in {
-    val dd = DirectDebitPaymentMethod("Mickey", "Mouse", "Mickey Mouse", "123456", "55779911")
     val mandateId = "65HK26E"
     val ef = ContributionEmailFields(
       "",
@@ -83,7 +94,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       "",
       Monthly,
       SfContactId("sfContactId"),
-      dd,
+      directDebitPaymentMethod,
       Some(mandateId)
     )
     val resultJson = parse(ef.payload)
@@ -92,7 +103,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
 
     new JsonValidater(resultJson.right.get)
       .validate("Mandate ID", mandateId)
-      .validate("account name", dd.bankTransferAccountName)
+      .validate("account name", directDebitPaymentMethod.bankTransferAccountName)
       .validate("account number", "******11")
       .validate("sort code", "12-34-56")
       .validate("first payment date", "Monday, 10 January 2000")
