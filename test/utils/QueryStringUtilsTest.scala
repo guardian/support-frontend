@@ -8,15 +8,15 @@ class QueryStringUtilsTest extends WordSpec with MustMatchers  {
     "add value of ssr parameter to query string" in {
       val queryString = Map.empty[String, Seq[String]]
       val result = utils.QueryStringUtils.addServerSideRenderingTestParameterQueryString(queryString)
-      result.get("ssrTwo") === Some(List("on")) || result.get("ssr") === Some(List("off")) mustBe true
+      result.get("ssrTwo") === Some(List("on")) || result.get("ssrTwo") === Some(List("off")) mustBe true
     }
   }
 
   "addServerSideRenderingTestParameterQueryString" should {
     "overwrite value of ssr parameter if it already exists" in {
-      val queryString = Map("ssr" -> Seq("test"))
+      val queryString = Map("ssrTwo" -> Seq("test"))
       val result = utils.QueryStringUtils.addServerSideRenderingTestParameterQueryString(queryString)
-      result.get("ssrTwo") === Some(List("on")) || result.get("ssr") === Some(List("off")) mustBe true
+      result.get("ssrTwo") === Some(List("on")) || result.get("ssrTwo") === Some(List("off")) mustBe true
     }
   }
 }
