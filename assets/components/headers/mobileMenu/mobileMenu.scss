@@ -63,4 +63,9 @@ $mobile-menu-gutter: ($gu-h-spacing*2.5);
   margin-left: $mobile-menu-gutter;
   border-top: 1px solid gu-colour(header-border);
   padding: ($gu-v-spacing/2) 0;
+
+  //TODO:this could be more elegant
+  .component-country-group-switcher .component-select-input__select {
+    @include gu-fontset-body-sans($size-only: true);
+  }
 }
