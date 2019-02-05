@@ -13,12 +13,12 @@ describe('Digital Subscription Checkout Reducer', () => {
   global.guardian = { productPrices: null };
 
   it('should default to Direct Debit if the country is GB', () => {
-    const reducer = initReducer('GB', 'GBPCountries');
+    const reducer = initReducer('GB');
     expect(reducer(undefined, {}).checkout.paymentMethod).toEqual('DirectDebit');
   });
 
   it('should default to Stripe if the country is US', () => {
-    const reducer = initReducer('US', 'UnitedStates');
+    const reducer = initReducer('US');
     expect(reducer(undefined, {}).checkout.paymentMethod).toEqual('Stripe');
   });
 
@@ -27,7 +27,7 @@ describe('Digital Subscription Checkout Reducer', () => {
     const stage: Stage = 'thankyou';
     const action = setStage(stage);
 
-    const newState = initReducer('GB', 'GBPCountries')(undefined, action);
+    const newState = initReducer('GB')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
@@ -38,7 +38,7 @@ describe('Digital Subscription Checkout Reducer', () => {
     const stage: Stage = 'checkout';
     const action = setStage(stage);
 
-    const newState = initReducer('GB', 'GBPCountries')(undefined, action);
+    const newState = initReducer('GB')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
