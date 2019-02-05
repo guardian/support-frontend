@@ -222,8 +222,9 @@ function getParticipations(
     }
   });
 
-  // seeing as the ssr test variant that the user is in is decided, server side, by the query parameter  and not by the local
-  // storage, we always want to get the most recent value from the query string parameter for the ssr test variant
+  // seeing as the ssr test variant that the user is in is decided, server side, by the query parameter
+  // and not by the local storage, we always want to get the most recent value from the query string parameter
+  // for the ssr test variant
   return { ...participations, ...getSSRParticipationsFromQuery() };
 }
 
