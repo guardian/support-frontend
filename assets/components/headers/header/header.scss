@@ -1,5 +1,4 @@
 @import '~stylesheets/gu-sass/gu-sass';
-@import '~components/leftMarginSection/leftMarginSection';
 
 .component-header {
   background-color: gu-colour(header-dark);
@@ -67,7 +66,6 @@
   padding: 0 ($gu-h-spacing / 2);
   position: relative;
   flex: 1 1 auto;
-  background: green;
 
   @include mq($from: tablet) {
     max-width: gu-span(11);
