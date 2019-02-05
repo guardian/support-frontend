@@ -1,11 +1,11 @@
 .component-country-group-switcher {
-  display: inline-flex;
+  display: block;
+  @include mq($from: mobileMedium) {
+    display: inline-flex;
+  }
 
   .component-select-input__select {
     @include gu-fontset-body-sans;
-    @include mq($until: tablet) {
-      font-size: 14px;
-    }
     line-height: 1;
     cursor: pointer;
     background-color: transparent;
@@ -25,6 +25,15 @@
     &::-ms-expand {
       display: none;
     }
+
+    @include mq($until: tablet) {
+      font-size: 14px;
+    }
+    @include mq($until: mobileMedium) {
+      font-size: 12px;
+      height: 12px;
+      padding: 0;
+    }
   }
 
   .svg-dropdown-arrow {
@@ -35,6 +44,9 @@
     position: relative;
     path {
       fill: gu-colour(garnett-neutral-5);
+    }
+    @include mq($until: mobileMedium) {
+      display: none;
     }
   }
 
