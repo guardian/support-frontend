@@ -28,7 +28,7 @@ import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
@@ -75,17 +75,17 @@ export type State = ReduxState<{|
 |}>;
 
 export type Action =
-  | { type: 'SET_DP_CHECKOUT_STAGE', stage: Stage }
-  | { type: 'SET_DP_CHECKOUT_FIRST_NAME', firstName: string }
-  | { type: 'SET_DP_CHECKOUT_LAST_NAME', lastName: string }
-  | { type: 'SET_DP_CHECKOUT_TELEPHONE', telephone: string }
-  | { type: 'SET_DP_CHECKOUT_STATE_PROVINCE', stateProvince: string, country: IsoCountry }
-  | { type: 'SET_DP_CHECKOUT_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
-  | { type: 'SET_DP_CHECKOUT_PAYMENT_METHOD', paymentMethod: PaymentMethod, country: IsoCountry }
-  | { type: 'SET_DP_CHECKOUT_COUNTRY_CHANGED', country: IsoCountry }
-  | { type: 'SET_DP_CHECKOUT_FORM_ERRORS', errors: FormError<FormField>[] }
-  | { type: 'SET_DP_CHECKOUT_SUBMISSION_ERROR', error: ErrorReason }
-  | { type: 'SET_DP_CHECKOUT_FORM_SUBMITTED', formSubmitted: boolean }
+  | { type: 'SET_STAGE', stage: Stage }
+  | { type: 'SET_FIRST_NAME', firstName: string }
+  | { type: 'SET_LAST_NAME', lastName: string }
+  | { type: 'SET_TELEPHONE', telephone: string }
+  | { type: 'SET_STATE_PROVINCE', stateProvince: string, country: IsoCountry }
+  | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
+  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod, country: IsoCountry }
+  | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry }
+  | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
+  | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
+  | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
   | DDAction;
 
 
@@ -138,10 +138,10 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 
 // ----- Action Creators ----- //
 
-const setStage = (stage: Stage): Action => ({ type: 'SET_DP_CHECKOUT_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_DP_CHECKOUT_FORM_ERRORS', errors });
-const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_DP_CHECKOUT_SUBMISSION_ERROR', error });
-const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_DP_CHECKOUT_FORM_SUBMITTED', formSubmitted });
+const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
+const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
+const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
+const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
 const signOut = () => { window.location.href = getSignoutUrl(); };
 
@@ -155,28 +155,28 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
 }
 
 const formActionCreators = {
-  setFirstName: (firstName: string): Action => ({ type: 'SET_DP_CHECKOUT_FIRST_NAME', firstName }),
-  setLastName: (lastName: string): Action => ({ type: 'SET_DP_CHECKOUT_LAST_NAME', lastName }),
-  setTelephone: (telephone: string): Action => ({ type: 'SET_DP_CHECKOUT_TELEPHONE', telephone }),
+  setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
+  setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
+  setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
     const country = fromString(countryRaw);
     if (country) {
       dispatch(setCountry(country));
       dispatch({
-        type: 'SET_DP_CHECKOUT_COUNTRY_CHANGED',
+        type: 'SET_COUNTRY_CHANGED',
         country,
       });
     }
   },
   setStateProvince: (stateProvince: string) =>
     (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
-      type: 'SET_DP_CHECKOUT_STATE_PROVINCE',
+      type: 'SET_STATE_PROVINCE',
       stateProvince,
       country: getState().common.internationalisation.countryId,
     }),
-  setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_DP_CHECKOUT_BILLING_PERIOD', billingPeriod }),
+  setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
-    type: 'SET_DP_CHECKOUT_PAYMENT_METHOD',
+    type: 'SET_PAYMENT_METHOD',
     paymentMethod,
     country: getState().common.internationalisation.countryId,
   }),
@@ -189,7 +189,7 @@ export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
-function initReducer(initialCountry: IsoCountry, initialCountryGroup: CountryGroupId) {
+function initReducer(initialCountry: IsoCountry) {
   const billingPeriodInUrl = getQueryParameter('period');
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual'
@@ -217,44 +217,44 @@ function initReducer(initialCountry: IsoCountry, initialCountryGroup: CountryGro
 
     switch (action.type) {
 
-      case 'SET_DP_CHECKOUT_STAGE':
+      case 'SET_STAGE':
         return { ...state, stage: action.stage };
 
-      case 'SET_DP_CHECKOUT_FIRST_NAME':
+      case 'SET_FIRST_NAME':
         return { ...state, firstName: action.firstName };
 
-      case 'SET_DP_CHECKOUT_LAST_NAME':
+      case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName };
 
-      case 'SET_DP_CHECKOUT_TELEPHONE':
+      case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
 
-      case 'SET_DP_CHECKOUT_STATE_PROVINCE':
+      case 'SET_STATE_PROVINCE':
         return { ...state, stateProvince: stateProvinceFromString(action.country, action.stateProvince) };
 
-      case 'SET_DP_CHECKOUT_BILLING_PERIOD':
+      case 'SET_BILLING_PERIOD':
         return { ...state, billingPeriod: action.billingPeriod };
 
-      case 'SET_DP_CHECKOUT_PAYMENT_METHOD':
+      case 'SET_PAYMENT_METHOD':
         return {
           ...state,
           paymentMethod: countrySupportsDirectDebit(action.country) ? action.paymentMethod : 'Stripe',
         };
 
-      case 'SET_DP_CHECKOUT_COUNTRY_CHANGED':
+      case 'SET_COUNTRY_CHANGED':
         return {
           ...state,
           stateProvince: null,
           paymentMethod: countrySupportsDirectDebit(action.country) ? 'DirectDebit' : 'Stripe',
         };
 
-      case 'SET_DP_CHECKOUT_FORM_ERRORS':
+      case 'SET_FORM_ERRORS':
         return { ...state, formErrors: action.errors };
 
-      case 'SET_DP_CHECKOUT_SUBMISSION_ERROR':
+      case 'SET_SUBMISSION_ERROR':
         return { ...state, submissionError: action.error, formSubmitted: false };
 
-      case 'SET_DP_CHECKOUT_FORM_SUBMITTED':
+      case 'SET_FORM_SUBMITTED':
         return { ...state, formSubmitted: action.formSubmitted };
 
       default:
@@ -264,7 +264,7 @@ function initReducer(initialCountry: IsoCountry, initialCountryGroup: CountryGro
 
   return combineReducers({
     checkout: reducer,
-    user: createUserReducer(initialCountryGroup),
+    user: createUserReducer(fromCountry(initialCountry) || 'GBPCountries'),
     directDebit,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
