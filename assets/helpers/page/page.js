@@ -76,7 +76,7 @@ function buildInitialState(
   };
 
   // Override the default amounts config with any test participations
-  const amountsWithParticipations = overrideAmountsForParticipations(abParticipations, settings.amounts);
+  const amountsWithParticipationOverrides = overrideAmountsForParticipations(abParticipations, settings.amounts);
 
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
@@ -84,7 +84,7 @@ function buildInitialState(
     otherQueryParams,
     internationalisation,
     abParticipations,
-    settings: { ...settings, amounts: amountsWithParticipations },
+    settings: { ...settings, amounts: amountsWithParticipationOverrides },
     optimizeExperiments,
   };
 
