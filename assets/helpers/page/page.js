@@ -9,6 +9,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
+import { overrideAmountsForParticipations } from 'helpers/abTests/helpers';
 import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -74,13 +75,16 @@ function buildInitialState(
     currencyId,
   };
 
+  // Override the default amounts config with any test participations
+  const amountsWithParticipations = overrideAmountsForParticipations(abParticipations, settings.amounts);
+
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
     otherQueryParams,
     internationalisation,
     abParticipations,
-    settings,
+    settings: { ...settings, amounts: amountsWithParticipations },
     optimizeExperiments,
   };
 

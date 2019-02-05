@@ -11,6 +11,7 @@ import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import { type Settings } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
 
@@ -61,8 +62,16 @@ type Audiences = {
   [IsoCountry | CountryGroupId | 'ALL']: Audience
 };
 
+export type Variant = {
+  id: string,
+  amountsRegions?: AmountsRegions,
+}
+
+export type TestType = 'AMOUNTS' | 'OTHER';
+
 export type Test = {|
-  variants: string[],
+  type: TestType,
+  variants: Variant[],
   audiences: Audiences,
   isActive: boolean,
   canRun?: () => boolean,
@@ -188,7 +197,7 @@ function assignUserToVariant(mvtId: number, test: Test): string {
 
   const variantIndex = randomNumber(mvtId, independent, seed) % test.variants.length;
 
-  return test.variants[variantIndex];
+  return test.variants[variantIndex].id;
 }
 
 function getParticipations(

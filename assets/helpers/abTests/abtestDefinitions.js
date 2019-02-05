@@ -1,11 +1,13 @@
 // @flow
 import type { Tests } from './abtest';
+import { annualAmountsControl, annualAmountsA } from './annualAmountsTest';
 
 // ----- Tests ----- //
 
 export const tests: Tests = {
   ssrTwo: {
-    variants: ['off', 'on'],
+    type: 'OTHER',
+    variants: [{ id: 'off' }, { id: 'on' }],
     audiences: {
       ALL: {
         offset: 0,
@@ -15,6 +17,29 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 4,
+  },
+
+  annualContributionsRoundFour: {
+    type: 'AMOUNTS',
+    variants: [
+      {
+        id: 'control',
+        amountsRegions: annualAmountsControl,
+      },
+      {
+        id: 'annualAmountsA',
+        amountsRegions: annualAmountsA,
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 3,
   },
 
 };
