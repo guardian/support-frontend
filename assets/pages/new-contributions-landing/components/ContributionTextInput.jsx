@@ -45,7 +45,7 @@ function NewContributionTextInput(props: PropTypes) {
     <div className={classNameWithModifiers('form__field', [props.name])}>
       <label className="form__label" htmlFor={props.id}>
         <span>{props.label}</span>
-        <span className={props.required && props.showRequiredLabel ? 'form__label__required' : 'hidden'}>
+        <span className={showRequiredLabel ? 'form__label__required' : 'hidden'}>
           required
         </span>
       </label>

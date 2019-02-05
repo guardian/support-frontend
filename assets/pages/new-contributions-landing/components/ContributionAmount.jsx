@@ -149,7 +149,6 @@ function ContributionAmount(props: PropTypes) {
           max={max}
           autoFocus
           required
-          showRequiredLabel={props.requiredFieldsTestVariant === 'control'}
         />
       ) : null}
     </fieldset>

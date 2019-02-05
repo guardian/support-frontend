@@ -9,7 +9,7 @@ import { type UsState, type CaState } from 'helpers/internationalisation/country
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgUser from 'components/svgs/user';
 import Signout from 'components/signout/signout';
-
+import SvgChevron from 'components/svgs/chevron';
 import {
   checkFirstName,
   checkLastName,
@@ -23,7 +23,6 @@ import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
 import { MustSignIn } from './MustSignIn';
 import { type State } from '../contributionsLandingReducer';
-
 import {
   updateFirstName,
   updateLastName,
@@ -31,7 +30,6 @@ import {
   updateState,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
-import SvgChevron from 'components/svgs/chevron';
 
 
 // ----- Types ----- //
@@ -95,11 +93,7 @@ function FormFields(props: PropTypes) {
     checkoutFormHasBeenSubmitted,
   } = props;
 
-  const requiredCopy = props.contributionType === 'ONE_OFF'
-    ? 'We only ever ask for information we need. Your email is required for billing purposes and to easily access your Guardian account.'
-    : 'We only ever ask for information we need. Your name and email are required for billing purposes and to easily access your Guardian account.'
-
-  const showRequiredLabel = props.requiredFieldsTestVariant === 'variant';
+  const showRequiredLabel = props.requiredFieldsTestVariant === 'variant' && props.contributionType !== 'ONE_OFF';
   return (
     <div className="form-fields">
       <NewContributionTextInput
@@ -170,7 +164,7 @@ function FormFields(props: PropTypes) {
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
         showRequiredLabel={showRequiredLabel}
       />
-      <details className="form-fields__required-explainer">
+      <details className={showRequiredLabel ? 'form-fields__required-explainer' : 'hidden'}>
         <summary >
           Why are these details required?
           <span className="icon icon--arrows">
@@ -178,7 +172,8 @@ function FormFields(props: PropTypes) {
           </span>
         </summary>
         <span className="form-fields__required-explainer--answer">
-          {requiredCopy}
+          We only ever ask for information we need. Your name and email are required for billing
+          purposes and to easily access your Guardian account.
         </span>
       </details>
 
