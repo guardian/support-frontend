@@ -95,9 +95,6 @@ class S3SettingsProvider[T: Decoder] private (
           update =>
             if (update.isChange) {
               SafeLogger.info(s"settings changed from ${update.old} to ${update.current}")
-            } else {
-              // TODO: remove else statement once we have collected some information on the polling
-              SafeLogger.info(s"settings not changed from ${update.old}")
             }
         )
     }
