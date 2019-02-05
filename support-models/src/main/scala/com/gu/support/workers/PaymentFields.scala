@@ -15,7 +15,12 @@ case class StripePaymentFields(stripeToken: String) extends PaymentFields
 case class DirectDebitPaymentFields(
   accountHolderName: String,
   sortCode: String,
-  accountNumber: String
+  accountNumber: String,
+  city: Option[String],
+  postalCode: Option[String],
+  state: Option[String],
+  streetName: Option[String],
+  streetNumber: Option[String],
 ) extends PaymentFields
 
 object PaymentFields {
