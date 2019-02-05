@@ -230,7 +230,7 @@ function getParticipations(
     }
   });
 
-  return participations;
+  return { ...participations, ...getSSRParticipationsFromQuery() };
 }
 
 const buildOphanPayload = (participations: Participations, complete: boolean): OphanABPayload =>
@@ -259,17 +259,11 @@ const init = (
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  const ssrParticipation: ?Participations = getSSRParticipationsFromQuery();
-  const allParticipations = {
-    ...participations,
-    ...urlParticipations,
-    ...ssrParticipation,
-  };
-  setLocalStorageParticipations(allParticipations);
+  setLocalStorageParticipations({ ...participations, ...urlParticipations });
 
-  trackABOphan(allParticipations, false);
+  trackABOphan(participations, false);
 
-  return allParticipations;
+  return participations;
 };
 
 const getVariantsAsString = (participation: Participations): string => {
