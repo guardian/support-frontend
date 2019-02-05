@@ -12,7 +12,7 @@ import { clickedEvent } from 'helpers/tracking/clickTracking';
 type HeaderNavLink = {
   href: string,
   text: string,
-  tracking: string,
+  trackAs: string,
 }
 
 type PropTypes = {|
@@ -26,32 +26,32 @@ const links: HeaderNavLink[] = [
   {
     href: routes.showcase,
     text: 'Support',
-    tracking: 'showcase',
+    trackAs: 'showcase',
   },
   {
     href: routes.subscriptionsLanding,
     text: 'Subscriptions',
-    tracking: 'subscriptions',
+    trackAs: 'subscriptions',
   },
   {
     href: routes.digitalSubscriptionLanding,
     text: 'Digital',
-    tracking: 'subscriptions:digital',
+    trackAs: 'subscriptions:digital',
   },
   {
     href: routes.paperSubscriptionLanding,
     text: 'Paper',
-    tracking: 'subscriptions:paper',
+    trackAs: 'subscriptions:paper',
   },
   {
     href: routes.guardianWeeklySubscriptionLanding,
     text: 'Guardian Weekly',
-    tracking: 'subscriptions:guardianweekly',
+    trackAs: 'subscriptions:guardianweekly',
   },
   {
     href: getPatronsLink(),
     text: 'Patrons',
-    tracking: 'patrons',
+    trackAs: 'patrons',
   },
 ];
 
@@ -60,7 +60,7 @@ const links: HeaderNavLink[] = [
 const Links = ({ baseClassName, location, getRef }: PropTypes) => (
   <nav className={baseClassName}>
     <ul className={[baseClassName, 'ul'].join('__')} ref={getRef}>
-      {links.map(({ href, text, tracking }) => (
+      {links.map(({ href, text, trackAs }) => (
         <li
           className={
           classNameWithModifiers(
@@ -70,10 +70,11 @@ const Links = ({ baseClassName, location, getRef }: PropTypes) => (
         }
         >
           <a
-            onClick={() => { clickedEvent(['header-link', tracking, location].join(' - ')); }}
+            onClick={() => { clickedEvent(['header-link', trackAs, location].join(' - ')); }}
             className={[baseClassName, 'link'].join('__')}
             href={href}
-          >{text}
+          >
+            {text}
           </a>
         </li>
       ))}
