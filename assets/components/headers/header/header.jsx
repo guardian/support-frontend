@@ -116,7 +116,7 @@ export default class Header extends Component<PropTypes, State> {
           </div>
           {displayNavigation &&
             <div className="component-header__row">
-              <Links baseClassName="component-header-bottomnav" location="desktop" getRef={(el) => { this.menuRef = el; }} />
+              <Links location="desktop" getRef={(el) => { this.menuRef = el; }} />
             </div>
           }
         </div>

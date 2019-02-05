@@ -25,10 +25,10 @@ export type PropTypes = {|
 const MobileMenu = ({ onClose, closeButtonAt }: PropTypes) =>
   (
     <div
-      className="component-mobile-header"
+      className="component-header-mobile-menu"
       style={closeButtonAt && { width: closeButtonAt.x }}
     >
-      <Links location="mobile" baseClassName="component-mobile-header-nav" />
+      <Links location="mobile" />
       <VeggieBurgerButton
         style={closeButtonAt && { top: closeButtonAt.y }}
         label="close"

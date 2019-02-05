@@ -1,49 +1,50 @@
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-mobile-header {
+.component-header-mobile-menu {
   background: gu-colour(header-dark);
   min-height: 100%;
   max-width: 95vw;
   position: relative;
+
   .component-veggie-burger-button {
     position: absolute;
     top: $gu-cta-height;
     right: $gu-cta-height/-2;
   }  
+  
 }
 
-.component-mobile-header-nav {
+.component-header-links--mobile {
   display: block;
   clear: both;
-}
-
-.component-mobile-header-nav__ul {
-  list-style: none;
-}
-
-.component-mobile-header-nav__link {
-  @include gu-fontset-nav-desktop;
-  color: gu-colour(news-garnett-highlight);
-  text-decoration: none;
-  display: block;
-  padding: ($gu-v-spacing/2) $gu-h-spacing ($gu-v-spacing*1.5);
-  overflow: hidden;
-  position: relative;
-  box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
-  transition: .2s linear;
-
-  &:hover, &:focus {
-    text-decoration: underline;
+  .component-header-links__ul {
+    list-style: none;
   }
 
-  &:after {
-    content: '';
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: $gu-h-spacing;
-    height: 1px;
-    background-color: gu-colour(header-border);
+  .component-header-links__link {
+    @include gu-fontset-nav-desktop;
+    color: gu-colour(news-garnett-highlight);
+    text-decoration: none;
+    display: block;
+    padding: ($gu-v-spacing/2) $gu-h-spacing ($gu-v-spacing*1.5);
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
+    transition: .2s linear;
+
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: $gu-h-spacing;
+      height: 1px;
+      background-color: gu-colour(header-border);
+    }
   }
 }

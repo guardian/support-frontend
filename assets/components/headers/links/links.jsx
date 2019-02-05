@@ -16,7 +16,6 @@ type HeaderNavLink = {
 }
 
 type PropTypes = {|
-  baseClassName: string,
   location: 'desktop' | 'mobile',
   getRef: Option<(?Element) => void>
 |};
@@ -57,21 +56,21 @@ const links: HeaderNavLink[] = [
 
 
 // Export
-const Links = ({ baseClassName, location, getRef }: PropTypes) => (
-  <nav className={baseClassName}>
-    <ul className={[baseClassName, 'ul'].join('__')} ref={getRef}>
+const Links = ({ location, getRef }: PropTypes) => (
+  <nav className={classNameWithModifiers('component-header-links', [location])}>
+    <ul className="component-header-links__ul" ref={getRef}>
       {links.map(({ href, text, trackAs }) => (
         <li
           className={
           classNameWithModifiers(
-            [baseClassName, 'li'].join('__'),
+            'component-header-links__li',
             [window.location.href.endsWith(href) ? 'active' : null],
           )
         }
         >
           <a
             onClick={() => { clickedEvent(['header-link', trackAs, location].join(' - ')); }}
-            className={[baseClassName, 'link'].join('__')}
+            className="component-header-links__link"
             href={href}
           >
             {text}
