@@ -7,14 +7,15 @@
   text-decoration: none;
   font-weight: bold;
   height: $gu-cta-height;
-  padding: ($gu-v-spacing/2) $gu-h-spacing;
+  padding: 0 ($gu-cta-height / 2);
   border: none;
-  border-radius: 600px;
+  border-radius: $gu-cta-height / 2;
   box-sizing: border-box;
   background: transparent;
   cursor: pointer;
-  transition: $gu-animation-speed;
+  transition: $gu-transition;
   justify-content: space-between;
+  position: relative;
   &:hover, &:focus {
     outline: 0;
   }
@@ -40,29 +41,25 @@
 
 .component-button--secondary {
   color: gu-colour(garnett-neutral-5);
-  background-color: gu-colour(garnett-neutral-1);
-  svg {
-    fill: gu-colour(garnett-neutral-5);
-  }
+  background-color: gu-colour( garnett-neutral-7);
+
   &:hover, &:focus {
-    background-color: darken(gu-colour(garnett-neutral-1), 100%);
+    background-color: gu-colour(garnett-neutral-1);
   }
 }
 
 .component-button--green {
   color: gu-colour(garnett-neutral-5);
-  background-color: gu-colour(green-dark);
-  svg {
-    fill: gu-colour(garnett-neutral-5);
-  }
+  background-color: gu-colour(green-main);
+
   &:hover, &:focus {
-    background-color: darken(gu-colour(green-dark), 10%);
+    background-color: gu-colour(green-dark);
   }
 }
 
 .component-button--greenHollow {
-  color: gu-colour(green-dark);
-  border: 1px solid gu-colour(green-dark);
+  color: gu-colour(green-main);
+  border: 1px solid gu-colour(garnett-neutral-4);
   &:hover, &:focus {
     background: gu-colour(garnett-neutral-3);
   }
@@ -83,26 +80,32 @@
 }
 
 .component-button svg {
-  width: $gu-h-spacing * 1.075;
-  margin: $gu-v-spacing * -1 $gu-h-spacing * -.5 $gu-v-spacing * -1 $gu-h-spacing * .5;
+  fill: currentColor;
+  position: relative;
+  width: $gu-cta-height / 2;
 }
 
 .component-button--hasicon-left {
   flex-direction: row-reverse;
+
+  svg {
+    margin: 0 ($gu-cta-height / 4) 0 (-$gu-cta-height / 8);
+  }
 }
 
-.component-button--hasicon-left svg {
-  margin: $gu-v-spacing * -1 $gu-h-spacing * .5 $gu-v-spacing * -1 $gu-h-spacing * -.5;
+.component-button--hasicon-right {
+  svg {
+    margin: 0 (-$gu-cta-height / 8) 0 ($gu-cta-height / 4);
+  }
 }
-
 
 /* icon-specific animations & transitions */
 .component-button {
   .svg-arrow-right-straight {
-    transition: $gu-animation-speed transform;
+    transition: $gu-transition transform;
     will-change: transform;
   }
   &:hover .svg-arrow-right-straight, &:focus .svg-arrow-right-straight {
-    transform: translateX(5%);
+    transform: translateX(20%);
   }
 }

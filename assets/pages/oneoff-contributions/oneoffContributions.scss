@@ -79,7 +79,7 @@
   }
 
   .component-paypal-contribution-button {
-    height: $gu-cta-height + 2;
+    height: $gu-cta-height;
     width: 100%;
 
     @include mq($from: phablet) {
