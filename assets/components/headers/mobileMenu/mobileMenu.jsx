@@ -29,9 +29,13 @@ const MobileMenu = ({ onClose, closeButtonAt, utility }: PropTypes) =>
       className="component-header-mobile-menu"
       style={closeButtonAt && { width: closeButtonAt.x }}
     >
-      <Links location="mobile" />
-      <div className="component-header-mobile-menu__utility">
-        {utility}
+      <div className="component-header-mobile-menu__scroll">
+        <Links location="mobile" />
+        {utility &&
+          <div className="component-header-mobile-menu__utility">
+            {utility}
+          </div>
+        }
       </div>
       <VeggieBurgerButton
         style={closeButtonAt && { top: closeButtonAt.y }}
