@@ -20,6 +20,7 @@ $mobile-menu-gutter: ($gu-h-spacing*2.5);
     height: 100%;
     height: 100vh;
     overflow: scroll;
+    box-sizing: border-box;
     padding: $gu-v-spacing/2 0 $gu-v-spacing*2;
   }
   
@@ -63,6 +64,7 @@ $mobile-menu-gutter: ($gu-h-spacing*2.5);
   margin-left: $mobile-menu-gutter;
   border-top: 1px solid gu-colour(header-border);
   padding: ($gu-v-spacing/2) 0;
+  margin-top: $gu-v-spacing;
 
   //TODO:this could be more elegant
   .component-country-group-switcher .component-select-input__select {
