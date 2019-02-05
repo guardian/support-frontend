@@ -47,7 +47,7 @@
     }
   }
   .component-dialog--open .component-header-mobile-menu {
-    animation: open-menu .2s ease-in-out both;
+    animation: open-menu $gu-animation-speed ease-in-out both;
   }
 }
 
@@ -156,7 +156,7 @@
     overflow: hidden;
     position: relative;
     box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
-    transition: .2s linear;
+    transition: $gu-animation-speed linear;
 
     .component-header-links__li--active &,
     &:hover {
