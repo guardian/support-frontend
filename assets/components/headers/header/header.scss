@@ -18,6 +18,7 @@
     margin-top: $gu-v-spacing / 2.4;
     margin-bottom: $gu-v-spacing * 1.5;
     height: 48px;
+    width: auto;
     @include mq($from: mobileLandscape) {
       height: 56px;
     }  
@@ -66,6 +67,7 @@
   padding: 0 ($gu-h-spacing / 2);
   position: relative;
   flex: 1 1 auto;
+  background: green;
 
   @include mq($from: tablet) {
     max-width: gu-span(11);
@@ -132,7 +134,9 @@
   z-index: 9;
   white-space: nowrap;
   .component-header--display-veggie-burger & {
-    @include accessibility-hint;
+    position: absolute;
+    height: 0;
+    overflow: hidden;
   }
   .component-header--one-row & {
     position: absolute;
@@ -144,6 +148,11 @@
   .component-header-links__ul {
     list-style: none;
     display: inline-flex;
+    width: auto;
+    > * {
+      flex: 0 0 auto;
+      display: block;
+    }
   }
 
   .component-header-links__link {
