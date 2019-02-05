@@ -108,8 +108,8 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isTest: Boolean)(implicit request: RequestHeader, settings: AllSettings) = {
-    if (isTest)
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isInSSRTest: Boolean)(implicit request: RequestHeader, settings: AllSettings) = {
+    if (isInSSRTest)
       views.html.newContributionsTest(
         title = "Support the Guardian | Make a Contribution",
         id = s"new-contributions-landing-page-$countryCode",
