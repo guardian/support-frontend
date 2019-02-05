@@ -48,7 +48,7 @@ const links: HeaderNavLink[] = [
     trackAs: 'subscriptions:guardianweekly',
   },
   {
-    href: `${getPatronsLink()}?INTCMP=support-header`,
+    href: getPatronsLink('support-header'),
     text: 'Patrons',
     trackAs: 'patrons',
   },
