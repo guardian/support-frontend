@@ -66,7 +66,7 @@ const TopNav = ({ getLogoRef, utility }: TopNavPropTypes) => (
 export default class Header extends Component<PropTypes, State> {
   static defaultProps = {
     utility: null,
-    displayNavigation: false,
+    displayNavigation: true,
   };
 
   state = {
@@ -75,7 +75,7 @@ export default class Header extends Component<PropTypes, State> {
   };
 
   componentDidMount() {
-    if (this.menuRef && this.logoRef && this.containerRef) {
+    if (this.props.displayNavigation && this.menuRef && this.logoRef && this.containerRef) {
       this.observer = onElementResize(
         [this.logoRef, this.menuRef, this.containerRef],
         ([logoRef, menuRef, containerRef]) => {

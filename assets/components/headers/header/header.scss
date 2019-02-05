@@ -1,10 +1,16 @@
 @import '~stylesheets/gu-sass/gu-sass';
+@import '~components/headers/veggieBurgerButton/veggieBurgerButton.scss';
+@import '~components/headers/mobileMenu/mobileMenu.scss';
+@import '~components/dialog/dialog.scss';
+
+$header-links-min-width: gu-span(11);
 
 .component-header {
   background-color: gu-colour(header-dark);
   display: flex;
   align-items: center;
   justify-content: stretch;
+  overflow: hidden;
 
   .component-dialog {
     align-items: stretch;
@@ -68,7 +74,7 @@
   flex: 1 1 auto;
 
   @include mq($from: tablet) {
-    max-width: gu-span(11);
+    max-width: $header-links-min-width;
   }
 
   @include mq($from: leftCol) {
@@ -126,11 +132,18 @@
   display: flex;
   justify-content: flex-start;
   background-color: gu-colour(header-dark);
-  border: 1px solid gu-colour(header-border);
-  border-bottom: none;
-  margin: 0 ($gu-h-spacing * -1);
+  border-top: 1px solid gu-colour(header-border);
   z-index: 9;
   white-space: nowrap;
+  margin: 0 ($gu-h-spacing * -2) 0 ($gu-h-spacing * -1);
+  box-sizing: border-box;
+
+  @media (min-width: $header-links-min-width + 40) {
+    margin: 0 ($gu-h-spacing * -1);
+    border-left: 1px solid gu-colour(header-border);
+    border-right: 1px solid gu-colour(header-border);
+  }
+
   .component-header--display-veggie-burger & {
     position: absolute;
     height: 0;

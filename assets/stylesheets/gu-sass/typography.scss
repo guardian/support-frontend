@@ -77,6 +77,12 @@ $gu-fonts: (
 		font-weight: 900;
 	}
 }
+@mixin gu-fontset-nav-mobile($size-only: false) {
+	@include gu-typeface(headline, 24, $size-only);
+	@if $size-only == false {
+		font-weight: 900;
+	}
+}
 
 
 // ----- Headings ----- //
