@@ -6,7 +6,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
@@ -18,12 +18,9 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 
 import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
-
 import './digitalSubscriptionCheckout.scss';
 
 // ----- Internationalisation ----- //
-
-const countryGroupId: CountryGroupId = detect();
 
 const reactElementId: {
   [CountryGroupId]: string,
@@ -36,7 +33,9 @@ const reactElementId: {
 
 // ----- Redux Store ----- //
 
-const store = pageInit(commonState => initReducer(commonState.internationalisation.countryGroupId), true);
+const store = pageInit(commonState => initReducer(commonState.internationalisation.countryId), true);
+
+const { countryGroupId } = store.getState().common.internationalisation;
 
 // ----- Render ----- //
 

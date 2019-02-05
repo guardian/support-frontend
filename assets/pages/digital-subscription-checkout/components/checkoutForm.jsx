@@ -46,7 +46,6 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
-import { countrySupportsDirectDebit } from '../helpers/paymentProviders';
 
 // ----- Types ----- //
 
@@ -174,7 +173,7 @@ function CheckoutForm(props: PropTypes) {
                 id="country"
                 label="Country"
                 value={props.country}
-                setValue={props.setCountry}
+                setValue={props.setBillingCountry}
                 error={firstError('country', props.formErrors)}
               >
                 <option value="">--</option>
@@ -222,8 +221,8 @@ function CheckoutForm(props: PropTypes) {
                 />
               </Fieldset>
             </FormSection>
-            <FormSection title={countrySupportsDirectDebit(props.country) ? 'How would you like to pay?' : null}>
-              {countrySupportsDirectDebit(props.country) &&
+            <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
+              {props.countrySupportsDirectDebit &&
               <div>
                 <Fieldset>
                   <RadioInput
