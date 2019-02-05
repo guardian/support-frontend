@@ -125,20 +125,12 @@ function getParticipationsFromUrl(): ?Participations {
 
 function getSSRParticipationsFromQuery(): ?Participations {
 
-  const hashUrl = (new URL(document.URL)).search;
-  const index = hashUrl.indexOf('ssr');
-
-  if (index > 0) {
-
-    const [testId, variantEtc] = hashUrl.substr(index).split('=');
-    const test = {};
-    const variant = variantEtc.split('&')[0];
-    test[testId] = variant;
-
-    return test;
+  const ssrParam = (new URL(document.URL)).searchParams.get('ssrTwo');
+  if (ssrParam) {
+    return { ssrTwo: ssrParam };
   }
 
-  return { ssr: 'notintest' };
+  return { ssrTwo: 'notintest' };
 }
 
 function userInBreakpoint(audience: Audience): boolean {
