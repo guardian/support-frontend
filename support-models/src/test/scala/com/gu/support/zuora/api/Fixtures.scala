@@ -119,7 +119,17 @@ object Fixtures {
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
-  val directDebitPaymentMethod = DirectDebitPaymentMethod("Barry", "Humphreys", "Barry Humphreys", "200000", "55779911")
+  val directDebitPaymentMethod = DirectDebitPaymentMethod(
+    firstName = "Barry",
+    lastName = "Humphreys",
+    bankTransferAccountName = "Barry Humphreys",
+    bankCode = "200000", bankTransferAccountNumber = "55779911",
+    city = Some("London"),
+    postalCode = Some("abc 123"),
+    state = None,
+    streetName = Some("easy street"),
+    streetNumber = None
+  )
   val productRatePlanId = "12345"
   val productRatePlanChargeId = "67890"
 
