@@ -17,4 +17,17 @@ export const tests: Tests = {
     seed: 4,
   },
 
+  requiredFields: {
+    variants: ['control', 'variant'],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 5,
+  },
+
 };

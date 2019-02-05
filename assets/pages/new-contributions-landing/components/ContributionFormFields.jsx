@@ -51,6 +51,7 @@ type PropTypes = {|
   updateState: Event => void,
   checkIfEmailHasPassword: Event => void,
   contributionType: ContributionType,
+  requiredFieldsTestVariant: 'control' | 'variant',
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -70,6 +71,7 @@ const mapStateToProps = (state: State) => ({
   isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
   contributionType: state.page.form.contributionType,
+  requiredFieldsTestVariant: state.common.abParticipations.requiredFields,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -92,6 +94,12 @@ function FormFields(props: PropTypes) {
     state,
     checkoutFormHasBeenSubmitted,
   } = props;
+
+  const requiredCopy = props.contributionType === 'ONE_OFF'
+    ? 'We only ever ask for information we need. Your email is required for billing purposes and to easily access your Guardian account.'
+    : 'We only ever ask for information we need. Your name and email are required for billing purposes and to easily access your Guardian account.'
+
+  const showRequiredLabel = props.requiredFieldsTestVariant === 'variant';
   return (
     <div className="form-fields">
       <NewContributionTextInput
@@ -111,6 +119,7 @@ function FormFields(props: PropTypes) {
         errorMessage="Please provide a valid email address"
         required
         disabled={isSignedIn}
+        showRequiredLabel={showRequiredLabel && !isSignedIn}
       />
       <Signout isSignedIn />
       <MustSignIn
@@ -135,6 +144,7 @@ function FormFields(props: PropTypes) {
             formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your first name"
             required
+            showRequiredLabel={showRequiredLabel}
           />
           <NewContributionTextInput
             id="contributionLastName"
@@ -149,6 +159,7 @@ function FormFields(props: PropTypes) {
             formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
             errorMessage="Please provide your last name"
             required
+            showRequiredLabel={showRequiredLabel}
           />
         </div> : null
       }
@@ -157,6 +168,7 @@ function FormFields(props: PropTypes) {
         selectedState={state}
         isValid={checkState(state)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+        showRequiredLabel={showRequiredLabel}
       />
       <details className="form-fields__required-explainer">
         <summary >
@@ -166,8 +178,7 @@ function FormFields(props: PropTypes) {
           </span>
         </summary>
         <span className="form-fields__required-explainer--answer">
-          We only ever ask for information we need. Your name and email are required for billing purposes and to easily
-          access your Guardian account.
+          {requiredCopy}
         </span>
       </details>
 
