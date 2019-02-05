@@ -31,6 +31,7 @@ import {
   updateState,
   checkIfEmailHasPassword,
 } from '../contributionsLandingActions';
+import SvgChevron from 'components/svgs/chevron';
 
 
 // ----- Types ----- //
@@ -157,6 +158,19 @@ function FormFields(props: PropTypes) {
         isValid={checkState(state)}
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
       />
+      <details className="form-fields__required-explainer">
+        <summary >
+          Why are these details required?
+          <span className="icon icon--arrows">
+            <SvgChevron />
+          </span>
+        </summary>
+        <span className="form-fields__required-explainer--answer">
+          We only ever ask for information we need. Your name and email are required for billing purposes and to easily
+          access your Guardian account.
+        </span>
+      </details>
+
     </div>
   );
 }

@@ -565,10 +565,63 @@ form {
   font-weight: bold;
 }
 
+/* TODO: implement in the SSR test CSS */
 .form__label {
   font-weight: bold;
   line-height: 1;
   margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-fields__required-explainer {
+  padding-top: $gu-v-spacing;
+  color: gu-colour(neutral-2);
+  font-family: $gu-text-sans-web;
+  line-height: 19px;
+}
+
+.form-fields__required-explainer summary {
+  cursor: pointer;
+  text-align: right;
+  text-decoration: underline;
+  font-style: italic;
+  font-size: 15px;
+  margin-bottom: 5px;
+  outline: none;
+  list-style: none;
+}
+
+.form-fields__required-explainer .icon {
+  text-align: center;
+  width: 40px;
+}
+
+.form-fields__required-explainer .svg-chevron {
+  padding: 0 $gu-h-spacing/4 0 $gu-h-spacing/4;
+  width: 15px;
+  height: 8px;
+  fill: gu-colour(neutral-2);;
+}
+
+.form-fields__required-explainer[open] .svg-chevron {
+  transform: rotate(180deg);
+}
+
+
+.form-fields__required-explainer summary::-webkit-details-marker {
+  display:none;
+}
+
+.form-fields__required-explainer--answer {
+  font-size: 15px;
+}
+.form__label__required {
+  font-family: $gu-text-sans-web;
+  font-style: italic;
+  font-size: 15px;
+  color: gu-colour(neutral-2);
+  font-weight: normal;
 }
 
 .form__input {

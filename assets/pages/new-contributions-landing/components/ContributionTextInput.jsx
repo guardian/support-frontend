@@ -34,6 +34,7 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
+// TODO: check how it looks on the set password screen
 function NewContributionTextInput(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   const modifiersArray = showError ? ['invalid', props.id] : [props.id];
@@ -41,7 +42,8 @@ function NewContributionTextInput(props: PropTypes) {
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
       <label className="form__label" htmlFor={props.id}>
-        {props.label}
+        <span>{props.label}</span>
+        <span className={props.required ? 'form__label__required' : 'hidden'}> required </span>
       </label>
       <span className="form__input-with-icon">
         <input
