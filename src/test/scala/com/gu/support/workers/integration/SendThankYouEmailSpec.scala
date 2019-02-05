@@ -105,7 +105,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       .validate("Mandate ID", mandateId)
       .validate("account name", directDebitPaymentMethod.bankTransferAccountName)
       .validate("account number", "******11")
-      .validate("sort code", "12-34-56")
+      .validate("sort code", "20-20-20")
       .validate("first payment date", "Monday, 10 January 2000")
       .validate("payment method", "Direct Debit")
       .validate("currency", "£")
