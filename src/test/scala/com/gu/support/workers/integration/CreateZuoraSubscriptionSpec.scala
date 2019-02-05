@@ -13,8 +13,8 @@ import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.{Annual, IdentityId, LambdaSpec, Monthly}
-import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
+import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
@@ -68,6 +68,18 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     val outStream = new ByteArrayOutputStream()
 
     createZuora.handleRequest(wrapFixture(createDigiPackSubscriptionWithPromoJson), outStream, context)
+
+    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
+    sendThankYouEmail._1.subscriptionNumber.length should be > 0
+  }
+
+  it should "create a Digital Pack subscription with a discount and free trial" in {
+
+    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
+
+    val outStream = new ByteArrayOutputStream()
+
+    createZuora.handleRequest(digipackSubscriptionWithDiscountAndFreeTrialJson, outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
     sendThankYouEmail._1.subscriptionNumber.length should be > 0
