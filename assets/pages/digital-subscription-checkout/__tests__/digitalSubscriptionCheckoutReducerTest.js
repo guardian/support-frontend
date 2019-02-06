@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { initReducer, setStage, type Stage } from '../digitalSubscriptionCheckoutReducer';
+import { initReducer, setStage, setFormErrors, type Stage } from '../digitalSubscriptionCheckoutReducer';
 
 jest.mock('ophan', () => {});
 
@@ -41,6 +41,22 @@ describe('Digital Subscription Checkout Reducer', () => {
     const newState = initReducer('GB')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
+
+  });
+
+  it('should setErrors on the redux store', () => {
+
+    const errors = [
+      { field: 'addressLine1', message: 'Please enter a value' },
+      { field: 'townCity', message: 'Please enter a value' },
+      { field: 'postcode', message: 'Please enter a value' },
+    ];
+
+    const action = setFormErrors(errors);
+
+    const newState = initReducer('GBPCountries')(undefined, action);
+
+    expect(newState.checkout.formErrors).toEqual(errors);
 
   });
 

@@ -166,7 +166,10 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
+const setFormErrors = (errors: Array<FormError<FormField>>): Action => {
+  console.log(errors);
+  return ({ type: 'SET_FORM_ERRORS', errors });
+};
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
@@ -331,6 +334,7 @@ function initReducer(initialCountry: IsoCountry) {
 export {
   initReducer,
   setStage,
+  setFormErrors,
   getFormFields,
   getEmail,
   setSubmissionError,
