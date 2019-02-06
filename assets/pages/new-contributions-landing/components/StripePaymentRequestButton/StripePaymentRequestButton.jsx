@@ -149,6 +149,9 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
     // We need to do this so that we can offer marketing permissions on the thank you page
     updateUserEmail(data, props.updateEmail);
     const tokenId = props.isTestUser ? 'tok_visa' : token.id;
+    if (data.methodName) {
+      trackComponentClick(`${data.methodName}-paymentAuthorised`);
+    }
     props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId, stripePaymentMethod: paymentMethod })
       .then(onComplete(complete));
   });
