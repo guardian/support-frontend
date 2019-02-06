@@ -1,11 +1,9 @@
-// gu-sass Library, you can import specific elements of gu-sass or import this file
-// which import all the modules of gu-sass.
+/*
+  gu-sass Library, this is all functions & helpers, you need this at the head of every file
+*/
 
-@import './reset-src';
 @import './breakpoints';
 @import './colours';
 @import './layout';
-@import './webfonts';
 @import './typography';
 @import './helpers';
-@import './accessibility';

@@ -15,7 +15,7 @@
 }
 
 .component-footer__content {
-  @extend .gu-content-margin;
+  @include gu-content-margin;
 }
 
 .component-footer__privacy-policy {

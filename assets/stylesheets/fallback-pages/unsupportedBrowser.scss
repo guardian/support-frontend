@@ -1,5 +1,6 @@
 // -----  gu-sass ----- //
 
+@import '~stylesheets/skeleton/skeleton';
 @import '~stylesheets/gu-sass/gu-sass';
 
 
@@ -21,7 +22,7 @@
 }
 
 .unsupported-browser__header-content {
-  @extend .gu-content-margin;
+  @include gu-content-margin;
   padding: ($gu-v-spacing / 2) 0 $gu-v-spacing;
   height: 68px;
 
@@ -46,7 +47,7 @@
 }
 
 .unsupported-browser__introduction-text {
-  @extend .gu-content-margin;
+  @include gu-content-margin;
   background-color: #e9e939;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -59,7 +60,7 @@
 }
 
 .unsupported-browser__why-support-content {
-  @extend .gu-content-margin;
+  @include gu-content-margin;
 }
 
 .unsupported-browser__why-support-heading {
@@ -91,7 +92,7 @@
 }
 
 .unsupported-browser__footer-content {
-  @extend .gu-content-margin;
+  @include gu-content-margin;
 }
 
 .unsupported-browser__footer-privacy-policy {

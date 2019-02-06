@@ -101,7 +101,7 @@
 }
 
 .component-featured-product-hero__content {
-  @extend .gu-content-margin;
+  @include gu-content-margin;
 
   @include mq($from: tablet) {
     position: relative;
@@ -123,7 +123,7 @@
 }
 
 .component-featured-product-hero__description {
-  @extend .gu-content-margin;
+  @include gu-content-margin;
   position: relative;
 
   @include mq($from: tablet) {
