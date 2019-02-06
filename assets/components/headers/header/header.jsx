@@ -34,7 +34,6 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
     containerRef.getBoundingClientRect().left,
     containerRef.getBoundingClientRect().width,
   ];
-  console.log([containerWidth, menuWidth, containerWidth - menuWidth]);
   const fitsLinksAtAll = containerWidth - menuWidth > 0;
   const fitsLinksInOneRow = fitsLinksAtAll && (logoLeft - containerLeft - menuWidth > 0);
   return ({
