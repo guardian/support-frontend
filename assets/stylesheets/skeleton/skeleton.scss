@@ -1,6 +1,8 @@
 /*
-Core page styles, import 1x per page
+Core page styles such as CSS reset, core helper classes, etc, 
+Import this once per page.
 */
+
 @import '~stylesheets/gu-sass/gu-sass';
 
 @import './webfonts';
