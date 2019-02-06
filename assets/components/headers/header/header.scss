@@ -168,7 +168,7 @@ $header-links-min-width: gu-span(11);
 
   .component-header-links__link {
     @include gu-fontset-nav-desktop;
-    color: gu-colour(news-garnett-highlight);
+    color: gu-colour(garnett-neutral-5);
     text-decoration: none;
     display: block;
     height: $gu-v-spacing * 2;
