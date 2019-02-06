@@ -1,3 +1,5 @@
+@import '~stylesheets/skeleton/html';
+
 .component-circles-introduction {
   @include introduction;
 
@@ -29,7 +31,7 @@
 }
 
 .component-circles-introduction__content {
-  @include gu-content-margin;
+  @extend .gu-content-margin;
   padding-bottom: 100px;
 
   @include mq($from: mobileMedium) {

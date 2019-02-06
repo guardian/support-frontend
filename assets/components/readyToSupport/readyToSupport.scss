@@ -1,9 +1,11 @@
+@import '~stylesheets/skeleton/html';
+
 .component-ready-to-support {
   border-top: 1px solid gu-colour(garnett-neutral-4);
 }
 
 .component-ready-to-support__content {
-  @include gu-content-margin;
+  @extend .gu-content-margin;
   padding-bottom: $gu-v-spacing * 4;
   position: relative;
 

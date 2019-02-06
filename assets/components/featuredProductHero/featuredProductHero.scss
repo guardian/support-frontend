@@ -1,3 +1,5 @@
+@import '~stylesheets/skeleton/html';
+
 @mixin with-colour($color) {
   & .component-featured-product-hero__heading,
   & .component-flash-sale-countdown, {
@@ -101,7 +103,7 @@
 }
 
 .component-featured-product-hero__content {
-  @include gu-content-margin;
+  @extend .gu-content-margin;
 
   @include mq($from: tablet) {
     position: relative;
@@ -123,7 +125,7 @@
 }
 
 .component-featured-product-hero__description {
-  @include gu-content-margin;
+  @extend .gu-content-margin;
   position: relative;
 
   @include mq($from: tablet) {

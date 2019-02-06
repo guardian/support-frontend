@@ -1,3 +1,5 @@
+@import '~stylesheets/skeleton/html';
+
 .component-squares-introduction {
   @include introduction;
 
@@ -19,7 +21,7 @@
 }
 
 .component-squares-introduction__content {
-  @include gu-content-margin;
+  @extend .gu-content-margin;
   padding-top: $gu-v-spacing;
   padding-bottom: 220px;
 

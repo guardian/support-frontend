@@ -87,40 +87,6 @@
   }
 }
 
-@mixin gu-content-margin {
-  box-sizing: border-box;
-  padding: 0 ($gu-h-spacing / 2);
-
-  @include mq($from: mobileLandscape) {
-    width: gu-breakpoint(mobileLandscape);
-    margin: 0 auto;
-    padding: 0 $gu-h-spacing;
-  }
-
-  @include mq($from: phablet) {
-    width: gu-breakpoint(phablet);
-    margin: 0 auto;
-    padding: 0 auto;
-  }
-
-  @include mq($from: tablet) {
-    width: gu-breakpoint(tablet);
-    padding: 0 $gu-h-spacing;
-  }
-
-  @include mq($from: desktop) {
-    width: gu-breakpoint(desktop);
-  }
-
-  @include mq($from: leftCol) {
-    width: gu-breakpoint(leftCol);
-  }
-
-  @include mq($from: wide) {
-    width: gu-breakpoint(wide);
-  }
-}
-
 // ----- Assistive technologies guidance (non-visible) ----- //
 @mixin accessibility-hint {
   position: absolute;
