@@ -43,7 +43,7 @@ const store = pageInit(commonState => initReducer(commonState.internationalisati
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header />}
+      header={<Header displayNavigation={false} />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
