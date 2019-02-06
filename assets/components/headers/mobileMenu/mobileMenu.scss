@@ -66,7 +66,6 @@ $mobile-menu-gutter: ($gu-h-spacing*2.5);
   padding: ($gu-v-spacing/2) 0;
   margin-top: $gu-v-spacing;
 
-  //TODO:this could be more elegant
   .component-country-group-switcher .component-select-input__select {
     @include gu-fontset-body-sans($size-only: true);
   }
