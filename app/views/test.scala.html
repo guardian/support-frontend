@@ -79,12 +79,17 @@
   animation-duration: 2s;
 }
 
-.fade-in-message .component-animated-dots div {
-  background: rgba(255, 255, 255, 1);
-  animation-name: fadeInOpacitySolid;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-in;
-  animation-duration: 2s;
+
+.fade-in-message .component-animated-dots__bounce1 {
+  animation-delay: 1.68s;
+}
+
+.fade-in-message .component-animated-dots__bounce2 {
+  animation-delay: 1.84s;
+}
+
+.fade-in-message .component-animated-dots__bounce3 {
+  animation-delay: 2s;
 }
 
 @@keyframes fadeInOpacity {
@@ -102,15 +107,6 @@
 }
 100% {
   opacity: 1;
-}
-}
-
-@@keyframes fadeInOpacitySolid {
-0% {
-  background: rgba(255,255,255, 0);
-}
-100% {
-  background: rgba(255, 255, 255, 1);
 }
 }
     </style>
