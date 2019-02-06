@@ -178,8 +178,8 @@ function CheckoutForm(props: PropTypes) {
                 footer="We may use this to get in touch with you about your subscription."
                 error={firstError('telephone', props.formErrors)}
               />
-              </FormSection>
-              <FormSection title="Address">
+            </FormSection>
+            <FormSection title="Address">
               <Input1
                 id="address-line-1"
                 label="Address Line 1"
@@ -241,7 +241,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setPostcode}
                 error={firstError('postcode', props.formErrors)}
               />
-              </FormSection>
+            </FormSection>
             <FormSection title="How often would you like to pay?">
               <Fieldset>
                 <RadioInput
