@@ -4,7 +4,7 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 
 export const tests: Tests = {
-  ssr: {
+  ssrTwo: {
     variants: ['off', 'on'],
     audiences: {
       ALL: {

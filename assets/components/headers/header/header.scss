@@ -26,13 +26,13 @@ $header-links-min-width: gu-span(11);
     width: auto;
     @include mq($from: mobileLandscape) {
       height: 56px;
-    }  
+    }
     @include mq($from: tablet) {
       height: 72px;
-    }  
+    }
     @include mq($from: desktop) {
       height: 95px;
-    }  
+    }
   }
 }
 
@@ -44,10 +44,10 @@ $header-links-min-width: gu-span(11);
   & > .component-veggie-burger-button {
     margin-left: $gu-h-spacing / 4;
     /*aligned with the logo*/
-    margin-top: 22px; 
+    margin-top: 22px;
     @include mq($from: mobileLandscape) {
       margin-top: 28px;
-    }  
+    }
     @include mq($from: tablet) {
       margin-top: 40px;
     }
@@ -114,7 +114,7 @@ $header-links-min-width: gu-span(11);
     .component-header--one-row & {
       border-left: 1px solid gu-colour(header-border);
       z-index: 10;
-      position: relative;    
+      position: relative;
     }
   }
   @include mq($from: wide) {
@@ -176,7 +176,7 @@ $header-links-min-width: gu-span(11);
     overflow: hidden;
     position: relative;
     box-shadow: inset 0 0 0 gu-colour(news-garnett-highlight);
-    transition: $gu-animation-speed linear;
+    transition: $gu-transition;
     box-sizing: border-box;
 
     &:hover {

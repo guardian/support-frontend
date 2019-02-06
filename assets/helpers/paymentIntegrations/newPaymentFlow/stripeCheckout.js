@@ -85,7 +85,7 @@ function setupStripeCheckout(
 function openDialogBox(stripeHandler: Object, amount: number, email: string) {
   stripeHandler.open({
     // Must be passed in pence.
-    amount: amount * 100,
+    amount: Math.round(amount * 100),
     email,
   });
 }

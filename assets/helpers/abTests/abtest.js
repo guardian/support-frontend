@@ -123,22 +123,14 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
-function getParticipationsFromQuery(): ?Participations {
+function getSSRParticipationsFromQuery(): ?Participations {
 
-  const hashUrl = (new URL(document.URL)).search;
-  const index = hashUrl.indexOf('ssr');
-
-  if (index > 0) {
-
-    const [testId, variantEtc] = hashUrl.substr(index).split('=');
-    const test = {};
-    const variant = variantEtc.split('&')[0];
-    test[testId] = variant;
-
-    return test;
+  const ssrParam = (new URL(document.URL)).searchParams.get('ssrTwo');
+  if (ssrParam) {
+    return { ssrTwo: ssrParam };
   }
 
-  return { ssr: 'notintest' };
+  return { ssrTwo: 'notintest' };
 }
 
 function userInBreakpoint(audience: Audience): boolean {
@@ -230,7 +222,10 @@ function getParticipations(
     }
   });
 
-  return participations;
+  // seeing as the ssr test variant that the user is in is decided, server side, by the query parameter
+  // and not by the local storage, we always want to get the most recent value from the query string parameter
+  // for the ssr test variant
+  return { ...participations, ...getSSRParticipationsFromQuery() };
 }
 
 const buildOphanPayload = (participations: Participations, complete: boolean): OphanABPayload =>
@@ -259,8 +254,7 @@ const init = (
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  const queryParticipations: ?Participations = getParticipationsFromQuery();
-  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations, queryParticipations));
+  setLocalStorageParticipations({ ...participations, ...urlParticipations });
 
   trackABOphan(participations, false);
 
