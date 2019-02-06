@@ -613,6 +613,10 @@ form {
   a, a:visited {
     color: gu-colour(news-garnett-main-1);
   }
+
+  .component-animated-dots div {
+    background-color: gu-colour(garnett-neutral-4);
+  }
 }
 
 .form__error--sign-in {
