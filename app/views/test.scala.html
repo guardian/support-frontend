@@ -69,31 +69,34 @@
   animation-name: fadeInOpacity;
   animation-iteration-count: 1;
   animation-timing-function: ease-in;
-  animation-duration: 2s;
+  animation-duration: 3s;
 }
 
 .fade-in-message .component-progress-message__message {
   animation-name: fadeInOpacityFont;
   animation-iteration-count: 1;
   animation-timing-function: ease-in;
-  animation-duration: 2s;
+  animation-duration: 3s;
 }
 
 
 .fade-in-message .component-animated-dots__bounce1 {
-  animation-delay: 1.68s;
+  animation-delay: 2.68s;
 }
 
 .fade-in-message .component-animated-dots__bounce2 {
-  animation-delay: 1.84s;
+  animation-delay: 2.84s;
 }
 
 .fade-in-message .component-animated-dots__bounce3 {
-  animation-delay: 2s;
+  animation-delay: 3s;
 }
 
 @@keyframes fadeInOpacity {
 0% {
+  background: rgba(0, 0, 0, 0);
+}
+75% {
   background: rgba(0, 0, 0, 0);
 }
 100% {
@@ -103,6 +106,9 @@
 
 @@keyframes fadeInOpacityFont {
 0% {
+  opacity: 0;
+}
+75% {
   opacity: 0;
 }
 100% {
