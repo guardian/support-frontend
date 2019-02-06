@@ -146,7 +146,8 @@ $gu-fonts: (
 
 // ----- Defaults ----- //
 
-html {
+html,
+dialog {
     font-family: "Guardian Text Egyptian Web", Georgia, serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
