@@ -579,6 +579,7 @@ form {
   color: gu-colour(neutral-2);
   font-family: $gu-text-sans-web;
   line-height: 19px;
+  font-size: 15px;
 }
 
 .form-fields__required-explainer summary {
@@ -586,7 +587,6 @@ form {
   text-align: left;
   text-decoration: underline;
   font-style: italic;
-  font-size: 15px;
   margin-bottom: 5px;
   outline: none;
   list-style: none;
@@ -608,14 +608,10 @@ form {
   transform: rotate(180deg);
 }
 
-
 .form-fields__required-explainer summary::-webkit-details-marker {
   display:none;
 }
 
-.form-fields__required-explainer--answer {
-  font-size: 15px;
-}
 .form__label__required {
   font-family: $gu-text-sans-web;
   font-style: italic;
