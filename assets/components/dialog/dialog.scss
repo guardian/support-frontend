@@ -6,6 +6,7 @@
   width: 0;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   &::backdrop {
     background: rgba(0,0,0,0);
   }  
