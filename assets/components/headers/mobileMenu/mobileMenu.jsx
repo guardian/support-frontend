@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 import SvgClose from 'components/svgs/close';
@@ -16,19 +16,27 @@ export type Position = Option<{x: number, y: number}>;
 
 export type PropTypes = {|
   onClose: () => void,
+  utility: Node,
   closeButtonAt?: Position,
 |};
 
 // ----- Component ----- //
 
 
-const MobileMenu = ({ onClose, closeButtonAt }: PropTypes) =>
+const MobileMenu = ({ onClose, closeButtonAt, utility }: PropTypes) =>
   (
     <div
       className="component-header-mobile-menu"
       style={closeButtonAt && { width: closeButtonAt.x }}
     >
-      <Links location="mobile" />
+      <div className="component-header-mobile-menu__scroll">
+        <Links location="mobile" />
+        {utility &&
+          <div className="component-header-mobile-menu__utility">
+            {utility}
+          </div>
+        }
+      </div>
       <VeggieBurgerButton
         style={closeButtonAt && { top: closeButtonAt.y }}
         label="close"
@@ -41,6 +49,7 @@ const MobileMenu = ({ onClose, closeButtonAt }: PropTypes) =>
 
 MobileMenu.defaultProps = {
   closeButtonAt: null,
+  utility: null,
 };
 
 export default MobileMenu;

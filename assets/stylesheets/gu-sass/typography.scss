@@ -77,6 +77,12 @@ $gu-fonts: (
 		font-weight: 900;
 	}
 }
+@mixin gu-fontset-nav-mobile($size-only: false) {
+	@include gu-typeface(headline, 24, $size-only);
+	@if $size-only == false {
+		font-weight: 900;
+	}
+}
 
 
 // ----- Headings ----- //
@@ -140,7 +146,8 @@ $gu-fonts: (
 
 // ----- Defaults ----- //
 
-html {
+html,
+dialog {
     font-family: "Guardian Text Egyptian Web", Georgia, serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
