@@ -64,9 +64,24 @@
   background-color: #ededed;
 }
 
-.component-progress-message .component-progress-message__background {
+.fade-in-message .component-progress-message__background {
   background: rgba(0, 0, 0, .6);
   animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 2s;
+}
+
+.fade-in-message .component-progress-message__message {
+  animation-name: fadeInOpacityFont;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 2s;
+}
+
+.fade-in-message .component-animated-dots div {
+  background: rgba(255, 255, 255, 1);
+  animation-name: fadeInOpacitySolid;
   animation-iteration-count: 1;
   animation-timing-function: ease-in;
   animation-duration: 2s;
@@ -78,6 +93,24 @@
 }
 100% {
   background: rgba(0, 0, 0, .6);
+}
+}
+
+@@keyframes fadeInOpacityFont {
+0% {
+  opacity: 0;
+}
+100% {
+  opacity: 1;
+}
+}
+
+@@keyframes fadeInOpacitySolid {
+0% {
+  background: rgba(255,255,255, 0);
+}
+100% {
+  background: rgba(255, 255, 255, 1);
 }
 }
     </style>
@@ -251,7 +284,7 @@
           . To find out what personal data we collect and how we use it, please visit our <a href="https://www.theguardian.com/help/privacy-policy">
           Privacy Policy</a>
           .</div></div>
-          <div class="component-progress-message">
+          <div class="component-progress-message fade-in-message">
             <div class="component-progress-message__dialog">
 
               <div class="component-progress-message__message">Loading the page</div>
