@@ -1,8 +1,9 @@
 // @flow
 import type { Tests } from './abtest';
-import { annualAmountsA } from './annualAmountsTest';
+import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './annualAmountsTest';
 
 // ----- Tests ----- //
+
 
 export const tests: Tests = {
   ssrTwo: {
@@ -26,8 +27,16 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'annualAmountsA',
-        amountsRegions: annualAmountsA,
+        id: 'lower',
+        amountsRegions: annualAmountsLower,
+      },
+      {
+        id: 'five',
+        amountsRegions: annualAmountsFive,
+      },
+      {
+        id: 'other',
+        amountsRegions: annualAmountsOther,
       },
     ],
     audiences: {
