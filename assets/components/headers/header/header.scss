@@ -52,14 +52,8 @@ $header-links-min-width: gu-span(11);
       margin-top: 40px;
     }
   }
-
-  .component-header-mobile-menu {
-    will-change: transform;
-    animation: open-menu $gu-animation-speed ease-in both;
-    
-    .component-dialog--open & {
-      animation: open-menu $gu-animation-speed ease-out both;
-    }
+  .component-dialog--open .component-header-mobile-menu {
+    animation: open-menu $gu-animation-speed ease-in-out both;
   }
 }
 
