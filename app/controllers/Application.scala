@@ -87,18 +87,6 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(views.html.main(
-      title = "Support the Guardian",
-      mainId = "support-landing-page",
-      mainJsBundle = "supportLandingPage.js",
-      mainStyleBundle = "supportLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
-      description = stringsConfig.supportLandingDescription
-    )).withSettingsSurrogateKey
-  }
-
   def contributionsLanding(countryCode: String, maybeSSR: Option[String]): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -152,7 +140,7 @@ class Application(
       mainId = "showcase-landing-page",
       mainJsBundle = "showcasePage.js",
       mainStyleBundle = "showcasePage.css",
-      description = stringsConfig.supportLandingDescription
+      description = stringsConfig.showcaseLandingDescription
     )).withSettingsSurrogateKey
   }
 

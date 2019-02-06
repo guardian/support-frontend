@@ -26,7 +26,7 @@ const routes: {
   directDebitCheckAccount: '/direct-debit/check-account',
   payPalRestReturnURL: '/paypal/rest/return',
   digitalSubscriptionCreate: '/subscribe/digital/create',
-  showcase: '/showcase',
+  showcase: '/uk',
   subscriptionsLanding: '/subscribe',
   digitalSubscriptionLanding: '/subscribe/digital',
   paperSubscriptionLanding: '/subscribe/paper',

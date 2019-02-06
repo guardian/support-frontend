@@ -12,7 +12,7 @@ GET  /*path/  controllers.Application.removeTrailingSlash(path: String)
 
 # ----- Bundles Landing Page ----- #
 
-GET /uk                                             controllers.Application.supportLanding()
+GET /uk                                             controllers.Application.showcase()
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
 GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
@@ -20,7 +20,7 @@ GET /int                                            controllers.Application.redi
 GET /nz                                             controllers.Application.redirect(location="/nz/contribute")
 GET /ca                                             controllers.Application.redirect(location="/ca/contribute")
 GET /                                               controllers.Application.geoRedirect()
-GET /showcase                                       controllers.Application.showcase()
+GET /showcase                                       controllers.Application.redirect(location="/uk")
 
 GET /sitemap.xml                                    controllers.SiteMap.sitemap
 
