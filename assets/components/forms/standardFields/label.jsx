@@ -4,6 +4,8 @@
 
 import React, { type Node } from 'react';
 
+import { type Option } from 'helpers/types/option';
+
 import './label.scss';
 
 
@@ -14,7 +16,7 @@ export type PropsForHoc = {
 }
 
 type Props = PropsForHoc & {
-  htmlFor: string,
+  htmlFor: Option<string>,
   children: Node,
 };
 
@@ -23,9 +25,10 @@ type Props = PropsForHoc & {
 function Label({
   label, children, footer, htmlFor,
 }: Props) {
+  const Element = htmlFor ? 'label' : 'strong';
   return (
     <div className="component-form-label">
-      <label className="component-form-label__label" htmlFor={htmlFor}>{label}</label>
+      <Element className="component-form-label__label" htmlFor={htmlFor}>{label}</Element>
       {children}
       {footer &&
         <div className="component-form-label__footer">{footer}</div>
