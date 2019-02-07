@@ -59,7 +59,7 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
   const handleSubscribeResult = (result: PaymentResult) => {
     switch (result.paymentStatus) {
       case 'success':
-        if (result.isPending) {
+        if (result.subscriptionCreationPending) {
           dispatch(setStage('thankyou-pending'));
         } else {
           dispatch(setStage('thankyou'));

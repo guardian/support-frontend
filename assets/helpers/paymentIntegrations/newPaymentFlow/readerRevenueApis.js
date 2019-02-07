@@ -84,7 +84,7 @@ export type PaymentAuthorisation = StripeAuthorisation | PayPalAuthorisation | D
 // because the end of that checkout happens on the backend after the user is redirected to our site.
 export type PaymentResult
   = {| paymentStatus: 'success' |}
-  | {| paymentStatus: 'success', isPending: true |}
+  | {| paymentStatus: 'success', subscriptionCreationPending: true |}
   | {| paymentStatus: 'failure', error: ErrorReason |};
 
 // ----- Setup ----- //
@@ -141,7 +141,7 @@ function checkRegularStatus(
   // Exhaustion of the maximum number of polls is considered a payment success
   const handleExhaustedPolls = (error) => {
     if (error === undefined) {
-      return Promise.resolve({ paymentStatus: 'success', isPending: true });
+      return Promise.resolve({ paymentStatus: 'success', subscriptionCreationPending: true });
     }
     throw error;
 
