@@ -3,6 +3,11 @@
 
 import * as ophan from 'ophan';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
+import type { Participations } from 'helpers/abTests/abtest';
+import { optimizeIdToTestName } from 'helpers/tracking/acquisitions';
+import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
+import type { TestId } from 'helpers/abTests/abtest';
+import { readExperimentsFromSession } from 'helpers/optimize/optimize';
 
 // ----- Types ----- //
 
@@ -66,6 +71,16 @@ export type OphanComponentEvent = {
   }
 };
 
+type OphanABEvent = {
+  variantName: string,
+  complete: boolean,
+  campaignCodes?: string[],
+};
+
+type OphanABPayload = {
+  [TestId]: OphanABEvent,
+};
+
 // ----- Functions ----- //
 
 const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
@@ -120,9 +135,48 @@ function pageView(url: string, referrer: string) {
   }
 }
 
+const buildOphanPayload = (participations: Participations, complete: boolean): OphanABPayload =>
+  Object.keys(participations)
+    .reduce((payload, participation) => {
+      const ophanABEvent: OphanABEvent = {
+        variantName: participations[participation],
+        complete,
+        campaignCodes: [],
+      };
+
+      return Object.assign({}, payload, { [participation]: ophanABEvent });
+    }, {});
+
+const trackNativeABTests = (participations: Participations, complete: boolean): void => {
+  ophan.record({
+    abTestRegister: buildOphanPayload(participations, complete),
+  });
+};
+
+const optimizeExperimentToParticipation = (exp: OptimizeExperiment) =>
+  ({ [optimizeIdToTestName(exp.id)]: exp.variant });
+
+function mergeTestTypes(participations: Participations, optimizeExperiments: OptimizeExperiments): Participations {
+  const reducer = (acc, exp) => (Object.assign(acc, optimizeExperimentToParticipation(exp)));
+  return optimizeExperiments.reduce(reducer, participations);
+}
+
+const trackAllABTests = (optimizeExperiments: OptimizeExperiments, participations: Participations) =>
+  trackNativeABTests(mergeTestTypes(participations, optimizeExperiments));
+
+const trackAbTests = (participations: Participations) => trackAllABTests(readExperimentsFromSession(), participations);
+
+function trackNewOptimizeExperiment(exp: OptimizeExperiment, participations: Participations) {
+  const allOptimizeExperiments = readExperimentsFromSession();
+  allOptimizeExperiments.push(exp);
+  trackAllABTests(allOptimizeExperiments, participations);
+}
+
 export {
   trackComponentEvents,
   pageView,
   trackComponentClick,
   trackCheckoutSubmitAttempt,
+  trackAbTests,
+  trackNewOptimizeExperiment,
 };
