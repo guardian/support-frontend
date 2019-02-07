@@ -35,7 +35,6 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-// TODO: check how it looks on the set password screen
 function NewContributionTextInput(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   const modifiersArray = showError ? ['invalid', props.id] : [props.id];
