@@ -50,6 +50,11 @@ export type RegularPaymentRequest = {|
   country: IsoCountry,
   state: UsState | CaState | null,
   email: string,
+  addressLine1: string,
+  addressLine2: string,
+  county: string,
+  postcode: string,
+  townCity: string,
   product: ProductFields,
   paymentFields: RegularPaymentFields,
   ophanIds: OphanIds,
@@ -84,6 +89,7 @@ export type PaymentAuthorisation = StripeAuthorisation | PayPalAuthorisation | D
 // because the end of that checkout happens on the backend after the user is redirected to our site.
 export type PaymentResult
   = {| paymentStatus: 'success' |}
+  | {| paymentStatus: 'success', subscriptionCreationPending: true |}
   | {| paymentStatus: 'failure', error: ErrorReason |};
 
 // ----- Setup ----- //
@@ -140,7 +146,7 @@ function checkRegularStatus(
   // Exhaustion of the maximum number of polls is considered a payment success
   const handleExhaustedPolls = (error) => {
     if (error === undefined) {
-      return Promise.resolve(PaymentSuccess);
+      return Promise.resolve({ paymentStatus: 'success', subscriptionCreationPending: true });
     }
     throw error;
 
