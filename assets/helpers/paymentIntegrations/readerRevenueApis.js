@@ -12,7 +12,7 @@ import { logException } from 'helpers/logger';
 import { fetchJson, getRequestOptions, requestOptions } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
 
-import { type ThankYouPageStage } from '../../../pages/new-contributions-landing/contributionsLandingReducer';
+import { type ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 

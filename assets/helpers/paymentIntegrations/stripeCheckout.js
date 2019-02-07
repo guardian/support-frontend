@@ -19,7 +19,7 @@
  */
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import type { StripeAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ----- Types ----- //
 
