@@ -58,7 +58,12 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
 
   const handleSubscribeResult = (result: PaymentResult) => {
     switch (result.paymentStatus) {
-      case 'success': dispatch(setStage('thankyou'));
+      case 'success':
+        if (result.isPending) {
+          dispatch(setStage('thankyou-pending'));
+        } else {
+          dispatch(setStage('thankyou'));
+        }
         break;
       default: dispatch(setSubmissionError(result.error));
     }
