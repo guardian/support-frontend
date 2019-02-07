@@ -104,7 +104,13 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
             },
           },
           {
-            loader: 'sass-loader',
+            loader: 'fast-sass-loader',
+            options: {
+              includePaths: [
+                path.resolve(__dirname, 'assets'),
+                path.resolve(__dirname),
+              ],
+            },
           },
         ],
       },

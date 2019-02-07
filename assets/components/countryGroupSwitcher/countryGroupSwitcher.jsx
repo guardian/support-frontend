@@ -17,6 +17,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 
 import type { SelectOption } from 'components/selectInput/selectInput';
 
+import './countryGroupSwitcher.scss';
 
 // ----- Props ----- //
 
