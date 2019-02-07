@@ -1,7 +1,7 @@
 module.exports = {
   "routes": [
     ...[
-      "uk",
+      "uk/support",
       "uk/subscribe",
       "uk/subscribe/paper",
       "uk/subscribe/paper/delivery",
