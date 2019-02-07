@@ -1,16 +1,10 @@
 // -----  gu-sass ----- //
-
 @import '~stylesheets/gu-sass/gu-sass';
 
 
 // ----- Shared Components ----- //
-
 @import '~components/footer/footer';
-@import '~components/headers/header/header';
-@import '~components/countryGroupSwitcher/countryGroupSwitcher';
-@import '~components/selectInput/selectInput';
-@import '~components/headingBlock/headingBlock';
-@import '~components/leftMarginSection/leftMarginSection';
+
 
 :root {
   scroll-behavior: smooth;

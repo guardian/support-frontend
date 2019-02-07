@@ -28,7 +28,7 @@ import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Checkout from 'components/checkout/checkout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { digitalPackProductPrice } from 'helpers/productPrice/productPrices';

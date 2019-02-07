@@ -24,6 +24,8 @@ import ProductPageInfoChip from 'components/productPage/productPageInfoChip/prod
 import SvgInformation from 'components/svgs/information';
 import SvgGift from 'components/svgs/gift';
 
+import 'stylesheets/skeleton/skeleton.scss';
+
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
 

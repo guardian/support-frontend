@@ -16,9 +16,9 @@ import {
 } from 'helpers/contributions';
 import { type ErrorReason } from 'helpers/errorReasons';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { openDialogBox } from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+import { openDialogBox } from 'helpers/paymentIntegrations/stripeCheckout';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
 

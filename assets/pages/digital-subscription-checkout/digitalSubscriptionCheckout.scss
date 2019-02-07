@@ -1,25 +1,18 @@
 // -----  gu-sass ----- //
-
 @import '~stylesheets/gu-sass/gu-sass';
 
 
 // ----- Shared Components ----- //
 
-@import '~components/countryGroupSwitcher/countryGroupSwitcher';
-@import '~components/selectInput/selectInput';
-@import '~components/ctaLink/ctaLink';
 @import '~components/footer/footer';
-@import '~components/headers/header/header';
 @import '~components/checkoutHeading/checkoutHeading';
 @import '~components/checkoutCopy/checkoutCopy';
 @import '~components/customerService/customerService';
 @import '~components/subscriptionFaq/subscriptionFaq';
 @import '~components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
-@import '~components/headingBlock/headingBlock';
 @import '~components/productHero/productHero';
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
-@import '~components/marketingConsentNew/marketingConsent';
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 @import '~components/directDebit/directDebitForm/directDebitForm';
