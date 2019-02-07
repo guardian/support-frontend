@@ -9,7 +9,7 @@ import play.api.libs.circe.Circe
 import scala.concurrent.{ExecutionContext, Future}
 import services.{IdentityService, PaymentAPIService, TestUserService}
 import views.html.oneOffContributions
-import com.gu.support.config.StripeConfigProvider
+import com.gu.support.config.{Stage, StripeConfigProvider}
 import cats.implicits._
 import com.gu.googleauth.AuthAction
 import com.gu.identity.play.IdUser
@@ -26,12 +26,14 @@ class OneOffContributions(
     paymentAPIService: PaymentAPIService,
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
-    settingsProvider: AllSettingsProvider
+    settingsProvider: AllSettingsProvider,
+    stage: Stage,
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+  implicit val s: Stage = stage
 
   def autofill: Action[AnyContent] = authenticatedAction().async { implicit request =>
     identityService.getUser(request.user).fold(

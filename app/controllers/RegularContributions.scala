@@ -7,7 +7,7 @@ import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.gu.support.workers.User
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
@@ -38,12 +38,14 @@ class RegularContributions(
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
     settingsProvider: AllSettingsProvider,
-    tipMonitoring: Tip
+    tipMonitoring: Tip,
+    stage: Stage
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+  implicit val s: Stage = stage
 
   def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: RequestHeader, settings: AllSettings): Result = {
     Ok(recurringContributions(

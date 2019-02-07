@@ -4,6 +4,7 @@
 @import com.gu.support.config.StripeConfig
 @import helper.CSRF
 @import com.gu.i18n.Currency.AUD
+@import com.gu.support.config.{Stage}
 @(
         title: String,
         id: String,
@@ -14,7 +15,7 @@
         paymentApiStripeEndpoint: String,
         paymentApiPayPalEndpoint: String,
         idUser: Option[IdUser]
-)(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings, flash: Flash)
+)(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings, flash: Flash, stage: Stage)
 
 @scripts = {
     <script type="text/javascript">

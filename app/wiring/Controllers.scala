@@ -34,7 +34,9 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    appConfig.stage
+
   )
 
   lazy val digitalPackController = new DigitalSubscription(
@@ -51,7 +53,8 @@ trait Controllers {
     allSettingsProvider,
     appConfig.supportUrl,
     tipMonitoring,
-    appConfig.guardianDomain
+    appConfig.guardianDomain,
+    appConfig.stage
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
@@ -72,7 +75,8 @@ trait Controllers {
     controllerComponents,
     appConfig.guardianDomain,
     allSettingsProvider,
-    tipMonitoring
+    tipMonitoring,
+    appConfig.stage
   )
 
   lazy val payPalRegularController = new PayPalRegular(
@@ -81,7 +85,8 @@ trait Controllers {
     payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
-    allSettingsProvider
+    allSettingsProvider,
+    appConfig.stage
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
@@ -92,7 +97,8 @@ trait Controllers {
     paymentAPIService,
     identityService,
     allSettingsProvider,
-    tipMonitoring
+    tipMonitoring,
+    appConfig.stage
   )
 
   lazy val oneOffContributions = new OneOffContributions(
@@ -104,7 +110,8 @@ trait Controllers {
     paymentAPIService,
     authAction,
     controllerComponents,
-    allSettingsProvider
+    allSettingsProvider,
+    appConfig.stage
   )
 
   lazy val testUsersController = new TestUsersManagement(

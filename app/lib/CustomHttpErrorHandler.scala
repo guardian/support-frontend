@@ -13,6 +13,7 @@ import assets.AssetsResolver
 import views.html.main
 import play.core.SourceMapper
 import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
+import com.gu.support.config.Stage
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -23,15 +24,18 @@ class CustomHttpErrorHandler(
     sourceMapper: Option[SourceMapper],
     router: => Option[Router],
     val assets: AssetsResolver,
-    settingsProvider: AllSettingsProvider
+    settingsProvider: AllSettingsProvider,
+    stage: Stage
 )(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with LazyLogging with SettingsSurrogateKeySyntax {
+
+  implicit val s: Stage = stage
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
     super.onClientError(request, statusCode, message).map(_.withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*))
 
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] =
     Future.successful(
-      NotFound(main("Error 404", "error-404-page", "error404Page.js", "error404Page.css")(assets, request, settingsProvider.getAllSettings()))
+      NotFound(main("Error 404", "error-404-page", "error404Page.js", "error404Page.css")(assets, request, settingsProvider.getAllSettings(), stage))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
         .withSettingsSurrogateKey
     )
@@ -39,7 +43,7 @@ class CustomHttpErrorHandler(
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
     logServerError(request, exception)
     Future.successful(
-      InternalServerError(main("Error 500", "error-500-page", "error500Page.js", "error500Page.css")(assets, request, settingsProvider.getAllSettings()))
+      InternalServerError(main("Error 500", "error-500-page", "error500Page.js", "error500Page.css")(assets, request, settingsProvider.getAllSettings(), stage))
         .withHeaders(CacheControl.noCache)
         .withSettingsSurrogateKey
     )

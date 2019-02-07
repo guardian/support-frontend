@@ -11,6 +11,7 @@ import play.api.mvc._
 import services._
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.support.config.Stage
 import monitoring.SafeLogger
 import monitoring.PathVerification.{OneOffContribution, PayPal, TipPath, monitoredRegion, verify}
 
@@ -27,12 +28,14 @@ class PayPalOneOff(
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
     settingsProvider: AllSettingsProvider,
-    tipMonitoring: Tip
+    tipMonitoring: Tip,
+  stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 
   implicit val a: AssetsResolver = assets
+  implicit val s: Stage = stage
 
   private val fallbackAcquisitionData: JsValue = JsObject(Seq("platform" -> JsString("SUPPORT")))
 

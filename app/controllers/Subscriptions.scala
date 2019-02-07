@@ -3,6 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
+import com.gu.support.config.Stage
 import config.StringsConfig
 import play.api.mvc._
 import services.IdentityService
@@ -16,12 +17,14 @@ class Subscriptions(
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
-    val supportUrl: String
+    val supportUrl: String,
+    val stage: Stage,
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+  implicit val s: Stage = stage
 
   def geoRedirect: Action[AnyContent] = geoRedirect("subscribe")
 

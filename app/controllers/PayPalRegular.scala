@@ -4,6 +4,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
+import com.gu.support.config.Stage
 import io.circe.syntax._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
@@ -21,12 +22,14 @@ class PayPalRegular(
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
-    settingsProvider: AllSettingsProvider
+    settingsProvider: AllSettingsProvider,
+    stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
 
   implicit val a: AssetsResolver = assets
+  implicit val s: Stage = stage
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
   def setupPayment: Action[PayPalBillingDetails] = maybeAuthenticatedAction().async(circe.json[PayPalBillingDetails]) { implicit request =>

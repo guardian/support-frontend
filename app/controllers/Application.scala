@@ -33,12 +33,13 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     guardianDomain: GuardianDomain,
-    stage: Stage
+    val stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging with ServersideAbTestCookie {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+  implicit val s: Stage = stage
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())

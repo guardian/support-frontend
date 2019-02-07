@@ -8,7 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
 import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.workers.{BillingPeriod, User}
 import com.gu.tip.Tip
@@ -43,12 +43,14 @@ class DigitalSubscription(
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
     tipMonitoring: Tip,
-    guardianDomain: GuardianDomain
+    guardianDomain: GuardianDomain,
+    stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+  implicit val s: Stage = stage
 
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
