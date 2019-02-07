@@ -166,10 +166,12 @@ function FormFields(props: PropTypes) {
       />
       <details className={showRequiredLabel ? 'form-fields__required-explainer' : 'hidden'}>
         <summary >
-          Why are these details required?
-          <span className="icon icon--arrows">
-            <SvgChevron />
-          </span>
+          <div className="form-fields__required-explainer--summary-wrapper">
+            Why are these details required?
+            <span className="icon icon--arrows">
+              <SvgChevron />
+            </span>
+          </div>
         </summary>
         <span className="form-fields__required-explainer--answer">
           We only ever ask for information we need. Your name and email are required for billing

@@ -579,10 +579,17 @@ form {
   font-family: $gu-text-sans-web;
   line-height: 19px;
   font-size: 15px;
+  & svg {
+    pointer-events: none;
+  }
+}
+
+// This wrapper is needed for click events on the SVG in IE11 to work
+.form-fields__required-explainer--summary-wrapper {
+  cursor: pointer;
 }
 
 .form-fields__required-explainer summary {
-  cursor: pointer;
   text-align: left;
   text-decoration: underline;
   font-style: italic;
@@ -595,6 +602,11 @@ form {
   text-align: center;
   width: 40px;
 }
+
+.form-fields__required-explainer:not([open]) > :not(summary) {
+  display: none;
+}
+
 
 .form-fields__required-explainer .svg-chevron {
   padding: 0 $gu-h-spacing/4 0 $gu-h-spacing/4;
