@@ -17,8 +17,8 @@ type Out<Props> = React$ComponentType<AugmentedProps<Props>>;
 // ----- Component ----- //
 
 function withLabel<Props: { id: string }>(Component: In<Props>): Out<Props> {
-  return ({ label, ...props }: AugmentedProps<Props>) => (
-    <Label htmlFor={props.id} label={label}>
+  return ({ label, footer, ...props }: AugmentedProps<Props>) => (
+    <Label htmlFor={props.id} footer={footer} label={label}>
       <Component {...props} />
     </Label>
   );
