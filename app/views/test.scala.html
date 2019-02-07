@@ -1,8 +1,10 @@
 @import assets.AssetsResolver
 @import views.ViewHelpers._
 @import admin.settings.AllSettings
-
+@import monitoring.SafeLogger
+@import monitoring.SafeLogger._
 @import com.gu.support.config.Stage
+@import com.gu.support.config.Stages
 @(
   title: String,
   mainId: String,
@@ -57,12 +59,17 @@
 
     @optimizeScript()
 
-    @if(Stage.fromString("DEV").contains(stage)) {
+    @if(stage == Stages.DEV) {
       <link rel="stylesheet" href="@assets(mainStyleBundle)">
     } else {
-      <style>
-        @assets.inline("public/compiled-assets", mainStyleBundle).getOrElse("WARNING: NO INLINE STYLING")
-      </style>
+      @assets.getFileContentsAsHtml(mainStyleBundle).fold {
+        @SafeLogger.error(scrub"Inline CSS failed to load")
+        <link rel="stylesheet" href="@assets(mainStyleBundle)">
+      } { inlineCss =>
+        <style>
+          @inlineCss
+        </style>
+      }
     }
 
     <link rel="shortcut icon" type="image/png" href="@assets("images/favicons/32x32.ico")">
