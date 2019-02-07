@@ -1,6 +1,6 @@
-package selenium.contributions.new_flow
+package selenium.contributions
 
-import selenium.contributions.new_flow.pages._
+import selenium.contributions.pages._
 import _root_.selenium.util._
 import org.scalatest._
 import org.scalatest.concurrent.Eventually
