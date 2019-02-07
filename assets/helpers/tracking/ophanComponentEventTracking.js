@@ -135,21 +135,21 @@ function pageView(url: string, referrer: string) {
   }
 }
 
-const buildOphanPayload = (participations: Participations, complete: boolean): OphanABPayload =>
+const buildOphanPayload = (participations: Participations): OphanABPayload =>
   Object.keys(participations)
     .reduce((payload, participation) => {
       const ophanABEvent: OphanABEvent = {
         variantName: participations[participation],
-        complete,
+        complete: false,
         campaignCodes: [],
       };
 
       return Object.assign({}, payload, { [participation]: ophanABEvent });
     }, {});
 
-const trackNativeABTests = (participations: Participations, complete: boolean): void => {
+const trackNativeABTests = (participations: Participations): void => {
   ophan.record({
-    abTestRegister: buildOphanPayload(participations, complete),
+    abTestRegister: buildOphanPayload(participations),
   });
 };
 
