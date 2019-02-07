@@ -19,6 +19,7 @@ import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/pro
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 
 import ThankYouContent from './thankYouContent';
+import ThankYouPendingContent from './thankYouPendingContent';
 import CheckoutForm from './checkoutForm';
 import ReturnSection from './returnSection';
 
@@ -117,6 +118,23 @@ function CheckoutStage(props: PropTypes) {
             heading="Your Digital Pack subscription is now live"
           />
           <ThankYouContent countryGroupId={props.countryGroupId} />
+          <ReturnSection />
+        </div>
+      );
+
+    case 'thankyou-pending':
+      return (
+        <div className="thank-you-stage">
+          <ProductHero
+            countryGroupId={props.countryGroupId}
+            imagesByCountry={heroesByCountry}
+            altText="digital subscription"
+            fallbackImgType="png"
+          />
+          <CheckoutHeading
+            heading="Your Digital Pack subscription is being processed"
+          />
+          <ThankYouPendingContent />
           <ReturnSection />
         </div>
       );

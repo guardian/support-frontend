@@ -4,13 +4,13 @@ import {
   loadStripe,
   openDialogBox,
   setupStripeCheckout,
-} from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+} from 'helpers/paymentIntegrations/stripeCheckout';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentResult,
   postRegularPaymentRequest, regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import { routes } from 'helpers/routes';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { type Dispatch } from 'redux';
@@ -24,6 +24,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const {
     firstName,
     lastName,
+    addressLine1,
+    addressLine2,
+    townCity,
+    county,
+    postcode,
     email,
     stateProvince,
     billingPeriod,
@@ -41,6 +46,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     firstName,
     lastName,
     country: countryId,
+    addressLine1,
+    addressLine2,
+    townCity,
+    county,
+    postcode,
     state: stateProvince,
     email,
     telephoneNumber: telephone,
@@ -58,7 +68,12 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
 
   const handleSubscribeResult = (result: PaymentResult) => {
     switch (result.paymentStatus) {
-      case 'success': dispatch(setStage('thankyou'));
+      case 'success':
+        if (result.subscriptionCreationPending) {
+          dispatch(setStage('thankyou-pending'));
+        } else {
+          dispatch(setStage('thankyou'));
+        }
         break;
       default: dispatch(setSubmissionError(result.error));
     }
