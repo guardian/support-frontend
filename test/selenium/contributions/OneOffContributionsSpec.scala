@@ -3,7 +3,7 @@ package selenium.contributions
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.contributions.new_flow.pages.{ContributionsLanding, ContributionThankYou}
+import selenium.contributions.pages.{ContributionsLanding, ContributionThankYou}
 import selenium.util._
 
 class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
