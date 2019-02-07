@@ -31,7 +31,7 @@ GET /                                               controllers.Application.geoR
 GET /support                                        controllers.Application.redirect(location="/uk/support")
 GET /uk/support                                     controllers.Application.showcase()
 # redirect from old ab test
-GET /showcase                                       controllers.Application.redirect(location="/uk/support")
+GET /showcase                                       controllers.Application.permanentRedirect(location="/uk/support")
 
 
 # ----- Events Redirect ----- #

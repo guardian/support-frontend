@@ -77,6 +77,10 @@ class Application(
     Redirect(location, request.queryString, status = FOUND)
   }
 
+  def permanentRedirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Redirect(location, request.queryString, status = MOVED_PERMANENTLY)
+  }
+
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location + path, request.queryString)
   }
