@@ -45,7 +45,7 @@ class Application(
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk"
+      case Some(UK) => "/uk/support"
       case Some(US) => "/us/contribute"
       case Some(Australia) => "/au/contribute"
       case Some(Europe) => "/eu/contribute"
@@ -77,6 +77,10 @@ class Application(
     Redirect(location, request.queryString, status = FOUND)
   }
 
+  def permanentRedirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
+    Redirect(location, request.queryString, status = MOVED_PERMANENTLY)
+  }
+
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location + path, request.queryString)
   }
@@ -85,18 +89,6 @@ class Application(
     BrowserCheck.logUserAgent(request)
     SafeLogger.info("Redirecting to unsupported-browser page")
     Ok(views.html.unsupportedBrowserPage())
-  }
-
-  def supportLanding(): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(views.html.main(
-      title = "Support the Guardian",
-      mainId = "support-landing-page",
-      mainJsBundle = "supportLandingPage.js",
-      mainStyleBundle = "supportLandingPageStyles.css",
-      scripts = views.html.addToWindow("paymentApiPayPalEndpoint", paymentAPIService.payPalCreatePaymentEndpoint),
-      description = stringsConfig.supportLandingDescription
-    )).withSettingsSurrogateKey
   }
 
   def contributionsLanding(countryCode: String, maybeSSR: Option[String]): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
@@ -152,7 +144,7 @@ class Application(
       mainId = "showcase-landing-page",
       mainJsBundle = "showcasePage.js",
       mainStyleBundle = "showcasePage.css",
-      description = stringsConfig.supportLandingDescription
+      description = stringsConfig.showcaseLandingDescription
     )).withSettingsSurrogateKey
   }
 
