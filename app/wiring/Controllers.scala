@@ -24,8 +24,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.guardianDomain,
-    appConfig.stage,
-    // TODO appConfig.stage == DEV
+    appConfig.stage
   )
 
   lazy val subscriptionsController = new Subscriptions(
