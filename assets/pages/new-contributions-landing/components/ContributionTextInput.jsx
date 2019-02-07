@@ -30,6 +30,7 @@ type PropTypes = {|
   step: number | void,
   pattern: string | void,
   disabled: boolean,
+  showRequiredLabel: boolean,
 |};
 
 // ----- Render ----- //
@@ -37,11 +38,15 @@ type PropTypes = {|
 function NewContributionTextInput(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   const modifiersArray = showError ? ['invalid', props.id] : [props.id];
+  const showRequiredLabel = props.required && props.showRequiredLabel;
 
   return (
     <div className={classNameWithModifiers('form__field', [props.name])}>
       <label className="form__label" htmlFor={props.id}>
-        {props.label}
+        <span>{props.label}</span>
+        <span className={showRequiredLabel ? 'form__label__required' : 'hidden'}>
+          required
+        </span>
       </label>
       <span className="form__input-with-icon">
         <input
@@ -92,6 +97,7 @@ NewContributionTextInput.defaultProps = {
   disabled: false,
   formHasBeenSubmitted: false,
   isValid: true,
+  showRequiredLabel: false,
 };
 
 export { NewContributionTextInput };
