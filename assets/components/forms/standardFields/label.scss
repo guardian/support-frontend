@@ -1,0 +1,8 @@
+@import './formFields';
+
+.component-label {
+  @include label;
+  margin-bottom: $gu-v-spacing / 2;
+  margin-top: $gu-v-spacing * 2;
+  display: block;
+}
