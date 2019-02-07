@@ -87,6 +87,7 @@ export type Action =
   | { type: 'SET_ADDRESS_LINE_2', addressLine2: string }
   | { type: 'SET_TOWN_CITY', townCity: string }
   | { type: 'SET_COUNTY', county: string }
+  | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_STATE_PROVINCE', stateProvince: string, country: IsoCountry }
@@ -111,7 +112,7 @@ function getFormFields(state: State): FormFields {
     townCity: state.page.checkout.townCity,
     county: state.page.checkout.county,
     postcode: state.page.checkout.postcode,
-    country: state.page.checkout.country,
+    country: state.common.internationalisation.countryId,
     stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
     billingPeriod: state.page.checkout.billingPeriod,
@@ -166,10 +167,7 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => {
-  console.log(errors);
-  return ({ type: 'SET_FORM_ERRORS', errors });
-};
+const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
@@ -190,7 +188,6 @@ const formActionCreators = {
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
     const country = fromString(countryRaw);
-    console.log({ country });
     if (country) {
       dispatch(setCountry(country));
       dispatch({
@@ -244,7 +241,6 @@ function initReducer(initialCountry: IsoCountry) {
     townCity: '',
     county: '',
     postcode: '',
-    country: user.country || null,
     stateProvince: null,
     telephone: '',
     billingPeriod: initialBillingPeriod,
@@ -277,9 +273,6 @@ function initReducer(initialCountry: IsoCountry) {
 
       case 'SET_TOWN_CITY':
         return { ...state, townCity: action.townCity };
-
-      case 'SET_COUNTRY':
-        return { ...state, country: action.country };
 
       case 'SET_COUNTY':
         return { ...state, county: action.county };

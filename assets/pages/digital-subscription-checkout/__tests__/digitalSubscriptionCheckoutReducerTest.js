@@ -54,7 +54,7 @@ describe('Digital Subscription Checkout Reducer', () => {
 
     const action = setFormErrors(errors);
 
-    const newState = initReducer('GBPCountries')(undefined, action);
+    const newState = initReducer('GB')(undefined, action);
 
     expect(newState.checkout.formErrors).toEqual(errors);
 
