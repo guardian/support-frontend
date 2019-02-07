@@ -169,41 +169,6 @@ function CheckoutForm(props: PropTypes) {
                   </span>
                 )}
               />
-              <InputWithFooter
-                id="telephone"
-                label="Telephone (optional)"
-                type="tel"
-                value={props.telephone}
-                setValue={props.setTelephone}
-                footer="We may use this to get in touch with you about your subscription."
-                error={firstError('telephone', props.formErrors)}
-              />
-            </FormSection>
-            <FormSection title="Address">
-              <Input1
-                id="address-line-1"
-                label="Address Line 1"
-                type="text"
-                value={props.addressLine1}
-                setValue={props.setAddressLine1}
-                error={firstError('addressLine1', props.formErrors)}
-              />
-              <Input1
-                id="address-line-2"
-                label="Address Line 2 (optional)"
-                type="text"
-                value={props.addressLine2}
-                setValue={props.setAddressLine2}
-                error={firstError('addressLine2', props.formErrors)}
-              />
-              <Input1
-                id="town-city"
-                label="Town/City"
-                type="text"
-                value={props.townCity}
-                setValue={props.setTownCity}
-                error={firstError('townCity', props.formErrors)}
-              />
               <Select1
                 id="country"
                 label="Country"
@@ -225,21 +190,14 @@ function CheckoutForm(props: PropTypes) {
                 <option value="">--</option>
                 {statesForCountry(props.country)}
               </Select2>
-              <Input1
-                id="county"
-                label="County (optional)"
-                type="text"
-                value={props.county}
-                setValue={props.setCounty}
-                error={firstError('county', props.formErrors)}
-              />
-              <Input1
-                id="postcode"
-                label="Postcode"
-                type="text"
-                value={props.postcode}
-                setValue={props.setPostcode}
-                error={firstError('postcode', props.formErrors)}
+              <InputWithFooter
+                id="telephone"
+                label="Telephone (optional)"
+                type="tel"
+                value={props.telephone}
+                setValue={props.setTelephone}
+                footer="We may use this to get in touch with you about your subscription."
+                error={firstError('telephone', props.formErrors)}
               />
             </FormSection>
             <FormSection title="How often would you like to pay?">

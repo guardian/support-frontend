@@ -5,12 +5,12 @@
 
 // Ascending comparison function for use with Array.prototype.sort.
 function ascending(a: number, b: number): number {
-  return a - b;
+  return a > b ? 1 : 0;
 }
 
 // Descending comparison function for use with Array.prototype.sort.
 function descending(a: number, b: number): number {
-  return b - a;
+  return a < b ? 1 : 0;
 }
 
 // Converts a number to a given number of decimal places, default two.
