@@ -225,6 +225,20 @@ function getSupportAbTests(participations: Participations, experiments: Optimize
   ];
 }
 
+const getAbTests = (
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
+) => {
+  const alltests = [
+    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
+    ...(referrerAcquisitionData.abTests || []),
+  ];
+  return alltests.reduce((acc: AcquisitionABTest[], abTest: AcquisitionABTest) => (
+    acc.find(test => test.name === abTest.name) ? acc : acc.concat([abTest])), []);
+};
+
+
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
@@ -232,10 +246,7 @@ function derivePaymentApiAcquisitionData(
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
-  const abTests = [
-    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
-    ...(referrerAcquisitionData.abTests || []),
-  ];
+  const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
 
   const campaignCodes = referrerAcquisitionData.campaignCode ?
     [referrerAcquisitionData.campaignCode] : [];
@@ -262,10 +273,7 @@ function deriveSubsAcquisitionData(
   optimizeExperiments: OptimizeExperiments,
 ): ReferrerAcquisitionData {
 
-  const abTests = [
-    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
-    ...(referrerAcquisitionData.abTests || []),
-  ];
+  const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
 
   return {
     ...referrerAcquisitionData,
