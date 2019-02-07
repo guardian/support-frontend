@@ -4,13 +4,13 @@ import {
   loadStripe,
   openDialogBox,
   setupStripeCheckout,
-} from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+} from 'helpers/paymentIntegrations/stripeCheckout';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentResult,
   postRegularPaymentRequest, regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import { routes } from 'helpers/routes';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { type Dispatch } from 'redux';
