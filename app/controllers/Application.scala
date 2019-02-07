@@ -45,7 +45,7 @@ class Application(
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk"
+      case Some(UK) => "/uk/support"
       case Some(US) => "/us/contribute"
       case Some(Australia) => "/au/contribute"
       case Some(Europe) => "/eu/contribute"

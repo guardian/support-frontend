@@ -10,19 +10,29 @@ GET /unsupported-browser                            controllers.Application.unsu
 
 GET  /*path/  controllers.Application.removeTrailingSlash(path: String)
 
-# ----- Bundles Landing Page ----- #
+# ----- Sitemap ----- #
 
-GET /uk                                             controllers.Application.showcase()
+GET /sitemap.xml                                    controllers.SiteMap.sitemap
+
+
+# ----- Geo landings ----- #
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
 GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
 GET /int                                            controllers.Application.redirect(location="/int/contribute")
 GET /nz                                             controllers.Application.redirect(location="/nz/contribute")
 GET /ca                                             controllers.Application.redirect(location="/ca/contribute")
+GET /uk                                             controllers.Application.redirect(location="/uk/support")
 GET /                                               controllers.Application.geoRedirect()
-GET /showcase                                       controllers.Application.redirect(location="/uk")
 
-GET /sitemap.xml                                    controllers.SiteMap.sitemap
+
+# ----- Bundles Landing Page ----- #
+
+GET /support                                        controllers.Application.redirect(location="/uk/support")
+GET /uk/support                                     controllers.Application.showcase()
+# redirect from old ab test
+GET /showcase                                       controllers.Application.redirect(location="/uk/support")
+
 
 # ----- Events Redirect ----- #
 GET /events/archive                                 controllers.Application.redirect(location="https://membership.theguardian.com/events/archive")
