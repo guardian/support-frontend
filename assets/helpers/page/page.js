@@ -9,6 +9,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
+import { overrideAmountsForParticipations } from 'helpers/abTests/helpers';
 import type { Settings } from 'helpers/settings';
 import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
@@ -23,6 +24,10 @@ import { addOptimizeExperiments, readExperimentsFromSession } from 'helpers/opti
 import storeReferrer from 'helpers/tracking/awin';
 import type { OptimizeExperiment } from 'helpers/optimize/optimize';
 import { setExperimentVariant } from 'helpers/page/commonActions';
+import {
+  trackAbTests,
+  trackNewOptimizeExperiment,
+} from 'helpers/tracking/ophanComponentEventTracking';
 
 if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
@@ -52,6 +57,7 @@ function analyticsInitialisation(participations: Participations): void {
     googleTagManager.init(participations);
     storeReferrer();
   }
+  trackAbTests(participations);
   // Logging.
   logger.init();
 }
@@ -74,13 +80,16 @@ function buildInitialState(
     currencyId,
   };
 
+  // Override the default amounts config with any test participations
+  const amountsWithParticipationOverrides = overrideAmountsForParticipations(abParticipations, settings.amounts);
+
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
     referrerAcquisitionData: acquisition,
     otherQueryParams,
     internationalisation,
     abParticipations,
-    settings,
+    settings: { ...settings, amounts: amountsWithParticipationOverrides },
     optimizeExperiments,
   };
 
@@ -92,6 +101,7 @@ function statelessInit() {
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
   analyticsInitialisation(participations);
+  addOptimizeExperiments((exp: OptimizeExperiment) => trackNewOptimizeExperiment(exp, participations));
 }
 
 // Enables redux devtools extension and optional redux-thunk.
@@ -136,7 +146,10 @@ function init<S, A>(
     storeEnhancer(thunk),
   );
 
-  addOptimizeExperiments((exp: OptimizeExperiment) => store.dispatch(setExperimentVariant(exp)));
+  addOptimizeExperiments((exp: OptimizeExperiment) => {
+    trackNewOptimizeExperiment(exp, participations);
+    store.dispatch(setExperimentVariant(exp));
+  });
 
   return store;
 }

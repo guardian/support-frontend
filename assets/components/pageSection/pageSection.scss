@@ -1,3 +1,5 @@
+@import '~stylesheets/skeleton/html';
+
 .component-page-section__header {
   @include mq($from: desktop) {
     display: inline-block;

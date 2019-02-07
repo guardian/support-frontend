@@ -1,66 +1,76 @@
 // @flow
 
+/**
+ * This module contains a copy of pages/oneoff-contributions/helpers/ajax so that
+ * the new payment flow can use this code without any impact on the existing
+ * infrastructure.
+ *
+ * There are a couple of differences though:
+ * - the amount: instead of fixing it when the callback is created, it should
+ *   be provided by the `getState` function
+ * - the actions: what happens upon error/success is view-dependent, so the
+ *   actions are provided as parameters too. As a result, `dispatch` can
+ *   go away (which makes the module completely independant of React)
+ * - tracking conversions: this should be decoupled from the payment itself and
+ *   moved upstream, in the success handler
+ *
+ * The latter module can be removed entirely once the new payment flow becomes the one
+ * and only contribution endpoint.
+ */
 
-// ----- Setup ----- //
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
-let stripeHandler = null;
+// ----- Types ----- //
 
+export type StripeAccount = 'ONE_OFF' | 'REGULAR';
 
 // ----- Functions ----- //
 
-const loadStripe = () => new Promise((resolve) => {
-
+function loadStripe(): Promise<void> {
   if (!window.StripeCheckout) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
 
-    const script = document.createElement('script');
+      script.onload = resolve;
+      script.onerror = reject;
+      script.src = 'https://checkout.stripe.com/checkout.js';
 
-    script.onload = resolve;
-    script.src = 'https://checkout.stripe.com/checkout.js';
-
-    if (document.head) {
-      document.head.appendChild(script);
-    }
-
-  } else {
-    resolve();
+      if (document.head) {
+        document.head.appendChild(script);
+      }
+    });
   }
+  return Promise.resolve();
 
-});
+}
 
-const getStripeKey = (currency: string, isTestUser: boolean) => {
-
-  let stripeKey = null;
-
+function getStripeKey(stripeAccount: StripeAccount, currency: IsoCurrency, isTestUser: boolean): string {
   switch (currency) {
     case 'AUD':
-      stripeKey = isTestUser ?
-        window.guardian.stripeKeyAustralia.uat : window.guardian.stripeKeyAustralia.default;
-      break;
+      return isTestUser ?
+        window.guardian.stripeKeyAustralia[stripeAccount].uat :
+        window.guardian.stripeKeyAustralia[stripeAccount].default;
     default:
-      stripeKey = isTestUser ?
-        window.guardian.stripeKeyDefaultCurrencies.uat :
-        window.guardian.stripeKeyDefaultCurrencies.default;
-      break;
+      return isTestUser ?
+        window.guardian.stripeKeyDefaultCurrencies[stripeAccount].uat :
+        window.guardian.stripeKeyDefaultCurrencies[stripeAccount].default;
   }
+}
 
-  return stripeKey;
-};
-
-export const setupStripeCheckout = (
-  onPaymentAuthorisation: string => void,
-  closeHandler: ?() => void,
-  currency: string,
+function setupStripeCheckout(
+  onPaymentAuthorisation: StripeAuthorisation => void,
+  stripeAccount: StripeAccount,
+  currency: IsoCurrency,
   isTestUser: boolean,
-): Promise<void> => loadStripe().then(() => {
-
+): Object {
   const handleToken = (token) => {
-    onPaymentAuthorisation(token.id);
+    onPaymentAuthorisation({ paymentMethod: 'Stripe', token: token.id, stripePaymentMethod: 'StripeCheckout' });
   };
-  const defaultCloseHandler: () => void = () => {};
 
-  const stripeKey = getStripeKey(currency, isTestUser);
+  const stripeKey = getStripeKey(stripeAccount, currency, isTestUser);
 
-  stripeHandler = window.StripeCheckout.configure({
+  return window.StripeCheckout.configure({
     name: 'Guardian',
     description: 'Please enter your card details.',
     allowRememberMe: false,
@@ -69,21 +79,20 @@ export const setupStripeCheckout = (
     locale: 'auto',
     currency,
     token: handleToken,
-    closed: closeHandler || defaultCloseHandler,
   });
-});
+}
 
-const openDialogBox = (amount: number, email: string) => {
-  if (stripeHandler) {
-    stripeHandler.open({
-      // Must be passed in pence.
-      amount: amount * 100,
-      email,
-    });
-  }
-};
+function openDialogBox(stripeHandler: Object, amount: number, email: string) {
+  stripeHandler.open({
+    // Must be passed in pence.
+    amount: Math.round(amount * 100),
+    email,
+  });
+}
 
 export {
+  loadStripe,
+  setupStripeCheckout,
   openDialogBox,
   getStripeKey,
 };

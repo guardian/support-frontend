@@ -20,6 +20,7 @@ type PropTypes = {|
   onChange: (Event => void) | false,
   isValid: boolean,
   formHasBeenSubmitted: boolean,
+  showRequiredLabel: boolean,
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -38,9 +39,13 @@ const renderStatesField = (
   onChange: (Event => void) | false,
   showError: boolean,
   label: string,
+  showRequiredLabel: boolean,
 ) => (
   <div className={classNameWithModifiers('form__field', ['contribution-state'])}>
-    <label className="form__label" htmlFor="contributionState">{label}</label>
+    <label className="form__label" htmlFor="contributionState">
+      {label}
+      <span className={showRequiredLabel ? 'form__label__required' : 'hidden'}> required </span>
+    </label>
     <span className="form__input-with-icon">
       <select id="contributionState" className={classNameWithModifiers('form__input', selectedState ? [] : ['placeholder'])} onChange={onChange} required>
         <option value="">Please select your {label.toLowerCase()}</option>
@@ -62,9 +67,9 @@ function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   switch (props.countryGroupId) {
     case 'UnitedStates':
-      return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State');
+      return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State', props.showRequiredLabel);
     case 'Canada':
-      return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province');
+      return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province', props.showRequiredLabel);
     default:
       return null;
   }

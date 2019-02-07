@@ -7,10 +7,10 @@ import React from 'react';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type ContributionType } from 'helpers/contributions';
-import { getPayPalOptions } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
+import { getPayPalOptions } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 type PropTypes = {|
   onPaymentAuthorisation: PaymentAuthorisation => void,

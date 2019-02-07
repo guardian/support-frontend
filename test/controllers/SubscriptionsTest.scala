@@ -32,8 +32,6 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    val checkoutEndpoint = "subscribe/digital/checkout?displayCheckout=true"
-
     def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
@@ -93,7 +91,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): Future[Result] = {
-      fakeDigitalPack(actionRefiner, identityService).displayForm("UK")(FakeRequest())
+      fakeDigitalPack(actionRefiner, identityService).displayForm()(FakeRequest())
     }
   }
 

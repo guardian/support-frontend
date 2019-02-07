@@ -45,7 +45,7 @@
   .component-error-message {
     margin-top: 20px;
     box-sizing: border-box;
-    height: $gu-cta-height + 2;
+    height: $gu-cta-height;
     width: 100%;
 
     @include mq($from: mobileMedium) {
