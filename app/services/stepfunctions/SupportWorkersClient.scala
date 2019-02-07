@@ -214,7 +214,7 @@ object PaymentFieldsEmbellisher {
 
     def concatStreetNames(firstStreetName: String, secondStreetName: String): String = s"$firstStreetName, $secondStreetName"
 
-    (addressLine1MaybeSplit, addressLine2MaybeSplit) match {
+    val combinedLine = (addressLine1MaybeSplit, addressLine2MaybeSplit) match {
       case (None, None) => None
       case (Some(line1), None) => Some(line1)
       case (None, Some(line2)) => Some(line2)
@@ -229,6 +229,14 @@ object PaymentFieldsEmbellisher {
           Some(AddressLine(None, concatStreetNames(line1.streetName, line2.streetName)))
         }
       }
+    }
+
+    combinedLine map { line =>
+      if (line.streetName.length > 100) {
+        //we are sometimes putting extra info into streetName but zuora's character limit is 100
+        AddressLine(line.streetNumber, line.streetName.take(100))
+      }
+      else line
     }
   }
 

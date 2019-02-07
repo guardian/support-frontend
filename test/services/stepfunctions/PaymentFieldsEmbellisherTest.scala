@@ -149,4 +149,28 @@ class PaymentFieldsEmbellisherTest extends FlatSpec with Matchers with MockitoSu
     paymentFields(requestWithStripePaymentFields) shouldBe stripePaymentFields
   }
 
+  "paymentFields" should "clip street names longer than 255 characters due to Zuora's character limit" in {
+
+    val longAddressDirectDebitRequest = directDebitRequest.copy(
+      addressLine1 = Some("123 some super long street name oh wow it is so long does anyone live here street"),
+      addressLine2 = Some("hi friend it is me another really long address line and so i will get cut off before " +
+        "i have said all there is to say how cruel")
+    )
+
+    val expected = DirectDebitPaymentFields(
+      accountHolderName = "oscar the grouch",
+      sortCode = "200000",
+      accountNumber = "55779911",
+      postalCode = Some("w37ab"),
+      city = Some("London"),
+      state = None,
+      streetName = Some("some super long street name oh wow it is so long does anyone live here street, hi friend it is me an"),
+      streetNumber = Some("123")
+    )
+
+    val transformed = paymentFields(longAddressDirectDebitRequest)
+    transformed shouldBe expected
+
+  }
+
 }
