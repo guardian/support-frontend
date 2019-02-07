@@ -4,6 +4,7 @@
 
 import * as React from 'react';
 
+import './radioInput.scss';
 
 // ----- Types ----- //
 
