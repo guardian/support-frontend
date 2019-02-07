@@ -25,8 +25,8 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
     Json.parse(json).validate[Map[String, String]].asOpt
 
   def getFileContentsAsHtml(file: String): Option[Html] = {
-    val resourcePath = apply(file).replaceFirst("^/assets/", "public/compiled-assets/")
-    loadResource(resourcePath).map(Html.apply)
+    val resourcePath = apply(file).replaceFirst("^/assets/", "")
+    loadResource(s"public/compiled-assets/$resourcePath").map(Html.apply)
   }
 
 }
