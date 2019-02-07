@@ -104,6 +104,44 @@ class PaymentFieldsEmbellisherTest extends FlatSpec with Matchers with MockitoSu
 
   }
 
+  "paymentFields" should "return the payment fields back when there are no address details (as contributions will do)" in {
+
+    val directDebitRequestNoAddress = CreateSupportWorkersRequest(
+      firstName = "oscar",
+      lastName = "the grouch",
+      addressLine1 = None,
+      addressLine2 = None,
+      townCity = None,
+      country = Country.UK,
+      state = None,
+      product = digitalPackProduct,
+      county = None,
+      postcode = None,
+      paymentFields = directDebitPaymentFieldsFromClient,
+      ophanIds = OphanIds(None, None, None),
+      referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
+      supportAbTests = Set(),
+      email = "oscarthegrouch@gu.com",
+      telephoneNumber = None,
+      promoCode = None
+    )
+
+    val expected = DirectDebitPaymentFields(
+      accountHolderName = "oscar the grouch",
+      sortCode = "200000",
+      accountNumber = "55779911",
+      postalCode = None,
+      city = None,
+      state = None,
+      streetName = None,
+      streetNumber = None
+    )
+
+    val transformed = paymentFields(directDebitRequestNoAddress)
+    transformed shouldBe expected
+
+  }
+
   "paymentFields" should "return stripe payment fields back without modifying them" in {
 
     val requestWithStripePaymentFields = directDebitRequest.copy(paymentFields = stripePaymentFields)

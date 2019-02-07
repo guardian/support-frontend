@@ -102,8 +102,6 @@ class SupportWorkersClient(
     promoCode: Option[PromoCode] = None
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
 
-    val modifiedRequest = request.body.copy(addressLine1 = Some("90 york way"), addressLine2 = Some("bank 3-46"),
-      postcode = Some("n1 9gu"), townCity = Some("London"))
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
