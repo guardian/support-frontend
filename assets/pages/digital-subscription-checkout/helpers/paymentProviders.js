@@ -92,7 +92,7 @@ function showStripe(
 
   loadStripe()
     .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currencyId, isTestUser))
-    .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
+    .then(stripe => openDialogBox(stripe, price, state.page.checkout.email));
 }
 
 function showPaymentMethod(
