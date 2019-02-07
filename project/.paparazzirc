@@ -1,0 +1,31 @@
+{
+  "routes": [
+    "uk",
+    "showcase",
+    "uk/subscribe",
+    "uk/subscribe/paper",
+    "uk/subscribe/digital",
+    "uk/subscribe/weekly",
+    "uk/contribute"
+  ],
+  "prefix": "https://support.thegulocal.com/",
+  "out": "screenshots",
+  "screenshot": {
+    "omitBackground": true,
+    "fullPage": true
+  },
+  "sizes": {
+    "desktop": {
+      "width": 1440,
+      "height": 900
+    },
+    "phone": {
+      "width": 375,
+      "height": 1100
+    },
+    "tablet": {
+      "height": 1024,
+      "width": 768
+    }
+  }
+}
