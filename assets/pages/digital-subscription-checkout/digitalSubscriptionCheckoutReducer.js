@@ -190,6 +190,7 @@ const formActionCreators = {
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
     const country = fromString(countryRaw);
+    console.log({ country });
     if (country) {
       dispatch(setCountry(country));
       dispatch({
@@ -276,6 +277,9 @@ function initReducer(initialCountry: IsoCountry) {
 
       case 'SET_TOWN_CITY':
         return { ...state, townCity: action.townCity };
+
+      case 'SET_COUNTRY':
+        return { ...state, country: action.country };
 
       case 'SET_COUNTY':
         return { ...state, county: action.county };
