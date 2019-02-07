@@ -24,6 +24,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const {
     firstName,
     lastName,
+    addressLine1,
+    addressLine2,
+    townCity,
+    county,
+    postcode,
     email,
     stateProvince,
     billingPeriod,
@@ -41,6 +46,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     firstName,
     lastName,
     country: countryId,
+    addressLine1,
+    addressLine2,
+    townCity,
+    county,
+    postcode,
     state: stateProvince,
     email,
     telephoneNumber: telephone,
@@ -58,7 +68,12 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
 
   const handleSubscribeResult = (result: PaymentResult) => {
     switch (result.paymentStatus) {
-      case 'success': dispatch(setStage('thankyou'));
+      case 'success':
+        if (result.subscriptionCreationPending) {
+          dispatch(setStage('thankyou-pending'));
+        } else {
+          dispatch(setStage('thankyou'));
+        }
         break;
       default: dispatch(setSubmissionError(result.error));
     }

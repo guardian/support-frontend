@@ -32,11 +32,11 @@ describe('utilities', () => {
       expect(ascending(3, 2)).toEqual(1);
     });
 
-    it('should return a 0 if a < b', () => {
-      expect(ascending(2, 3)).toEqual(0);
+    it('should return a -1 if a < b', () => {
+      expect(ascending(2, 3)).toEqual(-1);
     });
 
-    it('should return a 1 if a === b', () => {
+    it('should return a 0 if a === b', () => {
       expect(ascending(2, 2)).toEqual(0);
     });
 
@@ -58,7 +58,7 @@ describe('utilities', () => {
     });
 
     it('should return a 1 if a < b', () => {
-      expect(ascending(2, 3)).toEqual(0);
+      expect(ascending(2, 3)).toEqual(-1);
     });
 
     it('should return a 0 if a === b', () => {

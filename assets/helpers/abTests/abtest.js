@@ -6,7 +6,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import seedrandom from 'seedrandom';
 
-import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import { type Settings } from 'helpers/settings';
@@ -18,13 +17,7 @@ import { tests } from './abtestDefinitions';
 
 // ----- Types ----- //
 
-type TestId = $Keys<typeof tests>;
-
-type OphanABEvent = {
-  variantName: string,
-  complete: boolean,
-  campaignCodes?: string[],
-};
+export type TestId = $Keys<typeof tests>;
 
 const breakpoints = {
   mobile: 320,
@@ -47,10 +40,6 @@ type BreakpointRange = {|
 export type Participations = {
   [TestId]: string,
 }
-
-type OphanABPayload = {
-  [TestId]: OphanABEvent,
-};
 
 type Audience = {
   offset: number,
@@ -237,23 +226,6 @@ function getParticipations(
   return { ...participations, ...getSSRParticipationsFromQuery() };
 }
 
-const buildOphanPayload = (participations: Participations, complete: boolean): OphanABPayload =>
-  Object.keys(participations).reduce((payload, participation) => {
-    const ophanABEvent: OphanABEvent = {
-      variantName: participations[participation],
-      complete,
-      campaignCodes: [],
-    };
-
-    return Object.assign({}, payload, { [participation]: ophanABEvent });
-  }, {});
-
-const trackABOphan = (participations: Participations, complete: boolean): void => {
-  ophan.record({
-    abTestRegister: buildOphanPayload(participations, complete),
-  });
-};
-
 const init = (
   country: IsoCountry,
   countryGroupId: CountryGroupId,
@@ -264,8 +236,6 @@ const init = (
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   setLocalStorageParticipations({ ...participations, ...urlParticipations });
-
-  trackABOphan(participations, false);
 
   return participations;
 };
