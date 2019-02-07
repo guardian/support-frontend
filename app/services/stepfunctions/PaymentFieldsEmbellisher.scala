@@ -10,12 +10,12 @@ object PaymentFieldsEmbellisher {
 
   def combinedAddressLine(addressLine1: Option[String], addressLine2: Option[String]): Option[AddressLine] = {
 
-    def singleAddressLine(addressLine1: String): AddressLine = {
+    def singleAddressLine(addressLine: String): AddressLine = {
       val pattern: Regex = "([0-9]+) (.+)".r
 
-      addressLine1 match {
+      addressLine match {
         case pattern(streetNumber, streetName) => AddressLine(Some(streetNumber), streetName)
-        case _ => AddressLine(None, addressLine1)
+        case _ => AddressLine(None, addressLine)
       }
     }
 
