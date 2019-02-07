@@ -199,7 +199,7 @@ function CheckoutForm(props: PropTypes) {
               />
             </FormSection>
             <FormSection title="How often would you like to pay?">
-              <Fieldset>
+              <Fieldset legend="How often would you like to pay?">
                 <RadioInput
                   text={monthlyPriceLabel}
                   name="billingPeriod"
@@ -222,7 +222,7 @@ function CheckoutForm(props: PropTypes) {
             <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
               {props.countrySupportsDirectDebit &&
               <div>
-                <Fieldset>
+                <Fieldset legend="How would you like to pay?">
                   <RadioInput
                     text="Direct debit"
                     name="paymentMethod"
