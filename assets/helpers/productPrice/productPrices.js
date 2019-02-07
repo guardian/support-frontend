@@ -53,4 +53,16 @@ function digitalPackProductPrice(
   return productPrices[countryGroup.name][NoFulfilmentOptions][NoProductOptions][billingPeriod][countryGroup.currency];
 }
 
-export { digitalPackProductPrice };
+function digitalPackAmountToPay(
+  productPrices: ProductPrices,
+  billingPeriod: BillingPeriod,
+  country: IsoCountry,
+) {
+  const productPrice = digitalPackProductPrice(productPrices, billingPeriod, country);
+  if (productPrice.promotion && productPrice.promotion.discountedPrice) {
+    return productPrice.promotion.discountedPrice;
+  }
+  return productPrice.price;
+}
+
+export { digitalPackProductPrice, digitalPackAmountToPay };

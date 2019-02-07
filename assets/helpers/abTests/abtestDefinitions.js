@@ -1,11 +1,14 @@
 // @flow
 import type { Tests } from './abtest';
+import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './annualAmountsTest';
 
 // ----- Tests ----- //
 
+
 export const tests: Tests = {
-  ssr: {
-    variants: ['off', 'on'],
+  ssrTwo: {
+    type: 'OTHER',
+    variants: [{ id: 'off' }, { id: 'on' }],
     audiences: {
       ALL: {
         offset: 0,

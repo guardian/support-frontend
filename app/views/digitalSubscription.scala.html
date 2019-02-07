@@ -30,8 +30,7 @@
       window.guardian.user = {
         firstName: "@user.privateFields.map(_.firstName).getOrElse("")",
         lastName: "@user.privateFields.map(_.secondName).getOrElse("")",
-        email: "@user.primaryEmailAddress",
-        country: "@user.privateFields.map(_.country).getOrElse("")"
+        email: "@user.primaryEmailAddress"
       };
 
       window.guardian.productPrices = @Html(outputJson(productPrices))

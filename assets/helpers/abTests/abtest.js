@@ -11,6 +11,7 @@ import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import { type Settings } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
 
@@ -61,8 +62,16 @@ type Audiences = {
   [IsoCountry | CountryGroupId | 'ALL']: Audience
 };
 
+export type Variant = {
+  id: string,
+  amountsRegions?: AmountsRegions,
+}
+
+export type TestType = 'AMOUNTS' | 'OTHER';
+
 export type Test = {|
-  variants: string[],
+  type: TestType,
+  variants: Variant[],
   audiences: Audiences,
   isActive: boolean,
   canRun?: () => boolean,
@@ -123,22 +132,14 @@ function getParticipationsFromUrl(): ?Participations {
   return null;
 }
 
-function getParticipationsFromQuery(): ?Participations {
+function getSSRParticipationsFromQuery(): ?Participations {
 
-  const hashUrl = (new URL(document.URL)).search;
-  const index = hashUrl.indexOf('ssr');
-
-  if (index > 0) {
-
-    const [testId, variantEtc] = hashUrl.substr(index).split('=');
-    const test = {};
-    const variant = variantEtc.split('&')[0];
-    test[testId] = variant;
-
-    return test;
+  const ssrParam = (new URL(document.URL)).searchParams.get('ssrTwo');
+  if (ssrParam) {
+    return { ssrTwo: ssrParam };
   }
 
-  return { ssr: 'notintest' };
+  return { ssrTwo: 'notintest' };
 }
 
 function userInBreakpoint(audience: Audience): boolean {
@@ -196,7 +197,7 @@ function assignUserToVariant(mvtId: number, test: Test): string {
 
   const variantIndex = randomNumber(mvtId, independent, seed) % test.variants.length;
 
-  return test.variants[variantIndex];
+  return test.variants[variantIndex].id;
 }
 
 function getParticipations(
@@ -230,7 +231,10 @@ function getParticipations(
     }
   });
 
-  return participations;
+  // seeing as the ssr test variant that the user is in is decided, server side, by the query parameter
+  // and not by the local storage, we always want to get the most recent value from the query string parameter
+  // for the ssr test variant
+  return { ...participations, ...getSSRParticipationsFromQuery() };
 }
 
 const buildOphanPayload = (participations: Participations, complete: boolean): OphanABPayload =>
@@ -259,8 +263,7 @@ const init = (
   const mvt: number = getMvtId();
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
-  const queryParticipations: ?Participations = getParticipationsFromQuery();
-  setLocalStorageParticipations(Object.assign({}, participations, urlParticipations, queryParticipations));
+  setLocalStorageParticipations({ ...participations, ...urlParticipations });
 
   trackABOphan(participations, false);
 

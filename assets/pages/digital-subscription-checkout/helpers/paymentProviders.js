@@ -13,19 +13,18 @@ import {
 } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
 import { routes } from 'helpers/routes';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { getDigitalPrice } from 'helpers/subscriptions';
 import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
+import { digitalPackAmountToPay } from 'helpers/productPrice/productPrices';
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation) {
-  const { currencyId } = state.common.internationalisation;
+  const { currencyId, countryId } = state.common.internationalisation;
   const {
     firstName,
     lastName,
     email,
-    country,
     stateProvince,
     billingPeriod,
     telephone,
@@ -41,7 +40,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   return {
     firstName,
     lastName,
-    country: country || 'GB',
+    country: countryId,
     state: stateProvince,
     email,
     telephoneNumber: telephone,
@@ -80,14 +79,20 @@ function showStripe(
   dispatch: Dispatch<Action>,
   state: State,
 ) {
-  const { currencyId, countryGroupId } = state.common.internationalisation;
+  const { currencyId, countryId } = state.common.internationalisation;
   const { isTestUser } = state.page.checkout;
-  const price = getDigitalPrice(countryGroupId, state.page.checkout.billingPeriod);
+
+  const price = digitalPackAmountToPay(
+    state.page.checkout.productPrices,
+    state.page.checkout.billingPeriod,
+    countryId,
+  );
+
   const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(pa, dispatch, state);
 
   loadStripe()
     .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currencyId, isTestUser))
-    .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
+    .then(stripe => openDialogBox(stripe, price, state.page.checkout.email));
 }
 
 function showPaymentMethod(
@@ -103,11 +108,15 @@ function showPaymentMethod(
     case 'DirectDebit':
       dispatch(openDirectDebitPopUp());
       break;
+    case null:
+    case undefined:
+      console.log('Undefined payment method');
+      break;
     default:
       console.log(`Unknown payment method ${paymentMethod}`);
   }
 }
 
-const countrySupportsDirectDebit = (country: ?IsoCountry) => country && country === 'GB';
+const countrySupportsDirectDebit = (country: ?IsoCountry): boolean => country !== null && country === 'GB';
 
 export { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit };

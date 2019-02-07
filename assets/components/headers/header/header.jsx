@@ -9,7 +9,8 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
-import { links } from '../links';
+
+import Links from '../links/links';
 import MobileMenuToggler from './mobileMenuToggler';
 
 import './header.scss';
@@ -33,9 +34,11 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
     containerRef.getBoundingClientRect().left,
     containerRef.getBoundingClientRect().width,
   ];
+  const fitsLinksAtAll = containerWidth - menuWidth > 0;
+  const fitsLinksInOneRow = fitsLinksAtAll && (logoLeft - containerLeft - menuWidth > 0);
   return ({
-    fitsLinksInOneRow: logoLeft - containerLeft - menuWidth > 0,
-    fitsLinksAtAll: containerWidth - menuWidth > 0,
+    fitsLinksInOneRow,
+    fitsLinksAtAll,
   });
 };
 
@@ -43,7 +46,7 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
 // ----- Component ----- //
 
 type TopNavPropTypes = {|
-  utility: Option<Node>,
+  utility: Node,
   getLogoRef: (?Element) => void
 |};
 
@@ -59,34 +62,10 @@ const TopNav = ({ getLogoRef, utility }: TopNavPropTypes) => (
   </div>
 );
 
-type BottomNavPropTypes = {|
-  getMenuRef: (?Element) => void
-|};
-
-const BottomNav = ({ getMenuRef }: BottomNavPropTypes) =>
-  (
-    <nav className="component-header-bottomnav">
-      <ul className="component-header-bottomnav__ul" ref={getMenuRef}>
-        {links.map(({ href, text }) => (
-          <li
-            className={
-              classNameWithModifiers(
-                'component-header-bottomnav__li',
-                [window.location.href.endsWith(href) ? 'active' : null],
-              )
-            }
-          >
-            <a className="component-header-bottomnav__link" href={href}>{text}</a>
-          </li>
-    ))}
-      </ul>
-    </nav>
-  );
-
 export default class Header extends Component<PropTypes, State> {
   static defaultProps = {
     utility: null,
-    displayNavigation: false,
+    displayNavigation: true,
   };
 
   state = {
@@ -95,7 +74,7 @@ export default class Header extends Component<PropTypes, State> {
   };
 
   componentDidMount() {
-    if (this.menuRef && this.logoRef && this.containerRef) {
+    if (this.props.displayNavigation && this.menuRef && this.logoRef && this.containerRef) {
       this.observer = onElementResize(
         [this.logoRef, this.menuRef, this.containerRef],
         ([logoRef, menuRef, containerRef]) => {
@@ -132,14 +111,17 @@ export default class Header extends Component<PropTypes, State> {
       >
         <div className="component-header__wrapper" ref={(el) => { this.containerRef = el; }}>
           <div className="component-header__row">
-            <TopNav utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
+            <TopNav
+              utility={(displayNavigation && fitsLinksAtAll) ? utility : null}
+              getLogoRef={(el) => { this.logoRef = el; }}
+            />
             {displayNavigation &&
-              <MobileMenuToggler />
+              <MobileMenuToggler utility={utility} />
             }
           </div>
           {displayNavigation &&
             <div className="component-header__row">
-              <BottomNav getMenuRef={(el) => { this.menuRef = el; }} />
+              <Links location="desktop" getRef={(el) => { this.menuRef = el; }} />
             </div>
           }
         </div>

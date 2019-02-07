@@ -70,7 +70,7 @@ class DigitalSubscription(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  def displayForm(countryCode: String): Action[AnyContent] =
+  def displayForm(): Action[AnyContent] =
     authenticatedAction(recurringIdentityClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
@@ -78,13 +78,13 @@ class DigitalSubscription(
           SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
           InternalServerError
         },
-        user => Ok(digitalSubscriptionFormHtml(user, countryCode))
+        user => Ok(digitalSubscriptionFormHtml(user))
       ).map(_.withSettingsSurrogateKey)
     }
 
-  private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Digital Subscription"
-    val id = "digital-subscription-checkout-page-" + countryCode
+    val id = "digital-subscription-checkout-page"
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
