@@ -29,7 +29,7 @@ export type SubsUrls = {
 
 // ----- Setup ----- //
 
-const subsUrl = 'https://subscribe.theguardian.com';
+const subsUrl = `https://subscribe.${getBaseDomain()}`;
 const patronsUrl = 'https://patrons.theguardian.com';
 const profileUrl = `https://profile.${getBaseDomain()}`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
@@ -297,6 +297,7 @@ function getDigitalCheckout(
   params.set('startTrialButton', referringCta || '');
 
   if (billingPeriod === Annual) {
+    params.set('period', Annual);
     return `${subsUrl}/checkout/digitalpack-digitalpackannual?${params.toString()}`;
   }
   return `${subsUrl}/checkout?${params.toString()}`;

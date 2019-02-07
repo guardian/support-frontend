@@ -29,7 +29,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           GB: {
             offset: 0,
@@ -55,7 +56,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           GB: {
             offset: 0,
@@ -81,7 +83,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           GB: {
             offset: 0,
@@ -108,7 +111,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           GB: {
             offset: 0,
@@ -134,7 +138,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           US: {
             offset: 0,
@@ -167,7 +172,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           US: {
             offset: 0,
@@ -199,7 +205,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           US: {
             offset: 0,
@@ -232,7 +239,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           US: {
             offset: 0,
@@ -264,7 +272,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           GBPCountries: {
             offset: 0,
@@ -291,7 +300,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           US: {
             offset: 0,
@@ -332,7 +342,8 @@ describe('basic behaviour of init', () => {
 
     const tests = {
       mockTest: {
-        variants: ['control', 'variant'],
+        type: 'OTHER',
+        variants: [{ id: 'control' }, { id: 'variant' }],
         audiences: {
           GB: {
             offset: 0,
@@ -370,7 +381,8 @@ describe('Correct allocation in a multi test environment', () => {
 
   const tests = {
     mockTest: {
-      variants: ['control', 'variant'],
+      type: 'OTHER',
+      variants: [{ id: 'control' }, { id: 'variant' }],
       audiences: {
         GB: {
           offset: 0,
@@ -387,7 +399,8 @@ describe('Correct allocation in a multi test environment', () => {
     },
 
     mockTest2: {
-      variants: ['control', 'variant'],
+      type: 'OTHER',
+      variants: [{ id: 'control' }, { id: 'variant' }],
       audiences: {
         US: {
           offset: 0.2,
@@ -400,7 +413,8 @@ describe('Correct allocation in a multi test environment', () => {
     },
 
     mockTest3: {
-      variants: ['control', 'variant'],
+      type: 'OTHER',
+      variants: [{ id: 'control' }, { id: 'variant' }],
       audiences: {
         GB: {
           offset: 0,
