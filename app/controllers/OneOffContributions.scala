@@ -27,7 +27,7 @@ class OneOffContributions(
     authAction: AuthAction[AnyContent],
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
-    stage: Stage,
+    stage: Stage
 )(implicit val exec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._

@@ -18,7 +18,7 @@ class Subscriptions(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
-    val stage: Stage,
+    val stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
