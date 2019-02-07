@@ -1,4 +1,4 @@
-package selenium.contributions.new_flow
+package selenium.contributions
 
 import selenium.contributions.new_flow.pages._
 import _root_.selenium.util._

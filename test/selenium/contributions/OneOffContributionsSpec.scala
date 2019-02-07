@@ -1,4 +1,4 @@
-package selenium.contributions.new_flow
+package selenium.contributions
 
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
