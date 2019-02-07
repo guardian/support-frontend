@@ -1,4 +1,4 @@
-package selenium.contributions.new_flow.pages
+package selenium.contributions.pages
 
 import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.Page

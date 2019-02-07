@@ -569,6 +569,66 @@ form {
   font-weight: bold;
   line-height: 1;
   margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-fields__required-explainer {
+  padding-top: $gu-v-spacing;
+  color: gu-colour(neutral-2);
+  font-family: $gu-text-sans-web;
+  line-height: 19px;
+  font-size: 15px;
+  & svg {
+    pointer-events: none;
+  }
+}
+
+// This wrapper is needed for click events on the SVG in IE11 to work
+.form-fields__required-explainer--summary-wrapper {
+  cursor: pointer;
+}
+
+.form-fields__required-explainer summary {
+  text-align: left;
+  text-decoration: underline;
+  font-style: italic;
+  margin-bottom: 5px;
+  outline: none;
+  list-style: none;
+}
+
+.form-fields__required-explainer .icon {
+  text-align: center;
+  width: 40px;
+}
+
+.form-fields__required-explainer:not([open]) > :not(summary) {
+  display: none;
+}
+
+
+.form-fields__required-explainer .svg-chevron {
+  padding: 0 $gu-h-spacing/4 0 $gu-h-spacing/4;
+  width: 15px;
+  height: 8px;
+  fill: gu-colour(neutral-2);;
+}
+
+.form-fields__required-explainer[open] .svg-chevron {
+  transform: rotate(180deg);
+}
+
+.form-fields__required-explainer summary::-webkit-details-marker {
+  display:none;
+}
+
+.form__label__required {
+  font-family: $gu-text-sans-web;
+  font-style: italic;
+  font-size: 15px;
+  color: gu-colour(neutral-2);
+  font-weight: normal;
 }
 
 .form__input {
@@ -739,3 +799,66 @@ form {
   padding: 0 $gu-h-spacing $gu-v-spacing;
   margin-top: $gu-v-spacing;
 }
+
+
+/* Server side rendering test loading message*/
+
+.form__radio-group--pills .amounts__placeholder .form__radio-group-input + .form__radio-group-label {
+  border: none;
+}
+
+.amounts__placeholder .form__radio-group-label {
+  background-color: #ededed;
+}
+
+.fade-in-message .component-progress-message__background {
+  background: rgba(0, 0, 0, .6);
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 3s;
+}
+
+.fade-in-message .component-progress-message__message {
+  animation-name: fadeInOpacityFont;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 3s;
+}
+
+
+.fade-in-message .component-animated-dots__bounce1 {
+  animation-delay: 2.68s;
+}
+
+.fade-in-message .component-animated-dots__bounce2 {
+  animation-delay: 2.84s;
+}
+
+.fade-in-message .component-animated-dots__bounce3 {
+  animation-delay: 3s;
+}
+
+@keyframes fadeInOpacity {
+   0% {
+     background: rgba(0, 0, 0, 0);
+   }
+   50% {
+     background: rgba(0, 0, 0, 0);
+   }
+   100% {
+     background: rgba(0, 0, 0, .6);
+   }
+ }
+
+@keyframes fadeInOpacityFont {
+   0% {
+     opacity: 0;
+   }
+   50% {
+     opacity: 0;
+   }
+   100% {
+     opacity: 1;
+   }
+ }

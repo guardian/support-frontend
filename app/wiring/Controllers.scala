@@ -23,7 +23,8 @@ trait Controllers {
     paymentAPIService,
     stringsConfig,
     allSettingsProvider,
-    appConfig.guardianDomain
+    appConfig.guardianDomain,
+    appConfig.stage
   )
 
   lazy val subscriptionsController = new Subscriptions(

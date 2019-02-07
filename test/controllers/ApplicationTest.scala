@@ -13,7 +13,7 @@ import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
 import services.{HttpIdentityService, PaymentAPIService, TestUserService}
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import config.Configuration.GuardianDomain
 
 import scala.concurrent.ExecutionContext
@@ -48,7 +48,8 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[PaymentAPIService],
         mock[StringsConfig],
         mock[AllSettingsProvider],
-        mock[GuardianDomain]
+        mock[GuardianDomain],
+        mock[Stage]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
@@ -65,7 +66,8 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[PaymentAPIService],
         mock[StringsConfig],
         mock[AllSettingsProvider],
-        mock[GuardianDomain]
+        mock[GuardianDomain],
+        mock[Stage]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
