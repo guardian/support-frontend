@@ -7,7 +7,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.play.IdUser
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
 import config.StringsConfig
@@ -32,7 +32,8 @@ class Application(
     paymentAPIService: PaymentAPIService,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
-    guardianDomain: GuardianDomain
+    guardianDomain: GuardianDomain,
+    stage: Stage
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging with ServersideAbTestCookie {
 
   import actionRefiners._
@@ -124,7 +125,8 @@ class Application(
         regularUatPayPalConfig = payPalConfigProvider.get(true),
         paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-        idUser = idUser
+        idUser = idUser,
+        stage = stage
       )
     else
       views.html.newContributions(

@@ -2,6 +2,7 @@
 @import views.ViewHelpers._
 @import admin.settings.AllSettings
 
+@import com.gu.support.config.Stage
 @(
   title: String,
   mainId: String,
@@ -13,7 +14,8 @@
   styles: Html = Html(""),
   scripts: Html = Html(""),
   data: Map[String, String] = Map.empty,
-  csrf: Option[String] = None
+  csrf: Option[String] = None,
+  stage: Stage,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -55,7 +57,7 @@
 
     @optimizeScript()
 
-    @if(/*TODO config.stage passed through from the controller == DEV*/false) {
+    @if(Stage.fromString("DEV").contains(stage)) {
       <link rel="stylesheet" href="@assets(mainStyleBundle)">
     } else {
       <style>
