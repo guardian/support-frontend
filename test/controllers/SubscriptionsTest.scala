@@ -21,6 +21,7 @@ import org.scalatest.OptionValues._
 import org.scalatest.mockito.MockitoSugar.mock
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.mvc.Result
+import com.gu.support.config._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
 import services.stepfunctions.SupportWorkersClient
@@ -83,7 +84,8 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
         settingsProvider,
         "support.thegulocal.com",
         tip,
-        GuardianDomain(".thegulocal.com")
+        GuardianDomain(".thegulocal.com"),
+        Stages.PROD
       )
     }
 

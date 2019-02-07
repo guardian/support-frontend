@@ -20,7 +20,7 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.play.{PrivateFields, PublicFields}
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import services.{HttpIdentityService, PaymentAPIService, TestUserService}
-import com.gu.support.config.StripeConfigProvider
+import com.gu.support.config.{Stages, StripeConfigProvider}
 import fixtures.TestCSRFComponents
 import play.api.libs.json.JsString
 
@@ -92,7 +92,8 @@ class OneOffContributionsTest extends WordSpec with MustMatchers with TestCSRFCo
           mock[PaymentAPIService],
           mock[AuthAction[AnyContent]],
           stubControllerComponents(),
-          mock[AllSettingsProvider]
+          mock[AllSettingsProvider],
+          Stages.PROD
         ).autofill(FakeRequest())
       }
     }

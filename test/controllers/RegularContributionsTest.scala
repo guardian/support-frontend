@@ -20,6 +20,7 @@ import services.MembersDataService._
 import com.gu.support.config._
 import admin.settings.SwitchState.On
 import com.gu.tip.Tip
+import com.gu.support.config._
 import config.Configuration.GuardianDomain
 
 class RegularContributionsTest extends WordSpec with MustMatchers {
@@ -67,7 +68,8 @@ class RegularContributionsTest extends WordSpec with MustMatchers {
         stubControllerComponents(),
         guardianDomain = GuardianDomain(".thegulocal.com"),
         settingsProvider,
-        mock[Tip]
+        mock[Tip],
+        Stages.PROD
       )
     }
 
