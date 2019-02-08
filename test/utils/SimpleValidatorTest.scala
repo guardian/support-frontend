@@ -20,7 +20,12 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
     supportAbTests = Set(),
     email = "grace@gracehopper.com",
     telephoneNumber = None,
-    promoCode = None
+    promoCode = None,
+    addressLine1 = None,
+    addressLine2 = None,
+    townCity = None,
+    county = None,
+    postcode = None
   )
 
   "validate" should "return true when there are no empty strings" in {
