@@ -2,11 +2,11 @@ package controllers
 
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
+import com.gu.identity.play.{AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.User
 import com.gu.tip.Tip
@@ -19,10 +19,8 @@ import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, MembersDataService, TestUserService}
-import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,54 +42,6 @@ class RegularContributions(
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
-
-  def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: RequestHeader, settings: AllSettings): Result = {
-    Ok(recurringContributions(
-      title = "Support the Guardian | Recurring Contributions",
-      id = "regular-contributions-page",
-      js = "regularContributionsPage.js",
-      css = "regularContributionsPageStyles.css",
-      user = maybeUser,
-      uatMode,
-      defaultStripeConfig = stripeConfigProvider.get(false),
-      uatStripeConfig = stripeConfigProvider.get(true),
-      payPalConfig = payPalConfigProvider.get(uatMode)
-    ))
-  }
-
-  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: RequestHeader, settings: AllSettings): Future[Result] =
-    identityService.getUser(user).semiflatMap { fullUser =>
-      isRegularContributor(user.credentials) map {
-        case Some(true) =>
-          SafeLogger.info(s"Determined that ${user.id} is already a contributor; re-directing to /contribute/recurring/existing")
-          Redirect("/contribute/recurring/existing")
-        case Some(false) | None =>
-          val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
-          monthlyContributionsPage(Some(fullUser), uatMode)
-      }
-    }.valueOr { error =>
-      SafeLogger.error(scrub"Failed to display recurring contributions form for ${user.id} due to error from identityService: $error")
-      InternalServerError
-    }
-
-  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings): Future[Result] = {
-    val uatMode = testUsers.isTestUser(request)
-    Future.successful(
-      monthlyContributionsPage(None, uatMode)
-    )
-  }
-
-  def displayFormAuthenticated(): Action[AnyContent] =
-    authenticatedAction(recurringIdentityClientId).async { implicit request =>
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      displayFormWithUser(request.user).map(_.withSettingsSurrogateKey)
-    }
-
-  def displayFormMaybeAuthenticated(): Action[AnyContent] =
-    maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      request.user.fold(displayFormWithoutUser())(displayFormWithUser).map(_.withSettingsSurrogateKey)
-    }
 
   def create: Action[CreateSupportWorkersRequest] = maybeAuthenticatedAction().async(circe.json[CreateSupportWorkersRequest]) {
     implicit request =>
@@ -161,24 +111,6 @@ class RegularContributions(
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
       isTestUser = testUsers.isTestUser(user.publicFields.displayName)
     )
-  }
-
-  private def isRegularContributor(credentials: AccessCredentials) = credentials match {
-    case cookies: AccessCredentials.Cookies =>
-      membersDataService.userAttributes(cookies).fold(
-        {
-          case UserNotFound => Some(false)
-          case error =>
-            SafeLogger.warn(s"Failed to fetch user attributes due to an error from members-data-api: $error")
-            None
-        },
-        { response => Some(response.contentAccess.recurringContributor) }
-      ).recover {
-          case throwable @ _ =>
-            SafeLogger.warn(s"Failed to fetch user attributes from members-data-api due to a failed Future: ${throwable.getCause}")
-            None
-        }
-    case _ => Future.successful(None)
   }
 
 }
