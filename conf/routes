@@ -43,18 +43,18 @@ GET /event/*eventId                                 controllers.Application.redi
 # This is a temporary client-side redirect based on geo-location
 # Once we have a separate payment failure email for US and UK we can consider removing it
 
-GET  /monthly-contributions                         controllers.Application.contributionsRedirect()
+GET  /monthly-contributions                         controllers.Application.permanentRedirect(location="/contribute")
 
 # Deprecated endpoints that we now redirect to the contribute page. Once we have established that no traffic
 # is coming this way, we should remove them
-GET  /contribute/recurring                          controllers.Application.contributeGeoRedirect()
-GET  /contribute/recurring-guest                    controllers.Application.contributeGeoRedirect()
-GET  /contribute/recurring/thankyou                 controllers.Application.contributeGeoRedirect()
-GET  /contribute/recurring/pending                  controllers.Application.contributeGeoRedirect()
-GET  /contribute/recurring/existing                 controllers.Application.contributeGeoRedirect()
-GET  /contribute/one-off                            controllers.Application.contributeGeoRedirect()
-GET  /contribute/one-off/thankyou                   controllers.Application.contributeGeoRedirect()
-GET  /contribute/one-off/autofill                   controllers.Application.contributeGeoRedirect()
+GET  /contribute/recurring                          controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring-guest                    controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/thankyou                 controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/pending                  controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/existing                 controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off                            controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off/thankyou                   controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off/autofill                   controllers.Application.permanentRedirect(location="/contribute")
 
 
 # ----- Contributions ----- #
