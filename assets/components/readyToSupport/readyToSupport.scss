@@ -18,7 +18,7 @@
     content: "";
     position: absolute;
     right: 10px;
-    background-color: gu-colour(lifestyle-garnett-main-1);
+    background-color: gu-colour(lifestyle-main);
     border-bottom-left-radius: 600px;
     border-bottom-right-radius: 600px;
     width: 50px;
@@ -62,14 +62,14 @@
 }
 
 .component-cta-link--see-supporter-options {
-  background-color: gu-colour(lifestyle-garnett-main-1);
+  background-color: gu-colour(lifestyle-main);
 
   @include mq($from: tablet) {
     width: 500px;
   }
 
   &:hover {
-    background-color: darken(gu-colour(lifestyle-garnett-main-1), 5%);
+    background-color: darken(gu-colour(lifestyle-main), 5%);
   }
 
   .svg-chevron-up {

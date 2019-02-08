@@ -13,7 +13,7 @@
   background: gu-colour(brightness-97);
 
   .component-cta-link {
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
     color: gu-colour(brightness-7);
     width: 120px;
     height: 40px;
@@ -34,7 +34,7 @@
     }
 
     &:hover {
-      background-color: darken(gu-colour(news-garnett-highlight), 5%);
+      background-color: darken(gu-colour(highlight-main), 5%);
     }
   }
 
@@ -177,11 +177,11 @@
 }
 
 .component-featured-product-hero--digital-pack {
-  @include with-colour(lifestyle-garnett-main-1);
+  @include with-colour(lifestyle-main);
 }
 .component-featured-product-hero--paper {
-  @include with-colour(sport-garnett-media-main-1);
+  @include with-colour(sport-bright);
 }
 .component-featured-product-hero--guardian-weekly {
-  @include with-colour(opinion-garnett-media-main-1);
+  @include with-colour(opinion-bright);
 }

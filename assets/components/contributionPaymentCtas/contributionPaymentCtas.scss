@@ -18,10 +18,10 @@
 
   .component-cta-link--contribute-regular {
     margin-top: $gu-v-spacing;
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
 
     &:hover {
-      background-color: darken(gu-colour(news-garnett-highlight), 5%);
+      background-color: darken(gu-colour(highlight-main), 5%);
     }
   }
 

@@ -15,7 +15,7 @@
 
   &:focus, &:active {
     outline-color: rgba(255,255,255,0);
-    box-shadow: 0 0 0 2px lighten(gu-colour(news-garnett-highlight), 6%);
+    box-shadow: 0 0 0 2px lighten(gu-colour(highlight-main), 6%);
   }
 
   &[disabled] {

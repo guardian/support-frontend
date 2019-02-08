@@ -1,6 +1,6 @@
 .component-general-error-message {
   padding: ($gu-v-spacing / 2) $gu-h-spacing $gu-v-spacing;
-  color: gu-colour(news-garnett-main-1);
+  color: gu-colour(news-main);
   background-color: gu-colour(news-faded);
   margin-bottom: 20px;
 
@@ -13,7 +13,7 @@
 .component-general-error-message--invalid_form_mobile {
   padding-top: $gu-v-spacing;
   margin-bottom: -$gu-v-spacing;
-  color: gu-colour(news-garnett-main-1);
+  color: gu-colour(news-main);
   background-color: gu-colour(news-faded);
 
   // point at you can see the all the individual invalid field error messages
@@ -43,7 +43,7 @@
 }
 
 .svg-exclamation-alternate__circle {
-  fill: gu-colour(news-garnett-main-1);
+  fill: gu-colour(news-main);
 }
 
 .svg-exclamation-alternate__exclamation-mark {

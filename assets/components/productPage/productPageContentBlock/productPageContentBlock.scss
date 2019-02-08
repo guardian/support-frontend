@@ -68,16 +68,16 @@
 
 .component-product-page-content-block--feature {
   @include block-colours(
-    $border: gu-colour(header-border),
-    $bg: gu-colour(header-dark),
+    $border: gu-colour(brand-pastel),
+    $bg: gu-colour(brand-main),
     $text: gu-colour(brightness-100),
   );
 }
 
 .component-product-page-content-block--feature-secondary {
   @include block-colours(
-    $border: gu-colour(header-border),
-    $bg: gu-colour(news-garnett-highlight),
+    $border: gu-colour(brand-pastel),
+    $bg: gu-colour(highlight-main),
     $text: gu-colour(brightness-7)
   );
 }

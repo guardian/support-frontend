@@ -5,7 +5,7 @@
   @include gu-typeface(headline, 16);
   line-height: 1;
   font-weight: bold;
-  background-color: gu-colour(news-garnett-highlight);
+  background-color: gu-colour(highlight-main);
   color: gu-colour(brightness-7);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2);
   @supports(transform:translateY(-100%)){

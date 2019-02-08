@@ -32,7 +32,7 @@
 }
 
 .component-button--primary {
-  background-color: gu-colour(news-garnett-highlight);
+  background-color: gu-colour(highlight-main);
   color: gu-colour(brightness-7);
   &:hover, &:focus {
     background-color: gu-colour(highlight-dark);

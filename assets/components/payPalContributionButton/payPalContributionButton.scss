@@ -1,5 +1,5 @@
 .component-paypal-contribution-button {
-  background-color: gu-colour(news-garnett-highlight);
+  background-color: gu-colour(highlight-main);
   border-radius: 600px;
   border: none;
   color: gu-colour(brightness-7);
@@ -23,6 +23,6 @@
   }
 
   &:hover {
-    background-color: darken(gu-colour(news-garnett-highlight), 5%);
+    background-color: darken(gu-colour(highlight-main), 5%);
   }
 }

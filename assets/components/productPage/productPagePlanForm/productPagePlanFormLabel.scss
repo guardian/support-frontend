@@ -70,12 +70,12 @@
 }
 .component-product-page-plan-form-label__input:hover + .component-product-page-plan-form-label__box .component-product-page-plan-form-label__title,
 .component-product-page-plan-form-label__input:focus + .component-product-page-plan-form-label__box .component-product-page-plan-form-label__title {
-  background: gu-colour(news-garnett-highlight);
+  background: gu-colour(highlight-main);
 }
 
 .component-product-page-plan-form-label__input:checked + .component-product-page-plan-form-label__box {
   .component-product-page-plan-form-label__title {
-    background: gu-colour(news-garnett-highlight);
+    background: gu-colour(highlight-main);
   }
   .component-product-page-plan-form-label__check {
     transform: translateY(0);

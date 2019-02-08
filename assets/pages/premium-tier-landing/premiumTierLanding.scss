@@ -175,7 +175,7 @@
 
   .product-block__highlight {
     font-weight: normal;
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
     padding: 0 2px;
   }
 
@@ -198,7 +198,7 @@
     }
 
     .product-block__product-heading {
-      background-color: gu-colour(sport-garnett-media-main-1);
+      background-color: gu-colour(sport-bright);
     }
 
     .component-feature-list {
@@ -215,7 +215,7 @@
     line-height: 80px;
     font-family: $gu-headline;
     font-weight: bold;
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
     margin: 0 auto -35px;
     position: relative;
 

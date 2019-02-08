@@ -2,7 +2,7 @@
 
 .thank-you__container .header{
   @include mq($from: mobile, $until: tablet) {
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
   }
 }
 

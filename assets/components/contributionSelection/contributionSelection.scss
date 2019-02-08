@@ -7,7 +7,7 @@
   }
 
   .component-radio-toggle__label--checked {
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
     color: gu-colour(brightness-7);
   }
 
@@ -53,7 +53,7 @@
     }
     .component-radio-toggle__button {
       display: inline-block;
-      border: 2px solid gu-colour(news-garnett-highlight);
+      border: 2px solid gu-colour(highlight-main);
       border-radius: 600px;
       margin: 0 10px 0 0;
     }
@@ -82,7 +82,7 @@
 
   .component-radio-toggle {
     display: inline-block;
-    border: 2px solid gu-colour(news-garnett-highlight);
+    border: 2px solid gu-colour(highlight-main);
     border-radius: 600px;
   }
 
@@ -102,7 +102,7 @@
   margin-top: $gu-v-spacing;
 
   .component-radio-toggle__label {
-    border: 2px solid gu-colour(news-garnett-highlight);
+    border: 2px solid gu-colour(highlight-main);
     display: inline-block;
     text-align: center;
     width: 40px;
@@ -123,7 +123,7 @@
   }
 
   .component-number-input {
-    border: 2px solid gu-colour(news-garnett-highlight);
+    border: 2px solid gu-colour(highlight-main);
     padding: 8px 0;
     margin-top: 0;
   }

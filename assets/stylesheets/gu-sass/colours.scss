@@ -4,16 +4,16 @@
 // also a convenience function included that works as follows:
 //
 // .my-class {
-//     color: gu-colour(guardian-brand);
+//     color: gu-colourbrand-main);
 // }
 
 $gu-colours: (
-	guardian-brand:         #005689,
-	guardian-brand-light:   #94b1ca,
-	guardian-brand-dark:    #00456e,
+  brand-dark:             #041f4a,
+  brand-main:             #052962,
+  brand-pastel:           #506991,
 
-	error:                  #d61d00,
-	success:                #4a7801,
+	error:                  #c70000,
+	success:                #22874D,
 
 	// Neutral palette
   brightness-7:           #121212,
@@ -25,120 +25,51 @@ $gu-colours: (
   brightness-97:          #f6f6f6,
   brightness-100:         #ffffff,
 
-
-	// News palette
-	news-main-1:            #005689,
-	news-main-2:            #4bc6df,
-	news-support-1:         #aad8f1,
-	news-support-2:         #197caa,
-	news-support-3:         #69d1ca,
-	news-support-4:         #66a998,
-	news-support-5:         #aad801,
-	news-support-6:         #63717a,
-	news-support-7:         #484f53,
-
-	// Features palette
-	features-main-1:        #7d0068,
-	features-main-2:        #b82266,
-	features-support-1:     #951c55,
-	features-support-2:     #4e0375,
-	features-support-3:     #fdadba,
-	features-support-4:     #dc2a7d,
-
-	// Comment palette
-	comment-main-1:         #c05303,
-	comment-main-2:         #ff9b0b,
-	comment-support-1:      #7d7569,
-	comment-support-2:      #efefec,
-	comment-support-3:      #ffce4b,
-	comment-support-4:      #e6711b,
-
-	// Multimedia palette
-	multimedia-main-1:      #333333,
-	multimedia-main-2:      #ffbb00,
-	multimedia-support-1:   #c5d4ea,
-	multimedia-support-2:   #507892,
-	multimedia-support-3:   #002c59,
-	multimedia-support-4:   #484848,
-	multimedia-support-5:   #161616,
-
-	// Live palette
-	live-main-1:            #b51800,
-	live-main-2:            #cc2b12,
-	live-support-1:         #ff5b3a,
-	live-support-2:         #800c0c,
-	live-support-3:         #a60947,
-
-	// Maps palette
-	maps-main-1:            #1c6326,
-	maps-main-2:            #298422,
-	maps-support-1:         #ceb41d,
-	maps-support-2:         #a9af2b,
-	maps-support-3:         #5ebfba,
-	maps-support-4:         #72af7e,
-
-	// External content palette
-	external-main-1:        #1c6326,
-	external-support-1:     #a9af2b,
-
-	// Support palette
-	light-blue: #d4ebf8,
-	light-yellow: #ffdd7f,
-	light-black: #999,
+  // Highlight (yellow)
+  highlight-main:         #ffe500,
+  highlight-dark:         #ffbb50,
 
 	// Garnett
-  nav-faded: #e9eff1,
-  nav-dark: #bbcdd3,
-	header-dark: #052962,
-	header-border: #536b90,
+  nav-faded:              #e9eff1,
+  nav-dark:               #bbcdd3,
 
+  // Pillars
+  // News (red)
+  news-dark:              #ab0613,
+  news-main:              #c70000,
+  news-bright:            #ff4e36,
+  news-pastel:            #ffbac8,
+  news-faded:             #fff4f2,
 
+  // Opinion (orange)
+  opinion-dark:           #bd5318,
+  opinion-main:           #e05e00,
+  opinion-bright:         #ff7f0f,
+  opinion-pastel:         #f9b376,
+  opinion-faded:          #fef9f5,
 
+  // Sport (blue)
+  sport-dark:             #005689,
+  sport-main:             #0084c6,
+  sport-bright:           #00b2ff,
+  sport-pastel:           #90dcff,
+  sport-faded:            #f1f8fc,
 
-  news-garnett-main-1: #e00000, //used for kicker
-  news-garnett-feature: #ad0006, //used for feature head
-  news-garnett-media-main-1: #ff4e36, // used for kicker on media
-  news-garnett-highlight: #ffe500,
-  news-faded:  #fff4f2,
-  highlight-dark: #ffbb50,
+  // Culture (brown)
+  culture-dark:           #6b5840,
+  culture-main:           #a1845c,
+  culture-bright:         #eacca0,
+  culture-pastel:         #e7d4b9,
+  culture-faded:          #fbf6ef,
 
-  opinion-garnett-main-1: #ed6300,
-  opinion-garnett-feature: #f5be2c,
-  opinion-garnett-media-main-1: #ff7f0f,
-  opinion-garnett-background: #fef9f5,
+  // Lifestyle (magenta)
+  lifestyle-dark:         #7d0068,
+  lifestyle-main:         #bb3b80,
+  lifestyle-bright:       #ffabdb,
+  lifestyle-pastel:       #fec8d3,
+  lifestyle-faded:        #feeef7,
 
-  sport-garnett-main-1: #0084c6,
-  sport-garnett-feature: #005689,
-  sport-garnett-media-main-1: #00b2ff,
-
-  culture-garnett-main-1: #ab8958,
-  culture-garnett-feature: #6b5840,
-  culture-garnett-media-main-1: #eacca0,
-
-  lifestyle-garnett-main-1: #bb3b80,
-  lifestyle-garnett-feature: #7d0068,
-  lifestyle-garnett-media-main-1: #ffabdb,
-
-  live-garnett-main-1: #ad0006,
-  live-garnett-main-2: #ffbac8,
-  live-garnett-dead-background: #eaeaea,
-  live-garnett-accent: #d65353,
-  live-garnett-sport1: #005689,
-  live-garnett-sport2: #90dcff,
-  live-garnett-culture1: #6b5840,
-  live-garnett-culture2: #e7d4b9,
-  live-garnett-lifestyle1: #7d0068,
-  live-garnett-lifestyle2: #ffbac8,
-
-  media-garnett-main-1: #333333,
-
-  vjs-garnett-small-button-size: 42px,
-  vjs-garnett-medium-button-size: 50px,
-  vjs-garnett-large-button-size: 60px,
-
-  immersive-garnett-main-1: rgba(0, 0, 0, .65),
-  analysis-garnett-underline: #ffbac8,
-
+  // Green
   green-main: #22874D,
   green-dark: #185E36,
 

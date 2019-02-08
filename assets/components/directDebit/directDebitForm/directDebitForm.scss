@@ -158,8 +158,8 @@
 }
 
 .component-direct-debit-form__cta {
-  background-color: gu-colour(news-garnett-highlight);
-  border: solid 1px lighten(gu-colour(news-garnett-highlight), 15%);
+  background-color: gu-colour(highlight-main);
+  border: solid 1px lighten(gu-colour(highlight-main), 15%);
   border-radius: 100px;
   cursor: pointer;
   position: relative;
@@ -177,7 +177,7 @@
   }
 
   &:hover {
-    background-color: lighten(gu-colour(news-garnett-highlight), 15%);
+    background-color: lighten(gu-colour(highlight-main), 15%);
   }
 }
 
