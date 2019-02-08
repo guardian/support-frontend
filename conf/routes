@@ -43,7 +43,19 @@ GET /event/*eventId                                 controllers.Application.redi
 # This is a temporary client-side redirect based on geo-location
 # Once we have a separate payment failure email for US and UK we can consider removing it
 
-GET  /monthly-contributions                         controllers.Application.contributionsRedirect()
+GET  /monthly-contributions                         controllers.Application.permanentRedirect(location="/contribute")
+
+# Deprecated endpoints that we now redirect to the contribute page. Once we have established that no traffic
+# is coming this way, we should remove them
+GET  /contribute/recurring                          controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring-guest                    controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/thankyou                 controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/pending                  controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/existing                 controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off                            controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off/thankyou                   controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off/autofill                   controllers.Application.permanentRedirect(location="/contribute")
+
 
 # ----- Contributions ----- #
 
@@ -51,13 +63,9 @@ GET  /contribute                                        controllers.Application.
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String, ssrTwo: Option[String])
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String, ssrTwo: Option[String])
 
-GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
-GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormMaybeAuthenticated()
-GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayFormMaybeAuthenticated()
-GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js", css="regularContributionsExistingPageStyles.css")
+
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /support-workers/status                        controllers.SupportWorkersStatus.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.RegularContributions.displayFormMaybeAuthenticated()
 
 # this endpoint should be removed once identity remove
 # the need for a client token
@@ -68,9 +76,6 @@ PUT /identity/set-password-guest                 controllers.IdentityController.
 GET /identity/get-user-type                      controllers.IdentityController.getUserType(maybeEmail: Option[String])
 
 
-GET  /contribute/one-off                            controllers.OneOffContributions.displayForm()
-GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.displayForm()
-GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
 # ----- Subscriptions ----- #
 
