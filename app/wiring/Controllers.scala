@@ -95,18 +95,6 @@ trait Controllers {
     tipMonitoring
   )
 
-  lazy val oneOffContributions = new OneOffContributions(
-    assetsResolver,
-    actionRefiners,
-    identityService,
-    testUsers,
-    appConfig.oneOffStripeConfigProvider,
-    paymentAPIService,
-    authAction,
-    controllerComponents,
-    allSettingsProvider
-  )
-
   lazy val testUsersController = new TestUsersManagement(
     authAction,
     controllerComponents,

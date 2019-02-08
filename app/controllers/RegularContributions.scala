@@ -2,11 +2,11 @@ package controllers
 
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.OptionalAuthRequest
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
+import com.gu.identity.play.{AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.User
 import com.gu.tip.Tip
@@ -19,10 +19,8 @@ import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.MembersDataService.UserNotFound
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, MembersDataService, TestUserService}
-import views.html.recurringContributions
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -113,24 +111,6 @@ class RegularContributions(
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
       isTestUser = testUsers.isTestUser(user.publicFields.displayName)
     )
-  }
-
-  private def isRegularContributor(credentials: AccessCredentials) = credentials match {
-    case cookies: AccessCredentials.Cookies =>
-      membersDataService.userAttributes(cookies).fold(
-        {
-          case UserNotFound => Some(false)
-          case error =>
-            SafeLogger.warn(s"Failed to fetch user attributes due to an error from members-data-api: $error")
-            None
-        },
-        { response => Some(response.contentAccess.recurringContributor) }
-      ).recover {
-          case throwable @ _ =>
-            SafeLogger.warn(s"Failed to fetch user attributes from members-data-api due to a failed Future: ${throwable.getCause}")
-            None
-        }
-    case _ => Future.successful(None)
   }
 
 }
