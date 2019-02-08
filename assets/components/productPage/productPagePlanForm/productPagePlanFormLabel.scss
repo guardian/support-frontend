@@ -12,8 +12,8 @@
 
 .component-product-page-plan-form-label__box {
   @include gu-fontset-body-sans;
-  background: gu-colour(garnett-neutral-5);
-  color: gu-colour(garnett-neutral-1);
+  background: gu-colour(brightness-100);
+  color: gu-colour(brightness-7);
   display: block;
   height: 100%;
   cursor: pointer;
@@ -33,7 +33,7 @@
 .component-product-page-plan-form-label__title {
   @include gu-fontset-heading-sans;
   padding: $gu-v-spacing/2.15 $gu-h-spacing/2;
-  background-color: gu-colour(garnett-neutral-4);
+  background-color: gu-colour(brightness-86);
   position: relative;
   transition: .2s background;
 }
@@ -50,7 +50,7 @@
   width: $gu-v-spacing * 1.666;
   height: $gu-v-spacing * 1.666;
   border-radius: 100%;
-  background: gu-colour(garnett-neutral-1);
+  background: gu-colour(brightness-7);
   position: absolute;
   top: 0;
   bottom: 0;
@@ -61,12 +61,12 @@
   transition: .2s;
   svg {
     width: 50%;
-    fill: gu-colour(garnett-neutral-5);
+    fill: gu-colour(brightness-100);
   }
 }
 .component-product-page-plan-form-label__input:hover + .component-product-page-plan-form-label__box,
 .component-product-page-plan-form-label__input:focus + .component-product-page-plan-form-label__box {
-  box-shadow: 0 0 0 2px rgba(gu-colour(garnett-neutral-5),.25);
+  box-shadow: 0 0 0 2px rgba(gu-colour(brightness-100),.25);
 }
 .component-product-page-plan-form-label__input:hover + .component-product-page-plan-form-label__box .component-product-page-plan-form-label__title,
 .component-product-page-plan-form-label__input:focus + .component-product-page-plan-form-label__box .component-product-page-plan-form-label__title {
@@ -84,7 +84,7 @@
 }
 
 .component-product-page-plan-form-label__footer {
-  border-top: 1px solid gu-colour(garnett-neutral-4);
+  border-top: 1px solid gu-colour(brightness-86);
   margin: $gu-v-spacing/2 $gu-h-spacing/2 0;
   padding-top: $gu-v-spacing/2;
   padding-bottom: $gu-v-spacing;
@@ -108,18 +108,18 @@
 .component-product-page-plan-form-label-offer {
   $vertical-padding: $gu-v-spacing / 4;
   $horizontal-padding: $gu-h-spacing / 4;
-  color: gu-colour(garnett-neutral-5);
+  color: gu-colour(brightness-100);
   font-weight: 600;
   display: inline;
   line-height: 1.4;
   box-shadow: 
-  $horizontal-padding $vertical-padding 0 0 gu-colour(garnett-neutral-1), 
-  $horizontal-padding ($vertical-padding * -1) 0 0 gu-colour(garnett-neutral-1), 
-  ($horizontal-padding * -1) $vertical-padding 0 0 gu-colour(garnett-neutral-1),
-  ($horizontal-padding * -1) ($vertical-padding * -1) 0 0 gu-colour(garnett-neutral-1);
+  $horizontal-padding $vertical-padding 0 0 gu-colour(brightness-7), 
+  $horizontal-padding ($vertical-padding * -1) 0 0 gu-colour(brightness-7), 
+  ($horizontal-padding * -1) $vertical-padding 0 0 gu-colour(brightness-7),
+  ($horizontal-padding * -1) ($vertical-padding * -1) 0 0 gu-colour(brightness-7);
   
   .component-product-page-plan-form-label-offer__inside {
-    background: gu-colour(garnett-neutral-1);
+    background: gu-colour(brightness-7);
     line-height: 1.4;
     padding: $vertical-padding 0;
   }  

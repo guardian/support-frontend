@@ -34,7 +34,7 @@
     }
 
     .svg-arrow-right-straight {
-      fill: gu-colour(garnett-neutral-1);
+      fill: gu-colour(brightness-7);
     }
   }
 
@@ -52,7 +52,7 @@
 
   .component-cta-link--support-the-guardian {
     background-color: gu-colour(news-garnett-highlight);
-    color: gu-colour(garnett-neutral-1);
+    color: gu-colour(brightness-7);
 
     &:hover {
       background-color: darken(gu-colour(news-garnett-highlight), 5%);
@@ -66,12 +66,12 @@
   .component-cta-link--guardian-home-page {
     background-color: #fff;
     margin-top: $gu-v-spacing;
-    color: gu-colour(garnett-neutral-1);
-    border-color: gu-colour(garnett-neutral-1);
+    color: gu-colour(brightness-7);
+    border-color: gu-colour(brightness-7);
 
     &:hover {
-      color: darken(gu-colour(garnett-neutral-1), 5%);
-      border-color: darken(gu-colour(garnett-neutral-1), 5%);
+      color: darken(gu-colour(brightness-7), 5%);
+      border-color: darken(gu-colour(brightness-7), 5%);
     }
 
     @include mq($from: phablet) {

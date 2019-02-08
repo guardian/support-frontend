@@ -52,7 +52,7 @@
       }
 
       @include mq($from: desktop) {
-        border-left: 1px solid gu-colour(garnett-neutral-4);
+        border-left: 1px solid gu-colour(brightness-86);
       }
       
     }
@@ -100,7 +100,7 @@
   }
 
   .product-block__image {
-    border-bottom: 1px solid gu-colour(garnett-neutral-4);
+    border-bottom: 1px solid gu-colour(brightness-86);
     padding: 0 ($gu-h-spacing / 2);
     margin-bottom: $gu-v-spacing / 2;
 
@@ -266,11 +266,11 @@
 
   .digital-subscription-landing-header {
     .component-price-cta {
-      background-color: gu-colour(garnett-neutral-1);
+      background-color: gu-colour(brightness-7);
       border-top: 1px solid #fff;
     }
     .component-price-cta__secondary {
-      color: gu-colour(garnett-neutral-3);
+      color: gu-colour(brightness-97);
       padding: ($gu-v-spacing / 2) 0;
       font-size: .9em;
     }
@@ -278,7 +278,7 @@
       z-index: 10;
       position: relative;
       border-top: 1px solid #fff;
-      background: gu-colour(garnett-neutral-1);
+      background: gu-colour(brightness-7);
       color: #fff;
       .component-countdown__chip {
         padding-left: 10px;
@@ -306,7 +306,7 @@
 
   .digital-subscription-landing-header__cta {
     position: relative;
-    background-color: gu-colour(garnett-neutral-1);
+    background-color: gu-colour(brightness-7);
     border-top: 1px solid #fff;
     padding: $gu-v-spacing $gu-v-spacing;
   }
@@ -319,13 +319,13 @@
     font-weight: bold;
     font-size: 24px;
     padding: 4px 12px;
-    color: gu-colour(garnett-neutral-1);
+    color: gu-colour(brightness-7);
   }
 
   .digital-subscription-landing-header__title {
     position: relative;
     width: 100%;
-    background-color: gu-colour(garnett-neutral-1);
+    background-color: gu-colour(brightness-7);
   }
 
   .digital-subscription-landing-header__title-copy {
@@ -459,6 +459,6 @@
 }
 
 .component-left-margin-section--grey {
-  background: gu-colour(neutral-6);
+  background: gu-colour(brightness-97);
   overflow: hidden;
 }

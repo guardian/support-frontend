@@ -15,7 +15,7 @@
 .component-product-page-tabs__li {
   overflow: hidden;
   &:last-child {
-    border-right: 1px solid gu-colour(garnett-neutral-4);
+    border-right: 1px solid gu-colour(brightness-86);
   }
   @include mq($until:phablet) {
     flex: 1 1 0;
@@ -29,7 +29,7 @@
     left: 0;
     width: 1px;
     height: 100%;
-    background: gu-colour(garnett-neutral-4);
+    background: gu-colour(brightness-86);
     content: '';
   }
 }
@@ -44,8 +44,8 @@
   width: 100%;
   border: 0;
   margin-right: -1px;
-  box-shadow: inset 0 1px 0 0 gu-colour(garnett-neutral-4);
-  color: gu-colour(garnett-neutral-1);
+  box-shadow: inset 0 1px 0 0 gu-colour(brightness-86);
+  color: gu-colour(brightness-7);
   text-align: left;
   appearance: none;
   box-sizing: border-box;
@@ -64,7 +64,7 @@
 
 .component-product-page-tabs__tab:focus,
 .component-product-page-tabs__tab:hover {
-  box-shadow: inset 0 4px 0 0 gu-colour(garnett-neutral-4);
+  box-shadow: inset 0 4px 0 0 gu-colour(brightness-86);
 }
 
 .component-product-page-tabs__tab--active {
@@ -76,4 +76,3 @@
     box-shadow: inset 0 4px 0 0 gu-colour(highlight-dark);
   }
 }
-

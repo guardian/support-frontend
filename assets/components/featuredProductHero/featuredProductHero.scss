@@ -10,11 +10,11 @@
 .component-featured-product-hero {
   position: relative;
   overflow: hidden;
-  background: gu-colour(garnett-neutral-3);
+  background: gu-colour(brightness-97);
 
   .component-cta-link {
     background-color: gu-colour(news-garnett-highlight);
-    color: gu-colour(garnett-neutral-1);
+    color: gu-colour(brightness-7);
     width: 120px;
     height: 40px;
     line-height: 40px;
@@ -27,7 +27,7 @@
     }
 
     .svg-arrow-right-straight {
-      fill: gu-colour(garnett-neutral-1);
+      fill: gu-colour(brightness-7);
       height: 22px;
       top: 9px;
       left: calc(100% - 32px);
@@ -39,7 +39,7 @@
   }
 
   .component-featured-product-hero__countdownbox {
-    border-left: 1px solid gu-colour(garnett-neutral-4);
+    border-left: 1px solid gu-colour(brightness-86);
     padding-left: 5px;
     padding-bottom: 120px;
 
@@ -53,12 +53,12 @@
     width: 160%;
     display: inline-block;
     .component-countdown {
-      background: darken(gu-colour(garnett-neutral-3), 5%);
-      border-top: 1px solid gu-colour(garnett-neutral-4);
-      border-bottom: 1px solid gu-colour(garnett-neutral-4);
+      background: darken(gu-colour(brightness-97), 5%);
+      border-top: 1px solid gu-colour(brightness-86);
+      border-bottom: 1px solid gu-colour(brightness-86);
     }
     .component-countdown__chip {
-      border-color: gu-colour(garnett-neutral-4);
+      border-color: gu-colour(brightness-86);
     }
   }
 

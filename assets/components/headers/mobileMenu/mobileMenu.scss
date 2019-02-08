@@ -37,7 +37,7 @@ $mobile-menu-gutter: ($gu-h-spacing*2.5);
   .component-header-links__link {
     @include gu-fontset-nav-mobile;
     line-height: .9;
-    color: gu-colour(garnett-neutral-5);
+    color: gu-colour(brightness-100);
     text-decoration: none;
     display: block;
     padding: ($gu-v-spacing/2) $gu-h-spacing ($gu-v-spacing*1.5) 0;

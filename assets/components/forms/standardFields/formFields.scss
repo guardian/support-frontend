@@ -2,15 +2,15 @@
 
 @mixin form-field {
   @include gu-fontset-body-sans;
-  border: 1px solid gu-colour(garnett-neutral-4);
+  border: 1px solid gu-colour(brightness-86);
   transition: box-shadow .2s;
-  background-color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(brightness-100);
   border-radius: 0;
   width: 100%;
   box-sizing: border-box;
 
   &:hover {
-    box-shadow: 0 0 0 2px lighten(gu-colour(garnett-neutral-4), 6%);
+    box-shadow: 0 0 0 2px lighten(gu-colour(brightness-86), 6%);
   }
 
   &:focus, &:active {
@@ -20,7 +20,7 @@
 
   &[disabled] {
     pointer-events: none;
-    background-color: gu-colour(garnett-neutral-3);
+    background-color: gu-colour(brightness-97);
   }
 }
 

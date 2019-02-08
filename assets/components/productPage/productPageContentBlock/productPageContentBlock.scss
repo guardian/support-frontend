@@ -45,7 +45,7 @@
   max-width: 100%;
   position: relative;
   @include mq($from: tablet) {
-    border-left: 1px solid gu-colour(garnett-neutral-4);
+    border-left: 1px solid gu-colour(brightness-86);
   }
 }
 
@@ -55,14 +55,14 @@
 
 .component-product-page-content-block--white {
   @include block-colours(
-    $border: gu-colour(garnett-neutral-4)
+    $border: gu-colour(brightness-86)
   );
 }
 
 .component-product-page-content-block--grey {
   @include block-colours(
     $border: transparent,
-    $bg: gu-colour(garnett-neutral-3),
+    $bg: gu-colour(brightness-97),
   );
 }
 
@@ -70,7 +70,7 @@
   @include block-colours(
     $border: gu-colour(header-border),
     $bg: gu-colour(header-dark),
-    $text: gu-colour(garnett-neutral-5),
+    $text: gu-colour(brightness-100),
   );
 }
 
@@ -78,15 +78,15 @@
   @include block-colours(
     $border: gu-colour(header-border),
     $bg: gu-colour(news-garnett-highlight),
-    $text: gu-colour(garnett-neutral-1)
+    $text: gu-colour(brightness-7)
   );
 }
 
 .component-product-page-content-block--dark {
   @include block-colours(
-    $border: gu-colour(garnett-neutral-5),
-    $text: gu-colour(garnett-neutral-5),
-    $bg: gu-colour(garnett-neutral-7),
+    $border: gu-colour(brightness-100),
+    $text: gu-colour(brightness-100),
+    $bg: gu-colour(brightness-20),
   );
 }
 

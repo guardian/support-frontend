@@ -181,7 +181,7 @@
           }
 
           @include mq($from: tablet) {
-            border-left: 1px solid gu-colour(neutral-4);
+            border-left: 1px solid gu-colour(brightness-86);
             padding-left: $gu-h-spacing / 2;
           }
         }

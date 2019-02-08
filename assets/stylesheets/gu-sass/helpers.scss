@@ -54,7 +54,7 @@
 
 @mixin multiline-top-border {
   &:before {
-    @include multiline(4, gu-colour(garnett-neutral-4));
+    @include multiline(4, gu-colour(brightness-86));
     background-color: #fff;
     display: block;
     content: '';
@@ -63,7 +63,7 @@
 
 @mixin multiline-bottom-border {
   &:after {
-    @include multiline(4, gu-colour(garnett-neutral-4));
+    @include multiline(4, gu-colour(brightness-86));
     background-color: #fff;
     display: block;
     content: '';
@@ -76,7 +76,7 @@
     position: relative;
 
     &:after {
-      border-right: 1px solid gu-colour(garnett-neutral-4);
+      border-right: 1px solid gu-colour(brightness-86);
       content: "";
       display: inline-block;
       height: 36px;
