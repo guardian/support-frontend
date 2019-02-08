@@ -32,7 +32,7 @@ class CustomActionBuilders(
   import CustomActionBuilders._
 
   val membersIdentityClientId = "members"
-
+  val subscriptionsClientId = "subscriptions"
   val recurringIdentityClientId = "recurringContributions"
 
   // Tells identity to send users back to the checkout immediately after sign-up.
