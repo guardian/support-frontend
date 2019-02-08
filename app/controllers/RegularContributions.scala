@@ -45,54 +45,6 @@ class RegularContributions(
 
   implicit val a: AssetsResolver = assets
 
-  def monthlyContributionsPage(maybeUser: Option[IdUser], uatMode: Boolean)(implicit request: RequestHeader, settings: AllSettings): Result = {
-    Ok(recurringContributions(
-      title = "Support the Guardian | Recurring Contributions",
-      id = "regular-contributions-page",
-      js = "regularContributionsPage.js",
-      css = "regularContributionsPageStyles.css",
-      user = maybeUser,
-      uatMode,
-      defaultStripeConfig = stripeConfigProvider.get(false),
-      uatStripeConfig = stripeConfigProvider.get(true),
-      payPalConfig = payPalConfigProvider.get(uatMode)
-    ))
-  }
-
-  private def displayFormWithUser(user: AuthenticatedIdUser)(implicit request: RequestHeader, settings: AllSettings): Future[Result] =
-    identityService.getUser(user).semiflatMap { fullUser =>
-      isRegularContributor(user.credentials) map {
-        case Some(true) =>
-          SafeLogger.info(s"Determined that ${user.id} is already a contributor; re-directing to /contribute/recurring/existing")
-          Redirect("/contribute/recurring/existing")
-        case Some(false) | None =>
-          val uatMode = testUsers.isTestUser(fullUser.publicFields.displayName)
-          monthlyContributionsPage(Some(fullUser), uatMode)
-      }
-    }.valueOr { error =>
-      SafeLogger.error(scrub"Failed to display recurring contributions form for ${user.id} due to error from identityService: $error")
-      InternalServerError
-    }
-
-  private def displayFormWithoutUser()(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings): Future[Result] = {
-    val uatMode = testUsers.isTestUser(request)
-    Future.successful(
-      monthlyContributionsPage(None, uatMode)
-    )
-  }
-
-  def displayFormAuthenticated(): Action[AnyContent] =
-    authenticatedAction(recurringIdentityClientId).async { implicit request =>
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      displayFormWithUser(request.user).map(_.withSettingsSurrogateKey)
-    }
-
-  def displayFormMaybeAuthenticated(): Action[AnyContent] =
-    maybeAuthenticatedAction(recurringIdentityClientId).async { implicit request =>
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      request.user.fold(displayFormWithoutUser())(displayFormWithUser).map(_.withSettingsSurrogateKey)
-    }
-
   def create: Action[CreateSupportWorkersRequest] = maybeAuthenticatedAction().async(circe.json[CreateSupportWorkersRequest]) {
     implicit request =>
       request.user.fold {
