@@ -12,6 +12,7 @@ import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type D
 import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
 
 import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
+import { getOrigin } from './url';
 
 
 // ----- Types ----- //
@@ -283,7 +284,16 @@ function getDigitalCheckout(
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
   billingPeriod: DigitalBillingPeriod = Monthly,
+  newCheckoutFlow: boolean = false,
 ): string {
+
+  function buildUrl(params: URLSearchParams): string {
+    if (newCheckoutFlow) {
+      return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
+    }
+    return billingPeriod === Annual ? `${subsUrl}/checkout/digitalpack-digitalpackannual?${params.toString()}` : `${subsUrl}/checkout?${params.toString()}`;
+  }
+
   const acquisitionData = deriveSubsAcquisitionData(
     referrerAcquisitionData,
     nativeAbParticipations,
@@ -295,14 +305,11 @@ function getDigitalCheckout(
   params.set('promoCode', promoCode);
   params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
   params.set('startTrialButton', referringCta || '');
-
   if (billingPeriod === Annual) {
     params.set('period', Annual);
-    return `${subsUrl}/checkout/digitalpack-digitalpackannual?${params.toString()}`;
   }
-  return `${subsUrl}/checkout?${params.toString()}`;
+  return buildUrl(params);
 }
-
 
 // Builds a link to the GW checkout.
 function getWeeklyCheckout(

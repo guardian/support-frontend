@@ -31,6 +31,7 @@ function redirectToDigitalPage() {
         abParticipations,
         optimizeExperiments,
         plan,
+        window.guardian.newCheckout,
       );
 
       sendTrackingEventsOnClick(`main_cta_click_${plan}`, 'DigitalPack', null)();

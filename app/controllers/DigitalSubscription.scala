@@ -50,7 +50,7 @@ class DigitalSubscription(
 
   implicit val a: AssetsResolver = assets
 
-  def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def digital(countryCode: String, shouldLinkToNewCheckout: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Pack Subscription"
     val id = "digital-subscription-landing-page-" + countryCode
@@ -65,7 +65,16 @@ class DigitalSubscription(
       "en" -> buildCanonicalDigitalSubscriptionLink("int")
     )
 
-    Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
+    Ok(views.html.digitalSubscriptionLanding(
+      title,
+      id,
+      js,
+      css,
+      description,
+      canonicalLink,
+      hrefLangLinks,
+      shouldLinkToNewCheckout
+    )).withSettingsSurrogateKey
   }
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")

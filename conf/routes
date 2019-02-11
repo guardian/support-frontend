@@ -88,7 +88,8 @@ GET  /:country/subscribe                           controllers.Subscriptions.leg
 
 GET  /digital                            controllers.DigitalSubscription.digitalGeoRedirect()
 GET  /subscribe/digital                            controllers.DigitalSubscription.digitalGeoRedirect()
-GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.DigitalSubscription.digital(country: String)
+GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.DigitalSubscription.digital(country: String, shouldLinkToNewCheckout: Boolean = false)
+GET  /$country<(uk|us|au|int)>/subscribe/digital/new   controllers.DigitalSubscription.digital(country: String, shouldLinkToNewCheckout: Boolean = true)
 
 # redirect from old checkout urls
 GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")

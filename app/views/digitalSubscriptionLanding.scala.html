@@ -1,0 +1,30 @@
+@import admin.settings.AllSettings
+@import assets.AssetsResolver
+@import com.gu.i18n.Currency.AUD
+@import com.gu.identity.play.IdUser
+@import com.gu.support.config._
+@import helper.CSRF
+@import com.gu.support.pricing.ProductPrices
+@import views.ViewHelpers._
+@import io.circe.syntax._
+@import com.gu.support.encoding.CustomCodecs._
+
+@(
+  title: String,
+  id: String,
+  js: String,
+  css: String,
+  description: Option[String],
+  canonicalLink: Option[String] = None,
+  hrefLangLinks: Map[String, String],
+  shouldLinkToNewCheckout: Boolean
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
+
+  @scripts = {
+    <script type="text/javascript">
+      window.guardian = window.guardian || {};
+      window.guardian.newCheckout = @shouldLinkToNewCheckout;
+    </script>
+  }
+
+  @main(title, id, js, css, description, canonicalLink, hrefLangLinks, scripts = scripts)
