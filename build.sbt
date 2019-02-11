@@ -88,6 +88,7 @@ libraryDependencies ++= Seq(
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+  "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   filters,
   ws
 )
