@@ -23,6 +23,8 @@ import play.api.mvc.{request, _}
 import play.twirl.api.Html
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
+import utils.NormalisedTelephoneNumber
+import utils.NormalisedTelephoneNumber.asFormattedString
 import views.html.digitalSubscription
 import views.html.helper.CSRF
 import utils.SimpleValidator._
@@ -118,10 +120,14 @@ class DigitalSubscription(
 
         type ApiResponseOrError[RES] = EitherT[Future, CreateDigitalSubscriptionError, RES]
 
-        if (validationPasses(request.body)) {
+        val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, Some(request.body.country))
+        val createSupportWorkersRequest = request.body.copy(
+          telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
+        )
+        if (validationPasses(createSupportWorkersRequest)) {
           val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user).leftMap(ServerError(_))
           def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
-            client.createSubscription(request, createUser(idUser, request.body), request.uuid).leftMap(error => ServerError(error.toString))
+            client.createSubscription(request, createUser(idUser, createSupportWorkersRequest), request.uuid).leftMap(error => ServerError(error.toString))
           }
 
           val result: ApiResponseOrError[StatusResponse] = for {
@@ -129,9 +135,9 @@ class DigitalSubscription(
             statusResponse <- subscriptionStatusOrError(user)
           } yield statusResponse
 
-          respondToClient(result, request.body.product.billingPeriod)
+          respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
         } else {
-          respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), request.body.product.billingPeriod)
+          respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
         }
 
     }
