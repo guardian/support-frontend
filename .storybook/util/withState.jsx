@@ -2,7 +2,7 @@
 
 import React, {type Node, Component} from 'react';
 
-class WithState extends Component<{|initialState: {}, children: Node, refs: []|}, {}> {
+class WithState extends Component<{|initialState: {}, children: Function, refs?: any[]|}, {}> {
   state = {
     ...this.props.initialState
   }
