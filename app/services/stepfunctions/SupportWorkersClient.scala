@@ -11,6 +11,7 @@ import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
+import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
@@ -19,8 +20,10 @@ import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
 import play.api.mvc.Call
 import services.stepfunctions.SupportWorkersClient._
+import services.stepfunctions.PaymentFieldsEmbellisher._
 
 import scala.concurrent.Future
+import scala.util.matching.Regex
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
@@ -30,10 +33,16 @@ object CreateSupportWorkersRequest {
 case class CreateSupportWorkersRequest(
     firstName: String,
     lastName: String,
+    addressLine1: Option[String],
+    addressLine2: Option[String],
+    townCity: Option[String],
+    county: Option[String],
+    postcode: Option[String],
     country: Country,
     state: Option[String],
     product: ProductType,
     paymentFields: PaymentFields,
+    promoCode: Option[PromoCode],
     ophanIds: OphanIds,
     referrerAcquisitionData: ReferrerAcquisitionData,
     supportAbTests: Set[AbTest],
@@ -89,34 +98,36 @@ class SupportWorkersClient(
   def createSubscription(
     request: AnyAuthRequest[CreateSupportWorkersRequest],
     user: User,
-    requestId: UUID
+    requestId: UUID,
+    promoCode: Option[PromoCode] = None
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
+
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
       product = request.body.product,
-      paymentFields = request.body.paymentFields,
+      paymentFields = paymentFields(request.body),
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.body.ophanIds,
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
         supportAbTests = request.body.supportAbTests
       )),
-      promoCode = None
+      promoCode = request.body.promoCode
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>
-        SafeLogger.error(scrub"[$requestId] Failed to create regular contribution for ${user.id} - $error")
+        SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
         StateMachineFailure: SupportWorkersError
       },
       { success =>
-        SafeLogger.info(s"[$requestId] Creating regular contribution for ${user.id} ($success)")
+        SafeLogger.info(s"[$requestId] Successfully triggered Step Function execution for ${user.id} ($success)")
         underlying.jobIdFromArn(success.arn).map { jobId =>
           StatusResponse(
             status = Status.Pending,
             trackingUri = supportUrl + statusCall(jobId).url
           )
         } getOrElse {
-          SafeLogger.error(scrub"[$requestId] Failed to parse ${success.arn} to a jobId when creating new regular contribution for ${user.id} $request")
+          SafeLogger.error(scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id} $request")
           StatusResponse(
             status = Status.Failure,
             trackingUri = "",
@@ -182,3 +193,5 @@ object StepFunctionExecutionStatus {
   }
 
 }
+
+

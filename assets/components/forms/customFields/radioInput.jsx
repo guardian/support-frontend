@@ -2,13 +2,14 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import * as React from 'react';
 
+import './radioInput.scss';
 
 // ----- Types ----- //
 
 type PropTypes = {
-  text: string,
+  text: string | React.Node,
 };
 
 

@@ -67,11 +67,17 @@ ProductPageContentBlock.defaultProps = {
 /*
 Adds a multiline divider between block children.
 */
-export const Divider = () => (
-  <div className="component-product-page-content-block-divider">
+export const Divider = ({ small }: {small: boolean}) => (
+  <div className={classNameWithModifiers('component-product-page-content-block-divider', [
+    small ? 'small' : null,
+  ])}
+  >
     <hr className="component-product-page-content-block-divider__line" />
   </div>
 );
+Divider.defaultProps = {
+  small: false,
+};
 
 /*
 Cancels out the horizontal padding
@@ -79,6 +85,15 @@ Wrap full bleed children in this.
 */
 export const Outset = ({ children }: {children: Node}) => (
   <div className="component-product-page-content-block-outset">
+    {children}
+  </div>
+);
+
+/*
+A vertical block with max width
+*/
+export const NarrowContent = ({ children }: {children: Node}) => (
+  <div className="component-product-page-content-block__narrowContent">
     {children}
   </div>
 );

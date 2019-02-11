@@ -3,11 +3,12 @@ package services
 import com.netaporter.uri.QueryString
 import com.netaporter.uri.Uri.parseQuery
 import com.gu.support.config.PayPalConfig
+import com.gu.support.touchpoint.TouchpointService
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.paypal.{PayPalBillingDetails, Token}
-import services.touchpoint.TouchpointService
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

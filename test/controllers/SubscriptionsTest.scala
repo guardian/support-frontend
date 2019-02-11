@@ -1,10 +1,16 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.SwitchState.On
-import admin.{PaymentMethodsSwitch, AllSettings, AllSettingsProvider, Switches}
+import admin.settings._
+import admin.settings.SwitchState.On
 import cats.implicits._
+import com.gu.i18n.CountryGroup
+import com.gu.i18n.Currency.GBP
+import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
+import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
+import com.gu.support.promotions.PromoCode
+import com.gu.support.workers.Monthly
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.StringsConfig
@@ -26,16 +32,19 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    val checkoutEndpoint = "subscribe/digital/checkout?displayCheckout=true"
-
     def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): DigitalSubscription = {
 
+      val amounts = Amounts(Nil,Nil,Nil)
+
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(
-        AllSettings(Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On))
+        AllSettings(
+          Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On),
+          AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts)
+        )
       )
 
       val client = mock[SupportWorkersClient]
@@ -49,7 +58,19 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
 
+      val prices: ProductPrices = Map(
+        CountryGroup.UK ->
+          Map(NoFulfilmentOptions ->
+            Map(NoProductOptions ->
+              Map(Monthly ->
+                Map(GBP -> PriceSummary(10, None))))))
+      val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
+      val priceSummaryService = mock[PriceSummaryService]
+      when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[Option[PromoCode]])).thenReturn(prices)
+      when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
+
       new DigitalSubscription(
+        priceSummaryServiceProvider,
         client,
         assetResolver,
         actionRefiner,
@@ -70,7 +91,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
     ): Future[Result] = {
-      fakeDigitalPack(actionRefiner, identityService).displayForm("UK")(FakeRequest())
+      fakeDigitalPack(actionRefiner, identityService).displayForm()(FakeRequest())
     }
   }
 

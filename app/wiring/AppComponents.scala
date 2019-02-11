@@ -47,7 +47,6 @@ trait AppComponents extends PlayComponents
     regularContributionsController,
     supportWorkersStatusController,
     identityController,
-    oneOffContributions,
     subscriptionsController,
     digitalPackController,
     loginController,

@@ -23,7 +23,8 @@ trait Controllers {
     paymentAPIService,
     stringsConfig,
     allSettingsProvider,
-    appConfig.guardianDomain
+    appConfig.guardianDomain,
+    appConfig.stage
   )
 
   lazy val subscriptionsController = new Subscriptions(
@@ -37,6 +38,7 @@ trait Controllers {
   )
 
   lazy val digitalPackController = new DigitalSubscription(
+    priceSummaryServiceProvider,
     supportWorkersClient,
     assetsResolver,
     actionRefiners,
@@ -91,18 +93,6 @@ trait Controllers {
     identityService,
     allSettingsProvider,
     tipMonitoring
-  )
-
-  lazy val oneOffContributions = new OneOffContributions(
-    assetsResolver,
-    actionRefiners,
-    identityService,
-    testUsers,
-    appConfig.oneOffStripeConfigProvider,
-    paymentAPIService,
-    authAction,
-    controllerComponents,
-    allSettingsProvider
   )
 
   lazy val testUsersController = new TestUsersManagement(

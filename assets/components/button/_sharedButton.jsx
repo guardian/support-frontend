@@ -13,6 +13,7 @@ import './button.scss';
 
 export const Appearances = {
   primary: 'primary',
+  secondary: 'secondary',
   green: 'green',
   greenHollow: 'greenHollow',
   greyHollow: 'greyHollow',
@@ -29,6 +30,7 @@ type SharedButtonPropTypes = {|
   icon?: Node,
   appearance: Appearance,
   iconSide: IconSide,
+  getRef?: (?Element) => void,
   modifierClasses: string[],
 |};
 
@@ -40,7 +42,7 @@ type PropTypes = {
 // ----- Render ----- //
 
 const SharedButton = ({
-  element, appearance, iconSide, modifierClasses, children, icon, ...otherProps
+  element, appearance, iconSide, modifierClasses, children, icon, getRef, ...otherProps
 }: PropTypes) => {
 
   const className = classNameWithModifiers('component-button', [
@@ -56,6 +58,7 @@ const SharedButton = ({
 
   return createElement(element, {
     className,
+    ref: getRef,
     ...otherProps,
   }, contents);
 };

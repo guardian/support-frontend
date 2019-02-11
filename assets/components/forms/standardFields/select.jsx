@@ -4,6 +4,8 @@
 
 import React from 'react';
 
+import './select.scss';
+
 
 // ----- Component ----- //
 

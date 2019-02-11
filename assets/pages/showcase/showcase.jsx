@@ -17,6 +17,7 @@ import AnchorButton from 'components/button/anchorButton';
 
 import SvgChevron from 'components/svgs/chevron';
 import GridPicture from 'components/gridPicture/gridPicture';
+import 'stylesheets/skeleton/skeleton.scss';
 
 import WhySupportMatters from './components/whySupportMatters';
 import BreakingHeadlines from './components/breakingHeadlines';
@@ -41,8 +42,8 @@ const content = (
     <ProductPageHero
       overheading="Support The Guardian"
       heading="Help us deliver independent investigative journalism"
-      type="feature"
-      cta={<AnchorButton aria-label={null} icon={<SvgChevron />} href="#support">Ways to support</AnchorButton>}
+      appearance="feature"
+      content={<AnchorButton aria-label={null} icon={<SvgChevron />} href="#support">Ways to support</AnchorButton>}
     >
       <GridPicture
         sources={[

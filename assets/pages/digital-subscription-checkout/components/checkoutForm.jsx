@@ -9,10 +9,7 @@ import { compose } from 'redux';
 import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
-import { type CountryGroupId, fromCountry } from 'helpers/internationalisation/countryGroup';
-import { Annual, type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
-import { getDigitalPrice } from 'helpers/subscriptions';
-import { showPrice } from 'helpers/internationalisation/price';
+import { Annual, Monthly } from 'helpers/billingPeriods';
 
 import { Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
@@ -24,7 +21,6 @@ import { Fieldset } from 'components/forms/standardFields/fieldset';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
-import { withFooter } from 'components/forms/formHOCs/withFooter';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { canShow } from 'components/forms/formHOCs/canShow';
@@ -32,9 +28,14 @@ import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Checkout from 'components/checkout/checkout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import type { ErrorReason } from 'helpers/errorReasons';
+import { digitalPackProductPrice } from 'helpers/productPrice/productPrices';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { PriceLabel } from 'components/priceLabel/priceLabel';
+import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
+
 import {
   type FormActionCreators,
   formActionCreators,
@@ -44,8 +45,6 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
-import { countrySupportsDirectDebit } from '../helpers/paymentProviders';
-
 
 // ----- Types ----- //
 
@@ -54,6 +53,7 @@ type PropTypes = {|
   signOut: typeof signOut,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
+  productPrices: ProductPrices,
   ...FormActionCreators,
 |};
 
@@ -65,32 +65,13 @@ function mapStateToProps(state: State) {
     ...getFormFields(state),
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
+    productPrices: state.page.checkout.productPrices,
   };
 }
-
-
-// ----- Functions ----- //
-
-function getPrice(country: Option<IsoCountry>, frequency: DigitalBillingPeriod): string {
-
-  const cgId: ?CountryGroupId = fromCountry(country || '');
-
-  if (cgId) {
-
-    const price = getDigitalPrice(cgId, frequency);
-    return `${showPrice(price, true)} `;
-
-  }
-
-  return '';
-
-}
-
 
 // ----- Form Fields ----- //
 
 const InputWithLabel = withLabel(Input);
-const InputWithFooter = withFooter(InputWithLabel);
 const Input1 = compose(asControlled, withError)(InputWithLabel);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
@@ -119,12 +100,30 @@ function CheckoutForm(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
+  const monthlyPriceLabel = props.country !== null ?
+    (<PriceLabel
+      country={props.country}
+      productPrice={digitalPackProductPrice(props.productPrices, Monthly, props.country)}
+      billingPeriod={Monthly}
+    />) : '';
+
+  const annualPriceLabel = props.country !== null ?
+    (<PriceLabel
+      country={props.country}
+      productPrice={digitalPackProductPrice(props.productPrices, Annual, props.country)}
+      billingPeriod={Annual}
+    />) : '';
+
   return (
     <ProductPageContentBlock modifierClasses={['your-details']}>
       <Outset>
         <Checkout>
-          <Form onSubmit={(ev) => { ev.preventDefault(); props.submitForm(); }}>
-            <FormSection title="Your details" >
+          <Form onSubmit={(ev) => {
+            ev.preventDefault();
+            props.submitForm();
+          }}
+          >
+            <FormSection title="Your details">
               <Input1
                 id="first-name"
                 label="First name"
@@ -141,7 +140,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setLastName}
                 error={firstError('lastName', props.formErrors)}
               />
-              <InputWithFooter
+              <InputWithLabel
                 id="email"
                 label="Email"
                 type="email"
@@ -154,17 +153,60 @@ function CheckoutForm(props: PropTypes) {
                     </CheckoutExpander>
                     <CheckoutExpander copy="Not you?">
                       <p>
-                        <Button appearance="greyHollow" icon={null} type="button" aria-label={null} onClick={() => props.signOut()}>Sign out</Button> and create a new account.
+                        <Button
+                          appearance="greyHollow"
+                          icon={null}
+                          type="button"
+                          aria-label={null}
+                          onClick={() => props.signOut()}
+                        >
+                          Sign out
+                        </Button> and create a new account.
                       </p>
                     </CheckoutExpander>
                   </span>
-              )}
+                )}
+              />
+              <InputWithLabel
+                id="telephone"
+                label="Telephone (optional)"
+                type="tel"
+                value={props.telephone}
+                setValue={props.setTelephone}
+                footer="We may use this to get in touch with you about your subscription."
+                error={firstError('telephone', props.formErrors)}
+              />
+            </FormSection>
+            <FormSection title="Address">
+              <Input1
+                id="address-line-1"
+                label="Address Line 1"
+                type="text"
+                value={props.addressLine1}
+                setValue={props.setAddressLine1}
+                error={firstError('addressLine1', props.formErrors)}
+              />
+              <Input1
+                id="address-line-2"
+                label="Address Line 2 (optional)"
+                type="text"
+                value={props.addressLine2}
+                setValue={props.setAddressLine2}
+                error={firstError('addressLine2', props.formErrors)}
+              />
+              <Input1
+                id="town-city"
+                label="Town/City"
+                type="text"
+                value={props.townCity}
+                setValue={props.setTownCity}
+                error={firstError('townCity', props.formErrors)}
               />
               <Select1
                 id="country"
                 label="Country"
                 value={props.country}
-                setValue={props.setCountry}
+                setValue={props.setBillingCountry}
                 error={firstError('country', props.formErrors)}
               >
                 <option value="">--</option>
@@ -181,36 +223,48 @@ function CheckoutForm(props: PropTypes) {
                 <option value="">--</option>
                 {statesForCountry(props.country)}
               </Select2>
-              <InputWithFooter
-                id="telephone"
-                label="Telephone (optional)"
-                type="tel"
-                value={props.telephone}
-                setValue={props.setTelephone}
-                footer="We may use this to get in touch with you about your subscription."
-                error={firstError('telephone', props.formErrors)}
+              <Input1
+                id="county"
+                label="County (optional)"
+                type="text"
+                value={props.county}
+                setValue={props.setCounty}
+                error={firstError('county', props.formErrors)}
+              />
+              <Input1
+                id="postcode"
+                label="Postcode"
+                type="text"
+                value={props.postcode}
+                setValue={props.setPostcode}
+                error={firstError('postcode', props.formErrors)}
               />
             </FormSection>
             <FormSection title="How often would you like to pay?">
-              <Fieldset>
+              <Fieldset legend="How often would you like to pay?">
                 <RadioInput
-                  text={`${getPrice(props.country, Monthly)}Every month`}
+                  text={monthlyPriceLabel}
                   name="billingPeriod"
                   checked={props.billingPeriod === Monthly}
                   onChange={() => props.setBillingPeriod(Monthly)}
                 />
                 <RadioInput
-                  text={`${getPrice(props.country, Annual)}Every year`}
+                  text={annualPriceLabel}
                   name="billingPeriod"
                   checked={props.billingPeriod === Annual}
                   onChange={() => props.setBillingPeriod(Annual)}
                 />
+                <PromotionSummary
+                  country={props.country}
+                  productPrices={props.productPrices}
+                  billingPeriod={props.billingPeriod}
+                />
               </Fieldset>
             </FormSection>
-            <FormSection title={countrySupportsDirectDebit(props.country) ? 'How would you like to pay?' : null}>
-              {countrySupportsDirectDebit(props.country) &&
+            <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
+              {props.countrySupportsDirectDebit &&
               <div>
-                <Fieldset>
+                <Fieldset legend="How would you like to pay?">
                   <RadioInput
                     text="Direct debit"
                     name="paymentMethod"
@@ -225,7 +279,7 @@ function CheckoutForm(props: PropTypes) {
                   />
                 </Fieldset>
               </div>
-          }
+              }
               <CheckoutCopy
                 strong="Money Back Guarantee."
                 copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
@@ -235,7 +289,9 @@ function CheckoutForm(props: PropTypes) {
                 copy="There is no set time on your agreement so you can stop your subscription anytime."
               />
               <DirectDebitPopUpForm
-                onPaymentAuthorisation={(pa: PaymentAuthorisation) => { props.onPaymentAuthorised(pa); }}
+                onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
+                  props.onPaymentAuthorised(pa);
+                }}
               />
             </FormSection>
             <FormSection>
@@ -253,4 +309,7 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, { ...formActionCreators, signOut })(CheckoutForm);
+export default connect(mapStateToProps, {
+  ...formActionCreators,
+  signOut,
+})(CheckoutForm);

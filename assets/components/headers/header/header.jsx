@@ -9,7 +9,9 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
-import { links } from './links';
+
+import Links from '../links/links';
+import MobileMenuToggler from './mobileMenuToggler';
 
 import './header.scss';
 
@@ -19,27 +21,32 @@ export type PropTypes = {|
 |};
 export type State = {|
   fitsLinksInOneRow: boolean,
+  fitsLinksAtAll: boolean,
 |};
 
 
 // ----- Metrics ----- //
 
-const willMenuFitInOneRow = ({ menuRef, logoRef, containerRef }) => {
-  const [logoWidth, menuWidth, containerWidth] = [
-    logoRef.getBoundingClientRect().width,
+const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
+  const [logoLeft, menuWidth, containerLeft, containerWidth] = [
+    logoRef.getBoundingClientRect().left,
     menuRef.getBoundingClientRect().width,
+    containerRef.getBoundingClientRect().left,
     containerRef.getBoundingClientRect().width,
   ];
-  return (
-    containerWidth - logoWidth - menuWidth > 0
-  );
+  const fitsLinksAtAll = containerWidth - menuWidth > 0;
+  const fitsLinksInOneRow = fitsLinksAtAll && (logoLeft - containerLeft - menuWidth > 0);
+  return ({
+    fitsLinksInOneRow,
+    fitsLinksAtAll,
+  });
 };
 
 
 // ----- Component ----- //
 
 type TopNavPropTypes = {|
-  utility: Option<Node>,
+  utility: Node,
   getLogoRef: (?Element) => void
 |};
 
@@ -55,47 +62,23 @@ const TopNav = ({ getLogoRef, utility }: TopNavPropTypes) => (
   </div>
 );
 
-type BottomNavPropTypes = {|
-  getMenuRef: (?Element) => void
-|};
-
-const BottomNav = ({ getMenuRef }: BottomNavPropTypes) => (
-  <nav className="component-header-bottomnav">
-    <ul className="component-header-bottomnav__ul" ref={getMenuRef}>
-      {links.map(({ href, text }) => (
-        <li
-          className={
-          classNameWithModifiers(
-            'component-header-bottomnav__li',
-            [window.location.href.endsWith(href) ? 'active' : null],
-          )
-        }
-        >
-          <a className="component-header-bottomnav__link" href={href}>{text}</a>
-        </li>
-    ))}
-    </ul>
-  </nav>
-);
-
 export default class Header extends Component<PropTypes, State> {
   static defaultProps = {
     utility: null,
-    displayNavigation: false,
+    displayNavigation: true,
   };
 
   state = {
     fitsLinksInOneRow: false,
+    fitsLinksAtAll: false,
   };
 
   componentDidMount() {
-    if (this.menuRef && this.logoRef && this.containerRef) {
+    if (this.props.displayNavigation && this.menuRef && this.logoRef && this.containerRef) {
       this.observer = onElementResize(
         [this.logoRef, this.menuRef, this.containerRef],
         ([logoRef, menuRef, containerRef]) => {
-          this.setState({
-            fitsLinksInOneRow: willMenuFitInOneRow({ menuRef, logoRef, containerRef }),
-          });
+          this.setState(getMenuStateMetrics({ menuRef, logoRef, containerRef }));
         },
       );
     }
@@ -114,20 +97,32 @@ export default class Header extends Component<PropTypes, State> {
 
   render() {
     const { utility, displayNavigation } = this.props;
-    const { fitsLinksInOneRow } = this.state;
+    const { fitsLinksInOneRow, fitsLinksAtAll } = this.state;
+
     return (
       <header
         className={
           classNameWithModifiers('component-header', [
             fitsLinksInOneRow ? 'one-row' : null,
             displayNavigation ? 'display-navigation' : null,
+            !fitsLinksAtAll ? 'display-veggie-burger' : null,
           ])
         }
       >
         <div className="component-header__wrapper" ref={(el) => { this.containerRef = el; }}>
-          <TopNav utility={utility} getLogoRef={(el) => { this.logoRef = el; }} />
+          <div className="component-header__row">
+            <TopNav
+              utility={(displayNavigation && fitsLinksAtAll) ? utility : null}
+              getLogoRef={(el) => { this.logoRef = el; }}
+            />
+            {displayNavigation &&
+              <MobileMenuToggler utility={utility} />
+            }
+          </div>
           {displayNavigation &&
-            <BottomNav getMenuRef={(el) => { this.menuRef = el; }} />
+            <div className="component-header__row">
+              <Links location="desktop" getRef={(el) => { this.menuRef = el; }} />
+            </div>
           }
         </div>
       </header>

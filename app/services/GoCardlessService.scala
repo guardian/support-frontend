@@ -4,10 +4,11 @@ import com.gocardless.GoCardlessClient
 import com.gocardless.GoCardlessClient.Environment
 import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
+import com.gu.support.touchpoint.TouchpointService
 import models.CheckBankAccountDetails
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
-import services.touchpoint.TouchpointService
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

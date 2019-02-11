@@ -17,24 +17,24 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
+import { payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type {
   RegularPaymentRequest,
-  StripeAuthorisation,
-} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+  StripeAuthorisation, StripePaymentMethod,
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentAuthorisation,
   type PaymentResult,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+} from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { StripeChargeData } from 'helpers/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
-} from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+} from 'helpers/paymentIntegrations/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
 import { derivePaymentApiAcquisitionData, getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
@@ -69,7 +69,7 @@ export type Action =
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object }
-  | { type: 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT', canMakePayment: boolean }
+  | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
@@ -115,8 +115,8 @@ const updateEmail = (email: string): ((Function) => void) =>
 
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
-const setCanMakeStripePaymentRequestPayment =
-  (canMakePayment: boolean): Action => ({ type: 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT', canMakePayment });
+const setPaymentRequestButtonPaymentMethod =
+  (paymentMethod: StripePaymentMethod): Action => ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod });
 
 const setStripePaymentRequestObject =
   (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });
@@ -259,6 +259,11 @@ const regularPaymentRequestFromAuthorisation = (
   country: state.common.internationalisation.countryId,
   state: state.page.form.formData.state,
   email: state.page.form.formData.email || '',
+  addressLine1: null, // required go cardless field
+  addressLine2: null, // required go cardless field
+  townCity: null, // required go cardless field
+  county: null, // required go cardless field
+  postcode: null, // required go cardless field
   product: {
     amount: getAmount(
       state.page.form.selectedAmounts,
@@ -517,7 +522,7 @@ export {
   checkIfEmailHasPassword,
   setFormIsValid,
   sendFormSubmitEventForPayPalRecurring,
-  setCanMakeStripePaymentRequestPayment,
+  setPaymentRequestButtonPaymentMethod,
   setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,

@@ -11,7 +11,7 @@ import { getBaseDomain } from 'helpers/url';
 import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
 
-import { getIntcmp, getPromoCode } from './flashSale';
+import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
 
 
 // ----- Types ----- //
@@ -29,7 +29,7 @@ export type SubsUrls = {
 
 // ----- Setup ----- //
 
-const subsUrl = 'https://subscribe.theguardian.com';
+const subsUrl = `https://subscribe.${getBaseDomain()}`;
 const patronsUrl = 'https://patrons.theguardian.com';
 const profileUrl = `https://profile.${getBaseDomain()}`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
@@ -267,6 +267,13 @@ const withParams = ({
   return [url, params.toString()].join('?');
 };
 
+function getDigitalPackPromoCode(cgId: CountryGroupId, billingPeriod: DigitalBillingPeriod): string {
+  if (billingPeriod === 'Annual') {
+    return getAnnualPlanPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
+  }
+  return getPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
+
+}
 
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
@@ -282,14 +289,15 @@ function getDigitalCheckout(
     nativeAbParticipations,
     optimizeExperiments,
   );
-
+  const promoCode = getDigitalPackPromoCode(cgId, billingPeriod);
   const params = new URLSearchParams(window.location.search);
   params.set('acquisitionData', JSON.stringify(acquisitionData));
-  params.set('promoCode', defaultPromos.DigitalPack);
+  params.set('promoCode', promoCode);
   params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
   params.set('startTrialButton', referringCta || '');
 
   if (billingPeriod === Annual) {
+    params.set('period', Annual);
     return `${subsUrl}/checkout/digitalpack-digitalpackannual?${params.toString()}`;
   }
   return `${subsUrl}/checkout?${params.toString()}`;

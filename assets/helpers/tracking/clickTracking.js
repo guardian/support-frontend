@@ -7,17 +7,25 @@ import { gaEvent } from './googleTagManager';
 
 // ----- Functions ----- //
 
+function clickedEvent(
+  label: string,
+  triggerActivity?: string,
+): void {
+  gaEvent({
+    category: 'click',
+    action: triggerActivity || 'CLICK',
+    label,
+  });
+}
+
+
 function sendClickedEvent(
   label: string,
   triggerActivity?: string,
 ): () => void {
 
   return () => {
-    gaEvent({
-      category: 'click',
-      action: triggerActivity || 'CLICK',
-      label,
-    });
+    clickedEvent(label, triggerActivity);
   };
 
 }
@@ -26,4 +34,5 @@ function sendClickedEvent(
 
 export {
   sendClickedEvent,
+  clickedEvent,
 };

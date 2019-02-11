@@ -4,6 +4,8 @@
 
 import React, { type Node, Children } from 'react';
 
+import './headingBlock.scss';
+
 
 // ----- Types ----- //
 

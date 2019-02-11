@@ -10,7 +10,6 @@
 $gu-titlepiece: 'GT Guardian Titlepiece', Georgia, serif !default;
 $gu-headline: 'Guardian Headline', Georgia, serif !default;
 $gu-text-egyptian-web: 'Guardian Text Egyptian Web', Georgia, serif !default;
-$gu-sans-web: 'Guardian Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif !default;
 $gu-text-sans-web: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif !default;
 
 
@@ -75,7 +74,13 @@ $gu-fonts: (
 @mixin gu-fontset-nav-desktop($size-only: false) {
 	@include gu-typeface(headline, 20, $size-only);
 	@if $size-only == false {
-		font-weight: 700;
+		font-weight: 900;
+	}
+}
+@mixin gu-fontset-nav-mobile($size-only: false) {
+	@include gu-typeface(headline, 24, $size-only);
+	@if $size-only == false {
+		font-weight: 900;
 	}
 }
 
@@ -136,21 +141,4 @@ $gu-fonts: (
 	@if $size-only == false {
 		font-weight: 700;
 	}
-}
-
-
-// ----- Defaults ----- //
-
-html {
-    font-family: "Guardian Text Egyptian Web", Georgia, serif;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-}
-
-body {
-    line-height: 1.5;
-}
-
-strong {
-  font-weight: bolder;
 }

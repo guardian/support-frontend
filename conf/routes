@@ -10,19 +10,29 @@ GET /unsupported-browser                            controllers.Application.unsu
 
 GET  /*path/  controllers.Application.removeTrailingSlash(path: String)
 
-# ----- Bundles Landing Page ----- #
+# ----- Sitemap ----- #
 
-GET /uk                                             controllers.Application.supportLanding()
+GET /sitemap.xml                                    controllers.SiteMap.sitemap
+
+
+# ----- Geo landings ----- #
 GET /us                                             controllers.Application.redirect(location="/us/contribute")
 GET /au                                             controllers.Application.redirect(location="/au/contribute")
 GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
 GET /int                                            controllers.Application.redirect(location="/int/contribute")
 GET /nz                                             controllers.Application.redirect(location="/nz/contribute")
 GET /ca                                             controllers.Application.redirect(location="/ca/contribute")
+GET /uk                                             controllers.Application.redirect(location="/uk/support")
 GET /                                               controllers.Application.geoRedirect()
-GET /showcase                                       controllers.Application.showcase()
 
-GET /sitemap.xml                                    controllers.SiteMap.sitemap
+
+# ----- Bundles Landing Page ----- #
+
+GET /support                                        controllers.Application.redirect(location="/uk/support")
+GET /uk/support                                     controllers.Application.showcase()
+# redirect from old ab test
+GET /showcase                                       controllers.Application.permanentRedirect(location="/uk/support")
+
 
 # ----- Events Redirect ----- #
 GET /events/archive                                 controllers.Application.redirect(location="https://membership.theguardian.com/events/archive")
@@ -33,21 +43,29 @@ GET /event/*eventId                                 controllers.Application.redi
 # This is a temporary client-side redirect based on geo-location
 # Once we have a separate payment failure email for US and UK we can consider removing it
 
-GET  /monthly-contributions                         controllers.Application.contributionsRedirect()
+GET  /monthly-contributions                         controllers.Application.permanentRedirect(location="/contribute")
+
+# Deprecated endpoints that we now redirect to the contribute page. Once we have established that no traffic
+# is coming this way, we should remove them
+GET  /contribute/recurring                          controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring-guest                    controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/thankyou                 controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/pending                  controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/recurring/existing                 controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off                            controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off/thankyou                   controllers.Application.permanentRedirect(location="/contribute")
+GET  /contribute/one-off/autofill                   controllers.Application.permanentRedirect(location="/contribute")
+
 
 # ----- Contributions ----- #
 
 GET  /contribute                                        controllers.Application.contributeGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String, ssrTwo: Option[String])
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String, ssrTwo: Option[String])
 
-GET  /contribute/recurring                          controllers.RegularContributions.displayFormAuthenticated()
-GET  /contribute/recurring-guest                    controllers.RegularContributions.displayFormMaybeAuthenticated()
-GET  /contribute/recurring/thankyou                 controllers.RegularContributions.displayFormMaybeAuthenticated()
-GET  /contribute/recurring/existing                 controllers.Application.reactTemplate(title="Support the Guardian | Existing Contributor", id="regular-contributions-existing-page", js="regularContributionsExistingPage.js", css="regularContributionsExistingPageStyles.css")
+
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /support-workers/status                        controllers.SupportWorkersStatus.status(jobId: String)
-GET  /contribute/recurring/pending                  controllers.RegularContributions.displayFormMaybeAuthenticated()
 
 # this endpoint should be removed once identity remove
 # the need for a client token
@@ -58,9 +76,6 @@ PUT /identity/set-password-guest                 controllers.IdentityController.
 GET /identity/get-user-type                      controllers.IdentityController.getUserType(maybeEmail: Option[String])
 
 
-GET  /contribute/one-off                            controllers.OneOffContributions.displayForm()
-GET  /contribute/one-off/thankyou                   controllers.OneOffContributions.displayForm()
-GET  /contribute/one-off/autofill                   controllers.OneOffContributions.autofill
 
 # ----- Subscriptions ----- #
 
@@ -74,7 +89,10 @@ GET  /:country/subscribe                           controllers.Subscriptions.leg
 GET  /digital                            controllers.DigitalSubscription.digitalGeoRedirect()
 GET  /subscribe/digital                            controllers.DigitalSubscription.digitalGeoRedirect()
 GET  /$country<(uk|us|au|int)>/subscribe/digital   controllers.DigitalSubscription.digital(country: String)
-GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.DigitalSubscription.displayForm(country: String)
+
+# redirect from old checkout urls
+GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
+GET  /subscribe/digital/checkout  controllers.DigitalSubscription.displayForm()
 POST /subscribe/digital/create  controllers.DigitalSubscription.create
 
 GET  /premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()

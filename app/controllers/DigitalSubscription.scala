@@ -2,12 +2,14 @@ package controllers
 
 import actions.CustomActionBuilders
 import actions.CustomActionBuilders.AuthRequest
-import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
+import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.gu.support.workers.{BillingPeriod, User}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
@@ -28,6 +30,7 @@ import utils.SimpleValidator._
 import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscription(
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
     client: SupportWorkersClient,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
@@ -67,25 +70,26 @@ class DigitalSubscription(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  def displayForm(countryCode: String): Action[AnyContent] =
-    authenticatedAction(recurringIdentityClientId).async { implicit request =>
+  def displayForm(): Action[AnyContent] =
+    authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {
           SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
           InternalServerError
         },
-        user => Ok(digitalSubscriptionFormHtml(user, countryCode))
+        user => Ok(digitalSubscriptionFormHtml(user))
       ).map(_.withSettingsSurrogateKey)
     }
 
-  private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Digital Subscription"
-    val id = "digital-subscription-checkout-page-" + countryCode
+    val id = "digital-subscription-checkout-page"
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
+    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
 
     digitalSubscription(
       title,
@@ -95,6 +99,7 @@ class DigitalSubscription(
       Some(csrf),
       idUser,
       uatMode,
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCode),
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(uatMode)

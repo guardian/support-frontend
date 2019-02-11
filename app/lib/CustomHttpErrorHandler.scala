@@ -12,7 +12,7 @@ import play.api.mvc.Results.{InternalServerError, NotFound}
 import assets.AssetsResolver
 import views.html.main
 import play.core.SourceMapper
-import admin.{AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._

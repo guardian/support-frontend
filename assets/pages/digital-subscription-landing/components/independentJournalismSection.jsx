@@ -29,7 +29,7 @@ export default function IndependentJournalismSection() {
         </div>
         <div className="component-independent-journalism__footer">
           <WindrushZuck />
-          <CtaSwitch referringCta="support_digipack_page_independent_journalism_section" />
+          <CtaSwitch />
         </div>
       </div>
     </LeftMarginSection>

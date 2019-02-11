@@ -4,7 +4,7 @@
 
 import { type ErrorReason } from 'helpers/errorReasons';
 import { combineReducers } from 'redux';
-import { amounts, type Amount, type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -12,6 +12,7 @@ import { type UsState, type CaState } from 'helpers/internationalisation/country
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
+import type { StripePaymentMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
@@ -52,7 +53,7 @@ type SetPasswordData = {
 }
 
 type StripePaymentRequestButtonData = {
-  canMakeStripePaymentRequestPayment: boolean,
+  paymentMethod: StripePaymentMethod | null,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
   stripeV3HasLoaded: boolean,
@@ -93,18 +94,7 @@ export type State = {
 
 // ----- Functions ----- //
 
-function createFormReducer(countryGroupId: CountryGroupId) {
-  const amountsForCountry: { [ContributionType]: Amount[] } = {
-    ONE_OFF: amounts('notintest').ONE_OFF[countryGroupId],
-    MONTHLY: amounts('notintest').MONTHLY[countryGroupId],
-    ANNUAL: amounts('notintest').ANNUAL[countryGroupId],
-  };
-
-  const initialAmount: { [ContributionType]: Amount | 'other' } = {
-    ONE_OFF: amountsForCountry.ONE_OFF.find(amount => amount.isDefault) || amountsForCountry.ONE_OFF[0],
-    MONTHLY: amountsForCountry.MONTHLY.find(amount => amount.isDefault) || amountsForCountry.MONTHLY[0],
-    ANNUAL: amountsForCountry.ANNUAL.find(amount => amount.isDefault) || amountsForCountry.ANNUAL[0],
-  };
+function createFormReducer() {
 
   // ----- Initial state ----- //
 
@@ -137,7 +127,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       checkoutFormHasBeenSubmitted: false,
     },
     stripePaymentRequestButtonData: {
-      canMakeStripePaymentRequestPayment: false,
+      paymentMethod: null,
       stripePaymentRequestObject: null,
       stripePaymentRequestButtonClicked: false,
       stripeV3HasLoaded: false,
@@ -148,7 +138,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       passwordError: false,
     },
     showOtherAmount: false,
-    selectedAmounts: initialAmount,
+    selectedAmounts: {},
     isWaiting: false,
     paymentComplete: false,
     paymentError: null,
@@ -217,12 +207,12 @@ function createFormReducer(countryGroupId: CountryGroupId) {
       case 'UPDATE_STATE':
         return { ...state, formData: { ...state.formData, state: action.state } };
 
-      case 'SET_CAN_MAKE_STRIPE_PAYMENT_REQUEST_PAYMENT':
+      case 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD':
         return {
           ...state,
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
-            canMakeStripePaymentRequestPayment: action.canMakePayment,
+            paymentMethod: action.paymentMethod,
           },
         };
 
@@ -323,7 +313,7 @@ function createFormReducer(countryGroupId: CountryGroupId) {
 function initReducer(countryGroupId: CountryGroupId) {
 
   return combineReducers({
-    form: createFormReducer(countryGroupId),
+    form: createFormReducer(),
     user: createUserReducer(countryGroupId),
     directDebit,
     csrf,

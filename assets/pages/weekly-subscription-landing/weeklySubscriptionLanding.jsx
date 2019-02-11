@@ -24,6 +24,8 @@ import ProductPageInfoChip from 'components/productPage/productPageInfoChip/prod
 import SvgInformation from 'components/svgs/information';
 import SvgGift from 'components/svgs/gift';
 
+import 'stylesheets/skeleton/skeleton.scss';
+
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
 
@@ -31,7 +33,7 @@ import './weeklySubscriptionLanding.scss';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(reducer, true);
+const store = pageInit(() => reducer, true);
 
 // ----- Internationalisation ----- //
 
@@ -75,11 +77,11 @@ const content = (
       footer={<Footer />}
     >
       <ProductPagehero
-        type="feature"
+        appearance="feature"
         overheading="Guardian Weekly subscriptions"
         heading="Get a clearer, global perspective on the issues that matter, in one magazine."
         modifierClasses={['weekly']}
-        cta={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+        content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       >
         <GridPicture
           sources={[

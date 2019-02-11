@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import ProductPageContentBlock, { NarrowContent } from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import GridImage from 'components/gridImage/gridImage';
 import AnchorButton from 'components/button/anchorButton';
@@ -20,8 +20,10 @@ export default function CtaSubscribe() {
           From the Digital Pack, to the new Guardian Weekly magazine to the daily newspaper,
           you can subscribe to the Guardian <strong>for as little as 99p a day.</strong>
         </p>
-        <AnchorButton aria-label={null} icon={<ArrowRightStraight />} href="/subscribe">Choose a Subscription</AnchorButton>
       </ProductPageTextBlock>
+      <NarrowContent>
+        <AnchorButton aria-label={null} icon={<ArrowRightStraight />} href="/subscribe">Choose a Subscription</AnchorButton>
+      </NarrowContent>
     </ProductPageContentBlock>
   );
 }

@@ -2,6 +2,7 @@
 package controllers
 
 import actions.CustomActionBuilders
+import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import com.gu.identity.play.AuthenticatedIdUser
 import play.api.libs.circe.Circe
@@ -11,8 +12,8 @@ import services._
 import cats.data.EitherT
 import cats.implicits._
 import monitoring.SafeLogger
-import monitoring.PathVerification.{TipPath, PayPal, OneOffContribution, monitoredRegion, verify}
-import admin.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import monitoring.PathVerification.{OneOffContribution, PayPal, TipPath, monitoredRegion, verify}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import services.{IdentityService, PaymentAPIService, TestUserService}

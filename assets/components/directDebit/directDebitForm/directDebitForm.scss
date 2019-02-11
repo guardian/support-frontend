@@ -47,7 +47,7 @@
 
 .component-direct-debit-form__sort-code-field {
   text-align: center;
-  font-family: $gu-sans-web;
+  font-family: $gu-text-sans-web;
   font-size: 14px;
   background-color: white;
   color: gu-colour(garnett-neutral-1);
@@ -71,7 +71,7 @@
 }
 
 .component-direct-debit-form__text-field {
-  font-family: $gu-sans-web;
+  font-family: $gu-text-sans-web;
   font-size: 14px;
   font-weight: bold;
   background-color: white;
@@ -90,7 +90,7 @@
 }
 
 .component-direct-debit-form__confirmation-text {
-  font-family: $gu-sans-web;
+  font-family: $gu-text-sans-web;
   font-size: 14px;
   color: gu-colour(neutral-1);
   padding-left: 33px;
@@ -163,7 +163,7 @@
   border-radius: 100px;
   cursor: pointer;
   position: relative;
-  height: $cta-height;
+  height: $gu-cta-height;
   margin-top: 20px;
   margin-bottom: 10px;
 
@@ -249,6 +249,7 @@
   padding-top: $gu-v-spacing;
   margin-top: 20px;
   margin-bottom: 20px;
+  display: inline-block;
   a {
     color: gu-colour(garnett-neutral-2);
   }

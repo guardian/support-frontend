@@ -1,6 +1,6 @@
 package services
 
-import services.touchpoint.TouchpointServiceProvider
+import com.gu.support.touchpoint.TouchpointServiceProvider
 
 import scala.concurrent.ExecutionContext
 
