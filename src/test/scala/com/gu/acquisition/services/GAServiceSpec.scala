@@ -89,6 +89,34 @@ class GAServiceSpec extends AsyncWordSpecLike with Matchers with LazyLogging {
 
     }
 
+    "Include the correct successfulSubscriptionSignUp value" in {
+      val contributionPayload = payloadAsMap(
+        service
+          .buildPayload(AcquisitionSubmission(ophanIds, gaData, contribution), 25)
+          .right.get
+      )
+
+      contributionPayload.get("cm10") shouldEqual None
+
+      val digiPackPayload = payloadAsMap(
+        service
+          .buildPayload(AcquisitionSubmission(ophanIds, gaData, digiPack), 25)
+          .right.get
+      )
+
+      digiPackPayload.get("cm10") shouldEqual Some("1")
+
+      val weeklyPayload = payloadAsMap(
+        service
+          .buildPayload(AcquisitionSubmission(ophanIds, gaData, weekly), 25)
+          .right.get
+      )
+
+      weeklyPayload.get("cm10") shouldEqual Some("1")
+
+
+    }
+
     "build a correct ABTest payload" in {
       val tp = service.buildABTestPayload(digiPack.abTests)
       tp shouldEqual "test_name=variant_name,second_test=control"

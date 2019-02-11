@@ -56,6 +56,12 @@ private[services] class GAService(implicit client: OkHttpClient)
     EitherT(AnnualisedValueService.getAsyncAV(acquisitionModel, "ophan"))
   }
 
+  private def getSuccessfulSubscriptionSignUpMetric(conversionCategory: ConversionCategory) =
+    conversionCategory match {
+      case  _: ConversionCategory.ContributionConversion.type => ""
+      case _ => "1"
+  }
+
   private[services] def buildPayload(submission: AcquisitionSubmission, annualisedValue: Double, transactionId: Option[String] = None): Either[BuildError, String] = {
     import submission._
     val tid = transactionId.getOrElse(UUID.randomUUID().toString)
@@ -78,6 +84,9 @@ private[services] class GAService(implicit client: OkHttpClient)
           "cd12" -> acquisition.campaignCode.map(_.mkString(",")).getOrElse(""), // Campaign code
           "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
           "cd17" -> acquisition.paymentProvider.getOrElse(""), // Payment method
+
+          // Custom metrics
+          "cm10" -> getSuccessfulSubscriptionSignUpMetric(conversionCategory),
 
           // Google Optimize Experiment Id
           "xid" -> goExp.map(_._1).getOrElse(""),
