@@ -78,6 +78,7 @@ class DigitalSubscription(
   }
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
+  def digitalNewGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital/new")
 
   def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
