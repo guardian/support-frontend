@@ -1,6 +1,7 @@
 import { configure } from '@storybook/react';
 
 function loadStories() {
+  require('stylesheets/skeleton/skeleton.scss');
   require('../stories/button.jsx');
   require('../stories/dialog.jsx');
   require('../stories/form.jsx');
