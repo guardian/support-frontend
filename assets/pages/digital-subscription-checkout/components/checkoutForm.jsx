@@ -167,7 +167,7 @@ function CheckoutForm(props: PropTypes) {
                   </span>
                 )}
               />
-              <InputWithLabel
+              <Input1
                 id="telephone"
                 label="Telephone (optional)"
                 type="tel"
