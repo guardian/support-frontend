@@ -14,11 +14,10 @@ object NormalisedTelephoneNumber {
   def asFormattedString(normalisedTelephoneNumber: NormalisedTelephoneNumber): String =
     s"+${normalisedTelephoneNumber.countryCode}${normalisedTelephoneNumber.localNumber}"
 
-  def fromStringAndCountry(phone: Option[String], country: Option[Country]): Option[NormalisedTelephoneNumber] = {
+  def fromStringAndCountry(phone: Option[String], country: Country): Option[NormalisedTelephoneNumber] = {
     for {
       number <- phone
-      c <- country
-      parsed <- parseToOption(number, c.alpha2)
+      parsed <- parseToOption(number, country.alpha2)
     } yield {
       NormalisedTelephoneNumber(parsed.getCountryCode.toString, parsed.getNationalNumber.toString)
     }

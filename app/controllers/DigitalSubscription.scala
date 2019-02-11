@@ -120,7 +120,7 @@ class DigitalSubscription(
 
         type ApiResponseOrError[RES] = EitherT[Future, CreateDigitalSubscriptionError, RES]
 
-        val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, Some(request.body.country))
+        val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.country)
         val createSupportWorkersRequest = request.body.copy(
           telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
         )
