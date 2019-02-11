@@ -1,11 +1,11 @@
 package utils
 
-import com.google.i18n.phonenumbers.{NumberParseException, PhoneNumberUtil}
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.gu.i18n.Country
-import play.api.libs.json.Json
+import monitoring.SafeLogger
 
-import scala.util.control.Exception._
+import scala.util.{Failure, Success, Try}
 
 case class NormalisedTelephoneNumber(countryCode:String, localNumber: String)
 
@@ -26,7 +26,22 @@ object NormalisedTelephoneNumber {
 
   private def parseToOption(phone: String, countryCode: String): Option[PhoneNumber] = {
     val phoneNumberUtil = PhoneNumberUtil.getInstance()
-    catching(classOf[NumberParseException]).opt(phoneNumberUtil.parse(phone, countryCode)).filter(phoneNumberUtil.isValidNumber)
+
+    Try(phoneNumberUtil.parse(phone, countryCode)) match {
+      case Success(number) => {
+        phoneNumberUtil.isValidNumber(number) match {
+          case true => Some(number)
+          case false => {
+            SafeLogger.warn(s"We tried to normalise number $phone, countryCode: $countryCode but it was not a valid number")
+            None
+          }
+        }
+      }
+      case Failure(err) => {
+        SafeLogger.warn(s"We tried to normalise number $phone, countryCode: $countryCode but something went wrong: ${err.getMessage}")
+        None
+      }
+    }
   }
 
 }
