@@ -1,5 +1,5 @@
 public/**/*.js
 target/**/*.js
 tools/**/*.js
-coverage/
+../node_modules/spdy-transport/coverage/
 flow-typed/
