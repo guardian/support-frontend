@@ -1,0 +1,205 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Monthly contributions state machine"
+
+Parameters:
+  Stage:
+    Description: Stage name
+    Type: String
+    AllowedValues:
+        - PROD
+        - CODE
+    Default: CODE
+  Stack:
+    Description: Stack name
+    Type: String
+    Default: support
+  OphanRole:
+    Type: String
+    Description: ARN of the Ophan cross-account role
+  KinesisStreamArn:
+    Type: String
+    Description: ARN of the kinesis stream to write acquisition events to
+Conditions:
+  CreateProdResources: !Equals [!Ref "Stage", "PROD"]
+  CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
+Mappings:
+  StageVariables:
+    CODE:
+      DynamoDBTables:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
+      KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE
+    PROD:
+      DynamoDBTables:
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
+      KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD
+Resources:
+  LambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: PrivateBucket
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action: s3:GetObject
+              Resource: arn:aws:s3:::support-workers-private/*
+        - PolicyName: SqsMessages
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - sqs:GetQueueUrl
+              - sqs:SendMessage
+              Resource: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks
+            - Effect: Allow
+              Action:
+              - sqs:GetQueueUrl
+              - sqs:SendMessage
+              Resource: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks-dev
+        - PolicyName: CloudWatchLogging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Action:
+              - logs:Create*
+              - logs:PutLogEvents
+              - logs:DescribeLogStreams
+              - cloudwatch:putMetricData
+              Resource: "*"
+              Effect: Allow
+        - PolicyName: KMSEncryption
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                - kms:Encrypt
+                - kms:Decrypt
+                Resource: !FindInMap [ StageVariables, !Ref Stage, AwsKeyARN ]
+        - PolicyName: AssumeOphanRole
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: sts:AssumeRole
+              Resource:
+                Ref: OphanRole
+        - PolicyName: Kinesis
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: kinesis:*
+              Resource: !FindInMap [StageVariables, !Ref Stage, KinesisStreamArn]
+        - PolicyName: DynamoPromotions
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:Query
+              - dynamodb:DescribeTable
+              Resource: !FindInMap [StageVariables, !Ref Stage, DynamoDBTables]
+
+  StatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: "Allow"
+          Principal:
+            Service: !Sub states.${AWS::Region}.amazonaws.com
+          Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: "*"
+
+  {{#lambdas}}
+  {{> lambda}}
+  {{/lambdas}}
+
+  MonthlyContributionsPROD:
+    Type: "AWS::StepFunctions::StateMachine"
+    Condition: CreateProdResources
+    Properties:
+      DefinitionString:
+        !Sub
+          - |-
+            {{> stateMachine}}
+
+          - {}
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
+
+  MonthlyContributionsCODE:
+    Type: "AWS::StepFunctions::StateMachine"
+    Condition: CreateCodeResources
+    Properties:
+      DefinitionString:
+        !Sub
+          - |-
+            {{> stateMachine}}
+
+          - {}
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
+
+  ExecutionFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub State Machine Failure in ${Stage} (Monthly Contributions Sign-Ups)
+      AlarmDescription: The Monthly Contributions state machine failed during execution - please investigate.
+      MetricName: ExecutionsFailed
+      Namespace: AWS/States
+      Dimensions:
+        - Name: StateMachineArn
+          Value: !Ref MonthlyContributionsPROD
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Sum
+    DependsOn: MonthlyContributionsPROD
+
+  TimeoutAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub Monthly Contributions Sign-Up Timeout in ${Stage}
+      AlarmDescription: An execution of the Monthly Contributions state machine has taken an excessively long time to complete
+      MetricName: ExecutionsTimedOut
+      Namespace: AWS/States
+      Dimensions:
+        - Name: StateMachineArn
+          Value: !Ref MonthlyContributionsPROD
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Sum
+    DependsOn: MonthlyContributionsPROD
