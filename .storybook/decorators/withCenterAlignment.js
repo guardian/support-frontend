@@ -2,8 +2,10 @@ import React from 'react';
 
 const styles = {
   display: 'flex',
-  height: '100vh',
+  padding: '10vh 10vh',
+  minHeight: '100vh',
   width: '100vw',
+  boxSizing: 'border-box',
   alignItems: 'center',
   justifyContent: 'center',
 };

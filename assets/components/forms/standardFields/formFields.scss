@@ -1,3 +1,5 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
 @mixin form-field {
   @include gu-fontset-body-sans;
   border: 1px solid gu-colour(garnett-neutral-4);
@@ -25,6 +27,4 @@
 @mixin label {
   @include gu-fontset-body-sans;
   font-weight: bold;
-  margin-bottom: $gu-v-spacing / 2;
-  margin-top: $gu-v-spacing * 2;
 }

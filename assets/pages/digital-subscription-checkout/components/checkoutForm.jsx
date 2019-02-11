@@ -21,7 +21,6 @@ import { Fieldset } from 'components/forms/standardFields/fieldset';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
-import { withFooter } from 'components/forms/formHOCs/withFooter';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { canShow } from 'components/forms/formHOCs/canShow';
@@ -73,7 +72,6 @@ function mapStateToProps(state: State) {
 // ----- Form Fields ----- //
 
 const InputWithLabel = withLabel(Input);
-const InputWithFooter = withFooter(InputWithLabel);
 const Input1 = compose(asControlled, withError)(InputWithLabel);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
@@ -142,7 +140,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setLastName}
                 error={firstError('lastName', props.formErrors)}
               />
-              <InputWithFooter
+              <InputWithLabel
                 id="email"
                 label="Email"
                 type="email"
@@ -169,7 +167,7 @@ function CheckoutForm(props: PropTypes) {
                   </span>
                 )}
               />
-              <InputWithFooter
+              <InputWithLabel
                 id="telephone"
                 label="Telephone (optional)"
                 type="tel"
@@ -243,7 +241,7 @@ function CheckoutForm(props: PropTypes) {
               />
             </FormSection>
             <FormSection title="How often would you like to pay?">
-              <Fieldset>
+              <Fieldset legend="How often would you like to pay?">
                 <RadioInput
                   text={monthlyPriceLabel}
                   name="billingPeriod"
@@ -266,7 +264,7 @@ function CheckoutForm(props: PropTypes) {
             <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
               {props.countrySupportsDirectDebit &&
               <div>
-                <Fieldset>
+                <Fieldset legend="How would you like to pay?">
                   <RadioInput
                     text="Direct debit"
                     name="paymentMethod"
