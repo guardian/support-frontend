@@ -73,7 +73,7 @@ class DigitalSubscription(
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
   def displayForm(): Action[AnyContent] =
-    authenticatedAction(recurringIdentityClientId).async { implicit request =>
+    authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {

@@ -259,11 +259,11 @@ const regularPaymentRequestFromAuthorisation = (
   country: state.common.internationalisation.countryId,
   state: state.page.form.formData.state,
   email: state.page.form.formData.email || '',
-  addressLine1: '', // required go cardless field
-  addressLine2: '', // required go cardless field
-  townCity: '', // required go cardless field
-  county: '', // required go cardless field
-  postcode: '', // required go cardless field
+  addressLine1: null, // required go cardless field
+  addressLine2: null, // required go cardless field
+  townCity: null, // required go cardless field
+  county: null, // required go cardless field
+  postcode: null, // required go cardless field
   product: {
     amount: getAmount(
       state.page.form.selectedAmounts,

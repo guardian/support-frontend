@@ -1,0 +1,14 @@
+@import './formFields';
+
+.component-form-error__error {
+  @include gu-fontset-body-sans;
+  color: gu-colour(news-garnett-main-1);
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+  margin-top: $gu-v-spacing / 4;
+}
+
+.component-form-error .component-input:not([type-radio]) {
+  border-color: gu-colour(news-garnett-main-1);
+}

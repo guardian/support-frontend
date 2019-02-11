@@ -67,7 +67,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion,
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
-  "com.gu" %% "support-services" % "0.4",
+  "com.gu" %% "support-services" % "0.7",
   "com.gu" %% "fezziwig" % "0.8",
   "com.typesafe.akka" %% "akka-agent" % "2.5.14",
   "io.circe" %% "circe-core" % circeVersion,
@@ -111,7 +111,6 @@ riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
-
 
 def getFiles(f: File):Seq[(File,String)] = {
   f match {
