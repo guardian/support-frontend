@@ -64,6 +64,7 @@ class DigitalSubscription(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),
       "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
+      "en-eu" -> buildCanonicalDigitalSubscriptionLink("eu"),
       "en" -> buildCanonicalDigitalSubscriptionLink("int")
     )
 

@@ -51,6 +51,7 @@ const appFeatures: {
   GBPCountries: defaultFeatures,
   UnitedStates: defaultFeatures,
   International: defaultFeatures,
+  EURCountries: defaultFeatures,
   AUDCountries: [
     {
       heading: ['Live news and sport ', <mark className="product-block__highlight">New</mark>],
@@ -81,6 +82,7 @@ const appImages: {
   GBPCountries: defaultAppImage,
   UnitedStates: defaultAppImage,
   International: defaultAppImage,
+  EURCountries: defaultAppImage,
   AUDCountries: {
     ...defaultAppImage,
     gridId: 'premiumTierAU',

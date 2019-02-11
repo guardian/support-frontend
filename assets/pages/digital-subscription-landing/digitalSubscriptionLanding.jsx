@@ -36,13 +36,14 @@ const store = pageInit(() => digitalSubscriptionLandingReducer(null), true);
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detect();
-
+console.log({ countryGroupId });
 const reactElementId: {
   [CountryGroupId]: string,
 } = {
   GBPCountries: 'digital-subscription-landing-page-uk',
   UnitedStates: 'digital-subscription-landing-page-us',
   AUDCountries: 'digital-subscription-landing-page-au',
+  EURCountries: 'digital-subscription-landing-page-eu',
   International: 'digital-subscription-landing-page-int',
 };
 
@@ -52,6 +53,7 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
     'GBPCountries',
     'UnitedStates',
     'AUDCountries',
+    'EURCountries',
     'International',
   ],
 );
