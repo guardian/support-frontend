@@ -27,13 +27,13 @@
   }
 
   .component-subscription-bundle--weekly {
-    @include colour-bundle(opinion-garnett-main-1);
+    @include colour-bundle(opinion-bright);
   }
 
 }
 
 .component-subscriptions-by-country-group--uk {
   .component-subscription-bundle--digital {
-    @include colour-bundle(opinion-garnett-main-1);
+    @include colour-bundle(opinion-bright);
   }
 }
