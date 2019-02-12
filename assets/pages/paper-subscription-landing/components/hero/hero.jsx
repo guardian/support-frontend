@@ -24,6 +24,12 @@ function getHeading(): string {
   return 'Save up to 31% on The Guardian and The Observer - all year round';
 }
 
+const TimerIfActive = () => (true ? (
+  <FlashSaleCountdown
+    product="Paper"
+    countryGroupId="GBPCountries"
+  />) : null);
+
 
 const DefaultHeader = () => (
   <ProductPageHero
@@ -31,12 +37,7 @@ const DefaultHeader = () => (
     heading={getHeading()}
     appearance="feature"
     modifierClasses={['paper']}
-    overContent={
-      <FlashSaleCountdown
-        product="Paper"
-        countryGroupId="GBPCountries"
-      />
-    }
+    overcontent={<TimerIfActive />}
     content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
     <GridPicture
@@ -70,11 +71,8 @@ const SaleHeader = () => (
     heading={getHeading()}
     appearance="custom"
     modifierClasses={['paper-sale']}
-    overContent={
-      <FlashSaleCountdown
-        product="Paper"
-        countryGroupId="GBPCountries"
-      />
+    overcontent={
+      <TimerIfActive />
     }
     content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >

@@ -453,7 +453,6 @@ function getFormattedFlashSalePrice(
 }
 
 function countdownTimerIsActive(flashSaleActive: boolean, showForHowManyDays: number, endTime: number): boolean {
-  return true;
   if (flashSaleActive) {
     const timeTravelDays = getTimeTravelDaysOverride();
     const oneDayInMillis = 86400000;
