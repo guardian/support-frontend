@@ -6,8 +6,6 @@ import React from 'react';
 
 import { Error, type PropsForHoc } from '../standardFields/error';
 
-import './withError.scss';
-
 // ----- Types ----- //
 
 type AugmentedProps<Props> = Props & PropsForHoc;

@@ -20,7 +20,7 @@
   }
   .svg-information {
     circle {
-      fill: gu-colour(header-border);
+      fill: gu-colour(brand-pastel);
     }
   }
 }
@@ -29,8 +29,8 @@
   @include gu-fontset-heading;
   & > strong {
     padding: 0 ($gu-h-spacing / 4);
-    background-color: gu-colour(news-garnett-highlight);
-    color: gu-colour(garnett-neutral-1);
+    background-color: gu-colour(highlight-main);
+    color: gu-colour(brightness-7);
   }
 }
 

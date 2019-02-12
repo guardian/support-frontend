@@ -1,0 +1,28 @@
+.component-paypal-contribution-button {
+  background-color: gu-colour(highlight-main);
+  border-radius: 600px;
+  border: none;
+  color: gu-colour(brightness-7);
+  cursor: pointer;
+  display: block;
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
+  height: $gu-cta-height + 2;
+  line-height: $gu-cta-height + 2;
+  padding: 0 $gu-h-spacing;
+  position: relative;
+  text-align: left;
+  width: 100%;
+
+  .svg-arrow-right-straight {
+    fill: gu-colour(brightness-7);
+    height: 16px;
+    position: absolute;
+    left: calc(100% - 34px);
+    top: 14px;
+  }
+
+  &:hover {
+    background-color: darken(gu-colour(highlight-main), 5%);
+  }
+}

@@ -2,12 +2,12 @@
 
 .thank-you__container .header{
   @include mq($from: mobile, $until: tablet) {
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
   }
 }
 
 .confirmation {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  border-bottom: 1px solid gu-colour(brightness-86);
   font-weight: 300;
   margin: 0 -10px;
   padding: 0 10px;
@@ -28,7 +28,7 @@
   margin-left: -10px;
   margin-right: -10px;
   padding: 0 10px $gu-v-spacing;
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  border-bottom: 1px solid gu-colour(brightness-86);
 }
 
 .set-password__title {
@@ -49,7 +49,7 @@
 .button {
   align-items: center;
   border: 1px solid currentColor;
-  background-color: gu-colour(garnett-neutral-5);
+  background-color: gu-colour(brightness-100);
   border-radius: $gu-v-spacing * 2;
   font-family: $gu-text-sans-web;
   height: $gu-v-spacing * 3.5;
@@ -105,7 +105,7 @@
 }
 
 .component-marketing-consent.component-marketing-consent--newsletter {
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  border-bottom: 1px solid gu-colour(brightness-86);
 }
 
 .component-marketing-consent__message {

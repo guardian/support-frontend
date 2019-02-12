@@ -18,17 +18,17 @@
 }
 
 .component-product-page-hero--feature {
-  border-top: 1px solid gu-colour(header-border);
-  background-color: gu-colour(header-dark);
+  border-top: 1px solid gu-colour(brand-pastel);
+  background-color: gu-colour(brand-main);
   .component-left-margin-section__content {
-    border-left-color: gu-colour(header-border);
+    border-left-color: gu-colour(brand-pastel);
   }
 }
 
 .component-product-page-hero--grey {
-  background: gu-colour(garnett-neutral-3);
+  background: gu-colour(brightness-97);
   .component-left-margin-section__content {
-    border-left-color: gu-colour(garnett-neutral-4);
+    border-left-color: gu-colour(brightness-86);
   }
 }
 
@@ -39,10 +39,10 @@
 }
 
 .component-product-page-hero-hanger {
-  background: gu-colour(garnett-neutral-5);
+  background: gu-colour(brightness-100);
   .component-left-margin-section__content {
     @include mq($from: tablet) {
-      border-left: 1px solid gu-colour(garnett-neutral-4);
+      border-left: 1px solid gu-colour(brightness-86);
       .component-product-page-hero-hanger__content {
         margin-left: -1px;
       }
@@ -54,6 +54,6 @@
 .component-product-page-hero-hanger__content {
   border-top: 1px solid #ffffff;
   padding: $gu-v-spacing  ($gu-h-spacing / 2);
-  background: gu-colour(garnett-neutral-1);
+  background: gu-colour(brightness-7);
   color: #ffffff;
 }

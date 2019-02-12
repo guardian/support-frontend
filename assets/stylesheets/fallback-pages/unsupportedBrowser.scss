@@ -7,13 +7,12 @@
 // ----- Page-Specific Styles ----- //
 
 .unsupported-browser__header {
-  background-color: gu-colour(nav-faded);
+  background-color: gu-colour(brand-main);
 
   .svg-guardian-logo {
     height: 100%;
   }
 
-  border-bottom: 1px solid gu-colour(nav-dark);
 }
 
 .unsupported-browser__header-link {
@@ -84,7 +83,7 @@
 }
 
 .unsupported-browser__footer {
-  background-color: gu-colour(garnett-neutral-1);
+  background-color: gu-colour(brightness-7);
   font-family: $gu-text-sans-web;
   font-size: 12px;
   line-height: 16px;
@@ -97,7 +96,7 @@
 
 .unsupported-browser__footer-privacy-policy {
   text-decoration: none;
-  color: gu-colour(neutral-4);
+  color: gu-colour(brightness-86);
   padding: 5px 0;
 }
 
@@ -109,7 +108,7 @@
   font-weight: 400;
   display: block;
   padding: 3px 0;
-  color: gu-colour(neutral-4);
+  color: gu-colour(brightness-86);
 }
 
 .unsupported-browser__footer-legal {

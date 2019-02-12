@@ -1,5 +1,5 @@
 .component-legal-section {
-  border-top: 1px solid gu-colour(garnett-neutral-4);
+  border-top: 1px solid gu-colour(brightness-86);
 
   .component-page-section__header {
     @include dropline;
@@ -17,7 +17,7 @@
     font-family: $gu-text-sans-web;
     font-size: 14px;
     line-height: 18px;
-    color: gu-colour(media-garnett-main-1);
+    color: gu-colour(brightness-20);
 
     .component-terms-privacy__change {
       padding-bottom: 4px;
