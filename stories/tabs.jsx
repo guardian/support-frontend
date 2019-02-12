@@ -12,7 +12,7 @@ const stories = storiesOf('Tabs', module)
   .addDecorator(withCenterAlignment)
   .addDecorator(withKnobs);
 
-class ControlledTabs extends Component<{tabs: any}> {
+class ControlledTabs extends Component<{tabs: any}, {active: number}> {
   state = {
     active: 0,
   }
