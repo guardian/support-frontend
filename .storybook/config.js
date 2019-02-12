@@ -8,6 +8,7 @@ function loadStories() {
   require('../stories/header.jsx');
   require('../stories/list.jsx');
   require('../stories/hero.jsx');
+  require('../stories/tabs.jsx');
 }
 
 configure(loadStories, module);
