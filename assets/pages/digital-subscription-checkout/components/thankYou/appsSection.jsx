@@ -14,7 +14,7 @@ import {
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import AnchorButton from 'components/button/anchorButton';
 
 // ----- Types ----- //

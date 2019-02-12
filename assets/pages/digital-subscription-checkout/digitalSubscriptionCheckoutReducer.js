@@ -231,8 +231,11 @@ function initReducer(initialCountry: IsoCountry) {
     : Monthly;
   const { productPrices } = window.guardian;
 
+  const pathName = new URL(window.location).pathname.split('/');
+  const checkoutPathName: string = pathName.splice(pathName.findIndex(c => c === 'checkout')).pop();
+
   const initialState = {
-    stage: 'checkout',
+    stage: checkoutPathName === 'existing' ? 'thankyou-already-live' : 'checkout',
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
