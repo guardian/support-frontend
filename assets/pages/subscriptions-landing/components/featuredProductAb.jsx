@@ -17,6 +17,7 @@ import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { type CommonState } from 'helpers/page/commonReducer';
 import FeaturedProductHero from 'components/featuredProductHero/featuredProductHero';
 import { getProduct, type Product } from './featuredProducts';
+import { showCountdownTimer } from '../../../helpers/flashSale';
 
 
 // ----- Types ----- //
@@ -73,6 +74,8 @@ function FeaturedProductAb(props: PropTypes) {
 
   const product = getProduct(subsLinks, countryGroupId);
 
+  const showTimer = showCountdownTimer(product.name, countryGroupId);
+
   return product ? (
     <FeaturedProductHero
       headingText={product.headingText}
@@ -82,7 +85,7 @@ function FeaturedProductAb(props: PropTypes) {
       cta={getCta(product)}
       headingSize={headingSize}
       product={product.name}
-      hasTimer={false}
+      hasTimer={showTimer}
       countryGroupId={countryGroupId}
     />) : null;
 
