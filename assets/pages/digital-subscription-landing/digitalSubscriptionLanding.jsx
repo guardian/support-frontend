@@ -36,7 +36,7 @@ const store = pageInit(() => digitalSubscriptionLandingReducer(null), true);
 // ----- Internationalisation ----- //
 
 const countryGroupId: CountryGroupId = detect();
-console.log({ countryGroupId });
+
 const reactElementId: {
   [CountryGroupId]: string,
 } = {

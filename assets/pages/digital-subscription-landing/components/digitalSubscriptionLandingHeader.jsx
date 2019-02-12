@@ -119,7 +119,6 @@ const gridSlots: GridSlots = {
 function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
   const gridImages: GridImages = gridImagesByCountry[cgId];
-  console.log(gridImages);
   const sources: GridSource[] = [
     { ...gridSlots.mobile, ...gridImages.breakpoints.mobile },
     { ...gridSlots.tablet, ...gridImages.breakpoints.tablet },
