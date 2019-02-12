@@ -1,6 +1,12 @@
+import SeleniumTestConfig._
+
 version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
+
+testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
+
+testOptions in Test := Seq(Tests.Filter(unitTestFilter))
 
 import LibraryVersions.{circeVersion, awsClientVersion, jacksonVersion}
 

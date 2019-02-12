@@ -20,7 +20,6 @@ lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
-
 lazy val commonSettings = Seq(
   organization := "com.gu",
   scalaVersion := "2.12.7",
