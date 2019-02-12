@@ -12,7 +12,10 @@
 
 .component-flash-sale-countdown .component-countdown__chip {
   display: inline-block;
-  padding: $gu-v-spacing / 2 $gu-h-spacing $gu-v-spacing / 2 $gu-h-spacing / 2;
+  padding: $gu-v-spacing / 2 $gu-h-spacing / 2;
+  @include mq($from: mobileLandscape) {
+    padding: $gu-v-spacing / 2 $gu-h-spacing $gu-v-spacing / 2 $gu-h-spacing / 2;
+  }
   border-right: 1px solid currentColor;
   &:last-child {
     border: none;
