@@ -21,7 +21,9 @@ export default function ProgressMessage(props: PropTypes) {
       <div className="component-progress-message__dialog">
         {props.message.map(message =>
           <div className="component-progress-message__message">{message}</div>)}
-        <AnimatedDots />
+        <AnimatedDots
+          appearance="light"
+        />
       </div>
       <div className="component-progress-message__background" />
     </div>

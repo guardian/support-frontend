@@ -1,3 +1,5 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
 .component-animated-dots {
 
   margin: 10px auto 0;
@@ -7,8 +9,6 @@
   div {
     width: 18px;
     height: 18px;
-    background-color: #fff;
-
     border-radius: 100%;
     display: inline-block;
     animation: sk-bouncedelay 1.4s infinite ease-in-out both;
@@ -35,3 +35,16 @@
       }
   }
 }
+
+.component-animated-dots--light {
+  div {
+    background-color: gu-colour(brightness-100);
+  }
+}
+
+.component-animated-dots--dark {
+  div {
+    background-color: gu-colour(brightness-46);
+  }
+}
+
