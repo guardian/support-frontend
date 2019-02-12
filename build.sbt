@@ -40,10 +40,10 @@ lazy val commonDependencies = Seq(
 )
 
 lazy val root = (project in file("."))
-  .aggregate(supportWorkers, supportModels, supportConfig, supportInternationalisation, supportServices)
+  .aggregate(`support-frontend`, `support-workers`, `support-models`, `support-config`, `support-internationalisation`, `support-services`)
 
 
-lazy val supportFrontend = (project in file("support-frontend"))
+lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .configs(IntegrationTest, SeleniumTest)
   .settings(
@@ -62,42 +62,42 @@ lazy val supportFrontend = (project in file("support-frontend"))
     (test in Test) := ((test in Test) dependsOn testScalastyle).value,
     (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
     (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
-  ).dependsOn(supportServices, supportModels, supportConfig, supportInternationalisation)
+  ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
-lazy val supportWorkers = (project in file("support-workers"))
+lazy val `support-workers` = (project in file("support-workers"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
     testSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(supportServices, supportModels, supportConfig, supportInternationalisation)
+  ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
 
-lazy val supportModels = (project in file("support-models"))
+lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
     testSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(supportInternationalisation)
+  ).dependsOn(`support-internationalisation`)
 
-lazy val supportConfig = (project in file("support-config"))
+lazy val `support-config` = (project in file("support-config"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
     testSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(supportModels, supportInternationalisation)
+  ).dependsOn(`support-models`, `support-internationalisation`)
 
-lazy val supportServices = (project in file("support-services"))
+lazy val `support-services` = (project in file("support-services"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
     testSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(supportInternationalisation, supportModels, supportConfig)
+  ).dependsOn(`support-internationalisation`, `support-models`, `support-config`)
 
-lazy val supportInternationalisation = (project in file("support-internationalisation"))
+lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
