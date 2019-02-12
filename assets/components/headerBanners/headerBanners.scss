@@ -2,7 +2,7 @@
 
 .component-banner-time-travel {
   @include gu-fontset-body-sans;
-  background: gu-colour(news-garnett-highlight);
+  background: gu-colour(highlight-main);
   padding: $gu-v-spacing $gu-h-spacing;
   text-align: center;
 }

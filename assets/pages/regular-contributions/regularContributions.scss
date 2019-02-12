@@ -1,0 +1,176 @@
+// -----  gu-sass ----- //
+
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+// ----- Shared Components ----- //
+
+@import '~components/checkboxInput/checkboxInput';
+@import '~components/ctaLink/ctaLink';
+@import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+@import '~components/directDebit/directDebitForm/directDebitForm';
+@import '~components/displayName/displayName';
+@import '~components/dotcomCta/dotcomCta';
+@import '~components/errorMessage/errorMessage';
+@import '~components/footer/footer';
+@import '~components/headers/header/header';
+@import '~components/introduction/introduction';
+@import '~components/introduction/circlesIntroduction';
+@import '~components/legal/contribLegal/contribLegal';
+@import '~components/legal/termsPrivacy/termsPrivacy';
+@import '~components/pageSection/pageSection';
+@import '~components/paymentAmount/paymentAmount';
+@import '~components/paymentButtons/directDebitPopUpButton/directDebitPopUpButton';
+@import '~components/paymentButtons/payPalExpressButton/payPalExpressButton';
+@import '~components/paymentButtons/stripePopUpButton/stripePopUpButton';
+@import '~components/generalErrorMessage/generalErrorMessage';
+@import '~components/progressMessage/progressMessage';
+@import '~components/questionsContact/questionsContact';
+@import '~components/secure/secure';
+@import '~components/selectInput/selectInput';
+@import '~components/signout/signout';
+@import '~components/socialShare/socialShare';
+@import '~components/spinners/animatedDots';
+@import '~components/spreadTheWord/spreadTheWord';
+@import '~components/svgs/svg';
+@import '~components/testUserBanner/testUserBanner';
+@import '~components/textInput/textInput';
+@import '~components/contributionsThankYou/contributionsThankYouPage';
+@import '~components/marketingConsent/marketingConsent';
+@import '~components/yourContribution/yourContribution';
+@import '~components/yourDetails/yourDetails';
+@import '~components/legal/legalSection/legalSection';
+@import '~components/contributionsCheckout/contributionsCheckout';
+@import '~components/survey/survey';
+
+// ----- Page-Specific Styles ----- //
+
+#regular-contributions-page {
+
+  // ----- Your details
+
+  .component-text-input__input {
+    border: 2px solid gu-colour(highlight-main);
+    font-family: $gu-text-sans-web;
+    height: 44px;
+    margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:required {
+      box-shadow: none;
+    }
+
+    @include mq($from: desktop) {
+      width: 304px;
+    }
+  }
+
+  .component-select-input {
+    margin-top: $gu-v-spacing;
+  }
+
+  .component-select-input__select {
+    width: 100%;
+    border: 2px solid gu-colour(highlight-main);
+
+    @include mq($from: desktop) {
+      width: 304px;
+    }
+  }
+
+  .component-text-input--email {
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .component-text-input--error {
+    .component-text-input__input {
+      border: 2px solid gu-colour(error);
+      margin-bottom: $gu-v-spacing / 2;
+    }
+  }
+
+  .component-text-input--last-name {
+    margin-top: $gu-v-spacing;
+  }
+
+  // ----- Payment methods
+
+  .component-direct-debit-pop-up-button {
+    margin-bottom: $gu-v-spacing;
+    width: 100%;
+
+    @include mq($from: phablet) {
+      width: 304px;
+    }
+  }
+
+  .component-stripe-pop-up-button {
+    @include mq($from: phablet) {
+      width: 304px;
+    }
+  }
+
+  .component-paypal-button-checkout {
+    margin-top: $gu-v-spacing;
+    width: 100%;
+
+    @include mq($from: phablet) {
+      width: 304px;
+    }
+  }
+
+  .component-payment-error {
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .component-payment-error--paypal-express {
+    margin-top: $gu-v-spacing;
+  }
+
+  .component-cta-link--continue {
+    margin-top: $gu-v-spacing;
+    height: 42px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 $gu-h-spacing;
+    @include mq($from: desktop) {
+      width: 304px;
+    }
+  }
+
+  .component-cta-link--back {
+    background-color: transparent;
+    margin-top: $gu-v-spacing;
+    height: 42px;
+    color: gu-colour(brightness-7);
+    border: 1px solid gu-colour(brightness-86);
+    display: inline-block;
+    .svg-arrow-right-straight {
+      fill: gu-colour(brightness-7);
+      position: absolute;
+      left: $gu-v-spacing;
+      transform: rotate(180deg);
+    }
+
+    .component-cta-link__text {
+      margin-left: $gu-v-spacing * 2;
+    }
+  }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  .email-input {
+    a, a:visited {
+      text-decoration: none;
+    }
+  }
+}
+
+.regular-contribution-payment__or-label {
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-family: $gu-text-sans-web;
+}
