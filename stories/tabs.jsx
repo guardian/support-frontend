@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 
 import { storiesOf } from '@storybook/react';
-import { withKnobs, text, radios } from '@storybook/addon-knobs';
+import { withKnobs } from '@storybook/addon-knobs';
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
 
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
@@ -12,7 +12,7 @@ const stories = storiesOf('Tabs', module)
   .addDecorator(withCenterAlignment)
   .addDecorator(withKnobs);
 
-class ControlledTabs extends Component {
+class ControlledTabs extends Component<{tabs: any}> {
   state = {
     active: 0,
   }
