@@ -8,7 +8,7 @@ import ProductPageHero from 'components/productPage/productPageHero/productPageH
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
 import GridImage from 'components/gridImage/gridImage';
-
+import { FlashSaleCountdown } from 'components/flashSaleCountdown/flashSaleCountdown';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
@@ -31,6 +31,12 @@ const DefaultHeader = () => (
     heading={getHeading()}
     appearance="feature"
     modifierClasses={['paper']}
+    overContent={
+      <FlashSaleCountdown
+        product="Paper"
+        countryGroupId="GBPCountries"
+      />
+    }
     content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
     <GridPicture
@@ -64,6 +70,12 @@ const SaleHeader = () => (
     heading={getHeading()}
     appearance="custom"
     modifierClasses={['paper-sale']}
+    overContent={
+      <FlashSaleCountdown
+        product="Paper"
+        countryGroupId="GBPCountries"
+      />
+    }
     content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
     <div className="sale-joy-of-print">
