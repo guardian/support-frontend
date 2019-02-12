@@ -24,7 +24,7 @@ function getHeading(): string {
   return 'Save up to 31% on The Guardian and The Observer - all year round';
 }
 
-const TimerIfActive = () => (true ? (
+const TimerIfActive = () => (Date.now() > 1 ? (
   <FlashSaleCountdown
     product="Paper"
     countryGroupId="GBPCountries"
