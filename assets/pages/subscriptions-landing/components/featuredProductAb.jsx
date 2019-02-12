@@ -74,8 +74,6 @@ function FeaturedProductAb(props: PropTypes) {
 
   const product = getProduct(subsLinks, countryGroupId);
 
-  const showTimer = showCountdownTimer(product.name, countryGroupId);
-
   return product ? (
     <FeaturedProductHero
       headingText={product.headingText}
@@ -85,7 +83,7 @@ function FeaturedProductAb(props: PropTypes) {
       cta={getCta(product)}
       headingSize={headingSize}
       product={product.name}
-      hasTimer={showTimer}
+      hasTimer={showCountdownTimer(product.name, countryGroupId)}
       countryGroupId={countryGroupId}
     />) : null;
 

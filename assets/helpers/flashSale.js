@@ -485,5 +485,6 @@ export {
   getDuration,
   getTimeTravelDaysOverride,
   getFlashSaleActiveOverride,
+  countdownTimerIsActive,
   showCountdownTimer,
 };
