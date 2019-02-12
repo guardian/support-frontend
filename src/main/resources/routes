@@ -48,3 +48,11 @@ POST     /contribute/one-off/paypal/refund                    controllers.Paypal
 # Performs a bank details validation check against GoCardless
 POST     /direct-debit/check-account                          controllers.GoCardlessController.checkBankAccount
 OPTIONS  /direct-debit/check-account                          controllers.AppController.corsOptions
+
+
+#############################################
+# SUBSCRIBE WITH GOOGLE
+#############################################
+
+
+POST /contribute/one-off/swg/record-payment                   controllers.SubscribeWithGoogleController.recordPayment

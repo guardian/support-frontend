@@ -18,6 +18,7 @@ object PaymentProvider extends Enum[PaymentProvider] {
   }
 
   override val values: IndexedSeq[PaymentProvider] = findValues
+  case object SubscribeWithGoogle extends PaymentProvider
   case object Paypal extends PaymentProvider
   case object Stripe extends PaymentProvider
   case object StripeApplePay extends PaymentProvider
