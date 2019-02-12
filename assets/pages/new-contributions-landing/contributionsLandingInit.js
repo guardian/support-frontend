@@ -2,13 +2,13 @@
 
 // ----- Imports ----- //
 import { type Store } from 'redux';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import { loadPayPalRecurring } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import {
   loadStripe,
   setupStripeCheckout,
   type StripeAccount,
-} from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+} from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import {

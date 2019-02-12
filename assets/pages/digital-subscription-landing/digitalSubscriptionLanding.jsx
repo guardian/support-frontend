@@ -18,6 +18,7 @@ import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
+import 'stylesheets/skeleton/skeleton.scss';
 
 import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';

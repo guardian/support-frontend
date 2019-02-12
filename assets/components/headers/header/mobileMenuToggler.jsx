@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 
 import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
@@ -11,7 +11,10 @@ import { clickedEvent } from 'helpers/tracking/clickTracking';
 import MobileMenu, { type Position } from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 
-export default class MobileMenuToggler extends Component<{}, {menuOpen: boolean, buttonPosition: Position}> {
+export default class MobileMenuToggler extends Component<{ utility: Node }, {
+  menuOpen: boolean,
+  buttonPosition: Position
+}> {
 
   state = {
     buttonPosition: null,
@@ -21,7 +24,8 @@ export default class MobileMenuToggler extends Component<{}, {menuOpen: boolean,
   buttonRef: ?Element;
 
   render() {
-    const { menuOpen } = this.state;
+    const { menuOpen, buttonPosition } = this.state;
+    const { utility } = this.props;
     return (
       <div className="component-header-mobile-menu-toggler">
         <VeggieBurgerButton
@@ -55,7 +59,8 @@ export default class MobileMenuToggler extends Component<{}, {menuOpen: boolean,
           }}
         >
           <MobileMenu
-            closeButtonAt={this.state.buttonPosition}
+            closeButtonAt={buttonPosition}
+            utility={utility}
             onClose={() => {
               this.setState({ menuOpen: false });
               clickedEvent(['header', 'menu-close'].join(' - '));

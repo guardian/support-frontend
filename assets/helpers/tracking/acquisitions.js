@@ -10,7 +10,7 @@ import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
-import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
 import { OPTIMIZE_QUERY_PARAMETER } from 'helpers/optimize/optimize';
 
 
@@ -171,11 +171,15 @@ const participationsToAcquisitionABTest = (participations: Participations): Acqu
 
 // Prepends all the experiment names (the keys) with 'optimize$$' to be able to
 // differentiate from native tests, and returns as array of AB tests.
+const optimizeIdToTestName = (id: string) => `optimize$$${id}`;
+
+const optimizeExperimentToAcquisitionABTest = (exp: OptimizeExperiment) => ({
+  name: optimizeIdToTestName(exp.id),
+  variant: exp.variant,
+});
+
 function optimizeExperimentsToAcquisitionABTest(opt: OptimizeExperiments): AcquisitionABTest[] {
-  return opt.map(exp => ({
-    name: `optimize$$${exp.id}`,
-    variant: exp.variant,
-  }));
+  return opt.map(exp => optimizeExperimentToAcquisitionABTest(exp));
 }
 
 // Builds the acquisition object from data and other sources.
@@ -221,6 +225,20 @@ function getSupportAbTests(participations: Participations, experiments: Optimize
   ];
 }
 
+const getAbTests = (
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  nativeAbParticipations: Participations,
+  optimizeExperiments: OptimizeExperiments,
+) => {
+  const alltests = [
+    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
+    ...(referrerAcquisitionData.abTests || []),
+  ];
+  return alltests.reduce((acc: AcquisitionABTest[], abTest: AcquisitionABTest) => (
+    acc.find(test => test.name === abTest.name) ? acc : acc.concat([abTest])), []);
+};
+
+
 function derivePaymentApiAcquisitionData(
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
@@ -228,10 +246,7 @@ function derivePaymentApiAcquisitionData(
 ): PaymentAPIAcquisitionData {
   const ophanIds: OphanIds = getOphanIds();
 
-  const abTests = [
-    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
-    ...(referrerAcquisitionData.abTests || []),
-  ];
+  const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
 
   const campaignCodes = referrerAcquisitionData.campaignCode ?
     [referrerAcquisitionData.campaignCode] : [];
@@ -258,10 +273,7 @@ function deriveSubsAcquisitionData(
   optimizeExperiments: OptimizeExperiments,
 ): ReferrerAcquisitionData {
 
-  const abTests = [
-    ...getSupportAbTests(nativeAbParticipations, optimizeExperiments),
-    ...(referrerAcquisitionData.abTests || []),
-  ];
+  const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations, optimizeExperiments);
 
   return {
     ...referrerAcquisitionData,
@@ -294,4 +306,5 @@ export {
   derivePaymentApiAcquisitionData,
   deriveSubsAcquisitionData,
   getSupportAbTests,
+  optimizeIdToTestName,
 };

@@ -6,24 +6,18 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import seedrandom from 'seedrandom';
 
-import * as ophan from 'ophan';
 import * as cookie from 'helpers/cookie';
 import * as storage from 'helpers/storage';
 import { type Settings } from 'helpers/settings';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
 
 
 // ----- Types ----- //
 
-type TestId = $Keys<typeof tests>;
-
-type OphanABEvent = {
-  variantName: string,
-  complete: boolean,
-  campaignCodes?: string[],
-};
+export type TestId = $Keys<typeof tests>;
 
 const breakpoints = {
   mobile: 320,
@@ -47,10 +41,6 @@ export type Participations = {
   [TestId]: string,
 }
 
-type OphanABPayload = {
-  [TestId]: OphanABEvent,
-};
-
 type Audience = {
   offset: number,
   size: number,
@@ -61,8 +51,16 @@ type Audiences = {
   [IsoCountry | CountryGroupId | 'ALL']: Audience
 };
 
+export type Variant = {
+  id: string,
+  amountsRegions?: AmountsRegions,
+}
+
+export type TestType = 'AMOUNTS' | 'OTHER';
+
 export type Test = {|
-  variants: string[],
+  type: TestType,
+  variants: Variant[],
   audiences: Audiences,
   isActive: boolean,
   canRun?: () => boolean,
@@ -188,7 +186,7 @@ function assignUserToVariant(mvtId: number, test: Test): string {
 
   const variantIndex = randomNumber(mvtId, independent, seed) % test.variants.length;
 
-  return test.variants[variantIndex];
+  return test.variants[variantIndex].id;
 }
 
 function getParticipations(
@@ -228,23 +226,6 @@ function getParticipations(
   return { ...participations, ...getSSRParticipationsFromQuery() };
 }
 
-const buildOphanPayload = (participations: Participations, complete: boolean): OphanABPayload =>
-  Object.keys(participations).reduce((payload, participation) => {
-    const ophanABEvent: OphanABEvent = {
-      variantName: participations[participation],
-      complete,
-      campaignCodes: [],
-    };
-
-    return Object.assign({}, payload, { [participation]: ophanABEvent });
-  }, {});
-
-const trackABOphan = (participations: Participations, complete: boolean): void => {
-  ophan.record({
-    abTestRegister: buildOphanPayload(participations, complete),
-  });
-};
-
 const init = (
   country: IsoCountry,
   countryGroupId: CountryGroupId,
@@ -255,8 +236,6 @@ const init = (
   const participations: Participations = getParticipations(abTests, mvt, country, countryGroupId);
   const urlParticipations: ?Participations = getParticipationsFromUrl();
   setLocalStorageParticipations({ ...participations, ...urlParticipations });
-
-  trackABOphan(participations, false);
 
   return participations;
 };

@@ -8,10 +8,10 @@ import ProductPageHero from 'components/productPage/productPageHero/productPageH
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
 import GridImage from 'components/gridImage/gridImage';
-
+import { FlashSaleCountdown } from 'components/flashSaleCountdown/flashSaleCountdown';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
 
 import './joyOfPrint.scss';
 
@@ -24,6 +24,12 @@ function getHeading(): string {
   return 'Save up to 31% on The Guardian and The Observer - all year round';
 }
 
+const TimerIfActive = () => (showCountdownTimer('Paper', 'GBPCountries') ? (
+  <FlashSaleCountdown
+    product="Paper"
+    countryGroupId="GBPCountries"
+  />) : null);
+
 
 const DefaultHeader = () => (
   <ProductPageHero
@@ -31,6 +37,7 @@ const DefaultHeader = () => (
     heading={getHeading()}
     appearance="feature"
     modifierClasses={['paper']}
+    overcontent={<TimerIfActive />}
     content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
     <GridPicture
@@ -64,6 +71,9 @@ const SaleHeader = () => (
     heading={getHeading()}
     appearance="custom"
     modifierClasses={['paper-sale']}
+    overcontent={
+      <TimerIfActive />
+    }
     content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
   >
     <div className="sale-joy-of-print">

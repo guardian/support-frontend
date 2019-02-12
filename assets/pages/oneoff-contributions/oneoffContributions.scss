@@ -48,7 +48,7 @@
   // ----- Your details
 
   .component-text-input__input {
-    border: 2px solid gu-colour(news-garnett-highlight);
+    border: 2px solid gu-colour(highlight-main);
     font-family: $gu-text-sans-web;
     height: 44px;
     margin-bottom: 0;
@@ -79,7 +79,7 @@
   }
 
   .component-paypal-contribution-button {
-    height: $gu-cta-height;
+    height: $gu-cta-height + 2;
     width: 100%;
 
     @include mq($from: phablet) {

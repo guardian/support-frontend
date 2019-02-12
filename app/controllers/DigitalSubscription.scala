@@ -23,6 +23,8 @@ import play.api.mvc.{request, _}
 import play.twirl.api.Html
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
+import utils.NormalisedTelephoneNumber
+import utils.NormalisedTelephoneNumber.asFormattedString
 import views.html.digitalSubscription
 import views.html.helper.CSRF
 import utils.SimpleValidator._
@@ -70,21 +72,21 @@ class DigitalSubscription(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  def displayForm(countryCode: String): Action[AnyContent] =
-    authenticatedAction(recurringIdentityClientId).async { implicit request =>
+  def displayForm(): Action[AnyContent] =
+    authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {
           SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
           InternalServerError
         },
-        user => Ok(digitalSubscriptionFormHtml(user, countryCode))
+        user => Ok(digitalSubscriptionFormHtml(user))
       ).map(_.withSettingsSurrogateKey)
     }
 
-  private def digitalSubscriptionFormHtml(idUser: IdUser, countryCode: String)(implicit request: RequestHeader, settings: AllSettings): Html = {
+  private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Digital Subscription"
-    val id = "digital-subscription-checkout-page-" + countryCode
+    val id = "digital-subscription-checkout-page"
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
@@ -118,10 +120,14 @@ class DigitalSubscription(
 
         type ApiResponseOrError[RES] = EitherT[Future, CreateDigitalSubscriptionError, RES]
 
-        if (validationPasses(request.body)) {
+        val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.country)
+        val createSupportWorkersRequest = request.body.copy(
+          telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
+        )
+        if (validationPasses(createSupportWorkersRequest)) {
           val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user).leftMap(ServerError(_))
           def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
-            client.createSubscription(request, createUser(idUser, request.body), request.uuid).leftMap(error => ServerError(error.toString))
+            client.createSubscription(request, createUser(idUser, createSupportWorkersRequest), request.uuid).leftMap(error => ServerError(error.toString))
           }
 
           val result: ApiResponseOrError[StatusResponse] = for {
@@ -129,9 +135,9 @@ class DigitalSubscription(
             statusResponse <- subscriptionStatusOrError(user)
           } yield statusResponse
 
-          respondToClient(result, request.body.product.billingPeriod)
+          respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
         } else {
-          respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), request.body.product.billingPeriod)
+          respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
         }
 
     }

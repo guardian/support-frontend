@@ -212,7 +212,7 @@ const Sales: Sale[] = [
         annualPlanPromoCode: 'DDPFMANINT80',
         intcmp: '',
         price: 14.99,
-        annualPrice: 179.85,
+        annualPrice: 179.87,
         discountPercentage: 0.25,
         saleCopy: {
           featuredProduct: {
@@ -237,7 +237,7 @@ const Sales: Sale[] = [
         annualPlanPromoCode: 'DDPFMANINT80',
         intcmp: '',
         price: 14.99,
-        annualPrice: 179.85,
+        annualPrice: 179.87,
         discountPercentage: 0.25,
         saleCopy: {
           featuredProduct: {
@@ -261,8 +261,8 @@ const Sales: Sale[] = [
         promoCode: 'DDPFMINT80',
         annualPlanPromoCode: 'DDPFMANINT80',
         intcmp: '',
-        price: 16.13,
-        annualPrice: 193.44,
+        price: 16.12,
+        annualPrice: 193.46,
         discountPercentage: 0.25,
         saleCopy: {
           featuredProduct: {
@@ -464,6 +464,13 @@ function countdownTimerIsActive(flashSaleActive: boolean, showForHowManyDays: nu
   return false;
 }
 
+function showCountdownTimer(product: SubscriptionProduct, countryGroupId: CountryGroupId): boolean {
+  const flashSaleActive = flashSaleIsActive(product, countryGroupId);
+  const flashSaleEndTime = getEndTime(product, countryGroupId);
+
+  return countdownTimerIsActive(flashSaleActive, 7, flashSaleEndTime);
+}
+
 
 export {
   flashSaleIsActive,
@@ -479,4 +486,5 @@ export {
   getTimeTravelDaysOverride,
   getFlashSaleActiveOverride,
   countdownTimerIsActive,
+  showCountdownTimer,
 };

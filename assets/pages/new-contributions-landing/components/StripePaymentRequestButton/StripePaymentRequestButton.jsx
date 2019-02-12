@@ -8,9 +8,9 @@ import { connect } from 'react-redux';
 import { PaymentRequestButtonElement, injectStripe } from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
-import { type PaymentResult, type StripePaymentMethod } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import { type PaymentResult, type StripePaymentMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -149,6 +149,13 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
     // We need to do this so that we can offer marketing permissions on the thank you page
     updateUserEmail(data, props.updateEmail);
     const tokenId = props.isTestUser ? 'tok_visa' : token.id;
+    if (data.methodName) {
+      // https://stripe.com/docs/stripe-js/reference#payment-response-object
+      // methodName:
+      // "The unique name of the payment handler the customer
+      // chose to authorize payment. For example, 'basic-card'."
+      trackComponentClick(`${data.methodName}-paymentAuthorised`);
+    }
     props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId, stripePaymentMethod: paymentMethod })
       .then(onComplete(complete));
   });

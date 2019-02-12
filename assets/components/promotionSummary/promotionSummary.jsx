@@ -60,7 +60,7 @@ function discountSummary(
   return (
     <div className="component-promotion-summary">
       <h3 className="component-promotion-summary__heading">
-        {discountAmount}% off promotion applied ({promoCode})
+        Promotion applied ({promoCode})
       </h3>
       <p>
         {getSummary(glyph, price, discountedPrice, numberOfDiscountedPeriods, billingPeriod)}

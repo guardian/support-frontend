@@ -50,7 +50,7 @@
   // ----- Your details
 
   .component-text-input__input {
-    border: 2px solid gu-colour(news-garnett-highlight);
+    border: 2px solid gu-colour(highlight-main);
     font-family: $gu-text-sans-web;
     height: 44px;
     margin-bottom: 0;
@@ -72,7 +72,7 @@
 
   .component-select-input__select {
     width: 100%;
-    border: 2px solid gu-colour(news-garnett-highlight);
+    border: 2px solid gu-colour(highlight-main);
 
     @include mq($from: desktop) {
       width: 304px;
@@ -143,11 +143,11 @@
     background-color: transparent;
     margin-top: $gu-v-spacing;
     height: 42px;
-    color: gu-colour(garnett-neutral-1);
-    border: 1px solid gu-colour(neutral-4);
+    color: gu-colour(brightness-7);
+    border: 1px solid gu-colour(brightness-86);
     display: inline-block;
     .svg-arrow-right-straight {
-      fill: gu-colour(garnett-neutral-1);
+      fill: gu-colour(brightness-7);
       position: absolute;
       left: $gu-v-spacing;
       transform: rotate(180deg);

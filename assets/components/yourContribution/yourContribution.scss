@@ -1,5 +1,5 @@
 .component-your-contribution {
-  border-top: 1px solid gu-colour(garnett-neutral-4);
+  border-top: 1px solid gu-colour(brightness-86);
 
   .component-page-section__header {
     font-family: $gu-headline;
@@ -28,12 +28,12 @@
     position: absolute;
     right: 0;
     top: $gu-v-spacing;
-    color: gu-colour(garnett-neutral-2);
+    color: gu-colour(brightness-60);
 
     // Fix for IE.
     svg {
       width: 13px;
-      fill: gu-colour(garnett-neutral-2);
+      fill: gu-colour(brightness-60);
     }
   }
 

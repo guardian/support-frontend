@@ -1,5 +1,7 @@
+@import '~stylesheets/skeleton/html';
+
 .component-ready-to-support {
-  border-top: 1px solid gu-colour(garnett-neutral-4);
+  border-top: 1px solid gu-colour(brightness-86);
 }
 
 .component-ready-to-support__content {
@@ -16,7 +18,7 @@
     content: "";
     position: absolute;
     right: 10px;
-    background-color: gu-colour(lifestyle-garnett-main-1);
+    background-color: gu-colour(lifestyle-main);
     border-bottom-left-radius: 600px;
     border-bottom-right-radius: 600px;
     width: 50px;
@@ -40,7 +42,7 @@
 .component-ready-to-support__heading {
   font-size: 36px;
   line-height: 1;
-  color: gu-colour(garnett-neutral-1);
+  color: gu-colour(brightness-7);
   font-family: $gu-headline;
   font-weight: bold;
   margin-bottom: $gu-v-spacing * 2;
@@ -60,14 +62,14 @@
 }
 
 .component-cta-link--see-supporter-options {
-  background-color: gu-colour(lifestyle-garnett-main-1);
+  background-color: gu-colour(lifestyle-main);
 
   @include mq($from: tablet) {
     width: 500px;
   }
 
   &:hover {
-    background-color: darken(gu-colour(lifestyle-garnett-main-1), 5%);
+    background-color: darken(gu-colour(lifestyle-main), 5%);
   }
 
   .svg-chevron-up {

@@ -13,6 +13,7 @@ type HeaderNavLink = {
   href: string,
   text: string,
   trackAs: string,
+  opensInNewWindow?: boolean,
 }
 
 type PropTypes = {|
@@ -48,9 +49,10 @@ const links: HeaderNavLink[] = [
     trackAs: 'subscriptions:guardianweekly',
   },
   {
-    href: `${getPatronsLink()}?INTCMP=support-header`,
+    href: getPatronsLink('support-header'),
     text: 'Patrons',
     trackAs: 'patrons',
+    opensInNewWindow: true,
   },
 ];
 
@@ -59,24 +61,27 @@ const links: HeaderNavLink[] = [
 const Links = ({ location, getRef }: PropTypes) => (
   <nav className={classNameWithModifiers('component-header-links', [location])}>
     <ul className="component-header-links__ul" ref={getRef}>
-      {links.map(({ href, text, trackAs }) => (
-        <li
-          className={
-          classNameWithModifiers(
-            'component-header-links__li',
-            [window.location.href.endsWith(href) ? 'active' : null],
-          )
-        }
-        >
-          <a
-            onClick={() => { clickedEvent(['header-link', trackAs, location].join(' - ')); }}
-            className="component-header-links__link"
-            href={href}
+      {links.map(({
+        href, text, trackAs, opensInNewWindow,
+        }) => (
+          <li
+            className={
+              classNameWithModifiers(
+                'component-header-links__li',
+                [window.location.href.endsWith(href) ? 'active' : null],
+              )
+            }
           >
-            {text}
-          </a>
-        </li>
-      ))}
+            <a
+              onClick={() => { clickedEvent(['header-link', trackAs, location].join(' - ')); }}
+              className="component-header-links__link"
+              href={href}
+              target={opensInNewWindow ? '_blank' : null}
+            >
+              {text}
+            </a>
+          </li>
+        ))}
     </ul>
   </nav>
 );

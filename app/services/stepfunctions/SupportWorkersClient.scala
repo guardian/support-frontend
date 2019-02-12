@@ -20,8 +20,10 @@ import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
 import play.api.mvc.Call
 import services.stepfunctions.SupportWorkersClient._
+import services.stepfunctions.PaymentFieldsEmbellisher._
 
 import scala.concurrent.Future
+import scala.util.matching.Regex
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
@@ -31,6 +33,11 @@ object CreateSupportWorkersRequest {
 case class CreateSupportWorkersRequest(
     firstName: String,
     lastName: String,
+    addressLine1: Option[String],
+    addressLine2: Option[String],
+    townCity: Option[String],
+    county: Option[String],
+    postcode: Option[String],
     country: Country,
     state: Option[String],
     product: ProductType,
@@ -94,11 +101,12 @@ class SupportWorkersClient(
     requestId: UUID,
     promoCode: Option[PromoCode] = None
   ): EitherT[Future, SupportWorkersError, StatusResponse] = {
+
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
       product = request.body.product,
-      paymentFields = request.body.paymentFields,
+      paymentFields = paymentFields(request.body),
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.body.ophanIds,
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
@@ -185,3 +193,5 @@ object StepFunctionExecutionStatus {
   }
 
 }
+
+

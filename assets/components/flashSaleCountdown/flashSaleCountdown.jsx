@@ -9,6 +9,9 @@ import { getEndTime } from 'helpers/flashSale';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
+import './flashSaleCountdown.scss';
+
+
 // ----- Render ----- //
 
 function FlashSaleCountdown({ product, countryGroupId }: {

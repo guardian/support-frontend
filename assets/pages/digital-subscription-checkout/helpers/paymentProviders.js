@@ -4,19 +4,19 @@ import {
   loadStripe,
   openDialogBox,
   setupStripeCheckout,
-} from 'helpers/paymentIntegrations/newPaymentFlow/stripeCheckout';
+} from 'helpers/paymentIntegrations/stripeCheckout';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentResult,
   postRegularPaymentRequest, regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import { routes } from 'helpers/routes';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { getDigitalPrice } from 'helpers/subscriptions';
 import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
+import { digitalPackAmountToPay } from 'helpers/productPrice/productPrices';
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation) {
@@ -24,6 +24,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const {
     firstName,
     lastName,
+    addressLine1,
+    addressLine2,
+    townCity,
+    county,
+    postcode,
     email,
     stateProvince,
     billingPeriod,
@@ -41,6 +46,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     firstName,
     lastName,
     country: countryId,
+    addressLine1,
+    addressLine2,
+    townCity,
+    county,
+    postcode,
     state: stateProvince,
     email,
     telephoneNumber: telephone,
@@ -58,7 +68,12 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
 
   const handleSubscribeResult = (result: PaymentResult) => {
     switch (result.paymentStatus) {
-      case 'success': dispatch(setStage('thankyou'));
+      case 'success':
+        if (result.subscriptionCreationPending) {
+          dispatch(setStage('thankyou-pending'));
+        } else {
+          dispatch(setStage('thankyou'));
+        }
         break;
       default: dispatch(setSubmissionError(result.error));
     }
@@ -79,14 +94,20 @@ function showStripe(
   dispatch: Dispatch<Action>,
   state: State,
 ) {
-  const { currencyId, countryGroupId } = state.common.internationalisation;
+  const { currencyId, countryId } = state.common.internationalisation;
   const { isTestUser } = state.page.checkout;
-  const price = getDigitalPrice(countryGroupId, state.page.checkout.billingPeriod);
+
+  const price = digitalPackAmountToPay(
+    state.page.checkout.productPrices,
+    state.page.checkout.billingPeriod,
+    countryId,
+  );
+
   const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(pa, dispatch, state);
 
   loadStripe()
     .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currencyId, isTestUser))
-    .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
+    .then(stripe => openDialogBox(stripe, price, state.page.checkout.email));
 }
 
 function showPaymentMethod(

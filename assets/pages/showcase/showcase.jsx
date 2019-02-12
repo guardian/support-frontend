@@ -17,6 +17,7 @@ import AnchorButton from 'components/button/anchorButton';
 
 import SvgChevron from 'components/svgs/chevron';
 import GridPicture from 'components/gridPicture/gridPicture';
+import 'stylesheets/skeleton/skeleton.scss';
 
 import WhySupportMatters from './components/whySupportMatters';
 import BreakingHeadlines from './components/breakingHeadlines';

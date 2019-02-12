@@ -11,6 +11,7 @@ trait Controllers {
   // scalastyle:on
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
+  lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes)
 
   lazy val applicationController = new Application(
     actionRefiners,
@@ -23,7 +24,8 @@ trait Controllers {
     paymentAPIService,
     stringsConfig,
     allSettingsProvider,
-    appConfig.guardianDomain
+    appConfig.guardianDomain,
+    appConfig.stage
   )
 
   lazy val subscriptionsController = new Subscriptions(
@@ -92,18 +94,6 @@ trait Controllers {
     identityService,
     allSettingsProvider,
     tipMonitoring
-  )
-
-  lazy val oneOffContributions = new OneOffContributions(
-    assetsResolver,
-    actionRefiners,
-    identityService,
-    testUsers,
-    appConfig.oneOffStripeConfigProvider,
-    paymentAPIService,
-    authAction,
-    controllerComponents,
-    allSettingsProvider
   )
 
   lazy val testUsersController = new TestUsersManagement(

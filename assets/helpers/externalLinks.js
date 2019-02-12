@@ -10,9 +10,9 @@ import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
 import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type DigitalBillingPeriod } from 'helpers/billingPeriods';
 import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
-
 import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
-
+import { getOrigin } from './url';
+import type { OptimizeExperiment } from './optimize/optimize';
 
 // ----- Types ----- //
 
@@ -29,7 +29,7 @@ export type SubsUrls = {
 
 // ----- Setup ----- //
 
-const subsUrl = 'https://subscribe.theguardian.com';
+const subsUrl = `https://subscribe.${getBaseDomain()}`;
 const patronsUrl = 'https://patrons.theguardian.com';
 const profileUrl = `https://profile.${getBaseDomain()}`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
@@ -284,6 +284,17 @@ function getDigitalCheckout(
   optimizeExperiments: OptimizeExperiments,
   billingPeriod: DigitalBillingPeriod = Monthly,
 ): string {
+
+  function buildUrlForExperiment(params: URLSearchParams): string {
+    const digitalPackCheckoutExperimentId = 'I-M60BjwTLClJegHgJmklw';
+    const optimizeExperiment: Option<OptimizeExperiment> =
+      optimizeExperiments.find(exp => exp.id === digitalPackCheckoutExperimentId) || null;
+    if (optimizeExperiment && optimizeExperiment.variant === '1') {
+      return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
+    }
+    return billingPeriod === Annual ? `${subsUrl}/checkout/digitalpack-digitalpackannual?${params.toString()}` : `${subsUrl}/checkout?${params.toString()}`;
+  }
+
   const acquisitionData = deriveSubsAcquisitionData(
     referrerAcquisitionData,
     nativeAbParticipations,
@@ -295,11 +306,10 @@ function getDigitalCheckout(
   params.set('promoCode', promoCode);
   params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
   params.set('startTrialButton', referringCta || '');
-
   if (billingPeriod === Annual) {
-    return `${subsUrl}/checkout/digitalpack-digitalpackannual?${params.toString()}`;
+    params.set('period', Annual);
   }
-  return `${subsUrl}/checkout?${params.toString()}`;
+  return buildUrlForExperiment(params);
 }
 
 

@@ -17,24 +17,24 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { payPalRequestData } from 'helpers/paymentIntegrations/newPaymentFlow/payPalRecurringCheckout';
+import { payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type {
   RegularPaymentRequest,
   StripeAuthorisation, StripePaymentMethod,
-} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentAuthorisation,
   type PaymentResult,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
-} from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
-import type { StripeChargeData } from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+} from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { StripeChargeData } from 'helpers/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
   postOneOffPayPalCreatePaymentRequest,
   postOneOffStripeExecutePaymentRequest,
-} from 'helpers/paymentIntegrations/newPaymentFlow/oneOffContributions';
+} from 'helpers/paymentIntegrations/oneOffContributions';
 import { routes } from 'helpers/routes';
 import * as storage from 'helpers/storage';
 import { derivePaymentApiAcquisitionData, getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
@@ -259,6 +259,11 @@ const regularPaymentRequestFromAuthorisation = (
   country: state.common.internationalisation.countryId,
   state: state.page.form.formData.state,
   email: state.page.form.formData.email || '',
+  addressLine1: null, // required go cardless field
+  addressLine2: null, // required go cardless field
+  townCity: null, // required go cardless field
+  county: null, // required go cardless field
+  postcode: null, // required go cardless field
   product: {
     amount: getAmount(
       state.page.form.selectedAmounts,

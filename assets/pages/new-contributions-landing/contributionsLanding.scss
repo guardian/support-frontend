@@ -1,5 +1,5 @@
 // -----  gu-sass ----- //
-
+@import '~stylesheets/skeleton/skeleton';
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
@@ -31,7 +31,7 @@ body {
 }
 
 .gu-content--contribution-thankyou {
-  background: gu-colour(news-garnett-highlight);
+  background: gu-colour(highlight-main);
 }
 
 .gu-content__main {
@@ -82,10 +82,10 @@ body {
   width: 100%;
   margin: 0 -10px;
   font: bold 22px/1.15 $gu-headline;
-  color: gu-colour(garnett-neutral-1);
+  color: gu-colour(brightness-7);
 
   @include mq($from: tablet) {
-    border-bottom: 1px solid gu-colour(garnett-neutral-4);
+    border-bottom: 1px solid gu-colour(brightness-86);
     font-size: 36px;
     padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
   }
@@ -98,8 +98,8 @@ body {
 
 header[role="banner"] {
 
-  background-color: gu-colour(header-dark);
-  border-bottom: 1px solid gu-colour(garnett-neutral-4);
+  background-color: gu-colour(brand-main);
+  border-bottom: 1px solid gu-colour(brightness-86);
   position: relative;
   height: 44px;
   display: flex;
@@ -135,7 +135,7 @@ header[role="banner"] {
   }
 
   .svg-roundel__g {
-    fill: gu-colour(header-dark);
+    fill: gu-colour(brand-main);
   }
 
   @include mq($from: tablet) {
@@ -212,14 +212,14 @@ header[role="banner"] {
 .countryGroups .svg-checkmark {
   width: 18px;
   height: 14px;
-  fill: gu-colour(news-garnett-main-1);
+  fill: gu-colour(news-main);
 }
 
 .countryGroups .svg-globe {
   padding: 0 $gu-v-spacing;
   width: 14px;
   height: 14px;
-  fill: gu-colour(garnett-neutral-1);
+  fill: gu-colour(brightness-7);
   fill: #fff;
 }
 
@@ -242,8 +242,8 @@ header[role="banner"] {
   list-style: none;
   margin: 0;
   padding: 0;
-  background: gu-colour(garnett-neutral-5);
-  border: 1px solid gu-colour(garnett-neutral-4);
+  background: gu-colour(brightness-100);
+  border: 1px solid gu-colour(brightness-86);
   position: absolute;
 }
 
@@ -265,7 +265,7 @@ header[role="banner"] {
 
   &:before {
     content: '';
-    border-top: 1px solid gu-colour(garnett-neutral-4);
+    border-top: 1px solid gu-colour(brightness-86);
     display: block;
     position: absolute;
     top: 0;
@@ -276,7 +276,7 @@ header[role="banner"] {
 
 .countryGroups__item > a:hover,
 .countryGroups__item > a:focus {
-  background: gu-colour(garnett-neutral-3);
+  background: gu-colour(brightness-97);
   font-weight: bold;
 }
 
@@ -285,8 +285,8 @@ header[role="banner"] {
 
 footer[role="contentinfo"] {
   padding: 0 ($gu-h-spacing / 2);
-  background: gu-colour(media-garnett-main-1);
-  color: gu-colour(garnett-neutral-2);
+  background: gu-colour(brightness-20);
+  color: gu-colour(brightness-60);
   font-size: 12px;
   display: flex;
 
@@ -302,7 +302,7 @@ footer[role="contentinfo"] {
 }
 
 footer[role="contentinfo"] a {
-  color: gu-colour(garnett-neutral-5);
+  color: gu-colour(brightness-100);
 }
 
 .component-footer__content {
@@ -312,13 +312,13 @@ footer[role="contentinfo"] a {
 
 /*= CONTENT */
 .gu-content__content {
-  background: gu-colour(garnett-neutral-5);
+  background: gu-colour(brightness-100);
   padding: 0 10px;
   overflow: hidden;
   flex-grow: 1;
 
   @include mq($from: tablet) {
-    border-color: gu-colour(garnett-neutral-4);
+    border-color: gu-colour(brightness-86);
     border-style: none solid;
     border-width: 0 1px;
     width: 380px;
@@ -334,7 +334,7 @@ footer[role="contentinfo"] a {
 
 /*= TYPOGRAPHY */
 body {
-  color: gu-colour(garnett-neutral-1);
+  color: gu-colour(brightness-7);
   font: normal 16px/1.5 $gu-text-egyptian-web;
 }
 
@@ -373,7 +373,7 @@ footer[role="contentinfo"] {
 
 /*= CONTENT */
 .content {
-  background: gu-colour(garnett-neutral-5);
+  background: gu-colour(brightness-100);
   padding: 0 10px;
 }
 
@@ -392,10 +392,10 @@ footer[role="contentinfo"] {
   margin-bottom: 30px;
   font-size: 12px;
   line-height: 16px;
-  color: gu-colour(garnett-neutral-2);
+  color: gu-colour(brightness-60);
 
   a {
-    color: gu-colour(neutral-2);
+    color: gu-colour(brightness-46);
   }
 
   .component-terms-privacy__change {
@@ -457,12 +457,12 @@ form {
 }
 
 .form__radio-group--tabs .form__radio-group-item {
-  border-top: 1px solid gu-colour(neutral-4);
+  border-top: 1px solid gu-colour(brightness-86);
   flex: 1;
 }
 
 .form__radio-group--tabs .form__radio-group-item + .form__radio-group-item {
-  border-left: 1px solid gu-colour(neutral-4);
+  border-left: 1px solid gu-colour(brightness-86);
 }
 
 .form__radio-group--tabs .form__radio-group-input + .form__radio-group-label {
@@ -471,7 +471,7 @@ form {
 }
 
 .form__radio-group--tabs .form__radio-group-input:checked + .form__radio-group-label {
-  background: gu-colour(news-garnett-highlight);
+  background: gu-colour(highlight-main);
 }
 
 .form__radio-group--pills .form__radio-group-list {
@@ -488,7 +488,7 @@ form {
 }
 
 .form__radio-group--pills .form__radio-group-input + .form__radio-group-label {
-  border: solid 1px gu-colour(news-garnett-highlight);
+  border: solid 1px gu-colour(highlight-main);
   border-radius: 25px;
   box-sizing: border-box;
   display: flex;
@@ -499,7 +499,7 @@ form {
 }
 
 .form__radio-group--pills .form__radio-group-input:checked + .form__radio-group-label {
-  background: gu-colour(news-garnett-highlight);
+  background: gu-colour(highlight-main);
 }
 
 .form__radio-group--buttons .form__radio-group-item + .form__radio-group-item {
@@ -520,7 +520,7 @@ form {
   width: 8px;
   height: 8px;
   border-radius: 100%;
-  border-color: gu-colour(garnett-neutral-2);
+  border-color: gu-colour(brightness-60);
   display: inline-block;
   border-style: solid;
   border-width: 1px;
@@ -529,8 +529,8 @@ form {
 }
 
 .form__radio-group--buttons .form__radio-group-input:not(:checked) + .form__radio-group-label:hover .radio-ui {
-  border-color: gu-colour(sport-garnett-media-main-1);
-  box-shadow: 0 0 0 2px gu-colour(live-garnett-sport2);
+  border-color: gu-colour(sport-bright);
+  box-shadow: 0 0 0 2px gu-colour(sport-pastel);
 }
 
 .form__radio-group--buttons .form__radio-group-input:not(:checked) + .form__radio-group-label svg {
@@ -538,9 +538,9 @@ form {
 }
 
 .form__radio-group--buttons .form__radio-group-input:checked + .form__radio-group-label .radio-ui {
-  border-color: gu-colour(sport-garnett-media-main-1);
-  box-shadow: inset 0 0 0 1px gu-colour(garnett-neutral-5);
-  background: gu-colour(sport-garnett-media-main-1);
+  border-color: gu-colour(sport-bright);
+  box-shadow: inset 0 0 0 1px gu-colour(brightness-100);
+  background: gu-colour(sport-bright);
 }
 
 .form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .radio-ui__label {
@@ -569,12 +569,72 @@ form {
   font-weight: bold;
   line-height: 1;
   margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-fields__required-explainer {
+  padding-top: $gu-v-spacing;
+  color: gu-colour(brightness-46);
+  font-family: $gu-text-sans-web;
+  line-height: 19px;
+  font-size: 15px;
+  & svg {
+    pointer-events: none;
+  }
+}
+
+// This wrapper is needed for click events on the SVG in IE11 to work
+.form-fields__required-explainer--summary-wrapper {
+  cursor: pointer;
+}
+
+.form-fields__required-explainer summary {
+  text-align: left;
+  text-decoration: underline;
+  font-style: italic;
+  margin-bottom: 5px;
+  outline: none;
+  list-style: none;
+}
+
+.form-fields__required-explainer .icon {
+  text-align: center;
+  width: 40px;
+}
+
+.form-fields__required-explainer:not([open]) > :not(summary) {
+  display: none;
+}
+
+
+.form-fields__required-explainer .svg-chevron {
+  padding: 0 $gu-h-spacing/4 0 $gu-h-spacing/4;
+  width: 15px;
+  height: 8px;
+  fill: gu-colour(brightness-46);
+}
+
+.form-fields__required-explainer[open] .svg-chevron {
+  transform: rotate(180deg);
+}
+
+.form-fields__required-explainer summary::-webkit-details-marker {
+  display:none;
+}
+
+.form__label__required {
+  font-family: $gu-text-sans-web;
+  font-style: italic;
+  font-size: 15px;
+  color: gu-colour(brightness-46);
+  font-weight: normal;
 }
 
 .form__input {
   appearance: none;
-  background: gu-colour(garnett-neutral-5);
-  border: 1px solid gu-colour(neutral-4);
+  background: gu-colour(brightness-100);
+  border: 1px solid gu-colour(brightness-86);
   border-radius: 0;
   padding: 9px 10px 9px 38px;
   transition: box-shadow .2s ease-in-out;
@@ -585,33 +645,33 @@ form {
 }
 
 .form__input:disabled {
-  background: gu-colour(garnett-neutral-4);
-  color: gu-colour(media-garnett-main-1);
+  background: gu-colour(brightness-86);
+  color: gu-colour(brightness-20);
 }
 
 .form__input:enabled:focus {
-  box-shadow: 0 0 0 3px gu-colour(sport-garnett-media-main-1);
+  box-shadow: 0 0 0 3px gu-colour(sport-bright);
   outline: none;
 }
 
 .form__input--primed:invalid,
 .form__input--invalid {
-  border-color: gu-colour(news-garnett-main-1);
+  border-color: gu-colour(news-main);
 }
 
 .form__input::placeholder,
 .form__input--placeholder {
-  color: gu-colour(garnett-neutral-2);
+  color: gu-colour(brightness-60);
 }
 
 .form__error {
   background-color: gu-colour(news-faded);
-  color: gu-colour(news-garnett-main-1);
+  color: gu-colour(news-main);
   font-size: 14px;
   line-height: 16px;
   padding: 6px 10px;
   a, a:visited {
-    color: gu-colour(news-garnett-main-1);
+    color: gu-colour(news-main);
   }
 
   .component-animated-dots div {
@@ -640,8 +700,8 @@ form {
 }
 
 .form__submit-button.button {
-  background: gu-colour(news-garnett-highlight);
-  border: 1px solid gu-colour(news-garnett-highlight);
+  background: gu-colour(highlight-main);
+  border: 1px solid gu-colour(highlight-main);
 }
 
 .form__submit-button--hidden {
@@ -667,7 +727,7 @@ form {
 .form__input-with-icon .form__icon {
   align-items: center;
   display: flex;
-  fill: gu-colour(garnett-neutral-2);
+  fill: gu-colour(brightness-60);
   height: 40px;
   justify-content: center;
   left: 1px;
@@ -682,7 +742,7 @@ form {
 }
 
 .form__input-with-icon .form__input:focus ~ .form__icon {
-  fill: gu-colour(sport-garnett-media-main-1);
+  fill: gu-colour(sport-bright);
 }
 
 .form__field .svg-user {
@@ -743,3 +803,66 @@ form {
   padding: 0 $gu-h-spacing $gu-v-spacing;
   margin-top: $gu-v-spacing;
 }
+
+
+/* Server side rendering test loading message*/
+
+.form__radio-group--pills .amounts__placeholder .form__radio-group-input + .form__radio-group-label {
+  border: none;
+}
+
+.amounts__placeholder .form__radio-group-label {
+  background-color: #ededed;
+}
+
+.fade-in-message .component-progress-message__background {
+  background: rgba(0, 0, 0, .6);
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 3s;
+}
+
+.fade-in-message .component-progress-message__message {
+  animation-name: fadeInOpacityFont;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 3s;
+}
+
+
+.fade-in-message .component-animated-dots__bounce1 {
+  animation-delay: 2.68s;
+}
+
+.fade-in-message .component-animated-dots__bounce2 {
+  animation-delay: 2.84s;
+}
+
+.fade-in-message .component-animated-dots__bounce3 {
+  animation-delay: 3s;
+}
+
+@keyframes fadeInOpacity {
+   0% {
+     background: rgba(0, 0, 0, 0);
+   }
+   50% {
+     background: rgba(0, 0, 0, 0);
+   }
+   100% {
+     background: rgba(0, 0, 0, .6);
+   }
+ }
+
+@keyframes fadeInOpacityFont {
+   0% {
+     opacity: 0;
+   }
+   50% {
+     opacity: 0;
+   }
+   100% {
+     opacity: 1;
+   }
+ }

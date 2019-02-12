@@ -7,33 +7,33 @@
   }
 
   .component-subscription-bundle--premium-tier {
-    @include colour-bundle(sport-garnett-media-main-1);
+    @include colour-bundle(sport-bright);
   }
 
   .component-subscription-bundle--daily-edition {
-    @include colour-bundle(lifestyle-garnett-main-1);
+    @include colour-bundle(lifestyle-main);
   }
 
   .component-subscription-bundle--digital {
-    @include colour-bundle(lifestyle-garnett-main-1);
+    @include colour-bundle(lifestyle-main);
   }
 
   .component-subscription-bundle--paper {
-    @include colour-bundle(sport-garnett-media-main-1);
+    @include colour-bundle(sport-bright);
   }
 
   .component-subscription-bundle--paper-digital {
-    @include colour-bundle(lifestyle-garnett-main-1);
+    @include colour-bundle(lifestyle-main);
   }
 
   .component-subscription-bundle--weekly {
-    @include colour-bundle(opinion-garnett-main-1);
+    @include colour-bundle(opinion-bright);
   }
 
 }
 
 .component-subscriptions-by-country-group--uk {
   .component-subscription-bundle--digital {
-    @include colour-bundle(opinion-garnett-main-1);
+    @include colour-bundle(opinion-bright);
   }
 }

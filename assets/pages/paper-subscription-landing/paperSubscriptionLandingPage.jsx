@@ -18,6 +18,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import 'stylesheets/skeleton/skeleton.scss';
 
 import { SaleHeader } from './components/hero/hero';
 import Tabs from './components/tabs';

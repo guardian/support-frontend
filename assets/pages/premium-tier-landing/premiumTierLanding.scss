@@ -1,5 +1,5 @@
 // -----  gu-sass ----- //
-
+@import '~stylesheets/skeleton/skeleton';
 @import '~stylesheets/gu-sass/gu-sass';
 
 
@@ -36,7 +36,7 @@
       position: relative;
 
       @include mq($from: desktop) {
-        border-left: 1px solid gu-colour(garnett-neutral-4);
+        border-left: 1px solid gu-colour(brightness-86);
       }
     }
 
@@ -82,7 +82,7 @@
   }
 
   .product-block__image {
-    border-bottom: 1px solid gu-colour(garnett-neutral-4);
+    border-bottom: 1px solid gu-colour(brightness-86);
     padding: 0 ($gu-h-spacing / 2);
     margin-bottom: $gu-v-spacing / 2;
 
@@ -175,13 +175,13 @@
 
   .product-block__highlight {
     font-weight: normal;
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
     padding: 0 2px;
   }
 
   .product-block__product--premium-app {
     .product-block__product-heading {
-      background-color: gu-colour(news-garnett-media-main-1);
+      background-color: gu-colour(news-bright);
     }
   }
 
@@ -198,7 +198,7 @@
     }
 
     .product-block__product-heading {
-      background-color: gu-colour(sport-garnett-media-main-1);
+      background-color: gu-colour(sport-bright);
     }
 
     .component-feature-list {
@@ -215,7 +215,7 @@
     line-height: 80px;
     font-family: $gu-headline;
     font-weight: bold;
-    background-color: gu-colour(news-garnett-highlight);
+    background-color: gu-colour(highlight-main);
     margin: 0 auto -35px;
     position: relative;
 
@@ -387,5 +387,5 @@
 }
 
 .component-left-margin-section--grey {
-  background: gu-colour(neutral-6);
+  background: gu-colour(brightness-97);
 }

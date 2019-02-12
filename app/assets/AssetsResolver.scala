@@ -2,6 +2,7 @@ package assets
 
 import play.api.Environment
 import play.api.libs.json._
+import play.twirl.api.Html
 
 class AssetsResolver(base: String, mapResource: String, env: Environment) {
 
@@ -22,6 +23,12 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
 
   private def parseJson(json: String): Option[Map[String, String]] =
     Json.parse(json).validate[Map[String, String]].asOpt
+
+  def getFileContentsAsHtml(file: String): Option[Html] = {
+    val resourcePath = apply(file).replaceFirst("^/assets/", "")
+    loadResource(s"public/compiled-assets/$resourcePath").map(Html.apply)
+  }
+
 }
 
 case class AssetNotFoundException(assetPath: String)

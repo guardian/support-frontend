@@ -21,7 +21,6 @@ import { Fieldset } from 'components/forms/standardFields/fieldset';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
-import { withFooter } from 'components/forms/formHOCs/withFooter';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { canShow } from 'components/forms/formHOCs/canShow';
@@ -29,7 +28,7 @@ import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Checkout from 'components/checkout/checkout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/newPaymentFlow/readerRevenueApis';
+import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { digitalPackProductPrice } from 'helpers/productPrice/productPrices';
@@ -73,7 +72,6 @@ function mapStateToProps(state: State) {
 // ----- Form Fields ----- //
 
 const InputWithLabel = withLabel(Input);
-const InputWithFooter = withFooter(InputWithLabel);
 const Input1 = compose(asControlled, withError)(InputWithLabel);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
@@ -142,7 +140,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setLastName}
                 error={firstError('lastName', props.formErrors)}
               />
-              <InputWithFooter
+              <InputWithLabel
                 id="email"
                 label="Email"
                 type="email"
@@ -169,6 +167,41 @@ function CheckoutForm(props: PropTypes) {
                   </span>
                 )}
               />
+              <Input1
+                id="telephone"
+                label="Telephone (optional)"
+                type="tel"
+                value={props.telephone}
+                setValue={props.setTelephone}
+                footer="We may use this to get in touch with you about your subscription."
+                error={firstError('telephone', props.formErrors)}
+              />
+            </FormSection>
+            <FormSection title="Address">
+              <Input1
+                id="address-line-1"
+                label="Address Line 1"
+                type="text"
+                value={props.addressLine1}
+                setValue={props.setAddressLine1}
+                error={firstError('addressLine1', props.formErrors)}
+              />
+              <Input1
+                id="address-line-2"
+                label="Address Line 2 (optional)"
+                type="text"
+                value={props.addressLine2}
+                setValue={props.setAddressLine2}
+                error={firstError('addressLine2', props.formErrors)}
+              />
+              <Input1
+                id="town-city"
+                label="Town/City"
+                type="text"
+                value={props.townCity}
+                setValue={props.setTownCity}
+                error={firstError('townCity', props.formErrors)}
+              />
               <Select1
                 id="country"
                 label="Country"
@@ -190,18 +223,25 @@ function CheckoutForm(props: PropTypes) {
                 <option value="">--</option>
                 {statesForCountry(props.country)}
               </Select2>
-              <InputWithFooter
-                id="telephone"
-                label="Telephone (optional)"
-                type="tel"
-                value={props.telephone}
-                setValue={props.setTelephone}
-                footer="We may use this to get in touch with you about your subscription."
-                error={firstError('telephone', props.formErrors)}
+              <Input1
+                id="county"
+                label="County (optional)"
+                type="text"
+                value={props.county}
+                setValue={props.setCounty}
+                error={firstError('county', props.formErrors)}
+              />
+              <Input1
+                id="postcode"
+                label="Postcode"
+                type="text"
+                value={props.postcode}
+                setValue={props.setPostcode}
+                error={firstError('postcode', props.formErrors)}
               />
             </FormSection>
             <FormSection title="How often would you like to pay?">
-              <Fieldset>
+              <Fieldset legend="How often would you like to pay?">
                 <RadioInput
                   text={monthlyPriceLabel}
                   name="billingPeriod"
@@ -224,7 +264,7 @@ function CheckoutForm(props: PropTypes) {
             <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
               {props.countrySupportsDirectDebit &&
               <div>
-                <Fieldset>
+                <Fieldset legend="How would you like to pay?">
                   <RadioInput
                     text="Direct debit"
                     name="paymentMethod"
