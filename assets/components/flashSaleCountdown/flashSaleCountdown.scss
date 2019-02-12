@@ -1,22 +1,36 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
 .component-flash-sale-countdown {
-  font-size: 17px;
-  line-height: 16px;
-  font-family: $gu-text-egyptian-web;
+  font-size: 19px;
+  line-height: 17px;
+  font-family: $gu-headline;
   overflow: hidden;
+  font-variant-numeric: lining-nums;
+  -webkit-font-feature-settings: "lnum";
+  font-feature-settings: "lnum";
 }
 
 .component-flash-sale-countdown .component-countdown__chip {
   display: inline-block;
-  padding: $gu-v-spacing / 3 $gu-h-spacing / 4;
-  
-  &:not(:last-child) {
-    border-right: 1px solid currentColor;
+  padding: $gu-v-spacing / 2 $gu-h-spacing / 2;
+  @include mq($from: mobileLandscape) {
+    padding: $gu-v-spacing / 2 $gu-h-spacing $gu-v-spacing / 2 $gu-h-spacing / 2;
+  }
+  border-right: 1px solid currentColor;
+  &:last-child {
+    border: none;
   }
 }
 
 .component-flash-sale-countdown .component-countdown__chip--legend {
   font-style: italic;
-  padding-top: $gu-v-spacing / 3 + 16px;
+  padding-top: $gu-v-spacing / 2 + 19px;
+}
+
+.component-flash-sale-countdown .component-countdown__description,
+.component-flash-sale-countdown .component-countdown__chip--legend {
+  font-family: $gu-text-sans-web;
+  font-size: 14px;
 }
 
 .component-flash-sale-countdown .component-countdown__time {

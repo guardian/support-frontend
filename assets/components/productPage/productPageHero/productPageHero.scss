@@ -6,7 +6,8 @@
     position: relative;
     @include mq($from: tablet) {
       border-left: 1px solid;
-      .component-heading-block {
+      .component-heading-block,
+      .component-product-page-hero-content {
         margin-left: -1px;
       }    
     }
@@ -43,7 +44,7 @@
   .component-left-margin-section__content {
     @include mq($from: tablet) {
       border-left: 1px solid gu-colour(brightness-86);
-      .component-product-page-hero-hanger__content {
+      .component-product-page-hero-content {
         margin-left: -1px;
       }
     }
@@ -51,9 +52,15 @@
   }
 }
 
-.component-product-page-hero-hanger__content {
+.component-product-page-hero-content {
   border-top: 1px solid #ffffff;
   padding: $gu-v-spacing  ($gu-h-spacing / 2);
   background: gu-colour(brightness-7);
   color: #ffffff;
+  .component-flash-sale-countdown {
+    margin: $gu-v-spacing/-1  ($gu-h-spacing / -2);
+    .component-countdown__chip {
+      border-color: rgba(255,255,255,.22);
+    }  
+  }
 }

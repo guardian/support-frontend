@@ -57,6 +57,9 @@
       border-top: 1px solid gu-colour(brightness-86);
       border-bottom: 1px solid gu-colour(brightness-86);
     }
+    .component-countdown__chip:first-child {
+      margin-left: $gu-h-spacing / -4;
+    }
     .component-countdown__chip {
       border-color: gu-colour(brightness-86);
     }

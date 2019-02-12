@@ -17,6 +17,7 @@ type PropTypes = {|
   appearance: 'grey' | 'feature' | 'custom',
   heading: string,
   content?: Option<Node>,
+  overcontent?: Option<Node>,
   children?: Option<Node>,
   modifierClasses: Array<?string>,
 |};
@@ -25,19 +26,24 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const ProductPageHero = ({
-  overheading, heading, content, modifierClasses, children, appearance,
+  overheading, heading, content, overcontent, modifierClasses, children, appearance,
 }: PropTypes) => (
   <header>
     <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, appearance])}>
       <LeftMarginSection>
         {children}
         <HeadingBlock overheading={overheading} heading={heading} />
+        {overcontent &&
+        <div className="component-product-page-hero-content">
+          {overcontent}
+        </div>
+        }
       </LeftMarginSection>
     </div>
     {content &&
-    <div className="component-product-page-hero-hanger">
+    <div className={classNameWithModifiers('component-product-page-hero-hanger', ['bottom'])}>
       <LeftMarginSection>
-        <div className="component-product-page-hero-hanger__content">
+        <div className="component-product-page-hero-content">
           {content}
         </div>
       </LeftMarginSection>
@@ -50,6 +56,7 @@ ProductPageHero.defaultProps = {
   modifierClasses: [],
   children: null,
   content: null,
+  overcontent: null,
   appearance: 'grey',
 };
 
