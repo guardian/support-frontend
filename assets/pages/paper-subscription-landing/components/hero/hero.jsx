@@ -11,7 +11,7 @@ import GridImage from 'components/gridImage/gridImage';
 import { FlashSaleCountdown } from 'components/flashSaleCountdown/flashSaleCountdown';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
 
 import './joyOfPrint.scss';
 
@@ -24,7 +24,7 @@ function getHeading(): string {
   return 'Save up to 31% on The Guardian and The Observer - all year round';
 }
 
-const TimerIfActive = () => (Date.now() > 1 ? (
+const TimerIfActive = () => (showCountdownTimer('Paper', 'GBPCountries') ? (
   <FlashSaleCountdown
     product="Paper"
     countryGroupId="GBPCountries"
