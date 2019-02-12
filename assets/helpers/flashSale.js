@@ -464,6 +464,13 @@ function countdownTimerIsActive(flashSaleActive: boolean, showForHowManyDays: nu
   return false;
 }
 
+function showCountdownTimer(product: SubscriptionProduct, countryGroupId: CountryGroupId): boolean {
+  const flashSaleActive = flashSaleIsActive(product, countryGroupId);
+  const flashSaleEndTime = getEndTime(product, countryGroupId);
+
+  return countdownTimerIsActive(flashSaleActive, 7, flashSaleEndTime);
+}
+
 
 export {
   flashSaleIsActive,
@@ -479,4 +486,5 @@ export {
   getTimeTravelDaysOverride,
   getFlashSaleActiveOverride,
   countdownTimerIsActive,
+  showCountdownTimer,
 };
