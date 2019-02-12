@@ -54,7 +54,8 @@ trait AppComponents extends PlayComponents
     payPalRegularController,
     payPalOneOffController,
     directDebitController,
-    assetController
+    assetController,
+    faviconController
   )
 
   SentryLogging.init(appConfig)
