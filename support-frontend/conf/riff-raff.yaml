@@ -3,7 +3,7 @@ regions: [eu-west-1]
 deployments:
   cfn:
     type: cloud-formation
-    app: frontend-mono
+    app: frontend
     parameters:
       templatePath: cfn.yaml
       amiTags:

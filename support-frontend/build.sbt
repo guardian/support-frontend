@@ -66,7 +66,7 @@ riffRaffArtifactResources += (file("support-frontend/cloud-formation/cfn.yaml"),
 
 def getFiles(f: File):Seq[(File,String)] = {
   f match {
-    case file if file.isFile => Seq((file,file.toString))
+    case file if file.isFile => Seq((file,file.toString.replace("support-frontend/", "")))
     case dir if dir.isDirectory => dir.listFiles.toSeq.flatMap(getFiles)
   }
 }
