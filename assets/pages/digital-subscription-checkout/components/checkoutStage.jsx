@@ -20,6 +20,7 @@ import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 
 import ThankYouContent from './thankYouContent';
 import ThankYouPendingContent from './thankYouPendingContent';
+import ThankYouAlreadyLiveContent from './thankYouAlreadyLiveContent';
 import CheckoutForm from './checkoutForm';
 import ReturnSection from './returnSection';
 
@@ -85,6 +86,15 @@ const heroesByCountry: ImagesByCountry = {
   },
 };
 
+const ThankYouHero = ({ countryGroupId }: {countryGroupId: CountryGroupId}) => (
+  <ProductHero
+    countryGroupId={countryGroupId}
+    imagesByCountry={heroesByCountry}
+    altText="digital subscription"
+    fallbackImgType="png"
+  />
+);
+
 
 // ----- State/Props Maps ----- //
 
@@ -108,11 +118,8 @@ function CheckoutStage(props: PropTypes) {
     case 'thankyou':
       return (
         <div className="thank-you-stage">
-          <ProductHero
+          <ThankYouHero
             countryGroupId={props.countryGroupId}
-            imagesByCountry={heroesByCountry}
-            altText="digital subscription"
-            fallbackImgType="png"
           />
           <CheckoutHeading
             heading="Your Digital Pack subscription is now live"
@@ -125,16 +132,28 @@ function CheckoutStage(props: PropTypes) {
     case 'thankyou-pending':
       return (
         <div className="thank-you-stage">
-          <ProductHero
+          <ThankYouHero
             countryGroupId={props.countryGroupId}
-            imagesByCountry={heroesByCountry}
-            altText="digital subscription"
-            fallbackImgType="png"
           />
           <CheckoutHeading
             heading="Your Digital Pack subscription is being processed"
           />
           <ThankYouPendingContent />
+          <ReturnSection />
+        </div>
+      );
+
+
+    case 'thankyou-already-live':
+      return (
+        <div className="thank-you-stage">
+          <ThankYouHero
+            countryGroupId={props.countryGroupId}
+          />
+          <CheckoutHeading
+            heading="Your Digital Pack subscription is already live"
+          />
+          <ThankYouAlreadyLiveContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
       );

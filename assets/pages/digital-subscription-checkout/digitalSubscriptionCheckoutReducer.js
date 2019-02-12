@@ -35,7 +35,7 @@ import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } fr
 
 // ----- Types ----- //
 
-export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
+export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending' | 'thankyou-already-live';
 type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 export type FormFieldsInState = {|
