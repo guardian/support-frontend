@@ -71,6 +71,7 @@ stories.add('Styled dialog', () => (
                   I don&#39;t do much on my own <span role="img" aria-label="sadface">☹️</span>.
                 </ProductPageTextBlock>
                 <GreyButton
+                  appearance="primary"
                   onClick={() => { setState({ open: false }); }}
                 >
                   Close
