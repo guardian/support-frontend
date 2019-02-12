@@ -71,7 +71,7 @@ def getFiles(f: File):Seq[(File,String)] = {
   }
 }
 
-riffRaffArtifactResources ++= getFiles(file("storybook-static"))
+riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static"))
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
