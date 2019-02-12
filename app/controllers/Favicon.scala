@@ -16,7 +16,7 @@ class Favicon(
   import actionRefiners._
   def get(): Action[AnyContent] = CachedAction(365.days) {
     stage match {
-      case Stages.DEV => Ok.sendResource("favicon.32x32-dev.ico"),
+      case Stages.DEV => Ok.sendResource("favicon.32x32-dev.ico")
       case _ => Ok.sendResource("favicon.32x32.ico")
     }
   }
