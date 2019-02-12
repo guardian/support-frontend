@@ -51,8 +51,24 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
   val clientBrowserInfo = ClientBrowserInfo("localhost", "no idea", None, "localhost", None)
 
 
+  val identityError: IdentityClient.Result[Long] = EitherT.left(Future.successful(IdentityClient.ContextualError(
+    IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
+    IdentityClient.GetUser("email@email.com")
+  )))
 
   val ophanError: List[AnalyticsServiceError] = List(AnalyticsServiceError.BuildError("Ophan error response"))
+  val dbError: EitherT[Future, DatabaseService.Error, Unit] = EitherT.left(Future.successful(DatabaseService.Error("DB error response", None)))
+
+
+  val failedIdentityErrors = BackendError.combineResults(
+    identityError.map(_=> ()).leftMap(BackendError.fromIdentityError),
+    identityError.map(_=> ()).leftMap(BackendError.fromIdentityError)
+  )(DefaultThreadPool(ec))
+
+  val combinedDbErrors = BackendError.combineResults(
+    dbError.map(_=> ()).leftMap(BackendError.fromDatabaseError),
+    dbError.map(_=> ()).leftMap(BackendError.fromDatabaseError)
+  )(DefaultThreadPool(ec))
 
 
   val identityReply: IdentityClient.Result[Long] = EitherT.right(Future.successful(1L))
@@ -117,6 +133,48 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
         subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, acquisitionData, clientBrowserInfo)
 
       recordResult.futureLeft shouldBe BackendError.fromOphanError(ophanError)
+
+      verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
+
+      verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
+      verify(mockDbService, times(2)).insertContributionData(Match.any())
+      verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
+    }
+
+
+    "record a contribution when identity fails and do not send an email" in new SubscribeWithGoogleBackendFixture(){
+
+
+      when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityError)
+      when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmissionError)
+      when(mockDbService.insertContributionData(Match.any())).thenReturn(dbResult)
+      when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
+
+      val recordResult: EitherT[Future, BackendError, Unit] =
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, acquisitionData, clientBrowserInfo)
+
+      recordResult.futureLeft shouldBe failedIdentityErrors.futureLeft
+
+      verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
+
+      verify(mockOphanService, times(0)).submitAcquisition(Match.any())(Match.any())
+      verify(mockDbService, times(1)).insertContributionData(Match.any())
+      verify(mockEmailService, times(0)).sendThankYouEmail(Match.any())
+    }
+
+    "send thank you email when db fails - alert cloudwatch" in new SubscribeWithGoogleBackendFixture(){
+
+      //TODO: Alert cloudwatch to failure
+
+      when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityReply)
+      when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmission)
+      when(mockDbService.insertContributionData(Match.any())).thenReturn(dbError)
+      when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
+
+      val recordResult: EitherT[Future, BackendError, Unit] =
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, acquisitionData, clientBrowserInfo)
+
+      recordResult.futureLeft shouldBe BackendError.fromDatabaseError(dbError.futureLeft)
 
       verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
 
