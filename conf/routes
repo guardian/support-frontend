@@ -150,5 +150,7 @@ GET  /.well-known/*file   controllers.Assets.at(path="/public", file)
 # ----- Assets ----- #
 # See application.conf for cache time config
 
+GET  /favicon.ico                                   controllers.Favicon.get
+
 GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
 GET  /*file                                         controllers.Assets.at(path="/public", file)

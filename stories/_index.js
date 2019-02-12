@@ -8,4 +8,5 @@ module.exports = () => {
   require('./header.jsx');
   require('./list.jsx');
   require('./hero.jsx');
+  require('./tabs.jsx');
 };

@@ -11,6 +11,7 @@ trait Controllers {
   // scalastyle:on
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
+  lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes)
 
   lazy val applicationController = new Application(
     actionRefiners,
