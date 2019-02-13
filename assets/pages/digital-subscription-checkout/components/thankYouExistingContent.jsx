@@ -25,7 +25,7 @@ function ThankYouExistingContent({ countryGroupId }: PropTypes) {
       <ProductPageContentBlock>
         <ProductPageTextBlock>
           <LargeParagraph>
-            You have access to the following products
+            You have access to the following products:
           </LargeParagraph>
         </ProductPageTextBlock>
         <AppsSection countryGroupId={countryGroupId} />
