@@ -7,7 +7,7 @@ import { combineReducers, type Dispatch } from 'redux';
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter, getPathAfterRoute } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
   fromString,
@@ -35,7 +35,7 @@ import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } fr
 
 // ----- Types ----- //
 
-export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
+export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending' | 'thankyou-existing';
 type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 export type FormFieldsInState = {|
@@ -231,8 +231,10 @@ function initReducer(initialCountry: IsoCountry) {
     : Monthly;
   const { productPrices } = window.guardian;
 
+  const checkoutPathName: string = getPathAfterRoute('checkout').pop();
+
   const initialState = {
-    stage: 'checkout',
+    stage: checkoutPathName === 'existing' ? 'thankyou-existing' : 'checkout',
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
