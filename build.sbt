@@ -65,6 +65,7 @@ lazy val `support-frontend` = (project in file("support-frontend"))
   ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
 lazy val `support-workers` = (project in file("support-workers"))
+  .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
   .configs(IntegrationTest)
   .settings(
     commonSettings,
