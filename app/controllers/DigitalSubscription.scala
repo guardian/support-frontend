@@ -6,7 +6,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.play.IdUser
+import com.gu.identity.play.{AccessCredentials, IdUser}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
@@ -22,7 +22,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{request, _}
 import play.twirl.api.Html
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdentityService, TestUserService}
+import services.{IdentityService, MembersDataService, TestUserService}
 import utils.NormalisedTelephoneNumber
 import utils.NormalisedTelephoneNumber.asFormattedString
 import views.html.digitalSubscription
@@ -38,6 +38,7 @@ class DigitalSubscription(
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     testUsers: TestUserService,
+    membersDataService: MembersDataService,
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
@@ -74,14 +75,29 @@ class DigitalSubscription(
 
   def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
+      val hasDigipack: Future[Boolean] = membersDataService.userAttributes(
+        AccessCredentials.Cookies(request.cookies.get("SC_GU_U").map(c => c.value).getOrElse(""))
+      ).value map {
+        alsoUserInfo: Either[MembersDataService.MembersDataServiceError, MembersDataService.UserAttributes] =>
+        alsoUserInfo match {
+          case Left(_) => false
+          case Right(response: MembersDataService.UserAttributes) => response.contentAccess.digitalPack
+        }
+      }
+
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {
           SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
-          InternalServerError
+          Future.successful(InternalServerError)
         },
-        user => Ok(digitalSubscriptionFormHtml(user))
-      ).map(_.withSettingsSurrogateKey)
+        user => {
+          hasDigipack map {
+            case true =>  Redirect("digital/checkout/thankyou/existing", request.queryString, status = FOUND)
+            case _ => Ok(digitalSubscriptionFormHtml(user))
+          }
+        }
+      ).flatten.map(_.withSettingsSurrogateKey)
     }
 
   private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
