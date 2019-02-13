@@ -37,6 +37,10 @@ const ProductPageHeroWrapper = ({
     </LeftMarginSection>
   </div>
 );
+ProductPageHeroWrapper.defaultProps = {
+  modifierClasses: [],
+  appearance: 'grey',
+};
 
 const ProductPageHeroHanger = ({
   children,
@@ -70,11 +74,10 @@ const ProductPageHero = ({
 );
 
 ProductPageHero.defaultProps = {
-  modifierClasses: [],
   children: null,
   content: null,
   overcontent: null,
-  appearance: 'grey',
+  ...ProductPageHeroWrapper.defaultProps,
 };
 
 export { ProductPageHeroHanger, ProductPageHeroWrapper };
