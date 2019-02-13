@@ -269,18 +269,6 @@
       padding: ($gu-v-spacing / 2) 0;
       font-size: .9em;
     }
-    .component-flash-sale-countdown {
-      z-index: 10;
-      position: relative;
-      border-top: 1px solid #fff;
-      background: gu-colour(brightness-7);
-      color: #fff;
-      .component-countdown__chip {
-        padding-left: 10px;
-        padding-right: 10px;
-        border-color: rgba(250,250,250,0.2);
-      }
-    }
   }
 
   .component-heading-block {
@@ -304,17 +292,6 @@
     background-color: gu-colour(brightness-7);
     border-top: 1px solid #fff;
     padding: $gu-v-spacing $gu-v-spacing;
-  }
-
-  .digital-subscription-landing-header__product {
-    background-color: gu-colour(highlight-main);
-    position: absolute;
-    top: -44px;
-    font-family: $gu-headline;
-    font-weight: bold;
-    font-size: 24px;
-    padding: 4px 12px;
-    color: gu-colour(brightness-7);
   }
 
 

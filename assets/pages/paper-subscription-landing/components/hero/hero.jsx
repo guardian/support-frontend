@@ -4,7 +4,7 @@
 
 import React from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
-import ProductPageHero, { HeroHanger, HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import { HeroHanger, HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
 import GridImage from 'components/gridImage/gridImage';

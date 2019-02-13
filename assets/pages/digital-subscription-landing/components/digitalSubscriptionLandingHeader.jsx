@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { FlashSaleCountdown } from 'components/flashSaleCountdown/flashSaleCountdown';
+import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
   type GridImage,
@@ -171,12 +171,10 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         </div>
         <HeadingBlock overheading={copy.heading}>{copy.subHeading}</HeadingBlock>
         {showCountdownTimer(product, props.countryGroupId) &&
-          <div className="digital-subscription-landing-header__countdown">
-            <FlashSaleCountdown
-              product={product}
-              countryGroupId={props.countryGroupId}
-            />
-          </div>
+          <FlashSaleCountdownInHero
+            product={product}
+            countryGroupId={props.countryGroupId}
+          />
         }
         <div className="digital-subscription-landing-header__cta">
           <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
