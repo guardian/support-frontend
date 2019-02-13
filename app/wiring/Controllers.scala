@@ -25,7 +25,8 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.guardianDomain,
-    appConfig.stage
+    appConfig.stage,
+    appConfig.supportUrl
   )
 
   lazy val subscriptionsController = new Subscriptions(
