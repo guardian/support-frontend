@@ -99,6 +99,11 @@
       max-width: 520px;
     }
   }
+  
+  .product-block__copy {
+    padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;	
+    font-size: 17px;	
+  }
 
   .product-block__image {
     border-bottom: 1px solid gu-colour(brightness-86);
