@@ -6,8 +6,6 @@ import sbt.Keys.{libraryDependencies, resolvers}
 version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
-lazy val testScalastyle = taskKey[Unit]("testScalastyle")
-
 lazy val setupGitHook = taskKey[Unit]("Set up a pre-push git hook to run the integration tests")
 
 setupGitHook := {
@@ -59,31 +57,6 @@ assemblyMergeStrategy in assembly := {
     oldStrategy(y)
 }
 
-//lazy val supportWorkers = (project in file("."))
-//  .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
-//  .configs(IntegrationTest)
-//  .settings(
-//
-//    riffRaffPackageType := assembly.value,
-//    riffRaffManifestProjectName := s"support:${name.value}",
-//    riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown_branch"),
-//    riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("DEV"),
-//    riffRaffManifestVcsUrl := "git@github.com/guardian/support-workers.git",
-//    riffRaffUploadArtifactBucket := Option("riffraff-artifact"),
-//    riffRaffUploadManifestBucket := Option("riffraff-builds"),
-//    riffRaffArtifactResources += (file("cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml"),
-//    assemblyJarName := s"${name.value}.jar",
-//    assemblyMergeStrategy in assembly := {
-//      case PathList("models", xs@_*) => MergeStrategy.discard
-//      case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
-//      case y =>
-//        val oldStrategy = (assemblyMergeStrategy in assembly).value
-//        oldStrategy(y)
-//    },
-//    resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
-//  )
-//  //.settings(scalaStyleSettings: _*)
-//  .settings(testSettings: _*)
 
 
 
