@@ -14,4 +14,8 @@ trait CanonicalLinks {
   def buildCanonicalWeeklySubscriptionLink(countryCode: String): String =
     s"${supportUrl}/${countryCode}/subscribe/weekly"
 
+  def buildCanonicalShowcaseLink(countryCode: String): String =
+    s"${supportUrl}/${countryCode}/support"
+
+
 }
