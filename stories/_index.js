@@ -9,5 +9,5 @@ module.exports = () => {
   require('./list.jsx');
   require('./hero.jsx');
   require('./tabs.jsx');
-  require('./animatedDots.jsx')
+  require('./animatedDots.jsx');
 };

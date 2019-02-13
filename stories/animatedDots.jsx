@@ -24,7 +24,8 @@ stories.add('Animated dots', () => (
     boxSizing: 'border-box',
     alignItems: 'center',
     justifyContent: 'center',
-  }}>
+    }}
+  >
     <AnimatedDots
       appearance={appearanceKnob()}
     />
