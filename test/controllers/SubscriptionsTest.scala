@@ -24,7 +24,7 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
 import services.stepfunctions.SupportWorkersClient
-import services.{HttpIdentityService, TestUserService}
+import services.{HttpIdentityService, MembersDataService, TestUserService}
 
 import scala.concurrent.Future
 
@@ -49,6 +49,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
       val client = mock[SupportWorkersClient]
       val testUserService = mock[TestUserService]
+      val membersDataService = mock[MembersDataService]
       val tip = mock[Tip]
       val stripe = mock[StripeConfigProvider]
       val stripeAccountConfig = StripeAccountConfig("", "")
@@ -76,6 +77,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
         actionRefiner,
         identityService,
         testUserService,
+        membersDataService,
         stripe,
         payPal,
         stubControllerComponents(),
