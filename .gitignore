@@ -24,8 +24,12 @@ bower_components
 public/stylesheets
 assets/javascripts/lib/bower-components/
 
-conf/keys.conf
-conf/assets.map
+conf/
+support-frontend/conf/keys.conf
+support-frontend/conf/assets.map
+support-frontend/public/compiled-assets/
+support-frontend/tools/
+tools/
 
 assets/images/inline-svgs/*.svg
 /assets/images/svg-sprite.svg
