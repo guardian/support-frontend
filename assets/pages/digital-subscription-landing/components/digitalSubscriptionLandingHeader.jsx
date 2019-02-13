@@ -21,6 +21,7 @@ import AnchorButton from 'components/button/anchorButton';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import { HeroHanger } from 'components/productPage/productPageHero/productPageHero';
 
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 import { showCountdownTimer } from '../../../helpers/flashSale';
@@ -176,10 +177,11 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
             countryGroupId={props.countryGroupId}
           />
         }
-        <div className="digital-subscription-landing-header__cta">
-          <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
-        </div>
+        <div className="digital-subscription-landing-header__cta" />
       </LeftMarginSection>
+      <HeroHanger>
+        <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
+      </HeroHanger>
     </div>
   );
 }

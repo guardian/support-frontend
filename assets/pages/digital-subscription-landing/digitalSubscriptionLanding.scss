@@ -288,13 +288,6 @@
     }
   }
 
-  .digital-subscription-landing-header__cta {
-    position: relative;
-    background-color: gu-colour(brightness-7);
-    border-top: 1px solid #fff;
-    padding: $gu-v-spacing $gu-v-spacing;
-  }
-
 
   .component-left-margin-section--header-block {
     .component-grid-picture {
@@ -395,4 +388,5 @@
 .component-left-margin-section--grey {
   background: gu-colour(brightness-97);
   overflow: hidden;
+  margin-left: -1px;
 }
