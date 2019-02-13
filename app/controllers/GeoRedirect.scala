@@ -17,6 +17,7 @@ trait GeoRedirect {
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => s"/uk/$path"
       case Some(US) => s"/us/$path"
+      case Some(Europe) => s"/eu/$path"
       case Some(Australia) => s"/au/$path"
       case _ => s"/int/$path"
     }

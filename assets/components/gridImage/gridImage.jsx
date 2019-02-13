@@ -37,7 +37,6 @@ type PropTypes = GridImg;
 // ----- Component ----- //
 
 export default function GridImage(props: PropTypes) {
-
   if (props.srcSizes.length < 1) {
     return null;
   }
