@@ -42,3 +42,16 @@
   display: flex;
   justify-content: flex-start;
 }
+
+.component-flash-sale-countdown-hero {
+  border-top: 1px solid #ffffff;
+  padding: $gu-v-spacing  ($gu-h-spacing / 2);
+  background: gu-colour(brightness-7);
+  color: #ffffff;
+  .component-flash-sale-countdown {
+    margin: $gu-v-spacing/-1  ($gu-h-spacing / -2);
+    .component-countdown__chip {
+      border-color: rgba(255,255,255,.22);
+    }  
+  }
+}

@@ -5,7 +5,6 @@
 // ----- Shared Components ----- //
 
 @import '~components/footer/footer';
-@import '~components/checkoutHeading/checkoutHeading';
 @import '~components/checkoutCopy/checkoutCopy';
 @import '~components/customerService/customerService';
 @import '~components/subscriptionFaq/subscriptionFaq';
@@ -26,6 +25,9 @@
   // ----- Heading
 
   .component-product-hero {
+    @include mq($until: leftCol) {
+      overflow: hidden;
+    }
     @include mq($until: tablet) {
       display: none;
     }

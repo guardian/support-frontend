@@ -6,10 +6,7 @@
     position: relative;
     @include mq($from: tablet) {
       border-left: 1px solid;
-      .component-heading-block,
-      .component-product-page-hero-content {
-        margin-left: -1px;
-      }    
+      margin-left: -1px;
     }
   }
   .component-heading-block {
@@ -57,10 +54,4 @@
   padding: $gu-v-spacing  ($gu-h-spacing / 2);
   background: gu-colour(brightness-7);
   color: #ffffff;
-  .component-flash-sale-countdown {
-    margin: $gu-v-spacing/-1  ($gu-h-spacing / -2);
-    .component-countdown__chip {
-      border-color: rgba(255,255,255,.22);
-    }  
-  }
 }

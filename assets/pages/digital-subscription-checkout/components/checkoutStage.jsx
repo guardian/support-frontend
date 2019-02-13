@@ -9,7 +9,8 @@ import ProductHero, {
   type GridImages,
   type ImagesByCountry,
 } from 'components/productHero/productHero';
-import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
+import HeadingBlock from 'components/headingBlock/headingBlock';
+import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
@@ -121,9 +122,11 @@ function CheckoutStage(props: PropTypes) {
           <ThankYouHero
             countryGroupId={props.countryGroupId}
           />
-          <CheckoutHeading
-            heading="Your Digital Pack subscription is now live"
-          />
+          <HeroWrapper appearance="custom">
+            <HeadingBlock>
+              Your Digital Pack subscription is now live
+            </HeadingBlock>
+          </HeroWrapper>
           <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
@@ -135,9 +138,11 @@ function CheckoutStage(props: PropTypes) {
           <ThankYouHero
             countryGroupId={props.countryGroupId}
           />
-          <CheckoutHeading
-            heading="Your Digital Pack subscription is being processed"
-          />
+          <HeroWrapper appearance="custom">
+            <HeadingBlock>
+              Your Digital Pack subscription is being processed
+            </HeadingBlock>
+          </HeroWrapper>
           <ThankYouPendingContent />
           <ReturnSection />
         </div>
@@ -150,9 +155,11 @@ function CheckoutStage(props: PropTypes) {
           <ThankYouHero
             countryGroupId={props.countryGroupId}
           />
-          <CheckoutHeading
-            heading="Your Digital Pack subscription is already live"
-          />
+          <HeroWrapper appearance="custom">
+            <HeadingBlock>
+              Your Digital Pack subscription is already live
+            </HeadingBlock>
+          </HeroWrapper>
           <ThankYouExistingContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
@@ -162,9 +169,11 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <div className="checkout-content">
-          <CheckoutHeading
-            heading="Digital Pack"
-          />
+          <HeroWrapper appearance="custom">
+            <HeadingBlock>
+              Digital Pack
+            </HeadingBlock>
+          </HeroWrapper>
           <ProductPageContentBlock>
             <ProductPageTextBlock>
               <LargeParagraph>

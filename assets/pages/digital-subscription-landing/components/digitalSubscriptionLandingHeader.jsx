@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { FlashSaleCountdown } from 'components/flashSaleCountdown/flashSaleCountdown';
+import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
   type GridImage,
@@ -13,6 +13,7 @@ import GridPicture, {
   type Source as GridSource,
 } from 'components/gridPicture/gridPicture';
 import { type ImageId as GridId } from 'helpers/theGrid';
+import HeadingBlock from 'components/headingBlock/headingBlock';
 
 import SvgChevron from 'components/svgs/chevron';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
@@ -20,6 +21,7 @@ import AnchorButton from 'components/button/anchorButton';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import { HeroHanger } from 'components/productPage/productPageHero/productPageHero';
 
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 import { showCountdownTimer } from '../../../helpers/flashSale';
@@ -168,28 +170,18 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         <div className="digital-subscription-landing-header__picture">
           <GridPicture {...gridPicture(props.countryGroupId)} />
         </div>
-        <div className="digital-subscription-landing-header__wrapper">
-          <h1 className="digital-subscription-landing-header__product">
-            {copy.heading}
-          </h1>
-          <div className="digital-subscription-landing-header__title">
-            <p className="digital-subscription-landing-header__title-copy">
-              {copy.subHeading}
-            </p>
-          </div>
-        </div>
+        <HeadingBlock overheading={copy.heading}>{copy.subHeading}</HeadingBlock>
         {showCountdownTimer(product, props.countryGroupId) &&
-          <div className="digital-subscription-landing-header__countdown">
-            <FlashSaleCountdown
-              product={product}
-              countryGroupId={props.countryGroupId}
-            />
-          </div>
+          <FlashSaleCountdownInHero
+            product={product}
+            countryGroupId={props.countryGroupId}
+          />
         }
-        <div className="digital-subscription-landing-header__cta">
-          <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
-        </div>
+        <div className="digital-subscription-landing-header__cta" />
       </LeftMarginSection>
+      <HeroHanger>
+        <AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
+      </HeroHanger>
     </div>
   );
 }
