@@ -21,8 +21,7 @@ type PropTypes = {|
   ...WrapperPropTypes,
   overheading: string,
   heading: string,
-  content?: Option<Node>,
-  overcontent?: Option<Node>,
+  content?: Option<Node>
 |};
 
 
@@ -55,17 +54,12 @@ const HeroHanger = ({
 );
 
 const ProductPageHero = ({
-  overheading, heading, content, overcontent, modifierClasses, children, appearance,
+  overheading, heading, content, modifierClasses, children, appearance,
 }: PropTypes) => (
   <header>
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
       <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
-      {overcontent &&
-        <div className="component-product-page-hero-content">
-          {overcontent}
-        </div>
-        }
     </HeroWrapper>
     {content &&
       <HeroHanger>{content}</HeroHanger>
@@ -76,7 +70,6 @@ const ProductPageHero = ({
 ProductPageHero.defaultProps = {
   children: null,
   content: null,
-  overcontent: null,
   ...HeroWrapper.defaultProps,
 };
 
