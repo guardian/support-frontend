@@ -3,9 +3,11 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings._
 import admin.settings.SwitchState.On
+import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
+import com.gu.identity.play.AccessCredentials
 import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
 import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
@@ -23,6 +25,7 @@ import org.scalatest.{MustMatchers, WordSpec}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
+import services.MembersDataService.{MembersDataServiceError, UnexpectedResponseStatus, UserAttributes, UserNotFound}
 import services.stepfunctions.SupportWorkersClient
 import services.{HttpIdentityService, MembersDataService, TestUserService}
 
@@ -58,6 +61,14 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       )
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
+
+      import cats.data.EitherT
+      import cats.implicits._
+
+      val errorResponse: MembersDataServiceError = UnexpectedResponseStatus(500)
+      when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
+        EitherT.leftT[Future, UserAttributes](errorResponse)
+      )
 
       val prices: ProductPrices = Map(
         CountryGroup.UK ->
