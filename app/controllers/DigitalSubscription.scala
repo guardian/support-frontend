@@ -25,7 +25,7 @@ import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, Supp
 import services.{IdentityService, MembersDataService, TestUserService}
 import utils.NormalisedTelephoneNumber
 import utils.NormalisedTelephoneNumber.asFormattedString
-import views.html.digitalSubscription
+import views.html.{digitalSubscription, main}
 import views.html.helper.CSRF
 import utils.SimpleValidator._
 
@@ -93,7 +93,7 @@ class DigitalSubscription(
         },
         user => {
           hasDigipack map {
-            case true =>  Redirect("digital/checkout/thankyou/existing", request.queryString, status = FOUND)
+            case true =>  Redirect("/subscribe/digital/checkout/thankyou-existing", request.queryString, status = FOUND)
             case _ => Ok(digitalSubscriptionFormHtml(user))
           }
         }
@@ -122,6 +122,22 @@ class DigitalSubscription(
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(uatMode)
     )
+  }
+
+  def displayThankYouExisting(): Action[AnyContent] = CachedAction() { implicit request =>
+
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val title = "Support the Guardian | Digital Subscription"
+    val id = "digital-subscription-checkout-page"
+    val js = "digitalSubscriptionCheckoutPageThankYouExisting.js"
+    val css = "digitalSubscriptionCheckoutPageThankYouExisting.css"
+
+    Ok(views.html.main(
+      title,
+      id,
+      js,
+      css
+    ))
   }
 
   sealed abstract class CreateDigitalSubscriptionError(message: String)
