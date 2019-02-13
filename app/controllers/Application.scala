@@ -33,7 +33,8 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     guardianDomain: GuardianDomain,
-    stage: Stage
+    stage: Stage,
+    val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging with ServersideAbTestCookie {
 
   import actionRefiners._
