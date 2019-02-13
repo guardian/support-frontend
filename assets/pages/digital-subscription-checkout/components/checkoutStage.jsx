@@ -9,7 +9,8 @@ import ProductHero, {
   type GridImages,
   type ImagesByCountry,
 } from 'components/productHero/productHero';
-import CheckoutHeading from 'components/checkoutHeading/checkoutHeading';
+import HeadingBlock from 'components/headingBlock/headingBlock';
+import { ProductPageHeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
@@ -114,9 +115,11 @@ function CheckoutStage(props: PropTypes) {
             altText="digital subscription"
             fallbackImgType="png"
           />
-          <CheckoutHeading
-            heading="Your Digital Pack subscription is now live"
-          />
+          <ProductPageHeroWrapper appearance="custom">
+            <HeadingBlock
+              heading="Your Digital Pack subscription is now live"
+            />
+          </ProductPageHeroWrapper>
           <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
@@ -131,9 +134,11 @@ function CheckoutStage(props: PropTypes) {
             altText="digital subscription"
             fallbackImgType="png"
           />
-          <CheckoutHeading
-            heading="Your Digital Pack subscription is being processed"
-          />
+          <ProductPageHeroWrapper appearance="custom">
+            <HeadingBlock
+              heading="Your Digital Pack subscription is being processed"
+            />
+          </ProductPageHeroWrapper>
           <ThankYouPendingContent />
           <ReturnSection />
         </div>
@@ -143,9 +148,11 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <div className="checkout-content">
-          <CheckoutHeading
-            heading="Digital Pack"
-          />
+          <ProductPageHeroWrapper appearance="custom">
+            <HeadingBlock
+              heading="Digital Pack"
+            />
+          </ProductPageHeroWrapper>
           <ProductPageContentBlock>
             <ProductPageTextBlock>
               <LargeParagraph>
