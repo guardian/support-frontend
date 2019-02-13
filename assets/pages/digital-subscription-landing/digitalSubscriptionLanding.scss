@@ -146,11 +146,6 @@
     }
   }
 
-  .product-block__copy {
-    padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
-    font-size: 17px;
-  }
-
   .product-block__product-heading {
     color: #fff;
     font-weight: bold;
@@ -288,7 +283,7 @@
     }
   }
 
-  .digital-subscription-landing-header__wrapper {
+  .component-heading-block {
     position: relative;
   }
 
@@ -322,45 +317,6 @@
     color: gu-colour(brightness-7);
   }
 
-  .digital-subscription-landing-header__title {
-    position: relative;
-    width: 100%;
-    background-color: gu-colour(brightness-7);
-  }
-
-  .digital-subscription-landing-header__title-copy {
-    display: block;
-    color: #ffffff;
-    font-family: $gu-headline;
-    font-weight: bold;
-    margin-left: 10px;
-    padding: $gu-v-spacing/6 0 $gu-v-spacing/2;
-    font-size: 22px;
-    line-height: 29px;
-    min-height: 70px;
-    width: 250px;
-    
-
-    @include mq($from: mobileMedium, $until: tablet) {
-      padding-top: 8px;
-      font-size: 28px;
-      line-height: 34px;
-      width: 380px;
-    }
-
-    @include mq($from: tablet, $until: leftCol) {
-      width: 560px;
-      font-size: 42px;
-      line-height: 48px;
-    }
-
-    @include mq($from: leftCol) {
-      width: 560px;
-      font-size: 44px;
-      line-height: 50px;
-      margin-left: 12px;
-    }
-  }
 
   .component-left-margin-section--header-block {
     .component-grid-picture {

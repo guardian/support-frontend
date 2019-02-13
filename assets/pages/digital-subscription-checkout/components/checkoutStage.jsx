@@ -116,9 +116,9 @@ function CheckoutStage(props: PropTypes) {
             fallbackImgType="png"
           />
           <ProductPageHeroWrapper appearance="custom">
-            <HeadingBlock
-              heading="Your Digital Pack subscription is now live"
-            />
+            <HeadingBlock>
+              Your Digital Pack subscription is now live
+            </HeadingBlock>
           </ProductPageHeroWrapper>
           <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
@@ -135,9 +135,9 @@ function CheckoutStage(props: PropTypes) {
             fallbackImgType="png"
           />
           <ProductPageHeroWrapper appearance="custom">
-            <HeadingBlock
-              heading="Your Digital Pack subscription is being processed"
-            />
+            <HeadingBlock>
+              Your Digital Pack subscription is being processed
+            </HeadingBlock>
           </ProductPageHeroWrapper>
           <ThankYouPendingContent />
           <ReturnSection />
@@ -149,9 +149,9 @@ function CheckoutStage(props: PropTypes) {
       return (
         <div className="checkout-content">
           <ProductPageHeroWrapper appearance="custom">
-            <HeadingBlock
-              heading="Digital Pack"
-            />
+            <HeadingBlock>
+              Digital Pack
+            </HeadingBlock>
           </ProductPageHeroWrapper>
           <ProductPageContentBlock>
             <ProductPageTextBlock>

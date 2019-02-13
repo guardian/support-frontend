@@ -13,6 +13,7 @@ import GridPicture, {
   type Source as GridSource,
 } from 'components/gridPicture/gridPicture';
 import { type ImageId as GridId } from 'helpers/theGrid';
+import HeadingBlock from 'components/headingBlock/headingBlock';
 
 import SvgChevron from 'components/svgs/chevron';
 import { CirclesLeft, CirclesRight } from 'components/svgs/digitalSubscriptionLandingHeaderCircles';
@@ -168,16 +169,7 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
         <div className="digital-subscription-landing-header__picture">
           <GridPicture {...gridPicture(props.countryGroupId)} />
         </div>
-        <div className="digital-subscription-landing-header__wrapper">
-          <h1 className="digital-subscription-landing-header__product">
-            {copy.heading}
-          </h1>
-          <div className="digital-subscription-landing-header__title">
-            <p className="digital-subscription-landing-header__title-copy">
-              {copy.subHeading}
-            </p>
-          </div>
-        </div>
+        <HeadingBlock overheading={copy.heading}>{copy.subHeading}</HeadingBlock>
         {showCountdownTimer(product, props.countryGroupId) &&
           <div className="digital-subscription-landing-header__countdown">
             <FlashSaleCountdown

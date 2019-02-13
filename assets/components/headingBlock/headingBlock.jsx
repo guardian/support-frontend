@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { type Node, Children } from 'react';
+import React, { type Node } from 'react';
 import { type Option } from 'helpers/types/option';
 
 import './headingBlock.scss';
@@ -12,7 +12,6 @@ import './headingBlock.scss';
 
 type PropTypes = {|
   overheading: Option<string>,
-  heading: string,
   children?: Node,
 |};
 
@@ -30,20 +29,15 @@ function HeadingBlock(props: PropTypes) {
             <h1 className="component-heading-block__overheading">{props.overheading}</h1>),
           (
             <div className="component-heading-block__heading">
-              <h2 className="component-heading-block__maxwidth">{props.heading}</h2>
+              <h2 className="component-heading-block__maxwidth">{props.children}</h2>
             </div>
            ),
          ]
         :
         <div className="component-heading-block__heading">
-          <h1 className="component-heading-block__maxwidth">{props.heading}</h1>
+          <h1 className="component-heading-block__maxwidth">{props.children}</h1>
         </div>
       }
-        {Children.count(props.children) > 0 &&
-        <div className="component-heading-block__banner">
-          {props.children}
-        </div>
-        }
       </div>
     </div>
   );

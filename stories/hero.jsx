@@ -27,11 +27,11 @@ stories.add('Custom', () => (
       appearance="feature"
     >
       <div style={{ height: '50px' }} />
-      <HeadingBlock heading="Hero exports smaller components you can remix and reuse" />
+      <HeadingBlock>Hero exports smaller components you can remix and reuse</HeadingBlock>
     </ProductPageHeroWrapper>
     <ProductPageHeroWrapper >
       <div style={{ height: '50px' }} />
-      <HeadingBlock heading="So you can use different headings" />
+      <HeadingBlock>So you can use different headings</HeadingBlock>
     </ProductPageHeroWrapper>
     <ProductPageHeroHanger>And hangers</ProductPageHeroHanger>
     <ProductPageHeroWrapper >

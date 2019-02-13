@@ -60,7 +60,7 @@ const ProductPageHero = ({
   <header>
     <ProductPageHeroWrapper {...{ modifierClasses, appearance }}>
       {children}
-      <HeadingBlock overheading={overheading} heading={heading} />
+      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
       {overcontent &&
         <div className="component-product-page-hero-content">
           {overcontent}
