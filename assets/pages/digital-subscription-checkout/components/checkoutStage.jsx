@@ -10,7 +10,7 @@ import ProductHero, {
   type ImagesByCountry,
 } from 'components/productHero/productHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import { ProductPageHeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
@@ -115,11 +115,11 @@ function CheckoutStage(props: PropTypes) {
             altText="digital subscription"
             fallbackImgType="png"
           />
-          <ProductPageHeroWrapper appearance="custom">
+          <HeroWrapper appearance="custom">
             <HeadingBlock>
               Your Digital Pack subscription is now live
             </HeadingBlock>
-          </ProductPageHeroWrapper>
+          </HeroWrapper>
           <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
@@ -134,11 +134,11 @@ function CheckoutStage(props: PropTypes) {
             altText="digital subscription"
             fallbackImgType="png"
           />
-          <ProductPageHeroWrapper appearance="custom">
+          <HeroWrapper appearance="custom">
             <HeadingBlock>
               Your Digital Pack subscription is being processed
             </HeadingBlock>
-          </ProductPageHeroWrapper>
+          </HeroWrapper>
           <ThankYouPendingContent />
           <ReturnSection />
         </div>
@@ -148,11 +148,11 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <div className="checkout-content">
-          <ProductPageHeroWrapper appearance="custom">
+          <HeroWrapper appearance="custom">
             <HeadingBlock>
               Digital Pack
             </HeadingBlock>
-          </ProductPageHeroWrapper>
+          </HeroWrapper>
           <ProductPageContentBlock>
             <ProductPageTextBlock>
               <LargeParagraph>

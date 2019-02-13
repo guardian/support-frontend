@@ -13,10 +13,18 @@ import './flashSaleCountdown.scss';
 
 
 // ----- Render ----- //
-
-function FlashSaleCountdown({ product, countryGroupId }: {
+type PropTypes = {|
   product: SubscriptionProduct,
-  countryGroupId: CountryGroupId }) {
+  countryGroupId: CountryGroupId
+|};
+
+const FlashSaleCountdownInHero = ({ product, countryGroupId }: PropTypes) => (
+  <div className="component-flash-sale-countdown-hero">
+    <FlashSaleCountdown {...{ product, countryGroupId }} />
+  </div>
+);
+
+function FlashSaleCountdown({ product, countryGroupId }: PropTypes) {
   return (
     <div className="component-flash-sale-countdown">
       <Countdown legend="until sale ends" to={getEndTime(product, countryGroupId)} />
@@ -26,4 +34,5 @@ function FlashSaleCountdown({ product, countryGroupId }: {
 
 export {
   FlashSaleCountdown,
+  FlashSaleCountdownInHero,
 };

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 
-import ProductPageHero, { ProductPageHeroHanger, ProductPageHeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import ProductPageHero, { HeroHanger, HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
 
@@ -23,18 +23,18 @@ stories.add('Default', () => (
 
 stories.add('Custom', () => (
   <div>
-    <ProductPageHeroWrapper
+    <HeroWrapper
       appearance="feature"
     >
       <div style={{ height: '50px' }} />
       <HeadingBlock>Hero exports smaller components you can remix and reuse</HeadingBlock>
-    </ProductPageHeroWrapper>
-    <ProductPageHeroWrapper >
+    </HeroWrapper>
+    <HeroWrapper >
       <div style={{ height: '50px' }} />
       <HeadingBlock>So you can use different headings</HeadingBlock>
-    </ProductPageHeroWrapper>
-    <ProductPageHeroHanger>And hangers</ProductPageHeroHanger>
-    <ProductPageHeroWrapper >
+    </HeroWrapper>
+    <HeroHanger>And hangers</HeroHanger>
+    <HeroWrapper >
       <div style={{ padding: '50px 10px' }}>
         <ProductPageTextBlock>
           <LargeParagraph>
@@ -42,7 +42,7 @@ stories.add('Custom', () => (
           </LargeParagraph>
         </ProductPageTextBlock>
       </div>
-    </ProductPageHeroWrapper>
+    </HeroWrapper>
   </div>
 ));
 

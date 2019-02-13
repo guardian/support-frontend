@@ -28,7 +28,7 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-const ProductPageHeroWrapper = ({
+const HeroWrapper = ({
   modifierClasses, children, appearance,
 }: WrapperPropTypes) => (
   <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, appearance])}>
@@ -37,12 +37,12 @@ const ProductPageHeroWrapper = ({
     </LeftMarginSection>
   </div>
 );
-ProductPageHeroWrapper.defaultProps = {
+HeroWrapper.defaultProps = {
   modifierClasses: [],
   appearance: 'grey',
 };
 
-const ProductPageHeroHanger = ({
+const HeroHanger = ({
   children,
 }: {children: Node}) => (
   <div className={classNameWithModifiers('component-product-page-hero-hanger', ['bottom'])}>
@@ -58,7 +58,7 @@ const ProductPageHero = ({
   overheading, heading, content, overcontent, modifierClasses, children, appearance,
 }: PropTypes) => (
   <header>
-    <ProductPageHeroWrapper {...{ modifierClasses, appearance }}>
+    <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
       <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
       {overcontent &&
@@ -66,9 +66,9 @@ const ProductPageHero = ({
           {overcontent}
         </div>
         }
-    </ProductPageHeroWrapper>
+    </HeroWrapper>
     {content &&
-      <ProductPageHeroHanger>{content}</ProductPageHeroHanger>
+      <HeroHanger>{content}</HeroHanger>
     }
   </header>
 );
@@ -77,9 +77,9 @@ ProductPageHero.defaultProps = {
   children: null,
   content: null,
   overcontent: null,
-  ...ProductPageHeroWrapper.defaultProps,
+  ...HeroWrapper.defaultProps,
 };
 
-export { ProductPageHeroHanger, ProductPageHeroWrapper };
+export { HeroHanger, HeroWrapper };
 
 export default ProductPageHero;
