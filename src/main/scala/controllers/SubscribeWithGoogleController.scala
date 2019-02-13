@@ -1,9 +1,11 @@
 package controllers
 
 import actions.CorsActionProvider
-import backend.SubscribeWithGoogleBackend
+import backend.{BackendError, SubscribeWithGoogleBackend}
+import cats.instances.future._
+import cats.data.EitherT
 import com.typesafe.scalalogging.StrictLogging
-import model.DefaultThreadPool
+import model.{AcquisitionData, ClientBrowserInfo, DefaultThreadPool}
 import model.subscribewithgoogle.GoogleRecordPayment
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
@@ -13,7 +15,7 @@ import scala.concurrent.Future
 
 class SubscribeWithGoogleController(
                           cc: ControllerComponents,
-                          susbcribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend]
+                          subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend]
                         )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
     extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
 
@@ -22,7 +24,13 @@ class SubscribeWithGoogleController(
 
 
   def recordPayment: Action[GoogleRecordPayment] = CorsAction.async(circe.json[GoogleRecordPayment]) { request =>
+    import util.RequestTypeDecoder.instances._
 
+    subscribeWithGoogleBackendProvider.getInstanceFor(request)
+      .recordPayment(request.body,
+        AcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
+        ClientBrowserInfo("localhost", "whoknowsyet", None, "127.0.0.1", None)
+      )
 
     Future.successful(Ok("{}"))
   }

@@ -45,8 +45,6 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
     paymentId,
     currentTime)
 
-
-
   val acquisitionData = AcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None)
   val clientBrowserInfo = ClientBrowserInfo("localhost", "no idea", None, "localhost", None)
 
