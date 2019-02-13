@@ -57,7 +57,12 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
   )))
 
   val ophanError: List[AnalyticsServiceError] = List(AnalyticsServiceError.BuildError("Ophan error response"))
-  val dbError: EitherT[Future, DatabaseService.Error, Unit] = EitherT.left(Future.successful(DatabaseService.Error("DB error response", None)))
+  val dbError: EitherT[Future, DatabaseService.Error, Unit] = EitherT.left(
+    Future.successful(DatabaseService.Error("DB error response", None))
+  )
+  val emailError: EitherT[Future, EmailService.Error, SendMessageResult] = EitherT.left(
+    Future.successful(EmailService.Error(new Exception("Unknown error while sending message to SQS.")))
+  )
 
 
   val failedIdentityErrors = BackendError.combineResults(
@@ -93,8 +98,6 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
     mockCloudWatchService)(DefaultThreadPool(ec))
 
 }
-
-
 
 class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureEitherValues
   with IntegrationPatience  {
@@ -180,6 +183,25 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
 
       verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
       verify(mockDbService, times(2)).insertContributionData(Match.any())
+      verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
+    }
+
+    "transaction stored in db but email comms fail" in new SubscribeWithGoogleBackendFixture(){
+
+      when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityReply)
+      when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmission)
+      when(mockDbService.insertContributionData(Match.any())).thenReturn(dbResult)
+      when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailError)
+
+      val recordResult: EitherT[Future, BackendError, Unit] =
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, acquisitionData, clientBrowserInfo)
+
+      recordResult.futureLeft shouldBe BackendError.fromEmailError(emailError.futureLeft)
+
+      verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
+
+      verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
+      verify(mockDbService, times(1)).insertContributionData(Match.any())
       verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
     }
   }
