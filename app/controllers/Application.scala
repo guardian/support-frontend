@@ -33,8 +33,10 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     guardianDomain: GuardianDomain,
-    stage: Stage
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with SettingsSurrogateKeySyntax with StrictLogging with ServersideAbTestCookie {
+    stage: Stage,
+    val supportUrl: String
+)(implicit val ec: ExecutionContext) extends AbstractController(components)
+  with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging with ServersideAbTestCookie {
 
   import actionRefiners._
 
@@ -46,7 +48,7 @@ class Application(
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk/support"
+      case Some(UK) => buildCanonicalShowcaseLink("uk")
       case Some(US) => "/us/contribute"
       case Some(Australia) => "/au/contribute"
       case Some(Europe) => "/eu/contribute"
@@ -151,7 +153,9 @@ class Application(
       mainId = "showcase-landing-page",
       mainJsBundle = "showcasePage.js",
       mainStyleBundle = "showcasePage.css",
-      description = stringsConfig.showcaseLandingDescription
+      description = stringsConfig.showcaseLandingDescription,
+      canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
+
     )).withSettingsSurrogateKey
   }
 

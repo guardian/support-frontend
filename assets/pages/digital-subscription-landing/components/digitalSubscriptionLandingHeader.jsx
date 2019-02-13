@@ -76,6 +76,7 @@ const gridImagesByCountry: {
   GBPCountries: defaultImages,
   UnitedStates: defaultImages,
   International: defaultImages,
+  EURCountries: defaultImages,
   AUDCountries: {
     breakpoints: {
       mobile: {
@@ -119,7 +120,6 @@ const gridSlots: GridSlots = {
 function gridPicture(cgId: CountryGroupId): GridPictureProps {
 
   const gridImages: GridImages = gridImagesByCountry[cgId];
-
   const sources: GridSource[] = [
     { ...gridSlots.mobile, ...gridImages.breakpoints.mobile },
     { ...gridSlots.tablet, ...gridImages.breakpoints.tablet },

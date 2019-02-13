@@ -24,7 +24,8 @@
 #digital-subscription-landing-page-int,
 #digital-subscription-landing-page-uk,
 #digital-subscription-landing-page-us,
-#digital-subscription-landing-page-au {
+#digital-subscription-landing-page-au,
+#digital-subscription-landing-page-eu {
   .component-left-margin-section__content {
     overflow-x: hidden;
     @include mq($from: leftCol) {
