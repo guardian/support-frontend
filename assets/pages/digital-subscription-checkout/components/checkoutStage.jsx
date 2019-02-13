@@ -155,9 +155,11 @@ function CheckoutStage(props: PropTypes) {
           <ThankYouHero
             countryGroupId={props.countryGroupId}
           />
-          <CheckoutHeading
-            heading="Your Digital Pack subscription is already live"
-          />
+          <HeroWrapper appearance="custom">
+            <HeadingBlock>
+              Your Digital Pack subscription is already live
+            </HeadingBlock>
+          </HeroWrapper>
           <ThankYouExistingContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
