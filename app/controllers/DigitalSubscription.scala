@@ -6,7 +6,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.play.{AccessCredentials, IdUser}
+import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdUser}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
@@ -73,18 +73,19 @@ class DigitalSubscription(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
-  def displayForm(): Action[AnyContent] =
-    authenticatedAction(subscriptionsClientId).async { implicit request =>
-      val hasDigipack: Future[Boolean] = membersDataService.userAttributes(
-        AccessCredentials.Cookies(request.cookies.get("SC_GU_U").map(c => c.value).getOrElse(""))
-      ).value map {
-        alsoUserInfo: Either[MembersDataService.MembersDataServiceError, MembersDataService.UserAttributes] =>
-        alsoUserInfo match {
+  private def userHasDigipack(user: AuthenticatedIdUser): Future[Boolean] = {
+    user.credentials match {
+      case cookies: AccessCredentials.Cookies =>
+        membersDataService.userAttributes(cookies).value map {
           case Left(_) => false
           case Right(response: MembersDataService.UserAttributes) => response.contentAccess.digitalPack
         }
-      }
+      case _ => Future.successful(false)
+    }
+  }
 
+  def displayForm(): Action[AnyContent] =
+    authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {
@@ -92,8 +93,8 @@ class DigitalSubscription(
           Future.successful(InternalServerError)
         },
         user => {
-          hasDigipack map {
-            case true =>  Redirect("/subscribe/digital/checkout/thankyou-existing", request.queryString, status = FOUND)
+          userHasDigipack(request.user) map {
+            case true =>  Redirect(routes.DigitalSubscription.displayThankYouExisting().url, request.queryString, status = FOUND)
             case _ => Ok(digitalSubscriptionFormHtml(user))
           }
         }
