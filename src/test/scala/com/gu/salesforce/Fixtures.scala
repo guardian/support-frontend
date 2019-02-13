@@ -17,7 +17,7 @@ object Fixtures {
         "Email": "$email",
         "FirstName": "$name",
         "LastName": "$name",
-        "MailingCountry": "$uk",
+        "BillingCountry": "$uk",
         "Allow_Membership_Mail__c": $allowMail,
         "Allow_3rd_Party_Mail__c": $allowMail,
         "Allow_Guardian_Related_Mail__c": $allowMail
@@ -30,8 +30,8 @@ object Fixtures {
         "Email": "$email",
         "FirstName": "$name",
         "LastName": "$name",
-        "MailingState": "$state",
-        "MailingCountry": "$us",
+        "BillingState": "$state",
+        "BillingCountry": "$us",
         "Allow_Membership_Mail__c": $allowMail,
         "Allow_3rd_Party_Mail__c": $allowMail,
         "Allow_Guardian_Related_Mail__c": $allowMail
@@ -44,7 +44,7 @@ object Fixtures {
         "Email": "$email",
         "FirstName": "$name",
         "LastName": "$name",
-        "MailingCountry": "$uk",
+        "BillingCountry": "$uk",
         "Phone": "$telephoneNumber",
         "Allow_Membership_Mail__c": $allowMail,
         "Allow_3rd_Party_Mail__c": $allowMail,
