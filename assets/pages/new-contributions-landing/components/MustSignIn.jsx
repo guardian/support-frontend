@@ -56,7 +56,9 @@ export const MustSignIn = (props: PropTypes) => {
     case 'requestPending':
       return (
         <div className="form__error">
-          <AnimatedDots />
+          <AnimatedDots
+            appearance="dark"
+          />
         </div>
       );
 
