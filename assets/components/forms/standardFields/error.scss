@@ -2,7 +2,7 @@
 
 .component-form-error__error {
   @include gu-fontset-body-sans;
-  color: gu-colour(news-main-1);
+  color: gu-colour(error);
   font-size: 14px;
   font-weight: bold;
   display: block;
@@ -10,5 +10,5 @@
 }
 
 .component-form-error .component-input:not([type-radio]) {
-  border-color: gu-colour(news-main-1);
+  border-color: gu-colour(error);
 }
