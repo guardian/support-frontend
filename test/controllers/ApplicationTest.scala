@@ -49,7 +49,8 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[GuardianDomain],
-        mock[Stage]
+        mock[Stage],
+        "support.thegulocal.com"
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
@@ -67,7 +68,8 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[GuardianDomain],
-        mock[Stage]
+        mock[Stage],
+        "support.thegulocal.com"
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
