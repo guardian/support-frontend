@@ -55,7 +55,8 @@
 
 .component-product-page-content-block--white {
   @include block-colours(
-    $border: gu-colour(brightness-86)
+    $border: gu-colour(brightness-86),
+    $bg: gu-colour(brightness-100),
   );
 }
 
