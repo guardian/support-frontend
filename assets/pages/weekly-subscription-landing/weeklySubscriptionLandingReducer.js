@@ -20,9 +20,9 @@ export type State = {
 
 const promoInUrl = getQueryParameter('promo');
 
-const initialPeriod: WeeklyBillingPeriod = promoInUrl === 'SixForSix' || promoInUrl === 'Quarterly' || promoInUrl === 'Annual'
+const initialPeriod: WeeklyBillingPeriod = promoInUrl === 'Quarterly' || promoInUrl === 'Annual'
   ? promoInUrl
-  : 'SixForSix';
+  : 'Quarterly';
 
 
 // ----- Export ----- //

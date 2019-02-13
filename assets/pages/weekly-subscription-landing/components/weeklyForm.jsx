@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
-import { Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
+import { Annual, Quarterly } from 'helpers/billingPeriods';
 import { getPromotionWeeklyProductPrice, getWeeklyProductPrice } from 'helpers/subscriptions';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, {
@@ -32,12 +32,7 @@ const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBilling
   getPromotionWeeklyProductPrice(countryGroupId, period, promoCode),
 ].join('');
 
-export const billingPeriods = {
-  [SixForSix]: {
-    title: '6 for 6',
-    offer: 'Introductory offer',
-    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'SixForSix')} for the first 6 issues (then ${getPrice(countryGroupId, 'Quarterly')} quarterly)`,
-  },
+export const displayBillingPeriods = {
   [Quarterly]: {
     title: 'Quarterly',
     copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'Quarterly')} every 3 months`,
@@ -53,12 +48,12 @@ export const billingPeriods = {
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => ({
-  plans: Object.keys(billingPeriods).reduce((ps, k) => ({
+  plans: Object.keys(displayBillingPeriods).reduce((ps, k) => ({
     ...ps,
     [k]: {
-      title: billingPeriods[k].title,
-      copy: billingPeriods[k].copy(state.common.internationalisation.countryGroupId),
-      offer: billingPeriods[k].offer || null,
+      title: displayBillingPeriods[k].title,
+      copy: displayBillingPeriods[k].copy(state.common.internationalisation.countryGroupId),
+      offer: displayBillingPeriods[k].offer || null,
       price: null,
       saving: null,
     },
