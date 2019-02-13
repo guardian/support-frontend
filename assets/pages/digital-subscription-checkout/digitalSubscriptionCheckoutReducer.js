@@ -7,7 +7,7 @@ import { combineReducers, type Dispatch } from 'redux';
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter, getPathAfterRoute } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
   fromString,
@@ -231,8 +231,7 @@ function initReducer(initialCountry: IsoCountry) {
     : Monthly;
   const { productPrices } = window.guardian;
 
-  const pathName = new URL(window.location).pathname.split('/');
-  const checkoutPathName: string = pathName.splice(pathName.findIndex(c => c === 'checkout')).pop();
+  const checkoutPathName: string = getPathAfterRoute('checkout').pop();
 
   const initialState = {
     stage: checkoutPathName === 'existing' ? 'thankyou-already-live' : 'checkout',

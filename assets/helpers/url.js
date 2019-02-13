@@ -91,6 +91,14 @@ function getAbsoluteURL(path: string = ''): string {
   return `${getOrigin()}${path}`;
 }
 
+function getPath(): string[] {
+  return new URL(window.location).pathname.split('/');
+}
+
+function getPathAfterRoute(route: string): string[] {
+  const pathName = getPath();
+  return pathName.splice(pathName.findIndex(r => r === route));
+}
 
 // ----- Exports ----- //
 
@@ -102,4 +110,5 @@ export {
   getBaseDomain,
   addQueryParamsToURL,
   getAbsoluteURL,
+  getPathAfterRoute,
 };
