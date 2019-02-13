@@ -35,7 +35,7 @@ import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } fr
 
 // ----- Types ----- //
 
-export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending' | 'thankyou-already-live';
+export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending' | 'thankyou-existing';
 type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 export type FormFieldsInState = {|
@@ -234,7 +234,7 @@ function initReducer(initialCountry: IsoCountry) {
   const checkoutPathName: string = getPathAfterRoute('checkout').pop();
 
   const initialState = {
-    stage: checkoutPathName === 'existing' ? 'thankyou-already-live' : 'checkout',
+    stage: checkoutPathName === 'existing' ? 'thankyou-existing' : 'checkout',
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',

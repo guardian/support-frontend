@@ -20,7 +20,7 @@ import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 
 import ThankYouContent from './thankYouContent';
 import ThankYouPendingContent from './thankYouPendingContent';
-import ThankYouAlreadyLiveContent from './thankYouAlreadyLiveContent';
+import ThankYouExistingContent from './thankYouExistingContent';
 import CheckoutForm from './checkoutForm';
 import ReturnSection from './returnSection';
 
@@ -144,7 +144,7 @@ function CheckoutStage(props: PropTypes) {
       );
 
 
-    case 'thankyou-already-live':
+    case 'thankyou-existing':
       return (
         <div className="thank-you-stage">
           <ThankYouHero
@@ -153,7 +153,7 @@ function CheckoutStage(props: PropTypes) {
           <CheckoutHeading
             heading="Your Digital Pack subscription is already live"
           />
-          <ThankYouAlreadyLiveContent countryGroupId={props.countryGroupId} />
+          <ThankYouExistingContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
       );

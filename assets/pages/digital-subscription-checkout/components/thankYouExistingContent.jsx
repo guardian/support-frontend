@@ -18,7 +18,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-function ThankYouPendingContent({ countryGroupId }: PropTypes) {
+function ThankYouExistingContent({ countryGroupId }: PropTypes) {
 
   return (
     <div>
@@ -37,4 +37,4 @@ function ThankYouPendingContent({ countryGroupId }: PropTypes) {
 
 // ----- Export ----- //
 
-export default ThankYouPendingContent;
+export default ThankYouExistingContent;
