@@ -10,7 +10,7 @@ import com.gu.identity.play.IdUser
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
-import com.gu.support.workers.{BillingPeriod, User}
+import com.gu.support.workers.{Address, BillingPeriod, User}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import config.StringsConfig
@@ -150,11 +150,23 @@ class DigitalSubscription(
       lastName = request.lastName,
       country = request.country,
       state = request.state,
+      billingAddress = Some(billingAddress(request)),
       telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
       isTestUser = testUsers.isTestUser(user.publicFields.displayName)
+    )
+  }
+
+  private def billingAddress(request: CreateSupportWorkersRequest): Address = {
+    Address(
+      lineOne = request.addressLine1,
+      lineTwo = request.addressLine2,
+      city = request.townCity,
+      state = request.state,
+      postCode = request.postcode,
+      country = request.country
     )
   }
 

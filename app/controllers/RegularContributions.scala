@@ -8,7 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.{AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.workers.User
+import com.gu.support.workers.{Address, User}
 import com.gu.tip.Tip
 import config.Configuration.GuardianDomain
 import cookies.RecurringContributionCookie
@@ -98,6 +98,18 @@ class RegularContributions(
     )
   }
 
+  private def billingAddress(request: CreateSupportWorkersRequest): Address = {
+    //contributions only ever collects country and optional state
+    Address(
+      lineOne = None,
+      lineTwo = None,
+      city = None,
+      state = request.state,
+      postCode = None,
+      country = request.country
+    )
+  }
+
   private def contributor(user: IdUser, request: CreateSupportWorkersRequest) = {
     User(
       id = user.id,
@@ -106,6 +118,7 @@ class RegularContributions(
       lastName = request.lastName,
       country = request.country,
       state = request.state,
+      billingAddress = Some(billingAddress(request)),
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
