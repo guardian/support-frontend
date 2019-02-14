@@ -2,6 +2,7 @@
 
 module.exports = () => {
   require('stylesheets/skeleton/skeleton.scss');
+  require('./colours.jsx');
   require('./button.jsx');
   require('./dialog.jsx');
   require('./form.jsx');
