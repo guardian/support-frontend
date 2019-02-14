@@ -1,0 +1,49 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.story-colours {
+  padding: 2em;
+}
+
+.story-colours + .story-colours {
+  padding-top: 0;
+}
+
+.story-colours__title {
+  @include gu-fontset-heading;
+  text-transform: capitalize;
+  margin-bottom: $gu-v-spacing / 2;
+}
+
+.story-colours__colour {
+  @include gu-fontset-explainer;
+  padding: $gu-v-spacing / 2 $gu-h-spacing/2 $gu-v-spacing *2;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  transition: .15s ease-in-out;
+  > div {
+    font-weight: 400;
+    opacity: .8;
+  }
+}
+
+.story-colours__colour:hover {
+  flex: 1.25 1 0;
+  z-index: 10;
+}
+.story-colours__colour:focus,
+.story-colours__colour[data-clicked=true] {
+  outline: none;
+  box-shadow: inset 0 0 0 1px gu-colour(brightness-100), 0 0 0 2px gu-colour(green-main), 0 0 0 3px gu-colour(brightness-100);
+  z-index: 10;
+  position: relative;
+}
+
+.story-colours__row {
+  display: flex;
+  border: 1px solid gu-colour('brightness-93');
+}
+
+.story-colours__row > * {
+  flex: 1 1 0;
+}

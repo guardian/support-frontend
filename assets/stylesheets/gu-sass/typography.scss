@@ -38,6 +38,7 @@ $gu-fonts: (
 	textSans: (
 		family: $gu-text-sans-web,
 		sizes: (
+			14: 18px,
 			16: 22px,
 			18: 24px,
 		)
@@ -138,6 +139,12 @@ $gu-fonts: (
 }
 @mixin gu-fontset-tabs($size-only: false) {
 	@include gu-typeface(headline, 17, $size-only);
+	@if $size-only == false {
+		font-weight: 700;
+	}
+}
+@mixin gu-fontset-explainer($size-only: false) {
+	@include gu-typeface(textSans, 14, $size-only);
 	@if $size-only == false {
 		font-weight: 700;
 	}
