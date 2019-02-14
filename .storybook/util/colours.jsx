@@ -18,12 +18,6 @@ const copyStringToClipboard = (str) => {
   }
 }
 
-const colourIsBright = colour => (
-  parseInt(colour.substring(1, 3), 16) +
-  parseInt(colour.substring(3, 5), 16) +
-  parseInt(colour.substring(5, 7), 16)
-) > (128 * 3);
-
 const addMissingColoursToCategories = (categories, colours) => {
   const listed = Object.values(categories).reduce((prev, cur)=>[...prev, ...cur],[]);
   return {
@@ -45,15 +39,17 @@ const Colour = ({name, colour, copyHex}) => (
         onMouseLeave={()=>{
           setState({clicked: false})
         }}
-        className="story-colours__colour"
+        className="story-colour"
         data-clicked={clicked}
-        style={{
-          background: colour,
-          color: colourIsBright(colour) ? 'black' : 'white',
-        }}
       >
-        {colour}
-        <div>{clicked?'copied':name}</div>
+        <div         
+          className="story-colour__tile"
+          style={{
+            background: colour,
+          }}
+        />
+        <h4 className="story-colour__hex">{clicked?'copied':colour}</h4>
+        <h5 className="story-colour__name">{name}</h5>
       </button>
     }
   </WithState>
