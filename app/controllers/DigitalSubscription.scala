@@ -150,7 +150,7 @@ class DigitalSubscription(
       lastName = request.lastName,
       country = request.country,
       state = request.state,
-      billingAddress = Some(billingAddress(request)),
+      billingAddress = billingAddress(request),
       telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
