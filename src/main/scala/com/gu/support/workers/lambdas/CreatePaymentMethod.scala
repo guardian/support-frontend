@@ -68,8 +68,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .map(PayPalReferenceTransaction(payPal.baid, _))
 
   def createDirectDebitPaymentMethod(dd: DirectDebitPaymentFields, user: User): Future[DirectDebitPaymentMethod] = {
-    val billingAddress = user.billingAddress.get
-    val addressLine = AddressLineTransformer.combinedAddressLine(billingAddress.lineOne, billingAddress.lineTwo)
+    val addressLine = AddressLineTransformer.combinedAddressLine(user.billingAddress.lineOne, user.billingAddress.lineTwo)
 
     Future.successful(DirectDebitPaymentMethod(
       firstName = user.firstName,
@@ -77,10 +76,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       bankTransferAccountName = dd.accountHolderName,
       bankCode = dd.sortCode,
       bankTransferAccountNumber = dd.accountNumber,
-      country = billingAddress.country,
-      city = billingAddress.city,
-      postalCode = billingAddress.postCode,
-      state = billingAddress.state,
+      country = user.billingAddress.country,
+      city = user.billingAddress.city,
+      postalCode = user.billingAddress.postCode,
+      state = user.billingAddress.state,
       streetName = addressLine.map(_.streetName),
       streetNumber = addressLine.flatMap(_.streetNumber)
     ))
