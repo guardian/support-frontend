@@ -1,16 +1,14 @@
-// This contains the Guardian colour palette in a SASS map.
-//
-// You can pull the colours out with map-get if you really want, but there is
-// also a convenience function included that works as follows:
-//
-// .my-class {
-//     color: gu-colourbrand-main);
-// }
+/*
+This imports the Guardian colour pallette from JSON as a sass map.
+You can review the json itself or browse to support-ui's page on colour
+*/
 
 @import './colours.json';
+$gu-colours: $json;
+
 
 // Given the name of the colour this returns the hex value.
 // It is essentially just a wrapper around map-get.
 @function gu-colour($name) {
-    @return map-get(map-get($json, "colours"), $name);
+    @return map-get($gu-colours, $name);
 }

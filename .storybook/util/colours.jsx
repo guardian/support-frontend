@@ -1,6 +1,6 @@
 import React, {type Node, Component} from 'react';
 
-import { colours as allColours } from 'stylesheets/gu-sass/colours.json';
+import allColours from 'stylesheets/gu-sass/colours.json';
 import WithState from './withState.jsx';
 import './colours.scss';
 
