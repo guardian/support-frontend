@@ -80,7 +80,7 @@ GET /identity/get-user-type                      controllers.IdentityController.
 # ----- Subscriptions ----- #
 
 GET  /subscribe                                    controllers.Subscriptions.geoRedirect()
-GET  /$country<(uk|us|au|int)>/subscribe           controllers.Subscriptions.landing(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe           controllers.Subscriptions.landing(country: String)
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
@@ -88,17 +88,17 @@ GET  /:country/subscribe                           controllers.Subscriptions.leg
 
 GET  /digital                                           controllers.DigitalSubscription.digitalGeoRedirect()
 GET  /subscribe/digital                                 controllers.DigitalSubscription.digitalGeoRedirect()
-GET  /$country<(uk|us|au|eu|int)>/subscribe/digital     controllers.DigitalSubscription.digital(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital     controllers.DigitalSubscription.digital(country: String)
 
 # redirect from old checkout urls
-GET  /$country<(uk|us|au|int)>/subscribe/digital/checkout  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
 GET  /subscribe/digital/checkout  controllers.DigitalSubscription.displayForm()
 GET  /subscribe/digital/checkout/thankyou-existing  controllers.DigitalSubscription.displayThankYouExisting()
 POST /subscribe/digital/create  controllers.DigitalSubscription.create
 
 GET  /premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
-GET  /$country<(uk|us|au|int)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
 
 GET  /weekly                            controllers.Subscriptions.weeklyGeoRedirect()
 GET  /subscribe/weekly                            controllers.Subscriptions.weeklyGeoRedirect()

@@ -55,7 +55,7 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
   }
 
-  def weeklyGeoRedirect: Action[AnyContent] = geoRedirectAllMarkets("subscribe/weekly")
+  def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/weekly")
 
   def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()

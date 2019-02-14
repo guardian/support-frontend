@@ -10,7 +10,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import FeatureList, { type ListItem } from 'components/featureList/featureList';
 import GridImage, { type GridImg } from 'components/gridImage/gridImage';
 import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import CtaSwitch from './ctaSwitch';
 
@@ -52,6 +52,8 @@ const appFeatures: {
   UnitedStates: defaultFeatures,
   International: defaultFeatures,
   EURCountries: defaultFeatures,
+  NZDCountries: defaultFeatures,
+  Canada: defaultFeatures,
   AUDCountries: [
     {
       heading: ['Live news and sport ', <mark className="product-block__highlight">New</mark>],
@@ -83,6 +85,8 @@ const appImages: {
   UnitedStates: defaultAppImage,
   International: defaultAppImage,
   EURCountries: defaultAppImage,
+  NZDCountries: defaultAppImage,
+  Canada: defaultAppImage,
   AUDCountries: {
     ...defaultAppImage,
     gridId: 'premiumTierAU',
@@ -91,7 +95,7 @@ const appImages: {
 };
 
 function getDailyEditionCopy(countryGroupId: CountryGroupId) {
-  if (countryGroupId === 'GBPCountries') {
+  if (countryGroupId === GBPCountries) {
     return {
       description: 'Every issue of The Guardian and Observer, designed for your iPad and available offline',
       onTheGoText: 'Your complete daily newspaper, beautifully designed for your iPad',
