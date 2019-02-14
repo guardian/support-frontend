@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
@@ -44,17 +45,21 @@ const reactElementId: {
   UnitedStates: 'digital-subscription-landing-page-us',
   AUDCountries: 'digital-subscription-landing-page-au',
   EURCountries: 'digital-subscription-landing-page-eu',
+  NZDCountries: 'digital-subscription-landing-page-nz',
+  Canada: 'digital-subscription-landing-page-ca',
   International: 'digital-subscription-landing-page-int',
 };
 
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
   '/subscribe/digital',
   [
-    'GBPCountries',
-    'UnitedStates',
-    'AUDCountries',
-    'EURCountries',
-    'International',
+    GBPCountries,
+    UnitedStates,
+    AUDCountries,
+    EURCountries,
+    NZDCountries,
+    Canada,
+    International,
   ],
 );
 

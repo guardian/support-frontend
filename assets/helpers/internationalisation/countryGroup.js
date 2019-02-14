@@ -10,7 +10,22 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
-export type CountryGroupId = 'GBPCountries' | 'UnitedStates' | 'AUDCountries' | 'EURCountries' | 'International' | 'NZDCountries' | 'Canada';
+const GBPCountries: 'GBPCountries' = 'GBPCountries';
+const UnitedStates: 'UnitedStates' = 'UnitedStates';
+const AUDCountries: 'AUDCountries' = 'AUDCountries';
+const EURCountries: 'EURCountries' = 'EURCountries';
+const NZDCountries: 'NZDCountries' = 'NZDCountries';
+const Canada: 'Canada' = 'Canada';
+const International: 'International' = 'International';
+
+export type CountryGroupId =
+  typeof GBPCountries
+  | typeof UnitedStates
+  | typeof AUDCountries
+  | typeof EURCountries
+  | typeof International
+  | typeof NZDCountries
+  | typeof Canada;
 
 export type CountryGroupName = 'United Kingdom' | 'United States' | 'Australia' | 'Europe' | 'International' | 'New Zealand' | 'Canada';
 
@@ -86,7 +101,6 @@ const countryGroups: CountryGroups = {
   },
 };
 
-
 // ----- Functions ----- //
 
 function fromPath(path: string = window.location.pathname): ?CountryGroupId {
@@ -110,14 +124,22 @@ function fromPath(path: string = window.location.pathname): ?CountryGroupId {
 
 function fromString(countryGroup: string): ?CountryGroupId {
   switch (countryGroup) {
-    case 'GBPCountries': return 'GBPCountries';
-    case 'UnitedStates': return 'UnitedStates';
-    case 'AUDCountries': return 'AUDCountries';
-    case 'EURCountries': return 'EURCountries';
-    case 'International': return 'International';
-    case 'NZDCountries': return 'NZDCountries';
-    case 'Canada': return 'Canada';
-    default: return null;
+    case 'GBPCountries':
+      return 'GBPCountries';
+    case 'UnitedStates':
+      return 'UnitedStates';
+    case 'AUDCountries':
+      return 'AUDCountries';
+    case 'EURCountries':
+      return 'EURCountries';
+    case 'International':
+      return 'International';
+    case 'NZDCountries':
+      return 'NZDCountries';
+    case 'Canada':
+      return 'Canada';
+    default:
+      return null;
   }
 }
 
@@ -172,4 +194,11 @@ export {
   detect,
   stringToCountryGroupId,
   fromCountry,
+  GBPCountries,
+  UnitedStates,
+  AUDCountries,
+  EURCountries,
+  NZDCountries,
+  Canada,
+  International,
 };
