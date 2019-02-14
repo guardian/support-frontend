@@ -37,17 +37,19 @@ const getPageInfoChip = (): string => {
   return 'You can cancel your subscription at any time.';
 };
 
-const getDiscountCallout = (): ?string => {
+const DiscountCalloutMaybe = () => {
+  if (!flashSaleIsActive('Paper', 'GBPCountries')) { return null; }
   const [discount, duration] = [
     getDiscount('Paper', 'GBPCountries'),
     getDuration('Paper', 'GBPCountries'),
   ];
   if (discount && duration) {
-    return `Save an extra ${Math.round(discount * 100)}% for ${duration}`;
+    return <Callout>Save an extra {Math.round(discount * 100)}% for {duration}</Callout>;
   } else if (discount) {
-    return `Save an extra ${Math.round(discount * 100)}%`;
+    return <Callout>Save an extra {Math.round(discount * 100)}% </Callout>;
   }
   return null;
+
 };
 
 
@@ -95,37 +97,31 @@ const ContentForm = ({
   text?: Option<string>,
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab
-|}) => {
-  const callout = getDiscountCallout();
-  return (
-    <ProductPageContentBlock type="feature" id="subscribe">
-      <Text
-        title={title}
-      />
-      {flashSaleIsActive('Paper', 'GBPCountries') && callout &&
-        <Callout>{callout}</Callout>
-      }
+|}) => (
+  <ProductPageContentBlock type="feature" id="subscribe">
+    <Text
+      title={title}
+    >
+      <DiscountCalloutMaybe />
       {text &&
-        <Text>
-          <p>{text}</p>
-        </Text>
+        <p>{text}</p>
       }
-      <Form />
-      <Text>
-        <SansParagraph>
-          {
-              selectedTab === 'collection'
-              ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
-              : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
-            }
-        </SansParagraph>
-      </Text>
-      <ProductPageInfoChip>
-        {getPageInfoChip()}
-      </ProductPageInfoChip>
-    </ProductPageContentBlock>
-  );
-};
+    </Text>
+    <Form />
+    <Text>
+      <SansParagraph>
+        {
+          selectedTab === 'collection'
+          ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
+          : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
+        }
+      </SansParagraph>
+    </Text>
+    <ProductPageInfoChip>
+      {getPageInfoChip()}
+    </ProductPageInfoChip>
+  </ProductPageContentBlock>
+);
 ContentForm.defaultProps = { text: null };
 
 export { ContentHelpBlock, LinkTo, ContentForm };
