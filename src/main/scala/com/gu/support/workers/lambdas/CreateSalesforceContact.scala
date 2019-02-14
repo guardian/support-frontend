@@ -5,7 +5,9 @@ import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.{SalesforceContactResponse, UpsertData}
 import com.gu.services.Services
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.RequestInfo
+import com.gu.support.workers.AddressLine.asFormattedString
+import com.gu.support.workers.AddressLineTransformer.combinedAddressLine
+import com.gu.support.workers.{AddressLine, AddressLineTransformer, RequestInfo}
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import io.circe.generic.auto._
@@ -16,12 +18,18 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
 
   override protected def servicesHandler(state: CreateSalesforceContactState, requestInfo: RequestInfo, context: Context, services: Services) = {
     SafeLogger.debug(s"CreateSalesforceContact state: $state")
+    val billingAddress = state.user.billingAddress.get
+    val addressLine = combinedAddressLine(billingAddress.lineOne, billingAddress.lineTwo) map asFormattedString
+
     services.salesforceService.upsert(UpsertData.create(
       state.user.id,
       state.user.primaryEmailAddress,
       state.user.firstName,
       state.user.lastName,
-      state.user.state,
+      addressLine,
+      billingAddress.city,
+      billingAddress.state,
+      billingAddress.postCode,
       state.user.country.name,
       state.user.telephoneNumber,
       state.user.allowMembershipMail,
