@@ -11,6 +11,8 @@ testOptions in Test := Seq(Tests.Filter(unitTestFilter))
 import LibraryVersions.{circeVersion, awsClientVersion, jacksonVersion}
 
 libraryDependencies ++= Seq(
+  "com.typesafe" % "config" % "1.3.2",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "org.mockito" % "mockito-core" % "2.11.0" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
@@ -38,6 +40,7 @@ libraryDependencies ++= Seq(
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.gu" %% "tip" % "0.5.1",
+  "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
@@ -64,9 +67,9 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-frontend/cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
 
-def getFiles(f: File):Seq[(File,String)] = {
+def getFiles(f: File): Seq[(File, String)] = {
   f match {
-    case file if file.isFile => Seq((file,file.toString.replace("support-frontend/", "")))
+    case file if file.isFile => Seq((file, file.toString.replace("support-frontend/", "")))
     case dir if dir.isDirectory => dir.listFiles.toSeq.flatMap(getFiles)
   }
 }

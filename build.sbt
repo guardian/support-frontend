@@ -1,18 +1,9 @@
 import sbt.Keys.{publishTo, resolvers, scalaVersion}
-import scala.sys.process._
-import SeleniumTestConfig.SeleniumTest
+import SeleniumTestConfig.{SeleniumTest, seleniumTestFilter, unitTestFilter}
 
 skip in publish := true
 
-def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)
-
-def commitId(): String = try {
-  "git rev-parse HEAD".!!.trim
-} catch {
-  case _: Exception => "unknown"
-}
-
-lazy val testSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
+lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
   javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
   testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
@@ -42,26 +33,20 @@ lazy val commonDependencies = Seq(
 lazy val root = (project in file("."))
   .aggregate(`support-frontend`, `support-workers`, `support-models`, `support-config`, `support-internationalisation`, `support-services`)
 
-
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
-  .configs(IntegrationTest, SeleniumTest)
+  .configs(SeleniumTest)
   .settings(
+    inConfig(SeleniumTest)(Defaults.testTasks),
     commonSettings,
-    libraryDependencies ++= commonDependencies,
-    buildInfoKeys := Seq[BuildInfoKey](
-      name,
-      BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
-      BuildInfoKey.constant("buildTime", System.currentTimeMillis),
-      BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId())
-    ),
+    buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalastyleFailOnError := true,
     testScalastyle := scalastyle.in(Compile).toTask("").value,
     (test in Test) := ((test in Test) dependsOn testScalastyle).value,
     (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
-    (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
+    (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
   ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
 lazy val `support-workers` = (project in file("support-workers"))
@@ -69,7 +54,7 @@ lazy val `support-workers` = (project in file("support-workers"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
-    testSettings,
+    integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
@@ -78,7 +63,7 @@ lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
-    testSettings,
+    integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-internationalisation`)
 
@@ -86,7 +71,7 @@ lazy val `support-config` = (project in file("support-config"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
-    testSettings,
+    integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-models`, `support-internationalisation`)
 
@@ -94,7 +79,7 @@ lazy val `support-services` = (project in file("support-services"))
   .configs(IntegrationTest)
   .settings(
     commonSettings,
-    testSettings,
+    integrationTestSettings,
     libraryDependencies ++= commonDependencies
   ).dependsOn(`support-internationalisation`, `support-models`, `support-config`)
 
@@ -102,6 +87,6 @@ lazy val `support-internationalisation` = (project in file("support-internationa
   .configs(IntegrationTest)
   .settings(
     commonSettings,
-    testSettings,
+    integrationTestSettings,
     libraryDependencies ++= commonDependencies
   )
