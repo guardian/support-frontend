@@ -16,7 +16,7 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import 'stylesheets/skeleton/skeleton.scss';
 
@@ -76,9 +76,9 @@ const content = (
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
       <ProductPageContentBlock type="feature" id="subscribe">
-        <ProductPageTextBlock title="Subscribe to Digital Pack today">
+        <Text title="Subscribe to Digital Pack today">
           <p>Choose how you’d like to pay</p>
-        </ProductPageTextBlock>
+        </Text>
         <Form />
         <ProductPageInfoChip >
             You can cancel your subscription at any time

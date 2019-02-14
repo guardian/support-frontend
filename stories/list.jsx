@@ -4,7 +4,7 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import UnorderedList from 'components/list/unorderedList';
 import OrderedList from 'components/list/orderedList';
 
@@ -14,7 +14,7 @@ const stories = storiesOf('Lists', module)
   .addDecorator(withCenterAlignment);
 
 stories.add('Lists', () => (
-  <ProductPageTextBlock title="Lists">
+  <Text title="Lists">
     <UnorderedList items={[
       'This is an unordered list',
       'It looks like this',
@@ -25,5 +25,5 @@ stories.add('Lists', () => (
       'and it looks like this',
     ]}
     />
-  </ProductPageTextBlock>
+  </Text>
 ));

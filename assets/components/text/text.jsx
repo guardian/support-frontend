@@ -6,7 +6,7 @@ import React, { type Node } from 'react';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 import { classNameWithModifiers } from 'helpers/utilities';
 
-import './productPageTextBlock.scss';
+import './text.scss';
 
 // ---- Types ----- //
 
@@ -21,21 +21,21 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-const ProductPageTextBlock = ({
+const Text = ({
   title, children, headingSize, icon, callout,
 }: PropTypes) => (
   <div className={
-    classNameWithModifiers('component-product-page-text-block', [
+    classNameWithModifiers('component-text', [
       !children ? 'heading-only' : null,
     ])}
   >
-    {title && <Heading className="component-product-page-text-block__heading" size={headingSize}>{title}{icon} </Heading>}
-    {callout && <p className="component-product-page-text-block__callout"><strong>{callout}</strong></p>}
+    {title && <Heading className="component-text__heading" size={headingSize}>{title}{icon} </Heading>}
+    {callout && <p className="component-text__callout"><strong>{callout}</strong></p>}
     {children}
   </div>
 );
 
-ProductPageTextBlock.defaultProps = {
+Text.defaultProps = {
   headingSize: 2,
   children: null,
   callout: null,
@@ -46,10 +46,10 @@ ProductPageTextBlock.defaultProps = {
 
 // ----- Children ----- //
 
-export const LargeParagraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block__large">{children}</p>;
-export const SansParagraph = ({ children }: {children: Node}) => <p className="component-product-page-text-block__sans">{children}</p>;
+export const LargeParagraph = ({ children }: {children: Node}) => <p className="component-text__large">{children}</p>;
+export const SansParagraph = ({ children }: {children: Node}) => <p className="component-text__sans">{children}</p>;
 
 
 // ----- Exports ----- //
 
-export default ProductPageTextBlock;
+export default Text;

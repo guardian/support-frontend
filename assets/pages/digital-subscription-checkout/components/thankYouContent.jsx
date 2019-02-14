@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { LargeParagraph } from 'components/text/text';
 import MarketingConsent from './thankYou/marketingConsentContainer';
 import AppsSection from './thankYou/appsSection';
 
@@ -32,7 +32,7 @@ function ThankYouContent(props: PropTypes) {
   return (
     <div>
       <ProductPageContentBlock>
-        <ProductPageTextBlock>
+        <Text>
           <LargeParagraph>
             {
             props.paymentMethod === 'DirectDebit' ?
@@ -40,19 +40,19 @@ function ThankYouContent(props: PropTypes) {
             'We have sent you an email with everything you need to know. Your first payment will be taken in 14 days.'
           }
           </LargeParagraph>
-        </ProductPageTextBlock>
+        </Text>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Can&#39;t wait to get started?">
+        <Text title="Can&#39;t wait to get started?">
           <LargeParagraph>
             Just download the apps and log in with your Guardian account details.
           </LargeParagraph>
-        </ProductPageTextBlock>
+        </Text>
         <AppsSection countryGroupId={props.countryGroupId} />
       </ProductPageContentBlock>
       <ProductPageContentBlock>
         <MarketingConsent render={({ title, message }) => (
-          <ProductPageTextBlock title={title}>{message}</ProductPageTextBlock>
+          <Text title={title}>{message}</Text>
         )}
         />
       </ProductPageContentBlock>

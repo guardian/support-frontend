@@ -3,13 +3,13 @@
 import React from 'react';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import NoOne from 'components/svgs/noOne';
 
 export default function NoOneEdits() {
   return (
     <ProductPageContentBlock type="grey">
-      <ProductPageTextBlock>
+      <Text>
         <NoOne />
         <p>
           Our journalism is editorially independent, meaning we set our own agenda.
@@ -17,7 +17,7 @@ export default function NoOneEdits() {
           We are free from commercial bias and are not influenced by billionaire owners, politicians or shareholders.
           This independence matters because it enables us to challenge the powerful, and hold them to account.
         </p>
-      </ProductPageTextBlock>
+      </Text>
     </ProductPageContentBlock>
   );
 }

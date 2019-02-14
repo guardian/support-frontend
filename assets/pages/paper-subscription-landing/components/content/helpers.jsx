@@ -6,7 +6,7 @@ import React, { type Element, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { SansParagraph } from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import { paperSubsUrl } from 'helpers/routes';
 import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
@@ -59,14 +59,14 @@ const ContentHelpBlock = ({
   telephoneLink: Element<string>
 |}) => (
   <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
-    <ProductPageTextBlock title="FAQ and help">
+    <Text title="FAQ and help">
       <SansParagraph>
       If you’ve got any more questions, you might well find the answers in the {faqLink}.
       </SansParagraph>
       <SansParagraph>
        If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
       </SansParagraph>
-    </ProductPageTextBlock>
+    </Text>
   </ProductPageContentBlock>
 );
 
@@ -97,17 +97,17 @@ const ContentForm = ({
   setTabAction: typeof setTab
 |}) => (
   <ProductPageContentBlock type="feature" id="subscribe">
-    <ProductPageTextBlock
+    <Text
       title={title}
       callout={flashSaleIsActive('Paper', 'GBPCountries') ? getDiscountCallout() : null}
     />
     {text &&
-      <ProductPageTextBlock>
+      <Text>
         <p>{text}</p>
-      </ProductPageTextBlock>
+      </Text>
     }
     <Form />
-    <ProductPageTextBlock>
+    <Text>
       <SansParagraph>
         {
             selectedTab === 'collection'
@@ -115,7 +115,7 @@ const ContentForm = ({
             : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
           }
       </SansParagraph>
-    </ProductPageTextBlock>
+    </Text>
     <ProductPageInfoChip>
       {getPageInfoChip()}
     </ProductPageInfoChip>

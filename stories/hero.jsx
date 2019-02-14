@@ -6,7 +6,7 @@ import { storiesOf } from '@storybook/react';
 
 import ProductPageHero, { HeroHanger, HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { LargeParagraph } from 'components/text/text';
 
 const stories = storiesOf('Hero', module);
 
@@ -36,11 +36,11 @@ stories.add('Custom', () => (
     <HeroHanger>And hangers</HeroHanger>
     <HeroWrapper >
       <div style={{ padding: '50px 10px' }}>
-        <ProductPageTextBlock>
+        <Text>
           <LargeParagraph>
            or just wing it and not even use a heading!
           </LargeParagraph>
-        </ProductPageTextBlock>
+        </Text>
       </div>
     </HeroWrapper>
   </div>

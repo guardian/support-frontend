@@ -17,7 +17,7 @@ import GridPicture from 'components/gridPicture/gridPicture';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import ProductPageContentBlock, { Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { LargeParagraph } from 'components/text/text';
 import AnchorButton from 'components/button/anchorButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
@@ -108,16 +108,16 @@ const content = (
 
       </ProductPagehero>
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Open up your world view, Weekly">
+        <Text title="Open up your world view, Weekly">
           <LargeParagraph>Inside the essential magazine from
           The&nbsp;Guardian, you&rsquo;ll find expert opinion, insight and culture, curated to
           bring you a progressive, international perspective. You&rsquo;ll also discover
           challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
           </LargeParagraph>
-        </ProductPageTextBlock>
+        </Text>
       </ProductPageContentBlock>
       <ProductPageContentBlock id="benefits">
-        <ProductPageTextBlock title="As a subscriber you’ll enjoy" />
+        <Text title="As a subscriber you’ll enjoy" />
         <Outset>
           <ProductPageFeatures features={[
             { title: 'Up to 35% off the retail cover price' },
@@ -129,9 +129,9 @@ const content = (
         </Outset>
       </ProductPageContentBlock>
       <ProductPageContentBlock type="feature" id="subscribe">
-        <ProductPageTextBlock title="Subscribe to Guardian Weekly today">
+        <Text title="Subscribe to Guardian Weekly today">
           <p>Choose how you’d like to pay</p>
-        </ProductPageTextBlock>
+        </Text>
         <WeeklyForm />
         <ProductPageInfoChip icon={<SvgGift />}>
               Gifting is available for quarterly and annual subscriptions
@@ -141,12 +141,12 @@ const content = (
         </ProductPageInfoChip>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Gift subscriptions">
+        <Text title="Gift subscriptions">
           <LargeParagraph>A quarterly or annual Guardian Weekly subscription makes a great gift.
             To&nbsp;buy&nbsp;one, just select the gift option at checkout or get in touch with your local customer
             service team:
           </LargeParagraph>
-        </ProductPageTextBlock>
+        </Text>
         <Outset>
           <ProductPageFeatures features={[
             { title: 'UK, Europe and Rest of World', copy: '+44 (0) 330 333 6767' },
@@ -157,14 +157,14 @@ const content = (
         </Outset>
       </ProductPageContentBlock>
       <ProductPageContentBlock>
-        <ProductPageTextBlock title="Promotion terms and conditions">
+        <Text title="Promotion terms and conditions">
           <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full 6 for 6 promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
           </p>
-        </ProductPageTextBlock>
-        <ProductPageTextBlock title="Guardian Weekly terms and conditions">
+        </Text>
+        <Text title="Guardian Weekly terms and conditions">
           <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Weekly print subscription services and their terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">here</a>.
           </p>
-        </ProductPageTextBlock>
+        </Text>
       </ProductPageContentBlock>
     </Page>
   </Provider>
