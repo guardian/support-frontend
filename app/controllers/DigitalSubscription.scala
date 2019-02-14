@@ -6,7 +6,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.play.IdUser
+import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdUser}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
@@ -22,10 +22,10 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{request, _}
 import play.twirl.api.Html
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdentityService, TestUserService}
+import services.{IdentityService, MembersDataService, TestUserService}
 import utils.NormalisedTelephoneNumber
 import utils.NormalisedTelephoneNumber.asFormattedString
-import views.html.digitalSubscription
+import views.html.{digitalSubscription, main}
 import views.html.helper.CSRF
 import utils.SimpleValidator._
 
@@ -38,6 +38,7 @@ class DigitalSubscription(
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
     testUsers: TestUserService,
+    membersDataService: MembersDataService,
     stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
@@ -72,16 +73,32 @@ class DigitalSubscription(
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
 
+  private def userHasDigipack(user: AuthenticatedIdUser): Future[Boolean] = {
+    user.credentials match {
+      case cookies: AccessCredentials.Cookies =>
+        membersDataService.userAttributes(cookies).value map {
+          case Left(_) => false
+          case Right(response: MembersDataService.UserAttributes) => response.contentAccess.digitalPack
+        }
+      case _ => Future.successful(false)
+    }
+  }
+
   def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {
           SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
-          InternalServerError
+          Future.successful(InternalServerError)
         },
-        user => Ok(digitalSubscriptionFormHtml(user))
-      ).map(_.withSettingsSurrogateKey)
+        user => {
+          userHasDigipack(request.user) map {
+            case true =>  Redirect(routes.DigitalSubscription.displayThankYouExisting().url, request.queryString, status = FOUND)
+            case _ => Ok(digitalSubscriptionFormHtml(user))
+          }
+        }
+      ).flatten.map(_.withSettingsSurrogateKey)
     }
 
   private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
@@ -106,6 +123,22 @@ class DigitalSubscription(
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(uatMode)
     )
+  }
+
+  def displayThankYouExisting(): Action[AnyContent] = CachedAction() { implicit request =>
+
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val title = "Support the Guardian | Digital Subscription"
+    val id = "digital-subscription-checkout-page"
+    val js = "digitalSubscriptionCheckoutPageThankYouExisting.js"
+    val css = "digitalSubscriptionCheckoutPageThankYouExisting.css"
+
+    Ok(views.html.main(
+      title,
+      id,
+      js,
+      css
+    ))
   }
 
   sealed abstract class CreateDigitalSubscriptionError(message: String)
