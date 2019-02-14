@@ -68,7 +68,8 @@ class SendThankYouEmailSpec extends LambdaSpec {
     //This test will send a thank you email to the address below - useful for quickly testing changes
     val addressToSendTo = "rupert.bates+unitTest@theguardian.com"
     val mandateId = "65HK26E"
-    val user = User("1234", addressToSendTo, "Mickey", "Mouse", UK)
+    val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
+    val user = User("1234", addressToSendTo, "Mickey", "Mouse", UK, billingAddress = Some(billingAddressWithCountry))
     val ef = DigitalPackEmailFields(
       "A-S00045678",
       Annual,
