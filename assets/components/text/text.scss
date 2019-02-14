@@ -13,16 +13,6 @@
 
 .component-text__heading {
   @include gu-fontset-heading;
-  svg {
-    margin-left: $gu-h-spacing/3;
-    display: inline-block;
-    vertical-align: middle;
-  }
-  .svg-information {
-    circle {
-      fill: gu-colour(brand-pastel);
-    }
-  }
 }
 
 .component-text__callout {

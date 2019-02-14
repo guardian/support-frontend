@@ -12,9 +12,7 @@ import './text.scss';
 
 type PropTypes = {|
   title?: string | null,
-  callout?: string | null,
   children?: ?Node,
-  icon?: ?Node,
   headingSize: HeadingSize,
 |};
 
@@ -22,15 +20,14 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const Text = ({
-  title, children, headingSize, icon, callout,
+  title, children, headingSize,
 }: PropTypes) => (
   <div className={
     classNameWithModifiers('component-text', [
       !children ? 'heading-only' : null,
     ])}
   >
-    {title && <Heading className="component-text__heading" size={headingSize}>{title}{icon} </Heading>}
-    {callout && <p className="component-text__callout"><strong>{callout}</strong></p>}
+    {title && <Heading className="component-text__heading" size={headingSize}>{title}</Heading>}
     {children}
   </div>
 );
@@ -38,14 +35,12 @@ const Text = ({
 Text.defaultProps = {
   headingSize: 2,
   children: null,
-  callout: null,
-  icon: null,
   title: null,
 };
 
 
 // ----- Children ----- //
-
+export const Callout = ({ children }: {children: Node}) => <p className="component-text__callout"><strong>{children}</strong></p>;
 export const LargeParagraph = ({ children }: {children: Node}) => <p className="component-text__large">{children}</p>;
 export const SansParagraph = ({ children }: {children: Node}) => <p className="component-text__sans">{children}</p>;
 

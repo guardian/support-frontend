@@ -6,7 +6,7 @@ import React, { type Element, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import Text, { SansParagraph } from 'components/text/text';
+import Text, { SansParagraph, Callout } from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import { paperSubsUrl } from 'helpers/routes';
 import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
@@ -95,32 +95,37 @@ const ContentForm = ({
   text?: Option<string>,
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab
-|}) => (
-  <ProductPageContentBlock type="feature" id="subscribe">
-    <Text
-      title={title}
-      callout={flashSaleIsActive('Paper', 'GBPCountries') ? getDiscountCallout() : null}
-    />
-    {text &&
+|}) => {
+  const callout = getDiscountCallout();
+  return (
+    <ProductPageContentBlock type="feature" id="subscribe">
+      <Text
+        title={title}
+      />
+      {flashSaleIsActive('Paper', 'GBPCountries') && callout &&
+        <Callout>{callout}</Callout>
+      }
+      {text &&
+        <Text>
+          <p>{text}</p>
+        </Text>
+      }
+      <Form />
       <Text>
-        <p>{text}</p>
+        <SansParagraph>
+          {
+              selectedTab === 'collection'
+              ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
+              : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
+            }
+        </SansParagraph>
       </Text>
-    }
-    <Form />
-    <Text>
-      <SansParagraph>
-        {
-            selectedTab === 'collection'
-            ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
-            : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
-          }
-      </SansParagraph>
-    </Text>
-    <ProductPageInfoChip>
-      {getPageInfoChip()}
-    </ProductPageInfoChip>
-  </ProductPageContentBlock>
-);
+      <ProductPageInfoChip>
+        {getPageInfoChip()}
+      </ProductPageInfoChip>
+    </ProductPageContentBlock>
+  );
+};
 ContentForm.defaultProps = { text: null };
 
 export { ContentHelpBlock, LinkTo, ContentForm };
