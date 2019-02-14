@@ -25,7 +25,7 @@ import org.scalatest.{MustMatchers, WordSpec}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
-import services.MembersDataService.{MembersDataServiceError, UnexpectedResponseStatus, UserAttributes, UserNotFound}
+import services.MembersDataService._
 import services.stepfunctions.SupportWorkersClient
 import services.{HttpIdentityService, MembersDataService, TestUserService}
 
@@ -35,9 +35,37 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
     import scala.concurrent.ExecutionContext.Implicits.global
 
+    def fakeMembersDataService(hasFailed: Boolean, hasDp: Boolean): MembersDataService = {
+      val membersDataService: MembersDataService = mock[MembersDataService]
+      val errorResponse: MembersDataServiceError = UnexpectedResponseStatus(500)
+      val successResponseWithDp: UserAttributes = UserAttributes("0", ContentAccess(
+        recurringContributor = false,
+        digitalPack = true
+      ))
+      val successResponseWithoutDp: UserAttributes = UserAttributes("0", ContentAccess(
+        recurringContributor = false,
+        digitalPack = false
+      ))
+      if(hasFailed) {
+        when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
+          EitherT.leftT[Future, UserAttributes](errorResponse)
+        )
+      } else if(hasDp) {
+        when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
+          EitherT.rightT[Future, MembersDataServiceError](successResponseWithDp)
+        )
+      } else {
+        when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
+          EitherT.rightT[Future, MembersDataServiceError](successResponseWithoutDp)
+        )
+      }
+      membersDataService
+    }
+
     def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
+      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      membersDataService: MembersDataService = fakeMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
 
       val amounts = Amounts(Nil,Nil,Nil)
@@ -52,7 +80,6 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
       val client = mock[SupportWorkersClient]
       val testUserService = mock[TestUserService]
-      val membersDataService = mock[MembersDataService]
       val tip = mock[Tip]
       val stripe = mock[StripeConfigProvider]
       val stripeAccountConfig = StripeAccountConfig("", "")
@@ -61,14 +88,6 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       )
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
-
-      import cats.data.EitherT
-      import cats.implicits._
-
-      val errorResponse: MembersDataServiceError = UnexpectedResponseStatus(500)
-      when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
-        EitherT.leftT[Future, UserAttributes](errorResponse)
-      )
 
       val prices: ProductPrices = Map(
         CountryGroup.UK ->
@@ -102,9 +121,10 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     def fakeRequestAuthenticatedWith(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String])
+      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      membersDataService: MembersDataService = fakeMembersDataService(hasFailed = false, hasDp = false)
     ): Future[Result] = {
-      fakeDigitalPack(actionRefiner, identityService).displayForm()(FakeRequest())
+      fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm()(FakeRequest())
     }
   }
 
@@ -116,6 +136,14 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       header("Location", result).value must startWith("https://identity-url.local")
     }
 
+    "redirect user with a dp to ty page" in new DigitalSubscriptionsDisplayForm {
+      val result = fakeRequestAuthenticatedWith(
+        membersDataService = fakeMembersDataService(hasFailed = false, hasDp = true)
+      )
+      status(result) mustBe 302
+      header("Location", result).value must endWith("thankyou-existing")
+    }
+
     "return a 500 if the call to get additional data from identity fails" in new DigitalSubscriptionsDisplayForm {
       val result = fakeRequestAuthenticatedWith(
         identityService = mockedIdentityService(authenticatedIdUser.user -> "not found".asLeft)
@@ -123,6 +151,14 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       status(result) mustBe 500
     }
 
+    "not redirect users if membersDataService errors" in new DigitalSubscriptionsDisplayForm {
+      val result = fakeRequestAuthenticatedWith(
+        membersDataService = fakeMembersDataService(hasFailed = true, hasDp = true)
+      )
+      status(result) mustBe 200
+      contentAsString(result) must include("digitalSubscriptionCheckoutPage.js")
+    }
+    
     "return form if user is signed in and call to identity is successful" in new DigitalSubscriptionsDisplayForm {
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedInActionRefiner)
 
