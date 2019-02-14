@@ -10,10 +10,10 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import FeatureList, { type ListItem } from 'components/featureList/featureList';
 import GridImage, { type GridImg } from 'components/gridImage/gridImage';
 import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import CtaSwitch from './ctaSwitch';
-import { GBPCountries } from '../../../helpers/internationalisation/countryGroup';
+
 
 
 // ----- Types ----- //

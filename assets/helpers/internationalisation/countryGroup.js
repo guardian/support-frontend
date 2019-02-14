@@ -105,47 +105,39 @@ const countryGroups: CountryGroups = {
 
 function fromPath(path: string = window.location.pathname): ?CountryGroupId {
   if (path === '/uk' || path.startsWith('/uk/')) {
-    return 'GBPCountries';
+    return GBPCountries;
   } else if (path === '/us' || path.startsWith('/us/')) {
-    return 'UnitedStates';
+    return UnitedStates;
   } else if (path === '/au' || path.startsWith('/au/')) {
-    return 'AUDCountries';
+    return AUDCountries;
   } else if (path === '/eu' || path.startsWith('/eu/')) {
-    return 'EURCountries';
+    return EURCountries;
   } else if (path === '/int' || path.startsWith('/int/')) {
-    return 'International';
+    return International;
   } else if (path === '/nz' || path.startsWith('/nz/')) {
-    return 'NZDCountries';
+    return NZDCountries;
   } else if (path === '/ca' || path.startsWith('/ca/')) {
-    return 'Canada';
+    return Canada;
   }
   return null;
 }
 
 function fromString(countryGroup: string): ?CountryGroupId {
   switch (countryGroup) {
-    case 'GBPCountries':
-      return 'GBPCountries';
-    case 'UnitedStates':
-      return 'UnitedStates';
-    case 'AUDCountries':
-      return 'AUDCountries';
-    case 'EURCountries':
-      return 'EURCountries';
-    case 'International':
-      return 'International';
-    case 'NZDCountries':
-      return 'NZDCountries';
-    case 'Canada':
-      return 'Canada';
-    default:
-      return null;
+    case 'GBPCountries': return GBPCountries;
+    case 'UnitedStates': return UnitedStates;
+    case 'AUDCountries': return AUDCountries;
+    case 'EURCountries': return EURCountries;
+    case 'International': return International;
+    case 'NZDCountries': return NZDCountries;
+    case 'Canada': return Canada;
+    default: return null;
   }
 }
 
 function fromCountry(isoCountry: string): ?CountryGroupId {
   if (isoCountry === 'UK') {
-    return 'GBPCountries';
+    return GBPCountries;
   }
 
   const countryGroup = Object.keys(countryGroups).find(countryGroupId =>
@@ -180,11 +172,11 @@ function fromGeolocation(): ?CountryGroupId {
 }
 
 function detect(): CountryGroupId {
-  return fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || 'GBPCountries';
+  return fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || GBPCountries;
 }
 
 function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
-  return fromString(countryGroupId) || 'GBPCountries';
+  return fromString(countryGroupId) || GBPCountries;
 }
 
 // ----- Exports ----- //
