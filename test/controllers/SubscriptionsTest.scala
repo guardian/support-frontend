@@ -35,7 +35,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    def fakeMembersDataService(hasFailed: Boolean, hasDp: Boolean): MembersDataService = {
+    def mockedMembersDataService(hasFailed: Boolean, hasDp: Boolean): MembersDataService = {
       val membersDataService: MembersDataService = mock[MembersDataService]
       val errorResponse: MembersDataServiceError = UnexpectedResponseStatus(500)
       val successResponseWithDp: UserAttributes = UserAttributes("0", ContentAccess(
@@ -46,26 +46,22 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
         recurringContributor = false,
         digitalPack = false
       ))
-      if(hasFailed) {
         when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
-          EitherT.leftT[Future, UserAttributes](errorResponse)
+          if(hasFailed) {
+              EitherT.leftT[Future, UserAttributes](errorResponse)
+          } else if(hasDp) {
+              EitherT.rightT[Future, MembersDataServiceError](successResponseWithDp)
+          } else {
+              EitherT.rightT[Future, MembersDataServiceError](successResponseWithoutDp)
+          }
         )
-      } else if(hasDp) {
-        when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
-          EitherT.rightT[Future, MembersDataServiceError](successResponseWithDp)
-        )
-      } else {
-        when(membersDataService.userAttributes(any[AccessCredentials.Cookies])).thenReturn(
-          EitherT.rightT[Future, MembersDataServiceError](successResponseWithoutDp)
-        )
-      }
       membersDataService
     }
 
     def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
-      membersDataService: MembersDataService = fakeMembersDataService(hasFailed = false, hasDp = false)
+      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
 
       val amounts = Amounts(Nil,Nil,Nil)
@@ -122,7 +118,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     def fakeRequestAuthenticatedWith(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
-      membersDataService: MembersDataService = fakeMembersDataService(hasFailed = false, hasDp = false)
+      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): Future[Result] = {
       fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm()(FakeRequest())
     }
@@ -138,7 +134,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "redirect user with a dp to ty page" in new DigitalSubscriptionsDisplayForm {
       val result = fakeRequestAuthenticatedWith(
-        membersDataService = fakeMembersDataService(hasFailed = false, hasDp = true)
+        membersDataService = mockedMembersDataService(hasFailed = false, hasDp = true)
       )
       status(result) mustBe 302
       header("Location", result).value must endWith("thankyou-existing")
@@ -153,12 +149,12 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "not redirect users if membersDataService errors" in new DigitalSubscriptionsDisplayForm {
       val result = fakeRequestAuthenticatedWith(
-        membersDataService = fakeMembersDataService(hasFailed = true, hasDp = true)
+        membersDataService = mockedMembersDataService(hasFailed = true, hasDp = true)
       )
       status(result) mustBe 200
       contentAsString(result) must include("digitalSubscriptionCheckoutPage.js")
     }
-    
+
     "return form if user is signed in and call to identity is successful" in new DigitalSubscriptionsDisplayForm {
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedInActionRefiner)
 
