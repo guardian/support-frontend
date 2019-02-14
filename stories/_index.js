@@ -7,7 +7,7 @@ module.exports = () => {
   require('./dialog.jsx');
   require('./form.jsx');
   require('./header.jsx');
-  require('./list.jsx');
+  require('./type.jsx');
   require('./hero.jsx');
   require('./tabs.jsx');
   require('./animatedDots.jsx');

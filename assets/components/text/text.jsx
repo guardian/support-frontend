@@ -27,7 +27,7 @@ const Text = ({
       !children ? 'heading-only' : null,
     ])}
   >
-    {title && <Heading className="component-text__heading" size={headingSize}>{title}</Heading>}
+    {title && <Title size={headingSize}>{title}</Title>}
     {children}
   </div>
 );
@@ -40,9 +40,18 @@ Text.defaultProps = {
 
 
 // ----- Children ----- //
-export const Callout = ({ children }: {children: Node}) => <p className="component-text__callout"><strong>{children}</strong></p>;
-export const LargeParagraph = ({ children }: {children: Node}) => <p className="component-text__large">{children}</p>;
-export const SansParagraph = ({ children }: {children: Node}) => <p className="component-text__sans">{children}</p>;
+export const Title = ({ children, size }: {children: Node, size: HeadingSize}) => (
+  <Heading size={size}className="component-text__heading">{children}</Heading>
+);
+export const Callout = ({ children }: {children: Node}) => (
+  <p className="component-text__callout"><strong>{children}</strong></p>
+);
+export const LargeParagraph = ({ children }: {children: Node}) => (
+  <p className="component-text__large">{children}</p>
+);
+export const SansParagraph = ({ children }: {children: Node}) => (
+  <p className="component-text__sans">{children}</p>
+);
 
 
 // ----- Exports ----- //

@@ -11,6 +11,16 @@
   }
 }
 
+.component-text code {
+  font-family: monospace;
+  background: gu-colour(brightness-93);
+  padding: ($gu-v-spacing / 4) ($gu-h-spacing / 4);
+}
+
+.component-text a {
+  color: inherit;
+}
+
 .component-text__heading {
   @include gu-fontset-heading;
 }
@@ -22,10 +32,6 @@
     background-color: gu-colour(highlight-main);
     color: gu-colour(brightness-7);
   }
-}
-
-.component-text a {
-  color: inherit;
 }
 
 .component-text__large {
