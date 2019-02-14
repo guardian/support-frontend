@@ -5,13 +5,13 @@ import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import model.{AcquisitionData, ClientBrowserInfo, DefaultThreadPool}
+import model.{AcquisitionData, ClientBrowserInfo, DefaultThreadPool, PaymentProvider}
 import model.subscribewithgoogle.GoogleRecordPayment
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{Matchers, WordSpec}
 import services._
 import org.mockito.{Matchers => Match}
-import org.mockito.Mockito._
+import org.mockito.Mockito.{verify, _}
 import org.scalatest.concurrent.IntegrationPatience
 import util.FutureEitherValues
 
@@ -120,6 +120,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
       verify(mockDbService, times(1)).insertContributionData(Match.any())
       verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
+      verify(mockCloudWatchService, times(1)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
     }
 
     "record a contribution when ophan fails" in new SubscribeWithGoogleBackendFixture(){
@@ -140,6 +141,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
       verify(mockDbService, times(2)).insertContributionData(Match.any())
       verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
+      verify(mockCloudWatchService, times(0)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
     }
 
 
@@ -161,6 +163,10 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockOphanService, times(0)).submitAcquisition(Match.any())(Match.any())
       verify(mockDbService, times(1)).insertContributionData(Match.any())
       verify(mockEmailService, times(0)).sendThankYouEmail(Match.any())
+      verify(mockCloudWatchService, times(0)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
+      verify(mockCloudWatchService, times(1))
+        .recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+
     }
 
     "send thank you email when db fails - alert cloudwatch" in new SubscribeWithGoogleBackendFixture(){
@@ -182,6 +188,9 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
       verify(mockDbService, times(2)).insertContributionData(Match.any())
       verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
+      verify(mockCloudWatchService, times(1))
+        .recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+
     }
 
     "transaction stored in db but email comms fail" in new SubscribeWithGoogleBackendFixture(){
@@ -201,6 +210,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
       verify(mockDbService, times(1)).insertContributionData(Match.any())
       verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
+      verify(mockCloudWatchService, times(1)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
     }
   }
 }
