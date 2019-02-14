@@ -5,7 +5,7 @@
 import React from 'react';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { LargeParagraph } from 'components/text/text';
 
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
@@ -17,7 +17,7 @@ function ThankYouPendingContent() {
   return (
     <div>
       <ProductPageContentBlock>
-        <ProductPageTextBlock>
+        <Text>
           <LargeParagraph>
             Thank you for subscribing to the Digital Pack.
             Your subscription is being processed and you will
@@ -41,7 +41,7 @@ function ThankYouPendingContent() {
               </a>
             )} for customer support.
           </p>
-        </ProductPageTextBlock>
+        </Text>
       </ProductPageContentBlock>
     </div>
   );

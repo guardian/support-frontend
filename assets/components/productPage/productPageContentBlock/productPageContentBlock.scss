@@ -127,7 +127,7 @@
 }
 
 .component-product-page-content-block__narrowContent,
-.component-product-page-content-block .component-product-page-text-block {
+.component-product-page-content-block .component-text {
   @include narrow-content;
 }
 
@@ -135,7 +135,7 @@
 
 .component-product-page-content-block {
   .component-product-page-content-block__narrowContent,
-  .component-product-page-text-block, 
+  .component-text, 
   .component-product-page-plan-form,
   .component-product-page-info-chip {
     margin-bottom: ($gu-v-spacing*2)

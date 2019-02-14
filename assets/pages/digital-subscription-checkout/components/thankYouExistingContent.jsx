@@ -5,7 +5,7 @@
 import React from 'react';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { LargeParagraph } from 'components/text/text';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import AppsSection from './thankYou/appsSection';
@@ -23,11 +23,11 @@ function ThankYouExistingContent({ countryGroupId }: PropTypes) {
   return (
     <div>
       <ProductPageContentBlock>
-        <ProductPageTextBlock>
+        <Text>
           <LargeParagraph>
             You have access to the following products:
           </LargeParagraph>
-        </ProductPageTextBlock>
+        </Text>
         <AppsSection countryGroupId={countryGroupId} />
       </ProductPageContentBlock>
     </div>

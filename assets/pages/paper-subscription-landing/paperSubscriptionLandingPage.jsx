@@ -9,7 +9,7 @@ import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { LargeParagraph } from 'components/text/text';
 
 
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -75,20 +75,20 @@ const content = (
       <SaleHeader />
 
       <ProductPageContentBlock needsHigherZindex>
-        <ProductPageTextBlock>
+        <Text>
           <LargeParagraph>
             {getStandfirst()}
           </LargeParagraph>
-        </ProductPageTextBlock>
+        </Text>
         <Tabs />
       </ProductPageContentBlock>
       <Content />
       {flashSaleIsActive('Paper', 'GBPCountries') &&
         <ProductPageContentBlock>
-          <ProductPageTextBlock title="Promotion terms and conditions">
+          <Text title="Promotion terms and conditions">
             <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/GCB80X/terms?country=${subsCountry}`}>here</a>.
             </p>
-          </ProductPageTextBlock>
+          </Text>
         </ProductPageContentBlock>
       }
     </Page>

@@ -14,7 +14,7 @@ import {
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import AnchorButton from 'components/button/anchorButton';
 
 // ----- Types ----- //
@@ -28,7 +28,7 @@ type PropTypes = {
 
 const AppsSection = ({ countryGroupId }: PropTypes) => (
   <div>
-    <ProductPageTextBlock title="Premium App" headingSize={3}>
+    <Text title="Premium App" headingSize={3}>
       <p>
           Your enhanced experience of The Guardian
           for mobile and tablet, with exclusive features and ad-free reading.
@@ -51,8 +51,8 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             Download from Google Play
         </AnchorButton>
       </div>
-    </ProductPageTextBlock>
-    <ProductPageTextBlock title="Daily Edition (iPad only)" headingSize={3}>
+    </Text>
+    <Text title="Daily Edition (iPad only)" headingSize={3}>
       <p>Every issue of The Guardian and Observer, designed for your iPad and available offline.</p>
       <div className="thank-you-stage__ctas">
         <AnchorButton
@@ -64,7 +64,7 @@ const AppsSection = ({ countryGroupId }: PropTypes) => (
             Download the Daily Edition
         </AnchorButton>
       </div>
-    </ProductPageTextBlock>
+    </Text>
   </div>
 );
 

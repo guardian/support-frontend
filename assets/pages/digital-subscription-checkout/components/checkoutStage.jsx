@@ -11,7 +11,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { LargeParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { LargeParagraph } from 'components/text/text';
 
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 
@@ -92,11 +92,11 @@ function CheckoutStage(props: PropTypes) {
             </HeadingBlock>
           </HeroWrapper>
           <ProductPageContentBlock>
-            <ProductPageTextBlock>
+            <Text>
               <LargeParagraph>
                 Please enter your details below to complete your Digital Pack subscription.
               </LargeParagraph>
-            </ProductPageTextBlock>
+            </Text>
             <Divider />
           </ProductPageContentBlock>
           <CheckoutForm />

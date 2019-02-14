@@ -3,7 +3,7 @@
 import React from 'react';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import { getMemLink, getPatronsLink } from 'helpers/externalLinks';
 
 import OtherProduct from './otherProduct';
@@ -11,7 +11,7 @@ import OtherProduct from './otherProduct';
 export default function OtherProducts() {
   return (
     <ProductPageContentBlock modifierClasses={['other-products']}>
-      <ProductPageTextBlock title="Other ways you can support us">
+      <Text title="Other ways you can support us">
         <OtherProduct
           title="The Guardian Patrons"
           description="Support from our Patrons is crucial to ensure that generations to come will be able to enjoy The Guardian"
@@ -24,7 +24,7 @@ export default function OtherProducts() {
           destination={getMemLink('events')}
           modifierClass="masterclass"
         />
-      </ProductPageTextBlock>
+      </Text>
     </ProductPageContentBlock>
   );
 }

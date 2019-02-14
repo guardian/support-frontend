@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import UnorderedList from 'components/list/unorderedList';
 import OrderedList from 'components/list/orderedList';
 import GridImage from 'components/gridImage/gridImage';
@@ -27,7 +27,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
     />
     }
   >
-    <ProductPageTextBlock title="How home delivery works">
+    <Text title="How home delivery works">
       <p>
           If you live in Greater London (within the M25), you
           can use The Guardian’s home delivery service. If not, you can
@@ -38,16 +38,16 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
         'You’ll receive your first newspaper as quickly as five days from you subscribing',
         ]}
       />
-    </ProductPageTextBlock>
+    </Text>
     <Divider small />
-    <ProductPageTextBlock title="Giving you peace of mind">
+    <Text title="Giving you peace of mind">
       <UnorderedList items={[
         'Your paper will arrive before 7am from Monday to Saturday and before 8.30am on Sunday',
         'We can’t deliver to individual flats, or apartments within blocks because we need access to your post box to deliver your paper',
         'You can pause your subscription for up to 36 days a year. So if you’re going away anywhere, you won’t have to pay for the papers that you miss',
         ]}
       />
-    </ProductPageTextBlock>
+    </Text>
   </ProductPageContentBlock>
 
 );
