@@ -26,6 +26,9 @@ object Fixtures {
           "firstName": "test",
           "lastName": "user",
           "country": "GB",
+          "billingAddress": {
+            "country": "GB"
+          },
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
           "allowGURelatedMail": false,
