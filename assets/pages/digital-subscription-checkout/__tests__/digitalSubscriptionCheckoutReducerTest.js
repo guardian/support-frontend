@@ -6,7 +6,6 @@ import { initReducer, setStage, setFormErrors, type Stage } from '../digitalSubs
 
 jest.mock('ophan', () => {});
 
-
 // ----- Tests ----- //
 
 describe('Digital Subscription Checkout Reducer', () => {
