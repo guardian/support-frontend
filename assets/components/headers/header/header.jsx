@@ -17,7 +17,7 @@ import './header.scss';
 
 export type PropTypes = {|
   utility: Option<Node>,
-  displayNavigation: boolean,
+displayNavigation: boolean,
 |};
 export type State = {|
   fitsLinksInOneRow: boolean,
