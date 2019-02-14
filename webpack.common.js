@@ -7,6 +7,7 @@ const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 const cssnano = require('cssnano');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const { convertJs: convertToSass } = require('json-sass-vars');
 
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
@@ -106,6 +107,12 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           {
             loader: 'fast-sass-loader',
             options: {
+              transformers: [
+                {
+                  extensions: ['.json'],
+                  transform: rawFile => `$json: ${convertToSass(JSON.parse(rawFile))};`,
+                },
+              ],
               includePaths: [
                 path.resolve(__dirname, 'assets'),
                 path.resolve(__dirname),

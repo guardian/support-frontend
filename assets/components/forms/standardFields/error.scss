@@ -1,10 +1,8 @@
 @import './formFields';
 
 .component-form-error__error {
-  @include gu-fontset-body-sans;
+  @include gu-fontset-explainer;
   color: gu-colour(error);
-  font-size: 14px;
-  font-weight: bold;
   display: block;
   margin-top: $gu-v-spacing / 4;
 }
