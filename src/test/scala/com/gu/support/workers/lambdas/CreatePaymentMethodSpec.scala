@@ -11,12 +11,12 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.Stripe.{StripeError, StripeList}
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.Fixtures.{validBaid, _}
+import com.gu.support.workers.JsonFixtures.{validBaid, _}
+import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.CreateSalesforceContactState
-import com.gu.support.workers._
 import com.gu.test.tags.objects.IntegrationTest
 import io.circe.generic.auto._
 import org.mockito.Matchers._

@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.ophan.AcquisitionService
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.Fixtures.sendAcquisitionEventJson
+import com.gu.support.workers.JsonFixtures.sendAcquisitionEventJson
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}

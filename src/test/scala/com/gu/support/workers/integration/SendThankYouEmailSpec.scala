@@ -5,15 +5,15 @@ import java.io.ByteArrayOutputStream
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService}
 import com.gu.i18n.Country.UK
-import com.gu.i18n.{Country, Currency}
 import com.gu.i18n.Currency.GBP
+import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.Fixtures.{thankYouEmailJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{thankYouEmailJson, wrapFixture}
+import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.SendThankYouEmail
-import com.gu.support.workers._
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json

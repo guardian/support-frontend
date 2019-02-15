@@ -6,7 +6,7 @@ import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvide
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromotionService
-import com.gu.support.workers.Fixtures._
+import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
