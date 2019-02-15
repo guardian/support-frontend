@@ -9,15 +9,16 @@ import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import SquaresIntroduction from 'components/introduction/squaresIntroduction';
 import PageSection from 'components/pageSection/pageSection';
-import CtaLink from 'components/ctaLink/ctaLink';
+import Rows from 'components/base/rows';
+import AnchorButton from 'components/button/anchorButton';
 import { contributionsEmail } from 'helpers/legal';
-
+import Text, { LargeParagraph } from 'components/text/text';
 import '../error.scss';
 
 // ----- Types ----- //
 
 type PropTypes = {|
-  errorCode: string,
+  errorCode?: string,
   headings: string[],
   copy: string,
   reportLink?: boolean,
@@ -35,25 +36,32 @@ export default function ErrorPage(props: PropTypes) {
     >
       <SquaresIntroduction
         headings={props.headings}
-        highlights={[`Error ${props.errorCode}`]}
+        highlights={props.errorCode ? [`Error ${props.errorCode}`] : []}
       />
-      <PageSection modifierClass="ctas">
-        <p className="error-copy">
-          <span className="error-copy__text">{props.copy} </span>
-          <ReportLink show={props.reportLink || false} />
-        </p>
-        <CtaLink
-          text="Support The Guardian"
-          accessibilityHint="click here to support The Guardian"
-          url="/"
-          modifierClasses={['support-the-guardian']}
-        />
-        <CtaLink
-          text="Go to The Guardian home page"
-          accessibilityHint="click here to return to The Guardian home page"
-          url="https://www.theguardian.com"
-          modifierClasses={['guardian-home-page', 'border']}
-        />
+      <PageSection>
+        <Text>
+          <LargeParagraph>
+            <span className="error-copy__text">{props.copy} </span>
+            <ReportLink show={props.reportLink || false} />
+          </LargeParagraph>
+          <Rows>
+            <AnchorButton
+              aria-label="click here to support The Guardian"
+              href="/"
+              modifierClasses={['support-the-guardian']}
+            >
+              Support The Guardian
+            </AnchorButton>
+            <br />
+            <AnchorButton
+              aria-label="click here to return to The Guardian home page"
+              href="https://www.theguardian.com"
+              appearance="greyHollow"
+            >
+              Go to The Guardian home page
+            </AnchorButton>
+          </Rows>
+        </Text>
       </PageSection>
     </Page>
   );
@@ -82,4 +90,5 @@ function ReportLink(props: { show: boolean }) {
 
 ErrorPage.defaultProps = {
   reportLink: false,
+  errorCode: null,
 };
