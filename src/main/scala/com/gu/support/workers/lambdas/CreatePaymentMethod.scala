@@ -67,18 +67,22 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
 
-  def createDirectDebitPaymentMethod(dd: DirectDebitPaymentFields, user: User): Future[DirectDebitPaymentMethod] =
+  def createDirectDebitPaymentMethod(dd: DirectDebitPaymentFields, user: User): Future[DirectDebitPaymentMethod] = {
+    val addressLine = AddressLineTransformer.combinedAddressLine(user.billingAddress.lineOne, user.billingAddress.lineTwo)
+
     Future.successful(DirectDebitPaymentMethod(
       firstName = user.firstName,
       lastName = user.lastName,
       bankTransferAccountName = dd.accountHolderName,
       bankCode = dd.sortCode,
       bankTransferAccountNumber = dd.accountNumber,
-      country = user.country,
-      city = dd.city,
-      postalCode = dd.postalCode,
-      state = dd.state,
-      streetName = dd.streetName,
-      streetNumber = dd.streetNumber
+      country = user.billingAddress.country,
+      city = user.billingAddress.city,
+      postalCode = user.billingAddress.postCode,
+      state = user.billingAddress.state,
+      streetName = addressLine.map(_.streetName),
+      streetNumber = addressLine.flatMap(_.streetNumber)
     ))
+  }
+
 }
