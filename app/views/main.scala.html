@@ -1,6 +1,7 @@
 @import admin.settings.AllSettings
 @import assets.AssetsResolver
 @import views.ViewHelpers._
+@import com.gu.support.pricing.ProductPrices
 
 @(
 	title: String,
@@ -13,7 +14,8 @@
 	styles: Html = Html(""),
 	scripts: Html = Html(""),
   data: Map[String, String] = Map.empty,
-  csrf: Option[String] = None
+  csrf: Option[String] = None,
+  productPrices: Option[ProductPrices] = None,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
