@@ -18,7 +18,7 @@ object MembersDataService {
     implicit val jf: OFormat[ContentAccess] = Json.format[ContentAccess]
   }
 
-  case class ContentAccess(recurringContributor: Boolean)
+  case class ContentAccess(recurringContributor: Boolean, digitalPack: Boolean)
 
   object UserAttributes {
     implicit val jf: OFormat[UserAttributes] = Json.format[UserAttributes]

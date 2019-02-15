@@ -7,6 +7,7 @@ import {
   parseContribution,
   getMinContribution,
 } from '../contributions';
+import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from '../internationalisation/countryGroup';
 
 
 // ----- Tests ----- //
@@ -17,25 +18,25 @@ describe('contributions', () => {
 
     it('should return "TooLittle" for contributions below the minimum', () => {
       [
-        [1, 'MONTHLY', 'GBPCountries'],
-        [5, 'ANNUAL', 'AUDCountries'],
-        [0.5, 'ONE_OFF', 'EURCountries'],
+        [1, 'MONTHLY', GBPCountries],
+        [5, 'ANNUAL', AUDCountries],
+        [0.5, 'ONE_OFF', EURCountries],
       ].forEach(a => expect(validateContribution(...a)).toBe('TooLittle'));
     });
 
     it('should return "TooMuch" for contributions above the maximum', () => {
       [
-        [200, 'MONTHLY', 'UnitedStates'],
-        [2030, 'ANNUAL', 'International'],
-        [2030, 'ONE_OFF', 'Canada'],
+        [200, 'MONTHLY', UnitedStates],
+        [2030, 'ANNUAL', International],
+        [2030, 'ONE_OFF', Canada],
       ].forEach(a => expect(validateContribution(...a)).toBe('TooMuch'));
     });
 
     it('should return null for contributions that are OK', () => {
       [
-        [100, 'MONTHLY', 'NZDCountries'],
-        [100, 'ANNUAL', 'UnitedStates'],
-        [100, 'ONE_OFF', 'GBPCountries'],
+        [100, 'MONTHLY', NZDCountries],
+        [100, 'ANNUAL', UnitedStates],
+        [100, 'ONE_OFF', GBPCountries],
       ].forEach(a => expect(validateContribution(...a)).toBeNull());
     });
 
@@ -57,7 +58,7 @@ describe('contributions', () => {
 
   describe('getMinContribution', () => {
     it('should retrieve the minimum contribution', () => {
-      expect(getMinContribution('ONE_OFF', 'GBPCountries')).toBe(1);
+      expect(getMinContribution('ONE_OFF', GBPCountries)).toBe(1);
     });
   });
 

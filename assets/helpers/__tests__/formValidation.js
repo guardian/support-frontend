@@ -4,6 +4,7 @@
 
 import { checkStateIfApplicable } from 'helpers/formValidation';
 import { checkAmountOrOtherAmount, maxTwoDecimals } from '../formValidation';
+import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from '../internationalisation/countryGroup';
 
 // ----- Tests ----- //
 
@@ -50,36 +51,36 @@ describe('formValidation', () => {
 
     it('should return false if state is null', () => {
       const state = null;
-      const countryGroupId = 'UnitedStates';
+      const countryGroupId = UnitedStates;
       expect(checkStateIfApplicable(state, countryGroupId)).toEqual(false);
     });
 
     it('should return true if countryGroupId is UnitedStates and state is a string', () => {
       const state = 'CA';
-      const countryGroupId = 'UnitedStates';
+      const countryGroupId = UnitedStates;
       expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
     });
 
     it('should return true if countryGroupId is Canada and state is a string', () => {
       const state = 'AL';
-      const countryGroupId = 'Canada';
+      const countryGroupId = Canada;
       expect(checkStateIfApplicable(state, countryGroupId)).toEqual(true);
     });
 
     it('should return true if countryGroupId is not Canada or United States regardless of the state', () => {
       let state = 'AL';
-      expect(checkStateIfApplicable(state, 'GBPCountries')).toEqual(true);
-      expect(checkStateIfApplicable(state, 'AUDCountries')).toEqual(true);
-      expect(checkStateIfApplicable(state, 'EURCountries')).toEqual(true);
-      expect(checkStateIfApplicable(state, 'International')).toEqual(true);
-      expect(checkStateIfApplicable(state, 'NZDCountries')).toEqual(true);
+      expect(checkStateIfApplicable(state, GBPCountries)).toEqual(true);
+      expect(checkStateIfApplicable(state, AUDCountries)).toEqual(true);
+      expect(checkStateIfApplicable(state, EURCountries)).toEqual(true);
+      expect(checkStateIfApplicable(state, International)).toEqual(true);
+      expect(checkStateIfApplicable(state, NZDCountries)).toEqual(true);
 
       state = null;
-      expect(checkStateIfApplicable(state, 'GBPCountries')).toEqual(true);
-      expect(checkStateIfApplicable(state, 'AUDCountries')).toEqual(true);
-      expect(checkStateIfApplicable(state, 'EURCountries')).toEqual(true);
-      expect(checkStateIfApplicable(state, 'International')).toEqual(true);
-      expect(checkStateIfApplicable(state, 'NZDCountries')).toEqual(true);
+      expect(checkStateIfApplicable(state, GBPCountries)).toEqual(true);
+      expect(checkStateIfApplicable(state, AUDCountries)).toEqual(true);
+      expect(checkStateIfApplicable(state, EURCountries)).toEqual(true);
+      expect(checkStateIfApplicable(state, International)).toEqual(true);
+      expect(checkStateIfApplicable(state, NZDCountries)).toEqual(true);
     });
   });
 
@@ -123,19 +124,19 @@ describe('formValidation', () => {
 
 
     it('should return true if selected amount is not other and amount is valid', () => {
-      expect(checkAmountOrOtherAmount(defaultSelectedAmounts, defaultOtherAmounts, 'MONTHLY', 'UnitedStates')).toEqual(true);
+      expect(checkAmountOrOtherAmount(defaultSelectedAmounts, defaultOtherAmounts, 'MONTHLY', UnitedStates)).toEqual(true);
     });
 
     it('should return true if other is selected and amount is valid', () => {
-      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'MONTHLY', 'UnitedStates')).toEqual(true);
+      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'MONTHLY', UnitedStates)).toEqual(true);
     });
 
     it('should return false if other is selected and amount is empty', () => {
-      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'ONE_OFF', 'UnitedStates')).toEqual(false);
+      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'ONE_OFF', UnitedStates)).toEqual(false);
     });
 
     it('should return false if other is selected and amount is invalid', () => {
-      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'ANNUAL', 'UnitedStates')).toEqual(false);
+      expect(checkAmountOrOtherAmount(selectedAmountsWithOtherSelected, defaultOtherAmounts, 'ANNUAL', UnitedStates)).toEqual(false);
     });
   });
 });

@@ -3,7 +3,7 @@
 import React from 'react';
 
 import ProductPageContentBlock, { NarrowContent } from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import AnchorButton from 'components/button/anchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 
@@ -18,13 +18,13 @@ export default function CtaContribute() {
           <WithSupport />
         </div>
         <div>
-          <ProductPageTextBlock title="Contribute">
+          <Text title="Contribute">
             <p>
             At a time when factual, honest reporting is more vital than ever, we need your help to continue our work.
             If everyone who reads our reporting, who likes it, helps to support it, our future would be much
             more secure. <strong>Make a single or recurrent payment, and help us to change the story.</strong>
             </p>
-          </ProductPageTextBlock>
+          </Text>
           <NarrowContent>
             <AnchorButton
               icon={<ArrowRightStraight />}

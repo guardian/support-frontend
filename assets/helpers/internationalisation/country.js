@@ -6,7 +6,16 @@ import { getQueryParameter } from 'helpers/url';
 import * as cookie from 'helpers/cookie';
 import { type Option } from 'helpers/types/option';
 
-import { countryGroups } from './countryGroup';
+import {
+  AUDCountries,
+  Canada,
+  countryGroups,
+  EURCountries,
+  GBPCountries,
+  International,
+  NZDCountries,
+  UnitedStates,
+} from './countryGroup';
 import type { CountryGroupId } from './countryGroup';
 
 
@@ -436,9 +445,9 @@ function fromString(s: string): ?IsoCountry {
 
 function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
   switch (countryGroupId) {
-    case 'UnitedStates':
+    case UnitedStates:
       return 'US';
-    case 'Canada':
+    case Canada:
       return 'CA';
     default: return null;
   }
@@ -482,7 +491,12 @@ function setCountry(country: IsoCountry) {
   cookie.set('GU_country', country, 7);
 }
 
-type TargetCountryGroups = 'International' | 'EURCountries' | 'NZDCountries' | 'GBPCountries' | 'AUDCountries';
+type TargetCountryGroups =
+  typeof International |
+  typeof EURCountries |
+  typeof NZDCountries |
+  typeof GBPCountries |
+  typeof AUDCountries;
 
 function handleCountryForCountryGroup(
   targetCountryGroup: TargetCountryGroups,
@@ -526,7 +540,13 @@ function handleCountryForCountryGroup(
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
 
-  const targetCountryGroups: TargetCountryGroups[] = ['International', 'EURCountries', 'NZDCountries', 'GBPCountries', 'AUDCountries'];
+  const targetCountryGroups: TargetCountryGroups[] = [
+    International,
+    EURCountries,
+    NZDCountries,
+    GBPCountries,
+    AUDCountries,
+  ];
   let country = null;
 
   targetCountryGroups.forEach((targetCountryGroupId) => {

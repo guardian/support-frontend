@@ -8,6 +8,7 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { GBPCountries } from '../internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -49,7 +50,7 @@ function digitalPackProductPrice(
   billingPeriod: BillingPeriod,
   country: IsoCountry,
 ): ProductPrice {
-  const countryGroup = countryGroups[fromCountry(country) || 'GBPCountries'];
+  const countryGroup = countryGroups[fromCountry(country) || GBPCountries];
   return productPrices[countryGroup.name][NoFulfilmentOptions][NoProductOptions][billingPeriod][countryGroup.currency];
 }
 

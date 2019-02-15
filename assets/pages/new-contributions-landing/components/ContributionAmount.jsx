@@ -10,7 +10,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
-
+import { EURCountries, GBPCountries } from 'helpers/internationalisation/countryGroup';
 import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
@@ -97,8 +97,8 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 
 const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> => {
   switch (countryGroupId) {
-    case 'GBPCountries': return <SvgPound />;
-    case 'EURCountries': return <SvgEuro />;
+    case GBPCountries: return <SvgPound />;
+    case EURCountries: return <SvgEuro />;
     default: return <SvgDollar />;
   }
 };

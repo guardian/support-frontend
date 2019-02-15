@@ -6,7 +6,7 @@ import React, { type Element, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock, { SansParagraph } from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text, { SansParagraph, Callout } from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import { paperSubsUrl } from 'helpers/routes';
 import { flashSaleIsActive, getDiscount, getDuration } from 'helpers/flashSale';
@@ -37,17 +37,19 @@ const getPageInfoChip = (): string => {
   return 'You can cancel your subscription at any time.';
 };
 
-const getDiscountCallout = (): ?string => {
+const DiscountCalloutMaybe = () => {
+  if (!flashSaleIsActive('Paper', 'GBPCountries')) { return null; }
   const [discount, duration] = [
     getDiscount('Paper', 'GBPCountries'),
     getDuration('Paper', 'GBPCountries'),
   ];
   if (discount && duration) {
-    return `Save an extra ${Math.round(discount * 100)}% for ${duration}`;
+    return <Callout>Save an extra {Math.round(discount * 100)}% for {duration}</Callout>;
   } else if (discount) {
-    return `Save an extra ${Math.round(discount * 100)}%`;
+    return <Callout>Save an extra {Math.round(discount * 100)}% </Callout>;
   }
   return null;
+
 };
 
 
@@ -59,14 +61,14 @@ const ContentHelpBlock = ({
   telephoneLink: Element<string>
 |}) => (
   <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
-    <ProductPageTextBlock title="FAQ and help">
+    <Text title="FAQ and help">
       <SansParagraph>
-      If you’ve got any more questions, you might well find the answers in the {faqLink}.
+        If you’ve got any more questions, you might well find the answers in the {faqLink}.
       </SansParagraph>
       <SansParagraph>
-       If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
+        If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
       </SansParagraph>
-    </ProductPageTextBlock>
+    </Text>
   </ProductPageContentBlock>
 );
 
@@ -97,25 +99,24 @@ const ContentForm = ({
   setTabAction: typeof setTab
 |}) => (
   <ProductPageContentBlock type="feature" id="subscribe">
-    <ProductPageTextBlock
+    <Text
       title={title}
-      callout={flashSaleIsActive('Paper', 'GBPCountries') ? getDiscountCallout() : null}
-    />
-    {text &&
-      <ProductPageTextBlock>
-        <p>{text}</p>
-      </ProductPageTextBlock>
-    }
+    >
+      <DiscountCalloutMaybe />
+      {text &&
+      <p>{text}</p>
+      }
+    </Text>
     <Form />
-    <ProductPageTextBlock>
+    <Text>
       <SansParagraph>
         {
-            selectedTab === 'collection'
+          selectedTab === 'collection'
             ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
             : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
-          }
+        }
       </SansParagraph>
-    </ProductPageTextBlock>
+    </Text>
     <ProductPageInfoChip>
       {getPageInfoChip()}
     </ProductPageInfoChip>

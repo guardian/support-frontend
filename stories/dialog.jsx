@@ -8,7 +8,7 @@ import { storiesOf } from '@storybook/react';
 
 import Dialog from 'components/dialog/dialog';
 import Button from 'components/button/button';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 import WithState from '../.storybook/util/withState';
 
@@ -52,7 +52,7 @@ const stories = storiesOf('Dialogs', module)
 
 stories.add('Styled dialog', () => (
   <div style={{ maxWidth: '30em' }}>
-    <ProductPageTextBlock title="This is an styled dialog example">
+    <Text title="This is an styled dialog example">
       <p>
         It pops up in the middle of the screen
       </p>
@@ -67,9 +67,9 @@ stories.add('Styled dialog', () => (
               styled
             >
               <div style={dialogStyle}>
-                <ProductPageTextBlock title={'I\'m a dialog!'}>
+                <Text title={'I\'m a dialog!'}>
                   I don&#39;t do much on my own <span role="img" aria-label="sadface">☹️</span>.
-                </ProductPageTextBlock>
+                </Text>
                 <GreyButton
                   appearance="primary"
                   onClick={() => { setState({ open: false }); }}
@@ -81,14 +81,14 @@ stories.add('Styled dialog', () => (
           </div>
         )}
       </WithState>
-    </ProductPageTextBlock>
+    </Text>
   </div>
 ));
 
 
 stories.add('Unstyled dialog', () => (
   <div style={{ maxWidth: '30em' }}>
-    <ProductPageTextBlock title="This is an unstyled dialog example">
+    <Text title="This is an unstyled dialog example">
       <p>
         You can make it look like anything.
       </p>
@@ -134,6 +134,6 @@ stories.add('Unstyled dialog', () => (
             </Dialog>
           </div>)}
       </WithState>
-    </ProductPageTextBlock>
+    </Text>
   </div>
 ));

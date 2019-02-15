@@ -3,13 +3,13 @@
 import React from 'react';
 
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import BreakingTheHeadlines from 'components/svgs/breakingTheHeadlines';
 
 export default function BreakingHeadlines() {
   return (
     <ProductPageContentBlock type="grey">
-      <ProductPageTextBlock>
+      <Text>
         <BreakingTheHeadlines />
         <p>
           We pride ourselves on our breaking news stories, in-depth analysis and thoughtful opinion pieces.
@@ -17,7 +17,7 @@ export default function BreakingHeadlines() {
           arts critics, interviewers and science reporters are dedicated to bringing you the quality coverage
           you have come to expect of the Guardian. Why settle for less?
         </p>
-      </ProductPageTextBlock>
+      </Text>
     </ProductPageContentBlock>
   );
 }

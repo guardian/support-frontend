@@ -6,6 +6,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { usStates, caStates } from 'helpers/internationalisation/country';
 
 import type { Action } from './userActions';
+import { Canada, UnitedStates } from '../internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -46,9 +47,9 @@ const initialState: User = {
 // ----- Functions ----- //
 
 function defaultStateOrProvince(countryGroup: CountryGroupId): string {
-  if (countryGroup === 'UnitedStates') {
+  if (countryGroup === UnitedStates) {
     return Object.keys(usStates)[0];
-  } else if (countryGroup === 'Canada') {
+  } else if (countryGroup === Canada) {
     return Object.keys(caStates)[0];
   }
 

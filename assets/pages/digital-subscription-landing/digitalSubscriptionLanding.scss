@@ -25,7 +25,9 @@
 #digital-subscription-landing-page-uk,
 #digital-subscription-landing-page-us,
 #digital-subscription-landing-page-au,
-#digital-subscription-landing-page-eu {
+#digital-subscription-landing-page-eu,
+#digital-subscription-landing-page-nz,
+#digital-subscription-landing-page-ca {
   .component-left-margin-section__content {
     overflow-x: hidden;
     @include mq($from: leftCol) {
@@ -39,23 +41,23 @@
 
     .product-block__heading-wrapper {
       @include mq($from: phablet) {
-        width: 100%; 
+        width: 100%;
       }
     }
 
     .component-left-margin-section__content {
       position: relative;
-      
+
       @include mq($from: phablet) {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;  
+        flex-wrap: wrap;
       }
 
       @include mq($from: desktop) {
         border-left: 1px solid gu-colour(brightness-86);
       }
-      
+
     }
 
     .component-grid-image {
@@ -74,7 +76,7 @@
 
     .component-price-cta {
       width: 100%;
-      
+
       @include mq($until: desktop) {
         margin-top: $gu-v-spacing * 2;
       }
@@ -99,10 +101,10 @@
       max-width: 520px;
     }
   }
-  
+
   .product-block__copy {
-    padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;	
-    font-size: 17px;	
+    padding: 0 ($gu-h-spacing / 2) $gu-v-spacing;
+    font-size: 17px;
   }
 
   .product-block__image {

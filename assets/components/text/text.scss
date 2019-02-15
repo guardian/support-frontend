@@ -1,0 +1,43 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-text {
+  @include gu-fontset-body;
+  overflow-wrap: break-word;
+  > *:not(:last-child) {
+    margin-bottom: $gu-v-spacing
+  }
+  > .component-text__heading + p {
+    margin-top: ($gu-v-spacing/-2);
+  }
+}
+
+.component-text code {
+  font-family: monospace;
+  background: gu-colour(brightness-93);
+  padding: ($gu-v-spacing / 4) ($gu-h-spacing / 4);
+}
+
+.component-text a {
+  color: inherit;
+}
+
+.component-text__heading {
+  @include gu-fontset-heading;
+}
+
+.component-text__callout {
+  @include gu-fontset-heading;
+  & > strong {
+    padding: 0 ($gu-h-spacing / 4);
+    background-color: gu-colour(highlight-main);
+    color: gu-colour(brightness-7);
+  }
+}
+
+.component-text__large {
+  @include gu-fontset-body-large;
+}
+
+.component-text__sans {
+  @include gu-fontset-body-sans;
+}

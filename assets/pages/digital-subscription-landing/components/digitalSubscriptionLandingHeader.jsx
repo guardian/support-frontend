@@ -78,6 +78,8 @@ const gridImagesByCountry: {
   UnitedStates: defaultImages,
   International: defaultImages,
   EURCountries: defaultImages,
+  NZDCountries: defaultImages,
+  Canada: defaultImages,
   AUDCountries: {
     breakpoints: {
       mobile: {

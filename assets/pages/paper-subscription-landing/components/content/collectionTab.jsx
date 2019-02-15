@@ -5,7 +5,7 @@
 import React from 'react';
 
 import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import UnorderedList from 'components/list/unorderedList';
 import OrderedList from 'components/list/orderedList';
 import GridImage from 'components/gridImage/gridImage';
@@ -26,22 +26,22 @@ const ContentVoucherFaqBlock = () => (
     />
   }
   >
-    <ProductPageTextBlock title="How to use our vouchers">
+    <Text title="How to use our vouchers">
       <OrderedList items={[
         'Pick your subscription package below',
         'We’ll send you a book of vouchers that contain one voucher per paper in your subscription',
         'Take your voucher to your retailer. Your vouchers will be accepted at retailers across the UK, including most independent newsagents',
       ]}
       />
-    </ProductPageTextBlock>
+    </Text>
     <Divider small />
-    <ProductPageTextBlock title="Giving you peace of mind">
+    <Text title="Giving you peace of mind">
       <UnorderedList items={[
         'Your newsagent won’t lose out; we’ll pay them the same amount that they receive if you pay cash for your paper',
         'You can pause your subscription for up to four weeks a year. So if you’re going on holiday, you won’t have to pay for the papers you’ll miss',
       ]}
       />
-    </ProductPageTextBlock>
+    </Text>
   </ProductPageContentBlock>
 );
 

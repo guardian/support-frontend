@@ -46,6 +46,7 @@ trait Controllers {
     actionRefiners,
     identityService,
     testUsers,
+    membersDataService,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,

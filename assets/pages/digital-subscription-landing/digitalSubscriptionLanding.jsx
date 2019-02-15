@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
@@ -16,7 +17,7 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
-import ProductPageTextBlock from 'components/productPage/productPageTextBlock/productPageTextBlock';
+import Text from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import 'stylesheets/skeleton/skeleton.scss';
 
@@ -44,17 +45,21 @@ const reactElementId: {
   UnitedStates: 'digital-subscription-landing-page-us',
   AUDCountries: 'digital-subscription-landing-page-au',
   EURCountries: 'digital-subscription-landing-page-eu',
+  NZDCountries: 'digital-subscription-landing-page-nz',
+  Canada: 'digital-subscription-landing-page-ca',
   International: 'digital-subscription-landing-page-int',
 };
 
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
   '/subscribe/digital',
   [
-    'GBPCountries',
-    'UnitedStates',
-    'AUDCountries',
-    'EURCountries',
-    'International',
+    GBPCountries,
+    UnitedStates,
+    AUDCountries,
+    EURCountries,
+    NZDCountries,
+    Canada,
+    International,
   ],
 );
 
@@ -76,9 +81,9 @@ const content = (
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
       <ProductPageContentBlock type="feature" id="subscribe">
-        <ProductPageTextBlock title="Subscribe to Digital Pack today">
+        <Text title="Subscribe to Digital Pack today">
           <p>Choose how you’d like to pay</p>
-        </ProductPageTextBlock>
+        </Text>
         <Form />
         <ProductPageInfoChip >
             You can cancel your subscription at any time

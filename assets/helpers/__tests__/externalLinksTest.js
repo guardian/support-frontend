@@ -2,19 +2,32 @@
 
 // ----- Imports ----- //
 
-import { type CountryGroupId } from '../internationalisation/countryGroup';
-import { androidAppUrl, getIosAppUrl, getDailyEditionUrl } from '../externalLinks';
+import {
+  AUDCountries,
+  Canada,
+  type CountryGroupId,
+  GBPCountries,
+  NZDCountries,
+  UnitedStates,
+  EURCountries,
+  International,
+} from '../internationalisation/countryGroup';
+import {
+  androidAppUrl,
+  getIosAppUrl,
+  getDailyEditionUrl,
+} from '../externalLinks';
 
 // ----- Tests ----- //
 
 jest.mock('ophan', () => ({ viewId: '123456' }));
 
 describe('externalLinks', () => {
-  const uk: CountryGroupId = 'GBPCountries';
-  const us: CountryGroupId = 'UnitedStates';
-  const au: CountryGroupId = 'AUDCountries';
-  const ca: CountryGroupId = 'Canada';
-  const nz: CountryGroupId = 'NZDCountries';
+  const uk: CountryGroupId = GBPCountries;
+  const us: CountryGroupId = UnitedStates;
+  const au: CountryGroupId = AUDCountries;
+  const ca: CountryGroupId = Canada;
+  const nz: CountryGroupId = NZDCountries;
 
   const appStoreRoot = 'https://itunes.apple.com';
   const iosPremiumAppProduct = 'app/the-guardian/id409128287';
@@ -50,9 +63,12 @@ describe('externalLinks', () => {
     });
 
     const usDefaultLink = `${appStoreRoot}/us/${iosPremiumAppProduct}${iosPremiumTail}`;
-    it('should return default /us/ app store link for EU and International countries', () => {
-      ['EURCountries', 'International'].forEach(c => expect(getIosAppUrl(c).startsWith(usDefaultLink)));
-    });
+    it(
+      'should return default /us/ app store link for EU and International countries',
+      () => {
+        [EURCountries, International].forEach(c => expect(getIosAppUrl(c).startsWith(usDefaultLink)));
+      },
+    );
   });
 
   describe('iOSDailyEditionLink', () => {
@@ -84,9 +100,12 @@ describe('externalLinks', () => {
     });
 
     const usDefaultLink = `${appStoreRoot}/us/${iosDailyEditionProduct}${iosPremiumTail}`;
-    it('should return default /us/ app store link for EU and International countries', () => {
-      ['EURCountries', 'International'].forEach(c => expect(getDailyEditionUrl(c).startsWith(usDefaultLink)));
-    });
+    it(
+      'should return default /us/ app store link for EU and International countries',
+      () => {
+        [EURCountries, International].forEach(c => expect(getDailyEditionUrl(c).startsWith(usDefaultLink)));
+      },
+    );
   });
 
   describe('AndroidAppLink', () => {

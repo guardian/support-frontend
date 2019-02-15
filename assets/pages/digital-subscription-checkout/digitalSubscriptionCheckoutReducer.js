@@ -7,7 +7,7 @@ import { combineReducers, type Dispatch } from 'redux';
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
-import { getQueryParameter, getPathAfterRoute } from 'helpers/url';
+import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
   fromString,
@@ -15,6 +15,7 @@ import {
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
@@ -35,7 +36,7 @@ import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } fr
 
 // ----- Types ----- //
 
-export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending' | 'thankyou-existing';
+export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 export type FormFieldsInState = {|
@@ -231,10 +232,8 @@ function initReducer(initialCountry: IsoCountry) {
     : Monthly;
   const { productPrices } = window.guardian;
 
-  const checkoutPathName: string = getPathAfterRoute('checkout').pop();
-
   const initialState = {
-    stage: checkoutPathName === 'existing' ? 'thankyou-existing' : 'checkout',
+    stage: 'checkout',
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
@@ -320,7 +319,7 @@ function initReducer(initialCountry: IsoCountry) {
 
   return combineReducers({
     checkout: reducer,
-    user: createUserReducer(fromCountry(initialCountry) || 'GBPCountries'),
+    user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
     directDebit,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),

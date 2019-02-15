@@ -6,6 +6,7 @@ import { fixDecimals } from 'helpers/subscriptions';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 
 import { type SubscriptionProduct, type PaperBillingPlan } from './subscriptions';
+import { AUDCountries, GBPCountries, International, UnitedStates } from './internationalisation/countryGroup';
 
 export type SaleCopy = {
   featuredProduct: {
@@ -57,7 +58,7 @@ type Sale = {
 const Sales: Sale[] = [
   {
     subscriptionProduct: 'Paper',
-    activeRegions: ['GBPCountries'],
+    activeRegions: [GBPCountries],
     startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
     endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
     duration: '12 months',
@@ -99,7 +100,7 @@ const Sales: Sale[] = [
   },
   {
     subscriptionProduct: 'PaperAndDigital',
-    activeRegions: ['GBPCountries'],
+    activeRegions: [GBPCountries],
     startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
     endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
     saleDetails: {
@@ -130,7 +131,7 @@ const Sales: Sale[] = [
   },
   {
     subscriptionProduct: 'Paper',
-    activeRegions: ['GBPCountries'],
+    activeRegions: [GBPCountries],
     startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
     endTime: new Date(2019, 1, 18).getTime(), // 17 Feb 2019 (to finish at 0:00 in the morning)
     duration: '3 months',
@@ -172,7 +173,7 @@ const Sales: Sale[] = [
   },
   {
     subscriptionProduct: 'PaperAndDigital',
-    activeRegions: ['GBPCountries'],
+    activeRegions: [GBPCountries],
     startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
     endTime: new Date(2019, 1, 18).getTime(), // 17 Feb 2019 (to finish at 0:00 in the morning)
     saleDetails: {
@@ -203,7 +204,7 @@ const Sales: Sale[] = [
   },
   {
     subscriptionProduct: 'DigitalPack',
-    activeRegions: ['UnitedStates', 'AUDCountries', 'International'],
+    activeRegions: [UnitedStates, AUDCountries, International],
     startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
     endTime: new Date(2019, 3, 1).getTime(), // 31 Mar 2019
     saleDetails: {
@@ -287,7 +288,7 @@ const Sales: Sale[] = [
   },
   {
     subscriptionProduct: 'DigitalPack',
-    activeRegions: ['GBPCountries'],
+    activeRegions: [GBPCountries],
     startTime: new Date(2019, 1, 18).getTime(), // 18 Feb 2019
     endTime: new Date(2019, 3, 1).getTime(), // 31 Mar 2019
     saleDetails: {
