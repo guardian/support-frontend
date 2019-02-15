@@ -9,10 +9,12 @@ import {
   ProductPagePlanFormReducerFor,
   type State as FormState,
 } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import promotionPopUpReducer, { type FindOutMoreState } from './components/promotionPopUpReducer';
 
 export type State = {
   common: CommonState,
+  productPrices: ProductPrices,
   page: {
     plan: FormState<DigitalBillingPeriod>,
     promotion: FindOutMoreState
@@ -28,8 +30,11 @@ export default (promoInUrl: ?string) => {
     ? promoInUrl
     : null;
 
+  const { productPrices } = window.guardian;
+
   return combineReducers({
     plan: ProductPagePlanFormReducerFor<?DigitalBillingPeriod>('DigitalPack', initialPeriod),
+    productPrices: () => productPrices,
     promotion: promotionPopUpReducer,
   });
 };

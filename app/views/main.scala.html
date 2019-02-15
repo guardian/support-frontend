@@ -2,6 +2,8 @@
 @import assets.AssetsResolver
 @import views.ViewHelpers._
 @import com.gu.support.pricing.ProductPrices
+@import io.circe.syntax._
+@import com.gu.support.encoding.CustomCodecs._
 
 @(
 	title: String,
@@ -98,6 +100,9 @@
 	<script type="text/javascript">
     window.guardian = window.guardian || {};
     window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
+    @productPrices.map(p =>
+      Html(s"window.guardian.productPrices = ${Html(outputJson(p))}")
+    )
 	</script>
 
 	@scripts
