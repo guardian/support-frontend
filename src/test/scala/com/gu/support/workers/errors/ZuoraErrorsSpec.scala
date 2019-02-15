@@ -8,10 +8,10 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
-import com.gu.support.workers.Fixtures.{createContributionZuoraSubscriptionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createContributionZuoraSubscriptionJson, wrapFixture}
 import com.gu.support.workers.exceptions.RetryUnlimited
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
-import com.gu.support.workers.{Fixtures, JsonWrapper, LambdaSpec}
+import com.gu.support.workers.{JsonFixtures, JsonWrapper, LambdaSpec}
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures.{incorrectPaymentMethod, invalidSubscriptionRequest}
@@ -72,7 +72,7 @@ class ZuoraErrorsSpec extends LambdaSpec with MockWebServerCreator with MockServ
   "JsonWrapped error" should "deserialise correctly" in {
 
     val zuoraErrorResponse = for {
-      wrapper <- decode[JsonWrapper](Fixtures.cardDeclinedJsonZuora).toOption
+      wrapper <- decode[JsonWrapper](JsonFixtures.cardDeclinedJsonZuora).toOption
       executionError <- wrapper.error
       errorJson <- decode[ErrorJson](executionError.Cause).toOption
       zuoraErrorResponse <- decode[ZuoraErrorResponse](errorJson.errorMessage).toOption

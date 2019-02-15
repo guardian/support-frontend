@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.salesforce.Fixtures.salesforceId
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.Fixtures.{createSalesForceContactJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createSalesForceContactJson, wrapFixture}
 import com.gu.support.workers.LambdaSpec
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
