@@ -341,18 +341,11 @@ footer[role="contentinfo"] a {
 
   .gu-content__content {
     margin: 0 auto;
+    width: 100%;
     max-width: 1015px;
     border: none;
     padding: 0;
     background-color: transparent;
-    
-    width: 100%;
-
-    &--flex {
-      display: flex;
-      justify-content: space-between;
-      flex-direction: row-reverse;
-    }
 
     @include mq($from: tablet) {
       margin-left: $content-left-margin-tablet
@@ -361,6 +354,12 @@ footer[role="contentinfo"] a {
     @include mq($from: leftCol) {
       margin-left: $content-left-margin-leftCol
     }
+  }
+
+  .gu-content__content--flex {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
   }
 
   .gu-content__form {
