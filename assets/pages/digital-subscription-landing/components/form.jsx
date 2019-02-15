@@ -8,10 +8,9 @@ import { bindActionCreators } from 'redux';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import { showPrice, type Price, type ProductPrices } from 'helpers/productPrice/productPrices';
+import { showPrice, getCurrency, type Price, type ProductPrices } from 'helpers/productPrice/productPrices';
 import { amountToPay as digitalPackAmountToPay } from 'helpers/productPrice/digitalProductPrices';
 import { getDiscount, getFormattedFlashSalePrice, flashSaleIsActive } from 'helpers/flashSale';
-import { priceByCountryGroupId } from 'helpers/internationalisation/price';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, {
@@ -29,9 +28,11 @@ const getPrice = (productPrices: ProductPrices, period: DigitalBillingPeriod, co
   const countryGroupId = fromCountry(country);
 
   if (countryGroupId && flashSaleIsActive('DigitalPack', countryGroupId)) {
-    const priceAsNumber: number = Number(getFormattedFlashSalePrice('DigitalPack', countryGroupId, period));
-    const flashSalePrice: Price = priceByCountryGroupId(countryGroupId, priceAsNumber);
-    return (flashSalePrice);
+    const price: number = Number(getFormattedFlashSalePrice('DigitalPack', countryGroupId, period));
+    return {
+      price,
+      currency: getCurrency(country),
+    };
   }
 
   return (digitalPackAmountToPay(productPrices, period, country));

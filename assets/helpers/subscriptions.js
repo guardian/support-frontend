@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBP } from 'helpers/internationalisation/price';
 import { type Price } from 'helpers/productPrice/productPrices';
 import {
   Annual,
@@ -89,14 +88,14 @@ const subscriptionPricesForDefaultBillingPeriod: {
 };
 
 const paperSubscriptionPrices = {
-  collectionEveryday: GBP(47.62),
-  collectionSixday: GBP(41.12),
-  collectionWeekend: GBP(20.76),
-  collectionSunday: GBP(10.79),
-  deliveryEveryday: GBP(62.79),
-  deliverySixday: GBP(54.12),
-  deliveryWeekend: GBP(25.09),
-  deliverySunday: GBP(15.12),
+  collectionEveryday: (47.62),
+  collectionSixday: (41.12),
+  collectionWeekend: (20.76),
+  collectionSunday: (10.79),
+  deliveryEveryday: (62.79),
+  deliverySixday: (54.12),
+  deliveryWeekend: (25.09),
+  deliverySunday: (15.12),
 };
 
 const subscriptionPromoPricesForGuardianWeekly: {
@@ -230,7 +229,10 @@ function getPromotionWeeklyProductPrice(
 }
 
 function getRegularPaperPrice(billingPlan: PaperBillingPlan): Price {
-  return paperSubscriptionPrices[billingPlan];
+  return {
+    price: paperSubscriptionPrices[billingPlan],
+    currency: 'GBP',
+  };
 }
 
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
@@ -239,7 +241,10 @@ function getPaperPrice(billingPlan: PaperBillingPlan): Price {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
     const discountedPlanPrice = planPrices.find((planPrice: PlanPrice) => planPrice[billingPlan]);
     if (discountedPlanPrice) {
-      return GBP(discountedPlanPrice[billingPlan]);
+      return {
+        price: (discountedPlanPrice[billingPlan]),
+        currency: 'GBP',
+      };
     }
   }
 
