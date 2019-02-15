@@ -113,7 +113,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       val recordResult: EitherT[Future, BackendError, Unit] =
         subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, acquisitionData, clientBrowserInfo)
 
-      recordResult.futureRight shouldBe ()
+      recordResult.futureRight shouldBe()
 
       verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
 
@@ -211,6 +211,28 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockDbService, times(1)).insertContributionData(Match.any())
       verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
       verify(mockCloudWatchService, times(1)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
+    }
+
+    "mark a payment as refunded" in new SubscribeWithGoogleBackendFixture(){
+      when(mockDbService.flagContributionAsRefunded(subscribeWithGooglePayment.paymentId)).thenReturn(dbResult)
+      private val result: EitherT[Future, DatabaseService.Error, Unit] =
+        subscribeWithGoogleBackend.recordRefund(subscribeWithGooglePayment)
+
+      result.futureRight shouldBe()
+
+      verify(mockDbService, times(1)).flagContributionAsRefunded(subscribeWithGooglePayment.paymentId)
+      verify(mockCloudWatchService, times(0)).recordTrackingRefundFailure(PaymentProvider.SubscribeWithGoogle)
+    }
+
+    "alert cloudwatch after failure to mark as refund in db" in new SubscribeWithGoogleBackendFixture(){
+      when(mockDbService.flagContributionAsRefunded(subscribeWithGooglePayment.paymentId)).thenReturn(dbError)
+      private val result: EitherT[Future, DatabaseService.Error, Unit] =
+        subscribeWithGoogleBackend.recordRefund(subscribeWithGooglePayment)
+
+      result.futureLeft shouldBe dbError.futureLeft
+
+      verify(mockDbService, times(1)).flagContributionAsRefunded(subscribeWithGooglePayment.paymentId)
+      verify(mockCloudWatchService, times(1)).recordTrackingRefundFailure(PaymentProvider.SubscribeWithGoogle)
     }
   }
 }

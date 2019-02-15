@@ -28,10 +28,14 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
                                  cloudWatchService: CloudWatchService
                                 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
-  def recordPayment(googleRecordPayment: GoogleRecordPayment, acquisitionData: AcquisitionData, clientBrowserInfo: ClientBrowserInfo) = {
+  def recordPayment(googleRecordPayment: GoogleRecordPayment,
+                    acquisitionData: AcquisitionData,
+                    clientBrowserInfo: ClientBrowserInfo) = {
     val contributionData = ContributionData.fromSubscribeWithGoogle(googleRecordPayment, _: Option[Long])
     val identity = getOrCreateIdentityIdFromEmail(googleRecordPayment.email)
 
+
+    //TODO: Restructure - Ophan and DB call are not coupled
     val trackContributionResult = identity.flatMap { id =>
       trackContribution(googleRecordPayment, acquisitionData, id, clientBrowserInfo, contributionData(Some(id)))
     }.leftMap{ err =>
@@ -61,6 +65,14 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
       trackContributionResult,
       sendThankYouEmailResult
     )
+  }
+
+  def recordRefund(googleRecordPayment: GoogleRecordPayment): EitherT[Future, DatabaseService.Error, Unit] = {
+    databaseService.flagContributionAsRefunded(googleRecordPayment.paymentId).leftMap{ e =>
+      logger.error(s"Failed to mark payment as failed for paymentId: ${googleRecordPayment.paymentId} with reason: ${e.getMessage}")
+      cloudWatchService.recordTrackingRefundFailure(PaymentProvider.SubscribeWithGoogle)
+      e
+    }
   }
 
   private def contributorRowFromPayment(identityId: Long, googleRecordPayment: GoogleRecordPayment): ContributorRow = {

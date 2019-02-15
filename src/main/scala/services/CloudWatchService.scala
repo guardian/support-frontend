@@ -63,6 +63,8 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
 
   def recordPostPaymentTasksError(paymentProvider: PaymentProvider): Unit = put("post-payment-tasks-error", paymentProvider)
 
+  def recordTrackingRefundFailure(paymentProvider: PaymentProvider): Unit = put("tracking-refund-failure", paymentProvider)
+
 }
 
 object CloudWatchService {
