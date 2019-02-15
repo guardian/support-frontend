@@ -26,23 +26,38 @@
     "jsdom": true,
   },
   "rules": {
-    "curly": [2, "all"],
+    "curly": [
+      2,
+      "all"
+    ],
     "no-trailing-spaces": 2,
-    "quotes": [2, "single"],
+    "quotes": [
+      2,
+      "single"
+    ],
     "wrap-iife": 2,
     "no-console": 0,
     // For preact-compat, delete if switching to React.
     "import/no-duplicates": "off",
     "import/no-extraneous-dependencies": "off",
+    "react/no-unescaped-entities": "off",
     "padded-blocks": "off",
     "import/prefer-default-export": "off",
-    "jsx-a11y/label-has-for": [ 2, {
-      "components": [ "Label" ],
-      "required": {
-        "some": [ "nesting", "id" ]
-      },
-      "allowChildren": false
-    }],
+    "jsx-a11y/label-has-for": [
+      2,
+      {
+        "components": [
+          "Label"
+        ],
+        "required": {
+          "some": [
+            "nesting",
+            "id"
+          ]
+        },
+        "allowChildren": false
+      }
+    ],
     "max-len": [
       "error",
       120,
@@ -55,7 +70,12 @@
         "ignoreTemplateLiterals": true
       }
     ],
-    "react/default-props-match-prop-types": [2, { "allowRequiredDefaults": true }],
+    "react/default-props-match-prop-types": [
+      2,
+      {
+        "allowRequiredDefaults": true
+      }
+    ],
   },
   "settings": {
     "import/resolver": {
@@ -64,7 +84,7 @@
       }
     },
     "flowtype": {
-        "onlyFilesWithFlowAnnotation": true,
+      "onlyFilesWithFlowAnnotation": true,
     },
   },
 }

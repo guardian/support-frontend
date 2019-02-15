@@ -11,7 +11,7 @@ import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 export default function CtaSubscribe() {
   return (
     <Content
-      type="feature"
+      appearance="feature"
       modifierClasses={['subscribe']}
       image={<GridImage gridId="showcaseSubscribe" srcSizes={[1000, 500]} sizes="(max-width: 740px) 90vw, 600px" imgType="png" />}
     >

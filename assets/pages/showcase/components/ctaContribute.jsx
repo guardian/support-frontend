@@ -12,7 +12,7 @@ import OneMillionCircles from 'components/svgs/oneMillionCircles';
 
 export default function CtaContribute() {
   return (
-    <Content type="feature-secondary" modifierClasses={['contribute']}>
+    <Content appearance="highlight" modifierClasses={['contribute']}>
       <div className="wrapper">
         <div className="image">
           <WithSupport />

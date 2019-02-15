@@ -8,7 +8,7 @@ import NoOne from 'components/svgs/noOne';
 
 export default function NoOneEdits() {
   return (
-    <Content type="grey">
+    <Content appearance="grey">
       <Text>
         <NoOne />
         <p>
