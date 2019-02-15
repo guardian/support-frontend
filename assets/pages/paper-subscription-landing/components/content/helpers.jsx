@@ -63,10 +63,10 @@ const ContentHelpBlock = ({
   <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
     <Text title="FAQ and help">
       <SansParagraph>
-      If you’ve got any more questions, you might well find the answers in the {faqLink}.
+        If you’ve got any more questions, you might well find the answers in the {faqLink}.
       </SansParagraph>
       <SansParagraph>
-       If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
+        If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
       </SansParagraph>
     </Text>
   </ProductPageContentBlock>
@@ -104,7 +104,7 @@ const ContentForm = ({
     >
       <DiscountCalloutMaybe />
       {text &&
-        <p>{text}</p>
+      <p>{text}</p>
       }
     </Text>
     <Form />
@@ -112,8 +112,8 @@ const ContentForm = ({
       <SansParagraph>
         {
           selectedTab === 'collection'
-          ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
-          : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
+            ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
+            : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
         }
       </SansParagraph>
     </Text>

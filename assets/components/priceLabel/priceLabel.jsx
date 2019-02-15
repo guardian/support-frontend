@@ -10,6 +10,7 @@ import { countryGroups, fromCountry } from 'helpers/internationalisation/country
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fixDecimals } from 'helpers/subscriptions';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 export type PropTypes = {
   country: IsoCountry,
@@ -34,7 +35,7 @@ function discountedPrice(productPrice: ProductPrice, glyph: string, billingPerio
 
 function PriceLabel(props: PropTypes) {
 
-  const countryGroup = countryGroups[fromCountry(props.country) || 'GBPCountries'];
+  const countryGroup = countryGroups[fromCountry(props.country) || GBPCountries];
 
   const { glyph } = currencies[countryGroup.currency];
 

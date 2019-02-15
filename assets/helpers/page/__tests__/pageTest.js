@@ -5,6 +5,7 @@
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import { createCommonReducer } from '../commonReducer';
+import { GBPCountries } from '../../internationalisation/countryGroup';
 
 
 // ----- Tests ----- //
@@ -28,7 +29,7 @@ describe('reducer tests', () => {
       },
       internationalisation: {
         countryId: 'GB',
-        countryGroupId: 'GBPCountries',
+        countryGroupId: GBPCountries,
         currencyId: 'GBP',
       },
       abParticipations: {},

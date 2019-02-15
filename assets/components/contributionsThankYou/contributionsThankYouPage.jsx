@@ -11,9 +11,9 @@ import CirclesIntroduction from 'components/introduction/circlesIntroduction';
 import QuestionsContact from 'components/questionsContact/questionsContact';
 import { type ContributionType } from 'helpers/contributions';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import EmailConfirmation from './emailConfirmation';
 import DirectDebitDetails, { type PropTypes as DirectDebit } from './directDebitDetails';
-import type { CountryGroupId } from '../../helpers/internationalisation/countryGroup';
 import ContributionsSurveySection from '../survey/contributionsSurveySection';
 
 // ---- Types ----- //

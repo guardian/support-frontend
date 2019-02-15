@@ -8,6 +8,7 @@ import type { Node } from 'react';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Props ----- //
 
@@ -63,7 +64,7 @@ function Footer(props: PropTypes) {
 Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
-  countryGroupId: 'GBPCountries',
+  countryGroupId: GBPCountries,
   children: [],
 };
 

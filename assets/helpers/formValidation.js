@@ -8,6 +8,7 @@
 import { config } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import { Canada, UnitedStates } from './internationalisation/countryGroup';
 
 export const emailRegexPattern = '^[a-zA-Z0-9\\.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$';
 
@@ -47,7 +48,7 @@ export const checkStateIfApplicable: ((string | null), CountryGroupId) => boolea
   state: (string | null),
   countryGroupId: CountryGroupId,
 ) => {
-  if (countryGroupId === 'UnitedStates' || countryGroupId === 'Canada') {
+  if (countryGroupId === UnitedStates || countryGroupId === Canada) {
     return checkState(state);
   }
   return true;
