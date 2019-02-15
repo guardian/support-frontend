@@ -74,14 +74,18 @@ stories.add('Content', () => (
         </SansParagraph>
       </Text>
       <NarrowContent>
-        You can wrap custom non-text elements that need the same max-width as the text in <code>NarrowContent</code>. It looks just like <code>Text</code> but semantics matter! Don't wrap non text elements in <code>Text</code> just to get the max width
+        You can wrap custom non-text elements that need the same max-width as
+        the text in <code>NarrowContent</code>. It looks just like <code>Text</code> but
+        semantics matter! Don{'\''}t wrap non text elements in <code>Text</code> just to get a max width
       </NarrowContent>
     </Content>
     <Content >
       <Text title="Feeling adventurous ?" />
       <Outset>
-        <span role="img" aria-label={null}> 👉 </span> use Outset to break out
-        of the padding and go full bleed on the left, for stuff like tabs
+        <Text>
+          {/* eslint-disable-next-line */}
+          👉 use Outset to break out of the padding and go full bleed on the left, for stuff like tabs.
+        </Text>
       </Outset>
       <div style={{ padding: '1em 0' }}>
         And you can add elements with no max-width rules
