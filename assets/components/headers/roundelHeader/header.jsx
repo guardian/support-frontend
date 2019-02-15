@@ -11,13 +11,11 @@ import SvgCheckmark from 'components/svgs/checkmark';
 import SvgChevron from 'components/svgs/chevron';
 import SvgGlobe from 'components/svgs/globe';
 import SvgRoundel from 'components/svgs/roundel';
-import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   selectedCountryGroup: ?CountryGroup,
-  longLogo?: boolean
 |};
 
 // ----- Render ----- //
@@ -38,15 +36,9 @@ const renderCountryGroup = (selectedCountryGroup: CountryGroup) => (countryGroup
 function RoundelHeader(props: PropTypes) {
   return (
     <header role="banner" className="gu-content__header">
-      { props.longLogo ? (
-        <a className="guardian-logo" href="https://www.theguardian.com">
-          <SvgGuardianLogo />
-        </a>
-      ) : (
-        <a className="glogo" href="https://www.theguardian.com">
-          <SvgRoundel />
-        </a>
-      )}
+      <a className="glogo" href="https://www.theguardian.com">
+        <SvgRoundel />
+      </a>
       { props.selectedCountryGroup ? (
         <details className="countryGroups">
           <summary aria-label={`Selected country: ${props.selectedCountryGroup.name} (${currencies[props.selectedCountryGroup.currency].glyph})`}>
@@ -70,7 +62,6 @@ function RoundelHeader(props: PropTypes) {
 
 RoundelHeader.defaultProps = {
   selectedCountryGroup: null,
-  longLogo: false,
 };
 
 export { RoundelHeader };

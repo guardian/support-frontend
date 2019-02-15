@@ -334,29 +334,9 @@ footer[role="contentinfo"] a {
 
 // Alternative form layout 
 .gu-content--contribution-form-two {
-  header[role="banner"] {
-
-    @include mq($from: tablet) {
-      height: 120px;
-    }
-  }
-
-  .guardian-logo {
-    width: 100px;
-
-    svg {
-      width: 100%;
-    }
-
-    @include mq($from: tablet) {
-      width: auto;
-    }
-  }
-
 
   .gu-content__main {
     background-color: gu-colour(sport-faded);
-    display: block; // only here to cancel the display: flex
   }
 
   .gu-content__content {
@@ -443,10 +423,6 @@ footer[role="contentinfo"] a {
     @include mq($from: tablet) {
       margin: 30px 10px;
     }
-  }
-
-  .component-terms-privacy {
-    display: none;
   }
 }
 

@@ -74,7 +74,7 @@ const router = (
             return (
               <Page
                 classModifiers={formCssVariant}
-                header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} longLogo={variantOn} />}
+                header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
                 <NewContributionFormContainer
