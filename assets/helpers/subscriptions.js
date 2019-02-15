@@ -243,7 +243,7 @@ function getPaperPrice(billingPlan: PaperBillingPlan): Price {
     const discountedPlanPrice = planPrices.find((planPrice: PlanPrice) => planPrice[billingPlan]);
     if (discountedPlanPrice) {
       return {
-        price: (discountedPlanPrice[billingPlan]),
+        price: discountedPlanPrice[billingPlan],
         currency: 'GBP',
       };
     }
