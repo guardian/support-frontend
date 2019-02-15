@@ -48,7 +48,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           created = DateTime.now(),
           amount = c.amount,
           currency = c.currency,
-          edition = state.user.country.alpha2,
+          edition = state.user.billingAddress.country.alpha2,
           name = state.user.firstName,
           billingPeriod = state.product.billingPeriod,
           sfContactId = SfContactId(state.salesForceContact.Id),
