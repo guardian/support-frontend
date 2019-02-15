@@ -6,7 +6,7 @@ import React from 'react';
 
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import ProductPageContentBlock, { Divider, NarrowContent } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content, { Divider, NarrowContent } from 'components/content/content';
 import AnchorButton from 'components/button/anchorButton';
 
 
@@ -15,7 +15,7 @@ import AnchorButton from 'components/button/anchorButton';
 function ReturnSection() {
 
   return (
-    <ProductPageContentBlock>
+    <Content>
       <Divider />
       <NarrowContent>
         <div className="thank-you-stage__ctas">
@@ -29,7 +29,7 @@ function ReturnSection() {
           </AnchorButton>
         </div>
       </NarrowContent>
-    </ProductPageContentBlock>
+    </Content>
   );
 
 }

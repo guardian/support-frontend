@@ -2,13 +2,13 @@
 
 import React from 'react';
 
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import Text from 'components/text/text';
 import BreakingTheHeadlines from 'components/svgs/breakingTheHeadlines';
 
 export default function BreakingHeadlines() {
   return (
-    <ProductPageContentBlock type="grey">
+    <Content type="grey">
       <Text>
         <BreakingTheHeadlines />
         <p>
@@ -18,6 +18,6 @@ export default function BreakingHeadlines() {
           you have come to expect of the Guardian. Why settle for less?
         </p>
       </Text>
-    </ProductPageContentBlock>
+    </Content>
   );
 }

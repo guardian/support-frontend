@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import ProductPageContentBlock, { NarrowContent } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content, { NarrowContent } from 'components/content/content';
 import Text from 'components/text/text';
 import AnchorButton from 'components/button/anchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
@@ -12,7 +12,7 @@ import OneMillionCircles from 'components/svgs/oneMillionCircles';
 
 export default function CtaContribute() {
   return (
-    <ProductPageContentBlock type="feature-secondary" modifierClasses={['contribute']}>
+    <Content type="feature-secondary" modifierClasses={['contribute']}>
       <div className="wrapper">
         <div className="image">
           <WithSupport />
@@ -38,6 +38,6 @@ export default function CtaContribute() {
         </div>
       </div>
       <OneMillionCircles />
-    </ProductPageContentBlock>
+    </Content>
   );
 }

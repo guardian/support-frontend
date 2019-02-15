@@ -7,7 +7,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Option } from 'helpers/types/option';
 
-import './productPageContentBlock.scss';
+import './content.scss';
 
 // ---- Types ----- //
 
@@ -24,7 +24,7 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-const ProductPageContentBlock = ({
+const Content = ({
   type, children, id, modifierClasses, image, needsHigherZindex, border,
 }: PropTypes) => (
   <div
@@ -52,7 +52,7 @@ const ProductPageContentBlock = ({
   </div>
 );
 
-ProductPageContentBlock.defaultProps = {
+Content.defaultProps = {
   type: 'white',
   id: null,
   image: null,
@@ -106,4 +106,4 @@ export const bgClassName = 'component-product-page-content-block-bg';
 
 // ---- Exports ----- //
 
-export default ProductPageContentBlock;
+export default Content;

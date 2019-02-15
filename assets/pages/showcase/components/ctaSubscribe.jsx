@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import ProductPageContentBlock, { NarrowContent } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content, { NarrowContent } from 'components/content/content';
 import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import AnchorButton from 'components/button/anchorButton';
@@ -10,7 +10,7 @@ import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 
 export default function CtaSubscribe() {
   return (
-    <ProductPageContentBlock
+    <Content
       type="feature"
       modifierClasses={['subscribe']}
       image={<GridImage gridId="showcaseSubscribe" srcSizes={[1000, 500]} sizes="(max-width: 740px) 90vw, 600px" imgType="png" />}
@@ -24,6 +24,6 @@ export default function CtaSubscribe() {
       <NarrowContent>
         <AnchorButton aria-label={null} icon={<ArrowRightStraight />} href="/subscribe">Choose a Subscription</AnchorButton>
       </NarrowContent>
-    </ProductPageContentBlock>
+    </Content>
   );
 }

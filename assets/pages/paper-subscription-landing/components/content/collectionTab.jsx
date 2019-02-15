@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content, { Divider } from 'components/content/content';
 import Text from 'components/text/text';
 import UnorderedList from 'components/list/unorderedList';
 import OrderedList from 'components/list/orderedList';
@@ -16,7 +16,7 @@ import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpe
 
 // ----- Content ----- //
 const ContentVoucherFaqBlock = () => (
-  <ProductPageContentBlock
+  <Content
     border
     image={<GridImage
       gridId="paperVoucherFeature"
@@ -42,7 +42,7 @@ const ContentVoucherFaqBlock = () => (
       ]}
       />
     </Text>
-  </ProductPageContentBlock>
+  </Content>
 );
 
 const CollectionTab = ({ getRef, setTabAction, selectedTab }: ContentTabPropTypes) => (

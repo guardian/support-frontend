@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import { Outset } from 'components/content/content';
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { paperSubsUrl } from 'helpers/routes';

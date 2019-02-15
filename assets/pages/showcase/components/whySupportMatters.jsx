@@ -2,14 +2,14 @@
 
 import React from 'react';
 
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import Text, {
   LargeParagraph,
 } from 'components/text/text';
 
 export default function WhySupportMatters() {
   return (
-    <ProductPageContentBlock>
+    <Content>
       <Text title="Why your support matters">
         <LargeParagraph>
           Unlike many news organisations, we have kept our journalism open to our global audience.
@@ -17,6 +17,6 @@ export default function WhySupportMatters() {
           at a time when factual, honest reporting is critical.
         </LargeParagraph>
       </Text>
-    </ProductPageContentBlock>
+    </Content>
   );
 }

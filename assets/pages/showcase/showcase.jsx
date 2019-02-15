@@ -12,7 +12,7 @@ import Footer from 'components/footer/footer';
 import Heading from 'components/heading/heading';
 
 import ProductPageHero from 'components/productPage/productPageHero/productPageHero';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import AnchorButton from 'components/button/anchorButton';
 
 import SvgChevron from 'components/svgs/chevron';
@@ -71,11 +71,11 @@ const content = (
     <WhySupportMatters />
     <BreakingHeadlines />
     <NoOneEdits />
-    <ProductPageContentBlock id="support">
+    <Content id="support">
       <Heading size={2} className="anchor">
         Ways you can support The Guardian
       </Heading>
-    </ProductPageContentBlock>
+    </Content>
     <CtaSubscribe />
     <CtaContribute />
     <OtherProducts />
