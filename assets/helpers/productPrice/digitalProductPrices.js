@@ -16,7 +16,7 @@ function promotion(
   return productPrices[name][NoFulfilmentOptions][NoProductOptions][billingPeriod][currency].promotion;
 }
 
-function price(
+function regularPrice(
   productPrices: ProductPrices,
   billingPeriod: BillingPeriod,
   country: IsoCountry,
@@ -29,15 +29,15 @@ function price(
   };
 }
 
-function amountToPay(
+function finalPrice(
   productPrices: ProductPrices,
   billingPeriod: BillingPeriod,
   country: IsoCountry,
 ): Price {
   return applyPromotion(
-    price(productPrices, billingPeriod, country),
+    regularPrice(productPrices, billingPeriod, country),
     promotion(productPrices, billingPeriod, country),
   );
 }
 
-export { promotion, price, amountToPay };
+export { promotion, regularPrice, finalPrice };

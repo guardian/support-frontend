@@ -9,7 +9,7 @@ import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import { showPrice, getCurrency, type Price, type ProductPrices } from 'helpers/productPrice/productPrices';
-import { amountToPay as digitalPackAmountToPay } from 'helpers/productPrice/digitalProductPrices';
+import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
 import { getDiscount, getFormattedFlashSalePrice, flashSaleIsActive } from 'helpers/flashSale';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
@@ -35,7 +35,7 @@ const getPrice = (productPrices: ProductPrices, period: DigitalBillingPeriod, co
     };
   }
 
-  return (digitalPackAmountToPay(productPrices, period, country));
+  return (dpFinalPrice(productPrices, period, country));
 };
 
 const getAnnualSaving = (

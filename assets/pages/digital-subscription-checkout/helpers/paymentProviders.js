@@ -16,7 +16,7 @@ import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
-import { amountToPay as digitalPackAmountToPay } from 'helpers/productPrice/digitalProductPrices';
+import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation) {
@@ -97,7 +97,7 @@ function showStripe(
   const { currencyId, countryId } = state.common.internationalisation;
   const { isTestUser } = state.page.checkout;
 
-  const { price } = digitalPackAmountToPay(
+  const { price } = dpFinalPrice(
     state.page.checkout.productPrices,
     state.page.checkout.billingPeriod,
     countryId,
