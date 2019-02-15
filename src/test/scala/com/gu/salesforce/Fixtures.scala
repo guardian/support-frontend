@@ -6,10 +6,14 @@ object Fixtures {
   val email = "yjcysqxfcqqytuzupjc@gu.com"
   val telephoneNumber = "0123456789"
   val name = "YJCysqXFCqqYtuzuPJc"
+  val street = "123 trash alley"
+  val city = "London"
+  val postCode = "n1 9gu"
   val uk = "UK"
   val us = "US"
   val state = "CA"
   val allowMail = false
+
   val upsertJson =
     s"""{
       "newContact": {
@@ -37,6 +41,7 @@ object Fixtures {
         "Allow_Guardian_Related_Mail__c": $allowMail
        }
       }"""
+
   val upsertJsonWithTelephoneNumber =
     s"""{
       "newContact": {
@@ -44,6 +49,24 @@ object Fixtures {
         "Email": "$email",
         "FirstName": "$name",
         "LastName": "$name",
+        "OtherCountry": "$uk",
+        "Phone": "$telephoneNumber",
+        "Allow_Membership_Mail__c": $allowMail,
+        "Allow_3rd_Party_Mail__c": $allowMail,
+        "Allow_Guardian_Related_Mail__c": $allowMail
+       }
+      }"""
+
+  val upsertJsonWithBillingAddress =
+    s"""{
+      "newContact": {
+        "IdentityID__c": "$idId",
+        "Email": "$email",
+        "FirstName": "$name",
+        "LastName": "$name",
+        "OtherStreet": "$street",
+        "OtherCity": "$city",
+        "OtherPostalCode": "$postCode",
         "OtherCountry": "$uk",
         "Phone": "$telephoneNumber",
         "Allow_Membership_Mail__c": $allowMail,
