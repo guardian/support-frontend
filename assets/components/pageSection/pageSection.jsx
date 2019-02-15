@@ -8,6 +8,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { Node } from 'react';
 
+import './pageSection.scss';
 
 // ----- Props ----- //
 
