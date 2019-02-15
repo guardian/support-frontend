@@ -9,8 +9,6 @@ case class User(
   primaryEmailAddress: String,
   firstName: String,
   lastName: String,
-  country: Country,
-  state: Option[String] = None,
   billingAddress: Address,
   telephoneNumber: Option[String] = None,
   allowMembershipMail: Boolean = false,
