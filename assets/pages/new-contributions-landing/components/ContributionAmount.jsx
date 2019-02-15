@@ -10,14 +10,13 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
-
+import { EURCountries, GBPCountries } from 'helpers/internationalisation/countryGroup';
 import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
-import { EURCountries, GBPCountries } from '../../../helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 

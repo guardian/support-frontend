@@ -2,10 +2,9 @@
 
 // ----- Imports ----- //
 
+import { GBPCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { contributionSelectionReducerFor } from '../contributionSelectionReducer';
 import { contributionSelectionActionsFor } from '../contributionSelectionActions';
-import { GBPCountries, UnitedStates } from '../../../helpers/internationalisation/countryGroup';
-
 
 // ----- Tests ----- //
 

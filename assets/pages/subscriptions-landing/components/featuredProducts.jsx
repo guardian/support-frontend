@@ -10,7 +10,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import GridPicture from 'components/gridPicture/gridPicture';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
-import { GBPCountries } from '../../../helpers/internationalisation/countryGroup';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //

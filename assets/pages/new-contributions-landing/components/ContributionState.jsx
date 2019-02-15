@@ -8,11 +8,10 @@ import { connect } from 'react-redux';
 import { usStates, caStates, type UsState, type CaState } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
-
+import { Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import SvgGlobe from 'components/svgs/globe';
 
 import { type State } from '../contributionsLandingReducer';
-import { Canada, UnitedStates } from '../../../helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 type PropTypes = {|
