@@ -116,8 +116,6 @@ class RegularContributions(
       primaryEmailAddress = user.primaryEmailAddress,
       firstName = request.firstName,
       lastName = request.lastName,
-      country = request.country,
-      state = request.state,
       billingAddress = billingAddress(request),
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
