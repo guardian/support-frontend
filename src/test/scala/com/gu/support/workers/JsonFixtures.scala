@@ -12,7 +12,7 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 
 //noinspection TypeAnnotation
-object Fixtures {
+object JsonFixtures {
   val useEncryption = false
 
   def wrapFixture(string: String): ByteArrayInputStream =

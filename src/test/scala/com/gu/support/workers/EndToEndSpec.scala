@@ -6,7 +6,7 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.monitoring.SafeLogger
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.Fixtures.{createPayPalPaymentMethodContributionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createPayPalPaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.lambdas._
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.generic.auto._
