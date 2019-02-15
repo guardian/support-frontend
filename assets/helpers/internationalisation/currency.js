@@ -13,13 +13,21 @@ import {
 
 // ----- Types ----- //
 
+const GBP: 'GBP' = 'GBP';
+const USD: 'USD' = 'USD';
+const AUD: 'AUD' = 'AUD';
+const EUR: 'EUR' = 'EUR';
+const NZD: 'NZD' = 'NZD';
+const CAD: 'CAD' = 'CAD';
+
+
 export type IsoCurrency =
-  | 'GBP'
-  | 'USD'
-  | 'AUD'
-  | 'EUR'
-  | 'NZD'
-  | 'CAD';
+  | typeof GBP
+  | typeof USD
+  | typeof AUD
+  | typeof EUR
+  | typeof NZD
+  | typeof CAD;
 
 export type Currency = {|
   glyph: string,
@@ -107,12 +115,12 @@ function fromCountryGroupId(countryGroupId: CountryGroupId): ?IsoCurrency {
 
 function fromString(s: string): ?IsoCurrency {
   switch (s.toLowerCase()) {
-    case 'gbp': return 'GBP';
-    case 'usd': return 'USD';
-    case 'aud': return 'AUD';
-    case 'eur': return 'EUR';
-    case 'nzd': return 'NZD';
-    case 'cad': return 'CAD';
+    case 'gbp': return GBP;
+    case 'usd': return USD;
+    case 'aud': return AUD;
+    case 'eur': return EUR;
+    case 'nzd': return NZD;
+    case 'cad': return CAD;
     default: return null;
   }
 }
@@ -126,7 +134,7 @@ function fromQueryParameter(): ?IsoCurrency {
 }
 
 function detect(countryGroup: CountryGroupId): IsoCurrency {
-  return fromQueryParameter() || fromCountryGroupId(countryGroup) || 'GBP';
+  return fromQueryParameter() || fromCountryGroupId(countryGroup) || GBP;
 }
 
 const glyph = (c: IsoCurrency): string => currencies[c].glyph;
@@ -142,4 +150,10 @@ export {
   currencies,
   glyph,
   extendedGlyph,
+  GBP,
+  USD,
+  EUR,
+  AUD,
+  NZD,
+  CAD,
 };

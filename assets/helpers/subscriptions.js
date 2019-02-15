@@ -15,7 +15,7 @@ import {
 import { getPlanPrices, flashSaleIsActive, type PlanPrice } from 'helpers/flashSale';
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
-import { currencies, detect } from './internationalisation/currency';
+import { currencies, detect, GBP } from './internationalisation/currency';
 import { GBPCountries } from './internationalisation/countryGroup';
 
 
@@ -232,7 +232,7 @@ function getPromotionWeeklyProductPrice(
 function getRegularPaperPrice(billingPlan: PaperBillingPlan): Price {
   return {
     price: paperSubscriptionPrices[billingPlan],
-    currency: 'GBP',
+    currency: GBP,
   };
 }
 
@@ -244,7 +244,7 @@ function getPaperPrice(billingPlan: PaperBillingPlan): Price {
     if (discountedPlanPrice) {
       return {
         price: discountedPlanPrice[billingPlan],
-        currency: 'GBP',
+        currency: GBP,
       };
     }
   }

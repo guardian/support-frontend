@@ -20,6 +20,7 @@
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { AUD } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
@@ -47,7 +48,7 @@ function loadStripe(): Promise<void> {
 
 function getStripeKey(stripeAccount: StripeAccount, currency: IsoCurrency, isTestUser: boolean): string {
   switch (currency) {
-    case 'AUD':
+    case AUD:
       return isTestUser ?
         window.guardian.stripeKeyAustralia[stripeAccount].uat :
         window.guardian.stripeKeyAustralia[stripeAccount].default;

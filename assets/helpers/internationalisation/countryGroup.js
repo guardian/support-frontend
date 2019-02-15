@@ -7,6 +7,7 @@ import { getQueryParameter } from 'helpers/url';
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { AUD, CAD, EUR, GBP, NZD, USD } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
@@ -49,25 +50,25 @@ type CountryGroups = {
 const countryGroups: CountryGroups = {
   GBPCountries: {
     name: 'United Kingdom',
-    currency: 'GBP',
+    currency: GBP,
     countries: ['GB', 'FK', 'GI', 'GG', 'IM', 'JE', 'SH'],
     supportInternationalisationId: 'uk',
   },
   UnitedStates: {
     name: 'United States',
-    currency: 'USD',
+    currency: USD,
     countries: ['US'],
     supportInternationalisationId: 'us',
   },
   AUDCountries: {
     name: 'Australia',
-    currency: 'AUD',
+    currency: AUD,
     countries: ['AU', 'KI', 'NR', 'NF', 'TV'],
     supportInternationalisationId: 'au',
   },
   EURCountries: {
     name: 'Europe',
-    currency: 'EUR',
+    currency: EUR,
     countries: ['AD', 'AL', 'AT', 'BA', 'BE', 'BG', 'BL', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FO', 'FR',
       'GF', 'GL', 'GP', 'GR', 'HR', 'HU', 'IE', 'IT', 'LI', 'LT', 'LU', 'LV', 'MC', 'ME', 'MF', 'IS', 'MQ', 'MT', 'NL',
       'NO', 'PF', 'PL', 'PM', 'PT', 'RE', 'RO', 'RS', 'SE', 'SI', 'SJ', 'SK', 'SM', 'TF', 'TR', 'WF', 'YT', 'VA', 'AX'],
@@ -75,7 +76,7 @@ const countryGroups: CountryGroups = {
   },
   International: {
     name: 'International',
-    currency: 'USD',
+    currency: USD,
     countries: ['AE', 'AF', 'AG', 'AI', 'AM', 'AO', 'AQ', 'AR', 'AS', 'AW', 'AZ', 'BB', 'BD', 'BF', 'BH', 'BI', 'BJ', 'BM',
       'BN', 'BO', 'BQ', 'BR', 'BS', 'BT', 'BV', 'BW', 'BY', 'BZ', 'CC', 'CD', 'CF', 'CG', 'CI', 'CL', 'CM', 'CN', 'CO', 'CR',
       'CU', 'CV', 'CW', 'CX', 'DJ', 'DM', 'DO', 'DZ', 'EC', 'EG', 'EH', 'ER', 'ET', 'FJ', 'FM', 'GA', 'GD', 'GE', 'GH', 'GM',
@@ -89,13 +90,13 @@ const countryGroups: CountryGroups = {
   },
   NZDCountries: {
     name: 'New Zealand',
-    currency: 'NZD',
+    currency: NZD,
     countries: ['NZ', 'CK'],
     supportInternationalisationId: 'nz',
   },
   Canada: {
     name: 'Canada',
-    currency: 'CAD',
+    currency: CAD,
     countries: ['CA'],
     supportInternationalisationId: 'ca',
   },

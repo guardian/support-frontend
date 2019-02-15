@@ -6,8 +6,8 @@ import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import { GBP } from 'helpers/internationalisation/currency';
 import type { Participations } from 'helpers/abTests/abtest';
-
 
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion' | 'GAEvent' | 'AppStoreCtaClick';
@@ -54,7 +54,7 @@ function getCurrency(): string {
   if (currency) {
     storage.setSession('currency', currency);
   }
-  return storage.getSession('currency') || 'GBP';
+  return storage.getSession('currency') || GBP;
 }
 
 function getContributionValue(): number {

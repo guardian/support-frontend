@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-
+import { GBP } from 'helpers/internationalisation/currency';
 import { createCommonReducer } from '../commonReducer';
 import { GBPCountries } from '../../internationalisation/countryGroup';
 
@@ -30,7 +30,7 @@ describe('reducer tests', () => {
       internationalisation: {
         countryId: 'GB',
         countryGroupId: GBPCountries,
-        currencyId: 'GBP',
+        currencyId: GBP,
       },
       abParticipations: {},
       otherQueryParams: [],

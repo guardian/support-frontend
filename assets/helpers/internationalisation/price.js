@@ -2,9 +2,24 @@
 
 // ----- Imports ----- //
 
-import { type IsoCurrency, glyph, extendedGlyph } from './currency';
-import { AUDCountries, Canada, type CountryGroupId, GBPCountries, International, NZDCountries, UnitedStates } from './countryGroup';
-
+import {
+  AUD,
+  CAD,
+  EUR,
+  GBP,
+  NZD,
+  USD,
+} from 'helpers/internationalisation/currency';
+import { extendedGlyph, glyph, type IsoCurrency } from './currency';
+import {
+  AUDCountries,
+  Canada,
+  type CountryGroupId, EURCountries,
+  GBPCountries,
+  International,
+  NZDCountries,
+  UnitedStates,
+} from './countryGroup';
 
 // ----- Types ----- //
 
@@ -16,22 +31,23 @@ export type Price = $ReadOnly<{|
 
 // ----- Functions ----- //
 
-const GBP = (value: number): Price => ({ value, currency: 'GBP' });
-const USD = (value: number): Price => ({ value, currency: 'USD' });
-const AUD = (value: number): Price => ({ value, currency: 'AUD' });
-const EUR = (value: number): Price => ({ value, currency: 'EUR' });
-const NZD = (value: number): Price => ({ value, currency: 'NZD' });
-const CAD = (value: number): Price => ({ value, currency: 'CAD' });
+const GBPPrice = (value: number): Price => ({ value, currency: GBP });
+const USDPrice = (value: number): Price => ({ value, currency: USD });
+const AUDPrice = (value: number): Price => ({ value, currency: AUD });
+const EURPrice = (value: number): Price => ({ value, currency: EUR });
+const NZDPrice = (value: number): Price => ({ value, currency: NZD });
+const CADPrice = (value: number): Price => ({ value, currency: CAD });
 
 function priceByCountryGroupId(countryGroupId: CountryGroupId, price: number): Price {
   switch (countryGroupId) {
-    case GBPCountries: return GBP(price);
-    case AUDCountries: return AUD(price);
-    case International: return USD(price);
-    case NZDCountries: return NZD(price);
-    case Canada: return CAD(price);
+    case GBPCountries: return GBPPrice(price);
+    case AUDCountries: return AUDPrice(price);
+    case International: return USDPrice(price);
+    case NZDCountries: return NZDPrice(price);
+    case EURCountries: return EURPrice(price);
+    case Canada: return CADPrice(price);
     default:
-    case UnitedStates: return USD(price);
+    case UnitedStates: return USDPrice(price);
   }
 }
 
