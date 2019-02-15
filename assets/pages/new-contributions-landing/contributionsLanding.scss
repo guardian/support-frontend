@@ -336,6 +336,7 @@ footer[role="contentinfo"] a {
 .gu-content--contribution-form-two {
 
   .gu-content__main {
+    display: block; // this is to remove the display flex set earlier
     background-color: gu-colour(sport-faded);
   }
 
@@ -373,7 +374,7 @@ footer[role="contentinfo"] a {
     background-color: gu-colour(brightness-100);
 
     @include mq($from: tablet) {
-      width: 380px;      
+      width: 40%;      
     }
   }
 
