@@ -8,11 +8,10 @@ import { bindActionCreators } from 'redux';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import { digitalPackAmountToPay, type ProductPrices } from 'helpers/productPrice/productPrices';
+import { digitalPackAmountToPay, showPrice, type Price, type ProductPrices } from 'helpers/productPrice/productPrices';
 import { getDigitalPrice } from 'helpers/subscriptions';
 import { getDiscount, getFormattedFlashSalePrice, flashSaleIsActive } from 'helpers/flashSale';
 import { priceByCountryGroupId } from 'helpers/internationalisation/price';
-import { showPrice, type PriceWithCurrency } from 'helpers/productPrice/priceWithCurrency';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, {
@@ -31,20 +30,20 @@ const getPrice = (productPrices: ProductPrices, country: IsoCountry, period: Dig
 
   if (countryGroupId && flashSaleIsActive('DigitalPack', countryGroupId)) {
     const priceAsNumber: number = Number(getFormattedFlashSalePrice('DigitalPack', countryGroupId, period));
-    const flashSalePrice: PriceWithCurrency = priceByCountryGroupId(countryGroupId, priceAsNumber);
+    const flashSalePrice: Price = priceByCountryGroupId(countryGroupId, priceAsNumber);
     return showPrice(flashSalePrice);
   }
 
   return showPrice(digitalPackAmountToPay(productPrices, period, country));
 };
 
-const getAnnualSaving = (country: IsoCountry): ?PriceWithCurrency => {
+const getAnnualSaving = (country: IsoCountry): ?Price => {
   const countryGroupId = fromCountry(country);
   if (countryGroupId) {
-    const annualizedMonthlyCost = getDigitalPrice(countryGroupId, Monthly).value * 12;
+    const annualizedMonthlyCost = getDigitalPrice(countryGroupId, Monthly).price * 12;
     const annualCost = getDigitalPrice(countryGroupId, Annual);
 
-    return { ...annualCost, value: (annualizedMonthlyCost - annualCost.value) };
+    return { ...annualCost, price: (annualizedMonthlyCost - annualCost.price) };
   }
   return null;
 };

@@ -1,19 +1,19 @@
 // @flow
 
 // ----- Imports ----- //
-import { type PriceWithCurrency } from 'helpers/productPrice/priceWithCurrency';
+import { type Price } from 'helpers/productPrice/productPrices';
 import { type CountryGroupId } from './countryGroup';
 
 // ----- Functions ----- //
 
-const GBP = (value: number): PriceWithCurrency => ({ value, currency: 'GBP' });
-const USD = (value: number): PriceWithCurrency => ({ value, currency: 'USD' });
-const AUD = (value: number): PriceWithCurrency => ({ value, currency: 'AUD' });
-const EUR = (value: number): PriceWithCurrency => ({ value, currency: 'EUR' });
-const NZD = (value: number): PriceWithCurrency => ({ value, currency: 'NZD' });
-const CAD = (value: number): PriceWithCurrency => ({ value, currency: 'CAD' });
+const GBP = (price: number): Price => ({ price, currency: 'GBP' });
+const USD = (price: number): Price => ({ price, currency: 'USD' });
+const AUD = (price: number): Price => ({ price, currency: 'AUD' });
+const EUR = (price: number): Price => ({ price, currency: 'EUR' });
+const NZD = (price: number): Price => ({ price, currency: 'NZD' });
+const CAD = (price: number): Price => ({ price, currency: 'CAD' });
 
-function priceByCountryGroupId(countryGroupId: CountryGroupId, price: number): PriceWithCurrency {
+function priceByCountryGroupId(countryGroupId: CountryGroupId, price: number): Price {
   switch (countryGroupId) {
     case 'GBPCountries': return GBP(price);
     case 'AUDCountries': return AUD(price);

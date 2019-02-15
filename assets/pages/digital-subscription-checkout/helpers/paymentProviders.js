@@ -97,7 +97,7 @@ function showStripe(
   const { currencyId, countryId } = state.common.internationalisation;
   const { isTestUser } = state.page.checkout;
 
-  const price = digitalPackAmountToPay(
+  const { price } = digitalPackAmountToPay(
     state.page.checkout.productPrices,
     state.page.checkout.billingPeriod,
     countryId,
@@ -107,7 +107,7 @@ function showStripe(
 
   loadStripe()
     .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currencyId, isTestUser))
-    .then(stripe => openDialogBox(stripe, price.value, state.page.checkout.email));
+    .then(stripe => openDialogBox(stripe, price, state.page.checkout.email));
 }
 
 function showPaymentMethod(

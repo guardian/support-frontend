@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import { getNewsstandSaving, getNewsstandPrice, type PaperBillingPlan, getPaperPrice, getRegularPaperPrice } from 'helpers/subscriptions';
-import { type PriceWithCurrency, showPrice } from 'helpers/productPrice/priceWithCurrency';
+import { type Price, showPrice } from 'helpers/productPrice/productPrices';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
@@ -18,9 +18,9 @@ import { setPlan, redirectToCheckout } from '../../paperSubscriptionLandingPageA
 
 // ---- Helpers ----- //
 
-const getRegularPriceStr = (price: PriceWithCurrency): string => `You pay ${showPrice(price)} a month`;
+const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
 
-const getPriceStr = (price: PriceWithCurrency): string => {
+const getPriceStr = (price: Price): string => {
   if (flashSaleIsActive('Paper', 'GBPCountries')) {
     const duration = getDuration('Paper', 'GBPCountries');
     if (duration) {
@@ -38,7 +38,7 @@ const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): O
   return null;
 };
 
-const getSavingStr = (price: PriceWithCurrency): Option<string> => {
+const getSavingStr = (price: Price): Option<string> => {
   if (flashSaleIsActive('Paper', 'GBPCountries') && getDuration('Paper', 'GBPCountries')) {
     return `${showPrice(price)} a month thereafter`;
   }

@@ -4,7 +4,7 @@
 
 import React from 'react';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { digitalPackProductPrice } from 'helpers/productPrice/productPrices';
+import { digitalPackProductPrice, digitalPackPromotion } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { billingPeriodNoun } from 'helpers/billingPeriods';
 import { countryGroups, fromCountry } from 'helpers/internationalisation/countryGroup';
@@ -73,15 +73,16 @@ function PromotionSummary(props: PropTypes) {
   if (props.country) {
     const { country } = props;
     const productPrice = digitalPackProductPrice(props.productPrices, props.billingPeriod, country);
-    if (productPrice.promotion &&
-      productPrice.promotion.discountedPrice &&
-      productPrice.promotion.discount) {
+    const promotion = digitalPackPromotion(props.productPrices, props.billingPeriod, country);
+    if (promotion &&
+      promotion.discountedPrice &&
+      promotion.discount) {
       return discountSummary(
         productPrice.price,
-        productPrice.promotion.promoCode,
-        productPrice.promotion.discountedPrice,
-        productPrice.promotion.discount.amount,
-        productPrice.promotion.numberOfDiscountedPeriods,
+        promotion.promoCode,
+        promotion.discountedPrice,
+        promotion.discount.amount,
+        promotion.numberOfDiscountedPeriods,
         props.billingPeriod,
         country,
       );
