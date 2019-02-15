@@ -1,6 +1,9 @@
 @import admin.settings.AllSettings
 @import assets.AssetsResolver
 @import views.ViewHelpers._
+@import com.gu.support.pricing.ProductPrices
+@import io.circe.syntax._
+@import com.gu.support.encoding.CustomCodecs._
 
 @(
 	title: String,
@@ -13,7 +16,8 @@
 	styles: Html = Html(""),
 	scripts: Html = Html(""),
   data: Map[String, String] = Map.empty,
-  csrf: Option[String] = None
+  csrf: Option[String] = None,
+  productPrices: Option[ProductPrices] = None,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -96,6 +100,9 @@
 	<script type="text/javascript">
     window.guardian = window.guardian || {};
     window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
+    @productPrices.map(p =>
+      Html(s"window.guardian.productPrices = ${Html(outputJson(p))}")
+    )
 	</script>
 
 	@scripts

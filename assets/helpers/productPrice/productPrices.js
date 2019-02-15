@@ -1,17 +1,13 @@
 // @flow
-import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
-import { countryGroups, fromCountry } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupName, CountryGroup } from 'helpers/internationalisation/countryGroup';
+import { countryGroups, fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { GBPCountries } from '../internationalisation/countryGroup';
+import { type IsoCurrency, glyph, extendedGlyph } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
-
 
 export type DiscountBenefit = {
   amount: number,
@@ -45,25 +41,39 @@ export type ProductPrices = {
   }
 }
 
-function digitalPackProductPrice(
-  productPrices: ProductPrices,
-  billingPeriod: BillingPeriod,
-  country: IsoCountry,
-): ProductPrice {
-  const countryGroup = countryGroups[fromCountry(country) || GBPCountries];
-  return productPrices[countryGroup.name][NoFulfilmentOptions][NoProductOptions][billingPeriod][countryGroup.currency];
+export type Price = {|
+  price: number,
+  currency: IsoCurrency,
+|};
+
+const showPrice = (p: Price, isExtended: boolean = false): string => {
+  const showGlyph = isExtended ? extendedGlyph : glyph;
+  return `${showGlyph(p.currency)}${p.price.toFixed(2)}`;
+};
+
+
+function getCountryGroup(country: IsoCountry): CountryGroup {
+  return countryGroups[fromCountry(country) || GBPCountries];
 }
 
-function digitalPackAmountToPay(
-  productPrices: ProductPrices,
-  billingPeriod: BillingPeriod,
-  country: IsoCountry,
-) {
-  const productPrice = digitalPackProductPrice(productPrices, billingPeriod, country);
-  if (productPrice.promotion && productPrice.promotion.discountedPrice) {
-    return productPrice.promotion.discountedPrice;
+function getCurrency(country: IsoCountry): IsoCurrency {
+  const { currency } = getCountryGroup(country);
+  return currency;
+}
+
+function applyPromotion(price: Price, promotion: ?Promotion) {
+  if (promotion && promotion.discountedPrice) {
+    return {
+      ...price,
+      price: promotion.discountedPrice,
+    };
   }
-  return productPrice.price;
+  return price;
 }
 
-export { digitalPackProductPrice, digitalPackAmountToPay };
+export {
+  getCurrency,
+  getCountryGroup,
+  showPrice,
+  applyPromotion,
+};

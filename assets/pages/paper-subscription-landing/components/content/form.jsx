@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import { getNewsstandSaving, getNewsstandPrice, type PaperBillingPlan, getPaperPrice, getRegularPaperPrice } from 'helpers/subscriptions';
-import { showPrice, type Price } from 'helpers/internationalisation/price';
+import { type Price, showPrice } from 'helpers/productPrice/productPrices';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';

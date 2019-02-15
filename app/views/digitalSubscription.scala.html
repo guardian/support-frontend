@@ -33,8 +33,6 @@
         email: "@user.primaryEmailAddress"
       };
 
-      window.guardian.productPrices = @Html(outputJson(productPrices))
-
       window.guardian.stripeKeyDefaultCurrencies = {
         REGULAR: {
           default: "@defaultStripeConfig.forCurrency(None).publicKey",
@@ -52,4 +50,4 @@
   </script>
   }
 
-  @main(title = title, scripts = scripts, mainJsBundle = js, mainId = id, mainStyleBundle = css, csrf = csrf)
+  @main(title = title, scripts = scripts, mainJsBundle = js, mainId = id, mainStyleBundle = css, csrf = csrf, productPrices = Some(productPrices))

@@ -3,11 +3,10 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { AUD, CAD, EUR, GBP, NZD, type Price, USD } from 'helpers/internationalisation/price';
+import { type Price } from 'helpers/productPrice/productPrices';
 import {
   Annual,
   type BillingPeriod,
-  type DigitalBillingPeriod,
   Monthly,
   Quarterly,
   SixForSix,
@@ -89,46 +88,15 @@ const subscriptionPricesForDefaultBillingPeriod: {
   },
 };
 
-const digitalSubscriptionPrices = {
-  GBPCountries: {
-    [Monthly]: GBP(11.99),
-    [Annual]: GBP(119.90),
-  },
-  UnitedStates: {
-    [Monthly]: USD(19.99),
-    [Annual]: USD(199.90),
-  },
-  AUDCountries: {
-    [Monthly]: AUD(21.50),
-    [Annual]: AUD(215.00),
-  },
-  EURCountries: {
-    [Monthly]: EUR(14.99),
-    [Annual]: EUR(149.90),
-  },
-  International: {
-    [Monthly]: USD(19.99),
-    [Annual]: USD(199.90),
-  },
-  NZDCountries: {
-    [Monthly]: NZD(23.50),
-    [Annual]: NZD(235.00),
-  },
-  Canada: {
-    [Monthly]: CAD(21.95),
-    [Annual]: CAD(219.50),
-  },
-};
-
 const paperSubscriptionPrices = {
-  collectionEveryday: GBP(47.62),
-  collectionSixday: GBP(41.12),
-  collectionWeekend: GBP(20.76),
-  collectionSunday: GBP(10.79),
-  deliveryEveryday: GBP(62.79),
-  deliverySixday: GBP(54.12),
-  deliveryWeekend: GBP(25.09),
-  deliverySunday: GBP(15.12),
+  collectionEveryday: 47.62,
+  collectionSixday: 41.12,
+  collectionWeekend: 20.76,
+  collectionSunday: 10.79,
+  deliveryEveryday: 62.79,
+  deliverySixday: 54.12,
+  deliveryWeekend: 25.09,
+  deliverySunday: 15.12,
 };
 
 const subscriptionPromoPricesForGuardianWeekly: {
@@ -240,10 +208,6 @@ function fixDecimals(number: number): string {
   return number.toFixed(2);
 }
 
-function getDigitalPrice(cgId: CountryGroupId, frequency: DigitalBillingPeriod): Price {
-  return digitalSubscriptionPrices[cgId][frequency];
-}
-
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   return fixDecimals(subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]);
 }
@@ -266,7 +230,10 @@ function getPromotionWeeklyProductPrice(
 }
 
 function getRegularPaperPrice(billingPlan: PaperBillingPlan): Price {
-  return paperSubscriptionPrices[billingPlan];
+  return {
+    price: paperSubscriptionPrices[billingPlan],
+    currency: 'GBP',
+  };
 }
 
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
@@ -275,7 +242,10 @@ function getPaperPrice(billingPlan: PaperBillingPlan): Price {
   if (flashSaleIsActive('Paper', GBPCountries)) {
     const discountedPlanPrice = planPrices.find((planPrice: PlanPrice) => planPrice[billingPlan]);
     if (discountedPlanPrice) {
-      return GBP(discountedPlanPrice[billingPlan]);
+      return {
+        price: discountedPlanPrice[billingPlan],
+        currency: 'GBP',
+      };
     }
   }
 
@@ -350,7 +320,6 @@ export {
   getPromotionWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
-  getDigitalPrice,
   getPaperPrice,
   getRegularPaperPrice,
   fixDecimals,
