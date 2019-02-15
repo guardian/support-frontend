@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import ProductPageContentBlock, { Divider } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content, { Divider } from 'components/content/content';
 import Text from 'components/text/text';
 import UnorderedList from 'components/list/unorderedList';
 import OrderedList from 'components/list/orderedList';
@@ -17,7 +17,7 @@ import { ContentHelpBlock, LinkTo, ContentForm, type ContentTabPropTypes } from 
 
 // ----- Content ----- //
 const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => (
-  <ProductPageContentBlock
+  <Content
     border
     image={<GridImage
       gridId="paperDeliveryFeature"
@@ -48,7 +48,7 @@ const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}
         ]}
       />
     </Text>
-  </ProductPageContentBlock>
+  </Content>
 
 );
 

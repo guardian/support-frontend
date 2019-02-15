@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 import MarketingConsent from './thankYou/marketingConsentContainer';
 import AppsSection from './thankYou/appsSection';
@@ -31,7 +31,7 @@ function ThankYouContent(props: PropTypes) {
 
   return (
     <div>
-      <ProductPageContentBlock>
+      <Content>
         <Text>
           <LargeParagraph>
             {
@@ -41,21 +41,21 @@ function ThankYouContent(props: PropTypes) {
           }
           </LargeParagraph>
         </Text>
-      </ProductPageContentBlock>
-      <ProductPageContentBlock>
+      </Content>
+      <Content>
         <Text title="Can&#39;t wait to get started?">
           <LargeParagraph>
             Just download the apps and log in with your Guardian account details.
           </LargeParagraph>
         </Text>
         <AppsSection countryGroupId={props.countryGroupId} />
-      </ProductPageContentBlock>
-      <ProductPageContentBlock>
+      </Content>
+      <Content>
         <MarketingConsent render={({ title, message }) => (
           <Text title={title}>{message}</Text>
         )}
         />
-      </ProductPageContentBlock>
+      </Content>
     </div>
   );
 

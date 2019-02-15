@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import Text from 'components/text/text';
 import { getMemLink, getPatronsLink } from 'helpers/externalLinks';
 
@@ -10,7 +10,7 @@ import OtherProduct from './otherProduct';
 
 export default function OtherProducts() {
   return (
-    <ProductPageContentBlock modifierClasses={['other-products']}>
+    <Content modifierClasses={['other-products']}>
       <Text title="Other ways you can support us">
         <OtherProduct
           title="The Guardian Patrons"
@@ -25,6 +25,6 @@ export default function OtherProducts() {
           modifierClass="masterclass"
         />
       </Text>
-    </ProductPageContentBlock>
+    </Content>
   );
 }

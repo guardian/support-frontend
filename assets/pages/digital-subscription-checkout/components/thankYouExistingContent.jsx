@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -22,14 +22,14 @@ function ThankYouExistingContent({ countryGroupId }: PropTypes) {
 
   return (
     <div>
-      <ProductPageContentBlock>
+      <Content>
         <Text>
           <LargeParagraph>
             You have access to the following products:
           </LargeParagraph>
         </Text>
         <AppsSection countryGroupId={countryGroupId} />
-      </ProductPageContentBlock>
+      </Content>
     </div>
   );
 

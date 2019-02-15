@@ -5,7 +5,7 @@
 import React, { type Element, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import Text, { SansParagraph, Callout } from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import { paperSubsUrl } from 'helpers/routes';
@@ -60,7 +60,7 @@ const ContentHelpBlock = ({
   faqLink: Element<string>,
   telephoneLink: Element<string>
 |}) => (
-  <ProductPageContentBlock type="feature" modifierClasses={['faqs']}>
+  <Content type="feature" modifierClasses={['faqs']}>
     <Text title="FAQ and help">
       <SansParagraph>
         If you’ve got any more questions, you might well find the answers in the {faqLink}.
@@ -69,7 +69,7 @@ const ContentHelpBlock = ({
         If you can’t find the answer to your question here, please call our customer services team on {telephoneLink}.
       </SansParagraph>
     </Text>
-  </ProductPageContentBlock>
+  </Content>
 );
 
 const LinkTo = ({
@@ -98,7 +98,7 @@ const ContentForm = ({
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab
 |}) => (
-  <ProductPageContentBlock type="feature" id="subscribe">
+  <Content type="feature" id="subscribe">
     <Text
       title={title}
     >
@@ -120,7 +120,7 @@ const ContentForm = ({
     <ProductPageInfoChip>
       {getPageInfoChip()}
     </ProductPageInfoChip>
-  </ProductPageContentBlock>
+  </Content>
 );
 ContentForm.defaultProps = { text: null };
 

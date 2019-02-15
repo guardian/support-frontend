@@ -2,13 +2,13 @@
 
 import React from 'react';
 
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import Text from 'components/text/text';
 import NoOne from 'components/svgs/noOne';
 
 export default function NoOneEdits() {
   return (
-    <ProductPageContentBlock type="grey">
+    <Content type="grey">
       <Text>
         <NoOne />
         <p>
@@ -18,6 +18,6 @@ export default function NoOneEdits() {
           This independence matters because it enables us to challenge the powerful, and hold them to account.
         </p>
       </Text>
-    </ProductPageContentBlock>
+    </Content>
   );
 }

@@ -17,31 +17,31 @@
     color: $text;
   }
   @if($bg){
-    &, .component-product-page-content-block-bg {
+    &, .component-content-bg {
       background-color: $bg;
     }
   }
-  &, .component-product-page-content-block-bg,
+  &, .component-content-bg,
   & .component-left-margin-section__content,
   & .component-product-page-features .component-product-page-features__item {
     border-color: $border;
   }
-  & .component-product-page-content-block-divider__line {
+  & .component-content__divider__line {
     @include multiline(4, $border);
   }
-  &.component-product-page-content-block--force-border,
+  &.component-content--force-border,
   & + &  {
     .component-left-margin-section__content {
       border-top: 1px solid $border;
     }
   }
-  &.component-product-page-content-block--no-border  .component-left-margin-section__content {
+  &.component-content--no-border  .component-left-margin-section__content {
     border-top: 0 !important;  
   }    
 }
 
 
-.component-product-page-content-block .component-left-margin-section__content {
+.component-content .component-left-margin-section__content {
   max-width: 100%;
   position: relative;
   @include mq($from: tablet) {
@@ -49,25 +49,25 @@
   }
 }
 
-.component-product-page-content-block--overflow-hidden .component-left-margin-section__content {
+.component-content--overflow-hidden .component-left-margin-section__content {
   overflow: hidden;
 }
 
-.component-product-page-content-block--white {
+.component-content--white {
   @include block-colours(
     $border: gu-colour(brightness-86),
     $bg: gu-colour(brightness-100),
   );
 }
 
-.component-product-page-content-block--grey {
+.component-content--grey {
   @include block-colours(
     $border: transparent,
     $bg: gu-colour(brightness-97),
   );
 }
 
-.component-product-page-content-block--feature {
+.component-content--feature {
   @include block-colours(
     $border: gu-colour(brand-pastel),
     $bg: gu-colour(brand-main),
@@ -75,7 +75,7 @@
   );
 }
 
-.component-product-page-content-block--feature-secondary {
+.component-content--feature-secondary {
   @include block-colours(
     $border: gu-colour(brand-pastel),
     $bg: gu-colour(highlight-main),
@@ -83,7 +83,7 @@
   );
 }
 
-.component-product-page-content-block--dark {
+.component-content--dark {
   @include block-colours(
     $border: gu-colour(brightness-100),
     $text: gu-colour(brightness-100),
@@ -91,34 +91,34 @@
   );
 }
 
-.component-product-page-content-block--higher {
+.component-content--higher {
   position: relative;
   z-index: 10;
 }
 
-.component-product-page-content-block__content {
+.component-content__content {
   max-width: gu-span(12);
   padding: ($gu-v-spacing/2) ($gu-h-spacing / 2) 0;
 }
 
-.component-product-page-content-block-outset {
+.component-content__outset {
   @include outset;
 }
 
-.component-product-page-content-block-divider {
+.component-content__divider {
   @include outset;
   height: 20px;
   margin-bottom: ($gu-v-spacing*.33);
 }
 
-.component-product-page-content-block-divider--small {
+.component-content__divider--small {
   @include narrow-content;
   height: 1px;
   overflow: hidden;
   position: relative;
 }
 
-.component-product-page-content-block-divider__line {
+.component-content__divider__line {
   position: absolute;
   left: 0;
   right: 0;
@@ -126,15 +126,15 @@
   margin: 0;
 }
 
-.component-product-page-content-block__narrowContent,
-.component-product-page-content-block .component-text {
+.component-content__narrowContent,
+.component-content .component-text {
   @include narrow-content;
 }
 
 // ----- Vertical rhythm ------ //
 
-.component-product-page-content-block {
-  .component-product-page-content-block__narrowContent,
+.component-content {
+  .component-content__narrowContent,
   .component-text, 
   .component-product-page-plan-form,
   .component-product-page-info-chip {
@@ -143,14 +143,14 @@
   .component-product-page-info-chip + .component-product-page-info-chip {
     margin-top: ($gu-v-spacing * -1);
   }
-  .component-product-page-content-block-divider:last-child {
+  .component-content__divider:last-child {
     margin-bottom: ($gu-v-spacing*-.5) - 2px;
     margin-top: ($gu-v-spacing*.5) + 2px;
   }
   /*
   cancel out initial padding
   */
-  .component-product-page-content-block__content > .component-product-page-content-block-divider:first-child,
+  .component-content__content > .component-content__divider:first-child,
   .component-checkout,
   .component-product-page-tabs {
     margin-top: ($gu-v-spacing*-.5) - 1px;
@@ -160,7 +160,7 @@
 
 // ----- Images ------ //
 
-.component-product-page-content-block__image {
+.component-content__image {
   max-width: gu-span(6);
   @include mq($from: tablet) {
     position: absolute;

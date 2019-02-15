@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { bgClassName, Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import { bgClassName, Outset } from 'components/content/content';
 import Button from 'components/button/button';
 
 import { type Option } from 'helpers/types/option';

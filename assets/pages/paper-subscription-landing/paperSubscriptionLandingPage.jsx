@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 
 
@@ -23,7 +23,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 import { SaleHeader } from './components/hero/hero';
 import Tabs from './components/tabs';
-import Content from './components/content/content';
+import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
@@ -74,22 +74,22 @@ const content = (
     >
       <SaleHeader />
 
-      <ProductPageContentBlock needsHigherZindex>
+      <Content needsHigherZindex>
         <Text>
           <LargeParagraph>
             {getStandfirst()}
           </LargeParagraph>
         </Text>
         <Tabs />
-      </ProductPageContentBlock>
-      <Content />
+      </Content>
+      <TabsContent />
       {flashSaleIsActive('Paper', GBPCountries) &&
-        <ProductPageContentBlock>
+        <Content>
           <Text title="Promotion terms and conditions">
             <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/GCB80X/terms?country=${subsCountry}`}>here</a>.
             </p>
           </Text>
-        </ProductPageContentBlock>
+        </Content>
       }
     </Page>
   </Provider>

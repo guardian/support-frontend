@@ -16,7 +16,7 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import GridPicture from 'components/gridPicture/gridPicture';
 import SvgChevron from 'components/svgs/chevron';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-import ProductPageContentBlock, { Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content, { Outset } from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 import AnchorButton from 'components/button/anchorButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
@@ -109,7 +109,7 @@ const content = (
         />
 
       </ProductPagehero>
-      <ProductPageContentBlock>
+      <Content>
         <Text title="Open up your world view, Weekly">
           <LargeParagraph>Inside the essential magazine from
           The&nbsp;Guardian, you&rsquo;ll find expert opinion, insight and culture, curated to
@@ -117,8 +117,8 @@ const content = (
           challenging new puzzles every week. Subscribe today and get free delivery, worldwide.
           </LargeParagraph>
         </Text>
-      </ProductPageContentBlock>
-      <ProductPageContentBlock id="benefits">
+      </Content>
+      <Content id="benefits">
         <Text title="As a subscriber you’ll enjoy" />
         <Outset>
           <ProductPageFeatures features={[
@@ -129,8 +129,8 @@ const content = (
           ]}
           />
         </Outset>
-      </ProductPageContentBlock>
-      <ProductPageContentBlock type="feature" id="subscribe">
+      </Content>
+      <Content type="feature" id="subscribe">
         <Text title="Subscribe to Guardian Weekly today">
           <p>Choose how you’d like to pay</p>
         </Text>
@@ -141,8 +141,8 @@ const content = (
         <ProductPageInfoChip icon={<SvgInformation />}>
               You can cancel your subscription at any time
         </ProductPageInfoChip>
-      </ProductPageContentBlock>
-      <ProductPageContentBlock>
+      </Content>
+      <Content>
         <Text title="Gift subscriptions">
           <LargeParagraph>A quarterly or annual Guardian Weekly subscription makes a great gift.
             To&nbsp;buy&nbsp;one, just select the gift option at checkout or get in touch with your local customer
@@ -157,8 +157,8 @@ const content = (
           ]}
           />
         </Outset>
-      </ProductPageContentBlock>
-      <ProductPageContentBlock>
+      </Content>
+      <Content>
         <Text title="Promotion terms and conditions">
           <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full 6 for 6 promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
           </p>
@@ -167,7 +167,7 @@ const content = (
           <p>Subscriptions available to people aged 18 and over with a valid email address. For full details of Guardian Weekly print subscription services and their terms and conditions, see <a target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/guardian-weekly-subscription-terms-conditions">here</a>.
           </p>
         </Text>
-      </ProductPageContentBlock>
+      </Content>
     </Page>
   </Provider>
 );

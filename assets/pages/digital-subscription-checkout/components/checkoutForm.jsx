@@ -11,7 +11,7 @@ import { firstError, type FormError } from 'helpers/subscriptionsForms/validatio
 import { type Option } from 'helpers/types/option';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 
-import { Outset } from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import { Outset } from 'components/content/content';
 import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
@@ -29,7 +29,7 @@ import Checkout from 'components/checkout/checkout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
+import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { regularPrice as dpRegularPrice, promotion as digitalPackPromotion } from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -117,7 +117,7 @@ function CheckoutForm(props: PropTypes) {
     />) : '';
 
   return (
-    <ProductPageContentBlock modifierClasses={['your-details']}>
+    <Content modifierClasses={['your-details']}>
       <Outset>
         <Checkout>
           <Form onSubmit={(ev) => {
@@ -303,7 +303,7 @@ function CheckoutForm(props: PropTypes) {
           </Form>
         </Checkout>
       </Outset>
-    </ProductPageContentBlock>
+    </Content>
   );
 
 }
