@@ -72,18 +72,7 @@ const getOfferCopy = (country: IsoCountry, period: DigitalBillingPeriod): ?strin
     }
   }
   return null;
-
 };
-
-const getAnnualCopy = (productPrices: ProductPrices, country: IsoCountry) => {
-  const saving = getAnnualSaving(productPrices, country);
-  return [
-    `14 day free trial, then ${displayPrice(productPrices, Annual, country)} every 12 months`,
-    saving ? `(save ${showPrice(saving)} per year)` : null,
-  ].join(' ');
-};
-
-const getMonthlyCopy = (productPrices: ProductPrices, country: IsoCountry) => `14 day free trial, then ${displayPrice(productPrices, Monthly, country)} a month`;
 
 
 // ---- Periods ----- //
@@ -91,13 +80,19 @@ const getMonthlyCopy = (productPrices: ProductPrices, country: IsoCountry) => `1
 const billingPeriods = {
   [Monthly]: {
     title: 'Monthly',
-    offer: (country: IsoCountry) => getOfferCopy(country, 'Monthly'),
-    copy: getMonthlyCopy,
+    offer: (country: IsoCountry) => getOfferCopy(country, Monthly),
+    copy: (productPrices: ProductPrices, country: IsoCountry) => `14 day free trial, then ${displayPrice(productPrices, Monthly, country)} a month`,
   },
   [Annual]: {
     title: 'Annually',
-    offer: (country: IsoCountry) => getOfferCopy(country, 'Annual'),
-    copy: getAnnualCopy,
+    offer: (country: IsoCountry) => getOfferCopy(country, Annual),
+    copy: (productPrices: ProductPrices, country: IsoCountry) => {
+      const saving = getAnnualSaving(productPrices, country);
+      return [
+        `14 day free trial, then ${displayPrice(productPrices, Annual, country)} every 12 months`,
+        saving ? `(save ${showPrice(saving)} per year)` : null,
+      ].join(' ');
+    },
   },
 };
 

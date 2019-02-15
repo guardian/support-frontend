@@ -89,14 +89,14 @@ const subscriptionPricesForDefaultBillingPeriod: {
 };
 
 const paperSubscriptionPrices = {
-  collectionEveryday: (47.62),
-  collectionSixday: (41.12),
-  collectionWeekend: (20.76),
-  collectionSunday: (10.79),
-  deliveryEveryday: (62.79),
-  deliverySixday: (54.12),
-  deliveryWeekend: (25.09),
-  deliverySunday: (15.12),
+  collectionEveryday: 47.62,
+  collectionSixday: 41.12,
+  collectionWeekend: 20.76,
+  collectionSunday: 10.79,
+  deliveryEveryday: 62.79,
+  deliverySixday: 54.12,
+  deliveryWeekend: 25.09,
+  deliverySunday: 15.12,
 };
 
 const subscriptionPromoPricesForGuardianWeekly: {
