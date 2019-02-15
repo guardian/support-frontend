@@ -20,10 +20,8 @@ import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
 import play.api.mvc.Call
 import services.stepfunctions.SupportWorkersClient._
-import services.stepfunctions.PaymentFieldsEmbellisher._
 
 import scala.concurrent.Future
-import scala.util.matching.Regex
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
@@ -106,7 +104,7 @@ class SupportWorkersClient(
       requestId = requestId,
       user = user,
       product = request.body.product,
-      paymentFields = paymentFields(request.body),
+      paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
         ophanIds = request.body.ophanIds,
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
