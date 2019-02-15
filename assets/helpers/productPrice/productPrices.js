@@ -1,6 +1,6 @@
 // @flow
 import type { CountryGroupName, CountryGroup } from 'helpers/internationalisation/countryGroup';
-import { countryGroups, fromCountry } from 'helpers/internationalisation/countryGroup';
+import { countryGroups, fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -53,7 +53,7 @@ const showPrice = (p: Price, isExtended: boolean = false): string => {
 
 
 function getCountryGroup(country: IsoCountry): CountryGroup {
-  return countryGroups[fromCountry(country) || 'GBPCountries'];
+  return countryGroups[fromCountry(country) || GBPCountries];
 }
 
 function getCurrency(country: IsoCountry): IsoCurrency {
