@@ -14,11 +14,10 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import CustomerService from 'components/customerService/customerService';
 import Footer from 'components/footer/footer';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+import { AUDCountries, GBPCountries, International, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import PremiumTierLandingHeader from './components/premiumTierLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
-import { AUDCountries, GBPCountries, International, UnitedStates } from '../../helpers/internationalisation/countryGroup';
-
 
 // ----- Redux Store ----- //
 

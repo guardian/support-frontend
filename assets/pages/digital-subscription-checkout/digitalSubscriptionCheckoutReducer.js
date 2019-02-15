@@ -15,6 +15,7 @@ import {
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
@@ -32,7 +33,6 @@ import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
-import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 

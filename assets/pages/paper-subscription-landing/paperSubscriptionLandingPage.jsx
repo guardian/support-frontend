@@ -18,6 +18,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { SaleHeader } from './components/hero/hero';
@@ -26,8 +27,6 @@ import Content from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
-import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
-
 
 // ----- Collection or delivery ----- //
 

@@ -12,7 +12,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fixDecimals } from 'helpers/subscriptions';
 import type { Option } from 'helpers/types/option';
-import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 export type PropTypes = {
   productPrices: ProductPrices,

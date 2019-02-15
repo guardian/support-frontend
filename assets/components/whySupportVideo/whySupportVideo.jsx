@@ -10,7 +10,7 @@ import Video from 'components/video/video';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type VideoId } from 'helpers/youtube';
-import { AUDCountries, UnitedStates } from '../../helpers/internationalisation/countryGroup';
+import { AUDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Props ----- //

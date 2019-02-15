@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { AUDCountries, GBPCountries, UnitedStates } from '../../helpers/internationalisation/countryGroup';
+import { AUDCountries, GBPCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Props ----- //

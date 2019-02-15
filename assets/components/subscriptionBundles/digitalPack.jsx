@@ -14,7 +14,7 @@ import {
   sendTrackingEventsOnClick,
 } from 'helpers/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 function getCopy(countryGroupId: CountryGroupId) {
   if (flashSaleIsActive('DigitalPack', countryGroupId)) {

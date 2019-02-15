@@ -15,10 +15,10 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { getAppReferrer } from 'helpers/tracking/appStores';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
 import InternationalSection from './components/internationalSection';
-import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Types and State Mapping ----- //

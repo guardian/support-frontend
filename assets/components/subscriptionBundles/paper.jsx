@@ -6,7 +6,7 @@ import type { ComponentAbTest } from 'helpers/subscriptions';
 import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 import { flashSaleIsActive, getSaleCopy, getFormattedFlashSalePrice } from 'helpers/flashSale';
-import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
