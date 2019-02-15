@@ -15,6 +15,7 @@ import {
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
@@ -318,7 +319,7 @@ function initReducer(initialCountry: IsoCountry) {
 
   return combineReducers({
     checkout: reducer,
-    user: createUserReducer(fromCountry(initialCountry) || 'GBPCountries'),
+    user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
     directDebit,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),

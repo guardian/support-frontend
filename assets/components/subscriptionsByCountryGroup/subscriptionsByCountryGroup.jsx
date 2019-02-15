@@ -15,6 +15,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import { getAppReferrer } from 'helpers/tracking/appStores';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
 import InternationalSection from './components/internationalSection';
@@ -73,7 +74,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
 
   const appReferrer = getAppReferrer(appMedium, countryGroupId);
 
-  if (countryGroupId === 'GBPCountries') {
+  if (countryGroupId === GBPCountries) {
     return (
       <div className={className} {...otherProps}>
         <DigitalSection

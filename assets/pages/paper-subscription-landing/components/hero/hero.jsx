@@ -11,21 +11,21 @@ import GridImage from 'components/gridImage/gridImage';
 import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSaleCountdown';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
 
 import './joyOfPrint.scss';
 
 function getHeading(): string {
-  if (flashSaleIsActive('Paper', 'GBPCountries')) {
-    const saleCopy = getSaleCopy('Paper', 'GBPCountries');
+  if (flashSaleIsActive('Paper', GBPCountries)) {
+    const saleCopy = getSaleCopy('Paper', GBPCountries);
     return saleCopy.landingPage.subHeading;
   }
 
   return 'Save up to 31% on The Guardian and The Observer - all year round';
 }
 
-const TimerIfActive = () => (showCountdownTimer('Paper', 'GBPCountries') ? (
+const TimerIfActive = () => (showCountdownTimer('Paper', GBPCountries) ? (
   <FlashSaleCountdownInHero
     product="Paper"
     countryGroupId="GBPCountries"

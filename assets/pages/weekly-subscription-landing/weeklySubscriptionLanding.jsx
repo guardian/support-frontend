@@ -23,6 +23,7 @@ import ProductPageFeatures from 'components/productPage/productPageFeatures/prod
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import SvgInformation from 'components/svgs/information';
 import SvgGift from 'components/svgs/gift';
+import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 
 import 'stylesheets/skeleton/skeleton.scss';
 
@@ -30,6 +31,7 @@ import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
 
 import './weeklySubscriptionLanding.scss';
+
 
 // ----- Redux Store ----- //
 
@@ -57,13 +59,13 @@ const reactElementId: {
 const Header = headerWithCountrySwitcherContainer(
   '/subscribe/weekly',
   [
-    'GBPCountries',
-    'UnitedStates',
-    'AUDCountries',
-    'EURCountries',
-    'Canada',
-    'NZDCountries',
-    'International',
+    GBPCountries,
+    UnitedStates,
+    AUDCountries,
+    EURCountries,
+    Canada,
+    NZDCountries,
+    International,
   ],
   'GuardianWeekly',
 );

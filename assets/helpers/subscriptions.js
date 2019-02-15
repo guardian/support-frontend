@@ -16,6 +16,7 @@ import { getPlanPrices, flashSaleIsActive, type PlanPrice } from 'helpers/flashS
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
+import { GBPCountries } from './internationalisation/countryGroup';
 
 
 // ----- Types ------ //
@@ -236,9 +237,9 @@ function getRegularPaperPrice(billingPlan: PaperBillingPlan): Price {
 }
 
 function getPaperPrice(billingPlan: PaperBillingPlan): Price {
-  const planPrices: PlanPrice[] = getPlanPrices('Paper', 'GBPCountries');
+  const planPrices: PlanPrice[] = getPlanPrices('Paper', GBPCountries);
 
-  if (flashSaleIsActive('Paper', 'GBPCountries')) {
+  if (flashSaleIsActive('Paper', GBPCountries)) {
     const discountedPlanPrice = planPrices.find((planPrice: PlanPrice) => planPrice[billingPlan]);
     if (discountedPlanPrice) {
       return {

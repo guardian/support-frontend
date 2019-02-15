@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { usStates, caStates, type UsState, type CaState } from 'helpers/internationalisation/country';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
-
+import { Canada, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import SvgGlobe from 'components/svgs/globe';
 
 import { type State } from '../contributionsLandingReducer';
@@ -66,9 +66,9 @@ const renderStatesField = (
 function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   switch (props.countryGroupId) {
-    case 'UnitedStates':
+    case UnitedStates:
       return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State', props.showRequiredLabel);
-    case 'Canada':
+    case Canada:
       return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province', props.showRequiredLabel);
     default:
       return null;
