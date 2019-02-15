@@ -391,6 +391,7 @@ footer[role="contentinfo"] a {
     border-bottom: 1px solid gu-colour(brightness-86);
 
     li label {
+      font-family: $gu-titlepiece;
       font-size: 22px;
     }
   }
@@ -413,9 +414,10 @@ footer[role="contentinfo"] a {
     
     h1 {
       border-bottom: none;
+      padding-bottom: 10px;
       font-size: 44px;
       line-height: 46px;
-      padding-bottom: 10px;
+      font-family: $gu-titlepiece;
     }
 
     p {
