@@ -148,8 +148,6 @@ class DigitalSubscription(
       primaryEmailAddress = user.primaryEmailAddress,
       firstName = request.firstName,
       lastName = request.lastName,
-      country = request.country,
-      state = request.state,
       billingAddress = billingAddress(request),
       telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
