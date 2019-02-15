@@ -3,12 +3,11 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { AUD, CAD, EUR, GBP, NZD, USD } from 'helpers/internationalisation/price';
+import { GBP } from 'helpers/internationalisation/price';
 import { type Price } from 'helpers/productPrice/productPrices';
 import {
   Annual,
   type BillingPeriod,
-  type DigitalBillingPeriod,
   Monthly,
   Quarterly,
   SixForSix,
@@ -86,37 +85,6 @@ const subscriptionPricesForDefaultBillingPeriod: {
   },
   DailyEdition: {
     GBPCountries: 11.99,
-  },
-};
-
-const digitalSubscriptionPrices = {
-  GBPCountries: {
-    [Monthly]: GBP(11.99),
-    [Annual]: GBP(119.90),
-  },
-  UnitedStates: {
-    [Monthly]: USD(19.99),
-    [Annual]: USD(199.90),
-  },
-  AUDCountries: {
-    [Monthly]: AUD(21.50),
-    [Annual]: AUD(215.00),
-  },
-  EURCountries: {
-    [Monthly]: EUR(14.99),
-    [Annual]: EUR(149.90),
-  },
-  International: {
-    [Monthly]: USD(19.99),
-    [Annual]: USD(199.90),
-  },
-  NZDCountries: {
-    [Monthly]: NZD(23.50),
-    [Annual]: NZD(235.00),
-  },
-  Canada: {
-    [Monthly]: CAD(21.95),
-    [Annual]: CAD(219.50),
   },
 };
 
@@ -240,10 +208,6 @@ function fixDecimals(number: number): string {
   return number.toFixed(2);
 }
 
-function getDigitalPrice(cgId: CountryGroupId, frequency: DigitalBillingPeriod): Price {
-  return digitalSubscriptionPrices[cgId][frequency];
-}
-
 function getProductPrice(product: SubscriptionProduct, countryGroupId: CountryGroupId): string {
   return fixDecimals(subscriptionPricesForDefaultBillingPeriod[product][countryGroupId]);
 }
@@ -350,7 +314,6 @@ export {
   getPromotionWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
-  getDigitalPrice,
   getPaperPrice,
   getRegularPaperPrice,
   fixDecimals,
