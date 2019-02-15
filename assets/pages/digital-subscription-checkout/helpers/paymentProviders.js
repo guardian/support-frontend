@@ -16,7 +16,7 @@ import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
-import { digitalPackAmountToPay } from 'helpers/productPrice/productPrices';
+import { amountToPay as digitalPackAmountToPay } from 'helpers/productPrice/digitalProductPrices';
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation) {

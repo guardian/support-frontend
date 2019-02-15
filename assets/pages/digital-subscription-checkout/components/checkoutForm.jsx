@@ -31,7 +31,7 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import ProductPageContentBlock from 'components/productPage/productPageContentBlock/productPageContentBlock';
 import type { ErrorReason } from 'helpers/errorReasons';
-import { digitalPackProductPrice, digitalPackPromotion } from 'helpers/productPrice/productPrices';
+import { price as digitalPackPrice, promotion as digitalPackPromotion } from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
@@ -103,7 +103,7 @@ function CheckoutForm(props: PropTypes) {
   const monthlyPriceLabel = props.country !== null ?
     (<PriceLabel
       country={props.country}
-      productPrice={digitalPackProductPrice(props.productPrices, Monthly, props.country)}
+      productPrice={digitalPackPrice(props.productPrices, Monthly, props.country)}
       promotion={digitalPackPromotion(props.productPrices, Monthly, props.country)}
       billingPeriod={Monthly}
     />) : '';
@@ -111,7 +111,7 @@ function CheckoutForm(props: PropTypes) {
   const annualPriceLabel = props.country !== null ?
     (<PriceLabel
       country={props.country}
-      productPrice={digitalPackProductPrice(props.productPrices, Annual, props.country)}
+      productPrice={digitalPackPrice(props.productPrices, Annual, props.country)}
       promotion={digitalPackPromotion(props.productPrices, Annual, props.country)}
       billingPeriod={Annual}
     />) : '';
