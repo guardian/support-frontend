@@ -69,7 +69,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
     val addressToSendTo = "rupert.bates+unitTest@theguardian.com"
     val mandateId = "65HK26E"
     val billingAddressWithCountry = Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
-    val user = User("1234", addressToSendTo, "Mickey", "Mouse", UK, billingAddress = billingAddressWithCountry)
+    val user = User("1234", addressToSendTo, "Mickey", "Mouse", billingAddress = billingAddressWithCountry)
     val ef = DigitalPackEmailFields(
       "A-S00045678",
       Annual,

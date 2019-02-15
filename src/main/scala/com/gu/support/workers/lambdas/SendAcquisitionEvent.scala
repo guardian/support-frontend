@@ -103,7 +103,7 @@ object SendAcquisitionEvent {
               abTests = Some(thrift.AbTestInfo(
                 data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set())
               )),
-              countryCode = Some(state.user.country.alpha2),
+              countryCode = Some(state.user.billingAddress.country.alpha2),
               referrerPageViewId = data.referrerAcquisitionData.referrerPageviewId,
               referrerUrl = data.referrerAcquisitionData.referrerUrl,
               componentId = data.referrerAcquisitionData.componentId,

@@ -16,12 +16,7 @@ class AddressLineTransformerTest extends FlatSpec with Matchers with MockitoSuga
   val directDebitPaymentFieldsFromClient = DirectDebitPaymentFields(
     accountHolderName = "oscar the grouch",
     sortCode = "200000",
-    accountNumber = "55779911",
-    None,
-    None,
-    None,
-    None,
-    None
+    accountNumber = "55779911"
   )
 
   val stripePaymentFields = StripePaymentFields("test-token")

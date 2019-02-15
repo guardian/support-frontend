@@ -110,7 +110,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val config = zuoraConfigProvider.get(state.user.isTestUser)
     state.product match {
       case c: Contribution => c.build(config)
-      case d: DigitalPack => d.build(config, state.user.country, state.promoCode, promotionService)
+      case d: DigitalPack => d.build(config, state.user.billingAddress.country, state.promoCode, promotionService)
     }
   }
 
@@ -119,8 +119,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       firstName = state.user.firstName,
       lastName = state.user.lastName,
       workEmail = state.user.primaryEmailAddress,
-      country = state.user.country,
-      state = state.user.state
+      country = state.user.billingAddress.country,
+      state = state.user.billingAddress.state
     )
   }
 

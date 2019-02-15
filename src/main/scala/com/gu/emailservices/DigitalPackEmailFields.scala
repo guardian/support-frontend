@@ -70,7 +70,7 @@ case class DigitalPackEmailFields(
     "Address 2" -> "", //TODO: We don't have this
     "City" -> "", //TODO: We don't have this
     "Post Code" -> "", //TODO: We don't have this
-    "Country" -> user.country.name,
+    "Country" -> user.billingAddress.country.name,
     "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
     "Currency" -> currency.glyph,
     "Trial period" -> "14", //TODO: depends on Promo code
