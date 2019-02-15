@@ -62,15 +62,13 @@ class DigitalSubscription(
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
     val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
-    val testUsername = request.cookies.get("_test_username")
-    val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),
       "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
       "en" -> buildCanonicalDigitalSubscriptionLink("int")
     )
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, promoCode)
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCode)
 
     Ok(views.html.main(
       title, id, js, css, description, canonicalLink, hrefLangLinks, productPrices = Some(productPrices)
