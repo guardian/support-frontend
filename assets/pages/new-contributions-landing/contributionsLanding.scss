@@ -395,6 +395,16 @@ footer[role="contentinfo"] a {
     }
   }
 
+  .form--contribution .component-terms-privacy {
+    margin: 10px 0 10px;
+  }
+
+  .gu-content__form {
+    @include mq($from: tablet) {
+      margin: 30px 10px;
+    }
+  }
+
   .gu-content__blurb {
     display: none;
     max-width: 380px;
@@ -419,11 +429,6 @@ footer[role="contentinfo"] a {
     }
   }
   
-  .gu-content__form {
-    @include mq($from: tablet) {
-      margin: 30px 10px;
-    }
-  }
 }
 
 /*= TYPOGRAPHY */
