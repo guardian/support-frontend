@@ -332,6 +332,124 @@ footer[role="contentinfo"] a {
 
 }
 
+// Alternative form layout 
+.gu-content--contribution-form-two {
+  header[role="banner"] {
+
+    @include mq($from: tablet) {
+      height: 120px;
+    }
+  }
+
+  .guardian-logo {
+    width: 100px;
+
+    svg {
+      width: 100%;
+    }
+
+    @include mq($from: tablet) {
+      width: auto;
+    }
+  }
+
+
+  .gu-content__main {
+    background-color: gu-colour(sport-faded);
+    display: block; // only here to cancel the display: flex
+  }
+
+  .gu-content__content {
+    margin: 0 auto;
+    max-width: 1015px;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    
+    width: 100%;
+
+    &--flex {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row-reverse;
+    }
+
+    @include mq($from: tablet) {
+      margin-left: $content-left-margin-tablet
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: $content-left-margin-leftCol
+    }
+  }
+
+  .gu-content__form {
+    margin: auto;
+    width: auto;
+    padding: 0 10px;
+    border-color: gu-colour(brightness-86);
+    border-style: none solid;
+    border-width: 0 1px;
+    border-bottom: 1px solid gu-colour(brightness-86);
+    background-color: gu-colour(brightness-100);
+
+    @include mq($from: tablet) {
+      width: 380px;      
+    }
+  }
+
+  .form__radio-group--contribution-type:after {
+    background-image: none;
+    height: 0;
+  }
+
+  .form__radio-group-list {
+    padding: 0px;
+  }
+
+  .form__radio-group-list--border {
+    border-bottom: 1px solid gu-colour(brightness-86);
+
+    li label {
+      font-size: 22px;
+    }
+  }
+
+  .gu-content__blurb {
+    display: none;
+    max-width: 380px;
+    border-top: 10px solid gu-colour(highlight-main);
+    margin-left: auto;
+    
+    h1 {
+      border-bottom: none;
+      font-size: 44px;
+      line-height: 46px;
+      padding-bottom: 10px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 22px;
+    }
+
+    @include mq($from: tablet) {
+      display: block;
+      margin: 30px 120px 30px 10px;
+    }
+  }
+  
+  .gu-content__form {
+    @include mq($from: tablet) {
+      margin: 30px 10px;
+    }
+  }
+
+  .component-terms-privacy {
+    display: none;
+  }
+}
+
 /*= TYPOGRAPHY */
 body {
   color: gu-colour(brightness-7);
