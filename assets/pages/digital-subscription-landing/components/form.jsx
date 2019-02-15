@@ -10,7 +10,6 @@ import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import { showPrice, type Price, type ProductPrices } from 'helpers/productPrice/productPrices';
 import { amountToPay as digitalPackAmountToPay } from 'helpers/productPrice/digitalProductPrices';
-import { getDigitalPrice } from 'helpers/subscriptions';
 import { getDiscount, getFormattedFlashSalePrice, flashSaleIsActive } from 'helpers/flashSale';
 import { priceByCountryGroupId } from 'helpers/internationalisation/price';
 import { type IsoCountry } from 'helpers/internationalisation/country';
@@ -24,32 +23,43 @@ import { type State } from '../digitalSubscriptionLandingReducer';
 import { redirectToDigitalPage, setPlan } from '../digitalSubscriptionLandingActions';
 
 
-// ---- Plans ----- //
+// ---- Prices ----- //
 
-const getPrice = (productPrices: ProductPrices, country: IsoCountry, period: DigitalBillingPeriod) => {
+const getPrice = (productPrices: ProductPrices, period: DigitalBillingPeriod, country: IsoCountry) => {
   const countryGroupId = fromCountry(country);
 
   if (countryGroupId && flashSaleIsActive('DigitalPack', countryGroupId)) {
     const priceAsNumber: number = Number(getFormattedFlashSalePrice('DigitalPack', countryGroupId, period));
     const flashSalePrice: Price = priceByCountryGroupId(countryGroupId, priceAsNumber);
-    return showPrice(flashSalePrice);
+    return (flashSalePrice);
   }
 
-  return showPrice(digitalPackAmountToPay(productPrices, period, country));
+  return (digitalPackAmountToPay(productPrices, period, country));
 };
 
-const getAnnualSaving = (country: IsoCountry): ?Price => {
-  const countryGroupId = fromCountry(country);
-  if (countryGroupId) {
-    const annualizedMonthlyCost = getDigitalPrice(countryGroupId, Monthly).price * 12;
-    const annualCost = getDigitalPrice(countryGroupId, Annual);
-
-    return { ...annualCost, price: (annualizedMonthlyCost - annualCost.price) };
+const getAnnualSaving = (
+  productPrices: ProductPrices,
+  country: IsoCountry,
+): ?Price => {
+  const annualizedMonthlyCost = getPrice(productPrices, Monthly, country).price * 12;
+  const annualCost = getPrice(productPrices, Annual, country);
+  const saving = annualizedMonthlyCost - annualCost.price;
+  if (saving > 1) {
+    return { ...annualCost, price: saving };
   }
   return null;
 };
 
-const getOfferText = (country: IsoCountry, period: DigitalBillingPeriod): ?string => {
+const displayPrice = (
+  productPrices: ProductPrices,
+  period: DigitalBillingPeriod,
+  country: IsoCountry,
+): string => showPrice(getPrice(productPrices, period, country));
+
+
+// ---- Copy ----- //
+
+const getOfferCopy = (country: IsoCountry, period: DigitalBillingPeriod): ?string => {
   const countryGroupId = fromCountry(country);
   if (countryGroupId) {
     const discount = (getDiscount('DigitalPack', countryGroupId));
@@ -65,27 +75,27 @@ const getOfferText = (country: IsoCountry, period: DigitalBillingPeriod): ?strin
 };
 
 const getAnnualCopy = (productPrices: ProductPrices, country: IsoCountry) => {
-  const countryGroupId = fromCountry(country);
-  const saving = getAnnualSaving(country);
-  if (countryGroupId && flashSaleIsActive('DigitalPack', countryGroupId)) {
-    return `14 day free trial, then ${getPrice(productPrices, country, Annual)} every 12 months`;
-  } else if (saving) {
-    return `14 day free trial, then ${getPrice(productPrices, country, Annual)} every 12 months (save ${showPrice(saving)} per year)`;
-  }
-  return `14 day free trial, then ${getPrice(productPrices, country, Annual)} every 12 months`;
+  const saving = getAnnualSaving(productPrices, country);
+  return [
+    `14 day free trial, then ${displayPrice(productPrices, Annual, country)} every 12 months`,
+    saving ? `(save ${showPrice(saving)} per year)` : null,
+  ].join(' ');
 };
 
-const getMonthlyCopy = (productPrices: ProductPrices, country: IsoCountry) => `14 day free trial, then ${getPrice(productPrices, country, Monthly)} a month`;
+const getMonthlyCopy = (productPrices: ProductPrices, country: IsoCountry) => `14 day free trial, then ${displayPrice(productPrices, Monthly, country)} a month`;
+
+
+// ---- Periods ----- //
 
 const billingPeriods = {
   [Monthly]: {
     title: 'Monthly',
-    offer: (country: IsoCountry) => getOfferText(country, 'Monthly'),
+    offer: (country: IsoCountry) => getOfferCopy(country, 'Monthly'),
     copy: getMonthlyCopy,
   },
   [Annual]: {
     title: 'Annually',
-    offer: (country: IsoCountry) => getOfferText(country, 'Annual'),
+    offer: (country: IsoCountry) => getOfferCopy(country, 'Annual'),
     copy: getAnnualCopy,
   },
 };
