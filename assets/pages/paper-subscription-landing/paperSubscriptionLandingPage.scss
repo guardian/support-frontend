@@ -13,12 +13,12 @@
   scroll-behavior: smooth;
 }
 
-.component-product-page-content-block__image {
+.component-content__image {
   max-width: gu-span(5);
   min-width: gu-span(4);
 }
 
-.component-product-page-content-block--faqs .component-text {
+.component-content--faqs .component-text {
   max-width: gu-span(5);
   a {
     white-space: nowrap;

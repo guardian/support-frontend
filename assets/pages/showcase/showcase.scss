@@ -63,7 +63,7 @@
     }
   }
 
-  .component-product-page-content-block {
+  .component-content {
     &--grey {
       @include mq($from: tablet) {
         .svg-breaking-the-headlines {
@@ -78,13 +78,13 @@
     }
 
     &--subscribe {
-      .component-product-page-content-block__image {
+      .component-content__image {
         max-width: gu-span(5);
         min-width: gu-span(4);
       }
 
       @include mq($from: tablet) {
-        .component-product-page-content-block__content {
+        .component-content__content {
           min-height: 290px;
         }
 
