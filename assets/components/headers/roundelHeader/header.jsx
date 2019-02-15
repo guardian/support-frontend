@@ -17,7 +17,7 @@ import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
 type PropTypes = {|
   selectedCountryGroup: ?CountryGroup,
-  longLogo: boolean
+  longLogo?: boolean
 |};
 
 // ----- Render ----- //
@@ -70,6 +70,7 @@ function RoundelHeader(props: PropTypes) {
 
 RoundelHeader.defaultProps = {
   selectedCountryGroup: null,
+  longLogo: false,
 };
 
 export { RoundelHeader };
