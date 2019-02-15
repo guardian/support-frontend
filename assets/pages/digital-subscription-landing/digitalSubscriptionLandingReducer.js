@@ -14,8 +14,8 @@ import promotionPopUpReducer, { type FindOutMoreState } from './components/promo
 
 export type State = {
   common: CommonState,
-  productPrices: ProductPrices,
   page: {
+    productPrices: ProductPrices,
     plan: FormState<DigitalBillingPeriod>,
     promotion: FindOutMoreState
   }

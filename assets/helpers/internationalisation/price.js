@@ -1,29 +1,19 @@
 // @flow
 
 // ----- Imports ----- //
-
-import { type IsoCurrency, glyph, extendedGlyph } from './currency';
+import { type PriceWithCurrency } from 'helpers/productPrice/priceWithCurrency';
 import { type CountryGroupId } from './countryGroup';
-
-
-// ----- Types ----- //
-
-export type Price = $ReadOnly<{|
-  value: number,
-  currency: IsoCurrency,
-|}>;
-
 
 // ----- Functions ----- //
 
-const GBP = (value: number): Price => ({ value, currency: 'GBP' });
-const USD = (value: number): Price => ({ value, currency: 'USD' });
-const AUD = (value: number): Price => ({ value, currency: 'AUD' });
-const EUR = (value: number): Price => ({ value, currency: 'EUR' });
-const NZD = (value: number): Price => ({ value, currency: 'NZD' });
-const CAD = (value: number): Price => ({ value, currency: 'CAD' });
+const GBP = (value: number): PriceWithCurrency => ({ value, currency: 'GBP' });
+const USD = (value: number): PriceWithCurrency => ({ value, currency: 'USD' });
+const AUD = (value: number): PriceWithCurrency => ({ value, currency: 'AUD' });
+const EUR = (value: number): PriceWithCurrency => ({ value, currency: 'EUR' });
+const NZD = (value: number): PriceWithCurrency => ({ value, currency: 'NZD' });
+const CAD = (value: number): PriceWithCurrency => ({ value, currency: 'CAD' });
 
-function priceByCountryGroupId(countryGroupId: CountryGroupId, price: number): Price {
+function priceByCountryGroupId(countryGroupId: CountryGroupId, price: number): PriceWithCurrency {
   switch (countryGroupId) {
     case 'GBPCountries': return GBP(price);
     case 'AUDCountries': return AUD(price);
@@ -33,13 +23,6 @@ function priceByCountryGroupId(countryGroupId: CountryGroupId, price: number): P
     default:
     case 'UnitedStates': return USD(price);
   }
-}
-
-function showPrice(p: Price, isExtended: boolean = false): string {
-
-  const showGlyph = isExtended ? extendedGlyph : glyph;
-  return `${showGlyph(p.currency)}${p.value.toFixed(2)}`;
-
 }
 
 
@@ -52,6 +35,5 @@ export {
   EUR,
   NZD,
   CAD,
-  showPrice,
   priceByCountryGroupId,
 };

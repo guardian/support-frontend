@@ -3,7 +3,8 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { AUD, CAD, EUR, GBP, NZD, type Price, USD } from 'helpers/internationalisation/price';
+import { AUD, CAD, EUR, GBP, NZD, USD } from 'helpers/internationalisation/price';
+import { type PriceWithCurrency } from 'helpers/productPrice/priceWithCurrency';
 import {
   Annual,
   type BillingPeriod,
@@ -239,7 +240,7 @@ function fixDecimals(number: number): string {
   return number.toFixed(2);
 }
 
-function getDigitalPrice(cgId: CountryGroupId, frequency: DigitalBillingPeriod): Price {
+function getDigitalPrice(cgId: CountryGroupId, frequency: DigitalBillingPeriod): PriceWithCurrency {
   return digitalSubscriptionPrices[cgId][frequency];
 }
 
@@ -264,11 +265,11 @@ function getPromotionWeeklyProductPrice(
   return fixDecimals(subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod]);
 }
 
-function getRegularPaperPrice(billingPlan: PaperBillingPlan): Price {
+function getRegularPaperPrice(billingPlan: PaperBillingPlan): PriceWithCurrency {
   return paperSubscriptionPrices[billingPlan];
 }
 
-function getPaperPrice(billingPlan: PaperBillingPlan): Price {
+function getPaperPrice(billingPlan: PaperBillingPlan): PriceWithCurrency {
   const planPrices: PlanPrice[] = getPlanPrices('Paper', 'GBPCountries');
 
   if (flashSaleIsActive('Paper', 'GBPCountries')) {

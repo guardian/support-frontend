@@ -9,8 +9,9 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
-// ----- Types ----- //
+import type { PriceWithCurrency } from './priceWithCurrency';
 
+// ----- Types ----- //
 
 export type DiscountBenefit = {
   amount: number,
@@ -57,12 +58,19 @@ function digitalPackAmountToPay(
   productPrices: ProductPrices,
   billingPeriod: BillingPeriod,
   country: IsoCountry,
-) {
+): PriceWithCurrency {
   const productPrice = digitalPackProductPrice(productPrices, billingPeriod, country);
+  const countryGroup = countryGroups[fromCountry(country) || 'GBPCountries'];
   if (productPrice.promotion && productPrice.promotion.discountedPrice) {
-    return productPrice.promotion.discountedPrice;
+    return {
+      value: productPrice.promotion.discountedPrice,
+      currency: countryGroup.currency,
+    };
   }
-  return productPrice.price;
+  return {
+    value: productPrice.price,
+    currency: countryGroup.currency,
+  };
 }
 
 export { digitalPackProductPrice, digitalPackAmountToPay };
