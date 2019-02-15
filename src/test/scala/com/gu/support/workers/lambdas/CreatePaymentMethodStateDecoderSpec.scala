@@ -2,7 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.gu.i18n.Currency.GBP
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.Fixtures.{validBaid, _}
+import com.gu.support.workers.JsonFixtures.{validBaid, _}
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreatePaymentMethodState
 import com.typesafe.scalalogging.LazyLogging

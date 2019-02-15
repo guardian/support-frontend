@@ -7,11 +7,11 @@ import com.gu.emailservices.{EmailService, FailedContributionEmailFields, Failed
 import com.gu.monitoring.SafeLogger
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.CheckoutFailureReasons.{PaymentMethodUnacceptable, Unknown}
-import com.gu.support.workers.Fixtures._
+import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.states.CheckoutFailureState
-import com.gu.support.workers.{Fixtures, LambdaSpec}
+import com.gu.support.workers.{JsonFixtures, LambdaSpec}
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.generic.auto._
@@ -130,7 +130,7 @@ class FailureHandlerSpec extends LambdaSpec {
   }
 
   it should "match a transaction declined error" in {
-    val errorResponse = Some(ZuoraErrorResponse(success = false, decode[List[ZuoraError]](Fixtures.zuoraErrorResponse).right.get))
+    val errorResponse = Some(ZuoraErrorResponse(success = false, decode[List[ZuoraError]](JsonFixtures.zuoraErrorResponse).right.get))
 
     errorResponse match {
       case Some(ZuoraErrorResponse(_, List(ZuoraError("TRANSACTION_FAILED", _)))) => succeed

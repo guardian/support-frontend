@@ -9,10 +9,10 @@ import com.gu.stripe.Stripe.StripeError
 import com.gu.stripe.{Stripe, StripeService}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.ErrorJson
-import com.gu.support.workers.Fixtures.{createStripePaymentMethodContributionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createStripePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import com.gu.support.workers.{Fixtures, JsonWrapper, LambdaSpec}
+import com.gu.support.workers.{JsonFixtures, JsonWrapper, LambdaSpec}
 import io.circe.generic.auto._
 import io.circe.parser.decode
 import io.circe.syntax._
@@ -85,7 +85,7 @@ class StripeErrorsSpec extends LambdaSpec with MockWebServerCreator with MockSer
 
   "JsonWrapped error" should "deserialise correctly" in {
     val stripeError = for {
-      wrapper <- decode[JsonWrapper](Fixtures.cardDeclinedJsonStripe).toOption
+      wrapper <- decode[JsonWrapper](JsonFixtures.cardDeclinedJsonStripe).toOption
       executionError <- wrapper.error
       errorJson <- decode[ErrorJson](executionError.Cause).toOption
       stripeError <- decode[StripeError](errorJson.errorMessage).toOption
