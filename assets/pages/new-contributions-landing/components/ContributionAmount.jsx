@@ -17,6 +17,7 @@ import SvgPound from 'components/svgs/pound';
 
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
 import { NewContributionTextInput } from './ContributionTextInput';
+import { EURCountries, GBPCountries } from '../../../helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -97,8 +98,8 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
 
 const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> => {
   switch (countryGroupId) {
-    case 'GBPCountries': return <SvgPound />;
-    case 'EURCountries': return <SvgEuro />;
+    case GBPCountries: return <SvgPound />;
+    case EURCountries: return <SvgEuro />;
     default: return <SvgDollar />;
   }
 };

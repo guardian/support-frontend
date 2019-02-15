@@ -14,6 +14,7 @@ import {
   sendTrackingEventsOnClick,
 } from 'helpers/subscriptions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
 
 function getCopy(countryGroupId: CountryGroupId) {
   if (flashSaleIsActive('DigitalPack', countryGroupId)) {
@@ -23,7 +24,7 @@ function getCopy(countryGroupId: CountryGroupId) {
       description: <span>{saleCopy.bundle.description}</span>,
     };
   }
-  if (countryGroupId === 'GBPCountries') {
+  if (countryGroupId === GBPCountries) {
     return {
       subHeading: displayPrice('DigitalPack', countryGroupId),
       description: 'The Premium App and the daily edition iPad app in one pack, plus ad-free reading on all your devices',

@@ -12,6 +12,7 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import SvgGlobe from 'components/svgs/globe';
 
 import { type State } from '../contributionsLandingReducer';
+import { Canada, UnitedStates } from '../../../helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 type PropTypes = {|
@@ -66,9 +67,9 @@ const renderStatesField = (
 function ContributionState(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   switch (props.countryGroupId) {
-    case 'UnitedStates':
+    case UnitedStates:
       return renderStatesField(usStates, props.selectedState, props.onChange, showError, 'State', props.showRequiredLabel);
-    case 'Canada':
+    case Canada:
       return renderStatesField(caStates, props.selectedState, props.onChange, showError, 'Province', props.showRequiredLabel);
     default:
       return null;

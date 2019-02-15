@@ -6,6 +6,7 @@ import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridI
 import type { ComponentAbTest } from 'helpers/subscriptions';
 import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { flashSaleIsActive, getFormattedFlashSalePrice, getSaleCopy } from 'helpers/flashSale';
+import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -20,15 +21,15 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function getCopy() {
-  if (flashSaleIsActive('PaperAndDigital', 'GBPCountries')) {
-    const flashSaleCopy = getSaleCopy('PaperAndDigital', 'GBPCountries');
+  if (flashSaleIsActive('PaperAndDigital', GBPCountries)) {
+    const flashSaleCopy = getSaleCopy('PaperAndDigital', GBPCountries);
     return {
-      subHeading: `from £${getFormattedFlashSalePrice('PaperAndDigital', 'GBPCountries')}/Monthly`,
+      subHeading: `from £${getFormattedFlashSalePrice('PaperAndDigital', GBPCountries)}/Monthly`,
       description: `${flashSaleCopy.bundle.description}`,
     };
   }
   return {
-    subHeading: `from ${displayPrice('PaperAndDigital', 'GBPCountries')}`,
+    subHeading: `from ${displayPrice('PaperAndDigital', GBPCountries)}`,
     description: 'All the benefits of a paper subscription, plus access to the digital pack',
   };
 }

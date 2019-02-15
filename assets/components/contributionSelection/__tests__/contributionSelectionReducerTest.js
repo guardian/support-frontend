@@ -4,6 +4,7 @@
 
 import { contributionSelectionReducerFor } from '../contributionSelectionReducer';
 import { contributionSelectionActionsFor } from '../contributionSelectionActions';
+import { GBPCountries, UnitedStates } from '../../../helpers/internationalisation/countryGroup';
 
 
 // ----- Tests ----- //
@@ -11,8 +12,8 @@ import { contributionSelectionActionsFor } from '../contributionSelectionActions
 describe('Contributions Selection reducer', () => {
 
   const PREFIX = 'MY_PREFIX';
-  const reducer = contributionSelectionReducerFor(PREFIX, 'GBPCountries');
-  const usReducer = contributionSelectionReducerFor(PREFIX, 'UnitedStates');
+  const reducer = contributionSelectionReducerFor(PREFIX, GBPCountries);
+  const usReducer = contributionSelectionReducerFor(PREFIX, UnitedStates);
   const actions = contributionSelectionActionsFor(PREFIX);
 
   it('should return the initial state', () => {
@@ -60,7 +61,7 @@ describe('Contributions Selection reducer', () => {
       error: null,
     };
 
-    const changeContributionType = actions.setContributionType(contributionType, 'GBPCountries');
+    const changeContributionType = actions.setContributionType(contributionType, GBPCountries);
     const newState = reducer(initialState, changeContributionType);
     expect(newState.error).toEqual('TooLittle');
 
@@ -79,7 +80,7 @@ describe('Contributions Selection reducer', () => {
       error: 'TooLittle',
     };
 
-    const changeContributionType = actions.setContributionType(contributionType, 'GBPCountries');
+    const changeContributionType = actions.setContributionType(contributionType, GBPCountries);
     const newState = reducer(initialState, changeContributionType);
     expect(newState.error).toBeNull();
 
@@ -98,7 +99,7 @@ describe('Contributions Selection reducer', () => {
       error: null,
     };
 
-    const changeContributionType = actions.setContributionType(contributionType, 'GBPCountries');
+    const changeContributionType = actions.setContributionType(contributionType, GBPCountries);
     const newState = reducer(initialState, changeContributionType);
     expect(newState.error).toEqual('TooLittle');
 
@@ -265,7 +266,7 @@ describe('Contributions Selection reducer', () => {
       error: null,
     };
 
-    const newState = reducer(initialState, actions.setCustomAmount(amount, 'GBPCountries'));
+    const newState = reducer(initialState, actions.setCustomAmount(amount, GBPCountries));
 
     expect(newState.customAmount).toEqual(Number(amount));
     expect(newState.isCustomAmount).toEqual(true);
@@ -286,7 +287,7 @@ describe('Contributions Selection reducer', () => {
       error: null,
     };
 
-    const newState = reducer(initialState, actions.setCustomAmount(amount, 'GBPCountries'));
+    const newState = reducer(initialState, actions.setCustomAmount(amount, GBPCountries));
 
     expect(newState.customAmount).toBeNull();
     expect(newState.error).toEqual('ParseError');

@@ -10,6 +10,7 @@ import Video from 'components/video/video';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type VideoId } from 'helpers/youtube';
+import { AUDCountries, UnitedStates } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Props ----- //
@@ -26,8 +27,8 @@ function getVideoId(cgId: CountryGroupId): VideoId {
 
   switch (cgId) {
 
-    case 'UnitedStates':
-    case 'AUDCountries':
+    case UnitedStates:
+    case AUDCountries:
       return 'subscribeCampaignUS';
 
     default:

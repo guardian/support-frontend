@@ -6,6 +6,7 @@ import type { ComponentAbTest } from 'helpers/subscriptions';
 import { displayPrice, sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { gridImageProperties } from 'components/threeSubscriptions/helpers/gridImageProperties';
 import { flashSaleIsActive, getSaleCopy, getFormattedFlashSalePrice } from 'helpers/flashSale';
+import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -19,16 +20,16 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function getCopy() {
-  if (flashSaleIsActive('Paper', 'GBPCountries')) {
-    const saleCopy = getSaleCopy('Paper', 'GBPCountries');
-    const salePrice = getFormattedFlashSalePrice('Paper', 'GBPCountries');
+  if (flashSaleIsActive('Paper', GBPCountries)) {
+    const saleCopy = getSaleCopy('Paper', GBPCountries);
+    const salePrice = getFormattedFlashSalePrice('Paper', GBPCountries);
     return {
       subHeading: `from £${salePrice}/Monthly`,
       description: `${saleCopy.bundle.description}`,
     };
   }
   return {
-    subHeading: `from ${displayPrice('Paper', 'GBPCountries')}`,
+    subHeading: `from ${displayPrice('Paper', GBPCountries)}`,
     description: 'Save on The Guardian and The Observer\'s newspaper retail price all year round',
   };
 }

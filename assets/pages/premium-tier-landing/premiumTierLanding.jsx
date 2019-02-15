@@ -17,6 +17,7 @@ import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import PremiumTierLandingHeader from './components/premiumTierLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
+import { AUDCountries, GBPCountries, International, UnitedStates } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Redux Store ----- //
@@ -39,10 +40,10 @@ const reactElementId: {
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
   '/subscribe/digital',
   [
-    'GBPCountries',
-    'UnitedStates',
-    'AUDCountries',
-    'International',
+    GBPCountries,
+    UnitedStates,
+    AUDCountries,
+    International,
   ],
 );
 

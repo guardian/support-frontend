@@ -13,6 +13,7 @@ import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscription
 import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
 import { getOrigin } from './url';
 import type { OptimizeExperiment } from './optimize/optimize';
+import { GBPCountries } from './internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -87,10 +88,10 @@ const memUrls: {
 };
 
 const defaultPromos: PromoCodes = {
-  DigitalPack: getPromoCode('DigitalPack', 'GBPCountries', 'DXX83X'),
-  Paper: getPromoCode('Paper', 'GBPCountries', 'GXX83P'),
-  PaperAndDigital: getPromoCode('PaperAndDigital', 'GBPCountries', 'GXX83X'),
-  GuardianWeekly: getPromoCode('GuardianWeekly', 'GBPCountries', '10ANNUAL'),
+  DigitalPack: getPromoCode('DigitalPack', GBPCountries, 'DXX83X'),
+  Paper: getPromoCode('Paper', GBPCountries, 'GXX83P'),
+  PaperAndDigital: getPromoCode('PaperAndDigital', GBPCountries, 'GXX83X'),
+  GuardianWeekly: getPromoCode('GuardianWeekly', GBPCountries, '10ANNUAL'),
 };
 
 const customPromos: {
@@ -349,7 +350,7 @@ function getPaperCheckout(
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
 ) {
-  const promoCode = getPromoCode('Paper', 'GBPCountries', defaultPromos.Paper);
+  const promoCode = getPromoCode('Paper', GBPCountries, defaultPromos.Paper);
 
   const urls = {
     collectionEveryday: 'voucher-everyday',

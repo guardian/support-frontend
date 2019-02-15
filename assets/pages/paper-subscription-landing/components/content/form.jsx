@@ -14,6 +14,7 @@ import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
 import { setPlan, redirectToCheckout } from '../../paperSubscriptionLandingPageActions';
+import { GBPCountries } from '../../../../helpers/internationalisation/countryGroup';
 
 
 // ---- Helpers ----- //
@@ -21,8 +22,8 @@ import { setPlan, redirectToCheckout } from '../../paperSubscriptionLandingPageA
 const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
 
 const getPriceStr = (price: Price): string => {
-  if (flashSaleIsActive('Paper', 'GBPCountries')) {
-    const duration = getDuration('Paper', 'GBPCountries');
+  if (flashSaleIsActive('Paper', GBPCountries)) {
+    const duration = getDuration('Paper', GBPCountries);
     if (duration) {
       return `You pay ${showPrice(price)} a month for ${duration}`;
     }
@@ -39,7 +40,7 @@ const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): O
 };
 
 const getSavingStr = (price: Price): Option<string> => {
-  if (flashSaleIsActive('Paper', 'GBPCountries') && getDuration('Paper', 'GBPCountries')) {
+  if (flashSaleIsActive('Paper', GBPCountries) && getDuration('Paper', GBPCountries)) {
     return `${showPrice(price)} a month thereafter`;
   }
   return null;

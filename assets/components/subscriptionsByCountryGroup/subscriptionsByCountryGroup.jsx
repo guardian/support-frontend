@@ -18,6 +18,7 @@ import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import DigitalSection from './components/digitalSection';
 import PaperSection from './components/paperSection';
 import InternationalSection from './components/internationalSection';
+import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Types and State Mapping ----- //
@@ -73,7 +74,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
 
   const appReferrer = getAppReferrer(appMedium, countryGroupId);
 
-  if (countryGroupId === 'GBPCountries') {
+  if (countryGroupId === GBPCountries) {
     return (
       <div className={className} {...otherProps}>
         <DigitalSection

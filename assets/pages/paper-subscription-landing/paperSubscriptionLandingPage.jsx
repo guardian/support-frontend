@@ -26,6 +26,7 @@ import Content from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
+import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Collection or delivery ----- //
@@ -58,8 +59,8 @@ const store = pageInit(() => reducer(method, promoInUrl), true);
 
 function getStandfirst(): string {
   const defaultWording = 'We offer two different subscription types: voucher booklets and home delivery.';
-  if (flashSaleIsActive('Paper', 'GBPCountries')) {
-    const saleCopy = getSaleCopy('Paper', 'GBPCountries');
+  if (flashSaleIsActive('Paper', GBPCountries)) {
+    const saleCopy = getSaleCopy('Paper', GBPCountries);
     return saleCopy.landingPage.standfirst || defaultWording;
   }
 
@@ -83,7 +84,7 @@ const content = (
         <Tabs />
       </ProductPageContentBlock>
       <Content />
-      {flashSaleIsActive('Paper', 'GBPCountries') &&
+      {flashSaleIsActive('Paper', GBPCountries) &&
         <ProductPageContentBlock>
           <Text title="Promotion terms and conditions">
             <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/GCB80X/terms?country=${subsCountry}`}>here</a>.

@@ -32,6 +32,7 @@ import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import { GBPCountries } from '../../helpers/internationalisation/countryGroup';
 
 // ----- Types ----- //
 
@@ -318,7 +319,7 @@ function initReducer(initialCountry: IsoCountry) {
 
   return combineReducers({
     checkout: reducer,
-    user: createUserReducer(fromCountry(initialCountry) || 'GBPCountries'),
+    user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
     directDebit,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),

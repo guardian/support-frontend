@@ -10,6 +10,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import GridPicture from 'components/gridPicture/gridPicture';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
+import { GBPCountries } from '../../../helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -110,7 +111,7 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
     return {
       headingText: 'Digital Pack',
       subheadingText: 'Screen time well spent',
-      bodyText: (countryGroupId === 'GBPCountries') ?
+      bodyText: (countryGroupId === GBPCountries) ?
         'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the newspaper.' :
         'Read the Guardian ad-free on all devices, plus get all the benefits of the Premium App and Daily Edition iPad app of the UK newspaper.',
     };
@@ -167,13 +168,13 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
     case 'GuardianWeekly':
       return products.GuardianWeekly;
     default:
-      if (countryGroupId === 'GBPCountries' && flashSaleIsActive('DigitalPack', 'GBPCountries')) {
+      if (countryGroupId === GBPCountries && flashSaleIsActive('DigitalPack', GBPCountries)) {
         return products.DigitalPack;
       }
-      if (countryGroupId === 'GBPCountries') {
+      if (countryGroupId === GBPCountries) {
         return products.Paper;
       }
-      if (countryGroupId !== 'GBPCountries' && flashSaleIsActive('DigitalPack', countryGroupId)) {
+      if (countryGroupId !== GBPCountries && flashSaleIsActive('DigitalPack', countryGroupId)) {
         return products.DigitalPack;
       }
       return products.GuardianWeekly;

@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { AUDCountries, GBPCountries, UnitedStates } from '../../helpers/internationalisation/countryGroup';
 
 
 // ----- Props ----- //
@@ -30,7 +31,7 @@ DigitalPackEmail.defaultProps = {
 
 function CustomerService(props: PropTypes) {
   switch (props.selectedCountryGroup) {
-    case 'UnitedStates':
+    case UnitedStates:
       return (
         <div className="component-customer-service">
           <div className="component-customer-service__text">
@@ -40,7 +41,7 @@ function CustomerService(props: PropTypes) {
           </div>
         </div>
       );
-    case 'GBPCountries':
+    case GBPCountries:
       return (
         <div className="component-customer-service">
           <div className="component-customer-service__text">
@@ -49,7 +50,7 @@ function CustomerService(props: PropTypes) {
           </div>
         </div>
       );
-    case 'AUDCountries':
+    case AUDCountries:
       return (
         <div className="component-customer-service">
           <div className="component-customer-service__text">
