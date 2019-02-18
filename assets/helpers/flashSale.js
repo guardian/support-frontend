@@ -6,7 +6,7 @@ import { fixDecimals } from 'helpers/subscriptions';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 
 import { type SubscriptionProduct, type PaperBillingPlan } from './subscriptions';
-import { AUDCountries, GBPCountries, International, UnitedStates } from './internationalisation/countryGroup';
+import { AUDCountries, GBPCountries, EURCountries, Canada, International, UnitedStates, NZDCountries } from './internationalisation/countryGroup';
 
 export type SaleCopy = {
   featuredProduct: {
@@ -204,7 +204,7 @@ const Sales: Sale[] = [
   },
   {
     subscriptionProduct: 'DigitalPack',
-    activeRegions: [UnitedStates, AUDCountries, International],
+    activeRegions: [UnitedStates, AUDCountries, International, EURCountries, Canada, NZDCountries],
     startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
     endTime: new Date(2019, 3, 1).getTime(), // 31 Mar 2019
     saleDetails: {
@@ -239,6 +239,81 @@ const Sales: Sale[] = [
         intcmp: '',
         price: 14.99,
         annualPrice: 179.87,
+        discountPercentage: 0.25,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
+          },
+          landingPage: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
+          },
+          bundle: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
+          },
+        },
+        planPrices: [],
+      },
+      Canada: {
+        promoCode: 'DDPFMINT80',
+        annualPlanPromoCode: 'DDPFMANINT80',
+        intcmp: '',
+        price: 16.46,
+        annualPrice: 197.48,
+        discountPercentage: 0.25,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
+          },
+          landingPage: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
+          },
+          bundle: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
+          },
+        },
+        planPrices: [],
+      },
+      NZDCountries: {
+        promoCode: 'DDPFMINT80',
+        annualPlanPromoCode: 'DDPFMANINT80',
+        intcmp: '',
+        price: 17.63,
+        annualPrice: 211.43,
+        discountPercentage: 0.25,
+        saleCopy: {
+          featuredProduct: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+            description: 'Read The Guardian ad-free on all devices, including the Premium App and UK Daily Edition iPad app.',
+          },
+          landingPage: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% on award-winning, independent journalism, ad-free on all of your devices',
+          },
+          bundle: {
+            heading: 'Digital Pack',
+            subHeading: 'Save 25% for a year',
+            description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
+          },
+        },
+        planPrices: [],
+      },
+      EURCountries: {
+        promoCode: 'DDPFMINT80',
+        annualPlanPromoCode: 'DDPFMANINT80',
+        intcmp: '',
+        price: 11.24,
+        annualPrice: 134.87,
         discountPercentage: 0.25,
         saleCopy: {
           featuredProduct: {
