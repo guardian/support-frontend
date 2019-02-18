@@ -5,7 +5,7 @@ import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.{AcquisitionSubmission, GAData, OphanIds}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
-import model.{AcquisitionData, ClientBrowserInfo, DefaultThreadPool, PaymentProvider}
+import model._
 import model.subscribewithgoogle.GoogleRecordPayment
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{Matchers, WordSpec}
@@ -29,7 +29,7 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
   val currentTime = System.currentTimeMillis()
   val firstName = "Zechs"
   val email = "email@email.com"
-  val status = "Paid"
+  val status = PaymentStatus.Paid
   val amount = BigDecimal(5.00)
   val current = "GBP"
   val countryCode = "UK"
@@ -64,7 +64,10 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
 
 
   val failedIdentityErrors = BackendError.combineResults(
-    identityError.map(_=> ()).leftMap(BackendError.fromIdentityError),
+    BackendError.combineResults(
+      identityError.map(_=> ()).leftMap(BackendError.fromIdentityError),
+      identityError.map(_=> ()).leftMap(BackendError.fromIdentityError)
+    )(DefaultThreadPool(ec)),
     identityError.map(_=> ()).leftMap(BackendError.fromIdentityError)
   )(DefaultThreadPool(ec))
 
@@ -113,7 +116,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       val recordResult: EitherT[Future, BackendError, Unit] =
         subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, acquisitionData, clientBrowserInfo)
 
-      recordResult.futureRight shouldBe()
+      recordResult.futureRight shouldBe(())
 
       verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
 
@@ -139,9 +142,10 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
 
       verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
-      verify(mockDbService, times(2)).insertContributionData(Match.any())
+      verify(mockDbService, times(1)).insertContributionData(Match.any())
       verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
-      verify(mockCloudWatchService, times(0)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
+      verify(mockCloudWatchService, times(1)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
+      verify(mockCloudWatchService, times(1)).recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
     }
 
 
@@ -161,17 +165,16 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
 
       verify(mockOphanService, times(0)).submitAcquisition(Match.any())(Match.any())
-      verify(mockDbService, times(1)).insertContributionData(Match.any())
+      verify(mockDbService, times(0)).insertContributionData(Match.any())
       verify(mockEmailService, times(0)).sendThankYouEmail(Match.any())
       verify(mockCloudWatchService, times(0)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
-      verify(mockCloudWatchService, times(1))
+      verify(mockCloudWatchService, times(2))
         .recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
 
     }
 
     "send thank you email when db fails - alert cloudwatch" in new SubscribeWithGoogleBackendFixture(){
 
-      //TODO: Alert cloudwatch to failure
 
       when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityReply)
       when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmission)
@@ -186,7 +189,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
 
       verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
-      verify(mockDbService, times(2)).insertContributionData(Match.any())
+      verify(mockDbService, times(1)).insertContributionData(Match.any())
       verify(mockEmailService, times(1)).sendThankYouEmail(Match.any())
       verify(mockCloudWatchService, times(1))
         .recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
@@ -218,7 +221,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       private val result: EitherT[Future, DatabaseService.Error, Unit] =
         subscribeWithGoogleBackend.recordRefund(subscribeWithGooglePayment)
 
-      result.futureRight shouldBe()
+      result.futureRight shouldBe(())
 
       verify(mockDbService, times(1)).flagContributionAsRefunded(subscribeWithGooglePayment.paymentId)
       verify(mockCloudWatchService, times(0)).recordTrackingRefundFailure(PaymentProvider.SubscribeWithGoogle)

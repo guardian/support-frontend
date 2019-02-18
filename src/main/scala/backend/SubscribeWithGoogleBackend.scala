@@ -18,7 +18,6 @@ import conf.ConfigLoader._
 import model.acquisition.SubscribeWithGoogleAcquisition
 import services._
 
-
 import scala.concurrent.Future
 
 case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
@@ -31,28 +30,26 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
   def recordPayment(googleRecordPayment: GoogleRecordPayment,
                     acquisitionData: AcquisitionData,
                     clientBrowserInfo: ClientBrowserInfo) = {
-    val contributionData = ContributionData.fromSubscribeWithGoogle(googleRecordPayment, _: Option[Long])
+
     val identity = getOrCreateIdentityIdFromEmail(googleRecordPayment.email)
 
-
-    //TODO: Restructure - Ophan and DB call are not coupled
     val trackContributionResult = identity.flatMap { id =>
-      trackContribution(googleRecordPayment, acquisitionData, id, clientBrowserInfo, contributionData(Some(id)))
+      insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, (Some(id))))
     }.leftMap{ err =>
-      logger.warn(
-        s"""unable to get identity id for email ${googleRecordPayment.email},
-           | tracking acquisition anyway
-           | payment tracking failed for $googleRecordPayment
-           |""".stripMargin)
       cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
-      insertContributionDataIntoDatabase(contributionData(None))
-        .leftMap{trackErr =>
-          logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}")
-        }
+      logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
       err
     }.map{ f =>
       cloudWatchService.recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
       f
+    }
+
+    val ophanTrackingResult = identity.flatMap { id =>
+      submitAcquisitionToOphan(googleRecordPayment, acquisitionData, id, clientBrowserInfo)
+    }.leftMap{ err =>
+      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+      logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
+      err
     }
 
     val sendThankYouEmailResult = for {
@@ -62,7 +59,10 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     } yield ()
 
     BackendError.combineResults(
-      trackContributionResult,
+      BackendError.combineResults(
+        trackContributionResult,
+        ophanTrackingResult
+      ),
       sendThankYouEmailResult
     )
   }
@@ -81,16 +81,6 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
       identityId, PaymentProvider.SubscribeWithGoogle,
       Some(googleRecordPayment.firstName),
       googleRecordPayment.amount)
-  }
-
-  private def trackContribution(payment: GoogleRecordPayment, acquisitionData: AcquisitionData, identityId: Long, clientBrowserInfo: ClientBrowserInfo, contributionData: ContributionData) = {
-    BackendError.combineResults(
-        insertContributionDataIntoDatabase(contributionData),
-        submitAcquisitionToOphan(payment, acquisitionData, identityId, clientBrowserInfo)
-    ).leftMap { err =>
-      logger.error("Error tracking contribution", err)
-      err
-    }
   }
 
   private def submitAcquisitionToOphan(payment: GoogleRecordPayment,
