@@ -22,7 +22,7 @@ function getHeading(): string {
     return saleCopy.landingPage.subHeading;
   }
 
-  return 'Save up to 31% on The Guardian and The Observer - all year round';
+  return 'Save up to 37% on The Guardian and The Observer - all year round';
 }
 
 const TimerIfActive = () => (showCountdownTimer('Paper', GBPCountries) ? (
