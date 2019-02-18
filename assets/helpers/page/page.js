@@ -8,6 +8,7 @@ import { applyMiddleware, combineReducers, compose, createStore, type Reducer } 
 import thunkMiddleware from 'redux-thunk';
 
 import type { Participations } from 'helpers/abTests/abtest';
+import { renderError } from 'helpers/render';
 import * as abTest from 'helpers/abTests/abtest';
 import { overrideAmountsForParticipations } from 'helpers/abTests/helpers';
 import type { Settings } from 'helpers/settings';
@@ -125,33 +126,39 @@ function init<S, A>(
   pageReducer?: CommonState => Reducer<S, A> | null,
   thunk?: boolean = false,
 ): Store<*, *, *> {
-  const { settings } = window.guardian;
-  const countryGroupId: CountryGroupId = detectCountryGroup();
-  const countryId: IsoCountry = detectCountry();
-  const currencyId: IsoCurrency = detectCurrency(countryGroupId);
-  const participations: Participations = abTest.init(countryId, countryGroupId, settings);
-  analyticsInitialisation(participations);
 
-  const initialState: CommonState = buildInitialState(
-    participations,
-    countryGroupId,
-    countryId,
-    currencyId,
-    settings,
-  );
-  const commonReducer = createCommonReducer(initialState);
+  try {
+    const { settings } = window.guardian;
+    const countryGroupId: CountryGroupId = detectCountryGroup();
+    const countryId: IsoCountry = detectCountry();
+    const currencyId: IsoCurrency = detectCurrency(countryGroupId);
+    const participations: Participations = abTest.init(countryId, countryGroupId, settings);
+    analyticsInitialisation(participations);
 
-  const store = createStore(
-    combineReducers({ page: pageReducer ? pageReducer(initialState) : null, common: commonReducer }),
-    storeEnhancer(thunk),
-  );
+    const initialState: CommonState = buildInitialState(
+      participations,
+      countryGroupId,
+      countryId,
+      currencyId,
+      settings,
+    );
+    const commonReducer = createCommonReducer(initialState);
 
-  addOptimizeExperiments((exp: OptimizeExperiment) => {
-    trackNewOptimizeExperiment(exp, participations);
-    store.dispatch(setExperimentVariant(exp));
-  });
+    const store = createStore(
+      combineReducers({ page: pageReducer ? pageReducer(initialState) : null, common: commonReducer }),
+      storeEnhancer(thunk),
+    );
 
-  return store;
+    addOptimizeExperiments((exp: OptimizeExperiment) => {
+      trackNewOptimizeExperiment(exp, participations);
+      store.dispatch(setExperimentVariant(exp));
+    });
+
+    return store;
+  } catch (err) {
+    renderError(null);
+    throw (err);
+  }
 }
 
 
