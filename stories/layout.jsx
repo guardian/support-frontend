@@ -52,8 +52,8 @@ stories.add('Content', () => (
       </Outset>
       <div style={{ padding: '1em 0' }}>
         And you can add elements with no max-width rules
-        by just placing them unwrapped. There's still a
-        max width at play here, but you don't wanna go over it!!
+        by just placing them unwrapped. There{'\''}s still a
+        max width at play here, but you don{'\''}t wanna go over it!!
       </div>
       <Divider />
       <Text title="What else to know?">
@@ -62,7 +62,7 @@ stories.add('Content', () => (
           defined ad-hoc inside its CSS (boo!).
         </SansParagraph>
         <SansParagraph>
-          It normally does what you want it to do, as you'll mostly use <code>Text</code>
+          It normally does what you want it to do, as you{'\''}ll mostly use <code>Text</code>
           or a couple of bespoke containers like the forms. But you
           might need to add more special exceptions, go for it!
         </SansParagraph>
