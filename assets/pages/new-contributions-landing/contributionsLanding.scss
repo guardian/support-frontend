@@ -578,6 +578,7 @@ form {
 
 .form__radio-group--pills .form__radio-group-list {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .form__radio-group--pills .form__radio-group-item {
@@ -597,14 +598,6 @@ form {
       margin: 0 0 0 10px;
     }
   }
-
-  // &:nth-child(5) {
-  //   margin-right: 10px;
-
-  //   @include mq($from: 372px) { // custom breakpoint for hack
-  //     margin-right: 0;
-  //   }
-  // }
   // HACK END
 }
 
