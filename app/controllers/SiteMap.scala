@@ -54,7 +54,8 @@ class SiteMap(
   private def contributionsLandingPageUS()(implicit req: RequestHeader) = {
     routes.Application.contributionsLanding(
       country = "us",
-      ssrTwo = None
+      ssrTwo = None,
+      formTwo = None
     ).absoluteURL(secure = true)
   }
 

@@ -347,7 +347,7 @@ footer[role="contentinfo"] a {
     border: none;
     padding: 0;
     background-color: transparent;
-
+  
     @include mq($from: tablet) {
       margin-left: $content-left-margin-tablet
     }
@@ -578,7 +578,7 @@ form {
 
 .form__radio-group--pills .form__radio-group-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: flex-wrap;
 }
 
 .form__radio-group--pills .form__radio-group-item {
@@ -591,7 +591,7 @@ form {
 
   // HACK START - TO BE REMOVED: when annualContributionsRoundFour experiment ends
   // Make sure last amount pill has the right margin when it moves down a line
-  &:last-child{
+  &:nth-child(6){
     margin: 10px 10px 0 0;
 
     @include mq($from: 372px) { // custom breakpoint for hack
