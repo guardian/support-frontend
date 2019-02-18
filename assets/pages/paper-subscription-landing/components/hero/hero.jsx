@@ -22,7 +22,7 @@ function getHeading(): string {
     return saleCopy.landingPage.subHeading;
   }
 
-  return 'Save up to 31% on The Guardian and The Observer - all year round';
+  return 'Save up to 37% on The Guardian and The Observer - all year round';
 }
 
 const TimerIfActive = () => (showCountdownTimer('Paper', GBPCountries) ? (
@@ -91,8 +91,7 @@ const SaleHeader = () => (
           <div className="sale-joy-of-print-graphic-inner">
             <div className="sale-joy-of-print-badge">
               <span>Save up to</span>
-              <span>31%</span>
-              <span>for three months</span>
+              <span>37%</span>
             </div>
             <div className="sale-joy-of-print-graphic">
               <GridImage
