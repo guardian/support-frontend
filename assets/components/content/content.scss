@@ -75,7 +75,7 @@
   );
 }
 
-.component-content--feature-secondary {
+.component-content--highlight {
   @include block-colours(
     $border: gu-colour(brand-pastel),
     $bg: gu-colour(highlight-main),

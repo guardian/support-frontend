@@ -11,8 +11,21 @@ import './content.scss';
 
 // ---- Types ----- //
 
+export const Appearances = {
+  white: 'white',
+  grey: 'grey',
+  highlight: 'highlight',
+  feature: 'feature',
+  dark: 'dark',
+};
+export const Sides = {
+  right: 'right', left: 'left',
+};
+
+type Appearance = $Keys<typeof Appearances>;
+
 type PropTypes = {|
-  type: 'white' | 'grey' | 'feature' | 'dark' | 'feature-secondary',
+  appearance: Appearance,
   id?: Option<string>,
   children: Node,
   image: Option<Node>,
@@ -25,14 +38,14 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const Content = ({
-  type, children, id, modifierClasses, image, needsHigherZindex, border,
+  appearance, children, id, modifierClasses, image, needsHigherZindex, border,
 }: PropTypes) => (
   <div
     id={id}
     className={classNameWithModifiers(
       'component-content',
       [
-        type,
+        appearance,
         image ? 'overflow-hidden' : null,
         needsHigherZindex ? 'higher' : null,
         border === false ? 'no-border' : null,
@@ -53,7 +66,7 @@ const Content = ({
 );
 
 Content.defaultProps = {
-  type: 'white',
+  appearance: 'white',
   id: null,
   image: null,
   modifierClasses: [],

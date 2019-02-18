@@ -80,7 +80,7 @@ const content = (
       />
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
-      <Content type="feature" id="subscribe">
+      <Content appearance="feature" id="subscribe">
         <Text title="Subscribe to Digital Pack today">
           <p>Choose how you’d like to pay</p>
         </Text>

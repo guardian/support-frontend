@@ -60,7 +60,7 @@ const ContentHelpBlock = ({
   faqLink: Element<string>,
   telephoneLink: Element<string>
 |}) => (
-  <Content type="feature" modifierClasses={['faqs']}>
+  <Content appearance="feature" modifierClasses={['faqs']}>
     <Text title="FAQ and help">
       <SansParagraph>
         If you’ve got any more questions, you might well find the answers in the {faqLink}.
@@ -98,7 +98,7 @@ const ContentForm = ({
   selectedTab: ActiveTabState,
   setTabAction: typeof setTab
 |}) => (
-  <Content type="feature" id="subscribe">
+  <Content appearance="feature" id="subscribe">
     <Text
       title={title}
     >

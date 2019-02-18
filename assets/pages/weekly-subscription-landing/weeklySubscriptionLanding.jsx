@@ -130,7 +130,7 @@ const content = (
           />
         </Outset>
       </Content>
-      <Content type="feature" id="subscribe">
+      <Content appearance="feature" id="subscribe">
         <Text title="Subscribe to Guardian Weekly today">
           <p>Choose how you’d like to pay</p>
         </Text>

@@ -8,7 +8,7 @@ import BreakingTheHeadlines from 'components/svgs/breakingTheHeadlines';
 
 export default function BreakingHeadlines() {
   return (
-    <Content type="grey">
+    <Content appearance="grey">
       <Text>
         <BreakingTheHeadlines />
         <p>
