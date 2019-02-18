@@ -22,6 +22,7 @@ const getElementOrBody = (id: ?string): Element => {
 const renderError = (id: ?string) => {
   const element = getElementOrBody(id);
 
+  logException(['Fatal error rendering a page', id ? `id:${id}` : null].join(' '));
   import('pages/error/components/errorPage').then(({ default: ErrorPage }) => {
     if (element) {
       ReactDOM.render(ErrorPage({
@@ -41,7 +42,6 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
     try {
       ReactDOM.render(content, element, callBack);
     } catch {
-      logException(`Fatal error rendering a page. id:${id}`);
       renderError(id);
     }
   } else {
