@@ -122,6 +122,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       address1 = state.user.billingAddress.lineOne,
       address2 = state.user.billingAddress.lineTwo,
       city = state.user.billingAddress.city,
+      postalCode = state.user.billingAddress.postCode,
       country = state.user.billingAddress.country,
       state = state.user.billingAddress.state
     )
