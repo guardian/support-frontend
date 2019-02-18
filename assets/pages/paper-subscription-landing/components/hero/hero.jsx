@@ -91,7 +91,7 @@ const SaleHeader = () => (
           <div className="sale-joy-of-print-graphic-inner">
             <div className="sale-joy-of-print-badge">
               <span>Save up to</span>
-              <span>68%</span>
+              <span>31%</span>
               <span>for three months</span>
             </div>
             <div className="sale-joy-of-print-graphic">
