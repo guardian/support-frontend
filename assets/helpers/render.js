@@ -3,17 +3,24 @@
 import ReactDOM from 'react-dom';
 import { logException } from 'helpers/logger';
 
-const renderError = (id: ?string) => {
-  let element: ?Element;
+const getElement = (id: string): ?Element => document.getElementById(id);
+
+const getElementOrBody = (id: ?string): Element => {
+  let element;
   if (id) {
-    element = document.getElementById(id);
+    element = getElement(id);
   }
   if (!element) {
     element = document.querySelector('.gu-render-to');
   }
   if (!element) {
-    element = document.documentElement;
+    element = ((document.body: any): Element);
   }
+  return element;
+};
+
+const renderError = (id: ?string) => {
+  const element = getElementOrBody(id);
 
   import('pages/error/components/errorPage').then(({ default: ErrorPage }) => {
     if (element) {
@@ -28,7 +35,7 @@ const renderError = (id: ?string) => {
 };
 
 const renderPage = (content: Object, id: string, callBack?: () => void) => {
-  const element: ?Element = document.getElementById(id);
+  const element = getElement(id);
 
   if (element) {
     try {
