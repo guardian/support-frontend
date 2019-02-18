@@ -20,6 +20,20 @@ export const tests: Tests = {
     seed: 4,
   },
 
+  formTwo: {
+    type: 'OTHER',
+    variants: [{ id: 'off' }, { id: 'on' }],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 0,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 0,
+  },
+
   annualContributionsRoundFour: {
     type: 'AMOUNTS',
     variants: [
