@@ -81,7 +81,7 @@ const billingPeriods = {
   [Monthly]: {
     title: 'Monthly',
     offer: (country: IsoCountry) => getOfferCopy(country, Monthly),
-    copy: (productPrices: ProductPrices, country: IsoCountry) => `14 day free trial, then ${displayPrice(productPrices, Monthly, country)} a month`,
+    copy: (productPrices: ProductPrices, country: IsoCountry) => `14 day free trial, then ${displayPrice(productPrices, Monthly, country)} a month for 12 months`,
   },
   [Annual]: {
     title: 'Annually',
@@ -89,7 +89,7 @@ const billingPeriods = {
     copy: (productPrices: ProductPrices, country: IsoCountry) => {
       const saving = getAnnualSaving(productPrices, country);
       return [
-        `14 day free trial, then ${displayPrice(productPrices, Annual, country)} every 12 months`,
+        `14 day free trial, then ${displayPrice(productPrices, Annual, country)} for the first year`,
         saving ? `(save ${showPrice(saving)} per year)` : null,
       ].join(' ');
     },
