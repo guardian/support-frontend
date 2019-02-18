@@ -46,7 +46,7 @@ export type Price = {|
   currency: IsoCurrency,
 |};
 
-const showPrice = (p: Price, isExtended: boolean = false): string => {
+const showPrice = (p: Price, isExtended: boolean = true): string => {
   const showGlyph = isExtended ? extendedGlyph : glyph;
   return `${showGlyph(p.currency)}${p.price.toFixed(2)}`;
 };
