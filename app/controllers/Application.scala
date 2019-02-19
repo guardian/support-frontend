@@ -99,16 +99,21 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def contributionsLanding(countryCode: String, maybeSSR: Option[String]): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  def contributionsLanding(
+    countryCode: String,
+    maybeSSR: Option[String],
+    maybeFormDesignTest: Option[String]
+  ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, maybeSSR.contains("on"))),
-      user => Ok(contributionsHtml(countryCode, user, maybeSSR.contains("on")))
+      _ => Ok(contributionsHtml(countryCode, None, maybeSSR.contains("on"), maybeFormDesignTest.contains("variant"))),
+      user => Ok(contributionsHtml(countryCode, user, maybeSSR.contains("on"), maybeFormDesignTest.contains("variant")))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isInSSRTest: Boolean)(implicit request: RequestHeader, settings: AllSettings) = {
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isInSSRTest: Boolean, isInFormDesignTest: Boolean)
+    (implicit request: RequestHeader, settings: AllSettings) = {
     if (isInSSRTest)
       views.html.newContributionsTest(
         title = "Support the Guardian | Make a Contribution",
@@ -125,7 +130,8 @@ class Application(
         paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
         idUser = idUser,
-        stage = stage
+        stage = stage,
+        formDesignTestOn = isInFormDesignTest
       )
     else
       views.html.newContributions(

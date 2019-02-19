@@ -332,6 +332,108 @@ footer[role="contentinfo"] a {
 
 }
 
+// Alternative form layout 
+.gu-content--contribution-form-design-test {
+
+  .gu-content__main {
+    display: block; // this is to remove the display flex set earlier
+    background-color: gu-colour(sport-faded);
+  }
+
+  .gu-content__content {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1015px;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+  
+    @include mq($from: tablet) {
+      margin-left: $content-left-margin-tablet
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: $content-left-margin-leftCol
+    }
+  }
+
+  .gu-content__content--flex {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+  }
+
+  .gu-content__form {
+    margin: auto;
+    width: auto;
+    padding: 0 10px;
+    border-color: gu-colour(brightness-86);
+    border-style: none solid;
+    border-width: 0 1px;
+    border-bottom: 1px solid gu-colour(brightness-86);
+    background-color: gu-colour(brightness-100);
+
+    @include mq($from: tablet) {
+      width: 40%;      
+    }
+  }
+
+  .form__radio-group--contribution-type:after {
+    background-image: none;
+    height: 0;
+  }
+
+  .form__radio-group-list {
+    padding: 0px;
+    flex-wrap: wrap;
+  }
+
+  .form__radio-group-list--border {
+    border-bottom: 1px solid gu-colour(brightness-86);
+
+    li label {
+      font-family: $gu-titlepiece;
+      font-size: 22px;
+    }
+  }
+
+  .form--contribution .component-terms-privacy {
+    margin: 10px 0 10px;
+  }
+
+  .gu-content__form {
+    @include mq($from: tablet) {
+      margin: 30px 10px;
+    }
+  }
+
+  .gu-content__blurb {
+    display: none;
+    max-width: 380px;
+    border-top: 10px solid gu-colour(highlight-main);
+    margin-left: auto;
+    
+    h1 {
+      border-bottom: none;
+      padding-bottom: 10px;
+      font-size: 44px;
+      line-height: 46px;
+      font-family: $gu-titlepiece;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 22px;
+    }
+
+    @include mq($from: tablet) {
+      display: block;
+      margin: 30px 120px 30px 10px;
+    }
+  }
+  
+}
+
 /*= TYPOGRAPHY */
 body {
   color: gu-colour(brightness-7);
@@ -476,6 +578,7 @@ form {
 
 .form__radio-group--pills .form__radio-group-list {
   display: flex;
+  flex-wrap: flex-wrap;
 }
 
 .form__radio-group--pills .form__radio-group-item {
@@ -485,6 +588,17 @@ form {
 
 .form__radio-group--pills .form__radio-group-item + .form__radio-group-item {
   margin-left: 10px;
+
+  // HACK START - TO BE REMOVED: when annualContributionsRoundFour experiment ends
+  // Make sure last amount pill has the right margin when it moves down a line
+  &:nth-child(6){
+    margin: 10px 10px 0 0;
+
+    @include mq($from: 372px) { // custom breakpoint for hack
+      margin: 0 0 0 10px;
+    }
+  }
+  // HACK END
 }
 
 .form__radio-group--pills .form__radio-group-input + .form__radio-group-label {

@@ -95,17 +95,22 @@ function ContributionFormContainer(props: PropTypes) {
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
-      <div className="gu-content__content">
-        <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
-        {countryGroupDetails.tickerJsonUrl ?
-          <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
-        }
-        { countryGroupDetails.contributeCopy ?
-          <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
-        }
-        <NewContributionForm
-          onPaymentAuthorisation={onPaymentAuthorisation}
-        />
+      <div className="gu-content__content gu-content__content--flex">
+        <div className="gu-content__blurb">
+          <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
+          {countryGroupDetails.tickerJsonUrl ?
+            <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
+          }
+          { countryGroupDetails.contributeCopy ?
+            <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
+          }
+        </div>
+
+        <div className="gu-content__form">
+          <NewContributionForm
+            onPaymentAuthorisation={onPaymentAuthorisation}
+          />
+        </div>
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}
         />

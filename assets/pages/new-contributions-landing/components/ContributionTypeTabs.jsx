@@ -55,7 +55,7 @@ function ContributionTypeTabs(props: PropTypes) {
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
-      <ul className="form__radio-group-list">
+      <ul className="form__radio-group-list form__radio-group-list--border">
         {getValidContributionTypes().map((contributionType: ContributionType) => (
           <li className="form__radio-group-item">
             <input

@@ -8,6 +8,7 @@ import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
 import { isDetailsSupported, polyfillDetails } from 'helpers/details';
+import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -66,18 +67,23 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
-          render={() => (
-            <Page
-              classModifiers={['contribution-form']}
-              header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-              footer={<Footer disclaimer countryGroupId={countryGroupId} />}
-            >
-              <NewContributionFormContainer
-                thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-              />
-              <NewContributionBackground />
-            </Page>
-          )
+          render={() => {
+            const variantOn = getQueryParameter('formDesignTest') === 'variant';
+            const formCssVariant = variantOn ? ['contribution-form-design-test'] : ['contribution-form'];
+
+            return (
+              <Page
+                classModifiers={formCssVariant}
+                header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+                footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+              >
+                <NewContributionFormContainer
+                  thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+                />
+                <NewContributionBackground />
+              </Page>
+            );
+          }
         }
         />
         <Route
