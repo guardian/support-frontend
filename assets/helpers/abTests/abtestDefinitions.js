@@ -22,7 +22,7 @@ export const tests: Tests = {
 
   formDesignTest: {
     type: 'OTHER',
-    variants: [{ id: 'off' }, { id: 'on' }],
+    variants: [{ id: 'control' }, { id: 'variant' }],
     audiences: {
       ALL: {
         offset: 0,

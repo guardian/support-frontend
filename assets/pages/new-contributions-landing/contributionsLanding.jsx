@@ -68,7 +68,7 @@ const router = (
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
           render={() => {
-            const variantOn = getQueryParameter('formDesignTest') === 'on';
+            const variantOn = getQueryParameter('formDesignTest') === 'variant';
             const formCssVariant = variantOn ? ['contribution-form-design-test'] : ['contribution-form'];
 
             return (

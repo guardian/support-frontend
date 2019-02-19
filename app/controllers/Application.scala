@@ -104,8 +104,8 @@ class Application(
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, maybeSSR.contains("on"), maybeFormDesignTest.contains("on"))),
-      user => Ok(contributionsHtml(countryCode, user, maybeSSR.contains("on"), maybeFormDesignTest.contains("on")))
+      _ => Ok(contributionsHtml(countryCode, None, maybeSSR.contains("on"), maybeFormDesignTest.contains("variant"))),
+      user => Ok(contributionsHtml(countryCode, user, maybeSSR.contains("on"), maybeFormDesignTest.contains("variant")))
     ).map(_.withSettingsSurrogateKey)
   }
 
