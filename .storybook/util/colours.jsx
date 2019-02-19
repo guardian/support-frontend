@@ -53,22 +53,16 @@ const Colour = ({name, colour, copyHex}) => (
   </WithState>
 );
 
-const Colours = ({copyHex, categories, palette}) => (
-  <div>
+const Colours = ({copyHex, category, palette}) => (
+  <div className="story-colours">
+    <h2 className="story-colours__title">{category}</h2>
+    <div className="story-colours__row">
     {
-      categories.map((category)=>(
-        <div className="story-colours">
-          <h2 className="story-colours__title">{category}</h2>
-          <div className="story-colours__row">
-          {
-            Object.entries(coloursInCategory(palette, category)).map(([name, colour]) => (
-              <Colour copyHex={copyHex} name={name} colour={colour} />
-            ))
-          }
-          </div>
-        </div>
+      Object.entries(coloursInCategory(palette, category)).map(([name, colour]) => (
+        <Colour copyHex={copyHex} name={name} colour={colour} />
       ))
     }
+    </div>
   </div>
 )
 
