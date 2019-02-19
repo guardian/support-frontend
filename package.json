@@ -57,7 +57,7 @@
     "url": "https://github.com/guardian/support-frontend/issues"
   },
   "dependencies": {
-    "@guardian/pasteup": "^1.0.0-alpha.5",
+    "@guardian/pasteup": "^1.0.0-alpha.7",
     "cssnano": "^4.1.4",
     "fast-sass-loader": "^1.4.7",
     "ophan-tracker-js": "^1.3.13",
