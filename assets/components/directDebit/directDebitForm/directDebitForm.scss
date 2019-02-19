@@ -10,7 +10,7 @@
 
   .component-error-message {
     background-color: transparent;
-    color: gu-colour(error);
+    color: gu-colour(state-error);
     padding: 0;
     height: 0;
   }
@@ -22,11 +22,11 @@
 
   .svg-exclamation-alternate__circle {
     fill: none;
-    stroke: gu-colour(error);
+    stroke: gu-colour(state-error);
   }
 
   .svg-exclamation-alternate__exclamation-mark {
-    fill: gu-colour(error);
+    fill: gu-colour(state-error);
   }
 
   .component-error-message__message {

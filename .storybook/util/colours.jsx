@@ -8,8 +8,6 @@ import { flatten } from '../../scripts/palette'
 
 const allColours = flatten(palette);
 
-console.log(allColours)
-
 const copyStringToClipboard = (str) => {
   const el = document.createElement('textarea');
   el.value = str;
