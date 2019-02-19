@@ -5,6 +5,6 @@ object QueryStringUtils {
   def addServerSideRenderingTestParameterQueryString(queryString: Map[String, Seq[String]]): Map[String, Seq[String]] = {
     val ssrParameterValue = if (Random.nextBoolean()) "on" else "off"
     val formDesignTestParameterValue = if (Random.nextBoolean()) "on" else "off"
-   queryString + ("ssrTwo" -> Seq(ssrParameterValue)) + ("FromTwo" -> Seq(formDesignTestParameterValue))
+   queryString + ("ssrTwo" -> Seq(ssrParameterValue)) + ("fromDesignTest" -> Seq(formDesignTestParameterValue))
   }
 }
