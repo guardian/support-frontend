@@ -20,7 +20,7 @@ export const tests: Tests = {
     seed: 4,
   },
 
-  formTwo: {
+  formDesignTest: {
     type: 'OTHER',
     variants: [{ id: 'off' }, { id: 'on' }],
     audiences: {
@@ -31,7 +31,7 @@ export const tests: Tests = {
     },
     isActive: true,
     independent: true,
-    seed: 0,
+    seed: 1,
   },
 
   annualContributionsRoundFour: {

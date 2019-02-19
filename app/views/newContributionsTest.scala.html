@@ -20,7 +20,7 @@
   paymentApiPayPalEndpoint: String,
   idUser: Option[IdUser],
   stage: Stage,
-  formTwoOn: Boolean
+  formDesignTestOn: Boolean
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @scripts = {
@@ -69,4 +69,4 @@
   </script>
 }
 
-@test(title = title, scripts = scripts, mainJsBundle = js, description = description, mainId = id, mainStyleBundle = css, stage = stage, formTwoOn = formTwoOn)
+@test(title = title, scripts = scripts, mainJsBundle = js, description = description, mainId = id, mainStyleBundle = css, stage = stage, formDesignTestOn = formDesignTestOn)

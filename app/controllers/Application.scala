@@ -99,17 +99,17 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def contributionsLanding(countryCode: String, maybeSSR: Option[String], maybeFormTwo: Option[String]): Action[AnyContent] = maybeAuthenticatedAction().async
+  def contributionsLanding(countryCode: String, maybeSSR: Option[String], maybeFormDesignTest: Option[String]): Action[AnyContent] = maybeAuthenticatedAction().async
   { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, maybeSSR.contains("on"), maybeFormTwo.contains("on"))),
-      user => Ok(contributionsHtml(countryCode, user, maybeSSR.contains("on"), maybeFormTwo.contains("on")))
+      _ => Ok(contributionsHtml(countryCode, None, maybeSSR.contains("on"), maybeFormDesignTest.contains("on"))),
+      user => Ok(contributionsHtml(countryCode, user, maybeSSR.contains("on"), maybeFormDesignTest.contains("on")))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isInSSRTest: Boolean, isInFormTwoTest: Boolean)
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isInSSRTest: Boolean, isInFormDesignTest: Boolean)
     (implicit request: RequestHeader, settings: AllSettings) = {
     if (isInSSRTest)
       views.html.newContributionsTest(
@@ -128,7 +128,7 @@ class Application(
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
         idUser = idUser,
         stage = stage,
-        formTwoOn = isInFormTwoTest
+        formDesignTestOn = isInFormDesignTest
       )
     else
       views.html.newContributions(

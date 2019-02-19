@@ -55,7 +55,7 @@ class SiteMap(
     routes.Application.contributionsLanding(
       country = "us",
       ssrTwo = None,
-      formTwo = None
+      formDesignTest = None
     ).absoluteURL(secure = true)
   }
 
