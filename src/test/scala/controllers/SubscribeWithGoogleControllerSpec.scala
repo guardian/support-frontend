@@ -132,11 +132,11 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       }
 
       val json = Json.parse(fixture.refundGooglePayment.asJson.noSpaces)
-      val request = FakeRequest("POST", "/contribute/one-off/swg/record-payment")
+      val request = FakeRequest("POST", "/contribute/one-off/swg/record-refund")
         .withJsonBody(json)
 
       val eventualResult: Future[play.api.mvc.Result] =
-        Helpers.call(fixture.subscribeWithGoogleController.recordPayment, request)
+        Helpers.call(fixture.subscribeWithGoogleController.refundPayment, request)
 
       status(eventualResult) shouldBe 200
 
@@ -152,15 +152,55 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       }
 
       val json = Json.parse(fixture.refundGooglePayment.asJson.noSpaces)
-      val request = FakeRequest("POST", "/contribute/one-off/swg/record-payment")
+      val request = FakeRequest("POST", "/contribute/one-off/swg/record-refund")
         .withJsonBody(json)
 
       val eventualResult: Future[play.api.mvc.Result] =
-        Helpers.call(fixture.subscribeWithGoogleController.recordPayment, request)
+        Helpers.call(fixture.subscribeWithGoogleController.refundPayment, request)
 
       status(eventualResult) shouldBe 200
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(1)).recordRefund(Match.any())
+    }
+
+    "receive a payment on refund route" in {
+      val fixture = new SubscribeWithGoogleControllerFixture() {
+        when(subscribeWithGoogleBackendProvider.getInstanceFor(Match.any())(Match.any()))
+          .thenReturn(mockSubscribeWithGoogleBackend)
+
+        when(mockSubscribeWithGoogleBackend.recordRefund(Match.any())).thenReturn(dbInsertError)
+      }
+
+      val json = Json.parse(fixture.paidGooglePayment.asJson.noSpaces)
+      val request = FakeRequest("POST", "/contribute/one-off/swg/record-refund")
+        .withJsonBody(json)
+
+      val eventualResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.subscribeWithGoogleController.refundPayment, request)
+
+      status(eventualResult) shouldBe 400
+
+      verify(fixture.mockSubscribeWithGoogleBackend, times(0)).recordRefund(Match.any())
+    }
+
+    "receive a payment fail on refund route" in {
+      val fixture = new SubscribeWithGoogleControllerFixture() {
+        when(subscribeWithGoogleBackendProvider.getInstanceFor(Match.any())(Match.any()))
+          .thenReturn(mockSubscribeWithGoogleBackend)
+
+        when(mockSubscribeWithGoogleBackend.recordRefund(Match.any())).thenReturn(dbInsertError)
+      }
+
+      val json = Json.parse(fixture.failedGooglePayment.asJson.noSpaces)
+      val request = FakeRequest("POST", "/contribute/one-off/swg/record-refund")
+        .withJsonBody(json)
+
+      val eventualResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.subscribeWithGoogleController.refundPayment, request)
+
+      status(eventualResult) shouldBe 400
+
+      verify(fixture.mockSubscribeWithGoogleBackend, times(0)).recordRefund(Match.any())
     }
 
     "process a payment" in {
@@ -214,7 +254,6 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
 
         when(mockSubscribeWithGoogleBackend.recordPayment(Match.any(), Match.any(), Match.any()))
           .thenReturn(recordPaymentError)
-        when(mockSubscribeWithGoogleBackend.recordRefund(Match.any())).thenReturn(dbInsertResult)
       }
 
       val json = Json.parse(fixture.failedGooglePayment.asJson.noSpaces)
@@ -224,12 +263,31 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       val eventualResult: Future[play.api.mvc.Result] =
         Helpers.call(fixture.subscribeWithGoogleController.recordPayment, request)
 
-      status(eventualResult) shouldBe 200
+      status(eventualResult) shouldBe 400
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(0))
         .recordPayment(Match.any(), Match.any(), Match.any())
-      verify(fixture.mockSubscribeWithGoogleBackend, times(0)).recordRefund(Match.any())
+    }
+    "receive a payment refund on payment route" in {
+      val fixture = new SubscribeWithGoogleControllerFixture() {
+        when(subscribeWithGoogleBackendProvider.getInstanceFor(Match.any())(Match.any()))
+          .thenReturn(mockSubscribeWithGoogleBackend)
 
+        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any(), Match.any(), Match.any()))
+          .thenReturn(recordPaymentError)
+      }
+
+      val json = Json.parse(fixture.refundGooglePayment.asJson.noSpaces)
+      val request = FakeRequest("POST", "/contribute/one-off/swg/record-payment")
+        .withJsonBody(json)
+
+      val eventualResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.subscribeWithGoogleController.recordPayment, request)
+
+      status(eventualResult) shouldBe 400
+
+      verify(fixture.mockSubscribeWithGoogleBackend, times(0))
+        .recordPayment(Match.any(), Match.any(), Match.any())
     }
   }
 }

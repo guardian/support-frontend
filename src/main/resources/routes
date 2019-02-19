@@ -56,3 +56,4 @@ OPTIONS  /direct-debit/check-account                          controllers.AppCon
 
 
 POST /contribute/one-off/swg/record-payment                   controllers.SubscribeWithGoogleController.recordPayment
+POST /contribute/one-off/swg/refund-payment                   controllers.SubscribeWithGoogleController.refundPayment

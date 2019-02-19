@@ -1,15 +1,14 @@
 package controllers
 
 import actions.CorsActionProvider
-import backend.{BackendError, SubscribeWithGoogleBackend}
-import cats.instances.future._
-import cats.data.EitherT
+import backend.SubscribeWithGoogleBackend
 import com.typesafe.scalalogging.StrictLogging
 import model.{AcquisitionData, ClientBrowserInfo, DefaultThreadPool, PaymentStatus}
 import model.subscribewithgoogle.GoogleRecordPayment
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
+import util.RequestTypeDecoder.instances._
 
 import scala.concurrent.Future
 
@@ -24,8 +23,6 @@ class SubscribeWithGoogleController(
 
 
   def recordPayment: Action[GoogleRecordPayment] = CorsAction.async(circe.json[GoogleRecordPayment]) { request =>
-    import util.RequestTypeDecoder.instances._
-
     val requestBody: GoogleRecordPayment = request.body
 
     requestBody.status match {
@@ -35,14 +32,28 @@ class SubscribeWithGoogleController(
             AcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
             ClientBrowserInfo("localhost", "whoknowsyet", None, "127.0.0.1", None)
           )
+        Future.successful(Ok("{}"))
+      case PaymentStatus.Failed | PaymentStatus.Refunded =>
+        logger.error(
+         s"Received $requestBody - as a payment but has a Payment Status of ${requestBody.status} - this is not a payment"
+        )
+        Future.successful(BadRequest())
+    }
+  }
+
+  def refundPayment: Action[GoogleRecordPayment] = CorsAction.async(circe.json[GoogleRecordPayment]) { request =>
+    val requestBody: GoogleRecordPayment = request.body
+
+    requestBody.status match {
       case PaymentStatus.Refunded =>
         subscribeWithGoogleBackendProvider.getInstanceFor(request)
           .recordRefund(requestBody)
-      case PaymentStatus.Failed => logger.error(
-        s"Received $requestBody - Claims payment has failed - this is not supported for Subscribe With Google"
-      )
+        Future.successful(Ok("{}"))
+      case PaymentStatus.Failed | PaymentStatus.Paid =>
+        logger.error(
+          s"Received $requestBody - for refund but has a Payment Status of ${requestBody.status} - this is not a refund"
+        )
+        Future.successful(BadRequest())
     }
-
-    Future.successful(Ok("{}"))
   }
 }
