@@ -1,10 +1,9 @@
 import React, {type Node, Component} from 'react';
+import { palette } from '@guardian/pasteup/palette';
 
 import WithState from './withState.jsx';
+import { flatten } from '../../scripts/pasteup-sass'
 import './colours.scss';
-
-import { palette } from '@guardian/pasteup/palette';
-import { flatten } from '../../scripts/palette'
 
 const allColours = flatten(palette);
 
@@ -22,15 +21,10 @@ const copyStringToClipboard = (str) => {
   }
 }
 
-const addMissingColoursToCategories = (categories, colours) => {
-  const listed = Object.values(categories).reduce((prev, cur)=>[...prev, ...cur],[]);
-  return {
-    ...categories,
-    others: Object.keys(colours)
-      .filter(colour => !listed.includes(colour))
-      .filter(colour=>!colour.includes('__'))
-  }
-}
+const coloursInCategory = (palette, category) => 
+  Object.entries(palette)
+    .filter(([key])=>key.includes(category))
+    .reduce((p, [key,val])=>({...p, [key]:val}),{});
 
 const Colour = ({name, colour, copyHex}) => (
   <WithState initialState={{clicked: false}}>
@@ -59,16 +53,16 @@ const Colour = ({name, colour, copyHex}) => (
   </WithState>
 );
 
-const Colours = ({copyHex, categories}) => (
+const Colours = ({copyHex, categories, palette}) => (
   <div>
     {
-      Object.entries(addMissingColoursToCategories(categories, allColours)).map(([name, colours])=>(
+      categories.map((category)=>(
         <div className="story-colours">
-          <h2 className="story-colours__title">{name}</h2>
+          <h2 className="story-colours__title">{category}</h2>
           <div className="story-colours__row">
           {
-            colours.map(colour => (
-              <Colour copyHex={copyHex} name={colour} colour={allColours[colour]} />
+            Object.entries(coloursInCategory(palette, category)).map(([name, colour]) => (
+              <Colour copyHex={copyHex} name={name} colour={colour} />
             ))
           }
           </div>
