@@ -1,8 +1,14 @@
 import React, {type Node, Component} from 'react';
 
-import allColours from 'stylesheets/gu-sass/colours.json';
 import WithState from './withState.jsx';
 import './colours.scss';
+
+import { palette } from '@guardian/pasteup/palette';
+import { flatten } from '../../scripts/palette'
+
+const allColours = flatten(palette);
+
+console.log(allColours)
 
 const copyStringToClipboard = (str) => {
   const el = document.createElement('textarea');

@@ -2,21 +2,34 @@
   "presets": [
     "@babel/preset-react",
     "@babel/preset-flow",
-    [ "@babel/preset-env", {
-      "modules": false,
-    }]
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+      }
+    ]
   ],
   "plugins": [
     "@babel/plugin-transform-exponentiation-operator",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import",
-    ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
+    [
+      "@babel/plugin-proposal-object-rest-spread",
+      {
+        "useBuiltIns": true
+      }
+    ],
     "babel-plugin-add-react-displayname"
   ],
+  "sourceType": "unambiguous",
   "env": {
     "test": {
-      "presets": ["@babel/preset-env"],
-      "plugins": ["dynamic-import-node"]
+      "presets": [
+        "@babel/preset-env"
+      ],
+      "plugins": [
+        "dynamic-import-node"
+      ]
     }
   }
 }
