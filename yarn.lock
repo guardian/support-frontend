@@ -1582,6 +1582,11 @@
     puppeteer "^1.11.0"
     puppeteer-cluster "^0.12.1"
 
+"@guardian/pasteup@^1.0.0-alpha.5":
+  version "1.0.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/@guardian/pasteup/-/pasteup-1.0.0-alpha.5.tgz#6db40df6b1f01e34a8bfb49ad50a8d02ea30f75e"
+  integrity sha512-ELCvTloj1Usx1oNsB00ANLHSwElofCU4snev58m4At9NzGFxg9GLge2B8j477gpx6hIpGRFt1AK1gHQs+J4YTg==
+
 "@icons/material@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
