@@ -171,13 +171,13 @@
 
         &--patrons {
           .product-title {
-            color: gu-colour(patrons);
+            color: gu-colour(culture-main);
           }
         }
 
         &--masterclass {
           .product-title {
-            color: gu-colour(masterclass);
+            color: gu-colour(lifestyle-main);
           }
 
           @include mq($from: tablet) {
