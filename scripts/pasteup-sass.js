@@ -1,3 +1,6 @@
+const { convertJs: convertToSass } = require('json-sass-vars');
+const { palette } = require('@guardian/pasteup/palette');
+
 /*
 Given the pasteup palette,
 this function flattens all colours into a
@@ -15,4 +18,8 @@ const flatten = (obj, prefixes = []) => Object.entries(obj)
       ...flatten(val, [...prefixes, key]),
     }), {});
 
-module.exports = { flatten };
+const paletteAsMap = () => flatten(palette);
+const paletteAsSass = () => `$palette: ${convertToSass(paletteAsMap())};`;
+
+
+module.exports = { flatten, paletteAsMap, paletteAsSass };

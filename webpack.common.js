@@ -7,9 +7,7 @@ const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 const cssnano = require('cssnano');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const { convertJs: convertToSass } = require('json-sass-vars');
-const { palette } = require('@guardian/pasteup/palette');
-const { flatten } = require('./scripts/palette');
+const { paletteAsSass } = require('./scripts/pasteup-sass');
 
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
@@ -115,7 +113,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
                   extensions: ['.pasteupimport'],
                   transform: (rawFile) => {
                     if (rawFile.includes('use palette')) {
-                      return `$palette: ${convertToSass(flatten(palette))};`;
+                      return paletteAsSass();
                     }
                     throw new Error(`Invalid .pasteupimport – ${rawFile}`);
                   },
