@@ -53,6 +53,15 @@ class SubscribeWithGoogleControllerFixture()(implicit _ec: ExecutionContext, con
     System.currentTimeMillis()
   )
 
+  val failedGooglePayment = GoogleRecordPayment("Guardian",
+    "email@example.com",
+    PaymentStatus.Failed,
+    BigDecimal(1.00),
+    "GBP",
+    "UK",
+    "my-super-payment-id",
+    System.currentTimeMillis()
+  )
 
   val dbInsertResult: EitherT[Future, DatabaseService.Error, Unit] =
     EitherT.right(Future.successful(()))
@@ -196,6 +205,31 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(1))
         .recordPayment(Match.any(), Match.any(), Match.any())
+    }
+
+    "receive a payment fail and do nothing" in {
+      val fixture = new SubscribeWithGoogleControllerFixture() {
+        when(subscribeWithGoogleBackendProvider.getInstanceFor(Match.any())(Match.any()))
+          .thenReturn(mockSubscribeWithGoogleBackend)
+
+        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any(), Match.any(), Match.any()))
+          .thenReturn(recordPaymentError)
+        when(mockSubscribeWithGoogleBackend.recordRefund(Match.any())).thenReturn(dbInsertResult)
+      }
+
+      val json = Json.parse(fixture.failedGooglePayment.asJson.noSpaces)
+      val request = FakeRequest("POST", "/contribute/one-off/swg/record-payment")
+        .withJsonBody(json)
+
+      val eventualResult: Future[play.api.mvc.Result] =
+        Helpers.call(fixture.subscribeWithGoogleController.recordPayment, request)
+
+      status(eventualResult) shouldBe 200
+
+      verify(fixture.mockSubscribeWithGoogleBackend, times(0))
+        .recordPayment(Match.any(), Match.any(), Match.any())
+      verify(fixture.mockSubscribeWithGoogleBackend, times(0)).recordRefund(Match.any())
+
     }
   }
 }
