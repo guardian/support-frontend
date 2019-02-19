@@ -99,8 +99,11 @@ class Application(
     Ok(views.html.unsupportedBrowserPage())
   }
 
-  def contributionsLanding(countryCode: String, maybeSSR: Option[String], maybeFormDesignTest: Option[String]): Action[AnyContent] = maybeAuthenticatedAction().async
-  { implicit request =>
+  def contributionsLanding(
+    countryCode: String,
+    maybeSSR: Option[String],
+    maybeFormDesignTest: Option[String]
+  ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
