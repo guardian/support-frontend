@@ -101,55 +101,36 @@ class Application(
 
   def contributionsLanding(
     countryCode: String,
-    maybeSSR: Option[String],
     maybeFormDesignTest: Option[String]
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, maybeSSR.contains("on"), maybeFormDesignTest.contains("variant"))),
-      user => Ok(contributionsHtml(countryCode, user, maybeSSR.contains("on"), maybeFormDesignTest.contains("variant")))
+      _ => Ok(contributionsHtml(countryCode, None, maybeFormDesignTest.contains("variant"))),
+      user => Ok(contributionsHtml(countryCode, user, maybeFormDesignTest.contains("variant")))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isInSSRTest: Boolean, isInFormDesignTest: Boolean)
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isInFormDesignTest: Boolean)
     (implicit request: RequestHeader, settings: AllSettings) = {
-    if (isInSSRTest)
-      views.html.newContributionsTest(
-        title = "Support the Guardian | Make a Contribution",
-        id = s"new-contributions-landing-page-$countryCode",
-        js = "newContributionsLandingPage.js",
-        css = "newContributionsLandingPageStyles.css",
-        description = stringsConfig.contributionsLandingDescription,
-        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-        oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
-        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-        regularUatStripeConfig = regularStripeConfigProvider.get(true),
-        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularUatPayPalConfig = payPalConfigProvider.get(true),
-        paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
-        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-        idUser = idUser,
-        stage = stage,
-        formDesignTestOn = isInFormDesignTest
-      )
-    else
-      views.html.newContributions(
-        title = "Support the Guardian | Make a Contribution",
-        id = s"new-contributions-landing-page-$countryCode",
-        js = "newContributionsLandingPage.js",
-        css = "newContributionsLandingPageStyles.css",
-        description = stringsConfig.contributionsLandingDescription,
-        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-        oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
-        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-        regularUatStripeConfig = regularStripeConfigProvider.get(true),
-        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularUatPayPalConfig = payPalConfigProvider.get(true),
-        paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
-        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-        idUser = idUser
-      )
+    views.html.newContributionsTest(
+      title = "Support the Guardian | Make a Contribution",
+      id = s"new-contributions-landing-page-$countryCode",
+      js = "newContributionsLandingPage.js",
+      css = "newContributionsLandingPageStyles.css",
+      description = stringsConfig.contributionsLandingDescription,
+      oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+      oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+      regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+      regularUatStripeConfig = regularStripeConfigProvider.get(true),
+      regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+      regularUatPayPalConfig = payPalConfigProvider.get(true),
+      paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      idUser = idUser,
+      stage = stage,
+      formDesignTestOn = isInFormDesignTest
+    )
   }
 
   def showcase: Action[AnyContent] = CachedAction() { implicit request =>
