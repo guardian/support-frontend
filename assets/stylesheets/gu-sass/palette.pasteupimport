@@ -1,1 +1,5 @@
 @use palette
+/*
+webpack will pick this file and replace it 
+with the proper content – see webpack.common.js
+*/
