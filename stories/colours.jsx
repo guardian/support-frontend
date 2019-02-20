@@ -14,7 +14,7 @@ This maps neatly to the exported categories.
 */
 const palette = paletteAsMap();
 const categories = [...(
-  new Set(Object.keys(palette).map(key => key.split('-')[0]))
+  new Set(Object.keys(palette).map(key => .substr(0, key.indexOf('-')))
 )];
 
 const copyHexKnob = () => radios('Copy on click', ['variable', 'hex'], 'variable');
