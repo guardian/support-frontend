@@ -79,7 +79,7 @@ object JdbcThreadPool extends CustomThreadPoolLoader[JdbcThreadPool] {
 case class SubscribeWithGoogleThreadPool private (underlying: ExecutionContext) extends AppThreadPool
 
 object SubscribeWithGoogleThreadPool extends CustomThreadPoolLoader[SubscribeWithGoogleThreadPool] {
-  override val threadPoolId: String = "subscribeWithGoogle"
+  override val threadPoolId: String = "subscribewithgoogle"
 }
 
 // Models all thread pools required by the application
