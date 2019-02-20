@@ -17,7 +17,7 @@ import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
-import utils.QueryStringUtils.addServerSideRenderingTestParameterQueryString
+import utils.QueryStringUtils.addFormDesignTestParameterQueryString
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -73,7 +73,7 @@ class Application(
       case _ => "/uk/contribute"
     }
 
-    Redirect(redirectUrl, addServerSideRenderingTestParameterQueryString(request.queryString), status = FOUND)
+    Redirect(redirectUrl, addFormDesignTestParameterQueryString(request.queryString), status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
