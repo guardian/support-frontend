@@ -8,13 +8,18 @@ import { withKnobs, radios } from '@storybook/addon-knobs';
 import Colours from '../.storybook/util/colours';
 import { paletteAsMap } from '../scripts/pasteup-sass';
 
+/*
+Get the first part of each colour name and make them unique.
+This maps neatly to the exported categories.
+*/
 const palette = paletteAsMap();
-const categories = [...(new Set(Object.keys(palette).map(key => key.split('-')[0])))];
-
-const stories = storiesOf('Palette', module)
-  .addDecorator(withKnobs);
+const categories = [...(
+  new Set(Object.keys(palette).map(key => key.split('-')[0]))
+)];
 
 const copyHexKnob = () => radios('Copy on click', ['variable', 'hex'], 'variable');
+
+const stories = storiesOf('Palette', module).addDecorator(withKnobs);
 
 stories.add('Colours', () => (
   <div>
