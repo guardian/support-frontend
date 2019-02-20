@@ -1,11 +1,7 @@
 import React, {type Node, Component} from 'react';
-import { palette } from '@guardian/pasteup/palette';
 
 import WithState from './withState.jsx';
-import { flatten } from '../../scripts/pasteup-sass'
 import './colours.scss';
-
-const allColours = flatten(palette);
 
 const copyStringToClipboard = (str) => {
   const el = document.createElement('textarea');

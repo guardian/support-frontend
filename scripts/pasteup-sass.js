@@ -22,4 +22,4 @@ const paletteAsMap = () => flatten(palette);
 const paletteAsSass = () => `$palette: ${convertToSass(paletteAsMap())};`;
 
 
-module.exports = { flatten, paletteAsMap, paletteAsSass };
+module.exports = { paletteAsMap, paletteAsSass };
