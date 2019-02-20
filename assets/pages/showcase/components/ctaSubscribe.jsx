@@ -17,8 +17,8 @@ export default function CtaSubscribe() {
     >
       <Text title="Subscribe">
         <p>
-          From the Digital Pack, to the new Guardian Weekly magazine to the daily newspaper,
-          you can subscribe to the Guardian <strong>for as little as 99p a day.</strong>
+          From the Digital Pack, to the new Guardian Weekly magazine,
+          you can subscribe to the Guardian from wherever you are.
         </p>
       </Text>
       <NarrowContent>
