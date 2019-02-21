@@ -6,7 +6,7 @@ import com.gu.support.catalog
 import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
-import com.gu.support.workers.exceptions.CatalogDataNotFound
+import com.gu.support.workers.exceptions.CatalogDataNotFoundException
 import com.gu.support.workers.{Contribution, DigitalPack, ProductType}
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
@@ -25,15 +25,13 @@ object ProductSubscriptionBuilders {
 
     Try(maybeProductRatePlanId.get) match {
       case Success(value) => value
-      case Failure(e) => throw new CatalogDataNotFound(s"RatePlanId not found for ${productType.toString}", e)
+      case Failure(e) => throw new CatalogDataNotFoundException(s"RatePlanId not found for ${productType.toString}", e)
     }
   }
 
   implicit class ContributionSubscriptionBuilder(val contribution: Contribution) extends ProductSubscriptionBuilder {
     def build(config: ZuoraConfig): SubscriptionData = {
       val contributionConfig = config.contributionConfig(contribution.billingPeriod)
-      val productRatePlanId = getProductRatePlanId(catalog.Contribution, contribution)
-
       buildProductSubscription(
         contributionConfig.productRatePlanId,
         List(
@@ -60,11 +58,9 @@ object ProductSubscriptionBuilders {
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate
       )
-
       maybePromoCode
         .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
         .getOrElse(subscriptionData)
-
     }
   }
 

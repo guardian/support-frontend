@@ -45,11 +45,8 @@ object RetryImplicits {
     }
   }
 
-  implicit class ZuoraCatalogueConversions(val throwable: ZuoraCatalogException) {
-    def asRetryException: RetryException = throwable match {
-      case e: CatalogDataNotFound => new RetryNone(message = e.getMessage, cause = throwable)
-      case e: ZuoraCatalogException => new RetryNone(message = e.getMessage, cause = throwable)
-    }
+  implicit class ZuoraCatalogueConversions(val throwable: CatalogDataNotFoundException) {
+    def asRetryException: RetryException = new RetryNone(message = throwable.getMessage, cause = throwable)
   }
 
   implicit class OphanServiceErrorConversions(val error: AnalyticsServiceError) {
