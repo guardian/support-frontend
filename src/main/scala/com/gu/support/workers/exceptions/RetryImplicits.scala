@@ -45,7 +45,7 @@ object RetryImplicits {
     }
   }
 
-  implicit class ZuoraCatalogueConversions(val throwable: CatalogDataNotFoundException) {
+  implicit class ZuoraCatalogConversions(val throwable: CatalogDataNotFoundException) {
     def asRetryException: RetryException = new RetryNone(message = throwable.getMessage, cause = throwable)
   }
 
