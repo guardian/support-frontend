@@ -75,7 +75,9 @@ class PaperSubscription(
           if (displayCheckout) {
             Future.successful(Ok(paperSubscriptionFormHtml(user)))
           }
-          Future.successful(Redirect(routes.Subscriptions.geoRedirect))
+          else {
+            Future.successful(Redirect(routes.Subscriptions.geoRedirect))
+          }
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
