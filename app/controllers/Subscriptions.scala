@@ -77,22 +77,6 @@ class Subscriptions(
     Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
   }
 
-  def paperMethodRedirect(withDelivery: Boolean = false): Action[AnyContent] = Action { implicit request =>
-    Redirect(buildCanonicalPaperSubscriptionLink(withDelivery), request.queryString, status = FOUND)
-  }
-
-  def paper(withDelivery: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
-    val id = if (withDelivery) "paper-subscription-landing-page-delivery" else "paper-subscription-landing-page-collection"
-    val js = "paperSubscriptionLandingPage.js"
-    val css = "paperSubscriptionLandingPage.css"
-    val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
-    val description = stringsConfig.paperLandingDescription
-
-    Ok(views.html.main(title, id, js, css, description, canonicalLink)).withSettingsSurrogateKey
-  }
-
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
 }

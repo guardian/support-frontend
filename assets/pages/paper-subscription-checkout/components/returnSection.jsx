@@ -23,7 +23,7 @@ function ReturnSection() {
             appearance="secondary"
             aria-label="Return to The Guardian home page"
             href="https://theguardian.com"
-            onClick={sendTrackingEventsOnClick('checkout_return_home', 'DigitalPack', null)}
+            onClick={sendTrackingEventsOnClick('checkout_return_home', 'Paper', null)}
           >
             Return to The Guardian
           </AnchorButton>
