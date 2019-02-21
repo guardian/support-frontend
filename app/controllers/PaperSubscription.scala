@@ -63,16 +63,19 @@ class PaperSubscription(
     Ok(views.html.main(title, id, js, css, description, canonicalLink)).withSettingsSurrogateKey
   }
 
-  def displayForm(): Action[AnyContent] =
+  def displayForm(displayCheckout: Boolean): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {
-          SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
+          SafeLogger.error(scrub"Failed to display paper subscriptions form for ${request.user.id} due to error from identityService: $error")
           Future.successful(InternalServerError)
         },
         user => {
-          Future.successful(Ok(paperSubscriptionFormHtml(user)))
+          if (displayCheckout) {
+            Future.successful(Ok(paperSubscriptionFormHtml(user)))
+          }
+          Future.successful(Redirect(routes.Subscriptions.geoRedirect))
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
