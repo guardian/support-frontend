@@ -2,7 +2,7 @@
   font-family: $gu-headline;
   color: #121212;
   @include mq($from: desktop) {
-    border-left: 1px solid gu-colour(brightness-86);
+    border-left: 1px solid gu-colour(neutral-86);
   }
 }
 

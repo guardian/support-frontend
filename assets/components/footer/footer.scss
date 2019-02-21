@@ -1,7 +1,7 @@
 @import '~stylesheets/skeleton/html';
 
 .component-footer {
-  background-color: gu-colour(brightness-7);
+  background-color: gu-colour(neutral-7);
   font-family: $gu-text-sans-web;
   font-size: 12px;
   line-height: 16px;
@@ -12,7 +12,7 @@
     font-weight: 400;
     display: block;
     padding: 3px 0;
-    color: gu-colour(brightness-86);
+    color: gu-colour(neutral-86);
   }
 }
 
@@ -22,7 +22,7 @@
 
 .component-footer__privacy-policy {
   text-decoration: none;
-  color: gu-colour(brightness-86);
+  color: gu-colour(neutral-86);
   padding: 5px 0;
 
   &:hover {
@@ -34,5 +34,5 @@
   font-weight: 400;
   display: block;
   padding: 3px 0;
-  color: gu-colour(brightness-86);
+  color: gu-colour(neutral-86);
 }

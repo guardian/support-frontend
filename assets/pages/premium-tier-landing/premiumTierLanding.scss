@@ -36,7 +36,7 @@
       position: relative;
 
       @include mq($from: desktop) {
-        border-left: 1px solid gu-colour(brightness-86);
+        border-left: 1px solid gu-colour(neutral-86);
       }
     }
 
@@ -82,7 +82,7 @@
   }
 
   .product-block__image {
-    border-bottom: 1px solid gu-colour(brightness-86);
+    border-bottom: 1px solid gu-colour(neutral-86);
     padding: 0 ($gu-h-spacing / 2);
     margin-bottom: $gu-v-spacing / 2;
 
@@ -387,5 +387,5 @@
 }
 
 .component-left-margin-section--grey {
-  background: gu-colour(brightness-97);
+  background: gu-colour(neutral-97);
 }

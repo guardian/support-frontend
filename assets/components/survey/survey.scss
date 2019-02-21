@@ -10,13 +10,13 @@
 
   .component-cta-link--survey {
     background-color: gu-colour(highlight-main);
-    color: gu-colour(brightness-7);
+    color: gu-colour(neutral-7);
 
     &:hover {
       background-color: darken(gu-colour(highlight-main), 5%);
     }
 
-    .svg-arrow-right-straight { fill: gu-colour(brightness-7) }
+    .svg-arrow-right-straight { fill: gu-colour(neutral-7) }
 
   }
 
@@ -26,7 +26,7 @@
 }
 
 .component-contributions-survey-section {
-  border-bottom: 1px solid gu-colour(brightness-86);
+  border-bottom: 1px solid gu-colour(neutral-86);
 
   .component-contributions-survey {
     padding-top: $gu-v-spacing / 2;

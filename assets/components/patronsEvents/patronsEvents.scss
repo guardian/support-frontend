@@ -1,6 +1,6 @@
 .component-page-section--patrons-events {
-  color: gu-colour(brightness-7);
-  background-color: gu-colour(brightness-97);
+  color: gu-colour(neutral-7);
+  background-color: gu-colour(neutral-97);
   padding-bottom: $gu-v-spacing * 4;
 
   @include multiline-top-border;
@@ -83,14 +83,14 @@
 
   .component-cta-link {
     background: transparent;
-    color: gu-colour(brightness-7);
-    border: 1px solid gu-colour(brightness-7);
+    color: gu-colour(neutral-7);
+    border: 1px solid gu-colour(neutral-7);
     height: $gu-cta-height;
     line-height: $gu-cta-height;
     transition: background-color .3s;
 
     &:hover {
-      background-color: gu-colour(brightness-7);
+      background-color: gu-colour(neutral-7);
       color: #fff;
 
       .svg-arrow-right-straight {
@@ -100,7 +100,7 @@
   }
 
   .svg-arrow-right-straight {
-    fill: gu-colour(brightness-7);
+    fill: gu-colour(neutral-7);
     top: 13px;
   }
 }
