@@ -1,6 +1,6 @@
 .component-cta-link {
   text-align: left;
-  background-color: gu-colour(brightness-7);
+  background-color: gu-colour(neutral-7);
   transition: background-color .3s;
   border: none;
   border-radius: 600px;
@@ -16,7 +16,7 @@
   text-decoration: none;
 
   &:hover {
-    background-color: darken(gu-colour(brightness-7), 5%);
+    background-color: darken(gu-colour(neutral-7), 5%);
   }
 
   svg {

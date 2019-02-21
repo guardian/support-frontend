@@ -12,7 +12,7 @@
 
 //----------------Form------------------//
 .component-promotion-popup__form {
-  background-color: gu-colour(brightness-97);
+  background-color: gu-colour(neutral-97);
   width: 100%;
   @include mq($from: phablet) {
     margin: 15% 0;
@@ -33,7 +33,7 @@
   float: right;
   font-size: 28px;
   font-weight: bold;
-  border: solid 1px gu-colour(brightness-97);
+  border: solid 1px gu-colour(neutral-97);
   border-radius: 800px;
   background-color: #fff;
   height: 40px;
@@ -49,7 +49,7 @@
 
 .component-promotion-popup__close:hover,
 .component-promotion-popup__close:focus {
-  color: gu-colour(brightness-7);
+  color: gu-colour(neutral-7);
   text-decoration: none;
   cursor: pointer;
 }
@@ -102,10 +102,10 @@
   padding: 10px 10px;
 
   @include mq($until: tablet) {
-    border-bottom: solid gu-colour(brightness-86) 1px;
+    border-bottom: solid gu-colour(neutral-86) 1px;
   }
   @include mq($from: tablet) {
-    border-right: solid gu-colour(brightness-86) 1px;
+    border-right: solid gu-colour(neutral-86) 1px;
     font-size: 32px;
   }
   @include mq($from: desktop) {
@@ -122,7 +122,7 @@
 
 .component-promotion-options__button {
   color: #aaa;
-  border: solid 1px gu-colour(brightness-46);
+  border: solid 1px gu-colour(neutral-46);
   border-radius: 800px;
   outline: none;
   background-color: #fff;
@@ -141,7 +141,7 @@
     display: none;
   }
   .component-promotion-options__button {
-    border: solid 1px gu-colour(brightness-86);
+    border: solid 1px gu-colour(neutral-86);
     .svg-chevron {
       transform: rotate(270deg);
     }

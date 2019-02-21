@@ -21,7 +21,7 @@
   }
 
   &[disabled], &[data-disabled] {
-    background-color: gu-colour(brightness-100);
+    background-color: gu-colour(neutral-100);
     opacity: .5;
     pointer-events: none;
   }
@@ -33,23 +33,23 @@
 
 .component-button--primary {
   background-color: gu-colour(highlight-main);
-  color: gu-colour(brightness-7);
+  color: gu-colour(neutral-7);
   &:hover, &:focus {
     background-color: gu-colour(highlight-dark);
   }
 }
 
 .component-button--secondary {
-  color: gu-colour(brightness-100);
-  background-color: gu-colour( brightness-20);
+  color: gu-colour(neutral-100);
+  background-color: gu-colour( neutral-20);
 
   &:hover, &:focus {
-    background-color: gu-colour(brightness-7);
+    background-color: gu-colour(neutral-7);
   }
 }
 
 .component-button--green {
-  color: gu-colour(brightness-100);
+  color: gu-colour(neutral-100);
   background-color: gu-colour(green-main);
 
   &:hover, &:focus {
@@ -59,17 +59,17 @@
 
 .component-button--greenHollow {
   color: gu-colour(green-main);
-  border: 1px solid gu-colour(brightness-86);
+  border: 1px solid gu-colour(neutral-86);
   &:hover, &:focus {
-    background: gu-colour(brightness-97);
+    background: gu-colour(neutral-97);
   }
 }
 
 .component-button--greyHollow {
-  color: gu-colour(brightness-7);
-  border: 1px solid gu-colour(brightness-86);
+  color: gu-colour(neutral-7);
+  border: 1px solid gu-colour(neutral-86);
   &:hover, &:focus {
-    background: gu-colour(brightness-97);
+    background: gu-colour(neutral-97);
   }
 }
 

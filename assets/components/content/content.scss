@@ -45,7 +45,7 @@
   max-width: 100%;
   position: relative;
   @include mq($from: tablet) {
-    border-left: 1px solid gu-colour(brightness-86);
+    border-left: 1px solid gu-colour(neutral-86);
   }
 }
 
@@ -55,15 +55,15 @@
 
 .component-content--white {
   @include block-colours(
-    $border: gu-colour(brightness-86),
-    $bg: gu-colour(brightness-100),
+    $border: gu-colour(neutral-86),
+    $bg: gu-colour(neutral-100),
   );
 }
 
 .component-content--grey {
   @include block-colours(
     $border: transparent,
-    $bg: gu-colour(brightness-97),
+    $bg: gu-colour(neutral-97),
   );
 }
 
@@ -71,7 +71,7 @@
   @include block-colours(
     $border: gu-colour(brand-pastel),
     $bg: gu-colour(brand-main),
-    $text: gu-colour(brightness-100),
+    $text: gu-colour(neutral-100),
   );
 }
 
@@ -79,15 +79,15 @@
   @include block-colours(
     $border: gu-colour(brand-pastel),
     $bg: gu-colour(highlight-main),
-    $text: gu-colour(brightness-7)
+    $text: gu-colour(neutral-7)
   );
 }
 
 .component-content--dark {
   @include block-colours(
-    $border: gu-colour(brightness-100),
-    $text: gu-colour(brightness-100),
-    $bg: gu-colour(brightness-20),
+    $border: gu-colour(neutral-100),
+    $text: gu-colour(neutral-100),
+    $bg: gu-colour(neutral-20),
   );
 }
 

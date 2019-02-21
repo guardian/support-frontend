@@ -3,18 +3,18 @@
 
   .component-radio-toggle__label {
     font-family: $gu-text-sans-web;
-    color: rgba(gu-colour(brightness-7), 0.5);
+    color: rgba(gu-colour(neutral-7), 0.5);
   }
 
   .component-radio-toggle__label--checked {
     background-color: gu-colour(highlight-main);
-    color: gu-colour(brightness-7);
+    color: gu-colour(neutral-7);
   }
 
   .component-error-message {
     background-color: transparent;
     box-sizing: border-box;
-    color: gu-colour(brightness-7);
+    color: gu-colour(neutral-7);
     border: none;
     padding-left: 23px;
     margin-bottom: 0;
@@ -130,12 +130,12 @@
 
   .component-number-input__label {
     top: 10px;
-    color: rgba(gu-colour(brightness-7), 0.5);
+    color: rgba(gu-colour(neutral-7), 0.5);
   }
 
   .component-number-input__input {
     font-size: 14px;
-    color: rgba(gu-colour(brightness-7), 0.5);
+    color: rgba(gu-colour(neutral-7), 0.5);
 
     &::-moz-placeholder {
       opacity: 1;
@@ -144,11 +144,11 @@
 
   .component-number-input--selected {
     .component-number-input__label {
-      color: gu-colour(brightness-7);
+      color: gu-colour(neutral-7);
     }
 
     .component-number-input__input {
-      color: gu-colour(brightness-7);
+      color: gu-colour(neutral-7);
 
       &::placeholder {
         color: transparent;

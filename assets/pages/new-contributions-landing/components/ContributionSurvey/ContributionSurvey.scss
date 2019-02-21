@@ -1,7 +1,7 @@
 // -----  gu-sass ----- //
 
 .component-contributions-survey {
-  border-bottom: 1px solid gu-colour(brightness-86);
+  border-bottom: 1px solid gu-colour(neutral-86);
   margin: 0 -10px;
   padding: 0 10px;
 
@@ -19,7 +19,7 @@
     margin-top: $gu-v-spacing;
 
     .button--survey {
-      background-color: gu-colour(brightness-7);
+      background-color: gu-colour(neutral-7);
       color: white;
     }
   }

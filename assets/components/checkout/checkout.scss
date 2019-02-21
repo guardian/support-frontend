@@ -3,6 +3,6 @@
 .component-checkout__form {
   @include mq($from:tablet) {
     max-width: gu-span(5);
-    border-right: 1px solid gu-colour(brightness-86);
+    border-right: 1px solid gu-colour(neutral-86);
   }
 }

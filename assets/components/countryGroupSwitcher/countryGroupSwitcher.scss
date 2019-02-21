@@ -16,12 +16,12 @@
     margin: 0;
     height: auto;
     border-radius: 0;
-    color: gu-colour(brightness-100);
+    color: gu-colour(neutral-100);
     z-index: 10;
     position: relative;
 
     option {
-      color: gu-colour(brightness-7);
+      color: gu-colour(neutral-7);
     }
 
     &::-ms-expand {
@@ -36,7 +36,7 @@
     z-index: 9;
     position: relative;
     path {
-      fill: gu-colour(brightness-100);
+      fill: gu-colour(neutral-100);
     }
   }
 

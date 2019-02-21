@@ -13,8 +13,8 @@
 
 .component-text code {
   font-family: monospace;
-  background: gu-colour(brightness-93);
-  color: gu-colour(brightness-7);
+  background: gu-colour(neutral-93);
+  color: gu-colour(neutral-7);
   padding: ($gu-v-spacing / 4) ($gu-h-spacing / 4);
 }
 
@@ -31,7 +31,7 @@
   & > strong {
     padding: 0 ($gu-h-spacing / 4);
     background-color: gu-colour(highlight-main);
-    color: gu-colour(brightness-7);
+    color: gu-colour(neutral-7);
   }
 }
 

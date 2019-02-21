@@ -5,7 +5,7 @@
   }
 
   .component-cta-link {
-    color: gu-colour(brightness-7);
+    color: gu-colour(neutral-7);
 
     @include mq($from: mobileMedium) {
       width: 260px;
@@ -13,7 +13,7 @@
   }
 
   .svg-arrow-right-straight {
-    fill: gu-colour(brightness-7);
+    fill: gu-colour(neutral-7);
   }
 
   .component-cta-link--contribute-regular {
@@ -28,7 +28,7 @@
   .component-cta-link--contribute-one-off {
     background-color: transparent;
     margin-top: $gu-v-spacing;
-    border-color: gu-colour(brightness-7);
+    border-color: gu-colour(neutral-7);
     width: 258px;
 
     &:hover {

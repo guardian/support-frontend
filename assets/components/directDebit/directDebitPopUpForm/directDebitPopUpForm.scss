@@ -19,7 +19,7 @@
 
 .focus-target:focus {
   outline: 0;
-  box-shadow: 0 0 1px 2px gu-colour(brightness-60);
+  box-shadow: 0 0 1px 2px gu-colour(neutral-60);
 }
 
 .component-direct-debit-pop-up-form__content {
@@ -39,9 +39,9 @@
     transform: translateY(-25%);
   }
   min-height: 566px;
-  background-color: gu-colour(brightness-97);
+  background-color: gu-colour(neutral-97);
   text-align: left;
-  border-top: 1px solid gu-colour(brightness-7);
+  border-top: 1px solid gu-colour(neutral-7);
   border-radius: 20px;
 }
 
@@ -68,9 +68,9 @@
 }
 
 .component-direct-debit-pop-up-form__close-button {
-  border: solid 1px gu-colour(brightness-7);
+  border: solid 1px gu-colour(neutral-7);
   border-radius: 800px;
-  background-color: gu-colour(brightness-97);
+  background-color: gu-colour(neutral-97);
   height: 40px;
   width: 40px;
   float: right;

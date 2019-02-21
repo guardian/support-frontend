@@ -2,7 +2,7 @@
   background-color: gu-colour(highlight-main);
   border-radius: 600px;
   border: none;
-  color: gu-colour(brightness-7);
+  color: gu-colour(neutral-7);
   cursor: pointer;
   display: block;
   font-family: $gu-text-sans-web;
@@ -15,7 +15,7 @@
   width: 100%;
 
   .svg-arrow-right-straight {
-    fill: gu-colour(brightness-7);
+    fill: gu-colour(neutral-7);
     height: 16px;
     position: absolute;
     left: calc(100% - 34px);

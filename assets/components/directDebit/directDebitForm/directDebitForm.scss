@@ -50,8 +50,8 @@
   font-family: $gu-text-sans-web;
   font-size: 14px;
   background-color: white;
-  color: gu-colour(brightness-7);
-  border: 1px solid gu-colour(brightness-7);
+  color: gu-colour(neutral-7);
+  border: 1px solid gu-colour(neutral-7);
   border-radius: 25px;
   height: 41px;
   width: 47px;
@@ -76,7 +76,7 @@
   font-weight: bold;
   background-color: white;
   color: black;
-  border: 1px solid gu-colour(brightness-7);
+  border: 1px solid gu-colour(neutral-7);
   border-radius: 25px;
   height: 40px;
   width: 266px;
@@ -92,7 +92,7 @@
 .component-direct-debit-form__confirmation-text {
   font-family: $gu-text-sans-web;
   font-size: 14px;
-  color: gu-colour(brightness-7);
+  color: gu-colour(neutral-7);
   padding-left: 33px;
   display: block;
   overflow: hidden;
@@ -145,7 +145,7 @@
 }
 
 .component-direct-debit-form__cta-text {
-  color: gu-colour(brightness-7);
+  color: gu-colour(neutral-7);
   font-family: $gu-text-sans-web;
   font-size: 14px;
   line-height: 3;
@@ -169,7 +169,7 @@
 
   .svg-arrow-right-straight {
     width: 24px;
-    fill: gu-colour(brightness-7);
+    fill: gu-colour(neutral-7);
     position: absolute;
     right: 15px;
     top: 50%;
@@ -198,8 +198,8 @@
 }
 
 .component-direct-debit-form__cta--edit-button {
-  background-color: gu-colour(brightness-7);
-  border: solid 1px gu-colour(brightness-7);
+  background-color: gu-colour(neutral-7);
+  border: solid 1px gu-colour(neutral-7);
   color: white;
 
   @include mq($until: mobileLandscape) {
@@ -245,13 +245,13 @@
 .component-direct-debit-form__legal-notice {
   font-family: $gu-text-sans-web;
   font-size: 12px;
-  color: gu-colour(brightness-60);
+  color: gu-colour(neutral-60);
   padding-top: $gu-v-spacing;
   margin-top: 20px;
   margin-bottom: 20px;
   display: inline-block;
   a {
-    color: gu-colour(brightness-60);
+    color: gu-colour(neutral-60);
   }
 }
 
@@ -268,16 +268,16 @@
 
 .svg-direct-debit-symbol-and-text {
   margin-top: $gu-v-spacing;
-  fill: gu-colour(brightness-60);
+  fill: gu-colour(neutral-60);
 }
 
 .component-direct-debit-guarantee {
   font-family: $gu-text-sans-web;
   font-size: 12px;
-  color: gu-colour(brightness-60);
+  color: gu-colour(neutral-60);
   margin-bottom: 20px;
   a {
-    color: gu-colour(brightness-60);
+    color: gu-colour(neutral-60);
   }
 }
 .component-direct-debit-guarantee__list {
