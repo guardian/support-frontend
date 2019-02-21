@@ -14,7 +14,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import services.stepfunctions.SupportWorkersClient
 import services.{IdentityService, MembersDataService, TestUserService}
-import views.html.digitalSubscription
+import views.html.subscriptionCheckout
 import views.html.helper.CSRF
 import monitoring.SafeLogger
 import monitoring.SafeLogger._

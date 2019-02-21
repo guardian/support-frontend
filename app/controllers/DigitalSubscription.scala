@@ -25,7 +25,7 @@ import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, Supp
 import services.{IdentityService, MembersDataService, TestUserService}
 import utils.NormalisedTelephoneNumber
 import utils.NormalisedTelephoneNumber.asFormattedString
-import views.html.{digitalSubscription, main}
+import views.html.{subscriptionCheckout, main}
 import views.html.helper.CSRF
 import utils.SimpleValidator._
 
