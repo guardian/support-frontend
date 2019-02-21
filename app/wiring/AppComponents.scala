@@ -49,6 +49,7 @@ trait AppComponents extends PlayComponents
     identityController,
     subscriptionsController,
     digitalPackController,
+    paperController,
     loginController,
     testUsersController,
     payPalRegularController,

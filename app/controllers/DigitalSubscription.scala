@@ -25,7 +25,7 @@ import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, Supp
 import services.{IdentityService, MembersDataService, TestUserService}
 import utils.NormalisedTelephoneNumber
 import utils.NormalisedTelephoneNumber.asFormattedString
-import views.html.{digitalSubscription, main}
+import views.html.{subscriptionCheckout, main}
 import views.html.helper.CSRF
 import utils.SimpleValidator._
 
@@ -114,7 +114,7 @@ class DigitalSubscription(
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
     val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
 
-    digitalSubscription(
+    subscriptionCheckout(
       title,
       id,
       js,

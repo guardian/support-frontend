@@ -57,6 +57,24 @@ trait Controllers {
     appConfig.guardianDomain
   )
 
+  lazy val paperController = new PaperSubscription(
+    priceSummaryServiceProvider,
+    supportWorkersClient,
+    assetsResolver,
+    actionRefiners,
+    identityService,
+    testUsers,
+    membersDataService,
+    appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
+    controllerComponents,
+    stringsConfig,
+    allSettingsProvider,
+    appConfig.supportUrl,
+    tipMonitoring,
+    appConfig.guardianDomain
+  )
+
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
     supportWorkersClient,
     controllerComponents,
