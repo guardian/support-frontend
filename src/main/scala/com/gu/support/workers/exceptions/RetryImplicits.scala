@@ -3,6 +3,7 @@ package com.gu.support.workers.exceptions
 import java.net.{SocketException, SocketTimeoutException}
 
 import com.amazonaws.services.kms.model._
+import com.amazonaws.services.s3.model.AmazonS3Exception
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.helpers.WebServiceHelperError
@@ -41,6 +42,13 @@ object RetryImplicits {
     def asRetryException: RetryException = throwable match {
       case e: InvalidMessageContentsException => new RetryNone(message = e.getMessage, cause = throwable)
       case e: QueueDoesNotExistException => new RetryLimited(message = e.getMessage, cause = throwable)
+    }
+  }
+
+  implicit class ZuoraCatalogueConversions(val throwable: ZuoraCatalogException) {
+    def asRetryException: RetryException = throwable match {
+      case e: CatalogDataNotFound => new RetryNone(message = e.getMessage, cause = throwable)
+      case e: ZuoraCatalogException => new RetryNone(message = e.getMessage, cause = throwable)
     }
   }
 
