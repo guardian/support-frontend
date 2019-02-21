@@ -114,7 +114,7 @@ class DigitalSubscription(
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
     val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
 
-    digitalSubscription(
+    subscriptionCheckout(
       title,
       id,
       js,
