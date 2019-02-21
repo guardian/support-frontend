@@ -31,7 +31,7 @@ class SubscribeWithGoogleController(
           .recordPayment(request.body,
             AcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
             ClientBrowserInfo("localhost", "whoknowsyet", None, "127.0.0.1", None)
-          )
+          ) //todo: Ophan stats capture as part of future work
         Future.successful(Ok("{}"))
       case PaymentStatus.Failed | PaymentStatus.Refunded =>
         logger.error(

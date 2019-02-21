@@ -34,7 +34,7 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     val identity = getOrCreateIdentityIdFromEmail(googleRecordPayment.email)
 
     val trackContributionResult = identity.flatMap { id =>
-      insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, (Some(id))))
+      insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, Some(id)))
     }.leftMap{ err =>
       cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
       logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
