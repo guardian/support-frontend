@@ -207,20 +207,31 @@ function PaymentRequestButton(props: PropTypes) {
     return null;
   }
 
+  if (props.paymentRequestButtonPaymentMethod === 'StripeApplePay') {
+
+    return (
+      <div className="stripe-payment-request-button__container">
+        <PaymentRequestButtonElement
+          paymentRequest={props.stripePaymentRequestObject}
+          className="stripe-payment-request-button__button"
+          style={paymentButtonStyle}
+          onClick={(event) => {
+            onClick(event, props);
+          }}
+        />
+
+        <div className="stripe-payment-request-button__divider">
+          or
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="stripe-payment-request-button__container">
-      <PaymentRequestButtonElement
-        paymentRequest={props.stripePaymentRequestObject}
-        className="stripe-payment-request-button__button"
-        style={paymentButtonStyle}
-        onClick={(event) => { onClick(event, props); }}
-      />
 
-      <div className="stripe-payment-request-button__divider">
-        or
-      </div>
     </div>
-  );
+  )
 }
 
 // ----- Auxiliary components ----- //
