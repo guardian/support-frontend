@@ -3,7 +3,6 @@ package com.gu.support.workers.exceptions
 import java.net.{SocketException, SocketTimeoutException}
 
 import com.amazonaws.services.kms.model._
-import com.amazonaws.services.s3.model.AmazonS3Exception
 import com.amazonaws.services.sqs.model.{AmazonSQSException, InvalidMessageContentsException, QueueDoesNotExistException}
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.helpers.WebServiceHelperError

@@ -2,11 +2,10 @@ package com.gu.zuora
 
 import com.gu.config.Configuration
 import com.gu.i18n.Country
-import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog
 import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.UAT
-import com.gu.support.config.{Stage, TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers.exceptions.CatalogDataNotFoundException
 import com.gu.support.workers.{Contribution, DigitalPack, ProductType}
@@ -67,6 +66,7 @@ object ProductSubscriptionBuilders {
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate
       )
+
       maybePromoCode
         .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
         .getOrElse(subscriptionData)
