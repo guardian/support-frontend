@@ -95,9 +95,6 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout  controllers.
 GET  /subscribe/digital/checkout  controllers.DigitalSubscription.displayForm()
 GET  /subscribe/digital/checkout/thankyou-existing  controllers.DigitalSubscription.displayThankYouExisting()
 
-# Deprecated, soon all requests to create a subscription should go via /subscribe/create instead
-POST /subscribe/digital/create  controllers.CreateSubscription.create
-
 GET  /premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
