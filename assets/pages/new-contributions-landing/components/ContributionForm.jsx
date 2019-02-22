@@ -225,6 +225,7 @@ const defaultForm = (
     contributionType !== 'ONE_OFF'
     || stripePaymentRequestButtonImprovementVariant === 'control'
     || stripePaymentRequestButtonMethod === 'none'
+    || stripePaymentRequestButtonMethod === 'StripeApplePay'
     || stripePaymentRequestButtonViewOtherPaymentMethods === true
   ) {
     return (
