@@ -126,7 +126,7 @@ const setStripeV3HasLoaded =
   (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
 
 const stripePaymentRequestButtonToggleOtherPaymentMethods = (): Action =>
-  ({ type: 'STRIPE_PAYMENT_REQUEST_BUTTON_TOGGLE_OTHER_PAYMENT_METHODS'});
+  ({ type: 'STRIPE_PAYMENT_REQUEST_BUTTON_TOGGLE_OTHER_PAYMENT_METHODS' });
 
 const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 

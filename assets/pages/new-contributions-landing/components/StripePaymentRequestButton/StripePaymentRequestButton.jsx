@@ -16,21 +16,20 @@ import { getContributeButtonCopy } from 'helpers/checkouts';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import Button from 'components/button/button';
-import { logException } from 'helpers/logger';
-import type { State } from '../../contributionsLandingReducer';
-import {
-setPaymentRequestButtonPaymentMethod,
-setStripePaymentRequestButtonClicked,
-setStripePaymentRequestObject,
-onStripePaymentRequestApiPaymentAuthorised,
-updateEmail,
-stripePaymentRequestButtonToggleOtherPaymentMethods,
-} from '../../contributionsLandingActions';
 import SvgChevron from 'components/svgs/chevron';
 import { classNameWithModifiers } from 'helpers/utilities';
 import GridImage from 'components/gridImage/gridImage';
 import AnimatedDots from 'components/spinners/animatedDots';
-
+import { logException } from 'helpers/logger';
+import type { State } from '../../contributionsLandingReducer';
+import {
+  setPaymentRequestButtonPaymentMethod,
+  setStripePaymentRequestButtonClicked,
+  setStripePaymentRequestObject,
+  onStripePaymentRequestApiPaymentAuthorised,
+  updateEmail,
+  stripePaymentRequestButtonToggleOtherPaymentMethods,
+} from '../../contributionsLandingActions';
 
 
 // ----- Types -----//

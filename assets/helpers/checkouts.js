@@ -9,14 +9,10 @@ import {
   toContributionType,
 } from 'helpers/contributions';
 import {
-  getMinContribution,
-  parseContribution,
   toContributionTypeOrElse,
-  validateContribution,
 } from 'helpers/contributions';
 import * as storage from 'helpers/storage';
 import { type Switches, type SwitchObject } from 'helpers/settings';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
@@ -42,26 +38,6 @@ function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMetho
   }
 }
 
-
-function getAmount(contributionType: ContributionType, countryGroup: CountryGroupId): number {
-
-  const contributionValue = getQueryParameter('contributionValue');
-
-  if (contributionValue !== null && contributionValue !== undefined) {
-    const parsed = parseContribution(contributionValue);
-
-    if (parsed.valid) {
-      const error = validateContribution(parsed.amount, contributionType, countryGroup);
-
-      if (!error) {
-        return parsed.amount;
-      }
-    }
-  }
-
-  return getMinContribution(contributionType, countryGroup);
-
-}
 
 function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): ContributionType[] {
   const contributionTypesFromUrl = getQueryParameter('contributionTypes');

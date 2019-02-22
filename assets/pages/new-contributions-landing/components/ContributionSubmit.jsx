@@ -10,7 +10,7 @@ import { type ContributionType, type PaymentMethod } from 'helpers/contributions
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { SelectedAmounts } from 'helpers/contributions';
-import { getContributeButtonCopy, getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
+import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
 import { type State } from '../contributionsLandingReducer';
 import { PayPalRecurringButton } from './PayPalRecurringButton';

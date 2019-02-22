@@ -1,11 +1,7 @@
 // @flow
 
 // ----- Imports ----- //
-import { type ContributionType, getFrequency } from 'helpers/contributions';
-import type { Amount, PaymentMethod, SelectedAmounts } from 'helpers/contributions';
-import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
-import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
-import { getPaymentDescription } from 'helpers/checkouts';
+import { type ContributionType } from 'helpers/contributions';
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/

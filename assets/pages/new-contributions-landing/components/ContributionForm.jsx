@@ -222,9 +222,9 @@ const defaultForm = (
     return (
       <div>
         <ContributionFormFields />
-        <NewPaymentMethodSelector onPaymentAuthorisation={onPaymentAuthorisation}/>
+        <NewPaymentMethodSelector onPaymentAuthorisation={onPaymentAuthorisation} />
         <ContributionErrorMessage />
-        <NewContributionSubmit onPaymentAuthorisation={onPaymentAuthorisation}/>
+        <NewContributionSubmit onPaymentAuthorisation={onPaymentAuthorisation} />
       </div>
     );
   }
