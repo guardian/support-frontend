@@ -1,7 +1,7 @@
 package utils
 
 import com.gu.i18n.{Country, CountryGroup}
-import com.gu.support.workers.{DirectDebitPaymentFields, StripePaymentFields}
+import com.gu.support.workers.{DirectDebitPaymentFields, PayPalPaymentFields, StripePaymentFields}
 import services.stepfunctions.CreateSupportWorkersRequest
 
 object SimpleValidator {
@@ -19,6 +19,7 @@ object SimpleValidator {
       case directDebitDetails: DirectDebitPaymentFields =>
         !directDebitDetails.accountHolderName.isEmpty && !directDebitDetails.accountNumber.isEmpty && !directDebitDetails.sortCode.isEmpty
       case stripeDetails: StripePaymentFields => !stripeDetails.stripeToken.isEmpty
+      case payPalDetails: PayPalPaymentFields => !payPalDetails.baid.isEmpty
     }
 
     def currencyIsSupportedForCountry: Boolean = {
