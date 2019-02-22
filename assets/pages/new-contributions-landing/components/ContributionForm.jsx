@@ -212,7 +212,7 @@ const defaultForm = (
   onPaymentAuthorisation: PaymentAuthorisation => void,
   contributionType: ContributionType,
   stripePaymentRequestButtonViewOtherPaymentMethods: boolean,
-  stripePaymentRequestButtonImprovementVariant: 'control' | 'varaint',
+  stripePaymentRequestButtonImprovementVariant: string,
 ) => {
   if (
     contributionType !== 'ONE_OFF'

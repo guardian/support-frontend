@@ -61,7 +61,7 @@ export const imageCatalogue: {
   showcase: 'b72ef7a4c8764a163fc604d7b8edcedfdd7682f4/0_0_7100_3500',
   showcaseSubscribe: '2abea0fc492779a0f790994b9525632a0bd91ee6/0_0_2664_1288',
   paperLandingSale: '6179a30718dab98e96230e39195f3aa2a2784a1d/0_0_800_858',
-  stripePaymentRequestButtonLogos: '986571f51478a31904f03ff910041cd10e40c07b/0_0_536_74',
+  stripePaymentRequestButtonLogos: 'a5c3ae80f804297a1d563ee015623018a6036920/0_0_536_74',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
