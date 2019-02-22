@@ -18,9 +18,9 @@ import scala.util.{Failure, Success, Try}
 object ProductSubscriptionBuilders {
 
   def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, isTestUser: Boolean): ProductRatePlanId = {
-    val touchpointEnvironment = if(isTestUser) UAT else TouchPointEnvironments.fromStage(Configuration.stage)
+    val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(Configuration.stage)
 
-    SafeLogger.info(s"TouchpointEnvironment from stage: $touchpointEnvironment and stage: ${Configuration.stage}")
+    SafeLogger.info(s"Fetching productRatePlanId for touchpointEnvironment: $touchpointEnvironment")
 
     def getRatePlans[T <: Product](product: T): Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
 
@@ -49,11 +49,13 @@ object ProductSubscriptionBuilders {
   }
 
   implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder {
-    def build(config: ZuoraConfig,
-              country: Country,
-              maybePromoCode: Option[PromoCode],
-              promotionService: PromotionService,
-              isTestUser: Boolean): SubscriptionData = {
+    def build(
+      config: ZuoraConfig,
+      country: Country,
+      maybePromoCode: Option[PromoCode],
+      promotionService: PromotionService,
+      isTestUser: Boolean
+    ): SubscriptionData = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
       val contractAcceptanceDate = contractEffectiveDate
