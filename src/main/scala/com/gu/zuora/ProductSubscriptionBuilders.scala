@@ -20,8 +20,6 @@ object ProductSubscriptionBuilders {
   def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, isTestUser: Boolean): ProductRatePlanId = {
     val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(Configuration.stage)
 
-    SafeLogger.info(s"Fetching productRatePlanId for touchpointEnvironment: $touchpointEnvironment")
-
     def getRatePlans[T <: Product](product: T): Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
 
     val ratePlans: Seq[ProductRatePlan[Product]] = getRatePlans(catalog.DigitalPack)
@@ -63,7 +61,6 @@ object ProductSubscriptionBuilders {
         .plusDays(config.digitalPack.paymentGracePeriod)
 
       val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack, isTestUser)
-      SafeLogger.info(s"Setting up a digital pack. ProductRatePlanId found: ${productRatePlanId}")
 
       val subscriptionData = buildProductSubscription(
         productRatePlanId,
