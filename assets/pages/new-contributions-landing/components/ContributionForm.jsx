@@ -30,6 +30,7 @@ import { checkAmount } from 'helpers/formValidation';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type { StripePaymentRequestButtonMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import ContributionTypeTabs from './ContributionTypeTabs';
@@ -47,10 +48,6 @@ import {
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
-import type {
-  StripePaymentMethod,
-  StripePaymentRequestButtonMethod
-} from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
 // ----- Types ----- //
