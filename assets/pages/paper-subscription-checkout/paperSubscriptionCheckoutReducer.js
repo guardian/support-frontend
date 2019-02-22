@@ -7,12 +7,7 @@ import { combineReducers, type Dispatch } from 'redux';
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import {
-  fromString,
-  type IsoCountry,
-  type StateProvince,
-  stateProvinceFromString,
-} from 'helpers/internationalisation/country';
+import { fromString, type IsoCountry } from 'helpers/internationalisation/country';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
@@ -45,10 +40,9 @@ export type FormFieldsInState = {|
   addressLine1: string,
   addressLine2: Option<string>,
   townCity: string,
-  county: Option<string>,
   postcode: string,
   email: string,
-  stateProvince: Option<StateProvince>,
+  startDate: string,
   telephone: Option<string>,
   paymentMethod: Option<PaymentMethod>,
 |};
@@ -56,7 +50,6 @@ export type FormFieldsInState = {|
 export type FormFields = {|
   ...FormFieldsInState,
   country: IsoCountry,
-  countrySupportsDirectDebit: boolean,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -85,13 +78,13 @@ export type Action =
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_ADDRESS_LINE_1', addressLine1: string }
   | { type: 'SET_ADDRESS_LINE_2', addressLine2: string }
+  | { type: 'SET_START_DATE', startDate: string }
   | { type: 'SET_TOWN_CITY', townCity: string }
   | { type: 'SET_COUNTY', county: string }
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TELEPHONE', telephone: string }
-  | { type: 'SET_STATE_PROVINCE', stateProvince: string, country: IsoCountry }
-  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod, country: IsoCountry }
+  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry }
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
@@ -109,13 +102,11 @@ function getFormFields(state: State): FormFields {
     addressLine1: state.page.checkout.addressLine1,
     addressLine2: state.page.checkout.addressLine2,
     townCity: state.page.checkout.townCity,
-    county: state.page.checkout.county,
     postcode: state.page.checkout.postcode,
     country: state.common.internationalisation.countryId,
-    stateProvince: state.page.checkout.stateProvince,
+    startDate: state.page.checkout.startDate,
     telephone: state.page.checkout.telephone,
     paymentMethod: state.page.checkout.paymentMethod,
-    countrySupportsDirectDebit: countrySupportsDirectDebit(state.common.internationalisation.countryId),
   };
 }
 
@@ -140,6 +131,10 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       error: formError('addressLine1', 'Please enter a value'),
     },
     {
+      rule: nonEmptyString(fields.startDate),
+      error: formError('startDate', 'Please enter a value'),
+    },
+    {
       rule: nonEmptyString(fields.townCity),
       error: formError('townCity', 'Please enter a value'),
     },
@@ -150,13 +145,6 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
     {
       rule: notNull(fields.country),
       error: formError('country', 'Please select a country.'),
-    },
-    {
-      rule: fields.country === 'US' || fields.country === 'CA' ? notNull(fields.stateProvince) : true,
-      error: formError(
-        'stateProvince',
-        fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
-      ),
     },
   ]);
 }
@@ -196,23 +184,17 @@ const formActionCreators = {
       });
     }
   },
-  setStateProvince: (stateProvince: string) => (dispatch: Dispatch<Action>, getState: () => State) =>
-    dispatch({
-      type: 'SET_STATE_PROVINCE',
-      stateProvince,
-      country: getState().common.internationalisation.countryId,
-    }),
   setAddressLine1: (addressLine1: string): Action => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }),
   setAddressLine2: (addressLine2: string): Action => ({ type: 'SET_ADDRESS_LINE_2', addressLine2 }),
   setTownCity: (townCity: string): Action => ({ type: 'SET_TOWN_CITY', townCity }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
   setPostcode: (postcode: string): Action => ({ type: 'SET_POSTCODE', postcode }),
-  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) =>
+  setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
+  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>) =>
     dispatch({
       type: 'SET_PAYMENT_METHOD',
       paymentMethod,
-      country: getState().common.internationalisation.countryId,
     }),
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) => (dispatch: Dispatch<Action>) =>
     onPaymentAuthorised(authorisation, dispatch),
@@ -236,9 +218,8 @@ function initReducer(initialCountry: IsoCountry) {
     addressLine1: '',
     addressLine2: null,
     townCity: '',
-    county: '',
     postcode: '',
-    stateProvince: null,
+    startDate: '',
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
     formErrors: [],
@@ -271,29 +252,16 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_TOWN_CITY':
         return { ...state, townCity: action.townCity };
 
-      case 'SET_COUNTY':
-        return { ...state, county: action.county };
-
       case 'SET_POSTCODE':
         return { ...state, postcode: action.postcode };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
 
-      case 'SET_STATE_PROVINCE':
-        return { ...state, stateProvince: stateProvinceFromString(action.country, action.stateProvince) };
-
       case 'SET_PAYMENT_METHOD':
         return {
           ...state,
-          paymentMethod: countrySupportsDirectDebit(action.country) ? action.paymentMethod : 'Stripe',
-        };
-
-      case 'SET_COUNTRY_CHANGED':
-        return {
-          ...state,
-          stateProvince: null,
-          paymentMethod: countrySupportsDirectDebit(action.country) ? 'DirectDebit' : 'Stripe',
+          paymentMethod: action.paymentMethod,
         };
 
       case 'SET_FORM_ERRORS':
