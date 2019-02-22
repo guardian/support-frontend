@@ -258,6 +258,9 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
 
+      case 'SET_START_DATE':
+        return { ...state, startDate: action.startDate };
+
       case 'SET_PAYMENT_METHOD':
         return {
           ...state,
