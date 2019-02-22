@@ -41,7 +41,6 @@ trait Controllers {
 
   lazy val digitalPackController = new DigitalSubscription(
     priceSummaryServiceProvider,
-    supportWorkersClient,
     assetsResolver,
     actionRefiners,
     identityService,
@@ -52,27 +51,31 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
-    tipMonitoring,
-    appConfig.guardianDomain
+    appConfig.supportUrl
   )
 
   lazy val paperController = new PaperSubscription(
     priceSummaryServiceProvider,
-    supportWorkersClient,
     assetsResolver,
     actionRefiners,
     identityService,
     testUsers,
-    membersDataService,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl,
-    tipMonitoring,
-    appConfig.guardianDomain
+    appConfig.supportUrl
+  )
+
+  lazy val createSubscriptionController = new CreateSubscription(
+    supportWorkersClient,
+    actionRefiners,
+    identityService,
+    testUsers,
+    controllerComponents,
+    allSettingsProvider,
+    appConfig.supportUrl
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(

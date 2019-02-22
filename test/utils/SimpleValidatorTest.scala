@@ -14,6 +14,7 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
     country = Country.US,
     state = Some("VA"),
     product = DigitalPack(Currency.USD, Monthly),
+    firstDeliveryDate = None,
     paymentFields = StripePaymentFields("test-token"),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),
