@@ -8,7 +8,7 @@ import services.stepfunctions.CreateSupportWorkersRequest
 
 class SimpleValidatorTest extends FlatSpec with Matchers {
 
-  val validRequest = CreateSupportWorkersRequest(
+  val validDigitalPackRequest = CreateSupportWorkersRequest(
     firstName = "grace",
     lastName = "hopper",
     country = Country.US,
@@ -30,52 +30,52 @@ class SimpleValidatorTest extends FlatSpec with Matchers {
   )
 
   "validate" should "return true when there are no empty strings" in {
-    SimpleValidator.validationPasses(validRequest) shouldBe true
+    SimpleCheckoutFormValidation.passes(validDigitalPackRequest) shouldBe true
   }
 
   "validate" should "reject empty strings in the name field" in {
-    val requestMissingFirstName = validRequest.copy(firstName = "")
-    SimpleValidator.validationPasses(requestMissingFirstName) shouldBe false
+    val requestMissingFirstName = validDigitalPackRequest.copy(firstName = "")
+    SimpleCheckoutFormValidation.passes(requestMissingFirstName) shouldBe false
   }
 
   "validate" should "fail if the country is US and there is no state selected" in {
-    val requestMissingState = validRequest.copy(state = None)
-    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+    val requestMissingState = validDigitalPackRequest.copy(state = None)
+    DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
   "validate" should "also fail if the country is Canada and there is no state selected" in {
-    val requestMissingState = validRequest.copy(country = Country.Canada, state = None)
-    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+    val requestMissingState = validDigitalPackRequest.copy(country = Country.Canada, state = None)
+    DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
   "validate" should "pass if there is no state selected and the country is Australia" in {
-    val requestMissingState = validRequest.copy(country = Country.Australia, product = DigitalPack(Currency.AUD, Monthly), state = None)
-    SimpleValidator.validationPasses(requestMissingState) shouldBe true
+    val requestMissingState = validDigitalPackRequest.copy(country = Country.Australia, product = DigitalPack(Currency.AUD, Monthly), state = None)
+    DigitalPackValidation.passes(requestMissingState) shouldBe true
   }
 
   "validate" should "fail if the payment field received is an empty string" in {
-    val requestMissingState = validRequest.copy(paymentFields = StripePaymentFields(""))
-    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+    val requestMissingState = validDigitalPackRequest.copy(paymentFields = StripePaymentFields(""))
+    DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
   "validate" should "succeed for a standard country and currency combination" in {
-    val requestMissingState = validRequest.copy(country = Country.UK, product = DigitalPack(Currency.GBP, Annual), state = None)
-    SimpleValidator.validationPasses(requestMissingState) shouldBe true
+    val requestMissingState = validDigitalPackRequest.copy(country = Country.UK, product = DigitalPack(Currency.GBP, Annual), state = None)
+    DigitalPackValidation.passes(requestMissingState) shouldBe true
   }
 
   "validate" should "fail if the country and currency combination is unsupported" in {
-    val requestMissingState = validRequest.copy(country = Country.US, product = DigitalPack(Currency.GBP, Annual), state = None)
-    SimpleValidator.validationPasses(requestMissingState) shouldBe false
+    val requestMissingState = validDigitalPackRequest.copy(country = Country.US, product = DigitalPack(Currency.GBP, Annual), state = None)
+    DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
   "validate" should "fail if the telephone number is longer than 40 characters " in {
-    val requestWithTooLongTelephoneNumber = validRequest.copy(telephoneNumber = Some("12345678901234567890123456789012345678901"))
-    SimpleValidator.validationPasses(requestWithTooLongTelephoneNumber) shouldBe false
+    val requestWithTooLongTelephoneNumber = validDigitalPackRequest.copy(telephoneNumber = Some("12345678901234567890123456789012345678901"))
+    DigitalPackValidation.passes(requestWithTooLongTelephoneNumber) shouldBe false
   }
 
   "validate" should "not check what the characters are in a telephone number" in {
-    val requestWithTooLongTelephoneNumber = validRequest.copy(telephoneNumber = Some("abcdef"))
-    SimpleValidator.validationPasses(requestWithTooLongTelephoneNumber) shouldBe true
+    val requestWithTooLongTelephoneNumber = validDigitalPackRequest.copy(telephoneNumber = Some("abcdef"))
+    DigitalPackValidation.passes(requestWithTooLongTelephoneNumber) shouldBe true
   }
 
 }
