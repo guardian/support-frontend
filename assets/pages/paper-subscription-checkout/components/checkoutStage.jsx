@@ -18,7 +18,6 @@ import { type Stage, type State } from '../paperSubscriptionCheckoutReducer';
 import CheckoutForm from './checkoutForm';
 import ReturnSection from './returnSection';
 
-
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -27,33 +26,25 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
 |};
 
-
 // ----- State/Props Maps ----- //
 
 function mapStateToProps(state: State): PropTypes {
-
   return {
     stage: state.page.checkout.stage,
     formSubmitted: state.page.checkout.formSubmitted,
     countryGroupId: state.common.internationalisation.countryGroupId,
   };
-
 }
-
 
 // ----- Component ----- //
 
 function CheckoutStage(props: PropTypes) {
-
   switch (props.stage) {
-
     case 'thankyou':
       return (
         <div className="thank-you-stage">
           <HeroWrapper>
-            <HeadingBlock>
-              Your Paper subscription is now live
-            </HeadingBlock>
+            <HeadingBlock>Your Paper subscription is now live</HeadingBlock>
           </HeroWrapper>
           ty page
           <ReturnSection />
@@ -64,9 +55,7 @@ function CheckoutStage(props: PropTypes) {
       return (
         <div className="thank-you-stage">
           <HeroWrapper>
-            <HeadingBlock>
-              Your Paper subscription is being processed
-            </HeadingBlock>
+            <HeadingBlock>Your Paper subscription is being processed</HeadingBlock>
           </HeroWrapper>
           ty page but its pending sadface
           <ReturnSection />
@@ -78,15 +67,11 @@ function CheckoutStage(props: PropTypes) {
       return (
         <div className="checkout-content">
           <HeroWrapper appearance="custom">
-            <HeadingBlock>
-              Paper
-            </HeadingBlock>
+            <HeadingBlock>Paper</HeadingBlock>
           </HeroWrapper>
           <Content>
             <Text>
-              <LargeParagraph>
-                Please enter your details below to complete your Paper subscription.
-              </LargeParagraph>
+              <LargeParagraph>Please enter your details below to complete your Paper subscription.</LargeParagraph>
             </Text>
             <Divider />
           </Content>
@@ -94,11 +79,8 @@ function CheckoutStage(props: PropTypes) {
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>
       );
-
   }
-
 }
-
 
 // ----- Export ----- //
 

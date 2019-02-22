@@ -29,6 +29,7 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
 
@@ -38,6 +39,7 @@ export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 export type FormFieldsInState = {|
+  title: Option<Title>,
   firstName: string,
   lastName: string,
   addressLine1: string,
@@ -56,7 +58,6 @@ export type FormFields = {|
   country: IsoCountry,
   countrySupportsDirectDebit: boolean,
 |};
-
 
 export type FormField = $Keys<FormFields>;
 
@@ -80,6 +81,7 @@ export type State = ReduxState<{|
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
   | { type: 'SET_FIRST_NAME', firstName: string }
+  | { type: 'SET_TITLE', title: Option<Title> }
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_ADDRESS_LINE_1', addressLine1: string }
   | { type: 'SET_ADDRESS_LINE_2', addressLine2: string }
@@ -96,11 +98,11 @@ export type Action =
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
   | DDAction;
 
-
 // ----- Selectors ----- //
 
 function getFormFields(state: State): FormFields {
   return {
+    title: state.page.checkout.title,
     firstName: state.page.checkout.firstName,
     email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
@@ -120,7 +122,6 @@ function getFormFields(state: State): FormFields {
 function getEmail(state: State): string {
   return state.page.checkout.email;
 }
-
 
 // ----- Functions ----- //
 
@@ -167,7 +168,9 @@ const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
-const signOut = () => { window.location.href = getSignoutUrl(); };
+const signOut = () => {
+  window.location.href = getSignoutUrl();
+};
 
 function submitForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
@@ -179,6 +182,7 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
 }
 
 const formActionCreators = {
+  setTitle: (title: string): Action => ({ type: 'SET_TITLE', title }),
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
   setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
@@ -192,8 +196,8 @@ const formActionCreators = {
       });
     }
   },
-  setStateProvince: (stateProvince: string) =>
-    (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
+  setStateProvince: (stateProvince: string) => (dispatch: Dispatch<Action>, getState: () => State) =>
+    dispatch({
       type: 'SET_STATE_PROVINCE',
       stateProvince,
       country: getState().common.internationalisation.countryId,
@@ -204,13 +208,14 @@ const formActionCreators = {
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
   setPostcode: (postcode: string): Action => ({ type: 'SET_POSTCODE', postcode }),
-  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
-    type: 'SET_PAYMENT_METHOD',
-    paymentMethod,
-    country: getState().common.internationalisation.countryId,
-  }),
-  onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
-    (dispatch: Dispatch<Action>) => onPaymentAuthorised(authorisation, dispatch),
+  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) =>
+    dispatch({
+      type: 'SET_PAYMENT_METHOD',
+      paymentMethod,
+      country: getState().common.internationalisation.countryId,
+    }),
+  onPaymentAuthorised: (authorisation: PaymentAuthorisation) => (dispatch: Dispatch<Action>) =>
+    onPaymentAuthorised(authorisation, dispatch),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
 };
 
@@ -219,12 +224,12 @@ export type FormActionCreators = typeof formActionCreators;
 // ----- Reducer ----- //
 
 function initReducer(initialCountry: IsoCountry) {
-
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const { productPrices } = window.guardian;
 
   const initialState = {
     stage: 'checkout',
+    title: null,
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
@@ -244,14 +249,15 @@ function initReducer(initialCountry: IsoCountry) {
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
-
     switch (action.type) {
-
       case 'SET_STAGE':
         return { ...state, stage: action.stage };
 
       case 'SET_FIRST_NAME':
         return { ...state, firstName: action.firstName };
+
+      case 'SET_TITLE':
+        return { ...state, title: action.title };
 
       case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName };
@@ -312,7 +318,6 @@ function initReducer(initialCountry: IsoCountry) {
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
 }
-
 
 // ----- Export ----- //
 
