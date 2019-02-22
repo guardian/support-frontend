@@ -21,23 +21,22 @@ type PropTypes = {|
   children: Node,
 |};
 
+
 // ----- Functions ----- //
 
 function PrivacyPolicy(props: { privacyPolicy: boolean }) {
+
   if (props.privacyPolicy) {
     return (
       <div className="component-footer__privacy-policy-text">
         To find out what personal data we collect and how we use it, please visit our
-        <a className="component-footer__privacy-policy" href={privacyLink}>
-          {' '}
-          Privacy Policy
-        </a>
-        .
+        <a className="component-footer__privacy-policy" href={privacyLink}> Privacy Policy</a>.
       </div>
     );
   }
 
   return null;
+
 }
 
 function Disclaimer(props: { disclaimer: boolean, countryGroupId: CountryGroupId }) {
@@ -47,6 +46,7 @@ function Disclaimer(props: { disclaimer: boolean, countryGroupId: CountryGroupId
 // ----- Component ----- //
 
 function Footer(props: PropTypes) {
+
   return (
     <footer className="component-footer" role="contentinfo">
       <div className="component-footer__content">
@@ -57,7 +57,9 @@ function Footer(props: PropTypes) {
       </div>
     </footer>
   );
+
 }
+
 
 // ----- Default Props ----- //
 
@@ -67,6 +69,7 @@ Footer.defaultProps = {
   countryGroupId: GBPCountries,
   children: [],
 };
+
 
 // ----- Exports ----- //
 
