@@ -11,6 +11,7 @@ import { type IsoCurrency, type Currency, type SpokenCurrency, currencies, spoke
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import { EURCountries, GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { formatAmount } from 'helpers/checkouts';
 import SvgDollar from 'components/svgs/dollar';
 import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
@@ -62,11 +63,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 });
 
 // ----- Render ----- //
-
-const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: Amount, verbose: boolean) =>
-  (verbose ?
-    `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
-    `${currency.glyph}${amount.value}`);
 
 const isSelected = (amount: Amount, props: PropTypes) => {
   if (props.selectedAmounts[props.contributionType]) {

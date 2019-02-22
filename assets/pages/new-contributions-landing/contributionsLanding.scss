@@ -332,7 +332,7 @@ footer[role="contentinfo"] a {
 
 }
 
-// Alternative form layout 
+// Alternative form layout
 .gu-content--contribution-form-design-test {
 
   .gu-content__main {
@@ -347,7 +347,7 @@ footer[role="contentinfo"] a {
     border: none;
     padding: 0;
     background-color: transparent;
-  
+
     @include mq($from: tablet) {
       margin-left: $content-left-margin-tablet
     }
@@ -374,7 +374,7 @@ footer[role="contentinfo"] a {
     background-color: gu-colour(brightness-100);
 
     @include mq($from: tablet) {
-      width: 40%;      
+      width: 40%;
     }
   }
 
@@ -482,6 +482,8 @@ footer[role="contentinfo"] {
 .form--contribution {
   display: flex;
   flex-direction: column;
+  min-height: 409px;
+  justify-content: space-between;
 }
 
 .form__field {

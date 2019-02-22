@@ -49,7 +49,7 @@ function StripePaymentRequestButtonContainer(props: PropTypes) {
 
   if (showStripePaymentRequestButton) {
 
-    if (props.stripeHasLoaded === false && window.Stripe === undefined) {
+    if (props.stripeHasLoaded === false && window.Stripe === undefined ) {
       setupStripe(props.setStripeHasLoaded);
       return null;
     }

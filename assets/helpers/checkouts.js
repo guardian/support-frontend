@@ -4,7 +4,7 @@
 
 import { getQueryParameter } from 'helpers/url';
 import {
-  type ContributionType,
+  type ContributionType, getFrequency,
   type PaymentMethod,
   toContributionType,
 } from 'helpers/contributions';
@@ -18,6 +18,9 @@ import * as storage from 'helpers/storage';
 import { type Switches, type SwitchObject } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
+import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
+import type { Amount, SelectedAmounts } from 'helpers/contributions';
 
 
 // ----- Types ----- //
@@ -144,6 +147,48 @@ function getPaymentDescription(contributionType: ContributionType, paymentMethod
   return '';
 }
 
+const formatAmount = (currency: Currency, spokenCurrency: SpokenCurrency, amount: Amount, verbose: boolean) =>
+  (verbose ?
+    `${amount.value} ${amount.value === 1 ? spokenCurrency.singular : spokenCurrency.plural}` :
+    `${currency.glyph}${amount.value}`);
+
+
+const getContributeButtonCopy = (
+  contributionType: ContributionType,
+  maybeOtherAmount: string | null,
+  selectedAmounts: SelectedAmounts,
+  currency: IsoCurrency,
+) => {
+  const frequency = getFrequency(contributionType);
+  const otherAmount = maybeOtherAmount ? {
+    value: maybeOtherAmount,
+    spoken: '',
+    isDefault: false,
+  } : null;
+  const amount = selectedAmounts[contributionType] === 'other' ? otherAmount : selectedAmounts[contributionType];
+
+  const amountCopy = amount ?
+    formatAmount(
+      currencies[currency],
+      spokenCurrencies[currency],
+      amount,
+      false,
+    ) : '';
+  return `Contribute ${amountCopy} ${frequency}`;
+};
+
+const getContributeButtonCopyWithPaymentType = (
+  contributionType: ContributionType,
+  maybeOtherAmount: string | null,
+  selectedAmounts: SelectedAmounts,
+  currency: IsoCurrency,
+  paymentMethod: PaymentMethod,
+) => {
+  const paymentDescriptionCopy = getPaymentDescription(contributionType, paymentMethod);
+  const contributionButtonCopy = getContributeButtonCopy(contributionType, maybeOtherAmount, selectedAmounts, currency);
+  return `${contributionButtonCopy} ${paymentDescriptionCopy}`;
+};
+
 function getPaymentLabel(paymentMethod: PaymentMethod): string {
   switch (paymentMethod) {
     case 'Stripe':
@@ -159,7 +204,9 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 // ----- Exports ----- //
 
 export {
-  getAmount,
+  getContributeButtonCopy,
+  getContributeButtonCopyWithPaymentType,
+  formatAmount,
   getValidContributionTypes,
   getContributionTypeFromSessionOrElse,
   getContributionTypeFromUrlOrElse,
