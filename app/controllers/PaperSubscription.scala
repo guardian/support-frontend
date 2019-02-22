@@ -26,20 +26,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PaperSubscription(
   priceSummaryServiceProvider: PriceSummaryServiceProvider,
-  client: SupportWorkersClient,
   val assets: AssetsResolver,
   val actionRefiners: CustomActionBuilders,
   identityService: IdentityService,
   testUsers: TestUserService,
-  membersDataService: MembersDataService,
   stripeConfigProvider: StripeConfigProvider,
   payPalConfigProvider: PayPalConfigProvider,
   components: ControllerComponents,
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
-  val supportUrl: String,
-  tipMonitoring: Tip,
-  guardianDomain: GuardianDomain
+  val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._

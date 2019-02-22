@@ -94,7 +94,9 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital     controllers.Digita
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
 GET  /subscribe/digital/checkout  controllers.DigitalSubscription.displayForm()
 GET  /subscribe/digital/checkout/thankyou-existing  controllers.DigitalSubscription.displayThankYouExisting()
-POST /subscribe/digital/create  controllers.DigitalSubscription.create
+
+# Deprecated, soon all requests to create a subscription should go via /subscribe/create instead
+POST /subscribe/digital/create  controllers.CreateSubscription.create
 
 GET  /premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
 GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
@@ -111,6 +113,7 @@ GET  /uk/subscribe/paper          controllers.PaperSubscription.paper(withDelive
 GET  /uk/subscribe/paper/delivery          controllers.PaperSubscription.paper(withDelivery: Boolean = true)
 GET  /subscribe/paper/checkout  controllers.PaperSubscription.displayForm(displayCheckout: Boolean ?= false)
 
+POST /subscribe/create  controllers.CreateSubscription.create
 
 # ----- Authentication ----- #
 

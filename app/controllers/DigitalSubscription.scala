@@ -1,18 +1,13 @@
 package controllers
 
 import actions.CustomActionBuilders
-import actions.CustomActionBuilders.AuthRequest
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
-import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdUser}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
-import com.gu.support.workers.{Address, BillingPeriod, User}
-import com.gu.tip.Tip
-import config.Configuration.GuardianDomain
 import config.StringsConfig
 import io.circe.syntax._
 import lib.PlayImplicits._
@@ -21,19 +16,14 @@ import monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc.{request, _}
 import play.twirl.api.Html
-import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, MembersDataService, TestUserService}
-import utils.NormalisedTelephoneNumber
-import utils.NormalisedTelephoneNumber.asFormattedString
-import views.html.{subscriptionCheckout, main}
+import views.html.subscriptionCheckout
 import views.html.helper.CSRF
-import utils.SimpleValidator._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalSubscription(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    client: SupportWorkersClient,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
@@ -44,9 +34,7 @@ class DigitalSubscription(
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
-    val supportUrl: String,
-    tipMonitoring: Tip,
-    guardianDomain: GuardianDomain
+    val supportUrl: String
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -144,83 +132,5 @@ class DigitalSubscription(
       css
     ))
   }
-
-  sealed abstract class CreateDigitalSubscriptionError(message: String)
-  case class ServerError(message: String) extends CreateDigitalSubscriptionError(message)
-  case class RequestValidationError(message: String) extends CreateDigitalSubscriptionError(message)
-
-  def create: Action[CreateSupportWorkersRequest] =
-    authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
-      implicit request: AuthRequest[CreateSupportWorkersRequest] =>
-        val billingPeriod = request.body.product.billingPeriod
-        SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new $billingPeriod digital subscription")
-
-        type ApiResponseOrError[RES] = EitherT[Future, CreateDigitalSubscriptionError, RES]
-
-        val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.country)
-        val createSupportWorkersRequest = request.body.copy(
-          telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
-        )
-        if (validationPasses(createSupportWorkersRequest)) {
-          val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user).leftMap(ServerError(_))
-          def subscriptionStatusOrError(idUser: IdUser): ApiResponseOrError[StatusResponse] = {
-            client.createSubscription(request, createUser(idUser, createSupportWorkersRequest), request.uuid).leftMap(error => ServerError(error.toString))
-          }
-
-          val result: ApiResponseOrError[StatusResponse] = for {
-            user <- userOrError
-            statusResponse <- subscriptionStatusOrError(user)
-          } yield statusResponse
-
-          respondToClient(result, createSupportWorkersRequest.product.billingPeriod)
-        } else {
-          respondToClient(EitherT.leftT(RequestValidationError("validation of the request body failed")), createSupportWorkersRequest.product.billingPeriod)
-        }
-
-    }
-
-  private def createUser(user: IdUser, request: CreateSupportWorkersRequest) = {
-    User(
-      id = user.id,
-      primaryEmailAddress = user.primaryEmailAddress,
-      firstName = request.firstName,
-      lastName = request.lastName,
-      billingAddress = billingAddress(request),
-      telephoneNumber = request.telephoneNumber,
-      allowMembershipMail = false,
-      allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
-      allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
-      isTestUser = testUsers.isTestUser(user.publicFields.displayName)
-    )
-  }
-
-  private def billingAddress(request: CreateSupportWorkersRequest): Address = {
-    Address(
-      lineOne = request.addressLine1,
-      lineTwo = request.addressLine2,
-      city = request.townCity,
-      state = request.state,
-      postCode = request.postcode,
-      country = request.country
-    )
-  }
-
-  protected def respondToClient(
-    result: EitherT[Future, CreateDigitalSubscriptionError, StatusResponse],
-    billingPeriod: BillingPeriod
-  )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] =
-    result.fold(
-      { error =>
-        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod Digital Subscription, due to $error")
-        error match {
-          case _: RequestValidationError => BadRequest
-          case _: ServerError => InternalServerError
-        }
-      },
-      { statusResponse =>
-        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod Digital Subscription")
-        Accepted(statusResponse.asJson)
-      }
-    )
 
 }
