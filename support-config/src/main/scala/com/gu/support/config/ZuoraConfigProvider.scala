@@ -7,9 +7,7 @@ import com.typesafe.config.Config
 
 case class ZuoraContributionConfig(productRatePlanId: ProductRatePlanId, productRatePlanChargeId: ProductRatePlanChargeId)
 
-case class ZuoraDigitalPackConfig(defaultFreeTrialPeriod: Int, paymentGracePeriod: Int, productRatePlans: ProductRatePlans)
-
-case class ProductRatePlans(monthly: ProductRatePlanId, quarterly: ProductRatePlanId, annual: ProductRatePlanId)
+case class ZuoraDigitalPackConfig(defaultFreeTrialPeriod: Int, paymentGracePeriod: Int)
 
 case class ZuoraConfig(
   url: String,
@@ -25,12 +23,6 @@ case class ZuoraConfig(
       case Annual => annualContribution
       case _ => monthlyContribution
     }
-
-  def digitalPackRatePlan(billingPeriod: BillingPeriod): ProductRatePlanId = billingPeriod match {
-    case Annual => digitalPack.productRatePlans.annual
-    case Quarterly => digitalPack.productRatePlans.quarterly
-    case Monthly => digitalPack.productRatePlans.monthly
-  }
 }
 
 class ZuoraConfigProvider(config: Config, defaultStage: Stage) extends TouchpointConfigProvider[ZuoraConfig](config, defaultStage) {
@@ -51,11 +43,6 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage) extends Touchpoin
 
   private def digitalPackFromConfig(config: Config) = ZuoraDigitalPackConfig(
     defaultFreeTrialPeriod = config.getInt("defaultFreeTrialPeriodDays"),
-    paymentGracePeriod = config.getInt("paymentGracePeriod"),
-    productRatePlans = ProductRatePlans(
-      monthly = config.getString("productRatePlanIds.monthly"),
-      quarterly = config.getString("productRatePlanIds.quarterly"),
-      annual = config.getString("productRatePlanIds.annual")
-    )
+    paymentGracePeriod = config.getInt("paymentGracePeriod")
   )
 }
