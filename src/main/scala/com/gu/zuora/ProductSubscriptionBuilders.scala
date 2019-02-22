@@ -5,7 +5,8 @@ import com.gu.i18n.Country
 import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog
 import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
-import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
+import com.gu.support.config.TouchPointEnvironments.UAT
+import com.gu.support.config.{Stage, TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers.exceptions.CatalogDataNotFoundException
 import com.gu.support.workers.{Contribution, DigitalPack, ProductType}
@@ -16,13 +17,10 @@ import scala.util.{Failure, Success, Try}
 
 object ProductSubscriptionBuilders {
 
-  def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT): ProductRatePlanId = {
-    val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
-    val stage = Configuration.stage
-    SafeLogger.info(s"TouchpointEnvironment from stage: $touchpointEnvironment and stage: $stage")
+  def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, isTestUser: Boolean): ProductRatePlanId = {
+    val touchpointEnvironment = if(isTestUser) UAT else TouchPointEnvironments.fromStage(Configuration.stage)
 
-    val tpFromString = TouchPointEnvironments.fromString(stage.toString)
-    SafeLogger.info(s"TouchpointEnvironment from string: $tpFromString and stage: $stage")
+    SafeLogger.info(s"TouchpointEnvironment from stage: $touchpointEnvironment and stage: ${Configuration.stage}")
 
     def getRatePlans[T <: Product](product: T): Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
 
@@ -51,14 +49,18 @@ object ProductSubscriptionBuilders {
   }
 
   implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder {
-    def build(config: ZuoraConfig, country: Country, maybePromoCode: Option[PromoCode], promotionService: PromotionService): SubscriptionData = {
+    def build(config: ZuoraConfig,
+              country: Country,
+              maybePromoCode: Option[PromoCode],
+              promotionService: PromotionService,
+              isTestUser: Boolean): SubscriptionData = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
       val contractAcceptanceDate = contractEffectiveDate
         .plusDays(config.digitalPack.defaultFreeTrialPeriod)
         .plusDays(config.digitalPack.paymentGracePeriod)
 
-      val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack)
+      val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack, isTestUser)
       SafeLogger.info(s"Setting up a digital pack. ProductRatePlanId found: ${productRatePlanId}")
 
       val subscriptionData = buildProductSubscription(
