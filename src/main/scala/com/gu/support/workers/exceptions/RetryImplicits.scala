@@ -44,6 +44,10 @@ object RetryImplicits {
     }
   }
 
+  implicit class ZuoraCatalogConversions(val throwable: CatalogDataNotFoundException) {
+    def asRetryException: RetryException = new RetryNone(message = throwable.getMessage, cause = throwable)
+  }
+
   implicit class OphanServiceErrorConversions(val error: AnalyticsServiceError) {
     import AnalyticsServiceError._
 
