@@ -200,8 +200,9 @@ function initialisePaymentRequest(props: PropTypes) {
       trackComponentClick(`${paymentMethod}-loaded`);
       setUpPaymentListener(props, paymentRequest, paymentMethod);
       props.setPaymentRequestButtonPaymentMethod(paymentMethod);
+    } else {
+      props.setPaymentRequestButtonPaymentMethod('none');
     }
-    props.setPaymentRequestButtonPaymentMethod('none');
   });
   props.setStripePaymentRequestObject(paymentRequest);
 }
