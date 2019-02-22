@@ -7,12 +7,13 @@ import React from 'react';
 import { subscriptionsTermsLinks, privacyLink } from 'helpers/legal';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 
+import './subscriptionTermsPrivacy.scss';
+
 // ---- Types ----- //
 
 type PropTypes = {|
   subscriptionProduct: SubscriptionProduct,
 |};
-
 
 // ----- Component ----- //
 
@@ -28,9 +29,7 @@ function SubscriptionTermsPrivacy(props: PropTypes) {
       </div>
     </div>
   );
-
 }
-
 
 // ----- Exports ----- //
 
