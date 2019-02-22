@@ -10,7 +10,7 @@ export const titles: {
   Miss: 'Miss',
   Dr: 'Dr',
   Prof: 'Prof',
-  Rev: 'rev',
+  Rev: 'Rev',
 };
 
 export type Title = $Keys<typeof titles>;
