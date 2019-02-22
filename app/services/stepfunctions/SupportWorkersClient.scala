@@ -18,6 +18,7 @@ import com.gu.support.workers.{Status, _}
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
+import org.joda.time.LocalDate
 import play.api.mvc.Call
 import services.stepfunctions.SupportWorkersClient._
 
@@ -39,6 +40,7 @@ case class CreateSupportWorkersRequest(
     country: Country,
     state: Option[String],
     product: ProductType,
+    firstDeliveryDate: Option[LocalDate],
     paymentFields: PaymentFields,
     promoCode: Option[PromoCode],
     ophanIds: OphanIds,

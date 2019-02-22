@@ -98,7 +98,6 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
       new DigitalSubscription(
         priceSummaryServiceProvider,
-        client,
         assetResolver,
         actionRefiner,
         identityService,
@@ -109,9 +108,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
         stubControllerComponents(),
         new StringsConfig(),
         settingsProvider,
-        "support.thegulocal.com",
-        tip,
-        GuardianDomain(".thegulocal.com")
+        "support.thegulocal.com"
       )
     }
 
