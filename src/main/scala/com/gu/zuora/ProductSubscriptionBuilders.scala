@@ -2,6 +2,7 @@ package com.gu.zuora
 
 import com.gu.config.Configuration
 import com.gu.i18n.Country
+import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog
 import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
@@ -52,6 +53,7 @@ object ProductSubscriptionBuilders {
         .plusDays(config.digitalPack.paymentGracePeriod)
 
       val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack)
+      SafeLogger.info(s"Setting up a digital pack. ProductRatePlanId found: ${productRatePlanId}")
 
       val subscriptionData = buildProductSubscription(
         productRatePlanId,
