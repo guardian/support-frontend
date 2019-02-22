@@ -39,7 +39,7 @@ case class Paper(
   fulfilmentOptions: FulfilmentOptions,
   productOptions: ProductOptions
 ) extends ProductType {
-  override def describe: String = s"$Paper-$fulfilmentOptions-$productOptions"
+  override def describe: String = s"Paper-$fulfilmentOptions-$productOptions"
 }
 
 object ProductType {
