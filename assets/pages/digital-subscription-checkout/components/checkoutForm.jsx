@@ -172,7 +172,8 @@ function CheckoutForm(props: PropTypes) {
               />
               <Input1
                 id="telephone"
-                label="Telephone (optional)"
+                label="Telephone"
+                optional
                 type="tel"
                 value={props.telephone}
                 setValue={props.setTelephone}
@@ -191,7 +192,8 @@ function CheckoutForm(props: PropTypes) {
               />
               <Input1
                 id="address-line-2"
-                label="Address Line 2 (optional)"
+                label="Address Line 2"
+                optional
                 type="text"
                 value={props.addressLine2}
                 setValue={props.setAddressLine2}
@@ -228,7 +230,8 @@ function CheckoutForm(props: PropTypes) {
               </Select2>
               <Input1
                 id="county"
-                label="County (optional)"
+                label="County"
+                optional
                 type="text"
                 value={props.county}
                 setValue={props.setCounty}
