@@ -18,6 +18,12 @@ object ProductSubscriptionBuilders {
 
   def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT): ProductRatePlanId = {
     val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
+    val stage = Configuration.stage
+    SafeLogger.info(s"TouchpointEnvironment from stage: $touchpointEnvironment and stage: $stage")
+
+    val tpFromString = TouchPointEnvironments.fromString(stage.toString)
+    SafeLogger.info(s"TouchpointEnvironment from string: $tpFromString and stage: $stage")
+
     def getRatePlans[T <: Product](product: T): Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
 
     val ratePlans: Seq[ProductRatePlan[Product]] = getRatePlans(catalog.DigitalPack)
