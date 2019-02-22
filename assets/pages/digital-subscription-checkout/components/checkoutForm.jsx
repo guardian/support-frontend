@@ -12,7 +12,8 @@ import { type Option } from 'helpers/types/option';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 
 import { Outset } from 'components/content/content';
-import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
+import Text from 'components/text/text';
+import Rows from 'components/base/rows';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
 import { Input } from 'components/forms/standardFields/input';
@@ -264,32 +265,40 @@ function CheckoutForm(props: PropTypes) {
               </Fieldset>
             </FormSection>
             <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
-              {props.countrySupportsDirectDebit &&
-              <div>
-                <Fieldset legend="How would you like to pay?">
-                  <RadioInput
-                    text="Direct debit"
-                    name="paymentMethod"
-                    checked={props.paymentMethod === 'DirectDebit'}
-                    onChange={() => props.setPaymentMethod('DirectDebit')}
-                  />
-                  <RadioInput
-                    text="Credit/Debit card"
-                    name="paymentMethod"
-                    checked={props.paymentMethod === 'Stripe'}
-                    onChange={() => props.setPaymentMethod('Stripe')}
-                  />
-                </Fieldset>
-              </div>
+              <Rows gap="large">
+                {props.countrySupportsDirectDebit &&
+                <div>
+                  <Fieldset legend="How would you like to pay?">
+                    <RadioInput
+                      text="Direct debit"
+                      name="paymentMethod"
+                      checked={props.paymentMethod === 'DirectDebit'}
+                      onChange={() => props.setPaymentMethod('DirectDebit')}
+                    />
+                    <RadioInput
+                      text="Credit/Debit card"
+                      name="paymentMethod"
+                      checked={props.paymentMethod === 'Stripe'}
+                      onChange={() => props.setPaymentMethod('Stripe')}
+                    />
+                  </Fieldset>
+                </div>
               }
-              <CheckoutCopy
-                strong="Money Back Guarantee."
-                copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
-              />
-              <CheckoutCopy
-                strong="Cancel any time you want."
-                copy="There is no set time on your agreement so you can stop your subscription anytime."
-              />
+                <div>
+                  <Text>
+                    <p>
+                      <strong>Money Back Guarantee.</strong>
+                      If you wish to cancel your subscription, we will send you
+                      a refund of the unexpired part of your subscription.
+                    </p>
+                    <p>
+                      <strong>Cancel any time you want.</strong>
+                      There is no set time on your agreement so you can stop
+                      your subscription anytime
+                    </p>
+                  </Text>
+                </div>
+              </Rows>
               <DirectDebitPopUpForm
                 onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                   props.onPaymentAuthorised(pa);

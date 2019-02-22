@@ -7,6 +7,7 @@ import { subscriptionsTermsLinks } from 'helpers/legal';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
+import './subscriptionFaq.scss';
 
 // ----- Props ----- //
 
