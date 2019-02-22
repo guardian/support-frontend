@@ -20,16 +20,6 @@ class SimpleCheckoutFormValidationTest extends FlatSpec with Matchers {
     SimpleCheckoutFormValidation.passes(requestMissingFirstName) shouldBe false
   }
 
-  "SimpleCheckoutFormValidation.passes" should "fail if the telephone number is longer than 40 characters " in {
-    val requestWithTooLongTelephoneNumber = validDigitalPackRequest.copy(telephoneNumber = Some("12345678901234567890123456789012345678901"))
-    SimpleCheckoutFormValidation.passes(requestWithTooLongTelephoneNumber) shouldBe false
-  }
-
-  "SimpleCheckoutFormValidation.passes" should "not check what the characters are in a telephone number" in {
-    val requestWithTooLongTelephoneNumber = validDigitalPackRequest.copy(telephoneNumber = Some("abcdef"))
-    SimpleCheckoutFormValidation.passes(requestWithTooLongTelephoneNumber) shouldBe true
-  }
-
 }
 
 class DigitalPackValidationTest extends FlatSpec with Matchers {

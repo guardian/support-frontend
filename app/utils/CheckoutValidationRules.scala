@@ -17,8 +17,7 @@ object SimpleCheckoutFormValidation {
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
     noEmptyNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) &&
-    noEmptyPaymentFields(createSupportWorkersRequest.paymentFields) &&
-    telephoneNumberShortEnough(createSupportWorkersRequest.telephoneNumber)
+    noEmptyPaymentFields(createSupportWorkersRequest.paymentFields)
   }
 
   private def noEmptyNameFields(firstName: String, lastName: String) = !firstName.isEmpty && !lastName.isEmpty
@@ -29,8 +28,6 @@ object SimpleCheckoutFormValidation {
     case stripeDetails: StripePaymentFields => !stripeDetails.stripeToken.isEmpty
     case payPalDetails: PayPalPaymentFields => !payPalDetails.baid.isEmpty
   }
-
-  private def telephoneNumberShortEnough(telephoneNumber: Option[String]): Boolean = telephoneNumber.forall(_.length < 40)
 
 }
 
