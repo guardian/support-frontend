@@ -6,12 +6,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
+import { newspaperCountries } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { type Option } from 'helpers/types/option';
 
 import { Outset } from 'components/content/content';
-import CheckoutCopy from 'components/checkoutCopy/checkoutCopy';
+import Rows from 'components/base/rows';
+import Text from 'components/text/text';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
 import { Input } from 'components/forms/standardFields/input';
@@ -23,7 +23,6 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
 import { withError } from 'components/forms/formHOCs/withError';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
-import { canShow } from 'components/forms/formHOCs/canShow';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Checkout from 'components/checkout/checkout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -69,25 +68,11 @@ function mapStateToProps(state: State) {
 
 // ----- Form Fields ----- //
 
-const InputWithLabel = withLabel(Input);
-const Input1 = compose(asControlled, withError)(InputWithLabel);
+const StaticInputWithLabel = withLabel(Input);
+const InputWithLabel = asControlled(StaticInputWithLabel);
+const InputWithError = withError(InputWithLabel);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const SelectWithError = compose(withError)(SelectWithLabel);
-const Select2 = canShow(SelectWithError);
-
-function statesForCountry(country: Option<IsoCountry>): React$Node {
-
-  switch (country) {
-    case 'US':
-      return sortedOptions(usStates);
-    case 'CA':
-      return sortedOptions(caStates);
-    default:
-      return null;
-  }
-
-}
-
 
 // ----- Component ----- //
 
@@ -119,7 +104,7 @@ function CheckoutForm(props: PropTypes) {
                 <option value="">--</option>
                 {options(titles)}
               </SelectWithLabel>
-              <Input1
+              <InputWithError
                 id="first-name"
                 label="First name"
                 type="text"
@@ -127,7 +112,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setFirstName}
                 error={firstError('firstName', props.formErrors)}
               />
-              <Input1
+              <InputWithError
                 id="last-name"
                 label="Last name"
                 type="text"
@@ -135,7 +120,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setLastName}
                 error={firstError('lastName', props.formErrors)}
               />
-              <InputWithLabel
+              <StaticInputWithLabel
                 id="email"
                 label="Email"
                 type="email"
@@ -162,9 +147,10 @@ function CheckoutForm(props: PropTypes) {
                   </span>
                 )}
               />
-              <Input1
+              <InputWithError
                 id="telephone"
-                label="Telephone (optional)"
+                label="Telephone"
+                optional
                 type="tel"
                 value={props.telephone}
                 setValue={props.setTelephone}
@@ -172,8 +158,16 @@ function CheckoutForm(props: PropTypes) {
                 error={firstError('telephone', props.formErrors)}
               />
             </FormSection>
-            <FormSection title="Address">
-              <Input1
+            <FormSection title="Where should we deliver your newspapers?">
+              <InputWithError
+                id="postcode"
+                label="Delivery postcode"
+                type="text"
+                value={props.postcode}
+                setValue={props.setPostcode}
+                error={firstError('postcode', props.formErrors)}
+              />
+              <InputWithError
                 id="address-line-1"
                 label="Address Line 1"
                 type="text"
@@ -181,15 +175,16 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setAddressLine1}
                 error={firstError('addressLine1', props.formErrors)}
               />
-              <Input1
+              <InputWithError
                 id="address-line-2"
-                label="Address Line 2 (optional)"
+                label="Address Line 2"
+                optional
                 type="text"
                 value={props.addressLine2}
                 setValue={props.setAddressLine2}
                 error={firstError('addressLine2', props.formErrors)}
               />
-              <Input1
+              <InputWithError
                 id="town-city"
                 label="Town/City"
                 type="text"
@@ -205,39 +200,21 @@ function CheckoutForm(props: PropTypes) {
                 error={firstError('country', props.formErrors)}
               >
                 <option value="">--</option>
-                {sortedOptions(countries)}
+                {sortedOptions(newspaperCountries)}
               </SelectWithError>
-              <Select2
-                id="stateProvince"
-                label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-                value={props.stateProvince}
-                setValue={props.setStateProvince}
-                error={firstError('stateProvince', props.formErrors)}
-                isShown={props.country === 'US' || props.country === 'CA'}
-              >
-                <option value="">--</option>
-                {statesForCountry(props.country)}
-              </Select2>
-              <Input1
-                id="county"
-                label="County (optional)"
-                type="text"
-                value={props.county}
-                setValue={props.setCounty}
-                error={firstError('county', props.formErrors)}
-              />
-              <Input1
-                id="postcode"
-                label="Postcode"
-                type="text"
-                value={props.postcode}
-                setValue={props.setPostcode}
-                error={firstError('postcode', props.formErrors)}
+            </FormSection>
+            <FormSection title="When would you like your subscription to start?">
+              <InputWithError
+                id="start-date"
+                label="Start date"
+                type="date"
+                error={firstError('startDate', props.formErrors)}
+                value={props.startDate}
+                setValue={props.setStartDate}
               />
             </FormSection>
-            <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
-              {props.countrySupportsDirectDebit &&
-              <div>
+            <FormSection title="How would you like to pay?">
+              <Rows>
                 <Fieldset legend="How would you like to pay?">
                   <RadioInput
                     text="Direct debit"
@@ -252,16 +229,9 @@ function CheckoutForm(props: PropTypes) {
                     onChange={() => props.setPaymentMethod('Stripe')}
                   />
                 </Fieldset>
-              </div>
-              }
-              <CheckoutCopy
-                strong="Money Back Guarantee."
-                copy="If you wish to cancel your subscription, we will send you a refund of the unexpired part of your subscription."
-              />
-              <CheckoutCopy
-                strong="Cancel any time you want."
-                copy="There is no set time on your agreement so you can stop your subscription anytime."
-              />
+                {errorState}
+                <Button aria-label={null} type="submit">Continue to payment</Button>
+              </Rows>
               <DirectDebitPopUpForm
                 onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                   props.onPaymentAuthorised(pa);
@@ -269,8 +239,16 @@ function CheckoutForm(props: PropTypes) {
               />
             </FormSection>
             <FormSection>
-              {errorState}
-              <Button aria-label={null} type="submit">Continue to payment</Button>
+              <Text>
+                <strong>Money Back Guarantee.</strong>
+                If you wish to cancel your subscription, we will send
+                you a refund of the unexpired part of your subscription.
+              </Text>
+              <Text>
+                <strong>Cancel any time you want.</strong>
+                There is no set time on your agreement so you can
+                stop your subscription anytime
+              </Text>
             </FormSection>
           </Form>
         </Checkout>

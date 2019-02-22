@@ -18,7 +18,6 @@ import {
 } from './countryGroup';
 import type { CountryGroupId } from './countryGroup';
 
-
 // ----- Setup ----- //
 
 const usStates: {
@@ -99,6 +98,11 @@ const caStates: {
   QC: 'Quebec',
   SK: 'Saskatchewan',
   YT: 'Yukon',
+};
+
+const newspaperCountries = {
+  GB: 'United Kingdom',
+  IM: 'Isle of Man',
 };
 
 const countries = {
@@ -412,7 +416,6 @@ function caStateFromString(s: string): Option<CaState> {
 }
 
 function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option<StateProvince> {
-
   switch (country) {
     case 'US':
       return usStateFromString(s);
@@ -421,7 +424,6 @@ function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option
     default:
       return null;
   }
-
 }
 
 function findIsoCountry(country: string): Option<IsoCountry> {
@@ -449,7 +451,8 @@ function fromCountryGroup(countryGroupId: ?CountryGroupId = null): ?IsoCountry {
       return 'US';
     case Canada:
       return 'CA';
-    default: return null;
+    default:
+      return null;
   }
 }
 
@@ -492,18 +495,17 @@ function setCountry(country: IsoCountry) {
 }
 
 type TargetCountryGroups =
-  typeof International |
-  typeof EURCountries |
-  typeof NZDCountries |
-  typeof GBPCountries |
-  typeof AUDCountries;
+  | typeof International
+  | typeof EURCountries
+  | typeof NZDCountries
+  | typeof GBPCountries
+  | typeof AUDCountries;
 
 function handleCountryForCountryGroup(
   targetCountryGroup: TargetCountryGroups,
   countryGroupId: ?CountryGroupId = null,
 ): ?IsoCountry {
-
-  const paths: {[TargetCountryGroups]: string[]} = {
+  const paths: { [TargetCountryGroups]: string[] } = {
     International: ['/int', '/int/'],
     EURCountries: ['/eu', '/eu/'],
     NZDCountries: ['/nz', '/nz/'],
@@ -511,7 +513,7 @@ function handleCountryForCountryGroup(
     AUDCountries: ['/au', '/au/'],
   };
 
-  const defaultCountry: {[TargetCountryGroups]: IsoCountry} = {
+  const defaultCountry: { [TargetCountryGroups]: IsoCountry } = {
     International: 'IN',
     EURCountries: 'DE',
     NZDCountries: 'NZ',
@@ -539,7 +541,6 @@ function handleCountryForCountryGroup(
 }
 
 function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
-
   const targetCountryGroups: TargetCountryGroups[] = [
     International,
     EURCountries,
@@ -557,7 +558,8 @@ function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
   });
 
   if (country === null) {
-    country = fromCountryGroup(countryGroupId) ||
+    country =
+      fromCountryGroup(countryGroupId) ||
       fromPath() ||
       fromQueryParameter() ||
       fromCookie() ||
@@ -569,7 +571,6 @@ function detect(countryGroupId: ?CountryGroupId = null): IsoCountry {
   return country;
 }
 
-
 // ----- Exports ----- //
 
 export {
@@ -578,6 +579,7 @@ export {
   usStates,
   caStates,
   countries,
+  newspaperCountries,
   findIsoCountry,
   fromString,
   stateProvinceFromString,
