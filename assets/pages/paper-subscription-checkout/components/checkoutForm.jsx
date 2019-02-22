@@ -18,6 +18,7 @@ import { Input } from 'components/forms/standardFields/input';
 import { Select } from 'components/forms/standardFields/select';
 import { Fieldset } from 'components/forms/standardFields/fieldset';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
+import { options } from 'components/forms/customFields/options';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
 import { withError } from 'components/forms/formHOCs/withError';
@@ -31,6 +32,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { titles } from 'helpers/user/details';
 
 import {
   type FormActionCreators,
@@ -69,8 +71,9 @@ function mapStateToProps(state: State) {
 
 const InputWithLabel = withLabel(Input);
 const Input1 = compose(asControlled, withError)(InputWithLabel);
-const Select1 = compose(asControlled, withError, withLabel)(Select);
-const Select2 = canShow(Select1);
+const SelectWithLabel = compose(asControlled, withLabel)(Select);
+const SelectWithError = compose(withError)(SelectWithLabel);
+const Select2 = canShow(SelectWithError);
 
 function statesForCountry(country: Option<IsoCountry>): React$Node {
 
@@ -106,6 +109,16 @@ function CheckoutForm(props: PropTypes) {
           }}
           >
             <FormSection title="Your details">
+              <SelectWithLabel
+                id="title"
+                label="Title"
+                optional
+                value={props.title}
+                setValue={props.setTitle}
+              >
+                <option value="">--</option>
+                {options(titles)}
+              </SelectWithLabel>
               <Input1
                 id="first-name"
                 label="First name"
@@ -184,7 +197,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setTownCity}
                 error={firstError('townCity', props.formErrors)}
               />
-              <Select1
+              <SelectWithError
                 id="country"
                 label="Country"
                 value={props.country}
@@ -193,7 +206,7 @@ function CheckoutForm(props: PropTypes) {
               >
                 <option value="">--</option>
                 {sortedOptions(countries)}
-              </Select1>
+              </SelectWithError>
               <Select2
                 id="stateProvince"
                 label={props.country === 'CA' ? 'Province/Territory' : 'State'}
