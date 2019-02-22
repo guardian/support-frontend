@@ -25,6 +25,7 @@ import type {
 import {
   type PaymentAuthorisation,
   type PaymentResult,
+  type StripePaymentRequestButtonMethod,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -69,7 +70,7 @@ export type Action =
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object }
-  | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentMethod }
+  | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
@@ -117,7 +118,7 @@ const updateEmail = (email: string): ((Function) => void) =>
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
 const setPaymentRequestButtonPaymentMethod =
-  (paymentMethod: StripePaymentMethod): Action => ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod });
+  (paymentMethod: 'none' | StripePaymentMethod): Action => ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod });
 
 const setStripePaymentRequestObject =
   (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });

@@ -10,7 +10,11 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ContributionType, OtherAmounts, PaymentMethod, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
-import { type PaymentResult, type StripePaymentMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
+import {
+  type PaymentResult,
+  type StripePaymentMethod,
+  type StripePaymentRequestButtonMethod,
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getContributeButtonCopy } from 'helpers/checkouts';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
@@ -47,7 +51,7 @@ type PropTypes = {|
   amount: number,
   stripePaymentRequestObject: Object | null,
   paymentRequestButtonPaymentMethod: StripePaymentMethod,
-  setPaymentRequestButtonPaymentMethod: (StripePaymentMethod) => void,
+  setPaymentRequestButtonPaymentMethod: (StripePaymentRequestButtonMethod) => void,
   setStripePaymentRequestObject: (Object) => void,
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   setStripePaymentRequestButtonClicked: () => void,
@@ -80,7 +84,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
     (paymentAuthorisation: PaymentAuthorisation) =>
       dispatch(onStripePaymentRequestApiPaymentAuthorised(paymentAuthorisation)),
   setPaymentRequestButtonPaymentMethod:
-    (paymentMethod: StripePaymentMethod) => { dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod)); },
+    (paymentMethod: StripePaymentRequestButtonMethod) => {
+      dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod));
+    },
   setStripePaymentRequestObject:
     (paymentRequest: Object) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
@@ -195,6 +201,7 @@ function initialisePaymentRequest(props: PropTypes) {
       setUpPaymentListener(props, paymentRequest, paymentMethod);
       props.setPaymentRequestButtonPaymentMethod(paymentMethod);
     }
+    props.setPaymentRequestButtonPaymentMethod('none');
   });
   props.setStripePaymentRequestObject(paymentRequest);
 }
@@ -214,6 +221,10 @@ function PaymentRequestButton(props: PropTypes) {
   // until the async canMakePayment() function has been called on the stripePaymentRequestObject object.
   if (!props.stripePaymentRequestObject) {
     initialisePaymentRequest({ ...props });
+    return null;
+  }
+
+  if (props.paymentRequestButtonPaymentMethod === 'none') {
     return null;
   }
 

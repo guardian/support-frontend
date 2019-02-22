@@ -47,6 +47,10 @@ import {
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
+import type {
+  StripePaymentMethod,
+  StripePaymentRequestButtonMethod
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 
 
 // ----- Types ----- //
@@ -78,6 +82,7 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonImprovementVariant: 'control' | 'variant',
+  stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -109,6 +114,7 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestButtonViewOtherPaymentMethods:
     state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonViewOtherPaymentMethods,
   stripePaymentRequestButtonImprovementVariant: state.common.abParticipations.stripePaymentRequestButtonImprovement,
+  stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
 });
 
 
@@ -213,10 +219,12 @@ const defaultForm = (
   contributionType: ContributionType,
   stripePaymentRequestButtonViewOtherPaymentMethods: boolean,
   stripePaymentRequestButtonImprovementVariant: string,
+  stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
 ) => {
   if (
     contributionType !== 'ONE_OFF'
     || stripePaymentRequestButtonImprovementVariant === 'control'
+    || stripePaymentRequestButtonMethod === 'none'
     || stripePaymentRequestButtonViewOtherPaymentMethods === true
   ) {
     return (
@@ -255,6 +263,7 @@ function ContributionForm(props: PropTypes) {
           props.contributionType,
           props.stripePaymentRequestButtonViewOtherPaymentMethods,
           props.stripePaymentRequestButtonImprovementVariant,
+          props.stripePaymentRequestButtonMethod,
         )}
       </div>
       <div>

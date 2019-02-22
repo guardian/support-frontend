@@ -65,7 +65,7 @@ export type RegularPaymentRequest = {|
 |};
 
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
-
+export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
 export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string, stripePaymentMethod: StripePaymentMethod|};
 export type PayPalAuthorisation = {| paymentMethod: 'PayPal', token: string |};

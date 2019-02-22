@@ -53,7 +53,7 @@ type SetPasswordData = {
 }
 
 type StripePaymentRequestButtonData = {
-  paymentMethod: StripePaymentMethod | null,
+  paymentMethod: 'none' | StripePaymentMethod | null,
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
   stripeV3HasLoaded: boolean,
