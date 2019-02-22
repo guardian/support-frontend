@@ -42,6 +42,12 @@
   }
 }
 
+.component-animated-dots--medium {
+  div {
+    background-color: gu-colour(brightness-60);
+  }
+}
+
 .component-animated-dots--dark {
   div {
     background-color: gu-colour(neutral-46);

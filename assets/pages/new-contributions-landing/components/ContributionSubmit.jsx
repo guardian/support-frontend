@@ -6,14 +6,13 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFrequency, type ContributionType, type PaymentMethod } from 'helpers/contributions';
-import { getPaymentDescription } from 'helpers/checkouts';
-import { type IsoCurrency, currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
+import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { SelectedAmounts } from 'helpers/contributions';
+import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
 import { type State } from '../contributionsLandingReducer';
-import { formatAmount } from './ContributionAmount';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
 import {
   sendFormSubmitEventForPayPalRecurring,
@@ -79,29 +78,18 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 function ContributionSubmit(props: PropTypes) {
 
-  // if all payment methods are switched off, do not display the button
   if (props.paymentMethod !== 'None') {
-    const frequency = getFrequency(props.contributionType);
-    const otherAmount = props.otherAmount ? {
-      value: props.otherAmount,
-      spoken: '',
-      isDefault: false,
-    } : null;
-    const amount = props.selectedAmounts[props.contributionType] === 'other' ? otherAmount : props.selectedAmounts[props.contributionType];
+    // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';
     const showPayPalRecurringButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
 
-    const amountCopy = amount ?
-      formatAmount(
-        currencies[props.currency],
-        spokenCurrencies[props.currency],
-        amount,
-        false,
-      ) : '';
-
-    const paymentDescriptionCopy = getPaymentDescription(props.contributionType, props.paymentMethod);
-
-    const submitButtonCopy = `Contribute ${amountCopy} ${frequency} ${paymentDescriptionCopy}`;
+    const submitButtonCopy = getContributeButtonCopyWithPaymentType(
+      props.contributionType,
+      props.otherAmount,
+      props.selectedAmounts,
+      props.currency,
+      props.paymentMethod,
+    );
 
 
     // We have to show/hide PayPalRecurringButton rather than conditionally rendering it

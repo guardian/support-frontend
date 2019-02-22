@@ -7,13 +7,23 @@ import { connect } from 'react-redux';
 
 import { PaymentRequestButtonElement, injectStripe } from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type { ContributionType, OtherAmounts, PaymentMethod, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
-import { type PaymentResult, type StripePaymentMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
+import {
+  type PaymentResult,
+  type StripePaymentMethod,
+  type StripePaymentRequestButtonMethod,
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getContributeButtonCopy } from 'helpers/checkouts';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import Button from 'components/button/button';
+import SvgChevron from 'components/svgs/chevron';
+import { classNameWithModifiers } from 'helpers/utilities';
+import GridImage from 'components/gridImage/gridImage';
+import AnimatedDots from 'components/spinners/animatedDots';
 import { logException } from 'helpers/logger';
 import type { State } from '../../contributionsLandingReducer';
 import {
@@ -22,6 +32,7 @@ import {
   setStripePaymentRequestObject,
   onStripePaymentRequestApiPaymentAuthorised,
   updateEmail,
+  stripePaymentRequestButtonToggleOtherPaymentMethods,
 } from '../../contributionsLandingActions';
 
 
@@ -40,11 +51,16 @@ type PropTypes = {|
   amount: number,
   stripePaymentRequestObject: Object | null,
   paymentRequestButtonPaymentMethod: StripePaymentMethod,
-  setPaymentRequestButtonPaymentMethod: (StripePaymentMethod) => void,
+  setPaymentRequestButtonPaymentMethod: (StripePaymentRequestButtonMethod) => void,
   setStripePaymentRequestObject: (Object) => void,
   onPaymentAuthorised: (PaymentAuthorisation) => Promise<PaymentResult>,
   setStripePaymentRequestButtonClicked: () => void,
+  toggleOtherPaymentMethods: () => void,
   updateEmail: string => void,
+  paymentMethod: PaymentMethod,
+  viewOtherPaymentMethods: boolean,
+  stripePaymentRequestButtonImprovementVariant: 'control' | 'variant',
+
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -54,10 +70,13 @@ const mapStateToProps = (state: State) => ({
   stripePaymentRequestObject: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestObject,
   countryGroupId: state.common.internationalisation.countryGroupId,
   country: state.common.internationalisation.countryId,
-  currency: state.common.internationalisation.currencyId.toLowerCase(),
+  currency: state.common.internationalisation.currencyId,
   isTestUser: state.page.user.isTestUser || false,
   contributionType: state.page.form.contributionType,
-
+  paymentMethod: state.page.form.paymentMethod,
+  viewOtherPaymentMethods:
+    state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonViewOtherPaymentMethods,
+  stripePaymentRequestButtonImprovementVariant: state.common.abParticipations.stripePaymentRequestButtonImprovement,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -65,11 +84,14 @@ const mapDispatchToProps = (dispatch: Function) => ({
     (paymentAuthorisation: PaymentAuthorisation) =>
       dispatch(onStripePaymentRequestApiPaymentAuthorised(paymentAuthorisation)),
   setPaymentRequestButtonPaymentMethod:
-    (paymentMethod: StripePaymentMethod) => { dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod)); },
+    (paymentMethod: StripePaymentRequestButtonMethod) => {
+      dispatch(setPaymentRequestButtonPaymentMethod(paymentMethod));
+    },
   setStripePaymentRequestObject:
     (paymentRequest: Object) => { dispatch(setStripePaymentRequestObject(paymentRequest)); },
   updateEmail: (email: string) => { dispatch(updateEmail(email)); },
   setStripePaymentRequestButtonClicked: () => { dispatch(setStripePaymentRequestButtonClicked()); },
+  toggleOtherPaymentMethods: () => { dispatch(stripePaymentRequestButtonToggleOtherPaymentMethods()); },
 });
 
 
@@ -164,7 +186,7 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
 function initialisePaymentRequest(props: PropTypes) {
   const paymentRequest = props.stripe.paymentRequest({
     country: props.country,
-    currency: props.currency,
+    currency: props.currency.toLowerCase(),
     total: {
       label: 'The Guardian',
       amount: props.amount,
@@ -178,6 +200,8 @@ function initialisePaymentRequest(props: PropTypes) {
       trackComponentClick(`${paymentMethod}-loaded`);
       setUpPaymentListener(props, paymentRequest, paymentMethod);
       props.setPaymentRequestButtonPaymentMethod(paymentMethod);
+    } else {
+      props.setPaymentRequestButtonPaymentMethod('none');
     }
   });
   props.setStripePaymentRequestObject(paymentRequest);
@@ -201,24 +225,95 @@ function PaymentRequestButton(props: PropTypes) {
     return null;
   }
 
-  // We don't want to check this until we have initialised the payment request object, so the check has to come
-  // after the initialisation of the payment request object
-  if (!props.paymentRequestButtonPaymentMethod) {
+  if (props.paymentRequestButtonPaymentMethod === 'none') {
     return null;
   }
 
-  return (
-    <div className="stripe-payment-request-button__container">
-      <PaymentRequestButtonElement
-        paymentRequest={props.stripePaymentRequestObject}
-        className="stripe-payment-request-button__button"
-        style={paymentButtonStyle}
-        onClick={(event) => { onClick(event, props); }}
-      />
+  // We don't want to check this until we have initialised the payment request object, so the check has to come
+  // after the initialisation of the payment request object
+  if (!props.paymentRequestButtonPaymentMethod) {
+    if (props.stripePaymentRequestButtonImprovementVariant === 'variant') {
+      return (<AnimatedDots
+        appearance="medium"
+        modifierClasses={['stripe-payment-request-screen']}
+      />);
+    }
+    return null;
+  }
 
-      <div className="stripe-payment-request-button__divider">
-        or
+  if (props.paymentRequestButtonPaymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonImprovementVariant === 'control') {
+
+    return (
+      <div className="stripe-payment-request-button__container">
+        <PaymentRequestButtonElement
+          paymentRequest={props.stripePaymentRequestObject}
+          className="stripe-payment-request-button__button"
+          style={paymentButtonStyle}
+          onClick={(event) => {
+            onClick(event, props);
+          }}
+        />
+
+        <div className="stripe-payment-request-button__divider">
+          or
+        </div>
       </div>
+    );
+  }
+
+
+  const submitButtonCopy: string = getContributeButtonCopy(
+    props.contributionType,
+    props.otherAmounts[props.contributionType].amount,
+    props.selectedAmounts,
+    props.currency,
+  );
+
+  const viewOtherPaymentsClass = `view-other-${props.viewOtherPaymentMethods.toString()}`;
+
+  return (
+    <div>
+      <div
+        className={classNameWithModifiers('stripe-payment-request-button--contribute__container', [viewOtherPaymentsClass])}
+      >
+        <Button
+          aria-label="submit-contribution"
+          modifierClasses={[
+            classNameWithModifiers('stripe-payment-request-button--contribute', [viewOtherPaymentsClass]),
+          ]}
+          type="button"
+          onClick={() => {
+            if (props.stripePaymentRequestObject) {
+              props.stripePaymentRequestObject.show();
+            }
+          }}
+        >
+          {`${submitButtonCopy} now`}
+        </Button>
+        <GridImage
+          gridId="stripePaymentRequestButtonLogos"
+          srcSizes={[536]}
+          sizes="536px"
+          imgType="png"
+          classModifiers={['stripe-payment-request-button-logos']}
+        />
+      </div>
+
+      <Button
+        aria-label="view-other-payment-options"
+        modifierClasses={
+          [
+            classNameWithModifiers('stripe-payment-request-button--view-other-methods', [viewOtherPaymentsClass]),
+          ]
+        }
+        type="button"
+        onClick={props.toggleOtherPaymentMethods}
+        appearance="greyHollow"
+        icon={<SvgChevron />}
+      >
+        {props.viewOtherPaymentMethods ? 'Hide other payment methods' : 'View other payment methods'}
+      </Button>
+
     </div>
   );
 }

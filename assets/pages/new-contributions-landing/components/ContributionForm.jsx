@@ -30,6 +30,7 @@ import { checkAmount } from 'helpers/formValidation';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
+import type { StripePaymentRequestButtonMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import { ContributionFormFields } from './ContributionFormFields';
 import ContributionTypeTabs from './ContributionTypeTabs';
@@ -70,12 +71,15 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+  stripePaymentRequestButtonViewOtherPaymentMethods: boolean,
   isSignedIn: boolean,
   formIsValid: boolean,
   isPostDeploymentTestUser: boolean,
   formIsSubmittable: boolean,
   isTestUser: boolean,
   country: IsoCountry,
+  stripePaymentRequestButtonImprovementVariant: 'control' | 'variant',
+  stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -104,6 +108,10 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
+  stripePaymentRequestButtonViewOtherPaymentMethods:
+    state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonViewOtherPaymentMethods,
+  stripePaymentRequestButtonImprovementVariant: state.common.abParticipations.stripePaymentRequestButtonImprovement,
+  stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
 });
 
 
@@ -202,29 +210,64 @@ function onSubmit(props: PropTypes): Event => void {
 
 // ----- Render ----- //
 
+
+const defaultForm = (
+  onPaymentAuthorisation: PaymentAuthorisation => void,
+  contributionType: ContributionType,
+  stripePaymentRequestButtonViewOtherPaymentMethods: boolean,
+  stripePaymentRequestButtonImprovementVariant: string,
+  stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
+) => {
+  if (
+    contributionType !== 'ONE_OFF'
+    || stripePaymentRequestButtonImprovementVariant === 'control'
+    || stripePaymentRequestButtonMethod === 'none'
+    || stripePaymentRequestButtonMethod === 'StripeApplePay'
+    || stripePaymentRequestButtonViewOtherPaymentMethods === true
+  ) {
+    return (
+      <div>
+        <ContributionFormFields />
+        <NewPaymentMethodSelector onPaymentAuthorisation={onPaymentAuthorisation} />
+        <ContributionErrorMessage />
+        <NewContributionSubmit onPaymentAuthorisation={onPaymentAuthorisation} />
+      </div>
+    );
+  }
+  return null;
+};
+
+
 function ContributionForm(props: PropTypes) {
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-      <ContributionTypeTabs />
-      <NewContributionAmount
-        checkOtherAmount={checkAmount}
-      />
-      <StripePaymentRequestButtonContainer
-        setStripeHasLoaded={props.setStripeV3HasLoaded}
-        stripeHasLoaded={props.stripeV3HasLoaded}
-        currency={props.currency}
-        contributionType={props.contributionType}
-        isTestUser={props.isTestUser}
-        country={props.country}
-        otherAmounts={props.otherAmounts}
-        selectedAmounts={props.selectedAmounts}
-      />
-      <ContributionFormFields />
-      <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
-      <ContributionErrorMessage />
-      <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
-      <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} />
-      {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
+      <div>
+        <ContributionTypeTabs />
+        <NewContributionAmount
+          checkOtherAmount={checkAmount}
+        />
+        <StripePaymentRequestButtonContainer
+          setStripeHasLoaded={props.setStripeV3HasLoaded}
+          stripeHasLoaded={props.stripeV3HasLoaded}
+          currency={props.currency}
+          contributionType={props.contributionType}
+          isTestUser={props.isTestUser}
+          country={props.country}
+          otherAmounts={props.otherAmounts}
+          selectedAmounts={props.selectedAmounts}
+        />
+        {defaultForm(
+          props.onPaymentAuthorisation,
+          props.contributionType,
+          props.stripePaymentRequestButtonViewOtherPaymentMethods,
+          props.stripePaymentRequestButtonImprovementVariant,
+          props.stripePaymentRequestButtonMethod,
+        )}
+      </div>
+      <div>
+        <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} />
+        {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
+      </div>
     </form>
   );
 }

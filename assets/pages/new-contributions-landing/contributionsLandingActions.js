@@ -25,6 +25,7 @@ import type {
 import {
   type PaymentAuthorisation,
   type PaymentResult,
+  type StripePaymentRequestButtonMethod,
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -69,12 +70,13 @@ export type Action =
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object }
-  | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentMethod }
+  | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
   | { type: 'SET_PAYPAL_HAS_LOADED' }
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
+  | { type: 'STRIPE_PAYMENT_REQUEST_BUTTON_TOGGLE_OTHER_PAYMENT_METHODS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean };
 
@@ -116,13 +118,16 @@ const updateEmail = (email: string): ((Function) => void) =>
 const updatePassword = (password: string): Action => ({ type: 'UPDATE_PASSWORD', password });
 
 const setPaymentRequestButtonPaymentMethod =
-  (paymentMethod: StripePaymentMethod): Action => ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod });
+  (paymentMethod: 'none' | StripePaymentMethod): Action => ({ type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod });
 
 const setStripePaymentRequestObject =
   (stripePaymentRequestObject: Object): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject });
 
 const setStripeV3HasLoaded =
   (): Action => ({ type: 'SET_STRIPE_V3_HAS_LOADED' });
+
+const stripePaymentRequestButtonToggleOtherPaymentMethods = (): Action =>
+  ({ type: 'STRIPE_PAYMENT_REQUEST_BUTTON_TOGGLE_OTHER_PAYMENT_METHODS' });
 
 const setStripePaymentRequestButtonClicked = (): Action => ({ type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' });
 
@@ -527,4 +532,5 @@ export {
   onStripePaymentRequestApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
+  stripePaymentRequestButtonToggleOtherPaymentMethods,
 };
