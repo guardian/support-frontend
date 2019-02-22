@@ -367,11 +367,11 @@ footer[role="contentinfo"] a {
     margin: auto;
     width: auto;
     padding: 0 10px;
-    border-color: gu-colour(brightness-86);
+    border-color: gu-colour(neutral-86);
     border-style: none solid;
     border-width: 0 1px;
-    border-bottom: 1px solid gu-colour(brightness-86);
-    background-color: gu-colour(brightness-100);
+    border-bottom: 1px solid gu-colour(neutral-86);
+    background-color: gu-colour(neutral-100);
 
     @include mq($from: tablet) {
       width: 40%;      
@@ -389,7 +389,7 @@ footer[role="contentinfo"] a {
   }
 
   .form__radio-group-list--border {
-    border-bottom: 1px solid gu-colour(brightness-86);
+    border-bottom: 1px solid gu-colour(neutral-86);
 
     li label {
       font-family: $gu-titlepiece;
