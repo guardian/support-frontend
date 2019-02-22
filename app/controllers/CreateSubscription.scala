@@ -6,7 +6,7 @@ import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.IdUser
-import com.gu.support.workers.{Address, BillingPeriod, DigitalPack, User}
+import com.gu.support.workers.{Address, BillingPeriod, User}
 import io.circe.syntax._
 import lib.PlayImplicits._
 import monitoring.SafeLogger
@@ -15,9 +15,8 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, TestUserService}
-import utils.NormalisedTelephoneNumber
+import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 import utils.NormalisedTelephoneNumber.asFormattedString
-import utils.SimpleValidator._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,11 +41,7 @@ class CreateSubscription(
   def create: Action[CreateSupportWorkersRequest] =
     authenticatedAction(recurringIdentityClientId).async(circe.json[CreateSupportWorkersRequest]) {
       implicit request: AuthRequest[CreateSupportWorkersRequest] =>
-        val validator: CreateSupportWorkersRequest => Boolean = request.body.product match {
-          case digitalPack: DigitalPack => validationPasses
-          case _ => validationPasses // TODO use a different validator which encompasses HD/Voucher rules
-        }
-        handleCreateSupportWorkersRequest(request, validator)
+        handleCreateSupportWorkersRequest(request, CheckoutValidationRules.validatorFor(request.body.product))
     }
 
   def handleCreateSupportWorkersRequest(
