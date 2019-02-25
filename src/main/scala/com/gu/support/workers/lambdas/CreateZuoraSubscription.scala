@@ -6,8 +6,8 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromotionService
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers._
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
@@ -112,6 +112,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     state.product match {
       case c: Contribution => c.build(config)
       case d: DigitalPack => d.build(config, state.user.billingAddress.country, state.promoCode, promotionService, isTestUser)
+      case _: Paper => ???
     }
   }
 
