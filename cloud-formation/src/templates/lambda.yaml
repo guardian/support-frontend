@@ -1,0 +1,14 @@
+{{name}}Lambda:
+  Type: "AWS::Lambda::Function"
+  Description: "{{description}}"
+  Properties:
+    {{> environmentVariables}}
+    FunctionName: !Sub ${Stack}-{{name}}Lambda-${Stage}
+    Handler: "com.gu.support.workers.lambdas.{{name}}::handleRequest"
+    MemorySize: {{memorySize}}{{^memorySize}}1536{{/memorySize}}
+    Role: !GetAtt [ LambdaExecutionRole, Arn ]
+    Code:
+      S3Bucket: support-workers-dist
+      S3Key: !Sub support/${Stage}/support-workers/support-workers.jar
+    Runtime: "java8"
+    Timeout: "60"
