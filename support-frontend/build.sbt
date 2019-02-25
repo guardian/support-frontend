@@ -1,73 +1,28 @@
-name := "support-frontend"
+import SeleniumTestConfig._
 
 version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
 
-scalaVersion := "2.12.6"
-
-import scala.sys.process._
-
-def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)
-
-def commitId(): String = try {
-  "git rev-parse HEAD".!!.trim
-} catch {
-  case _: Exception => "unknown"
-}
-
-lazy val testScalastyle = taskKey[Unit]("testScalastyle")
-
-lazy val SeleniumTest = config("selenium") extend(Test)
-
-def seleniumTestFilter(name: String): Boolean = name startsWith "selenium"
-
-def unitTestFilter(name: String): Boolean = !seleniumTestFilter(name)
-
 testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
 
 testOptions in Test := Seq(Tests.Filter(unitTestFilter))
 
-lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
-  .configs(SeleniumTest)
-  .settings(
-  inConfig(SeleniumTest)(Defaults.testTasks),
-  buildInfoKeys := Seq[BuildInfoKey](
-    name,
-    BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
-    BuildInfoKey.constant("buildTime", System.currentTimeMillis),
-    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId())
-  ),
-  buildInfoPackage := "app",
-  buildInfoOptions += BuildInfoOption.ToMap,
-  scalastyleFailOnError := true,
-  testScalastyle := scalastyle.in(Compile).toTask("").value,
-  (test in Test) := ((test in Test) dependsOn testScalastyle).value,
-  (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
-  (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
-)
-
-val circeVersion = "0.9.1"
-
-resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
-
-val awsVersion = "1.11.475"
-val jacksonVersion = "2.9.8"
+import LibraryVersions.{circeVersion, awsClientVersion, jacksonVersion}
 
 libraryDependencies ++= Seq(
+  "com.typesafe" % "config" % "1.3.2",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "org.mockito" % "mockito-core" % "2.11.0" % Test,
   "io.sentry" % "sentry-logback" % "1.7.5",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-  "com.amazonaws" % "aws-java-sdk-kms" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-sts" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-s3" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion,
+  "com.amazonaws" % "aws-java-sdk-kms" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-sts" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
-  "com.gu" %% "support-services" % "0.11",
   "com.gu" %% "fezziwig" % "0.8",
   "com.typesafe.akka" %% "akka-agent" % "2.5.14",
   "io.circe" %% "circe-core" % circeVersion,
@@ -85,10 +40,10 @@ libraryDependencies ++= Seq(
   "com.squareup.okhttp3" % "okhttp" % "3.9.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.gu" %% "tip" % "0.5.1",
+  "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
-  "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   filters,
   ws
 )
@@ -106,20 +61,20 @@ packageDescription := """Frontend for the new supporter platform"""
 maintainer := "Membership <membership.dev@theguardian.com>"
 
 riffRaffPackageType := (packageBin in Debian).value
-riffRaffManifestProjectName := "support:frontend"
+riffRaffManifestProjectName := "support:frontend-mono"
 riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffArtifactResources += (file("support-frontend/cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
 
-def getFiles(f: File):Seq[(File,String)] = {
+def getFiles(f: File): Seq[(File, String)] = {
   f match {
-    case file if file.isFile => Seq((file,file.toString))
+    case file if file.isFile => Seq((file, file.toString.replace("support-frontend/", "")))
     case dir if dir.isDirectory => dir.listFiles.toSeq.flatMap(getFiles)
   }
 }
 
-riffRaffArtifactResources ++= getFiles(file("storybook-static"))
+riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static"))
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",

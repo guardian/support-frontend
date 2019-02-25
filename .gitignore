@@ -1,47 +1,44 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Scala template
-*.class
-*.log
-### JetBrains template
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
-# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+.DS_Store
+.bundle
+.idea
+.idea_modules
+*.sublime-project
+*.sublime-workspace
+.vscode
 
-# User-specific stuff:
-.idea/
-.idea/**/tasks.xml
-.idea/dictionaries
+node_modules
+npm-debug.log
+yarn-error.log
+app/npm-debug.log
+coverage/
+package-lock.json
 
-# Sensitive or high-churn files:
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
+dev
+logs
+target
+project/project
+storybook-static
+paparazzi
 
-# Gradle:
-.idea/**/gradle.xml
-.idea/**/libraries
+bower_components
+public/stylesheets
+assets/javascripts/lib/bower-components/
 
-# CMake
-cmake-build-debug/
-cmake-build-release/
+conf/
+support-frontend/conf/keys.conf
+support-frontend/conf/assets.map
+support-frontend/public/compiled-assets/
+support-frontend/tools/
+tools/
 
-# Mongo Explorer plugin:
-.idea/**/mongoSettings.xml
-
-## File-based project format:
-*.iws
-
-## Plugin-specific files:
-
-# IntelliJ
-target/
-lib_managed/
-project/boot/
-project/plugins/project/
-.cache
-.lib/
-
-.idea/
-
+assets/images/inline-svgs/*.svg
+/assets/images/svg-sprite.svg
+/public/compiled-assets/
+/public/dist/
+/public/webpack/
+/public/images/
+/public/**/*.js
+!/public/assets-new-ui/scripts.js
+/public/**/*.js.map
+/assets/javascripts/lib/bower-components/
+.yarnclean
