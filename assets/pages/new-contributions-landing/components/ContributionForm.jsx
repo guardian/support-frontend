@@ -226,7 +226,7 @@ const defaultForm = (
     || stripePaymentRequestButtonViewOtherPaymentMethods === true
   ) {
     return (
-      <div>
+      <div className={classNameWithModifiers('form', ['content'])}>
         <ContributionFormFields />
         <NewPaymentMethodSelector onPaymentAuthorisation={onPaymentAuthorisation} />
         <ContributionErrorMessage />
