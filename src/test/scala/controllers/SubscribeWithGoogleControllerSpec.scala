@@ -8,16 +8,13 @@ import cats.implicits._
 import model.{DefaultThreadPool, PaymentStatus}
 import model.subscribewithgoogle.GoogleRecordPayment
 import org.scalatest.mockito.MockitoSugar
-import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Configuration, Environment}
+import play.api.{ApplicationLoader, Configuration, Environment}
 import play.api.http.Status
 import play.api.inject.DefaultApplicationLifecycle
 import play.api.libs.json.Json
-import play.api.mvc.EssentialFilter
-import play.api.routing.Router
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers._
 import play.core.DefaultWebCommands
-import router.Routes
 import util.RequestBasedProvider
 import io.circe.syntax._
 import org.mockito.{Matchers => Match}
@@ -29,7 +26,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 
 class SubscribeWithGoogleControllerFixture()(implicit _ec: ExecutionContext, context: ApplicationLoader.Context)
-  extends BuiltInComponentsFromContext(context) with MockitoSugar {
+  extends MockitoSugar {
 
   val ec = implicitly[ExecutionContext]
 
@@ -80,32 +77,11 @@ class SubscribeWithGoogleControllerFixture()(implicit _ec: ExecutionContext, con
   val subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
     mock[RequestBasedProvider[SubscribeWithGoogleBackend]]
 
-  val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
-    mock[RequestBasedProvider[PaypalBackend]]
 
-  val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
-    mock[RequestBasedProvider[StripeBackend]]
-
-  val goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend] =
-    mock[RequestBasedProvider[GoCardlessBackend]]
-
-
-  val subscribeWithGoogleController = new SubscribeWithGoogleController(controllerComponents,
+  val subscribeWithGoogleController = new SubscribeWithGoogleController(stubControllerComponents(),
     subscribeWithGoogleBackendProvider)(DefaultThreadPool(ec), List.empty)
 
-  override def router: Router = new Routes(
-    httpErrorHandler,
-    new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
-    new StripeController(controllerComponents, stripeBackendProvider)(DefaultThreadPool(ec), List.empty),
-    new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty),
-    new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty),
-    subscribeWithGoogleController
-  )
-
-  override def httpFilters: Seq[EssentialFilter] = Seq.empty
-
 }
-
 
 class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Status with MockitoSugar {
 
