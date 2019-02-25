@@ -4,6 +4,7 @@ import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './ann
 
 // ----- Tests ----- //
 
+export type FrequencyTabsTestVariant = 'control' | 'sam' | 'mas';
 
 export const tests: Tests = {
   ssrTwo: {
@@ -62,6 +63,30 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 3,
+  },
+
+  frequencyTabsOrdering: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control', // SMA
+      },
+      {
+        id: 'sam',
+      },
+      {
+        id: 'mas',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 9,
   },
 
   requiredFields: {

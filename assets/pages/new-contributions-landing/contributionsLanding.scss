@@ -927,6 +927,11 @@ form {
   background-color: #ededed;
 }
 
+.frequencies__placeholder .form__radio-group-label {
+  background-color: #ffffff;
+  color: #ffffff;
+}
+
 .fade-in-message .component-progress-message__background {
   background: rgba(0, 0, 0, .6);
   animation-name: fadeInOpacity;
