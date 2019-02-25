@@ -1,5 +1,0 @@
-*.log
-.idea/
-.vscode/
-target/
-cloud-formation/src/node_modules/
