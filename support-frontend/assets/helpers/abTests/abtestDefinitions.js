@@ -4,7 +4,7 @@ import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './ann
 
 // ----- Tests ----- //
 
-export type FrequencyTabsTestVariant = 'control' | 'sam' | 'mas';
+export type FrequencyTabsTestVariant = 'control' | 'sam' | 'mas' | 'notintest';
 
 export const tests: Tests = {
   ssrTwo: {
