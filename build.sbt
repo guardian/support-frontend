@@ -1,136 +1,92 @@
-name := "support-frontend"
+import sbt.Keys.{publishTo, resolvers, scalaVersion}
+import SeleniumTestConfig.{SeleniumTest, seleniumTestFilter, unitTestFilter}
 
-version := "1.0-SNAPSHOT"
+skip in publish := true
 
-packageSummary := "Support Play APP"
-
-scalaVersion := "2.12.6"
-
-import scala.sys.process._
-
-def env(key: String, default: String): String = Option(System.getenv(key)).getOrElse(default)
-
-def commitId(): String = try {
-  "git rev-parse HEAD".!!.trim
-} catch {
-  case _: Exception => "unknown"
-}
+lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
+  scalaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "scala",
+  javaSource in IntegrationTest := baseDirectory.value / "src" / "test" / "java",
+  testOptions in Test := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest"))
+)
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
-lazy val SeleniumTest = config("selenium") extend(Test)
+lazy val commonSettings = Seq(
+  organization := "com.gu",
+  scalaVersion := "2.12.7",
+  resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("releases" at nexus + "service/local/staging/deploy/maven2")
+  },
+  licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+)
 
-def seleniumTestFilter(name: String): Boolean = name startsWith "selenium"
-
-def unitTestFilter(name: String): Boolean = !seleniumTestFilter(name)
-
-testOptions in SeleniumTest := Seq(Tests.Filter(seleniumTestFilter))
-
-testOptions in Test := Seq(Tests.Filter(unitTestFilter))
+lazy val commonDependencies = Seq(
+  "com.typesafe" % "config" % "1.3.2",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "it, test"
+)
 
 lazy val root = (project in file("."))
+  .aggregate(`support-frontend`, `support-workers`, `support-models`, `support-config`, `support-internationalisation`, `support-services`)
+
+lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .configs(SeleniumTest)
   .settings(
-  inConfig(SeleniumTest)(Defaults.testTasks),
-  buildInfoKeys := Seq[BuildInfoKey](
-    name,
-    BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
-    BuildInfoKey.constant("buildTime", System.currentTimeMillis),
-    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId())
-  ),
-  buildInfoPackage := "app",
-  buildInfoOptions += BuildInfoOption.ToMap,
-  scalastyleFailOnError := true,
-  testScalastyle := scalastyle.in(Compile).toTask("").value,
-  (test in Test) := ((test in Test) dependsOn testScalastyle).value,
-  (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
-  (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated
-)
+    inConfig(SeleniumTest)(Defaults.testTasks),
+    commonSettings,
+    buildInfoKeys := BuildInfoSettings.buildInfoKeys,
+    buildInfoPackage := "app",
+    buildInfoOptions += BuildInfoOption.ToMap,
+    scalastyleFailOnError := true,
+    testScalastyle := scalastyle.in(Compile).toTask("").value,
+    (test in Test) := ((test in Test) dependsOn testScalastyle).value,
+    (testOnly in Test) := ((testOnly in Test) dependsOn testScalastyle).evaluated,
+    (testQuick in Test) := ((testQuick in Test) dependsOn testScalastyle).evaluated,
+  ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
-val circeVersion = "0.9.1"
+lazy val `support-workers` = (project in file("support-workers"))
+  .enablePlugins(JavaAppPackaging, RiffRaffArtifact)
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
-resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan"))
 
-val awsVersion = "1.11.475"
-val jacksonVersion = "2.9.8"
+lazy val `support-models` = (project in file("support-models"))
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`support-internationalisation`)
 
-libraryDependencies ++= Seq(
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
-  "org.mockito" % "mockito-core" % "2.11.0" % Test,
-  "io.sentry" % "sentry-logback" % "1.7.5",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-  "com.amazonaws" % "aws-java-sdk-kms" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-sts" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-s3" % awsVersion,
-  "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsVersion,
-  "org.typelevel" %% "cats-core" % "1.0.1",
-  "com.dripower" %% "play-circe" % "2609.1",
-  "com.gu" %% "support-services" % "0.11",
-  "com.gu" %% "fezziwig" % "0.8",
-  "com.typesafe.akka" %% "akka-agent" % "2.5.14",
-  "io.circe" %% "circe-core" % circeVersion,
-  "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % circeVersion,
-  "io.circe" %% "circe-parser" % circeVersion,
-  "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-play-auth" % "2.5",
-  "com.gu" %% "identity-test-users" % "0.6",
-  "com.google.guava" % "guava" % "25.0-jre",
-  "com.netaporter" %% "scala-uri" % "0.4.16",
-  "com.gu" %% "play-googleauth" % "0.7.6",
-  "io.github.bonigarcia" % "webdrivermanager" % "2.1.0" % "test",
-  "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
-  "com.squareup.okhttp3" % "okhttp" % "3.9.0",
-  "com.gocardless" % "gocardless-pro" % "2.8.0",
-  "com.gu" %% "tip" % "0.5.1",
-  // This is required to force aws libraries to use the latest version of jackson
-  "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-  "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
-  "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
-  filters,
-  ws
-)
+lazy val `support-config` = (project in file("support-config"))
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`support-models`, `support-internationalisation`)
 
-sources in(Compile, doc) := Seq.empty
+lazy val `support-services` = (project in file("support-services"))
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  ).dependsOn(`support-internationalisation`, `support-models`, `support-config`)
 
-publishArtifact in(Compile, packageDoc) := false
-
-enablePlugins(SystemdPlugin)
-
-debianPackageDependencies := Seq("openjdk-8-jre-headless")
-
-packageSummary := "Support Frontend Play App"
-packageDescription := """Frontend for the new supporter platform"""
-maintainer := "Membership <membership.dev@theguardian.com>"
-
-riffRaffPackageType := (packageBin in Debian).value
-riffRaffManifestProjectName := "support:frontend"
-riffRaffPackageName := "frontend"
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
-
-def getFiles(f: File):Seq[(File,String)] = {
-  f match {
-    case file if file.isFile => Seq((file,file.toString))
-    case dir if dir.isDirectory => dir.listFiles.toSeq.flatMap(getFiles)
-  }
-}
-
-riffRaffArtifactResources ++= getFiles(file("storybook-static"))
-
-javaOptions in Universal ++= Seq(
-  "-Dpidfile.path=/dev/null",
-  "-J-XX:MaxRAMFraction=2",
-  "-J-XX:InitialRAMFraction=2",
-  "-J-XX:MaxMetaspaceSize=500m",
-  "-J-XX:+PrintGCDetails",
-  "-J-XX:+PrintGCDateStamps",
-  s"-J-Xloggc:/var/log/${packageName.value}/gc.log"
-)
-
-javaOptions in Test += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
-
-addCommandAlias("devrun", "run 9210") // Chosen to not clash with other Guardian projects - we can't all use the Play default of 9000!
+lazy val `support-internationalisation` = (project in file("support-internationalisation"))
+  .configs(IntegrationTest)
+  .settings(
+    commonSettings,
+    integrationTestSettings,
+    libraryDependencies ++= commonDependencies
+  )

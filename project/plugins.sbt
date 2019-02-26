@@ -1,3 +1,11 @@
+logLevel := Level.Warn
+
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
+
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0")
+
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.0")
+
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.16")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
@@ -18,3 +26,6 @@ addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.2.0")
 
 // dependency tracker plugin - needed for snyk cli integration
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.0")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.1")
+
