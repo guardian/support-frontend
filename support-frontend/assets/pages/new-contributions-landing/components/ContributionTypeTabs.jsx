@@ -16,6 +16,7 @@ import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTrackin
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { FrequencyTabsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
 
@@ -26,6 +27,7 @@ type PropTypes = {|
   countryId: IsoCountry,
   countryGroupId: CountryGroupId,
   switches: Switches,
+  frequencyTabsOrdering: FrequencyTabsTestVariant,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
 |};
 
@@ -34,6 +36,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
+  frequencyTabsOrdering: state.common.abParticipations.frequencyTabsOrdering,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -56,7 +59,7 @@ function ContributionTypeTabs(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
-        {getValidContributionTypes().map((contributionType: ContributionType) => (
+        {getValidContributionTypes(props.frequencyTabsOrdering).map((contributionType: ContributionType) => (
           <li className="form__radio-group-item">
             <input
               id={`contributionType-${contributionType}`}

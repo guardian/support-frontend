@@ -21,6 +21,7 @@ import {
 } from 'helpers/checkouts';
 import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { FrequencyTabsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import {
   type Action,
   checkIfEmailHasPassword,
@@ -51,14 +52,14 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(): ContributionType {
+function getInitialContributionType(frequencyTabsOrdering: FrequencyTabsTestVariant): ContributionType {
   const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('ANNUAL'));
 
   return (
     // make sure we don't select a contribution type which isn't on the page
-    getValidContributionTypes().includes(contributionType)
+    getValidContributionTypes(frequencyTabsOrdering).includes(contributionType)
       ? contributionType
-      : getValidContributionTypes()[0]
+      : getValidContributionTypes(frequencyTabsOrdering)[0]
   );
 }
 
@@ -131,10 +132,12 @@ function selectInitialAmounts(state: State, dispatch: Function) {
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
-  const contributionType = getInitialContributionType();
-  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
-
-  dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
+  const { frequencyTabsOrdering } = state.common.abParticipations;
+  if (frequencyTabsOrdering === 'control' || frequencyTabsOrdering === 'mas' || frequencyTabsOrdering === 'sam') {
+    const contributionType = getInitialContributionType(frequencyTabsOrdering);
+    const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
+    dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
+  }
 }
 
 const init = (store: Store<State, Action, Function>) => {

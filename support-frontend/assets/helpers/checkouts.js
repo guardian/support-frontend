@@ -17,6 +17,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { Amount, SelectedAmounts } from 'helpers/contributions';
+import type { FrequencyTabsTestVariant } from 'helpers/abTests/abtestDefinitions';
 
 
 // ----- Types ----- //
@@ -51,8 +52,13 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
   return fallback;
 }
 
-function getValidContributionTypes(): ContributionType[] {
-  return getValidContributionTypesFromUrlOrElse(['ONE_OFF', 'MONTHLY', 'ANNUAL']);
+function getValidContributionTypes(frequencyTabsOrdering: FrequencyTabsTestVariant): ContributionType[] {
+  const mappings = {
+    control: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+    mas: ['MONTHLY', 'ANNUAL', 'ONE_OFF'],
+    sam: ['ONE_OFF', 'ANNUAL', 'MONTHLY'],
+  };
+  return getValidContributionTypesFromUrlOrElse(mappings[frequencyTabsOrdering]);
 }
 
 function toHumanReadableContributionType(contributionType: ContributionType): 'Single' | 'Monthly' | 'Annual' {
