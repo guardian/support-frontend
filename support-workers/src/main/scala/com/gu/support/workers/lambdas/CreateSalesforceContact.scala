@@ -3,18 +3,16 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.{SalesforceContactResponse, UpsertData}
-import com.gu.services.Services
-import com.gu.support.encoding.CustomCodecs._
+import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.AddressLine.asFormattedString
 import com.gu.support.workers.AddressLineTransformer.combinedAddressLine
-import com.gu.support.workers.{AddressLine, AddressLineTransformer, RequestInfo}
+import com.gu.support.workers.RequestInfo
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
-import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState] {
+class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactState, CreateZuoraSubscriptionState](ServiceProvider) {
 
   override protected def servicesHandler(state: CreateSalesforceContactState, requestInfo: RequestInfo, context: Context, services: Services) = {
     SafeLogger.debug(s"CreateSalesforceContact state: $state")

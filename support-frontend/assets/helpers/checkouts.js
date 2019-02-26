@@ -54,6 +54,7 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
 
 function getValidContributionTypes(frequencyTabsOrdering: FrequencyTabsTestVariant): ContributionType[] {
   const mappings = {
+    notintest: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
     control: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
     mas: ['MONTHLY', 'ANNUAL', 'ONE_OFF'],
     sam: ['ONE_OFF', 'ANNUAL', 'MONTHLY'],

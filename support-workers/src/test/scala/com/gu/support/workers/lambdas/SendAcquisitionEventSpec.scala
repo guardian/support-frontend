@@ -2,7 +2,7 @@ package com.gu.support.workers.lambdas
 
 import java.io.ByteArrayOutputStream
 
-import com.gu.ophan.AcquisitionService
+import com.gu.acquisitions.AcquisitionServiceBuilder
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.JsonFixtures.sendAcquisitionEventJson
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -36,9 +36,9 @@ object MockAcquisitionHelper extends MockitoSugar {
     //Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val ophan = AcquisitionService(true)
+    val acquisitionService = AcquisitionServiceBuilder.build(isTestService = true)
 
-    when(services.acquisitionService).thenReturn(ophan)
+    when(services.acquisitionService).thenReturn(acquisitionService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider
   }
