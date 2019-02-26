@@ -1,7 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.emailservices.{EmailService, FailedContributionEmailFields, FailedDigitalPackEmailFields, IdentityUserId}
+import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
 import com.gu.monitoring.SafeLogger
 import com.gu.stripe.Stripe.StripeError
@@ -37,9 +37,10 @@ class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHa
 
   private def sendEmail(state: FailureHandlerState) = {
     val emailFields = state.product match {
-      case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
+      //TODO!!! will currently send nothing
       case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
-      case _: Paper => ???
+      //TODO!!! will currently send nothing
+      case p: Paper => FailedPaperEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
     }
     SafeLogger.info(s"Sending a failure email. Email fields: $emailFields")
     emailService.send(emailFields)

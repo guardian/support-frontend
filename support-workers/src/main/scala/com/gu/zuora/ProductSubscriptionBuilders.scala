@@ -8,7 +8,7 @@ import com.gu.support.config.TouchPointEnvironments.UAT
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers.exceptions.CatalogDataNotFoundException
-import com.gu.support.workers.{Contribution, DigitalPack, ProductType}
+import com.gu.support.workers.{Contribution, DigitalPack, Paper, ProductType}
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
 
@@ -23,7 +23,10 @@ object ProductSubscriptionBuilders {
 
     val ratePlans: Seq[ProductRatePlan[Product]] = getRatePlans(catalog.DigitalPack)
 
-    val maybeProductRatePlanId: Option[ProductRatePlanId] = ratePlans.find(p => p.billingPeriod == productType.billingPeriod) map (_.id)
+    val maybeProductRatePlanId: Option[ProductRatePlanId] = productType match {
+      case dp: DigitalPack => ratePlans.find(rp => rp.billingPeriod == dp.billingPeriod) map (_.id)
+      case p: Paper => ratePlans.find(rp => rp.fulfilmentOptions == p.fulfilmentOptions && rp.productOptions == p.productOptions) map (_.id)
+    }
 
     Try(maybeProductRatePlanId.get) match {
       case Success(value) => value
@@ -47,12 +50,12 @@ object ProductSubscriptionBuilders {
 
   implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder {
     def build(
-      config: ZuoraConfig,
-      country: Country,
-      maybePromoCode: Option[PromoCode],
-      promotionService: PromotionService,
-      isTestUser: Boolean
-    ): SubscriptionData = {
+               config: ZuoraConfig,
+               country: Country,
+               maybePromoCode: Option[PromoCode],
+               promotionService: PromotionService,
+               isTestUser: Boolean
+             ): SubscriptionData = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
       val contractAcceptanceDate = contractEffectiveDate
@@ -67,6 +70,32 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate
       )
 
+      maybePromoCode
+        .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
+        .getOrElse(subscriptionData)
+    }
+  }
+
+  implicit class PaperSubscriptionBuilder(val paper: Paper) extends ProductSubscriptionBuilder {
+    def build(
+               country: Country,
+               maybePromoCode: Option[PromoCode],
+               promotionService: PromotionService,
+               isTestUser: Boolean
+             ): SubscriptionData = {
+
+      val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
+
+      //TODO this will eventually match the first delivery date. This will follow once support-frontend starts sending it.
+      val contractAcceptanceDate = LocalDate.now(DateTimeZone.UTC)
+
+      val productRatePlanId = getProductRatePlanId(catalog.Paper, paper, isTestUser)
+
+      val subscriptionData = buildProductSubscription(
+        productRatePlanId,
+        contractAcceptanceDate = contractAcceptanceDate,
+        contractEffectiveDate = contractEffectiveDate
+      )
       maybePromoCode
         .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
         .getOrElse(subscriptionData)

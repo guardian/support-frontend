@@ -3,6 +3,9 @@ package com.gu.zuora
 import com.gu.config.Configuration
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
+import com.gu.support.catalog
+import com.gu.support.catalog.{Everyday, HomeDelivery, Product, ProductRatePlan}
+import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
@@ -54,6 +57,21 @@ object Fixtures {
     Subscription(date, date, date)
   )
 
+  val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
+  def getRatePlans[T <: Product](product: T): Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
+  val everydayHDProductRatePlanId = getRatePlans(catalog.Paper).find(x => x.fulfilmentOptions == HomeDelivery && x.productOptions == Everyday) map (_.id)
+
+  val everydayPaperSubscriptionData = SubscriptionData(
+    List(
+      RatePlanData(
+        RatePlan(everydayHDProductRatePlanId.get), //Everyday HD product
+        Nil,
+        Nil
+      )
+    ),
+    Subscription(date, date, date)
+  )
+
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
     SubscribeRequest(List(
       SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
@@ -62,6 +80,11 @@ object Fixtures {
   def directDebitSubscriptionRequest: SubscribeRequest =
     SubscribeRequest(List(
       SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+    ))
+
+  def directDebitSubscriptionRequestPaper: SubscribeRequest =
+    SubscribeRequest(List(
+      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, directDebitPaymentMethod, everydayPaperSubscriptionData, SubscribeOptions())
     ))
 
   val invalidMonthlySubsData = SubscriptionData(
