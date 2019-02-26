@@ -65,16 +65,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           directDebitMandateId = directDebitMandateId,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
-        case p: Paper => DigitalPackEmailFields(
-          subscriptionNumber = state.subscriptionNumber,
-          billingPeriod = p.billingPeriod,
-          user = state.user,
-          paymentSchedule = state.paymentSchedule,
-          currency = p.currency,
-          paymentMethod = state.paymentMethod,
-          directDebitMandateId = directDebitMandateId,
-          sfContactId = SfContactId(state.salesForceContact.Id) //todo: future card handles the thank you email
-        )
+        case _: Paper => ???
       }
     )
 

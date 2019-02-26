@@ -51,12 +51,12 @@ object ProductSubscriptionBuilders {
 
   implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder {
     def build(
-         config: ZuoraConfig,
-        country: Country,
-        maybePromoCode: Option[PromoCode],
-        promotionService: PromotionService,
-        isTestUser: Boolean
-      ): SubscriptionData = {
+      config: ZuoraConfig,
+      country: Country,
+      maybePromoCode: Option[PromoCode],
+      promotionService: PromotionService,
+      isTestUser: Boolean
+    ): SubscriptionData = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
       val contractAcceptanceDate = contractEffectiveDate
