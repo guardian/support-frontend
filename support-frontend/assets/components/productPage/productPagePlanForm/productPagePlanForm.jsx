@@ -6,6 +6,7 @@ import React from 'react';
 
 import { bgClassName, Outset } from 'components/content/content';
 import Button from 'components/button/button';
+import { Fieldset } from 'components/forms/standardFields/fieldset';
 
 import { type Option } from 'helpers/types/option';
 
@@ -58,8 +59,9 @@ export default function ProductPagePlanForm<P:string>({
       }}
     >
       <Outset>
-        <div className="component-product-page-plan-form__items">
-          {keys.map((key: P) => {
+        <Fieldset legend="Choose your plan">
+          <div className="component-product-page-plan-form__items">
+            {keys.map((key: P) => {
             const {
               copy, title, offer, price, saving,
             } = plans[key];
@@ -82,7 +84,8 @@ export default function ProductPagePlanForm<P:string>({
               </div>
               );
             })}
-        </div>
+          </div>
+        </Fieldset>
       </Outset>
       <div className={['component-product-page-plan-form__cta', bgClassName].join(' ')} data-disabled={selectedPlan === null}>
         <Button aria-label={null} disabled={!selectedPlanTitle} type="submit">
