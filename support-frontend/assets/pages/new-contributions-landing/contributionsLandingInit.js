@@ -133,7 +133,7 @@ function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: F
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
   const { frequencyTabsOrdering } = state.common.abParticipations;
-  if (frequencyTabsOrdering === 'control' || frequencyTabsOrdering === 'mas' || frequencyTabsOrdering === 'sam') {
+  if (frequencyTabsOrdering === 'notintest' || frequencyTabsOrdering === 'control' || frequencyTabsOrdering === 'mas' || frequencyTabsOrdering === 'sam') {
     const contributionType = getInitialContributionType(frequencyTabsOrdering);
     const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
