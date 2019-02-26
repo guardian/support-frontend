@@ -1,0 +1,5 @@
+package codecs
+
+class ProductTypeDecoderTest {
+
+}
