@@ -2,6 +2,7 @@ package com.gu.zuora
 
 import com.gu.config.Configuration
 import com.gu.i18n.Country
+import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog
 import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.UAT
@@ -21,7 +22,7 @@ object ProductSubscriptionBuilders {
 
     def getRatePlans[T <: Product](product: T): Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
 
-    val ratePlans: Seq[ProductRatePlan[Product]] = getRatePlans(catalog.DigitalPack)
+    val ratePlans: Seq[ProductRatePlan[Product]] = getRatePlans(product)
 
     val maybeProductRatePlanId: Option[ProductRatePlanId] = productType match {
       case dp: DigitalPack => ratePlans.find(rp => rp.billingPeriod == dp.billingPeriod) map (_.id)
@@ -50,12 +51,12 @@ object ProductSubscriptionBuilders {
 
   implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder {
     def build(
-               config: ZuoraConfig,
-               country: Country,
-               maybePromoCode: Option[PromoCode],
-               promotionService: PromotionService,
-               isTestUser: Boolean
-             ): SubscriptionData = {
+         config: ZuoraConfig,
+        country: Country,
+        maybePromoCode: Option[PromoCode],
+        promotionService: PromotionService,
+        isTestUser: Boolean
+      ): SubscriptionData = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
       val contractAcceptanceDate = contractEffectiveDate
@@ -78,11 +79,11 @@ object ProductSubscriptionBuilders {
 
   implicit class PaperSubscriptionBuilder(val paper: Paper) extends ProductSubscriptionBuilder {
     def build(
-               country: Country,
-               maybePromoCode: Option[PromoCode],
-               promotionService: PromotionService,
-               isTestUser: Boolean
-             ): SubscriptionData = {
+      country: Country,
+      maybePromoCode: Option[PromoCode],
+      promotionService: PromotionService,
+      isTestUser: Boolean
+    ): SubscriptionData = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
