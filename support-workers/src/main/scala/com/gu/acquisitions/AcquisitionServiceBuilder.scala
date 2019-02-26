@@ -1,4 +1,4 @@
-package com.gu.ophan
+package com.gu.acquisitions
 
 import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -7,9 +7,9 @@ import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners
 import com.gu.support.config.Stages
 
-object AcquisitionService {
+object AcquisitionServiceBuilder {
 
-  def apply(isTestService: Boolean): com.gu.acquisition.services.AcquisitionService =
+  def build(isTestService: Boolean): com.gu.acquisition.services.AcquisitionService =
     if (isTestService) {
       com.gu.acquisition.services.MockAcquisitionService
     } else {

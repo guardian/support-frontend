@@ -9,7 +9,7 @@ import io.circe.{Decoder, Encoder}
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ServicesHandler[T <: StepFunctionUserState, R](servicesProvider: ServiceProvider = ServiceProvider, d: Option[Duration] = None)(
+abstract class ServicesHandler[T <: StepFunctionUserState, R](servicesProvider: ServiceProvider, d: Option[Duration] = None)(
     implicit
     decoder: Decoder[T],
     encoder: Encoder[R],
