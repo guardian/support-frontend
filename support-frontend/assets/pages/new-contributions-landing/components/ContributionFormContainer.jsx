@@ -9,12 +9,13 @@ import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions';
+import { countryGroupSpecificDetails } from 'helpers/internationalisation/contributions.jsx';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { type LandingPageCopyTestVariant } from 'helpers/abTests/abtestDefinitions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 
@@ -52,6 +53,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  landingPageCopyTestVariant: LandingPageCopyTestVariant,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -68,6 +70,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
+  landingPageCopyTestVariant: state.common.abParticipations.landingPageCopy,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -88,7 +91,7 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
+  const countryGroupDetails = countryGroupSpecificDetails(props.landingPageCopyTestVariant)[props.countryGroupId];
 
   const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
 
