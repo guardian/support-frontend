@@ -111,13 +111,15 @@ const helpVariantHeaderCopyAndContributeCopy = {
   headerClasses: 'help-variant',
 };
 
+const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
+
 const defaultCountryGroupSpecificDetails = {
   GBPCountries: defaultHeaderCopyAndContributeCopy,
   EURCountries: defaultHeaderCopyAndContributeCopy,
   UnitedStates: defaultHeaderCopyAndContributeCopy,
   AUDCountries: {
     ...defaultHeaderCopyAndContributeCopy,
-    headerCopy: 'Help us deliver the independent journalism Australia needs',
+    headerCopy: australiaHeadline,
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
@@ -128,7 +130,10 @@ const helpVariantCountryGroupSpecificDetails = {
   GBPCountries: helpVariantHeaderCopyAndContributeCopy,
   EURCountries: helpVariantHeaderCopyAndContributeCopy,
   UnitedStates: helpVariantHeaderCopyAndContributeCopy,
-  AUDCountries: helpVariantHeaderCopyAndContributeCopy,
+  AUDCountries: {
+    ...helpVariantHeaderCopyAndContributeCopy,
+    headerCopy: australiaHeadline,
+  },
   International: helpVariantHeaderCopyAndContributeCopy,
   NZDCountries: helpVariantHeaderCopyAndContributeCopy,
   Canada: helpVariantHeaderCopyAndContributeCopy,
