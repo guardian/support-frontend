@@ -413,7 +413,7 @@ footer[role="contentinfo"] a {
 
   .gu-content__blurb {
     display: none;
-    max-width: 404px;
+    max-width: 380px;
     border-top: 10px solid gu-colour(highlight-main);
     margin-left: auto;
 
@@ -433,6 +433,14 @@ footer[role="contentinfo"] a {
     @include mq($from: tablet) {
       display: block;
       margin: 30px 120px 30px 10px;
+    }
+  }
+
+  .gu-content__blurb--help-variant {
+    max-width: 404px;
+    p {
+      padding-bottom: $gu-v-spacing;
+      border-bottom: 1px solid gu-colour(highlight-main);
     }
   }
 

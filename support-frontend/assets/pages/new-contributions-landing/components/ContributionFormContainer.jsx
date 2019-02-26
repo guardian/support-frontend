@@ -30,6 +30,7 @@ import {
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
 } from '../contributionsLandingActions';
+import { classNameWithModifiers } from 'helpers/utilities';
 
 
 // ----- Types ----- //
@@ -93,14 +94,14 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = countryGroupSpecificDetails(props.landingPageCopyTestVariant)[props.countryGroupId];
 
-  const headerClasses = `header ${countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : ''}`;
+  const blurbClass = classNameWithModifiers('gu-content__blurb', [countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : '']);
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content gu-content__content--flex">
-        <div className="gu-content__blurb">
-          <h1 className={headerClasses}>{countryGroupDetails.headerCopy}</h1>
+        <div className={blurbClass}>
+          <h1 className="header">{countryGroupDetails.headerCopy}</h1>
           {countryGroupDetails.tickerJsonUrl ?
             <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
           }

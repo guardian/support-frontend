@@ -27,6 +27,7 @@ const helpVariantHeaderCopyAndContributeCopy = {
       <span className="bold">Your support is critical for the future of Guardian journalism.</span>
     </span>
   ),
+  headerClasses: 'help-variant',
 };
 
 const defaultCountryGroupSpecificDetails = {
