@@ -18,7 +18,7 @@ import ophan.thrift.{event => thrift}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[SendAcquisitionEventState, Unit] {
+    extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
 
   import SendAcquisitionEvent._
   import cats.instances.future._
