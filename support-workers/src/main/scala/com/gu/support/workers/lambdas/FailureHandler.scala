@@ -40,7 +40,6 @@ class FailureHandler(emailService: EmailService) extends FutureHandler[FailureHa
       case c: Contribution => FailedContributionEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       //TODO!!! will currently send nothing
       case d: DigitalPack => FailedDigitalPackEmailFields(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
-      //TODO!!! will currently send nothing
       case p: Paper => ???
     }
     SafeLogger.info(s"Sending a failure email. Email fields: $emailFields")
