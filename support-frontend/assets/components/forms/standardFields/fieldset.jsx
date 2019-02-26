@@ -11,7 +11,7 @@ import { type Option } from 'helpers/types/option';
 function Fieldset({ children, legend, ...props }: {children: Node, legend: Option<string>}) {
   return (
     <fieldset className="component-fieldset" {...props} >
-      <legend className="accessibility-hint">{legend}</legend>
+      <legend aria-hidden="true" className="accessibility-hint">{legend}</legend>
       {children}
     </fieldset>);
 }
