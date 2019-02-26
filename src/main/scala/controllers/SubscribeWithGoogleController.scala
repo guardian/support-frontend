@@ -3,7 +3,7 @@ package controllers
 import actions.CorsActionProvider
 import backend.SubscribeWithGoogleBackend
 import com.typesafe.scalalogging.StrictLogging
-import model.{AcquisitionData, ClientBrowserInfo, DefaultThreadPool, PaymentStatus}
+import model.{DefaultThreadPool, PaymentStatus}
 import model.subscribewithgoogle.GoogleRecordPayment
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
@@ -28,10 +28,8 @@ class SubscribeWithGoogleController(
     requestBody.status match {
       case PaymentStatus.Paid =>
         subscribeWithGoogleBackendProvider.getInstanceFor(request)
-          .recordPayment(request.body,
-            AcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
-            ClientBrowserInfo("localhost", "whoknowsyet", None, "127.0.0.1", None)
-          ) //todo: Ophan stats capture as part of future work
+          .recordPayment(request.body)
+      //todo: Ophan stats capture as part of future work
         Future.successful(Ok("{}"))
       case PaymentStatus.Failed | PaymentStatus.Refunded =>
         logger.error(

@@ -184,7 +184,7 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
         when(subscribeWithGoogleBackendProvider.getInstanceFor(Match.any())(Match.any()))
           .thenReturn(mockSubscribeWithGoogleBackend)
 
-        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any(), Match.any(), Match.any()))
+        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any()))
           .thenReturn(recordPaymentResult)
       }
 
@@ -198,7 +198,7 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       status(eventualResult) shouldBe 200
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(1))
-        .recordPayment(Match.any(), Match.any(), Match.any())
+        .recordPayment(Match.any())
     }
 
     "process a payment and fail" in {
@@ -206,7 +206,7 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
         when(subscribeWithGoogleBackendProvider.getInstanceFor(Match.any())(Match.any()))
           .thenReturn(mockSubscribeWithGoogleBackend)
 
-        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any(), Match.any(), Match.any()))
+        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any()))
           .thenReturn(recordPaymentError)
       }
 
@@ -220,7 +220,7 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       status(eventualResult) shouldBe 200
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(1))
-        .recordPayment(Match.any(), Match.any(), Match.any())
+        .recordPayment(Match.any())
     }
 
     "receive a payment fail and do nothing" in {
@@ -228,7 +228,7 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
         when(subscribeWithGoogleBackendProvider.getInstanceFor(Match.any())(Match.any()))
           .thenReturn(mockSubscribeWithGoogleBackend)
 
-        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any(), Match.any(), Match.any()))
+        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any()))
           .thenReturn(recordPaymentError)
       }
 
@@ -242,14 +242,14 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       status(eventualResult) shouldBe 400
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(0))
-        .recordPayment(Match.any(), Match.any(), Match.any())
+        .recordPayment(Match.any())
     }
     "receive a payment refund on payment route" in {
       val fixture = new SubscribeWithGoogleControllerFixture() {
         when(subscribeWithGoogleBackendProvider.getInstanceFor(Match.any())(Match.any()))
           .thenReturn(mockSubscribeWithGoogleBackend)
 
-        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any(), Match.any(), Match.any()))
+        when(mockSubscribeWithGoogleBackend.recordPayment(Match.any()))
           .thenReturn(recordPaymentError)
       }
 
@@ -263,7 +263,7 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       status(eventualResult) shouldBe 400
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(0))
-        .recordPayment(Match.any(), Match.any(), Match.any())
+        .recordPayment(Match.any())
     }
   }
 }

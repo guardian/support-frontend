@@ -27,9 +27,7 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
                                  cloudWatchService: CloudWatchService
                                 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
-  def recordPayment(googleRecordPayment: GoogleRecordPayment,
-                    acquisitionData: AcquisitionData,
-                    clientBrowserInfo: ClientBrowserInfo) = {
+  def recordPayment(googleRecordPayment: GoogleRecordPayment) = {
 
     val identity = getOrCreateIdentityIdFromEmail(googleRecordPayment.email)
 
@@ -45,7 +43,7 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     }
 
     val ophanTrackingResult = identity.flatMap { id =>
-      submitAcquisitionToOphan(googleRecordPayment, acquisitionData, id, clientBrowserInfo)
+      submitAcquisitionToOphan(googleRecordPayment, id)
     }.leftMap{ err =>
       cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
       logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
@@ -84,10 +82,8 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
   }
 
   private def submitAcquisitionToOphan(payment: GoogleRecordPayment,
-                                       acquisitionData: AcquisitionData,
-                                       identityId: Long,
-                                       clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
-    ophanService.submitAcquisition(SubscribeWithGoogleAcquisition(payment, acquisitionData, identityId, clientBrowserInfo))
+                                       identityId: Long): EitherT[Future, BackendError, Unit] = {
+    ophanService.submitAcquisition(SubscribeWithGoogleAcquisition(payment, identityId))
       .bimap(BackendError.fromOphanError, _ => ())
   }
 

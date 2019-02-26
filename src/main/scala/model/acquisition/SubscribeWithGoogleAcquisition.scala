@@ -2,14 +2,11 @@ package model.acquisition
 
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
-import model.{AcquisitionData, ClientBrowserInfo}
 import model.subscribewithgoogle.GoogleRecordPayment
 import ophan.thrift.event.{Acquisition, PaymentFrequency, Product}
 
 case class SubscribeWithGoogleAcquisition(googleRecordPayment: GoogleRecordPayment,
-                                          acquisitionData: AcquisitionData,
-                                          identityId: Long,
-                                          clientBrowserInfo: ClientBrowserInfo) {
+                                          identityId: Long) {
 }
 
 object SubscribeWithGoogleAcquisition {
