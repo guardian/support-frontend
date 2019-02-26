@@ -1,13 +1,13 @@
 package codecs
 
 import com.gu.i18n.Currency
+import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.{Collection, Sunday}
 import com.gu.support.workers.ProductType._
 import com.gu.support.workers._
-import io.circe.parser.parse
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.WordSpec
 
-class ProductTypeDecoderTest extends WordSpec with MustMatchers {
+class ProductTypeDecoderTest extends WordSpec with SerialisationTestHelpers {
 
   "ProductTypeDecoder" should {
     "decode a contribution" in {
@@ -21,17 +21,12 @@ class ProductTypeDecoderTest extends WordSpec with MustMatchers {
         """
           .stripMargin
 
-      val parsedJson = parse(json).toOption.get
-
-      val productType: ProductType = decodeProduct.decodeJson(parsedJson).right.get
-
-      val contributionMaybe = productType match {
-        case c: Contribution => Some(c)
-        case _ => None
-      }
-
-      contributionMaybe.get.amount mustBe 10
-      contributionMaybe.get.billingPeriod mustBe Monthly
+      testDecoding[Contribution](json,
+        contribution => {
+          contribution.amount shouldBe 10
+          contribution.billingPeriod shouldBe Monthly
+        }
+      )
     }
 
     "decode a paper sub" in {
@@ -46,18 +41,13 @@ class ProductTypeDecoderTest extends WordSpec with MustMatchers {
         """
           .stripMargin
 
-      val parsedJson = parse(json).toOption.get
-
-      val productType: ProductType = decodeProduct.decodeJson(parsedJson).right.get
-
-      val paperMaybe = productType match {
-        case p: Paper => Some(p)
-        case _ => None
-      }
-
-      paperMaybe.get.billingPeriod mustBe Monthly
-      paperMaybe.get.productOptions mustBe Sunday
-      paperMaybe.get.fulfilmentOptions mustBe Collection
+      testDecoding[Paper](json,
+        paper => {
+          paper.billingPeriod shouldBe Monthly
+          paper.productOptions shouldBe Sunday
+          paper.fulfilmentOptions shouldBe Collection
+        }
+      )
     }
   }
 
@@ -72,12 +62,11 @@ class ProductTypeDecoderTest extends WordSpec with MustMatchers {
       """
         .stripMargin
 
-    val parsedJson = parse(json).toOption.get
-
-    val productType: ProductType = decodeProduct.decodeJson(parsedJson).right.get
-
-    productType.isInstanceOf[DigitalPack] mustBe true
-    productType.billingPeriod mustBe Monthly
+    testDecoding[DigitalPack](json,
+      digitalPack => {
+        digitalPack.billingPeriod shouldBe Monthly
+      }
+    )
   }
 
   "decode as a digital pack when just billingPeriod and currency are provided" in {
@@ -91,13 +80,13 @@ class ProductTypeDecoderTest extends WordSpec with MustMatchers {
       """
         .stripMargin
 
-    val parsedJson = parse(json).toOption.get
+    testDecoding[DigitalPack](json,
+      digitalPack => {
+        digitalPack.billingPeriod shouldBe Annual
+        digitalPack.currency shouldBe Currency.USD
+      }
+    )
 
-    val productType: ProductType = decodeProduct.decodeJson(parsedJson).right.get
-
-    productType.isInstanceOf[DigitalPack] mustBe true
-    productType.billingPeriod mustBe Annual
-    productType.currency mustBe Currency.USD
   }
 }
 
