@@ -50,6 +50,7 @@ trait AppComponents extends PlayComponents
     subscriptionsController,
     digitalPackController,
     paperController,
+    getAddressController,
     createSubscriptionController,
     loginController,
     testUsersController,

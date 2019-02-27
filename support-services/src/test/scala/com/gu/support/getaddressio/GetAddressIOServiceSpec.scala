@@ -10,6 +10,6 @@ import org.scalatest.{AsyncFlatSpec, Matchers}
 class GetAddressIOServiceSpec extends AsyncFlatSpec with Matchers {
   "GetAddressService" should "be able to find a postcode" in {
     val service = new GetAddressIOService(GetAddressIOConfig.fromConfig(ConfigFactory.load()), RequestRunners.futureRunner)
-    service.find("SE249BJ").map(_.Addresses.nonEmpty shouldBe true)
+    service.find("N19GU").map(_.Addresses.nonEmpty shouldBe true)
   }
 }

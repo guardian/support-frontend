@@ -146,4 +146,10 @@ trait Controllers {
     goCardlessServiceProvider,
     testUsers
   )
+
+  lazy val getAddressController = new GetAddress(
+    controllerComponents,
+    getAddressIOService,
+    actionRefiners
+  )
 }

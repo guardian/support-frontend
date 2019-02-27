@@ -110,6 +110,8 @@ GET  /uk/subscribe/paper          controllers.PaperSubscription.paper(withDelive
 GET  /uk/subscribe/paper/delivery          controllers.PaperSubscription.paper(withDelivery: Boolean = true)
 GET  /subscribe/paper/checkout  controllers.PaperSubscription.displayForm(displayCheckout: Boolean ?= false)
 
+GET /postcode-lookup/:postcode            controllers.GetAddress.findAddress(postcode: String)
+
 POST /subscribe/create  controllers.CreateSubscription.create
 
 # ----- Authentication ----- #
