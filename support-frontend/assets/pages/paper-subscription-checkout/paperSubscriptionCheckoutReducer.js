@@ -44,7 +44,7 @@ export type FormFieldsInState = {|
   townCity: string,
   postcode: string,
   email: string,
-  fulfillmentOption: PaperFulfilmentOptions,
+  fulfilmentOption: PaperFulfilmentOptions,
   productOption: PaperProductOptions,
   startDate: string,
   telephone: Option<string>,
@@ -111,7 +111,7 @@ function getFormFields(state: State): FormFields {
     startDate: state.page.checkout.startDate,
     telephone: state.page.checkout.telephone,
     paymentMethod: state.page.checkout.paymentMethod,
-    fulfillmentOption: state.page.checkout.fulfillmentOption,
+    fulfilmentOption: state.page.checkout.fulfilmentOption,
     productOption: state.page.checkout.productOption,
   };
 }
@@ -233,7 +233,7 @@ function initReducer(initialCountry: IsoCountry) {
     formSubmitted: false,
     isTestUser: isTestUser(),
     productOption: Everyday,
-    fulfillmentOption: Collection,
+    fulfilmentOption: Collection,
     productPrices,
   };
 
