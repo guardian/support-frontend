@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath}
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdUser}
 import com.gu.support.catalog.DigitalPack
@@ -19,6 +19,9 @@ import play.twirl.api.Html
 import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.subscriptionCheckout
 import views.html.helper.CSRF
+import views.ViewHelpers._
+import com.gu.support.encoding.CustomCodecs._
+import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,9 +47,9 @@ class DigitalSubscription(
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Pack Subscription"
-    val id = "digital-subscription-landing-page-" + countryCode
-    val js = "digitalSubscriptionLandingPage.js"
-    val css = "digitalSubscriptionLandingPage.css"
+    val id = EmptyDiv("digital-subscription-landing-page-" + countryCode)
+    val js = RefPath("digitalSubscriptionLandingPage.js")
+    val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
     val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
@@ -59,8 +62,13 @@ class DigitalSubscription(
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCode)
 
     Ok(views.html.main(
-      title, id, js, css, description, canonicalLink, hrefLangLinks, productPrices = Some(productPrices)
-    )).withSettingsSurrogateKey
+      title, id, js, css, description, canonicalLink, hrefLangLinks
+    ) {
+      val priceLines = productPrices.map(p =>
+        s"window.guardian.productPrices = ${outputJson(p)}"
+      )
+      Html(s"""<script type="text/javascript">${priceLines.mkString("\n")}</script>""")
+    }).withSettingsSurrogateKey
   }
 
   def digitalGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/digital")
@@ -95,7 +103,7 @@ class DigitalSubscription(
 
   private def digitalSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Digital Subscription"
-    val id = "digital-subscription-checkout-page"
+    val id = EmptyDiv("digital-subscription-checkout-page")
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
@@ -121,16 +129,16 @@ class DigitalSubscription(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Subscription"
-    val id = "digital-subscription-checkout-page"
-    val js = "digitalSubscriptionCheckoutPageThankYouExisting.js"
-    val css = "digitalSubscriptionCheckoutPageThankYouExisting.css"
+    val id = EmptyDiv("digital-subscription-checkout-page")
+    val js = RefPath("digitalSubscriptionCheckoutPageThankYouExisting.js")
+    val css = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.css"))
 
     Ok(views.html.main(
       title,
       id,
       js,
       css
-    ))
+    )())
   }
 
 }

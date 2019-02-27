@@ -9,10 +9,11 @@ import play.api.http.DefaultHttpErrorHandler
 import play.api.routing.Router
 import play.api.mvc.{RequestHeader, Result}
 import play.api.mvc.Results.{InternalServerError, NotFound}
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath}
 import views.html.main
 import play.core.SourceMapper
 import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
+import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -31,7 +32,12 @@ class CustomHttpErrorHandler(
 
   override protected def onNotFound(request: RequestHeader, message: String): Future[Result] =
     Future.successful(
-      NotFound(main("Error 404", "error-404-page", "error404Page.js", "error404Page.css")(assets, request, settingsProvider.getAllSettings()))
+      NotFound(main(
+        "Error 404",
+        EmptyDiv("error-404-page"),
+        RefPath("error404Page.js"),
+        Left(RefPath("error404Page.css"))
+      )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
         .withSettingsSurrogateKey
     )
@@ -39,7 +45,13 @@ class CustomHttpErrorHandler(
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
     logServerError(request, exception)
     Future.successful(
-      InternalServerError(main("Error 500", "error-500-page", "error500Page.js", "error500Page.css")(assets, request, settingsProvider.getAllSettings()))
+      InternalServerError(
+        main(
+          "Error 500",
+          EmptyDiv("error-500-page"),
+          RefPath("error500Page.js"),
+          Left(RefPath("error500Page.css"))
+        )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.noCache)
         .withSettingsSurrogateKey
     )

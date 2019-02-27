@@ -3,7 +3,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath}
 import io.circe.syntax._
 import monitoring.SafeLogger
 import monitoring.SafeLogger._
@@ -12,6 +12,7 @@ import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
 import services.paypal.{PayPalBillingDetails, PayPalNvpServiceProvider, Token}
 import services.{PayPalNvpService, TestUserService}
+import views.EmptyDiv
 
 import scala.concurrent.ExecutionContext
 
@@ -66,10 +67,10 @@ class PayPalRegular(
     SafeLogger.error(scrub"User hit the PayPal returnUrl.")
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
-      "paypal-error-page",
-      "payPalErrorPage.js",
-      "payPalErrorPageStyles.css"
-    )).withSettingsSurrogateKey
+      EmptyDiv("paypal-error-page"),
+      RefPath("payPalErrorPage.js"),
+      Left(RefPath("payPalErrorPageStyles.css"))
+    )()).withSettingsSurrogateKey
   }
 
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
@@ -79,9 +80,9 @@ class PayPalRegular(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
-      "paypal-error-page",
-      "payPalErrorPage.js",
-      "payPalErrorPageStyles.css"
-    )).withSettingsSurrogateKey
+      EmptyDiv("paypal-error-page"),
+      RefPath("payPalErrorPage.js"),
+      Left(RefPath("payPalErrorPageStyles.css"))
+    )()).withSettingsSurrogateKey
   }
 }

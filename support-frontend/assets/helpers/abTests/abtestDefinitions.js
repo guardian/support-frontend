@@ -8,19 +8,6 @@ export type FrequencyTabsTestVariant = 'control' | 'sam' | 'mas' | 'notintest';
 export type LandingPageCopyTestVariant = 'control' | 'help' | 'notintest';
 
 export const tests: Tests = {
-  ssrTwo: {
-    type: 'OTHER',
-    variants: [{ id: 'off' }, { id: 'on' }],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 0,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 4,
-  },
 
   annualContributionsRoundFour: {
     type: 'AMOUNTS',

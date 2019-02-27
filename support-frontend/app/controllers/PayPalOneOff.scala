@@ -3,7 +3,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath}
 import com.gu.identity.play.AuthenticatedIdUser
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
@@ -18,6 +18,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import services.{IdentityService, PaymentAPIService, TestUserService}
 import com.gu.tip.Tip
+import views.EmptyDiv
 
 class PayPalOneOff(
     actionBuilders: CustomActionBuilders,
@@ -40,10 +41,10 @@ class PayPalOneOff(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
-      "paypal-error-page",
-      "payPalErrorPage.js",
-      "payPalErrorPageStyles.css"
-    )).withSettingsSurrogateKey
+      EmptyDiv("paypal-error-page"),
+      RefPath("payPalErrorPage.js"),
+      Left(RefPath("payPalErrorPageStyles.css"))
+    )()).withSettingsSurrogateKey
   }
 
   def processPayPalError(error: PayPalError)(implicit request: RequestHeader): Result = {

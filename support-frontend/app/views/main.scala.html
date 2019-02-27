@@ -5,20 +5,21 @@
 @import io.circe.syntax._
 @import com.gu.support.encoding.CustomCodecs._
 
+@import views.StyleContent
+@import assets.RefPath
+@import views.EmptyDiv
+@import views.SSRContent
+@import views.ReactDiv
 @(
 	title: String,
-	mainId: String,
-	mainJsBundle: String,
-	mainStyleBundle: String,
+	mainId: ReactDiv,
+	mainJsBundle: RefPath,
+  mainStyleBundle: Either[RefPath, StyleContent],
 	description: Option[String] = None,
 	canonicalLink: Option[String] = None,
 	hrefLangLinks: Map[String, String] = Map(),
-	styles: Html = Html(""),
-	scripts: Html = Html(""),
-  data: Map[String, String] = Map.empty,
   csrf: Option[String] = None,
-  productPrices: Option[ProductPrices] = None,
-)(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
+)(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +57,18 @@
 
 	@optimizeScript()
 
-	<link rel="stylesheet" href="@assets(mainStyleBundle)">
+  @linkedCss(path: RefPath) = {
+    <link rel="stylesheet" href="@assets(path)">
+  }
+
+  @mainStyleBundle.fold(path => {
+    linkedCss(path)
+  }, inlineCss => {
+    <style>
+      @inlineCss.value
+    </style>
+  })
+
   <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
 	<link rel="apple-touch-icon" sizes="152x152" href="@assets("images/favicons/152x152.png")">
 	<link rel="apple-touch-icon" sizes="144x144" href="@assets("images/favicons/144x144.png")">
@@ -79,7 +91,6 @@
 
 	<link rel="preload"  as="script" href="@assets(mainJsBundle)">
 
-	@styles
 </head>
 <body class="header-tweaks">
 	<noscript>
@@ -93,19 +104,28 @@
     </div>
   </noscript>
 
-	<div class="gu-render-to" id="@mainId" @{mapToDataset(data)}></div>
+  @left(id: EmptyDiv) = {
+    <div class="gu-render-to" id="@id.value"></div>
+  }
+
+  @right(ssrContent: SSRContent) = {
+    <div class="gu-render-to" id="@ssrContent.value">@ssrContent.content</div>
+  }
+
+  @mainId.fold(id => {
+      left(id)
+  }, ssrContent => {
+      right(ssrContent)
+  })
 
 	<script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
 	<script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
 	<script type="text/javascript">
     window.guardian = window.guardian || {};
     window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
-    @productPrices.map(p =>
-      Html(s"window.guardian.productPrices = ${Html(outputJson(p))}")
-    )
 	</script>
 
-	@scripts
+	@body
 
 	@* This script is intentionally at the bottom of the file. Please check
 	      all the critical flows work correctly if you change its position *@

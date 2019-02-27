@@ -2,21 +2,23 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.play.IdUser
-import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
 import config.StringsConfig
 import cookies.ServersideAbTestCookie
 import monitoring.SafeLogger
+import monitoring.SafeLogger._
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
+import views.{EmptyDiv, StyleContent}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -111,11 +113,25 @@ class Application(
 
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
     (implicit request: RequestHeader, settings: AllSettings) = {
-    views.html.newContributionsTest(
+
+    val cssPath = RefPath("newContributionsLandingPageStyles.css")
+    val css =
+      if(stage == Stages.DEV) {
+        Left(cssPath)
+      } else {
+        assets.getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
+          SafeLogger.error(scrub"Inline CSS failed to load")
+          Left(cssPath)
+        } { inlineCss =>
+          Right(inlineCss)
+        }
+      }
+
+    views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
-      js = "newContributionsLandingPage.js",
-      css = "newContributionsLandingPageStyles.css",
+      js = RefPath("newContributionsLandingPage.js"),
+      css = css,
       description = stringsConfig.contributionsLandingDescription,
       oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
       oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
@@ -125,8 +141,7 @@ class Application(
       regularUatPayPalConfig = payPalConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      idUser = idUser,
-      stage = stage
+      idUser = idUser
     )
   }
 
@@ -134,18 +149,12 @@ class Application(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       title = "Support the Guardian",
-      mainId = "showcase-landing-page",
-      mainJsBundle = "showcasePage.js",
-      mainStyleBundle = "showcasePage.css",
+      mainId = EmptyDiv("showcase-landing-page"),
+      mainJsBundle = RefPath("showcasePage.js"),
+      mainStyleBundle = Left(RefPath("showcasePage.css")),
       description = stringsConfig.showcaseLandingDescription,
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
-
-    )).withSettingsSurrogateKey
-  }
-
-  def reactTemplate(title: String, id: String, js: String, css: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+    )()).withSettingsSurrogateKey
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
