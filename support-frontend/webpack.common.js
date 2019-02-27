@@ -9,6 +9,36 @@ const cssnano = require('cssnano');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 
+const cssLoaders = [{
+  loader: 'postcss-loader',
+  options: {
+    plugins: [
+      pxtorem({ propList: ['*'] }),
+      autoprefixer(),
+    ],
+  },
+},
+{
+  loader: 'fast-sass-loader',
+  options: {
+    transformers: [
+      {
+        extensions: ['.pasteupimport'],
+        transform: (rawFile) => {
+          if (rawFile.includes('use palette')) {
+            return paletteAsSass();
+          }
+          throw new Error(`Invalid .pasteupimport – ${rawFile}`);
+        },
+      },
+    ],
+    includePaths: [
+      path.resolve(__dirname, 'assets'),
+      path.resolve(__dirname),
+    ],
+  },
+}];
+
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
     new ManifestPlugin({
@@ -97,35 +127,20 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           {
             loader: 'css-loader',
           },
+          ...cssLoaders,
+        ],
+      },
+      {
+        test: /\.module.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
           {
-            loader: 'postcss-loader',
+            loader: 'css-loader',
             options: {
-              plugins: [
-                pxtorem({ propList: ['*'] }),
-                autoprefixer(),
-              ],
+              modules: true,
             },
           },
-          {
-            loader: 'fast-sass-loader',
-            options: {
-              transformers: [
-                {
-                  extensions: ['.pasteupimport'],
-                  transform: (rawFile) => {
-                    if (rawFile.includes('use palette')) {
-                      return paletteAsSass();
-                    }
-                    throw new Error(`Invalid .pasteupimport – ${rawFile}`);
-                  },
-                },
-              ],
-              includePaths: [
-                path.resolve(__dirname, 'assets'),
-                path.resolve(__dirname),
-              ],
-            },
-          },
+          ...cssLoaders,
         ],
       },
     ],

@@ -26,6 +26,7 @@ import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
+import { postcodeFinderReducer } from './components/postcodeFinderReducer';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
 
 // ----- Types ----- //
@@ -285,6 +286,7 @@ function initReducer(initialCountry: IsoCountry) {
     checkout: reducer,
     user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
     directDebit,
+    postcodeFinder: postcodeFinderReducer,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
