@@ -1,10 +1,9 @@
-package codecs
+package com.gu.support.workers
 
 import com.gu.i18n.Currency
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.{Collection, Sunday}
 import com.gu.support.workers.ProductType._
-import com.gu.support.workers._
 import org.scalatest.WordSpec
 
 class ProductTypeDecoderTest extends WordSpec with SerialisationTestHelpers {
