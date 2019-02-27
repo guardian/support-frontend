@@ -13,6 +13,7 @@
   font-weight: bold;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .component-radio-input__input {
@@ -24,7 +25,7 @@
   left: 0;
 }
 
-.component-radio-input__text::before {
+.component-radio-input__text:before {
   display: inline-block;
   content: '';
   width: 18px;
@@ -33,23 +34,43 @@
   box-shadow: inset 0 0 0 3px #fff;
   border-radius: 60px;
   margin-right: $gu-h-spacing/2;
-  transition: 0.2s box-shadow;
 }
 
-.component-radio-input__input:checked + .component-radio-input__text::before {
-  background-color: gu-colour(green-main);
+.component-radio-input__text:after {
+  display: inline-block;
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: gu-colour(green-main);
+  border-radius: 60px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  transform: scale(0.2);
+  opacity: 0;
+  transition: $gu-transition;
+  transition-duration: $gu-animation-speed;
+}
+
+.component-radio-input__input:checked + .component-radio-input__text:before {
   border-color: gu-colour(green-main);
+}
+.component-radio-input__input:checked + .component-radio-input__text:after {
+  transform: scale(0.6);
+  opacity: 1;
 }
 
 .component-radio-input--normal:hover {
-  .component-radio-input__text::before {
+  .component-radio-input__text:before {
     box-shadow: inset 0 0 0 3px #fff,
       0 0 0 2px lighten(gu-colour(neutral-86), 6%);
   }
 }
 
 .component-radio-input--normal .component-radio-input__input {
-  &:focus + .component-radio-input__text::before {
+  &:focus + .component-radio-input__text:before {
     box-shadow: inset 0 0 0 3px #fff,
       0 0 0 2px lighten(gu-colour(highlight-main), 6%);
   }
@@ -63,6 +84,9 @@
   border-radius: 9999em;
   width: 100%;
   box-sizing: border-box;
+  &:after {
+    left: $gu-h-spacing/2 + 2px;
+  }
 }
 
 .component-radio-input--group
