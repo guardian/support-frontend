@@ -32,8 +32,9 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
-import { getVoucherDays, formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
+import { getVoucherDays, getDeliveryDays, formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
 import {
   type FormActionCreators,
   formActionCreators,
@@ -78,6 +79,10 @@ const SelectWithError = compose(withError)(SelectWithLabel);
 // ----- Component ----- //
 
 function CheckoutForm(props: PropTypes) {
+
+  const days = props.fulfilmentOption === HomeDelivery
+    ? getDeliveryDays(Date.now(), props.productOption)
+    : getVoucherDays(Date.now(), props.productOption);
 
   const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
     'Payment Attempt Failed';
@@ -207,8 +212,8 @@ function CheckoutForm(props: PropTypes) {
             <FormSection title="When would you like your subscription to start?">
               <Error htmlFor={null} error={firstError('startDate', props.formErrors)}>
                 <Fieldset id={null} legend="When would you like your subscription to start?">
-                  {getVoucherDays(Date.now(), props.productOption).map((d) => {
-                    const [userDate, machineDate] = [formatUserDate(d), formatMachineDate(d)];
+                  {days.map((day) => {
+                    const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                     return (
                       <RadioInput
                         text={userDate}
