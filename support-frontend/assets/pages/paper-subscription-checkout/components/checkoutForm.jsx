@@ -15,7 +15,6 @@ import Text from 'components/text/text';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
 import { Input } from 'components/forms/standardFields/input';
-import { Error } from 'components/forms/standardFields/error';
 import { Select } from 'components/forms/standardFields/select';
 import { Fieldset } from 'components/forms/standardFields/fieldset';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
@@ -74,7 +73,8 @@ const StaticInputWithLabel = withLabel(Input);
 const InputWithLabel = asControlled(StaticInputWithLabel);
 const InputWithError = withError(InputWithLabel);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
-const SelectWithError = compose(withError)(SelectWithLabel);
+const SelectWithError = withError(SelectWithLabel);
+const FieldsetWithError = withError(Fieldset);
 
 // ----- Component ----- //
 
@@ -210,21 +210,19 @@ function CheckoutForm(props: PropTypes) {
               </SelectWithError>
             </FormSection>
             <FormSection title="When would you like your subscription to start?">
-              <Error htmlFor={null} error={firstError('startDate', props.formErrors)}>
-                <Fieldset id={null} legend="When would you like your subscription to start?">
-                  {days.map((day) => {
-                    const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
-                    return (
-                      <RadioInput
-                        text={userDate}
-                        name={machineDate}
-                        checked={props.startDate === machineDate}
-                        onChange={() => props.setStartDate(machineDate)}
-                      />
-                    );
-                  })}
-                </Fieldset>
-              </Error>
+              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
+                {days.map((day) => {
+                  const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                  return (
+                    <RadioInput
+                      text={userDate}
+                      name={machineDate}
+                      checked={props.startDate === machineDate}
+                      onChange={() => props.setStartDate(machineDate)}
+                    />
+                  );
+                })}
+              </FieldsetWithError>
             </FormSection>
             <FormSection title="How would you like to pay?">
               <Rows>
