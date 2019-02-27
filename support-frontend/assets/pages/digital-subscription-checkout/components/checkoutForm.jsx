@@ -36,6 +36,8 @@ import { regularPrice as dpRegularPrice, promotion as digitalPackPromotion } fro
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
+import { PayPalRecurringButton } from './../../../pages/new-contributions-landing/components/PayPalRecurringButton';
+import { onPaymentAuthorisation } from './../digitalSubscriptionCheckoutActions';
 
 import {
   type FormActionCreators,
@@ -67,6 +69,20 @@ function mapStateToProps(state: State) {
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+    csrf: state.page.csrf,
+    payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+    paymentMethod: state.page.checkout.paymentMethod,
+  };
+}
+
+// ----- Map Dispatch/Props ----- //
+function mapDispatchToProps(dispatch: Dispatch) {
+  return {
+    ...formActionCreators,
+    signOut,
+    onPaymentAuthorisation: () => {
+      dispatch(onPaymentAuthorisation);
+    },
   };
 }
 
@@ -284,6 +300,12 @@ function CheckoutForm(props: PropTypes) {
                       checked={props.paymentMethod === 'Stripe'}
                       onChange={() => props.setPaymentMethod('Stripe')}
                     />
+                    <RadioInput
+                      text="PayPal"
+                      name="paymentMethod"
+                      checked={props.paymentMethod === 'PayPal'}
+                      onChange={() => props.setPaymentMethod('PayPal')}
+                    />
                   </Fieldset>
                 </div>
               }
@@ -310,7 +332,22 @@ function CheckoutForm(props: PropTypes) {
             </FormSection>
             <FormSection>
               {errorState}
-              <Button aria-label={null} type="submit">Continue to payment</Button>
+              {props.paymentMethod === 'PayPal' ? (
+                <PayPalRecurringButton
+                  onPaymentAuthorisation={props.onPaymentAuthorisation}
+                  csrf={props.csrf}
+                  currencyId="GBP"
+                  hasLoaded={props.payPalHasLoaded}
+                  canOpen={() => true}
+                  onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
+                  formClassName="form--contribution"
+                  isTestUser={props.isTestUser}
+                  setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+                  contributionType={props.contributionType}
+                />
+              ) : (
+                <Button aria-label={null} type="submit">Continue to payment</Button>
+              )}
             </FormSection>
           </Form>
         </Checkout>
@@ -323,7 +360,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, {
-  ...formActionCreators,
-  signOut,
-})(CheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(CheckoutForm);

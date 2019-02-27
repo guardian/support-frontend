@@ -34,10 +34,13 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
 
+import { loadPayPalRecurring } from '../../helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setPayPalHasLoaded } from './digitalSubscriptionCheckoutActions';
+
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-type PaymentMethod = 'Stripe' | 'DirectDebit';
+type PaymentMethod = 'Stripe' | 'DirectDebit' | 'PayPal';
 
 export type FormFieldsInState = {|
   firstName: string,
@@ -172,7 +175,7 @@ const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
-const signOut = () => { window.location.href = getSignoutUrl(); };
+const signOut = () => { window.location.href = getSignoutUrl(); }; // TODO move this, SignOut is not an action creator
 
 function submitForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
@@ -182,6 +185,15 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
     showPaymentMethod(dispatch, state);
   }
 }
+
+const showPayPal = (dispatch: Function) => {
+  console.log('showPayPal is working');
+  loadPayPalRecurring()
+    .then(() => {
+      console.log('this has loaded');
+      dispatch(setPayPalHasLoaded());
+    });
+};
 
 const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
@@ -210,11 +222,17 @@ const formActionCreators = {
   setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
   setPostcode: (postcode: string): Action => ({ type: 'SET_POSTCODE', postcode }),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
-  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
-    type: 'SET_PAYMENT_METHOD',
-    paymentMethod,
-    country: getState().common.internationalisation.countryId,
-  }),
+  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (paymentMethod === 'PayPal') {
+      showPayPal(dispatch);
+    }
+    return dispatch({
+      type: 'SET_PAYMENT_METHOD',
+      paymentMethod,
+      country: getState().common.internationalisation.countryId,
+    });
+  },
+
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
     (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
@@ -251,6 +269,7 @@ function initReducer(initialCountry: IsoCountry) {
     formSubmitted: false,
     isTestUser: isTestUser(),
     productPrices,
+    payPalHasLoaded: false,
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
@@ -311,6 +330,9 @@ function initReducer(initialCountry: IsoCountry) {
 
       case 'SET_FORM_SUBMITTED':
         return { ...state, formSubmitted: action.formSubmitted };
+
+      case 'SET_PAYPAL_HAS_LOADED':
+        return { ...state, payPalHasLoaded: true };
 
       default:
         return state;

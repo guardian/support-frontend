@@ -123,6 +123,9 @@ function showPaymentMethod(
     case 'DirectDebit':
       dispatch(openDirectDebitPopUp());
       break;
+    case 'PayPal':
+      // PayPal case is here to stop showPaymentMethod from defaulting
+      break;
     case null:
     case undefined:
       console.log('Undefined payment method');
