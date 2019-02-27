@@ -2,31 +2,33 @@
 
 // ----- Imports ----- //
 
-import * as React from 'react';
+import React, { type Node } from 'react';
+
+import { classNameWithModifiers } from 'helpers/utilities';
 
 import './radioInput.scss';
 
 // ----- Types ----- //
 
 type PropTypes = {
-  text: string | React.Node,
+  text: Node,
+  appearance: 'normal' | 'group',
 };
-
 
 // ----- Component ----- //
 
-function RadioInput({ text, ...otherProps }: PropTypes) {
-
+function RadioInput({ text, appearance, ...otherProps }: PropTypes) {
   return (
-    <label className="component-radio-input">
+    <label className={classNameWithModifiers('component-radio-input', [appearance])}>
       <input className="component-radio-input__input" type="radio" {...otherProps} />
       <span className="component-radio-input__text">{text}</span>
     </label>
   );
-
 }
-
 
 // ----- Exports ----- //
 
+RadioInput.defaultProps = {
+  appearance: 'normal',
+};
 export { RadioInput };
