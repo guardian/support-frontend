@@ -5,6 +5,7 @@ import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './ann
 // ----- Tests ----- //
 
 export type FrequencyTabsTestVariant = 'control' | 'sam' | 'mas' | 'notintest';
+export type LandingPageCopyTestVariant = 'control' | 'help' | 'notintest';
 
 export const tests: Tests = {
   ssrTwo: {
@@ -117,4 +118,24 @@ export const tests: Tests = {
     seed: 7,
   },
 
+  landingPageCopy: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'help',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 12,
+  },
 };
