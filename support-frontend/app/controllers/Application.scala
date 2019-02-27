@@ -17,7 +17,6 @@ import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
-import utils.QueryStringUtils.addFormDesignTestParameterQueryString
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -73,7 +72,7 @@ class Application(
       case _ => "/uk/contribute"
     }
 
-    Redirect(redirectUrl, addFormDesignTestParameterQueryString(request.queryString), status = FOUND)
+    Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -100,18 +99,17 @@ class Application(
   }
 
   def contributionsLanding(
-    countryCode: String,
-    maybeFormDesignTest: Option[String]
+    countryCode: String
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, maybeFormDesignTest.contains("variant"))),
-      user => Ok(contributionsHtml(countryCode, user, maybeFormDesignTest.contains("variant")))
+      _ => Ok(contributionsHtml(countryCode, None)),
+      user => Ok(contributionsHtml(countryCode, user))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], isInFormDesignTest: Boolean)
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
     (implicit request: RequestHeader, settings: AllSettings) = {
     views.html.newContributionsTest(
       title = "Support the Guardian | Make a Contribution",
@@ -128,8 +126,7 @@ class Application(
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser,
-      stage = stage,
-      formDesignTestOn = isInFormDesignTest
+      stage = stage
     )
   }
 

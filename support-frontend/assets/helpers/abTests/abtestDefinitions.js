@@ -21,20 +21,6 @@ export const tests: Tests = {
     seed: 4,
   },
 
-  formDesignTest: {
-    type: 'OTHER',
-    variants: [{ id: 'control' }, { id: 'variant' }],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 0,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 1,
-  },
-
   annualContributionsRoundFour: {
     type: 'AMOUNTS',
     variants: [
