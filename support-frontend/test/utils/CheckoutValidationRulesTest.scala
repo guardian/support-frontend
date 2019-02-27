@@ -77,6 +77,11 @@ class PaperValidationTest extends FlatSpec with Matchers {
     PaperValidation.passes(requestDeliveredToUs) shouldBe true
   }
 
+  "PaperValidation.passes" should "fail if there is no first delivery date" in {
+    val requestDeliveredToUs = validPaperRequest.copy(firstDeliveryDate = None)
+    PaperValidation.passes(requestDeliveredToUs) shouldBe false
+  }
+
 }
 
 object TestData {

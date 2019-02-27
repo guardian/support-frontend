@@ -48,6 +48,10 @@ object RetryImplicits {
     def asRetryException: RetryException = new RetryNone(message = throwable.getMessage, cause = throwable)
   }
 
+  implicit class BadRequestConversions(val throwable: BadRequestException) {
+    def asRetryException: RetryException = new RetryNone(message = throwable.getMessage, cause = throwable)
+  }
+
   implicit class OphanServiceErrorConversions(val error: AnalyticsServiceError) {
     import AnalyticsServiceError._
 

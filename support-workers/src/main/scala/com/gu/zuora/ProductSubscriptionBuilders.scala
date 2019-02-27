@@ -8,7 +8,7 @@ import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.UAT
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
-import com.gu.support.workers.exceptions.CatalogDataNotFoundException
+import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
 import com.gu.support.workers.{Contribution, DigitalPack, Paper, ProductType}
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
@@ -81,14 +81,17 @@ object ProductSubscriptionBuilders {
     def build(
       country: Country,
       maybePromoCode: Option[PromoCode],
+      firstDeliveryDate: Option[LocalDate],
       promotionService: PromotionService,
       isTestUser: Boolean
     ): SubscriptionData = {
 
       val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
-      //TODO this will eventually match the first delivery date. This will follow once support-frontend starts sending it.
-      val contractAcceptanceDate = LocalDate.now(DateTimeZone.UTC)
+      val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
+        case Success(value) => value
+        case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a print subscription.", e)
+      }
 
       val productRatePlanId = getProductRatePlanId(catalog.Paper, paper, isTestUser)
 

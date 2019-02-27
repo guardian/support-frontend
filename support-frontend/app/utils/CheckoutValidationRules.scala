@@ -65,6 +65,8 @@ object PaperValidation {
 
   import AddressAndCurrencyValidationRules._
 
+  def hasFirstDeliveryDate(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = createSupportWorkersRequest.firstDeliveryDate.nonEmpty
+
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
     deliveredToUkAndPaidInGbp(createSupportWorkersRequest.country, createSupportWorkersRequest.product.currency)
