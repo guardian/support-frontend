@@ -57,7 +57,7 @@ object ProductType {
   implicit val decodeProduct: Decoder[ProductType] =
     List[Decoder[ProductType]](
       Decoder[Contribution].widen,
-      Decoder[DigitalPack].widen,
-      Decoder[Paper].widen
+      Decoder[Paper].widen,
+      Decoder[DigitalPack].widen
     ).reduceLeft(_ or _)
 }

@@ -131,16 +131,6 @@ function getSSRParticipationsFromQuery(): ?Participations {
   return { ssrTwo: 'notintest' };
 }
 
-function getFormDesignTestParticipationsFromQuery(): ?Participations {
-
-  const formDesignParam = (new URL(document.URL)).searchParams.get('formDesignTest');
-  if (formDesignParam) {
-    return { formDesignTest: formDesignParam };
-  }
-
-  return { formDesignTest: 'notintest' };
-}
-
 function userInBreakpoint(audience: Audience): boolean {
 
   if (!audience.breakpoint) {
@@ -233,7 +223,7 @@ function getParticipations(
   // seeing as the ssr test variant that the user is in is decided, server side, by the query parameter
   // and not by the local storage, we always want to get the most recent value from the query string parameter
   // for the ssr test variant
-  return { ...participations, ...getSSRParticipationsFromQuery(), ...getFormDesignTestParticipationsFromQuery() };
+  return { ...participations, ...getSSRParticipationsFromQuery() };
 }
 
 const init = (
