@@ -61,12 +61,16 @@
     <link rel="stylesheet" href="@assets(path)">
   }
 
+    @inline(inlineCss: StyleContent) = {
+      <style>
+        @inlineCss.value
+      </style>
+    }
+
   @mainStyleBundle.fold(path => {
     linkedCss(path)
   }, inlineCss => {
-    <style>
-      @inlineCss.value
-    </style>
+    inline(inlineCss)
   })
 
   <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
