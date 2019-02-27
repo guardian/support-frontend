@@ -69,6 +69,7 @@ object PaperValidation {
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
-    deliveredToUkAndPaidInGbp(createSupportWorkersRequest.country, createSupportWorkersRequest.product.currency)
+    deliveredToUkAndPaidInGbp(createSupportWorkersRequest.country, createSupportWorkersRequest.product.currency) &&
+    hasFirstDeliveryDate(createSupportWorkersRequest)
   }
 }
