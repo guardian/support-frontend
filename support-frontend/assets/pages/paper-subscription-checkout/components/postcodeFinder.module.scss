@@ -1,0 +1,11 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.root {
+  display: flex;
+  :global {
+    .component-button {
+      margin-left: $gu-h-spacing /2;
+      flex: 0 0 auto;
+    }
+  }
+}

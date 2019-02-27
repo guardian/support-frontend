@@ -9,6 +9,11 @@ const cssnano = require('cssnano');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 
+
+const camelCaseToDash = str =>
+  str.replace(/([a-zA-Z])(?=[A-Z])/g, '$1-').toLowerCase();
+
+
 const cssLoaders = [{
   loader: 'postcss-loader',
   options: {
@@ -122,6 +127,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       },
       {
         test: /\.scss$/,
+        exclude: /\.module.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
           {
@@ -138,6 +144,24 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
             loader: 'css-loader',
             options: {
               modules: true,
+              getLocalIdent: (context, localIdentName, localName) => {
+                const { dir, name } = path.parse(path.relative(__dirname, context.resourcePath));
+                const getStartingName = (path) => {
+                  if (path === 'pages') { return null; } else if (path === 'components') { return 'component'; }
+                  return path;
+                };
+                let identity =
+                  camelCaseToDash([
+                    getStartingName(dir.split(path.sep).splice(1, 1)[0]),
+                    ...dir.split(path.sep).splice(2),
+                    name.substr(0, name.indexOf('.')),
+                  ].filter(Boolean).join('-'));
+
+                if (localName !== 'root') {
+                  identity += `__${camelCaseToDash(localName)}`;
+                }
+                return identity;
+              },
             },
           },
           ...cssLoaders,
