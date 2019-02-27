@@ -112,7 +112,8 @@ class SupportWorkersClient(
         referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
         supportAbTests = request.body.supportAbTests
       )),
-      promoCode = request.body.promoCode
+      promoCode = request.body.promoCode,
+      firstDeliveryDate = request.body.firstDeliveryDate
     )
     underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
       { error =>

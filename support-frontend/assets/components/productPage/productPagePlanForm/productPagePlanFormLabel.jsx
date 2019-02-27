@@ -29,10 +29,11 @@ export default ({
   type, title, offer, children, checked, onChange, footer,
 }: PropTypes) => {
   const id = uuidv4();
+  const descriptionId = uuidv4();
   return (
     <label onChange={onChange} htmlFor={id} className="component-product-page-plan-form-label">
-      <input checked={checked} className="component-product-page-plan-form-label__input" id={id} type="radio" name="sub-type" value={type} />
-      <div className="component-product-page-plan-form-label__box">
+      <input aria-describedby={descriptionId} aria-label={title} checked={checked} className="component-product-page-plan-form-label__input" id={id} type="radio" name="sub-type" value={type} />
+      <div className="component-product-page-plan-form-label__box" id={descriptionId} aria-hidden="true">
         <div className="component-product-page-plan-form-label__title">
           {title}
           <div aria-hidden="true" className="component-product-page-plan-form-label__check"><SvgCheckmark /></div>

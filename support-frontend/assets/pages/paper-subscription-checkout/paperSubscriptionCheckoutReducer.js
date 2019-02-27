@@ -24,6 +24,8 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
@@ -33,7 +35,13 @@ import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } fr
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 type PaymentMethod = 'Stripe' | 'DirectDebit';
 
+type Product = {|
+  fulfilmentOption: PaperFulfilmentOptions,
+  productOption: PaperProductOptions,
+|};
+
 export type FormFieldsInState = {|
+  ...Product,
   title: Option<Title>,
   firstName: string,
   lastName: string,
@@ -107,6 +115,8 @@ function getFormFields(state: State): FormFields {
     startDate: state.page.checkout.startDate,
     telephone: state.page.checkout.telephone,
     paymentMethod: state.page.checkout.paymentMethod,
+    fulfilmentOption: state.page.checkout.fulfilmentOption,
+    productOption: state.page.checkout.productOption,
   };
 }
 
@@ -120,27 +130,27 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   return validate([
     {
       rule: nonEmptyString(fields.firstName),
-      error: formError('firstName', 'Please enter a value.'),
+      error: formError('firstName', 'Please enter a first name.'),
     },
     {
       rule: nonEmptyString(fields.lastName),
-      error: formError('lastName', 'Please enter a value.'),
+      error: formError('lastName', 'Please enter a last name.'),
     },
     {
       rule: nonEmptyString(fields.addressLine1),
-      error: formError('addressLine1', 'Please enter a value'),
+      error: formError('addressLine1', 'Please enter an address'),
     },
     {
       rule: nonEmptyString(fields.startDate),
-      error: formError('startDate', 'Please enter a value'),
+      error: formError('startDate', 'Please select a start date'),
     },
     {
       rule: nonEmptyString(fields.townCity),
-      error: formError('townCity', 'Please enter a value'),
+      error: formError('townCity', 'Please enter a city'),
     },
     {
       rule: nonEmptyString(fields.postcode),
-      error: formError('postcode', 'Please enter a value'),
+      error: formError('postcode', 'Please enter a post code'),
     },
     {
       rule: notNull(fields.country),
@@ -205,7 +215,27 @@ export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
-function initReducer(initialCountry: IsoCountry) {
+const getInitialProduct = (productInUrl: ?string, fulfillmentInUrl: ?string): Product => ({
+  productOption:
+    productInUrl === 'Saturday' ||
+    productInUrl === 'SaturdayPlus' ||
+    productInUrl === 'Sunday' ||
+    productInUrl === 'SundayPlus' ||
+    productInUrl === 'Weekend' ||
+    productInUrl === 'WeekendPlus' ||
+    productInUrl === 'Sixday' ||
+    productInUrl === 'SixdayPlus' ||
+    productInUrl === 'Everyday' ||
+    productInUrl === 'EverydayPlus'
+      ? (productInUrl: PaperProductOptions)
+      : Everyday,
+  fulfilmentOption:
+    fulfillmentInUrl === 'Collection' || fulfillmentInUrl === 'HomeDelivery'
+      ? (fulfillmentInUrl: PaperFulfilmentOptions)
+      : Collection,
+});
+
+function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillmentInUrl: ?string) {
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const { productPrices } = window.guardian;
 
@@ -226,6 +256,7 @@ function initReducer(initialCountry: IsoCountry) {
     submissionError: null,
     formSubmitted: false,
     isTestUser: isTestUser(),
+    ...getInitialProduct(productInUrl, fulfillmentInUrl),
     productPrices,
   };
 

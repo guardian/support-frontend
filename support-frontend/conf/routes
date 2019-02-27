@@ -60,8 +60,8 @@ GET  /contribute/one-off/autofill                   controllers.Application.perm
 # ----- Contributions ----- #
 
 GET  /contribute                                        controllers.Application.contributeGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String, formDesignTest: Option[String])
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String, formDesignTest: Option[String])
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String)
 
 
 POST /contribute/recurring/create                   controllers.RegularContributions.create

@@ -31,8 +31,9 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
-
+import { getVoucherDays, getDeliveryDays, formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
 import {
   type FormActionCreators,
   formActionCreators,
@@ -72,11 +73,16 @@ const StaticInputWithLabel = withLabel(Input);
 const InputWithLabel = asControlled(StaticInputWithLabel);
 const InputWithError = withError(InputWithLabel);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
-const SelectWithError = compose(withError)(SelectWithLabel);
+const SelectWithError = withError(SelectWithLabel);
+const FieldsetWithError = withError(Fieldset);
 
 // ----- Component ----- //
 
 function CheckoutForm(props: PropTypes) {
+
+  const days = props.fulfilmentOption === HomeDelivery
+    ? getDeliveryDays(Date.now(), props.productOption)
+    : getVoucherDays(Date.now(), props.productOption);
 
   const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
     'Payment Attempt Failed';
@@ -204,14 +210,20 @@ function CheckoutForm(props: PropTypes) {
               </SelectWithError>
             </FormSection>
             <FormSection title="When would you like your subscription to start?">
-              <InputWithError
-                id="start-date"
-                label="Start date"
-                type="date"
-                error={firstError('startDate', props.formErrors)}
-                value={props.startDate}
-                setValue={props.setStartDate}
-              />
+              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
+                {days.map((day) => {
+                  const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                  return (
+                    <RadioInput
+                      appearance="group"
+                      text={userDate}
+                      name={machineDate}
+                      checked={props.startDate === machineDate}
+                      onChange={() => props.setStartDate(machineDate)}
+                    />
+                  );
+                })}
+              </FieldsetWithError>
             </FormSection>
             <FormSection title="How would you like to pay?">
               <Rows>
@@ -230,8 +242,10 @@ function CheckoutForm(props: PropTypes) {
                   />
                 </Fieldset>
                 {errorState}
-                <Button aria-label={null} type="submit">Continue to payment</Button>
               </Rows>
+            </FormSection>
+            <FormSection>
+              <Button aria-label={null} type="submit">Continue to payment</Button>
               <DirectDebitPopUpForm
                 onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                   props.onPaymentAuthorised(pa);

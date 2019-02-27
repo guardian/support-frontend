@@ -1,10 +1,16 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-checkout-form-section {
-  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing*2;
-  .component-form-label__label {
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing * 2;
+  .component-form-label + .component-form-label {
     margin-top: $gu-v-spacing * 2;
-  }  
+  }
+  .component-radio-input + .component-radio-input {
+    margin-top: $gu-v-spacing;
+  }
+  .component-radio-input--group + .component-radio-input--group {
+    margin-top: $gu-v-spacing / 2;
+  }
 }
 
 .component-checkout-form-section + .component-checkout-form-section {
@@ -13,5 +19,5 @@
 
 .component-checkout-form-section__heading {
   @include gu-fontset-heading;
-  margin-bottom: ($gu-v-spacing/2);
+  margin-bottom: ($gu-v-spacing * 2);
 }

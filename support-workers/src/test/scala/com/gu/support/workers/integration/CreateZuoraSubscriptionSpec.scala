@@ -6,7 +6,7 @@ import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvide
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromotionService
-import com.gu.support.workers.JsonFixtures._
+import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
@@ -80,6 +80,17 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     val outStream = new ByteArrayOutputStream()
 
     createZuora.handleRequest(digipackSubscriptionWithDiscountAndFreeTrialJson, outStream, context)
+
+    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
+    sendThankYouEmail._1.subscriptionNumber.length should be > 0
+  }
+
+  "CreateZuoraSubscription lambda" should "create an everyday paper subscription" in {
+    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
+
+    val outStream = new ByteArrayOutputStream()
+
+    createZuora.handleRequest(wrapFixture(createEverydayPaperSubscriptionJson), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
     sendThankYouEmail._1.subscriptionNumber.length should be > 0

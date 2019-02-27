@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
+import { getQueryParameter } from 'helpers/url';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
@@ -21,7 +22,13 @@ import CheckoutStage from './components/checkoutStage';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(commonState => initReducer(commonState.internationalisation.countryId), true);
+const fulfilmentOption = getQueryParameter('fulfilment');
+const productOption = getQueryParameter('product');
+
+const store = pageInit(
+  commonState => initReducer(commonState.internationalisation.countryId, productOption, fulfilmentOption),
+  true,
+);
 
 const { countryGroupId } = store.getState().common.internationalisation;
 
@@ -36,7 +43,8 @@ const content = (
           <SubscriptionTermsPrivacy subscriptionProduct="Paper" />
           <CustomerService selectedCountryGroup={countryGroupId} />
           <SubscriptionFaq subscriptionProduct="Paper" />
-        </Footer>}
+        </Footer>
+      }
     >
       <CheckoutStage />
     </Page>
