@@ -42,6 +42,7 @@ import {
   getFormFields,
   type State,
 } from '../paperSubscriptionCheckoutReducer';
+import PostcodeFinder from './postcodeFinder';
 
 // ----- Types ----- //
 
@@ -159,6 +160,7 @@ function CheckoutForm(props: PropTypes) {
               />
             </FormSection>
             <FormSection title="Where should we deliver your newspapers?">
+              <PostcodeFinder id="postcode" />
               <InputWithError
                 id="postcode"
                 label="Delivery postcode"
