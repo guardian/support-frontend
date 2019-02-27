@@ -7,7 +7,7 @@ import java.util.Date
 import io.circe.syntax._
 import io.circe.generic.JsonCodec
 import model.PaymentProvider
-import model.PaymentProvider.{Paypal, Stripe, StripeApplePay, StripePaymentRequestButton}
+import model.PaymentProvider._
 
 /*
  * Variable name capitalisation due to the expected JSON structure
@@ -83,6 +83,7 @@ case class ContributorRow(
   private def renderPaymentMethod: String = paymentMethod match {
     case Stripe | StripeApplePay | StripePaymentRequestButton => "credit / debit card"
     case Paypal => "PayPal"
+    case SubscribeWithGoogle => "Subscribe With Google" //todo: confirm phrase usage
   }
 
   def toJsonContributorRowSqsMessage: String = {

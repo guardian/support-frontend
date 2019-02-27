@@ -8,8 +8,8 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import router.Routes
 import util.RequestBasedProvider
 import aws.AWSClientBuilder
-import backend.{GoCardlessBackend, PaypalBackend, StripeBackend}
-import _root_.controllers.{AppController, ErrorHandler, PaypalController, StripeController, GoCardlessController}
+import backend.{GoCardlessBackend, PaypalBackend, StripeBackend, SubscribeWithGoogleBackend}
+import _root_.controllers.{AppController, ErrorHandler, GoCardlessController, PaypalController, StripeController, SubscribeWithGoogleController}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{ConfigLoader, PlayConfigUpdater}
@@ -62,7 +62,7 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
 
   implicit val _wsClient: WSClient = wsClient
 
-  override lazy val httpErrorHandler =  new ErrorHandler(environment, configuration, sourceMapper, Some(router))
+  override lazy val httpErrorHandler = new ErrorHandler(environment, configuration, sourceMapper, Some(router))
 
   val cloudWatchClient: AmazonCloudWatchAsync = AWSClientBuilder.buildCloudWatchAsyncClient()
 
@@ -81,6 +81,11 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
+  val subscribeWithGoogleProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
+    new SubscribeWithGoogleBackend.Builder(configLoader, databaseProvider, cloudWatchClient)
+      .buildRequestBasedProvider(requestEnvironments)
+      .valueOr(throw _)
+
   implicit val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
 
   override val router =
@@ -89,6 +94,7 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       new AppController(controllerComponents),
       new StripeController(controllerComponents, stripeBackendProvider),
       new PaypalController(controllerComponents, paypalBackendProvider),
-      new GoCardlessController(controllerComponents, goCardlessBackendProvider)
+      new GoCardlessController(controllerComponents, goCardlessBackendProvider),
+      new SubscribeWithGoogleController(controllerComponents, subscribeWithGoogleProvider)
     )
 }

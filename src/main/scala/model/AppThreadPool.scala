@@ -75,13 +75,21 @@ object JdbcThreadPool extends CustomThreadPoolLoader[JdbcThreadPool] {
   override val threadPoolId: String = "jdbc"
 }
 
+// Should be used as the execution context for subscribeWithGoogle IO.
+case class SubscribeWithGoogleThreadPool private (underlying: ExecutionContext) extends AppThreadPool
+
+object SubscribeWithGoogleThreadPool extends CustomThreadPoolLoader[SubscribeWithGoogleThreadPool] {
+  override val threadPoolId: String = "subscribewithgoogle"
+}
+
 // Models all thread pools required by the application
 case class AppThreadPools private (
   default: DefaultThreadPool,
   stripe: StripeThreadPool,
   paypal: PaypalThreadPool,
   goCardless: GoCardlessThreadPool,
-  jdbc: JdbcThreadPool
+  jdbc: JdbcThreadPool,
+  subscribeWithGoogle: SubscribeWithGoogleThreadPool
 )
 
 object AppThreadPools {
@@ -91,7 +99,8 @@ object AppThreadPools {
     StripeThreadPool.load(),
     PaypalThreadPool.load(),
     GoCardlessThreadPool.load(),
-    JdbcThreadPool.load()
+    JdbcThreadPool.load(),
+    SubscribeWithGoogleThreadPool.load()
   ).mapN(AppThreadPools.apply)
 }
 
@@ -107,4 +116,5 @@ trait AppThreadPoolsProvider {
   implicit lazy val paypalThreadPool: PaypalThreadPool = threadPools.paypal
   implicit lazy val goCardlessThreadPool: GoCardlessThreadPool = threadPools.goCardless
   implicit lazy val jdbcThreadPool: JdbcThreadPool = threadPools.jdbc
+  implicit lazy val subscribeWithGoogleThreadPool: SubscribeWithGoogleThreadPool = threadPools.subscribeWithGoogle
 }
