@@ -35,7 +35,13 @@ import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } fr
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 type PaymentMethod = 'Stripe' | 'DirectDebit';
 
+type Product = {|
+  fulfilmentOption: PaperFulfilmentOptions,
+  productOption: PaperProductOptions,
+|};
+
 export type FormFieldsInState = {|
+  ...Product,
   title: Option<Title>,
   firstName: string,
   lastName: string,
@@ -44,8 +50,6 @@ export type FormFieldsInState = {|
   townCity: string,
   postcode: string,
   email: string,
-  fulfilmentOption: PaperFulfilmentOptions,
-  productOption: PaperProductOptions,
   startDate: string,
   telephone: Option<string>,
   paymentMethod: Option<PaymentMethod>,
@@ -211,7 +215,27 @@ export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
-function initReducer(initialCountry: IsoCountry) {
+const getInitialProduct = (productInUrl: ?string, fulfillmentInUrl: ?string): Product => ({
+  productOption:
+    productInUrl === 'Saturday' ||
+    productInUrl === 'SaturdayPlus' ||
+    productInUrl === 'Sunday' ||
+    productInUrl === 'SundayPlus' ||
+    productInUrl === 'Weekend' ||
+    productInUrl === 'WeekendPlus' ||
+    productInUrl === 'Sixday' ||
+    productInUrl === 'SixdayPlus' ||
+    productInUrl === 'Everyday' ||
+    productInUrl === 'EverydayPlus'
+      ? (productInUrl: PaperProductOptions)
+      : Everyday,
+  fulfilmentOption:
+    fulfillmentInUrl === 'Collection' || fulfillmentInUrl === 'HomeDelivery'
+      ? (fulfillmentInUrl: PaperFulfilmentOptions)
+      : Collection,
+});
+
+function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillmentInUrl: ?string) {
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const { productPrices } = window.guardian;
 
@@ -232,8 +256,7 @@ function initReducer(initialCountry: IsoCountry) {
     submissionError: null,
     formSubmitted: false,
     isTestUser: isTestUser(),
-    productOption: Everyday,
-    fulfilmentOption: Collection,
+    ...getInitialProduct(productInUrl, fulfillmentInUrl),
     productPrices,
   };
 
