@@ -417,28 +417,28 @@ footer[role="contentinfo"] a {
     border-top: 10px solid gu-colour(highlight-main);
     margin-left: auto;
 
-    h1 {
-      border-bottom: none;
-      padding-bottom: 10px;
-      font-size: 44px;
-      line-height: 46px;
-      font-family: $gu-titlepiece;
-    }
-
-    p {
-      font-size: 18px;
-      line-height: 22px;
-    }
-
     @include mq($from: tablet) {
       display: block;
       margin: 30px 120px 30px 10px;
     }
   }
 
+  .gu-content__blurb--header {
+    border-bottom: none;
+    padding-bottom: 10px;
+    font-size: 44px;
+    line-height: 46px;
+    font-family: $gu-titlepiece;
+  }
+
+  .gu-content__blurb--blurb {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
   .gu-content__blurb--help-variant {
     max-width: 404px;
-    p {
+    .gu-content__blurb--blurb {
       padding-bottom: $gu-v-spacing;
       border-bottom: 1px solid gu-colour(highlight-main);
     }

@@ -151,12 +151,12 @@ const countryGroupSpecificDetails: (variant: LandingPageCopyTestVariant) => {
   [CountryGroupId]: CountryMetaData
 } = (variant: LandingPageCopyTestVariant) => {
   switch (variant) {
+    case 'help':
+      return helpVariantCountryGroupSpecificDetails;
     case 'control':
     case 'notintest':
     default:
       return defaultCountryGroupSpecificDetails;
-    case 'help':
-      return helpVariantCountryGroupSpecificDetails;
   }
 };
 
@@ -179,12 +179,12 @@ function ContributionFormContainer(props: PropTypes) {
     : (
       <div className="gu-content__content gu-content__content--flex">
         <div className={blurbClass}>
-          <h1 className="header">{countryGroupDetails.headerCopy}</h1>
+          <h1 className="gu-content__blurb--header">{countryGroupDetails.headerCopy}</h1>
           {countryGroupDetails.tickerJsonUrl ?
             <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
           }
           { countryGroupDetails.contributeCopy ?
-            <p className="blurb">{countryGroupDetails.contributeCopy}</p> : null
+            <p className="gu-content__blurb--blurb">{countryGroupDetails.contributeCopy}</p> : null
           }
         </div>
 
