@@ -6,7 +6,7 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog
 import com.gu.support.catalog.{Everyday, HomeDelivery, Product, ProductRatePlan}
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, PayPalReferenceTransaction}
+import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, Monthly, PayPalReferenceTransaction}
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
 
@@ -58,8 +58,7 @@ object Fixtures {
   )
 
   val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
-  def getRatePlans[T <: Product](product: T): Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
-  val everydayHDProductRatePlanId = getRatePlans(catalog.Paper).find(x => x.fulfilmentOptions == HomeDelivery && x.productOptions == Everyday) map (_.id)
+  val everydayHDProductRatePlanId = catalog.Paper.getProductRatePlan(touchpointEnvironment, Monthly, HomeDelivery, Everyday) map (_.id)
 
   val everydayPaperSubscriptionData = SubscriptionData(
     List(
