@@ -15,6 +15,7 @@ import Text from 'components/text/text';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
 import { Input } from 'components/forms/standardFields/input';
+import { Error } from 'components/forms/standardFields/error';
 import { Select } from 'components/forms/standardFields/select';
 import { Fieldset } from 'components/forms/standardFields/fieldset';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
@@ -32,7 +33,7 @@ import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { titles } from 'helpers/user/details';
-import { getVoucherDays } from '../helpers/deliveryDays';
+import { getVoucherDays, formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
 import {
   type FormActionCreators,
   formActionCreators,
@@ -204,23 +205,21 @@ function CheckoutForm(props: PropTypes) {
               </SelectWithError>
             </FormSection>
             <FormSection title="When would you like your subscription to start?">
-              {getVoucherDays(Date.now(), props.productOption).map(d => (
-                <div>
-                  {
-                  d.toLocaleString('en', {
-                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-                  })
-                }
-                </div>
-              ))}
-              <InputWithError
-                id="start-date"
-                label="Start date"
-                type="date"
-                error={firstError('startDate', props.formErrors)}
-                value={props.startDate}
-                setValue={props.setStartDate}
-              />
+              <Error htmlFor={null} error={firstError('startDate', props.formErrors)}>
+                <Fieldset id={null} legend="When would you like your subscription to start?">
+                  {getVoucherDays(Date.now(), props.productOption).map((d) => {
+                    const [userDate, machineDate] = [formatUserDate(d), formatMachineDate(d)];
+                    return (
+                      <RadioInput
+                        text={userDate}
+                        name={machineDate}
+                        checked={props.startDate === machineDate}
+                        onChange={() => props.setStartDate(machineDate)}
+                      />
+                    );
+                  })}
+                </Fieldset>
+              </Error>
             </FormSection>
             <FormSection title="How would you like to pay?">
               <Rows>

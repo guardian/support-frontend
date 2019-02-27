@@ -14,15 +14,12 @@ import {
 } from 'helpers/productPrice/productOptions';
 
 type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
 const milsInADay = 1000 * 60 * 60 * 24;
 
 const maxWeeks = 4;
-
 // The cut off for getting vouchers in two weeks is Wednesday (day #3 in ISO format) at 6 AM GMT
 const cutoffWeekday = 3;
 const cutoffHour = 6;
-
 const voucherNormalDelayWeeks = 2;
 const voucherExtraDelayWeeks = 3;
 
@@ -71,5 +68,22 @@ const getVoucherDays = (today: number, product: PaperProductOptions): Date[] => 
 const getDeliveryDays = (today: number, product: PaperProductOptions): Date[] =>
   getNextDaysOfTheWeek(today, getDeliveryDayForProduct(product), maxWeeks);
 
+const formatMachineDate = (date: Date) => (
+  [
+    date.getFullYear().toString().padStart(4, '0'),
+    (date.getMonth() + 1).toString().padStart(2, '0'),
+    date.getDate().toString().padStart(2, '0'),
+  ].join('-')
+);
 
-export { getNextDayOfTheWeek, getNextDaysOfTheWeek, getVoucherDays, getDeliveryDays };
+const formatUserDate = (date: Date) => (
+  date.toLocaleString('en', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+);
+
+
+export { getVoucherDays, getDeliveryDays, formatMachineDate, formatUserDate };
