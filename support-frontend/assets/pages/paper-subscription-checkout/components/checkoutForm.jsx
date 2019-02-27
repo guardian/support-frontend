@@ -215,6 +215,7 @@ function CheckoutForm(props: PropTypes) {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
                     <RadioInput
+                      appearance="group"
                       text={userDate}
                       name={machineDate}
                       checked={props.startDate === machineDate}
@@ -241,8 +242,10 @@ function CheckoutForm(props: PropTypes) {
                   />
                 </Fieldset>
                 {errorState}
-                <Button aria-label={null} type="submit">Continue to payment</Button>
               </Rows>
+            </FormSection>
+            <FormSection>
+              <Button aria-label={null} type="submit">Continue to payment</Button>
               <DirectDebitPopUpForm
                 onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                   props.onPaymentAuthorised(pa);
