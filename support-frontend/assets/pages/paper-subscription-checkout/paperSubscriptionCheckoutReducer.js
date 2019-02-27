@@ -24,6 +24,8 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
@@ -42,6 +44,8 @@ export type FormFieldsInState = {|
   townCity: string,
   postcode: string,
   email: string,
+  fulfillmentOption: PaperFulfilmentOptions,
+  productOption: PaperProductOptions,
   startDate: string,
   telephone: Option<string>,
   paymentMethod: Option<PaymentMethod>,
@@ -107,6 +111,8 @@ function getFormFields(state: State): FormFields {
     startDate: state.page.checkout.startDate,
     telephone: state.page.checkout.telephone,
     paymentMethod: state.page.checkout.paymentMethod,
+    fulfillmentOption: state.page.checkout.fulfillmentOption,
+    productOption: state.page.checkout.productOption,
   };
 }
 
@@ -226,6 +232,8 @@ function initReducer(initialCountry: IsoCountry) {
     submissionError: null,
     formSubmitted: false,
     isTestUser: isTestUser(),
+    productOption: Everyday,
+    fulfillmentOption: Collection,
     productPrices,
   };
 

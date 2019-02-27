@@ -204,7 +204,7 @@ function CheckoutForm(props: PropTypes) {
               </SelectWithError>
             </FormSection>
             <FormSection title="When would you like your subscription to start?">
-              {getVoucherDays(Date.now(), 1).map(d => (
+              {getVoucherDays(Date.now(), props.productOption).map(d => (
                 <div>
                   {
                   d.toLocaleString('en', {

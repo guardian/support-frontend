@@ -25,7 +25,19 @@ export type ProductOptions =
   | typeof Sixday
   | typeof SixdayPlus
   | typeof Everyday
-  | typeof EverydayPlus
+  | typeof EverydayPlus;
+
+export type PaperProductOptions =
+  | typeof Saturday
+  | typeof SaturdayPlus
+  | typeof Sunday
+  | typeof SundayPlus
+  | typeof Weekend
+  | typeof WeekendPlus
+  | typeof Sixday
+  | typeof SixdayPlus
+  | typeof Everyday
+  | typeof EverydayPlus;
 
 export {
   NoProductOptions,
