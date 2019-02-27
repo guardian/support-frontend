@@ -105,7 +105,7 @@ const helpVariantHeaderCopyAndContributeCopy = {
       steers our opinion. This is important as it enables us to give a voice to those less heard, challenge the
       powerful and hold them to account. It’s what makes us different to so many others in the media, at a time when
       factual, honest reporting is crucial.
-      <span className="bold">Your support is critical for the future of Guardian journalism.</span>
+      <span className="bold"> Your support is critical for the future of Guardian journalism.</span>
     </span>
   ),
   headerClasses: 'help-variant',
