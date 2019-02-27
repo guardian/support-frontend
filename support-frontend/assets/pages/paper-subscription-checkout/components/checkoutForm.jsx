@@ -32,7 +32,7 @@ import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { titles } from 'helpers/user/details';
-
+import { getVoucherDays } from '../helpers/deliveryDays';
 import {
   type FormActionCreators,
   formActionCreators,
@@ -204,6 +204,15 @@ function CheckoutForm(props: PropTypes) {
               </SelectWithError>
             </FormSection>
             <FormSection title="When would you like your subscription to start?">
+              {getVoucherDays(Date.now(), 1).map(d => (
+                <div>
+                  {
+                  d.toLocaleString('en', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                  })
+                }
+                </div>
+              ))}
               <InputWithError
                 id="start-date"
                 label="Start date"
