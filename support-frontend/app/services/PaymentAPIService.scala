@@ -1,14 +1,14 @@
 package services
 
 import cats.data.EitherT
-import monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger._
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
 import codecs.CirceDecoders._
 import io.circe.Decoder
 import io.circe.parser.decode
-import monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger
 import cats.implicits._
 import io.circe.generic.semiauto.deriveDecoder
 

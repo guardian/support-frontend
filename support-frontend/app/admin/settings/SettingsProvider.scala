@@ -10,8 +10,8 @@ import cats.instances.future._
 import com.amazonaws.services.s3.AmazonS3
 import config.{Configuration, FastlyConfig}
 import io.circe.Decoder
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
 import services.fastly.FastlyService

@@ -11,8 +11,8 @@ import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
 import io.circe.syntax._
 import lib.PlayImplicits._
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc.{request, _}
 import play.twirl.api.Html

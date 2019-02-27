@@ -6,14 +6,14 @@ import cats.data.EitherT
 import cats.implicits._
 import com.google.common.net.InetAddresses
 import com.gu.identity.play.{IdMinimalUser, IdUser}
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import models.identity.UserIdWithGuestAccountToken
 import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.{GuestRegistrationResponse, SetGuestPasswordResponseCookies, UserResponse}
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
 import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader

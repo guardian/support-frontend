@@ -4,7 +4,8 @@ import akka.actor.ActorSystem
 import services.stepfunctions.SupportWorkersClient
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
-import SafeLogger._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 
 class StateMachineMonitor(client: SupportWorkersClient, actorSystem: ActorSystem) {
 

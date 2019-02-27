@@ -1,7 +1,8 @@
 package monitoring
 
 import ch.qos.logback.classic.filter.ThresholdFilter
-import monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import config.Configuration
 import io.sentry.Sentry
 import io.sentry.logback.SentryAppender

@@ -9,14 +9,14 @@ import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.Country
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers.{Status, _}
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
 import ophan.thrift.event.AbTest
 import org.joda.time.LocalDate
 import play.api.mvc.Call

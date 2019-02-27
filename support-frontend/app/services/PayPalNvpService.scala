@@ -1,11 +1,11 @@
 package services
 
-import com.netaporter.uri.QueryString
-import com.netaporter.uri.Uri.parseQuery
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import com.gu.support.config.PayPalConfig
 import com.gu.support.touchpoint.TouchpointService
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import com.netaporter.uri.QueryString
+import com.netaporter.uri.Uri.parseQuery
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.paypal.{PayPalBillingDetails, Token}
 

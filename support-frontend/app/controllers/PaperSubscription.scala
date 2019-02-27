@@ -16,8 +16,8 @@ import services.stepfunctions.SupportWorkersClient
 import services.{IdentityService, MembersDataService, TestUserService}
 import views.html.subscriptionCheckout
 import views.html.helper.CSRF
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.circe.Circe

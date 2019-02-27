@@ -6,8 +6,8 @@ import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
 import com.gu.support.touchpoint.TouchpointService
 import models.CheckBankAccountDetails
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
