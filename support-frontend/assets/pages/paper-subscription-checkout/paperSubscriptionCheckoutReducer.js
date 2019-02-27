@@ -130,27 +130,27 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   return validate([
     {
       rule: nonEmptyString(fields.firstName),
-      error: formError('firstName', 'Please enter a value.'),
+      error: formError('firstName', 'Please enter a first name.'),
     },
     {
       rule: nonEmptyString(fields.lastName),
-      error: formError('lastName', 'Please enter a value.'),
+      error: formError('lastName', 'Please enter a last name.'),
     },
     {
       rule: nonEmptyString(fields.addressLine1),
-      error: formError('addressLine1', 'Please enter a value'),
+      error: formError('addressLine1', 'Please enter an address'),
     },
     {
       rule: nonEmptyString(fields.startDate),
-      error: formError('startDate', 'Please enter a value'),
+      error: formError('startDate', 'Please select a start date'),
     },
     {
       rule: nonEmptyString(fields.townCity),
-      error: formError('townCity', 'Please enter a value'),
+      error: formError('townCity', 'Please enter a city'),
     },
     {
       rule: nonEmptyString(fields.postcode),
-      error: formError('postcode', 'Please enter a value'),
+      error: formError('postcode', 'Please enter a post code'),
     },
     {
       rule: notNull(fields.country),
