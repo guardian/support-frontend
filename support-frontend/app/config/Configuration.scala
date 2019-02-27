@@ -48,9 +48,6 @@ class Configuration {
 
   lazy val priceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
 
-  lazy val getAddressIOApiUrl: String = config.getString("get-address-io-api.url")
-
-  lazy val getAddressIOApiKey: String = config.getString("get-address-io-api.key")
 }
 
 object Configuration {
