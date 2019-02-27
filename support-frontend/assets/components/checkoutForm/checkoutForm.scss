@@ -8,6 +8,9 @@
   .component-radio-input + .component-radio-input {
     margin-top: $gu-v-spacing;
   }
+  .component-radio-input--group + .component-radio-input--group {
+    margin-top: $gu-v-spacing / 2;
+  }
 }
 
 .component-checkout-form-section + .component-checkout-form-section {
