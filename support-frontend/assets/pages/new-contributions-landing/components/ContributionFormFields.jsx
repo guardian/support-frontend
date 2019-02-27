@@ -18,7 +18,7 @@ import {
   emailRegexPattern,
 } from 'helpers/formValidation';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-
+import {trackComponentClick} from 'helpers/tracking/ophanComponentEventTracking';
 import { NewContributionState } from './ContributionState';
 import { NewContributionTextInput } from './ContributionTextInput';
 import { MustSignIn } from './MustSignIn';
@@ -164,7 +164,12 @@ function FormFields(props: PropTypes) {
         formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
         showRequiredLabel={showRequiredLabel}
       />
-      <details className={showRequiredLabel ? 'form-fields__required-explainer' : 'hidden'}>
+      <details
+        className={showRequiredLabel ? 'form-fields__required-explainer' : 'hidden'}
+        onClick={(event) => {
+          trackComponentClick('required-fields-explainer');
+        }}
+      >
         <summary >
           <div className="form-fields__required-explainer--summary-wrapper">
             Why are these details required?
