@@ -31,23 +31,21 @@ stories.add('Forms', () => (
       <option>Hate them</option>
       <option>Weirdly emotional</option>
     </SelectWithLabel>
-    <FormLabel label="Select your fav" htmlFor={null} >
+    <FormLabel label="Select your fav" htmlFor={null}>
       <Fieldset legend="Select your fav">
-        <RadioInput
-          id="fruits"
-          text="Banana"
-          name="billingPeriod"
-        />
-        <RadioInput
-          id="fruits"
-          text="Pear"
-          name="billingPeriod"
-        />
-        <RadioInput
-          id="fruits"
-          text="Apple"
-          name="billingPeriod"
-        />
+        <Rows gap="small">
+          <RadioInput appearance="group" id="fruits" text="Banana" name="chonkyBois" />
+          <RadioInput appearance="group" id="fruits" text="Pear" name="chonkyBois" />
+          <RadioInput appearance="group" id="fruits" text="Apple" name="chonkyBois" />
+        </Rows>
+      </Fieldset>
+    </FormLabel>
+    <FormLabel label="Do you consent to the usage of your data under GDPR rules" htmlFor={null}>
+      <Fieldset legend="Select your fav">
+        <Rows gap="small">
+          <RadioInput id="gdpr" text="Yes" name="gdpr" />
+          <RadioInput id="gdpr" text="No" name="gdpr" />
+        </Rows>
       </Fieldset>
     </FormLabel>
   </Rows>
