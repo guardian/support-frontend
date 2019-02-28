@@ -4,8 +4,8 @@ import actions.CustomActionBuilders
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.syntax._
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
 import services.IdentityService

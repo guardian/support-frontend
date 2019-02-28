@@ -3,12 +3,10 @@ package config
 import admin.settings.SettingsSources
 import cats.syntax.either._
 import com.gu.support.config._
-import com.gu.support.pricing.PriceSummaryServiceProvider
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
 import config.Configuration.GuardianDomain
 import services.GoCardlessConfigProvider
-import services.aws.AwsConfig
 import services.stepfunctions.StateMachineArn
 
 class Configuration {
@@ -22,7 +20,9 @@ class Configuration {
 
   lazy val googleAuth = new GoogleAuth(config.getConfig("googleAuth"))
 
-  lazy val aws = new AwsConfig(config.getConfig("aws"))
+  lazy val aws = AwsConfig.fromConfig(config)
+
+  lazy val getAddressIOConfig = GetAddressIOConfig.fromConfig(config)
 
   lazy val guardianDomain = GuardianDomain(config.getString("guardianDomain"))
 
@@ -47,6 +47,7 @@ class Configuration {
   lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
 
   lazy val priceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
+
 }
 
 object Configuration {

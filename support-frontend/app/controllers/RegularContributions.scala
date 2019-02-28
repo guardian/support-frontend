@@ -15,8 +15,8 @@ import cookies.RecurringContributionCookie
 import io.circe.syntax._
 import lib.PlayImplicits._
 import monitoring.PathVerification._
-import monitoring.SafeLogger
-import monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}

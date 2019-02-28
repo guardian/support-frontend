@@ -2,7 +2,9 @@ package wiring
 
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
+import com.gu.okhttp.RequestRunners
 import com.gu.support.config.Stages.PROD
+import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -44,4 +46,6 @@ trait Services {
 
   lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =
     new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider)
+
+  lazy val getAddressIOService: GetAddressIOService = new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
 }

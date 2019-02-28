@@ -3,7 +3,7 @@ package utils
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.gu.i18n.Country
-import monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger
 
 import scala.util.{Failure, Success, Try}
 

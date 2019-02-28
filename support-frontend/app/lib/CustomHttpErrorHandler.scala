@@ -2,7 +2,7 @@ package lib
 
 import actions.CacheControl
 import com.typesafe.scalalogging.LazyLogging
-import monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger
 import play.api.PlayException.ExceptionSource
 import play.api.{Configuration, Environment, UsefulException}
 import play.api.http.DefaultHttpErrorHandler
