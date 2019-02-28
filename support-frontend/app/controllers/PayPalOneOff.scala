@@ -11,7 +11,7 @@ import play.api.mvc._
 import services._
 import cats.data.EitherT
 import cats.implicits._
-import monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger
 import monitoring.PathVerification.{OneOffContribution, PayPal, TipPath, monitoredRegion, verify}
 
 import scala.concurrent.{ExecutionContext, Future}

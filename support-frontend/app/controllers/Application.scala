@@ -12,7 +12,7 @@ import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
 import config.StringsConfig
 import cookies.ServersideAbTestCookie
-import monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger
 import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck

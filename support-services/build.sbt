@@ -1,4 +1,4 @@
-import LibraryVersions.{awsClientVersion, catsVersion, circeVersion}
+import LibraryVersions.{awsClientVersion, catsVersion, circeVersion, okhttpVersion}
 
 name := "support-services"
 
@@ -11,5 +11,6 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
-  "io.circe" %% "circe-parser" % circeVersion
+  "io.circe" %% "circe-parser" % circeVersion,
+  "com.squareup.okhttp3" % "okhttp" % okhttpVersion
 )

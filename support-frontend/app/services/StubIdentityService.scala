@@ -5,7 +5,7 @@ import cats.implicits._
 import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
 import models.identity.UserIdWithGuestAccountToken
 import models.identity.responses.SetGuestPasswordResponseCookies
-import monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger
 import play.api.mvc.RequestHeader
 import org.joda.time.DateTime
 

@@ -1,6 +1,6 @@
 package utils
 
-import monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger
 import play.api.mvc.RequestHeader
 
 object BrowserCheck {
