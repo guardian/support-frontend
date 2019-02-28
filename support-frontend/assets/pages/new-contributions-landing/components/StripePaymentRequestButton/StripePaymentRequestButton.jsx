@@ -59,7 +59,7 @@ type PropTypes = {|
   updateEmail: string => void,
   paymentMethod: PaymentMethod,
   viewOtherPaymentMethods: boolean,
-  stripePaymentRequestButtonImprovementVariant: 'control' | 'variant',
+  stripePaymentRequestButtonImprovementVariant: 'control' | 'variant' | 'notintest',
 
 |};
 
@@ -241,7 +241,10 @@ function PaymentRequestButton(props: PropTypes) {
     return null;
   }
 
-  if (props.paymentRequestButtonPaymentMethod === 'StripeApplePay' || props.stripePaymentRequestButtonImprovementVariant === 'control') {
+  if (
+    props.paymentRequestButtonPaymentMethod === 'StripeApplePay'
+    || props.stripePaymentRequestButtonImprovementVariant !== 'variant'
+  ) {
 
     return (
       <div className="stripe-payment-request-button__container">

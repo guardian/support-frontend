@@ -78,7 +78,7 @@ type PropTypes = {|
   formIsSubmittable: boolean,
   isTestUser: boolean,
   country: IsoCountry,
-  stripePaymentRequestButtonImprovementVariant: 'control' | 'variant',
+  stripePaymentRequestButtonImprovementVariant: 'control' | 'variant' | 'notintest',
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
 |};
 
@@ -220,7 +220,7 @@ const defaultForm = (
 ) => {
   if (
     contributionType !== 'ONE_OFF'
-    || stripePaymentRequestButtonImprovementVariant === 'control'
+    || stripePaymentRequestButtonImprovementVariant !== 'variant'
     || stripePaymentRequestButtonMethod === 'none'
     || stripePaymentRequestButtonMethod === 'StripeApplePay'
     || stripePaymentRequestButtonViewOtherPaymentMethods === true
