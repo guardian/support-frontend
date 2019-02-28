@@ -12,7 +12,7 @@ import { withError } from 'components/forms/formHOCs/withError';
 
 import { type PostcodeFinderState, type Address, type PostcodeFinderActionCreators, postcodeFinderActionCreators } from './postcodeFinderReducer';
 
-import styles from './postcodeFinder.module.scss';
+import './postcodeFinder.scss';
 
 type PropTypes = {|
   ...PostcodeFinderState,
@@ -23,7 +23,7 @@ type PropTypes = {|
 |};
 
 const InputWithButton = ({ onClick, ...props }) => (
-  <div className={styles.root}>
+  <div className="checkout-postcode-finder">
     <Input {...props} name="postcode" />
     <Button type="button" appearance="greyHollow" icon={null} onClick={onClick} aria-label={null}>Find it</Button>
   </div>

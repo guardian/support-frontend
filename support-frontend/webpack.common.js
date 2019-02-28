@@ -8,37 +8,6 @@ const pxtorem = require('postcss-pxtorem');
 const cssnano = require('cssnano');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
-const { getClassName } = require('./scripts/css');
-
-const cssLoaders = [{
-  loader: 'postcss-loader',
-  options: {
-    plugins: [
-      pxtorem({ propList: ['*'] }),
-      autoprefixer(),
-    ],
-  },
-},
-{
-  loader: 'fast-sass-loader',
-  options: {
-    transformers: [
-      {
-        extensions: ['.pasteupimport'],
-        transform: (rawFile) => {
-          if (rawFile.includes('use palette')) {
-            return paletteAsSass();
-          }
-          throw new Error(`Invalid .pasteupimport – ${rawFile}`);
-        },
-      },
-    ],
-    includePaths: [
-      path.resolve(__dirname, 'assets'),
-      path.resolve(__dirname),
-    ],
-  },
-}];
 
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   plugins: [
@@ -123,30 +92,40 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
       },
       {
         test: /\.scss$/,
-        exclude: /\.module.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
           },
-          ...cssLoaders,
-        ],
-      },
-      {
-        test: /\.module.scss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader',
+            loader: 'postcss-loader',
             options: {
-              modules: true,
-              getLocalIdent: (context, localIdentName, localName) => getClassName(
-                path.relative(__dirname, context.resourcePath),
-                localName,
-              ),
+              plugins: [
+                pxtorem({ propList: ['*'] }),
+                autoprefixer(),
+              ],
             },
           },
-          ...cssLoaders,
+          {
+            loader: 'fast-sass-loader',
+            options: {
+              transformers: [
+                {
+                  extensions: ['.pasteupimport'],
+                  transform: (rawFile) => {
+                    if (rawFile.includes('use palette')) {
+                      return paletteAsSass();
+                    }
+                    throw new Error(`Invalid .pasteupimport – ${rawFile}`);
+                  },
+                },
+              ],
+              includePaths: [
+                path.resolve(__dirname, 'assets'),
+                path.resolve(__dirname),
+              ],
+            },
+          },
         ],
       },
     ],
