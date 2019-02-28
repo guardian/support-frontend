@@ -58,7 +58,11 @@ class PostcodeFinder extends Component<PropTypes> {
         />
         {(results.length > 0) &&
           <ComposedSelect
-            onChange={(ev) => { if (results[ev.target.value]) { onAddressUpdate(results[ev.target.value]); } }}
+            onChange={(ev) => {
+              if (results[ev.target.value]) {
+                onAddressUpdate(results[ev.target.value]);
+              }
+            }}
             forwardRef={(r) => { this.selectRef = r; }}
             id="address"
             label={`${results.length} addresses found`}
