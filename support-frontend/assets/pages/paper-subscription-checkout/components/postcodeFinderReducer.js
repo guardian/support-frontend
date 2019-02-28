@@ -15,17 +15,17 @@ export type PostcodeFinderState = {|
 |}
 
 export type PostcodeFinderActions =
-  {|type: 'FILL_PCFINDER_RESULTS', results: Address[]|} |
-  {|type: 'SET_PCFINDER_ERROR', error: Option<string>|} |
-  {|type: 'START_PCFINDER_FETCH_RESULTS' |} |
-  {|type: 'SET_PCFINDER_POSTCODE', postcode: Option<string>|};
+  {|type: 'FILL_POSTCODEFINDER_RESULTS', results: Address[]|} |
+  {|type: 'SET_POSTCODEFINDER_ERROR', error: Option<string>|} |
+  {|type: 'START_POSTCODEFINDER_FETCH_RESULTS' |} |
+  {|type: 'SET_POSTCODEFINDER_POSTCODE', postcode: Option<string>|};
 
 export const postcodeFinderActionCreators = {
-  setPostcode: (postcode: string) => ({ type: 'SET_PCFINDER_POSTCODE', postcode }),
+  setPostcode: (postcode: string) => ({ type: 'SET_POSTCODEFINDER_POSTCODE', postcode }),
   fetchResults: () => (dispatch: Dispatch<PostcodeFinderActions>) => {
-    dispatch({ type: 'START_PCFINDER_FETCH_RESULTS' });
+    dispatch({ type: 'START_POSTCODEFINDER_FETCH_RESULTS' });
     setTimeout(() => {
-      dispatch({ type: 'SET_PCFINDER_ERROR', error: 'This failed (predictably) because it\'s not linked to the backend yet' });
+      dispatch({ type: 'SET_POSTCODEFINDER_ERROR', error: 'This failed (predictably) because it\'s not linked to the backend yet' });
     }, 2000);
   },
 };
@@ -45,21 +45,21 @@ const postcodeFinderReducer = (
 ): PostcodeFinderState => {
 
   switch (action.type) {
-    case 'FILL_PCFINDER_RESULTS':
+    case 'FILL_POSTCODEFINDER_RESULTS':
       return {
         ...state,
       };
-    case 'SET_PCFINDER_POSTCODE':
+    case 'SET_POSTCODEFINDER_POSTCODE':
       return {
         ...state,
         postcode: action.postcode,
       };
-    case 'SET_PCFINDER_ERROR':
+    case 'SET_POSTCODEFINDER_ERROR':
       return {
         ...state,
         error: action.error,
       };
-    case 'START_PCFINDER_FETCH_RESULTS':
+    case 'START_POSTCODEFINDER_FETCH_RESULTS':
       return {
         ...initialState,
         postcode: state.postcode,
