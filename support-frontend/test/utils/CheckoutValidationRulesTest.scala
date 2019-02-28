@@ -4,6 +4,7 @@ import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{Everyday, HomeDelivery}
 import com.gu.support.workers._
+import org.joda.time.LocalDate
 import org.scalatest.{FlatSpec, Matchers}
 import services.stepfunctions.CreateSupportWorkersRequest
 
@@ -77,6 +78,11 @@ class PaperValidationTest extends FlatSpec with Matchers {
     PaperValidation.passes(requestDeliveredToUs) shouldBe true
   }
 
+  "PaperValidation.passes" should "fail if there is no first delivery date" in {
+    val requestDeliveredToUs = validPaperRequest.copy(firstDeliveryDate = None)
+    PaperValidation.passes(requestDeliveredToUs) shouldBe false
+  }
+
 }
 
 object TestData {
@@ -102,13 +108,14 @@ object TestData {
     postcode = None
   )
 
+  val someDateNextMonth = new LocalDate().plusMonths(1)
   val validPaperRequest = CreateSupportWorkersRequest(
     firstName = "grace",
     lastName = "hopper",
     country = Country.UK,
     state = None,
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
-    firstDeliveryDate = None,
+    firstDeliveryDate = Some(someDateNextMonth),
     paymentFields = StripePaymentFields("test-token"),
     ophanIds = OphanIds(None, None, None),
     referrerAcquisitionData = ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None),

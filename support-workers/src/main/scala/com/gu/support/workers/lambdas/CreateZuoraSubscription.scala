@@ -112,7 +112,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     state.product match {
       case c: Contribution => c.build(config)
       case d: DigitalPack => d.build(config, state.user.billingAddress.country, state.promoCode, promotionService, isTestUser)
-      case p: Paper => p.build(state.user.billingAddress.country, state.promoCode, promotionService, isTestUser)
+      case p: Paper => p.build(state.user.billingAddress.country, state.promoCode, state.firstDeliveryDate, promotionService, isTestUser)
     }
   }
 
