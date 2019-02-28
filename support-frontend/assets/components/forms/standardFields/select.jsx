@@ -9,11 +9,12 @@ import './select.scss';
 
 // ----- Component ----- //
 
-function Select(props: {}) {
-  return <select className="component-select" {...props} />;
+function Select({ forwardRef, ...props }: {forwardRef?: ?Function}) {
+  return <select ref={forwardRef} className="component-select" {...props} />;
 }
 
 
 // ----- Exports ----- //
+Select.defaultProps = { forwardRef: null };
 
 export { Select };

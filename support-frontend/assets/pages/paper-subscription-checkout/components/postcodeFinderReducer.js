@@ -2,10 +2,10 @@
 import { type Dispatch } from 'redux';
 import { type Option } from 'helpers/types/option';
 
-type Address = {|
-  addressLine1: string,
-  addressLine2?: Option<string>,
-  townCity: string,
+export type Address = {|
+  lineOne?: string,
+  lineTwo?: string,
+  city?: string,
 |};
 
 export type PostcodeFinderState = {|
@@ -25,8 +25,7 @@ export const postcodeFinderActionCreators = {
   fetchResults: () => (dispatch: Dispatch<PostcodeFinderActions>) => {
     dispatch({ type: 'START_PCFINDER_FETCH_RESULTS' });
     setTimeout(() => {
-      dispatch({ type: 'FILL_PCFINDER_RESULTS', results: [] });
-      dispatch({ type: 'SET_PCFINDER_ERROR', error: 'Ooops this thing failed because of reasons sorry whoopsie daisy we made an owo boingo' });
+      dispatch({ type: 'SET_PCFINDER_ERROR', error: 'This failed (predictably) because it\'s not linked to the backend yet' });
     }, 2000);
   },
 };
@@ -35,10 +34,7 @@ export type PostcodeFinderActionCreators = typeof postcodeFinderActionCreators;
 
 
 const initialState = {
-  results: [{
-    addressLine1: '7 lollypop ave',
-    townCity: 'London',
-  }],
+  results: [],
   postcode: null,
   error: null,
 };
@@ -52,7 +48,6 @@ const postcodeFinderReducer = (
     case 'FILL_PCFINDER_RESULTS':
       return {
         ...state,
-        results: [...state.results, ...state.results, ...action.results],
       };
     case 'SET_PCFINDER_POSTCODE':
       return {

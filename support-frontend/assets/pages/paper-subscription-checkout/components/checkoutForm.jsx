@@ -166,7 +166,15 @@ function CheckoutForm(props: PropTypes) {
               />
             </FormSection>
             <FormSection title="Where should we deliver your newspapers?">
-              <PostcodeFinder id="postcode" />
+              <PostcodeFinder
+                id="postcode"
+                onPostcodeUpdate={props.setPostcode}
+                onAddressUpdate={({ lineOne, lineTwo, city }) => {
+                  props.setAddressLine1(lineOne);
+                  props.setAddressLine2(lineTwo);
+                  props.setTownCity(city);
+                }}
+              />
               <InputWithError
                 id="postcode"
                 label="Delivery postcode"
