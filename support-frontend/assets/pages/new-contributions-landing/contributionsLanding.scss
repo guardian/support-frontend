@@ -321,14 +321,22 @@ footer[role="contentinfo"] a {
 }
 
 .gu-content__content-thankyou {
-  width: 380px;
   background: gu-colour(neutral-100);
   padding: 0 10px;
+  overflow: hidden;
+  flex-grow: 1;
 
   @include mq($from: tablet) {
     border-color: gu-colour(neutral-86);
     border-style: none solid;
     border-width: 0 1px;
+    width: 380px;
+    margin-left: $content-left-margin-tablet
+  }
+
+  @include mq($from: leftCol) {
+    width: 380px;
+    margin-left: $content-left-margin-leftCol
   }
 
 }
