@@ -23,7 +23,8 @@
   productPrices: ProductPrices,
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
-  payPalConfig: PayPalConfig
+  defaultPayPalConfig: PayPalConfig,
+  uatPayPalConfig: PayPalConfig
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = RefPath(js), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
@@ -49,7 +50,10 @@
           uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
         }
       };
-      window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
+      window.guardian.payPalEnvironment = {
+        default: "@defaultPayPalConfig.payPalEnvironment",
+        uat: "@uatPayPalConfig.payPalEnvironment"
+      };
       window.guardian.csrf = { token: "@CSRF.getToken.value" };
   </script>
 

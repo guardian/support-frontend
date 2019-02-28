@@ -36,6 +36,22 @@ import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } fr
 
 import { loadPayPalRecurring } from '../../helpers/paymentIntegrations/payPalRecurringCheckout';
 import { setPayPalHasLoaded } from './digitalSubscriptionCheckoutActions';
+import {
+  setCheckoutFormHasBeenSubmitted,
+  setFormIsValid
+} from 'pages/new-contributions-landing/contributionsLandingActions';
+import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
+import { getForm } from 'helpers/checkoutForm/checkoutForm';
+import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
+import { routes } from 'helpers/routes';
+import type { ContributionType } from 'helpers/contributions';
+import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import { logException } from 'helpers/logger';
+import * as storage from 'helpers/storage';
+import { payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
 
 // ----- Types ----- //
 
@@ -195,6 +211,60 @@ const showPayPal = (dispatch: Function) => {
     });
 };
 
+const sendFormSubmitEventForPayPalRecurring = () =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const formSubmitParameters: FormSubmitParameters = {
+      ...state.page.form,
+      flowPrefix: 'npf',
+      form: getForm('form--contribution'),
+      isSignedIn: state.page.user.isSignedIn,
+      isRecurringContributor: state.page.user.isRecurringContributor,
+      setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
+      setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
+    };
+    onFormSubmit(formSubmitParameters);
+  };
+
+const setupRecurringPayPalPayment = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: Csrf,
+  contributionType: ContributionType,
+) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const csrfToken = csrf.token;
+    const { price } = dpFinalPrice(
+      state.page.checkout.productPrices,
+      state.page.checkout.billingPeriod,
+      state.common.internationalisation.countryId,
+    );
+    const billingPeriod = billingPeriodFromContrib(contributionType);
+    storage.setSession('selectedPaymentMethod', 'PayPal');
+    const requestBody = {
+      amount: price,
+      billingPeriod,
+      currency,
+    };
+
+    fetch('/paypal/setup-payment', payPalRequestData(requestBody, csrfToken || ''))
+      .then(response => (response.ok ? response.json() : null))
+      .then((token: { token: string } | null) => {
+        if (token) {
+          resolve(token.token);
+        } else {
+          logException('PayPal token came back blank');
+        }
+      }).catch((err: Error) => {
+      logException(err.message);
+      reject(err);
+    });
+  };
+
+
+
 const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
   setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
@@ -236,6 +306,8 @@ const formActionCreators = {
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
     (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
+  sendFormSubmitEventForPayPalRecurring,
+  setupRecurringPayPalPayment,
 };
 
 export type FormActionCreators = typeof formActionCreators;

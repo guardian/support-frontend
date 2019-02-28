@@ -72,6 +72,7 @@ function mapStateToProps(state: State) {
     csrf: state.page.csrf,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     paymentMethod: state.page.checkout.paymentMethod,
+    isTestUser: state.page.checkout.isTestUser,
   };
 }
 
