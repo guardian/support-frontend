@@ -211,7 +211,7 @@ function PaymentRequestButton(props: PropTypes) {
     return null;
   }
 
-  if (props.paymentRequestButtonPaymentMethod === 'none') {
+  if (!props.paymentRequestButtonPaymentMethod || props.paymentRequestButtonPaymentMethod === 'none') {
     return null;
   }
 
