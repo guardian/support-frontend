@@ -169,7 +169,7 @@ object CSSElementForStage {
       Left(cssPath)
     } else {
       getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
-        SafeLogger.error(scrub"Inline CSS failed to load")
+        SafeLogger.error(scrub"Inline CSS failed to load for $cssPath") // in future add email perf alert instead (cloudwatch alarm perhaps)
         Left(cssPath)
       } { inlineCss =>
         Right(inlineCss)

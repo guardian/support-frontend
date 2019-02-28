@@ -34,8 +34,9 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
     })
 
   def getFileContentsAsHtml(file: RefPath): Option[StyleContent] = {
-    val resourcePath = apply(file).replaceFirst("^/assets/", "")
-    loadResource(s"public/compiled-assets/$resourcePath").map(string => StyleContent(Html(string)))
+    lookup.get(file).map(base + _).map(_.replaceFirst("^/assets/", "")) flatMap { resourcePath =>
+      loadResource(s"public/compiled-assets/$resourcePath").map(string => StyleContent(Html(string)))
+    }
   }
 
 }
