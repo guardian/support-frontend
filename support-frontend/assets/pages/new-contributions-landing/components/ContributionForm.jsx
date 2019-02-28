@@ -71,14 +71,12 @@ type PropTypes = {|
   setCheckoutFormHasBeenSubmitted: () => void,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
-  stripePaymentRequestButtonViewOtherPaymentMethods: boolean,
   isSignedIn: boolean,
   formIsValid: boolean,
   isPostDeploymentTestUser: boolean,
   formIsSubmittable: boolean,
   isTestUser: boolean,
   country: IsoCountry,
-  stripePaymentRequestButtonImprovementVariant: 'control' | 'variant' | 'notintest',
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
 |};
 
@@ -108,9 +106,6 @@ const mapStateToProps = (state: State) => ({
   isTestUser: state.page.user.isTestUser || false,
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
-  stripePaymentRequestButtonViewOtherPaymentMethods:
-    state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonViewOtherPaymentMethods,
-  stripePaymentRequestButtonImprovementVariant: state.common.abParticipations.stripePaymentRequestButtonImprovement,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
 });
 
@@ -210,34 +205,6 @@ function onSubmit(props: PropTypes): Event => void {
 
 // ----- Render ----- //
 
-
-const defaultForm = (
-  onPaymentAuthorisation: PaymentAuthorisation => void,
-  contributionType: ContributionType,
-  stripePaymentRequestButtonViewOtherPaymentMethods: boolean,
-  stripePaymentRequestButtonImprovementVariant: string,
-  stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
-) => {
-  if (
-    contributionType !== 'ONE_OFF'
-    || stripePaymentRequestButtonImprovementVariant !== 'variant'
-    || stripePaymentRequestButtonMethod === 'none'
-    || stripePaymentRequestButtonMethod === 'StripeApplePay'
-    || stripePaymentRequestButtonViewOtherPaymentMethods === true
-  ) {
-    return (
-      <div className={classNameWithModifiers('form', ['content'])}>
-        <ContributionFormFields />
-        <NewPaymentMethodSelector onPaymentAuthorisation={onPaymentAuthorisation} />
-        <ContributionErrorMessage />
-        <NewContributionSubmit onPaymentAuthorisation={onPaymentAuthorisation} />
-      </div>
-    );
-  }
-  return null;
-};
-
-
 function ContributionForm(props: PropTypes) {
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
@@ -256,13 +223,12 @@ function ContributionForm(props: PropTypes) {
           otherAmounts={props.otherAmounts}
           selectedAmounts={props.selectedAmounts}
         />
-        {defaultForm(
-          props.onPaymentAuthorisation,
-          props.contributionType,
-          props.stripePaymentRequestButtonViewOtherPaymentMethods,
-          props.stripePaymentRequestButtonImprovementVariant,
-          props.stripePaymentRequestButtonMethod,
-        )}
+        <div className={classNameWithModifiers('form', ['content'])}>
+          <ContributionFormFields />
+          <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
+          <ContributionErrorMessage />
+          <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
+        </div>
       </div>
       <div>
         <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} />

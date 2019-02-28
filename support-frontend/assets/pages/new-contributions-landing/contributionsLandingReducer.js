@@ -57,7 +57,6 @@ type StripePaymentRequestButtonData = {
   stripePaymentRequestObject: Object | null,
   stripePaymentRequestButtonClicked: boolean,
   stripeV3HasLoaded: boolean,
-  stripePaymentRequestButtonViewOtherPaymentMethods: boolean,
 }
 
 type FormState = {
@@ -132,7 +131,6 @@ function createFormReducer() {
       stripePaymentRequestObject: null,
       stripePaymentRequestButtonClicked: false,
       stripeV3HasLoaded: false,
-      stripePaymentRequestButtonViewOtherPaymentMethods: false,
     },
     setPasswordData: {
       password: '',
@@ -243,16 +241,6 @@ function createFormReducer() {
           stripePaymentRequestButtonData: {
             ...state.stripePaymentRequestButtonData,
             stripeV3HasLoaded: true,
-          },
-        };
-
-      case 'STRIPE_PAYMENT_REQUEST_BUTTON_TOGGLE_OTHER_PAYMENT_METHODS':
-        return {
-          ...state,
-          stripePaymentRequestButtonData: {
-            ...state.stripePaymentRequestButtonData,
-            stripePaymentRequestButtonViewOtherPaymentMethods:
-              !state.stripePaymentRequestButtonData.stripePaymentRequestButtonViewOtherPaymentMethods,
           },
         };
 
