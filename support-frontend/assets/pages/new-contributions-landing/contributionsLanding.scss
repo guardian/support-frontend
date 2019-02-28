@@ -90,9 +90,12 @@ header[role="banner"] {
   z-index: 1;
   padding: 0 10px;
 
+  @include mq($from: mobileLandscape) {
+    height: 80px;
+  }
 
   @include mq($from: tablet) {
-    height: 75px;
+    height: 115px;
     padding: 0 0 0 $content-left-margin-tablet;
   }
 
@@ -107,22 +110,21 @@ header[role="banner"] {
 }
 
 .glogo {
-  width: 30px;
-  height: 30px;
-
-  .svg-roundel {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  
+  .svg-guardian-logo {
     width: 100%;
-    height: 100%;
-  }
+    height: 80%;
+    padding: 2%;
 
-  .svg-roundel__g {
-    fill: gu-colour(brand-main);
-  }
-
-  @include mq($from: tablet) {
-    width: 60px;
-    height: 60px;
-    margin-right: 10px;
+    @include mq($from: mobileLandscape) {
+      width: 80%;
+      height: 80%;
+      padding: 10px;
+    }
   }
 }
 

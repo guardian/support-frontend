@@ -10,7 +10,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import SvgCheckmark from 'components/svgs/checkmark';
 import SvgChevron from 'components/svgs/chevron';
 import SvgGlobe from 'components/svgs/globe';
-import SvgRoundel from 'components/svgs/roundel';
+import SvgGuardianLogo from 'components/svgs/guardianLogo';
 
 // ----- Types ----- //
 
@@ -37,7 +37,7 @@ function RoundelHeader(props: PropTypes) {
   return (
     <header role="banner" className="gu-content__header">
       <a className="glogo" href="https://www.theguardian.com">
-        <SvgRoundel />
+        <SvgGuardianLogo />
       </a>
       { props.selectedCountryGroup ? (
         <details className="countryGroups">
