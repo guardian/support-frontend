@@ -114,18 +114,7 @@ class Application(
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
     (implicit request: RequestHeader, settings: AllSettings) = {
 
-    val cssPath = RefPath("newContributionsLandingPageStyles.css")
-    val css =
-      if(stage == Stages.DEV) {
-        Left(cssPath)
-      } else {
-        assets.getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
-          SafeLogger.error(scrub"Inline CSS failed to load")
-          Left(cssPath)
-        } { inlineCss =>
-          Right(inlineCss)
-        }
-      }
+    val css = CSSElementForStage(assets.getFileContentsAsHtml, stage, RefPath("newContributionsLandingPageStyles.css"))
 
     val preload = List("GuardianTextSans-Regular", "GuardianTextSans-Medium", "GHGuardianHeadline-Bold").map { name =>
       Preload(s"//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/$name.woff2", "font", "font/woff2")
@@ -154,7 +143,7 @@ class Application(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       title = "Support the Guardian",
-      mainId = EmptyDiv("showcase-landing-page"),
+      mainElement = EmptyDiv("showcase-landing-page"),
       mainJsBundle = RefPath("showcasePage.js"),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
       description = stringsConfig.showcaseLandingDescription,
@@ -171,4 +160,21 @@ class Application(
     request =>
       Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
+}
+
+object CSSElementForStage {
+
+  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage, cssPath: RefPath): Either[RefPath, StyleContent] = {
+    if (stage == Stages.DEV) {
+      Left(cssPath)
+    } else {
+      getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
+        SafeLogger.error(scrub"Inline CSS failed to load")
+        Left(cssPath)
+      } { inlineCss =>
+        Right(inlineCss)
+      }
+    }
+  }
+
 }

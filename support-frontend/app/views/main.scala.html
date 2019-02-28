@@ -3,7 +3,7 @@
 @import views.{EmptyDiv, Preload, ReactDiv, SSRContent}
 @(
   title: String,
-  mainId: ReactDiv,
+  mainElement: ReactDiv,
   mainJsBundle: RefPath,
   mainStyleBundle: Either[RefPath, StyleContent],
   description: Option[String] = None,
@@ -107,7 +107,7 @@
     <div class="gu-render-to" id="@ssrContent.value">@ssrContent.content</div>
   }
 
-    @mainId.fold(emptyDiv, withContent)
+    @mainElement.fold(emptyDiv, withContent)
 
     <script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
     <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>

@@ -47,7 +47,7 @@ class DigitalSubscription(
   def digital(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Pack Subscription"
-    val id = EmptyDiv("digital-subscription-landing-page-" + countryCode)
+    val mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode)
     val js = RefPath("digitalSubscriptionLandingPage.js")
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
@@ -62,7 +62,7 @@ class DigitalSubscription(
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCode)
 
     Ok(views.html.main(
-      title, id, js, css, description, canonicalLink, hrefLangLinks
+      title, mainElement, js, css, description, canonicalLink, hrefLangLinks
     ) {
       Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
     }).withSettingsSurrogateKey
@@ -126,13 +126,13 @@ class DigitalSubscription(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Subscription"
-    val id = EmptyDiv("digital-subscription-checkout-page")
+    val mainElement = EmptyDiv("digital-subscription-checkout-page")
     val js = RefPath("digitalSubscriptionCheckoutPageThankYouExisting.js")
     val css = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.css"))
 
     Ok(views.html.main(
       title,
-      id,
+      mainElement,
       js,
       css
     )())
