@@ -36,6 +36,11 @@ body {
 
 .gu-content--contribution-thankyou {
   background: gu-colour(highlight-main);
+  .gu-content__main {
+    position: relative;
+    background-color: transparent;
+  }
+
 }
 
 .gu-content__main {
@@ -298,17 +303,41 @@ footer[role="contentinfo"] a {
   overflow: hidden;
   flex-grow: 1;
   margin: 0 auto;
-  width: 100%;
-  max-width: 1015px;
   border: none;
-  padding: 0;
-  background-color: transparent;
 
   @include mq($from: tablet) {
     margin-left: $content-left-margin-tablet
   }
 
   @include mq($from: leftCol) {
+    margin-left: $content-left-margin-leftCol
+  }
+
+}
+
+.gu-content__content-contributions {
+  width: 100%;
+  max-width: 1015px;
+  padding: 0;
+  background-color: transparent;
+}
+
+.gu-content__content-thankyou {
+  background: gu-colour(neutral-100);
+  padding: 0 10px;
+  overflow: hidden;
+  flex-grow: 1;
+
+  @include mq($from: tablet) {
+    border-color: gu-colour(neutral-86);
+    border-style: none solid;
+    border-width: 0 1px;
+    width: 380px;
+    margin-left: $content-left-margin-tablet
+  }
+
+  @include mq($from: leftCol) {
+    width: 380px;
     margin-left: $content-left-margin-leftCol
   }
 
@@ -371,6 +400,22 @@ footer[role="contentinfo"] a {
 
   @include mq($from: tablet) {
     padding: 0 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+  }
+}
+
+.header {
+  border: 0;
+  left: 10px;
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+  width: 100%;
+  margin: 0 -10px;
+  font: bold 22px/1.15 $gu-headline;
+  color: gu-colour(neutral-7);
+
+  @include mq($from: tablet) {
+    border-bottom: 1px solid gu-colour(neutral-86);
+    font-size: 36px;
+    padding: 0 $gu-h-spacing/2 $gu-v-spacing*1.5 $gu-h-spacing/2;
   }
 }
 

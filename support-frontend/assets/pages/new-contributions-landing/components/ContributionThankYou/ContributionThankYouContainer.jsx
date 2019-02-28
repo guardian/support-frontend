@@ -34,7 +34,7 @@ function ContributionThankYouContainer(props: PropTypes) {
 
 
   return (
-    <div className="gu-content__content">
+    <div className="gu-content__content gu-content__content-thankyou">
       {thankYouPageStage[props.thankYouPageStage]}
     </div>
   );
