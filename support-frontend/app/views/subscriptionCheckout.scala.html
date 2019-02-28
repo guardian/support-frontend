@@ -28,9 +28,7 @@
 
   @main(title = title, mainJsBundle = RefPath(js), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
     <script type="text/javascript">
-      @productPrices.map(p =>
-        Html(s"window.guardian.productPrices = ${Html(outputJson(p))}")
-      )
+      window.guardian.productPrices = @{Html(outputJson(productPrices))}
       window.guardian = window.guardian || {};
 
       window.guardian.user = {
