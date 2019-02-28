@@ -64,10 +64,7 @@ class DigitalSubscription(
     Ok(views.html.main(
       title, id, js, css, description, canonicalLink, hrefLangLinks
     ) {
-      val priceLines = productPrices.map(p =>
-        s"window.guardian.productPrices = ${outputJson(p)}"
-      )
-      Html(s"""<script type="text/javascript">${priceLines.mkString("\n")}</script>""")
+      Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
     }).withSettingsSurrogateKey
   }
 
