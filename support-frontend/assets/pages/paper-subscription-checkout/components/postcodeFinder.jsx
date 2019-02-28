@@ -5,6 +5,7 @@ import { compose } from 'redux';
 
 import Button from 'components/button/button';
 import { Input } from 'components/forms/standardFields/input';
+import { Select } from 'components/forms/standardFields/select';
 import { Label } from 'components/forms/standardFields/label';
 import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
@@ -28,18 +29,28 @@ const InputWithButton = ({ onClick, ...props }) => (
 );
 
 const ComposedInputWithButton = compose(withLabel, withError, asControlled)(InputWithButton);
+const ComposedSelect = compose(withLabel, asControlled)(Select);
 
 const PostcodeFinder = ({
   id, postcode, results, setPostcode, fetchResults, error,
 }: PropTypes) => (
   <div>
-    <ComposedInputWithButton error={error} label="Postcode" onClick={fetchResults} id={id} setValue={setPostcode} value={postcode} />
+    <ComposedInputWithButton
+      error={error}
+      label="Postcode"
+      onClick={fetchResults}
+      id={id}
+      setValue={setPostcode}
+      value={postcode}
+    />
     {results &&
-    <Label htmlFor={null} label="Results">
-      {results.map(({ addressLine1 }) => (
-        <strong>{addressLine1}</strong>
+      <ComposedSelect id="address" label={`${results.length} addresses found`}>
+        <option>--</option>
+        {results.map(({ addressLine1 }) => (
+          <option>{addressLine1}</option>
       ))}
-    </Label>
+      </ComposedSelect>
+
     }
   </div>
 );
