@@ -12,7 +12,7 @@ import org.mockito.ArgumentMatchers.{any, eq => argEq}
 import play.api.test.Helpers._
 import play.api.mvc.RequestHeader
 import play.api.Environment
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath}
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import services.{HttpIdentityService, MembersDataService, TestUserService}
@@ -30,6 +30,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
 
   val assetResolver = new AssetsResolver("", "", mock[Environment]) {
     override def apply(path: String): String = path
+    override def apply(path: RefPath): String = path.value
   }
 
   val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
