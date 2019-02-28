@@ -3,9 +3,9 @@ package assets
 import play.api.Environment
 import play.api.libs.json._
 import play.twirl.api.Html
-import views.StyleContent
 
 case class RefPath(value: String)
+case class StyleContent(value: Html) extends AnyVal
 
 class AssetsResolver(base: String, mapResource: String, env: Environment) {
 

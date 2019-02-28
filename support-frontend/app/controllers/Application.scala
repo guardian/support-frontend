@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath}
+import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
@@ -18,7 +18,7 @@ import play.api.mvc._
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
-import views.{EmptyDiv, StyleContent}
+import views.{EmptyDiv, Preload}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -127,6 +127,10 @@ class Application(
         }
       }
 
+    val preload = List("GuardianTextSans-Regular", "GuardianTextSans-Medium", "GHGuardianHeadline-Bold").map { name =>
+      Preload(s"//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/$name.woff2", "font", "font/woff2")
+    }
+
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
@@ -141,7 +145,8 @@ class Application(
       regularUatPayPalConfig = payPalConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      idUser = idUser
+      idUser = idUser,
+      preload = preload
     )
   }
 

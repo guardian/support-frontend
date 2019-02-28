@@ -1,15 +1,6 @@
 @import admin.settings.AllSettings
-@import assets.AssetsResolver
-@import views.ViewHelpers._
-@import com.gu.support.pricing.ProductPrices
-@import io.circe.syntax._
-@import com.gu.support.encoding.CustomCodecs._
-
-@import views.StyleContent
-@import assets.RefPath
-@import views.EmptyDiv
-@import views.SSRContent
-@import views.ReactDiv
+@import assets.{AssetsResolver, RefPath, StyleContent}
+@import views.{EmptyDiv, Preload, ReactDiv, SSRContent}
 @(
 	title: String,
 	mainId: ReactDiv,
@@ -19,6 +10,7 @@
 	canonicalLink: Option[String] = None,
 	hrefLangLinks: Map[String, String] = Map(),
   csrf: Option[String] = None,
+  preload: List[Preload] = Nil
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -27,6 +19,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
+  @for(Preload(href, as, typeAttr) <- preload) {
+    <link rel="preload" href="@href" as="@as" type="@typeAttr" crossorigin>
+  }
 
   @csrf.map { token =>
     <script type="text/javascript">
