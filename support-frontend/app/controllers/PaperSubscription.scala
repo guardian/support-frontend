@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath}
 import com.gu.identity.play.IdUser
 import com.gu.support.catalog.Paper
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
@@ -21,6 +21,7 @@ import com.gu.monitoring.SafeLogger._
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.circe.Circe
+import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -50,13 +51,13 @@ class PaperSubscription(
   def paper(withDelivery: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
-    val id = if (withDelivery) "paper-subscription-landing-page-delivery" else "paper-subscription-landing-page-collection"
-    val js = "paperSubscriptionLandingPage.js"
-    val css = "paperSubscriptionLandingPage.css"
+    val mainElement = if (withDelivery) EmptyDiv("paper-subscription-landing-page-delivery") else EmptyDiv("paper-subscription-landing-page-collection")
+    val js = RefPath("paperSubscriptionLandingPage.js")
+    val css = Left(RefPath("paperSubscriptionLandingPage.css"))
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
     val description = stringsConfig.paperLandingDescription
 
-    Ok(views.html.main(title, id, js, css, description, canonicalLink)).withSettingsSurrogateKey
+    Ok(views.html.main(title, mainElement, js, css, description, canonicalLink)()).withSettingsSurrogateKey
   }
 
   def displayForm(displayCheckout: Boolean): Action[AnyContent] =
@@ -80,7 +81,7 @@ class PaperSubscription(
 
   private def paperSubscriptionFormHtml(idUser: IdUser)(implicit request: RequestHeader, settings: AllSettings): Html = {
     val title = "Support the Guardian | Newspaper Subscription"
-    val id = "paper-subscription-checkout-page"
+    val id = EmptyDiv("paper-subscription-checkout-page")
     val js = "paperSubscriptionCheckoutPage.js"
     val css = "paperSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value

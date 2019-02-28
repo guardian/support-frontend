@@ -2,10 +2,11 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath}
 import config.StringsConfig
 import play.api.mvc._
 import services.IdentityService
+import views.EmptyDiv
 
 import scala.concurrent.ExecutionContext
 
@@ -34,25 +35,25 @@ class Subscriptions(
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Get a Subscription"
-    val id = "subscriptions-landing-page"
+    val mainElement = EmptyDiv("subscriptions-landing-page")
     val js = "subscriptionsLandingPage.js"
     Ok(views.html.main(
       title,
-      id,
-      js,
-      "subscriptionsLandingPageStyles.css",
+      mainElement,
+      RefPath(js),
+      Left(RefPath("subscriptionsLandingPageStyles.css")),
       description = stringsConfig.subscriptionsLandingDescription
-    )).withSettingsSurrogateKey
+    )()).withSettingsSurrogateKey
 
   }
 
   def premiumTier(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Premium Tier"
-    val id = "premium-tier-landing-page-" + countryCode
-    val js = "premiumTierLandingPage.js"
-    val css = "premiumTierLandingPageStyles.css"
-    Ok(views.html.main(title, id, js, css)).withSettingsSurrogateKey
+    val mainElement = EmptyDiv("premium-tier-landing-page-" + countryCode)
+    val js = RefPath("premiumTierLandingPage.js")
+    val css = Left(RefPath("premiumTierLandingPageStyles.css"))
+    Ok(views.html.main(title, mainElement, js, css)()).withSettingsSurrogateKey
   }
 
   def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/weekly")
@@ -60,9 +61,9 @@ class Subscriptions(
   def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "The Guardian Weekly Subscriptions | The Guardian"
-    val id = "weekly-landing-page-" + countryCode
-    val js = "weeklySubscriptionLandingPage.js"
-    val css = "weeklySubscriptionLandingPage.css"
+    val mainElement = EmptyDiv("weekly-landing-page-" + countryCode)
+    val js = RefPath("weeklySubscriptionLandingPage.js")
+    val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
     val hrefLangLinks = Map(
@@ -74,7 +75,7 @@ class Subscriptions(
       "en" -> buildCanonicalWeeklySubscriptionLink("int"),
       "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
-    Ok(views.html.main(title, id, js, css, description, canonicalLink, hrefLangLinks)).withSettingsSurrogateKey
+    Ok(views.html.main(title, mainElement, js, css, description, canonicalLink, hrefLangLinks)()).withSettingsSurrogateKey
   }
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
