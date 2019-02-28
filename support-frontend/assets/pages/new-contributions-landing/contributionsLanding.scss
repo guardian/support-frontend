@@ -373,8 +373,9 @@ footer[role="contentinfo"] a {
 }
 
 .gu-content__blurb--blurb {
-  font-size: 18px;
-  line-height: 22px;
+  font-size: 16px;
+  line-height: 20px;
+  font-family: $gu-headline;
 
   @include mq($from: tablet) {
     margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
