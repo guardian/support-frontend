@@ -2,14 +2,17 @@
 
 .component-checkout-form-section {
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing * 2;
-  .component-form-label + .component-form-label {
+  .component-form-label {
     margin-top: $gu-v-spacing * 2;
   }
-  .component-radio-input + .component-radio-input {
-    margin-top: $gu-v-spacing;
-  }
-  .component-radio-input--group + .component-radio-input--group {
-    margin-top: $gu-v-spacing / 2;
+
+  fieldset {
+    .component-radio-input + .component-radio-input {
+      margin-top: $gu-v-spacing;
+    }
+    .component-radio-input--group + .component-radio-input--group {
+      margin-top: $gu-v-spacing / 2;
+    }
   }
 }
 
