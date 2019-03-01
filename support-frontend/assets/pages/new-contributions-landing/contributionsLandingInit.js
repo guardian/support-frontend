@@ -54,7 +54,6 @@ function getInitialPaymentMethod(
 
 function getInitialContributionType(dropMonthlyVariant: DropMonthlyTestVariant): ContributionType {
   const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('ANNUAL'));
-  console.log(contributionType);
   return (
     // make sure we don't select a contribution type which isn't on the page
     getValidContributionTypes(dropMonthlyVariant).includes(contributionType)

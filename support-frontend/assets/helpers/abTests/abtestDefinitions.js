@@ -43,7 +43,7 @@ export const tests: Tests = {
     type: 'OTHER',
     variants: [
       {
-        id: 'control', // SMA
+        id: 'control',
       },
       {
         id: 'variant',
