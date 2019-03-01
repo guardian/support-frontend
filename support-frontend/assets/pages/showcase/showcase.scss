@@ -89,10 +89,6 @@
         margin-right: -($gu-v-spacing * 1.5)
       }
 
-      .component-text {
-        // padding-right: $gu-h-spacing*4;
-      }
-
       @include mq($from: tablet) {
         .component-content__content {
           min-height: 290px;
