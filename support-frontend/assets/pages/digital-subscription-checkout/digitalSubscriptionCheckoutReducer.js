@@ -42,13 +42,13 @@ type PaymentMethod = 'Stripe' | 'DirectDebit';
 export type FormFieldsInState = {|
   firstName: string,
   lastName: string,
-  billingAddressLine1: string,
-  billingAddressLine2: Option<string>,
-  billingTownCity: string,
-  billingCounty: Option<string>,
-  billingPostcode: string,
+  addressLine1: string,
+  addressLine2: Option<string>,
+  townCity: string,
+  county: Option<string>,
+  postcode: string,
   email: string,
-  billingStateProvince: Option<StateProvince>,
+  stateProvince: Option<StateProvince>,
   telephone: Option<string>,
   billingPeriod: DigitalBillingPeriod,
   paymentMethod: Option<PaymentMethod>,
@@ -56,7 +56,7 @@ export type FormFieldsInState = {|
 
 export type FormFields = {|
   ...FormFieldsInState,
-  billingCountry: IsoCountry,
+  country: IsoCountry,
   countrySupportsDirectDebit: boolean,
 |};
 
@@ -84,16 +84,16 @@ export type Action =
   | { type: 'SET_STAGE', stage: Stage }
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
-  | { type: 'SET_BILLING_ADDRESS_LINE_1', billingAddressLine1: string }
-  | { type: 'SET_BILLING_ADDRESS_LINE_2', billingAddressLine2: string }
-  | { type: 'SET_BILLING_TOWN_CITY', billingTownCity: string }
-  | { type: 'SET_BILLING_COUNTY', billingCounty: string }
-  | { type: 'SET_BILLING_COUNTRY', billingCountry: string }
-  | { type: 'SET_BILLING_POSTCODE', billingPostcode: string }
+  | { type: 'SET_ADDRESS_LINE_1', addressLine1: string }
+  | { type: 'SET_ADDRESS_LINE_2', addressLine2: string }
+  | { type: 'SET_TOWN_CITY', townCity: string }
+  | { type: 'SET_COUNTY', county: string }
+  | { type: 'SET_COUNTRY', country: string }
+  | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TELEPHONE', telephone: string }
-  | { type: 'SET_BILLING_STATE_PROVINCE', billingStateProvince: string, billingCountry: IsoCountry }
+  | { type: 'SET_STATE_PROVINCE', stateProvince: string, country: IsoCountry }
   | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
-  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod, billingCountry: IsoCountry }
+  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod, country: IsoCountry }
   | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry }
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
@@ -108,13 +108,13 @@ function getFormFields(state: State): FormFields {
     firstName: state.page.checkout.firstName,
     email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
-    billingAddressLine1: state.page.checkout.billingAddressLine1,
-    billingAddressLine2: state.page.checkout.billingAddressLine2,
-    billingTownCity: state.page.checkout.billingTownCity,
-    billingCounty: state.page.checkout.billingCounty,
-    billingPostcode: state.page.checkout.billingPostcode,
-    billingCountry: state.common.internationalisation.countryId,
-    billingStateProvince: state.page.checkout.billingStateProvince,
+    addressLine1: state.page.checkout.addressLine1,
+    addressLine2: state.page.checkout.addressLine2,
+    townCity: state.page.checkout.townCity,
+    county: state.page.checkout.county,
+    postcode: state.page.checkout.postcode,
+    country: state.common.internationalisation.countryId,
+    stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
     billingPeriod: state.page.checkout.billingPeriod,
     paymentMethod: state.page.checkout.paymentMethod,
@@ -140,26 +140,26 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       error: formError('lastName', 'Please enter a value.'),
     },
     {
-      rule: nonEmptyString(fields.billingAddressLine1),
-      error: formError('billingAddressLine1', 'Please enter a value'),
+      rule: nonEmptyString(fields.addressLine1),
+      error: formError('addressLine1', 'Please enter a value'),
     },
     {
-      rule: nonEmptyString(fields.billingTownCity),
-      error: formError('billingTownCity', 'Please enter a value'),
+      rule: nonEmptyString(fields.townCity),
+      error: formError('townCity', 'Please enter a value'),
     },
     {
-      rule: nonEmptyString(fields.billingPostcode),
-      error: formError('billingPostcode', 'Please enter a value'),
+      rule: nonEmptyString(fields.postcode),
+      error: formError('postcode', 'Please enter a value'),
     },
     {
-      rule: notNull(fields.billingCountry),
-      error: formError('billingCountry', 'Please select a country.'),
+      rule: notNull(fields.country),
+      error: formError('country', 'Please select a country.'),
     },
     {
-      rule: fields.billingCountry === 'US' || fields.billingCountry === 'CA' ? notNull(fields.billingCountry) : true,
+      rule: fields.country === 'US' || fields.country === 'CA' ? notNull(fields.stateProvince) : true,
       error: formError(
-        'billingStateProvince',
-        fields.billingCountry === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
+        'stateProvince',
+        fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
       ),
     },
   ]);
@@ -187,7 +187,7 @@ const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
   setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
-  setBillingCountryChanged: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
+  setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
     const country = fromString(countryRaw);
     if (country) {
       dispatch(setCountry(country));
@@ -197,23 +197,23 @@ const formActionCreators = {
       });
     }
   },
-  setBillingStateProvince: (billingStateProvince: string) =>
+  setStateProvince: (stateProvince: string) =>
     (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
-      type: 'SET_BILLING_STATE_PROVINCE',
-      billingStateProvince,
-      billingCountry: getState().common.internationalisation.countryId,
+      type: 'SET_STATE_PROVINCE',
+      stateProvince,
+      country: getState().common.internationalisation.countryId,
     }),
-  setBillingAddressLine1: (billingAddressLine1: string): Action => ({ type: 'SET_BILLING_ADDRESS_LINE_1', billingAddressLine1 }),
-  setBillingAddressLine2: (billingAddressLine2: string): Action => ({ type: 'SET_BILLING_ADDRESS_LINE_2', billingAddressLine2 }),
-  setBillingTownCity: (billingTownCity: string): Action => ({ type: 'SET_BILLING_TOWN_CITY', billingTownCity }),
-  setBillingCountry: (billingCountry: string): Action => ({ type: 'SET_BILLING_COUNTRY', billingCountry }),
-  setBillingCounty: (billingCounty: string): Action => ({ type: 'SET_BILLING_COUNTY', billingCounty }),
-  setBillingPostcode: (billingPostcode: string): Action => ({ type: 'SET_BILLING_POSTCODE', billingPostcode }),
+  setAddressLine1: (addressLine1: string): Action => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }),
+  setAddressLine2: (addressLine2: string): Action => ({ type: 'SET_ADDRESS_LINE_2', addressLine2 }),
+  setTownCity: (townCity: string): Action => ({ type: 'SET_TOWN_CITY', townCity }),
+  setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
+  setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
+  setPostcode: (postcode: string): Action => ({ type: 'SET_POSTCODE', postcode }),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
     type: 'SET_PAYMENT_METHOD',
     paymentMethod,
-    billingCountry: getState().common.internationalisation.countryId,
+    country: getState().common.internationalisation.countryId,
   }),
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
     (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
@@ -237,12 +237,12 @@ function initReducer(initialCountry: IsoCountry) {
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    billingAddressLine1: '',
-    billingAddressLine2: null,
-    billingTownCity: '',
-    billingCounty: '',
-    billingPostcode: '',
-    billingStateProvince: null,
+    addressLine1: '',
+    addressLine2: null,
+    townCity: '',
+    county: '',
+    postcode: '',
+    stateProvince: null,
     telephone: null,
     billingPeriod: initialBillingPeriod,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
@@ -266,29 +266,26 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName };
 
-      case 'SET_BILLING_ADDRESS_LINE_1':
-        return { ...state, billingAddressLine1: action.billingAddressLine1 };
+      case 'SET_ADDRESS_LINE_1':
+        return { ...state, addressLine1: action.addressLine1 };
 
-      case 'SET_BILLING_ADDRESS_LINE_2':
-        return { ...state, billingAddressLine2: action.billingAddressLine2 };
+      case 'SET_ADDRESS_LINE_2':
+        return { ...state, addressLine2: action.addressLine2 };
 
-      case 'SET_BILLING_TOWN_CITY':
-        return { ...state, billingTownCity: action.billingTownCity };
+      case 'SET_TOWN_CITY':
+        return { ...state, townCity: action.townCity };
 
-      case 'SET_BILLING_COUNTY':
-        return { ...state, billingCounty: action.billingCounty };
+      case 'SET_COUNTY':
+        return { ...state, county: action.county };
 
-      case 'SET_BILLING_POSTCODE':
-        return { ...state, billingPostcode: action.billingPostcode };
+      case 'SET_POSTCODE':
+        return { ...state, postcode: action.postcode };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
 
-      case 'SET_BILLING_STATE_PROVINCE':
-        return {
-          ...state,
-          billingStateProvince: stateProvinceFromString(action.billingCountry, action.billingStateProvince),
-        };
+      case 'SET_STATE_PROVINCE':
+        return { ...state, stateProvince: stateProvinceFromString(action.country, action.stateProvince) };
 
       case 'SET_BILLING_PERIOD':
         return { ...state, billingPeriod: action.billingPeriod };
@@ -296,13 +293,13 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_PAYMENT_METHOD':
         return {
           ...state,
-          paymentMethod: countrySupportsDirectDebit(action.billingCountry) ? action.paymentMethod : 'Stripe',
+          paymentMethod: countrySupportsDirectDebit(action.country) ? action.paymentMethod : 'Stripe',
         };
 
       case 'SET_COUNTRY_CHANGED':
         return {
           ...state,
-          billingStateProvince: null,
+          stateProvince: null,
           paymentMethod: countrySupportsDirectDebit(action.country) ? 'DirectDebit' : 'Stripe',
         };
 
