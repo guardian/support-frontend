@@ -19,8 +19,10 @@ type FormSectionPropTypes = {|
 
 const FormSection = ({ children, title, headingSize }: FormSectionPropTypes) => (
   <div className="component-checkout-form-section">
-    {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
-    {children}
+    <div className="component-checkout-form-section__wrap">
+      {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
+      {children}
+    </div>
   </div>
 );
 FormSection.defaultProps = {
