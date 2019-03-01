@@ -20,16 +20,24 @@ export const postcodeFinderActionCreators = {
   setPostcode: (postcode: string) => ({ type: 'SET_POSTCODE_FINDER_POSTCODE', postcode }),
   fetchResults: (postcode: Option<string>) => (dispatch: Dispatch<PostcodeFinderActions>) => {
     if (!postcode) {
-      dispatch({ type: 'SET_POSTCODE_FINDER_ERROR', error: 'Ya need a postcode lass' });
+      dispatch({
+        type: 'SET_POSTCODE_FINDER_ERROR',
+        error: 'Please enter a postcode',
+      });
     } else {
       dispatch({ type: 'START_POSTCODE_FINDER_FETCH_RESULTS' });
       getAddressesForPostcode(postcode)
         .then((results) => {
-          dispatch({ type: 'FILL_POSTCODE_FINDER_RESULTS', results });
+          dispatch({
+            type: 'FILL_POSTCODE_FINDER_RESULTS',
+            results,
+          });
         })
-        .catch((error) => {
-          console.error(error);
-          dispatch({ type: 'SET_POSTCODE_FINDER_ERROR', error: 'This failed' });
+        .catch(() => {
+          dispatch({
+            type: 'SET_POSTCODE_FINDER_ERROR',
+            error: 'Couldn\'t find your postcode',
+          });
         });
     }
   },

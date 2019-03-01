@@ -1,4 +1,5 @@
 // @flow
+import { postcodeLookupUrl } from 'helpers/routes';
 
 export type Address = {|
   lineOne?: string,
@@ -7,7 +8,7 @@ export type Address = {|
 |};
 
 const getAddressesForPostcode = (postcode: string): Promise<Address[]> =>
-  fetch(`/postcode-lookup/${postcode}`)
+  fetch(postcodeLookupUrl(postcode))
     .then(res => res.json());
 
 export { getAddressesForPostcode };
