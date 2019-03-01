@@ -81,6 +81,16 @@
       .component-content__image {
         max-width: gu-span(5);
         min-width: gu-span(4);
+        bottom: 0;
+        left: auto;
+        right: 0;
+        height: 100%;
+        float: right;
+        margin-right: -($gu-v-spacing * 1.5)
+      }
+
+      .component-text {
+        // padding-right: $gu-h-spacing*4;
       }
 
       @include mq($from: tablet) {
@@ -92,13 +102,25 @@
           position: relative;
           border-left: none;
           .component-grid-image {
-            width: 200%;
+            width: auto;
+            height: 100%;
             display: block;
             position: absolute;
             right: 0;
             bottom: 0;
-            left: 0;
           }
+        }
+      }
+
+      @include mq($from: tablet, $until: desktop) {
+        .component-content__image {
+          right: -300px;
+        }
+      }
+
+      @include mq($from: desktop, $until: leftCol) {
+        .component-content__image {
+          right: -200px;
         }
       }
     }
@@ -107,7 +129,8 @@
       overflow: hidden;
 
       @include mq($until: tablet) {
-        height: 400px;
+        // height: 400px;
+        padding-bottom: 75px;
       }
 
       .component-left-margin-section__content {
@@ -129,6 +152,7 @@
           }
         }
       }
+      
 
       .one-million-circles {
         position: absolute;
@@ -140,7 +164,7 @@
 
         @include mq($until: tablet) {
           transform: rotate(-70deg);
-          left: 80px;
+          left: 50vw;
           bottom: -190px;
         }
       }
