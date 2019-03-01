@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { compose, Dispatch } from 'redux';
 
 import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
@@ -37,12 +37,10 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import { PayPalRecurringButton } from './../../../pages/new-contributions-landing/components/PayPalRecurringButton';
-import { onPaymentAuthorisation } from './../digitalSubscriptionCheckoutActions';
-
+import { type FormActionCreators, formActionCreators } from './../digitalSubscriptionCheckoutActions';
 
 import {
-  type FormActionCreators,
-  formActionCreators,
+  submitForm,
   signOut,
   type FormField,
   type FormFields,
@@ -51,6 +49,8 @@ import {
 } from '../digitalSubscriptionCheckoutReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { setupPayPalPayment } from 'pages/digital-subscription-checkout/helpers/payPal';
+import { formIsValid } from '../digitalSubscriptionCheckoutReducer';
+import { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -86,6 +86,9 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps(dispatch: Dispatch) {
   return {
     ...formActionCreators,
+    formIsValid,
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
+    setupPayPalPayment,
     signOut,
   };
 }

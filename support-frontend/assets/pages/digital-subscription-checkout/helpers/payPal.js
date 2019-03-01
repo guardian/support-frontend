@@ -1,6 +1,6 @@
 // @flow
 
-import { Action, setPayPalHasLoaded } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import { Action, setPayPalHasLoaded } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import { loadPayPalRecurring, payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { ContributionType } from 'helpers/contributions';
 import { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
