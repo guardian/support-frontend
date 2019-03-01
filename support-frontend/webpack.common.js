@@ -7,6 +7,7 @@ const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 const cssnano = require('cssnano');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 const { getClassName } = require('./scripts/css');
 
@@ -45,6 +46,10 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     new ManifestPlugin({
       fileName: '../../conf/assets.map',
       writeToFileEmit: true,
+    }),
+    new StatsWriterPlugin({
+      filename: 'stats.json',
+      fields: null,
     }),
     new MiniCssExtractPlugin({
       filename: path.join('stylesheets', cssFilename),

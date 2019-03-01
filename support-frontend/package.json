@@ -13,6 +13,7 @@
     "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest",
+    "stat": "yarn build-prod && webpack-bundle-analyzer public/compiled-assets/stats.json",
     "paparazzi": "paparazzi && open ./paparazzi",
     "storybook": "start-storybook -p 9001 -c .storybook -s .storybook/static",
     "storybook-static": "build-storybook -c .storybook -o storybook-static  -s .storybook/static",
@@ -69,7 +70,8 @@
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
     "seedrandom": "^2.4.3",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "webpack-bundle-analyzer": "^3.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -123,6 +125,7 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "3.1.5",
     "webpack-manifest-plugin": "2.0.3",
-    "webpack-merge": "^4.1.3"
+    "webpack-merge": "^4.1.3",
+    "webpack-stats-plugin": "^0.2.1"
   }
 }
