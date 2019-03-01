@@ -31,7 +31,12 @@ const routes: {
   digitalSubscriptionLanding: '/subscribe/digital',
   paperSubscriptionLanding: '/subscribe/paper',
   guardianWeeklySubscriptionLanding: '/subscribe/weekly',
+  postcodeLookup: '/postcode-lookup',
 };
+
+function postcodeLookupUrl(postcode: string): string {
+  return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
+}
 
 function paperSubsUrl(withDelivery: boolean = false): string {
   return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
@@ -48,4 +53,4 @@ function payPalReturnUrl(cgId: CountryGroupId): string {
 
 // ----- Exports ----- //
 
-export { routes, payPalCancelUrl, payPalReturnUrl, paperSubsUrl };
+export { routes, postcodeLookupUrl, payPalCancelUrl, payPalReturnUrl, paperSubsUrl };

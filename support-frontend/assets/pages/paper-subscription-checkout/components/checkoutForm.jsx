@@ -176,14 +176,6 @@ function CheckoutForm(props: PropTypes) {
                 }}
               />
               <InputWithError
-                id="postcode"
-                label="Delivery postcode"
-                type="text"
-                value={props.postcode}
-                setValue={props.setPostcode}
-                error={firstError('postcode', props.formErrors)}
-              />
-              <InputWithError
                 id="address-line-1"
                 label="Address Line 1"
                 type="text"

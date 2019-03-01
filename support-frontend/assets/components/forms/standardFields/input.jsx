@@ -4,15 +4,19 @@
 
 import React from 'react';
 
+import { withExtraClassName } from 'hocs/withExtraClassName';
+
 import './input.scss';
 
 // ----- Component ----- //
 
-function Input({ forwardRef, ...props }: {forwardRef?: ?Function}) {
-  return <input ref={forwardRef} className="component-input" {...props} />;
+function PreInput({ forwardRef, ...props }: {forwardRef?: ?Function}) {
+  return <input ref={forwardRef} {...props} />;
 }
 
-Input.defaultProps = { forwardRef: null };
+PreInput.defaultProps = { forwardRef: null };
+
+const Input = withExtraClassName('component-input')(PreInput);
 
 
 // ----- Exports ----- //
