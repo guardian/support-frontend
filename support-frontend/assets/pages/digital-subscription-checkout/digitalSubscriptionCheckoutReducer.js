@@ -10,16 +10,13 @@ import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
-  fromString,
   type IsoCountry,
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import { type Action as DDAction } from 'components/directDebit/directDebitActions';
 import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
@@ -151,11 +148,17 @@ const formIsValid = () => (dispatch: Function, getState: () => State): boolean =
 
 const signOut = () => { window.location.href = getSignoutUrl(); };
 
-function submitForm(dispatch: Dispatch<Action>, state: State) {
+function validateForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
-  if (errors.length > 0) {
+  const valid = errors.length === 0;
+  if (!valid) {
     dispatch(setFormErrors(errors));
-  } else {
+  }
+  return valid;
+}
+
+function submitForm(dispatch: Dispatch<Action>, state: State) {
+  if (validateForm(dispatch, state)) {
     showPaymentMethod(dispatch, state);
   }
 }
@@ -279,4 +282,5 @@ export {
   signOut,
   formIsValid,
   submitForm,
+  validateForm,
 };

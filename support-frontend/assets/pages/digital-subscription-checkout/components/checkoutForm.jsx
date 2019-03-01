@@ -49,7 +49,7 @@ import {
 } from '../digitalSubscriptionCheckoutReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { setupPayPalPayment } from 'pages/digital-subscription-checkout/helpers/payPal';
-import { formIsValid } from '../digitalSubscriptionCheckoutReducer';
+import { formIsValid, validateForm } from '../digitalSubscriptionCheckoutReducer';
 import { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 
 // ----- Types ----- //
@@ -88,6 +88,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
     ...formActionCreators,
     formIsValid,
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
+    validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
     setupPayPalPayment,
     signOut,
   };
@@ -346,7 +347,7 @@ function CheckoutForm(props: PropTypes) {
                   currencyId={props.currencyId}
                   hasLoaded={props.payPalHasLoaded}
                   canOpen={props.formIsValid}
-                  onClick={props.submitForm}
+                  onClick={props.validateForm}
                   formClassName="form--contribution"
                   isTestUser={props.isTestUser}
                   setupRecurringPayPalPayment={props.setupPayPalPayment}

@@ -88,7 +88,6 @@ const formActionCreators = {
 
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
     (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
-  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
 };
 
 export type FormActionCreators = typeof formActionCreators;
