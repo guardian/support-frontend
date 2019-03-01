@@ -29,7 +29,7 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
       {...props}
       onKeyPress={(ev) => {
         if (ev.key && ev.key === 'Enter') {
-          ev.stopPropagation();
+          ev.preventDefault();
           onClick();
         }
       }}
@@ -37,7 +37,15 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
       name="postcode"
     />
     {!isLoading &&
-      <Button type="button" appearance="greyHollow" icon={null} onClick={onClick} aria-label={null}>Find it</Button>
+      <Button
+        type="button"
+        appearance="greyHollow"
+        icon={null}
+        onClick={onClick}
+        aria-label={null}
+      >
+        Find it
+      </Button>
     }
   </div>
 );
