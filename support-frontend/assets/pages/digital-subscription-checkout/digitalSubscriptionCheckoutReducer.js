@@ -34,7 +34,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import { showPayPal } from 'pages/digital-subscription-checkout/helpers/payPal';
+import { setupPayPalPayment, showPayPal } from 'pages/digital-subscription-checkout/helpers/payPal';
 
 // ----- Types ----- //
 
@@ -192,7 +192,6 @@ const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISS
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
-
 const formActionCreators = {
   setFirstName: (firstName: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
   setLastName: (lastName: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
@@ -235,6 +234,8 @@ const formActionCreators = {
     (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
   formIsValid,
+  setupPayPalPayment,
+
 };
 
 export type FormActionCreators = typeof formActionCreators;

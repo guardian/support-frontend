@@ -349,7 +349,7 @@ function CheckoutForm(props: PropTypes) {
                   onClick={props.submitForm}
                   formClassName="form--contribution"
                   isTestUser={props.isTestUser}
-                  setupRecurringPayPalPayment={setupPayPalPayment}
+                  setupRecurringPayPalPayment={props.setupPayPalPayment}
                   contributionType={props.contributionType}
                 />
               ) : (
