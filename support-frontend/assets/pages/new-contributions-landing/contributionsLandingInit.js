@@ -20,8 +20,8 @@ import {
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
 import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import type { DropMonthlyTestVariant } from 'helpers/abTests/abtestDefinitions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { FrequencyTabsTestVariant } from 'helpers/abTests/abtestDefinitions';
 import {
   type Action,
   checkIfEmailHasPassword,
@@ -52,14 +52,14 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(frequencyTabsOrdering: FrequencyTabsTestVariant): ContributionType {
+function getInitialContributionType(dropMonthlyVariant: DropMonthlyTestVariant): ContributionType {
   const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('ANNUAL'));
-
+  console.log(contributionType);
   return (
     // make sure we don't select a contribution type which isn't on the page
-    getValidContributionTypes(frequencyTabsOrdering).includes(contributionType)
+    getValidContributionTypes(dropMonthlyVariant).includes(contributionType)
       ? contributionType
-      : getValidContributionTypes(frequencyTabsOrdering)[0]
+      : getValidContributionTypes(dropMonthlyVariant)[0]
   );
 }
 
@@ -132,9 +132,9 @@ function selectInitialAmounts(state: State, dispatch: Function) {
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
-  const { frequencyTabsOrdering } = state.common.abParticipations;
-  if (frequencyTabsOrdering === 'notintest' || frequencyTabsOrdering === 'control' || frequencyTabsOrdering === 'mas' || frequencyTabsOrdering === 'sam') {
-    const contributionType = getInitialContributionType(frequencyTabsOrdering);
+  const dropMonthlyVariant = state.common.abParticipations.dropMonthly;
+  if (dropMonthlyVariant === 'notintest' || dropMonthlyVariant === 'control' || dropMonthlyVariant === 'variant') {
+    const contributionType = getInitialContributionType(dropMonthlyVariant);
     const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
     dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
   }
