@@ -44,17 +44,21 @@ export type RegularPaymentFields =
   RegularStripePaymentFields |
   RegularDirectDebitPaymentFields;
 
+export type RegularPaymentRequestAddress = {|
+  country: IsoCountry,
+  state: UsState | CaState | null,
+  lineOne: Option<string>,
+  lineTwo: Option<string>,
+  postCode: Option<string>,
+  city: Option<string>,
+|};
+
 export type RegularPaymentRequest = {|
   firstName: string,
   lastName: string,
-  country: IsoCountry,
-  state: UsState | CaState | null,
+  billingAddress: RegularPaymentRequestAddress,
+  deliveryAddress: Option<RegularPaymentRequestAddress>,
   email: string,
-  addressLine1: Option<string>,
-  addressLine2: Option<string>,
-  county: Option<string>,
-  postcode: Option<string>,
-  townCity: Option<string>,
   product: ProductFields,
   paymentFields: RegularPaymentFields,
   ophanIds: OphanIds,

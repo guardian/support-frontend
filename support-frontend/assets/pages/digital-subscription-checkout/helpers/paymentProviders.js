@@ -9,6 +9,7 @@ import { type IsoCountry } from 'helpers/internationalisation/country';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentResult,
+  type RegularPaymentRequest,
   postRegularPaymentRequest, regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { routes } from 'helpers/routes';
@@ -19,18 +20,17 @@ import { getQueryParameter } from 'helpers/url';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
 
-function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation) {
+function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
   const { currencyId, countryId } = state.common.internationalisation;
   const {
     firstName,
     lastName,
-    addressLine1,
-    addressLine2,
-    townCity,
-    county,
-    postcode,
+    billingAddressLine1,
+    billingAddressLine2,
+    billingTownCity,
+    billingPostcode,
     email,
-    stateProvince,
+    billingStateProvince,
     billingPeriod,
     telephone,
   } = state.page.checkout;
@@ -45,13 +45,15 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   return {
     firstName,
     lastName,
-    country: countryId,
-    addressLine1,
-    addressLine2,
-    townCity,
-    county,
-    postcode,
-    state: stateProvince,
+    billingAddress: {
+      lineOne: billingAddressLine1,
+      lineTwo: billingAddressLine2,
+      city: billingTownCity,
+      state: billingStateProvince,
+      postCode: billingPostcode,
+      country: countryId,
+    },
+    deliveryAddress: null,
     email,
     telephoneNumber: telephone,
     product,

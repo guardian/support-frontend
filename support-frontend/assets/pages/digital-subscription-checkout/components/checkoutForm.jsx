@@ -101,19 +101,19 @@ function CheckoutForm(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
-  const monthlyPriceLabel = props.country !== null ?
+  const monthlyPriceLabel = props.billingCountry !== null ?
     (<PriceLabel
-      country={props.country}
-      productPrice={dpRegularPrice(props.productPrices, Monthly, props.country)}
-      promotion={digitalPackPromotion(props.productPrices, Monthly, props.country)}
+      country={props.billingCountry}
+      productPrice={dpRegularPrice(props.productPrices, Monthly, props.billingCountry)}
+      promotion={digitalPackPromotion(props.productPrices, Monthly, props.billingCountry)}
       billingPeriod={Monthly}
     />) : '';
 
-  const annualPriceLabel = props.country !== null ?
+  const annualPriceLabel = props.billingCountry !== null ?
     (<PriceLabel
-      country={props.country}
-      productPrice={dpRegularPrice(props.productPrices, Annual, props.country)}
-      promotion={digitalPackPromotion(props.productPrices, Annual, props.country)}
+      country={props.billingCountry}
+      productPrice={dpRegularPrice(props.productPrices, Annual, props.billingCountry)}
+      promotion={digitalPackPromotion(props.productPrices, Annual, props.billingCountry)}
       billingPeriod={Annual}
     />) : '';
 
@@ -186,64 +186,64 @@ function CheckoutForm(props: PropTypes) {
                 id="address-line-1"
                 label="Address Line 1"
                 type="text"
-                value={props.addressLine1}
-                setValue={props.setAddressLine1}
-                error={firstError('addressLine1', props.formErrors)}
+                value={props.billingAddressLine1}
+                setValue={props.setBillingAddressLine1}
+                error={firstError('billingAddressLine1', props.formErrors)}
               />
               <Input1
                 id="address-line-2"
                 label="Address Line 2"
                 optional
                 type="text"
-                value={props.addressLine2}
-                setValue={props.setAddressLine2}
-                error={firstError('addressLine2', props.formErrors)}
+                value={props.billingAddressLine2}
+                setValue={props.setBillingAddressLine2}
+                error={firstError('billingAddressLine2', props.formErrors)}
               />
               <Input1
                 id="town-city"
                 label="Town/City"
                 type="text"
-                value={props.townCity}
-                setValue={props.setTownCity}
-                error={firstError('townCity', props.formErrors)}
+                value={props.billingTownCity}
+                setValue={props.setBillingTownCity}
+                error={firstError('billingTownCity', props.formErrors)}
               />
               <Select1
                 id="country"
                 label="Country"
-                value={props.country}
+                value={props.billingCountry}
                 setValue={props.setBillingCountry}
-                error={firstError('country', props.formErrors)}
+                error={firstError('billingCountry', props.formErrors)}
               >
                 <option value="">--</option>
                 {sortedOptions(countries)}
               </Select1>
               <Select2
-                id="stateProvince"
-                label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-                value={props.stateProvince}
-                setValue={props.setStateProvince}
-                error={firstError('stateProvince', props.formErrors)}
-                isShown={props.country === 'US' || props.country === 'CA'}
+                id="billingStateProvince"
+                label={props.billingCountry === 'CA' ? 'Province/Territory' : 'State'}
+                value={props.billingStateProvince}
+                setValue={props.setBillingStateProvince}
+                error={firstError('billingStateProvince', props.formErrors)}
+                isShown={props.billingCountry === 'US' || props.billingCountry === 'CA'}
               >
                 <option value="">--</option>
-                {statesForCountry(props.country)}
+                {statesForCountry(props.billingCountry)}
               </Select2>
               <Input1
                 id="county"
                 label="County"
                 optional
                 type="text"
-                value={props.county}
-                setValue={props.setCounty}
-                error={firstError('county', props.formErrors)}
+                value={props.billingCounty}
+                setValue={props.setBillingCounty}
+                error={firstError('billingCounty', props.formErrors)}
               />
               <Input1
                 id="postcode"
                 label="Postcode"
                 type="text"
-                value={props.postcode}
-                setValue={props.setPostcode}
-                error={firstError('postcode', props.formErrors)}
+                value={props.billingPostcode}
+                setValue={props.setBillingPostcode}
+                error={firstError('billingPostcode', props.formErrors)}
               />
             </FormSection>
             <FormSection title="How often would you like to pay?">
@@ -261,7 +261,7 @@ function CheckoutForm(props: PropTypes) {
                   onChange={() => props.setBillingPeriod(Annual)}
                 />
                 <PromotionSummary
-                  country={props.country}
+                  country={props.billingCountry}
                   productPrices={props.productPrices}
                   billingPeriod={props.billingPeriod}
                 />

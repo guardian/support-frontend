@@ -46,10 +46,10 @@ export type FormFieldsInState = {|
   title: Option<Title>,
   firstName: string,
   lastName: string,
-  addressLine1: string,
-  addressLine2: Option<string>,
-  townCity: string,
-  postcode: string,
+  billingAddressLine1: string,
+  billingAddressLine2: Option<string>,
+  billingTownCity: string,
+  billingPostcode: string,
   email: string,
   startDate: string,
   telephone: Option<string>,
@@ -85,13 +85,13 @@ export type Action =
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_TITLE', title: Option<Title> }
   | { type: 'SET_LAST_NAME', lastName: string }
-  | { type: 'SET_ADDRESS_LINE_1', addressLine1: string }
-  | { type: 'SET_ADDRESS_LINE_2', addressLine2: string }
+  | { type: 'SET_BILLING_ADDRESS_LINE_1', billingAddressLine1: string }
+  | { type: 'SET_BILLING_ADDRESS_LINE_2', billingAddressLine2: string }
   | { type: 'SET_START_DATE', startDate: string }
-  | { type: 'SET_TOWN_CITY', townCity: string }
-  | { type: 'SET_COUNTY', county: string }
+  | { type: 'SET_BILLING_TOWN_CITY', billingTownCity: string }
+  | { type: 'SET_BILLING_COUNTY', billingCounty: string }
   | { type: 'SET_COUNTRY', country: string }
-  | { type: 'SET_POSTCODE', postcode: string }
+  | { type: 'SET_BILLING_POSTCODE', billingPostcode: string }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry }
@@ -108,10 +108,10 @@ function getFormFields(state: State): FormFields {
     firstName: state.page.checkout.firstName,
     email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
-    addressLine1: state.page.checkout.addressLine1,
-    addressLine2: state.page.checkout.addressLine2,
-    townCity: state.page.checkout.townCity,
-    postcode: state.page.checkout.postcode,
+    billingAddressLine1: state.page.checkout.billingAddressLine1,
+    billingAddressLine2: state.page.checkout.billingAddressLine2,
+    billingTownCity: state.page.checkout.billingTownCity,
+    billingPostcode: state.page.checkout.billingPostcode,
     country: state.common.internationalisation.countryId,
     startDate: state.page.checkout.startDate,
     telephone: state.page.checkout.telephone,
@@ -138,20 +138,20 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       error: formError('lastName', 'Please enter a last name.'),
     },
     {
-      rule: nonEmptyString(fields.addressLine1),
-      error: formError('addressLine1', 'Please enter an address'),
+      rule: nonEmptyString(fields.billingAddressLine1),
+      error: formError('billingAddressLine1', 'Please enter an address'),
     },
     {
       rule: nonEmptyString(fields.startDate),
       error: formError('startDate', 'Please select a start date'),
     },
     {
-      rule: nonEmptyString(fields.townCity),
-      error: formError('townCity', 'Please enter a city'),
+      rule: nonEmptyString(fields.billingTownCity),
+      error: formError('billingTownCity', 'Please enter a city'),
     },
     {
-      rule: nonEmptyString(fields.postcode),
-      error: formError('postcode', 'Please enter a post code'),
+      rule: nonEmptyString(fields.billingPostcode),
+      error: formError('billingPostcode', 'Please enter a post code'),
     },
     {
       rule: notNull(fields.country),
@@ -195,12 +195,12 @@ const formActionCreators = {
       });
     }
   },
-  setAddressLine1: (addressLine1: string): Action => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }),
-  setAddressLine2: (addressLine2: string): Action => ({ type: 'SET_ADDRESS_LINE_2', addressLine2 }),
-  setTownCity: (townCity: string): Action => ({ type: 'SET_TOWN_CITY', townCity }),
+  setBillingAddressLine1: (billingAddressLine1: string): Action => ({ type: 'SET_BILLING_ADDRESS_LINE_1', billingAddressLine1 }),
+  setBillingAddressLine2: (billingAddressLine2: string): Action => ({ type: 'SET_BILLING_ADDRESS_LINE_2', billingAddressLine2 }),
+  setBillingTownCity: (billingTownCity: string): Action => ({ type: 'SET_BILLING_TOWN_CITY', billingTownCity }),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
-  setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
-  setPostcode: (postcode: string): Action => ({ type: 'SET_POSTCODE', postcode }),
+  setBillingCounty: (billingCounty: string): Action => ({ type: 'SET_BILLING_COUNTY', billingCounty }),
+  setBillingPostcode: (billingPostcode: string): Action => ({ type: 'SET_BILLING_POSTCODE', billingPostcode }),
   setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>) =>
     dispatch({
@@ -275,17 +275,17 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
       case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName };
 
-      case 'SET_ADDRESS_LINE_1':
-        return { ...state, addressLine1: action.addressLine1 };
+      case 'SET_BILLING_ADDRESS_LINE_1':
+        return { ...state, billingAddressLine1: action.billingAddressLine1 };
 
-      case 'SET_ADDRESS_LINE_2':
-        return { ...state, addressLine2: action.addressLine2 };
+      case 'SET_BILLING_ADDRESS_LINE_2':
+        return { ...state, billingAddressLine2: action.billingAddressLine2 };
 
-      case 'SET_TOWN_CITY':
-        return { ...state, townCity: action.townCity };
+      case 'SET_BILLING_TOWN_CITY':
+        return { ...state, billingTownCity: action.billingTownCity };
 
-      case 'SET_POSTCODE':
-        return { ...state, postcode: action.postcode };
+      case 'SET_BILLING_POSTCODE':
+        return { ...state, billingPostcode: action.billingPostcode };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
