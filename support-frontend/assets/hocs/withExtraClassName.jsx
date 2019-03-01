@@ -29,7 +29,7 @@ type InitialProps = {
 function withExtraClassName(originalClassName: string) {
   return function withOriginalClassname<Props: InitialProps>(Component: ComponentType<Props>): ComponentType<Props> {
     return ({ className, ...props }) =>
-      <Component {...props} className={[originalClassName, className].join(' ')} />;
+      <Component {...props} className={className ? [originalClassName, className].join(' ') : originalClassName} />;
   };
 }
 
