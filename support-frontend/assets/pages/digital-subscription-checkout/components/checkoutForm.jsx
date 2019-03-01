@@ -50,6 +50,7 @@ import {
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { setupPayPalPayment } from 'pages/digital-subscription-checkout/helpers/payPal';
 
 // ----- Types ----- //
 
@@ -86,7 +87,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
   return {
     ...formActionCreators,
     signOut,
-    submitForm,
     onPaymentAuthorisation: () => {
       dispatch(onPaymentAuthorisation);
     },
@@ -349,7 +349,7 @@ function CheckoutForm(props: PropTypes) {
                   onClick={props.submitForm}
                   formClassName="form--contribution"
                   isTestUser={props.isTestUser}
-                  setupRecurringPayPalPayment={props.setupPayPalPayment}
+                  setupRecurringPayPalPayment={setupPayPalPayment}
                   contributionType={props.contributionType}
                 />
               ) : (

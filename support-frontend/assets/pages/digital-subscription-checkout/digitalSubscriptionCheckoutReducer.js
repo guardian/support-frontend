@@ -33,26 +33,8 @@ import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
-
-import { loadPayPalRecurring } from '../../helpers/paymentIntegrations/payPalRecurringCheckout';
-import { setPayPalHasLoaded } from './digitalSubscriptionCheckoutActions';
-import {
-  setCheckoutFormHasBeenSubmitted,
-  setFormIsValid
-} from 'pages/new-contributions-landing/contributionsLandingActions';
-import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import { getForm } from 'helpers/checkoutForm/checkoutForm';
-import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
-import { routes } from 'helpers/routes';
-import type { ContributionType } from 'helpers/contributions';
-import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import { logException } from 'helpers/logger';
-import * as storage from 'helpers/storage';
-import { payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
+import { showPayPal } from 'pages/digital-subscription-checkout/helpers/payPal';
 
 // ----- Types ----- //
 
@@ -118,6 +100,7 @@ export type Action =
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
+  | { type: 'SET_PAYPAL_HAS_LOADED' }
   | DDAction;
 
 
@@ -207,6 +190,7 @@ const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
 const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
+const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
 
 const formActionCreators = {
@@ -250,7 +234,6 @@ const formActionCreators = {
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
     (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
-  setupPayPalPayment,
   formIsValid,
 };
 
@@ -376,6 +359,7 @@ export {
   getEmail,
   setSubmissionError,
   setFormSubmitted,
+  setPayPalHasLoaded,
   signOut,
   formActionCreators,
 };

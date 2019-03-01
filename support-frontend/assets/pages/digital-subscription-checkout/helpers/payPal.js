@@ -1,6 +1,6 @@
 // @flow
 
-import { setPayPalHasLoaded } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import { Action, setPayPalHasLoaded } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { loadPayPalRecurring, payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { ContributionType } from 'helpers/contributions';
 import { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
@@ -10,6 +10,7 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { logException } from 'helpers/logger';
 import * as storage from 'helpers/storage';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
+
 
 const showPayPal = (dispatch: Function) => {
   loadPayPalRecurring()
