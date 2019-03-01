@@ -177,7 +177,7 @@ function ContributionFormContainer(props: PropTypes) {
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
-      <div className="gu-content__content gu-content__content--flex">
+      <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
         <div className={blurbClass}>
           <h1 className="gu-content__blurb--header">{countryGroupDetails.headerCopy}</h1>
           {countryGroupDetails.tickerJsonUrl ?

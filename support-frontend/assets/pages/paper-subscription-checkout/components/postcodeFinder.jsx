@@ -10,9 +10,10 @@ import { asControlled } from 'components/forms/formHOCs/asControlled';
 import { withLabel } from 'components/forms/formHOCs/withLabel';
 import { withError } from 'components/forms/formHOCs/withError';
 
-import { type PostcodeFinderState, type Address, type PostcodeFinderActionCreators, postcodeFinderActionCreators } from './postcodeFinderReducer';
+import { type PostcodeFinderState, type PostcodeFinderActionCreators, postcodeFinderActionCreators } from './postcodeFinderReducer';
+import { type Address } from '../helpers/postcodeFinder';
 
-import './postcodeFinder.scss';
+import styles from './postcodeFinder.module.scss';
 
 type PropTypes = {|
   ...PostcodeFinderState,
@@ -22,10 +23,30 @@ type PropTypes = {|
   id: string
 |};
 
-const InputWithButton = ({ onClick, ...props }) => (
-  <div className="checkout-postcode-finder">
-    <Input {...props} name="postcode" />
-    <Button type="button" appearance="greyHollow" icon={null} onClick={onClick} aria-label={null}>Find it</Button>
+const InputWithButton = ({ onClick, isLoading, ...props }) => (
+  <div className={styles.root}>
+    <Input
+      {...props}
+      onKeyPress={(ev) => {
+        if (ev.key && ev.key === 'Enter') {
+          ev.preventDefault();
+          onClick();
+        }
+      }}
+      className={styles.input}
+      name="postcode"
+    />
+    {!isLoading &&
+      <Button
+        type="button"
+        appearance="greyHollow"
+        icon={null}
+        onClick={onClick}
+        aria-label={null}
+      >
+        Find it
+      </Button>
+    }
   </div>
 );
 
@@ -41,19 +62,20 @@ class PostcodeFinder extends Component<PropTypes> {
   selectRef: (Element & {focus: Function});
   render() {
     const {
-      id, postcode, results, setPostcode, fetchResults, error, onPostcodeUpdate, onAddressUpdate,
+      id, postcode, results, isLoading, setPostcode, fetchResults, error, onPostcodeUpdate, onAddressUpdate,
     } = this.props;
     return (
       <div>
         <ComposedInputWithButton
           error={error}
           label="Postcode"
-          onClick={fetchResults}
+          onClick={() => { fetchResults(postcode); }}
           id={id}
           setValue={(val) => {
             setPostcode(val);
             onPostcodeUpdate(val);
           }}
+          isLoading={isLoading}
           value={postcode}
         />
         {(results.length > 0) &&
@@ -67,9 +89,9 @@ class PostcodeFinder extends Component<PropTypes> {
             id="address"
             label={`${results.length} addresses found`}
           >
-            <option value={null}>Select a postcode</option>
+            <option value={null}>Select an address</option>
             {results.map((result, key) => (
-              <option value={key}>{result.lineOne}</option>
+              <option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</option>
           ))}
           </ComposedSelect>
         }

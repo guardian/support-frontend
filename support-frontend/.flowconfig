@@ -18,5 +18,6 @@ module.name_mapper='^components/' -> '<PROJECT_ROOT>/assets/components/'
 module.name_mapper='^pages/' -> '<PROJECT_ROOT>/assets/pages/'
 module.name_mapper='^stylesheets/' -> '<PROJECT_ROOT>/assets/stylesheets/'
 module.name_mapper='^helpers/' -> '<PROJECT_ROOT>/assets/helpers/'
+module.name_mapper='^hocs/' -> '<PROJECT_ROOT>/assets/hocs/'
 module.name_mapper='^ophan' -> 'ophan-tracker-js/build/ophan.support'
 suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore

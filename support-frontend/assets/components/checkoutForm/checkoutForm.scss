@@ -1,5 +1,9 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+.component-checkout-form-section__wrap {
+    max-width: gu-span(5)
+}
+
 .component-checkout-form-section {
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing * 2;
   .component-form-label {

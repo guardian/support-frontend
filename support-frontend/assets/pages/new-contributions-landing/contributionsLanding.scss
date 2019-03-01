@@ -20,6 +20,9 @@
 $content-left-margin-tablet: calc(50% - 361px);
 $content-left-margin-leftCol: calc(50% - 401px);
 
+$content-right-margin-tablet: calc(50% + 361px);
+$content-right-margin-leftCol: calc(50% + 401px);
+
 body {
   min-height: 100vh;
 }
@@ -320,6 +323,15 @@ footer[role="contentinfo"] a {
   max-width: 1015px;
   padding: 0;
   background-color: transparent;
+
+  @include mq($from: tablet) {
+    margin-right: $content-right-margin-tablet
+  }
+
+  @include mq($from: leftCol) {
+    margin-right: $content-right-margin-leftCol
+  }
+
 }
 
 .gu-content__content-thankyou {
@@ -333,12 +345,10 @@ footer[role="contentinfo"] a {
     border-style: none solid;
     border-width: 0 1px;
     width: 380px;
-    margin-left: $content-left-margin-tablet
   }
 
   @include mq($from: leftCol) {
     width: 380px;
-    margin-left: $content-left-margin-leftCol
   }
 
 }
