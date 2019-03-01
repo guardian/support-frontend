@@ -4,7 +4,7 @@ import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './ann
 
 // ----- Tests ----- //
 
-export type FrequencyTabsTestVariant = 'control' | 'sam' | 'mas' | 'notintest';
+export type DropMonthlyTestVariant = 'control' | 'variant' | 'notintest';
 export type LandingPageCopyTestVariant = 'control' | 'help' | 'notintest';
 
 export const tests: Tests = {
@@ -39,17 +39,14 @@ export const tests: Tests = {
     seed: 3,
   },
 
-  frequencyTabsOrdering: {
+  dropMonthly: {
     type: 'OTHER',
     variants: [
       {
-        id: 'control', // SMA
+        id: 'control',
       },
       {
-        id: 'sam',
-      },
-      {
-        id: 'mas',
+        id: 'variant',
       },
     ],
     audiences: {
