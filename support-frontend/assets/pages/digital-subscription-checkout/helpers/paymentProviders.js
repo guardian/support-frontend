@@ -124,7 +124,7 @@ function showPaymentMethod(
       dispatch(openDirectDebitPopUp());
       break;
     case 'PayPal':
-      // PayPal case is here to stop showPaymentMethod from defaulting
+      // PayPal is handled differently
       break;
     case null:
     case undefined:

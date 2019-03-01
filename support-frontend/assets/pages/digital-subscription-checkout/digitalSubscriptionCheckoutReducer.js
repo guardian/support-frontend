@@ -52,6 +52,7 @@ import { logException } from 'helpers/logger';
 import * as storage from 'helpers/storage';
 import { payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
+import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 
 // ----- Types ----- //
 
@@ -184,14 +185,12 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
-// ----- Action Creators ----- //
+const formIsValid = () => (dispatch: Function, getState: () => State): boolean => {
+  const errors = getErrors(getFormFields(getState()));
+  return errors.length === 0
+};
 
-const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
-const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
-const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
-
-const signOut = () => { window.location.href = getSignoutUrl(); }; // TODO move this, SignOut is not an action creator
+const signOut = () => { window.location.href = getSignoutUrl(); };
 
 function submitForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
@@ -202,72 +201,17 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
   }
 }
 
-const showPayPal = (dispatch: Function) => {
-  console.log('showPayPal is working');
-  loadPayPalRecurring()
-    .then(() => {
-      console.log('this has loaded');
-      dispatch(setPayPalHasLoaded());
-    });
-};
+// ----- Action Creators ----- //
 
-const sendFormSubmitEventForPayPalRecurring = () =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
-    const formSubmitParameters: FormSubmitParameters = {
-      ...state.page.form,
-      flowPrefix: 'npf',
-      form: getForm('form--contribution'),
-      isSignedIn: state.page.user.isSignedIn,
-      isRecurringContributor: state.page.user.isRecurringContributor,
-      setFormIsValid: (isValid: boolean) => dispatch(setFormIsValid(isValid)),
-      setCheckoutFormHasBeenSubmitted: () => dispatch(setCheckoutFormHasBeenSubmitted()),
-    };
-    onFormSubmit(formSubmitParameters);
-  };
-
-const setupRecurringPayPalPayment = (
-  resolve: string => void,
-  reject: Error => void,
-  currency: IsoCurrency,
-  csrf: Csrf,
-  contributionType: ContributionType,
-) =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
-    const csrfToken = csrf.token;
-    const { price } = dpFinalPrice(
-      state.page.checkout.productPrices,
-      state.page.checkout.billingPeriod,
-      state.common.internationalisation.countryId,
-    );
-    const billingPeriod = billingPeriodFromContrib(contributionType);
-    storage.setSession('selectedPaymentMethod', 'PayPal');
-    const requestBody = {
-      amount: price,
-      billingPeriod,
-      currency,
-    };
-
-    fetch('/paypal/setup-payment', payPalRequestData(requestBody, csrfToken || ''))
-      .then(response => (response.ok ? response.json() : null))
-      .then((token: { token: string } | null) => {
-        if (token) {
-          resolve(token.token);
-        } else {
-          logException('PayPal token came back blank');
-        }
-      }).catch((err: Error) => {
-      logException(err.message);
-      reject(err);
-    });
-  };
-
+const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
+const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
+const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
+const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
 
 
 const formActionCreators = {
-  setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
-  setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
+  setFirstName: (firstName: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
+  setLastName: (lastName: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
     const country = fromString(countryRaw);
@@ -285,12 +229,12 @@ const formActionCreators = {
       stateProvince,
       country: getState().common.internationalisation.countryId,
     }),
-  setAddressLine1: (addressLine1: string): Action => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }),
+  setAddressLine1: (addressLine1: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }))),
   setAddressLine2: (addressLine2: string): Action => ({ type: 'SET_ADDRESS_LINE_2', addressLine2 }),
-  setTownCity: (townCity: string): Action => ({ type: 'SET_TOWN_CITY', townCity }),
+  setTownCity: (townCity: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_TOWN_CITY', townCity }))),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
-  setPostcode: (postcode: string): Action => ({ type: 'SET_POSTCODE', postcode }),
+  setPostcode: (postcode: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_POSTCODE', postcode }))),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {
     if (paymentMethod === 'PayPal') {
@@ -306,8 +250,8 @@ const formActionCreators = {
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
     (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
-  sendFormSubmitEventForPayPalRecurring,
-  setupRecurringPayPalPayment,
+  setupPayPalPayment,
+  formIsValid,
 };
 
 export type FormActionCreators = typeof formActionCreators;
@@ -427,6 +371,7 @@ export {
   initReducer,
   setStage,
   setFormErrors,
+  getErrors,
   getFormFields,
   getEmail,
   setSubmissionError,

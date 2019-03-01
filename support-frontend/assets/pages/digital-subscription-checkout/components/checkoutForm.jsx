@@ -39,6 +39,7 @@ import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import { PayPalRecurringButton } from './../../../pages/new-contributions-landing/components/PayPalRecurringButton';
 import { onPaymentAuthorisation } from './../digitalSubscriptionCheckoutActions';
 
+
 import {
   type FormActionCreators,
   formActionCreators,
@@ -48,15 +49,18 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   ...FormFields,
   signOut: typeof signOut,
+  submitForm: typeof submitForm,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
+  currencyId: IsoCurrency,
   ...FormActionCreators,
 |};
 
@@ -69,6 +73,7 @@ function mapStateToProps(state: State) {
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+    currencyId: state.common.internationalisation.currencyId,
     csrf: state.page.csrf,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     paymentMethod: state.page.checkout.paymentMethod,
@@ -81,6 +86,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
   return {
     ...formActionCreators,
     signOut,
+    submitForm,
     onPaymentAuthorisation: () => {
       dispatch(onPaymentAuthorisation);
     },
@@ -335,15 +341,15 @@ function CheckoutForm(props: PropTypes) {
               {errorState}
               {props.paymentMethod === 'PayPal' ? (
                 <PayPalRecurringButton
-                  onPaymentAuthorisation={props.onPaymentAuthorisation}
+                  onPaymentAuthorisation={props.onPaymentAuthorised}
                   csrf={props.csrf}
-                  currencyId="GBP"
+                  currencyId={props.currencyId}
                   hasLoaded={props.payPalHasLoaded}
-                  canOpen={() => true}
-                  onClick={() => props.sendFormSubmitEventForPayPalRecurring()}
+                  canOpen={props.formIsValid}
+                  onClick={props.submitForm}
                   formClassName="form--contribution"
                   isTestUser={props.isTestUser}
-                  setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+                  setupRecurringPayPalPayment={props.setupPayPalPayment}
                   contributionType={props.contributionType}
                 />
               ) : (
