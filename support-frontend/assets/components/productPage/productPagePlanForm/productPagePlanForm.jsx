@@ -6,7 +6,7 @@ import React from 'react';
 
 import { bgClassName, Outset } from 'components/content/content';
 import Button from 'components/button/button';
-import { Fieldset } from 'components/forms/standardFields/fieldset';
+import { Fieldset } from 'components/forms/fieldset';
 
 import { type Option } from 'helpers/types/option';
 

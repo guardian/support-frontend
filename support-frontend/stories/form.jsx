@@ -5,13 +5,13 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import Rows from 'components/base/rows';
-import { Input } from 'components/forms/standardFields/input';
-import { Label as FormLabel } from 'components/forms/standardFields/label';
-import { Fieldset } from 'components/forms/standardFields/fieldset';
-import { Select } from 'components/forms/standardFields/select';
+import { Input } from 'components/forms/input';
+import { Label as FormLabel } from 'components/forms/label';
+import { Fieldset } from 'components/forms/fieldset';
+import { Select } from 'components/forms/select';
 import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'components/forms/formHOCs/withLabel';
-import { withError } from 'components/forms/formHOCs/withError';
+import { withLabel } from 'hocs/withLabel';
+import { withError } from 'hocs/withError';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 
 const stories = storiesOf('Forms', module).addDecorator(withCenterAlignment);
