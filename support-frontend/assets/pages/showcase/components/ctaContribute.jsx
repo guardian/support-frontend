@@ -20,9 +20,21 @@ export default function CtaContribute() {
         <div>
           <Text title="Contribute">
             <p>
-            At a time when factual, honest reporting is more vital than ever, we need your help to continue our work.
-            If everyone who reads our reporting, who likes it, helps to support it, our future would be much
-            more secure. <strong>Make a single or recurrent payment, and help us to change the story.</strong>
+              We chose a model that means our reporting is open to everyone,
+              funded by our readers. This support safeguards our essential editorial
+              independence, emboldening us to challenge the powerful and
+              shed light where others won’t.
+            </p>
+            <p>
+              The Guardian{'\''}s open, independent journalism has now been supported by
+              over a million people around the world – but we must keep building
+              on this for the years to come. Every contribution, whether big or
+              small, means we can keep investigating and exploring the critical
+              issues of our time.
+              <strong>
+                Make a contribution from as little as
+                £1, and it only takes a minute.
+              </strong>
             </p>
           </Text>
           <NarrowContent>
