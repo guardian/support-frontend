@@ -285,7 +285,10 @@ function initReducer(initialCountry: IsoCountry) {
         return { ...state, telephone: action.telephone };
 
       case 'SET_BILLING_STATE_PROVINCE':
-        return { ...state, billingStateProvince: stateProvinceFromString(action.billingCountry, action.billingStateProvince) };
+        return {
+          ...state,
+          billingStateProvince: stateProvinceFromString(action.billingCountry, action.billingStateProvince),
+        };
 
       case 'SET_BILLING_PERIOD':
         return { ...state, billingPeriod: action.billingPeriod };
