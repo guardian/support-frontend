@@ -35,7 +35,7 @@ const routes: {
 };
 
 function postcodeLookupUrl(postcode: string): string {
-  return [getOrigin(), routes.postcodeLookup, postcode].join('/');
+  return `${getOrigin() + routes.postcodeLookup}/${postcode}`;
 }
 
 function paperSubsUrl(withDelivery: boolean = false): string {
