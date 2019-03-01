@@ -87,9 +87,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
   return {
     ...formActionCreators,
     signOut,
-    onPaymentAuthorisation: () => {
-      dispatch(onPaymentAuthorisation);
-    },
   };
 }
 
