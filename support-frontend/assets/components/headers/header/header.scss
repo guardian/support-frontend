@@ -82,7 +82,7 @@ $header-links-min-width: gu-span(11);
   }
 
   @include mq($from: wide) {
-    max-width: gu-span(16) - ($gu-h-spacing);
+    max-width: gu-span(16);
   }
 }
 
@@ -118,7 +118,7 @@ $header-links-min-width: gu-span(11);
     }
   }
   @include mq($from: wide) {
-    padding-right: gu-span(1) + $gu-h-spacing / 2;
+    padding-right: gu-span(1) + $gu-h-spacing;
   }
 }
 
