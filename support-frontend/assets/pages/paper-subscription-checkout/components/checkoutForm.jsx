@@ -8,8 +8,10 @@ import { compose } from 'redux';
 
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
+import { finalPrice as paperFinalPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
 
 import { Outset } from 'components/content/content';
+import { PriceLabel } from 'components/priceLabel/priceLabel';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
@@ -256,6 +258,22 @@ function CheckoutForm(props: PropTypes) {
             </FormSection>
             <FormSection>
               <Text>
+                <p>
+                  You will pay{' '}
+                  <PriceLabel
+                    productPrice={paperFinalPrice(
+                      props.productPrices,
+                      props.fulfilmentOption,
+                      props.productOption,
+                    )}
+                    promotion={paperPromotion(
+                      props.productPrices,
+                      props.fulfilmentOption,
+                      props.productOption,
+                    )}
+                    billingPeriod="Monthly"
+                  />
+                </p>
                 <p>
                   <strong>Money Back Guarantee.</strong>
                   If you wish to cancel your subscription, we will send you
