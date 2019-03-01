@@ -4,9 +4,9 @@
 
 import React from 'react';
 
-import './input.scss';
+import { withExtraClassName } from 'hocs/withExtraClassName';
 
-import { withExtraClassName } from '../formHOCs/withExtraClassName';
+import './input.scss';
 
 // ----- Component ----- //
 
