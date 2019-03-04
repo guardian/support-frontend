@@ -18,8 +18,8 @@ import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { initReducer } from './paperSubscriptionCheckoutReducer';
-import CheckoutStage from './stage';
-import './paperSubscriptionCheckout.scss';
+import CheckoutStage from './components/checkoutStage';
+import './_legacyImports.scss';
 
 
 // ----- Redux Store ----- //

@@ -124,9 +124,7 @@ function getPayPalOptions(
       disallowed: [window.paypal.FUNDING.CREDIT],
     },
 
-    onClick() {
-      onClick();
-    },
+    onClick,
 
     // This function is called when user clicks the PayPal button.
     payment: setupPayment(currencyId, csrf, contributionType, setupRecurringPayPalPayment),

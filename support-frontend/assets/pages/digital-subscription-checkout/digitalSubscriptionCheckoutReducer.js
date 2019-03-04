@@ -10,16 +10,13 @@ import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import {
-  fromString,
   type IsoCountry,
   type StateProvince,
   stateProvinceFromString,
 } from 'helpers/internationalisation/country';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import { type Action as DDAction } from 'components/directDebit/directDebitActions';
 import {
   marketingConsentReducerFor,
   type State as MarketingConsentState,
@@ -28,16 +25,17 @@ import { getSignoutUrl } from 'helpers/externalLinks';
 import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { Action } from './digitalSubscriptionCheckoutActions';
+import { setFormErrors } from './digitalSubscriptionCheckoutActions';
 import { getUser } from './helpers/user';
-import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import { showPaymentMethod, countrySupportsDirectDebit } from './helpers/paymentProviders';
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-type PaymentMethod = 'Stripe' | 'DirectDebit';
+export type PaymentMethod = 'Stripe' | 'DirectDebit' | 'PayPal'; // TODO: there is another version of this type in contributions.js
 
 export type FormFieldsInState = {|
   firstName: string,
@@ -72,6 +70,7 @@ type CheckoutState = {|
   formSubmitted: boolean,
   isTestUser: boolean,
   productPrices: ProductPrices,
+  payPalHasLoaded: boolean,
 |};
 
 export type State = ReduxState<{|
@@ -79,27 +78,6 @@ export type State = ReduxState<{|
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
 |}>;
-
-export type Action =
-  | { type: 'SET_STAGE', stage: Stage }
-  | { type: 'SET_FIRST_NAME', firstName: string }
-  | { type: 'SET_LAST_NAME', lastName: string }
-  | { type: 'SET_ADDRESS_LINE_1', addressLine1: string }
-  | { type: 'SET_ADDRESS_LINE_2', addressLine2: string }
-  | { type: 'SET_TOWN_CITY', townCity: string }
-  | { type: 'SET_COUNTY', county: string }
-  | { type: 'SET_COUNTRY', country: string }
-  | { type: 'SET_POSTCODE', postcode: string }
-  | { type: 'SET_TELEPHONE', telephone: string }
-  | { type: 'SET_STATE_PROVINCE', stateProvince: string, country: IsoCountry }
-  | { type: 'SET_BILLING_PERIOD', billingPeriod: DigitalBillingPeriod }
-  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod, country: IsoCountry }
-  | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry }
-  | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
-  | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
-  | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | DDAction;
-
 
 // ----- Selectors ----- //
 
@@ -125,7 +103,6 @@ function getFormFields(state: State): FormFields {
 function getEmail(state: State): string {
   return state.page.checkout.email;
 }
-
 
 // ----- Functions ----- //
 
@@ -165,62 +142,27 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
-// ----- Action Creators ----- //
-
-const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
-const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
-const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
+const formIsValid = () => (dispatch: Function, getState: () => State): boolean => {
+  const errors = getErrors(getFormFields(getState()));
+  return errors.length === 0;
+};
 
 const signOut = () => { window.location.href = getSignoutUrl(); };
 
-function submitForm(dispatch: Dispatch<Action>, state: State) {
+function validateForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
-  if (errors.length > 0) {
+  const valid = errors.length === 0;
+  if (!valid) {
     dispatch(setFormErrors(errors));
-  } else {
+  }
+  return valid;
+}
+
+function submitForm(dispatch: Dispatch<Action>, state: State) {
+  if (validateForm(dispatch, state)) {
     showPaymentMethod(dispatch, state);
   }
 }
-
-const formActionCreators = {
-  setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
-  setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
-  setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
-  setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
-    const country = fromString(countryRaw);
-    if (country) {
-      dispatch(setCountry(country));
-      dispatch({
-        type: 'SET_COUNTRY_CHANGED',
-        country,
-      });
-    }
-  },
-  setStateProvince: (stateProvince: string) =>
-    (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
-      type: 'SET_STATE_PROVINCE',
-      stateProvince,
-      country: getState().common.internationalisation.countryId,
-    }),
-  setAddressLine1: (addressLine1: string): Action => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }),
-  setAddressLine2: (addressLine2: string): Action => ({ type: 'SET_ADDRESS_LINE_2', addressLine2 }),
-  setTownCity: (townCity: string): Action => ({ type: 'SET_TOWN_CITY', townCity }),
-  setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
-  setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
-  setPostcode: (postcode: string): Action => ({ type: 'SET_POSTCODE', postcode }),
-  setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
-  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => dispatch({
-    type: 'SET_PAYMENT_METHOD',
-    paymentMethod,
-    country: getState().common.internationalisation.countryId,
-  }),
-  onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
-    (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
-  submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
-};
-
-export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
@@ -251,6 +193,7 @@ function initReducer(initialCountry: IsoCountry) {
     formSubmitted: false,
     isTestUser: isTestUser(),
     productPrices,
+    payPalHasLoaded: false,
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
@@ -312,6 +255,9 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_FORM_SUBMITTED':
         return { ...state, formSubmitted: action.formSubmitted };
 
+      case 'SET_PAYPAL_HAS_LOADED':
+        return { ...state, payPalHasLoaded: true };
+
       default:
         return state;
     }
@@ -331,12 +277,11 @@ function initReducer(initialCountry: IsoCountry) {
 
 export {
   initReducer,
-  setStage,
-  setFormErrors,
+  getErrors,
   getFormFields,
   getEmail,
-  setSubmissionError,
-  setFormSubmitted,
   signOut,
-  formActionCreators,
+  formIsValid,
+  submitForm,
+  validateForm,
 };

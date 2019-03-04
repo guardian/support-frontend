@@ -99,7 +99,8 @@ class PaperSubscription(
       priceSummaryServiceProvider.forUser(uatMode).getPrices(Paper, promoCode),
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
-      payPalConfigProvider.get(uatMode)
+      payPalConfigProvider.get(false),
+      payPalConfigProvider.get(true)
     )
   }
 

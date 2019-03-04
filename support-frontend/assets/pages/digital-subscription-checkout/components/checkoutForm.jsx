@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import type { Dispatch } from 'redux';
 
 import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
@@ -36,26 +37,41 @@ import { regularPrice as dpRegularPrice, promotion as digitalPackPromotion } fro
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { setupPayPalPayment } from 'pages/digital-subscription-checkout/helpers/payPal';
+import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 
 import {
-  type FormActionCreators,
-  formActionCreators,
+  submitForm,
   signOut,
   type FormField,
   type FormFields,
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
+import { PayPalRecurringButton } from './../../../pages/new-contributions-landing/components/PayPalRecurringButton';
+import { type FormActionCreators, formActionCreators } from './../digitalSubscriptionCheckoutActions';
+
+import { formIsValid, validateForm } from '../digitalSubscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   ...FormFields,
   signOut: typeof signOut,
+  submitForm: Function,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
+  currencyId: IsoCurrency,
   ...FormActionCreators,
+  csrf: Csrf,
+  isTestUser: boolean,
+  payPalHasLoaded: boolean,
+  setupPayPalPayment: Function,
+  validateForm: () => Function,
+  formIsValid: Function,
 |};
 
 
@@ -67,6 +83,23 @@ function mapStateToProps(state: State) {
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+    currencyId: state.common.internationalisation.currencyId,
+    csrf: state.page.csrf,
+    payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+    paymentMethod: state.page.checkout.paymentMethod,
+    isTestUser: state.page.checkout.isTestUser,
+  };
+}
+
+// ----- Map Dispatch/Props ----- //
+function mapDispatchToProps() {
+  return {
+    ...formActionCreators,
+    formIsValid,
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
+    validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
+    setupPayPalPayment,
+    signOut,
   };
 }
 
@@ -284,6 +317,7 @@ function CheckoutForm(props: PropTypes) {
                       checked={props.paymentMethod === 'Stripe'}
                       onChange={() => props.setPaymentMethod('Stripe')}
                     />
+
                   </Fieldset>
                 </div>
               }
@@ -310,7 +344,22 @@ function CheckoutForm(props: PropTypes) {
             </FormSection>
             <FormSection>
               {errorState}
-              <Button aria-label={null} type="submit">Continue to payment</Button>
+              {props.paymentMethod === 'PayPal' ? (
+                <PayPalRecurringButton
+                  onPaymentAuthorisation={props.onPaymentAuthorised}
+                  csrf={props.csrf}
+                  currencyId={props.currencyId}
+                  hasLoaded={props.payPalHasLoaded}
+                  canOpen={props.formIsValid}
+                  onClick={props.validateForm}
+                  formClassName="form--contribution"
+                  isTestUser={props.isTestUser}
+                  setupRecurringPayPalPayment={props.setupPayPalPayment}
+                  contributionType="MONTHLY" // TODO: Refactor this out
+                />
+              ) : (
+                <Button aria-label={null} type="submit">Continue to payment</Button>
+              )}
             </FormSection>
           </Form>
         </Checkout>
@@ -323,7 +372,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, {
-  ...formActionCreators,
-  signOut,
-})(CheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(CheckoutForm);

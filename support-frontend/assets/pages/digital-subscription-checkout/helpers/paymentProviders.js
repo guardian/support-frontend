@@ -18,7 +18,8 @@ import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
-import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
+import { type State } from '../digitalSubscriptionCheckoutReducer';
+import { setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutActions';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
   const { currencyId, countryId } = state.common.internationalisation;
@@ -124,6 +125,9 @@ function showPaymentMethod(
       break;
     case 'DirectDebit':
       dispatch(openDirectDebitPopUp());
+      break;
+    case 'PayPal':
+      // PayPal is handled differently
       break;
     case null:
     case undefined:

@@ -118,7 +118,8 @@ class DigitalSubscription(
       priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCode),
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
-      payPalConfigProvider.get(uatMode)
+      payPalConfigProvider.get(false),
+      payPalConfigProvider.get(true)
     )
   }
 
