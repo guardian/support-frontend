@@ -19,6 +19,8 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 import { initReducer } from './paperSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
+import './_legacyImports.scss';
+
 
 // ----- Redux Store ----- //
 
