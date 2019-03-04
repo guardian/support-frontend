@@ -11,11 +11,12 @@ import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/content';
-import Text, { SansParagraph } from 'components/text/text';
+import Text, { SansParagraph, LargeParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import typeof MarketingConsent from './marketingConsentContainer';
 import styles from './thankYou.module.scss';
+import { formatUserDate } from '../helpers/deliveryDays';
 
 import {
   getFormFields,
@@ -68,7 +69,7 @@ const whatNext = {
 };
 
 
-function ThankYouContent({ fulfilmentOption, productOption }: PropTypes) {
+function ThankYouContent({ fulfilmentOption, productOption, startDate }: PropTypes) {
 
   return (
     <div>
@@ -82,6 +83,11 @@ function ThankYouContent({ fulfilmentOption, productOption }: PropTypes) {
       </HeroWrapper>
 
       <Content>
+        {startDate &&
+          <Text title="Your first issue will arrive on">
+            <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
+          </Text>
+        }
         {whatNext[fulfilmentOption]}
       </Content>
       <Content>
