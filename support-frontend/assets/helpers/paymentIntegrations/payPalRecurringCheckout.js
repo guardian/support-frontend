@@ -7,6 +7,11 @@ import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ContributionType } from 'helpers/contributions';
+import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
+import type { State } from 'pages/new-contributions-landing/contributionsLandingReducer';
+import * as storage from 'helpers/storage';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
 // ----- Types ----- //
 
@@ -16,6 +21,13 @@ export type PayPalButtonToggler = {
 };
 
 // ----- Functions ----- //
+
+const showPayPal = (dispatch: Function) => {
+  loadPayPalRecurring()
+    .then(() => {
+      dispatch(setPayPalHasLoaded());
+    });
+};
 
 function loadPayPalRecurring(): Promise<void> {
   return new Promise((resolve) => {
@@ -37,19 +49,57 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
   };
 }
 
+// This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
+// It happens when the user clicks the recurring PayPal button,
+// before the PayPal popup in which they authorise the payment appears.
+// It should probably be called createOneOffPayPalPayment but it's called setupPayment
+// on the backend so pending a far-reaching rename, I'll keep the terminology consistent with the backend.
+const setupRecurringPayPalPayment = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: Csrf,
+  amount: number,
+  billingPeriod: BillingPeriod,
+) =>
+  (dispatch: Function, getState: () => State): void => {
+    const csrfToken = csrf.token;
+    storage.setSession('selectedPaymentMethod', 'PayPal');
+    const requestBody = {
+      amount,
+      billingPeriod,
+      currency,
+    };
+
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+      .then(response => (response.ok ? response.json() : null))
+      .then((token: { token: string } | null) => {
+        if (token) {
+          resolve(token.token);
+        } else {
+          logException('PayPal token came back blank');
+        }
+      }).catch((err: Error) => {
+      logException(err.message);
+      reject(err);
+    });
+  };
+
 function setupPayment(
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  contributionType: ContributionType,
+  amount: number,
+  billingPeriod: BillingPeriod,
   setupRecurringPayPalPayment: (
     resolve: string => void,
     reject: Error => void,
     IsoCurrency, CsrfState,
-    contributionType: ContributionType
+    amount: number,
+    billingPeriod: BillingPeriod,
   ) => void,
 ) {
   return (resolve, reject) => {
-    setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, contributionType);
+    setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, amount, billingPeriod);
   };
 }
 
@@ -75,13 +125,15 @@ function getPayPalOptions(
   onClick: () => void,
   formClassName: string,
   isTestUser: boolean,
-  contributionType: ContributionType,
+  amount: number,
+  billingPeriod: BillingPeriod,
   setupRecurringPayPalPayment: (
     resolve: string => void,
     reject: Error => void,
     IsoCurrency,
     CsrfState,
-    contributionType: ContributionType
+    amount: number,
+    billingPeriod: BillingPeriod,
   ) => void,
 ): Object {
 
@@ -127,7 +179,7 @@ function getPayPalOptions(
     onClick,
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(currencyId, csrf, contributionType, setupRecurringPayPalPayment),
+    payment: setupPayment(currencyId, csrf, amount, billingPeriod, setupRecurringPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize: (data) => {
@@ -147,6 +199,8 @@ function getPayPalOptions(
 
 export {
   getPayPalOptions,
+  showPayPal,
   loadPayPalRecurring,
   payPalRequestData,
+  setupRecurringPayPalPayment,
 };

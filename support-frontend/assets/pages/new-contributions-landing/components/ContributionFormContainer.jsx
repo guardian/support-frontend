@@ -18,11 +18,11 @@ import { type LandingPageCopyTestVariant } from 'helpers/abTests/abtestDefinitio
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
 import { ContributionTicker } from './ContributionTicker/ContributionTicker';
-import { setPayPalHasLoaded } from '../contributionsLandingActions';
 
 import {
   paymentWaiting,

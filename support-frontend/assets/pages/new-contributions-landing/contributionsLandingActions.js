@@ -45,6 +45,7 @@ import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/cookie';
 import { Annual, Monthly } from 'helpers/billingPeriods';
+import { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
 
@@ -73,7 +74,7 @@ export type Action =
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }
   | { type: 'SET_STRIPE_V3_HAS_LOADED' }
-  | { type: 'SET_PAYPAL_HAS_LOADED' }
+  | PayPalAction
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
@@ -176,8 +177,6 @@ const setThirdPartyPaymentLibrary =
     type: 'UPDATE_PAYMENT_READY',
     thirdPartyPaymentLibraryByContrib: thirdPartyPaymentLibraryByContrib || null,
   });
-
-const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
 const setUserTypeFromIdentityResponse =
   (userTypeFromIdentityResponse: UserTypeFromIdentityResponse): ((Function) => void) =>
@@ -355,49 +354,6 @@ const executeStripeOneOffPayment = (data: StripeChargeData) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
     dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
 
-
-// This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
-// It happens when the user clicks the recurring PayPal button,
-// before the PayPal popup in which they authorise the payment appears.
-// It should probably be called createOneOffPayPalPayment but it's called setupPayment
-// on the backend so pending a far-reaching rename, I'll keep the terminology consistent with the backend.
-const setupRecurringPayPalPayment = (
-  resolve: string => void,
-  reject: Error => void,
-  currency: IsoCurrency,
-  csrf: Csrf,
-  contributionType: ContributionType,
-) =>
-  (dispatch: Function, getState: () => State): void => {
-    const state = getState();
-    const csrfToken = csrf.token;
-    const amount = getAmount(
-      state.page.form.selectedAmounts,
-      state.page.form.formData.otherAmounts,
-      state.page.form.contributionType,
-    );
-    const billingPeriod = billingPeriodFromContrib(contributionType);
-    storage.setSession('selectedPaymentMethod', 'PayPal');
-    const requestBody = {
-      amount,
-      billingPeriod,
-      currency,
-    };
-
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
-      .then(response => (response.ok ? response.json() : null))
-      .then((token: { token: string } | null) => {
-        if (token) {
-          resolve(token.token);
-        } else {
-          logException('PayPal token came back blank');
-        }
-      }).catch((err: Error) => {
-        logException(err.message);
-        reject(err);
-      });
-  };
-
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
   state: State,
@@ -520,7 +476,6 @@ export {
   updatePassword,
   createOneOffPayPalPayment,
   setPayPalHasLoaded,
-  setupRecurringPayPalPayment,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
   setFormIsValid,

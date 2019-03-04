@@ -79,7 +79,8 @@ export class PayPalRecurringButton extends React.Component<PropTypes> {
         this.props.onClick,
         this.props.formClassName,
         this.props.isTestUser,
-        this.props.contributionType,
+        this.props.amount,
+        this.props.billingPeriod,
         this.props.setupRecurringPayPalPayment,
       ),
     );

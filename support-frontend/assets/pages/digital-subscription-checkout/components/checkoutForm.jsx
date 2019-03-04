@@ -33,12 +33,15 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
-import { regularPrice as dpRegularPrice, promotion as digitalPackPromotion } from 'helpers/productPrice/digitalProductPrices';
+import {
+  regularPrice as dpRegularPrice,
+  promotion as digitalPackPromotion,
+  finalPrice as dpFinalPrice
+} from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { setupPayPalPayment } from 'pages/digital-subscription-checkout/helpers/payPal';
 import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 
@@ -54,6 +57,8 @@ import { PayPalRecurringButton } from './../../../pages/new-contributions-landin
 import { type FormActionCreators, formActionCreators } from './../digitalSubscriptionCheckoutActions';
 
 import { formIsValid, validateForm } from '../digitalSubscriptionCheckoutReducer';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 
 // ----- Types ----- //
 
@@ -67,8 +72,10 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   ...FormActionCreators,
   csrf: Csrf,
-  isTestUser: boolean,
   payPalHasLoaded: boolean,
+  isTestUser: boolean,
+  amount: number,
+  billingPeriod: BillingPeriod,
   setupPayPalPayment: Function,
   validateForm: () => Function,
   formIsValid: Function,
@@ -88,6 +95,12 @@ function mapStateToProps(state: State) {
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     paymentMethod: state.page.checkout.paymentMethod,
     isTestUser: state.page.checkout.isTestUser,
+    amount: dpFinalPrice(
+      state.page.checkout.productPrices,
+      state.page.checkout.billingPeriod,
+      state.common.internationalisation.countryId,
+    ).price,
+    billingPeriod: state.page.checkout.billingPeriod,
   };
 }
 
@@ -98,7 +111,7 @@ function mapDispatchToProps() {
     formIsValid,
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
-    setupPayPalPayment,
+    setupRecurringPayPalPayment,
     signOut,
   };
 }
@@ -317,7 +330,12 @@ function CheckoutForm(props: PropTypes) {
                       checked={props.paymentMethod === 'Stripe'}
                       onChange={() => props.setPaymentMethod('Stripe')}
                     />
-
+                    <RadioInput
+                      text="PayPal"
+                      name="paymentMethod"
+                      checked={props.paymentMethod === 'PayPal'}
+                      onChange={() => props.setPaymentMethod('PayPal')}
+                    />
                   </Fieldset>
                 </div>
               }
@@ -354,8 +372,9 @@ function CheckoutForm(props: PropTypes) {
                   onClick={props.validateForm}
                   formClassName="form--contribution"
                   isTestUser={props.isTestUser}
-                  setupRecurringPayPalPayment={props.setupPayPalPayment}
-                  contributionType="MONTHLY" // TODO: Refactor this out
+                  setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+                  amount={props.amount}
+                  billingPeriod={props.billingPeriod}
                 />
               ) : (
                 <Button aria-label={null} type="submit">Continue to payment</Button>

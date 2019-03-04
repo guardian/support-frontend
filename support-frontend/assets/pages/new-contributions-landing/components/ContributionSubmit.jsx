@@ -6,19 +6,18 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { billingPeriodFromContrib, type ContributionType, getAmount, type PaymentMethod } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { SelectedAmounts } from 'helpers/contributions';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
+import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { type State } from '../contributionsLandingReducer';
 import { PayPalRecurringButton } from './PayPalRecurringButton';
-import {
-  sendFormSubmitEventForPayPalRecurring,
-  setupRecurringPayPalPayment,
-} from '../contributionsLandingActions';
+import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 
 
 // ----- Types ----- //
@@ -44,6 +43,8 @@ type PropTypes = {|
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   formIsSubmittable: boolean,
+  amount: number,
+  billingPeriod: BillingPeriod,
 |};
 
 const mapStateToProps = (state: State) =>
@@ -59,6 +60,12 @@ const mapStateToProps = (state: State) =>
     payPalHasLoaded: state.page.form.payPalHasLoaded,
     isTestUser: state.page.user.isTestUser,
     formIsSubmittable: state.page.form.formIsSubmittable,
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      state.page.form.contributionType,
+    ),
+    billingPeriod: billingPeriodFromContrib(contributionType),
   });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -69,7 +76,11 @@ const mapDispatchToProps = (dispatch: Function) => ({
     currencyId: IsoCurrency,
     csrf: CsrfState,
     contributionType: ContributionType,
-  ) => { dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, contributionType)); },
+    amount: number,
+    billingPeriod: BillingPeriod,
+  ) => { dispatch(
+    setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, contributionType, amount, billingPeriod));
+  },
 });
 
 
@@ -91,7 +102,6 @@ function ContributionSubmit(props: PropTypes) {
       props.paymentMethod,
     );
 
-
     // We have to show/hide PayPalRecurringButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
     // See PayPalRecurringButton.jsx for more info.
@@ -111,7 +121,8 @@ function ContributionSubmit(props: PropTypes) {
             formClassName={formClassName}
             isTestUser={props.isTestUser}
             setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            contributionType={props.contributionType}
+            contributionType={props.amount}
+            billingPeriod={props.billingPeriod}
           />
         </div>
         <ButtonWithRightArrow
