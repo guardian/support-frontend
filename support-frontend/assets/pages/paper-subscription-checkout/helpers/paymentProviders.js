@@ -101,7 +101,6 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
     () => {},
     () => {},
   ).then(handleSubscribeResult);
-  // Promise.resolve({ paymentStatus: 'success' }).then(handleSubscribeResult);
 }
 
 function showStripe(
