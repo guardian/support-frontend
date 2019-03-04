@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import Button from 'components/button/button';
-import { Input } from 'components/forms/standardFields/input';
-import { Select } from 'components/forms/standardFields/select';
-import { asControlled } from 'components/forms/formHOCs/asControlled';
-import { withLabel } from 'components/forms/formHOCs/withLabel';
-import { withError } from 'components/forms/formHOCs/withError';
+import { Input } from 'components/forms/input';
+import { Select } from 'components/forms/select';
+import { asControlled } from 'hocs/asControlled';
+import { withLabel } from 'hocs/withLabel';
+import { withError } from 'hocs/withError';
 
 import { type PostcodeFinderState, type PostcodeFinderActionCreators, postcodeFinderActionCreators } from './postcodeFinderReducer';
 import { type Address } from '../helpers/postcodeFinder';
