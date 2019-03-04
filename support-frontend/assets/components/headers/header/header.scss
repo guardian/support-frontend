@@ -3,7 +3,7 @@
 @import '~components/headers/mobileMenu/mobileMenu.scss';
 @import '~components/dialog/dialog.scss';
 
-$header-links-min-width: gu-span(11);
+$header-links-min-width: gu-span(12);
 
 .component-header {
   background-color: gu-colour(brand-main);
@@ -78,7 +78,7 @@ $header-links-min-width: gu-span(11);
   }
 
   @include mq($from: leftCol) {
-    max-width: gu-span(14) - ($gu-h-spacing);
+    max-width: gu-span(14);
   }
 
   @include mq($from: wide) {
