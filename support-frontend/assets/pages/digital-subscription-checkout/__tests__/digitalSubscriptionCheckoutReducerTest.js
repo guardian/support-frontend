@@ -2,7 +2,8 @@
 
 // ----- Imports ----- //
 
-import { initReducer, setStage, setFormErrors, type Stage } from '../digitalSubscriptionCheckoutReducer';
+import { initReducer, type Stage } from '../digitalSubscriptionCheckoutReducer';
+import { setStage, setFormErrors } from '../digitalSubscriptionCheckoutActions';
 
 jest.mock('ophan', () => {});
 

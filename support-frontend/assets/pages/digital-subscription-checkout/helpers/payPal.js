@@ -1,9 +1,9 @@
 // @flow
 
-import { Action, setPayPalHasLoaded } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import { setPayPalHasLoaded } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import { loadPayPalRecurring, payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { ContributionType } from 'helpers/contributions';
-import { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import type { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
@@ -51,9 +51,9 @@ const setupPayPalPayment = (
           logException('PayPal token came back blank');
         }
       }).catch((err: Error) => {
-      logException(err.message);
-      reject(err);
-    });
+        logException(err.message);
+        reject(err);
+      });
   };
 
-export { showPayPal, setupPayPalPayment }
+export { showPayPal, setupPayPalPayment };

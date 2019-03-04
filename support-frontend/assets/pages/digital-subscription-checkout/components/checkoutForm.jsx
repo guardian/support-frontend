@@ -4,7 +4,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, Dispatch } from 'redux';
+import { compose } from 'redux';
+import type { Dispatch } from 'redux';
 
 import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
@@ -36,8 +37,10 @@ import { regularPrice as dpRegularPrice, promotion as digitalPackPromotion } fro
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
-import { PayPalRecurringButton } from './../../../pages/new-contributions-landing/components/PayPalRecurringButton';
-import { type FormActionCreators, formActionCreators } from './../digitalSubscriptionCheckoutActions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { setupPayPalPayment } from 'pages/digital-subscription-checkout/helpers/payPal';
+import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 
 import {
   submitForm,
@@ -47,22 +50,28 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { setupPayPalPayment } from 'pages/digital-subscription-checkout/helpers/payPal';
+import { PayPalRecurringButton } from './../../../pages/new-contributions-landing/components/PayPalRecurringButton';
+import { type FormActionCreators, formActionCreators } from './../digitalSubscriptionCheckoutActions';
+
 import { formIsValid, validateForm } from '../digitalSubscriptionCheckoutReducer';
-import { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   ...FormFields,
   signOut: typeof signOut,
-  submitForm: typeof submitForm,
+  submitForm: Function,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   currencyId: IsoCurrency,
   ...FormActionCreators,
+  csrf: Csrf,
+  isTestUser: boolean,
+  payPalHasLoaded: boolean,
+  setupPayPalPayment: Function,
+  validateForm: () => Function,
+  formIsValid: Function,
 |};
 
 
@@ -83,7 +92,7 @@ function mapStateToProps(state: State) {
 }
 
 // ----- Map Dispatch/Props ----- //
-function mapDispatchToProps(dispatch: Dispatch) {
+function mapDispatchToProps() {
   return {
     ...formActionCreators,
     formIsValid,
@@ -346,7 +355,7 @@ function CheckoutForm(props: PropTypes) {
                   formClassName="form--contribution"
                   isTestUser={props.isTestUser}
                   setupRecurringPayPalPayment={props.setupPayPalPayment}
-                  contributionType={props.contributionType}
+                  contributionType="MONTHLY" // TODO: Refactor this out
                 />
               ) : (
                 <Button aria-label={null} type="submit">Continue to payment</Button>

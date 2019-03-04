@@ -1,22 +1,21 @@
 // @flow
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { getFormFields } from './digitalSubscriptionCheckoutReducer';
-import { postRegularPaymentRequest } from '../../helpers/paymentIntegrations/readerRevenueApis';
-import trackConversion from '../../helpers/tracking/conversions';
-import type { ErrorReason } from '../../helpers/errorReasons';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { FormField, Stage, State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import type { FormField, Stage, State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { showPayPal } from 'pages/digital-subscription-checkout/helpers/payPal';
 import { fromString } from 'helpers/internationalisation/country';
 import { onPaymentAuthorised } from 'pages/digital-subscription-checkout/helpers/paymentProviders';
 import { setCountry } from 'helpers/page/commonActions';
-import { Dispatch } from "redux";
+import type { Dispatch } from 'redux';
 import type { Action as CommonAction } from 'helpers/page/commonActions';
 import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
-import type { PaymentMethod } from 'helpers/contributions';
+import type { PaymentMethod } from './digitalSubscriptionCheckoutReducer';
+import { getFormFields } from './digitalSubscriptionCheckoutReducer';
+import type { ErrorReason } from '../../helpers/errorReasons';
+
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -49,8 +48,8 @@ const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTE
 const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
 const formActionCreators = {
-  setFirstName: (firstName: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
-  setLastName: (lastName: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
+  setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
+  setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
     const country = fromString(countryRaw);
@@ -68,12 +67,12 @@ const formActionCreators = {
       stateProvince,
       country: getState().common.internationalisation.countryId,
     }),
-  setAddressLine1: (addressLine1: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }))),
+  setAddressLine1: (addressLine1: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_ADDRESS_LINE_1', addressLine1 }))),
   setAddressLine2: (addressLine2: string): Action => ({ type: 'SET_ADDRESS_LINE_2', addressLine2 }),
-  setTownCity: (townCity: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_TOWN_CITY', townCity }))),
+  setTownCity: (townCity: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_TOWN_CITY', townCity }))),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
   setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
-  setPostcode: (postcode: string): Action => (setFormSubmissionDependentValue(() => ({ type: 'SET_POSTCODE', postcode }))),
+  setPostcode: (postcode: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_POSTCODE', postcode }))),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {
     if (paymentMethod === 'PayPal') {
@@ -100,4 +99,4 @@ export {
   setFormSubmitted,
   setPayPalHasLoaded,
   formActionCreators,
-}
+};

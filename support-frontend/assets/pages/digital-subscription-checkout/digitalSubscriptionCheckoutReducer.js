@@ -27,15 +27,15 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { Action } from './digitalSubscriptionCheckoutActions';
+import { setFormErrors } from './digitalSubscriptionCheckoutActions';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, countrySupportsDirectDebit } from './helpers/paymentProviders';
-import type { Action } from 'digitalSubscriptionCheckoutActions';
-import { setFormErrors } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-type PaymentMethod = 'Stripe' | 'DirectDebit' | 'PayPal';
+export type PaymentMethod = 'Stripe' | 'DirectDebit' | 'PayPal'; // TODO: there is another version of this type in contributions.js
 
 export type FormFieldsInState = {|
   firstName: string,
@@ -70,6 +70,7 @@ type CheckoutState = {|
   formSubmitted: boolean,
   isTestUser: boolean,
   productPrices: ProductPrices,
+  payPalHasLoaded: boolean,
 |};
 
 export type State = ReduxState<{|
@@ -143,7 +144,7 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 
 const formIsValid = () => (dispatch: Function, getState: () => State): boolean => {
   const errors = getErrors(getFormFields(getState()));
-  return errors.length === 0
+  return errors.length === 0;
 };
 
 const signOut = () => { window.location.href = getSignoutUrl(); };
