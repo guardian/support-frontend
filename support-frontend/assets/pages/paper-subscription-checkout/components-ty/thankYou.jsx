@@ -7,9 +7,10 @@ import { connect } from 'react-redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
+import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
-import MarketingConsent from './marketingConsentContainer';
+import typeof MarketingConsent from './marketingConsentContainer';
 
 import {
   getFormFields,
@@ -49,10 +50,15 @@ function ThankYouContent(props: PropTypes) {
         </Text>
       </Content>
       <Content>
-        <MarketingConsent render={({ title, message }) => (
-          <Text title={title}>{message}</Text>
-        )}
-        />
+        <Asyncronously loader={import('./marketingConsentContainer')}>
+          {(MktConsent: MarketingConsent) => (
+            <MktConsent
+              render={({ title, message }) => (
+                <Text title={title}>{message}</Text>
+              )}
+            />)
+          }
+        </Asyncronously>
       </Content>
     </div>
   );
