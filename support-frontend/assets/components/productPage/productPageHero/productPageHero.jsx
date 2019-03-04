@@ -14,6 +14,7 @@ import './productPageHero.scss';
 type WrapperPropTypes = {|
   children: Node,
   modifierClasses: Array<?string>,
+  className: ?string,
   appearance: 'grey' | 'feature' | 'custom',
 |};
 
@@ -28,9 +29,9 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const HeroWrapper = ({
-  modifierClasses, children, appearance,
+  modifierClasses, children, appearance, className,
 }: WrapperPropTypes) => (
-  <div className={classNameWithModifiers('component-product-page-hero', [...modifierClasses, appearance])}>
+  <div className={`${className || ''} ${classNameWithModifiers('component-product-page-hero', [...modifierClasses, appearance])}`}>
     <LeftMarginSection>
       {children}
     </LeftMarginSection>
@@ -39,6 +40,7 @@ const HeroWrapper = ({
 HeroWrapper.defaultProps = {
   modifierClasses: [],
   appearance: 'grey',
+  className: null,
 };
 
 const HeroHanger = ({

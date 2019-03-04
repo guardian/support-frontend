@@ -2,7 +2,7 @@
 import { Component, type Node, type ComponentType } from 'react';
 
 type PropTypes = {
-  loader: Promise<{default: any}>,
+  loader: Promise<{default: ComponentType<*>}>,
   loading: Node,
   children: (ComponentType<*>) => Node
 }
