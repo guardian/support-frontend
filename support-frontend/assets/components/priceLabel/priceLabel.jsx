@@ -13,7 +13,7 @@ export type PropTypes = {
   billingPeriod: BillingPeriod,
 }
 const displayPriceForPeriod = (productPrice: Price, billingPeriod: BillingPeriod) =>
-  `${showPrice(productPrice)} Every ${billingPeriodNoun(billingPeriod)}`;
+  `${showPrice(productPrice)} every ${billingPeriodNoun(billingPeriod).toLowerCase()}`;
 
 function PriceLabel({
   productPrice, promotion, billingPeriod,
