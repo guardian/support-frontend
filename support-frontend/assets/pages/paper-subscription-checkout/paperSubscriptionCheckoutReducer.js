@@ -207,8 +207,8 @@ const formActionCreators = {
       type: 'SET_PAYMENT_METHOD',
       paymentMethod,
     }),
-  onPaymentAuthorised: (authorisation: PaymentAuthorisation) => (dispatch: Dispatch<Action>) =>
-    onPaymentAuthorised(authorisation, dispatch),
+  onPaymentAuthorised: (authorisation: PaymentAuthorisation) => (dispatch: Dispatch<Action>, getState: () => State) =>
+    onPaymentAuthorised(authorisation, dispatch, getState()),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
 };
 

@@ -11,6 +11,8 @@ import { logPromise, pollUntilPromise } from 'helpers/promise';
 import { logException } from 'helpers/logger';
 import { fetchJson, getRequestOptions, requestOptions } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
+import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { type PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 import { type ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
 
@@ -27,7 +29,14 @@ type DigitalSubscription = {|
   billingPeriod: BillingPeriod,
 |};
 
-type ProductFields = RegularContribution | DigitalSubscription
+type PaperSubscription = {|
+  currency: string,
+  billingPeriod: BillingPeriod,
+  fulfilmentOptions: PaperFulfilmentOptions,
+  productOptions: PaperProductOptions,
+|};
+
+type ProductFields = RegularContribution | DigitalSubscription | PaperSubscription
 
 type RegularPayPalPaymentFields = {| baid: string |};
 
@@ -60,6 +69,7 @@ export type RegularPaymentRequest = {|
   deliveryAddress: Option<RegularPaymentRequestAddress>,
   email: string,
   product: ProductFields,
+  firstDeliveryDate: Option<string>,
   paymentFields: RegularPaymentFields,
   ophanIds: OphanIds,
   referrerAcquisitionData: ReferrerAcquisitionData,

@@ -276,6 +276,7 @@ const regularPaymentRequestFromAuthorisation = (
     currency: state.common.internationalisation.currencyId,
     billingPeriod: state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
   },
+  firstDeliveryDate: null,
   paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
   ophanIds: getOphanIds(),
   referrerAcquisitionData: state.common.referrerAcquisitionData,

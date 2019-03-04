@@ -57,6 +57,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     email,
     telephoneNumber: telephone,
     product,
+    firstDeliveryDate: null,
     paymentFields,
     ophanIds: getOphanIds(),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
