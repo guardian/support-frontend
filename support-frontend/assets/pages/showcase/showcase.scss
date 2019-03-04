@@ -97,9 +97,10 @@
         .component-left-margin-section__content {
           position: relative;
           border-left: none;
+          
           .component-grid-image {
             width: auto;
-            height: 100%;
+            height: 150%;
             display: block;
             position: absolute;
             right: 0;
@@ -110,7 +111,11 @@
 
       @include mq($from: tablet, $until: desktop) {
         .component-content__image {
-          right: -300px;
+          right: -200px;
+        }
+
+        .component-left-margin-section__content .component-grid-image {
+          height: 120%;
         }
       }
 
