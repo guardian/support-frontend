@@ -9,16 +9,15 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type ContributionType } from 'helpers/contributions';
 import { getPayPalOptions } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 type PropTypes = {|
-  onPaymentAuthorisation: PaymentAuthorisation => void,
+  onPaymentAuthorisation: Function,
   csrf: CsrfState,
   currencyId: IsoCurrency,
   hasLoaded: boolean,
   canOpen: () => boolean,
-  onClick: () => void,
+  onClick: Function,
   formClassName: string,
   isTestUser: boolean,
   contributionType: ContributionType,
