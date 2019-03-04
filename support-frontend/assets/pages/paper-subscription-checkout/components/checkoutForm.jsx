@@ -170,37 +170,45 @@ function CheckoutForm(props: PropTypes) {
             <FormSection title="Where should we deliver your newspapers?">
               <PostcodeFinder
                 id="postcode"
-                onPostcodeUpdate={props.setPostcode}
+                onPostcodeUpdate={props.setBillingPostcode}
                 onAddressUpdate={({ lineOne, lineTwo, city }) => {
-                  props.setAddressLine1(lineOne);
-                  props.setAddressLine2(lineTwo);
-                  props.setTownCity(city);
+                  props.setBillingAddressLine1(lineOne);
+                  props.setBillingAddressLine2(lineTwo);
+                  props.setBillingTownCity(city);
                 }}
+              />
+              <InputWithError
+                id="postcode"
+                label="Delivery postcode"
+                type="text"
+                value={props.billingPostcode}
+                setValue={props.setBillingPostcode}
+                error={firstError('billingPostcode', props.formErrors)}
               />
               <InputWithError
                 id="address-line-1"
                 label="Address Line 1"
                 type="text"
-                value={props.addressLine1}
-                setValue={props.setAddressLine1}
-                error={firstError('addressLine1', props.formErrors)}
+                value={props.billingAddressLine1}
+                setValue={props.setBillingAddressLine1}
+                error={firstError('billingAddressLine1', props.formErrors)}
               />
               <InputWithError
                 id="address-line-2"
                 label="Address Line 2"
                 optional
                 type="text"
-                value={props.addressLine2}
-                setValue={props.setAddressLine2}
-                error={firstError('addressLine2', props.formErrors)}
+                value={props.billingAddressLine2}
+                setValue={props.setBillingAddressLine2}
+                error={firstError('billingAddressLine2', props.formErrors)}
               />
               <InputWithError
                 id="town-city"
                 label="Town/City"
                 type="text"
-                value={props.townCity}
-                setValue={props.setTownCity}
-                error={firstError('townCity', props.formErrors)}
+                value={props.billingTownCity}
+                setValue={props.setBillingTownCity}
+                error={firstError('billingTownCity', props.formErrors)}
               />
               <SelectWithError
                 id="country"

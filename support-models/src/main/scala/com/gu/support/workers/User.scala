@@ -10,6 +10,7 @@ case class User(
   firstName: String,
   lastName: String,
   billingAddress: Address,
+  deliveryAddress: Option[Address] = None,
   telephoneNumber: Option[String] = None,
   allowMembershipMail: Boolean = false,
   allowThirdPartyMail: Boolean = false,

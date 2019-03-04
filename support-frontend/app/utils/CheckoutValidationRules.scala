@@ -56,8 +56,10 @@ object DigitalPackValidation {
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
-    hasStateIfRequired(createSupportWorkersRequest.country, createSupportWorkersRequest.state, createSupportWorkersRequest.product.currency) &&
-    currencyIsSupportedForCountry(createSupportWorkersRequest.country, createSupportWorkersRequest.product.currency)
+    hasStateIfRequired(createSupportWorkersRequest.billingAddress.country,
+      createSupportWorkersRequest.billingAddress.state,
+      createSupportWorkersRequest.product.currency) &&
+    currencyIsSupportedForCountry(createSupportWorkersRequest.billingAddress.country, createSupportWorkersRequest.product.currency)
   }
 }
 
@@ -68,8 +70,14 @@ object PaperValidation {
   def hasFirstDeliveryDate(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = createSupportWorkersRequest.firstDeliveryDate.nonEmpty
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
+
+    val hasDeliveryAddressInUKAndPaidInGbp = createSupportWorkersRequest.deliveryAddress match {
+      case Some(address) => deliveredToUkAndPaidInGbp(address.country, createSupportWorkersRequest.product.currency)
+      case None => false
+    }
+
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
-    deliveredToUkAndPaidInGbp(createSupportWorkersRequest.country, createSupportWorkersRequest.product.currency) &&
+    hasDeliveryAddressInUKAndPaidInGbp &&
     hasFirstDeliveryDate(createSupportWorkersRequest)
   }
 }

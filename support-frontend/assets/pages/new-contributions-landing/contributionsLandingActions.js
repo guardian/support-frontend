@@ -257,14 +257,16 @@ const regularPaymentRequestFromAuthorisation = (
 ): RegularPaymentRequest => ({
   firstName: state.page.form.formData.firstName || '',
   lastName: state.page.form.formData.lastName || '',
-  country: state.common.internationalisation.countryId,
-  state: state.page.form.formData.state,
   email: state.page.form.formData.email || '',
-  addressLine1: null, // required go cardless field
-  addressLine2: null, // required go cardless field
-  townCity: null, // required go cardless field
-  county: null, // required go cardless field
-  postcode: null, // required go cardless field
+  billingAddress: {
+    lineOne: null, // required go cardless field
+    lineTwo: null, // required go cardless field
+    city: null, // required go cardless field
+    state: state.page.form.formData.state,
+    postCode: null, // required go cardless field
+    country: state.common.internationalisation.countryId,
+  },
+  deliveryAddress: null,
   product: {
     amount: getAmount(
       state.page.form.selectedAmounts,

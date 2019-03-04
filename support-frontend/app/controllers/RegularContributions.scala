@@ -88,7 +88,7 @@ class RegularContributions(
       },
       { statusResponse =>
         if (!testUsers.isTestUser(request)) {
-          monitoredRegion(body.country).map { region =>
+          monitoredRegion(body.billingAddress.country).map { region =>
             val tipPath = TipPath(region, RecurringContribution, monitoredPaymentMethod(body.paymentFields), guestCheckout)
             verify(tipPath, tipMonitoring.verify)
           }
@@ -104,9 +104,9 @@ class RegularContributions(
       lineOne = None,
       lineTwo = None,
       city = None,
-      state = request.state,
+      state = request.billingAddress.state,
       postCode = None,
-      country = request.country
+      country = request.billingAddress.country
     )
   }
 
@@ -117,6 +117,7 @@ class RegularContributions(
       firstName = request.firstName,
       lastName = request.lastName,
       billingAddress = billingAddress(request),
+      deliveryAddress = None,
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),

@@ -50,7 +50,7 @@ class CreateSubscription(
   ): Future[Result] = {
     SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new subscription")
 
-    val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.country)
+    val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
 
     val createSupportWorkersRequest = request.body.copy(
       telephoneNumber = normalisedTelephoneNumber.map(asFormattedString)
@@ -80,23 +80,12 @@ class CreateSubscription(
       primaryEmailAddress = user.primaryEmailAddress,
       firstName = request.firstName,
       lastName = request.lastName,
-      billingAddress = billingAddress(request),
+      billingAddress = request.billingAddress,
       telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
       allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
       isTestUser = testUsers.isTestUser(user.publicFields.displayName)
-    )
-  }
-
-  private def billingAddress(request: CreateSupportWorkersRequest): Address = {
-    Address(
-      lineOne = request.addressLine1,
-      lineTwo = request.addressLine2,
-      city = request.townCity,
-      state = request.state,
-      postCode = request.postcode,
-      country = request.country
     )
   }
 
