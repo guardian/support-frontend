@@ -1,0 +1,14 @@
+version: v1.70.2
+ignore:
+  'SNYK-JAVA-COMFASTERXMLJACKSONCORE-32043':
+    - '* > com.fasterxml.jackson.core:jackson-databind@2.6.7.1':
+      reason: 'AWS depends on this and we cannot fix independently'
+      expires: '2019-03-22T10:00:00Z'
+  'SNYK-JAVA-COMFASTERXMLJACKSONCORE-32044':
+    - '* > com.fasterxml.jackson.core:jackson-databind@2.6.7.1':
+      reason: 'AWS depends on this and we cannot fix independently'
+      expires: '2019-03-22T10:00:00Z'
+  'SNYK-JAVA-COMFASTERXMLJACKSONCORE-32111':
+    - '* > com.fasterxml.jackson.core:jackson-databind@2.6.7.1':
+      reason: 'AWS depends on this and we cannot fix independently'
+      expires: '2019-03-22T10:00:00Z'

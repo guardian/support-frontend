@@ -1,0 +1,10 @@
+echo "Running integration tests before push"
+sbt it:test
+rc=$?
+echo "Result" + $rc
+if [[ $rc != 0 ]]; then
+  echo "There were failures in the integration tests, please fix before pushing"
+else
+  echo "Integration tests passed successfully"
+fi
+exit $rc;

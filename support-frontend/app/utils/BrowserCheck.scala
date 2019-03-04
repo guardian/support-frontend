@@ -1,0 +1,12 @@
+package utils
+
+import com.gu.monitoring.SafeLogger
+import play.api.mvc.RequestHeader
+
+object BrowserCheck {
+  def logUserAgent(implicit request: RequestHeader): Unit = {
+    SafeLogger.info(s"Unsupported user agent: ${
+      request.headers.get("User-Agent").getOrElse("No User-Agent available in request.headers")
+    }")
+  }
+}

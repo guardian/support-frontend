@@ -1,0 +1,56 @@
+@import admin.settings.AllSettings
+@import assets.AssetsResolver
+@import com.gu.i18n.Currency.AUD
+@import com.gu.identity.play.IdUser
+@import com.gu.support.config._
+@import helper.CSRF
+@import com.gu.support.pricing.ProductPrices
+@import views.ViewHelpers._
+@import io.circe.syntax._
+@import com.gu.support.encoding.CustomCodecs._
+
+@import assets.RefPath
+@import views.EmptyDiv
+@import views.ReactDiv
+@(
+  title: String,
+  mainElement: ReactDiv,
+  js: String,
+  css: String,
+  csrf: Option[String],
+  user: IdUser,
+  uatMode: Boolean,
+  productPrices: ProductPrices,
+  defaultStripeConfig: StripeConfig,
+  uatStripeConfig: StripeConfig,
+  payPalConfig: PayPalConfig
+)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
+
+  @main(title = title, mainJsBundle = RefPath(js), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
+    <script type="text/javascript">
+      window.guardian.productPrices = @{Html(outputJson(productPrices))}
+      window.guardian = window.guardian || {};
+
+      window.guardian.user = {
+        firstName: "@user.privateFields.map(_.firstName).getOrElse("")",
+        lastName: "@user.privateFields.map(_.secondName).getOrElse("")",
+        email: "@user.primaryEmailAddress"
+      };
+
+      window.guardian.stripeKeyDefaultCurrencies = {
+        REGULAR: {
+          default: "@defaultStripeConfig.forCurrency(None).publicKey",
+          uat: "@uatStripeConfig.forCurrency(None).publicKey"
+        }
+      };
+      window.guardian.stripeKeyAustralia = {
+        REGULAR: {
+          default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
+          uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
+        }
+      };
+      window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
+      window.guardian.csrf = { token: "@CSRF.getToken.value" };
+  </script>
+
+  }
