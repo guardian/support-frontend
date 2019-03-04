@@ -18,6 +18,8 @@ import { finalPrice as paperFinalPrice } from 'helpers/productPrice/paperProduct
 import { routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
+import { Monthly } from 'helpers/billingPeriods';
+
 import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../paperSubscriptionCheckoutReducer';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
@@ -35,12 +37,10 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
 
   const product = {
     currency: currencyId,
-    billingPeriod: 'Monthly',
+    billingPeriod: Monthly,
     fulfilmentOptions: state.page.checkout.fulfilmentOption,
     productOptions: state.page.checkout.productOption,
   };
-
-  console.log(product);
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 
