@@ -36,7 +36,7 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import {
   regularPrice as dpRegularPrice,
   promotion as digitalPackPromotion,
-  finalPrice as dpFinalPrice
+  finalPrice as dpFinalPrice,
 } from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -44,6 +44,8 @@ import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 
 import {
   submitForm,
@@ -53,12 +55,10 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
-import { PayPalRecurringButton } from './../../../pages/new-contributions-landing/components/PayPalRecurringButton';
+import { PayPalExpressButton } from '../../../components/paypalExpressButton/PayPalExpressButton';
 import { type FormActionCreators, formActionCreators } from './../digitalSubscriptionCheckoutActions';
 
 import { formIsValid, validateForm } from '../digitalSubscriptionCheckoutReducer';
-import type { BillingPeriod } from 'helpers/billingPeriods';
-import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 
 // ----- Types ----- //
 
@@ -76,7 +76,7 @@ type PropTypes = {|
   isTestUser: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
-  setupPayPalPayment: Function,
+  setupRecurringPayPalPayment: Function,
   validateForm: () => Function,
   formIsValid: Function,
 |};
@@ -363,7 +363,7 @@ function CheckoutForm(props: PropTypes) {
             <FormSection>
               {errorState}
               {props.paymentMethod === 'PayPal' ? (
-                <PayPalRecurringButton
+                <PayPalExpressButton
                   onPaymentAuthorisation={props.onPaymentAuthorised}
                   csrf={props.csrf}
                   currencyId={props.currencyId}

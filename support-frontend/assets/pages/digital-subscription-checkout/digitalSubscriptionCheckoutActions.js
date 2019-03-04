@@ -6,7 +6,7 @@ import type { FormField, Stage, State } from 'pages/digital-subscription-checkou
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
+import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import { fromString } from 'helpers/internationalisation/country';
 import { onPaymentAuthorised } from 'pages/digital-subscription-checkout/helpers/paymentProviders';
 import { setCountry } from 'helpers/page/commonActions';

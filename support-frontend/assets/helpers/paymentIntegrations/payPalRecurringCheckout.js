@@ -6,28 +6,19 @@ import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ContributionType } from 'helpers/contributions';
-import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
-import type { State } from 'pages/new-contributions-landing/contributionsLandingReducer';
 import * as storage from 'helpers/storage';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
-// ----- Types ----- //
-
-export type PayPalButtonToggler = {
-  enable: () => void,
-  disable: () => void
-};
+export type SetupPayPalRequestType = (
+  resolve: string => void,
+  reject: Error => void,
+  IsoCurrency, CsrfState,
+  amount: number,
+  billingPeriod: BillingPeriod,
+) => void
 
 // ----- Functions ----- //
-
-const showPayPal = (dispatch: Function) => {
-  loadPayPalRecurring()
-    .then(() => {
-      dispatch(setPayPalHasLoaded());
-    });
-};
 
 function loadPayPalRecurring(): Promise<void> {
   return new Promise((resolve) => {
@@ -39,6 +30,14 @@ function loadPayPalRecurring(): Promise<void> {
     }
   });
 }
+
+const showPayPal = (dispatch: Function) => {
+  loadPayPalRecurring()
+    .then(() => {
+      dispatch(setPayPalHasLoaded());
+    });
+};
+
 
 function payPalRequestData(bodyObj: Object, csrfToken: string) {
   return {
@@ -58,11 +57,11 @@ const setupRecurringPayPalPayment = (
   resolve: string => void,
   reject: Error => void,
   currency: IsoCurrency,
-  csrf: Csrf,
+  csrf: CsrfState,
   amount: number,
   billingPeriod: BillingPeriod,
 ) =>
-  (dispatch: Function, getState: () => State): void => {
+  (): void => {
     const csrfToken = csrf.token;
     storage.setSession('selectedPaymentMethod', 'PayPal');
     const requestBody = {
@@ -80,9 +79,9 @@ const setupRecurringPayPalPayment = (
           logException('PayPal token came back blank');
         }
       }).catch((err: Error) => {
-      logException(err.message);
-      reject(err);
-    });
+        logException(err.message);
+        reject(err);
+      });
   };
 
 function setupPayment(
@@ -90,16 +89,10 @@ function setupPayment(
   csrf: CsrfState,
   amount: number,
   billingPeriod: BillingPeriod,
-  setupRecurringPayPalPayment: (
-    resolve: string => void,
-    reject: Error => void,
-    IsoCurrency, CsrfState,
-    amount: number,
-    billingPeriod: BillingPeriod,
-  ) => void,
+  setupPayPalPayment: SetupPayPalRequestType,
 ) {
   return (resolve, reject) => {
-    setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, amount, billingPeriod);
+    setupPayPalPayment(resolve, reject, currencyId, csrf, amount, billingPeriod);
   };
 }
 
@@ -127,14 +120,7 @@ function getPayPalOptions(
   isTestUser: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
-  setupRecurringPayPalPayment: (
-    resolve: string => void,
-    reject: Error => void,
-    IsoCurrency,
-    CsrfState,
-    amount: number,
-    billingPeriod: BillingPeriod,
-  ) => void,
+  setupPayPalPayment: SetupPayPalRequestType,
 ): Object {
 
   function toggleButton(actions): void {
@@ -179,7 +165,7 @@ function getPayPalOptions(
     onClick,
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(currencyId, csrf, amount, billingPeriod, setupRecurringPayPalPayment),
+    payment: setupPayment(currencyId, csrf, amount, billingPeriod, setupPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize: (data) => {

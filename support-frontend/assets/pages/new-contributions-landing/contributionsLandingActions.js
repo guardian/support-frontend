@@ -6,18 +6,14 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import { type ThirdPartyPaymentLibrary } from 'helpers/checkouts';
 import {
   type Amount,
-  billingPeriodFromContrib,
   type ContributionType,
   getAmount,
   logInvalidCombination,
   type PaymentMatrix,
   type PaymentMethod,
 } from 'helpers/contributions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { payPalRequestData } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type {
   RegularPaymentRequest,
   StripeAuthorisation, StripePaymentMethod,
@@ -45,7 +41,7 @@ import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import { type FormSubmitParameters, onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import * as cookie from 'helpers/cookie';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
+import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
 
@@ -475,7 +471,6 @@ export {
   setPasswordError,
   updatePassword,
   createOneOffPayPalPayment,
-  setPayPalHasLoaded,
   setHasSeenDirectDebitThankYouCopy,
   checkIfEmailHasPassword,
   setFormIsValid,

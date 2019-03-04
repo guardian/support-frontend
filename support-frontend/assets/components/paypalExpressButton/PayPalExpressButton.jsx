@@ -6,10 +6,10 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { type ContributionType } from 'helpers/contributions';
-import { getPayPalOptions } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { getPayPalOptions, type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 
 type PropTypes = {|
   onPaymentAuthorisation: Function,
@@ -20,13 +20,9 @@ type PropTypes = {|
   onClick: Function,
   formClassName: string,
   isTestUser: boolean,
-  contributionType: ContributionType,
-  setupRecurringPayPalPayment: (
-    resolve: string => void,
-    reject: Error => void,
-    IsoCurrency, CsrfState,
-    regularContributionType: ContributionType
-  ) => void,
+  amount: number,
+  billingPeriod: BillingPeriod,
+  setupRecurringPayPalPayment: SetupPayPalRequestType,
 |};
 
 
@@ -46,7 +42,7 @@ type PropTypes = {|
 // 1. Loading this iframe is an expensive operation which causes an obvious visual re-render
 // 2. We don't want to have to re-bind handlers which interact with the iframe
 //    (e.g. the handler bound in getPayPalOptions)
-export class PayPalRecurringButton extends React.Component<PropTypes> {
+export class PayPalExpressButton extends React.Component<PropTypes> {
   shouldComponentUpdate(nextProps: PropTypes) {
     return (this.props.hasLoaded !== nextProps.hasLoaded);
   }
