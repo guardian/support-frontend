@@ -5,7 +5,7 @@ import { type PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 import { getCurrency, getCountryGroup, applyPromotion, type ProductPrices, type Price, type Promotion } from './productPrices';
 
-const { name: country } = getCountryGroup('GB');
+const country = getCountryGroup('GB').name;
 const currency = getCurrency('GB');
 
 function promotion(

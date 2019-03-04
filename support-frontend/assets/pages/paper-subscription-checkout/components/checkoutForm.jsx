@@ -8,7 +8,7 @@ import { compose } from 'redux';
 
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { finalPrice as paperFinalPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
+import { regularPrice as paperRegularPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
 
 import { Outset } from 'components/content/content';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -261,7 +261,7 @@ function CheckoutForm(props: PropTypes) {
                 <p>
                   You will pay{' '}
                   <PriceLabel
-                    productPrice={paperFinalPrice(
+                    productPrice={paperRegularPrice(
                       props.productPrices,
                       props.fulfilmentOption,
                       props.productOption,
