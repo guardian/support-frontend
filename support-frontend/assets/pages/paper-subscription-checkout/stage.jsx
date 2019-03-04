@@ -17,6 +17,7 @@ import { type Stage, type State } from './paperSubscriptionCheckoutReducer';
 
 import CheckoutForm from './components-checkout/checkoutForm';
 import ReturnSection from './components-ty/returnSection';
+import ThankYouContent from './components-ty/thankYou';
 
 // ----- Types ----- //
 
@@ -42,22 +43,16 @@ function CheckoutStage(props: PropTypes) {
   switch (props.stage) {
     case 'thankyou':
       return (
-        <div className="thank-you-stage">
-          <HeroWrapper>
-            <HeadingBlock>Your Paper subscription is now live</HeadingBlock>
-          </HeroWrapper>
-          ty page
+        <div>
+          <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
       );
 
     case 'thankyou-pending':
       return (
-        <div className="thank-you-stage">
-          <HeroWrapper>
-            <HeadingBlock>Your Paper subscription is being processed</HeadingBlock>
-          </HeroWrapper>
-          ty page but its pending sadface
+        <div>
+          <ThankYouContent countryGroupId={props.countryGroupId} />
           <ReturnSection />
         </div>
       );
