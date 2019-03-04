@@ -30,7 +30,7 @@ export default function CtaContribute() {
               over a million people around the world – but we must keep building
               on this for the years to come. Every contribution, whether big or
               small, means we can keep investigating and exploring the critical
-              issues of our time.
+              issues of our time.&nbsp;
               <strong>
                 Make a contribution from as little as
                 £1, and it only takes a minute.
