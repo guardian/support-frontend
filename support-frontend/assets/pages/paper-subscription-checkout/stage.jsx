@@ -13,10 +13,10 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import Content, { Divider } from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 
-import { type Stage, type State } from '../paperSubscriptionCheckoutReducer';
+import { type Stage, type State } from './paperSubscriptionCheckoutReducer';
 
-import CheckoutForm from './checkoutForm';
-import ReturnSection from './returnSection';
+import CheckoutForm from './components-checkout/checkoutForm';
+import ReturnSection from './components-ty/returnSection';
 
 // ----- Types ----- //
 
@@ -71,7 +71,9 @@ function CheckoutStage(props: PropTypes) {
           </HeroWrapper>
           <Content>
             <Text>
-              <LargeParagraph>Please enter your details below to complete your Paper subscription.</LargeParagraph>
+              <LargeParagraph>
+                Please enter your details below to complete your Paper subscription.
+              </LargeParagraph>
             </Text>
             <Divider />
           </Content>
