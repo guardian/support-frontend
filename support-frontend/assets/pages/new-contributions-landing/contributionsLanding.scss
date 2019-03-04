@@ -379,7 +379,8 @@ footer[role="contentinfo"] a {
   border-bottom: 1px solid gu-colour(neutral-86);
 
   li label {
-    font-family: $gu-titlepiece;
+    font-family: $gu-headline;
+    font-weight: 600;
     font-size: 22px;
   }
 }
