@@ -28,7 +28,7 @@ import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fu
 import { Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
-import { postcodeFinderReducer } from './components/postcodeFinderReducer';
+import { postcodeFinderReducer } from './components-checkout/postcodeFinderReducer';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
 
 // ----- Types ----- //
