@@ -44,7 +44,7 @@ function CheckoutStage(props: PropTypes) {
     case 'thankyou':
       return (
         <div>
-          <ThankYouContent countryGroupId={props.countryGroupId} />
+          <ThankYouContent isPending={false} />
           <ReturnSection />
         </div>
       );
@@ -52,7 +52,7 @@ function CheckoutStage(props: PropTypes) {
     case 'thankyou-pending':
       return (
         <div>
-          <ThankYouContent countryGroupId={props.countryGroupId} />
+          <ThankYouContent isPending />
           <ReturnSection />
         </div>
       );

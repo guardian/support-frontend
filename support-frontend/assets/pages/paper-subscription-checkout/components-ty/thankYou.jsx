@@ -27,6 +27,7 @@ import {
 
 type PropTypes = {
     ...FormFields,
+    isPending: boolean,
 };
 
 
@@ -43,7 +44,7 @@ const whatNext = {
         <span>
           Your newspaper will be delivered to your door. Here{'\''}s a reminder of how home delivery works.
         </span>,
-  ]}
+        ]}
       />
 
     </Text>
@@ -52,15 +53,18 @@ const whatNext = {
     <Text title="What happens next?">
       <p>
         <OrderedList items={[
-          <span>Look out for an email from us confirming your subscription.
-      It has everything you need to know about how manage it in the future.
+          <span>
+            Look out for an email from us confirming your subscription.
+            It has everything you need to know about how manage it in the future.
           </span>,
           <span>
-      You will receive your personalised book of vouchers.
-      Here{'\''}s a reminder of how the voucher booklet works.
+            You will receive your personalised book of vouchers.
+            Here{'\''}s a reminder of how the voucher booklet works.
           </span>,
-          <span>Exchange your voucher for a newspaper at your newsagent or wherever you buy your paper</span>,
-  ]}
+          <span>
+            Exchange your voucher for a newspaper at your newsagent or wherever you buy your paper
+          </span>,
+          ]}
         />
 
       </p>
@@ -69,7 +73,9 @@ const whatNext = {
 };
 
 
-function ThankYouContent({ fulfilmentOption, productOption, startDate }: PropTypes) {
+function ThankYouContent({
+  fulfilmentOption, productOption, startDate, isPending,
+}: PropTypes) {
 
   return (
     <div>
@@ -78,11 +84,23 @@ function ThankYouContent({ fulfilmentOption, productOption, startDate }: PropTyp
         <HeadingBlock
           overheading="Thank you for supporting our journalism!"
         >
-          You are now subscribed to the {productOption.toLowerCase()} package
+          {isPending ?
+          `Your subscription to the ${productOption} package is being processed` :
+          `You are now subscribed to the ${productOption} package`
+  }
         </HeadingBlock>
       </HeroWrapper>
-
       <Content>
+        {
+          isPending && (
+            <Text>
+              <LargeParagraph>
+                Your subscription is being processed and you will
+                receive an email when it goes live.
+              </LargeParagraph>
+            </Text>
+          )
+        }
         {startDate &&
           <Text title="Your first issue will arrive on">
             <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
