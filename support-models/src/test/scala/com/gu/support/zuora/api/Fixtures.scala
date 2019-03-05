@@ -234,12 +234,12 @@ object Fixtures {
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(currency), contactDetails, Some(contactDetails), creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
     ))
 
   def directDebitSubscriptionRequest: SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())
     ))
 
   val invalidMonthlySubsData = SubscriptionData(
@@ -255,10 +255,19 @@ object Fixtures {
     Subscription(date, date, date, termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
+    SubscribeItem(account(), contactDetails, None, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
   ))
 
-  val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account(), contactDetails, payPalPaymentMethod, invalidMonthlySubsData, SubscribeOptions())))
+  val incorrectPaymentMethod = SubscribeRequest(
+    List(
+      SubscribeItem(account(),
+      contactDetails,
+      None,
+      payPalPaymentMethod,
+      invalidMonthlySubsData,
+      SubscribeOptions())
+    )
+  )
 
   val invoiceResult =
     """
