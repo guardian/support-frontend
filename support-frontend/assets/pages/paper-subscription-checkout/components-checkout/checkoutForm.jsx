@@ -45,8 +45,9 @@ import {
   getFormFields,
   type State,
 } from '../paperSubscriptionCheckoutReducer';
-import PostcodeFinder from './postcodeFinder';
+import postcodeFinderFor from './postcodeFinderFor';
 
+const PostcodeFinder = postcodeFinderFor('billing');
 // ----- Types ----- //
 
 type PropTypes = {|

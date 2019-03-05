@@ -1,6 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import Button from 'components/button/button';
@@ -10,10 +9,11 @@ import { asControlled } from 'hocs/asControlled';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 
-import { type PostcodeFinderState, type PostcodeFinderActionCreators, postcodeFinderActionCreators } from './postcodeFinderReducer';
+import { type PostcodeFinderState, type PostcodeFinderActionCreators } from './postcodeFinderStore';
 import { type Address } from '../helpers/postcodeFinder';
 
 import styles from './postcodeFinder.module.scss';
+
 
 type PropTypes = {|
   ...PostcodeFinderState,
@@ -53,8 +53,8 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
 const ComposedInputWithButton = compose(withLabel, asControlled, withError)(InputWithButton);
 const ComposedSelect = compose(withLabel)(Select);
 
-class PostcodeFinder extends Component<PropTypes> {
-  componentDidUpdate(prevProps) {
+export default class PostcodeFinder extends Component<PropTypes> {
+  componentDidUpdate(prevProps: PropTypes) {
     if (this.selectRef && this.props.results.join() !== prevProps.results.join()) {
       this.selectRef.focus();
     }
@@ -99,12 +99,3 @@ class PostcodeFinder extends Component<PropTypes> {
     );
   }
 }
-
-// ----- Exports ----- //
-
-export default connect(
-  state => ({
-    ...state.page.postcodeFinder,
-  }),
-  postcodeFinderActionCreators,
-)(PostcodeFinder);

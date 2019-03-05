@@ -10,41 +10,49 @@ export type PostcodeFinderState = {|
   error: Option<string>,
 |}
 
-export type PostcodeFinderActions =
-  {|type: 'FILL_POSTCODE_FINDER_RESULTS', results: Address[]|} |
-  {|type: 'SET_POSTCODE_FINDER_ERROR', error: Option<string>|} |
-  {|type: 'START_POSTCODE_FINDER_FETCH_RESULTS' |} |
-  {|type: 'SET_POSTCODE_FINDER_POSTCODE', postcode: Option<string>|};
+type Scope = string;
 
-export const postcodeFinderActionCreators = {
-  setPostcode: (postcode: string) => ({ type: 'SET_POSTCODE_FINDER_POSTCODE', postcode }),
+type Scoped = {|
+  scope: Scope
+|}
+
+export type PostcodeFinderActions =
+  {|type: 'FILL_POSTCODE_FINDER_RESULTS', results: Address[], ...Scoped|} |
+  {|type: 'SET_POSTCODE_FINDER_ERROR', error: Option<string>, ...Scoped|} |
+  {|type: 'START_POSTCODE_FINDER_FETCH_RESULTS', ...Scoped |} |
+  {|type: 'SET_POSTCODE_FINDER_POSTCODE', ...Scoped, postcode: Option<string>|};
+
+const postcodeFinderActionCreatorsFor = (scope: Scope) => ({
+  setPostcode: (postcode: string) => ({ type: 'SET_POSTCODE_FINDER_POSTCODE', postcode, scope }),
   fetchResults: (postcode: Option<string>) => (dispatch: Dispatch<PostcodeFinderActions>) => {
     if (!postcode) {
       dispatch({
         type: 'SET_POSTCODE_FINDER_ERROR',
         error: 'Please enter a postcode',
+        scope,
       });
     } else {
-      dispatch({ type: 'START_POSTCODE_FINDER_FETCH_RESULTS' });
+      dispatch({ type: 'START_POSTCODE_FINDER_FETCH_RESULTS', scope });
       getAddressesForPostcode(postcode)
         .then((results) => {
           dispatch({
             type: 'FILL_POSTCODE_FINDER_RESULTS',
             results,
+            scope,
           });
         })
         .catch(() => {
           dispatch({
             type: 'SET_POSTCODE_FINDER_ERROR',
             error: 'Couldn\'t find your postcode',
+            scope,
           });
         });
     }
   },
-};
+});
 
-export type PostcodeFinderActionCreators = typeof postcodeFinderActionCreators;
-
+export type PostcodeFinderActionCreators = $Call<typeof postcodeFinderActionCreatorsFor, string>;
 
 const initialState = {
   results: [],
@@ -53,10 +61,14 @@ const initialState = {
   error: null,
 };
 
-const postcodeFinderReducer = (
+const postcodeFinderReducerFor = (scope: Scope) => (
   state: PostcodeFinderState = initialState,
   action: PostcodeFinderActions,
 ): PostcodeFinderState => {
+
+  if (action.scope !== scope) {
+    return state;
+  }
 
   switch (action.type) {
     case 'FILL_POSTCODE_FINDER_RESULTS':
@@ -90,4 +102,10 @@ const postcodeFinderReducer = (
 
 };
 
-export { postcodeFinderReducer };
+const postcodeFinderStoreFor = (scope: Scope) => ({
+  reducer: postcodeFinderReducerFor(scope),
+  actionCreators: postcodeFinderActionCreatorsFor(scope),
+});
+
+export { postcodeFinderStoreFor };
+

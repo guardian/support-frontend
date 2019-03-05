@@ -28,8 +28,8 @@ import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fu
 import { Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
-import { postcodeFinderReducer } from './components-checkout/postcodeFinderReducer';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import { postcodeFinders } from './helpers/postcodeFinders';
 
 // ----- Types ----- //
 
@@ -78,6 +78,8 @@ export type State = ReduxState<{|
   checkout: CheckoutState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
+  billingPostcodeFinder: typeof postcodeFinders.billing.reducer,
+  deliveryPostcodeFinder: typeof postcodeFinders.delivery.reducer,
 |}>;
 
 export type Action =
@@ -317,7 +319,8 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     checkout: reducer,
     user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
     directDebit,
-    postcodeFinder: postcodeFinderReducer,
+    billingPostcodeFinder: postcodeFinders.billing.reducer,
+    deliveryPostcodeFinder: postcodeFinders.delivery.reducer,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
@@ -335,4 +338,5 @@ export {
   setFormSubmitted,
   signOut,
   formActionCreators,
+  postcodeFinders,
 };
