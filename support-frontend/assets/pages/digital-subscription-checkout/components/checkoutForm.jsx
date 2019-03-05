@@ -313,6 +313,7 @@ function CheckoutForm(props: PropTypes) {
               countrySupportsDirectDebit={props.countrySupportsDirectDebit}
               paymentMethod={props.paymentMethod}
               setPaymentMethod={props.setPaymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
             />
             <FormSection>
               {errorState}

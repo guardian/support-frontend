@@ -10,10 +10,11 @@ import Text from 'components/text/text';
 import Rows from 'components/base/rows';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { getQueryParameter } from 'helpers/url';
+import { type Option } from 'helpers/types/option';
 
 type PropTypes = {|
   countrySupportsDirectDebit: boolean,
-  paymentMethod: PaymentMethod,
+  paymentMethod: Option<PaymentMethod>,
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
 |}
