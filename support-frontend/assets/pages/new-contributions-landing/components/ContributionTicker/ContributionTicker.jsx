@@ -96,7 +96,6 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
 
     return (
       <div className={wrapperClassName}>
-        <div className="contributions-landing-ticker__border" />
         <div className="contributions-landing-ticker__values">
           <div className="contributions-landing-ticker__so-far">
             <div className="contributions-landing-ticker__count">${Math.floor(this.state.totalSoFar).toLocaleString()}</div>
