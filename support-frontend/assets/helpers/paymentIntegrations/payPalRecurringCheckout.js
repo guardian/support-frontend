@@ -48,11 +48,9 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
   };
 }
 
-// This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
-// It happens when the user clicks the recurring PayPal button,
-// before the PayPal popup in which they authorise the payment appears.
-// It should probably be called createOneOffPayPalPayment but it's called setupPayment
-// on the backend so pending a far-reaching rename, I'll keep the terminology consistent with the backend.
+// This is the recurring PayPal Express version of the PayPal checkout.
+// It happens when the user clicks the PayPal button, and before the PayPal popup
+// appears to allow the user to authorise the payment.
 const setupRecurringPayPalPayment = (
   resolve: string => void,
   reject: Error => void,

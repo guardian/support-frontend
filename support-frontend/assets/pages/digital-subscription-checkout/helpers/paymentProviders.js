@@ -127,7 +127,7 @@ function showPaymentMethod(
       dispatch(openDirectDebitPopUp());
       break;
     case 'PayPal':
-      // PayPal is handled differently
+      // PayPal is more complicated and is handled differently, see PayPalExpressButton component
       break;
     case null:
     case undefined:
