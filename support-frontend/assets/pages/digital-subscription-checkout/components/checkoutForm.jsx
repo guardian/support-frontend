@@ -42,12 +42,15 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import { type Action, type FormActionCreators, formActionCreators } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
 
 import {
+  formIsValid,
+  validateForm,
   submitForm,
   signOut,
   type FormField,
@@ -55,10 +58,6 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
-import { PayPalExpressButton } from '../../../components/paypalExpressButton/PayPalExpressButton';
-import { type FormActionCreators, formActionCreators } from './../digitalSubscriptionCheckoutActions';
-
-import { formIsValid, validateForm } from '../digitalSubscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
