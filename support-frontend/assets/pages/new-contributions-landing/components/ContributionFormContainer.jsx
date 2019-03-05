@@ -116,6 +116,7 @@ const countryGroupSpecificDetails: {
   AUDCountries: {
     ...defaultHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
+    tickerJsonUrl: '/ticker.json',
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
