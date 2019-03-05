@@ -26,7 +26,7 @@ import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
-import Checkout from 'components/checkout/checkout';
+import Layout from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -96,7 +96,7 @@ function CheckoutForm(props: PropTypes) {
   return (
     <Content modifierClasses={['your-details']}>
       <Outset>
-        <Checkout>
+        <Layout>
           <Form onSubmit={(ev) => {
             ev.preventDefault();
             props.submitForm();
@@ -295,7 +295,7 @@ function CheckoutForm(props: PropTypes) {
               </Text>
             </FormSection>
           </Form>
-        </Checkout>
+        </Layout>
       </Outset>
     </Content>
   );

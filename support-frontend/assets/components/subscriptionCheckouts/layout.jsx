@@ -2,13 +2,13 @@
 
 import React, { type Node } from 'react';
 
-import './checkout.scss';
+import './layout.scss';
 
 
 type PropTypes = {
   children: Node,
 };
-const Checkout = ({ children }: PropTypes) => (
+const Layout = ({ children }: PropTypes) => (
   <div className="component-checkout">
     <div className="component-checkout__form">
       {children}
@@ -16,4 +16,4 @@ const Checkout = ({ children }: PropTypes) => (
   </div>
 );
 
-export default Checkout;
+export default Layout;

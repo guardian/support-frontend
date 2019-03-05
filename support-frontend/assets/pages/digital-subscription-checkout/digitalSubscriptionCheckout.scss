@@ -40,6 +40,10 @@
     width: auto;
   }
 
+  .component-button--hidden, .component-paypal-button-checkout--hidden {
+    display: none;
+  }
+
   // ----- Thank You
 
   .thank-you-stage {
