@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Fixtures.{email, idId}
+import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
@@ -22,7 +22,7 @@ object JsonFixtures {
     s"""
       "user":{
           "id": "$idId",
-          "primaryEmailAddress": "$email",
+          "primaryEmailAddress": "$emailAddress",
           "firstName": "test",
           "lastName": "user",
           "country": "GB",
