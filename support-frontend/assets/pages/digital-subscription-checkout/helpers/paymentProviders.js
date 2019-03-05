@@ -84,7 +84,7 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
 
   dispatch(setFormSubmitted(true));
   postRegularPaymentRequest(
-    routes.digitalSubscriptionCreate,
+    routes.subscriptionCreate,
     data,
     state.common.abParticipations,
     state.page.csrf,

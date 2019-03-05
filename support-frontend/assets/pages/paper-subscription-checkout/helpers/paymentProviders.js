@@ -44,25 +44,29 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 
+  const billingAddress = {
+    lineOne: billingAddressLine1,
+    lineTwo: billingAddressLine2,
+    city: billingTownCity,
+    state: null,
+    postCode: billingPostcode,
+    country: countryId,
+  };
+
+  const deliveryAddress = {
+    lineOne: billingAddressLine1,
+    lineTwo: billingAddressLine2,
+    city: billingTownCity,
+    state: null,
+    postCode: billingPostcode,
+    country: countryId,
+  };
+
   return {
     firstName,
     lastName,
-    billingAddress: {
-      lineOne: billingAddressLine1,
-      lineTwo: billingAddressLine2,
-      city: billingTownCity,
-      state: null,
-      postCode: billingPostcode,
-      country: countryId,
-    },
-    deliveryAddress: {
-      lineOne: billingAddressLine1,
-      lineTwo: billingAddressLine2,
-      city: billingTownCity,
-      state: null,
-      postCode: billingPostcode,
-      country: countryId,
-    },
+    billingAddress,
+    deliveryAddress,
     email,
     telephoneNumber: telephone,
     product,
@@ -94,7 +98,7 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
   const data = buildRegularPaymentRequest(state, paymentAuthorisation);
 
   postRegularPaymentRequest(
-    routes.digitalSubscriptionCreate,
+    routes.subscriptionCreate,
     data,
     state.common.abParticipations,
     state.page.csrf,
