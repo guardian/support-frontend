@@ -31,6 +31,32 @@ const TimerIfActive = () => (showCountdownTimer('Paper', GBPCountries) ? (
     countryGroupId="GBPCountries"
   />) : null);
 
+const HeroPicture = () => (
+  <GridPicture
+    sources={[
+      {
+        gridId: 'paperLandingHeroMobile',
+        srcSizes: [500, 922],
+        imgType: 'png',
+        sizes: '100vw',
+        media: '(max-width: 739px)',
+      },
+      {
+        gridId: 'paperLandingHero',
+        srcSizes: [1000, 2000],
+        imgType: 'png',
+        sizes: '(min-width: 1000px) 2000px, 1000px',
+        media: '(min-width: 740px)',
+      },
+    ]}
+    fallback="paperLandingHero"
+    fallbackSize={1000}
+    altText=""
+    fallbackImgType="png"
+  />
+);
+
+
 const Footer = () => (
   <HeroHanger>
     <AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
@@ -45,28 +71,7 @@ const DefaultHeader = () => (
       appearance="feature"
       modifierClasses={['paper']}
     >
-      <GridPicture
-        sources={[
-    {
-      gridId: 'paperLandingHeroMobile',
-      srcSizes: [500, 922],
-      imgType: 'png',
-      sizes: '100vw',
-      media: '(max-width: 739px)',
-    },
-    {
-      gridId: 'paperLandingHero',
-      srcSizes: [1000, 2000],
-      imgType: 'png',
-      sizes: '(min-width: 1000px) 2000px, 1000px',
-      media: '(min-width: 740px)',
-    },
-  ]}
-        fallback="paperLandingHero"
-        fallbackSize={1000}
-        altText=""
-        fallbackImgType="png"
-      />
+      <HeroPicture />
       <Heading />
       <TimerIfActive />
     </HeroWrapper>
@@ -114,4 +119,4 @@ const SaleHeader = () => (
 );
 
 
-export { DefaultHeader, SaleHeader };
+export { DefaultHeader, SaleHeader, HeroPicture };
