@@ -35,6 +35,9 @@ type PropTypes = {|
 
 
 function SubscriptionSubmitButtons(props: PropTypes) {
+  // We have to show/hide PayPalExpressButton rather than conditionally rendering it
+  // because we don't want to destroy and replace the iframe each time.
+  // See PayPalExpressButton for more info.
   return (
     <div>
       <div
