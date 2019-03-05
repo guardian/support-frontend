@@ -329,12 +329,6 @@ function CheckoutForm(props: PropTypes) {
                       checked={props.paymentMethod === 'Stripe'}
                       onChange={() => props.setPaymentMethod('Stripe')}
                     />
-                    <RadioInput
-                      text="PayPal"
-                      name="paymentMethod"
-                      checked={props.paymentMethod === 'PayPal'}
-                      onChange={() => props.setPaymentMethod('PayPal')}
-                    />
                   </Fieldset>
                 </div>
               }
