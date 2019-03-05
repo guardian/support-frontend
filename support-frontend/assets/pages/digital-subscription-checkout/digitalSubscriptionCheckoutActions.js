@@ -5,7 +5,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FormField, Stage, State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
-import { showPayPal } from 'pages/digital-subscription-checkout/helpers/payPal';
+import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import { fromString } from 'helpers/internationalisation/country';
 import { onPaymentAuthorised } from 'pages/digital-subscription-checkout/helpers/paymentProviders';
 import { setCountry } from 'helpers/page/commonActions';
@@ -15,7 +16,6 @@ import { setFormSubmissionDependentValue } from 'pages/digital-subscription-chec
 import type { PaymentMethod } from './digitalSubscriptionCheckoutReducer';
 import { getFormFields } from './digitalSubscriptionCheckoutReducer';
 import type { ErrorReason } from '../../helpers/errorReasons';
-
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -35,7 +35,7 @@ export type Action =
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | { type: 'SET_PAYPAL_HAS_LOADED' }
+  | PayPalAction
   | DDAction;
 
 
@@ -45,7 +45,6 @@ const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
 const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
 const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
 const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
-const setPayPalHasLoaded = (): Action => ({ type: 'SET_PAYPAL_HAS_LOADED' });
 
 const formActionCreators = {
   setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
@@ -97,6 +96,5 @@ export {
   getFormFields,
   setSubmissionError,
   setFormSubmitted,
-  setPayPalHasLoaded,
   formActionCreators,
 };

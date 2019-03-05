@@ -6,14 +6,17 @@ import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ContributionType } from 'helpers/contributions';
+import * as storage from 'helpers/storage';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
-// ----- Types ----- //
-
-export type PayPalButtonToggler = {
-  enable: () => void,
-  disable: () => void
-};
+export type SetupPayPalRequestType = (
+  resolve: string => void,
+  reject: Error => void,
+  IsoCurrency, CsrfState,
+  amount: number,
+  billingPeriod: BillingPeriod,
+) => void
 
 // ----- Functions ----- //
 
@@ -28,6 +31,14 @@ function loadPayPalRecurring(): Promise<void> {
   });
 }
 
+const showPayPal = (dispatch: Function) => {
+  loadPayPalRecurring()
+    .then(() => {
+      dispatch(setPayPalHasLoaded());
+    });
+};
+
+
 function payPalRequestData(bodyObj: Object, csrfToken: string) {
   return {
     credentials: 'include',
@@ -37,19 +48,49 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
   };
 }
 
+// This is the recurring PayPal Express version of the PayPal checkout.
+// It happens when the user clicks the PayPal button, and before the PayPal popup
+// appears to allow the user to authorise the payment.
+const setupRecurringPayPalPayment = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: CsrfState,
+  amount: number,
+  billingPeriod: BillingPeriod,
+) =>
+  (): void => {
+    const csrfToken = csrf.token;
+    storage.setSession('selectedPaymentMethod', 'PayPal');
+    const requestBody = {
+      amount,
+      billingPeriod,
+      currency,
+    };
+
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+      .then(response => (response.ok ? response.json() : null))
+      .then((token: { token: string } | null) => {
+        if (token) {
+          resolve(token.token);
+        } else {
+          logException('PayPal token came back blank');
+        }
+      }).catch((err: Error) => {
+        logException(err.message);
+        reject(err);
+      });
+  };
+
 function setupPayment(
   currencyId: IsoCurrency,
   csrf: CsrfState,
-  contributionType: ContributionType,
-  setupRecurringPayPalPayment: (
-    resolve: string => void,
-    reject: Error => void,
-    IsoCurrency, CsrfState,
-    contributionType: ContributionType
-  ) => void,
+  amount: number,
+  billingPeriod: BillingPeriod,
+  setupPayPalPayment: SetupPayPalRequestType,
 ) {
   return (resolve, reject) => {
-    setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, contributionType);
+    setupPayPalPayment(resolve, reject, currencyId, csrf, amount, billingPeriod);
   };
 }
 
@@ -75,14 +116,9 @@ function getPayPalOptions(
   onClick: () => void,
   formClassName: string,
   isTestUser: boolean,
-  contributionType: ContributionType,
-  setupRecurringPayPalPayment: (
-    resolve: string => void,
-    reject: Error => void,
-    IsoCurrency,
-    CsrfState,
-    contributionType: ContributionType
-  ) => void,
+  amount: number,
+  billingPeriod: BillingPeriod,
+  setupPayPalPayment: SetupPayPalRequestType,
 ): Object {
 
   function toggleButton(actions): void {
@@ -127,7 +163,7 @@ function getPayPalOptions(
     onClick,
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(currencyId, csrf, contributionType, setupRecurringPayPalPayment),
+    payment: setupPayment(currencyId, csrf, amount, billingPeriod, setupPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize: (data) => {
@@ -147,6 +183,8 @@ function getPayPalOptions(
 
 export {
   getPayPalOptions,
+  showPayPal,
   loadPayPalRecurring,
   payPalRequestData,
+  setupRecurringPayPalPayment,
 };

@@ -4,6 +4,7 @@
 import { type Store } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { loadPayPalRecurring } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import {
   loadStripe,
   setupStripeCheckout,
@@ -28,7 +29,6 @@ import {
   onThirdPartyPaymentAuthorised,
   paymentWaiting,
   selectAmount,
-  setPayPalHasLoaded,
   setThirdPartyPaymentLibrary,
   updateContributionTypeAndPaymentMethod,
   updateUserFormData,
