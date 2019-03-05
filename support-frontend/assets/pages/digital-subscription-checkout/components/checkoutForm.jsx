@@ -42,7 +42,8 @@ import { type Action, type FormActionCreators, formActionCreators } from 'pages/
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
+import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 
 import {
   formIsValid,
@@ -54,8 +55,6 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
-import { hiddenIf } from 'helpers/utilities';
-import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector.jsx';
 
 // ----- Types ----- //
 
@@ -317,31 +316,19 @@ function CheckoutForm(props: PropTypes) {
             />
             <FormSection>
               {errorState}
-              <div
-                id="component-paypal-button-checkout"
-                className={hiddenIf(props.paymentMethod !== 'PayPal', 'component-paypal-button-checkout')}
-              >
-                <PayPalExpressButton
-                  onPaymentAuthorisation={props.onPaymentAuthorised}
-                  csrf={props.csrf}
-                  currencyId={props.currencyId}
-                  hasLoaded={props.payPalHasLoaded}
-                  canOpen={props.formIsValid}
-                  onClick={props.validateForm}
-                  formClassName="form--contribution"
-                  isTestUser={props.isTestUser}
-                  setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-                  amount={props.amount}
-                  billingPeriod={props.billingPeriod}
-                />
-              </div>
-              <Button
-                aria-label={null}
-                type="submit"
-                modifierClasses={props.paymentMethod === 'PayPal' ? ['hidden'] : []}
-              >
-                Continue to payment
-              </Button>
+              <SubscriptionSubmitButtons
+                paymentMethod={props.paymentMethod}
+                onPaymentAuthorised={props.onPaymentAuthorised}
+                csrf={props.csrf}
+                currencyId={props.currencyId}
+                payPalHasLoaded={props.payPalHasLoaded}
+                formIsValid={props.formIsValid}
+                validateForm={props.validateForm}
+                isTestUser={props.isTestUser}
+                setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+                amount={props.amount}
+                billingPeriod={props.billingPeriod}
+              />
             </FormSection>
           </Form>
         </Layout>

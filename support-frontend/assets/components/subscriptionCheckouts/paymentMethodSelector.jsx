@@ -19,7 +19,7 @@ type PropTypes = {|
 
 function PaymentMethodSelector(props: PropTypes) {
   return (
-    <FormSection title={'How would you like to pay?'}>
+    <FormSection title="How would you like to pay?">
       <Rows gap="large">
         <div>
           <Fieldset legend="How would you like to pay?">
@@ -68,4 +68,4 @@ function PaymentMethodSelector(props: PropTypes) {
   );
 }
 
-export { PaymentMethodSelector }
+export { PaymentMethodSelector };
