@@ -48,7 +48,7 @@ type Product = {|
   productOption: PaperProductOptions,
 |};
 
-export type FormFieldsInState = {|
+export type FormFields = {|
   ...Product,
   title: Option<Title>,
   firstName: string,
@@ -59,15 +59,11 @@ export type FormFieldsInState = {|
   paymentMethod: Option<PaymentMethod>,
 |};
 
-export type FormFields = {|
-  ...FormFieldsInState,
-|};
-
 export type FormField = $Keys<FormFields>;
 
 type CheckoutState = {|
   stage: Stage,
-  ...FormFieldsInState,
+  ...FormFields,
   email: string,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
@@ -173,8 +169,7 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
 
   if (allErrors.length > 0) {
     allErrors.forEach(({ errors, dispatcher }) => {
-      const d = dispatcher(errors);
-      dispatch(d);
+      dispatch(dispatcher(errors));
     });
   } else {
     showPaymentMethod(dispatch, state);
