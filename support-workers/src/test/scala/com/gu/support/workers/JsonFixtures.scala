@@ -35,6 +35,33 @@ object JsonFixtures {
           "isTestUser": false
         }
     """
+
+  val userJsonWithDeliveryAddress =
+    s"""
+      "user":{
+          "id": "$idId",
+          "primaryEmailAddress": "$emailAddress",
+          "firstName": "test",
+          "lastName": "user",
+          "country": "GB",
+          "billingAddress": {
+            "country": "GB",
+            "lineOne": "yaw kroy 09",
+            "city": "london",
+            "postCode": "n1 9gu"
+          },
+          "deliveryAddress": {
+            "country": "GB",
+            "lineOne": "90 york way",
+            "city": "london",
+            "postCode": "n1 9gu"
+          },
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false
+        }
+    """
   val requestIdJson = "\"requestId\": \"e18f6418-45f2-11e7-8bfa-8faac2182601\""
   val validBaid = "B-23637766K5365543J"
   val payPalEmail = "test@paypal.com"
@@ -265,12 +292,14 @@ object JsonFixtures {
             }
         """
 
+  val firstDeliveryDate = "2019-04-01"
   val createEverydayPaperSubscriptionJson =
     s"""
           {
             $requestIdJson,
-            $userJson,
+            $userJsonWithDeliveryAddress,
             "product": ${everydayPaperJson},
+            "firstDeliveryDate": "2019-04-01",
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
