@@ -13,8 +13,6 @@ import { type Option } from 'helpers/types/option';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 
 import { Outset } from 'components/content/content';
-import Text from 'components/text/text';
-import Rows from 'components/base/rows';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
 import { Input } from 'components/forms/input';
@@ -27,10 +25,8 @@ import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import { canShow } from 'hocs/canShow';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
-import Checkout from 'components/checkout/checkout';
+import Layout from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
@@ -58,6 +54,8 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
+import { hiddenIf } from 'helpers/utilities';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector.jsx';
 
 // ----- Types ----- //
 
@@ -165,7 +163,7 @@ function CheckoutForm(props: PropTypes) {
   return (
     <Content modifierClasses={['your-details']}>
       <Outset>
-        <Checkout>
+        <Layout>
           <Form onSubmit={(ev) => {
             ev.preventDefault();
             props.submitForm();
@@ -312,50 +310,17 @@ function CheckoutForm(props: PropTypes) {
                 />
               </Fieldset>
             </FormSection>
-            <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
-              <Rows gap="large">
-                {props.countrySupportsDirectDebit &&
-                <div>
-                  <Fieldset legend="How would you like to pay?">
-                    <RadioInput
-                      text="Direct debit"
-                      name="paymentMethod"
-                      checked={props.paymentMethod === 'DirectDebit'}
-                      onChange={() => props.setPaymentMethod('DirectDebit')}
-                    />
-                    <RadioInput
-                      text="Credit/Debit card"
-                      name="paymentMethod"
-                      checked={props.paymentMethod === 'Stripe'}
-                      onChange={() => props.setPaymentMethod('Stripe')}
-                    />
-                  </Fieldset>
-                </div>
-              }
-                <div>
-                  <Text>
-                    <p>
-                      <strong>Money Back Guarantee.</strong>
-                      If you wish to cancel your subscription, we will send you
-                      a refund of the unexpired part of your subscription.
-                    </p>
-                    <p>
-                      <strong>Cancel any time you want.</strong>
-                      There is no set time on your agreement so you can stop
-                      your subscription anytime
-                    </p>
-                  </Text>
-                </div>
-              </Rows>
-              <DirectDebitPopUpForm
-                onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
-                  props.onPaymentAuthorised(pa);
-                }}
-              />
-            </FormSection>
+            <PaymentMethodSelector
+              countrySupportsDirectDebit={props.countrySupportsDirectDebit}
+              paymentMethod={props.paymentMethod}
+              setPaymentMethod={props.setPaymentMethod}
+            />
             <FormSection>
               {errorState}
-              {props.paymentMethod === 'PayPal' ? (
+              <div
+                id="component-paypal-button-checkout"
+                className={hiddenIf(props.paymentMethod !== 'PayPal', 'component-paypal-button-checkout')}
+              >
                 <PayPalExpressButton
                   onPaymentAuthorisation={props.onPaymentAuthorised}
                   csrf={props.csrf}
@@ -369,12 +334,17 @@ function CheckoutForm(props: PropTypes) {
                   amount={props.amount}
                   billingPeriod={props.billingPeriod}
                 />
-              ) : (
-                <Button aria-label={null} type="submit">Continue to payment</Button>
-              )}
+              </div>
+              <Button
+                aria-label={null}
+                type="submit"
+                modifierClasses={props.paymentMethod === 'PayPal' ? ['hidden'] : []}
+              >
+                Continue to payment
+              </Button>
             </FormSection>
           </Form>
-        </Checkout>
+        </Layout>
       </Outset>
     </Content>
   );
