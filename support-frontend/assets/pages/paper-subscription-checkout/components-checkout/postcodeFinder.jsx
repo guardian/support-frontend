@@ -14,13 +14,12 @@ import { type Address } from '../helpers/postcodeFinder';
 
 import styles from './postcodeFinder.module.scss';
 
-
 type PropTypes = {|
-  ...PostcodeFinderState,
-  ...PostcodeFinderActionCreators,
   onPostcodeUpdate: (string) => void,
   onAddressUpdate: (Address) => void,
-  id: string
+  id: string,
+  ...PostcodeFinderState,
+  ...PostcodeFinderActionCreators,
 |};
 
 const InputWithButton = ({ onClick, isLoading, ...props }) => (

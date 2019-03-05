@@ -1,14 +1,13 @@
 // @flow
 import { connect } from 'react-redux';
-import { postcodeFinders, type PostcodeFinders } from '../helpers/postcodeFinders';
+import { type Addresses } from '../helpers/addresses';
 import PostcodeFinder from './postcodeFinder';
 import { type State } from '../paperSubscriptionCheckoutReducer';
+import { type PostcodeFinderState, postcodeFinderActionCreatorsFor } from './postcodeFinderStore';
 
-const postcodeFinderFor = (scope: PostcodeFinders) => connect(
-  (state: State) => ({
-    ...state.page[`${scope}PostcodeFinder`],
-  }),
-  postcodeFinders.billing.actionCreators,
+const postcodeFinderFor = (scope: Addresses, traverseState: State => PostcodeFinderState) => connect(
+  traverseState,
+  postcodeFinderActionCreatorsFor(scope),
 )(PostcodeFinder);
 
 export default postcodeFinderFor;

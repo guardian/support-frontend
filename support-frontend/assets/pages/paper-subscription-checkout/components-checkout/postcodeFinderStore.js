@@ -102,10 +102,5 @@ const postcodeFinderReducerFor = (scope: Scope) => (
 
 };
 
-const postcodeFinderStoreFor = (scope: Scope) => ({
-  reducer: postcodeFinderReducerFor(scope),
-  actionCreators: postcodeFinderActionCreatorsFor(scope),
-});
-
-export { postcodeFinderStoreFor };
+export { postcodeFinderReducerFor, postcodeFinderActionCreatorsFor };
 

@@ -27,13 +27,16 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const {
     firstName,
     lastName,
-    billingAddressLine1,
-    billingAddressLine2,
-    billingTownCity,
-    billingPostcode,
     email,
     telephone,
   } = state.page.checkout;
+
+  const {
+    lineOne,
+    lineTwo,
+    city,
+    postCode,
+  } = state.page.billingAddress.address;
 
   const product = {
     currency: currencyId,
@@ -45,20 +48,20 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 
   const billingAddress = {
-    lineOne: billingAddressLine1,
-    lineTwo: billingAddressLine2,
-    city: billingTownCity,
+    lineOne,
+    lineTwo,
+    city,
     state: null,
-    postCode: billingPostcode,
+    postCode,
     country: countryId,
   };
 
   const deliveryAddress = {
-    lineOne: billingAddressLine1,
-    lineTwo: billingAddressLine2,
-    city: billingTownCity,
+    lineOne,
+    lineTwo,
+    city,
     state: null,
-    postCode: billingPostcode,
+    postCode,
     country: countryId,
   };
 

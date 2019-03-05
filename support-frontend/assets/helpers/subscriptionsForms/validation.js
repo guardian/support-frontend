@@ -17,7 +17,7 @@ export type FormError<FormField> = {
 
 // ----- Rules ----- //
 
-const nonEmptyString: string => boolean = s => s.trim() !== '';
+const nonEmptyString: ?string => boolean = s => (s || '').trim() !== '';
 
 function notNull<A>(value: A): boolean {
   return value !== null;
