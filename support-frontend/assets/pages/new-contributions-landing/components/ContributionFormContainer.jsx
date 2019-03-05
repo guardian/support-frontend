@@ -120,6 +120,7 @@ const defaultCountryGroupSpecificDetails = {
   AUDCountries: {
     ...defaultHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
+    formMessage: 'Make a contribution',
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
@@ -133,6 +134,7 @@ const helpVariantCountryGroupSpecificDetails = {
   AUDCountries: {
     ...helpVariantHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
+    formMessage: 'Make a contribution',
   },
   International: helpVariantHeaderCopyAndContributeCopy,
   NZDCountries: helpVariantHeaderCopyAndContributeCopy,
@@ -145,6 +147,8 @@ export type CountryMetaData = {
   headerClasses?: string,
   // URL to fetch ticker data from. null/undefined implies no ticker
   tickerJsonUrl?: string,
+  // Optional message to display at the top of the form
+  formMessage?: string,
 };
 
 const countryGroupSpecificDetails: (variant: LandingPageCopyTestVariant) => {
@@ -191,6 +195,7 @@ function ContributionFormContainer(props: PropTypes) {
         <div className="gu-content__form">
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}
+            message={countryGroupDetails.formMessage}
           />
         </div>
         <DirectDebitPopUpForm
