@@ -367,6 +367,7 @@ footer[role="contentinfo"] a {
   border-style: none solid;
   border-width: 0 1px;
   border-bottom: 1px solid gu-colour(neutral-86);
+  border-top: 1px solid gu-colour(neutral-86);
   background-color: gu-colour(neutral-100);
 
   @include mq($from: tablet) {
@@ -579,7 +580,6 @@ form {
 }
 
 .form__radio-group--tabs .form__radio-group-item {
-  border-top: 1px solid gu-colour(neutral-86);
   flex: 1;
 }
 

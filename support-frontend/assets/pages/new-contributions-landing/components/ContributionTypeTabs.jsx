@@ -55,11 +55,17 @@ const mapDispatchToProps = (dispatch: Function) => ({
 // ----- Render ----- //
 
 function ContributionTypeTabs(props: PropTypes) {
+  const contributionTypes = getValidContributionTypes(props.dropMonthlyVariant);
+
+  if (contributionTypes.length === 1 && contributionTypes[0] === 'ONE_OFF') {
+    return (null);
+  }
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
-        {getValidContributionTypes(props.dropMonthlyVariant).map((contributionType: ContributionType) => (
+        {contributionTypes.map((contributionType: ContributionType) => (
           <li className="form__radio-group-item">
             <input
               id={`contributionType-${contributionType}`}
