@@ -42,7 +42,7 @@ $progess-bar-height: 10px;
   font-family: $gu-titlepiece;
   font-size: 32px;
   font-weight: 800;
-  color: gu-colour(opinion-bright);
+  //color: gu-colour(opinion-bright);
 }
 
 .contributions-landing-ticker__goal {
@@ -70,7 +70,7 @@ $progess-bar-height: 10px;
 }
 
 .contributions-landing-ticker__filled-progress {
-  background-color: gu-colour(opinion-bright);
+  background-color: gu-colour(highlight-main);
   position: absolute;
   top: 0;
   left: 0;
