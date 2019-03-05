@@ -1,3 +1,3 @@
 // @flow
 
-export type Addresses = 'billing' | 'delivery';
+export type Address = 'billing' | 'delivery';

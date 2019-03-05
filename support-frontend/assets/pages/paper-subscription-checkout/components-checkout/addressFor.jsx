@@ -16,7 +16,7 @@ import { asControlled } from 'hocs/asControlled';
 
 import postcodeFinderFor from './postcodeFinderFor';
 import { type PostcodeFinderState } from './postcodeFinderStore';
-import { type Addresses } from '../helpers/addresses';
+import { type Address } from '../helpers/addresses';
 import { type State as PageState } from '../paperSubscriptionCheckoutReducer';
 
 import { type FormField, getFormFields, type FormFields, type AddressActionCreators, type AddressState, addressActionCreatorsFor } from './addressStore';
@@ -24,7 +24,7 @@ import { type FormField, getFormFields, type FormFields, type AddressActionCreat
 type PropTypes = {
   ...AddressActionCreators,
   ...FormFields,
-  scope: Addresses,
+  scope: Address,
   traverseState: PageState => AddressState,
   formErrors: FormError<FormField>[],
 }
@@ -47,7 +47,7 @@ class AddressFor extends Component<PropTypes> {
       this.ScopedPostcodeFinder = postcodeFinderFor(scope, state => traverseState(state).postcode);
     }
   }
-  ScopedPostcodeFinder: ?$Call<typeof postcodeFinderFor, Addresses, () => PostcodeFinderState>;
+  ScopedPostcodeFinder: ?$Call<typeof postcodeFinderFor, Address, () => PostcodeFinderState>;
 
   render() {
     const { scope, traverseState, ...props } = this.props;
@@ -113,7 +113,7 @@ class AddressFor extends Component<PropTypes> {
   }
 }
 
-export default (scope: Addresses, traverseState: PageState => AddressState) =>
+export default (scope: Address, traverseState: PageState => AddressState) =>
   connect(
     (state: PageState) => ({
       ...getFormFields(traverseState(state).address),

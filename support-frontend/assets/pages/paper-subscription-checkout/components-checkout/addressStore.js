@@ -8,7 +8,7 @@ import { fromString, type IsoCountry } from 'helpers/internationalisation/countr
 import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { type RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { type Addresses } from '../helpers/addresses';
+import { type Address } from '../helpers/addresses';
 import { postcodeFinderReducerFor, type PostcodeFinderState } from './postcodeFinderStore';
 
 
@@ -57,7 +57,7 @@ function getFormFields(state: AddressFormState): FormFields {
 
 // ----- Functions ----- //
 
-const setFormErrorsFor = (scope: Addresses) => (errors: Array<FormError<FormField>>): AddressAction => ({
+const setFormErrorsFor = (scope: Address) => (errors: Array<FormError<FormField>>): AddressAction => ({
   scope,
   type: 'SET_ADDRESS_FORM_ERRORS',
   errors,
@@ -83,7 +83,7 @@ const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
 
 // ----- Action Creators ----- //
 
-const addressActionCreatorsFor = (scope: Addresses) => ({
+const addressActionCreatorsFor = (scope: Address) => ({
   setCountry: (countryRaw: string) => (dispatch: Dispatch<AddressAction | CommonAction>) => {
     const country = fromString(countryRaw);
     if (country) {
@@ -117,11 +117,11 @@ const addressActionCreatorsFor = (scope: Addresses) => ({
   }),
 });
 
-export type AddressActionCreators = $Call<typeof addressActionCreatorsFor, Addresses>;
+export type AddressActionCreators = $Call<typeof addressActionCreatorsFor, Address>;
 
 // ----- Reducer ----- //
 
-function addressReducerFor(scope: Addresses, initialCountry: IsoCountry) {
+function addressReducerFor(scope: Address, initialCountry: IsoCountry) {
 
   const initialState = {
     country: initialCountry,
