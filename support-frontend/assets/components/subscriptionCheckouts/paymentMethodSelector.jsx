@@ -9,6 +9,7 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import Text from 'components/text/text';
 import Rows from 'components/base/rows';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import { getQueryParameter } from 'helpers/url';
 
 type PropTypes = {|
   countrySupportsDirectDebit: boolean,
@@ -18,9 +19,13 @@ type PropTypes = {|
 |}
 
 function PaymentMethodSelector(props: PropTypes) {
+  const payPalEnabled = getQueryParameter('payPal') === 'true';
+  const multiplePaymentMethodsEnabled = payPalEnabled || props.countrySupportsDirectDebit;
+
   return (
-    <FormSection title="How would you like to pay?">
+    <FormSection title={multiplePaymentMethodsEnabled ? 'How would you like to pay?' : null}>
       <Rows gap="large">
+        {multiplePaymentMethodsEnabled &&
         <div>
           <Fieldset legend="How would you like to pay?">
             {props.countrySupportsDirectDebit &&
@@ -36,14 +41,16 @@ function PaymentMethodSelector(props: PropTypes) {
               checked={props.paymentMethod === 'Stripe'}
               onChange={() => props.setPaymentMethod('Stripe')}
             />
+            {payPalEnabled &&
             <RadioInput
               text="PayPal"
               name="paymentMethod"
               checked={props.paymentMethod === 'PayPal'}
               onChange={() => props.setPaymentMethod('PayPal')}
-            />
+            />}
           </Fieldset>
         </div>
+        }
         <div>
           <Text>
             <p>

@@ -63,7 +63,7 @@ function SubscriptionSubmitButtons(props: PropTypes) {
         Continue to payment
       </Button>
     </div>
-  )
+  );
 }
 
 export { SubscriptionSubmitButtons };
