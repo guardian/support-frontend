@@ -58,6 +58,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     email,
     telephoneNumber: telephone,
     product,
+    firstDeliveryDate: null,
     paymentFields,
     ophanIds: getOphanIds(),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
@@ -84,7 +85,7 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
 
   dispatch(setFormSubmitted(true));
   postRegularPaymentRequest(
-    routes.digitalSubscriptionCreate,
+    routes.subscriptionCreate,
     data,
     state.common.abParticipations,
     state.page.csrf,

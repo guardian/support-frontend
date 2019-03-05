@@ -25,7 +25,7 @@ const routes: {
   payPalCreateAgreement: '/paypal/create-agreement',
   directDebitCheckAccount: '/direct-debit/check-account',
   payPalRestReturnURL: '/paypal/rest/return',
-  digitalSubscriptionCreate: '/subscribe/create',
+  subscriptionCreate: '/subscribe/create',
   showcase: '/support',
   subscriptionsLanding: '/subscribe',
   digitalSubscriptionLanding: '/subscribe/digital',
