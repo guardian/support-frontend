@@ -2,6 +2,7 @@
 
 .component-product-page-hero {
   overflow: hidden;
+
   .component-left-margin-section__content {
     position: relative;
     @include mq($from: tablet) {
@@ -13,7 +14,22 @@
     z-index: 10;
     position: relative;
   }
+
+  // todo
+  // look at height here
+  &:not(.component-product-page-hero--campaign) {
+    position: relative;
+    min-height: 300px;
+    height: 37.5vw;
+    max-height: 580px;
+    .component-left-margin-section {
+      height: 100%;
+    }
+  }
 }
+
+// todo
+// component-product-page-hero--weekly .component-grid-picture
 
 .component-product-page-hero--feature {
   border-top: 1px solid gu-colour(brand-pastel);
@@ -50,7 +66,7 @@
 }
 
 .component-product-page-hero-content {
-  border-top: 1px solid #ffffff;
+  border-top: 1px solid rgba(#fff, 0.5);
   padding: $gu-v-spacing  ($gu-h-spacing / 2);
   background: gu-colour(neutral-7);
   color: #ffffff;
