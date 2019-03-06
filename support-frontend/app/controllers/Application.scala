@@ -114,7 +114,7 @@ class Application(
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
     (implicit request: RequestHeader, settings: AllSettings) = {
 
-    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, Stages.CODE)_
+    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
     val css = elementForStage(RefPath("newContributionsLandingPageStyles.css"))
 
     val js = elementForStage(RefPath("newContributionsLandingPage.js"))
