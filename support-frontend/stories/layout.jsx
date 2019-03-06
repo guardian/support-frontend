@@ -93,28 +93,3 @@ stories.add('Hero (campaign)', () => (
     <div />
   </ProductPageHero>
 ));
-
-// stories.add('Hero (custom)', () => (
-//   <div>
-//     <HeroWrapper
-//       appearance="feature"
-//     >
-//       <div style={{ height: '50px' }} />
-//       <HeadingBlock>Hero exports smaller components you can remix and reuse</HeadingBlock>
-//     </HeroWrapper>
-//     <HeroWrapper >
-//       <div style={{ height: '50px' }} />
-//       <HeadingBlock>So you can use different headings</HeadingBlock>
-//     </HeroWrapper>
-//     <HeroHanger>And hangers</HeroHanger>
-//     <HeroWrapper >
-//       <div style={{ padding: '50px 10px' }}>
-//         <Text>
-//           <LargeParagraph>
-//            or just wing it and not even use a heading!
-//           </LargeParagraph>
-//         </Text>
-//       </div>
-//     </HeroWrapper>
-//   </div>
-// ));
