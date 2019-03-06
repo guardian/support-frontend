@@ -2,6 +2,9 @@
 
 .component-product-page-hero {
   overflow: hidden;
+  position: relative;
+  min-height: 300px;
+  height: 37.5vw;
 
   .component-left-margin-section__content {
     position: relative;
@@ -14,17 +17,11 @@
     z-index: 10;
     position: relative;
   }
-
-  // todo
-  // look at height here
+  .component-left-margin-section {
+    height: 100%;
+  }
   &:not(.component-product-page-hero--campaign) {
-    position: relative;
-    min-height: 300px;
-    height: 37.5vw;
-    max-height: 580px;
-    .component-left-margin-section {
-      height: 100%;
-    }
+    max-height: 550px;
   }
 }
 
@@ -52,7 +49,15 @@
   }
 }
 
+.component-product-page-hero--campaign {
+  background-color: gu-colour(green-dark);
+  .component-left-margin-section__content {
+    border-left-color: transparent;
+  }
+}
+
 .component-product-page-hero-hanger {
+  position: relative;
   background: gu-colour(neutral-100);
   .component-left-margin-section__content {
     @include mq($from: tablet) {
