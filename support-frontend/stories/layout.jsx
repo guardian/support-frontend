@@ -76,6 +76,7 @@ stories.add('Hero', () => (
     heading="This is a default banner lemon drizzle waffle confit"
     appearance="feature"
     content="Hero blocks showcase a product and really help set the mood of a page. They work great right under the header!"
+    hasCampaign={false}
   >
     <div />
   </ProductPageHero>
