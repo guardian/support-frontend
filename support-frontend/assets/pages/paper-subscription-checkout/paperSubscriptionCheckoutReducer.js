@@ -33,10 +33,10 @@ import {
   getFormFields as getAddressFormFields,
   getFormErrors as getAddressFormErrors,
   setFormErrorsFor as setAddressFormErrorsFor,
-  type AddressState,
-  type AddressAction,
+  type Action as AddressAction,
+  type State as AddressState,
   type FormField as AddressFormField,
-} from './components-checkout/addressStore';
+} from './components-checkout/addressFieldsStore';
 
 // ----- Types ----- //
 
@@ -115,6 +115,9 @@ function getEmail(state: State): string {
   return state.page.checkout.email;
 }
 
+const getDeliveryAddress = (state: State): AddressState => state.page.deliveryAddress;
+const getBillingAddress = (state: State): AddressState => state.page.deliveryAddress;
+
 // ----- Functions ----- //
 
 function getErrors(fields: FormFields): FormError<FormField>[] {
@@ -158,11 +161,11 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
       dispatcher: setFormErrors,
     }: Error<FormField>),
     ({
-      errors: getAddressFormErrors(getAddressFormFields(state.page.deliveryAddress.address)),
+      errors: getAddressFormErrors(getAddressFormFields(getDeliveryAddress(state))),
       dispatcher: setAddressFormErrorsFor('delivery'),
     }: Error<AddressFormField>),
     ({
-      errors: getAddressFormErrors(getAddressFormFields(state.page.billingAddress.address)),
+      errors: getAddressFormErrors(getAddressFormFields(getBillingAddress(state))),
       dispatcher: setAddressFormErrorsFor('billing'),
     }: Error<AddressFormField>),
   ].filter(({ errors }) => errors.length > 0);
@@ -296,6 +299,8 @@ export {
   setFormErrors,
   getFormFields,
   getEmail,
+  getDeliveryAddress,
+  getBillingAddress,
   setSubmissionError,
   setFormSubmitted,
   signOut,

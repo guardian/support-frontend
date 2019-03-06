@@ -41,10 +41,11 @@ import {
   type FormField,
   type FormFields,
   getFormFields,
+  getDeliveryAddress,
+  getBillingAddress,
   type State,
 } from '../paperSubscriptionCheckoutReducer';
-import addressFor from './addressFor';
-
+import { withStore } from './addressFields';
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -76,8 +77,8 @@ const InputWithError = withError(InputWithLabel);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
-const DeliveryAddress = addressFor('delivery', state => state.page.deliveryAddress);
-const BillingAddress = addressFor('billing', state => state.page.billingAddress);
+const DeliveryAddress = withStore('delivery', getDeliveryAddress);
+const BillingAddress = withStore('billing', getBillingAddress);
 
 // ----- Component ----- //
 

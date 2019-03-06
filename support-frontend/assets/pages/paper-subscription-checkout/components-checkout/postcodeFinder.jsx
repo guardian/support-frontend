@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import Button from 'components/button/button';
@@ -9,19 +10,25 @@ import { asControlled } from 'hocs/asControlled';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 
-import { type PostcodeFinderState, type PostcodeFinderActionCreators } from './postcodeFinderStore';
-import { type Address } from '../helpers/postcodeFinder';
+import { type PostcodeFinderState, type PostcodeFinderActionCreators, postcodeFinderActionCreatorsFor } from './postcodeFinderStore';
+import { type Address } from '../helpers/addresses';
+import { type PostcodeFinderResult } from '../helpers/postcodeFinder';
 
 import styles from './postcodeFinder.module.scss';
 
+
+// Types
+
 type PropTypes = {|
-  onPostcodeUpdate: (string) => void,
-  onAddressUpdate: (Address) => void,
+  onPostcodeUpdate: (string) => any,
+  onAddressUpdate: (PostcodeFinderResult) => any,
   id: string,
   ...PostcodeFinderState,
   ...PostcodeFinderActionCreators,
 |};
 
+
+// Helpers
 const InputWithButton = ({ onClick, isLoading, ...props }) => (
   <div className={styles.root}>
     <Input
@@ -52,7 +59,10 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
 const ComposedInputWithButton = compose(withLabel, asControlled, withError)(InputWithButton);
 const ComposedSelect = compose(withLabel)(Select);
 
-export default class PostcodeFinder extends Component<PropTypes> {
+
+// Main class
+
+class PostcodeFinder extends Component<PropTypes> {
   componentDidUpdate(prevProps: PropTypes) {
     if (this.selectRef && this.props.results.join() !== prevProps.results.join()) {
       this.selectRef.focus();
@@ -89,12 +99,19 @@ export default class PostcodeFinder extends Component<PropTypes> {
             label={`${results.length} addresses found`}
           >
             <option value={null}>Select an address</option>
-            {results.map((result, key) => (
-              <option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</option>
-          ))}
+              {results.map((result, key) => (
+                <option value={key}>{[result.lineOne, result.lineTwo].join(', ')}</option>
+              ))}
           </ComposedSelect>
         }
       </div>
     );
   }
 }
+
+export const withStore = <GlobalState>(scope: Address, traverseState: GlobalState => PostcodeFinderState) => connect(
+  traverseState,
+  postcodeFinderActionCreatorsFor(scope),
+)(PostcodeFinder);
+
+export default PostcodeFinder;

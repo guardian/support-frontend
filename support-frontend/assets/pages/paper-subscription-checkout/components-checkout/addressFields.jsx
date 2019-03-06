@@ -1,8 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
@@ -14,20 +14,30 @@ import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 
-import postcodeFinderFor from './postcodeFinderFor';
+import { withStore as postcodeFinderWithStore } from './postcodeFinder';
 import { type PostcodeFinderState } from './postcodeFinderStore';
 import { type Address } from '../helpers/addresses';
-import { type State as PageState } from '../paperSubscriptionCheckoutReducer';
 
-import { type FormField, getFormFields, type FormFields, type AddressActionCreators, type AddressState, addressActionCreatorsFor } from './addressStore';
+import { getPostcodeForm,
+  getFormFields,
+  getStateFormErrors,
+  addressActionCreatorsFor,
+  type FormField,
+  type FormFields,
+  type ActionCreators as AddressActionCreators,
+  type State as AddressState } from './addressFieldsStore';
 
-type PropTypes = {
-  ...AddressActionCreators,
+type StatePropTypes<GlobalState> = {|
   ...FormFields,
   scope: Address,
-  traverseState: PageState => AddressState,
+  traverseState: GlobalState => AddressState,
   formErrors: FormError<FormField>[],
-}
+|}
+
+type PropTypes<GlobalState> = {|
+  ...AddressActionCreators,
+  ...StatePropTypes<GlobalState>,
+|}
 
 const StaticInputWithLabel = withLabel(Input);
 const InputWithLabel = asControlled(StaticInputWithLabel);
@@ -35,31 +45,37 @@ const InputWithError = withError(InputWithLabel);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const SelectWithError = withError(SelectWithLabel);
 
-class AddressFor extends Component<PropTypes> {
-  constructor(props) {
+class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
+
+  constructor(props: PropTypes<GlobalState>) {
     super(props);
-    const { scope, traverseState } = props;
-    this.ScopedPostcodeFinder = postcodeFinderFor(scope, state => traverseState(state).postcode);
+    this.regeneratePostcodeFinder();
   }
-  componentDidUpdate(prevProps: PropTypes) {
-    const { scope, traverseState } = this.props;
-    if (prevProps.scope !== scope) {
-      this.ScopedPostcodeFinder = postcodeFinderFor(scope, state => traverseState(state).postcode);
+
+  componentDidUpdate(prevProps: PropTypes<GlobalState>) {
+    if (prevProps.scope !== this.props.scope) {
+      this.regeneratePostcodeFinder();
     }
   }
-  ScopedPostcodeFinder: ?$Call<typeof postcodeFinderFor, Address, () => PostcodeFinderState>;
+
+  regeneratePostcodeFinder() {
+    /*
+    this is done to prevent preact from rerendering the whole component on each keystroke sadface
+    */
+    const { scope, traverseState } = this.props;
+    this.ScopedPostcodeFinder = postcodeFinderWithStore(scope, state => getPostcodeForm(traverseState(state)));
+  }
+  ScopedPostcodeFinder: $Call<typeof postcodeFinderWithStore, Address, () => PostcodeFinderState>;
 
   render() {
-    const { scope, traverseState, ...props } = this.props;
+    const { scope, ...props } = this.props;
     const { ScopedPostcodeFinder } = this;
     return (
       <div>
         {ScopedPostcodeFinder &&
           <ScopedPostcodeFinder
             id={`${scope}-postcode`}
-            onPostcodeUpdate={(val) => {
-              props.setPostcode(val);
-            }}
+            onPostcodeUpdate={props.setPostcode}
             onAddressUpdate={({ lineOne, lineTwo, city }) => {
             if (lineOne) {
               props.setAddressLineOne(lineOne);
@@ -78,7 +94,7 @@ class AddressFor extends Component<PropTypes> {
           label="Address Line 1"
           type="text"
           value={props.lineOne}
-          setValue={val => props.setAddressLineOne(val)}
+          setValue={props.setAddressLineOne}
           error={firstError('lineOne', props.formErrors)}
         />
         <InputWithError
@@ -87,7 +103,7 @@ class AddressFor extends Component<PropTypes> {
           optional
           type="text"
           value={props.lineTwo}
-          setValue={val => props.setAddressLineTwo(val)}
+          setValue={props.setAddressLineTwo}
           error={firstError('lineTwo', props.formErrors)}
         />
         <InputWithError
@@ -95,14 +111,14 @@ class AddressFor extends Component<PropTypes> {
           label="Town/City"
           type="text"
           value={props.city}
-          setValue={val => props.setTownCity(val)}
+          setValue={props.setTownCity}
           error={firstError('city', props.formErrors)}
         />
         <SelectWithError
           id={`${scope}-country`}
           label="Country"
           value={props.country}
-          setValue={val => props.setCountry(val)}
+          setValue={props.setCountry}
           error={firstError('country', props.formErrors)}
         >
           <option value="">--</option>
@@ -113,13 +129,15 @@ class AddressFor extends Component<PropTypes> {
   }
 }
 
-export default (scope: Address, traverseState: PageState => AddressState) =>
-  connect(
-    (state: PageState) => ({
-      ...getFormFields(traverseState(state).address),
-      formErrors: traverseState(state).address.formErrors,
-      traverseState,
-      scope,
-    }),
-    addressActionCreatorsFor(scope),
-  )(AddressFor);
+export const withStore = <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
+  (state: GlobalState) => ({
+    ...getFormFields(traverseState(state)),
+    formErrors: getStateFormErrors(traverseState(state)),
+    traverseState,
+    scope,
+  }),
+  addressActionCreatorsFor(scope),
+)(AddressFields);
+
+
+export default AddressFields;
