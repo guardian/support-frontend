@@ -22,7 +22,8 @@ type PropTypes = {|
   ...WrapperPropTypes,
   overheading: string,
   heading: string,
-  content?: Option<Node>
+  content?: Option<Node>,
+  hasCampaign: boolean
 |};
 
 // ----- Render ----- //
