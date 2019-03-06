@@ -19,6 +19,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
+
     @for(Preload(href, as, typeAttr) <- preload) {
       <link rel="preload" href="@href" as="@as" type="@typeAttr" crossorigin>
     }
@@ -62,6 +63,12 @@
       </style>
     }
 
+      <style>
+        .guardianFontLoader {
+          display: none;
+        }
+      </style>
+
     @mainStyleBundle.fold(linkedCss, inline)
 
     <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
@@ -83,11 +90,50 @@
 	</script>
 
     <script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
-
+    <link rel="preload" href="https://f9e0f622.ngrok.io/font-loader" as="document">
     <link rel="preload"  as="script" href="@assets(mainJsBundle)">
 
     </head>
   <body class="header-tweaks">
+    <script>
+      (function(window, document) {
+      console.log("start");
+      console.time("here");
+      var head = document.getElementsByTagName('head')[0];
+      var useFont = function(font) {
+        if (font.css) {
+          var style = document.createElement('style');
+          style.innerHTML = font.css;
+          head.appendChild(style);
+        }
+      };
+
+      var loadFonts = function() {
+          console.log("loadFonts")
+          var iframe = document.createElement('iframe');
+          iframe.src = 'https://f9e0f622.ngrok.io/font-loader';
+          iframe.classList = 'guardianFontLoader';
+          // add iframe and wait for message
+          window.addEventListener('message', function(e) {
+          if (
+            e &&
+            e.data &&
+            e.data.name &&
+            e.data.name === 'guardianFonts' &&
+            e.data.fonts &&
+            e.source === iframe.contentWindow
+          ) {
+            console.log(e);
+            console.log("end")
+            console.timeEnd("here");
+            e.data.fonts.forEach(useFont);
+          }
+          });
+          document.body.appendChild(iframe);
+       };
+       loadFonts();
+       })(window, document);
+    </script>
     <noscript>
       <div style="text-align: center;
         font-size: 30px;
@@ -117,10 +163,14 @@
 	</script>
 
     @body
-
+    <script type="text/javascript">
+      console.log("end")
+      console.log(document.body)
+	  </script>
     @* This script is intentionally at the bottom of the file. Please check
     all the critical flows work correctly if you change its position *@
     <script type="text/javascript" src="@assets(mainJsBundle)"></script>
       <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
+
   </body>
 </html>

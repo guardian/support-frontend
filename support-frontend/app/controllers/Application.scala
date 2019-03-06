@@ -116,9 +116,11 @@ class Application(
 
     val css = CSSElementForStage(assets.getFileContentsAsHtml, stage, RefPath("newContributionsLandingPageStyles.css"))
 
-    val preload = List("GuardianTextSans-Regular", "GuardianTextSans-Medium", "GHGuardianHeadline-Bold").map { name =>
-      Preload(s"//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/$name.woff2", "font", "font/woff2")
-    }
+    val preload = List.empty
+
+//      List("GuardianTextSans-Regular", "GuardianTextSans-Medium", "GHGuardianHeadline-Bold").map { name =>
+//      Preload(s"//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/$name.woff2", "font", "font/woff2")
+//    }
 
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
