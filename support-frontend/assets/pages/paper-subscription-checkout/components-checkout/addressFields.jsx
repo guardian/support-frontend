@@ -72,23 +72,21 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
     const { ScopedPostcodeFinder } = this;
     return (
       <div>
-        {ScopedPostcodeFinder &&
-          <ScopedPostcodeFinder
-            id={`${scope}-postcode`}
-            onPostcodeUpdate={props.setPostcode}
-            onAddressUpdate={({ lineOne, lineTwo, city }) => {
-            if (lineOne) {
-              props.setAddressLineOne(lineOne);
-            }
-            if (lineTwo) {
-              props.setAddressLineTwo(lineTwo);
-            }
-            if (city) {
-              props.setTownCity(city);
-            }
-          }}
-          />
-        }
+        <ScopedPostcodeFinder
+          id={`${scope}-postcode`}
+          onPostcodeUpdate={props.setPostcode}
+          onAddressUpdate={({ lineOne, lineTwo, city }) => {
+          if (lineOne) {
+            props.setAddressLineOne(lineOne);
+          }
+          if (lineTwo) {
+            props.setAddressLineTwo(lineTwo);
+          }
+          if (city) {
+            props.setTownCity(city);
+          }
+        }}
+        />
         <InputWithError
           id={`${scope}-lineOne`}
           label="Address Line 1"
