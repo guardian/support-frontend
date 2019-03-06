@@ -5,7 +5,6 @@
   position: relative;
   min-height: 300px;
   height: 37.5vw;
-
   .component-left-margin-section__content {
     position: relative;
     @include mq($from: tablet) {
@@ -23,10 +22,11 @@
   &:not(.component-product-page-hero--campaign) {
     max-height: 600px;
   }
+  .component-grid-picture,
+  .component-grid-picture__image {
+    height: 100%;
+  }
 }
-
-// todo
-// component-product-page-hero--weekly .component-grid-picture
 
 .component-product-page-hero--feature {
   border-top: 1px solid gu-colour(brand-pastel);
