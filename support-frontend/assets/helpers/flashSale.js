@@ -57,156 +57,10 @@ type Sale = {
 // Days are 1 based, months are 0 based
 const Sales: Sale[] = [
   {
-    subscriptionProduct: 'Paper',
-    activeRegions: [GBPCountries],
-    startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
-    endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
-    duration: '12 months',
-    saleDetails: {
-      GBPCountries: {
-        promoCode: 'GCB80X',
-        intcmp: '',
-        price: 8.09,
-        discountPercentage: 0.25,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Paper subscriptions',
-            subHeading: 'Save up to 52% on your newspaper',
-            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save an additional 25% for a year.',
-          },
-          landingPage: {
-            heading: 'The Guardian newspaper subscriptions',
-            subHeading: 'Subscribe and save on the joy of print',
-            standfirst: 'We offer two different subscription types: voucher booklet and home delivery.',
-          },
-          bundle: {
-            heading: 'Paper',
-            subHeading: 'From £8.09/month',
-            description: 'Save an additional 25% for the first year of your subscription to The Guardian and The Observer',
-          },
-        },
-        planPrices: [
-          { collectionEveryday: 35.71 },
-          { collectionSixday: 30.84 },
-          { collectionWeekend: 15.57 },
-          { collectionSunday: 8.09 },
-          { deliveryEveryday: 47.09 },
-          { deliverySixday: 40.59 },
-          { deliveryWeekend: 18.82 },
-          { deliverySunday: 11.34 },
-        ],
-      },
-    },
-  },
-  {
-    subscriptionProduct: 'PaperAndDigital',
-    activeRegions: [GBPCountries],
-    startTime: new Date(2019, 0, 4).getTime(), // 4 Jan 2019
-    endTime: new Date(2019, 1, 4).getTime(), // 3 Feb 2019 (to finish at 0:00 in the morning)
-    saleDetails: {
-      GBPCountries: {
-        promoCode: 'GCB56X',
-        intcmp: '',
-        price: 16.22,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Paper subscriptions',
-            subHeading: 'Save up to 52% on your newspaper',
-            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save an additional 25% for a year.',
-          },
-          landingPage: {
-            heading: 'The Guardian newspaper subscriptions',
-            subHeading: 'Subscribe and save up to 52% off the retail price of your newspaper',
-            standfirst: 'Subscribers already save up to 37% off the retail price. With this limited time offer, you\'ll enjoy and additional 25% off for the first year of your subscription. We offer two different subscription types: voucher booklets and home delivery.',
-          },
-          bundle: {
-            heading: 'Paper+Digital',
-            subHeading: 'From £16.22/month',
-            description: 'The Paper + Digital subscription includes all the benefits of a paper subscription, plus access to the Digital Pack. Save 25% for your first year.',
-          },
-        },
-        planPrices: [],
-      },
-    },
-  },
-  {
-    subscriptionProduct: 'Paper',
-    activeRegions: [GBPCountries],
-    startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
-    endTime: new Date(2019, 1, 18).getTime(), // 17 Feb 2019 (to finish at 0:00 in the morning)
-    duration: '3 months',
-    saleDetails: {
-      GBPCountries: {
-        promoCode: 'GCC80X',
-        intcmp: '',
-        price: 5.40,
-        discountPercentage: 0.50,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Paper subscriptions',
-            subHeading: 'Save up to 68% on your newspaper',
-            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save an additional 50% for your first three months.',
-          },
-          landingPage: {
-            heading: 'The Guardian newspaper subscriptions',
-            subHeading: 'Subscribe and save on the joy of print',
-            standfirst: 'We offer two different subscription types: voucher booklets and home delivery.',
-          },
-          bundle: {
-            heading: 'Paper',
-            subHeading: 'From £5.40/month',
-            description: 'Save an additional 50% for the first three months of your subscription to The Guardian and The Observer',
-          },
-        },
-        planPrices: [
-          { collectionEveryday: 23.81 },
-          { collectionSixday: 20.56 },
-          { collectionWeekend: 10.38 },
-          { collectionSunday: 5.40 },
-          { deliveryEveryday: 31.40 },
-          { deliverySixday: 27.06 },
-          { deliveryWeekend: 12.55 },
-          { deliverySunday: 7.56 },
-        ],
-      },
-    },
-  },
-  {
-    subscriptionProduct: 'PaperAndDigital',
-    activeRegions: [GBPCountries],
-    startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
-    endTime: new Date(2019, 1, 18).getTime(), // 17 Feb 2019 (to finish at 0:00 in the morning)
-    saleDetails: {
-      GBPCountries: {
-        promoCode: 'GCC56X',
-        intcmp: '',
-        price: 11.03,
-        saleCopy: {
-          featuredProduct: {
-            heading: 'Paper subscriptions',
-            subHeading: 'Save up to 68% on your newspaper',
-            description: 'Find analysis, opinions, reviews, recipes and more with a subscription to The Guardian and The Observer. Subscribe now and save an additional 50% for your first three months.',
-          },
-          landingPage: {
-            heading: 'The Guardian newspaper subscriptions',
-            subHeading: 'Subscribe and save up to 68% off the retail price of your newspaper',
-            standfirst: 'Subscribers already save up to 37% off the retail price. With this limited time offer, you\'ll enjoy and additional 50% off for the first three months of your subscription. We offer two different subscription types: voucher booklets and home delivery.',
-          },
-          bundle: {
-            heading: 'Paper+Digital',
-            subHeading: 'From £16.22/month',
-            description: 'The Paper + Digital subscription includes all the benefits of a paper subscription, plus access to the Digital Pack. Save 50% for your first three months.',
-          },
-        },
-        planPrices: [],
-      },
-    },
-  },
-  {
     subscriptionProduct: 'DigitalPack',
     activeRegions: [UnitedStates, AUDCountries, International, EURCountries, Canada, NZDCountries],
     startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
-    endTime: new Date(2019, 3, 1).getTime(), // 31 Mar 2019
+    endTime: new Date(2019, 2, 18).getTime(), // 31 Mar 2019
     saleDetails: {
       UnitedStates: {
         promoCode: 'DDPFMINT80',
@@ -365,7 +219,7 @@ const Sales: Sale[] = [
     subscriptionProduct: 'DigitalPack',
     activeRegions: [GBPCountries],
     startTime: new Date(2019, 1, 18).getTime(), // 18 Feb 2019
-    endTime: new Date(2019, 3, 1).getTime(), // 31 Mar 2019
+    endTime: new Date(2019, 2, 18).getTime(), // 31 Mar 2019
     saleDetails: {
       GBPCountries: {
         promoCode: 'DDPFM80X',
