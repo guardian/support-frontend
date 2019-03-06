@@ -292,7 +292,6 @@ object JsonFixtures {
             }
         """
 
-  val firstDeliveryDate = "2019-04-01"
   val createEverydayPaperSubscriptionJson =
     s"""
           {

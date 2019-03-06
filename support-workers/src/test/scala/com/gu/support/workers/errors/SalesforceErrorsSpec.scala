@@ -23,28 +23,29 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     }
   }
 
+  val upsertData = UpsertData.create(
+    idId,
+    emailAddress,
+    name,
+    name,
+    None,
+    None,
+    None,
+    None,
+    us,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    allowMail,
+    allowMail,
+    allowMail
+  )
+
   it should "throw a SalesforceAuthenticationErrorResponse if the authentication fails" in {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
-    val upsertData = UpsertData.create(
-      idId,
-      emailAddress,
-      name,
-      name,
-      None,
-      None,
-      None,
-      None,
-      us,
-      None,
-      None,
-      None,
-      None,
-      None,
-      None,
-      allowMail,
-      allowMail,
-      allowMail
-    )
 
     val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
 
@@ -59,27 +60,6 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
       override def addAuthenticationToRequest(auth: Authentication, req: Request.Builder): Request.Builder =
         req.url(s"${auth.instance_url}/$upsertEndpoint") //We still need to set the base url
     }
-
-    val upsertData = UpsertData.create(
-      idId,
-      emailAddress,
-      name,
-      name,
-      None,
-      None,
-      None,
-      None,
-      us,
-      None,
-      None,
-      None,
-      None,
-      None,
-      None,
-      allowMail,
-      allowMail,
-      allowMail
-    )
 
     recoverToSucceededIf[SalesforceErrorResponse] {
       service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
