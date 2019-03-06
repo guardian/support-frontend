@@ -64,7 +64,9 @@ const Footer = () => (
 );
 
 const Heading = () => (
-  <HeroHeading>
+  <HeroHeading
+    hasCampaign="false"
+  >
     <HeadingBlock overheading="The Guardian newspaper subscriptions">{getHeading()}</HeadingBlock>
   </HeroHeading>
 );
