@@ -120,7 +120,6 @@ const defaultCountryGroupSpecificDetails = {
   AUDCountries: {
     ...defaultHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
-    formMessage: (<div><h1>Make a contribution</h1>pls</div>),
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
@@ -134,7 +133,6 @@ const helpVariantCountryGroupSpecificDetails = {
   AUDCountries: {
     ...helpVariantHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
-    formMessage: (<div><h1>Make a contribution</h1>pls</div>),
   },
   International: helpVariantHeaderCopyAndContributeCopy,
   NZDCountries: helpVariantHeaderCopyAndContributeCopy,
