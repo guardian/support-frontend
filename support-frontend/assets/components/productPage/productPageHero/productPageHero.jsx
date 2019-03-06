@@ -15,7 +15,7 @@ type WrapperPropTypes = {|
   children: Node,
   modifierClasses: Array<?string>,
   className: ?string,
-  appearance: 'grey' | 'feature' | 'custom',
+  appearance: 'grey' | 'feature' | 'custom' | 'campaign',
 |};
 
 type PropTypes = {|
