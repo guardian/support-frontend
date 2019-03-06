@@ -63,8 +63,8 @@ const Footer = () => (
   </HeroHanger>
 );
 
-const Heading = () =>  (
-  <HeroHeading> 
+const Heading = () => (
+  <HeroHeading>
     <HeadingBlock overheading="The Guardian newspaper subscriptions">{getHeading()}</HeadingBlock>
   </HeroHeading>
 );
