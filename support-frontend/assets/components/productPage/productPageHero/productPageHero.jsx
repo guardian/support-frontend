@@ -66,6 +66,19 @@ const HeroHeading = ({
   </div>
 );
 
+// const HeroHeading = ({
+//   children,
+//   heading,
+//   hasCampaign,
+//   ...props
+// }: {children:Node, heading:string, hasCampaign:boolean}) => (
+//   <div className={classNameWithModifiers('component-product-page-hero-heading', [hasCampaign ? 'campaign' : null])}>
+//     <LeftMarginSection>
+//       <HeadingBlock {...props}>{heading}</HeadingBlock>
+//     </LeftMarginSection>
+//   </div>
+// );
+
 const ProductPageHero = ({
   overheading, heading, content, modifierClasses, children, appearance, hasCampaign,
 }: PropTypes) => (
@@ -73,9 +86,7 @@ const ProductPageHero = ({
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
     </HeroWrapper>
-    <HeroHeading {...{ hasCampaign }}>
-      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
-    </HeroHeading>
+    <HeroHeading overheading={overheading} heading={heading} hasCampaign={hasCampaign} />
     {content &&
       <HeroHanger>{content}</HeroHanger>
     }
