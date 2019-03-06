@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Option } from 'helpers/types/option';
@@ -65,19 +64,6 @@ const HeroHeading = ({
     </LeftMarginSection>
   </div>
 );
-
-// const HeroHeading = ({
-//   children,
-//   heading,
-//   hasCampaign,
-//   ...props
-// }: {children:Node, heading:string, hasCampaign:boolean}) => (
-//   <div className={classNameWithModifiers('component-product-page-hero-heading', [hasCampaign ? 'campaign' : null])}>
-//     <LeftMarginSection>
-//       <HeadingBlock {...props}>{heading}</HeadingBlock>
-//     </LeftMarginSection>
-//   </div>
-// );
 
 const ProductPageHero = ({
   overheading, heading, content, modifierClasses, children, appearance, hasCampaign,
