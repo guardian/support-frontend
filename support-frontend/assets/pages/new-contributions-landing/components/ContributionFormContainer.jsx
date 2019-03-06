@@ -81,6 +81,16 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Functions ----- //
 
+export type CountryMetaData = {
+  headerCopy: string,
+  contributeCopy?: React$Element<string>,
+  headerClasses?: string,
+  // URL to fetch ticker data from. null/undefined implies no ticker
+  tickerJsonUrl?: string,
+  // Optional message to display at the top of the form
+  formMessage?: React$Element<string>,
+};
+
 const defaultHeaderCopy = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\xa0the\nworld\xa0needs';
 const defaultContributeCopy = (
   <span>
@@ -96,14 +106,6 @@ const defaultHeaderCopyAndContributeCopy = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
   headerClasses: 'help-variant',
-};
-
-export type CountryMetaData = {
-  headerCopy: string,
-  contributeCopy?: React$Element<string>,
-  headerClasses?: string,
-  // URL to fetch ticker data from. null/undefined implies no ticker
-  tickerJsonUrl?: string,
 };
 
 const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
@@ -153,6 +155,7 @@ function ContributionFormContainer(props: PropTypes) {
         <div className="gu-content__form">
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}
+            message={countryGroupDetails.formMessage}
           />
         </div>
         <DirectDebitPopUpForm

@@ -12,7 +12,6 @@ import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type D
 import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
 import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
 import { getOrigin } from './url';
-import type { OptimizeExperiment } from './optimize/optimize';
 import { GBPCountries } from './internationalisation/countryGroup';
 
 // ----- Types ----- //
@@ -278,39 +277,16 @@ function getDigitalPackPromoCode(cgId: CountryGroupId, billingPeriod: DigitalBil
 
 // Builds a link to the digital pack checkout.
 function getDigitalCheckout(
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  cgId: CountryGroupId,
-  referringCta: ?string,
-  nativeAbParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
+  countryGroupId: CountryGroupId,
   billingPeriod: DigitalBillingPeriod = Monthly,
 ): string {
-
-  function buildUrlForExperiment(params: URLSearchParams): string {
-    const digitalPackCheckoutExperimentId = 'I-M60BjwTLClJegHgJmklw';
-    const optimizeExperiment: Option<OptimizeExperiment> =
-      optimizeExperiments.find(exp => exp.id === digitalPackCheckoutExperimentId) || null;
-    if (optimizeExperiment && optimizeExperiment.variant === '1') {
-      return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
-    }
-    return billingPeriod === Annual ? `${subsUrl}/checkout/digitalpack-digitalpackannual?${params.toString()}` : `${subsUrl}/checkout?${params.toString()}`;
-  }
-
-  const acquisitionData = deriveSubsAcquisitionData(
-    referrerAcquisitionData,
-    nativeAbParticipations,
-    optimizeExperiments,
-  );
-  const promoCode = getDigitalPackPromoCode(cgId, billingPeriod);
+  const promoCode = getDigitalPackPromoCode(countryGroupId, billingPeriod);
   const params = new URLSearchParams(window.location.search);
-  params.set('acquisitionData', JSON.stringify(acquisitionData));
   params.set('promoCode', promoCode);
-  params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
-  params.set('startTrialButton', referringCta || '');
   if (billingPeriod === Annual) {
     params.set('period', Annual);
   }
-  return buildUrlForExperiment(params);
+  return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
 }
 
 

@@ -7,10 +7,9 @@ import { combineReducers, type Dispatch } from 'redux';
 import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { fromString, type IsoCountry } from 'helpers/internationalisation/country';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
-import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
+import { formError, type FormError, nonEmptyString, validate } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Action as DDAction } from 'components/directDebit/directDebitActions';
 import {
@@ -21,15 +20,23 @@ import { getSignoutUrl } from 'helpers/externalLinks';
 import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
-import { postcodeFinderReducer } from './components-checkout/postcodeFinderReducer';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import {
+  addressReducerFor,
+  getFormFields as getAddressFormFields,
+  getFormErrors as getAddressFormErrors,
+  setFormErrorsFor as setAddressFormErrorsFor,
+  type Action as AddressAction,
+  type State as AddressState,
+  type FormField as AddressFormField,
+} from './components-checkout/addressFieldsStore';
 
 // ----- Types ----- //
 
@@ -41,31 +48,22 @@ type Product = {|
   productOption: PaperProductOptions,
 |};
 
-export type FormFieldsInState = {|
+export type FormFields = {|
   ...Product,
   title: Option<Title>,
   firstName: string,
   lastName: string,
-  billingAddressLine1: string,
-  billingAddressLine2: Option<string>,
-  billingTownCity: string,
-  billingPostcode: string,
   email: string,
   startDate: string,
   telephone: Option<string>,
   paymentMethod: Option<PaymentMethod>,
 |};
 
-export type FormFields = {|
-  ...FormFieldsInState,
-  country: IsoCountry,
-|};
-
 export type FormField = $Keys<FormFields>;
 
 type CheckoutState = {|
   stage: Stage,
-  ...FormFieldsInState,
+  ...FormFields,
   email: string,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
@@ -78,6 +76,8 @@ export type State = ReduxState<{|
   checkout: CheckoutState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
+  deliveryAddress: AddressState,
+  billingAddress: AddressState,
 |}>;
 
 export type Action =
@@ -85,20 +85,15 @@ export type Action =
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_TITLE', title: Option<Title> }
   | { type: 'SET_LAST_NAME', lastName: string }
-  | { type: 'SET_BILLING_ADDRESS_LINE_1', billingAddressLine1: string }
-  | { type: 'SET_BILLING_ADDRESS_LINE_2', billingAddressLine2: string }
   | { type: 'SET_START_DATE', startDate: string }
-  | { type: 'SET_BILLING_TOWN_CITY', billingTownCity: string }
-  | { type: 'SET_BILLING_COUNTY', billingCounty: string }
-  | { type: 'SET_COUNTRY', country: string }
-  | { type: 'SET_BILLING_POSTCODE', billingPostcode: string }
   | { type: 'SET_TELEPHONE', telephone: string }
   | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
   | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry }
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | DDAction;
+  | DDAction
+  | AddressAction;
 
 // ----- Selectors ----- //
 
@@ -108,11 +103,6 @@ function getFormFields(state: State): FormFields {
     firstName: state.page.checkout.firstName,
     email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
-    billingAddressLine1: state.page.checkout.billingAddressLine1,
-    billingAddressLine2: state.page.checkout.billingAddressLine2,
-    billingTownCity: state.page.checkout.billingTownCity,
-    billingPostcode: state.page.checkout.billingPostcode,
-    country: state.common.internationalisation.countryId,
     startDate: state.page.checkout.startDate,
     telephone: state.page.checkout.telephone,
     paymentMethod: state.page.checkout.paymentMethod,
@@ -124,6 +114,9 @@ function getFormFields(state: State): FormFields {
 function getEmail(state: State): string {
   return state.page.checkout.email;
 }
+
+const getDeliveryAddress = (state: State): AddressState => state.page.deliveryAddress;
+const getBillingAddress = (state: State): AddressState => state.page.billingAddress;
 
 // ----- Functions ----- //
 
@@ -138,24 +131,8 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       error: formError('lastName', 'Please enter a last name.'),
     },
     {
-      rule: nonEmptyString(fields.billingAddressLine1),
-      error: formError('billingAddressLine1', 'Please enter an address'),
-    },
-    {
       rule: nonEmptyString(fields.startDate),
       error: formError('startDate', 'Please select a start date'),
-    },
-    {
-      rule: nonEmptyString(fields.billingTownCity),
-      error: formError('billingTownCity', 'Please enter a city'),
-    },
-    {
-      rule: nonEmptyString(fields.billingPostcode),
-      error: formError('billingPostcode', 'Please enter a post code'),
-    },
-    {
-      rule: notNull(fields.country),
-      error: formError('country', 'Please select a country.'),
     },
   ]);
 }
@@ -172,9 +149,31 @@ const signOut = () => {
 };
 
 function submitForm(dispatch: Dispatch<Action>, state: State) {
-  const errors = getErrors(getFormFields(state));
-  if (errors.length > 0) {
-    dispatch(setFormErrors(errors));
+
+  type Error<T> = {
+    errors: FormError<T>[],
+    dispatcher: any => Action,
+  }
+
+  const allErrors: (Error<AddressFormField> | Error<FormField>)[] = [
+    ({
+      errors: getErrors(getFormFields(state)),
+      dispatcher: setFormErrors,
+    }: Error<FormField>),
+    ({
+      errors: getAddressFormErrors(getAddressFormFields(getDeliveryAddress(state))),
+      dispatcher: setAddressFormErrorsFor('delivery'),
+    }: Error<AddressFormField>),
+    ({
+      errors: getAddressFormErrors(getAddressFormFields(getBillingAddress(state))),
+      dispatcher: setAddressFormErrorsFor('billing'),
+    }: Error<AddressFormField>),
+  ].filter(({ errors }) => errors.length > 0);
+
+  if (allErrors.length > 0) {
+    allErrors.forEach(({ errors, dispatcher }) => {
+      dispatch(dispatcher(errors));
+    });
   } else {
     showPaymentMethod(dispatch, state);
   }
@@ -185,22 +184,6 @@ const formActionCreators = {
   setFirstName: (firstName: string): Action => ({ type: 'SET_FIRST_NAME', firstName }),
   setLastName: (lastName: string): Action => ({ type: 'SET_LAST_NAME', lastName }),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
-  setBillingCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
-    const country = fromString(countryRaw);
-    if (country) {
-      dispatch(setCountry(country));
-      dispatch({
-        type: 'SET_COUNTRY_CHANGED',
-        country,
-      });
-    }
-  },
-  setBillingAddressLine1: (billingAddressLine1: string): Action => ({ type: 'SET_BILLING_ADDRESS_LINE_1', billingAddressLine1 }),
-  setBillingAddressLine2: (billingAddressLine2: string): Action => ({ type: 'SET_BILLING_ADDRESS_LINE_2', billingAddressLine2 }),
-  setBillingTownCity: (billingTownCity: string): Action => ({ type: 'SET_BILLING_TOWN_CITY', billingTownCity }),
-  setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
-  setBillingCounty: (billingCounty: string): Action => ({ type: 'SET_BILLING_COUNTY', billingCounty }),
-  setBillingPostcode: (billingPostcode: string): Action => ({ type: 'SET_BILLING_POSTCODE', billingPostcode }),
   setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>) =>
     dispatch({
@@ -246,10 +229,6 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    billingAddressLine1: '',
-    billingAddressLine2: null,
-    billingTownCity: '',
-    billingPostcode: '',
     startDate: '',
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
@@ -274,18 +253,6 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
 
       case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName };
-
-      case 'SET_BILLING_ADDRESS_LINE_1':
-        return { ...state, billingAddressLine1: action.billingAddressLine1 };
-
-      case 'SET_BILLING_ADDRESS_LINE_2':
-        return { ...state, billingAddressLine2: action.billingAddressLine2 };
-
-      case 'SET_BILLING_TOWN_CITY':
-        return { ...state, billingTownCity: action.billingTownCity };
-
-      case 'SET_BILLING_POSTCODE':
-        return { ...state, billingPostcode: action.billingPostcode };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
@@ -317,7 +284,8 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     checkout: reducer,
     user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
     directDebit,
-    postcodeFinder: postcodeFinderReducer,
+    billingAddress: addressReducerFor('billing', initialCountry),
+    deliveryAddress: addressReducerFor('delivery', initialCountry),
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
@@ -331,6 +299,8 @@ export {
   setFormErrors,
   getFormFields,
   getEmail,
+  getDeliveryAddress,
+  getBillingAddress,
   setSubmissionError,
   setFormSubmitted,
   signOut,

@@ -38,6 +38,17 @@ object Fixtures {
   )
 
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", "test@gu.com", Country.UK)
+  val differentContactDetails = ContactDetails(
+    "Test-FirstName",
+    "Test-LastName",
+    "test@gu.com",
+    Country.UK,
+    Some("123 easy street"),
+    None,
+    Some("london"),
+    Some("n1 9gu"),
+    None
+  )
   val creditCardPaymentMethod = CreditCardReferenceTransaction(tokenId, secondTokenId, cardNumber, Some(Country.UK), 12, 22, "AmericanExpress")
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
   val directDebitPaymentMethod = DirectDebitPaymentMethod("Barry", "Humphreys", "Barry Humphreys", "200000", "55779911",
@@ -73,17 +84,24 @@ object Fixtures {
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(currency), contactDetails, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(currency), contactDetails, None, creditCardPaymentMethod, monthlySubscriptionData, SubscribeOptions())
     ))
 
   def directDebitSubscriptionRequest: SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())
+      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, None, directDebitPaymentMethod, monthlySubscriptionData, SubscribeOptions())
     ))
 
   def directDebitSubscriptionRequestPaper: SubscribeRequest =
     SubscribeRequest(List(
-      SubscribeItem(account(paymentGateway = DirectDebitGateway), contactDetails, directDebitPaymentMethod, everydayPaperSubscriptionData, SubscribeOptions())
+      SubscribeItem(
+        account(paymentGateway = DirectDebitGateway),
+        contactDetails,
+        Some(differentContactDetails),
+        directDebitPaymentMethod,
+        everydayPaperSubscriptionData,
+        SubscribeOptions()
+      )
     ))
 
   val invalidMonthlySubsData = SubscriptionData(
@@ -99,9 +117,19 @@ object Fixtures {
     Subscription(date, date, date, termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
-    SubscribeItem(account(), contactDetails, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
+    SubscribeItem(account(), contactDetails, None, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
   ))
 
-  val incorrectPaymentMethod = SubscribeRequest(List(SubscribeItem(account(), contactDetails, payPalPaymentMethod, invalidMonthlySubsData, SubscribeOptions())))
+  val incorrectPaymentMethod = SubscribeRequest(
+    List(
+      SubscribeItem(account(),
+        contactDetails,
+        None,
+        payPalPaymentMethod,
+        invalidMonthlySubsData,
+        SubscribeOptions()
+      )
+    )
+  )
 
 }

@@ -20,18 +20,10 @@ function redirectToDigitalPage() {
     const state = getState();
 
     const { countryGroupId } = state.common.internationalisation;
-    const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
     const { plan } = state.page.plan;
 
     if (plan) {
-      const location = getDigitalCheckout(
-        referrerAcquisitionData,
-        countryGroupId,
-        null,
-        abParticipations,
-        optimizeExperiments,
-        plan,
-      );
+      const location = getDigitalCheckout(countryGroupId);
 
       sendTrackingEventsOnClick(`main_cta_click_${plan}`, 'DigitalPack', null)();
       window.location.href = location;
