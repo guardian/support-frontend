@@ -84,6 +84,16 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Functions ----- //
 
+export type CountryMetaData = {
+  headerCopy: string,
+  contributeCopy?: React$Element<string>,
+  headerClasses?: string,
+  // URL to fetch ticker data from. null/undefined implies no ticker
+  tickerJsonUrl?: string,
+  // Optional message to display at the top of the form
+  formMessage?: React$Element<string>,
+};
+
 const defaultHeaderCopy = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\xa0the\nworld\xa0needs';
 const defaultContributeCopy = (
   <span>
@@ -91,12 +101,12 @@ const defaultContributeCopy = (
     as and when you feel like it – choose the option that suits you best.
   </span>);
 
-const defaultHeaderCopyAndContributeCopy = {
+const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
 };
 
-const helpVariantHeaderCopyAndContributeCopy = {
+const helpVariantHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: (
     <span>
@@ -137,14 +147,6 @@ const helpVariantCountryGroupSpecificDetails = {
   International: helpVariantHeaderCopyAndContributeCopy,
   NZDCountries: helpVariantHeaderCopyAndContributeCopy,
   Canada: helpVariantHeaderCopyAndContributeCopy,
-};
-
-export type CountryMetaData = {
-  headerCopy: string,
-  contributeCopy?: React$Element<string>,
-  headerClasses?: string,
-  // URL to fetch ticker data from. null/undefined implies no ticker
-  tickerJsonUrl?: string,
 };
 
 const countryGroupSpecificDetails: (variant: LandingPageCopyTestVariant) => {
@@ -191,6 +193,7 @@ function ContributionFormContainer(props: PropTypes) {
         <div className="gu-content__form">
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}
+            message={countryGroupDetails.formMessage}
           />
         </div>
         <DirectDebitPopUpForm
