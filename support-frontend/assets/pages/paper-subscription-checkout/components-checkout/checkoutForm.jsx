@@ -6,7 +6,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { newspaperCountries } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { regularPrice as paperRegularPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
 
@@ -19,7 +18,6 @@ import Button from 'components/button/button';
 import { Input } from 'components/forms/input';
 import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
-import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { options } from 'components/forms/customFields/options';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import { withLabel } from 'hocs/withLabel';
@@ -43,10 +41,11 @@ import {
   type FormField,
   type FormFields,
   getFormFields,
+  getDeliveryAddress,
+  getBillingAddress,
   type State,
 } from '../paperSubscriptionCheckoutReducer';
-import PostcodeFinder from './postcodeFinder';
-
+import { withStore } from './addressFields';
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -76,8 +75,10 @@ const StaticInputWithLabel = withLabel(Input);
 const InputWithLabel = asControlled(StaticInputWithLabel);
 const InputWithError = withError(InputWithLabel);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
-const SelectWithError = withError(SelectWithLabel);
 const FieldsetWithError = withError(Fieldset);
+
+const DeliveryAddress = withStore('delivery', getDeliveryAddress);
+const BillingAddress = withStore('billing', getBillingAddress);
 
 // ----- Component ----- //
 
@@ -168,58 +169,10 @@ function CheckoutForm(props: PropTypes) {
               />
             </FormSection>
             <FormSection title="Where should we deliver your newspapers?">
-              <PostcodeFinder
-                id="postcode"
-                onPostcodeUpdate={props.setBillingPostcode}
-                onAddressUpdate={({ lineOne, lineTwo, city }) => {
-                  props.setBillingAddressLine1(lineOne);
-                  props.setBillingAddressLine2(lineTwo);
-                  props.setBillingTownCity(city);
-                }}
-              />
-              <InputWithError
-                id="postcode"
-                label="Delivery postcode"
-                type="text"
-                value={props.billingPostcode}
-                setValue={props.setBillingPostcode}
-                error={firstError('billingPostcode', props.formErrors)}
-              />
-              <InputWithError
-                id="address-line-1"
-                label="Address Line 1"
-                type="text"
-                value={props.billingAddressLine1}
-                setValue={props.setBillingAddressLine1}
-                error={firstError('billingAddressLine1', props.formErrors)}
-              />
-              <InputWithError
-                id="address-line-2"
-                label="Address Line 2"
-                optional
-                type="text"
-                value={props.billingAddressLine2}
-                setValue={props.setBillingAddressLine2}
-                error={firstError('billingAddressLine2', props.formErrors)}
-              />
-              <InputWithError
-                id="town-city"
-                label="Town/City"
-                type="text"
-                value={props.billingTownCity}
-                setValue={props.setBillingTownCity}
-                error={firstError('billingTownCity', props.formErrors)}
-              />
-              <SelectWithError
-                id="country"
-                label="Country"
-                value={props.country}
-                setValue={props.setBillingCountry}
-                error={firstError('country', props.formErrors)}
-              >
-                <option value="">--</option>
-                {sortedOptions(newspaperCountries)}
-              </SelectWithError>
+              <DeliveryAddress />
+            </FormSection>
+            <FormSection title="Where should we bill you?">
+              <BillingAddress />
             </FormSection>
             <FormSection title="When would you like your subscription to start?">
               <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">

@@ -19,18 +19,30 @@ import { routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { Monthly } from 'helpers/billingPeriods';
+import { getFormFields, type FormFields } from '../components-checkout/addressFieldsStore';
 
-import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../paperSubscriptionCheckoutReducer';
+import {
+  type State,
+  setSubmissionError,
+  setFormSubmitted,
+  getDeliveryAddress,
+  getBillingAddress,
+  type Action,
+  setStage,
+} from '../paperSubscriptionCheckoutReducer';
+
+const getAddressFieldsState = (from: FormFields) => ({
+  lineOne: from.lineOne,
+  lineTwo: from.lineTwo,
+  city: from.city,
+  postCode: from.postCode,
+});
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
   const { currencyId, countryId } = state.common.internationalisation;
   const {
     firstName,
     lastName,
-    billingAddressLine1,
-    billingAddressLine2,
-    billingTownCity,
-    billingPostcode,
     email,
     telephone,
   } = state.page.checkout;
@@ -45,20 +57,14 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 
   const billingAddress = {
-    lineOne: billingAddressLine1,
-    lineTwo: billingAddressLine2,
-    city: billingTownCity,
+    ...getAddressFieldsState(getFormFields(getBillingAddress(state))),
     state: null,
-    postCode: billingPostcode,
     country: countryId,
   };
 
   const deliveryAddress = {
-    lineOne: billingAddressLine1,
-    lineTwo: billingAddressLine2,
-    city: billingTownCity,
+    ...getAddressFieldsState(getFormFields(getDeliveryAddress(state))),
     state: null,
-    postCode: billingPostcode,
     country: countryId,
   };
 
