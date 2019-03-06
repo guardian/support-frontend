@@ -112,7 +112,8 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     });
   });
 
-  loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
+  // DISABLED to test performance improvement
+  // loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 }
 
 function selectInitialAmounts(state: State, dispatch: Function) {
