@@ -120,7 +120,7 @@ const defaultCountryGroupSpecificDetails = {
   AUDCountries: {
     ...defaultHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
-    formMessage: 'Make a contribution',
+    formMessage: (<div><h1>Make a contribution</h1>pls</div>),
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
@@ -134,7 +134,7 @@ const helpVariantCountryGroupSpecificDetails = {
   AUDCountries: {
     ...helpVariantHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
-    formMessage: 'Make a contribution',
+    formMessage: (<div><h1>Make a contribution</h1>pls</div>),
   },
   International: helpVariantHeaderCopyAndContributeCopy,
   NZDCountries: helpVariantHeaderCopyAndContributeCopy,
@@ -148,7 +148,7 @@ export type CountryMetaData = {
   // URL to fetch ticker data from. null/undefined implies no ticker
   tickerJsonUrl?: string,
   // Optional message to display at the top of the form
-  formMessage?: string,
+  formMessage?: React$Element<string>,
 };
 
 const countryGroupSpecificDetails: (variant: LandingPageCopyTestVariant) => {
