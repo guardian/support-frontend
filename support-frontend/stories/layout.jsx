@@ -74,7 +74,7 @@ stories.add('Content', () => (
 stories.add('Hero', () => (
   <ProductPageHero
     overheading="This overheading is the H1"
-    heading="Lemon drizzle waffle confit lorem ipsu dolet"
+    heading="This is a default banner lemon drizzle waffle confit"
     appearance="feature"
     content="Hero blocks showcase a product and really help set the mood of a page. They work great right under the header!"
   >
@@ -85,35 +85,36 @@ stories.add('Hero', () => (
 stories.add('Hero (campaign)', () => (
   <ProductPageHero
     overheading="This overheading is the H1"
-    heading="Lemon drizzle waffle confit lorem ipsu dolet"
+    heading="This is a campign banner lemon drizzle waffle confit"
     appearance="campaign"
     content="Hero blocks showcase a product and really help set the mood of a page. They work great right under the header!"
+    hasCampaign
   >
     <div />
   </ProductPageHero>
 ));
 
-stories.add('Hero (custom)', () => (
-  <div>
-    <HeroWrapper
-      appearance="feature"
-    >
-      <div style={{ height: '50px' }} />
-      <HeadingBlock>Hero exports smaller components you can remix and reuse</HeadingBlock>
-    </HeroWrapper>
-    <HeroWrapper >
-      <div style={{ height: '50px' }} />
-      <HeadingBlock>So you can use different headings</HeadingBlock>
-    </HeroWrapper>
-    <HeroHanger>And hangers</HeroHanger>
-    <HeroWrapper >
-      <div style={{ padding: '50px 10px' }}>
-        <Text>
-          <LargeParagraph>
-           or just wing it and not even use a heading!
-          </LargeParagraph>
-        </Text>
-      </div>
-    </HeroWrapper>
-  </div>
-));
+// stories.add('Hero (custom)', () => (
+//   <div>
+//     <HeroWrapper
+//       appearance="feature"
+//     >
+//       <div style={{ height: '50px' }} />
+//       <HeadingBlock>Hero exports smaller components you can remix and reuse</HeadingBlock>
+//     </HeroWrapper>
+//     <HeroWrapper >
+//       <div style={{ height: '50px' }} />
+//       <HeadingBlock>So you can use different headings</HeadingBlock>
+//     </HeroWrapper>
+//     <HeroHanger>And hangers</HeroHanger>
+//     <HeroWrapper >
+//       <div style={{ padding: '50px 10px' }}>
+//         <Text>
+//           <LargeParagraph>
+//            or just wing it and not even use a heading!
+//           </LargeParagraph>
+//         </Text>
+//       </div>
+//     </HeroWrapper>
+//   </div>
+// ));
