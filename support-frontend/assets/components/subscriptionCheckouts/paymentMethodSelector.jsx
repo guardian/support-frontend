@@ -22,7 +22,7 @@ type PropTypes = {|
 |}
 
 const isPayPalEnabled = (optimizeExperiments: OptimizeExperiments) => {
-  const PayPalExperimentId = "Owuvo_-LQrywVTEhStTFvQ";
+  const PayPalExperimentId = "8IebFnX-SbKRxhlj_tGp-w";
   const enabledByTest = optimizeExperiments.find((exp) => exp.id === PayPalExperimentId && exp.variant === '1');
   const enabledByQueryString = getQueryParameter('payPal') === 'true';
   return enabledByTest || enabledByQueryString;
