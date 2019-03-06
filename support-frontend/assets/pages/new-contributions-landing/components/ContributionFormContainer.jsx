@@ -107,6 +107,13 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 
 const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
 
+const ausCampaignFormMessage = (
+  <div>
+    <div>Make a contribution</div>
+    <div>to our dedicated series ’Climate Crunch’</div>
+  </div>
+);
+
 const countryGroupSpecificDetails: {
   [CountryGroupId]: CountryMetaData
 } = {
@@ -117,6 +124,7 @@ const countryGroupSpecificDetails: {
     ...defaultHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
     tickerJsonUrl: '/ticker.json',
+    formMessage: ausCampaignFormMessage,
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
