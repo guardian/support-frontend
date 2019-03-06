@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import type { Dispatch } from 'redux';
 
-import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
+import { auStates, caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
 import { Annual, Monthly } from 'helpers/billingPeriods';
@@ -129,6 +129,8 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
       return sortedOptions(usStates);
     case 'CA':
       return sortedOptions(caStates);
+    case 'AU':
+      return sortedOptions(auStates);
     default:
       return null;
   }
@@ -268,23 +270,14 @@ function CheckoutForm(props: PropTypes) {
                 value={props.stateProvince}
                 setValue={props.setStateProvince}
                 error={firstError('stateProvince', props.formErrors)}
-                isShown={props.country === 'US' || props.country === 'CA'}
+                isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
               >
                 <option value="">--</option>
                 {statesForCountry(props.country)}
               </Select2>
               <Input1
-                id="county"
-                label="County"
-                optional
-                type="text"
-                value={props.county}
-                setValue={props.setCounty}
-                error={firstError('county', props.formErrors)}
-              />
-              <Input1
                 id="postcode"
-                label="Postcode"
+                label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
                 type="text"
                 value={props.postcode}
                 setValue={props.setPostcode}

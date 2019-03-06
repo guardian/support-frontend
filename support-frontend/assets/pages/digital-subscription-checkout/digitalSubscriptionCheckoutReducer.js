@@ -43,7 +43,6 @@ export type FormFieldsInState = {|
   addressLine1: string,
   addressLine2: Option<string>,
   townCity: string,
-  county: Option<string>,
   postcode: string,
   email: string,
   stateProvince: Option<StateProvince>,
@@ -89,7 +88,6 @@ function getFormFields(state: State): FormFields {
     addressLine1: state.page.checkout.addressLine1,
     addressLine2: state.page.checkout.addressLine2,
     townCity: state.page.checkout.townCity,
-    county: state.page.checkout.county,
     postcode: state.page.checkout.postcode,
     country: state.common.internationalisation.countryId,
     stateProvince: state.page.checkout.stateProvince,
@@ -182,7 +180,6 @@ function initReducer(initialCountry: IsoCountry) {
     addressLine1: '',
     addressLine2: null,
     townCity: '',
-    county: '',
     postcode: '',
     stateProvince: null,
     telephone: null,
@@ -217,9 +214,6 @@ function initReducer(initialCountry: IsoCountry) {
 
       case 'SET_TOWN_CITY':
         return { ...state, townCity: action.townCity };
-
-      case 'SET_COUNTY':
-        return { ...state, county: action.county };
 
       case 'SET_POSTCODE':
         return { ...state, postcode: action.postcode };
