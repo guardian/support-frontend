@@ -12,7 +12,7 @@
   // }
 
   &:not(.component-product-page-hero-heading--campaign) {
-    margin-top: -6.5rem;
+    margin-top: -6rem;
     @include mq($from: leftCol) {
       margin-top: -7.5rem;
     }
