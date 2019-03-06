@@ -3,13 +3,13 @@
 .component-product-page-hero-heading {
   position: relative;
   
-  // .component-left-margin-section__content {
-  //   position: relative;
-  //   @include mq($from: tablet) {
-  //     border-left: 1px solid;
-  //     margin-left: -1px;
-  //   }
-  // }
+  .component-left-margin-section__content {
+    position: relative;
+    @include mq($from: tablet) {
+      border-left: 1px solid;
+      margin-left: -1px;
+    }
+  }
 
   &:not(.component-product-page-hero-heading--campaign) {
     margin-top: -6rem;
