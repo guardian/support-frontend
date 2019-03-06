@@ -60,7 +60,7 @@ const Sales: Sale[] = [
     subscriptionProduct: 'DigitalPack',
     activeRegions: [UnitedStates, AUDCountries, International, EURCountries, Canada, NZDCountries],
     startTime: new Date(2019, 1, 4).getTime(), // 4 Feb 2019
-    endTime: new Date(2019, 2, 18).getTime(), // 31 Mar 2019
+    endTime: new Date(2019, 2, 18).getTime(), // 17 Mar 2019
     saleDetails: {
       UnitedStates: {
         promoCode: 'DDPFMINT80',
@@ -219,7 +219,7 @@ const Sales: Sale[] = [
     subscriptionProduct: 'DigitalPack',
     activeRegions: [GBPCountries],
     startTime: new Date(2019, 1, 18).getTime(), // 18 Feb 2019
-    endTime: new Date(2019, 2, 18).getTime(), // 31 Mar 2019
+    endTime: new Date(2019, 2, 18).getTime(), // 17 Mar 2019
     saleDetails: {
       GBPCountries: {
         promoCode: 'DDPFM80X',
