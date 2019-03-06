@@ -210,7 +210,7 @@ function ContributionForm(props: PropTypes) {
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <div>
-        {props.message ? props.message : null}
+        {props.message ? <div className={classNameWithModifiers('form', ['message'])}>{props.message}</div> : null}
         <ContributionTypeTabs />
         <NewContributionAmount
           checkOtherAmount={checkAmount}

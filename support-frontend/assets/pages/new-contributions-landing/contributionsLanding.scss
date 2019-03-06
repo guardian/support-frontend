@@ -507,6 +507,12 @@ footer[role="contentinfo"] {
   flex-direction: column;
 }
 
+.form--message {
+  margin: 0 -10px;
+  padding: 7px 10px;
+  border-bottom: 1px solid gu-colour(neutral-86);
+}
+
 .form--content {
   padding-top: 10px;
 }
