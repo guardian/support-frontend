@@ -81,6 +81,7 @@ class CreateSubscription(
       firstName = request.firstName,
       lastName = request.lastName,
       billingAddress = request.billingAddress,
+      deliveryAddress = request.deliveryAddress,
       telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
       allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),

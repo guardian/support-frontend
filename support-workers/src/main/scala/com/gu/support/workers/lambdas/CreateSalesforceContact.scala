@@ -17,17 +17,26 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
   override protected def servicesHandler(state: CreateSalesforceContactState, requestInfo: RequestInfo, context: Context, services: Services) = {
     SafeLogger.debug(s"CreateSalesforceContact state: $state")
 
-    val addressLine = combinedAddressLine(state.user.billingAddress.lineOne, state.user.billingAddress.lineTwo).map(asFormattedString)
+    val billingAddressLine = combinedAddressLine(state.user.billingAddress.lineOne, state.user.billingAddress.lineTwo).map(asFormattedString)
+    val deliveryAddressLine = combinedAddressLine(
+      state.user.deliveryAddress.flatMap(_.lineOne),
+      state.user.deliveryAddress.flatMap(_.lineTwo)).map(asFormattedString)
+
     services.salesforceService.upsert(UpsertData.create(
       state.user.id,
       state.user.primaryEmailAddress,
       state.user.firstName,
       state.user.lastName,
-      addressLine,
+      billingAddressLine,
       state.user.billingAddress.city,
       state.user.billingAddress.state,
       state.user.billingAddress.postCode,
       state.user.billingAddress.country.name,
+      deliveryAddressLine,
+      state.user.deliveryAddress.flatMap(_.city),
+      state.user.deliveryAddress.flatMap(_.state),
+      state.user.deliveryAddress.flatMap(_.postCode),
+      state.user.deliveryAddress.map(_.country.name),
       state.user.telephoneNumber,
       state.user.allowMembershipMail,
       state.user.allowThirdPartyMail,

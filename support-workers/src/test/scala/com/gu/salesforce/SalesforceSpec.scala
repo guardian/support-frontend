@@ -52,7 +52,26 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   "SalesforceService" should "be able to upsert a customer" in {
     val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
-    val upsertData = UpsertData.create(idId, email, name, name, None, None, None, None, uk, None, allowMail, allowMail, allowMail)
+    val upsertData = UpsertData.create(
+      identityId = idId,
+      email = emailAddress,
+      firstName = name,
+      lastName = name,
+      billingStreet = None,
+      billingCity = None,
+      billingPostcode = None,
+      billingState = None,
+      billingCountry = uk,
+      deliveryStreet = None,
+      deliveryCity = None,
+      deliveryPostcode = None,
+      deliveryState = None,
+      deliveryCountry = None,
+      telephoneNumber = None,
+      allowMembershipMail = allowMail,
+      allow3rdPartyMail = allowMail,
+      allowGuardianRelatedMail = allowMail
+    )
 
     service.upsert(upsertData).map { response: SalesforceContactResponse =>
       response.Success should be(true)
@@ -60,9 +79,29 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  "SalesforceService" should "be able to upsert a customer that has an optional field" in {
+  "SalesforceService" should "be able to upsert a customer that has optional fields" in {
     val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
-    val upsertData = UpsertData.create(idId, email, name, name, None, None, None, None, uk, Some(telephoneNumber), allowMail, allowMail, allowMail)
+
+    val upsertData = UpsertData.create(
+      identityId = idId,
+      email = emailAddress,
+      firstName = name,
+      lastName = name,
+      billingStreet = Some(street),
+      billingCity = Some(city),
+      billingPostcode = Some(postCode),
+      billingState = None,
+      billingCountry = uk,
+      deliveryStreet = Some(street),
+      deliveryCity = Some(city),
+      deliveryPostcode = Some(postCode),
+      deliveryState = None,
+      deliveryCountry = Some(uk),
+      telephoneNumber = Some(telephoneNumber),
+      allowMembershipMail = allowMail,
+      allow3rdPartyMail = allowMail,
+      allowGuardianRelatedMail = allowMail
+    )
 
     service.upsert(upsertData).map { response: SalesforceContactResponse =>
       response.Success should be(true)
