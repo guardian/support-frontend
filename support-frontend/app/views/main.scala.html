@@ -109,30 +109,26 @@
       };
 
       var loadFonts = function() {
-          console.log("loadFonts")
-          var iframe = document.createElement('iframe');
-          iframe.src = 'https://f9e0f622.ngrok.io/font-loader';
-          iframe.classList = 'guardianFontLoader';
-          // add iframe and wait for message
-          window.addEventListener('message', function(e) {
-          if (
-            e &&
-            e.data &&
-            e.data.name &&
-            e.data.name === 'guardianFonts' &&
-            e.data.fonts &&
-            e.source === iframe.contentWindow
-          ) {
-            console.log(e);
-            console.log("end")
-            console.timeEnd("here");
-            e.data.fonts.forEach(useFont);
-          }
-          });
-          document.body.appendChild(iframe);
-       };
-       loadFonts();
-       })(window, document);
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://f9e0f622.ngrok.io/font-loader';
+        iframe.classList = 'guardianFontLoader';
+        // add iframe and wait for message
+        window.addEventListener('message', function(e) {
+        if (
+          e &&
+          e.data &&
+          e.data.name &&
+          e.data.name === 'guardianFonts' &&
+          e.data.fonts &&
+          e.source === iframe.contentWindow
+        ) {
+          e.data.fonts.forEach(useFont);
+        }
+        });
+        document.body.appendChild(iframe);
+     };
+     loadFonts();
+     })(window, document);
     </script>
     <noscript>
       <div style="text-align: center;
