@@ -84,7 +84,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 export type CountryMetaData = {
   headerCopy: string,
   contributeCopy?: React$Element<string>,
-  headerClasses?: string,
   // URL to fetch ticker data from. null/undefined implies no ticker
   tickerJsonUrl?: string,
   // Optional message to display at the top of the form
@@ -102,10 +101,9 @@ const defaultContributeCopy = (
     <span className="bold"> Your support is critical for the future of Guardian journalism.</span>
   </span>);
 
-const defaultHeaderCopyAndContributeCopy = {
+const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
-  headerClasses: 'help-variant',
 };
 
 const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
