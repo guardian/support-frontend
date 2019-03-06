@@ -6,6 +6,7 @@ $progess-bar-height: 10px;
   padding: 18px 0 28px 0;
   margin: 0 -10px;
   border-bottom: 1px solid gu-colour(neutral-86);
+  font-family: $gu-headline;
 }
 
 .contributions-landing-ticker--hidden {
@@ -43,7 +44,6 @@ $progess-bar-height: 10px;
 }
 
 .contributions-landing-ticker__so-far .contributions-landing-ticker__count {
-  font-family: $gu-titlepiece;
   font-size: 24px;
   font-weight: 800;
 }

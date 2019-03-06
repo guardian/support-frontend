@@ -504,19 +504,21 @@ footer[role="contentinfo"] {
 
 .gu-content__form__message {
   margin: 0 -10px;
-  padding: 7px 10px;
+  padding: 12px 10px 11px 10px;
   border-bottom: 1px solid gu-colour(neutral-86);
 }
 
 .climate-crunch {
-  line-height: 1;
+  font-family: $gu-headline;
 }
 .climate-crunch__headline {
   font-size: 24px;
+  line-height: 26px;
   font-weight: bold;
 }
 .climate-crunch__body {
   font-size: 16px;
+  line-height: 18px;
   font-style: italic;
 }
 
