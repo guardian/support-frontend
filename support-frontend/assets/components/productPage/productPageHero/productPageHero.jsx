@@ -88,6 +88,6 @@ ProductPageHero.defaultProps = {
   ...HeroWrapper.defaultProps,
 };
 
-export { HeroHanger, HeroWrapper };
+export { HeroHanger, HeroWrapper, HeroHeading };
 
 export default ProductPageHero;
