@@ -502,10 +502,22 @@ footer[role="contentinfo"] {
   flex-direction: column;
 }
 
-.form--message {
+.gu-content__form__message {
   margin: 0 -10px;
   padding: 7px 10px;
   border-bottom: 1px solid gu-colour(neutral-86);
+}
+
+.climate-crunch {
+  line-height: 1;
+}
+.climate-crunch__headline {
+  font-size: 24px;
+  font-weight: bold;
+}
+.climate-crunch__body {
+  font-size: 16px;
+  font-style: italic;
 }
 
 .form--content {

@@ -107,10 +107,10 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 
 const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
 
-const ausCampaignFormMessage = (
-  <div>
-    <div>Make a contribution</div>
-    <div>to our dedicated series ’Climate Crunch’</div>
+const australiaClimateCampaignFormMessage = (
+  <div className="climate-crunch">
+    <div className="climate-crunch__headline">Make a contribution</div>
+    <div className="climate-crunch__body">to our dedicated series ‘Climate Crunch’</div>
   </div>
 );
 
@@ -124,7 +124,7 @@ const countryGroupSpecificDetails: {
     ...defaultHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
     tickerJsonUrl: '/ticker.json',
-    formMessage: ausCampaignFormMessage,
+    formMessage: australiaClimateCampaignFormMessage,
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
@@ -157,9 +157,11 @@ function ContributionFormContainer(props: PropTypes) {
           {countryGroupDetails.tickerJsonUrl ?
             <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
           }
+          {countryGroupDetails.formMessage ?
+            <div className="gu-content__form__message">{countryGroupDetails.formMessage}</div> : null
+          }
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}
-            message={countryGroupDetails.formMessage}
           />
         </div>
         <DirectDebitPopUpForm
