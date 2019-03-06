@@ -116,7 +116,7 @@ function getEmail(state: State): string {
 }
 
 const getDeliveryAddress = (state: State): AddressState => state.page.deliveryAddress;
-const getBillingAddress = (state: State): AddressState => state.page.deliveryAddress;
+const getBillingAddress = (state: State): AddressState => state.page.billingAddress;
 
 // ----- Functions ----- //
 

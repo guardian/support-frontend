@@ -90,8 +90,8 @@ class PostcodeFinder extends Component<PropTypes> {
         {(results.length > 0) &&
           <ComposedSelect
             onChange={(ev) => {
-              if (results[ev.target.value]) {
-                onAddressUpdate(results[ev.target.value]);
+              if (results[ev.currentTarget.value]) {
+                onAddressUpdate(results[ev.currentTarget.value]);
               }
             }}
             forwardRef={(r) => { this.selectRef = r; }}
