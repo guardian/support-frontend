@@ -48,7 +48,7 @@ class DigitalSubscription(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Pack Subscription"
     val mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode)
-    val js = RefPath("digitalSubscriptionLandingPage.js")
+    val js = Left(RefPath("digitalSubscriptionLandingPage.js"))
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
@@ -128,7 +128,7 @@ class DigitalSubscription(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Digital Subscription"
     val mainElement = EmptyDiv("digital-subscription-checkout-page")
-    val js = RefPath("digitalSubscriptionCheckoutPageThankYouExisting.js")
+    val js = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.js"))
     val css = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.css"))
 
     Ok(views.html.main(

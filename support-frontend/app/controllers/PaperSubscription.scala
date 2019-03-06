@@ -52,7 +52,7 @@ class PaperSubscription(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
     val mainElement = if (withDelivery) EmptyDiv("paper-subscription-landing-page-delivery") else EmptyDiv("paper-subscription-landing-page-collection")
-    val js = RefPath("paperSubscriptionLandingPage.js")
+    val js = Left(RefPath("paperSubscriptionLandingPage.js"))
     val css = Left(RefPath("paperSubscriptionLandingPage.css"))
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
     val description = stringsConfig.paperLandingDescription

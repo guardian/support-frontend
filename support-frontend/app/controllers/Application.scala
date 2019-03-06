@@ -114,7 +114,10 @@ class Application(
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
     (implicit request: RequestHeader, settings: AllSettings) = {
 
-    val css = CSSElementForStage(assets.getFileContentsAsHtml, stage, RefPath("newContributionsLandingPageStyles.css"))
+    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, Stages.CODE)_
+    val css = elementForStage(RefPath("newContributionsLandingPageStyles.css"))
+
+    val js = elementForStage(RefPath("newContributionsLandingPage.js"))
 
     val preload = List("GuardianTextSans-Regular", "GuardianTextSans-Medium", "GHGuardianHeadline-Bold").map { name =>
       Preload(s"//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/$name.woff2", "font", "font/woff2")
@@ -123,7 +126,7 @@ class Application(
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
-      js = RefPath("newContributionsLandingPage.js"),
+      js = js,
       css = css,
       description = stringsConfig.contributionsLandingDescription,
       oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
@@ -144,7 +147,7 @@ class Application(
     Ok(views.html.main(
       title = "Support the Guardian",
       mainElement = EmptyDiv("showcase-landing-page"),
-      mainJsBundle = RefPath("showcasePage.js"),
+      mainJsBundle = Left(RefPath("showcasePage.js")),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
       description = stringsConfig.showcaseLandingDescription,
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
@@ -164,7 +167,7 @@ class Application(
 
 object CSSElementForStage {
 
-  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage, cssPath: RefPath): Either[RefPath, StyleContent] = {
+  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(cssPath: RefPath): Either[RefPath, StyleContent] = {
     if (stage == Stages.DEV) {
       Left(cssPath)
     } else {

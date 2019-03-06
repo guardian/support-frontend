@@ -27,7 +27,7 @@
   uatPayPalConfig: PayPalConfig
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
-  @main(title = title, mainJsBundle = RefPath(js), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
+  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
     <script type="text/javascript">
       window.guardian.productPrices = @{Html(outputJson(productPrices))}
       window.guardian = window.guardian || {};
