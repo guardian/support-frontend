@@ -122,7 +122,7 @@ header[role="banner"] {
   justify-content: flex-end;
   width: 100%;
   height: 100%;
-  
+
   .svg-guardian-logo {
     width: 100%;
     height: 80%;
@@ -387,9 +387,9 @@ footer[role="contentinfo"] a {
 
 .gu-content__blurb {
   display: none;
-  max-width: 380px;
   border-top: 10px solid gu-colour(highlight-main);
   margin-left: auto;
+  max-width: 404px;
 
   @include mq($from: tablet) {
     display: block;
@@ -414,6 +414,17 @@ footer[role="contentinfo"] a {
   }
 }
 
+.gu-content__blurb--blurb {
+  font-size: 16px;
+  line-height: 20px;
+  font-family: $gu-headline;
+  padding-bottom: $gu-v-spacing;
+  border-bottom: 1px solid gu-colour(highlight-main);
+  @include mq($from: tablet) {
+    margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
+  }
+}
+
 .header {
   border: 0;
   left: 10px;
@@ -430,23 +441,8 @@ footer[role="contentinfo"] a {
   }
 }
 
-.gu-content__blurb--blurb {
-  font-size: 16px;
-  line-height: 20px;
-  font-family: $gu-headline;
 
-  @include mq($from: tablet) {
-    margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
-  }
-}
 
-.gu-content__blurb--help-variant {
-  max-width: 404px;
-  .gu-content__blurb--blurb {
-    padding-bottom: $gu-v-spacing;
-    border-bottom: 1px solid gu-colour(highlight-main);
-  }
-}
 
 /*= TYPOGRAPHY */
 body {
@@ -944,6 +940,13 @@ form {
 
 
 /* Server side rendering test loading message*/
+
+
+.gu-content--contribution-form--placeholder {
+  .gu-content__blurb--blurb, .gu-content__blurb--header, .countryGroups__label  {
+    opacity: 0.0;
+  }
+}
 
 .form__radio-group--pills .amounts__placeholder .form__radio-group-input + .form__radio-group-label {
   border: none;
