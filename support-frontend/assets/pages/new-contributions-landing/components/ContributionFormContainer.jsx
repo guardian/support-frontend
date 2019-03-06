@@ -15,7 +15,6 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import { classNameWithModifiers } from 'helpers/utilities';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
@@ -134,13 +133,11 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
-  const blurbClass = classNameWithModifiers('gu-content__blurb', [countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : '']);
-
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
-        <div className={blurbClass}>
+        <div className="gu-content__blurb">
           <h1 className="gu-content__blurb--header">{countryGroupDetails.headerCopy}</h1>
           {countryGroupDetails.tickerJsonUrl ?
             <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
