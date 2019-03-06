@@ -44,6 +44,7 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 
 import {
   formIsValid,
@@ -75,6 +76,7 @@ type PropTypes = {|
   setupRecurringPayPalPayment: Function,
   validateForm: () => Function,
   formIsValid: Function,
+  optimizeExperiments: OptimizeExperiments,
 |};
 
 
@@ -97,6 +99,7 @@ function mapStateToProps(state: State) {
       state.common.internationalisation.countryId,
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
+    optimizeExperiments: state.common.optimizeExperiments,
   };
 }
 
@@ -314,6 +317,7 @@ function CheckoutForm(props: PropTypes) {
               paymentMethod={props.paymentMethod}
               setPaymentMethod={props.setPaymentMethod}
               onPaymentAuthorised={props.onPaymentAuthorised}
+              optimizeExperiments={props.optimizeExperiments}
             />
             <FormSection>
               {errorState}

@@ -11,16 +11,25 @@ import Rows from 'components/base/rows';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { getQueryParameter } from 'helpers/url';
 import { type Option } from 'helpers/types/option';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 
 type PropTypes = {|
   countrySupportsDirectDebit: boolean,
   paymentMethod: Option<PaymentMethod>,
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
+  optimizeExperiments: OptimizeExperiments,
 |}
 
+const isPayPalEnabled = (optimizeExperiments: OptimizeExperiments) => {
+  const PayPalExperimentId = "Owuvo_-LQrywVTEhStTFvQ";
+  const enabledByTest = optimizeExperiments.find((exp) => exp.id === PayPalExperimentId && exp.variant === '1');
+  const enabledByQueryString = getQueryParameter('payPal') === 'true';
+  return enabledByTest || enabledByQueryString;
+};
+
 function PaymentMethodSelector(props: PropTypes) {
-  const payPalEnabled = getQueryParameter('payPal') === 'true';
+  const payPalEnabled = isPayPalEnabled(props.optimizeExperiments);
   const multiplePaymentMethodsEnabled = payPalEnabled || props.countrySupportsDirectDebit;
 
   return (
