@@ -138,12 +138,12 @@ function ContributionFormContainer(props: PropTypes) {
     : (
       <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
         <div className="gu-content__blurb">
-          <h1 className="gu-content__blurb--header">{countryGroupDetails.headerCopy}</h1>
+          <h1 className="gu-content__blurb-header">{countryGroupDetails.headerCopy}</h1>
           {countryGroupDetails.tickerJsonUrl ?
             <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
           }
           { countryGroupDetails.contributeCopy ?
-            <p className="gu-content__blurb--blurb">{countryGroupDetails.contributeCopy}</p> : null
+            <p className="gu-content__blurb-blurb">{countryGroupDetails.contributeCopy}</p> : null
           }
         </div>
 

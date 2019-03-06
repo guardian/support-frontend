@@ -398,7 +398,7 @@ footer[role="contentinfo"] a {
   }
 }
 
-.gu-content__blurb--header {
+.gu-content__blurb-header {
   border: 0;
   left: 10px;
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
@@ -415,7 +415,7 @@ footer[role="contentinfo"] a {
   }
 }
 
-.gu-content__blurb--blurb {
+.gu-content__blurb-blurb {
   font-size: 16px;
   line-height: 20px;
   font-family: $gu-headline;
@@ -948,8 +948,8 @@ form {
 
 
 .gu-content--contribution-form--placeholder {
-  .gu-content__blurb--blurb, .gu-content__blurb--header, .countryGroups__label  {
-    opacity: 0.0;
+  .gu-content__blurb-blurb, .gu-content__blurb-header, .countryGroups__label  {
+    visibility: hidden;
   }
 }
 
