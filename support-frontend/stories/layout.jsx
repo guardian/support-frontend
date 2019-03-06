@@ -5,9 +5,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, radios } from '@storybook/addon-knobs';
 
-import ProductPageHero, { HeroHanger, HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import ProductPageHero from 'components/productPage/productPageHero/productPageHero';
 import Content, { Divider, Outset, NarrowContent, Appearances } from 'components/content/content';
-import HeadingBlock from 'components/headingBlock/headingBlock';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 
 const stories = storiesOf('Layout', module)
