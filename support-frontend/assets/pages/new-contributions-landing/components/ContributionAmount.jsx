@@ -34,7 +34,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  requiredFieldsTestVariant: 'control' | 'variant',
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -48,7 +47,6 @@ const mapStateToProps = state => ({
   otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
-  requiredFieldsTestVariant: state.common.abParticipations.requiredFieldsTestVariant,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
