@@ -950,6 +950,12 @@ form {
   margin-top: $gu-v-spacing;
 }
 
+.gu-content--frontline-campaign {
+  .gu-content__main {
+    background: no-repeat url('https://media.guim.co.uk/b9ed1767866d29186f198b523cd5571aeda02a88/0_1269_5184_1516/2000.jpg');
+  }
+}
+
 
 /* Server side rendering test loading message*/
 

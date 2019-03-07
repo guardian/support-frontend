@@ -61,6 +61,8 @@ export const imageCatalogue: {
   showcase: 'b72ef7a4c8764a163fc604d7b8edcedfdd7682f4/0_0_7100_3500',
   showcaseSubscribe: '1174d922f64d951a4a860e4b91b8dd5c5eb8cc8c/0_0_1802_1190',
   paperLandingSale: '6179a30718dab98e96230e39195f3aa2a2784a1d/0_0_800_858',
+  frontlineCampaignSlim: 'b9ed1767866d29186f198b523cd5571aeda02a88/0_1269_5184_1516',
+  frontlineCampaignFull: 'b9ed1767866d29186f198b523cd5571aeda02a88/0_0_5184_3456',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
