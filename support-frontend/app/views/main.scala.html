@@ -19,7 +19,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="nFrhJ3suC2OpKRasEkZyH1KZKpSZc-ofno_uunJgfvg" />
-
     @for(Preload(href, as, typeAttr) <- preload) {
       <link rel="preload" href="@href" as="@as" type="@typeAttr" crossorigin>
     }
@@ -154,14 +153,10 @@
 	</script>
 
     @body
-    <script type="text/javascript">
-      console.log("end")
-      console.log(document.body)
-	  </script>
+
     @* This script is intentionally at the bottom of the file. Please check
     all the critical flows work correctly if you change its position *@
     <script type="text/javascript" src="@assets(mainJsBundle)"></script>
       <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
-
   </body>
 </html>
