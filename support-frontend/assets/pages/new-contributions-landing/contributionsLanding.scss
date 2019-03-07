@@ -367,6 +367,7 @@ footer[role="contentinfo"] a {
   border-style: none solid;
   border-width: 0 1px;
   border-bottom: 1px solid gu-colour(neutral-86);
+  border-top: 1px solid gu-colour(neutral-86);
   background-color: gu-colour(neutral-100);
 
   @include mq($from: tablet) {
@@ -387,9 +388,9 @@ footer[role="contentinfo"] a {
 
 .gu-content__blurb {
   display: none;
-  max-width: 380px;
   border-top: 10px solid gu-colour(highlight-main);
   margin-left: auto;
+  max-width: 404px;
 
   @include mq($from: tablet) {
     display: block;
@@ -397,7 +398,7 @@ footer[role="contentinfo"] a {
   }
 }
 
-.gu-content__blurb--header {
+.gu-content__blurb-header {
   border: 0;
   left: 10px;
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
@@ -412,6 +413,17 @@ footer[role="contentinfo"] a {
 
   @include mq($from: tablet) {
     padding: 0 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+  }
+}
+
+.gu-content__blurb-blurb {
+  font-size: 16px;
+  line-height: 20px;
+  font-family: $gu-headline;
+  padding-bottom: $gu-v-spacing;
+  border-bottom: 1px solid gu-colour(highlight-main);
+  @include mq($from: tablet) {
+    margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
   }
 }
 
@@ -431,23 +443,8 @@ footer[role="contentinfo"] a {
   }
 }
 
-.gu-content__blurb--blurb {
-  font-size: 16px;
-  line-height: 20px;
-  font-family: $gu-headline;
 
-  @include mq($from: tablet) {
-    margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
-  }
-}
 
-.gu-content__blurb--help-variant {
-  max-width: 404px;
-  .gu-content__blurb--blurb {
-    padding-bottom: $gu-v-spacing;
-    border-bottom: 1px solid gu-colour(highlight-main);
-  }
-}
 
 /*= TYPOGRAPHY */
 body {
@@ -497,7 +494,6 @@ footer[role="contentinfo"] {
 .form--contribution {
   display: flex;
   flex-direction: column;
-  min-height: 409px;
   justify-content: space-between;
 }
 
@@ -505,6 +501,12 @@ footer[role="contentinfo"] {
   align-items: stretch;
   display: flex;
   flex-direction: column;
+}
+
+.form--message {
+  margin: 0 -10px;
+  padding: 7px 10px;
+  border-bottom: 1px solid gu-colour(neutral-86);
 }
 
 .form--content {
@@ -580,7 +582,6 @@ form {
 }
 
 .form__radio-group--tabs .form__radio-group-item {
-  border-top: 1px solid gu-colour(neutral-86);
   flex: 1;
 }
 
@@ -945,6 +946,13 @@ form {
 
 
 /* Server side rendering test loading message*/
+
+
+.gu-content--contribution-form--placeholder {
+  .gu-content__blurb-blurb, .gu-content__blurb-header, .countryGroups__label  {
+    visibility: hidden;
+  }
+}
 
 .form__radio-group--pills .amounts__placeholder .form__radio-group-input + .form__radio-group-label {
   border: none;

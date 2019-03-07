@@ -98,7 +98,7 @@ function ContributionSubmit(props: PropTypes) {
 
     // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
-    // See PayPalExpressButtonsx for more info.
+    // See PayPalExpressButton for more info.
     return (
       <div className="form__submit">
         <div

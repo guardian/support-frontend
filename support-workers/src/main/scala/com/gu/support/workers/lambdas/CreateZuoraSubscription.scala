@@ -98,11 +98,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   private def buildSubscribeItem(state: CreateZuoraSubscriptionState, promotionService: PromotionService): SubscribeItem = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
     SubscribeItem(
-      buildAccount(state),
-      buildContactDetails(state),
-      state.paymentMethod,
-      buildSubscriptionData(state, promotionService),
-      SubscribeOptions()
+      account = buildAccount(state),
+      billToContact = buildContactDetails(state.user, state.user.billingAddress),
+      soldToContact = state.user.deliveryAddress map (buildContactDetails(state.user, _)),
+      paymentMethod = state.paymentMethod,
+      subscriptionData = buildSubscriptionData(state, promotionService),
+      subscribeOptions= SubscribeOptions()
     )
   }
 
@@ -116,17 +117,17 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     }
   }
 
-  private def buildContactDetails(state: CreateZuoraSubscriptionState) = {
+  private def buildContactDetails(user: User, address: Address) = {
     ContactDetails(
-      firstName = state.user.firstName,
-      lastName = state.user.lastName,
-      workEmail = state.user.primaryEmailAddress,
-      address1 = state.user.billingAddress.lineOne,
-      address2 = state.user.billingAddress.lineTwo,
-      city = state.user.billingAddress.city,
-      postalCode = state.user.billingAddress.postCode,
-      country = state.user.billingAddress.country,
-      state = state.user.billingAddress.state
+      firstName = user.firstName,
+      lastName = user.lastName,
+      workEmail = user.primaryEmailAddress,
+      address1 = address.lineOne,
+      address2 = address.lineTwo,
+      city = address.city,
+      postalCode = address.postCode,
+      country = address.country,
+      state = address.state
     )
   }
 

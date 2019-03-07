@@ -16,18 +16,11 @@ import { getProductPrice } from 'helpers/subscriptions';
 
 function mapStateToProps(state: { common: CommonState }, ownProps: {ctaText: ?string, referringCta: ?string }) {
   const { countryGroupId } = state.common.internationalisation;
-  const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
   const price = getProductPrice('DigitalPack', countryGroupId);
 
   return {
     ctaText: ownProps.ctaText || 'Start your free trial now',
-    url: getDigitalCheckout(
-      referrerAcquisitionData,
-      countryGroupId,
-      ownProps.referringCta,
-      abParticipations,
-      optimizeExperiments,
-    ),
+    url: getDigitalCheckout(countryGroupId),
     price: `${currencies[state.common.internationalisation.currencyId].glyph}${price}`,
   };
 

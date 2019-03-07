@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream
 
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Fixtures.{email, idId}
+import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
@@ -22,12 +22,39 @@ object JsonFixtures {
     s"""
       "user":{
           "id": "$idId",
-          "primaryEmailAddress": "$email",
+          "primaryEmailAddress": "$emailAddress",
           "firstName": "test",
           "lastName": "user",
           "country": "GB",
           "billingAddress": {
             "country": "GB"
+          },
+          "allowMembershipMail": false,
+          "allowThirdPartyMail": false,
+          "allowGURelatedMail": false,
+          "isTestUser": false
+        }
+    """
+
+  val userJsonWithDeliveryAddress =
+    s"""
+      "user":{
+          "id": "$idId",
+          "primaryEmailAddress": "$emailAddress",
+          "firstName": "test",
+          "lastName": "user",
+          "country": "GB",
+          "billingAddress": {
+            "country": "GB",
+            "lineOne": "yaw kroy 09",
+            "city": "london",
+            "postCode": "n1 9gu"
+          },
+          "deliveryAddress": {
+            "country": "GB",
+            "lineOne": "90 york way",
+            "city": "london",
+            "postCode": "n1 9gu"
           },
           "allowMembershipMail": false,
           "allowThirdPartyMail": false,
@@ -269,8 +296,9 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            $userJson,
+            $userJsonWithDeliveryAddress,
             "product": ${everydayPaperJson},
+            "firstDeliveryDate": "2019-04-01",
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson
             }

@@ -74,13 +74,14 @@ const formActionCreators = {
   setPostcode: (postcode: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_POSTCODE', postcode }))),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (paymentMethod === 'PayPal') {
+    const state = getState();
+    if (paymentMethod === 'PayPal' && !state.page.checkout.payPalHasLoaded) {
       showPayPal(dispatch);
     }
     return dispatch({
       type: 'SET_PAYMENT_METHOD',
       paymentMethod,
-      country: getState().common.internationalisation.countryId,
+      country: state.common.internationalisation.countryId,
     });
   },
 

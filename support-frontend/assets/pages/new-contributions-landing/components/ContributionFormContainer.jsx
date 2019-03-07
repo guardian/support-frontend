@@ -14,9 +14,7 @@ import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { type LandingPageCopyTestVariant } from 'helpers/abTests/abtestDefinitions';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import { classNameWithModifiers } from 'helpers/utilities';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
@@ -53,7 +51,6 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
-  landingPageCopyTestVariant: LandingPageCopyTestVariant,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -70,7 +67,6 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
-  landingPageCopyTestVariant: state.common.abParticipations.landingPageCopy,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -84,36 +80,36 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Functions ----- //
 
+export type CountryMetaData = {
+  headerCopy: string,
+  contributeCopy?: React$Element<string>,
+  // URL to fetch ticker data from. null/undefined implies no ticker
+  tickerJsonUrl?: string,
+  // Optional message to display at the top of the form
+  formMessage?: React$Element<string>,
+};
+
 const defaultHeaderCopy = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\xa0the\nworld\xa0needs';
 const defaultContributeCopy = (
   <span>
-    Make a recurring commitment to support The&nbsp;Guardian long-term or a single contribution
-    as and when you feel like it – choose the option that suits you best.
+    The Guardian is editorially independent, meaning we set our own agenda. Our journalism is free from commercial
+    bias and not influenced by billionaire owners, politicians or shareholders. No one edits our editor. No one
+    steers our opinion. This is important as it enables us to give a voice to those less heard, challenge the
+    powerful and hold them to account. It’s what makes us different to so many others in the media, at a time when
+    factual, honest reporting is crucial.
+    <span className="bold"> Your support is critical for the future of Guardian journalism.</span>
   </span>);
 
-const defaultHeaderCopyAndContributeCopy = {
+const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
 };
 
-const helpVariantHeaderCopyAndContributeCopy = {
-  headerCopy: defaultHeaderCopy,
-  contributeCopy: (
-    <span>
-      The Guardian is editorially independent, meaning we set our own agenda. Our journalism is free from commercial
-      bias and not influenced by billionaire owners, politicians or shareholders. No one edits our editor. No one
-      steers our opinion. This is important as it enables us to give a voice to those less heard, challenge the
-      powerful and hold them to account. It’s what makes us different to so many others in the media, at a time when
-      factual, honest reporting is crucial.
-      <span className="bold"> Your support is critical for the future of Guardian journalism.</span>
-    </span>
-  ),
-  headerClasses: 'help-variant',
-};
-
 const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
 
-const defaultCountryGroupSpecificDetails = {
+const countryGroupSpecificDetails: {
+  [CountryGroupId]: CountryMetaData
+} = {
   GBPCountries: defaultHeaderCopyAndContributeCopy,
   EURCountries: defaultHeaderCopyAndContributeCopy,
   UnitedStates: defaultHeaderCopyAndContributeCopy,
@@ -126,41 +122,6 @@ const defaultCountryGroupSpecificDetails = {
   Canada: defaultHeaderCopyAndContributeCopy,
 };
 
-const helpVariantCountryGroupSpecificDetails = {
-  GBPCountries: helpVariantHeaderCopyAndContributeCopy,
-  EURCountries: helpVariantHeaderCopyAndContributeCopy,
-  UnitedStates: helpVariantHeaderCopyAndContributeCopy,
-  AUDCountries: {
-    ...helpVariantHeaderCopyAndContributeCopy,
-    headerCopy: australiaHeadline,
-  },
-  International: helpVariantHeaderCopyAndContributeCopy,
-  NZDCountries: helpVariantHeaderCopyAndContributeCopy,
-  Canada: helpVariantHeaderCopyAndContributeCopy,
-};
-
-export type CountryMetaData = {
-  headerCopy: string,
-  contributeCopy?: React$Element<string>,
-  headerClasses?: string,
-  // URL to fetch ticker data from. null/undefined implies no ticker
-  tickerJsonUrl?: string,
-};
-
-const countryGroupSpecificDetails: (variant: LandingPageCopyTestVariant) => {
-  [CountryGroupId]: CountryMetaData
-} = (variant: LandingPageCopyTestVariant) => {
-  switch (variant) {
-    case 'help':
-      return helpVariantCountryGroupSpecificDetails;
-    case 'control':
-    case 'notintest':
-    default:
-      return defaultCountryGroupSpecificDetails;
-  }
-};
-
-
 // ----- Render ----- //
 
 function ContributionFormContainer(props: PropTypes) {
@@ -170,27 +131,26 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = countryGroupSpecificDetails(props.landingPageCopyTestVariant)[props.countryGroupId];
-
-  const blurbClass = classNameWithModifiers('gu-content__blurb', [countryGroupDetails.headerClasses ? countryGroupDetails.headerClasses : '']);
+  const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
-        <div className={blurbClass}>
-          <h1 className="gu-content__blurb--header">{countryGroupDetails.headerCopy}</h1>
+        <div className="gu-content__blurb">
+          <h1 className="gu-content__blurb-header">{countryGroupDetails.headerCopy}</h1>
           {countryGroupDetails.tickerJsonUrl ?
             <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
           }
           { countryGroupDetails.contributeCopy ?
-            <p className="gu-content__blurb--blurb">{countryGroupDetails.contributeCopy}</p> : null
+            <p className="gu-content__blurb-blurb">{countryGroupDetails.contributeCopy}</p> : null
           }
         </div>
 
         <div className="gu-content__form">
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}
+            message={countryGroupDetails.formMessage}
           />
         </div>
         <DirectDebitPopUpForm
