@@ -45,12 +45,11 @@ import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalR
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import { signOut } from 'helpers/user/user';
+import { isPostcodeOptional, formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 
 import {
-  formIsValid,
-  validateForm,
   submitForm,
-  signOut,
   type FormField,
   type FormFields,
   getFormFields,
@@ -123,7 +122,6 @@ const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
 
 function statesForCountry(country: Option<IsoCountry>): React$Node {
-
   switch (country) {
     case 'US':
       return sortedOptions(usStates);
@@ -134,9 +132,7 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
     default:
       return null;
   }
-
 }
-
 
 // ----- Component ----- //
 
@@ -279,6 +275,7 @@ function CheckoutForm(props: PropTypes) {
                 id="postcode"
                 label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
                 type="text"
+                optional={isPostcodeOptional(props.country)}
                 value={props.postcode}
                 setValue={props.setPostcode}
                 error={firstError('postcode', props.formErrors)}

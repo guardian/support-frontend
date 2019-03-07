@@ -5,6 +5,7 @@
 import { getErrors, getFormFields } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { State } from './digitalSubscriptionCheckoutReducer';
 import type { Action } from './digitalSubscriptionCheckoutActions';
+import { formIsValid } from 'pages/digital-subscription-checkout/helpers/validation';
 
 // ----- Functions ----- //
 
@@ -16,14 +17,9 @@ const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) 
   }
 };
 
-const formIsValid = (state: State): boolean => {
-  const errors = getErrors(getFormFields(state));
-  return errors.length === 0;
-};
-
 function enableOrDisableForm() {
   return (dispatch: Function, getState: () => State): void => {
-    enableOrDisablePayPalExpressCheckoutButton(formIsValid(getState()));
+    enableOrDisablePayPalExpressCheckoutButton(formIsValid(getState));
   };
 }
 
