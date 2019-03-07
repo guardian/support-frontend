@@ -2,10 +2,9 @@
 
 // ----- Imports ----- //
 
-import { getErrors, getFormFields } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
-import type { State } from './digitalSubscriptionCheckoutReducer';
-import type { Action } from './digitalSubscriptionCheckoutActions';
+import type { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { formIsValid } from 'pages/digital-subscription-checkout/helpers/validation';
+import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 
 // ----- Functions ----- //
 
@@ -19,7 +18,7 @@ const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) 
 
 function enableOrDisableForm() {
   return (dispatch: Function, getState: () => State): void => {
-    enableOrDisablePayPalExpressCheckoutButton(formIsValid(getState));
+    enableOrDisablePayPalExpressCheckoutButton(formIsValid(getState()));
   };
 }
 

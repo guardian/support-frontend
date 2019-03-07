@@ -106,7 +106,7 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
-    formIsValid,
+    formIsValid: () => (dispatch: Dispatch<Action>, getState: () => State) => formIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
     setupRecurringPayPalPayment,

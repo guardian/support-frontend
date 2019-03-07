@@ -2,7 +2,7 @@
 
 import type { Option } from 'helpers/types/option';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Dispatch } from 'redux';
+import type { Dispatch } from 'redux';
 import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import { getFormFields, setFormErrors } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import type {
@@ -54,8 +54,8 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
-const formIsValid = () => (dispatch: Function, getState: () => State): boolean => {
-  const errors = getErrors(getFormFields(getState()));
+const formIsValid = (state: State): boolean => {
+  const errors = getErrors(getFormFields(state));
   return errors.length === 0;
 };
 
