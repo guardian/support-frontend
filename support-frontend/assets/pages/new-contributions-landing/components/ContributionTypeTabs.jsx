@@ -16,7 +16,6 @@ import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTrackin
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { DropMonthlyTestVariant } from 'helpers/abTests/abtestDefinitions';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
 
@@ -27,7 +26,6 @@ type PropTypes = {|
   countryId: IsoCountry,
   countryGroupId: CountryGroupId,
   switches: Switches,
-  dropMonthlyVariant: DropMonthlyTestVariant,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
 |};
 
@@ -36,7 +34,6 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
-  dropMonthlyVariant: state.common.abParticipations.dropMonthly,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -55,7 +52,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 // ----- Render ----- //
 
 function ContributionTypeTabs(props: PropTypes) {
-  const contributionTypes = getValidContributionTypes(props.dropMonthlyVariant);
+  const contributionTypes = getValidContributionTypes(props.countryGroupId);
 
   if (contributionTypes.length === 1 && contributionTypes[0] === 'ONE_OFF') {
     return (null);

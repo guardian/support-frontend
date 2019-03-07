@@ -21,7 +21,6 @@ import {
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
 import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
-import type { DropMonthlyTestVariant } from 'helpers/abTests/abtestDefinitions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   type Action,
@@ -34,6 +33,7 @@ import {
   updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Functions ----- //
 
@@ -52,13 +52,13 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(dropMonthlyVariant: DropMonthlyTestVariant): ContributionType {
+function getInitialContributionType(countryGroupId: CountryGroupId): ContributionType {
   const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('ANNUAL'));
   return (
     // make sure we don't select a contribution type which isn't on the page
-    getValidContributionTypes(dropMonthlyVariant).includes(contributionType)
+    getValidContributionTypes(countryGroupId).includes(contributionType)
       ? contributionType
-      : getValidContributionTypes(dropMonthlyVariant)[0]
+      : getValidContributionTypes(countryGroupId)[0]
   );
 }
 
@@ -131,12 +131,10 @@ function selectInitialAmounts(state: State, dispatch: Function) {
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
-  const dropMonthlyVariant = state.common.abParticipations.dropMonthly;
-  if (dropMonthlyVariant === 'notintest' || dropMonthlyVariant === 'control' || dropMonthlyVariant === 'variant') {
-    const contributionType = getInitialContributionType(dropMonthlyVariant);
-    const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
-    dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
-  }
+  const { countryGroupId } = state.common.internationalisation;
+  const contributionType = getInitialContributionType(countryGroupId);
+  const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
+  dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
 const init = (store: Store<State, Action, Function>) => {
