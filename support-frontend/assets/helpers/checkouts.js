@@ -60,7 +60,7 @@ function getValidContributionTypes(countryGroupId: CountryGroupId): Contribution
   const mappings = {
     GBPCountries: defaultContributionTypes,
     UnitedStates: defaultContributionTypes,
-    AUDCountries: ['ONE_OFF'],
+    AUDCountries: contributionTypesNoMonthly,
     EURCountries: contributionTypesNoMonthly,
     International: contributionTypesNoMonthly,
     NZDCountries: contributionTypesNoMonthly,

@@ -5,6 +5,7 @@
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
+import { getPathAfterRoute } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -142,6 +143,8 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
+  const tickerUrl = countryGroupDetails.tickerJsonUrl || getPathAfterRoute() ? '/ticker.json' : undefined;
+
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
@@ -154,8 +157,8 @@ function ContributionFormContainer(props: PropTypes) {
         </div>
 
         <div className="gu-content__form">
-          {countryGroupDetails.tickerJsonUrl ?
-            <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
+          {tickerUrl ?
+            <ContributionTicker tickerJsonUrl={tickerUrl} /> : null
           }
           {countryGroupDetails.formMessage ?
             <div className="gu-content__form__message">{countryGroupDetails.formMessage}</div> : null
