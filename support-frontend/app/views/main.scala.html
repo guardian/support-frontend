@@ -63,12 +63,6 @@
       </style>
     }
 
-      <style>
-        .guardianFontLoader {
-          display: none;
-        }
-      </style>
-
     @mainStyleBundle.fold(linkedCss, inline)
 
     <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
@@ -90,16 +84,16 @@
 	</script>
 
     <script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
-    <link rel="preload" href="https://f9e0f622.ngrok.io/font-loader" as="document">
     <link rel="preload"  as="script" href="@assets(mainJsBundle)">
 
     </head>
   <body class="header-tweaks">
     <script>
       (function(window, document) {
-      console.log("start");
-      console.time("here");
       var head = document.getElementsByTagName('head')[0];
+      var hideIframeStyle = document.createElement('style');
+      hideIframeStyle.innerHTML= ".guardianFontLoader {display: none;}";
+      head.append(hideIframeStyle);
       var useFont = function(font) {
         if (font.css) {
           var style = document.createElement('style');
@@ -110,7 +104,8 @@
 
       var loadFonts = function() {
         var iframe = document.createElement('iframe');
-        iframe.src = 'https://f9e0f622.ngrok.io/font-loader';
+        // TODO use prod link to font-loader
+        iframe.src = 'https://176c9a2c.ngrok.io/font-loader';
         iframe.classList = 'guardianFontLoader';
         // add iframe and wait for message
         window.addEventListener('message', function(e) {
