@@ -236,7 +236,7 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_PAYMENT_METHOD':
         return {
           ...state,
-          paymentMethod: countrySupportsDirectDebit(action.country) ? action.paymentMethod : 'Stripe',
+          paymentMethod: action.paymentMethod,
         };
 
       case 'SET_COUNTRY_CHANGED':
