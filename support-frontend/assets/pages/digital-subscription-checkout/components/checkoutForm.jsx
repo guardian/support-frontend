@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import type { Dispatch } from 'redux';
 
-import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
+import { auStates, caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
 import { Annual, Monthly } from 'helpers/billingPeriods';
@@ -45,12 +45,11 @@ import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalR
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import { signOut } from 'helpers/user/user';
+import { isPostcodeOptional, formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 
 import {
-  formIsValid,
-  validateForm,
   submitForm,
-  signOut,
   type FormField,
   type FormFields,
   getFormFields,
@@ -107,7 +106,7 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
-    formIsValid,
+    formIsValid: () => (dispatch: Dispatch<Action>, getState: () => State) => formIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
     setupRecurringPayPalPayment,
@@ -123,18 +122,17 @@ const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
 
 function statesForCountry(country: Option<IsoCountry>): React$Node {
-
   switch (country) {
     case 'US':
       return sortedOptions(usStates);
     case 'CA':
       return sortedOptions(caStates);
+    case 'AU':
+      return sortedOptions(auStates);
     default:
       return null;
   }
-
 }
-
 
 // ----- Component ----- //
 
@@ -268,24 +266,16 @@ function CheckoutForm(props: PropTypes) {
                 value={props.stateProvince}
                 setValue={props.setStateProvince}
                 error={firstError('stateProvince', props.formErrors)}
-                isShown={props.country === 'US' || props.country === 'CA'}
+                isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
               >
                 <option value="">--</option>
                 {statesForCountry(props.country)}
               </Select2>
               <Input1
-                id="county"
-                label="County"
-                optional
-                type="text"
-                value={props.county}
-                setValue={props.setCounty}
-                error={firstError('county', props.formErrors)}
-              />
-              <Input1
                 id="postcode"
-                label="Postcode"
+                label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
                 type="text"
+                optional={isPostcodeOptional(props.country)}
                 value={props.postcode}
                 setValue={props.setPostcode}
                 error={firstError('postcode', props.formErrors)}

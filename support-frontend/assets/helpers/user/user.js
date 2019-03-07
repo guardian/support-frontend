@@ -8,6 +8,7 @@ import { get as getCookie } from 'helpers/cookie';
 import { getSession } from 'helpers/storage';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import type { UserSetStateActions } from 'helpers/user/userActions';
+import { getSignoutUrl } from 'helpers/externalLinks';
 
 
 // ----- Functions ----- //
@@ -18,6 +19,8 @@ function isTestUser(): boolean {
   const testCookie = cookie.get('_test_username');
   return isDefined(uatMode) || isDefined(testCookie);
 }
+
+const signOut = () => { window.location.href = getSignoutUrl(); };
 
 const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
 
@@ -94,4 +97,4 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
 
 // ----- Exports ----- //
 
-export { init, isTestUser };
+export { init, isTestUser, signOut };
