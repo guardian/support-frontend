@@ -704,6 +704,13 @@ form {
   margin-left: 5px;
 }
 
+.form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .svg-direct-debit-symbol {
+  fill: #00B2FF;
+  width: 24px;
+  margin-right: 8px;
+  margin-left: 5px;
+}
+
 .form__radio-group--contribution-pay .form__legend {
   font-weight: bold;
 }
