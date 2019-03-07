@@ -928,6 +928,50 @@ form {
 .gu-content--frontline-campaign {
   .gu-content__main {
     background: no-repeat url('https://media.guim.co.uk/b9ed1767866d29186f198b523cd5571aeda02a88/0_1269_5184_1516/2000.jpg');
+    background-size: contain;
+  }
+
+  .gu-content__blurb-header {
+    color: white;
+  }
+
+  .gu-content__header {
+    border-bottom: 0;
+  }
+
+  .gu-content__blurb, .gu-content__form {
+    margin-top: $gu-v-spacing * 8;
+  }
+
+  $content-left-margin-tablet: 100px;
+  $content-left-margin-leftCol: 200px;
+
+  header[role="banner"] {
+    @include mq($from: tablet) {
+      padding-left: $content-left-margin-tablet;
+    }
+
+    @include mq($from: leftCol) {
+      padding-left: $content-left-margin-leftCol;
+    }
+  }
+
+  .gu-content__content {
+    @include mq($from: tablet) {
+      margin-left: $content-left-margin-tablet;
+    }
+
+    @include mq($from: leftCol) {
+      margin-left: $content-left-margin-leftCol;
+    }
+  }
+
+  .gu-content__blurb {
+    margin-right: $gu-h-spacing;
+  }
+
+  .gu-content__blurb-blurb {
+    margin-top: 10vw;
   }
 }
 

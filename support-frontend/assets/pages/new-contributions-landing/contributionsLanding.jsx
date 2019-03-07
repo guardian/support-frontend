@@ -70,7 +70,7 @@ const router = (
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
           render={() => (
             <Page
-              classModifiers={['contribution-form', ...(isFrontlineCampaign ? ['frontline-campaign'] : [])]}
+              classModifiers={['contribution-form', ...(isFrontlineCampaign() ? ['frontline-campaign'] : [])]}
               header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
