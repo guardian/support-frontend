@@ -37,7 +37,7 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       error: formError('townCity', 'Please enter a value'),
     },
     {
-      rule: isPostcodeOptional(fields.country) ? true : nonEmptyString(fields.postcode),
+      rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postcode),
       error: formError('postcode', 'Please enter a value'),
     },
     {

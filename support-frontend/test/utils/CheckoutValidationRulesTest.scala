@@ -16,7 +16,7 @@ class SimpleCheckoutFormValidationTest extends FlatSpec with Matchers {
     SimpleCheckoutFormValidation.passes(validDigitalPackRequest) shouldBe true
   }
 
-  "SimpleCheckoutFormValidation.passes" should "reject empty strings in the name field" in {
+  it should "reject empty strings in the name field" in {
     val requestMissingFirstName = validDigitalPackRequest.copy(firstName = "")
     SimpleCheckoutFormValidation.passes(requestMissingFirstName) shouldBe false
   }
@@ -34,27 +34,67 @@ class DigitalPackValidationTest extends FlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
-  "DigitalPackValidation.passes" should "also fail if the country is Canada and there is no state selected" in {
+  it should "also fail if the country is Canada and there is no state selected" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, state = None),
     )
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
-  "DigitalPackValidation.passes" should "pass if there is no state selected and the country is Australia" in {
+  it should "also fail if the country is Australia and there is no state selected" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, state = None),
       product = DigitalPack(Currency.AUD, Monthly)
     )
-    DigitalPackValidation.passes(requestMissingState) shouldBe true
+    DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
-  "DigitalPackValidation.passes" should "fail if the payment field received is an empty string" in {
+  it should "also fail if the country is Australia and there is no postcode" in {
+    val requestMissingPostcode = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
+      product = DigitalPack(Currency.AUD, Monthly)
+    )
+    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+  }
+
+  it should "also fail if the country is United Kingdom and there is no postcode" in {
+    val requestMissingPostcode = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
+      product = DigitalPack(Currency.GBP, Monthly)
+    )
+    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+  }
+
+  it should "also fail if the country is United States and there is no postcode" in {
+    val requestMissingPostcode = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
+      product = DigitalPack(Currency.USD, Monthly)
+    )
+    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+  }
+
+  it should "also fail if the country is Canada and there is no postcode" in {
+    val requestMissingPostcode = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
+      product = DigitalPack(Currency.CAD, Monthly)
+    )
+    DigitalPackValidation.passes(requestMissingPostcode) shouldBe false
+  }
+
+  it should "also allow a missing postcode in other countries" in {
+    val requestMissingPostcode = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Ireland, postCode = None),
+      product = DigitalPack(Currency.EUR, Monthly)
+    )
+    DigitalPackValidation.passes(requestMissingPostcode) shouldBe true
+  }
+
+  it should "fail if the payment field received is an empty string" in {
     val requestMissingState = validDigitalPackRequest.copy(paymentFields = StripePaymentFields(""))
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
-  "DigitalPackValidation.passes" should "succeed for a standard country and currency combination" in {
+  it should "succeed for a standard country and currency combination" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, state = None),
       product = DigitalPack(Currency.GBP, Annual),
@@ -62,7 +102,7 @@ class DigitalPackValidationTest extends FlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingState) shouldBe true
   }
 
-  "DigitalPackValidation.passes" should "fail if the country and currency combination is unsupported" in {
+  it should "fail if the country and currency combination is unsupported" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = Some("VA")),
       product = DigitalPack(Currency.GBP, Annual)
@@ -81,17 +121,17 @@ class PaperValidationTest extends FlatSpec with Matchers {
     PaperValidation.passes(requestDeliveredToUs) shouldBe false
   }
 
-  "PaperValidation.passes" should "fail if the currency is USD" in {
+  it should "fail if the currency is USD" in {
     val requestDeliveredToUs = validPaperRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday))
     PaperValidation.passes(requestDeliveredToUs) shouldBe false
   }
 
-  "PaperValidation.passes" should "succeed if the country is UK and the currency is GBP" in {
+  it should "succeed if the country is UK and the currency is GBP" in {
     val requestDeliveredToUs = validPaperRequest
     PaperValidation.passes(requestDeliveredToUs) shouldBe true
   }
 
-  "PaperValidation.passes" should "fail if there is no first delivery date" in {
+  it should "fail if there is no first delivery date" in {
     val requestDeliveredToUs = validPaperRequest.copy(firstDeliveryDate = None)
     PaperValidation.passes(requestDeliveredToUs) shouldBe false
   }
@@ -117,7 +157,7 @@ object TestData {
       None,
       None,
       state = Some("VA"),
-      None,
+      postCode = Some("111111"),
       country = Country.US,
     ),
     deliveryAddress = None
