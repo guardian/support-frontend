@@ -12,6 +12,7 @@ import {
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
+import { getQueryParameter } from 'helpers/url';
 import {
   getContributionTypeFromSessionOrElse,
   getContributionTypeFromUrlOrElse,
@@ -97,22 +98,26 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation));
   };
 
-  loadStripe().then(() => {
-    ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
-      const validPayments = getValidPaymentMethods(contribType, switches, countryId);
-      if (validPayments.includes('Stripe')) {
-        initialiseStripeCheckout(
-          onPaymentAuthorisation,
-          contribType,
-          currencyId,
-          !!isTestUser,
-          dispatch,
-        );
-      }
+  if (getQueryParameter('stripe-checkout-js') !== 'no') {
+    loadStripe().then(() => {
+      ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
+        const validPayments = getValidPaymentMethods(contribType, switches, countryId);
+        if (validPayments.includes('Stripe')) {
+          initialiseStripeCheckout(
+            onPaymentAuthorisation,
+            contribType,
+            currencyId,
+            !!isTestUser,
+            dispatch,
+          );
+        }
+      });
     });
-  });
+  }
 
-  loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
+  if (getQueryParameter('paypal-js') !== 'no') {
+    loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
+  }
 }
 
 function selectInitialAmounts(state: State, dispatch: Function) {
