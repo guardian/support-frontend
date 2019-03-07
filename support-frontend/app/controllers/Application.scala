@@ -15,7 +15,7 @@ import cookies.ServersideAbTestCookie
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import play.api.mvc._
-import services.{IdentityService, PaymentAPIService}
+import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
 import views.{EmptyDiv, Preload}
@@ -31,6 +31,7 @@ class Application(
     regularStripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     paymentAPIService: PaymentAPIService,
+    membersDataService: MembersDataService,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     guardianDomain: GuardianDomain,
@@ -135,6 +136,7 @@ class Application(
       regularUatPayPalConfig = payPalConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      existingPaymentMethodsEndpoint = membersDataService.existingPaymentMethodsEndpoint,
       idUser = idUser
     )
   }

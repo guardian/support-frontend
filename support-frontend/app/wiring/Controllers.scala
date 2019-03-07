@@ -25,6 +25,7 @@ trait Controllers {
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     paymentAPIService,
+    membersDataService,
     stringsConfig,
     allSettingsProvider,
     appConfig.guardianDomain,
