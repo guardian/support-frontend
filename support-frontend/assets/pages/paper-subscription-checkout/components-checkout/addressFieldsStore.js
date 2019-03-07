@@ -21,14 +21,15 @@ export type FormFields = {|
 export type FormField = $Keys<FormFields>;
 export type FormErrors = FormError<FormField>[];
 
-type AddressFieldsState = {|
+export type AddressFieldsState = {|
   ...FormFields,
   formErrors: FormErrors,
 |}
 
 export type State = {|
   fields: AddressFieldsState,
-  postcode: PostcodeFinderState
+  postcode: PostcodeFinderState,
+  countryList: IsoCountry[],
 |};
 
 export type Action =

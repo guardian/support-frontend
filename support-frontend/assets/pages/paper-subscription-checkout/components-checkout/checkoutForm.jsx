@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { regularPrice as paperRegularPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
@@ -15,14 +14,9 @@ import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
-import { Input } from 'components/forms/input';
-import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
 import { options } from 'components/forms/customFields/options';
 import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -45,7 +39,13 @@ import {
   getBillingAddress,
   type State,
 } from '../paperSubscriptionCheckoutReducer';
-import { withStore } from './addressFields';
+import { domesticAddressWithStore } from './addressFields';
+import {
+  FieldsetWithError,
+  InputWithError,
+  SelectWithLabel,
+  StaticInputWithLabel,
+} from 'components/subscriptionCheckouts/formFields';
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -71,14 +71,8 @@ function mapStateToProps(state: State) {
 
 // ----- Form Fields ----- //
 
-const StaticInputWithLabel = withLabel(Input);
-const InputWithLabel = asControlled(StaticInputWithLabel);
-const InputWithError = withError(InputWithLabel);
-const SelectWithLabel = compose(asControlled, withLabel)(Select);
-const FieldsetWithError = withError(Fieldset);
-
-const DeliveryAddress = withStore('delivery', getDeliveryAddress);
-const BillingAddress = withStore('billing', getBillingAddress);
+const DeliveryAddress = domesticAddressWithStore('delivery', getDeliveryAddress);
+const BillingAddress = domesticAddressWithStore('billing', getBillingAddress);
 
 // ----- Component ----- //
 

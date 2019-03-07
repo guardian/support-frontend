@@ -2,18 +2,12 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-
-import { Input } from 'components/forms/input';
-import { Select } from 'components/forms/select';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
-
+import { InputWithError, SelectWithError, SelectWithIsShown } from 'components/subscriptionCheckouts/formFields';
+import { isPostcodeOptional } from 'pages/digital-subscription-checkout/helpers/validation';
 import { withStore as postcodeFinderWithStore } from './postcodeFinder';
 import { type PostcodeFinderState } from './postcodeFinderStore';
 import { type Address } from '../helpers/addresses';
@@ -26,6 +20,7 @@ import { getPostcodeForm,
   type FormFields,
   type ActionCreators as AddressActionCreators,
   type State as AddressState } from './addressFieldsStore';
+import type { Option } from 'helpers/types/option';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -39,13 +34,62 @@ type PropTypes<GlobalState> = {|
   ...StatePropTypes<GlobalState>,
 |}
 
-const StaticInputWithLabel = withLabel(Input);
-const InputWithLabel = asControlled(StaticInputWithLabel);
-const InputWithError = withError(InputWithLabel);
-const SelectWithLabel = compose(asControlled, withLabel)(Select);
-const SelectWithError = withError(SelectWithLabel);
+function statesForCountry(country: Option<IsoCountry>): React$Node {
+  switch (country) {
+    case 'US':
+      return sortedOptions(usStates);
+    case 'CA':
+      return sortedOptions(caStates);
+    case 'AU':
+      return sortedOptions(auStates);
+    default:
+      return null;
+  }
+}
 
-class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
+function CommonAddressFields<GlobalState>(props: PropTypes<GlobalState>) {
+  return (
+    <div>
+      <InputWithError
+        id={`${props.scope}-lineOne`}
+        label="Address Line 1"
+        type="text"
+        value={props.lineOne}
+        setValue={props.setAddressLineOne}
+        error={firstError('lineOne', props.formErrors)}
+      />
+      <InputWithError
+        id={`${props.scope}-lineTwo`}
+        label="Address Line 2"
+        optional
+        type="text"
+        value={props.lineTwo}
+        setValue={props.setAddressLineTwo}
+        error={firstError('lineTwo', props.formErrors)}
+      />
+      <InputWithError
+        id={`${props.scope}-city`}
+        label="Town/City"
+        type="text"
+        value={props.city}
+        setValue={props.setTownCity}
+        error={firstError('city', props.formErrors)}
+      />
+      <SelectWithError
+        id={`${props.scope}-country`}
+        label="Country"
+        value={props.country}
+        setValue={props.setCountry}
+        error={firstError('country', props.formErrors)}
+      >
+        <option value="">--</option>
+        {sortedOptions(newspaperCountries)}
+      </SelectWithError>
+    </div>
+  );
+}
+
+class DomesticAddress<GlobalState> extends Component<PropTypes<GlobalState>> {
 
   constructor(props: PropTypes<GlobalState>) {
     super(props);
@@ -87,47 +131,49 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           }
         }}
         />
-        <InputWithError
-          id={`${scope}-lineOne`}
-          label="Address Line 1"
-          type="text"
-          value={props.lineOne}
-          setValue={props.setAddressLineOne}
-          error={firstError('lineOne', props.formErrors)}
-        />
-        <InputWithError
-          id={`${scope}-lineTwo`}
-          label="Address Line 2"
-          optional
-          type="text"
-          value={props.lineTwo}
-          setValue={props.setAddressLineTwo}
-          error={firstError('lineTwo', props.formErrors)}
-        />
-        <InputWithError
-          id={`${scope}-city`}
-          label="Town/City"
-          type="text"
-          value={props.city}
-          setValue={props.setTownCity}
-          error={firstError('city', props.formErrors)}
-        />
-        <SelectWithError
-          id={`${scope}-country`}
-          label="Country"
-          value={props.country}
-          setValue={props.setCountry}
-          error={firstError('country', props.formErrors)}
-        >
-          <option value="">--</option>
-          {sortedOptions(newspaperCountries)}
-        </SelectWithError>
+        <CommonAddressFields {...this.props} />
       </div>
     );
   }
 }
 
-export const withStore = <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
+class InternationalAddress<GlobalState> extends Component<PropTypes<GlobalState>> {
+
+  constructor(props: PropTypes<GlobalState>) {
+    super(props);
+  }
+
+  render() {
+    const { ...props } = this.props;
+    return (
+      <div>
+        <CommonAddressFields {...props} />
+        <SelectWithIsShown
+          id="stateProvince"
+          label={props.country === 'CA' ? 'Province/Territory' : 'State'}
+          value={props.stateProvince}
+          setValue={props.setStateProvince}
+          error={firstError('stateProvince', props.formErrors)}
+          isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
+        >
+          <option value="">--</option>
+          {statesForCountry(props.country)}
+        </SelectWithIsShown>
+        <InputWithError
+          id="postcode"
+          label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
+          type="text"
+          optional={isPostcodeOptional(props.country)}
+          value={props.postCode}
+          setValue={props.setPostcode}
+          error={firstError('postCode', props.formErrors)}
+        />
+      </div>
+    );
+  }
+}
+
+export const domesticAddressWithStore = <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
   (state: GlobalState) => ({
     ...getFormFields(traverseState(state)),
     formErrors: getStateFormErrors(traverseState(state)),
@@ -135,7 +181,17 @@ export const withStore = <GlobalState>(scope: Address, traverseState: GlobalStat
     scope,
   }),
   addressActionCreatorsFor(scope),
-)(AddressFields);
+)(DomesticAddress);
+
+export const internationalAddressWithStore = <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
+  (state: GlobalState) => ({
+    ...getFormFields(traverseState(state)),
+    formErrors: getStateFormErrors(traverseState(state)),
+    traverseState,
+    scope,
+  }),
+  addressActionCreatorsFor(scope),
+)(InternationalAddress);
 
 
-export default AddressFields;
+export default DomesticAddress;

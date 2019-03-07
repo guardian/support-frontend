@@ -30,6 +30,7 @@ import { validateForm } from 'pages/digital-subscription-checkout/helpers/valida
 import type { Action } from './digitalSubscriptionCheckoutActions';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import type { State as AddressState } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
 
 // ----- Types ----- //
 
@@ -99,6 +100,26 @@ function getFormFields(state: State): FormFields {
 
 function getEmail(state: State): string {
   return state.page.checkout.email;
+}
+
+function getAddress(state: State): AddressState {
+  return {
+    fields: {
+      lineOne: state.page.checkout.addressLine1,
+      lineTwo: state.page.checkout.addressLine2,
+      city: state.page.checkout.townCity,
+      country: state.common.internationalisation.countryId,
+      state: state.page.checkout.stateProvince,
+      postCode: state.page.checkout.postcode,
+      formErrors: [],
+    },
+    postcode: {
+      postcode: state.page.checkout.postcode,
+      results: [],
+      isLoading: false,
+      error: null,
+    },
+  };
 }
 
 // ----- Functions ----- //
@@ -219,6 +240,7 @@ function initReducer(initialCountry: IsoCountry) {
 export {
   initReducer,
   getFormFields,
+  getAddress,
   getEmail,
   submitForm,
 };

@@ -4,26 +4,16 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import type { Dispatch } from 'redux';
 
-import { auStates, caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { type Option } from 'helpers/types/option';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 
 import { Outset } from 'components/content/content';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
-import { Input } from 'components/forms/input';
-import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
-import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
-import { canShow } from 'hocs/canShow';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -46,7 +36,7 @@ import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subs
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { signOut } from 'helpers/user/user';
-import { isPostcodeOptional, formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
+import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 
 import {
   submitForm,
@@ -55,6 +45,9 @@ import {
   getFormFields,
   type State,
 } from '../digitalSubscriptionCheckoutReducer';
+import { InputWithError, StaticInputWithLabel } from 'components/subscriptionCheckouts/formFields';
+import { internationalAddressWithStore } from 'pages/paper-subscription-checkout/components-checkout/addressFields';
+import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -114,26 +107,6 @@ function mapDispatchToProps() {
   };
 }
 
-// ----- Form Fields ----- //
-
-const InputWithLabel = withLabel(Input);
-const Input1 = compose(asControlled, withError)(InputWithLabel);
-const Select1 = compose(asControlled, withError, withLabel)(Select);
-const Select2 = canShow(Select1);
-
-function statesForCountry(country: Option<IsoCountry>): React$Node {
-  switch (country) {
-    case 'US':
-      return sortedOptions(usStates);
-    case 'CA':
-      return sortedOptions(caStates);
-    case 'AU':
-      return sortedOptions(auStates);
-    default:
-      return null;
-  }
-}
-
 // ----- Component ----- //
 
 function CheckoutForm(props: PropTypes) {
@@ -160,6 +133,8 @@ function CheckoutForm(props: PropTypes) {
       billingPeriod={Annual}
     />) : '';
 
+  const Address = internationalAddressWithStore('billing', getAddress);
+
   return (
     <Content modifierClasses={['your-details']}>
       <Outset>
@@ -170,7 +145,7 @@ function CheckoutForm(props: PropTypes) {
           }}
           >
             <FormSection title="Your details">
-              <Input1
+              <InputWithError
                 id="first-name"
                 label="First name"
                 type="text"
@@ -178,7 +153,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setFirstName}
                 error={firstError('firstName', props.formErrors)}
               />
-              <Input1
+              <InputWithError
                 id="last-name"
                 label="Last name"
                 type="text"
@@ -186,7 +161,7 @@ function CheckoutForm(props: PropTypes) {
                 setValue={props.setLastName}
                 error={firstError('lastName', props.formErrors)}
               />
-              <InputWithLabel
+              <StaticInputWithLabel
                 id="email"
                 label="Email"
                 type="email"
@@ -213,7 +188,7 @@ function CheckoutForm(props: PropTypes) {
                   </span>
                 )}
               />
-              <Input1
+              <InputWithError
                 id="telephone"
                 label="Telephone"
                 optional
@@ -225,61 +200,7 @@ function CheckoutForm(props: PropTypes) {
               />
             </FormSection>
             <FormSection title="Address">
-              <Input1
-                id="address-line-1"
-                label="Address Line 1"
-                type="text"
-                value={props.addressLine1}
-                setValue={props.setAddressLine1}
-                error={firstError('addressLine1', props.formErrors)}
-              />
-              <Input1
-                id="address-line-2"
-                label="Address Line 2"
-                optional
-                type="text"
-                value={props.addressLine2}
-                setValue={props.setAddressLine2}
-                error={firstError('addressLine2', props.formErrors)}
-              />
-              <Input1
-                id="town-city"
-                label="Town/City"
-                type="text"
-                value={props.townCity}
-                setValue={props.setTownCity}
-                error={firstError('townCity', props.formErrors)}
-              />
-              <Select1
-                id="country"
-                label="Country"
-                value={props.country}
-                setValue={props.setBillingCountry}
-                error={firstError('country', props.formErrors)}
-              >
-                <option value="">--</option>
-                {sortedOptions(countries)}
-              </Select1>
-              <Select2
-                id="stateProvince"
-                label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-                value={props.stateProvince}
-                setValue={props.setStateProvince}
-                error={firstError('stateProvince', props.formErrors)}
-                isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
-              >
-                <option value="">--</option>
-                {statesForCountry(props.country)}
-              </Select2>
-              <Input1
-                id="postcode"
-                label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
-                type="text"
-                optional={isPostcodeOptional(props.country)}
-                value={props.postcode}
-                setValue={props.setPostcode}
-                error={firstError('postcode', props.formErrors)}
-              />
+              <Address />
             </FormSection>
             <FormSection title="How often would you like to pay?">
               <Fieldset legend="How often would you like to pay?">
