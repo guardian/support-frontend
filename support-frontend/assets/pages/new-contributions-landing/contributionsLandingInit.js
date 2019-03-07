@@ -21,6 +21,7 @@ import {
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
 import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   type Action,
@@ -33,7 +34,6 @@ import {
   updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 // ----- Functions ----- //
 
