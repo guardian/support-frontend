@@ -7,7 +7,6 @@
   background: #FCF8F2;
   box-sizing: border-box;
   height: auto;
-  min-height: 200px;
 
   & * {
     box-sizing: border-box;
@@ -19,8 +18,8 @@
 .the-moment-hero {
   display: flex;
   align-items: center;
+  min-height: 360px;
   padding: $gu-v-spacing*2 0 $gu-v-spacing*3;
-  height: 100%;
   
   @include mq($from: tablet) {
     padding: $gu-v-spacing*2 0 $gu-v-spacing*4;
@@ -94,6 +93,7 @@
   align-items: center;
   justify-content: center;
   max-width: gu-span(8);
+  display: none; //TODO: fix image
   
   @include mq($from: mobileMedium) {
     padding-top: $gu-v-spacing*1;
