@@ -5,7 +5,7 @@
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { getPathAfterRoute } from 'helpers/url';
+import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -108,10 +108,10 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 
 const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
 
-const australiaClimateCampaignFormMessage = (
-  <div className="climate-crunch">
-    <div className="climate-crunch__headline">Make a contribution</div>
-    <div className="climate-crunch__body">to our dedicated series ‘Climate Crunch’</div>
+const australiaFrontlineFormMessage = (
+  <div className="frontline-campaign">
+    <div className="frontline-campaign__headline">Make a contribution</div>
+    <div className="frontline-campaign__body">to our dedicated series ‘Climate Crunch’</div>
   </div>
 );
 
@@ -124,8 +124,6 @@ const countryGroupSpecificDetails: {
   AUDCountries: {
     ...defaultHeaderCopyAndContributeCopy,
     headerCopy: australiaHeadline,
-    tickerJsonUrl: '/ticker.json',
-    formMessage: australiaClimateCampaignFormMessage,
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
@@ -143,7 +141,13 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
-  const tickerUrl = countryGroupDetails.tickerJsonUrl || getPathAfterRoute() ? '/ticker.json' : undefined;
+  const tickerUrl =
+    countryGroupDetails.tickerJsonUrl ||
+    getQueryParameter('ticker') === 'true' ? '/ticker.json' : undefined;
+
+  const formMessage =
+    countryGroupDetails.formMessage ||
+    isFrontlineCampaign() ? australiaFrontlineFormMessage : undefined;
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
@@ -160,8 +164,8 @@ function ContributionFormContainer(props: PropTypes) {
           {tickerUrl ?
             <ContributionTicker tickerJsonUrl={tickerUrl} /> : null
           }
-          {countryGroupDetails.formMessage ?
-            <div className="gu-content__form__message">{countryGroupDetails.formMessage}</div> : null
+          {formMessage ?
+            <div className="gu-content__form__message">{formMessage}</div> : null
           }
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}
