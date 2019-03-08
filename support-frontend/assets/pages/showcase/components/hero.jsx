@@ -21,7 +21,7 @@ export default function BreakingHeadlines() {
         <figure className="showcase-hero__figure">
           <div className="showcase-hero__image">
             <GridImage
-              gridId="showcaseChrisAlt"
+              gridId="showcaseChris"
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
@@ -29,7 +29,7 @@ export default function BreakingHeadlines() {
           </div>
           <div className="showcase-hero__image">
             <GridImage
-              gridId="showcaseChris"
+              gridId="showcaseZuckEyes"
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
