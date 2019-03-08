@@ -44,6 +44,7 @@ const content = (
       heading="Help us deliver independent investigative journalism"
       appearance="feature"
       content={<AnchorButton aria-label={null} icon={<SvgChevron />} href="#support">Ways to support</AnchorButton>}
+      hasCampaign={false}
     >
       <GridPicture
         sources={[

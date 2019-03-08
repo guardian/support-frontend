@@ -15,16 +15,16 @@ type WrapperPropTypes = {|
   children: Node,
   modifierClasses: Array<?string>,
   className: ?string,
-  appearance: 'grey' | 'feature' | 'custom',
+  appearance: 'grey' | 'feature' | 'custom' | 'campaign',
 |};
 
 type PropTypes = {|
   ...WrapperPropTypes,
   overheading: string,
   heading: string,
-  content?: Option<Node>
+  content?: Option<Node>,
+  hasCampaign: boolean
 |};
-
 
 // ----- Render ----- //
 
@@ -55,14 +55,27 @@ const HeroHanger = ({
   </div>
 );
 
+const HeroHeading = ({
+  children,
+  hasCampaign,
+}: {children: Node, hasCampaign: boolean}) => (
+  <div className={classNameWithModifiers('component-product-page-hero-heading', [hasCampaign ? 'campaign' : null])}>
+    <LeftMarginSection>
+      {children}
+    </LeftMarginSection>
+  </div>
+);
+
 const ProductPageHero = ({
-  overheading, heading, content, modifierClasses, children, appearance,
+  overheading, heading, content, modifierClasses, children, appearance, hasCampaign,
 }: PropTypes) => (
   <header>
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
-      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
     </HeroWrapper>
+    <HeroHeading {...{ hasCampaign }}>
+      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
+    </HeroHeading>
     {content &&
       <HeroHanger>{content}</HeroHanger>
     }
@@ -75,6 +88,6 @@ ProductPageHero.defaultProps = {
   ...HeroWrapper.defaultProps,
 };
 
-export { HeroHanger, HeroWrapper };
+export { HeroHanger, HeroWrapper, HeroHeading };
 
 export default ProductPageHero;

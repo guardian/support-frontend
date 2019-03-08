@@ -105,6 +105,18 @@ $gu-fonts: (
 		font-weight: 700;
 	}
 }
+@mixin gu-fontset-heading-large-alt($size-only: false) {
+	@include gu-typeface(headline, 32, $size-only);
+  @include mq($from: tablet) {
+		@include gu-typeface(headline, 32, $size-only: true);
+  }
+  @include mq($from: leftCol) {
+		@include gu-typeface(headline, 42, $size-only: true);
+	}
+	@if $size-only == false {
+		font-weight: 700;
+	}
+}
 @mixin gu-fontset-heading($size-only: false) {
 	@include gu-typeface(headline, 22, $size-only);
   @include mq($from: tablet) {
