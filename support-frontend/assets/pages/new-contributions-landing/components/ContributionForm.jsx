@@ -78,7 +78,6 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
-  message: ?React$Element<string>,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -210,7 +209,6 @@ function ContributionForm(props: PropTypes) {
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <div>
-        {props.message ? <div className={classNameWithModifiers('form', ['message'])}>{props.message}</div> : null}
         <ContributionTypeTabs />
         <NewContributionAmount
           checkOtherAmount={checkAmount}
