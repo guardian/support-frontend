@@ -189,9 +189,9 @@ object TestData {
     telephoneNumber = None,
     promoCode = None,
     billingAddress = Address(
+      Some("123 easy street"),
       None,
-      None,
-      None,
+      Some("arlington"),
       state = Some("VA"),
       postCode = Some("111111"),
       country = Country.US,
