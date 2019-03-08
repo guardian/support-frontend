@@ -60,6 +60,10 @@
 }
 
 @include mq($until: tablet) {
+
+  .showcase-hero-heading {
+    padding-right: $gu-h-spacing * 1;
+  }
   .showcase-hero__figure {
     display: flex;
     flex-direction: column;
