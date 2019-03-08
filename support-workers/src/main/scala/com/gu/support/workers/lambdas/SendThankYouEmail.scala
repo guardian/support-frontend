@@ -27,7 +27,6 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     context: Context,
     services: Services
   ): FutureHandlerResult = {
-    SafeLogger.info(s"Number of available processors: ${Runtime.getRuntime.availableProcessors()}")
     for {
       mandateId <- fetchDirectDebitMandateId(state, services.zuoraService)
       emailResult <- sendEmail(state, mandateId)
