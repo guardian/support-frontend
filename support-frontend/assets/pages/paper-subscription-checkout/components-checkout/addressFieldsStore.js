@@ -8,12 +8,10 @@ import { setCountry, type Action as CommonAction } from 'helpers/page/commonActi
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { type RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type Scoped } from 'helpers/scoped';
-
-import { type Address } from '../helpers/addresses';
-import { postcodeFinderReducerFor, type PostcodeFinderState } from './postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
-
+import { postcodeFinderReducerFor, type PostcodeFinderState } from './postcodeFinderStore';
+import { type Address } from '../helpers/addresses';
 
 // ----- Types ----- //
 
@@ -66,7 +64,7 @@ const setFormErrorsFor = (scope: Address) => (errors: Array<FormError<FormField>
   errors,
 });
 
-const isPostcodeOptional = (country: Option<IsoCountry>): boolean  =>
+const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
   country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
 
 const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
@@ -125,10 +123,10 @@ const addressActionCreatorsFor = (scope: Address) => ({
     city,
   }))),
   setState: (state: string, country: IsoCountry) => ({
-      type: 'SET_STATE',
-      state,
-      country: country,
-    }),
+    type: 'SET_STATE',
+    state,
+    country,
+  }),
   setPostcode: (postCode: string): Function => (setFormSubmissionDependentValue(() => ({
     type: 'SET_POSTCODE',
     postCode,

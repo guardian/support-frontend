@@ -7,6 +7,9 @@ import { auStates, caStates, countries, newspaperCountries, usStates } from 'hel
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { InputWithError, SelectWithError, SelectWithIsShown } from 'components/subscriptionCheckouts/formFields';
+import type { Option } from 'helpers/types/option';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { isPostcodeOptional } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
 import { withStore as postcodeFinderWithStore } from './postcodeFinder';
 import { type PostcodeFinderState } from './postcodeFinderStore';
 import { type Address } from '../helpers/addresses';
@@ -19,9 +22,6 @@ import { getPostcodeForm,
   type FormFields,
   type ActionCreators as AddressActionCreators,
   type State as AddressState } from './addressFieldsStore';
-import type { Option } from 'helpers/types/option';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { isPostcodeOptional } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -48,7 +48,7 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
   }
 }
 
-function CommonAddressFields<GlobalState>(props: {...PropTypes<GlobalState>, countryList: IsoCountry[]}) {
+function CommonAddressFields<GlobalState>(props: {...PropTypes<GlobalState>, countryList: {}}) {
   return (
     <div>
       <InputWithError
@@ -132,67 +132,61 @@ class DomesticAddress<GlobalState> extends Component<PropTypes<GlobalState>> {
           }
         }}
         />
-        <CommonAddressFields {...{...this.props, countryList: newspaperCountries}} />
+        <CommonAddressFields {...this.props} countryList={newspaperCountries} />
       </div>
     );
   }
 }
 
-class InternationalAddress<GlobalState> extends Component<PropTypes<GlobalState>> {
-
-  constructor(props: PropTypes<GlobalState>) {
-    super(props);
-  }
-
-  render() {
-    const { ...props } = this.props;
-    return (
-      <div>
-        <CommonAddressFields {...{...this.props, countryList: countries}} />
-        <SelectWithIsShown
-          id="stateProvince"
-          label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-          value={props.state}
-          setValue={(state) => props.setState(state, props.country)}
-          error={firstError('state', props.formErrors)}
-          isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
-        >
-          <option value="">--</option>
-          {statesForCountry(props.country)}
-        </SelectWithIsShown>
-        <InputWithError
-          id="postcode"
-          label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
-          type="text"
-          optional={isPostcodeOptional(props.country)}
-          value={props.postCode}
-          setValue={props.setPostcode}
-          error={firstError('postCode', props.formErrors)}
-        />
-      </div>
-    );
-  }
+function InternationalAddress<GlobalState>(props: PropTypes<GlobalState>) {
+  return (
+    <div>
+      <CommonAddressFields {...props} countryList={countries} />
+      <SelectWithIsShown
+        id="stateProvince"
+        label={props.country === 'CA' ? 'Province/Territory' : 'State'}
+        value={props.state}
+        setValue={state => props.setState(state, props.country)}
+        error={firstError('state', props.formErrors)}
+        isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
+      >
+        <option value="">--</option>
+        {statesForCountry(props.country)}
+      </SelectWithIsShown>
+      <InputWithError
+        id="postcode"
+        label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
+        type="text"
+        optional={isPostcodeOptional(props.country)}
+        value={props.postCode}
+        setValue={props.setPostcode}
+        error={firstError('postCode', props.formErrors)}
+      />
+    </div>
+  );
 }
 
-export const domesticAddressWithStore = <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
-  (state: GlobalState) => ({
-    ...getFormFields(traverseState(state)),
-    formErrors: getStateFormErrors(traverseState(state)),
-    traverseState,
-    scope,
-  }),
-  addressActionCreatorsFor(scope),
-)(DomesticAddress);
+export const domesticAddressWithStore =
+  <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
+    (state: GlobalState) => ({
+      ...getFormFields(traverseState(state)),
+      formErrors: getStateFormErrors(traverseState(state)),
+      traverseState,
+      scope,
+    }),
+    addressActionCreatorsFor(scope),
+  )(DomesticAddress);
 
-export const internationalAddressWithStore = <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
-  (state: GlobalState) => ({
-    ...getFormFields(traverseState(state)),
-    formErrors: getStateFormErrors(traverseState(state)),
-    traverseState,
-    scope,
-  }),
-  addressActionCreatorsFor(scope),
-)(InternationalAddress);
+export const internationalAddressWithStore =
+  <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
+    (state: GlobalState) => ({
+      ...getFormFields(traverseState(state)),
+      formErrors: getStateFormErrors(traverseState(state)),
+      traverseState,
+      scope,
+    }),
+    addressActionCreatorsFor(scope),
+  )(InternationalAddress);
 
 
 export default DomesticAddress;

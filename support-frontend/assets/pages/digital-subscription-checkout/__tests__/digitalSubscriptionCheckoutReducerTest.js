@@ -48,9 +48,8 @@ describe('Digital Subscription Checkout Reducer', () => {
   it('should setErrors on the redux store', () => {
 
     const errors = [
-      { field: 'addressLine1', message: 'Please enter a value' },
-      { field: 'townCity', message: 'Please enter a value' },
-      { field: 'postcode', message: 'Please enter a value' },
+      { field: 'firstName', message: 'Please enter a value' },
+      { field: 'lastName', message: 'Please enter a value' },
     ];
 
     const action = setFormErrors(errors);

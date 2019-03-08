@@ -27,6 +27,12 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
+import {
+  FieldsetWithError,
+  InputWithError,
+  SelectWithLabel,
+  StaticInputWithLabel,
+} from 'components/subscriptionCheckouts/formFields';
 import { getVoucherDays, getDeliveryDays, formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
 import {
   type FormActionCreators,
@@ -40,12 +46,7 @@ import {
   type State,
 } from '../paperSubscriptionCheckoutReducer';
 import { domesticAddressWithStore } from './addressFields';
-import {
-  FieldsetWithError,
-  InputWithError,
-  SelectWithLabel,
-  StaticInputWithLabel,
-} from 'components/subscriptionCheckouts/formFields';
+
 // ----- Types ----- //
 
 type PropTypes = {|

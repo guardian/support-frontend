@@ -18,11 +18,11 @@ import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
-import { type State } from '../digitalSubscriptionCheckoutReducer';
+import { getAddressFields, type State } from '../digitalSubscriptionCheckoutReducer';
 import { setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutActions';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
-  const { currencyId, countryId } = state.common.internationalisation;
+  const { currencyId } = state.common.internationalisation;
   const {
     firstName,
     lastName,
@@ -31,7 +31,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     telephone,
   } = state.page.checkout;
 
-  const { formErrors,  ...addressFields } = state.page.address.fields;
+  const addressFields = getAddressFields(state);
 
   const product = {
     currency: currencyId,

@@ -10,7 +10,7 @@ import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import {
@@ -20,14 +20,13 @@ import {
 import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
-import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
+import type { State as AddressState, FormFields as AddressFormFields } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
+import { addressReducerFor } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
 import type { Action } from './digitalSubscriptionCheckoutActions';
 import { getUser } from './helpers/user';
-import { showPaymentMethod, countrySupportsDirectDebit } from './helpers/paymentProviders';
-import type { State as AddressState } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
-import { addressReducerFor } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
+import { countrySupportsDirectDebit, showPaymentMethod } from './helpers/paymentProviders';
 
 // ----- Types ----- //
 
@@ -89,6 +88,10 @@ function getEmail(state: State): string {
 }
 
 const getAddress = (state: State): AddressState => state.page.address;
+const getAddressFields = (state: State): AddressFormFields => {
+  const { formErrors, ...formFields } = getAddress(state).fields;
+  return formFields;
+};
 
 // ----- Functions ----- //
 
@@ -183,6 +186,7 @@ export {
   initReducer,
   getFormFields,
   getAddress,
+  getAddressFields,
   getEmail,
   submitForm,
 };

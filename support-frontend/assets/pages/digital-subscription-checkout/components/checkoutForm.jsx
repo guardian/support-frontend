@@ -7,9 +7,10 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 
-import { Outset } from 'components/content/content';
+import Content, { Outset } from 'components/content/content';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
 import { Fieldset } from 'components/forms/fieldset';
@@ -17,38 +18,40 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
-  regularPrice as dpRegularPrice,
-  promotion as digitalPackPromotion,
   finalPrice as dpFinalPrice,
+  promotion as digitalPackPromotion,
+  regularPrice as dpRegularPrice,
 } from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { type Action, type FormActionCreators, formActionCreators } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import {
+  type Action,
+  type FormActionCreators,
+  formActionCreators,
+} from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { signOut } from 'helpers/user/user';
 import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
+import { InputWithError, StaticInputWithLabel } from 'components/subscriptionCheckouts/formFields';
+import { internationalAddressWithStore } from 'pages/paper-subscription-checkout/components-checkout/addressFields';
+import { getAddress, getAddressFields } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import type { RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import {
-  submitForm,
   type FormField,
   type FormFields,
   getFormFields,
   type State,
+  submitForm,
 } from '../digitalSubscriptionCheckoutReducer';
-import { InputWithError, StaticInputWithLabel } from 'components/subscriptionCheckouts/formFields';
-import { internationalAddressWithStore } from 'pages/paper-subscription-checkout/components-checkout/addressFields';
-import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
-import type { RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ----- Types ----- //
 
@@ -79,7 +82,7 @@ type PropTypes = {|
 function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
-    ...getAddress(state).fields,
+    ...getAddressFields(state),
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
