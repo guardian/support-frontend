@@ -229,7 +229,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    startDate: '',
+    startDate: null,
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
     formErrors: [],
