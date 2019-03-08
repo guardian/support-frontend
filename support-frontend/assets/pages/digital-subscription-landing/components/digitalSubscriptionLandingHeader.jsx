@@ -39,7 +39,7 @@ type PropTypes = {|
 
 type GridImageType = {|
   gridId: string,
-  srcSizes: mumber[],
+  srcSizes: number[],
   imgType: string,
 |}
 
