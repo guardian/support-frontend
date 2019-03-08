@@ -100,6 +100,20 @@ const caStates: {
   YT: 'Yukon',
 };
 
+const auStates: {
+  [string]: string,
+} = {
+  SA: 'South Australia',
+  TAS: 'Tasmania',
+  NSW: 'New South Wales',
+  VIC: 'Victoria',
+  WA: 'Western Australia',
+  QLD: 'Queensland',
+  ACT: 'Australian Capital Territory',
+  NT: 'Northern Territory',
+  JBT: 'Jervis Bay Territory',
+};
+
 const newspaperCountries = {
   GB: 'United Kingdom',
   IM: 'Isle of Man',
@@ -361,8 +375,9 @@ const countries = {
 
 export type UsState = $Keys<typeof usStates>;
 export type CaState = $Keys<typeof caStates>;
+export type AuState = $Keys<typeof auStates>;
 export type IsoCountry = $Keys<typeof countries>;
-export type StateProvince = UsState | CaState;
+export type StateProvince = UsState | CaState | AuState;
 
 // Annoyingly, this isn't Stripe's documentation, but if you try and submit
 // a country that isn't on this list, you get an error
@@ -415,12 +430,18 @@ function caStateFromString(s: string): Option<CaState> {
   return caStates[s] ? s : null;
 }
 
+function auStateFromString(s: string): Option<AuState> {
+  return auStates[s] ? s : null;
+}
+
 function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option<StateProvince> {
   switch (country) {
     case 'US':
       return usStateFromString(s);
     case 'CA':
       return caStateFromString(s);
+    case 'AU':
+      return auStateFromString(s);
     default:
       return null;
   }
@@ -578,6 +599,7 @@ export {
   setCountry,
   usStates,
   caStates,
+  auStates,
   countries,
   newspaperCountries,
   findIsoCountry,

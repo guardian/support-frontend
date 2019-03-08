@@ -17,7 +17,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { Amount, SelectedAmounts } from 'helpers/contributions';
-import type { DropMonthlyTestVariant } from 'helpers/abTests/abtestDefinitions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Types ----- //
@@ -52,13 +52,21 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
   return fallback;
 }
 
-function getValidContributionTypes(dropMonthly: DropMonthlyTestVariant): ContributionType[] {
+function getValidContributionTypes(countryGroupId: CountryGroupId): ContributionType[] {
+
+  const defaultContributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
+  const contributionTypesNoMonthly = ['ONE_OFF', 'ANNUAL'];
+
   const mappings = {
-    notintest: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-    control: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-    variant: ['ONE_OFF', 'ANNUAL'],
+    GBPCountries: defaultContributionTypes,
+    UnitedStates: defaultContributionTypes,
+    AUDCountries: contributionTypesNoMonthly,
+    EURCountries: contributionTypesNoMonthly,
+    International: contributionTypesNoMonthly,
+    NZDCountries: contributionTypesNoMonthly,
+    Canada: contributionTypesNoMonthly,
   };
-  return getValidContributionTypesFromUrlOrElse(mappings[dropMonthly]);
+  return getValidContributionTypesFromUrlOrElse(mappings[countryGroupId]);
 }
 
 function toHumanReadableContributionType(contributionType: ContributionType): 'Single' | 'Monthly' | 'Annual' {

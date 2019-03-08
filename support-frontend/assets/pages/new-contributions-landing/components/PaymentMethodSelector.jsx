@@ -18,6 +18,7 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
+import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 
 import { type State } from '../contributionsLandingReducer';
@@ -57,6 +58,17 @@ const mapDispatchToProps = {
 
 // ----- Render ----- //
 
+function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
+  switch (paymentMethod) {
+    case 'PayPal':
+      return <SvgPayPal />;
+    case 'DirectDebit':
+      return <SvgDirectDebitSymbol />;
+    default:
+      return <SvgNewCreditCard />;
+  }
+}
+
 function PaymentMethodSelector(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
@@ -84,7 +96,7 @@ function PaymentMethodSelector(props: PropTypes) {
               <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
                 <span className="radio-ui" />
                 <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
-                {paymentMethod === 'PayPal' ? (<SvgPayPal />) : (<SvgNewCreditCard />)}
+                {getPaymentMethodLogo(paymentMethod)}
               </label>
             </li>
           ))}

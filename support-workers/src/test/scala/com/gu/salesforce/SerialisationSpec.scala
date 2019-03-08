@@ -10,38 +10,30 @@ import org.joda.time.DateTime
 import org.scalatest.{FlatSpec, Matchers}
 
 class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
+
   "UpsertData" should "serialise to correct UK json" in {
-    val upsertData = UpsertData(NewContact(idId, email, name, name, None, None, None, None, uk, None, allowMail, allowMail, allowMail))
+    val upsertData = UpsertData(newContactUK)
     upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJson).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct US json" in {
-    val upsertData = UpsertData(NewContact(idId, email, name, name, None, None, Some(state), None, us, None, allowMail, allowMail, allowMail))
+    val upsertData = UpsertData(newContactUS)
     upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithState).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct json when telephoneNumber provided" in {
-    val upsertData = UpsertData(NewContact(idId, email, name, name, None, None, None, None, uk, Some(telephoneNumber), allowMail, allowMail, allowMail))
+    val upsertData = UpsertData(newContactUK.copy(Phone = Some(telephoneNumber)))
     upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithTelephoneNumber).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct json when billing address provided" in {
-    val upsertData = UpsertData(NewContact(
-      idId,
-      email,
-      name,
-      name,
-      Some("123 trash alley"),
-      Some("London"),
-      None,
-      Some("n1 9gu"),
-      uk,
-      Some(telephoneNumber),
-      allowMail,
-      allowMail,
-      allowMail
-    ))
+    val upsertData = UpsertData(newContactUKWithBillingAddress)
     upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAddress).right.get.noSpaces)
+  }
+
+  "UpsertData" should "serialise to correct json when billing address and delivery address provided" in {
+    val upsertData = UpsertData(newContactUKWithBothAddressesAndTelephone)
+    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAndDeliveryAddresses).right.get.noSpaces)
   }
 
   "Authentication" should "deserialize correctly" in {

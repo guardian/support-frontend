@@ -5,15 +5,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import type { Dispatch } from 'redux';
 
-import { caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
+import { auStates, caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { type Option } from 'helpers/types/option';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 
 import { Outset } from 'components/content/content';
-import Text from 'components/text/text';
-import Rows from 'components/base/rows';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
 import { Input } from 'components/forms/input';
@@ -26,21 +25,31 @@ import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import { canShow } from 'hocs/canShow';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
-import Checkout from 'components/checkout/checkout';
+import Layout from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
-import { regularPrice as dpRegularPrice, promotion as digitalPackPromotion } from 'helpers/productPrice/digitalProductPrices';
+import {
+  regularPrice as dpRegularPrice,
+  promotion as digitalPackPromotion,
+  finalPrice as dpFinalPrice,
+} from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { type Action, type FormActionCreators, formActionCreators } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
+import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import { signOut } from 'helpers/user/user';
+import { isPostcodeOptional, formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 
 import {
-  type FormActionCreators,
-  formActionCreators,
-  signOut,
+  submitForm,
   type FormField,
   type FormFields,
   getFormFields,
@@ -52,10 +61,21 @@ import {
 type PropTypes = {|
   ...FormFields,
   signOut: typeof signOut,
+  submitForm: Function,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
+  currencyId: IsoCurrency,
   ...FormActionCreators,
+  csrf: Csrf,
+  payPalHasLoaded: boolean,
+  isTestUser: boolean,
+  amount: number,
+  billingPeriod: BillingPeriod,
+  setupRecurringPayPalPayment: Function,
+  validateForm: () => Function,
+  formIsValid: Function,
+  optimizeExperiments: OptimizeExperiments,
 |};
 
 
@@ -67,6 +87,30 @@ function mapStateToProps(state: State) {
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+    currencyId: state.common.internationalisation.currencyId,
+    csrf: state.page.csrf,
+    payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+    paymentMethod: state.page.checkout.paymentMethod,
+    isTestUser: state.page.checkout.isTestUser,
+    amount: dpFinalPrice(
+      state.page.checkout.productPrices,
+      state.page.checkout.billingPeriod,
+      state.common.internationalisation.countryId,
+    ).price,
+    billingPeriod: state.page.checkout.billingPeriod,
+    optimizeExperiments: state.common.optimizeExperiments,
+  };
+}
+
+// ----- Map Dispatch/Props ----- //
+function mapDispatchToProps() {
+  return {
+    ...formActionCreators,
+    formIsValid: () => (dispatch: Dispatch<Action>, getState: () => State) => formIsValid(getState()),
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
+    validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
+    setupRecurringPayPalPayment,
+    signOut,
   };
 }
 
@@ -78,18 +122,17 @@ const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
 
 function statesForCountry(country: Option<IsoCountry>): React$Node {
-
   switch (country) {
     case 'US':
       return sortedOptions(usStates);
     case 'CA':
       return sortedOptions(caStates);
+    case 'AU':
+      return sortedOptions(auStates);
     default:
       return null;
   }
-
 }
-
 
 // ----- Component ----- //
 
@@ -120,7 +163,7 @@ function CheckoutForm(props: PropTypes) {
   return (
     <Content modifierClasses={['your-details']}>
       <Outset>
-        <Checkout>
+        <Layout>
           <Form onSubmit={(ev) => {
             ev.preventDefault();
             props.submitForm();
@@ -223,24 +266,16 @@ function CheckoutForm(props: PropTypes) {
                 value={props.stateProvince}
                 setValue={props.setStateProvince}
                 error={firstError('stateProvince', props.formErrors)}
-                isShown={props.country === 'US' || props.country === 'CA'}
+                isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
               >
                 <option value="">--</option>
                 {statesForCountry(props.country)}
               </Select2>
               <Input1
-                id="county"
-                label="County"
-                optional
-                type="text"
-                value={props.county}
-                setValue={props.setCounty}
-                error={firstError('county', props.formErrors)}
-              />
-              <Input1
                 id="postcode"
-                label="Postcode"
+                label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
                 type="text"
+                optional={isPostcodeOptional(props.country)}
                 value={props.postcode}
                 setValue={props.setPostcode}
                 error={firstError('postcode', props.formErrors)}
@@ -267,53 +302,31 @@ function CheckoutForm(props: PropTypes) {
                 />
               </Fieldset>
             </FormSection>
-            <FormSection title={props.countrySupportsDirectDebit ? 'How would you like to pay?' : null}>
-              <Rows gap="large">
-                {props.countrySupportsDirectDebit &&
-                <div>
-                  <Fieldset legend="How would you like to pay?">
-                    <RadioInput
-                      text="Direct debit"
-                      name="paymentMethod"
-                      checked={props.paymentMethod === 'DirectDebit'}
-                      onChange={() => props.setPaymentMethod('DirectDebit')}
-                    />
-                    <RadioInput
-                      text="Credit/Debit card"
-                      name="paymentMethod"
-                      checked={props.paymentMethod === 'Stripe'}
-                      onChange={() => props.setPaymentMethod('Stripe')}
-                    />
-                  </Fieldset>
-                </div>
-              }
-                <div>
-                  <Text>
-                    <p>
-                      <strong>Money Back Guarantee.</strong>
-                      If you wish to cancel your subscription, we will send you
-                      a refund of the unexpired part of your subscription.
-                    </p>
-                    <p>
-                      <strong>Cancel any time you want.</strong>
-                      There is no set time on your agreement so you can stop
-                      your subscription anytime
-                    </p>
-                  </Text>
-                </div>
-              </Rows>
-              <DirectDebitPopUpForm
-                onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
-                  props.onPaymentAuthorised(pa);
-                }}
-              />
-            </FormSection>
+            <PaymentMethodSelector
+              countrySupportsDirectDebit={props.countrySupportsDirectDebit}
+              paymentMethod={props.paymentMethod}
+              setPaymentMethod={props.setPaymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
+              optimizeExperiments={props.optimizeExperiments}
+            />
             <FormSection>
               {errorState}
-              <Button aria-label={null} type="submit">Continue to payment</Button>
+              <SubscriptionSubmitButtons
+                paymentMethod={props.paymentMethod}
+                onPaymentAuthorised={props.onPaymentAuthorised}
+                csrf={props.csrf}
+                currencyId={props.currencyId}
+                payPalHasLoaded={props.payPalHasLoaded}
+                formIsValid={props.formIsValid}
+                validateForm={props.validateForm}
+                isTestUser={props.isTestUser}
+                setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
+                amount={props.amount}
+                billingPeriod={props.billingPeriod}
+              />
             </FormSection>
           </Form>
-        </Checkout>
+        </Layout>
       </Outset>
     </Content>
   );
@@ -323,7 +336,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, {
-  ...formActionCreators,
-  signOut,
-})(CheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(CheckoutForm);

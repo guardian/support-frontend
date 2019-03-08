@@ -4,7 +4,7 @@
   "description": "Frontend for the supporter platform.",
   "scripts": {
     "clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
-    "validate": "echo 'Validating JS' && npm-run-all lint flow",
+    "validate": "echo 'Validating JS' && npm-run-all 'lint --fix' flow",
     "flow": "flow",
     "lint": "eslint --ext .js --ext .jsx .",
     "build-dev": "webpack --config webpack.dev.js",

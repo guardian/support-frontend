@@ -36,7 +36,7 @@ the top level form itself
 */
 
 type FormPropTypes = {
-  children: ChildrenArray<Element<typeof FormSection>>,
+  children: ChildrenArray<Element<any>>,
 };
 const Form = ({ children, ...otherProps }: FormPropTypes) => (<form {...otherProps} className="component-checkout-form">{children}</form>);
 

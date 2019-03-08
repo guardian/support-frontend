@@ -122,7 +122,7 @@ header[role="banner"] {
   justify-content: flex-end;
   width: 100%;
   height: 100%;
-  
+
   .svg-guardian-logo {
     width: 100%;
     height: 80%;
@@ -367,6 +367,7 @@ footer[role="contentinfo"] a {
   border-style: none solid;
   border-width: 0 1px;
   border-bottom: 1px solid gu-colour(neutral-86);
+  border-top: 1px solid gu-colour(neutral-86);
   background-color: gu-colour(neutral-100);
 
   @include mq($from: tablet) {
@@ -379,16 +380,17 @@ footer[role="contentinfo"] a {
   border-bottom: 1px solid gu-colour(neutral-86);
 
   li label {
-    font-family: $gu-titlepiece;
+    font-family: $gu-headline;
+    font-weight: 600;
     font-size: 22px;
   }
 }
 
 .gu-content__blurb {
   display: none;
-  max-width: 380px;
   border-top: 10px solid gu-colour(highlight-main);
   margin-left: auto;
+  max-width: 404px;
 
   @include mq($from: tablet) {
     display: block;
@@ -396,7 +398,7 @@ footer[role="contentinfo"] a {
   }
 }
 
-.gu-content__blurb--header {
+.gu-content__blurb-header {
   border: 0;
   left: 10px;
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
@@ -410,6 +412,17 @@ footer[role="contentinfo"] a {
 
   @include mq($from: tablet) {
     padding: 0 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+  }
+}
+
+.gu-content__blurb-blurb {
+  font-size: 16px;
+  line-height: 20px;
+  font-family: $gu-headline;
+  padding-bottom: $gu-v-spacing;
+  border-bottom: 1px solid gu-colour(highlight-main);
+  @include mq($from: tablet) {
+    margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
   }
 }
 
@@ -429,23 +442,8 @@ footer[role="contentinfo"] a {
   }
 }
 
-.gu-content__blurb--blurb {
-  font-size: 16px;
-  line-height: 20px;
-  font-family: $gu-headline;
 
-  @include mq($from: tablet) {
-    margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
-  }
-}
 
-.gu-content__blurb--help-variant {
-  max-width: 404px;
-  .gu-content__blurb--blurb {
-    padding-bottom: $gu-v-spacing;
-    border-bottom: 1px solid gu-colour(highlight-main);
-  }
-}
 
 /*= TYPOGRAPHY */
 body {
@@ -495,7 +493,6 @@ footer[role="contentinfo"] {
 .form--contribution {
   display: flex;
   flex-direction: column;
-  min-height: 409px;
   justify-content: space-between;
 }
 
@@ -503,6 +500,26 @@ footer[role="contentinfo"] {
   align-items: stretch;
   display: flex;
   flex-direction: column;
+}
+
+.gu-content__form__message {
+  margin: 0 -10px;
+  padding: 12px 10px 11px 10px;
+  border-bottom: 1px solid gu-colour(neutral-86);
+}
+
+.frontline-campaign {
+  font-family: $gu-headline;
+}
+.frontline-campaign__headline {
+  font-size: 24px;
+  line-height: 26px;
+  font-weight: bold;
+}
+.frontline-campaign__body {
+  font-size: 16px;
+  line-height: 18px;
+  font-style: italic;
 }
 
 .form--content {
@@ -578,7 +595,6 @@ form {
 }
 
 .form__radio-group--tabs .form__radio-group-item {
-  border-top: 1px solid gu-colour(neutral-86);
   flex: 1;
 }
 
@@ -699,6 +715,13 @@ form {
   height: 14px;
   width: 22px;
   margin-right: 10px;
+  margin-left: 5px;
+}
+
+.form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .svg-direct-debit-symbol {
+  fill: #00B2FF;
+  width: 24px;
+  margin-right: 8px;
   margin-left: 5px;
 }
 
@@ -943,6 +966,13 @@ form {
 
 
 /* Server side rendering test loading message*/
+
+
+.gu-content--contribution-form--placeholder {
+  .gu-content__blurb-blurb, .gu-content__blurb-header, .countryGroups__label  {
+    visibility: hidden;
+  }
+}
 
 .form__radio-group--pills .amounts__placeholder .form__radio-group-input + .form__radio-group-label {
   border: none;

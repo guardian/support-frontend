@@ -23,10 +23,11 @@
   productPrices: ProductPrices,
   defaultStripeConfig: StripeConfig,
   uatStripeConfig: StripeConfig,
-  payPalConfig: PayPalConfig
+  defaultPayPalConfig: PayPalConfig,
+  uatPayPalConfig: PayPalConfig
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
-  @main(title = title, mainJsBundle = RefPath(js), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
+  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
     <script type="text/javascript">
       window.guardian.productPrices = @{Html(outputJson(productPrices))}
       window.guardian = window.guardian || {};
@@ -49,7 +50,10 @@
           uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
         }
       };
-      window.guardian.payPalEnvironment = "@payPalConfig.payPalEnvironment";
+      window.guardian.payPalEnvironment = {
+        default: "@defaultPayPalConfig.payPalEnvironment",
+        uat: "@uatPayPalConfig.payPalEnvironment"
+      };
       window.guardian.csrf = { token: "@CSRF.getToken.value" };
   </script>
 

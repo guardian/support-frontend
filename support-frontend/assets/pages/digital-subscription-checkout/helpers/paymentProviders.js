@@ -18,7 +18,8 @@ import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
-import { type State, setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutReducer';
+import { type State } from '../digitalSubscriptionCheckoutReducer';
+import { setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutActions';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
   const { currencyId, countryId } = state.common.internationalisation;
@@ -57,6 +58,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     email,
     telephoneNumber: telephone,
     product,
+    firstDeliveryDate: null,
     paymentFields,
     ophanIds: getOphanIds(),
     referrerAcquisitionData: state.common.referrerAcquisitionData,
@@ -83,7 +85,7 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
 
   dispatch(setFormSubmitted(true));
   postRegularPaymentRequest(
-    routes.digitalSubscriptionCreate,
+    routes.subscriptionCreate,
     data,
     state.common.abParticipations,
     state.page.csrf,
@@ -124,6 +126,9 @@ function showPaymentMethod(
       break;
     case 'DirectDebit':
       dispatch(openDirectDebitPopUp());
+      break;
+    case 'PayPal':
+      // PayPal is more complicated and is handled differently, see PayPalExpressButton component
       break;
     case null:
     case undefined:

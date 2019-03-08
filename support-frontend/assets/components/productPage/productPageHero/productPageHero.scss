@@ -2,6 +2,9 @@
 
 .component-product-page-hero {
   overflow: hidden;
+  position: relative;
+  min-height: 300px;
+  height: 37.5vw;
   .component-left-margin-section__content {
     position: relative;
     @include mq($from: tablet) {
@@ -12,6 +15,16 @@
   .component-heading-block {
     z-index: 10;
     position: relative;
+  }
+  .component-left-margin-section {
+    height: 100%;
+  }
+  &:not(.component-product-page-hero--campaign) {
+    max-height: 600px;
+  }
+  .component-grid-picture,
+  .component-grid-picture__image {
+    height: 100%;
   }
 }
 
@@ -36,7 +49,15 @@
   }
 }
 
+.component-product-page-hero--campaign {
+  background-color: gu-colour(green-dark);
+  .component-left-margin-section__content {
+    border-left-color: transparent;
+  }
+}
+
 .component-product-page-hero-hanger {
+  position: relative;
   background: gu-colour(neutral-100);
   .component-left-margin-section__content {
     @include mq($from: tablet) {
@@ -50,7 +71,7 @@
 }
 
 .component-product-page-hero-content {
-  border-top: 1px solid #ffffff;
+  border-top: 1px solid rgba(#fff, 0.5);
   padding: $gu-v-spacing  ($gu-h-spacing / 2);
   background: gu-colour(neutral-7);
   color: #ffffff;

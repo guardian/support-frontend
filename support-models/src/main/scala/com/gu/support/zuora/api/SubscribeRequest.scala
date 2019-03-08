@@ -12,6 +12,7 @@ object SubscribeItem {
 case class SubscribeItem(
   account: Account,
   billToContact: ContactDetails,
+  soldToContact: Option[ContactDetails],
   paymentMethod: PaymentMethod,
   subscriptionData: SubscriptionData,
   subscribeOptions: SubscribeOptions

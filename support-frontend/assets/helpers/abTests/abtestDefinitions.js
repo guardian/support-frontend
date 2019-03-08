@@ -4,9 +4,6 @@ import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './ann
 
 // ----- Tests ----- //
 
-export type DropMonthlyTestVariant = 'control' | 'variant' | 'notintest';
-export type LandingPageCopyTestVariant = 'control' | 'help' | 'notintest';
-
 export const tests: Tests = {
 
   annualContributionsRoundFour: {
@@ -37,68 +34,5 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 3,
-  },
-
-  dropMonthly: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 9,
-  },
-
-  requiredFields: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'variant',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 5,
-  },
-
-  landingPageCopy: {
-    type: 'OTHER',
-    variants: [
-      {
-        id: 'control',
-      },
-      {
-        id: 'help',
-      },
-    ],
-    audiences: {
-      ALL: {
-        offset: 0,
-        size: 1,
-      },
-    },
-    isActive: true,
-    independent: true,
-    seed: 12,
   },
 };

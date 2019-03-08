@@ -13,10 +13,11 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import Content, { Divider } from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 
-import { type Stage, type State } from '../paperSubscriptionCheckoutReducer';
+import { type Stage, type State } from './paperSubscriptionCheckoutReducer';
 
-import CheckoutForm from './checkoutForm';
-import ReturnSection from './returnSection';
+import CheckoutForm from './components-checkout/checkoutForm';
+import ReturnSection from './components-ty/returnSection';
+import ThankYouContent from './components-ty/thankYou';
 
 // ----- Types ----- //
 
@@ -42,22 +43,16 @@ function CheckoutStage(props: PropTypes) {
   switch (props.stage) {
     case 'thankyou':
       return (
-        <div className="thank-you-stage">
-          <HeroWrapper>
-            <HeadingBlock>Your Paper subscription is now live</HeadingBlock>
-          </HeroWrapper>
-          ty page
+        <div>
+          <ThankYouContent isPending={false} />
           <ReturnSection />
         </div>
       );
 
     case 'thankyou-pending':
       return (
-        <div className="thank-you-stage">
-          <HeroWrapper>
-            <HeadingBlock>Your Paper subscription is being processed</HeadingBlock>
-          </HeroWrapper>
-          ty page but its pending sadface
+        <div>
+          <ThankYouContent isPending />
           <ReturnSection />
         </div>
       );
@@ -71,7 +66,9 @@ function CheckoutStage(props: PropTypes) {
           </HeroWrapper>
           <Content>
             <Text>
-              <LargeParagraph>Please enter your details below to complete your Paper subscription.</LargeParagraph>
+              <LargeParagraph>
+                Please enter your details below to complete your Paper subscription.
+              </LargeParagraph>
             </Text>
             <Divider />
           </Content>

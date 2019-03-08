@@ -9,7 +9,7 @@ import './list.scss';
 // ---- Types ----- //
 
 type PropTypes = {|
-  items: (Node)[]
+  items: Node[]
 |};
 
 

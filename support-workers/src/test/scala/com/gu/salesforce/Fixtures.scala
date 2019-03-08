@@ -1,9 +1,11 @@
 package com.gu.salesforce
 
+import com.gu.salesforce.Salesforce.NewContact
+
 object Fixtures {
   val idId = "9999999"
   val salesforceId = "0036E00000Uc1IhQAJ"
-  val email = "yjcysqxfcqqytuzupjc@gu.com"
+  val emailAddress = "yjcysqxfcqqytuzupjc@gu.com"
   val telephoneNumber = "0123456789"
   val name = "YJCysqXFCqqYtuzuPJc"
   val street = "123 trash alley"
@@ -14,11 +16,30 @@ object Fixtures {
   val state = "CA"
   val allowMail = false
 
+  val newContactUK = NewContact(idId, emailAddress, name, name, None, None, None, None, uk, None, None, None, None, None, None, allowMail, allowMail, allowMail)
+  val newContactUKWithBillingAddress = newContactUK.copy(
+    OtherStreet = Some("123 trash alley"),
+    OtherCity = Some("London"),
+    OtherState = None,
+    OtherPostalCode = Some("n1 9gu"),
+    OtherCountry = uk
+  )
+  val newContactUKWithBothAddressesAndTelephone = newContactUKWithBillingAddress.copy(
+    MailingStreet = Some("123 trash alley"),
+    MailingCity = Some("London"),
+    MailingState = None,
+    MailingPostalCode = Some("n1 9gu"),
+    MailingCountry = Some(uk),
+    Phone = Some(telephoneNumber)
+  )
+  val newContactUS = newContactUK.copy(OtherCountry = us, OtherState = Some(state))
+
+
   val upsertJson =
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
-        "Email": "$email",
+        "Email": "$emailAddress",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherCountry": "$uk",
@@ -31,7 +52,7 @@ object Fixtures {
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
-        "Email": "$email",
+        "Email": "$emailAddress",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherState": "$state",
@@ -46,7 +67,7 @@ object Fixtures {
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
-        "Email": "$email",
+        "Email": "$emailAddress",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherCountry": "$uk",
@@ -61,19 +82,41 @@ object Fixtures {
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
-        "Email": "$email",
+        "Email": "$emailAddress",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherStreet": "$street",
         "OtherCity": "$city",
         "OtherPostalCode": "$postCode",
         "OtherCountry": "$uk",
+        "Allow_Membership_Mail__c": $allowMail,
+        "Allow_3rd_Party_Mail__c": $allowMail,
+        "Allow_Guardian_Related_Mail__c": $allowMail
+       }
+      }"""
+
+  val upsertJsonWithBillingAndDeliveryAddresses =
+    s"""{
+      "newContact": {
+        "IdentityID__c": "$idId",
+        "Email": "$emailAddress",
+        "FirstName": "$name",
+        "LastName": "$name",
+        "OtherStreet": "$street",
+        "OtherCity": "$city",
+        "OtherPostalCode": "$postCode",
+        "OtherCountry": "$uk",
+        "MailingStreet": "$street",
+        "MailingCity": "$city",
+        "MailingPostalCode": "$postCode",
+        "MailingCountry": "$uk",
         "Phone": "$telephoneNumber",
         "Allow_Membership_Mail__c": $allowMail,
         "Allow_3rd_Party_Mail__c": $allowMail,
         "Allow_Guardian_Related_Mail__c": $allowMail
        }
       }"""
+
   val authJson =
     """
       {

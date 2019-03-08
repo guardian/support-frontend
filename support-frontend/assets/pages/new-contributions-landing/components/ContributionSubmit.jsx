@@ -6,20 +6,18 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { billingPeriodFromContrib, type ContributionType, getAmount, type PaymentMethod } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { SelectedAmounts } from 'helpers/contributions';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
+import { setupRecurringPayPalPayment, type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
 import { type State } from '../contributionsLandingReducer';
-import { PayPalRecurringButton } from './PayPalRecurringButton';
-import {
-  sendFormSubmitEventForPayPalRecurring,
-  setupRecurringPayPalPayment,
-} from '../contributionsLandingActions';
+import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
-
 
 // ----- Types ----- //
 
@@ -33,33 +31,37 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   csrf: CsrfState,
   sendFormSubmitEventForPayPalRecurring: () => void,
-  setupRecurringPayPalPayment: (
-    resolve: string => void,
-    reject: Error => void,
-    IsoCurrency,
-    CsrfState,
-    contributionType: ContributionType
-  ) => void,
+  setupRecurringPayPalPayment: SetupPayPalRequestType,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   formIsSubmittable: boolean,
+  amount: number,
+  billingPeriod: BillingPeriod,
 |};
 
-const mapStateToProps = (state: State) =>
-  ({
+function mapStateToProps(state: State) {
+  const { contributionType } = state.page.form;
+  return ({
     currency: state.common.internationalisation.currencyId,
-    contributionType: state.page.form.contributionType,
+    contributionType,
     isWaiting: state.page.form.isWaiting,
     paymentMethod: state.page.form.paymentMethod,
     selectedAmounts: state.page.form.selectedAmounts,
-    otherAmount: state.page.form.formData.otherAmounts[state.page.form.contributionType].amount,
+    otherAmount: state.page.form.formData.otherAmounts[contributionType].amount,
     currencyId: state.common.internationalisation.currencyId,
     csrf: state.page.csrf,
     payPalHasLoaded: state.page.form.payPalHasLoaded,
     isTestUser: state.page.user.isTestUser,
     formIsSubmittable: state.page.form.formIsSubmittable,
+    amount: getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      contributionType,
+    ),
+    billingPeriod: billingPeriodFromContrib(contributionType),
   });
+}
 
 const mapDispatchToProps = (dispatch: Function) => ({
   sendFormSubmitEventForPayPalRecurring: () => { dispatch(sendFormSubmitEventForPayPalRecurring()); },
@@ -68,8 +70,11 @@ const mapDispatchToProps = (dispatch: Function) => ({
     reject: Function,
     currencyId: IsoCurrency,
     csrf: CsrfState,
-    contributionType: ContributionType,
-  ) => { dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, contributionType)); },
+    amount: number,
+    billingPeriod: BillingPeriod,
+  ) => {
+    dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, amount, billingPeriod));
+  },
 });
 
 
@@ -91,17 +96,16 @@ function ContributionSubmit(props: PropTypes) {
       props.paymentMethod,
     );
 
-
-    // We have to show/hide PayPalRecurringButton rather than conditionally rendering it
+    // We have to show/hide PayPalExpressButton rather than conditionally rendering it
     // because we don't want to destroy and replace the iframe each time.
-    // See PayPalRecurringButton.jsx for more info.
+    // See PayPalExpressButton for more info.
     return (
       <div className="form__submit">
         <div
           id="component-paypal-button-checkout"
           className={hiddenIf(!showPayPalRecurringButton, 'component-paypal-button-checkout')}
         >
-          <PayPalRecurringButton
+          <PayPalExpressButton
             onPaymentAuthorisation={props.onPaymentAuthorisation}
             csrf={props.csrf}
             currencyId={props.currencyId}
@@ -111,7 +115,8 @@ function ContributionSubmit(props: PropTypes) {
             formClassName={formClassName}
             isTestUser={props.isTestUser}
             setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-            contributionType={props.contributionType}
+            amount={props.amount}
+            billingPeriod={props.billingPeriod}
           />
         </div>
         <ButtonWithRightArrow

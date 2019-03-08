@@ -14,20 +14,13 @@ import { getProductPrice } from 'helpers/subscriptions';
 
 // ----- State Maps ----- //
 
-function mapStateToProps(state: { common: CommonState }, ownProps: { referringCta: ?string }) {
+function mapStateToProps(state: { common: CommonState }) {
   const { countryGroupId } = state.common.internationalisation;
-  const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
   const price = getProductPrice('PremiumTier', countryGroupId);
 
   return {
     ctaText: 'Start a 7 day free trial',
-    url: getDigitalCheckout(
-      referrerAcquisitionData,
-      countryGroupId,
-      ownProps.referringCta,
-      abParticipations,
-      optimizeExperiments,
-    ),
+    url: getDigitalCheckout(countryGroupId),
     price: `${currencies[state.common.internationalisation.currencyId].glyph}${price}`,
   };
 
