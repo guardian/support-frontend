@@ -17,10 +17,13 @@ object SimpleCheckoutFormValidation {
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean =
     noEmptyNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) &&
+      noExcessivelyLongNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) &&
       noEmptyPaymentFields(createSupportWorkersRequest.paymentFields)
 
 
   private def noEmptyNameFields(firstName: String, lastName: String) = !firstName.isEmpty && !lastName.isEmpty
+
+  private def noExcessivelyLongNameFields(firstName: String, lastName: String) = !(firstName.length > 40) && !(lastName.length > 80)
 
   private def noEmptyPaymentFields(paymentFields: PaymentFields): Boolean = paymentFields match {
     case directDebitDetails: DirectDebitPaymentFields =>

@@ -21,6 +21,16 @@ class SimpleCheckoutFormValidationTest extends FlatSpec with Matchers {
     SimpleCheckoutFormValidation.passes(requestMissingFirstName) shouldBe false
   }
 
+  it should "reject a first name which is too long" in {
+    val requestWithLongFirstName = validDigitalPackRequest.copy(firstName = "TooLongToBeFirstNameAccordingToSalesforce")
+    SimpleCheckoutFormValidation.passes(requestWithLongFirstName) shouldBe false
+  }
+
+  it should "reject a last name which is too long" in {
+    val requestWithLongLastName = validDigitalPackRequest.copy(lastName = "TooLongToBeLastNameAccordingToSalesforceTooLongToBeLastNameAccordingToSalesforce1")
+    SimpleCheckoutFormValidation.passes(requestWithLongLastName) shouldBe false
+  }
+
 }
 
 class DigitalPackValidationTest extends FlatSpec with Matchers {
