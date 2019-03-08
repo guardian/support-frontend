@@ -4,7 +4,7 @@
 @(
   title: String,
   mainElement: ReactDiv,
-  mainJsBundle: RefPath,
+  mainJsBundle: Either[RefPath, StyleContent],
   mainStyleBundle: Either[RefPath, StyleContent],
   description: Option[String] = None,
   canonicalLink: Option[String] = None,
@@ -82,9 +82,6 @@
 		}
 	</script>
 
-    <script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
-
-    <link rel="preload"  as="script" href="@assets(mainJsBundle)">
 
     </head>
   <body class="header-tweaks">
@@ -110,7 +107,6 @@
     @mainElement.fold(emptyDiv, withContent)
 
     <script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"></script>
-    <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
     <script type="text/javascript">
     window.guardian = window.guardian || {};
     window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
@@ -120,7 +116,21 @@
 
     @* This script is intentionally at the bottom of the file. Please check
     all the critical flows work correctly if you change its position *@
-    <script type="text/javascript" src="@assets(mainJsBundle)"></script>
-      <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
+    @linkedJs(path: RefPath) = {
+    <script type="text/javascript" src="@assets(path)"></script>
+  }
+
+    @inlineJs(inlineJs: StyleContent) = {
+    <script type="text/javascript">
+    @inlineJs.value
+    </script>
+  }
+
+    @mainJsBundle.fold(linkedJs, inlineJs)
+
+    <script async type="text/javascript" src="@assets("googleTagManagerScript.js")"></script>
+    <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
+
+    <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
   </body>
 </html>
