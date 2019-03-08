@@ -3,11 +3,12 @@ package com.gu.support.workers.integration
 import java.io.ByteArrayOutputStream
 
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService}
+import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService, PaperEmailFields}
 import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.SfContactId
+import com.gu.support.catalog.Saturday
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.JsonFixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers._
@@ -75,6 +76,41 @@ class SendThankYouEmailSpec extends LambdaSpec {
       Annual,
       user,
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
+      GBP,
+      directDebitPaymentMethod,
+      SfContactId("0036E00000WK8fDQAT"),
+      Some(mandateId)
+    )
+    val service = new EmailService
+    service.send(ef)
+  }
+
+  it should "send a paper subscription email" in {
+    //This test will send a thank you email to the address below - useful for quickly testing changes
+    val addressToSendTo = "jacob.winch+integrationTest@theguardian.com"
+    val mandateId = "65HK26E"
+    val billingAddressWithCountry = Address(
+      lineOne = Some("90 York Way"),
+      lineTwo = None,
+      city = Some("London"),
+      state = None,
+      postCode = Some("N1 9AG"),
+      country = UK
+    )
+    val user = User(
+      "1234",
+      addressToSendTo,
+      "Mickey",
+      "Mouse",
+      billingAddress = billingAddressWithCountry,
+      deliveryAddress = Some(billingAddressWithCountry)
+    )
+    val ef = PaperEmailFields(
+      "A-S00045678",
+      Saturday,
+      Monthly,
+      user,
+      PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
       GBP,
       directDebitPaymentMethod,
       SfContactId("0036E00000WK8fDQAT"),
