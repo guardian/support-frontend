@@ -40,6 +40,23 @@
 
 .showcase-hero__image {
   background: #fff;
+  filter: grayscale(1);
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    @supports (object-fit: cover) {
+      height: 100%;
+    }
+  }
+}
+
+.showcase-hero-heading svg {
+  width: 100%;
+  margin-top: $gu-h-spacing;
+  height: auto;
 }
 
 @include mq($until: tablet) {
@@ -81,10 +98,10 @@
 }
 
 @include mq($from: tablet) {
-  $photo-1-height: 120px;
-  $photo-2-height: 90px;
-  $photo-3-height: 90px;
-  $photo-4-height: 300px;
+  $photo-1-height: 280px;
+  $photo-2-height: 120px;
+  $photo-3-height: 120px;
+  $photo-4-height: 440px;
 
   .showcase-hero .component-left-margin-section__content {
     min-height: $photo-3-height + $photo-4-height + $gu-v-spacing;
@@ -98,6 +115,7 @@
     align-items: flex-end;
     justify-content: stretch;
     margin: 0 $gu-h-spacing/2;
+    width: gu-span(6.5);
   }
 
   .showcase-hero__figure {

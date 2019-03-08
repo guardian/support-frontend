@@ -61,6 +61,10 @@ export const imageCatalogue: {
   showcase: 'b72ef7a4c8764a163fc604d7b8edcedfdd7682f4/0_0_7100_3500',
   showcaseSubscribe: '1174d922f64d951a4a860e4b91b8dd5c5eb8cc8c/0_0_1802_1190',
   paperLandingSale: '6179a30718dab98e96230e39195f3aa2a2784a1d/0_0_800_858',
+  showcaseZuck: '8435fc940815a0baefeb67329f62d54a80c45e81/0_100_3000_1800',
+  showcaseChris: 'c1cc13877adad39f45945304344d5bb28a4ec49c/0_182_3000_1800',
+  showcaseChrisAlt: 'a4bdbc721484d1ee3db785b9b469910ba6612112/299_10_4744_2846',
+  showcaseBrit: 'e1134ec267edf4a3bbd18271ee271069bbbcec06/0_151_6350_3809',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

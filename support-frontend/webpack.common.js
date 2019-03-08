@@ -123,6 +123,26 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
         loader: 'file-loader?name=[path][name].[hash].[ext]',
       },
       {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+          {
+            loader: 'react-svg-loader',
+            options: {
+              svgo: {
+                plugins: [
+                  { removeTitle: true },
+                ],
+                floatPrecision: 2,
+              },
+              jsx: true,
+            },
+          },
+        ],
+      },
+      {
         test: /\.(ttf|woff|woff2)$/,
         loader: 'file-loader?name=[path][name].[ext]',
       },
