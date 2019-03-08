@@ -65,6 +65,9 @@ export const imageCatalogue: {
   showcaseZuckEyes: '8435fc940815a0baefeb67329f62d54a80c45e81/887_556_1005_659',
   showcaseChris: 'a4bdbc721484d1ee3db785b9b469910ba6612112/299_10_4744_2846',
   showcaseBrit: 'e1134ec267edf4a3bbd18271ee271069bbbcec06/0_151_6350_3809',
+  theMomentDigiHero: '5795b5aa7e60c9a9bce411e69fe134850bc84847/0_0_486_772',
+  theMomentDigiHero2: '7779d8c0e000900c4fd31fa24e0942b11882921e/0_0_486_772',
+  theMomentDigiHero3: 'bfb170762564a39330fce685e938d69976bfe38e/0_0_486_772',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
