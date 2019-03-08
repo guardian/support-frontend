@@ -1,20 +1,20 @@
 // @flow
 
-import type { Option } from 'helpers/types/option';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Dispatch } from 'redux';
 import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import { getFormFields, setFormErrors } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import {
+  getFormErrors as getAddressErrors,
+  setFormErrorsFor as setAddressFormErrorsFor
+} from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
 import type {
   FormField,
   FormFields,
   State,
 } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-
-import { formError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
-
-
+import { formError, nonEmptyString, validate } from 'helpers/subscriptionsForms/validation';
 
 function getErrors(fields: FormFields): FormError<FormField>[] {
   return validate([
@@ -36,11 +36,16 @@ const formIsValid = (state: State): boolean => {
 
 function validateForm(dispatch: Dispatch<Action>, state: State) {
   const errors = getErrors(getFormFields(state));
+  const addressErrors = getAddressErrors(getAddress(state).fields);
   const valid = errors.length === 0;
+  const addressValid = addressErrors.length === 0;
   if (!valid) {
     dispatch(setFormErrors(errors));
   }
-  return valid;
+  if (!addressValid) {
+    dispatch(setAddressFormErrorsFor('billing', )(addressErrors));
+  }
+  return valid && addressValid;
 }
 
 export { validateForm, formIsValid, getErrors };

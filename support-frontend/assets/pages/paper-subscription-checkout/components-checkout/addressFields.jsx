@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { auStates, caStates, newspaperCountries, usStates } from 'helpers/internationalisation/country';
+import { auStates, caStates, countries, newspaperCountries, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { InputWithError, SelectWithError, SelectWithIsShown } from 'components/subscriptionCheckouts/formFields';
@@ -48,7 +48,7 @@ function statesForCountry(country: Option<IsoCountry>): React$Node {
   }
 }
 
-function CommonAddressFields<GlobalState>(props: PropTypes<GlobalState>) {
+function CommonAddressFields<GlobalState>(props: {...PropTypes<GlobalState>, countryList: IsoCountry[]}) {
   return (
     <div>
       <InputWithError
@@ -84,7 +84,7 @@ function CommonAddressFields<GlobalState>(props: PropTypes<GlobalState>) {
         error={firstError('country', props.formErrors)}
       >
         <option value="">--</option>
-        {sortedOptions(newspaperCountries)}
+        {sortedOptions(props.countryList)}
       </SelectWithError>
     </div>
   );
@@ -132,7 +132,7 @@ class DomesticAddress<GlobalState> extends Component<PropTypes<GlobalState>> {
           }
         }}
         />
-        <CommonAddressFields {...this.props} />
+        <CommonAddressFields {...{...this.props, countryList: newspaperCountries}} />
       </div>
     );
   }
@@ -148,7 +148,7 @@ class InternationalAddress<GlobalState> extends Component<PropTypes<GlobalState>
     const { ...props } = this.props;
     return (
       <div>
-        <CommonAddressFields {...props} />
+        <CommonAddressFields {...{...this.props, countryList: countries}} />
         <SelectWithIsShown
           id="stateProvince"
           label={props.country === 'CA' ? 'Province/Territory' : 'State'}
