@@ -9,7 +9,7 @@ import { type Option } from 'helpers/types/option';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { formError, type FormError, nonEmptyString, validate } from 'helpers/subscriptionsForms/validation';
+import { formError, type FormError, nonEmptyString, validate, notNull } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Action as DDAction } from 'components/directDebit/directDebitActions';
 import {
@@ -54,7 +54,7 @@ export type FormFields = {|
   firstName: string,
   lastName: string,
   email: string,
-  startDate: string,
+  startDate: Option<string>,
   telephone: Option<string>,
   paymentMethod: Option<PaymentMethod>,
 |};
@@ -131,7 +131,7 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       error: formError('lastName', 'Please enter a last name.'),
     },
     {
-      rule: nonEmptyString(fields.startDate),
+      rule: notNull(fields.startDate),
       error: formError('startDate', 'Please select a start date'),
     },
   ]);
