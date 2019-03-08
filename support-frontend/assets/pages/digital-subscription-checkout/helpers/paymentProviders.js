@@ -26,15 +26,12 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const {
     firstName,
     lastName,
-    addressLine1,
-    addressLine2,
-    townCity,
-    postcode,
     email,
-    stateProvince,
     billingPeriod,
     telephone,
   } = state.page.checkout;
+
+  const { formErrors,  ...addressFields } = state.page.address.fields;
 
   const product = {
     currency: currencyId,
@@ -46,14 +43,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   return {
     firstName,
     lastName,
-    billingAddress: {
-      lineOne: addressLine1,
-      lineTwo: addressLine2,
-      city: townCity,
-      state: stateProvince,
-      postCode: postcode,
-      country: countryId,
-    },
+    billingAddress: addressFields,
     deliveryAddress: null,
     email,
     telephoneNumber: telephone,

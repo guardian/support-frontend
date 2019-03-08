@@ -48,6 +48,7 @@ import {
 import { InputWithError, StaticInputWithLabel } from 'components/subscriptionCheckouts/formFields';
 import { internationalAddressWithStore } from 'pages/paper-subscription-checkout/components-checkout/addressFields';
 import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import type { RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 // ----- Types ----- //
 
@@ -60,6 +61,7 @@ type PropTypes = {|
   productPrices: ProductPrices,
   currencyId: IsoCurrency,
   ...FormActionCreators,
+  ...RegularPaymentRequestAddress,
   csrf: Csrf,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
@@ -77,6 +79,7 @@ type PropTypes = {|
 function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
+    ...getAddress(state).fields,
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,

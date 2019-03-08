@@ -9,11 +9,7 @@ import { type Option } from 'helpers/types/option';
 import { type DigitalBillingPeriod, Monthly } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import {
-  type IsoCountry,
-  type StateProvince,
-  stateProvinceFromString,
-} from 'helpers/internationalisation/country';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
@@ -31,6 +27,7 @@ import type { Action } from './digitalSubscriptionCheckoutActions';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, countrySupportsDirectDebit } from './helpers/paymentProviders';
 import type { State as AddressState } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
+import { addressReducerFor } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
 
 // ----- Types ----- //
 
@@ -40,12 +37,7 @@ export type PaymentMethod = 'Stripe' | 'DirectDebit' | 'PayPal'; // TODO: there 
 export type FormFieldsInState = {|
   firstName: string,
   lastName: string,
-  addressLine1: string,
-  addressLine2: Option<string>,
-  townCity: string,
-  postcode: string,
   email: string,
-  stateProvince: Option<StateProvince>,
   telephone: Option<string>,
   billingPeriod: DigitalBillingPeriod,
   paymentMethod: Option<PaymentMethod>,
@@ -53,7 +45,6 @@ export type FormFieldsInState = {|
 
 export type FormFields = {|
   ...FormFieldsInState,
-  country: IsoCountry,
   countrySupportsDirectDebit: boolean,
 |};
 
@@ -76,6 +67,7 @@ export type State = ReduxState<{|
   checkout: CheckoutState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
+  address: AddressState,
 |}>;
 
 // ----- Selectors ----- //
@@ -85,12 +77,6 @@ function getFormFields(state: State): FormFields {
     firstName: state.page.checkout.firstName,
     email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
-    addressLine1: state.page.checkout.addressLine1,
-    addressLine2: state.page.checkout.addressLine2,
-    townCity: state.page.checkout.townCity,
-    postcode: state.page.checkout.postcode,
-    country: state.common.internationalisation.countryId,
-    stateProvince: state.page.checkout.stateProvince,
     telephone: state.page.checkout.telephone,
     billingPeriod: state.page.checkout.billingPeriod,
     paymentMethod: state.page.checkout.paymentMethod,
@@ -102,25 +88,7 @@ function getEmail(state: State): string {
   return state.page.checkout.email;
 }
 
-function getAddress(state: State): AddressState {
-  return {
-    fields: {
-      lineOne: state.page.checkout.addressLine1,
-      lineTwo: state.page.checkout.addressLine2,
-      city: state.page.checkout.townCity,
-      country: state.common.internationalisation.countryId,
-      state: state.page.checkout.stateProvince,
-      postCode: state.page.checkout.postcode,
-      formErrors: [],
-    },
-    postcode: {
-      postcode: state.page.checkout.postcode,
-      results: [],
-      isLoading: false,
-      error: null,
-    },
-  };
-}
+const getAddress = (state: State): AddressState => state.page.address;
 
 // ----- Functions ----- //
 
@@ -145,11 +113,6 @@ function initReducer(initialCountry: IsoCountry) {
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    addressLine1: '',
-    addressLine2: null,
-    townCity: '',
-    postcode: '',
-    stateProvince: null,
     telephone: null,
     billingPeriod: initialBillingPeriod,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
@@ -174,23 +137,8 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_LAST_NAME':
         return { ...state, lastName: action.lastName };
 
-      case 'SET_ADDRESS_LINE_1':
-        return { ...state, addressLine1: action.addressLine1 };
-
-      case 'SET_ADDRESS_LINE_2':
-        return { ...state, addressLine2: action.addressLine2 };
-
-      case 'SET_TOWN_CITY':
-        return { ...state, townCity: action.townCity };
-
-      case 'SET_POSTCODE':
-        return { ...state, postcode: action.postcode };
-
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
-
-      case 'SET_STATE_PROVINCE':
-        return { ...state, stateProvince: stateProvinceFromString(action.country, action.stateProvince) };
 
       case 'SET_BILLING_PERIOD':
         return { ...state, billingPeriod: action.billingPeriod };
@@ -199,13 +147,6 @@ function initReducer(initialCountry: IsoCountry) {
         return {
           ...state,
           paymentMethod: action.paymentMethod,
-        };
-
-      case 'SET_COUNTRY_CHANGED':
-        return {
-          ...state,
-          stateProvince: null,
-          paymentMethod: countrySupportsDirectDebit(action.country) ? 'DirectDebit' : 'Stripe',
         };
 
       case 'SET_FORM_ERRORS':
@@ -229,6 +170,7 @@ function initReducer(initialCountry: IsoCountry) {
     checkout: reducer,
     user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
     directDebit,
+    address: addressReducerFor('billing', initialCountry),
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });

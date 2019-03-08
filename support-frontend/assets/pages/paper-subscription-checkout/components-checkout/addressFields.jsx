@@ -3,11 +3,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { newspaperCountries } from 'helpers/internationalisation/country';
+import { auStates, caStates, newspaperCountries, usStates } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { InputWithError, SelectWithError, SelectWithIsShown } from 'components/subscriptionCheckouts/formFields';
-import { isPostcodeOptional } from 'pages/digital-subscription-checkout/helpers/validation';
 import { withStore as postcodeFinderWithStore } from './postcodeFinder';
 import { type PostcodeFinderState } from './postcodeFinderStore';
 import { type Address } from '../helpers/addresses';
@@ -21,6 +20,8 @@ import { getPostcodeForm,
   type ActionCreators as AddressActionCreators,
   type State as AddressState } from './addressFieldsStore';
 import type { Option } from 'helpers/types/option';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { isPostcodeOptional } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -151,9 +152,9 @@ class InternationalAddress<GlobalState> extends Component<PropTypes<GlobalState>
         <SelectWithIsShown
           id="stateProvince"
           label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-          value={props.stateProvince}
-          setValue={props.setStateProvince}
-          error={firstError('stateProvince', props.formErrors)}
+          value={props.state}
+          setValue={(state) => props.setState(state, props.country)}
+          error={firstError('state', props.formErrors)}
           isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
         >
           <option value="">--</option>

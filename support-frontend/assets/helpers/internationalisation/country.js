@@ -434,7 +434,7 @@ function auStateFromString(s: string): Option<AuState> {
   return auStates[s] ? s : null;
 }
 
-function stateProvinceFromString(country: Option<IsoCountry>, s: string): Option<StateProvince> {
+function stateFromString(country: Option<IsoCountry>, s: string): Option<StateProvince> {
   switch (country) {
     case 'US':
       return usStateFromString(s);
@@ -604,5 +604,5 @@ export {
   newspaperCountries,
   findIsoCountry,
   fromString,
-  stateProvinceFromString,
+  stateFromString,
 };

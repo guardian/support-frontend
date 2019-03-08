@@ -4,3 +4,4 @@ tools/**/*.js
 coverage/
 flow-typed/
 storybook-static/
+target/

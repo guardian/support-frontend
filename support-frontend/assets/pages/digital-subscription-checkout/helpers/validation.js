@@ -14,9 +14,7 @@ import type { FormError } from 'helpers/subscriptionsForms/validation';
 
 import { formError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 
-function isPostcodeOptional(country: Option<IsoCountry>): boolean {
-  return country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
-}
+
 
 function getErrors(fields: FormFields): FormError<FormField>[] {
   return validate([
@@ -27,29 +25,6 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
     {
       rule: nonEmptyString(fields.lastName),
       error: formError('lastName', 'Please enter a value.'),
-    },
-    {
-      rule: nonEmptyString(fields.addressLine1),
-      error: formError('addressLine1', 'Please enter a value'),
-    },
-    {
-      rule: nonEmptyString(fields.townCity),
-      error: formError('townCity', 'Please enter a value'),
-    },
-    {
-      rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postcode),
-      error: formError('postcode', 'Please enter a value'),
-    },
-    {
-      rule: notNull(fields.country),
-      error: formError('country', 'Please select a country.'),
-    },
-    {
-      rule: fields.country === 'US' || fields.country === 'CA' || fields.country === 'AU' ? notNull(fields.stateProvince) : true,
-      error: formError(
-        'stateProvince',
-        fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
-      ),
     },
   ]);
 }
@@ -68,4 +43,4 @@ function validateForm(dispatch: Dispatch<Action>, state: State) {
   return valid;
 }
 
-export { isPostcodeOptional, validateForm, formIsValid, getErrors };
+export { validateForm, formIsValid, getErrors };
