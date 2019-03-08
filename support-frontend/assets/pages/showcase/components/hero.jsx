@@ -58,7 +58,7 @@ export default function BreakingHeadlines() {
               campaign and played a role in Brexit, had used the data harvested
               from 87 million Facebook users without their consent.
               This reporting led to a public apology from Facebook’s
-              Mark Zuckerberg who was forced to testify before congress.
+              Mark Zuckerberg who was forced to testify before Congress.
             </p>
           </figcaption>
         </figure>
