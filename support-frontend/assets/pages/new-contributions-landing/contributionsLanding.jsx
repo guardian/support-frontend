@@ -88,6 +88,7 @@ const router = (
                 {/*imgType="jpg"*/}
                 {/*altText="A kangaroo stuck in deep mud at the Cawndilla lake outfall near Menindee"*/}
               {/*/>*/}
+              <div className="bg"></div>
               <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
               />

@@ -926,9 +926,12 @@ form {
 }
 
 .gu-content--frontline-campaign {
-  .gu-content__main {
+  .bg {
+    position: absolute;
+    width: 100%;
+    height: 500px;
     background: no-repeat url('https://media.guim.co.uk/b9ed1767866d29186f198b523cd5571aeda02a88/0_1269_5184_1516/2000.jpg');
-    background-size: contain;
+    background-size: cover;
   }
 
   .gu-content__blurb-header {
