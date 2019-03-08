@@ -37,11 +37,18 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
 |};
 
+type GridImageType = {|
+  gridId: string,
+  srcSizes: mumber[],
+  imgType: string,
+|}
+
+
 type GridImages = {
   breakpoints: {
-    // mobile: GridImage,
-    tablet: GridImage,
-    desktop: GridImage,
+    mobile: GridImageType,
+    tablet: GridImageType,
+    desktop: GridImageType,
   },
   fallback: GridId,
 };
