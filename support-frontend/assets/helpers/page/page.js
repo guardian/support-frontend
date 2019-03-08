@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import 'ophan';
+import loadFonts from '@guardian/font-loader';
 import type { Store } from 'redux';
 import { applyMiddleware, combineReducers, compose, createStore, type Reducer } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -34,6 +35,8 @@ if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
 }
 
+// ----- Sides ----- //
+loadFonts(window, document);
 
 // ----- Types ----- //
 

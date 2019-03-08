@@ -1,3 +1,7 @@
+// Our core fonts (Guardian Headline, Guardian Text Egyptian Web and Guardian Text Sans Egyptian Web)
+// are loaded via an iFrame from dotcom. If you use any fonts in this file, it will result in
+// the font files being downloaded from pasteup
+
 $gu-gt-fonts-url: "//pasteup.guim.co.uk/webfonts/1.0.0";
 $gu-gt-font-variant: "noalts-not-hinted";
 

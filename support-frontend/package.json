@@ -87,6 +87,7 @@
     "@storybook/addon-options": "^4.1.11",
     "@storybook/addon-storysource": "^4.1.11",
     "@storybook/react": "^4.1.9",
+    "@guardian/font-loader": "1.0.0-alpha",
     "autoprefixer": "^8.6.1",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.1",

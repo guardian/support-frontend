@@ -1,13 +1,10 @@
 /*
-Core page styles such as CSS reset, core helper classes, etc, 
+Core page styles such as CSS reset, core helper classes, etc,
 Import this once per page.
 */
 
 @import '~stylesheets/gu-sass/gu-sass';
 
-@import './webfonts';
-
-@import './webfonts';
-
+@import './non-critical-webfonts';
 @import './reset-src';
 @import './html';

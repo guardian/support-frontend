@@ -87,43 +87,6 @@
 
     </head>
   <body class="header-tweaks">
-    <script>
-      (function(window, document) {
-      var head = document.getElementsByTagName('head')[0];
-      var hideIframeStyle = document.createElement('style');
-      hideIframeStyle.innerHTML= ".guardianFontLoader {display: none;}";
-      head.append(hideIframeStyle);
-      var useFont = function(font) {
-        if (font.css) {
-          var style = document.createElement('style');
-          style.innerHTML = font.css;
-          head.appendChild(style);
-        }
-      };
-
-      var loadFonts = function() {
-        var iframe = document.createElement('iframe');
-        // TODO use prod link to font-loader
-        iframe.src = 'https://176c9a2c.ngrok.io/font-loader';
-        iframe.classList = 'guardianFontLoader';
-        // add iframe and wait for message
-        window.addEventListener('message', function(e) {
-        if (
-          e &&
-          e.data &&
-          e.data.name &&
-          e.data.name === 'guardianFonts' &&
-          e.data.fonts &&
-          e.source === iframe.contentWindow
-        ) {
-          e.data.fonts.forEach(useFont);
-        }
-        });
-        document.body.appendChild(iframe);
-     };
-     loadFonts();
-     })(window, document);
-    </script>
     <noscript>
       <div style="text-align: center;
         font-size: 30px;
