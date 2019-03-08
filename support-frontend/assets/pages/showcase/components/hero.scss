@@ -3,6 +3,12 @@
 .showcase-hero {
   background: gu-colour(highlight-main);
   color: gu-colour(neutral-7);
+  
+  .component-product-page-hero {
+    height: auto;
+    max-height: 100%;  
+  }
+
   .component-left-margin-section__content {
     padding-top: $gu-v-spacing;
     padding-bottom: $gu-v-spacing;
