@@ -29,6 +29,9 @@
   .component-grid-picture__image {
     height: 100%;
   }
+  &.component-product-page-hero--feature {
+    max-height: 600px;
+  }
 }
 
 .component-product-page-hero--feature {
