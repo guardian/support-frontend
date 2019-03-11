@@ -2,12 +2,13 @@ package com.gu.emailservices
 
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.catalog.ProductOptions
+import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, ProductOptions}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 
 case class PaperEmailFields(
   subscriptionNumber: String,
+  fulfilmentOptions: FulfilmentOptions,
   productOptions: ProductOptions,
   billingPeriod: BillingPeriod,
   user: User,
@@ -18,6 +19,11 @@ case class PaperEmailFields(
   sfContactId: SfContactId,
   directDebitMandateId: Option[String] = None
 ) extends EmailFields {
+
+  val dataExtension = fulfilmentOptions match {
+    case HomeDelivery => "paper-delivery"
+    case _ => "paper-voucher"
+  }
 
   val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date
 
@@ -58,6 +64,6 @@ case class PaperEmailFields(
 
   //TODO - do we care about the billing and promotion fields - these are included in the emails queued via subscriptions-frontend?
 
-  override def payload: String = super.payload(user.primaryEmailAddress, "paper-delivery")
+  override def payload: String = super.payload(user.primaryEmailAddress, dataExtension)
   override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
 }

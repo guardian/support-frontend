@@ -8,7 +8,7 @@ import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.catalog.Saturday
+import com.gu.support.catalog.{Collection, Saturday}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.JsonFixtures.{thankYouEmailJson, wrapFixture}
 import com.gu.support.workers._
@@ -107,6 +107,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
     )
     val ef = PaperEmailFields(
       "A-S00045678",
+      Collection,
       Saturday,
       Monthly,
       user,

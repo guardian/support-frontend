@@ -64,8 +64,9 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           directDebitMandateId = directDebitMandateId,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
-        case p: Paper if p.fulfilmentOptions == HomeDelivery => PaperEmailFields(
+        case p: Paper => PaperEmailFields(
           subscriptionNumber = state.subscriptionNumber,
+          fulfilmentOptions = p.fulfilmentOptions,
           productOptions = p.productOptions,
           billingPeriod = p.billingPeriod,
           user = state.user,
@@ -76,7 +77,6 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           directDebitMandateId = directDebitMandateId,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
-        case p: Paper if p.fulfilmentOptions == Collection => ??? //We have a different email template for Collection
       }
     )
 
