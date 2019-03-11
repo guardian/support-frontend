@@ -161,7 +161,7 @@ const content = (
       </Content>
       <Content>
         <Text title="Promotion terms and conditions">
-          <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full annual promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/WWM99X/terms?country=${subsCountry}`}>here</a>.
+          <p>Offer subject to availability. Guardian News and Media Limited (&ldquo;GNM&rdquo;) reserves the right to withdraw this promotion at any time. For full annual promotion terms and conditions, see <a target="_blank" rel="noopener noreferrer" href={`https://subscribe.theguardian.com/p/10ANNUAL/terms?country=${subsCountry}`}>here</a>.
           </p>
         </Text>
         <Text title="Guardian Weekly terms and conditions">
