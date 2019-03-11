@@ -14,6 +14,7 @@ import Content from 'components/content/content';
 import Text, { SansParagraph, LargeParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
+import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
 import typeof MarketingConsent from './marketingConsentContainer';
 import styles from './thankYou.module.scss';
 import { formatUserDate } from '../helpers/deliveryDays';
@@ -111,7 +112,8 @@ function ThankYouContent({
       <Content>
         <Text>
           <SansParagraph>
-            You can manage your subscription by visiting our Manage section or accessing it via your Guardian account.
+            You can manage your subscription by visiting our <a href={manageSubsUrl}>Manage section</a> or accessing
+            it via <a href={myAccountUrl}>your Guardian account</a>.
           </SansParagraph>
         </Text>
       </Content>
