@@ -45,6 +45,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     lastName,
     email,
     telephone,
+    billingAddressIsSame,
   } = state.page.checkout;
 
   const product = {
@@ -56,14 +57,14 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 
-  const billingAddress = {
-    ...getAddressFieldsState(getFormFields(getBillingAddress(state))),
+  const deliveryAddress = {
+    ...getAddressFieldsState(getFormFields(getDeliveryAddress(state))),
     state: null,
     country: countryId,
   };
 
-  const deliveryAddress = {
-    ...getAddressFieldsState(getFormFields(getDeliveryAddress(state))),
+  const billingAddress = billingAddressIsSame ? deliveryAddress : {
+    ...getAddressFieldsState(getFormFields(getBillingAddress(state))),
     state: null,
     country: countryId,
   };

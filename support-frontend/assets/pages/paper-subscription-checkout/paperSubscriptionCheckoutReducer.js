@@ -158,20 +158,25 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
     dispatcher: any => Action,
   }
 
+  const formFields: FormFields = getFormFields(state);
+
   const allErrors: (Error<AddressFormField> | Error<FormField>)[] = [
     ({
-      errors: getErrors(getFormFields(state)),
+      errors: getErrors(formFields),
       dispatcher: setFormErrors,
     }: Error<FormField>),
     ({
       errors: getAddressFormErrors(getAddressFormFields(getDeliveryAddress(state))),
       dispatcher: setAddressFormErrorsFor('delivery'),
     }: Error<AddressFormField>),
-    ({
+  ].filter(({ errors }) => errors.length > 0);
+
+  if (!formFields.billingAddressIsSame) {
+    allErrors.push(({
       errors: getAddressFormErrors(getAddressFormFields(getBillingAddress(state))),
       dispatcher: setAddressFormErrorsFor('billing'),
-    }: Error<AddressFormField>),
-  ].filter(({ errors }) => errors.length > 0);
+    }: Error<AddressFormField>));
+  }
 
   if (allErrors.length > 0) {
     allErrors.forEach(({ errors, dispatcher }) => {
