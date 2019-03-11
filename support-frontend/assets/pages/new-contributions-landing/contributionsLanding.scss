@@ -969,24 +969,15 @@ form {
       margin-top: $gu-v-spacing * 3;
     }
 
-    $content-left-margin-tablet: 100px;
     $content-left-margin-leftCol: 200px;
 
     header[role="banner"] {
-      //@include mq(tablet) {
-      //  padding-left: $content-left-margin-tablet;
-      //}
-
       @include mq(leftCol) {
         padding-left: $content-left-margin-leftCol;
       }
     }
 
     .gu-content__content {
-      //@include mq($from: tablet) {
-      //  margin-left: $content-left-margin-tablet;
-      //}
-
       @include mq($from: leftCol) {
         margin-left: $content-left-margin-leftCol;
       }
