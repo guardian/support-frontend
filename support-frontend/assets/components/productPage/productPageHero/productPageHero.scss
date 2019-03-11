@@ -5,6 +5,12 @@
   position: relative;
   min-height: 300px;
   height: 37.5vw;
+
+  &.component-product-page-hero--custom {
+    height: auto;
+    min-height: 0;
+  }
+
   .component-left-margin-section__content {
     position: relative;
     @include mq($from: tablet) {
@@ -18,9 +24,6 @@
   }
   .component-left-margin-section {
     height: 100%;
-  }
-  &:not(.component-product-page-hero--campaign) {
-    max-height: 600px;
   }
   .component-grid-picture,
   .component-grid-picture__image {
@@ -50,7 +53,7 @@
 }
 
 .component-product-page-hero--campaign {
-  background-color: gu-colour(green-dark);
+  background: gu-colour(neutral-97);
   .component-left-margin-section__content {
     border-left-color: transparent;
   }

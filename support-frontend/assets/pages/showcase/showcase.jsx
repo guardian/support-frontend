@@ -11,17 +11,14 @@ import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import Heading from 'components/heading/heading';
 
-import ProductPageHero from 'components/productPage/productPageHero/productPageHero';
 import Content from 'components/content/content';
-import AnchorButton from 'components/button/anchorButton';
 
-import SvgChevron from 'components/svgs/chevron';
-import GridPicture from 'components/gridPicture/gridPicture';
 import 'stylesheets/skeleton/skeleton.scss';
 
 import WhySupportMatters from './components/whySupportMatters';
 import BreakingHeadlines from './components/breakingHeadlines';
 import NoOneEdits from './components/noOneEdits';
+import Hero from './components/hero';
 import CtaSubscribe from './components/ctaSubscribe';
 import CtaContribute from './components/ctaContribute';
 import OtherProducts from './components/otherProducts';
@@ -35,40 +32,8 @@ pageInit();
 // ----- Render ----- //
 
 const content = (
-  <Page
-    header={<Header />}
-    footer={<Footer />}
-  >
-    <ProductPageHero
-      overheading="Support The Guardian"
-      heading="Help us deliver independent investigative journalism"
-      appearance="feature"
-      content={<AnchorButton aria-label={null} icon={<SvgChevron />} href="#support">Ways to support</AnchorButton>}
-      hasCampaign={false}
-    >
-      <GridPicture
-        sources={[
-          {
-            gridId: 'showcase',
-            srcSizes: [500, 1000],
-            imgType: 'png',
-            sizes: '100vw',
-            media: '(max-width: 739px)',
-          },
-          {
-            gridId: 'showcase',
-            srcSizes: [1000, 2000],
-            imgType: 'png',
-            sizes: '(min-width: 1000px) 2000px, 1000px',
-            media: '(min-width: 740px)',
-          },
-        ]}
-        fallback="showcase"
-        fallbackSize={1000}
-        altText=""
-        fallbackImgType="png"
-      />
-    </ProductPageHero>
+  <Page header={<Header />} footer={<Footer />}>
+    <Hero />
     <WhySupportMatters />
     <BreakingHeadlines />
     <NoOneEdits />

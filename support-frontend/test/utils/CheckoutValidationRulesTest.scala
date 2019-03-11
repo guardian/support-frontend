@@ -120,6 +120,19 @@ class DigitalPackValidationTest extends FlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingState) shouldBe false
   }
 
+  it should "fail when missing an address line or a city for billing address" in {
+    val badBillingAddress = Address(
+      lineOne = None,
+      lineTwo = None,
+      city = None,
+      state = None,
+      postCode = None,
+      country = Country.UK
+    )
+    val requestMissingAddressLineAndCity = validDigitalPackRequest.copy(billingAddress = badBillingAddress)
+    DigitalPackValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+  }
+
 }
 
 class PaperValidationTest extends FlatSpec with Matchers {
@@ -146,6 +159,19 @@ class PaperValidationTest extends FlatSpec with Matchers {
     PaperValidation.passes(requestDeliveredToUs) shouldBe false
   }
 
+  it should "fail when missing an address data for billing and delivery address" in {
+      val emptyAddress = Address(
+        lineOne = None,
+        lineTwo = None,
+        city = None,
+        state = None,
+        postCode = None,
+        country = Country.UK
+      )
+      val requestMissingAddressLineAndCity = validPaperRequest.copy(billingAddress = emptyAddress, deliveryAddress = Some(emptyAddress))
+      DigitalPackValidation.passes(requestMissingAddressLineAndCity) shouldBe false
+  }
+
 }
 
 object TestData {
@@ -163,9 +189,9 @@ object TestData {
     telephoneNumber = None,
     promoCode = None,
     billingAddress = Address(
+      Some("123 easy street"),
       None,
-      None,
-      None,
+      Some("arlington"),
       state = Some("VA"),
       postCode = Some("111111"),
       country = Country.US,

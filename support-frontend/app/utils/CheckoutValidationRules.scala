@@ -3,6 +3,7 @@ package utils
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.workers._
+import org.joda.time.LocalDate
 import services.stepfunctions.CreateSupportWorkersRequest
 
 object CheckoutValidationRules {
@@ -39,6 +40,10 @@ object AddressAndCurrencyValidationRules {
   def deliveredToUkAndPaidInGbp(countryFromRequest: Country, currencyFromRequest: Currency): Boolean =
     countryFromRequest == Country.UK && currencyFromRequest == GBP
 
+  def hasAddressLine1AndCity(address: Address): Boolean = {
+    address.lineOne.isDefined && address.city.isDefined
+  }
+
 
   def hasStateIfRequired(countryFromRequest: Country, stateFromRequest: Option[String], currencyFromRequest: Currency): Boolean =
     if (countryFromRequest == Country.US || countryFromRequest == Country.Canada || countryFromRequest == Country.Australia) {
@@ -69,13 +74,15 @@ object DigitalPackValidation {
   import AddressAndCurrencyValidationRules._
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
+    import createSupportWorkersRequest._
     import createSupportWorkersRequest.product._
     import createSupportWorkersRequest.billingAddress._
 
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
       hasStateIfRequired(country, state, currency) &&
       hasPostcodeIfRequired(country, postCode) &&
-      currencyIsSupportedForCountry(country, currency)
+      currencyIsSupportedForCountry(country, currency) &&
+      hasAddressLine1AndCity(billingAddress)
   }
 }
 
@@ -83,7 +90,7 @@ object PaperValidation {
 
   import AddressAndCurrencyValidationRules._
 
-  def hasFirstDeliveryDate(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = createSupportWorkersRequest.firstDeliveryDate.nonEmpty
+  def hasFirstDeliveryDate(firstDeliveryDate: Option[LocalDate]): Boolean = firstDeliveryDate.nonEmpty
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Boolean = {
 
@@ -92,8 +99,16 @@ object PaperValidation {
       case None => false
     }
 
+    val deliveryAddressHasAddressLine1AndCity = createSupportWorkersRequest.deliveryAddress match {
+      case Some(address) => hasAddressLine1AndCity(address)
+      case None => false
+    }
+
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) &&
-      hasDeliveryAddressInUKAndPaidInGbp &&
-      hasFirstDeliveryDate(createSupportWorkersRequest)
+    hasDeliveryAddressInUKAndPaidInGbp &&
+    hasFirstDeliveryDate(createSupportWorkersRequest.firstDeliveryDate) &&
+    hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) &&
+    deliveryAddressHasAddressLine1AndCity
+
   }
 }
