@@ -50,7 +50,7 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
         onClick={onClick}
         aria-label={null}
       >
-        Find it
+        Find address
       </Button>
     }
   </div>
