@@ -117,7 +117,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           label="Postcode"
           type="text"
           value={props.postCode}
-          setValue={props.setPostCode}
+          setValue={props.setPostcode}
           error={firstError('postCode', props.formErrors)}
         />
         <SelectWithError
