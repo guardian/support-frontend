@@ -138,35 +138,11 @@ Resources:
   {{> lambda}}
   {{/lambdas}}
 
-  MonthlyContributionsPROD:
-    Type: "AWS::StepFunctions::StateMachine"
-    Condition: CreateProdResources
-    Properties:
-      DefinitionString:
-        !Sub
-          - |-
-            {{> stateMachine}}
-
-          - {}
-      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
-
   SupportWorkersPROD:
     Type: "AWS::StepFunctions::StateMachine"
     Condition: CreateProdResources
     Properties:
       StateMachineName: !Sub support-workers-${Stage}
-      DefinitionString:
-        !Sub
-          - |-
-            {{> stateMachine}}
-
-          - {}
-      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
-
-  MonthlyContributionsCODE:
-    Type: "AWS::StepFunctions::StateMachine"
-    Condition: CreateCodeResources
-    Properties:
       DefinitionString:
         !Sub
           - |-
