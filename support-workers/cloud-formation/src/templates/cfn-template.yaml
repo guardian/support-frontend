@@ -166,6 +166,7 @@ Resources:
     Type: "AWS::StepFunctions::StateMachine"
     Condition: CreateCodeResources
     Properties:
+      StateMachineName: !Sub support-workers-${Stage}
       DefinitionString:
         !Sub
           - |-
