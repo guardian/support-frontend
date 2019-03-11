@@ -85,7 +85,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
     service.send(ef)
   }
 
-  it should "send a paper subscription email" in {
+  ignore should "send a paper subscription email" in {
     //This test will send a thank you email to the address below - useful for quickly testing changes
     val addressToSendTo = "jacob.winch+integrationTest@theguardian.com"
     val mandateId = "65HK26E"
