@@ -35,7 +35,7 @@ class CustomHttpErrorHandler(
       NotFound(main(
         "Error 404",
         EmptyDiv("error-404-page"),
-        RefPath("error404Page.js"),
+        Left(RefPath("error404Page.js")),
         Left(RefPath("error404Page.css"))
       )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
@@ -49,7 +49,7 @@ class CustomHttpErrorHandler(
         main(
           "Error 500",
           EmptyDiv("error-500-page"),
-          RefPath("error500Page.js"),
+          Left(RefPath("error500Page.js")),
           Left(RefPath("error500Page.css"))
         )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.noCache)

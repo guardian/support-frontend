@@ -8,7 +8,7 @@
 @(
   title: String,
   id: String,
-  js: RefPath,
+  js: Either[RefPath, StyleContent],
   css: Either[RefPath, StyleContent],
   description: Option[String],
   oneOffDefaultStripeConfig: StripeConfig,

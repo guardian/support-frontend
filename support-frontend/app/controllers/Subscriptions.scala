@@ -40,7 +40,7 @@ class Subscriptions(
     Ok(views.html.main(
       title,
       mainElement,
-      RefPath(js),
+      Left(RefPath(js)),
       Left(RefPath("subscriptionsLandingPageStyles.css")),
       description = stringsConfig.subscriptionsLandingDescription
     )()).withSettingsSurrogateKey
@@ -51,7 +51,7 @@ class Subscriptions(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Premium Tier"
     val mainElement = EmptyDiv("premium-tier-landing-page-" + countryCode)
-    val js = RefPath("premiumTierLandingPage.js")
+    val js = Left(RefPath("premiumTierLandingPage.js"))
     val css = Left(RefPath("premiumTierLandingPageStyles.css"))
     Ok(views.html.main(title, mainElement, js, css)()).withSettingsSurrogateKey
   }
@@ -62,7 +62,7 @@ class Subscriptions(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "The Guardian Weekly Subscriptions | The Guardian"
     val mainElement = EmptyDiv("weekly-landing-page-" + countryCode)
-    val js = RefPath("weeklySubscriptionLandingPage.js")
+    val js = Left(RefPath("weeklySubscriptionLandingPage.js"))
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))

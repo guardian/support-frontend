@@ -5,6 +5,7 @@
 import type { ContributionType, PaymentMethod } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
+import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -107,6 +108,13 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 
 const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
 
+const australiaFrontlineFormMessage = (
+  <div className="frontline-campaign">
+    <div className="frontline-campaign__headline">Make a contribution</div>
+    <div className="frontline-campaign__body">to our dedicated series ‘Climate Crunch’</div>
+  </div>
+);
+
 const countryGroupSpecificDetails: {
   [CountryGroupId]: CountryMetaData
 } = {
@@ -133,24 +141,34 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
 
+  const tickerUrl =
+    countryGroupDetails.tickerJsonUrl ||
+    getQueryParameter('ticker') === 'true' ? '/ticker.json' : undefined;
+
+  const formMessage =
+    countryGroupDetails.formMessage ||
+    isFrontlineCampaign() ? australiaFrontlineFormMessage : undefined;
+
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
     : (
       <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
         <div className="gu-content__blurb">
           <h1 className="gu-content__blurb-header">{countryGroupDetails.headerCopy}</h1>
-          {countryGroupDetails.tickerJsonUrl ?
-            <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
-          }
           { countryGroupDetails.contributeCopy ?
             <p className="gu-content__blurb-blurb">{countryGroupDetails.contributeCopy}</p> : null
           }
         </div>
 
         <div className="gu-content__form">
+          {tickerUrl ?
+            <ContributionTicker tickerJsonUrl={tickerUrl} /> : null
+          }
+          {formMessage ?
+            <div className="gu-content__form__message">{formMessage}</div> : null
+          }
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}
-            message={countryGroupDetails.formMessage}
           />
         </div>
         <DirectDebitPopUpForm

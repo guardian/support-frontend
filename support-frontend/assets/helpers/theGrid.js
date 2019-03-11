@@ -61,8 +61,13 @@ export const imageCatalogue: {
   showcase: 'b72ef7a4c8764a163fc604d7b8edcedfdd7682f4/0_0_7100_3500',
   showcaseSubscribe: '1174d922f64d951a4a860e4b91b8dd5c5eb8cc8c/0_0_1802_1190',
   paperLandingSale: '6179a30718dab98e96230e39195f3aa2a2784a1d/0_0_800_858',
-  frontlineCampaignSlim: 'b9ed1767866d29186f198b523cd5571aeda02a88/0_1269_5184_1516',
-  frontlineCampaignFull: 'b9ed1767866d29186f198b523cd5571aeda02a88/0_0_5184_3456',
+  showcaseZuck: '8435fc940815a0baefeb67329f62d54a80c45e81/0_100_3000_1800',
+  showcaseZuckEyes: '8435fc940815a0baefeb67329f62d54a80c45e81/887_556_1005_659',
+  showcaseChris: 'a4bdbc721484d1ee3db785b9b469910ba6612112/299_10_4744_2846',
+  showcaseBrit: 'e1134ec267edf4a3bbd18271ee271069bbbcec06/0_151_6350_3809',
+  theMomentDigiHero: '5795b5aa7e60c9a9bce411e69fe134850bc84847/0_0_486_772',
+  theMomentDigiHero2: '7779d8c0e000900c4fd31fa24e0942b11882921e/0_0_486_772',
+  theMomentDigiHero3: 'bfb170762564a39330fce685e938d69976bfe38e/0_0_486_772',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

@@ -16,6 +16,6 @@ This script allows you to decrypt the state from step function executions, it ca
     for decrypting state from the CODE environment but if you want to decrypt state from PROD, you can pass the
     production AWS encryption key ARN as a second parameter to the script.
 END
-cd ..
+cd ../..
 minified_json="$(echo $1 | tr -d '\n\r\t ')"
-sbt --error "run-main com.gu.support.workers.encoding.StateDecoder $minified_json $2"
+sbt --error "project support-workers" "runMain com.gu.support.workers.encoding.StateDecoder $minified_json $2"

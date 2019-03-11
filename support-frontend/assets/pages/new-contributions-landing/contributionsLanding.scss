@@ -477,10 +477,24 @@ footer[role="contentinfo"] {
   flex-direction: column;
 }
 
-.form--message {
+.gu-content__form__message {
   margin: 0 -10px;
-  padding: 7px 10px;
+  padding: 12px 10px 11px 10px;
   border-bottom: 1px solid gu-colour(neutral-86);
+}
+
+.frontline-campaign {
+  font-family: $gu-headline;
+}
+.frontline-campaign__headline {
+  font-size: 24px;
+  line-height: 26px;
+  font-weight: bold;
+}
+.frontline-campaign__body {
+  font-size: 16px;
+  line-height: 18px;
+  font-style: italic;
 }
 
 .form--content {

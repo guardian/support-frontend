@@ -21,7 +21,8 @@ import Text from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import 'stylesheets/skeleton/skeleton.scss';
 
-import DigitalSubscriptionLandingHeader from './components/digitalSubscriptionLandingHeader';
+
+import { SaleHeader } from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
@@ -29,6 +30,7 @@ import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReduc
 import Form from './components/form';
 
 import './digitalSubscriptionLanding.scss';
+import './components/theMoment.scss';
 
 // ----- Redux Store ----- //
 
@@ -75,9 +77,9 @@ const content = (
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </Footer>}
     >
-      <DigitalSubscriptionLandingHeader
-        countryGroupId={countryGroupId}
-      />
+
+      <SaleHeader />
+
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
       <Content appearance="feature" id="subscribe">
