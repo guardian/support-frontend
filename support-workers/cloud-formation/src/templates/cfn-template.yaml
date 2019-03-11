@@ -162,6 +162,18 @@ Resources:
           - {}
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
+  SupportWorkersCODE:
+    Type: "AWS::StepFunctions::StateMachine"
+    Condition: CreateCodeResources
+    Properties:
+      DefinitionString:
+        !Sub
+          - |-
+            {{> stateMachine}}
+
+          - {}
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
+
   ExecutionFailureAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
