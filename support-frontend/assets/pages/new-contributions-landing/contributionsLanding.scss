@@ -975,10 +975,14 @@ form {
       top: 0;
       background: no-repeat url('https://media.guim.co.uk/b9ed1767866d29186f198b523cd5571aeda02a88/0_1269_5184_1516/2000.jpg');
       background-size: cover;
-      background-position: left 20% top;
+      background-position: left -150px top;
+
+      @include mq(leftCol) {
+        background-position: left -90px top;
+      }
 
       @include mq(wide) {
-        background-position: left 20% bottom 20%;
+        background-position: left top -25px;
       }
     }
 
@@ -1003,22 +1007,55 @@ form {
     }
 
     .gu-content__content {
+      @include mq(desktop) {
+        margin: $gu-v-spacing * 3 auto 0;
+        width: 860px;
+      }
+
       @include mq($from: leftCol) {
-        margin-left: $content-left-margin-leftCol;
+        width: 948px;
       }
     }
 
     .gu-content__form {
       z-index: 0;
+
+      // TODO: should this be normalised to work like this everywhere?
+      box-sizing: border-box;
+
+      @include mq(tablet) {
+        width: 416px;
+        margin: 30px 10px;
+      }
+
+      @include mq(desktop) {
+        margin: 0;
+      }
     }
 
     .gu-content__blurb {
       z-index: 0;
-      margin-right: $gu-h-spacing;
+      // TODO: should this be normalised to work like this everywhere?
+      box-sizing: border-box;
+
+      @include mq(desktop) {
+        width: 474px;
+        margin: 0;
+      }
+
+      @include mq(leftCol) {
+        max-width: 404px;
+      }
     }
 
     .gu-content__blurb-blurb {
-      margin-top: $gu-v-spacing * 15;
+      margin-top: ($gu-v-spacing * 15) - 9;
+      padding-top: 9px;
+      padding-bottom: 0;
+      padding-left: $gu-h-spacing / 2;
+      margin-left: -($gu-h-spacing / 2);
+      border-left: solid 1px #121212;
+      border-bottom: 0;
     }
   }
 
