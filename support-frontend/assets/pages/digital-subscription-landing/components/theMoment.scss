@@ -88,7 +88,6 @@
   align-items: center;
   justify-content: center;
   max-width: gu-span(8);
-  // display: none; //TODO: fix image
   
   @include mq($from: mobileMedium) {
     padding-top: $gu-v-spacing*1;
