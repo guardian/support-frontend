@@ -42,7 +42,7 @@ class PayPalOneOff(
     Ok(views.html.main(
       "Support the Guardian | PayPal Error",
       EmptyDiv("paypal-error-page"),
-      RefPath("payPalErrorPage.js"),
+      Left(RefPath("payPalErrorPage.js")),
       Left(RefPath("payPalErrorPageStyles.css"))
     )()).withSettingsSurrogateKey
   }

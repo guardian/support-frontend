@@ -24,7 +24,6 @@ export type Action =
   | { type: 'SET_ADDRESS_LINE_1', addressLine1: string }
   | { type: 'SET_ADDRESS_LINE_2', addressLine2: string }
   | { type: 'SET_TOWN_CITY', townCity: string }
-  | { type: 'SET_COUNTY', county: string }
   | { type: 'SET_COUNTRY', country: string }
   | { type: 'SET_POSTCODE', postcode: string }
   | { type: 'SET_TELEPHONE', telephone: string }
@@ -70,7 +69,6 @@ const formActionCreators = {
   setAddressLine2: (addressLine2: string): Action => ({ type: 'SET_ADDRESS_LINE_2', addressLine2 }),
   setTownCity: (townCity: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_TOWN_CITY', townCity }))),
   setCountry: (country: string): Action => ({ type: 'SET_COUNTRY', country }),
-  setCounty: (county: string): Action => ({ type: 'SET_COUNTY', county }),
   setPostcode: (postcode: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_POSTCODE', postcode }))),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {

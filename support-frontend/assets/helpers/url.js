@@ -100,6 +100,10 @@ function getPathAfterRoute(route: string): string[] {
   return pathName.splice(pathName.findIndex(r => r === route));
 }
 
+function isFrontlineCampaign(): boolean {
+  return getQueryParameter('frontline-campaign') === 'true';
+}
+
 // ----- Exports ----- //
 
 export {
@@ -111,4 +115,5 @@ export {
   addQueryParamsToURL,
   getAbsoluteURL,
   getPathAfterRoute,
+  isFrontlineCampaign,
 };

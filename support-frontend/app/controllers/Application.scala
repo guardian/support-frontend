@@ -114,12 +114,15 @@ class Application(
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
     (implicit request: RequestHeader, settings: AllSettings) = {
 
-    val css = CSSElementForStage(assets.getFileContentsAsHtml, stage, RefPath("newContributionsLandingPageStyles.css"))
+    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
+    val css = elementForStage(RefPath("newContributionsLandingPageStyles.css"))
+
+    val js = elementForStage(RefPath("newContributionsLandingPage.js"))
 
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
-      js = RefPath("newContributionsLandingPage.js"),
+      js = js,
       css = css,
       description = stringsConfig.contributionsLandingDescription,
       oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
@@ -140,7 +143,7 @@ class Application(
     Ok(views.html.main(
       title = "Support the Guardian",
       mainElement = EmptyDiv("showcase-landing-page"),
-      mainJsBundle = RefPath("showcasePage.js"),
+      mainJsBundle = Left(RefPath("showcasePage.js")),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
       description = stringsConfig.showcaseLandingDescription,
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
@@ -160,7 +163,7 @@ class Application(
 
 object CSSElementForStage {
 
-  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage, cssPath: RefPath): Either[RefPath, StyleContent] = {
+  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(cssPath: RefPath): Either[RefPath, StyleContent] = {
     if (stage == Stages.DEV) {
       Left(cssPath)
     } else {

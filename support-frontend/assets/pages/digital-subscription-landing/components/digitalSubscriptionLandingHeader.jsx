@@ -7,7 +7,6 @@ import React from 'react';
 import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSaleCountdown';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import GridPicture, {
-  type GridImage,
   type GridSlot,
   type PropTypes as GridPictureProps,
   type Source as GridSource,
@@ -23,8 +22,14 @@ import { sendTrackingEventsOnClick, type SubscriptionProduct } from 'helpers/sub
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { HeroHanger } from 'components/productPage/productPageHero/productPageHero';
 
+import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
+import GridImage, { type GridImg } from 'components/gridImage/gridImage';
+
 import { showUpgradeMessage } from '../helpers/upgradePromotion';
 import { showCountdownTimer } from '../../../helpers/flashSale';
+
+import './theMoment.scss';
+
 
 // ----- Types ----- //
 
@@ -34,9 +39,9 @@ type PropTypes = {|
 
 type GridImages = {
   breakpoints: {
-    mobile: GridImage,
-    tablet: GridImage,
-    desktop: GridImage,
+    mobile: GridImg,
+    tablet: GridImg,
+    desktop: GridImg,
   },
   fallback: GridId,
 };
@@ -55,17 +60,23 @@ const defaultImages: GridImages = {
     mobile: {
       gridId: 'digitalSubscriptionHeaderMobile',
       srcSizes: [342, 684, 1200],
+      sizes: '1200px',
       imgType: 'png',
+      altText: '',
     },
     tablet: {
       gridId: 'digitalSubscriptionHeaderTablet',
       srcSizes: [500, 1000, 2000],
+      sizes: '2000px',
       imgType: 'png',
+      altText: '',
     },
     desktop: {
       gridId: 'digitalSubscriptionHeaderDesktop',
       srcSizes: [500, 1000, 2000, 4045],
+      sizes: '2000px',
       imgType: 'png',
+      altText: '',
     },
   },
   fallback: 'digitalSubscriptionHeaderDesktop',
@@ -86,16 +97,22 @@ const gridImagesByCountry: {
         gridId: 'digitalSubscriptionHeaderMobileAU',
         srcSizes: [310, 620, 1088],
         imgType: 'png',
+        sizes: '2000px',
+        altText: '',
       },
       tablet: {
         gridId: 'digitalSubscriptionHeaderTabletAU',
         srcSizes: [500, 1000, 2000],
         imgType: 'png',
+        sizes: '2000px',
+        altText: '',
       },
       desktop: {
         gridId: 'digitalSubscriptionHeaderDesktopAU',
         srcSizes: [500, 1000, 2000, 4045],
         imgType: 'png',
+        sizes: '2000px',
+        altText: '',
       },
     },
     fallback: 'digitalSubscriptionHeaderDesktopAU',
@@ -159,9 +176,80 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   };
 }
 
+const SaleHeader = () => (
+  <ProductPagehero
+    appearance="campaign"
+    overheading="Digital Pack subscriptions"
+    heading="The Guardian, ad-free on all of your devices"
+    modifierClasses={['digital-campaign']}
+    content={<AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">Start your 14 day free trial</AnchorButton>}
+    hasCampaign
+  >
+
+    <div className="the-moment-hero">
+      <div className="the-moment-hero__copy">
+        <h2>A better way to fund journalism. <br />
+          <span>A better way to read it.
+          </span>
+        </h2>
+      </div>
+
+      <div className="the-moment-hero__graphic-outer">
+        <div className="the-moment-hero__graphic-inner">
+          <div className="the-moment-hero__graphic">
+            <GridImage
+              gridId="theMomentDigiHero"
+              srcSizes={[486, 772]}
+              sizes="(max-width: 740px) 315px, 486px"
+              imgType="png"
+              altText="A couple sit together sharing one newspaper"
+            />
+          </div>
+
+          <div className="the-moment-hero__graphic-slider">
+            <div className="the-moment-hero__graphic-slider-inner">
+              <div className="the-moment-hero__graphic-slider-1">
+                <GridImage
+                  gridId="theMomentDigiHero"
+                  srcSizes={[486]}
+                  sizes="(max-width: 740px) 315px, 486px"
+                  imgType="png"
+                  altText="A couple sit together sharing one newspaper"
+                />
+              </div>
+              <div className="the-moment-hero__graphic-slider-2">
+                <GridImage
+                  gridId="theMomentDigiHero2"
+                  srcSizes={[486]}
+                  sizes="(max-width: 740px) 315px, 486px"
+                  imgType="png"
+                  altText="A couple sit together sharing one newspaper"
+                />
+              </div>
+              <div className="the-moment-hero__graphic-slider-3">
+                <GridImage
+                  gridId="theMomentDigiHero3"
+                  srcSizes={[486]}
+                  sizes="(max-width: 740px) 315px, 486px"
+                  imgType="png"
+                  altText="A couple sit together sharing one newspaper"
+                />
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </ProductPagehero>
+);
+
 // ----- Component ----- //
 
-export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
+function DigitalSubscriptionLandingHeader(props: PropTypes) {
   const product: SubscriptionProduct = 'DigitalPack';
   const copy = getCopy(product, props.countryGroupId);
   return (
@@ -187,3 +275,5 @@ export default function DigitalSubscriptionLandingHeader(props: PropTypes) {
     </div>
   );
 }
+
+export { SaleHeader, DigitalSubscriptionLandingHeader };

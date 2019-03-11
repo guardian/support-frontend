@@ -3,12 +3,10 @@
 $progess-bar-height: 10px;
 
 .contributions-landing-ticker {
-  padding-bottom: $gu-h-spacing;
-}
-
-.contributions-landing-ticker__border {
-  border-top: 1px solid gu-colour(neutral-86);
+  padding: 18px 0 28px 0;
   margin: 0 -10px;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  font-family: $gu-headline;
 }
 
 .contributions-landing-ticker--hidden {
@@ -27,10 +25,17 @@ $progess-bar-height: 10px;
   flex-direction: column;
 }
 
+.contributions-landing-ticker__values,
+.contributions-landing-ticker__progress-bar {
+  margin: 0 10px;
+}
+
 .contributions-landing-ticker__values {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  padding-bottom: 6px;
+  line-height: 1;
 }
 
 .contributions-landing-ticker__goal, .contributions-landing-ticker__so-far {
@@ -39,10 +44,8 @@ $progess-bar-height: 10px;
 }
 
 .contributions-landing-ticker__so-far .contributions-landing-ticker__count {
-  font-family: $gu-headline;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 800;
-  color: gu-colour(opinion-bright);
 }
 
 .contributions-landing-ticker__goal {
@@ -70,7 +73,7 @@ $progess-bar-height: 10px;
 }
 
 .contributions-landing-ticker__filled-progress {
-  background-color: gu-colour(opinion-bright);
+  background-color: gu-colour(highlight-main);
   position: absolute;
   top: 0;
   left: 0;

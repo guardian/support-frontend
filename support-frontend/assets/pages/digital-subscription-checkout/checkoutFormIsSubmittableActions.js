@@ -2,9 +2,9 @@
 
 // ----- Imports ----- //
 
-import { getErrors, getFormFields } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
-import type { State } from './digitalSubscriptionCheckoutReducer';
-import type { Action } from './digitalSubscriptionCheckoutActions';
+import type { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import { formIsValid } from 'pages/digital-subscription-checkout/helpers/validation';
+import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 
 // ----- Functions ----- //
 
@@ -14,11 +14,6 @@ const enableOrDisablePayPalExpressCheckoutButton = (formIsSubmittable: boolean) 
   } else if (window.disablePayPalButton) {
     window.disablePayPalButton();
   }
-};
-
-const formIsValid = (state: State): boolean => {
-  const errors = getErrors(getFormFields(state));
-  return errors.length === 0;
 };
 
 function enableOrDisableForm() {

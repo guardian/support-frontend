@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Monthly contributions state machine"
+Description: "support-workers state machine"
 
 Parameters:
   Stage:
@@ -169,8 +169,8 @@ Resources:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub State Machine Failure in ${Stage} (Monthly Contributions Sign-Ups)
-      AlarmDescription: The Monthly Contributions state machine failed during execution - please investigate.
+      AlarmName: !Sub Support Workers Failure in ${Stage} (Recurring Contributions or Subscriptions Checkout)
+      AlarmDescription: There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process
       MetricName: ExecutionsFailed
       Namespace: AWS/States
       Dimensions:
@@ -190,8 +190,8 @@ Resources:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub Monthly Contributions Sign-Up Timeout in ${Stage}
-      AlarmDescription: An execution of the Monthly Contributions state machine has taken an excessively long time to complete
+      AlarmName: !Sub Support Workers Timeout in ${Stage} (Recurring Contributions or Subscriptions Checkout)
+      AlarmDescription: An execution of the Support Workers state machine has taken an excessively long time to complete
       MetricName: ExecutionsTimedOut
       Namespace: AWS/States
       Dimensions:

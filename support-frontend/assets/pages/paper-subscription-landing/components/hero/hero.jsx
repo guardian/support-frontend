@@ -4,7 +4,7 @@
 
 import React from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
-import { HeroHanger, HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import { HeroHanger, HeroWrapper, HeroHeading } from 'components/productPage/productPageHero/productPageHero';
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
 import GridImage from 'components/gridImage/gridImage';
@@ -63,7 +63,11 @@ const Footer = () => (
   </HeroHanger>
 );
 
-const Heading = () => <HeadingBlock overheading="The Guardian newspaper subscriptions">{getHeading()}</HeadingBlock>;
+const Heading = () => (
+  <HeroHeading hasCampaign={false}>
+    <HeadingBlock overheading="The Guardian newspaper subscriptions">{getHeading()}</HeadingBlock>
+  </HeroHeading>
+);
 
 const DefaultHeader = () => (
   <header>
@@ -72,9 +76,9 @@ const DefaultHeader = () => (
       modifierClasses={['paper']}
     >
       <HeroPicture />
-      <Heading />
       <TimerIfActive />
     </HeroWrapper>
+    <Heading />
     <Footer />
   </header>
 );
