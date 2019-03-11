@@ -111,6 +111,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       Monthly,
       user,
       PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
+      Some(new LocalDate(2019, 3, 26)),
       GBP,
       directDebitPaymentMethod,
       SfContactId("0036E00000WK8fDQAT"),

@@ -70,6 +70,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           billingPeriod = p.billingPeriod,
           user = state.user,
           paymentSchedule = state.paymentSchedule,
+          firstDeliveryDate = state.firstDeliveryDate,
           currency = p.currency,
           paymentMethod = state.paymentMethod,
           directDebitMandateId = directDebitMandateId,
