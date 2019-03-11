@@ -17,7 +17,6 @@ import { set as setCookie } from 'helpers/cookie';
 import { isFrontlineCampaign } from 'helpers/url';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
-import GridImage from 'components/gridImage/gridImage';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 
 
