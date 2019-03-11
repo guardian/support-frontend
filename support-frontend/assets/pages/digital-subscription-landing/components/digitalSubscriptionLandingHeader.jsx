@@ -199,10 +199,10 @@ const SaleHeader = () => (
           <div className="the-moment-hero__graphic">
             <GridImage
               gridId="theMomentDigiHero"
-              srcSizes={[486, 772]}
+              srcSizes={[486]}
               sizes="(max-width: 740px) 315px, 486px"
               imgType="png"
-              altText="A couple sit together sharing one newspaper"
+              altText="A mobile device"
             />
           </div>
 
@@ -214,7 +214,7 @@ const SaleHeader = () => (
                   srcSizes={[486]}
                   sizes="(max-width: 740px) 315px, 486px"
                   imgType="png"
-                  altText="A couple sit together sharing one newspaper"
+                  altText="A mobile device"
                 />
               </div>
               <div className="the-moment-hero__graphic-slider-2">
@@ -223,7 +223,7 @@ const SaleHeader = () => (
                   srcSizes={[486]}
                   sizes="(max-width: 740px) 315px, 486px"
                   imgType="png"
-                  altText="A couple sit together sharing one newspaper"
+                  altText="A mobile device"
                 />
               </div>
               <div className="the-moment-hero__graphic-slider-3">
@@ -232,7 +232,7 @@ const SaleHeader = () => (
                   srcSizes={[486]}
                   sizes="(max-width: 740px) 315px, 486px"
                   imgType="png"
-                  altText="A couple sit together sharing one newspaper"
+                  altText="A mobile device"
                 />
               </div>
 
