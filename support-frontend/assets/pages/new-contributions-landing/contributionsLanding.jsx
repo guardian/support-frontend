@@ -25,6 +25,7 @@ import { initReducer } from './contributionsLandingReducer';
 import { NewContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer from './components/ContributionThankYou/ContributionThankYouContainer';
+import { NewContributionBackground } from './components/ContributionBackground';
 import { setUserStateActions } from './setUserStateActions';
 
 if (!isDetailsSupported) {
@@ -76,6 +77,7 @@ const router = (
               <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
               />
+              <NewContributionBackground />
             </Page>
             )
         }
@@ -95,6 +97,7 @@ const router = (
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
                 <ContributionThankYouContainer />
+                <NewContributionBackground />
               </Page>
             );
           }}
