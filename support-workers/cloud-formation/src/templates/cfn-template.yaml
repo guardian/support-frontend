@@ -201,13 +201,13 @@ Resources:
       Namespace: AWS/States
       Dimensions:
         - Name: StateMachineArn
-          Value: !Ref MonthlyContributionsPROD
+          Value: !Ref SupportWorkersPROD
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
-    DependsOn: MonthlyContributionsPROD
+    DependsOn: SupportWorkersPROD
 
   TimeoutAlarm:
     Type: AWS::CloudWatch::Alarm
@@ -222,10 +222,10 @@ Resources:
       Namespace: AWS/States
       Dimensions:
         - Name: StateMachineArn
-          Value: !Ref MonthlyContributionsPROD
+          Value: !Ref SupportWorkersPROD
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
-    DependsOn: MonthlyContributionsPROD
+    DependsOn: SupportWorkersPROD
