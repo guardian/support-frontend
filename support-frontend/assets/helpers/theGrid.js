@@ -68,6 +68,7 @@ export const imageCatalogue: {
   theMomentDigiHero: '5795b5aa7e60c9a9bce411e69fe134850bc84847/0_0_486_772',
   theMomentDigiHero2: '7779d8c0e000900c4fd31fa24e0942b11882921e/0_0_486_772',
   theMomentDigiHero3: 'bfb170762564a39330fce685e938d69976bfe38e/0_0_486_772',
+  weeklyCampaignHeroImg: '3d4bf412afdf3c91faed55c9507a6d741575e3c5/0_0_1358_954',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

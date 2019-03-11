@@ -1,0 +1,120 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+.component-product-page-hero.component-product-page-hero--weekly-campaign {
+  position: relative;
+  box-sizing: border-box;
+  background: #283942;
+  color: #fff;
+  max-height: 550px;
+
+  & * {
+    box-sizing: border-box;
+  }
+}
+
+.weekly-campaign-hero {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  align-items: center;
+  padding: $gu-v-spacing*2 0 $gu-v-spacing*3;
+  padding: $gu-v-spacing*2 0 0;
+  
+  @include mq($from: tablet) {
+    // padding: $gu-v-spacing*2 0 $gu-v-spacing*4;
+  }
+
+}
+
+.weekly-campaign-hero__copy {
+  display: block;
+  max-width: gu-span(6);
+  padding-left: $gu-v-spacing;
+  
+  h2 {
+    margin: 0 0 $gu-v-spacing*1 0;
+    max-width: gu-span(3);
+    color: #fff;
+    font-family: $gu-titlepiece;
+    font-size: 38px;
+    line-height: 1;
+  }
+
+  p {
+    @include gu-fontset-body-large;
+    color: #fff;
+    display: none;
+  }
+
+  // @include mq($from: mobileLandscape) {
+  //   h2 {
+  //     font-size: 38px;
+  //   }
+  // }
+  
+  @include mq($from: phablet) {
+    h2 {
+      font-size: 42px;
+    }
+  }
+  
+  @include mq($from: tablet) {      
+    h2 {
+      font-size: 46px;
+      max-width: gu-span(6);
+      margin: 0 0 $gu-v-spacing*2 0;
+    }
+
+    p {
+      max-width: gu-span(4);
+      display: block;
+    }
+  }
+
+  @include mq($from: desktop) {
+    h2 {
+      font-size: 50px;
+      max-width: gu-span(6);
+    }
+
+    p {
+      max-width: gu-span(5);
+    }
+  }
+  
+  @include mq($from: leftCol) {
+    h2 {
+      font-size: 56px;
+    }
+  }
+}
+
+.weekly-campaign-hero__graphic {
+  // position: absolute;
+  position: relative;
+  // right: 0;
+  // bottom: 0;
+  height: 100%;
+  width: 100%;
+  max-width: 60%;
+  padding-top: $gu-v-spacing*2;
+
+  img {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    max-width: 100%;
+    height: auto;
+    max-height: 95%;
+    display: block;
+  }
+  
+  // @include mq($from: mobileMedium) {
+  //   padding-top: $gu-v-spacing*1;
+  // }
+  
+  // @include mq($from: tablet) {
+  //   padding-top: $gu-v-spacing*2;
+  // }
+}
