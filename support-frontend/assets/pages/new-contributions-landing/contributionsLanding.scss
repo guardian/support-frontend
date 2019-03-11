@@ -982,7 +982,7 @@ form {
       }
 
       @include mq(wide) {
-        background-position: left top -25px;
+        background-position: left 20% bottom 20%;
       }
     }
 
