@@ -50,7 +50,7 @@ case class PaperEmailFields(
   }
 
   override val fields = List(
-    "ZuoraSubscriberId" -> subscriptionNumber, //TODO why do we need to send all of this stuff twice?
+    "ZuoraSubscriberId" -> subscriptionNumber, //TODO - can the Braze templates be updated to remove the need for this duplication?
     "SubscriberKey" -> user.primaryEmailAddress,
     "EmailAddress" -> user.primaryEmailAddress,
     "subscriber_id" -> subscriptionNumber,
@@ -61,8 +61,6 @@ case class PaperEmailFields(
     "package" -> productOptions.toString,
     "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency)
   ) ++ paymentFields ++ deliveryAddressFields.getOrElse(List())
-
-  //TODO - do we care about the billing and promotion fields - these are included in the emails queued via subscriptions-frontend?
 
   override def payload: String = super.payload(user.primaryEmailAddress, dataExtension)
   override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
