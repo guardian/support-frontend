@@ -12,7 +12,7 @@ import { type Price, showPrice } from 'helpers/productPrice/productPrices';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, {
   type DispatchPropTypes,
-  type StatePropTypes
+  type StatePropTypes,
 } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -73,8 +73,8 @@ const copy = {
   Collection: 'Collect your papers from your local retailer',
 };
 
-const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: ProductPrices) => {
-  return ActivePaperProductTypes.reduce((products, productOption) => {
+const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: ProductPrices) =>
+  ActivePaperProductTypes.reduce((products, productOption) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     return {
       ...products,
@@ -87,7 +87,6 @@ const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: Produ
       },
     };
   }, {});
-};
 
 
 // ----- State/Props Maps ----- //
