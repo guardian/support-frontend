@@ -88,6 +88,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.user,
       state.product,
       state.paymentMethod,
+      state.firstDeliveryDate,
       state.salesForceContact,
       accountNumber.value,
       subscriptionNumber.value,

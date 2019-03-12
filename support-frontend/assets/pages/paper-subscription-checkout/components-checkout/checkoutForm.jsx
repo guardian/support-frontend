@@ -171,9 +171,31 @@ function CheckoutForm(props: PropTypes) {
             <FormSection title="Where should we deliver your newspapers?">
               <DeliveryAddress />
             </FormSection>
-            <FormSection title="Where should we bill you?">
-              <BillingAddress />
+            <FormSection title="Is the billing address the same as the delivery address?">
+              <Rows>
+                <Fieldset legend="Is the billing address the same as the delivery address?">
+                  <RadioInput
+                    text="Yes"
+                    name="billingAddressIsSame"
+                    checked={props.billingAddressIsSame}
+                    onChange={() => props.setbillingAddressIsSame(true)}
+                  />
+                  <RadioInput
+                    text="No"
+                    name="billingAddressIsSame"
+                    checked={!props.billingAddressIsSame}
+                    onChange={() => props.setbillingAddressIsSame(false)}
+                  />
+                </Fieldset>
+                {errorState}
+              </Rows>
             </FormSection>
+            {
+              props.billingAddressIsSame ? null :
+              <FormSection title="Where should we bill you?">
+                <BillingAddress />
+              </FormSection>
+            }
             <FormSection title="When would you like your subscription to start?">
               <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
                 {days.map((day) => {

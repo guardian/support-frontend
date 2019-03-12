@@ -119,7 +119,6 @@ Resources:
               - Effect: Allow
                 Action: s3:GetObject
                 Resource:
-                  - !Sub arn:aws:s3:::support-frontend-admin-console/${Stage}/*
                   - !Sub arn:aws:s3:::support-admin-console/${Stage}/*
         - PolicyName: UpdateSSHKeys
           PolicyDocument:

@@ -1,6 +1,7 @@
 [ignore]
 .*/node_modules/preact/.*
 .*node_modules/webpack-cli/.*
+.*target/.*
 
 [include]
 assets

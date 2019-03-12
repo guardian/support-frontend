@@ -66,16 +66,16 @@ case class DigitalPackEmailFields(
     "Payment amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),
     "First Name" -> user.firstName,
     "Last Name" -> user.lastName,
-    "Address 1" -> "", //TODO: We don't have this
-    "Address 2" -> "", //TODO: We don't have this
-    "City" -> "", //TODO: We don't have this
-    "Post Code" -> "", //TODO: We don't have this
+    "Address 1" -> "", //TODO: Remove this from Braze template
+    "Address 2" -> "", //TODO: Remove this from Braze template
+    "City" -> "", //TODO: Remove this from Braze template
+    "Post Code" -> "", //TODO: Remove this from Braze template
     "Country" -> user.billingAddress.country.name,
     "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
     "Currency" -> currency.glyph,
     "Trial period" -> "14", //TODO: depends on Promo code
     "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency)
-  ) ++ paymentFields //TODO: ++ promotionFields
+  ) ++ paymentFields
 
   override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
   override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)

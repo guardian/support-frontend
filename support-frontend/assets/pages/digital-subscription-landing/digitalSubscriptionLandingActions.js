@@ -23,7 +23,7 @@ function redirectToDigitalPage() {
     const { plan } = state.page.plan;
 
     if (plan) {
-      const location = getDigitalCheckout(countryGroupId);
+      const location = getDigitalCheckout(countryGroupId, plan);
 
       sendTrackingEventsOnClick(`main_cta_click_${plan}`, 'DigitalPack', null)();
       window.location.href = location;

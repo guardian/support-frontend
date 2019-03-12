@@ -14,9 +14,11 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import * as user from 'helpers/user/user';
 import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
+import { isFrontlineCampaign } from 'helpers/url';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
+
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -68,7 +70,7 @@ const router = (
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
           render={() => (
             <Page
-              classModifiers={['contribution-form']}
+              classModifiers={['contribution-form', ...(isFrontlineCampaign() ? ['frontline-campaign'] : [])]}
               header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
               footer={<Footer disclaimer countryGroupId={countryGroupId} />}
             >
