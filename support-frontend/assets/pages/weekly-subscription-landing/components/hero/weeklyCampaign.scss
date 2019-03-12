@@ -1,11 +1,11 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-
 .component-product-page-hero.component-product-page-hero--weekly-campaign {
   position: relative;
   box-sizing: border-box;
   background: #283942;
   color: #fff;
+
   max-height: 550px;
 
   & * {
@@ -18,68 +18,47 @@
   justify-content: space-between;
   height: 100%;
   align-items: center;
-  padding: $gu-v-spacing*2 0 $gu-v-spacing*3;
-  padding: $gu-v-spacing*2 0 0;
-  
-  @include mq($from: tablet) {
-    // padding: $gu-v-spacing*2 0 $gu-v-spacing*4;
-  }
-
+  padding: 0;
 }
 
 .weekly-campaign-hero__copy {
   display: block;
-  max-width: gu-span(6);
-  padding-left: $gu-v-spacing;
+  max-width: 50%;
+  padding: $gu-v-spacing*2 0 $gu-v-spacing*2 $gu-v-spacing;
+  margin-bottom: auto; 
   
   h2 {
-    margin: 0 0 $gu-v-spacing*1 0;
-    max-width: gu-span(3);
     color: #fff;
     font-family: $gu-titlepiece;
-    font-size: 38px;
+    font-size: 34px;
     line-height: 1;
   }
 
-  p {
-    @include gu-fontset-body-large;
-    color: #fff;
-    display: none;
+  @include mq($from: mobileMedium) {
+    max-width: 60%;
   }
-
-  // @include mq($from: mobileLandscape) {
-  //   h2 {
-  //     font-size: 38px;
-  //   }
-  // }
+  
+  @include mq($from: mobileLandscape) {
+    margin-bottom: 0; 
+    padding-top: 0;
+  }
   
   @include mq($from: phablet) {
+    max-width: gu-span(10);      
     h2 {
-      font-size: 42px;
+      font-size: 40px;
     }
   }
   
-  @include mq($from: tablet) {      
+  @include mq($from: tablet) {
     h2 {
-      font-size: 46px;
-      max-width: gu-span(6);
-      margin: 0 0 $gu-v-spacing*2 0;
-    }
-
-    p {
-      max-width: gu-span(4);
-      display: block;
+      font-size: 44px;
     }
   }
 
   @include mq($from: desktop) {
     h2 {
       font-size: 50px;
-      max-width: gu-span(6);
-    }
-
-    p {
-      max-width: gu-span(5);
     }
   }
   
@@ -91,30 +70,28 @@
 }
 
 .weekly-campaign-hero__graphic {
-  // position: absolute;
-  position: relative;
-  // right: 0;
-  // bottom: 0;
+  position: absolute;
+  right: 0;
+  bottom: 0;
   height: 100%;
   width: 100%;
-  max-width: 60%;
+  max-width: 80%;
   padding-top: $gu-v-spacing*2;
-
+  
   img {
     position: absolute;
     bottom: 0;
     right: 0;
     max-width: 100%;
-    height: auto;
-    max-height: 95%;
+    max-height: calc(100% - (1.5rem));
     display: block;
   }
-  
-  // @include mq($from: mobileMedium) {
-  //   padding-top: $gu-v-spacing*1;
-  // }
-  
-  // @include mq($from: tablet) {
-  //   padding-top: $gu-v-spacing*2;
-  // }
+
+  @include mq($from: mobileLandscape) {
+    max-width: 60%;
+  }
+
+  @include mq($from: phablet) {
+    max-width: 55%;
+  }
 }
