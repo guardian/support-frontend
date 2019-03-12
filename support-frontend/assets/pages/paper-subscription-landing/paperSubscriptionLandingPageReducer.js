@@ -10,6 +10,7 @@ import { type TabActions } from './paperSubscriptionLandingPageActions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 
 
 // ----- Types ----- //
@@ -45,11 +46,8 @@ const getTabsReducer = (initialTab: PaperFulfilmentOptions) =>
 
 export default (initialTab: PaperFulfilmentOptions, product: ?string) => {
 
-  const initialProduct: ?PaperProductOptions =
-    product === 'Everyday' ||
-    product === 'Sixday' ||
-    product === 'Weekend' ||
-    product === 'Sunday' ? product : null;
+  const index = ActivePaperProductTypes.findIndex(s => s.toLowerCase() === product.toLowerCase());
+  const initialProduct: ?PaperProductOptions = index > -1 ? ActivePaperProductTypes[index] : null;
 
   const { productPrices } = window.guardian;
 
