@@ -134,7 +134,7 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       val eventualResult: Future[play.api.mvc.Result] =
         Helpers.call(fixture.subscribeWithGoogleController.refundPayment, request)
 
-      status(eventualResult) shouldBe 200
+      status(eventualResult) shouldBe 500
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(1)).recordRefund(Match.any())
     }
@@ -217,7 +217,7 @@ class SubscribeWithGoogleControllerSpec extends WordSpec with Matchers with Stat
       val eventualResult: Future[play.api.mvc.Result] =
         Helpers.call(fixture.subscribeWithGoogleController.recordPayment, request)
 
-      status(eventualResult) shouldBe 200
+      status(eventualResult) shouldBe 500
 
       verify(fixture.mockSubscribeWithGoogleBackend, times(1))
         .recordPayment(Match.any())

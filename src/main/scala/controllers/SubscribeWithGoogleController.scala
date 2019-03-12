@@ -1,10 +1,12 @@
 package controllers
 
+import cats.implicits._
 import actions.CorsActionProvider
-import backend.SubscribeWithGoogleBackend
+import backend.{BackendError, SubscribeWithGoogleBackend}
 import com.typesafe.scalalogging.StrictLogging
 import model.{DefaultThreadPool, PaymentStatus}
 import model.subscribewithgoogle.GoogleRecordPayment
+import play.api.http.ContentTypes
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
 import util.RequestBasedProvider
@@ -28,14 +30,19 @@ class SubscribeWithGoogleController(
     requestBody.status match {
       case PaymentStatus.Paid =>
         subscribeWithGoogleBackendProvider.getInstanceFor(request)
-          .recordPayment(request.body)
+          .recordPayment(request.body).bimap(
+          err => err match {
+          case dbError: BackendError.SubscribeWithGooglePaymentError => Ok("{}").as(ContentTypes.JSON)
+          case er: BackendError => InternalServerError
+        },
+          success => Ok("{}").as(ContentTypes.JSON)
+        ).merge
       //todo: Ophan stats capture as part of future work
-        Future.successful(Ok("{}"))
       case PaymentStatus.Failed | PaymentStatus.Refunded =>
         logger.error(
          s"Received $requestBody - as a payment but has a Payment Status of ${requestBody.status} - this is not a payment"
         )
-        Future.successful(BadRequest())
+        Future.successful(BadRequest)
     }
   }
 
@@ -45,13 +52,15 @@ class SubscribeWithGoogleController(
     requestBody.status match {
       case PaymentStatus.Refunded =>
         subscribeWithGoogleBackendProvider.getInstanceFor(request)
-          .recordRefund(requestBody)
-        Future.successful(Ok("{}"))
+          .recordRefund(requestBody).bimap(
+          err => InternalServerError,
+          succ => Ok("{}").as(ContentTypes.JSON)
+        ).merge
       case PaymentStatus.Failed | PaymentStatus.Paid =>
         logger.error(
           s"Received $requestBody - for refund but has a Payment Status of ${requestBody.status} - this is not a refund"
         )
-        Future.successful(BadRequest())
+        Future.successful(BadRequest)
     }
   }
 }
