@@ -12,26 +12,21 @@ import Footer from 'components/footer/footer';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import GridPicture from 'components/gridPicture/gridPicture';
-import SvgChevron from 'components/svgs/chevron';
-import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import Content, { Outset } from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
-import AnchorButton from 'components/button/anchorButton';
 import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import SvgInformation from 'components/svgs/information';
 import SvgGift from 'components/svgs/gift';
 import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
-
 import 'stylesheets/skeleton/skeleton.scss';
+
+import { SaleHeader } from './components/hero/hero';
 
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
 
 import './weeklySubscriptionLanding.scss';
-
 
 // ----- Redux Store ----- //
 
@@ -78,38 +73,7 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <ProductPagehero
-        appearance="feature"
-        overheading="Guardian Weekly subscriptions"
-        heading="Get a clearer, global perspective on the issues that matter, in one magazine."
-        modifierClasses={['weekly']}
-        content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
-        hasCampaign={false}
-      >
-        <GridPicture
-          sources={[
-            {
-              gridId: 'weeklyLandingHero',
-              srcSizes: [500, 1000],
-              imgType: 'png',
-              sizes: '100vw',
-              media: '(max-width: 739px)',
-            },
-            {
-              gridId: 'weeklyLandingHero',
-              srcSizes: [1000, 2000],
-              imgType: 'png',
-              sizes: '(min-width: 1000px) 2000px, 1000px',
-              media: '(min-width: 740px)',
-            },
-          ]}
-          fallback="weeklyLandingHero"
-          fallbackSize={1000}
-          altText=""
-          fallbackImgType="png"
-        />
-
-      </ProductPagehero>
+      <SaleHeader />
       <Content>
         <Text title="Open up your world view, Weekly">
           <LargeParagraph>Inside the essential magazine from
