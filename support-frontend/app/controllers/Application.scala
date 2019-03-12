@@ -133,7 +133,7 @@ class Application(
       regularUatPayPalConfig = payPalConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      idUser = idUser,
+      idUser = idUser
     )
   }
 
