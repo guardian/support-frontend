@@ -41,7 +41,7 @@ const DefaultHeader = () => (
           ]}
         fallback="weeklyLandingHero"
         fallbackSize={1000}
-        altText=""
+        altText="A collection of Guardian Weekly magazines"
         fallbackImgType="png"
       />
     </ProductPagehero>
@@ -69,7 +69,7 @@ const SaleHeader = () => (
           srcSizes={[1000, 1358]}
           sizes="(max-width: 740px) 1000px, 1358px"
           imgType="png"
-          altText="A mobile device"
+          altText="A collection of Guardian Weekly magazines"
         />
       </div>
 
