@@ -24,7 +24,10 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
+import {
+  Everyday,
+  type PaperProductOptions,
+} from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';

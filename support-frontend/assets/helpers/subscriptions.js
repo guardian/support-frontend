@@ -39,7 +39,7 @@ export type ComponentAbTest = {
 export type PaperBillingPlan =
   'collectionEveryday' | 'collectionSixday' | 'collectionWeekend' | 'collectionSunday' |
   'deliveryEveryday' | 'deliverySixday' | 'deliveryWeekend' | 'deliverySunday';
-export type PaperDeliveryMethod = 'collection' | 'delivery';
+
 export type PaperNewsstandTiers = 'weekly' | 'saturday' | 'sunday';
 
 const newsstandPrices: {[PaperNewsstandTiers]: number} = {

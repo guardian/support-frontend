@@ -4,15 +4,16 @@
 
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type PaperDeliveryMethod, type PaperBillingPlan } from 'helpers/subscriptions';
+import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 import { type TabActions } from './paperSubscriptionLandingPageActions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 
 // ----- Types ----- //
 
-export type ActiveTabState = PaperDeliveryMethod;
+export type ActiveTabState = PaperFulfilmentOptions;
 
 export type State = {
   common: CommonState,
@@ -25,7 +26,7 @@ export type State = {
 
 // ----- Helpers ----- //
 
-const getTabsReducer = (initialTab: PaperDeliveryMethod) =>
+const getTabsReducer = (initialTab: PaperFulfilmentOptions) =>
   (state: ActiveTabState = initialTab, action: TabActions): ActiveTabState => {
 
     switch (action.type) {
@@ -40,7 +41,7 @@ const getTabsReducer = (initialTab: PaperDeliveryMethod) =>
 
 // ----- Exports ----- //
 
-export default (initialTab: PaperDeliveryMethod, promoInUrl: ?string) => {
+export default (initialTab: PaperFulfilmentOptions, promoInUrl: ?string) => {
 
   const initialPeriod: ?PaperBillingPlan =
     promoInUrl === 'collectionEveryday' || promoInUrl === 'collectionSixday' ||

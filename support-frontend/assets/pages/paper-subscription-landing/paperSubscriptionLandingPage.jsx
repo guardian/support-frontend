@@ -16,7 +16,6 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -27,16 +26,18 @@ import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Collection or delivery ----- //
 
-const method: PaperDeliveryMethod = window.location.pathname.includes('delivery') ? 'delivery' : 'collection';
+const method: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
 
 const reactElementId: {
-  [PaperDeliveryMethod]: string,
+  [PaperFulfilmentOptions]: string,
 } = {
-  collection: 'paper-subscription-landing-page-collection',
-  delivery: 'paper-subscription-landing-page-delivery',
+  Collection: 'paper-subscription-landing-page-collection',
+  HomeDelivery: 'paper-subscription-landing-page-delivery',
 };
 
 // ----- Internationalisation ----- //
