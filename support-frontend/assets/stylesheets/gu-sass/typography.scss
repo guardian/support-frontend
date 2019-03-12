@@ -8,7 +8,7 @@
 // ----- Font Families ----- //
 
 $gu-titlepiece: 'GT Guardian Titlepiece', Georgia, serif !default;
-$gu-headline: 'Guardian Headline', Georgia, serif !default;
+$gu-headline: 'Guardian Egyptian Web', Georgia, serif !default;
 $gu-text-egyptian-web: 'Guardian Text Egyptian Web', Georgia, serif !default;
 $gu-text-sans-web: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif !default;
 
@@ -146,7 +146,7 @@ $gu-fonts: (
 		@include gu-typeface(headline, 22, $size-only: true);
 	}
 	@if $size-only == false {
-		font-weight: 400;
+		font-weight: 300;
 	}
 }
 @mixin gu-fontset-tabs($size-only: false) {

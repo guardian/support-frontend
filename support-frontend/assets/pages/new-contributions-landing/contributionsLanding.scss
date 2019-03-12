@@ -27,9 +27,6 @@ body {
   min-height: 100vh;
 }
 
-.bold {
-  font-weight: bold;
-}
 
 .highlight {
   background-color: gu-colour(highlight-main);
@@ -408,7 +405,8 @@ footer[role="contentinfo"] a {
   width: 100%;
   font-size: 44px;
   line-height: 46px;
-  font-family: $gu-titlepiece;
+  font-family: $gu-headline;
+  font-weight: bold;
   margin: 0 -10px;
   color: gu-colour(neutral-7);
 
@@ -424,6 +422,7 @@ footer[role="contentinfo"] a {
   font-family: $gu-headline;
   padding-bottom: $gu-v-spacing;
   border-bottom: 1px solid gu-colour(highlight-main);
+  font-weight: 300;
   @include mq($from: tablet) {
     margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
   }
@@ -431,6 +430,10 @@ footer[role="contentinfo"] a {
   p:not(:last-child) {
     margin-bottom: $gu-v-spacing;
   }
+}
+
+.gu-content__blurb-blurb-last-sentence {
+  font-weight: normal;
 }
 
 .header {
@@ -672,6 +675,7 @@ form {
 
 .form__radio-group--pills .form__radio-group-input:checked + .form__radio-group-label {
   background: gu-colour(highlight-main);
+  font-weight: bold;
 }
 
 .form__radio-group--pills .form__radio-group-input:hover + .form__radio-group-label {
