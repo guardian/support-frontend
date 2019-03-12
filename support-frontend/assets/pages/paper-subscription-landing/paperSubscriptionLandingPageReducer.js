@@ -41,19 +41,22 @@ const getTabsReducer = (initialTab: PaperFulfilmentOptions) =>
 
   };
 
+const findInitialProduct = (product: ?string) => {
+  if (!product) { return null; }
+  // $FlowIgnore - Flow doesn't realise we've already checked product is not null
+  const index = ActivePaperProductTypes.findIndex(s => s.toLowerCase() === product.toLowerCase());
+  return index > -1 ? ActivePaperProductTypes[index] : null;
+};
 
 // ----- Exports ----- //
 
 export default (initialTab: PaperFulfilmentOptions, product: ?string) => {
 
-  const index = ActivePaperProductTypes.findIndex(s => s.toLowerCase() === product.toLowerCase());
-  const initialProduct: ?PaperProductOptions = index > -1 ? ActivePaperProductTypes[index] : null;
-
   const { productPrices } = window.guardian;
 
   return combineReducers({
     productPrices: () => productPrices,
-    plan: ProductPagePlanFormReducerFor<?PaperProductOptions>('Paper', initialProduct),
+    plan: ProductPagePlanFormReducerFor<?PaperProductOptions>('Paper', findInitialProduct(product)),
     tab: getTabsReducer(initialTab),
   });
 };

@@ -45,7 +45,7 @@ function paperSubsUrl(withDelivery: boolean = false): string {
 }
 
 function paperCheckoutUrl(fulfilmentOption: FulfilmentOptions, productOptions: ProductOptions) {
-  return `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}'`;
+  return `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}&displayCheckout=true`; // TODO: remove displayCheckout param when we go live
 }
 
 function payPalCancelUrl(cgId: CountryGroupId): string {

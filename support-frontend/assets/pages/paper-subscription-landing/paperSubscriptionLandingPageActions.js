@@ -10,9 +10,9 @@ import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 import { type State } from './paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-import { Everyday } from 'helpers/productPrice/productOptions';
 import { getQueryParameter } from 'helpers/url';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import { Everyday } from 'helpers/productPrice/productOptions';
 
 // ----- Types ----- //
 export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }
@@ -29,7 +29,8 @@ const setTab = (tab: PaperFulfilmentOptions): TabActions => {
 
 const getCheckoutUrl = (state: State) => {
   if (getQueryParameter('displayCheckout') === 'true') {
-    return paperCheckoutUrl(HomeDelivery, Everyday);
+    const product = state.page.plan.plan ? state.page.plan.plan : Everyday;
+    return paperCheckoutUrl(state.page.tab, product);
   }
 
   const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
