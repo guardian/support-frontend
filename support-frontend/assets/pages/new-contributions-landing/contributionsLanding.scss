@@ -998,22 +998,28 @@ form {
       margin-top: $gu-v-spacing * 3;
     }
 
-    $content-left-margin-leftCol: 200px;
-
-    header[role="banner"] {
-      @include mq(leftCol) {
-        padding-left: $content-left-margin-leftCol;
-      }
-    }
+    $content-width-desktop: 860px;
+    $content-width-leftCol: 948px;
 
     .gu-content__content {
       @include mq(desktop) {
-        margin: $gu-v-spacing * 3 auto 0;
-        width: 860px;
+        margin: $gu-v-spacing * 3 0 0 calc(50% - (#{$content-width-desktop} / 2));
+        width: $content-width-desktop;
       }
 
-      @include mq($from: leftCol) {
-        width: 948px;
+      @include mq(leftCol) {
+        margin-left: calc(50% - (#{$content-width-leftCol} / 2));
+        width: $content-width-leftCol;
+      }
+    }
+
+    header[role="banner"] {
+      @include mq(desktop) {
+        padding-left: calc(50% - (#{$content-width-desktop} / 2));
+      }
+
+      @include mq(leftCol) {
+        padding-left: calc(50% - (#{$content-width-leftCol} / 2));
       }
     }
 
