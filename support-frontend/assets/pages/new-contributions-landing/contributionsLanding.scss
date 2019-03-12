@@ -966,7 +966,11 @@ form {
 
 .gu-content--frontline-campaign {
   .gu-content__main {
-    background-color: #fbf6ef;
+    background-color: gu-colour(culture-faded);
+
+    //@supports(background-image: image-set()) {
+    //
+    //}
   }
 
   @include mq(desktop) {
@@ -977,7 +981,8 @@ form {
       position: absolute;
       left: 0;
       top: 0;
-      background: no-repeat url('https://media.guim.co.uk/b9ed1767866d29186f198b523cd5571aeda02a88/0_1269_5184_1516/2000.jpg');
+      background-repeat: no-repeat;
+      background: url('https://media.guim.co.uk/b9ed1767866d29186f198b523cd5571aeda02a88/0_1269_5184_1516/2000.jpg'), linear-gradient(gu-colour(culture-dark), gu-colour(culture-faded));
       background-size: cover;
       background-position: left -150px top;
 
