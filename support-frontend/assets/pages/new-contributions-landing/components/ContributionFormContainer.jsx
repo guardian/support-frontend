@@ -106,15 +106,6 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   contributeCopy: defaultContributeCopy,
 };
 
-const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
-
-const australiaFrontlineFormMessage = (
-  <div className="frontline-campaign">
-    <div className="frontline-campaign__headline">Make a contribution</div>
-    <div className="frontline-campaign__body">to our dedicated series ‘Climate Crunch’</div>
-  </div>
-);
-
 const countryGroupSpecificDetails: {
   [CountryGroupId]: CountryMetaData
 } = {
@@ -123,12 +114,50 @@ const countryGroupSpecificDetails: {
   UnitedStates: defaultHeaderCopyAndContributeCopy,
   AUDCountries: {
     ...defaultHeaderCopyAndContributeCopy,
-    headerCopy: australiaHeadline,
+    headerCopy: 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs',
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
   Canada: defaultHeaderCopyAndContributeCopy,
 };
+
+function campaignSpecificDetails() {
+  if (isFrontlineCampaign()) {
+    return {
+      formMessage: (
+        <div className="frontline-campaign">
+          <div className="frontline-campaign__headline">Make a contribution</div>
+          <div className="frontline-campaign__body">to our dedicated series ‘The Frontline’</div>
+        </div>
+      ),
+      headerCopy: 'The Frontline: Australia and the climate emergency',
+      contributeCopy: (
+        <div>
+          <p>
+            The north is flooded, the south parched by drought. The Murray Darling, our greatest river system, has dried to a trickle, crippling communities and turning up millions of dead fish. The ancient alpine forests of Tasmania have burned. The summer was the hottest on record. We are living the reality of climate change.
+          </p>
+          <p>
+            We’re asking readers to fund a new Guardian series – The Frontline: Australia and the climate emergency. With your support, we can cut through the rhetoric and focus the debate on the facts. That way everyone can learn about the devastating and immediate threats to our country and how best to find a solution.
+            <span className="bold highlight"> Please contribute to our new series on Australia's climate emergency today.</span>
+          </p>
+        </div>
+      )
+    };
+  }
+
+  return {};
+}
+
+function urlSpecificDetails() {
+  if (getQueryParameter('ticker') === 'true') {
+    return {
+      tickerJsonUrl: '/ticker.json'
+    };
+  }
+
+  return {};
+}
+
 
 // ----- Render ----- //
 
@@ -139,15 +168,11 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
-
-  const tickerUrl =
-    countryGroupDetails.tickerJsonUrl ||
-    getQueryParameter('ticker') === 'true' ? '/ticker.json' : undefined;
-
-  const formMessage =
-    countryGroupDetails.formMessage ||
-    isFrontlineCampaign() ? australiaFrontlineFormMessage : undefined;
+  const countryGroupDetails = {
+    ...countryGroupSpecificDetails[props.countryGroupId],
+    ...campaignSpecificDetails(),
+    ...urlSpecificDetails(),
+  };
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
@@ -161,11 +186,11 @@ function ContributionFormContainer(props: PropTypes) {
         </div>
 
         <div className="gu-content__form">
-          {tickerUrl ?
-            <ContributionTicker tickerJsonUrl={tickerUrl} /> : null
+          {countryGroupDetails.tickerJsonUrl ?
+            <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
           }
-          {formMessage ?
-            <div className="gu-content__form__message">{formMessage}</div> : null
+          {countryGroupDetails.formMessage ?
+            <div className="gu-content__form__message">{countryGroupDetails.formMessage}</div> : null
           }
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}
