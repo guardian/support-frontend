@@ -137,6 +137,7 @@ fetch_dev_cert() {
 }
 
 link_nginx_config() {
+  mkdir -p ${NGINX_ROOT}sites-enabled
   ln -sf ${PWD}/nginx/support.conf ${NGINX_ROOT}sites-enabled/support.conf
 }
 
