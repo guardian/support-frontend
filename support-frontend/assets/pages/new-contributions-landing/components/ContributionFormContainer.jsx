@@ -149,7 +149,7 @@ function campaignSpecificDetails() {
               threats to our country and how best to find a solution.
             </span>&nbsp;
             {/*todo: find out why there's no space between these, unless I put &nbps;*/}
-            <span className="gu-content__blurb-blurb-last-sentence highlight">
+            <span className="bold highlight">
               Please contribute to our new series on Australia’s climate emergency today.
             </span>
           </p>
