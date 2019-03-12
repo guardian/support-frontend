@@ -61,7 +61,6 @@ const SaleHeader = () => (
     <div className="weekly-campaign-hero">
       <div className="weekly-campaign-hero__copy">
         <h2>Think globally.<br />Read Weekly.</h2>
-        <p>An independent perspective on the issues affecting the world.</p>
       </div>
 
       <div className="weekly-campaign-hero__graphic">
@@ -81,4 +80,4 @@ const SaleHeader = () => (
 );
 
 
-export { DefaultHeader, SaleHeader, HeroPicture };
+export { DefaultHeader, SaleHeader };
