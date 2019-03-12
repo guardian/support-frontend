@@ -9,7 +9,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
 import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type DigitalBillingPeriod } from 'helpers/billingPeriods';
-import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
 import { getOrigin } from './url';
 import { GBPCountries } from './internationalisation/countryGroup';

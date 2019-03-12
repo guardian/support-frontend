@@ -15,9 +15,8 @@ import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
 import { setPlan, redirectToCheckout } from '../../paperSubscriptionLandingPageActions';
-import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Everyday, PaperProductTypes, Sixday } from 'helpers/productPrice/productOptions';
+import { Everyday, ActivePaperProductTypes, Sixday } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
@@ -72,7 +71,7 @@ const copy = {
 };
 
 const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: ProductPrices) => {
-  const plans = PaperProductTypes.reduce((products, productOption) => {
+  const plans = ActivePaperProductTypes.reduce((products, productOption) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     return {
       ...products,

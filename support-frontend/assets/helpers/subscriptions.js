@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type Price } from 'helpers/productPrice/productPrices';
 import {
   Annual,
   type BillingPeriod,
@@ -12,11 +11,9 @@ import {
   SixForSix,
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
-import { getPlanPrices, flashSaleIsActive, type PlanPrice } from 'helpers/flashSale';
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
-import { GBPCountries } from './internationalisation/countryGroup';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 
@@ -36,10 +33,6 @@ export type ComponentAbTest = {
   name: string,
   variant: string,
 };
-
-export type PaperBillingPlan =
-  'collectionEveryday' | 'collectionSixday' | 'collectionWeekend' | 'collectionSunday' |
-  'deliveryEveryday' | 'deliverySixday' | 'deliveryWeekend' | 'deliverySunday';
 
 const dailyNewsstandPrice = 2.20;
 const weekendNewsstandPrice = 3.20;
@@ -88,17 +81,6 @@ const subscriptionPricesForDefaultBillingPeriod: {
   DailyEdition: {
     GBPCountries: 11.99,
   },
-};
-
-const paperSubscriptionPrices = {
-  collectionEveryday: 47.62,
-  collectionSixday: 41.12,
-  collectionWeekend: 20.76,
-  collectionSunday: 10.79,
-  deliveryEveryday: 62.79,
-  deliverySixday: 54.12,
-  deliveryWeekend: 25.09,
-  deliverySunday: 15.12,
 };
 
 const subscriptionPromoPricesForGuardianWeekly: {
@@ -231,29 +213,6 @@ function getPromotionWeeklyProductPrice(
   return fixDecimals(subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod]);
 }
 
-function getRegularPaperPrice(billingPlan: PaperBillingPlan): Price {
-  return {
-    price: paperSubscriptionPrices[billingPlan],
-    currency: 'GBP',
-  };
-}
-
-function getPaperPrice(billingPlan: PaperBillingPlan): Price {
-  const planPrices: PlanPrice[] = getPlanPrices('Paper', GBPCountries);
-
-  if (flashSaleIsActive('Paper', GBPCountries)) {
-    const discountedPlanPrice = planPrices.find((planPrice: PlanPrice) => planPrice[billingPlan]);
-    if (discountedPlanPrice) {
-      return {
-        price: discountedPlanPrice[billingPlan],
-        currency: 'GBP',
-      };
-    }
-  }
-
-  return getRegularPaperPrice(billingPlan);
-}
-
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
 
   switch (product) {
@@ -322,7 +281,5 @@ export {
   getPromotionWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
-  getPaperPrice,
-  getRegularPaperPrice,
   fixDecimals,
 };

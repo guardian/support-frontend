@@ -26,7 +26,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
   Everyday,
-  type PaperProductOptions,
+  type PaperProductOptions, ActivePaperProductTypes,
 } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
@@ -213,16 +213,8 @@ export type FormActionCreators = typeof formActionCreators;
 
 const getInitialProduct = (productInUrl: ?string, fulfillmentInUrl: ?string): Product => ({
   productOption:
-    productInUrl === 'Saturday' ||
-    productInUrl === 'SaturdayPlus' ||
-    productInUrl === 'Sunday' ||
-    productInUrl === 'SundayPlus' ||
-    productInUrl === 'Weekend' ||
-    productInUrl === 'WeekendPlus' ||
-    productInUrl === 'Sixday' ||
-    productInUrl === 'SixdayPlus' ||
-    productInUrl === 'Everyday' ||
-    productInUrl === 'EverydayPlus'
+    ActivePaperProductTypes.includes(productInUrl)
+      // $FlowIgnore
       ? (productInUrl: PaperProductOptions)
       : Everyday,
   fulfilmentOption:
