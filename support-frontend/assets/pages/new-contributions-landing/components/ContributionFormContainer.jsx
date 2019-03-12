@@ -125,9 +125,9 @@ function campaignSpecificDetails() {
   if (isFrontlineCampaign()) {
     return {
       formMessage: (
-        <div className="frontline-campaign">
-          <div className="frontline-campaign__headline">Make a contribution</div>
-          <div className="frontline-campaign__body">to our dedicated series ‘The Frontline’</div>
+        <div>
+          <div className="form-message__headline">Make a contribution</div>
+          <div className="form-message__body">to our dedicated series ‘The Frontline’</div>
         </div>
       ),
       headerCopy: 'The Frontline: Australia and the climate emergency',
@@ -142,10 +142,13 @@ function campaignSpecificDetails() {
             We are living the reality of climate change.
           </p>
           <p>
-            We’re asking readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
-            With your support, we can cut through the rhetoric and focus the debate on the facts.
-            That way everyone can learn about the devastating and immediate
-            threats to our country and how best to find a solution.
+            <span>
+              We’re asking readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
+              With your support, we can cut through the rhetoric and focus the debate on the facts.
+              That way everyone can learn about the devastating and immediate
+              threats to our country and how best to find a solution.
+            </span>&nbsp;
+            {/*todo: find out why there's no space between these, unless I put &nbps;*/}
             <span className="bold highlight">
               Please contribute to our new series on Australia’s climate emergency today.
             </span>
@@ -205,7 +208,7 @@ function ContributionFormContainer(props: PropTypes) {
             <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
           }
           {countryGroupDetails.formMessage ?
-            <div className="gu-content__form__message">{countryGroupDetails.formMessage}</div> : null
+            <div className="form-message">{countryGroupDetails.formMessage}</div> : null
           }
           <NewContributionForm
             onPaymentAuthorisation={onPaymentAuthorisation}

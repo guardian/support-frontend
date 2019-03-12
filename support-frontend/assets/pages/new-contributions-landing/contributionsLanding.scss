@@ -427,6 +427,10 @@ footer[role="contentinfo"] a {
   @include mq($from: tablet) {
     margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
   }
+
+  p:not(:last-child) {
+    margin-bottom: $gu-v-spacing;
+  }
 }
 
 .header {
@@ -505,25 +509,29 @@ footer[role="contentinfo"] {
   flex-direction: column;
 }
 
-.gu-content__form__message {
+.form-message {
   margin: 0 -10px;
   padding: 12px 10px 11px 10px;
   border-bottom: 1px solid gu-colour(neutral-86);
+  font-family: $gu-headline;
+  background-color: gu-colour(highlight-main);
+
+  @include mq(tablet) {
+    background: none;
+  }
 }
 
-.frontline-campaign {
-  font-family: $gu-headline;
-}
-.frontline-campaign__headline {
+.form-message__headline {
   font-size: 24px;
   line-height: 26px;
   font-weight: bold;
 }
-.frontline-campaign__body {
+.form-message__body {
   font-size: 16px;
   line-height: 18px;
   font-style: italic;
 }
+
 .component-terms-thefrontline {
   padding-bottom: $gu-v-spacing;
   border-bottom: 1px solid gu-colour(neutral-86);
@@ -1079,10 +1087,6 @@ form {
       margin-left: -($gu-h-spacing / 2);
       border-left: solid 1px #121212;
       border-bottom: 0;
-
-      p {
-        margin-bottom: $gu-v-spacing;
-      }
     }
   }
 
