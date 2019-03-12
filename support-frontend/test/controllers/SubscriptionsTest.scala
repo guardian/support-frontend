@@ -68,7 +68,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(
         AllSettings(
-          Switches(PaymentMethodsSwitch(On, On, None), PaymentMethodsSwitch(On, On, Some(On)), Map.empty, On),
+          Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty, On),
           AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts)
         )
       )

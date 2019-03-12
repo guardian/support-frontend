@@ -3,7 +3,7 @@ package monitoring
 import app.BuildInfo
 import com.gu.i18n.Country
 import com.gu.support.config.Stages.PROD
-import com.gu.support.workers.{DirectDebitPaymentFields, PayPalPaymentFields, PaymentFields, StripePaymentFields}
+import com.gu.support.workers._
 import com.gu.tip.{Tip, TipConfig, TipFactory, TipResponse}
 import config.Configuration
 
@@ -44,6 +44,7 @@ object PathVerification {
   case object DirectDebit extends MonitoredPaymentMethod { val tipString = "Direct Debit" }
   case object PayPal extends MonitoredPaymentMethod { val tipString = "PayPal" }
   case object Card extends MonitoredPaymentMethod { val tipString = "Card" }
+  case object ExistingPaymentMethod extends MonitoredPaymentMethod { val tipString = "Existing Payment Method" }
 
   case class TipPath(
       region: MonitoredRegion,
@@ -73,6 +74,7 @@ object PathVerification {
     case DirectDebitPaymentFields(_, _, _) => DirectDebit
     case PayPalPaymentFields(_) => PayPal
     case StripePaymentFields(_) => Card
+    case ExistingPaymentFields(_) => ExistingPaymentMethod
   }
 
   def verify(tipPath: TipPath, verifier: VerifyPath): Future[TipResponse] = {

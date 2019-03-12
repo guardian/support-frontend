@@ -379,10 +379,12 @@ function getDailyEditionUrl(countryGroupId: CountryGroupId) {
   return getAppleStoreUrl('guardian-observer-daily-edition/id452707806', countryGroupId);
 }
 
-function getSignoutUrl(returnUrl: ?string): string {
+const getProfileUrl = (path: string) => (returnUrl: ?string) => {
   const encodedReturn = encodeURIComponent(returnUrl || window.location);
-  return `https://profile.${getBaseDomain()}/signout?returnUrl=${encodedReturn}`;
-}
+  return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
+};
+const getSignoutUrl = getProfileUrl('signout');
+const getReauthenticateUrl = getProfileUrl('reauthenticate');
 
 // ----- Exports ----- //
 
@@ -395,6 +397,7 @@ export {
   androidAppUrl,
   getDailyEditionUrl,
   getSignoutUrl,
+  getReauthenticateUrl,
   emailPreferencesUrl,
   myAccountUrl,
   manageSubsUrl,

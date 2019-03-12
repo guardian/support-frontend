@@ -45,10 +45,13 @@ import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActi
 import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import type { FullDetailExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import { ExistingCard, ExistingDirectDebit } from '../../helpers/paymentMethods';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
+  | { type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD', existingPaymentMethod: FullDetailExistingPaymentMethod }
   | { type: 'UPDATE_FIRST_NAME', firstName: string }
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
@@ -93,6 +96,9 @@ const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
   storage.setSession('selectedPaymentMethod', paymentMethod);
   return ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
 };
+
+const updateSelectedExistingPaymentMethod = (existingPaymentMethod: FullDetailExistingPaymentMethod): Action =>
+  ({ type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD', existingPaymentMethod });
 
 const updateFirstName = (firstName: string): ((Function) => void) =>
   (dispatch: Function): void => {
@@ -381,6 +387,8 @@ const recurringPaymentAuthorisationHandlers = {
   PayPal: recurringPaymentAuthorisationHandler,
   Stripe: recurringPaymentAuthorisationHandler,
   DirectDebit: recurringPaymentAuthorisationHandler,
+  ExistingCard: recurringPaymentAuthorisationHandler,
+  ExistingDirectDebit: recurringPaymentAuthorisationHandler,
 };
 
 const error = { paymentStatus: 'failure', error: 'internal_error' };
@@ -410,6 +418,14 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
     },
     DirectDebit: () => {
       logInvalidCombination('ONE_OFF', DirectDebit);
+      return Promise.resolve(error);
+    },
+    ExistingCard: () => {
+      logInvalidCombination('ONE_OFF', ExistingCard);
+      return Promise.resolve(error);
+    },
+    ExistingDirectDebit: () => {
+      logInvalidCombination('ONE_OFF', ExistingDirectDebit);
       return Promise.resolve(error);
     },
     None: () => {
@@ -457,6 +473,7 @@ const onStripePaymentRequestApiPaymentAuthorised =
 export {
   updateContributionTypeAndPaymentMethod,
   updatePaymentMethod,
+  updateSelectedExistingPaymentMethod,
   updateFirstName,
   updateLastName,
   updateEmail,

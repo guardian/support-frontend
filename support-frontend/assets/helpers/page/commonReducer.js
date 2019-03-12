@@ -12,6 +12,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Action } from 'helpers/page/commonActions';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
+import type { ExistingPaymentMethodsResponse } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ThirdPartyTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 
 export type Internationalisation = {|
@@ -28,6 +29,7 @@ export type CommonState = {
   settings: Settings,
   trackingConsent: ThirdPartyTrackingConsent,
   internationalisation: Internationalisation,
+  existingPaymentMethods?: ExistingPaymentMethodsResponse,
   optimizeExperiments: OptimizeExperiments,
 };
 
@@ -61,6 +63,9 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
           .filter(exp => exp.id !== action.experiment.id)
           .concat(action.experiment);
         return { ...state, optimizeExperiments };
+      }
+      case 'SET_EXISTING_PAYMENT_METHODS': {
+        return { ...state, existingPaymentMethods: action.existingPaymentMethods };
       }
 
       case 'SET_TRACKING_CONSENT': {

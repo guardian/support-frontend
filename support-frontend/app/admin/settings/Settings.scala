@@ -101,7 +101,13 @@ object SettingsSource extends LazyLogging {
 
 }
 
-case class PaymentMethodsSwitch(stripe: SwitchState, payPal: SwitchState, directDebit: Option[SwitchState])
+case class PaymentMethodsSwitch(
+  stripe: SwitchState,
+  payPal: SwitchState,
+  directDebit: Option[SwitchState],
+  existingCard: Option[SwitchState],
+  existingDirectDebit: Option[SwitchState]
+)
 case class ExperimentSwitch(name: String, description: String, state: SwitchState) {
   def isOn: Boolean = state == SwitchState.On
 
@@ -112,15 +118,15 @@ case class ExperimentSwitch(name: String, description: String, state: SwitchStat
     participation == ServersideAbTest.Control && isOn
 }
 
+
 object PaymentMethodsSwitch {
   def fromConfig(config: Config): PaymentMethodsSwitch =
     PaymentMethodsSwitch(
       SwitchState.fromConfig(config, "stripe"),
       SwitchState.fromConfig(config, "payPal"),
-      if (config.hasPath("directDebit"))
-        Some(SwitchState.fromConfig(config, "directDebit"))
-      else
-        None
+      SwitchState.optionFromConfig(config, "direcDebit"),
+      SwitchState.optionFromConfig(config, "existingCard"),
+      SwitchState.optionFromConfig(config, "existingDirecDebit")
     )
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
 }
@@ -140,6 +146,12 @@ sealed trait SwitchState {
 }
 
 object SwitchState {
+  def optionFromConfig(config: Config, path: String): Option[SwitchState] =
+    if(config.hasPath(path))
+      Some(fromConfig(config, path))
+    else
+      None
+
   def fromConfig(config: Config, path: String): SwitchState = fromString(config.getString(path))
 
   def fromString(s: String): SwitchState = if (s.toLowerCase == "on") On else Off
