@@ -521,6 +521,14 @@ footer[role="contentinfo"] {
   line-height: 18px;
   font-style: italic;
 }
+.component-terms-thefrontline {
+  padding-bottom: $gu-v-spacing;
+  border-bottom: 1px solid gu-colour(neutral-86);
+
+  & + p {
+    padding-top: $gu-v-spacing / 2;
+  }
+}
 
 .form--content {
   padding-top: 10px;
