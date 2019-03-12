@@ -134,7 +134,6 @@ class Application(
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       idUser = idUser,
-      preload = Nil
     )
   }
 
