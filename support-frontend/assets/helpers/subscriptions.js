@@ -17,6 +17,7 @@ import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
 import { GBPCountries } from './internationalisation/countryGroup';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 
 // ----- Types ------ //
@@ -40,14 +41,15 @@ export type PaperBillingPlan =
   'collectionEveryday' | 'collectionSixday' | 'collectionWeekend' | 'collectionSunday' |
   'deliveryEveryday' | 'deliverySixday' | 'deliveryWeekend' | 'deliverySunday';
 
-export type PaperNewsstandTiers = 'weekly' | 'saturday' | 'sunday';
-
-const newsstandPrices: {[PaperNewsstandTiers]: number} = {
-  weekly: 2.20 * 5,
-  saturday: 3.20,
-  sunday: 3.20,
+const dailyNewsstandPrice = 2.20;
+const weekendNewsstandPrice = 3.20;
+const newsstandPrices: {[PaperProductOptions]: number} = {
+  Saturday: weekendNewsstandPrice,
+  Sunday: weekendNewsstandPrice,
+  Everyday: (dailyNewsstandPrice * 5) + (weekendNewsstandPrice * 2),
+  Sixday: (dailyNewsstandPrice * 5) + weekendNewsstandPrice,
+  Weekend: weekendNewsstandPrice * 2,
 };
-
 
 // ----- Config ----- //
 
@@ -307,8 +309,8 @@ const getMonthlyNewsStandPrice = (newsstand: number) => ((newsstand) * 52) / 12;
 const getNewsstandSaving = (subscriptionMonthlyCost: number, newsstandWeeklyCost: number) =>
   fixDecimals(getMonthlyNewsStandPrice(newsstandWeeklyCost) - subscriptionMonthlyCost);
 
-const getNewsstandPrice = (tiers: PaperNewsstandTiers[]) =>
-  tiers.map(tier => newsstandPrices[tier]).reduce((a, b) => a + b, 0);
+const getNewsstandPrice = (productOption: PaperProductOptions) =>
+  newsstandPrices[productOption];
 
 // ----- Exports ----- //
 

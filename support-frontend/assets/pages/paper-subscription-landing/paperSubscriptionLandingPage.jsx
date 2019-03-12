@@ -31,7 +31,8 @@ import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions
 
 // ----- Collection or delivery ----- //
 
-const method: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
+const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
+const product = getQueryParameter('product');
 
 const reactElementId: {
   [PaperFulfilmentOptions]: string,
@@ -46,13 +47,10 @@ const countryGroupId: CountryGroupId = detect();
 const { supportInternationalisationId } = countryGroups[countryGroupId];
 const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supportInternationalisationId : 'gb').toUpperCase();
 
-// ----- Initial selection? ----- //
-
-const promoInUrl = getQueryParameter('promo');
 
 // ----- Redux Store ----- //
 
-const store = pageInit(() => reducer(method, promoInUrl), true);
+const store = pageInit(() => reducer(fulfilment, product), true);
 
 
 // ----- Render ----- //
@@ -96,5 +94,5 @@ const content = (
   </Provider>
 );
 
-renderPage(content, reactElementId[method]);
+renderPage(content, reactElementId[fulfilment]);
 

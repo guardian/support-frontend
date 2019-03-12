@@ -4,11 +4,12 @@
 
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 import { type TabActions } from './paperSubscriptionLandingPageActions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 
 
 // ----- Types ----- //
@@ -18,8 +19,9 @@ export type ActiveTabState = PaperFulfilmentOptions;
 export type State = {
   common: CommonState,
   page: {
+    productPrices: ProductPrices,
     tab: ActiveTabState,
-    plan: FormState<PaperBillingPlan>,
+    plan: FormState<PaperProductOptions>,
   }
 };
 
@@ -41,16 +43,19 @@ const getTabsReducer = (initialTab: PaperFulfilmentOptions) =>
 
 // ----- Exports ----- //
 
-export default (initialTab: PaperFulfilmentOptions, promoInUrl: ?string) => {
+export default (initialTab: PaperFulfilmentOptions, product: ?string) => {
 
-  const initialPeriod: ?PaperBillingPlan =
-    promoInUrl === 'collectionEveryday' || promoInUrl === 'collectionSixday' ||
-    promoInUrl === 'collectionWeekend' || promoInUrl === 'collectionSunday' ||
-    promoInUrl === 'deliveryEveryday' || promoInUrl === 'deliverySixday' ||
-    promoInUrl === 'deliveryWeekend' || promoInUrl === 'deliverySunday' ? promoInUrl : null;
+  const initialProduct: ?PaperProductOptions =
+    product === 'Everyday' ||
+    product === 'Sixday' ||
+    product === 'Weekend' ||
+    product === 'Sunday' ? product : null;
+
+  const { productPrices } = window.guardian;
 
   return combineReducers({
-    plan: ProductPagePlanFormReducerFor<?PaperBillingPlan>('Paper', initialPeriod),
+    productPrices: () => productPrices,
+    plan: ProductPagePlanFormReducerFor<?PaperProductOptions>('Paper', initialProduct),
     tab: getTabsReducer(initialTab),
   });
 };

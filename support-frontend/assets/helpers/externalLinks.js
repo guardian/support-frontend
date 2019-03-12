@@ -13,6 +13,9 @@ import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscription
 import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
 import { getOrigin } from './url';
 import { GBPCountries } from './internationalisation/countryGroup';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
 
@@ -325,23 +328,15 @@ function getWeeklyCheckout(
 
 // Builds a link to paper subs checkout
 function getPaperCheckout(
-  billingPlan: PaperBillingPlan,
+  productOption: PaperProductOptions,
+  fulfilmentOption: PaperFulfilmentOptions,
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
 ) {
   const promoCode = getPromoCode('Paper', GBPCountries, defaultPromos.Paper);
 
-  const urls = {
-    collectionEveryday: 'voucher-everyday',
-    collectionSixday: 'voucher-sixday',
-    collectionWeekend: 'voucher-weekend',
-    collectionSunday: 'voucher-sunday',
-    deliveryEveryday: 'delivery-everyday',
-    deliverySixday: 'delivery-sixday',
-    deliveryWeekend: 'delivery-weekend',
-    deliverySunday: 'delivery-sunday',
-  };
+  const fulfilmentPart = fulfilmentOption === HomeDelivery ? 'delivery' : 'voucher';
 
   return withParams({
     referrerAcquisitionData,
@@ -349,7 +344,7 @@ function getPaperCheckout(
     nativeAbParticipations,
     optimizeExperiments,
     promoCode,
-  })([subsUrl, 'checkout', urls[billingPlan]].join('/'));
+  })([subsUrl, 'checkout', fulfilmentPart, productOption.toLowerCase()].join('/'));
 }
 
 

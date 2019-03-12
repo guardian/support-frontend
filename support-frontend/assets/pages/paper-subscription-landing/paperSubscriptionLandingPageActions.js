@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import { paperCheckoutUrl, paperSubsUrl } from 'helpers/routes';
 import { getPaperCheckout } from 'helpers/externalLinks';
@@ -13,6 +12,7 @@ import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { Everyday } from 'helpers/productPrice/productOptions';
 import { getQueryParameter } from 'helpers/url';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Types ----- //
 export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }
@@ -20,10 +20,10 @@ export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }
 
 // ----- Action Creators ----- //
 
-const { setPlan } = ProductPagePlanFormActionsFor<PaperBillingPlan>('Paper', 'Paper');
+const { setPlan } = ProductPagePlanFormActionsFor<PaperProductOptions>('Paper', 'Paper');
 const setTab = (tab: PaperFulfilmentOptions): TabActions => {
   sendClickedEvent(`paper_subscription_landing_page-switch_tab-${tab}`)();
-  window.history.replaceState({}, null, paperSubsUrl(tab === 'delivery'));
+  window.history.replaceState({}, null, paperSubsUrl(tab === HomeDelivery));
   return { type: 'SET_TAB', tab };
 };
 
@@ -35,6 +35,7 @@ const getCheckoutUrl = (state: State) => {
   const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
   return state.page.plan.plan ? getPaperCheckout(
     state.page.plan.plan,
+    state.page.tab,
     referrerAcquisitionData,
     abParticipations,
     optimizeExperiments,

@@ -29,15 +29,12 @@ export type ProductOptions =
 
 export type PaperProductOptions =
   | typeof Saturday
-  | typeof SaturdayPlus
   | typeof Sunday
-  | typeof SundayPlus
   | typeof Weekend
-  | typeof WeekendPlus
   | typeof Sixday
-  | typeof SixdayPlus
-  | typeof Everyday
-  | typeof EverydayPlus;
+  | typeof Everyday;
+
+const PaperProductTypes = [Everyday, Sixday, Weekend, Sunday];
 
 export {
   NoProductOptions,
@@ -51,4 +48,5 @@ export {
   SixdayPlus,
   Everyday,
   EverydayPlus,
+  PaperProductTypes,
 };
