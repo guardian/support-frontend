@@ -13,6 +13,7 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
+import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 
 import './joyOfPrint.scss';
 
@@ -56,7 +57,6 @@ const HeroPicture = () => (
   />
 );
 
-
 const Footer = () => (
   <HeroHanger>
     <AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
@@ -84,43 +84,41 @@ const DefaultHeader = () => (
 );
 
 const SaleHeader = () => (
-  <header>
-    <HeroWrapper
-      appearance="custom"
-      modifierClasses={['paper-sale']}
-    >
-      <div className="sale-joy-of-print">
-
-        <div className="sale-joy-of-print-copy">
-          <h2>Works with different browsers</h2>
-          <p>Get your hands on journalism that’s really worth keeping.</p>
-        </div>
-
-        <div className="sale-joy-of-print-graphic-outer">
-          <div className="sale-joy-of-print-graphic-inner">
-            <div className="sale-joy-of-print-badge">
-              <span>Save up to</span>
-              <span>37%</span>
-            </div>
-            <div className="sale-joy-of-print-graphic">
-              <GridImage
-                gridId="paperLandingSale"
-                srcSizes={[800, 466]}
-                sizes="(max-width: 740px) 100vw, 800px"
-                imgType="png"
-                altText="A couple sit together sharing one newspaper"
-              />
-            </div>
-          </div>
-
-        </div>
+  <ProductPagehero
+    appearance="campaign"
+    overheading="The Guardian newspaper subscriptions"
+    heading="Save up to 37% on The Guardian and The Observer - all year round"
+    modifierClasses={['paper-sale']}
+    content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+    hasCampaign
+  >
+    <div className="sale-joy-of-print">
+      <div className="sale-joy-of-print-copy">
+        <h2>Works with different browsers</h2>
+        <p>Get your hands on journalism that’s really worth keeping.</p>
       </div>
-      <Heading />
-      <TimerIfActive />
-    </HeroWrapper>
-    <Footer />
-  </header>
-);
 
+      <div className="sale-joy-of-print-graphic-outer">
+        <div className="sale-joy-of-print-graphic-inner">
+          <div className="sale-joy-of-print-badge">
+            <span>Save up to</span>
+            <span>37%</span>
+          </div>
+          <div className="sale-joy-of-print-graphic">
+            <GridImage
+              gridId="paperLandingSale"
+              srcSizes={[800, 466]}
+              sizes="(max-width: 740px) 100vw, 800px"
+              imgType="png"
+              altText="A couple sit together sharing one newspaper"
+            />
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <TimerIfActive />
+  </ProductPagehero>
+);
 
 export { DefaultHeader, SaleHeader, HeroPicture };
