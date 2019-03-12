@@ -970,10 +970,6 @@ form {
 .gu-content--frontline-campaign {
   .gu-content__main {
     background-color: gu-colour(culture-faded);
-
-    //@supports(background-image: image-set()) {
-    //
-    //}
   }
 
   @include mq(desktop) {
