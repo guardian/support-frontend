@@ -134,14 +134,29 @@ function campaignSpecificDetails() {
       contributeCopy: (
         <div>
           <p>
-            The north is flooded, the south parched by drought. The Murray Darling, our greatest river system, has dried to a trickle, crippling communities and turning up millions of dead fish. The ancient alpine forests of Tasmania have burned. The summer was the hottest on record. We are living the reality of climate change.
+            The north is flooded, the south parched by drought.
+            The Murray Darling, our greatest river system, has dried to a trickle,
+            crippling communities and turning up millions of dead fish.
+            The ancient alpine forests of Tasmania have burned.
+            The summer was the hottest on record.
+            We are living the reality of climate change.
           </p>
           <p>
-            We’re asking readers to fund a new Guardian series – The Frontline: Australia and the climate emergency. With your support, we can cut through the rhetoric and focus the debate on the facts. That way everyone can learn about the devastating and immediate threats to our country and how best to find a solution.
-            <span className="bold highlight"> Please contribute to our new series on Australia's climate emergency today.</span>
+            We’re asking readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
+            With your support, we can cut through the rhetoric and focus the debate on the facts.
+            That way everyone can learn about the devastating and immediate
+            threats to our country and how best to find a solution.
+            <span className="bold highlight">
+              Please contribute to our new series on Australia’s climate emergency today.
+            </span>
           </p>
         </div>
-      )
+      ),
+      tickerJsonUrl: '/ticker.json',
+      // stuff for campaign that's not set here:
+      // - CSS class (contributionsLanding.jsx)
+      // - Terms & Conditions
+      // - Just single contributions (via URL)
     };
   }
 
@@ -151,7 +166,7 @@ function campaignSpecificDetails() {
 function urlSpecificDetails() {
   if (getQueryParameter('ticker') === 'true') {
     return {
-      tickerJsonUrl: '/ticker.json'
+      tickerJsonUrl: '/ticker.json',
     };
   }
 
