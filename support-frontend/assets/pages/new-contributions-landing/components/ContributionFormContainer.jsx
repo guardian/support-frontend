@@ -155,7 +155,8 @@ function campaignSpecificDetails() {
           </p>
         </div>
       ),
-      tickerJsonUrl: '/ticker.json',
+      // TODO: uncomment the below
+      // tickerJsonUrl: '/ticker.json',
       // stuff for campaign that's not set here:
       // - CSS class (contributionsLanding.jsx)
       // - Terms & Conditions
@@ -168,9 +169,11 @@ function campaignSpecificDetails() {
 
 function urlSpecificDetails() {
   if (getQueryParameter('ticker') === 'true') {
-    return {
-      tickerJsonUrl: '/ticker.json',
-    };
+    // TODO: uncomment the below
+    // return {
+    //   tickerJsonUrl: '/ticker.json',
+    // };
+    return {};
   }
 
   return {};
