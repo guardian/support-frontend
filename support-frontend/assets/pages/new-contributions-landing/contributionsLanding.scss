@@ -965,6 +965,10 @@ form {
 }
 
 .gu-content--frontline-campaign {
+  .gu-content__main {
+    background-color: #fbf6ef;
+  }
+
   @include mq(desktop) {
     .gu-content__main::before {
       content: '';
