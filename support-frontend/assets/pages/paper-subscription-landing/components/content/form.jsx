@@ -6,24 +6,27 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
-import { getNewsstandSaving, getNewsstandPrice } from 'helpers/subscriptions';
+import { getNewsstandPrice, getNewsstandSaving } from 'helpers/subscriptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Price, showPrice } from 'helpers/productPrice/productPrices';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
+import ProductPagePlanForm, {
+  type DispatchPropTypes,
+  type StatePropTypes
+} from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
-import { setPlan, redirectToCheckout } from '../../paperSubscriptionLandingPageActions';
+import { redirectToCheckout, setPlan } from '../../paperSubscriptionLandingPageActions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Everyday, ActivePaperProductTypes, Sixday } from 'helpers/productPrice/productOptions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import { ActivePaperProductTypes, Everyday, Sixday } from 'helpers/productPrice/productOptions';
+import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
 
 
 // ---- Helpers ----- //
-// TODO: Can we get rid of all these price helpers?
+// TODO: We will need to make this work for flash sales
 const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
 
 const getPriceStr = (price: Price): string => {
@@ -71,7 +74,7 @@ const copy = {
 };
 
 const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: ProductPrices) => {
-  const plans = ActivePaperProductTypes.reduce((products, productOption) => {
+  return ActivePaperProductTypes.reduce((products, productOption) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     return {
       ...products,
@@ -84,7 +87,6 @@ const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: Produ
       },
     };
   }, {});
-  return plans;
 };
 
 
