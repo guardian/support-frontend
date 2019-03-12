@@ -211,7 +211,6 @@ function CheckoutForm(props: PropTypes) {
                   );
                 })}
               </FieldsetWithError>
-              We will
             </FormSection>
             <FormSection title="How would you like to pay?">
               <Rows>

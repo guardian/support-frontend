@@ -176,7 +176,6 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
-
       },
       AUDCountries: {
         promoCode: 'DDPFMINT80',

@@ -214,7 +214,7 @@ export type FormActionCreators = typeof formActionCreators;
 const getInitialProduct = (productInUrl: ?string, fulfillmentInUrl: ?string): Product => ({
   productOption:
     ActivePaperProductTypes.includes(productInUrl)
-      // $FlowIgnore
+      // $FlowIgnore - flow doesn't recognise that we've checked the value of productInUrl
       ? (productInUrl: PaperProductOptions)
       : Everyday,
   fulfilmentOption:
