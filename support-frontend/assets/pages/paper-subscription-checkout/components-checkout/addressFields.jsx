@@ -112,6 +112,14 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           setValue={props.setTownCity}
           error={firstError('city', props.formErrors)}
         />
+        <InputWithError
+          id={`${scope}-postcode`}
+          label="Postcode"
+          type="text"
+          value={props.postCode}
+          setValue={props.setPostcode}
+          error={firstError('postCode', props.formErrors)}
+        />
         <SelectWithError
           id={`${scope}-country`}
           label="Country"

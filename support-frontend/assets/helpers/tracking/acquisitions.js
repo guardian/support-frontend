@@ -5,7 +5,7 @@
 import * as ophan from 'ophan';
 
 import { get as getCookie } from 'helpers/cookie';
-import { getQueryParameter } from 'helpers/url';
+import { getQueryParameter, isFrontlineCampaign } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
@@ -190,7 +190,8 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
     getQueryParameter('REFPVID');
 
   // This was how referrer pageview id used to be passed.
-  const campaignCode = acquisitionData.campaignCode ||
+  const campaignCode =
+    (isFrontlineCampaign() ? 'thefrontline' : acquisitionData.campaignCode) ||
     getQueryParameter('INTCMP');
 
   const parameterExclusions =
