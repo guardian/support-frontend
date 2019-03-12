@@ -58,10 +58,13 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
   val dbError: EitherT[Future, DatabaseService.Error, Unit] = EitherT.left(
     Future.successful(DatabaseService.Error("DB error response", None))
   )
+  val dbSelectError: EitherT[Future, DatabaseService.Error, Boolean] = EitherT.left(
+    Future.successful(DatabaseService.Error("DB error response", None))
+  )
   val emailError: EitherT[Future, EmailService.Error, SendMessageResult] = EitherT.left(
     Future.successful(EmailService.Error(new Exception("Unknown error while sending message to SQS.")))
   )
-
+  val subscribeError = BackendError.fromSubscribeWithGoogleError(SubscribeWithGoogleError(s"Received a duplicate payment id for payment : $subscribeWithGooglePayment"))
 
   val failedIdentityErrors = BackendError.combineResults(
     BackendError.combineResults(
@@ -84,6 +87,7 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
       null //todo: Properly later.
     )))
   val dbResultNoPaymentExists:EitherT[Future, DatabaseService.Error, Boolean] = EitherT.right(Future.successful(false))
+  val dbResultPaymentExists:EitherT[Future, DatabaseService.Error, Boolean] = EitherT.right(Future.successful(true))
   val dbResult:EitherT[Future, DatabaseService.Error, Unit] = EitherT.right(Future.successful(()))
 
   val emailResult: EitherT[Future, EmailService.Error, SendMessageResult] =
@@ -106,6 +110,29 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
 
   "Subscribe with Google Backend" must {
     implicit val executionContext: ExecutionContext = ExecutionContext.global
+
+    "return error when a contribution db errors" in new SubscribeWithGoogleBackendFixture(){
+      when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbSelectError)
+
+      val recordResult: EitherT[Future, BackendError, Unit] =
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+
+      recordResult.futureLeft shouldBe BackendError.fromDatabaseError(dbError.futureLeft)
+
+      verify(mockDbService, times(1)).paymentAlreadyInserted(Match.any())
+    }
+
+    "return error when a contribution tied to paymentid already exists" in new SubscribeWithGoogleBackendFixture(){
+      when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultPaymentExists)
+
+      val recordResult: EitherT[Future, BackendError, Unit] =
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+
+      recordResult.futureLeft shouldBe subscribeError
+
+      verify(mockDbService, times(1)).paymentAlreadyInserted(Match.any())
+    }
+
 
     "record a contribution" in new SubscribeWithGoogleBackendFixture(){
 
