@@ -83,6 +83,7 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
       GAData.apply("localhost", "", None, None),
       null //todo: Properly later.
     )))
+  val dbResultNoPaymentExists:EitherT[Future, DatabaseService.Error, Boolean] = EitherT.right(Future.successful(false))
   val dbResult:EitherT[Future, DatabaseService.Error, Unit] = EitherT.right(Future.successful(()))
 
   val emailResult: EitherT[Future, EmailService.Error, SendMessageResult] =
@@ -111,6 +112,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityReply)
       when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmission)
       when(mockDbService.insertContributionData(Match.any())).thenReturn(dbResult)
+      when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultNoPaymentExists)
       when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
@@ -131,6 +133,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
 
       when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityReply)
       when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmissionError)
+      when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultNoPaymentExists)
       when(mockDbService.insertContributionData(Match.any())).thenReturn(dbResult)
       when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
 
@@ -151,7 +154,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
 
     "record a contribution when identity fails and do not send an email" in new SubscribeWithGoogleBackendFixture(){
 
-
+      when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultNoPaymentExists)
       when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityError)
       when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmissionError)
       when(mockDbService.insertContributionData(Match.any())).thenReturn(dbResult)
@@ -162,6 +165,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
 
       recordResult.futureLeft shouldBe failedIdentityErrors.futureLeft
 
+      when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultNoPaymentExists)
       verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
 
       verify(mockOphanService, times(0)).submitAcquisition(Match.any())(Match.any())
@@ -175,7 +179,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
 
     "send thank you email when db fails - alert cloudwatch" in new SubscribeWithGoogleBackendFixture(){
 
-
+      when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultNoPaymentExists)
       when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityReply)
       when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmission)
       when(mockDbService.insertContributionData(Match.any())).thenReturn(dbError)
@@ -198,6 +202,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
 
     "transaction stored in db but email comms fail" in new SubscribeWithGoogleBackendFixture(){
 
+      when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultNoPaymentExists)
       when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityReply)
       when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmission)
       when(mockDbService.insertContributionData(Match.any())).thenReturn(dbResult)

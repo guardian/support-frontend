@@ -20,31 +20,59 @@ import services._
 
 import scala.concurrent.Future
 
+
+case class SubscribeWithGoogleError(msg: String) extends Exception(msg)
+
 case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
-                                 identityService: IdentityService,
-                                 ophanService: AnalyticsService,
-                                 emailService: EmailService,
-                                 cloudWatchService: CloudWatchService
-                                )(implicit pool: DefaultThreadPool) extends StrictLogging {
+                                      identityService: IdentityService,
+                                      ophanService: AnalyticsService,
+                                      emailService: EmailService,
+                                      cloudWatchService: CloudWatchService
+                                     )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
-  def recordPayment(googleRecordPayment: GoogleRecordPayment) = {
+  def recordPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
+    for {
+      alreadyProcessed <- isPaymentAlreadyProcessed(googleRecordPayment)
+      processOutcome <- handleAlreadyProcessed(alreadyProcessed, googleRecordPayment)
+    } yield processOutcome
+  }
 
+  def recordRefund(googleRecordPayment: GoogleRecordPayment): EitherT[Future, DatabaseService.Error, Unit] = {
+    databaseService.flagContributionAsRefunded(googleRecordPayment.paymentId).leftMap { e =>
+      logger.error(s"Failed to mark payment as failed for paymentId: ${googleRecordPayment.paymentId} with reason: ${e.getMessage}")
+      cloudWatchService.recordTrackingRefundFailure(PaymentProvider.SubscribeWithGoogle)
+      e
+    }
+  }
+
+  private def handleAlreadyProcessed(boolean: Boolean, googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
+    if (boolean) {
+      logger.error(s"Received a duplicate payment id for payment : $googleRecordPayment")
+      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+      EitherT.leftT[Future, Unit](BackendError.fromSubscribeWithGoogleError(
+        SubscribeWithGoogleError(s"Received a duplicate payment id for payment : $googleRecordPayment")))
+    } else {
+      handleFirstInstanceOfPayment(googleRecordPayment)
+    }
+  }
+
+  private def handleFirstInstanceOfPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
     val identity = getOrCreateIdentityIdFromEmail(googleRecordPayment.email)
 
     val trackContributionResult = identity.flatMap { id =>
       insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, Some(id)))
-    }.leftMap{ err =>
+    }.leftMap { err =>
       cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
       logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
       err
-    }.map{ f =>
+    }.map { f =>
       cloudWatchService.recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
       f
     }
 
     val ophanTrackingResult = identity.flatMap { id =>
       submitAcquisitionToOphan(googleRecordPayment, id)
-    }.leftMap{ err =>
+    }.leftMap { err =>
       cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
       logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
       err
@@ -65,14 +93,6 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     )
   }
 
-  def recordRefund(googleRecordPayment: GoogleRecordPayment): EitherT[Future, DatabaseService.Error, Unit] = {
-    databaseService.flagContributionAsRefunded(googleRecordPayment.paymentId).leftMap{ e =>
-      logger.error(s"Failed to mark payment as failed for paymentId: ${googleRecordPayment.paymentId} with reason: ${e.getMessage}")
-      cloudWatchService.recordTrackingRefundFailure(PaymentProvider.SubscribeWithGoogle)
-      e
-    }
-  }
-
   private def contributorRowFromPayment(identityId: Long, googleRecordPayment: GoogleRecordPayment): ContributorRow = {
     ContributorRow(googleRecordPayment.email,
       googleRecordPayment.currency,
@@ -85,6 +105,15 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
                                        identityId: Long): EitherT[Future, BackendError, Unit] = {
     ophanService.submitAcquisition(SubscribeWithGoogleAcquisition(payment, identityId))
       .bimap(BackendError.fromOphanError, _ => ())
+  }
+
+  private def isPaymentAlreadyProcessed(googleRecordPayment: GoogleRecordPayment) = {
+    databaseService.paymentAlreadyInserted(googleRecordPayment.paymentId).leftMap(
+      err => {
+        logger.error(s"Failure to select from database - trying to record payment for : $googleRecordPayment", err)
+        BackendError.fromDatabaseError(err)
+      }
+    )
   }
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
@@ -125,4 +154,5 @@ object SubscribeWithGoogleBackend {
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService]
     ).mapN(SubscribeWithGoogleBackend.apply)
   }
+
 }
