@@ -19,6 +19,7 @@ import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { PayPal } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -87,7 +88,7 @@ function ContributionSubmit(props: PropTypes) {
   if (props.paymentMethod !== 'None') {
     // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';
-    const showPayPalRecurringButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
+    const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
 
     const submitButtonCopy = getContributeButtonCopyWithPaymentType(
       props.contributionType,

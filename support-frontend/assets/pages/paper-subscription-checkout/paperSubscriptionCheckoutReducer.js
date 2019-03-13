@@ -41,6 +41,7 @@ import {
   type FormField as AddressFormField,
 } from './components-checkout/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -235,7 +236,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     lastName: user.lastName || '',
     startDate: null,
     telephone: null,
-    paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
+    paymentMethod: countrySupportsDirectDebit(initialCountry) ? DirectDebit : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,

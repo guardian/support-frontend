@@ -46,6 +46,7 @@ import {
   type State,
 } from '../paperSubscriptionCheckoutReducer';
 import { withStore } from './addressFields';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -218,14 +219,14 @@ function CheckoutForm(props: PropTypes) {
                   <RadioInput
                     text="Direct debit"
                     name="paymentMethod"
-                    checked={props.paymentMethod === 'DirectDebit'}
-                    onChange={() => props.setPaymentMethod('DirectDebit')}
+                    checked={props.paymentMethod === DirectDebit}
+                    onChange={() => props.setPaymentMethod(DirectDebit)}
                   />
                   <RadioInput
                     text="Credit/Debit card"
                     name="paymentMethod"
-                    checked={props.paymentMethod === 'Stripe'}
-                    onChange={() => props.setPaymentMethod('Stripe')}
+                    checked={props.paymentMethod === Stripe}
+                    onChange={() => props.setPaymentMethod(Stripe)}
                   />
                 </Fieldset>
                 {errorState}

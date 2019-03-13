@@ -10,6 +10,7 @@ import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArr
 import MarketingConsent from '../MarketingConsentContainer';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -43,7 +44,7 @@ function ContributionThankYou(props: PropTypes) {
   let directDebitHeaderSuffix = '';
   let directDebitMessageSuffix = '';
 
-  if (props.paymentMethod === 'DirectDebit' && !props.hasSeenDirectDebitThankYouCopy) {
+  if (props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy) {
     directDebitHeaderSuffix = 'Your Direct Debit has been set up.';
     directDebitMessageSuffix = 'This will appear as \'Guardian Media Group\' on your bank statements';
     props.setHasSeenDirectDebitThankYouCopy();

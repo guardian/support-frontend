@@ -1,5 +1,9 @@
 // @flow
 
+const Stripe: 'Stripe' = 'Stripe';
+const PayPal: 'PayPal' = 'PayPal';
+const DirectDebit: 'DirectDebit' = 'DirectDebit';
+
 export type PaymentMethodMap<T> = {|
   Stripe: T,
   PayPal: T,
@@ -13,3 +17,5 @@ export type PaymentMethodMap<T> = {|
 // We need to supply the type parameter, but we're only using the keys
 // so it's irrelevant - so we supply null
 export type PaymentMethod = $Keys<PaymentMethodMap<null>>;
+
+export { Stripe, PayPal, DirectDebit };

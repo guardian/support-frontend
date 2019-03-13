@@ -30,6 +30,7 @@ import {
   type Action,
   setStage,
 } from '../paperSubscriptionCheckoutReducer';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 const getAddressFieldsState = (from: FormFields) => ({
   lineOne: from.lineOne,
@@ -140,10 +141,10 @@ function showPaymentMethod(
   const { paymentMethod } = state.page.checkout;
 
   switch (paymentMethod) {
-    case 'Stripe':
+    case Stripe:
       showStripe(dispatch, state);
       break;
-    case 'DirectDebit':
+    case DirectDebit:
       dispatch(openDirectDebitPopUp());
       break;
     case null:

@@ -28,6 +28,7 @@ import {
   updateEmail,
 } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { Stripe } from 'helpers/paymentMethods';
 
 
 // ----- Types -----//
@@ -165,7 +166,7 @@ function setUpPaymentListener(props: PropTypes, paymentRequest: Object, paymentM
       // chose to authorize payment. For example, 'basic-card'."
       trackComponentClick(`${data.methodName}-paymentAuthorised`);
     }
-    props.onPaymentAuthorised({ paymentMethod: 'Stripe', token: tokenId, stripePaymentMethod: paymentMethod })
+    props.onPaymentAuthorised({ paymentMethod: Stripe, token: tokenId, stripePaymentMethod: paymentMethod })
       .then(onComplete(complete));
   });
 }

@@ -12,6 +12,7 @@ import { getQueryParameter } from 'helpers/url';
 import { type Option } from 'helpers/types/option';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 type PropTypes = {|
   countrySupportsDirectDebit: boolean,
@@ -42,21 +43,21 @@ function PaymentMethodSelector(props: PropTypes) {
             <RadioInput
               text="Direct debit"
               name="paymentMethod"
-              checked={props.paymentMethod === 'DirectDebit'}
-              onChange={() => props.setPaymentMethod('DirectDebit')}
+              checked={props.paymentMethod === DirectDebit}
+              onChange={() => props.setPaymentMethod(DirectDebit)}
             />}
             <RadioInput
               text="Credit/Debit card"
               name="paymentMethod"
-              checked={props.paymentMethod === 'Stripe'}
-              onChange={() => props.setPaymentMethod('Stripe')}
+              checked={props.paymentMethod === Stripe}
+              onChange={() => props.setPaymentMethod(Stripe)}
             />
             {payPalEnabled &&
             <RadioInput
               text="PayPal"
               name="paymentMethod"
-              checked={props.paymentMethod === 'PayPal'}
-              onChange={() => props.setPaymentMethod('PayPal')}
+              checked={props.paymentMethod === PayPal}
+              onChange={() => props.setPaymentMethod(PayPal)}
             />}
           </Fieldset>
         </div>

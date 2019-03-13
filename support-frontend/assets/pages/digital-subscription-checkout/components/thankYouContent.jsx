@@ -16,6 +16,7 @@ import {
   getFormFields,
   type FormFields,
 } from '../digitalSubscriptionCheckoutReducer';
+import { DirectDebit } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -35,7 +36,7 @@ function ThankYouContent(props: PropTypes) {
         <Text>
           <LargeParagraph>
             {
-            props.paymentMethod === 'DirectDebit' ?
+            props.paymentMethod === DirectDebit ?
             'Look out for an email within three business days confirming your recurring payment. Your first payment will be taken in 14 days and will appear as \'Guardian Media Group\' on your bank statement.' :
             'We have sent you an email with everything you need to know. Your first payment will be taken in 14 days.'
           }

@@ -16,6 +16,7 @@ import { setFormSubmissionDependentValue } from 'pages/digital-subscription-chec
 import { getFormFields } from './digitalSubscriptionCheckoutReducer';
 import type { ErrorReason } from '../../helpers/errorReasons';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { PayPal } from 'helpers/paymentMethods';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -73,7 +74,7 @@ const formActionCreators = {
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {
     const state = getState();
-    if (paymentMethod === 'PayPal' && !state.page.checkout.payPalHasLoaded) {
+    if (paymentMethod === PayPal && !state.page.checkout.payPalHasLoaded) {
       showPayPal(dispatch);
     }
     return dispatch({
