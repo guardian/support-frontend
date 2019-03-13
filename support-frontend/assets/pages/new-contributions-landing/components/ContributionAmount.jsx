@@ -15,7 +15,7 @@ import {
   type SpokenCurrency,
   currencies,
   spokenCurrencies,
-  detect
+  detect,
 } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
@@ -117,13 +117,13 @@ const localisedAverageAmountSentence: {
       ANNUAL: number
     },
   }
-}  = {
+} = {
   GBPCountries: {
     amountSentence: 'In the UK, the',
     averageAmount: {
       ONE_OFF: 19.04,
       MONTHLY: 4.22,
-      ANNUAL: 50.37
+      ANNUAL: 50.37,
     },
   },
   UnitedStates: {
@@ -131,7 +131,7 @@ const localisedAverageAmountSentence: {
     averageAmount: {
       ONE_OFF: 26.09,
       MONTHLY: 9.45,
-      ANNUAL: 50.16
+      ANNUAL: 50.16,
     },
   },
   AUDCountries: {
@@ -139,7 +139,7 @@ const localisedAverageAmountSentence: {
     averageAmount: {
       ONE_OFF: 42.32,
       MONTHLY: 13.18,
-      ANNUAL: 82.65
+      ANNUAL: 82.65,
     },
   },
   EURCountries: {
@@ -147,7 +147,7 @@ const localisedAverageAmountSentence: {
     averageAmount: {
       ONE_OFF: 23.56,
       MONTHLY: 7.26,
-      ANNUAL: 52.92
+      ANNUAL: 52.92,
     },
   },
   NZDCountries: {
@@ -155,7 +155,7 @@ const localisedAverageAmountSentence: {
     averageAmount: {
       ONE_OFF: 35.88,
       MONTHLY: 11.62,
-      ANNUAL: 58.51
+      ANNUAL: 58.51,
     },
   },
   Canada: {
@@ -163,7 +163,7 @@ const localisedAverageAmountSentence: {
     averageAmount: {
       ONE_OFF: 31.92,
       MONTHLY: 8.85,
-      ANNUAL: 62.68
+      ANNUAL: 62.68,
     },
   },
   International: {
@@ -171,7 +171,7 @@ const localisedAverageAmountSentence: {
     averageAmount: {
       ONE_OFF: 27.53,
       MONTHLY: 8.40,
-      ANNUAL: 61.78
+      ANNUAL: 61.78,
     },
   },
 };
@@ -185,15 +185,15 @@ function averageAmountVariantCopy(
   const contributionTypeSpecificCopy: {
     [ContributionType]: string
   } = {
-    'ONE_OFF': '',
-    'MONTHLY': ' each month',
-    'ANNUAL': ' each year',
+    ONE_OFF: '',
+    MONTHLY: ' each month',
+    ANNUAL: ' each year',
   };
   const localAverageAmountInfo = localisedAverageAmountSentence[countryGroupId];
   const localAverageAmount = Math.round(localAverageAmountInfo.averageAmount[contributionType]);
   const localAverageAmountSentence = localAverageAmountInfo.amountSentence;
   const contributionTypeCopy = contributionTypeSpecificCopy[contributionType];
-  return `Please select the amount you\'d like to contribute${contributionTypeCopy}. ${localAverageAmountSentence} average choice is ${currencyString}${localAverageAmount}.`
+  return `Please select the amount you'd like to contribute${contributionTypeCopy}. ${localAverageAmountSentence} average choice is ${currencyString}${localAverageAmount}.`;
 }
 
 const getEditorialisedAmountsCopy = (
@@ -201,7 +201,7 @@ const getEditorialisedAmountsCopy = (
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   selectedAmounts: SelectedAmounts,
-  otherAmounts: OtherAmounts
+  otherAmounts: OtherAmounts,
 ): string => {
   const currencyString = currencies[detect(countryGroupId)].glyph;
   const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
@@ -215,11 +215,11 @@ const getEditorialisedAmountsCopy = (
   }
 
   if (editorialiseAmountsVariant === 'monthlyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount/12.00).toFixed(2)} each month.`
+    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 12.00).toFixed(2)} each month.`;
   }
 
   if (editorialiseAmountsVariant === 'weeklyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount/52.00).toFixed(2)} each week.`
+    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 52.00).toFixed(2)} each week.`;
   }
 
   return '';
@@ -273,7 +273,13 @@ function ContributionAmount(props: PropTypes) {
         />
       ) : null}
       <p className="editorialise-amounts-test-copy">
-        {getEditorialisedAmountsCopy(props.editorialiseAmountsVariant, props.contributionType, props.countryGroupId, props.selectedAmounts, props.otherAmounts)}
+        {getEditorialisedAmountsCopy(
+          props.editorialiseAmountsVariant,
+          props.contributionType,
+          props.countryGroupId,
+          props.selectedAmounts,
+          props.otherAmounts,
+        )}
       </p>
     </fieldset>
   );

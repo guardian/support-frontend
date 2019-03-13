@@ -1,6 +1,5 @@
 // @flow
 import type { Tests } from './abtest';
-import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './annualAmountsTest';
 
 // ----- Tests ----- //
 
