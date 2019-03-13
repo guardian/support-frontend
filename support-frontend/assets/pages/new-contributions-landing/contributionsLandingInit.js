@@ -89,7 +89,7 @@ function initialiseStripeCheckout(
 
 
 function initialisePaymentMethods(state: State, dispatch: Function) {
-  const { countryId, currencyId } = state.common.internationalisation;
+  const { countryId, currencyId, countryGroupId } = state.common.internationalisation;
   const { switches } = state.common.settings;
   const { isTestUser } = state.page.user;
 
@@ -98,9 +98,11 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation));
   };
 
+  const contributionTypes = getValidContributionTypes(countryGroupId);
+
   if (getQueryParameter('stripe-checkout-js') !== 'no') {
     loadStripe().then(() => {
-      ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
+      contributionTypes.forEach((contribType) => {
         const validPayments = getValidPaymentMethods(contribType, switches, countryId);
         if (validPayments.includes('Stripe')) {
           initialiseStripeCheckout(
@@ -115,7 +117,10 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     });
   }
 
-  if (getQueryParameter('paypal-js') !== 'no') {
+  const hasRecurring = contributionTypes.includes('MONTHLY')
+    || contributionTypes.includes('ANNUAL');
+
+  if (getQueryParameter('paypal-js') !== 'no' && hasRecurring) {
     loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
   }
 }
