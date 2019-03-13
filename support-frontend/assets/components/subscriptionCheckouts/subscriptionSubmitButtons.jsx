@@ -5,7 +5,6 @@
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 
-import { type PaymentMethod } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { hiddenIf } from 'helpers/utilities';
 import { type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
@@ -13,6 +12,7 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
 import Button from 'components/button/button';
 import { type Option } from 'helpers/types/option';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 

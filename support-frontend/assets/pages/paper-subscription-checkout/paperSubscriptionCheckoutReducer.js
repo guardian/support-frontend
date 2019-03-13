@@ -40,11 +40,11 @@ import {
   type State as AddressState,
   type FormField as AddressFormField,
 } from './components-checkout/addressFieldsStore';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 type Product = {|
   fulfilmentOption: PaperFulfilmentOptions,

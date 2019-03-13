@@ -4,7 +4,7 @@
 
 import { type ErrorReason } from 'helpers/errorReasons';
 import { combineReducers } from 'redux';
-import { type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -22,6 +22,7 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 

@@ -4,10 +4,10 @@
 
 import { type Dispatch } from 'redux';
 import React from 'react';
-import type { PaymentMethod } from 'helpers/contributions';
 import { connect } from 'react-redux';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
 import SetPasswordForm from '../SetPasswordForm';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 

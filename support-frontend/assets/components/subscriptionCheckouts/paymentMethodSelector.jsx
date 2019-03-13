@@ -2,7 +2,6 @@
 
 import React from 'react';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
@@ -12,6 +11,7 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import { getQueryParameter } from 'helpers/url';
 import { type Option } from 'helpers/types/option';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 type PropTypes = {|
   countrySupportsDirectDebit: boolean,

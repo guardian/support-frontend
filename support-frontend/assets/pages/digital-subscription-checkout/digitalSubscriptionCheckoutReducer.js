@@ -30,11 +30,11 @@ import { validateForm } from 'pages/digital-subscription-checkout/helpers/valida
 import type { Action } from './digitalSubscriptionCheckoutActions';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-export type PaymentMethod = 'Stripe' | 'DirectDebit' | 'PayPal'; // TODO: there is another version of this type in contributions.js
 
 export type FormFieldsInState = {|
   firstName: string,

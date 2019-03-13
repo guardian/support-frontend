@@ -11,7 +11,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import {
   type ContributionType,
   type PaymentMatrix,
-  type PaymentMethod,
   logInvalidCombination,
 } from 'helpers/contributions';
 import { type ErrorReason } from 'helpers/errorReasons';
@@ -48,6 +47,7 @@ import {
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 
 // ----- Types ----- //

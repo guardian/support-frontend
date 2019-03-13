@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { PaymentRequestButtonElement, injectStripe } from 'react-stripe-elements';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ContributionType, OtherAmounts, PaymentMethod, SelectedAmounts } from 'helpers/contributions';
+import type { ContributionType, OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { checkAmountOrOtherAmount, isValidEmail } from 'helpers/formValidation';
 import {
@@ -27,6 +27,7 @@ import {
   onStripePaymentRequestApiPaymentAuthorised,
   updateEmail,
 } from '../../contributionsLandingActions';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 
 // ----- Types -----//

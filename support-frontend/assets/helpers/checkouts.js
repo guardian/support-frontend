@@ -5,7 +5,6 @@
 import { getQueryParameter } from 'helpers/url';
 import {
   type ContributionType, getFrequency,
-  type PaymentMethod,
   toContributionType,
 } from 'helpers/contributions';
 import {
@@ -18,6 +17,7 @@ import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationa
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { Amount, SelectedAmounts } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 
 // ----- Types ----- //

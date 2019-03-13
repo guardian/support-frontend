@@ -13,9 +13,9 @@ import { setCountry } from 'helpers/page/commonActions';
 import type { Dispatch } from 'redux';
 import type { Action as CommonAction } from 'helpers/page/commonActions';
 import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
-import type { PaymentMethod } from './digitalSubscriptionCheckoutReducer';
 import { getFormFields } from './digitalSubscriptionCheckoutReducer';
 import type { ErrorReason } from '../../helpers/errorReasons';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }

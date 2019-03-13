@@ -10,22 +10,9 @@ import { currencies, spokenCurrencies } from 'helpers/internationalisation/curre
 import type { Radio } from 'components/radioToggle/radioToggle';
 import { logException } from 'helpers/logger';
 import { Annual, type BillingPeriod, Monthly } from 'helpers/billingPeriods';
+import type { PaymentMethod, PaymentMethodMap } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
-
-export type PaymentMethodMap<T> = {|
-  Stripe: T,
-  PayPal: T,
-  DirectDebit: T,
-  None: T,
-|};
-
-// This lets us create a union type from the object keys,
-// avoiding the need to specify them separately and keep them in sync!
-// https://flow.org/en/docs/types/utilities/#toc-keys
-// We need to supply the type parameter, but we're only using the keys
-// so it's irrelevant - so we supply null
-export type PaymentMethod = $Keys<PaymentMethodMap<null>>;
 
 export type RegularContributionTypeMap<T> = {|
   MONTHLY: T,
