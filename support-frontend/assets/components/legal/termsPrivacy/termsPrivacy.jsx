@@ -31,10 +31,9 @@ function TermsPrivacy(props: PropTypes) {
           By proceeding, you’re agreeing to our <span className="bold">Terms and Conditions</span>.
           If we hit our goal of $100,000, The Guardian will allocate this amount to its core operations
           which will help fund the completion of the ‘The Frontline: Australia and the climate emergency’ series,
-          including editing, reporting, graphics and new commissions. If we exceed our fundraising goal,
-          The Guardian will allocate the additional funds towards its core operations that fund our in-depth
-          environmental reporting. If we fall short of the goal, The Guardian will allocate the funds for a scaled
-          back project on climate change. Contributions will not be returned. Your contribution is also governed by
+          including editing, reporting, graphics and new commissions. If we fall short of the goal,
+          The Guardian will allocate the funds for a scaled back project on climate change.
+          Contributions will not be returned. Your contribution is also governed by
           our standard <a href={contributionsTermsLinks[props.countryGroupId]}>contribution terms and conditions</a>.
         </p>
         <p>
