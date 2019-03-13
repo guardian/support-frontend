@@ -4,6 +4,7 @@
 
 import { initReducer, type Stage } from '../digitalSubscriptionCheckoutReducer';
 import { setStage, setFormErrors } from '../digitalSubscriptionCheckoutActions';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 jest.mock('ophan', () => {});
 jest.mock('font-loader', () => () => ({}));
@@ -15,12 +16,12 @@ describe('Digital Subscription Checkout Reducer', () => {
 
   it('should default to Direct Debit if the country is GB', () => {
     const reducer = initReducer('GB');
-    expect(reducer(undefined, {}).checkout.paymentMethod).toEqual('DirectDebit');
+    expect(reducer(undefined, {}).checkout.paymentMethod).toEqual(DirectDebit);
   });
 
   it('should default to Stripe if the country is US', () => {
     const reducer = initReducer('US');
-    expect(reducer(undefined, {}).checkout.paymentMethod).toEqual('Stripe');
+    expect(reducer(undefined, {}).checkout.paymentMethod).toEqual(Stripe);
   });
 
   it('should handle SET_STAGE to "thankyou"', () => {

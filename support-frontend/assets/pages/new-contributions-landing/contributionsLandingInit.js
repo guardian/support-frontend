@@ -21,7 +21,7 @@ import {
   getValidPaymentMethods,
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
-import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
@@ -35,6 +35,8 @@ import {
   updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { Stripe } from 'helpers/paymentMethods';
 
 // ----- Functions ----- //
 
@@ -102,7 +104,7 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     loadStripe().then(() => {
       ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
         const validPayments = getValidPaymentMethods(contribType, switches, countryId);
-        if (validPayments.includes('Stripe')) {
+        if (validPayments.includes(Stripe)) {
           initialiseStripeCheckout(
             onPaymentAuthorisation,
             contribType,

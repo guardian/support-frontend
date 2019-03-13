@@ -10,7 +10,6 @@ import {
   getAmount,
   logInvalidCombination,
   type PaymentMatrix,
-  type PaymentMethod,
 } from 'helpers/contributions';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
@@ -44,6 +43,8 @@ import { Annual, Monthly } from 'helpers/billingPeriods';
 import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
@@ -398,14 +399,14 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       state: State,
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
-      if (paymentAuthorisation.paymentMethod === 'Stripe') {
+      if (paymentAuthorisation.paymentMethod === Stripe) {
         return dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
       return Promise.resolve(error);
     },
     DirectDebit: () => {
-      logInvalidCombination('ONE_OFF', 'DirectDebit');
+      logInvalidCombination('ONE_OFF', DirectDebit);
       return Promise.resolve(error);
     },
     None: () => {

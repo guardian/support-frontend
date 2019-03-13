@@ -5,7 +5,6 @@
 import { getQueryParameter } from 'helpers/url';
 import {
   type ContributionType, getFrequency,
-  type PaymentMethod,
   toContributionType,
 } from 'helpers/contributions';
 import {
@@ -18,6 +17,8 @@ import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationa
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { Amount, SelectedAmounts } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 
 // ----- Types ----- //
@@ -32,9 +33,9 @@ export type ThirdPartyPaymentLibrary = StripeHandler;
 
 function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMethodSwitch | null {
   switch (paymentMethod) {
-    case 'PayPal': return 'payPal';
-    case 'Stripe': return 'stripe';
-    case 'DirectDebit': return 'directDebit';
+    case PayPal: return 'payPal';
+    case Stripe: return 'stripe';
+    case DirectDebit: return 'directDebit';
     default: return null;
   }
 }
@@ -90,8 +91,8 @@ function getContributionTypeFromUrlOrElse(fallback: ContributionType): Contribut
 // i.e the first element in the array will be the default option
 function getPaymentMethods(contributionType: ContributionType, countryId: IsoCountry): PaymentMethod[] {
   return contributionType !== 'ONE_OFF' && countryId === 'GB'
-    ? ['DirectDebit', 'Stripe', 'PayPal']
-    : ['Stripe', 'PayPal'];
+    ? [DirectDebit, Stripe, PayPal]
+    : [Stripe, PayPal];
 }
 
 const switchIsOn =
@@ -127,7 +128,7 @@ function getPaymentMethodFromSession(): ?PaymentMethod {
 
 function getPaymentDescription(contributionType: ContributionType, paymentMethod: PaymentMethod): string {
   if (contributionType === 'ONE_OFF') {
-    if (paymentMethod === 'PayPal') {
+    if (paymentMethod === PayPal) {
       return 'with PayPal';
     }
 
@@ -181,13 +182,13 @@ const getContributeButtonCopyWithPaymentType = (
 
 function getPaymentLabel(paymentMethod: PaymentMethod): string {
   switch (paymentMethod) {
-    case 'Stripe':
+    case Stripe:
       return 'Credit/Debit card';
-    case 'DirectDebit':
+    case DirectDebit:
       return 'Direct debit';
-    case 'PayPal':
+    case PayPal:
     default:
-      return 'PayPal';
+      return PayPal;
   }
 }
 

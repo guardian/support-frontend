@@ -11,7 +11,6 @@ import { classNameWithModifiers } from 'helpers/utilities';
 import {
   type ContributionType,
   type PaymentMatrix,
-  type PaymentMethod,
   logInvalidCombination,
 } from 'helpers/contributions';
 import { type ErrorReason } from 'helpers/errorReasons';
@@ -48,6 +47,8 @@ import {
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 
 // ----- Types ----- //
@@ -168,7 +169,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
-    DirectDebit: () => { logInvalidCombination('ONE_OFF', 'DirectDebit'); },
+    DirectDebit: () => { logInvalidCombination('ONE_OFF', DirectDebit); },
     None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
   ANNUAL: {
@@ -189,8 +190,8 @@ function onSubmit(props: PropTypes): Event => void {
     const flowPrefix = 'npf';
     const form = event.target;
 
-    if (props.isPostDeploymentTestUser && props.paymentMethod === 'Stripe') {
-      props.onPaymentAuthorisation({ paymentMethod: 'Stripe', token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });
+    if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe) {
+      props.onPaymentAuthorisation({ paymentMethod: Stripe, token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });
     } else {
       const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
       onFormSubmit({

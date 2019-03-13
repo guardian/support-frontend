@@ -10,6 +10,7 @@ import { getPayPalOptions, type SetupPayPalRequestType } from 'helpers/paymentIn
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { BillingPeriod } from 'helpers/billingPeriods';
+import { PayPal } from 'helpers/paymentMethods';
 
 type PropTypes = {|
   onPaymentAuthorisation: Function,
@@ -56,7 +57,7 @@ export class PayPalExpressButton extends React.Component<PropTypes> {
     }
 
     const tokenToAuthorisation = (token: string): PayPalAuthorisation => ({
-      paymentMethod: 'PayPal',
+      paymentMethod: PayPal,
       token,
     });
 
