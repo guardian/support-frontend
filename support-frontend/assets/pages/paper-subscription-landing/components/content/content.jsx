@@ -13,6 +13,7 @@ import { type ContentPropTypes } from './helpers';
 import DeliveryTab from './deliveryTab';
 import CollectionTab from './collectionTab';
 import './content.scss';
+import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 
 
 // ----- Render ----- //
@@ -32,7 +33,7 @@ class Content extends Component<ContentPropTypes> {
   render() {
     const { selectedTab, setTabAction } = this.props;
 
-    return selectedTab === 'collection'
+    return selectedTab === Collection
       ? <CollectionTab
         {...{ selectedTab, setTabAction }}
         getRef={(r) => { if (r) { this.tabRef = r; } }}

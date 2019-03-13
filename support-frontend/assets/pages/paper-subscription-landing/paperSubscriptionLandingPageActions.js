@@ -2,39 +2,52 @@
 
 // ----- Imports ----- //
 
-import { type PaperBillingPlan } from 'helpers/subscriptions';
 import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import { type PaperDeliveryMethod } from 'helpers/subscriptions';
-import { paperSubsUrl } from 'helpers/routes';
-import { getPaperCheckout } from 'helpers/externalLinks';
+import { paperCheckoutUrl, paperSubsUrl } from 'helpers/routes';
+import { getLegacyPaperCheckout } from 'helpers/externalLinks';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { type State } from './paperSubscriptionLandingPageReducer';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { getQueryParameter } from 'helpers/url';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import { Everyday } from 'helpers/productPrice/productOptions';
 
 // ----- Types ----- //
-export type TabActions = { type: 'SET_TAB', tab: PaperDeliveryMethod }
+export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }
 
 
 // ----- Action Creators ----- //
 
-const { setPlan } = ProductPagePlanFormActionsFor<PaperBillingPlan>('Paper', 'Paper');
-const setTab = (tab: PaperDeliveryMethod): TabActions => {
+const { setPlan } = ProductPagePlanFormActionsFor<PaperProductOptions>('Paper', 'Paper');
+const setTab = (tab: PaperFulfilmentOptions): TabActions => {
   sendClickedEvent(`paper_subscription_landing_page-switch_tab-${tab}`)();
-  window.history.replaceState({}, null, paperSubsUrl(tab === 'delivery'));
+  window.history.replaceState({}, null, paperSubsUrl(tab === HomeDelivery));
   return { type: 'SET_TAB', tab };
+};
+
+const getCheckoutUrl = (state: State) => {
+  if (getQueryParameter('displayCheckout') === 'true') {
+    const product = state.page.plan.plan ? state.page.plan.plan : Everyday;
+    return paperCheckoutUrl(state.page.tab, product);
+  }
+
+  const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
+  return state.page.plan.plan ? getLegacyPaperCheckout(
+    state.page.plan.plan,
+    state.page.tab,
+    referrerAcquisitionData,
+    abParticipations,
+    optimizeExperiments,
+  ) : null;
 };
 
 const redirectToCheckout = () =>
   (dispatch: Dispatch<{||}>, getState: () => State) => {
     /* this action does not dipatch anything at the moment */
     const state = getState();
-    const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
-    const location = state.page.plan.plan ? getPaperCheckout(
-      state.page.plan.plan,
-      referrerAcquisitionData,
-      abParticipations,
-      optimizeExperiments,
-    ) : null;
+    const location = getCheckoutUrl(state);
 
     if (location) {
       // this is annoying because we *know* state.page.plan.plan exists --------------v

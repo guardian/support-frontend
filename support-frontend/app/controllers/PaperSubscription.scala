@@ -22,6 +22,8 @@ import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.circe.Circe
 import views.EmptyDiv
+import com.gu.support.encoding.CustomCodecs._
+import views.ViewHelpers.outputJson
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -56,8 +58,12 @@ class PaperSubscription(
     val css = Left(RefPath("paperSubscriptionLandingPage.css"))
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
     val description = stringsConfig.paperLandingDescription
+    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, promoCode)
 
-    Ok(views.html.main(title, mainElement, js, css, description, canonicalLink)()).withSettingsSurrogateKey
+    Ok(views.html.main(title, mainElement, js, css, description, canonicalLink){
+      Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
+    }).withSettingsSurrogateKey
   }
 
   def displayForm(displayCheckout: Boolean): Action[AnyContent] =

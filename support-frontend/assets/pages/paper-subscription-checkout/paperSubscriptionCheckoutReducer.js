@@ -24,7 +24,10 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
+import {
+  Everyday,
+  type PaperProductOptions, ActivePaperProductTypes,
+} from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
@@ -210,16 +213,8 @@ export type FormActionCreators = typeof formActionCreators;
 
 const getInitialProduct = (productInUrl: ?string, fulfillmentInUrl: ?string): Product => ({
   productOption:
-    productInUrl === 'Saturday' ||
-    productInUrl === 'SaturdayPlus' ||
-    productInUrl === 'Sunday' ||
-    productInUrl === 'SundayPlus' ||
-    productInUrl === 'Weekend' ||
-    productInUrl === 'WeekendPlus' ||
-    productInUrl === 'Sixday' ||
-    productInUrl === 'SixdayPlus' ||
-    productInUrl === 'Everyday' ||
-    productInUrl === 'EverydayPlus'
+    ActivePaperProductTypes.includes(productInUrl)
+      // $FlowIgnore - flow doesn't recognise that we've checked the value of productInUrl
       ? (productInUrl: PaperProductOptions)
       : Everyday,
   fulfilmentOption:
