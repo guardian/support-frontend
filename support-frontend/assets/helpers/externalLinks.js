@@ -327,7 +327,7 @@ function getWeeklyCheckout(
 
 
 // Builds a link to paper subs checkout
-function getPaperCheckout(
+function getLegacyPaperCheckout(
   productOption: PaperProductOptions,
   fulfilmentOption: PaperFulfilmentOptions,
   referrerAcquisitionData: ReferrerAcquisitionData,
@@ -399,5 +399,5 @@ export {
   myAccountUrl,
   manageSubsUrl,
   getWeeklyCheckout,
-  getPaperCheckout,
+  getLegacyPaperCheckout,
 };

@@ -4,7 +4,7 @@
 
 import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import { paperCheckoutUrl, paperSubsUrl } from 'helpers/routes';
-import { getPaperCheckout } from 'helpers/externalLinks';
+import { getLegacyPaperCheckout } from 'helpers/externalLinks';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { type State } from './paperSubscriptionLandingPageReducer';
@@ -34,7 +34,7 @@ const getCheckoutUrl = (state: State) => {
   }
 
   const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
-  return state.page.plan.plan ? getPaperCheckout(
+  return state.page.plan.plan ? getLegacyPaperCheckout(
     state.page.plan.plan,
     state.page.tab,
     referrerAcquisitionData,
