@@ -1,5 +1,7 @@
 package model.acquisition
 
+import java.util.UUID
+
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import model.subscribewithgoogle.GoogleRecordPayment
@@ -19,11 +21,11 @@ object SubscribeWithGoogleAcquisition {
         paymentFrequency = PaymentFrequency.OneOff,
         currency = a.googleRecordPayment.currency,
         amount = a.googleRecordPayment.amount.toDouble
-      )) //todo: Add the rest of the data
+      )) //todo: Potentially add SWiG to the com.gu.acquisition enum for payment provider if required
 
       override def buildGAData(a: SubscribeWithGoogleAcquisition): Either[String, GAData] = Right(GAData(
-        "???",
-        "???",
+        "swg.theguardian.com",
+        UUID.randomUUID().toString,
         None,
         None
       ))
