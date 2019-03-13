@@ -26,13 +26,11 @@ $progess-bar-height: 10px;
 }
 
 .contributions-landing-ticker__values,
-.contributions-landing-ticker__over-goal,
 .contributions-landing-ticker__progress-bar {
   margin: 0 10px;
 }
 
-.contributions-landing-ticker__values,
-.contributions-landing-ticker__over-goal {
+.contributions-landing-ticker__values {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -40,9 +38,7 @@ $progess-bar-height: 10px;
   line-height: 1;
 }
 
-.contributions-landing-ticker__goal,
-.contributions-landing-ticker__so-far,
-.contributions-landing-ticker__thankyou {
+.contributions-landing-ticker__goal, .contributions-landing-ticker__so-far {
   display: flex;
   flex-direction: column;
 }
