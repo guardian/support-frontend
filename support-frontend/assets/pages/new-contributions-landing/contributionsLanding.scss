@@ -1162,3 +1162,14 @@ form {
      opacity: 1;
    }
  }
+
+
+// Editorialise Amounts Test
+
+.editorialise-amounts-test-copy {
+  margin-top: $gu-v-spacing;
+}
+
+.editorialise-amounts-test-copy:empty {
+  display: none;
+}

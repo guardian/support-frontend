@@ -210,7 +210,7 @@ const getEditorialisedAmountsCopy = (
     return '';
   }
 
-  if (editorialiseAmountsVariant === 'averageAmount') {
+  if (editorialiseAmountsVariant === 'averageAmount' && contributionType === 'ANNUAL') {
     return averageAmountVariantCopy(countryGroupId, contributionType, currencyString);
   }
 
@@ -272,7 +272,9 @@ function ContributionAmount(props: PropTypes) {
           required
         />
       ) : null}
-      {getEditorialisedAmountsCopy(props.editorialiseAmountsVariant, props.contributionType, props.countryGroupId, props.selectedAmounts, props.otherAmounts)}
+      <p className="editorialise-amounts-test-copy">
+        {getEditorialisedAmountsCopy(props.editorialiseAmountsVariant, props.contributionType, props.countryGroupId, props.selectedAmounts, props.otherAmounts)}
+      </p>
     </fieldset>
   );
 }
