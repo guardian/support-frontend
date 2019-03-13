@@ -28,6 +28,7 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 
@@ -46,6 +47,7 @@ type PropTypes = {|
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
+  setTickerGoalReached: boolean => void,
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
@@ -73,6 +75,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
+  setTickerGoalReached: () => { dispatch(setTickerGoalReached()); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
@@ -206,7 +209,7 @@ function ContributionFormContainer(props: PropTypes) {
 
         <div className="gu-content__form">
           {countryGroupDetails.tickerJsonUrl ?
-            <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
+            <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} onGoalReached={props.setTickerGoalReached} /> : null
           }
           {countryGroupDetails.formMessage ?
             <div className="form-message">{countryGroupDetails.formMessage}</div> : null

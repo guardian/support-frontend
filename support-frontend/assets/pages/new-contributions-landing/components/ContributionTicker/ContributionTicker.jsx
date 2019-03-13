@@ -13,6 +13,7 @@ type StateTypes = {|
 type PropTypes = {|
   // URL to fetch ticker JSON from
   tickerJsonUrl: string,
+  onGoalReached: boolean => void,
 |}
 
 
@@ -41,6 +42,7 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
     super(props);
 
     this.tickerJsonUrl = props.tickerJsonUrl;
+    this.onGoalReached = props.onGoalReached;
 
     this.state = {
       totalSoFar: 0,
@@ -67,6 +69,8 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
   count = 0;
   totalSoFar: number;
   tickerJsonUrl: string;
+  onGoalReached: boolean => void;
+  onGoalReachedHasBeenCalled: boolean;
 
   animateBar(totalSoFar: number, goal: number) {
     const progressBarElement = this.filledProgressBar;
@@ -78,6 +82,13 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
   increaseCounter() {
     const { totalSoFar } = this;
     this.count += Math.floor(totalSoFar / 100);
+
+    if (this.count === this.totalSoFar) {
+      if (!this.onGoalReachedHasBeenCalled) {
+        this.onGoalReached(true);
+        this.onGoalReachedHasBeenCalled = true;
+      }
+    }
 
     if (this.count >= this.totalSoFar) {
       this.setState({ totalSoFar: this.totalSoFar });
