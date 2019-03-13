@@ -5,6 +5,8 @@
 import type { CountryGroupId } from './internationalisation/countryGroup';
 import { countryGroups } from './internationalisation/countryGroup';
 import { getOrigin } from './url';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 const routes: {
   [string]: string,
@@ -42,6 +44,10 @@ function paperSubsUrl(withDelivery: boolean = false): string {
   return [getOrigin(), 'uk/subscribe/paper', ...(withDelivery ? ['delivery'] : [])].join('/');
 }
 
+function paperCheckoutUrl(fulfilmentOption: FulfilmentOptions, productOptions: ProductOptions) {
+  return `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}&displayCheckout=true`; // TODO: remove displayCheckout param when we go live
+}
+
 function payPalCancelUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
 }
@@ -53,4 +59,4 @@ function payPalReturnUrl(cgId: CountryGroupId): string {
 
 // ----- Exports ----- //
 
-export { routes, postcodeLookupUrl, payPalCancelUrl, payPalReturnUrl, paperSubsUrl };
+export { routes, postcodeLookupUrl, payPalCancelUrl, payPalReturnUrl, paperSubsUrl, paperCheckoutUrl };

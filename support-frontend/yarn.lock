@@ -1570,6 +1570,11 @@
     camelcase "^5.0.0"
     prettier "^1.13.7"
 
+"@guardian/font-loader@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/font-loader/-/font-loader-1.0.0.tgz#82e70682fa7d9d49a5e6e4028769b75ab960caa8"
+  integrity sha512-NNGn6pIzNDAVRFxHsNhOb1WOAiOiAPbkzA+7IExw7YXAOVti5kSmebYMPBIAF8vh89j0NlWzakAfinDHwaV11A==
+
 "@guardian/paparazzi@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@guardian/paparazzi/-/paparazzi-0.3.1.tgz#2eea9b928de29557ac4fd86e2cef364464ad9cc1"

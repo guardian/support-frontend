@@ -5,7 +5,7 @@ import { type CountryGroupId, detect } from 'helpers/internationalisation/countr
 import { fixDecimals } from 'helpers/subscriptions';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 
-import { type SubscriptionProduct, type PaperBillingPlan } from './subscriptions';
+import { type SubscriptionProduct } from './subscriptions';
 import { AUDCountries, GBPCountries, EURCountries, Canada, International, UnitedStates, NZDCountries } from './internationalisation/countryGroup';
 
 export type SaleCopy = {
@@ -26,10 +26,6 @@ export type SaleCopy = {
   },
 }
 
-export type PlanPrice = {
-  [PaperBillingPlan]: number,
-}
-
 type SaleDetails = {
   [CountryGroupId]: {
     promoCode: string,
@@ -39,7 +35,6 @@ type SaleDetails = {
     annualPrice?: number,
     discountPercentage?: number,
     saleCopy: SaleCopy,
-    planPrices: PlanPrice[],
   },
 };
 
@@ -85,7 +80,6 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
-        planPrices: [],
       },
       International: {
         promoCode: 'DDPFMINT80',
@@ -110,7 +104,6 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
-        planPrices: [],
       },
       Canada: {
         promoCode: 'DDPFMINT80',
@@ -135,7 +128,6 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
-        planPrices: [],
       },
       NZDCountries: {
         promoCode: 'DDPFMINT80',
@@ -160,7 +152,6 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
-        planPrices: [],
       },
       EURCountries: {
         promoCode: 'DDPFMINT80',
@@ -185,7 +176,6 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
-        planPrices: [],
       },
       AUDCountries: {
         promoCode: 'DDPFMINT80',
@@ -210,9 +200,7 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
-        planPrices: [],
       },
-
     },
   },
   {
@@ -244,7 +232,6 @@ const Sales: Sale[] = [
             description: 'The Premium App and the daily edition iPad app of the UK newspaper in one pack, plus ad-free reading on all your devices',
           },
         },
-        planPrices: [],
       },
     },
   },
@@ -331,11 +318,6 @@ function getIntcmp(
   return intcmp || defaultIntcmp;
 }
 
-function getPlanPrices(product: SubscriptionProduct, countryGroupId: CountryGroupId): PlanPrice[] {
-  const sale = getActiveFlashSales(product, countryGroupId)[0];
-  return sale && sale.saleDetails[countryGroupId].planPrices;
-}
-
 function getEndTime(product: SubscriptionProduct, countryGroupId: CountryGroupId) {
   const sale = getActiveFlashSales(product, countryGroupId)[0];
   return sale && sale.endTime;
@@ -410,7 +392,6 @@ export {
   getEndTime,
   getSaleCopy,
   getFormattedFlashSalePrice,
-  getPlanPrices,
   getDiscount,
   getDuration,
   getTimeTravelDaysOverride,

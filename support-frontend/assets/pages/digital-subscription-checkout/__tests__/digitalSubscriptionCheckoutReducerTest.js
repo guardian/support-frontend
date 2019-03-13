@@ -6,7 +6,7 @@ import { initReducer, type Stage } from '../digitalSubscriptionCheckoutReducer';
 import { setStage, setFormErrors } from '../digitalSubscriptionCheckoutActions';
 
 jest.mock('ophan', () => {});
-
+jest.mock('font-loader', () => () => ({}));
 // ----- Tests ----- //
 
 describe('Digital Subscription Checkout Reducer', () => {

@@ -172,7 +172,7 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   }
   return {
     heading: 'Digital Pack',
-    subHeading: 'Award-winning, independent journalism, ad-free on all devices',
+    subHeading: 'The premium Guardian experience, ad-free on all your devices',
   };
 }
 
@@ -180,9 +180,9 @@ const SaleHeader = () => (
   <ProductPagehero
     appearance="campaign"
     overheading="Digital Pack subscriptions"
-    heading="The Guardian, ad-free on all of your devices"
+    heading="The premium Guardian experience, ad-free on all your devices"
     modifierClasses={['digital-campaign']}
-    content={<AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">Start your 14 day free trial</AnchorButton>}
+    content={<AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
   >
 
