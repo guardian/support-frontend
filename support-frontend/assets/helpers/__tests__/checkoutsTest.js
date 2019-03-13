@@ -3,6 +3,7 @@
 // ----- Imports ----- //
 
 import { getValidPaymentMethods, getPaymentMethodToSelect } from '../checkouts';
+import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 // ----- Tests ----- //
 
@@ -40,8 +41,8 @@ describe('checkouts', () => {
     it('should return correct values for Monthly Recurring UK when switches are all on', () => {
       const contributionType = 'MONTHLY';
       const countryId = 'GB';
-      expect(getValidPaymentMethods(contributionType, allSwitchesOn, countryId)).toEqual(['DirectDebit', 'Stripe', 'PayPal']);
-      expect(getPaymentMethodToSelect(contributionType, allSwitchesOn, countryId)).toEqual('DirectDebit');
+      expect(getValidPaymentMethods(contributionType, allSwitchesOn, countryId)).toEqual([DirectDebit, Stripe, PayPal]);
+      expect(getPaymentMethodToSelect(contributionType, allSwitchesOn, countryId)).toEqual(DirectDebit);
 
     });
 
@@ -57,8 +58,8 @@ describe('checkouts', () => {
       const contributionType = 'ONE_OFF';
       const justStripeOn = { ...allSwitchesOff, oneOffPaymentMethods: { ...allSwitchesOff.oneOffPaymentMethods, stripe: 'On' } };
       const countryId = 'US';
-      expect(getValidPaymentMethods(contributionType, justStripeOn, countryId)).toEqual(['Stripe']);
-      expect(getPaymentMethodToSelect(contributionType, justStripeOn, countryId)).toEqual('Stripe');
+      expect(getValidPaymentMethods(contributionType, justStripeOn, countryId)).toEqual([Stripe]);
+      expect(getPaymentMethodToSelect(contributionType, justStripeOn, countryId)).toEqual(Stripe);
 
     });
 

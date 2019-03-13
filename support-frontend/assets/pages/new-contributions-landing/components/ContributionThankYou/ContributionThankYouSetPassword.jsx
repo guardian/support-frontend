@@ -4,10 +4,11 @@
 
 import { type Dispatch } from 'redux';
 import React from 'react';
-import type { PaymentMethod } from 'helpers/contributions';
 import { connect } from 'react-redux';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
 import SetPasswordForm from '../SetPasswordForm';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -40,7 +41,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Render ----- //
 
 function ContributionThankYouSetPassword(props: PropTypes) {
-  if (props.paymentMethod === 'DirectDebit' && !props.hasSeenDirectDebitThankYouCopy) {
+  if (props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy) {
     props.setHasSeenDirectDebitThankYouCopy();
     return (
       <div className="set-password__content">

@@ -9,7 +9,6 @@ import { type ThirdPartyPaymentLibrary, getPaymentLabel, getValidPaymentMethods 
 import { type Switches } from 'helpers/settings';
 import {
   type ContributionType,
-  type PaymentMethod,
   type ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -23,6 +22,8 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 
 import { type State } from '../contributionsLandingReducer';
 import { type Action, updatePaymentMethod, setThirdPartyPaymentLibrary } from '../contributionsLandingActions';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -60,9 +61,9 @@ const mapDispatchToProps = {
 
 function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
   switch (paymentMethod) {
-    case 'PayPal':
+    case PayPal:
       return <SvgPayPal />;
-    case 'DirectDebit':
+    case DirectDebit:
       return <SvgDirectDebitSymbol />;
     default:
       return <SvgNewCreditCard />;

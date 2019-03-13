@@ -21,7 +21,7 @@ import {
   getValidPaymentMethods,
   type ThirdPartyPaymentLibrary,
 } from 'helpers/checkouts';
-import { type ContributionType, type PaymentMethod } from 'helpers/contributions';
+import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
@@ -35,6 +35,8 @@ import {
   updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { Stripe } from 'helpers/paymentMethods';
 
 // ----- Functions ----- //
 
@@ -89,7 +91,7 @@ function initialiseStripeCheckout(
 
 
 function initialisePaymentMethods(state: State, dispatch: Function) {
-  const { countryId, currencyId } = state.common.internationalisation;
+  const { countryId, currencyId, countryGroupId } = state.common.internationalisation;
   const { switches } = state.common.settings;
   const { isTestUser } = state.page.user;
 
@@ -98,11 +100,13 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation));
   };
 
+  const contributionTypes = getValidContributionTypes(countryGroupId);
+
   if (getQueryParameter('stripe-checkout-js') !== 'no') {
     loadStripe().then(() => {
-      ['ONE_OFF', 'ANNUAL', 'MONTHLY'].forEach((contribType) => {
+      contributionTypes.forEach((contribType) => {
         const validPayments = getValidPaymentMethods(contribType, switches, countryId);
-        if (validPayments.includes('Stripe')) {
+        if (validPayments.includes(Stripe)) {
           initialiseStripeCheckout(
             onPaymentAuthorisation,
             contribType,
@@ -115,7 +119,10 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     });
   }
 
-  if (getQueryParameter('paypal-js') !== 'no') {
+  const recurringContributionsAvailable = contributionTypes.includes('MONTHLY')
+    || contributionTypes.includes('ANNUAL');
+
+  if (getQueryParameter('paypal-js') !== 'no' && recurringContributionsAvailable) {
     loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
   }
 }

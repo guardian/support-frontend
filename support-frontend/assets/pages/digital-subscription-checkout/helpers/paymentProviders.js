@@ -20,6 +20,7 @@ import { getQueryParameter } from 'helpers/url';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
 import { type State } from '../digitalSubscriptionCheckoutReducer';
 import { setSubmissionError, setFormSubmitted, type Action, setStage } from '../digitalSubscriptionCheckoutActions';
+import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
   const { currencyId, countryId } = state.common.internationalisation;
@@ -121,13 +122,13 @@ function showPaymentMethod(
   const { paymentMethod } = state.page.checkout;
 
   switch (paymentMethod) {
-    case 'Stripe':
+    case Stripe:
       showStripe(dispatch, state);
       break;
-    case 'DirectDebit':
+    case DirectDebit:
       dispatch(openDirectDebitPopUp());
       break;
-    case 'PayPal':
+    case PayPal:
       // PayPal is more complicated and is handled differently, see PayPalExpressButton component
       break;
     case null:
