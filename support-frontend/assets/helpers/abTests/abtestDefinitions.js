@@ -4,25 +4,25 @@ import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './ann
 
 // ----- Tests ----- //
 
+
+export type EditorialiseAmountsVariant = 'control' | 'averageAmount' | 'monthlyBreakdownAnnual' | 'weeklyBreakdownAnnual';
+
 export const tests: Tests = {
 
-  annualContributionsRoundFour: {
-    type: 'AMOUNTS',
+  editorialiseAmounts: {
+    type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'lower',
-        amountsRegions: annualAmountsLower,
+        id: 'averageAmount',
       },
       {
-        id: 'five',
-        amountsRegions: annualAmountsFive,
+        id: 'monthlyBreakdownAnnual',
       },
       {
-        id: 'other',
-        amountsRegions: annualAmountsOther,
+        id: 'weeklyBreakdownAnnual',
       },
     ],
     audiences: {
@@ -36,3 +36,4 @@ export const tests: Tests = {
     seed: 3,
   },
 };
+

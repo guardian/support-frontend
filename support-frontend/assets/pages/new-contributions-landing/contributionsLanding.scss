@@ -652,17 +652,6 @@ form {
 
 .form__radio-group--pills .form__radio-group-item + .form__radio-group-item {
   margin-left: 10px;
-
-  // HACK START - TO BE REMOVED: when annualContributionsRoundFour experiment ends
-  // Make sure last amount pill has the right margin when it moves down a line
-  &:nth-child(6){
-    margin: 10px 10px 0 0;
-
-    @include mq($from: 372px) { // custom breakpoint for hack
-      margin: 0 0 0 10px;
-    }
-  }
-  // HACK END
 }
 
 .form__radio-group--pills .form__radio-group-input + .form__radio-group-label {

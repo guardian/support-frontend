@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "webpack-bundle-analyzer": "^3.0.4"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.94.0"
   }
 }
