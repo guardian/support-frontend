@@ -33,7 +33,11 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
   def recordPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
     for {
       alreadyProcessed <- isPaymentAlreadyProcessed(googleRecordPayment)
-      processOutcome <- handleAlreadyProcessed(alreadyProcessed, googleRecordPayment)
+      processOutcome <- if (alreadyProcessed) {
+        handleAlreadyProcessedPayment(googleRecordPayment)
+      } else {
+        handleFirstInstanceOfPayment(googleRecordPayment)
+      }
     } yield processOutcome
   }
 
@@ -45,15 +49,11 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     }
   }
 
-  private def handleAlreadyProcessed(boolean: Boolean, googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
-    if (boolean) {
-      logger.error(s"Received a duplicate payment id for payment : $googleRecordPayment")
-      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
-      EitherT.leftT[Future, Unit](BackendError.fromSubscribeWithGoogleError(
-        SubscribeWithGoogleError(s"Received a duplicate payment id for payment : $googleRecordPayment")))
-    } else {
-      handleFirstInstanceOfPayment(googleRecordPayment)
-    }
+  private def handleAlreadyProcessedPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
+    logger.error(s"Received a duplicate payment id for payment : $googleRecordPayment")
+    cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+    EitherT.leftT[Future, Unit](BackendError.fromSubscribeWithGoogleError(
+      SubscribeWithGoogleError(s"Received a duplicate payment id for payment : $googleRecordPayment")))
   }
 
   private def handleFirstInstanceOfPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
