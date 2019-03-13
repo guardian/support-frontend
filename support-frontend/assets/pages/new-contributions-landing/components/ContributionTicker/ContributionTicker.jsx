@@ -108,6 +108,15 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
             </div>
           </div>
         </div>
+        <div className="contributions-landing-ticker__over-goal">
+          <div className="contributions-landing-ticker__thankyou">
+            We‘ve met our goal — thank you
+          </div>
+          <div className="contributions-landing-ticker__goal">
+            <div className="contributions-landing-ticker__count">${Math.floor(this.state.goal).toLocaleString()}</div>
+            <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">contributed</div>
+          </div>
+        </div>
         <div className="contributions-landing-ticker__progress-bar">
           <div className="contributions-landing-ticker__progress">
             <div
