@@ -344,7 +344,7 @@ function getLegacyPaperCheckout(
     nativeAbParticipations,
     optimizeExperiments,
     promoCode,
-  })([subsUrl, 'checkout', fulfilmentPart, productOption.toLowerCase()].join('/'));
+  })([subsUrl, 'checkout', `${fulfilmentPart}-${productOption.toLowerCase()}`].join('/'));
 }
 
 
