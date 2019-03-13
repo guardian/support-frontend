@@ -78,7 +78,7 @@ const content = (
         </Footer>}
     >
 
-      <SaleHeader />
+      <SaleHeader countryGroupId={countryGroupId} />
 
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />
