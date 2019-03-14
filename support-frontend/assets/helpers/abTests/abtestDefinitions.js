@@ -4,7 +4,7 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 
 
-export type EditorialiseAmountsVariant = 'control' | 'averageAmount' | 'monthlyBreakdownAnnual' | 'weeklyBreakdownAnnual';
+export type EditorialiseAmountsVariant = 'control' | 'averageAnnualAmount' | 'monthlyBreakdownAnnual' | 'weeklyBreakdownAnnual';
 
 export const tests: Tests = {
 
@@ -15,7 +15,7 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'averageAmount',
+        id: 'averageAnnualAmount',
       },
       {
         id: 'monthlyBreakdownAnnual',

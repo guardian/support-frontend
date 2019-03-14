@@ -111,68 +111,36 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
 const localisedAverageAmountSentence: {
   [CountryGroupId]: {
     amountSentence: string,
-    averageAmount: {
-      ONE_OFF: number,
-      MONTHLY: number,
-      ANNUAL: number
-    },
+    averageAnnualAmount: number,
   }
 } = {
   GBPCountries: {
     amountSentence: 'In the UK, the',
-    averageAmount: {
-      ONE_OFF: 19.04,
-      MONTHLY: 4.22,
-      ANNUAL: 50.37,
-    },
+    averageAnnualAmount: 50.37,
   },
   UnitedStates: {
     amountSentence: 'In the US, the',
-    averageAmount: {
-      ONE_OFF: 26.09,
-      MONTHLY: 9.45,
-      ANNUAL: 50.16,
-    },
+    averageAnnualAmount: 50.16,
   },
   AUDCountries: {
     amountSentence: 'In Australia, the',
-    averageAmount: {
-      ONE_OFF: 42.32,
-      MONTHLY: 13.18,
-      ANNUAL: 82.65,
-    },
+    averageAnnualAmount: 82.65,
   },
   EURCountries: {
     amountSentence: 'In Europe, the',
-    averageAmount: {
-      ONE_OFF: 23.56,
-      MONTHLY: 7.26,
-      ANNUAL: 52.92,
-    },
+    averageAnnualAmount: 52.92,
   },
   NZDCountries: {
     amountSentence: 'In New Zealand, the',
-    averageAmount: {
-      ONE_OFF: 35.88,
-      MONTHLY: 11.62,
-      ANNUAL: 58.51,
-    },
+    averageAnnualAmount: 58.51,
   },
   Canada: {
     amountSentence: 'In Canada, the',
-    averageAmount: {
-      ONE_OFF: 31.92,
-      MONTHLY: 8.85,
-      ANNUAL: 62.68,
-    },
+    averageAnnualAmount: 62.68,
   },
   International: {
     amountSentence: 'The',
-    averageAmount: {
-      ONE_OFF: 27.53,
-      MONTHLY: 8.40,
-      ANNUAL: 61.78,
-    },
+    averageAnnualAmount:  61.78,
   },
 };
 
@@ -182,18 +150,10 @@ function averageAmountVariantCopy(
   contributionType: ContributionType,
   currencyString: string,
 ) {
-  const contributionTypeSpecificCopy: {
-    [ContributionType]: string
-  } = {
-    ONE_OFF: '',
-    MONTHLY: ' each month',
-    ANNUAL: ' each year',
-  };
   const localAverageAmountInfo = localisedAverageAmountSentence[countryGroupId];
-  const localAverageAmount = Math.round(localAverageAmountInfo.averageAmount[contributionType]);
+  const localAverageAmount = Math.round(localAverageAmountInfo.averageAnnualAmount);
   const localAverageAmountSentence = localAverageAmountInfo.amountSentence;
-  const contributionTypeCopy = contributionTypeSpecificCopy[contributionType];
-  return `Please select the amount you'd like to contribute${contributionTypeCopy}. ${localAverageAmountSentence} average choice is ${currencyString}${localAverageAmount}.`;
+  return `Please select the amount you'd like to contribute each year. ${localAverageAmountSentence} average choice is ${currencyString}${localAverageAmount}.`;
 }
 
 const getEditorialisedAmountsCopy = (
@@ -210,7 +170,7 @@ const getEditorialisedAmountsCopy = (
     return '';
   }
 
-  if (editorialiseAmountsVariant === 'averageAmount' && contributionType === 'ANNUAL') {
+  if (editorialiseAmountsVariant === 'averageAnnualAmount' && contributionType === 'ANNUAL') {
     return averageAmountVariantCopy(countryGroupId, contributionType, currencyString);
   }
 
