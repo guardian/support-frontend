@@ -172,17 +172,13 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
       if (promoteGuardianWeekly) {
         return products.GuardianWeekly;
       }
-      if (countryGroupId === GBPCountries && flashSaleIsActive('DigitalPack', GBPCountries)) {
+      if (flashSaleIsActive('DigitalPack', countryGroupId)) {
         return products.DigitalPack;
       }
       if (countryGroupId === GBPCountries) {
         return products.Paper;
       }
-      if (countryGroupId !== GBPCountries && flashSaleIsActive('DigitalPack', countryGroupId)) {
-        return products.DigitalPack;
-      }
       return products.GuardianWeekly;
-
   }
 };
 
