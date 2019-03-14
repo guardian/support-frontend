@@ -153,7 +153,7 @@ function averageAmountVariantCopy(
   const localAverageAmountInfo = localisedAverageAmountSentence[countryGroupId];
   const localAverageAmount = Math.round(localAverageAmountInfo.averageAnnualAmount);
   const localAverageAmountSentence = localAverageAmountInfo.amountSentence;
-  return `Please select the amount you'd like to contribute each year. ${localAverageAmountSentence} average choice is ${currencyString}${localAverageAmount}.`;
+  return `Please select the amount you'd like to contribute each year. ${localAverageAmountSentence} average is ${currencyString}${localAverageAmount}.`;
 }
 
 const getEditorialisedAmountsCopy = (
