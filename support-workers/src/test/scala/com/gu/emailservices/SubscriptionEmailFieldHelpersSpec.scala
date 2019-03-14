@@ -37,11 +37,10 @@ class SubscriptionEmailFieldHelpersSpec extends FlatSpec with Matchers {
     assert(SubscriptionEmailFieldHelpers.describe(PaymentSchedule(schedule), Monthly, EUR) == expected)
   }
 
-  "describe" should "explain a payment schedule correctly if the first year is discounted" in {
+  "describe" should "explain a payment schedule truthfully if we only get information about the first payment" in {
     val discountedDigitalPackPayment = Payment(referenceDate, 100.90)
-    val standardDigitalPackPayment = Payment(referenceDate.plusYears(1), 119.90)
-    val schedule = PaymentSchedule(List(discountedDigitalPackPayment, standardDigitalPackPayment))
-    val expected = "£100.90 for 1 year, then £119.90 every year"
+    val schedule = PaymentSchedule(List(discountedDigitalPackPayment))
+    val expected = "£100.90 for the first year"
     assert(SubscriptionEmailFieldHelpers.describe(schedule, Annual, GBP) == expected)
   }
 
