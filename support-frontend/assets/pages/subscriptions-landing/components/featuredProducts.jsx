@@ -160,6 +160,7 @@ const getProducts = (
 
 const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Product => {
   const products = getProducts(subsLinks, countryGroupId);
+  const promoteGuardianWeekly = true;
   switch (getQueryParameter('ab_product')) {
     case 'DigitalPack':
       return products.DigitalPack;
@@ -168,21 +169,20 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
     case 'GuardianWeekly':
       return products.GuardianWeekly;
     default:
-      const promoteGuardianWeekly = true;
-      if(promoteGuardianWeekly) {
-        return products.GuardianWeekly
-      } else {
-        if (countryGroupId === GBPCountries && flashSaleIsActive('DigitalPack', GBPCountries)) {
-          return products.DigitalPack;
-        }
-        if (countryGroupId === GBPCountries) {
-          return products.Paper;
-        }
-        if (countryGroupId !== GBPCountries && flashSaleIsActive('DigitalPack', countryGroupId)) {
-          return products.DigitalPack;
-        }
+      if (promoteGuardianWeekly) {
         return products.GuardianWeekly;
       }
+      if (countryGroupId === GBPCountries && flashSaleIsActive('DigitalPack', GBPCountries)) {
+        return products.DigitalPack;
+      }
+      if (countryGroupId === GBPCountries) {
+        return products.Paper;
+      }
+      if (countryGroupId !== GBPCountries && flashSaleIsActive('DigitalPack', countryGroupId)) {
+        return products.DigitalPack;
+      }
+      return products.GuardianWeekly;
+
   }
 };
 
