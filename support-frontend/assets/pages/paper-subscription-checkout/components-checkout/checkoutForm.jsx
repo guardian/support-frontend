@@ -188,7 +188,6 @@ function CheckoutForm(props: PropTypes) {
                     onChange={() => props.setbillingAddressIsSame(false)}
                   />
                 </Fieldset>
-                {errorState}
               </Rows>
             </FormSection>
             {

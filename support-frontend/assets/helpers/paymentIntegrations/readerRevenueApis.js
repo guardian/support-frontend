@@ -157,8 +157,10 @@ function checkRegularStatus(
         trackConversion(participations, routes.recurringContribPending);
         return PaymentSuccess;
 
-      default:
-        return { paymentStatus: 'failure', error: json.failureReason };
+      default: {
+        const failureReason = json.failureReason ? json.failureReason : 'unknown';
+        return { paymentStatus: 'failure', error: failureReason };
+      }
     }
   };
 
