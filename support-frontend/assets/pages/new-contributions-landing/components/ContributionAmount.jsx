@@ -175,11 +175,11 @@ const getEditorialisedAmountsCopy = (
   }
 
   if (editorialiseAmountsVariant === 'monthlyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 12.00).toFixed(2)} each month.`;
+    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 12.00).toFixed(2)} each month`;
   }
 
   if (editorialiseAmountsVariant === 'weeklyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 52.00).toFixed(2)} each week.`;
+    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 52.00).toFixed(2)} each week`;
   }
 
   return '';
