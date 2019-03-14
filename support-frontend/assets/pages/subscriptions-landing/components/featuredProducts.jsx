@@ -160,7 +160,6 @@ const getProducts = (
 
 const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Product => {
   const products = getProducts(subsLinks, countryGroupId);
-  const promoteGuardianWeekly = true;
   switch (getQueryParameter('ab_product')) {
     case 'DigitalPack':
       return products.DigitalPack;
@@ -169,14 +168,8 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
     case 'GuardianWeekly':
       return products.GuardianWeekly;
     default:
-      if (promoteGuardianWeekly) {
-        return products.GuardianWeekly;
-      }
       if (flashSaleIsActive('DigitalPack', countryGroupId)) {
         return products.DigitalPack;
-      }
-      if (countryGroupId === GBPCountries) {
-        return products.Paper;
       }
       return products.GuardianWeekly;
   }
