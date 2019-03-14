@@ -410,7 +410,11 @@
 
   .component-flash-sale-countdown-hero {
     position: relative;
-    margin-left: 450px;
+    margin-bottom: 50px;
+    @include mq($from: tablet) {
+      margin-bottom: 0px;
+      margin-left: 450px;
+    }
   }
 }
 
