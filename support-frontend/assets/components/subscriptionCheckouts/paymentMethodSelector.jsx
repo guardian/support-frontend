@@ -2,10 +2,8 @@
 
 import React from 'react';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
-import Text from 'components/text/text';
 import Rows from 'components/base/rows';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { getQueryParameter } from 'helpers/url';
@@ -13,6 +11,9 @@ import { type Option } from 'helpers/types/option';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
+import SvgNewCreditCard from 'components/svgs/newCreditCard';
+import SvgPayPal from 'components/svgs/paypal';
 
 type PropTypes = {|
   countrySupportsDirectDebit: boolean,
@@ -34,19 +35,21 @@ function PaymentMethodSelector(props: PropTypes) {
   const multiplePaymentMethodsEnabled = payPalEnabled || props.countrySupportsDirectDebit;
 
   return (
-    <FormSection title={multiplePaymentMethodsEnabled ? 'How would you like to pay?' : null}>
+    <>
       <Rows gap="large">
         {multiplePaymentMethodsEnabled &&
         <div>
           <Fieldset legend="How would you like to pay?">
             {props.countrySupportsDirectDebit &&
             <RadioInput
+              image={<SvgDirectDebitSymbol />}
               text="Direct debit"
               name="paymentMethod"
               checked={props.paymentMethod === DirectDebit}
               onChange={() => props.setPaymentMethod(DirectDebit)}
             />}
             <RadioInput
+              image={<SvgNewCreditCard />}
               text="Credit/Debit card"
               name="paymentMethod"
               checked={props.paymentMethod === Stripe}
@@ -54,6 +57,7 @@ function PaymentMethodSelector(props: PropTypes) {
             />
             {payPalEnabled &&
             <RadioInput
+              image={<SvgPayPal />}
               text="PayPal"
               name="paymentMethod"
               checked={props.paymentMethod === PayPal}
@@ -62,27 +66,13 @@ function PaymentMethodSelector(props: PropTypes) {
           </Fieldset>
         </div>
         }
-        <div>
-          <Text>
-            <p>
-              <strong>Money Back Guarantee.</strong>
-              If you wish to cancel your subscription, we will send you
-              a refund of the unexpired part of your subscription.
-            </p>
-            <p>
-              <strong>Cancel any time you want.</strong>
-              There is no set time on your agreement so you can stop
-              your subscription anytime
-            </p>
-          </Text>
-        </div>
       </Rows>
       <DirectDebitPopUpForm
         onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
           props.onPaymentAuthorised(pa);
         }}
       />
-    </FormSection>
+    </>
   );
 }
 
