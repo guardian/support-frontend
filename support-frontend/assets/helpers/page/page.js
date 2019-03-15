@@ -3,7 +3,8 @@
 // ----- Imports ----- //
 
 import 'ophan';
-import loadFonts from '@guardian/font-loader';
+
+import loadFonts from 'helpers/fontLoader';
 import type { Store } from 'redux';
 import { applyMiddleware, combineReducers, compose, createStore, type Reducer } from 'redux';
 import thunkMiddleware from 'redux-thunk';

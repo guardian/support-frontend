@@ -45,8 +45,7 @@
       "assets"
     ],
     "moduleNameMapper": {
-      "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support",
-      "font-loader(.*)": "<rootDir>/node_modules/@guardian/font-loader/index.js"
+      "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
     },
     "verbose": true,
     "testEnvironment": "./jestEnvironment"
@@ -88,7 +87,6 @@
     "@storybook/addon-options": "^4.1.11",
     "@storybook/addon-storysource": "^4.1.11",
     "@storybook/react": "^4.1.9",
-    "@guardian/font-loader": "^1.0.0",
     "autoprefixer": "^8.6.1",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.1",
