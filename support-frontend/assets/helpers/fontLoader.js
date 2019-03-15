@@ -26,7 +26,11 @@ const fetchFonts = (window: Object, document: Document): void => {
         e.source === iframe.contentWindow
       ) {
         if (Array.isArray(e.data.fonts)) {
-          e.data.fonts.forEach(useFont);
+          e.data.fonts.forEach((font) => {
+            if (font instanceof Object) {
+              useFont(font);
+            }
+          });
         }
       }
     });
