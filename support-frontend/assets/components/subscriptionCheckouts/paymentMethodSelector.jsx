@@ -6,7 +6,6 @@ import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import Rows from 'components/base/rows';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import { getQueryParameter } from 'helpers/url';
 import { type Option } from 'helpers/types/option';
 import type { OptimizeExperiment } from 'helpers/optimize/optimize';
 import type { PaymentMethod } from 'helpers/paymentMethods';
