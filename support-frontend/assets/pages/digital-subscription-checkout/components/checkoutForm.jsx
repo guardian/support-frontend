@@ -153,6 +153,7 @@ function CheckoutForm(props: PropTypes) {
 
   const payPalEnabled = isPayPalEnabled(props.optimizeExperiments);
   const multiplePaymentMethodsEnabled = payPalEnabled || props.countrySupportsDirectDebit;
+
   return (
     <Content modifierClasses={['your-details']}>
       <Outset>
@@ -261,7 +262,8 @@ function CheckoutForm(props: PropTypes) {
                 paymentMethod={props.paymentMethod}
                 setPaymentMethod={props.setPaymentMethod}
                 onPaymentAuthorised={props.onPaymentAuthorised}
-                optimizeExperiments={props.optimizeExperiments}
+                payPalEnabled={payPalEnabled}
+                multiplePaymentMethodsEnabled={multiplePaymentMethodsEnabled}
               />
               {errorState}
               <SubscriptionSubmitButtons
