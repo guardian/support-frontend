@@ -42,6 +42,9 @@ import {
 } from './components-checkout/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { getVoucherDays, getDeliveryDays, formatMachineDate } from './helpers/deliveryDays';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+
 
 // ----- Types ----- //
 
@@ -228,20 +231,25 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const { productPrices } = window.guardian;
 
+  const product = getInitialProduct(productInUrl, fulfillmentInUrl);
+  const days: Date[] = product.fulfilmentOption === HomeDelivery
+    ? getDeliveryDays(Date.now(), product.productOption)
+    : getVoucherDays(Date.now(), product.productOption);
+
   const initialState = {
     stage: 'checkout',
     title: null,
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    startDate: null,
+    startDate: formatMachineDate(days[0]) || null,
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? DirectDebit : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
     isTestUser: isTestUser(),
-    ...getInitialProduct(productInUrl, fulfillmentInUrl),
+    ...product,
     productPrices,
     billingAddressIsSame: true,
   };
