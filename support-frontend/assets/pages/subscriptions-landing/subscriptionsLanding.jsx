@@ -13,6 +13,7 @@ import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import FeaturedProductAb from './components/featuredProductAb';
+import ConsentBanner from '../../components/consentBanner/consentBanner';
 
 // ----- Redux Store ----- //
 
@@ -31,6 +32,7 @@ const content = (
         headingSize={3}
       />
       <SubscriptionsByCountryGroup headingSize={3} appMedium="subscribe_landing_page" />
+      <ConsentBanner />
     </Page>
   </Provider>
 );

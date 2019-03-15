@@ -1,0 +1,219 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+$btn-height: ($gu-v-spacing*3.5);
+
+.consent-banner--first-pv-consent {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+
+  padding: ($gu-v-spacing / 2) 0 $gu-v-spacing * 2;
+  background: gu-colour(neutral-20);
+
+  a {
+    color: currentColor;
+  }
+
+  .consent-banner--double-banner & {
+    padding: ($gu-v-spacing / 2) 0;
+
+    @include mq(tablet) {
+      padding: $gu-v-spacing 0;
+    }
+  }
+
+  .u-underline {
+    border-color: rgba(255, 255, 255, .5);
+
+    &:hover {
+      border-color: #ffffff;
+    }
+  }
+
+  @include mq(leftCol) {
+    padding-bottom: $gu-v-spacing * 4;
+  }
+
+  .consent-banner__roundel {
+    position: absolute;
+    padding: 0;
+    width: auto;
+    height: auto;
+    display: none;
+    margin-top: 8px;
+
+    .inline-icon {
+      fill: gu-colour(neutral-100);
+
+      path:last-child {
+        fill: gu-colour(neutral-20);;
+      }
+    }
+
+    svg {
+      width: 36px;
+      height: 36px;
+      display: block;
+    }
+
+    @include mq(leftCol) {
+      top: $gu-v-spacing / 2;
+      left: $gu-h-spacing;
+      right: auto;
+      bottom: auto;
+      display: block;
+    }
+  }
+
+  .consent-banner__inner {
+    padding: 0;
+  }
+
+  .consent-banner__copy {
+    display: block;
+    margin: 0 $gu-h-spacing / 2;
+
+    .consent-banner--double-banner & {
+      padding: 0;
+      @include mq(tablet) {
+        margin: 0 $gu-h-spacing;
+      }
+
+      @include mq(desktop) {
+        display: block;
+      }
+    }
+
+    @include mq(leftCol) {
+      padding-left: gu-span(2) + $gu-h-spacing * 1.5;
+    }
+    @include mq(wide) {
+      padding-left: gu-span(3) + $gu-h-spacing * 1.5;
+    }
+  }
+}
+
+.consent-banner--first-pv-consent__button {
+  font-family: $gu-text-sans-web;
+  border-radius: 1000px;
+  height: $btn-height;
+  background: gu-colour(highlight-main);
+  color: gu-colour(brightness-7);
+
+  .consent-banner--double-banner & {
+    background: transparent;
+    color: gu-colour(neutral-100);
+    border: 1px solid rgba(gu-colour(neutral-100), .3);
+    transition: background-color .3s ease-in-out;
+    height: 36px;
+  }
+
+  padding: 0 $gu-h-spacing 0 $btn-height;
+  display: block;
+  align-items: flex-start;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  border: 0;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:hover {
+    background: darken(gu-colour(highlight-main), 1%);
+  }
+
+  .consent-banner--double-banner &:hover {
+    background: rgba(gu-colour(neutral-100), .08);
+  }
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 3px;
+    bottom: 0;
+    margin: auto;
+    width: $btn-height;
+    height: $btn-height;
+    transform: scale(.5);
+
+    g, path {
+      fill: gu-colour(neutral-7);
+
+      .consent-banner--double-banner & {
+        fill: #ffffff;
+      }
+    }
+  }
+}
+
+.consent-banner--first-pv-consent__block {
+  max-width: gu-span(8);
+
+  &.consent-banner--first-pv-consent__block--head {
+    font-family: $gu-headline;
+    font-size: 28px;
+    @include mq(leftCol) {
+      font-size: 36px;
+    }
+    font-weight: bold;
+    padding-bottom: $gu-v-spacing;
+    color: gu-colour(neutral-100);
+
+    .consent-banner--double-banner & {
+      display: none;
+    }
+  }
+
+  &.consent-banner--first-pv-consent__block--intro {
+    //        @include fs-bodyCopy(2);
+    font-size: 17px;
+    line-height: 24px;
+    color: gu-colour(neutral-100);
+    //.consent-banner--double-banner & {
+    //    @include fs-textSans(2);
+    //    @include mq(tablet) {
+    //        @include fs-textSans(5);
+    //    }
+    //
+    //    @include banner-copy-alignment;
+    //}
+  }
+
+  .consent-banner--double-banner & p {
+    display: inline;
+  }
+}
+
+.consent-banner--first-pv-consent__actions {
+  //@include fs-textSans(5);
+  font-family: $gu-text-sans-web;
+  margin-top: $gu-v-spacing * 2;
+  font-weight: bold;
+
+  .consent-banner--double-banner & {
+    margin-top: $gu-v-spacing;
+
+    @include mq(desktop) {
+      display: inline-block;
+      vertical-align: bottom;
+    }
+  }
+
+  .consent-banner--first-pv-consent__link {
+    margin-left: $gu-v-spacing;
+    color: gu-colour(neutral-100);
+  }
+
+  .consent-banner--first-pv-consent__button,
+  .consent-banner--first-pv-consent__link {
+    display: inline-block;
+    vertical-align: baseline;
+    font-weight: bold;
+    font-size: 16px;
+
+    .consent-banner--double-banner & {
+      font-weight: bold;
+      vertical-align: middle;
+    }
+  }
+}
