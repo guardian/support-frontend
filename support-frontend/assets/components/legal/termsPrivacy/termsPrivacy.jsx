@@ -29,7 +29,7 @@ function TermsPrivacy(props: PropTypes) {
       <div className="component-terms-privacy">
         <p className="component-terms-thefrontline">
           By proceeding, you’re agreeing to our <span className="bold">Terms and Conditions</span>.
-          If we hit our goal of $100,000, The Guardian will allocate this amount to its core operations
+          If we hit our goal of $150,000, The Guardian will allocate this amount to its core operations
           which will help fund the completion of the ‘The Frontline: Australia and the climate emergency’ series,
           including editing, reporting, graphics and new commissions. If we fall short of the goal,
           The Guardian will allocate the funds for a scaled back project on climate change.

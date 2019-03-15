@@ -149,8 +149,13 @@ function campaignSpecificDetails() {
             We are living the reality of climate change.
           </p>
           <p>
+            That’s why we need your help to bring our reporting on the climate crisis to light.
+            We asked our readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
+            Your response has been immediate and overwhelming, and thanks to your encouragement we have increased
+            the goal to $150,000.
+          </p>
+          <p>
             <span>
-              We’re asking readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
               With your support, we can cut through the rhetoric and focus the debate on the facts.
               That way everyone can learn about the devastating and immediate
               threats to our country and how best to find a solution.

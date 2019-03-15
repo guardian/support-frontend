@@ -25,7 +25,10 @@ object SubscriptionEmailFieldHelpers {
   def describe(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency): String = {
     val initialPrice = firstPayment(paymentSchedule).amount
     val (paymentsWithInitialPrice, paymentsWithDifferentPrice) = paymentSchedule.payments.partition(_.amount == initialPrice)
-    if (paymentsWithDifferentPrice.isEmpty) {
+    if (paymentSchedule.payments.size == 1) {
+      s"${priceWithCurrency(currency, initialPrice)} for the first ${billingPeriod.noun}"
+    }
+    else if (paymentsWithDifferentPrice.isEmpty) {
       s"${priceWithCurrency(currency, initialPrice)} every ${billingPeriod.noun}"
     } else {
       val introductoryTimespan = {

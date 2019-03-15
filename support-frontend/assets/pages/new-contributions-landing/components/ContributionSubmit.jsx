@@ -12,7 +12,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import type { SelectedAmounts } from 'helpers/contributions';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
-import { setupRecurringPayPalPayment, type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
 import { type State } from '../contributionsLandingReducer';
@@ -33,7 +33,7 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   csrf: CsrfState,
   sendFormSubmitEventForPayPalRecurring: () => void,
-  setupRecurringPayPalPayment: SetupPayPalRequestType,
+  setupRecurringPayPalPayment: Function,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
@@ -72,10 +72,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
     reject: Function,
     currencyId: IsoCurrency,
     csrf: CsrfState,
-    amount: number,
-    billingPeriod: BillingPeriod,
   ) => {
-    dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, amount, billingPeriod));
+    dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf));
   },
 });
 
