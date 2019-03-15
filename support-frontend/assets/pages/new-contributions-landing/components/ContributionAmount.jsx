@@ -140,7 +140,7 @@ const localisedAverageAmountSentence: {
   },
   International: {
     amountSentence: 'The',
-    averageAnnualAmount:  61.78,
+    averageAnnualAmount: 61.78,
   },
 };
 

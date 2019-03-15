@@ -41,7 +41,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { type Action, type FormActionCreators, formActionCreators } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
@@ -109,7 +109,7 @@ function mapDispatchToProps() {
     formIsValid: () => (dispatch: Dispatch<Action>, getState: () => State) => formIsValid(getState()),
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
-    setupRecurringPayPalPayment,
+    setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
     signOut,
   };
 }
