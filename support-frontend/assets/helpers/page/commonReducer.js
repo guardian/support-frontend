@@ -12,7 +12,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Action } from 'helpers/page/commonActions';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
-import type {ThirdPartyTrackingConsent} from '../tracking/thirdPartyTrackingConsent';
+import type { ThirdPartyTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 
 export type Internationalisation = {|
   currencyId: IsoCurrency,

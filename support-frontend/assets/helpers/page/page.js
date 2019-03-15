@@ -31,7 +31,7 @@ import {
   trackAbTests,
   trackNewOptimizeExperiment,
 } from 'helpers/tracking/ophanComponentEventTracking';
-import {getTrackingConsent} from '../tracking/thirdPartyTrackingConsent';
+import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 
 if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
