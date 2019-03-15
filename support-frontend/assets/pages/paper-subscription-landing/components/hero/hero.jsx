@@ -117,7 +117,6 @@ const SaleHeader = () => (
 
       </div>
     </div>
-    <TimerIfActive />
   </ProductPagehero>
 );
 
