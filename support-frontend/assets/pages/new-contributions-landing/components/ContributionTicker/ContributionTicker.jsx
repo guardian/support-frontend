@@ -69,10 +69,10 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
     });
   }
 
-  count = 0;
-  totalSoFar: number;
-  tickerJsonUrl: string;
   onGoalReached: () => void;
+  tickerJsonUrl: string;
+  totalSoFar: number;
+  count = 0;
   filledProgressBar: ?HTMLDivElement;
   increaseCounter = this.increaseCounter.bind(this);
 
