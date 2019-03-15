@@ -10,6 +10,9 @@ import * as storage from 'helpers/storage';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/paymentMethods';
+import { billingPeriodFromContrib, getAmount } from '../contributions';
+import type { Csrf } from '../csrf/csrfReducer';
+import type { State } from '../../pages/new-contributions-landing/contributionsLandingReducer';
 
 export type SetupPayPalRequestType = (
   resolve: string => void,
@@ -49,10 +52,52 @@ function payPalRequestData(bodyObj: Object, csrfToken: string) {
   };
 }
 
+// This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
+// It happens when the user clicks the recurring PayPal button,
+// before the PayPal popup in which they authorise the payment appears.
+// It should probably be called createOneOffPayPalPayment but it's called setupPayment
+// on the backend so pending a far-reaching rename, I'll keep the terminology consistent with the backend.
+const setupRecurringPayPalPayment = (
+  resolve: string => void,
+  reject: Error => void,
+  currency: IsoCurrency,
+  csrf: Csrf,
+) =>
+  (dispatch: Function, getState: () => State): void => {
+    const state = getState();
+    const csrfToken = csrf.token;
+    const { contributionType } = state.page.form;
+    const amount = getAmount(
+      state.page.form.selectedAmounts,
+      state.page.form.formData.otherAmounts,
+      contributionType,
+    );
+    const billingPeriod = billingPeriodFromContrib(contributionType);
+    storage.setSession('selectedPaymentMethod', 'PayPal');
+    const requestBody = {
+      amount,
+      billingPeriod,
+      currency,
+    };
+
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+      .then(response => (response.ok ? response.json() : null))
+      .then((token: { token: string } | null) => {
+        if (token) {
+          resolve(token.token);
+        } else {
+          logException('PayPal token came back blank');
+        }
+      }).catch((err: Error) => {
+        logException(err.message);
+        reject(err);
+      });
+  };
+
 // This is the recurring PayPal Express version of the PayPal checkout.
 // It happens when the user clicks the PayPal button, and before the PayPal popup
 // appears to allow the user to authorise the payment.
-const setupRecurringPayPalPayment = (
+const setupSubscriptionPayPalPayment = (
   resolve: string => void,
   reject: Error => void,
   currency: IsoCurrency,
@@ -187,5 +232,6 @@ export {
   showPayPal,
   loadPayPalRecurring,
   payPalRequestData,
+  setupSubscriptionPayPalPayment,
   setupRecurringPayPalPayment,
 };
