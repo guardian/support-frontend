@@ -45,8 +45,7 @@
       "assets"
     ],
     "moduleNameMapper": {
-      "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support",
-      "font-loader(.*)": "<rootDir>/node_modules/@guardian/font-loader/index.js"
+      "ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support"
     },
     "verbose": true,
     "testEnvironment": "./jestEnvironment"
