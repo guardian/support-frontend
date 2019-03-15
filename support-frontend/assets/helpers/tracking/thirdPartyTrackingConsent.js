@@ -20,9 +20,11 @@ const getTrackingConsent = (): ThirdPartyTrackingConsent => {
   return Unset;
 };
 
-const setTrackingConsent = (optedIn: boolean) => {
-  const cookie = [optedIn ? '1' : '0', Date.now()].join('.');
-  setCookie(ConsentCookieName, cookie, DaysToLive);
+const writeTrackingConsentCookie = (trackingConsent: ThirdPartyTrackingConsent) => {
+  if (trackingConsent !== Unset) {
+    const cookie = [trackingConsent === OptedIn ? '1' : '0', Date.now()].join('.');
+    setCookie(ConsentCookieName, cookie, DaysToLive);
+  }
 };
 
-export { getTrackingConsent, setTrackingConsent, OptedIn, OptedOut, Unset, ConsentCookieName };
+export { getTrackingConsent, writeTrackingConsentCookie, OptedIn, OptedOut, Unset, ConsentCookieName };

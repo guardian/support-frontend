@@ -1,9 +1,38 @@
 // @flow
 import React from 'react';
-import {setTrackingConsent} from '../../helpers/tracking/thirdPartyTrackingConsent';
+import type { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import {
+  OptedIn, Unset,
+} from '../../helpers/tracking/thirdPartyTrackingConsent';
+import {
+  setTrackingConsent,
+} from '../../helpers/page/commonActions';
+import type {ThirdPartyTrackingConsent} from '../../helpers/tracking/thirdPartyTrackingConsent';
 
-export default function ConsentBanner() {
-  return (
+export type PropTypes = {
+  trackingConsent: ThirdPartyTrackingConsent,
+  onAccepted: Function,
+}
+
+function mapStateToProps(state) {
+  return {
+    trackingConsent: state.common.trackingConsent,
+  }
+}
+
+function mapDispatchToProps(dispatch: Dispatch<Action>) {
+  return {
+    onAccepted: () => {
+      dispatch(setTrackingConsent(OptedIn));
+    }
+  }
+}
+
+function ConsentBanner(props: PropTypes) {
+
+  return props.trackingConsent === Unset ?
+  (
     <div className="consent-banner--first-pv-consent">
       <div className="consent-banner__roundel">
         <span
@@ -37,7 +66,7 @@ export default function ConsentBanner() {
         </div>
         <div className="consent-banner--first-pv-consent__actions">
           <button data-link-name="first-pv-consent : agree"
-                  onClick={() => setTrackingConsent(true)}
+                  onClick={props.onAccepted}
                   className="consent-banner--first-pv-consent__button consent-banner--first-pv-consent__button--main js-first-pv-consent-agree">
             <span className="inline-tick inline-icon">
               <svg width="10.79"
@@ -57,7 +86,8 @@ export default function ConsentBanner() {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }
 
 
+export default connect(mapStateToProps, mapDispatchToProps)(ConsentBanner)
