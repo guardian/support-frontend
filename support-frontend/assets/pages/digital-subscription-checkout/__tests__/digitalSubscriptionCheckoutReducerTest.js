@@ -7,7 +7,7 @@ import { setStage, setFormErrors } from '../digitalSubscriptionCheckoutActions';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 jest.mock('ophan', () => {});
-jest.mock('font-loader', () => () => ({}));
+jest.mock('helpers/fontLoader', () => () => ({}));
 // ----- Tests ----- //
 
 describe('Digital Subscription Checkout Reducer', () => {
