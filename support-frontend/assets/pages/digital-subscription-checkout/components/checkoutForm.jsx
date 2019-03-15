@@ -40,7 +40,6 @@ import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { getQueryParameter } from 'helpers/url';
-import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
