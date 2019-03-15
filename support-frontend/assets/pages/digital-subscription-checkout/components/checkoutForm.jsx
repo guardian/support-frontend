@@ -230,6 +230,7 @@ function CheckoutForm(props: PropTypes) {
                 setBillingCountry={props.setBillingCountry}
                 stateProvince={props.stateProvince}
                 setPostcode={props.setPostcode}
+                setStateProvince={props.setStateProvince}
                 formErrors={props.formErrors}
               />
             </FormSection>

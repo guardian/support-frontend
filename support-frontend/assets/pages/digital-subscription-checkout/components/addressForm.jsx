@@ -7,6 +7,7 @@ import { compose } from 'redux';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { isPostcodeOptional } from 'pages/digital-subscription-checkout/helpers/validation';
 import { auStates, caStates, countries, type IsoCountry, usStates } from 'helpers/internationalisation/country';
+import type { Option } from 'helpers/types/option';
 
 // hocs
 import { withLabel } from 'hocs/withLabel';
@@ -24,13 +25,24 @@ const Input1 = compose(asControlled, withError)(InputWithLabel);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
 
-import { type FormFields } from '../digitalSubscriptionCheckoutReducer';
-import { type FormActionCreators } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import { type FormFields, type FormField } from '../digitalSubscriptionCheckoutReducer';
+import { type Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import { type StateProvince } from 'helpers/internationalisation/country';
 
 type PropTypes = {|
-  ...FormFields,
+  addressLine1: string,
+  addressLine2: Option<string>,
+  townCity: string,
+  country: Option<IsoCountry>,
+  postcode: string,
   formErrors: FormError<FormField>[],
-  ...FormActionCreators,
+  stateProvince: Option<StateProvince>,
+  setPostcode: (postcode: string) => Function,
+  setAddressLine1: (addressLine1: string) => Function,
+  setAddressLine2: (addressLine2: string) => Action,
+  setTownCity: (townCity: string) => Function,
+  setBillingCountry: (countryRaw: string) => Function,
+  setStateProvince: (stateProvince: string) => Function
 |};
 
 function statesForCountry(country: Option<IsoCountry>): React$Node {

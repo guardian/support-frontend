@@ -13,6 +13,7 @@ import './radioInput.scss';
 type PropTypes = {
   text: Node,
   appearance: 'normal' | 'group',
+  image?: Node,
 };
 
 // ----- Component ----- //
@@ -33,5 +34,6 @@ function RadioInput({
 
 RadioInput.defaultProps = {
   appearance: 'normal',
+  image: null,
 };
 export { RadioInput };
