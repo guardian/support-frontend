@@ -24,7 +24,7 @@ import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import Content from 'components/content/content';
-import AddressFrom from './addressForm';
+import AddressForm from './addressForm';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
   regularPrice as dpRegularPrice,
@@ -218,7 +218,7 @@ function CheckoutForm(props: PropTypes) {
               />
             </FormSection>
             <FormSection title="Address">
-              <AddressFrom
+              <AddressForm
                 addressLine1={props.addressLine1}
                 addressLine2={props.addressLine2}
                 townCity={props.townCity}
