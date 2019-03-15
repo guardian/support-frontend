@@ -31,6 +31,7 @@ import {
   setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import {ButtonWithRightArrow} from "./ButtonWithRightArrow/ButtonWithRightArrow";
 
 
 // ----- Types ----- //
@@ -172,6 +173,48 @@ function campaignSpecificDetails() {
   return {};
 }
 
+function goalReachedTemplate() {
+  if (isFrontlineCampaign()) {
+    return (
+      <div className="goal-reached">
+        <div className="goal-reached__message">
+          Thank you to everyone who supported ‘The Frontline’.
+          We’re no longer accepting contributions for the series, but you can still support
+          The Guardian’s journalism with a single or recurring contribution
+        </div>
+        <div className="goal-reached__buttons">
+          <ButtonWithRightArrow
+            componentClassName="goal-reached__button"
+            buttonClassName=""
+            accessibilityHintId="accessibility-hint-the-frontline"
+            type="button"
+            buttonCopy="Read ‘The Frontline’ series"
+            onClick={
+              () => {
+                window.location.assign('https://www.theguardian.com/environment/series/the-frontline');
+              }
+            }
+          />
+          <ButtonWithRightArrow
+            componentClassName="goal-reached__button"
+            buttonClassName="goal-reached__button--support"
+            accessibilityHintId="accessibility-hint-support"
+            type="button"
+            buttonCopy="Support The Guardian"
+            onClick={
+              () => {
+                window.location.assign('/contribute');
+              }
+            }
+          />
+        </div>
+      </div>
+    )
+  }
+
+  return null;
+}
+
 function urlSpecificDetails() {
   if (getQueryParameter('ticker') === 'true') {
     return {
@@ -216,19 +259,15 @@ function ContributionFormContainer(props: PropTypes) {
               onGoalReached={props.setTickerGoalReached}
             /> : null
           }
-          {countryGroupDetails.formMessage ?
-            <div className="form-message">{countryGroupDetails.formMessage}</div> : null
-          }
-          {props.tickerGoalReached ?
+          {props.tickerGoalReached ? goalReachedTemplate() :
             <div>
-              Thank you to everyone who supported ‘The Frontline’.
-              We’re no longer accepting contributions for the series, but you can still support
-              The Guardian’s journalism with a single or recurring contribution
+              {countryGroupDetails.formMessage ?
+                <div className="form-message">{countryGroupDetails.formMessage}</div> : null
+              }
+              <NewContributionForm
+                onPaymentAuthorisation={onPaymentAuthorisation}
+              />
             </div>
-            :
-            <NewContributionForm
-              onPaymentAuthorisation={onPaymentAuthorisation}
-            />
           }
         </div>
         <DirectDebitPopUpForm

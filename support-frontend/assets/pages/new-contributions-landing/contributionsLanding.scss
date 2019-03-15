@@ -1173,3 +1173,29 @@ form {
      opacity: 1;
    }
  }
+
+.goal-reached__message {
+  font-style: italic;
+  line-height: 20px;
+  padding: 6px 0 0 0;
+}
+
+.goal-reached__message:after {
+  margin: 6px -10px 0 -10px;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  display: block;
+  content: '';
+}
+
+.goal-reached__buttons {
+  margin-top: 30px;
+}
+
+.goal-reached__button {
+  padding-bottom: 20px;
+}
+
+.goal-reached__button--support {
+  background: gu-colour(highlight-main);
+  border: 1px solid gu-colour(highlight-main);
+}
