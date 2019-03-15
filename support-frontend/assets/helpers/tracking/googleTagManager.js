@@ -7,6 +7,7 @@ import { detect as detectCurrency } from 'helpers/internationalisation/currency'
 import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/abtest';
+import { getTrackingConsent } from './thirdPartyTrackingConsent';
 
 
 // ----- Types ----- //
@@ -143,6 +144,7 @@ function sendData(
       internalCampaignCode: getQueryParameter('INTCMP') || undefined,
       experience: getVariantsAsString(participations),
       paymentRequestApiStatus,
+      thirdPartyTrackingConsent: getTrackingConsent(),
       ecommerce: {
         currencyCode: currency,
         purchase: {
