@@ -95,6 +95,8 @@ function CheckoutForm(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'newspaper' : 'voucher booklet';
+
   return (
     <Content modifierClasses={['your-details']}>
       <Outset>
@@ -211,6 +213,14 @@ function CheckoutForm(props: PropTypes) {
                   );
                 })}
               </FieldsetWithError>
+              <Text>
+                <p>
+                  We will take the first payment on the date you receive your first {fulfilmentOptionDescriptor}.
+                </p>
+                <p>
+                  Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                </p>
+              </Text>
             </FormSection>
             <FormSection title="How would you like to pay?">
               <Rows>
