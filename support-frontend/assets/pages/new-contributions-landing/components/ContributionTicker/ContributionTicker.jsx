@@ -13,6 +13,7 @@ type StateTypes = {|
 type PropTypes = {|
   // URL to fetch ticker JSON from
   tickerJsonUrl: string,
+  onGoalReached: () => void,
 |}
 
 
@@ -41,6 +42,7 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
     super(props);
 
     this.tickerJsonUrl = props.tickerJsonUrl;
+    this.onGoalReached = props.onGoalReached;
 
     this.state = {
       totalSoFar: 0,
@@ -54,6 +56,11 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
       const initialTotal = totalSoFar * 0.8;
       this.count = initialTotal;
       this.totalSoFar = totalSoFar;
+
+      if (totalSoFar >= goal) {
+        this.onGoalReached();
+      }
+
       this.setState({ totalSoFar: initialTotal, goal });
       window.setTimeout(() => {
         window.requestAnimationFrame(this.increaseCounter);
@@ -62,11 +69,12 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
     });
   }
 
-  increaseCounter = this.increaseCounter.bind(this);
-  filledProgressBar: ?HTMLDivElement;
-  count = 0;
-  totalSoFar: number;
+  onGoalReached: () => void;
   tickerJsonUrl: string;
+  totalSoFar: number;
+  count = 0;
+  filledProgressBar: ?HTMLDivElement;
+  increaseCounter = this.increaseCounter.bind(this);
 
   animateBar(totalSoFar: number, goal: number) {
     const progressBarElement = this.filledProgressBar;

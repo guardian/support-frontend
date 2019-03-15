@@ -28,8 +28,10 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
 
 
 // ----- Types ----- //
@@ -46,6 +48,7 @@ type PropTypes = {|
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
+  setTickerGoalReached: () => void,
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
@@ -53,6 +56,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  tickerGoalReached: boolean,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -69,10 +73,12 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
+  tickerGoalReached: state.page.form.tickerGoalReached,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
+  setTickerGoalReached: () => { dispatch(setTickerGoalReached()); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
@@ -172,6 +178,48 @@ function campaignSpecificDetails() {
   return {};
 }
 
+function goalReachedTemplate() {
+  if (isFrontlineCampaign()) {
+    return (
+      <div className="goal-reached">
+        <div className="goal-reached__message">
+          Thank you to everyone who supported ‘The Frontline’.
+          We’re no longer accepting contributions for the series, but you can still support
+          The Guardian’s journalism with a single or recurring contribution
+        </div>
+        <div className="goal-reached__buttons">
+          <ButtonWithRightArrow
+            componentClassName="goal-reached__button"
+            buttonClassName=""
+            accessibilityHintId="accessibility-hint-the-frontline"
+            type="button"
+            buttonCopy="Read ‘The Frontline’ series"
+            onClick={
+              () => {
+                window.location.assign('https://www.theguardian.com/environment/series/the-frontline');
+              }
+            }
+          />
+          <ButtonWithRightArrow
+            componentClassName="goal-reached__button"
+            buttonClassName="goal-reached__button--support"
+            accessibilityHintId="accessibility-hint-support"
+            type="button"
+            buttonCopy="Support The Guardian"
+            onClick={
+              () => {
+                window.location.assign('/contribute');
+              }
+            }
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
 function urlSpecificDetails() {
   if (getQueryParameter('ticker') === 'true') {
     return {
@@ -211,14 +259,21 @@ function ContributionFormContainer(props: PropTypes) {
 
         <div className="gu-content__form">
           {countryGroupDetails.tickerJsonUrl ?
-            <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} /> : null
+            <ContributionTicker
+              tickerJsonUrl={countryGroupDetails.tickerJsonUrl}
+              onGoalReached={props.setTickerGoalReached}
+            /> : null
           }
-          {countryGroupDetails.formMessage ?
-            <div className="form-message">{countryGroupDetails.formMessage}</div> : null
+          {props.tickerGoalReached ? goalReachedTemplate() :
+          <div>
+            {countryGroupDetails.formMessage ?
+              <div className="form-message">{countryGroupDetails.formMessage}</div> : null
+              }
+            <NewContributionForm
+              onPaymentAuthorisation={onPaymentAuthorisation}
+            />
+          </div>
           }
-          <NewContributionForm
-            onPaymentAuthorisation={onPaymentAuthorisation}
-          />
         </div>
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}
