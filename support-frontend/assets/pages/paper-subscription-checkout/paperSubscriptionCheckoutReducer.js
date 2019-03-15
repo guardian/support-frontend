@@ -40,11 +40,12 @@ import {
   type State as AddressState,
   type FormField as AddressFormField,
 } from './components-checkout/addressFieldsStore';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-type PaymentMethod = 'Stripe' | 'DirectDebit';
 
 type Product = {|
   fulfilmentOption: PaperFulfilmentOptions,
@@ -235,7 +236,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     lastName: user.lastName || '',
     startDate: null,
     telephone: null,
-    paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
+    paymentMethod: countrySupportsDirectDebit(initialCountry) ? DirectDebit : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,

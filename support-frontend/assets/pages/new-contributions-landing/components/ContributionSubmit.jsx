@@ -6,7 +6,7 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { billingPeriodFromContrib, type ContributionType, getAmount, type PaymentMethod } from 'helpers/contributions';
+import { billingPeriodFromContrib, type ContributionType, getAmount } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { SelectedAmounts } from 'helpers/contributions';
@@ -18,6 +18,8 @@ import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpres
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { PayPal } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -86,7 +88,7 @@ function ContributionSubmit(props: PropTypes) {
   if (props.paymentMethod !== 'None') {
     // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';
-    const showPayPalRecurringButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
+    const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
 
     const submitButtonCopy = getContributeButtonCopyWithPaymentType(
       props.contributionType,

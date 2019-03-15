@@ -1,8 +1,9 @@
 // @flow
-import type { ContributionType, PaymentMethod } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import { canContributeWithoutSigningIn, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { formElementIsValid, invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 type OldFlowOrNewFlow = 'opf' | 'npf';
 

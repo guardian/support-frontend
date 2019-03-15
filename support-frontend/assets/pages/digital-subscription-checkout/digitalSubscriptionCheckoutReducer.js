@@ -30,11 +30,12 @@ import { validateForm } from 'pages/digital-subscription-checkout/helpers/valida
 import type { Action } from './digitalSubscriptionCheckoutActions';
 import { getUser } from './helpers/user';
 import { showPaymentMethod, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
-export type PaymentMethod = 'Stripe' | 'DirectDebit' | 'PayPal'; // TODO: there is another version of this type in contributions.js
 
 export type FormFieldsInState = {|
   firstName: string,
@@ -131,7 +132,7 @@ function initReducer(initialCountry: IsoCountry) {
     stateProvince: null,
     telephone: null,
     billingPeriod: initialBillingPeriod,
-    paymentMethod: countrySupportsDirectDebit(initialCountry) ? 'DirectDebit' : 'Stripe',
+    paymentMethod: countrySupportsDirectDebit(initialCountry) ? DirectDebit : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -184,7 +185,7 @@ function initReducer(initialCountry: IsoCountry) {
         return {
           ...state,
           stateProvince: null,
-          paymentMethod: countrySupportsDirectDebit(action.country) ? 'DirectDebit' : 'Stripe',
+          paymentMethod: countrySupportsDirectDebit(action.country) ? DirectDebit : Stripe,
         };
 
       case 'SET_FORM_ERRORS':

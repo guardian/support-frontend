@@ -9,6 +9,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
+import { PayPal } from 'helpers/paymentMethods';
 
 export type SetupPayPalRequestType = (
   resolve: string => void,
@@ -61,7 +62,7 @@ const setupRecurringPayPalPayment = (
 ) =>
   (): void => {
     const csrfToken = csrf.token;
-    storage.setSession('selectedPaymentMethod', 'PayPal');
+    storage.setSession('selectedPaymentMethod', PayPal);
     const requestBody = {
       amount,
       billingPeriod,
