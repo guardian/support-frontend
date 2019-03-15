@@ -211,7 +211,7 @@ const checkIfEmailHasPassword = (email: string) =>
     );
   };
 
-const setTickerGoalReached = (tickerGoalReached: boolean): Action => ({ type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached });
+const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: true });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {

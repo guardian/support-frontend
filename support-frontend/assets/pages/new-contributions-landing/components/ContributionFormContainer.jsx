@@ -47,7 +47,7 @@ type PropTypes = {|
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
-  setTickerGoalReached: boolean => void,
+  setTickerGoalReached: () => void,
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
@@ -55,6 +55,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  tickerGoalReached: boolean,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -71,6 +72,7 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
+  tickerGoalReached: state.page.form.tickerGoalReached,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -209,14 +211,25 @@ function ContributionFormContainer(props: PropTypes) {
 
         <div className="gu-content__form">
           {countryGroupDetails.tickerJsonUrl ?
-            <ContributionTicker tickerJsonUrl={countryGroupDetails.tickerJsonUrl} onGoalReached={props.setTickerGoalReached} /> : null
+            <ContributionTicker
+              tickerJsonUrl={countryGroupDetails.tickerJsonUrl}
+              onGoalReached={props.setTickerGoalReached}
+            /> : null
           }
           {countryGroupDetails.formMessage ?
             <div className="form-message">{countryGroupDetails.formMessage}</div> : null
           }
-          <NewContributionForm
-            onPaymentAuthorisation={onPaymentAuthorisation}
-          />
+          {props.tickerGoalReached ?
+            <div>
+              Thank you to everyone who supported ‘The Frontline’.
+              We’re no longer accepting contributions for the series, but you can still support
+              The Guardian’s journalism with a single or recurring contribution
+            </div>
+            :
+            <NewContributionForm
+              onPaymentAuthorisation={onPaymentAuthorisation}
+            />
+          }
         </div>
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}

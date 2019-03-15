@@ -13,7 +13,7 @@ type StateTypes = {|
 type PropTypes = {|
   // URL to fetch ticker JSON from
   tickerJsonUrl: string,
-  onGoalReached: boolean => void,
+  onGoalReached: () => void,
 |}
 
 
@@ -56,6 +56,11 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
       const initialTotal = totalSoFar * 0.8;
       this.count = initialTotal;
       this.totalSoFar = totalSoFar;
+
+      if (totalSoFar >= goal) {
+        this.onGoalReached();
+      }
+
       this.setState({ totalSoFar: initialTotal, goal });
       window.setTimeout(() => {
         window.requestAnimationFrame(this.increaseCounter);
@@ -64,13 +69,12 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
     });
   }
 
-  increaseCounter = this.increaseCounter.bind(this);
   filledProgressBar: ?HTMLDivElement;
   count = 0;
   totalSoFar: number;
   tickerJsonUrl: string;
-  onGoalReached: boolean => void;
-  onGoalReachedHasBeenCalled: boolean;
+  onGoalReached: () => void;
+  increaseCounter = this.increaseCounter.bind(this);
 
   animateBar(totalSoFar: number, goal: number) {
     const progressBarElement = this.filledProgressBar;
@@ -82,13 +86,6 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
   increaseCounter() {
     const { totalSoFar } = this;
     this.count += Math.floor(totalSoFar / 100);
-
-    if (this.count === this.totalSoFar) {
-      if (!this.onGoalReachedHasBeenCalled) {
-        this.onGoalReached(true);
-        this.onGoalReachedHasBeenCalled = true;
-      }
-    }
 
     if (this.count >= this.totalSoFar) {
       this.setState({ totalSoFar: this.totalSoFar });
