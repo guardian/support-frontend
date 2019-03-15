@@ -3,8 +3,8 @@
 const fetchFonts = (window: Object, document: Document): void => {
   const head: null | HTMLHeadElement = document.querySelector('head');
 
-  const useFont = (font: Object): void => {
-    if (head && font.css) {
+  const useFont = (font: { css: string }): void => {
+    if (head) {
       const style: HTMLStyleElement = document.createElement('style');
       style.innerHTML = font.css;
       head.appendChild(style);
