@@ -25,7 +25,7 @@ const Input1 = compose(asControlled, withError)(InputWithLabel);
 const Select1 = compose(asControlled, withError, withLabel)(Select);
 const Select2 = canShow(Select1);
 
-import { type FormFields, type FormField } from '../digitalSubscriptionCheckoutReducer';
+import { type FormField } from '../digitalSubscriptionCheckoutReducer';
 import { type Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import { type StateProvince } from 'helpers/internationalisation/country';
 
