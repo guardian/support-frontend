@@ -69,11 +69,11 @@ export class ContributionTicker extends Component<PropTypes, StateTypes> {
     });
   }
 
-  filledProgressBar: ?HTMLDivElement;
   count = 0;
   totalSoFar: number;
   tickerJsonUrl: string;
   onGoalReached: () => void;
+  filledProgressBar: ?HTMLDivElement;
   increaseCounter = this.increaseCounter.bind(this);
 
   animateBar(totalSoFar: number, goal: number) {

@@ -31,7 +31,7 @@ import {
   setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import {ButtonWithRightArrow} from "./ButtonWithRightArrow/ButtonWithRightArrow";
+import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
 
 
 // ----- Types ----- //
@@ -209,7 +209,7 @@ function goalReachedTemplate() {
           />
         </div>
       </div>
-    )
+    );
   }
 
   return null;
@@ -260,14 +260,14 @@ function ContributionFormContainer(props: PropTypes) {
             /> : null
           }
           {props.tickerGoalReached ? goalReachedTemplate() :
-            <div>
-              {countryGroupDetails.formMessage ?
-                <div className="form-message">{countryGroupDetails.formMessage}</div> : null
+          <div>
+            {countryGroupDetails.formMessage ?
+              <div className="form-message">{countryGroupDetails.formMessage}</div> : null
               }
-              <NewContributionForm
-                onPaymentAuthorisation={onPaymentAuthorisation}
-              />
-            </div>
+            <NewContributionForm
+              onPaymentAuthorisation={onPaymentAuthorisation}
+            />
+          </div>
           }
         </div>
         <DirectDebitPopUpForm
