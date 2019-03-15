@@ -87,9 +87,9 @@ const SaleHeader = () => (
   <ProductPagehero
     appearance="campaign"
     overheading="The Guardian newspaper subscriptions"
-    heading="{getHeading()}"
+    heading="Save up to 37% on The Guardian and The Observer - all year round"
     modifierClasses={['paper-sale']}
-    content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+    content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
   >
     <div className="sale-joy-of-print">
