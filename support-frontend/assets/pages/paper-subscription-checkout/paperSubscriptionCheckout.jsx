@@ -19,6 +19,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 import { initReducer } from './paperSubscriptionCheckoutReducer';
 import CheckoutStage from './stage';
+import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import './_legacyImports.scss';
 
 
@@ -34,6 +35,8 @@ const store = pageInit(
 
 const { countryGroupId } = store.getState().common.internationalisation;
 
+const paperFulfilmentOption: PaperFulfilmentOptions = fulfilmentOption === 'HomeDelivery' ? 'HomeDelivery' : 'Collection';
+
 // ----- Render ----- //
 
 const content = (
@@ -43,7 +46,11 @@ const content = (
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="Paper" />
-          <CustomerService selectedCountryGroup={countryGroupId} />
+          <CustomerService
+            selectedCountryGroup={countryGroupId}
+            subscriptionProduct="Paper"
+            paperFulfilmentOptions={paperFulfilmentOption}
+          />
           <SubscriptionFaq subscriptionProduct="Paper" />
         </Footer>
       }

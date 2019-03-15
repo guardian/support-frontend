@@ -35,7 +35,11 @@ const content = (
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
-          <CustomerService selectedCountryGroup={countryGroupId} />
+          <CustomerService
+            selectedCountryGroup={countryGroupId}
+            subscriptionProduct="DigitalPack"
+            paperFulfilmentOptions={null}
+          />
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </Footer>}
     >
