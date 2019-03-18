@@ -27,7 +27,6 @@
     line-height: 1;
     max-width: gu-span(6);
     padding-left: $gu-v-spacing;
-    // display: none;
     
     h2 {
       font-family: $gu-titlepiece;
@@ -38,14 +37,6 @@
         color: #0084C6
       }
     }
-
-    // @include mq($from: mobile) {
-    //   max-width: 60%;
-    // }
-    
-    // @include mq($from: mobileMedium) {
-    //   max-width: 50%;
-    // }
 
     @include mq($until: mobileLandscape) {
       display: none;
@@ -239,10 +230,6 @@
     -webkit-font-feature-settings: "lnum";
     font-feature-settings: "lnum";
   }
-
-  // @include mq($from: mobileMedium) {
-  //   top: 2rem;
-  // }
   
   @include mq($from: mobileMedium) {
     top: 1.8rem;
