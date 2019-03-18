@@ -49,7 +49,8 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     }
   }
 
-  private def handleAlreadyProcessedPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
+  private def handleAlreadyProcessedPayment(googleRecordPayment: GoogleRecordPayment,
+                                            clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
     logger.error(s"Received a duplicate payment id for payment : $googleRecordPayment")
     cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
     EitherT.leftT[Future, Unit](BackendError.fromSubscribeWithGoogleError(
@@ -71,7 +72,7 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     }
 
     val ophanTrackingResult = identity.flatMap { id =>
-      submitAcquisitionToOphan(googleRecordPayment, id)
+      submitAcquisitionToOphan(googleRecordPayment, id, clientBrowserInfo)
     }.leftMap { err =>
       cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
       logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
@@ -102,8 +103,9 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
   }
 
   private def submitAcquisitionToOphan(payment: GoogleRecordPayment,
-                                       identityId: Long): EitherT[Future, BackendError, Unit] = {
-    ophanService.submitAcquisition(SubscribeWithGoogleAcquisition(payment, identityId))
+                                       identityId: Long,
+                                       clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
+    ophanService.submitAcquisition(SubscribeWithGoogleAcquisition(payment, identityId, clientBrowserInfo))
       .bimap(BackendError.fromOphanError, _ => ())
   }
 

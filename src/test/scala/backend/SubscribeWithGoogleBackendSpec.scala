@@ -143,7 +143,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
-        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, clientBrowserInfo)
 
       recordResult.futureRight shouldBe(())
 
@@ -165,7 +165,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
-        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, clientBrowserInfo)
 
       recordResult.futureLeft shouldBe BackendError.fromOphanError(ophanError)
 
@@ -188,7 +188,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
-        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, clientBrowserInfo)
 
       recordResult.futureLeft shouldBe failedIdentityErrors.futureLeft
 
@@ -213,7 +213,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
-        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, clientBrowserInfo)
 
       recordResult.futureLeft shouldBe BackendError.fromDatabaseError(dbError.futureLeft)
 
@@ -236,7 +236,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailError)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
-        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, clientBrowserInfo)
 
       recordResult.futureLeft shouldBe BackendError.fromEmailError(emailError.futureLeft)
 

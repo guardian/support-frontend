@@ -4,7 +4,7 @@ import cats.implicits._
 import actions.CorsActionProvider
 import backend.{BackendError, SubscribeWithGoogleBackend}
 import com.typesafe.scalalogging.StrictLogging
-import model.{DefaultThreadPool, PaymentStatus}
+import model.{ClientBrowserInfo, DefaultThreadPool, PaymentStatus}
 import model.subscribewithgoogle.GoogleRecordPayment
 import play.api.http.ContentTypes
 import play.api.libs.circe.Circe
@@ -30,14 +30,13 @@ class SubscribeWithGoogleController(
     requestBody.status match {
       case PaymentStatus.Paid =>
         subscribeWithGoogleBackendProvider.getInstanceFor(request)
-          .recordPayment(request.body).bimap(
+          .recordPayment(request.body, ClientBrowserInfo.fromRequest(request, None)).bimap(
           err => err match {
           case dbError: BackendError.SubscribeWithGooglePaymentError => Ok("{}").as(ContentTypes.JSON)
           case er: BackendError => InternalServerError
         },
           success => Ok("{}").as(ContentTypes.JSON)
         ).merge
-      //todo: Ophan stats capture as part of future work
       case PaymentStatus.Failed | PaymentStatus.Refunded =>
         logger.error(
          s"Received $requestBody - as a payment but has a Payment Status of ${requestBody.status} - this is not a payment"

@@ -4,11 +4,13 @@ import java.util.UUID
 
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
+import model.ClientBrowserInfo
 import model.subscribewithgoogle.GoogleRecordPayment
 import ophan.thrift.event.{Acquisition, PaymentFrequency, Product}
 
 case class SubscribeWithGoogleAcquisition(googleRecordPayment: GoogleRecordPayment,
-                                          identityId: Long) {
+                                          identityId: Long,
+                                          clientBrowserInfo: ClientBrowserInfo) {
 }
 
 object SubscribeWithGoogleAcquisition {
@@ -23,11 +25,6 @@ object SubscribeWithGoogleAcquisition {
         amount = a.googleRecordPayment.amount.toDouble
       )) //todo: Potentially add SWiG to the com.gu.acquisition enum for payment provider if required
 
-      override def buildGAData(a: SubscribeWithGoogleAcquisition): Either[String, GAData] = Right(GAData(
-        "swg.theguardian.com",
-        UUID.randomUUID().toString,
-        None,
-        None
-      ))
+      override def buildGAData(a: SubscribeWithGoogleAcquisition): Either[String, GAData] = Right(ClientBrowserInfo.toGAData(a.clientBrowserInfo))
     }
 }
