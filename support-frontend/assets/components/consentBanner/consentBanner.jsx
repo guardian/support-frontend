@@ -12,7 +12,9 @@ import {
 import type { ThirdPartyTrackingConsent } from '../../helpers/tracking/thirdPartyTrackingConsent';
 import Roundel from './roundel.svg';
 import Tick from './tick.svg';
-import 'components/consentBanner/consentBanner.scss';
+import Button from 'components/button/button';
+import Text from 'components/text/text';
+import styles from 'components/consentBanner/consentBanner.module.scss';
 
 export type PropTypes = {
   trackingConsent: ThirdPartyTrackingConsent,
@@ -36,41 +38,30 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 function ConsentBanner(props: PropTypes) {
   if (props.trackingConsent === Unset) {
     return (
-      <div className="consent-banner--first-pv-consent">
-        <div className="consent-banner__roundel">
-          <span className="inline-icon"><Roundel /></span>
-        </div>
-        <div className="consent-banner__copy">
-          <div className="consent-banner--first-pv-consent__block consent-banner--first-pv-consent__block--head">
-            Your privacy
-          </div>
-          <div className="consent-banner--first-pv-consent__block consent-banner--first-pv-consent__block--intro">
+      <div className={styles.root}>
+        <div className={styles.copy}>
+          <Roundel className={styles.roundel} />
+          <Text className={styles.text} title="Your privacy">
             <p>We use cookies to improve your experience on our site and to show you personalised advertising.</p>
             <p>To find out more, read our&nbsp;
               <a
-                className="u-underline"
                 href="https://www.theguardian.com/help/privacy-policy"
               >
                 privacy policy
               </a>&nbsp;and&nbsp;
               <a
-                className="u-underline"
                 href="https://www.theguardian.com/info/cookies"
               >
                 cookie policy
               </a>.
             </p>
-          </div>
-          <div className="consent-banner--first-pv-consent__actions">
-            <button onClick={props.onAccepted} className="consent-banner--first-pv-consent__button">
-              <span className="inline-icon">
-                <Tick />
-              </span>
-              <span>I&#39;m OK with that</span>
-            </button>
+          </Text>
+          <div className={styles.actions}>
+            <Button aria-label={null} icon={<Tick />} iconSide="left" onClick={props.onAccepted}>
+              I&#39;m OK with that
+            </Button>
             <a
               href="https://profile.theguardian.com/privacy-settings"
-              className="consent-banner--first-pv-consent__link u-underline"
             >
               My options
             </a>
