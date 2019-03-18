@@ -10,9 +10,9 @@ import {
   setTrackingConsent,
 } from '../../helpers/page/commonActions';
 import type { ThirdPartyTrackingConsent } from '../../helpers/tracking/thirdPartyTrackingConsent';
-import ConsentBannerButtonTick from '../svgs/consentBannerButtonTick';
-import ConsentBannerRoundel from '../svgs/consentBannerRoundel';
-import './consentBanner.scss'
+import Roundel from './roundel.svg';
+import Tick from './tick.svg';
+import './consentBanner.scss';
 
 export type PropTypes = {
   trackingConsent: ThirdPartyTrackingConsent,
@@ -38,7 +38,7 @@ function ConsentBanner(props: PropTypes) {
     return (
       <div className="consent-banner--first-pv-consent">
         <div className="consent-banner__roundel">
-          <span className="inline-icon"><ConsentBannerRoundel /></span>
+          <span className="inline-icon"><Roundel /></span>
         </div>
         <div className="consent-banner__copy">
           <div className="consent-banner--first-pv-consent__block consent-banner--first-pv-consent__block--head">
@@ -64,7 +64,7 @@ function ConsentBanner(props: PropTypes) {
           <div className="consent-banner--first-pv-consent__actions">
             <button onClick={props.onAccepted} className="consent-banner--first-pv-consent__button">
               <span className="inline-icon">
-                <ConsentBannerButtonTick />
+                <Tick />
               </span>
               <span>I&#39;m OK with that</span>
             </button>
