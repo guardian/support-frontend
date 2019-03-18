@@ -19,6 +19,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
 import './digitalSubscriptionCheckout.scss';
+import ConsentBanner from '../../components/consentBanner/consentBanner';
 
 // ----- Redux Store ----- //
 
@@ -40,6 +41,7 @@ const content = (
         </Footer>}
     >
       <CheckoutStage />
+      <ConsentBanner />
     </Page>
   </Provider>
 );
