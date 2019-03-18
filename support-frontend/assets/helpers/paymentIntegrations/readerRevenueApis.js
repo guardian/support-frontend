@@ -15,6 +15,7 @@ import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 import { type PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 import { type ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
+import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -81,10 +82,14 @@ export type RegularPaymentRequest = {|
 export type StripePaymentMethod = 'StripeCheckout' | 'StripeApplePay' | 'StripePaymentRequestButton';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 
-export type StripeAuthorisation = {| paymentMethod: 'Stripe', token: string, stripePaymentMethod: StripePaymentMethod|};
-export type PayPalAuthorisation = {| paymentMethod: 'PayPal', token: string |};
+export type StripeAuthorisation = {|
+  paymentMethod: typeof Stripe,
+  token: string,
+  stripePaymentMethod: StripePaymentMethod
+|};
+export type PayPalAuthorisation = {| paymentMethod: typeof PayPal, token: string |};
 export type DirectDebitAuthorisation = {|
-  paymentMethod: 'DirectDebit',
+  paymentMethod: typeof DirectDebit,
   accountHolderName: string,
   sortCode: string,
   accountNumber: string
@@ -115,11 +120,11 @@ const MAX_POLLS = 10;
 
 function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisation): RegularPaymentFields {
   switch (authorisation.paymentMethod) {
-    case 'Stripe':
+    case Stripe:
       return { stripeToken: authorisation.token };
-    case 'PayPal':
+    case PayPal:
       return { baid: authorisation.token };
-    case 'DirectDebit':
+    case DirectDebit:
       return {
         accountHolderName: authorisation.accountHolderName,
         sortCode: authorisation.sortCode,
@@ -152,8 +157,10 @@ function checkRegularStatus(
         trackConversion(participations, routes.recurringContribPending);
         return PaymentSuccess;
 
-      default:
-        return { paymentStatus: 'failure', error: json.failureReason };
+      default: {
+        const failureReason = json.failureReason ? json.failureReason : 'unknown';
+        return { paymentStatus: 'failure', error: failureReason };
+      }
     }
   };
 

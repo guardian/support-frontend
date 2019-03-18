@@ -30,6 +30,7 @@ import {
   type Action,
   setStage,
 } from '../paperSubscriptionCheckoutReducer';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 const getAddressFieldsState = (from: FormFields) => ({
   lineOne: from.lineOne,
@@ -45,6 +46,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     lastName,
     email,
     telephone,
+    billingAddressIsSame,
   } = state.page.checkout;
 
   const product = {
@@ -56,14 +58,14 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 
-  const billingAddress = {
-    ...getAddressFieldsState(getFormFields(getBillingAddress(state))),
+  const deliveryAddress = {
+    ...getAddressFieldsState(getFormFields(getDeliveryAddress(state))),
     state: null,
     country: countryId,
   };
 
-  const deliveryAddress = {
-    ...getAddressFieldsState(getFormFields(getDeliveryAddress(state))),
+  const billingAddress = billingAddressIsSame ? deliveryAddress : {
+    ...getAddressFieldsState(getFormFields(getBillingAddress(state))),
     state: null,
     country: countryId,
   };
@@ -139,10 +141,10 @@ function showPaymentMethod(
   const { paymentMethod } = state.page.checkout;
 
   switch (paymentMethod) {
-    case 'Stripe':
+    case Stripe:
       showStripe(dispatch, state);
       break;
-    case 'DirectDebit':
+    case DirectDebit:
       dispatch(openDirectDebitPopUp());
       break;
     case null:

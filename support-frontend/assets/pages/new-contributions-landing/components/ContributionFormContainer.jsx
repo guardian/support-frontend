@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import type { ContributionType, PaymentMethod } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
@@ -28,7 +28,10 @@ import {
   onThirdPartyPaymentAuthorised,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
+  setTickerGoalReached,
 } from '../contributionsLandingActions';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
 
 
 // ----- Types ----- //
@@ -45,6 +48,7 @@ type PropTypes = {|
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setCheckoutFormHasBeenSubmitted: () => void,
+  setTickerGoalReached: () => void,
   openDirectDebitPopUp: () => void,
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
   payPalSetHasLoaded: () => void,
@@ -52,6 +56,7 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
+  tickerGoalReached: boolean,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -68,10 +73,12 @@ const mapStateToProps = (state: State) => ({
   paymentMethod: state.page.form.paymentMethod,
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
+  tickerGoalReached: state.page.form.tickerGoalReached,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
+  setTickerGoalReached: () => { dispatch(setTickerGoalReached()); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
@@ -98,22 +105,13 @@ const defaultContributeCopy = (
     steers our opinion. This is important as it enables us to give a voice to those less heard, challenge the
     powerful and hold them to account. It’s what makes us different to so many others in the media, at a time when
     factual, honest reporting is crucial.
-    <span className="bold"> Your support is critical for the future of Guardian journalism.</span>
+    <span className="gu-content__blurb-blurb-last-sentence"> Your support is critical for the future of Guardian journalism.</span>
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
 };
-
-const australiaHeadline = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs';
-
-const australiaFrontlineFormMessage = (
-  <div className="frontline-campaign">
-    <div className="frontline-campaign__headline">Make a contribution</div>
-    <div className="frontline-campaign__body">to our dedicated series ‘Climate Crunch’</div>
-  </div>
-);
 
 const countryGroupSpecificDetails: {
   [CountryGroupId]: CountryMetaData
@@ -123,12 +121,111 @@ const countryGroupSpecificDetails: {
   UnitedStates: defaultHeaderCopyAndContributeCopy,
   AUDCountries: {
     ...defaultHeaderCopyAndContributeCopy,
-    headerCopy: australiaHeadline,
+    headerCopy: 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs',
   },
   International: defaultHeaderCopyAndContributeCopy,
   NZDCountries: defaultHeaderCopyAndContributeCopy,
   Canada: defaultHeaderCopyAndContributeCopy,
 };
+
+function campaignSpecificDetails() {
+  if (isFrontlineCampaign()) {
+    return {
+      formMessage: (
+        <div>
+          <div className="form-message__headline">Make a contribution</div>
+          <div className="form-message__body">to our dedicated series ‘The Frontline’</div>
+        </div>
+      ),
+      headerCopy: 'The Frontline: Australia and the climate emergency',
+      contributeCopy: (
+        <div>
+          <p>
+            The north is flooded, the south parched by drought.
+            The Murray Darling, our greatest river system, has dried to a trickle,
+            crippling communities and turning up millions of dead fish.
+            The ancient alpine forests of Tasmania have burned.
+            The summer was the hottest on record.
+            We are living the reality of climate change.
+          </p>
+          <p>
+            That’s why we need your help to bring our reporting on the climate crisis to light.
+            We asked our readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
+            Your response has been immediate and overwhelming, and thanks to your encouragement we have increased
+            the goal to $150,000.
+          </p>
+          <p>
+            <span>
+              With your support, we can cut through the rhetoric and focus the debate on the facts.
+              That way everyone can learn about the devastating and immediate
+              threats to our country and how best to find a solution.
+            </span>
+          </p>
+        </div>
+      ),
+      tickerJsonUrl: '/ticker.json',
+      // stuff for campaign that's not set here:
+      // - CSS class (contributionsLanding.jsx)
+      // - Terms & Conditions
+      // - Just single contributions (via URL)
+    };
+  }
+
+  return {};
+}
+
+function goalReachedTemplate() {
+  if (isFrontlineCampaign()) {
+    return (
+      <div className="goal-reached">
+        <div className="goal-reached__message">
+          Thank you to everyone who supported ‘The Frontline’.
+          We’re no longer accepting contributions for the series, but you can still support
+          The Guardian’s journalism with a single or recurring contribution
+        </div>
+        <div className="goal-reached__buttons">
+          <ButtonWithRightArrow
+            componentClassName="goal-reached__button"
+            buttonClassName=""
+            accessibilityHintId="accessibility-hint-the-frontline"
+            type="button"
+            buttonCopy="Read ‘The Frontline’ series"
+            onClick={
+              () => {
+                window.location.assign('https://www.theguardian.com/environment/series/the-frontline');
+              }
+            }
+          />
+          <ButtonWithRightArrow
+            componentClassName="goal-reached__button"
+            buttonClassName="goal-reached__button--support"
+            accessibilityHintId="accessibility-hint-support"
+            type="button"
+            buttonCopy="Support The Guardian"
+            onClick={
+              () => {
+                window.location.assign('/contribute');
+              }
+            }
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+function urlSpecificDetails() {
+  if (getQueryParameter('ticker') === 'true') {
+    return {
+      tickerJsonUrl: '/ticker.json',
+    };
+  }
+
+  return {};
+}
+
 
 // ----- Render ----- //
 
@@ -139,15 +236,11 @@ function ContributionFormContainer(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const countryGroupDetails = countryGroupSpecificDetails[props.countryGroupId];
-
-  const tickerUrl =
-    countryGroupDetails.tickerJsonUrl ||
-    getQueryParameter('ticker') === 'true' ? '/ticker.json' : undefined;
-
-  const formMessage =
-    countryGroupDetails.formMessage ||
-    isFrontlineCampaign() ? australiaFrontlineFormMessage : undefined;
+  const countryGroupDetails = {
+    ...countryGroupSpecificDetails[props.countryGroupId],
+    ...campaignSpecificDetails(),
+    ...urlSpecificDetails(),
+  };
 
   return props.paymentComplete ?
     <Redirect to={props.thankYouRoute} />
@@ -161,15 +254,22 @@ function ContributionFormContainer(props: PropTypes) {
         </div>
 
         <div className="gu-content__form">
-          {tickerUrl ?
-            <ContributionTicker tickerJsonUrl={tickerUrl} /> : null
+          {countryGroupDetails.tickerJsonUrl ?
+            <ContributionTicker
+              tickerJsonUrl={countryGroupDetails.tickerJsonUrl}
+              onGoalReached={props.setTickerGoalReached}
+            /> : null
           }
-          {formMessage ?
-            <div className="gu-content__form__message">{formMessage}</div> : null
+          {props.tickerGoalReached ? goalReachedTemplate() :
+          <div>
+            {countryGroupDetails.formMessage ?
+              <div className="form-message">{countryGroupDetails.formMessage}</div> : null
+              }
+            <NewContributionForm
+              onPaymentAuthorisation={onPaymentAuthorisation}
+            />
+          </div>
           }
-          <NewContributionForm
-            onPaymentAuthorisation={onPaymentAuthorisation}
-          />
         </div>
         <DirectDebitPopUpForm
           onPaymentAuthorisation={onPaymentAuthorisation}

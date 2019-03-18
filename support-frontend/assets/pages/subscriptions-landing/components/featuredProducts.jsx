@@ -129,7 +129,7 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
   return {
     headingText: 'Guardian Weekly',
     subheadingText: 'Open up your world view',
-    bodyText: 'Discover our essential new magazine with free worldwide delivery.',
+    bodyText: 'The Guardian\'s essential news magazine with free worldwide delivery.',
   };
   // }
 };
@@ -168,13 +168,7 @@ const getProduct = (subsLinks: SubsUrls, countryGroupId: CountryGroupId): ?Produ
     case 'GuardianWeekly':
       return products.GuardianWeekly;
     default:
-      if (countryGroupId === GBPCountries && flashSaleIsActive('DigitalPack', GBPCountries)) {
-        return products.DigitalPack;
-      }
-      if (countryGroupId === GBPCountries) {
-        return products.Paper;
-      }
-      if (countryGroupId !== GBPCountries && flashSaleIsActive('DigitalPack', countryGroupId)) {
+      if (flashSaleIsActive('DigitalPack', countryGroupId)) {
         return products.DigitalPack;
       }
       return products.GuardianWeekly;

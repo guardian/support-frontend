@@ -16,27 +16,29 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
-import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import 'stylesheets/skeleton/skeleton.scss';
 
-import { DefaultHeader } from './components/hero/hero';
+import { SaleHeader } from './components/hero/hero';
 import Tabs from './components/tabs';
 import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
 
 import './paperSubscriptionLandingPage.scss';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Collection or delivery ----- //
 
-const method: PaperDeliveryMethod = window.location.pathname.includes('delivery') ? 'delivery' : 'collection';
+const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
+const product = getQueryParameter('product');
 
 const reactElementId: {
-  [PaperDeliveryMethod]: string,
+  [PaperFulfilmentOptions]: string,
 } = {
-  collection: 'paper-subscription-landing-page-collection',
-  delivery: 'paper-subscription-landing-page-delivery',
+  Collection: 'paper-subscription-landing-page-collection',
+  HomeDelivery: 'paper-subscription-landing-page-delivery',
 };
 
 // ----- Internationalisation ----- //
@@ -45,13 +47,10 @@ const countryGroupId: CountryGroupId = detect();
 const { supportInternationalisationId } = countryGroups[countryGroupId];
 const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supportInternationalisationId : 'gb').toUpperCase();
 
-// ----- Initial selection? ----- //
-
-const promoInUrl = getQueryParameter('promo');
 
 // ----- Redux Store ----- //
 
-const store = pageInit(() => reducer(method, promoInUrl), true);
+const store = pageInit(() => reducer(fulfilment, product), true);
 
 
 // ----- Render ----- //
@@ -72,7 +71,7 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <DefaultHeader />
+      <SaleHeader />
 
       <Content needsHigherZindex>
         <Text>
@@ -95,5 +94,5 @@ const content = (
   </Provider>
 );
 
-renderPage(content, reactElementId[method]);
+renderPage(content, reactElementId[fulfilment]);
 

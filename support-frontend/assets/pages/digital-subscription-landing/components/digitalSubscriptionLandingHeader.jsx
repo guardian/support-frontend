@@ -172,80 +172,87 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   }
   return {
     heading: 'Digital Pack',
-    subHeading: 'Award-winning, independent journalism, ad-free on all devices',
+    subHeading: 'The premium Guardian experience, ad-free on all your devices',
   };
 }
 
-const SaleHeader = () => (
-  <ProductPagehero
-    appearance="campaign"
-    overheading="Digital Pack subscriptions"
-    heading="The Guardian, ad-free on all of your devices"
-    modifierClasses={['digital-campaign']}
-    content={<AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">Start your 14 day free trial</AnchorButton>}
-    hasCampaign
-  >
+function SaleHeader(props: PropTypes) {
+  const product: SubscriptionProduct = 'DigitalPack';
+  return (
+    <ProductPagehero
+      appearance="campaign"
+      overheading="Digital Pack subscriptions"
+      heading="The premium Guardian experience, ad-free on all your devices"
+      modifierClasses={['digital-campaign']}
+      content={<AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+      hasCampaign
+    >
+      <div className="the-moment-hero">
+        <div className="the-moment-hero__copy">
+          <h2>A better way to fund journalism <br />
+            <span>A better way to read it
+            </span>
+          </h2>
+        </div>
 
-    <div className="the-moment-hero">
-      <div className="the-moment-hero__copy">
-        <h2>A better way to fund journalism. <br />
-          <span>A better way to read it.
-          </span>
-        </h2>
-      </div>
-
-      <div className="the-moment-hero__graphic-outer">
-        <div className="the-moment-hero__graphic-inner">
-          <div className="the-moment-hero__graphic">
-            <GridImage
-              gridId="theMomentDigiHero"
-              srcSizes={[486]}
-              sizes="(max-width: 740px) 315px, 486px"
-              imgType="png"
-              altText="A mobile device"
-            />
-          </div>
-
-          <div className="the-moment-hero__graphic-slider">
-            <div className="the-moment-hero__graphic-slider-inner">
-              <div className="the-moment-hero__graphic-slider-1">
-                <GridImage
-                  gridId="theMomentDigiHero"
-                  srcSizes={[486]}
-                  sizes="(max-width: 740px) 315px, 486px"
-                  imgType="png"
-                  altText="A mobile device"
-                />
-              </div>
-              <div className="the-moment-hero__graphic-slider-2">
-                <GridImage
-                  gridId="theMomentDigiHero2"
-                  srcSizes={[486]}
-                  sizes="(max-width: 740px) 315px, 486px"
-                  imgType="png"
-                  altText="A mobile device"
-                />
-              </div>
-              <div className="the-moment-hero__graphic-slider-3">
-                <GridImage
-                  gridId="theMomentDigiHero3"
-                  srcSizes={[486]}
-                  sizes="(max-width: 740px) 315px, 486px"
-                  imgType="png"
-                  altText="A mobile device"
-                />
-              </div>
-
+        <div className="the-moment-hero__graphic-outer">
+          <div className="the-moment-hero__graphic-inner">
+            <div className="the-moment-hero__badge">
+              <span className="the-moment-hero__badge-lgeCopy">14 Day</span>
+              <span>Free trial</span>
             </div>
-
+            <div className="the-moment-hero__graphic">
+              <GridImage
+                gridId="theMomentDigiHero"
+                srcSizes={[486]}
+                sizes="(max-width: 740px) 315px, 486px"
+                imgType="png"
+                altText="A mobile device"
+              />
+            </div>
+            <div className="the-moment-hero__graphic-slider">
+              <div className="the-moment-hero__graphic-slider-inner">
+                <div className="the-moment-hero__graphic-slider-1">
+                  <GridImage
+                    gridId="theMomentDigiHero"
+                    srcSizes={[486]}
+                    sizes="(max-width: 740px) 315px, 486px"
+                    imgType="png"
+                    altText="A mobile device"
+                  />
+                </div>
+                <div className="the-moment-hero__graphic-slider-2">
+                  <GridImage
+                    gridId="theMomentDigiHero2"
+                    srcSizes={[486]}
+                    sizes="(max-width: 740px) 315px, 486px"
+                    imgType="png"
+                    altText="A mobile device"
+                  />
+                </div>
+                <div className="the-moment-hero__graphic-slider-3">
+                  <GridImage
+                    gridId="theMomentDigiHero3"
+                    srcSizes={[486]}
+                    sizes="(max-width: 740px) 315px, 486px"
+                    imgType="png"
+                    altText="A mobile device"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-
-  </ProductPagehero>
-);
+      {showCountdownTimer(product, props.countryGroupId) &&
+      <FlashSaleCountdownInHero
+        product={product}
+        countryGroupId={props.countryGroupId}
+      />
+      }
+    </ProductPagehero>
+  );
+}
 
 // ----- Component ----- //
 

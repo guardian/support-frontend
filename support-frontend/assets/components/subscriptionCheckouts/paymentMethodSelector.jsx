@@ -2,7 +2,6 @@
 
 import React from 'react';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
@@ -12,6 +11,8 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import { getQueryParameter } from 'helpers/url';
 import { type Option } from 'helpers/types/option';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 type PropTypes = {|
   countrySupportsDirectDebit: boolean,
@@ -22,8 +23,8 @@ type PropTypes = {|
 |}
 
 const isPayPalEnabled = (optimizeExperiments: OptimizeExperiments) => {
-  const PayPalExperimentId = "8IebFnX-SbKRxhlj_tGp-w";
-  const enabledByTest = optimizeExperiments.find((exp) => exp.id === PayPalExperimentId && exp.variant === '1');
+  const PayPalExperimentId = '8IebFnX-SbKRxhlj_tGp-w';
+  const enabledByTest = optimizeExperiments.find(exp => exp.id === PayPalExperimentId && exp.variant === '1');
   const enabledByQueryString = getQueryParameter('payPal') === 'true';
   return enabledByTest || enabledByQueryString;
 };
@@ -42,21 +43,21 @@ function PaymentMethodSelector(props: PropTypes) {
             <RadioInput
               text="Direct debit"
               name="paymentMethod"
-              checked={props.paymentMethod === 'DirectDebit'}
-              onChange={() => props.setPaymentMethod('DirectDebit')}
+              checked={props.paymentMethod === DirectDebit}
+              onChange={() => props.setPaymentMethod(DirectDebit)}
             />}
             <RadioInput
               text="Credit/Debit card"
               name="paymentMethod"
-              checked={props.paymentMethod === 'Stripe'}
-              onChange={() => props.setPaymentMethod('Stripe')}
+              checked={props.paymentMethod === Stripe}
+              onChange={() => props.setPaymentMethod(Stripe)}
             />
             {payPalEnabled &&
             <RadioInput
               text="PayPal"
               name="paymentMethod"
-              checked={props.paymentMethod === 'PayPal'}
-              onChange={() => props.setPaymentMethod('PayPal')}
+              checked={props.paymentMethod === PayPal}
+              onChange={() => props.setPaymentMethod(PayPal)}
             />}
           </Fieldset>
         </div>

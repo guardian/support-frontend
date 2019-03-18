@@ -8,20 +8,20 @@ import { bindActionCreators } from 'redux';
 
 import { Outset } from 'components/content/content';
 import ProductPageTabs from 'components/productPage/productPageTabs/productPageTabs';
-import { type PaperDeliveryMethod } from 'helpers/subscriptions';
 import { paperSubsUrl } from 'helpers/routes';
 
 import { type State } from '../paperSubscriptionLandingPageReducer';
 import { setTab, type TabActions } from '../paperSubscriptionLandingPageActions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Tabs ----- //
 
-export const tabs: {[PaperDeliveryMethod]: {name: string, href: string}} = {
-  collection: {
+export const tabs: {[PaperFulfilmentOptions]: {name: string, href: string}} = {
+  Collection: {
     name: 'Voucher Booklet',
     href: paperSubsUrl(false),
   },
-  delivery: {
+  HomeDelivery: {
     name: 'Home Delivery',
     href: paperSubsUrl(true),
   },
@@ -32,7 +32,7 @@ type StatePropTypes = {|
 |};
 
 type DispatchPropTypes = {|
-  setTabAction: (PaperDeliveryMethod) => TabActions,
+  setTabAction: (PaperFulfilmentOptions) => TabActions,
 |};
 
 type PropTypes = {|

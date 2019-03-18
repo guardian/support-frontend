@@ -6,18 +6,20 @@ import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { billingPeriodFromContrib, type ContributionType, getAmount, type PaymentMethod } from 'helpers/contributions';
+import { billingPeriodFromContrib, type ContributionType, getAmount } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { SelectedAmounts } from 'helpers/contributions';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/checkouts';
 import { hiddenIf } from 'helpers/utilities';
-import { setupRecurringPayPalPayment, type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
+import { setupRecurringPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { PayPal } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -31,7 +33,7 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   csrf: CsrfState,
   sendFormSubmitEventForPayPalRecurring: () => void,
-  setupRecurringPayPalPayment: SetupPayPalRequestType,
+  setupRecurringPayPalPayment: Function,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   onPaymentAuthorisation: PaymentAuthorisation => void,
@@ -70,10 +72,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
     reject: Function,
     currencyId: IsoCurrency,
     csrf: CsrfState,
-    amount: number,
-    billingPeriod: BillingPeriod,
   ) => {
-    dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf, amount, billingPeriod));
+    dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf));
   },
 });
 
@@ -86,7 +86,7 @@ function ContributionSubmit(props: PropTypes) {
   if (props.paymentMethod !== 'None') {
     // if all payment methods are switched off, do not display the button
     const formClassName = 'form--contribution';
-    const showPayPalRecurringButton = props.paymentMethod === 'PayPal' && props.contributionType !== 'ONE_OFF';
+    const showPayPalRecurringButton = props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
 
     const submitButtonCopy = getContributeButtonCopyWithPaymentType(
       props.contributionType,

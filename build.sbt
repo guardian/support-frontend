@@ -56,7 +56,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     commonSettings,
     integrationTestSettings,
     libraryDependencies ++= commonDependencies
-  ).dependsOn(`support-services`, `support-models` % "test->test;compile->compile", `support-config`, `support-internationalisation`)
+  ).dependsOn(`support-services`, `support-models` % "test->test;it->test;compile->compile", `support-config`, `support-internationalisation`)
 
 
 lazy val `support-models` = (project in file("support-models"))

@@ -9,10 +9,13 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
 import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type DigitalBillingPeriod } from 'helpers/billingPeriods';
-import type { PaperBillingPlan, SubscriptionProduct } from 'helpers/subscriptions';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
 import { getOrigin } from './url';
 import { GBPCountries } from './internationalisation/countryGroup';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
 
@@ -32,9 +35,13 @@ export type SubsUrls = {
 const subsUrl = `https://subscribe.${getBaseDomain()}`;
 const patronsUrl = 'https://patrons.theguardian.com';
 const profileUrl = `https://profile.${getBaseDomain()}`;
+const manageUrl = `https://manage.${getBaseDomain()}`;
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl = 'https://play.google.com/store/apps/details?id=com.guardian';
 const emailPreferencesUrl = `${profileUrl}/email-prefs`;
+const myAccountUrl = `${profileUrl}/account/edit`;
+const manageSubsUrl = `${manageUrl}/subscriptions`;
+
 
 function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGroupId) {
 
@@ -320,24 +327,16 @@ function getWeeklyCheckout(
 
 
 // Builds a link to paper subs checkout
-function getPaperCheckout(
-  billingPlan: PaperBillingPlan,
+function getLegacyPaperCheckout(
+  productOption: PaperProductOptions,
+  fulfilmentOption: PaperFulfilmentOptions,
   referrerAcquisitionData: ReferrerAcquisitionData,
   nativeAbParticipations: Participations,
   optimizeExperiments: OptimizeExperiments,
 ) {
   const promoCode = getPromoCode('Paper', GBPCountries, defaultPromos.Paper);
 
-  const urls = {
-    collectionEveryday: 'voucher-everyday',
-    collectionSixday: 'voucher-sixday',
-    collectionWeekend: 'voucher-weekend',
-    collectionSunday: 'voucher-sunday',
-    deliveryEveryday: 'delivery-everyday',
-    deliverySixday: 'delivery-sixday',
-    deliveryWeekend: 'delivery-weekend',
-    deliverySunday: 'delivery-sunday',
-  };
+  const fulfilmentPart = fulfilmentOption === HomeDelivery ? 'delivery' : 'voucher';
 
   return withParams({
     referrerAcquisitionData,
@@ -345,7 +344,7 @@ function getPaperCheckout(
     nativeAbParticipations,
     optimizeExperiments,
     promoCode,
-  })([subsUrl, 'checkout', urls[billingPlan]].join('/'));
+  })([subsUrl, 'checkout', `${fulfilmentPart}-${productOption.toLowerCase()}`].join('/'));
 }
 
 
@@ -397,6 +396,8 @@ export {
   getDailyEditionUrl,
   getSignoutUrl,
   emailPreferencesUrl,
+  myAccountUrl,
+  manageSubsUrl,
   getWeeklyCheckout,
-  getPaperCheckout,
+  getLegacyPaperCheckout,
 };

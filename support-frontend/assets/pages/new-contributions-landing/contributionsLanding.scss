@@ -28,7 +28,11 @@ body {
 }
 
 .bold {
-  font-weight: bold;
+  font-weight: 500;
+}
+
+.highlight {
+  background-color: gu-colour(highlight-main);
 }
 
 .gu-content {
@@ -43,7 +47,6 @@ body {
     position: relative;
     background-color: transparent;
   }
-
 }
 
 .gu-content__main {
@@ -405,7 +408,8 @@ footer[role="contentinfo"] a {
   width: 100%;
   font-size: 44px;
   line-height: 46px;
-  font-family: $gu-titlepiece;
+  font-family: $gu-headline;
+  font-weight: bold;
   margin: 0 -10px;
   color: gu-colour(neutral-7);
 
@@ -421,9 +425,18 @@ footer[role="contentinfo"] a {
   font-family: $gu-headline;
   padding-bottom: $gu-v-spacing;
   border-bottom: 1px solid gu-colour(highlight-main);
+  font-weight: 300;
   @include mq($from: tablet) {
     margin: ($gu-v-spacing / 4) 0 ($gu-v-spacing / 4 * 3);
   }
+
+  p:not(:last-child) {
+    margin-bottom: $gu-v-spacing;
+  }
+}
+
+.gu-content__blurb-blurb-last-sentence {
+  font-weight: normal;
 }
 
 .header {
@@ -502,24 +515,36 @@ footer[role="contentinfo"] {
   flex-direction: column;
 }
 
-.gu-content__form__message {
+.form-message {
   margin: 0 -10px;
   padding: 12px 10px 11px 10px;
   border-bottom: 1px solid gu-colour(neutral-86);
+  font-family: $gu-headline;
+  background-color: gu-colour(highlight-main);
+
+  @include mq(tablet) {
+    background: none;
+  }
 }
 
-.frontline-campaign {
-  font-family: $gu-headline;
-}
-.frontline-campaign__headline {
+.form-message__headline {
   font-size: 24px;
   line-height: 26px;
   font-weight: bold;
 }
-.frontline-campaign__body {
+.form-message__body {
   font-size: 16px;
   line-height: 18px;
   font-style: italic;
+}
+
+.component-terms-thefrontline {
+  padding-bottom: $gu-v-spacing;
+  border-bottom: 1px solid gu-colour(neutral-86);
+
+  & + p {
+    padding-top: $gu-v-spacing / 2;
+  }
 }
 
 .form--content {
@@ -627,17 +652,6 @@ form {
 
 .form__radio-group--pills .form__radio-group-item + .form__radio-group-item {
   margin-left: 10px;
-
-  // HACK START - TO BE REMOVED: when annualContributionsRoundFour experiment ends
-  // Make sure last amount pill has the right margin when it moves down a line
-  &:nth-child(6){
-    margin: 10px 10px 0 0;
-
-    @include mq($from: 372px) { // custom breakpoint for hack
-      margin: 0 0 0 10px;
-    }
-  }
-  // HACK END
 }
 
 .form__radio-group--pills .form__radio-group-input + .form__radio-group-label {
@@ -653,6 +667,7 @@ form {
 
 .form__radio-group--pills .form__radio-group-input:checked + .form__radio-group-label {
   background: gu-colour(highlight-main);
+  font-weight: bold;
 }
 
 .form__radio-group--pills .form__radio-group-input:hover + .form__radio-group-label {
@@ -964,6 +979,117 @@ form {
   margin-top: $gu-v-spacing;
 }
 
+.gu-content--frontline-campaign {
+  .gu-content__main {
+    background-color: gu-colour(culture-faded);
+  }
+
+  @include mq(desktop) {
+    .gu-content__main::before {
+      content: '';
+      height: 414px;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-repeat: no-repeat;
+      background: url('https://uploads.guim.co.uk/2019/03/12/kangaroo.jpg'), linear-gradient(gu-colour(culture-dark), gu-colour(culture-faded));
+      background-size: cover;
+      background-position: left -150px top;
+
+      @include mq(leftCol) {
+        background-position: left -90px top;
+      }
+
+      @include mq(wide) {
+        background-position: left 20% bottom 20%;
+      }
+    }
+
+    .gu-content__blurb-header {
+      color: white;
+    }
+
+    .gu-content__header {
+      border-bottom: 0;
+    }
+
+    .gu-content__blurb, .gu-content__form {
+      margin-top: $gu-v-spacing * 3;
+    }
+
+    $content-width-desktop: 860px;
+    $content-width-leftCol: 948px;
+
+    .gu-content__content {
+      align-items: flex-start;
+
+      @include mq(desktop) {
+        margin: ($gu-v-spacing * 3) calc(50% - (#{$content-width-desktop} / 2));
+        width: $content-width-desktop;
+      }
+
+      @include mq(leftCol) {
+        margin: ($gu-v-spacing * 3) calc(50% - (#{$content-width-leftCol} / 2));
+        width: $content-width-leftCol;
+      }
+    }
+
+    header[role="banner"] {
+      @include mq(desktop) {
+        padding-left: calc(50% - (#{$content-width-desktop} / 2));
+      }
+
+      @include mq(leftCol) {
+        padding-left: calc(50% - (#{$content-width-leftCol} / 2));
+      }
+    }
+
+    .gu-content__form {
+      z-index: 0;
+
+      // TODO: should this be normalised to work like this everywhere?
+      box-sizing: border-box;
+
+      @include mq(tablet) {
+        width: 416px;
+        margin: 30px 10px;
+      }
+
+      @include mq(desktop) {
+        margin: 0;
+      }
+    }
+
+    .gu-content__blurb {
+      z-index: 0;
+      // TODO: should this be normalised to work like this everywhere?
+      box-sizing: border-box;
+
+      @include mq(desktop) {
+        // TODO: wtf, why does this have no effect!???
+        width: 423px;
+        margin: 0;
+      }
+
+      @include mq(leftCol) {
+        width: 474px;
+      }
+    }
+
+    .gu-content__blurb-blurb {
+      margin-top: 218px;
+      padding-top: 9px;
+      padding-bottom: 0;
+      padding-left: $gu-h-spacing / 2;
+      margin-left: -($gu-h-spacing / 2);
+      border-left: solid 1px #121212;
+      border-bottom: 0;
+    }
+  }
+
+}
+
 
 /* Server side rendering test loading message*/
 
@@ -1038,3 +1164,42 @@ form {
      opacity: 1;
    }
  }
+
+.goal-reached__message {
+  font-style: italic;
+  line-height: 20px;
+  padding: 6px 0 0 0;
+}
+
+.goal-reached__message:after {
+  margin: 6px -10px 0 -10px;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  display: block;
+  content: '';
+}
+
+.goal-reached__buttons {
+  margin-top: 30px;
+}
+
+.goal-reached__button {
+  padding-bottom: 20px;
+}
+
+.goal-reached__button--support {
+  background: gu-colour(highlight-main);
+  border: 1px solid gu-colour(highlight-main);
+}
+
+
+// Editorialise Amounts Test
+
+.editorialise-amounts-test-copy {
+  margin-top: $gu-v-spacing;
+  font-style: italic;
+  line-height: 20px;
+}
+
+.editorialise-amounts-test-copy:empty {
+  display: none;
+}

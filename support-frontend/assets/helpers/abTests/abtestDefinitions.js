@@ -1,28 +1,27 @@
 // @flow
 import type { Tests } from './abtest';
-import { annualAmountsLower, annualAmountsFive, annualAmountsOther } from './annualAmountsTest';
 
 // ----- Tests ----- //
 
+
+export type EditorialiseAmountsVariant = 'control' | 'averageAnnualAmount' | 'monthlyBreakdownAnnual' | 'weeklyBreakdownAnnual' | 'notintest';
+
 export const tests: Tests = {
 
-  annualContributionsRoundFour: {
-    type: 'AMOUNTS',
+  editorialiseAmounts: {
+    type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'lower',
-        amountsRegions: annualAmountsLower,
+        id: 'averageAnnualAmount',
       },
       {
-        id: 'five',
-        amountsRegions: annualAmountsFive,
+        id: 'monthlyBreakdownAnnual',
       },
       {
-        id: 'other',
-        amountsRegions: annualAmountsOther,
+        id: 'weeklyBreakdownAnnual',
       },
     ],
     audiences: {
@@ -36,3 +35,4 @@ export const tests: Tests = {
     seed: 3,
   },
 };
+

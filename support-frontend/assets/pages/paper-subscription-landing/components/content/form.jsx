@@ -6,19 +6,27 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
-import { getNewsstandSaving, getNewsstandPrice, type PaperBillingPlan, getPaperPrice, getRegularPaperPrice } from 'helpers/subscriptions';
+import { getNewsstandPrice, getNewsstandSaving } from 'helpers/subscriptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Price, showPrice } from 'helpers/productPrice/productPrices';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import ProductPagePlanForm, { type StatePropTypes, type DispatchPropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
+import ProductPagePlanForm, {
+  type DispatchPropTypes,
+  type StatePropTypes,
+} from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
-import { setPlan, redirectToCheckout } from '../../paperSubscriptionLandingPageActions';
+import { redirectToCheckout, setPlan } from '../../paperSubscriptionLandingPageActions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import { ActivePaperProductTypes, Everyday, Sixday } from 'helpers/productPrice/productOptions';
+import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
 
 
 // ---- Helpers ----- //
-
+// TODO: We will need to make this work for flash sales
 const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
 
 const getPriceStr = (price: Price): string => {
@@ -49,98 +57,45 @@ const getSavingStr = (price: Price): Option<string> => {
 
 // ---- Plans ----- //
 
-const collectionCopy = 'Collect your papers from your local retailer';
-const deliveryCopy = 'Have your papers delivered to your home';
-
-const allPlans = {
-  collectionEveryday: {
-    title: 'Every day',
-    copy: collectionCopy,
-    newsstand: getNewsstandPrice(['weekly', 'saturday', 'sunday']),
-    price: getPaperPrice('collectionEveryday'),
-    regularPrice: getRegularPaperPrice('collectionEveryday'),
-  },
-  collectionSixday: {
-    title: 'Monday to Saturday',
-    copy: collectionCopy,
-    newsstand: getNewsstandPrice(['weekly', 'saturday']),
-    price: getPaperPrice('collectionSixday'),
-    regularPrice: getRegularPaperPrice('collectionSixday'),
-  },
-  collectionWeekend: {
-    title: 'Weekend',
-    copy: collectionCopy,
-    newsstand: getNewsstandPrice(['saturday', 'sunday']),
-    price: getPaperPrice('collectionWeekend'),
-    regularPrice: getRegularPaperPrice('collectionWeekend'),
-  },
-  collectionSunday: {
-    title: 'Sunday',
-    copy: collectionCopy,
-    newsstand: getNewsstandPrice(['sunday']),
-    price: getPaperPrice('collectionSunday'),
-    regularPrice: getRegularPaperPrice('collectionSunday'),
-  },
-  deliveryEveryday: {
-    title: 'Every day',
-    copy: deliveryCopy,
-    newsstand: getNewsstandPrice(['weekly', 'saturday', 'sunday']),
-    price: getPaperPrice('deliveryEveryday'),
-    regularPrice: getRegularPaperPrice('deliveryEveryday'),
-  },
-  deliverySixday: {
-    title: 'Monday to Saturday',
-    copy: deliveryCopy,
-    newsstand: getNewsstandPrice(['weekly', 'saturday']),
-    price: getPaperPrice('deliverySixday'),
-    regularPrice: getRegularPaperPrice('deliverySixday'),
-  },
-  deliveryWeekend: {
-    title: 'Weekend',
-    copy: deliveryCopy,
-    newsstand: getNewsstandPrice(['saturday', 'sunday']),
-    price: getPaperPrice('deliveryWeekend'),
-    regularPrice: getRegularPaperPrice('deliveryWeekend'),
-  },
-  deliverySunday: {
-    title: 'Sunday',
-    copy: deliveryCopy,
-    newsstand: getNewsstandPrice(['sunday']),
-    price: getPaperPrice('deliverySunday'),
-    regularPrice: getRegularPaperPrice('deliverySunday'),
-  },
+const getTitle = (productOption: PaperProductOptions) => {
+  switch (productOption) {
+    case Everyday:
+      return 'Every day';
+    case Sixday:
+      return 'Monday to Saturday';
+    default:
+      return productOption;
+  }
 };
+
+const copy = {
+  HomeDelivery: 'Have your papers delivered to your home',
+  Collection: 'Collect your papers from your local retailer',
+};
+
+const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: ProductPrices) =>
+  ActivePaperProductTypes.reduce((products, productOption) => {
+    const price = finalPrice(productPrices, fulfilmentOption, productOption);
+    return {
+      ...products,
+      [productOption]: {
+        title: getTitle(productOption),
+        copy: copy[fulfilmentOption],
+        price: getPriceStr(price),
+        offer: getOfferStr(price.price, getNewsstandPrice(productOption)),
+        saving: getSavingStr(regularPrice(productPrices, fulfilmentOption, productOption)),
+      },
+    };
+  }, {});
 
 
 // ----- State/Props Maps ----- //
-const mapStateToProps = (state: State): StatePropTypes<PaperBillingPlan> => {
-  const transformPlans = (plans: $Keys<typeof allPlans>[]) => plans.reduce((ps, k) => ({
-    ...ps,
-    [k]: {
-      title: allPlans[k].title,
-      copy: allPlans[k].copy,
-      price: getPriceStr(allPlans[k].price),
-      offer: getOfferStr(allPlans[k].price.value, allPlans[k].newsstand ? allPlans[k].newsstand : null),
-      saving: getSavingStr(allPlans[k].regularPrice),
-    },
-  }), {});
+const mapStateToProps = (state: State): StatePropTypes<PaperProductOptions> => ({
+  plans: getPlans(state.page.tab, state.page.productPrices),
+  selectedPlan: state.page.plan.plan,
+});
 
-  if (state.page.tab === 'collection') {
-    return {
-      plans: transformPlans(['collectionEveryday', 'collectionSixday', 'collectionWeekend', 'collectionSunday']),
-      selectedPlan: state.page.plan.plan,
-    };
-  }
-
-  return {
-    plans: transformPlans(['deliveryEveryday', 'deliverySixday', 'deliveryWeekend', 'deliverySunday']),
-    selectedPlan: state.page.plan.plan,
-  };
-
-
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<Action<PaperBillingPlan>>): DispatchPropTypes<PaperBillingPlan> =>
+const mapDispatchToProps = (dispatch: Dispatch<Action<PaperProductOptions>>): DispatchPropTypes<PaperProductOptions> =>
   ({
     setPlanAction: bindActionCreators(setPlan, dispatch),
     onSubmitAction: bindActionCreators(redirectToCheckout, dispatch),

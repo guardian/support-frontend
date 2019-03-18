@@ -1,0 +1,97 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.component-product-page-hero.component-product-page-hero--weekly-campaign {
+  position: relative;
+  box-sizing: border-box;
+  background: #283942;
+  color: #fff;
+
+  max-height: 550px;
+
+  & * {
+    box-sizing: border-box;
+  }
+}
+
+.weekly-campaign-hero {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  align-items: center;
+  padding: 0;
+}
+
+.weekly-campaign-hero__copy {
+  display: block;
+  max-width: 50%;
+  padding: $gu-v-spacing*2 0 $gu-v-spacing*2 $gu-v-spacing;
+  margin-bottom: auto; 
+  
+  h2 {
+    color: #fff;
+    font-family: $gu-titlepiece;
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  @include mq($from: mobileMedium) {
+    max-width: 60%;
+  }
+  
+  @include mq($from: mobileLandscape) {
+    margin-bottom: 0; 
+    padding-top: 0;
+  }
+  
+  @include mq($from: phablet) {
+    max-width: gu-span(10);      
+    h2 {
+      font-size: 40px;
+    }
+  }
+  
+  @include mq($from: tablet) {
+    h2 {
+      font-size: 44px;
+    }
+  }
+
+  @include mq($from: desktop) {
+    h2 {
+      font-size: 50px;
+    }
+  }
+  
+  @include mq($from: leftCol) {
+    h2 {
+      font-size: 56px;
+    }
+  }
+}
+
+.weekly-campaign-hero__graphic {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  max-width: 80%;
+  padding-top: $gu-v-spacing*2;
+  
+  img {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    max-width: 100%;
+    max-height: calc(100% - (1.5rem));
+    display: block;
+  }
+
+  @include mq($from: mobileLandscape) {
+    max-width: 60%;
+  }
+
+  @include mq($from: phablet) {
+    max-width: 55%;
+  }
+}

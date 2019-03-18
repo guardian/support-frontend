@@ -20,6 +20,7 @@
 
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { StripeAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { Stripe } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -65,7 +66,7 @@ function setupStripeCheckout(
   isTestUser: boolean,
 ): Object {
   const handleToken = (token) => {
-    onPaymentAuthorisation({ paymentMethod: 'Stripe', token: token.id, stripePaymentMethod: 'StripeCheckout' });
+    onPaymentAuthorisation({ paymentMethod: Stripe, token: token.id, stripePaymentMethod: 'StripeCheckout' });
   };
 
   const stripeKey = getStripeKey(stripeAccount, currency, isTestUser);

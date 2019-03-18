@@ -1,8 +1,9 @@
 // @flow
-import type { ContributionType, PaymentMethod } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import { invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophanComponentEventTracking';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 type OldFlowOrNewFlow = 'opf' | 'npf';
 

@@ -4,7 +4,7 @@
 
 import { type ErrorReason } from 'helpers/errorReasons';
 import { combineReducers } from 'redux';
-import { type ContributionType, type PaymentMethod, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -22,6 +22,7 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -77,6 +78,7 @@ type FormState = {
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
+  tickerGoalReached: boolean,
 };
 
 type PageState = {
@@ -149,6 +151,7 @@ function createFormReducer() {
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
     formIsSubmittable: true,
+    tickerGoalReached: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -249,6 +252,9 @@ function createFormReducer() {
 
       case 'SET_PAYPAL_HAS_LOADED':
         return { ...state, payPalHasLoaded: true };
+
+      case 'SET_TICKER_GOAL_REACHED':
+        return { ...state, tickerGoalReached: true };
 
 
       case 'SELECT_AMOUNT':

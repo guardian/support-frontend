@@ -15,6 +15,7 @@ import { type ActiveTabState } from '../../paperSubscriptionLandingPageReducer';
 import { setTab } from '../../paperSubscriptionLandingPageActions';
 
 import Form from './form';
+import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
 
 // Types
@@ -111,9 +112,9 @@ const ContentForm = ({
     <Text>
       <SansParagraph>
         {
-          selectedTab === 'collection'
-            ? <LinkTo tab="delivery" setTabAction={setTabAction}>Switch to Delivery</LinkTo>
-            : <LinkTo tab="collection" setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
+          selectedTab === Collection
+            ? <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo>
+            : <LinkTo tab={Collection} setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
         }
       </SansParagraph>
     </Text>

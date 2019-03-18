@@ -119,10 +119,6 @@ class Application(
 
     val js = elementForStage(RefPath("newContributionsLandingPage.js"))
 
-    val preload = List("GuardianTextSans-Regular", "GuardianTextSans-Medium", "GHGuardianHeadline-Bold").map { name =>
-      Preload(s"//pasteup.guim.co.uk/webfonts/1.0.0/noalts-not-hinted/$name.woff2", "font", "font/woff2")
-    }
-
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"new-contributions-landing-page-$countryCode",
@@ -137,8 +133,7 @@ class Application(
       regularUatPayPalConfig = payPalConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      idUser = idUser,
-      preload = preload
+      idUser = idUser
     )
   }
 

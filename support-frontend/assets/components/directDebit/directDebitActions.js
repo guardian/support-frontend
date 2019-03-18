@@ -4,6 +4,7 @@ import * as storage from 'helpers/storage';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
 import { checkAccount } from './helpers/ajax';
+import { DirectDebit } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -28,7 +29,7 @@ export type Action =
 // ----- Actions ----- //
 
 const openDirectDebitPopUp = (): Action => {
-  storage.setSession('selectedPaymentMethod', 'DirectDebit');
+  storage.setSession('selectedPaymentMethod', DirectDebit);
   return { type: 'DIRECT_DEBIT_POP_UP_OPEN' };
 };
 
@@ -124,7 +125,7 @@ function confirmDirectDebitClicked(onPaymentAuthorisation: PaymentAuthorisation 
     const sortCode = sortCodeArray.join('');
 
     onPaymentAuthorisation({
-      paymentMethod: 'DirectDebit',
+      paymentMethod: DirectDebit,
       accountHolderName,
       sortCode,
       accountNumber,
