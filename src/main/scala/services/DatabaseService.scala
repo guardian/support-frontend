@@ -100,7 +100,7 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
     Future(database.withConnection { implicit conn => query.as(scalar[Boolean].single) })
       .attemptT
       .leftMap(err => {
-        val msg = "unable to select from database"
+        val msg = s"Unable to query database when doing an existence check for $paymentId"
         logger.error(msg, err)
         DatabaseService.Error(msg, Some(err))
       })
