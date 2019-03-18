@@ -115,7 +115,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbSelectError)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
-        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, clientBrowserInfo)
 
       recordResult.futureLeft shouldBe BackendError.fromDatabaseError(dbError.futureLeft)
 
@@ -126,7 +126,7 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
       when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultPaymentExists)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
-        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment)
+        subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, clientBrowserInfo)
 
       recordResult.futureLeft shouldBe subscribeError
 

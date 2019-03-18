@@ -30,13 +30,14 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
                                       cloudWatchService: CloudWatchService
                                      )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
-  def recordPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
+  def recordPayment(googleRecordPayment: GoogleRecordPayment,
+                    clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
     for {
       alreadyProcessed <- isPaymentAlreadyProcessed(googleRecordPayment)
       processOutcome <- if (alreadyProcessed) {
         handleAlreadyProcessedPayment(googleRecordPayment)
       } else {
-        handleFirstInstanceOfPayment(googleRecordPayment)
+        handleFirstInstanceOfPayment(googleRecordPayment, clientBrowserInfo)
       }
     } yield processOutcome
   }
@@ -49,15 +50,15 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     }
   }
 
-  private def handleAlreadyProcessedPayment(googleRecordPayment: GoogleRecordPayment,
-                                            clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
+  private def handleAlreadyProcessedPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
     logger.error(s"Received a duplicate payment id for payment : $googleRecordPayment")
     cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
     EitherT.leftT[Future, Unit](BackendError.fromSubscribeWithGoogleError(
       SubscribeWithGoogleError(s"Received a duplicate payment id for payment : $googleRecordPayment")))
   }
 
-  private def handleFirstInstanceOfPayment(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Unit] = {
+  private def handleFirstInstanceOfPayment(googleRecordPayment: GoogleRecordPayment,
+                                           clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
     val identity = getOrCreateIdentityIdFromEmail(googleRecordPayment.email)
 
     val trackContributionResult = identity.flatMap { id =>
