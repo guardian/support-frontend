@@ -159,10 +159,6 @@ function campaignSpecificDetails() {
               With your support, we can cut through the rhetoric and focus the debate on the facts.
               That way everyone can learn about the devastating and immediate
               threats to our country and how best to find a solution.
-            </span>&nbsp;
-            {/* todo: find out why there's no space between these, unless I put &nbps; */}
-            <span className="bold highlight">
-              Please contribute to our new series on Australia’s climate emergency today.
             </span>
           </p>
         </div>
