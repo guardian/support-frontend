@@ -8,5 +8,6 @@ if [[ -w ${CONFIG_DIR} ]]; then
     --profile membership
 else
   echo "ERROR! Cannot write to ${CONFIG_DIR}. Check it exists and you have write permissions to it.";
+  echo "  'mkdir ${CONFIG_DIR}' will create ${CONFIG_DIR} if it does not exist";
   echo "  'sudo chown -R $(whoami):admin ${CONFIG_DIR}' will make you the owner of ${CONFIG_DIR}";
 fi
