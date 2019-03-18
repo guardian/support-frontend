@@ -12,7 +12,7 @@ import {
 import type { ThirdPartyTrackingConsent } from '../../helpers/tracking/thirdPartyTrackingConsent';
 import Roundel from './roundel.svg';
 import Tick from './tick.svg';
-import './consentBanner.scss';
+import 'components/consentBanner/consentBanner.scss';
 
 export type PropTypes = {
   trackingConsent: ThirdPartyTrackingConsent,
