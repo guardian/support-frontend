@@ -115,9 +115,9 @@ class Application(
     (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
-    val css = elementForStage(RefPath("newContributionsLandingPageStyles.css"))
+    val css = elementForStage(RefPath("contributionsLandingPage.css"))
 
-    val js = elementForStage(RefPath("newContributionsLandingPage.js"))
+    val js = elementForStage(RefPath("contributionsLandingPage.js"))
 
     views.html.newContributions(
       title = "Support the Guardian | Make a Contribution",
