@@ -3,6 +3,7 @@
 $btn-height: ($gu-v-spacing*3.5);
 
 .consent-banner--first-pv-consent {
+  z-index: 99;
   position: fixed;
   bottom: 0px;
   width: 100%;

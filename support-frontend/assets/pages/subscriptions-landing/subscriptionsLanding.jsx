@@ -13,7 +13,7 @@ import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import FeaturedProductAb from './components/featuredProductAb';
-import ConsentBanner from '../../components/consentBanner/consentBanner';
+import ConsentBanner from 'components/consentBanner/consentBanner';
 
 // ----- Redux Store ----- //
 

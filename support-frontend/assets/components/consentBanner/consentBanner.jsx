@@ -12,6 +12,7 @@ import {
 import type { ThirdPartyTrackingConsent } from '../../helpers/tracking/thirdPartyTrackingConsent';
 import ConsentBannerButtonTick from '../svgs/consentBannerButtonTick';
 import ConsentBannerRoundel from '../svgs/consentBannerRoundel';
+import './consentBanner.scss'
 
 export type PropTypes = {
   trackingConsent: ThirdPartyTrackingConsent,
@@ -45,13 +46,13 @@ function ConsentBanner(props: PropTypes) {
           </div>
           <div className="consent-banner--first-pv-consent__block consent-banner--first-pv-consent__block--intro">
             <p>We use cookies to improve your experience on our site and to show you personalised advertising.</p>
-            <p>To find out more, read our
+            <p>To find out more, read our&nbsp;
               <a
                 className="u-underline"
                 href="https://www.theguardian.com/help/privacy-policy"
               >
                 privacy policy
-              </a> and
+              </a>&nbsp;and&nbsp;
               <a
                 className="u-underline"
                 href="https://www.theguardian.com/info/cookies"
