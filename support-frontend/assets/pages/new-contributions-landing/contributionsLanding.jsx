@@ -28,7 +28,7 @@ import ContributionThankYouContainer from './components/ContributionThankYou/Con
 import { NewContributionBackground } from './components/ContributionBackground';
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
-import './contributionsLanding.scss'
+import './contributionsLanding.scss';
 
 if (!isDetailsSupported) {
   polyfillDetails();
