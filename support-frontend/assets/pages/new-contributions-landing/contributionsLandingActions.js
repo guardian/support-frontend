@@ -76,7 +76,7 @@ export type Action =
   | { type: 'PAYMENT_SUCCESS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
-  | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
+  | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean };
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 

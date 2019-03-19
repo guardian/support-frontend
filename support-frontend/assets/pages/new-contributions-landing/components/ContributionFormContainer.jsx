@@ -94,6 +94,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
 export type CountryMetaData = {
   headerCopy: string,
   contributeCopy?: React$Element<string>,
+  // URL to fetch ticker data from. null/undefined implies no ticker
+  tickerJsonUrl?: string,
   // Optional message to display at the top of the form
   formMessage?: React$Element<string>,
 };

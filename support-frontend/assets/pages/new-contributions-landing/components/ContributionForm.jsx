@@ -234,7 +234,11 @@ function ContributionForm(props: PropTypes) {
         </div>
       </div>
       <div>
-        <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} campaignName={props.campaignName} />
+        <TermsPrivacy
+          countryGroupId={props.countryGroupId}
+          contributionType={props.contributionType}
+          campaignName={props.campaignName}
+        />
         {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
       </div>
     </form>
