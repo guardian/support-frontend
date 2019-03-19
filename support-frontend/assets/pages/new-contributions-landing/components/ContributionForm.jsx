@@ -79,6 +79,7 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
+  campaignName: ?CampaignName,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -108,6 +109,7 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
+  campaignName: state.page.form.campaignName,
 });
 
 
@@ -232,7 +234,7 @@ function ContributionForm(props: PropTypes) {
         </div>
       </div>
       <div>
-        <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} />
+        <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} campaignName={props.campaignName} />
         {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
       </div>
     </form>

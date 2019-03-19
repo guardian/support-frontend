@@ -5,6 +5,7 @@
 import { type ErrorReason } from 'helpers/errorReasons';
 import { combineReducers } from 'redux';
 import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
+import { type CampaignName, getCampaignName } from 'helpers/campaigns';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -79,6 +80,7 @@ type FormState = {
   formIsValid: boolean,
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
+  campaignName: ?CampaignName,
 };
 
 type PageState = {
@@ -152,6 +154,7 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
+    campaignName: getCampaignName(),
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -256,6 +259,8 @@ function createFormReducer() {
       case 'SET_TICKER_GOAL_REACHED':
         return { ...state, tickerGoalReached: true };
 
+      case 'SET_CAMPAIGN_NAME':
+        return { ...state, campaignName: action.campaignName };
 
       case 'SELECT_AMOUNT':
         return {

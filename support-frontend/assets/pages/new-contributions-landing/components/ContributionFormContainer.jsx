@@ -18,6 +18,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
+import { type CampaignName, campaigns } from 'helpers/campaigns';
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
@@ -57,6 +58,7 @@ type PropTypes = {|
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
   tickerGoalReached: boolean,
+  campaignName: ?CampaignName,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -74,6 +76,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   tickerGoalReached: state.page.form.tickerGoalReached,
+  campaignName: state.page.form.campaignName,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -91,8 +94,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
 export type CountryMetaData = {
   headerCopy: string,
   contributeCopy?: React$Element<string>,
-  // URL to fetch ticker data from. null/undefined implies no ticker
-  tickerJsonUrl?: string,
   // Optional message to display at the top of the form
   formMessage?: React$Element<string>,
 };
@@ -127,52 +128,6 @@ const countryGroupSpecificDetails: {
   NZDCountries: defaultHeaderCopyAndContributeCopy,
   Canada: defaultHeaderCopyAndContributeCopy,
 };
-
-function campaignSpecificDetails() {
-  if (isFrontlineCampaign()) {
-    return {
-      formMessage: (
-        <div>
-          <div className="form-message__headline">Make a contribution</div>
-          <div className="form-message__body">to our dedicated series ‘The Frontline’</div>
-        </div>
-      ),
-      headerCopy: 'The Frontline: Australia and the climate emergency',
-      contributeCopy: (
-        <div>
-          <p>
-            The north is flooded, the south parched by drought.
-            The Murray Darling, our greatest river system, has dried to a trickle,
-            crippling communities and turning up millions of dead fish.
-            The ancient alpine forests of Tasmania have burned.
-            The summer was the hottest on record.
-            We are living the reality of climate change.
-          </p>
-          <p>
-            That’s why we need your help to bring our reporting on the climate crisis to light.
-            We asked our readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
-            Your response has been immediate and overwhelming, and thanks to your encouragement we have increased
-            the goal to $150,000.
-          </p>
-          <p>
-            <span>
-              With your support, we can cut through the rhetoric and focus the debate on the facts.
-              That way everyone can learn about the devastating and immediate
-              threats to our country and how best to find a solution.
-            </span>
-          </p>
-        </div>
-      ),
-      tickerJsonUrl: '/ticker.json',
-      // stuff for campaign that's not set here:
-      // - CSS class (contributionsLanding.jsx)
-      // - Terms & Conditions
-      // - Just single contributions (via URL)
-    };
-  }
-
-  return {};
-}
 
 function goalReachedTemplate() {
   if (isFrontlineCampaign()) {
@@ -238,7 +193,7 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = {
     ...countryGroupSpecificDetails[props.countryGroupId],
-    ...campaignSpecificDetails(),
+    ...props.campaignName ? campaigns[props.campaignName] : {},
     ...urlSpecificDetails(),
   };
 
