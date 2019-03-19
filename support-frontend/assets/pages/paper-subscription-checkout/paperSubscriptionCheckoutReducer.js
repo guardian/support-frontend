@@ -42,6 +42,8 @@ import {
 } from './components-checkout/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+
 
 // ----- Types ----- //
 
@@ -219,9 +221,9 @@ const getInitialProduct = (productInUrl: ?string, fulfillmentInUrl: ?string): Pr
       ? (productInUrl: PaperProductOptions)
       : Everyday,
   fulfilmentOption:
-    fulfillmentInUrl === 'Collection' || fulfillmentInUrl === 'HomeDelivery'
-      ? (fulfillmentInUrl: PaperFulfilmentOptions)
-      : Collection,
+  paperHasDeliveryEnabled() && (fulfillmentInUrl === 'Collection' || fulfillmentInUrl === 'HomeDelivery')
+    ? (fulfillmentInUrl: PaperFulfilmentOptions)
+    : Collection,
 });
 
 function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillmentInUrl: ?string) {

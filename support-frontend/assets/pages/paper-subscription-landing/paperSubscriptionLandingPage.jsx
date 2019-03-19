@@ -28,6 +28,7 @@ import reducer from './paperSubscriptionLandingPageReducer';
 import './paperSubscriptionLandingPage.scss';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 
 // ----- Collection or delivery ----- //
@@ -35,12 +36,7 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
 const product = getQueryParameter('product');
 
-const reactElementId: {
-  [PaperFulfilmentOptions]: string,
-} = {
-  Collection: 'paper-subscription-landing-page-collection',
-  HomeDelivery: 'paper-subscription-landing-page-delivery',
-};
+const reactElementId = 'paper-subscription-landing-page';
 
 // ----- Internationalisation ----- //
 
@@ -73,15 +69,16 @@ const content = (
       footer={<Footer />}
     >
       <SaleHeader />
-
-      <Content needsHigherZindex>
-        <Text>
-          <LargeParagraph>
-            {getStandfirst()}
-          </LargeParagraph>
-        </Text>
-        <Tabs />
-      </Content>
+      {paperHasDeliveryEnabled() &&
+        <Content needsHigherZindex>
+          <Text>
+            <LargeParagraph>
+              {getStandfirst()}
+            </LargeParagraph>
+          </Text>
+          <Tabs />
+        </Content>
+      }
       <TabsContent />
       {flashSaleIsActive('Paper', GBPCountries) &&
         <Content>
@@ -96,5 +93,5 @@ const content = (
   </Provider>
 );
 
-renderPage(content, reactElementId[fulfilment]);
+renderPage(content, reactElementId);
 
