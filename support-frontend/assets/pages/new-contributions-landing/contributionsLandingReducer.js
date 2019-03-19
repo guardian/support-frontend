@@ -259,9 +259,6 @@ function createFormReducer() {
       case 'SET_TICKER_GOAL_REACHED':
         return { ...state, tickerGoalReached: true };
 
-      case 'SET_CAMPAIGN_NAME':
-        return { ...state, campaignName: action.campaignName };
-
       case 'SELECT_AMOUNT':
         return {
           ...state,

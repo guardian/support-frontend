@@ -11,7 +11,6 @@ import {
   logInvalidCombination,
   type PaymentMatrix,
 } from 'helpers/contributions';
-import { type CampaignName } from 'helpers/campaigns';
 import { getUserTypeFromIdentity, type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { type CaState, type UsState } from 'helpers/internationalisation/country';
 import type {
@@ -78,7 +77,6 @@ export type Action =
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
   | { type: 'SET_FORM_IS_VALID', isValid: boolean }
   | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean }
-  | { type: 'SET_CAMPAIGN_NAME', campaignName: CampaignName };
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -214,8 +212,6 @@ const checkIfEmailHasPassword = (email: string) =>
   };
 
 const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: true });
-
-const setCampaignName = (name: CampaignName): Action => ({ type: 'SET_CAMPAIGN_NAME', campaignName: name });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
@@ -490,5 +486,4 @@ export {
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
   setTickerGoalReached,
-  setCampaignName,
 };
