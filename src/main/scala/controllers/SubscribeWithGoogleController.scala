@@ -32,7 +32,7 @@ class SubscribeWithGoogleController(
         subscribeWithGoogleBackendProvider.getInstanceFor(request)
           .recordPayment(request.body, ClientBrowserInfo.fromRequest(request, None)).bimap(
           err => err match {
-            case dbError: BackendError.SubscribeWithGooglePaymentError => Ok("{}").as(ContentTypes.JSON)
+            case dbError: BackendError.SubscribeWithGoogleDuplicateEventError => Ok("{}").as(ContentTypes.JSON)
             case er: BackendError => InternalServerError
           },
           success => Ok("{}").as(ContentTypes.JSON)

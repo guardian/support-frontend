@@ -64,7 +64,7 @@ class SubscribeWithGoogleBackendFixture()(implicit ec: ExecutionContext) extends
   val emailError: EitherT[Future, EmailService.Error, SendMessageResult] = EitherT.left(
     Future.successful(EmailService.Error(new Exception("Unknown error while sending message to SQS.")))
   )
-  val subscribeError = BackendError.fromSubscribeWithGoogleError(SubscribeWithGoogleError(s"Received a duplicate payment id for payment : $subscribeWithGooglePayment"))
+  val subscribeError = BackendError.fromSubscribeWithGoogleDuplicatePaymentError(SubscribeWithGoogleDuplicateEventError(s"Received a duplicate payment id for payment : $subscribeWithGooglePayment"))
 
   val failedIdentityErrors = BackendError.combineResults(
     BackendError.combineResults(
