@@ -18,23 +18,28 @@ case class DirectDebitPaymentFields(
   accountNumber: String
 ) extends PaymentFields
 
+case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
+
 object PaymentFields {
   //Payment fields are input from support-frontend
   implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
   implicit val stripePaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
+  implicit val existingPaymentFieldsCodec: Codec[ExistingPaymentFields] = deriveCodec
 
   implicit val encodePaymentFields: Encoder[PaymentFields] = Encoder.instance {
     case p: PayPalPaymentFields => p.asJson
     case s: StripePaymentFields => s.asJson
     case d: DirectDebitPaymentFields => d.asJson
+    case e: ExistingPaymentFields => e.asJson
   }
 
   implicit val decodePaymentFields: Decoder[PaymentFields] =
     List[Decoder[PaymentFields]](
       Decoder[PayPalPaymentFields].widen,
       Decoder[StripePaymentFields].widen,
-      Decoder[DirectDebitPaymentFields].widen
+      Decoder[DirectDebitPaymentFields].widen,
+      Decoder[ExistingPaymentFields].widen
     ).reduceLeft(_ or _)
 
 }

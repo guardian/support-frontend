@@ -21,8 +21,8 @@ class StateWrapper(encryption: EncryptionProvider, useEncryption: Boolean) {
   implicit private val wrapperEncoder = deriveEncoder[JsonWrapper]
   implicit private val wrapperDecoder = deriveDecoder[JsonWrapper]
 
-  def wrap[T](state: T, isTestUser: Boolean)(implicit encoder: Encoder[T]): String = {
-    JsonWrapper(encodeState(state), None, RequestInfo(useEncryption, isTestUser, failed = false, Nil)).asJson.noSpaces
+  def wrap[T](state: T, isTestUser: Boolean, isExistingAccount: Boolean)(implicit encoder: Encoder[T]): String = {
+    JsonWrapper(encodeState(state), None, RequestInfo(useEncryption, isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces
   }
 
   def unWrap[T](s: String)(implicit decoder: Decoder[T]): Try[T] =

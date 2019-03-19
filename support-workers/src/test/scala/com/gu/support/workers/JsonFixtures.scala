@@ -16,7 +16,7 @@ object JsonFixtures {
   val useEncryption = false
 
   def wrapFixture(string: String): ByteArrayInputStream =
-    Wrapper.wrapString(string, RequestInfo(useEncryption, testUser = false, failed = false, Nil)).asJson.noSpaces.asInputStream
+    Wrapper.wrapString(string, RequestInfo(useEncryption, testUser = false, failed = false, Nil, false)).asJson.noSpaces.asInputStream
 
   val userJson =
     s"""
@@ -315,7 +315,8 @@ object JsonFixtures {
             "encrypted": false,
             "testUser": false,
             "failed": false,
-            "messages": []
+            "messages": [],
+            "accountExists": false
           }
         }
      """
@@ -331,7 +332,8 @@ object JsonFixtures {
             "encrypted": false,
             "testUser": false,
             "failed": false,
-            "messages": []
+            "messages": [],
+            "accountExists": false
           }
         }
      """
@@ -346,7 +348,8 @@ object JsonFixtures {
           "encrypted": false,
           "testUser": true,
           "failed": false,
-          "messages": []
+          "messages": [],
+          "accountExists": false
         }
       }
     """
@@ -364,7 +367,8 @@ object JsonFixtures {
         "encrypted": false,
         "testUser": true,
         "failed": false,
-        "messages": []
+        "messages": [],
+        "accountExists": false
       }
     }
   """
@@ -379,7 +383,8 @@ object JsonFixtures {
           "encrypted": false,
           "testUser": true,
           "failed": false,
-          "messages": []
+          "messages": [],
+          "accountExists": false
         }
       }
     """
@@ -399,7 +404,8 @@ object JsonFixtures {
           "encrypted": false,
           "testUser": true,
           "failed": false,
-          "messages": []
+          "messages": [],
+          "accountExists": false
         }
       }
      """
@@ -415,7 +421,8 @@ object JsonFixtures {
           "encrypted": false,
           "testUser": true,
           "failed": false,
-          "messages": []
+          "messages": [],
+          "accountExists": false
         }
       }
     """
@@ -431,7 +438,8 @@ object JsonFixtures {
           "failed": false,
           "messages": [
             "Payment method is Stripe"
-          ]
+          ],
+          "accountExists": false
         }
       }
     """
@@ -457,7 +465,8 @@ object JsonFixtures {
             "failed": false,
             "messages": [
               "Payment method is Stripe"
-            ]
+            ],
+            "accountExists": false
           }
         }
       """.asInputStream

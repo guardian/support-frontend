@@ -41,6 +41,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
         createDirectDebitPaymentMethod(dd, state.user)
+      case _: ExistingPaymentFields =>
+        Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
     }
 
   private def getCreateSalesforceContactState(state: CreatePaymentMethodState, paymentMethod: PaymentMethod) =
