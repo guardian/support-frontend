@@ -113,8 +113,8 @@ function ThankYouContent({
       <Content>
         <Text>
           <SansParagraph>
-            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick('checkout_return_home', 'DigitalPack', null)}>Manage section</a> or accessing
-            it via <a href={myAccountUrl}>your Guardian account</a>.
+            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick('checkout_mma', 'Paper', null)}>Manage section</a> or accessing
+            it via <a href={myAccountUrl} onClick={sendTrackingEventsOnClick('checkout_my_account', 'Paper', null)}>your Guardian account</a>.
           </SansParagraph>
         </Text>
       </Content>
