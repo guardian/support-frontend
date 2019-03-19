@@ -20,6 +20,7 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
+import { type CampaignName } from 'helpers/campaigns';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
