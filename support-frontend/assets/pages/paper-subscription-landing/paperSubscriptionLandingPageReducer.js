@@ -7,10 +7,11 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 import { type TabActions } from './paperSubscriptionLandingPageActions';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
+import { isDeliveryEnabled } from './helpers/switches';
 
 
 // ----- Types ----- //
@@ -34,7 +35,7 @@ const getTabsReducer = (initialTab: PaperFulfilmentOptions) =>
 
     switch (action.type) {
       case 'SET_TAB':
-        return action.tab;
+        return isDeliveryEnabled() ? action.tab : Collection;
       default:
         return state;
     }
@@ -57,6 +58,6 @@ export default (initialTab: PaperFulfilmentOptions, product: ?string) => {
   return combineReducers({
     productPrices: () => productPrices,
     plan: ProductPagePlanFormReducerFor<?PaperProductOptions>('Paper', findInitialProduct(product)),
-    tab: getTabsReducer(initialTab),
+    tab: getTabsReducer(isDeliveryEnabled() ? initialTab : Collection),
   });
 };

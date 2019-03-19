@@ -16,6 +16,7 @@ import { setTab } from '../../paperSubscriptionLandingPageActions';
 
 import Form from './form';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { isDeliveryEnabled } from '../../helpers/switches';
 
 
 // Types
@@ -109,15 +110,17 @@ const ContentForm = ({
       }
     </Text>
     <Form />
-    <Text>
-      <SansParagraph>
-        {
-          selectedTab === Collection
-            ? <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo>
-            : <LinkTo tab={Collection} setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
-        }
-      </SansParagraph>
-    </Text>
+    {isDeliveryEnabled() &&
+      <Text>
+        <SansParagraph>
+          {
+            selectedTab === Collection
+              ? <LinkTo tab={HomeDelivery} setTabAction={setTabAction}>Switch to Delivery</LinkTo>
+              : <LinkTo tab={Collection} setTabAction={setTabAction}>Switch to Vouchers</LinkTo>
+          }
+        </SansParagraph>
+      </Text>
+    }
     <ProductPageInfoChip>
       {getPageInfoChip()}
     </ProductPageInfoChip>

@@ -19,7 +19,6 @@ import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 // ----- Content ----- //
 const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => (
   <Content
-    border
     image={<GridImage
       gridId="paperDeliveryFeature"
       srcSizes={[920, 500, 140]}

@@ -17,7 +17,6 @@ import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpe
 // ----- Content ----- //
 const ContentVoucherFaqBlock = () => (
   <Content
-    border
     image={<GridImage
       gridId="paperVoucherFeature"
       srcSizes={[750, 500, 140]}
