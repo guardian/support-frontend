@@ -15,10 +15,10 @@ import util.RequestTypeDecoder.instances._
 import scala.concurrent.Future
 
 class SubscribeWithGoogleController(
-                          cc: ControllerComponents,
-                          subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend]
-                        )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
-    extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
+                                     cc: ControllerComponents,
+                                     subscribeWithGoogleBackendProvider: RequestBasedProvider[SubscribeWithGoogleBackend]
+                                   )(implicit pool: DefaultThreadPool, allowedCorsUrls: List[String])
+  extends AbstractController(cc) with Circe with JsonUtils with StrictLogging with CorsActionProvider {
 
   override implicit val corsUrls: List[String] = allowedCorsUrls
   override implicit val controllerComponents: ControllerComponents = cc
@@ -32,14 +32,14 @@ class SubscribeWithGoogleController(
         subscribeWithGoogleBackendProvider.getInstanceFor(request)
           .recordPayment(request.body, ClientBrowserInfo.fromRequest(request, None)).bimap(
           err => err match {
-          case dbError: BackendError.SubscribeWithGooglePaymentError => Ok("{}").as(ContentTypes.JSON)
-          case er: BackendError => InternalServerError
-        },
+            case dbError: BackendError.SubscribeWithGooglePaymentError => Ok("{}").as(ContentTypes.JSON)
+            case er: BackendError => InternalServerError
+          },
           success => Ok("{}").as(ContentTypes.JSON)
         ).merge
       case PaymentStatus.Failed | PaymentStatus.Refunded =>
         logger.error(
-         s"Received $requestBody - as a payment but has a Payment Status of ${requestBody.status} - this is not a payment"
+          s"Received $requestBody - as a payment but has a Payment Status of ${requestBody.status} - this is not a payment"
         )
         Future.successful(BadRequest)
     }
