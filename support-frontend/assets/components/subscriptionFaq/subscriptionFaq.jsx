@@ -30,15 +30,6 @@ function faqLink(props: PropTypes) {
 function SubscriptionFaq(props: PropTypes) {
 
   switch (props.subscriptionProduct) {
-    case 'GuardianWeekly':
-      return (
-        <div className="component-subscription-faq">
-          <div className="component-subscription-faq__text">
-            You may also find help in our
-            <a className="component-subscription-faq__href" href={faqLink(props)} onClick={sendTrackingEventsOnClick('onward_faq', 'GuardianWeekly', null)}> Frequently Asked Questions</a>.
-          </div>
-        </div>
-      );
     case 'DigitalPack':
       return (
         <div className="component-subscription-faq">
@@ -58,7 +49,7 @@ function SubscriptionFaq(props: PropTypes) {
         <div className="component-subscription-faq">
           <div className="component-subscription-faq__text">
             You may also find help in our
-            <a className="component-subscription-faq__href" href={faqLink(props)}> Frequently Asked Questions</a>.
+            <a className="component-subscription-faq__href" href={faqLink(props)} onClick={sendTrackingEventsOnClick('onward_faq', props.subscriptionProduct, null)}> Frequently Asked Questions</a>.
           </div>
         </div>
       );
