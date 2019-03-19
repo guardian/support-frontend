@@ -98,7 +98,8 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
   private def contributorRowFromPayment(identityId: Long, googleRecordPayment: GoogleRecordPayment): ContributorRow = {
     ContributorRow(googleRecordPayment.email,
       googleRecordPayment.currency,
-      identityId, PaymentProvider.SubscribeWithGoogle,
+      identityId,
+      PaymentProvider.SubscribeWithGoogle,
       Some(googleRecordPayment.firstName),
       googleRecordPayment.amount)
   }

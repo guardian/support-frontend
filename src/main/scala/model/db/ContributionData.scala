@@ -1,7 +1,7 @@
 package model.db
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDateTime, ZoneId, ZoneOffset}
+import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 import java.util.UUID
 
 import cats.implicits._
@@ -105,7 +105,7 @@ object ContributionData extends StrictLogging {
       identityId = identityId,
       email = googleRecordPayment.email,
       // Time at which the object was created. Measured in seconds since the Unix epoch.
-      created = LocalDateTime.ofEpochSecond(googleRecordPayment.receivedTimestamp, 0, ZoneOffset.UTC),
+      created = LocalDateTime.ofInstant(Instant.ofEpochMilli(googleRecordPayment.receivedTimestamp), ZoneOffset.UTC),
       currency = Currency.withNameInsensitive(googleRecordPayment.currency),
       amount = googleRecordPayment.amount,
       countryCode = Some(googleRecordPayment.countryCode),
