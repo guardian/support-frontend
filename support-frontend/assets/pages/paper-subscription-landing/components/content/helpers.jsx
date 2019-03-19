@@ -16,7 +16,7 @@ import { setTab } from '../../paperSubscriptionLandingPageActions';
 
 import Form from './form';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-import { isDeliveryEnabled } from '../../helpers/switches';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 
 // Types
@@ -110,7 +110,7 @@ const ContentForm = ({
       }
     </Text>
     <Form />
-    {isDeliveryEnabled() &&
+    {paperHasDeliveryEnabled() &&
       <Text>
         <SansParagraph>
           {

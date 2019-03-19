@@ -28,7 +28,7 @@ import reducer from './paperSubscriptionLandingPageReducer';
 import './paperSubscriptionLandingPage.scss';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-import { isDeliveryEnabled } from './helpers/switches';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 // ----- Collection or delivery ----- //
 
@@ -68,7 +68,7 @@ const content = (
       footer={<Footer />}
     >
       <SaleHeader />
-      {isDeliveryEnabled() &&
+      {paperHasDeliveryEnabled() &&
         <Content needsHigherZindex>
           <Text>
             <LargeParagraph>
