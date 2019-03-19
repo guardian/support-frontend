@@ -76,7 +76,7 @@ export const campaigns: Campaigns = {
 export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
-  const name = getQueryParameter('campaign-name') || (isFrontlineCampaign() === true ? 'thefrontline' : undefined);
+  const name = getQueryParameter('campaignName') || (isFrontlineCampaign() === true ? 'thefrontline' : undefined);
   if (Object.keys(campaigns).includes(name)) {
     return name;
   }
