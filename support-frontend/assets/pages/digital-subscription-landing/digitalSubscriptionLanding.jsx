@@ -31,6 +31,7 @@ import Form from './components/form';
 
 import './digitalSubscriptionLanding.scss';
 import './components/theMoment.scss';
+import ConsentBanner from 'components/consentBanner/consentBanner';
 
 // ----- Redux Store ----- //
 
@@ -93,6 +94,7 @@ const content = (
       </Content>
       <IndependentJournalismSection />
       <PromotionPopUp />
+      <ConsentBanner />
     </Page>
   </Provider>
 );

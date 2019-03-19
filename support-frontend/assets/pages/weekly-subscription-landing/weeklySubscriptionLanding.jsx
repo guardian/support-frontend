@@ -25,6 +25,7 @@ import { SaleHeader } from './components/hero/hero';
 
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
+import ConsentBanner from 'components/consentBanner/consentBanner';
 
 import './weeklySubscriptionLanding.scss';
 
@@ -133,6 +134,7 @@ const content = (
           </p>
         </Text>
       </Content>
+      <ConsentBanner />
     </Page>
   </Provider>
 );
