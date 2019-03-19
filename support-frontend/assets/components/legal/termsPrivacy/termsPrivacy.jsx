@@ -15,7 +15,7 @@ import { type CampaignName, campaigns } from 'helpers/campaigns';
 type PropTypes = {|
   countryGroupId: CountryGroupId,
   contributionType: ContributionType,
-  campaignName: ?CampaignName,
+  campaignName?: CampaignName,
 |};
 
 
