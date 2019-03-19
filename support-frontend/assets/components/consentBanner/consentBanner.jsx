@@ -15,6 +15,7 @@ import Tick from './tick.svg';
 import Button from 'components/button/button';
 import Text from 'components/text/text';
 import styles from 'components/consentBanner/consentBanner.module.scss';
+import { get as getCookie } from '../../helpers/cookie';
 
 export type PropTypes = {
   trackingConsent: ThirdPartyTrackingConsent,
@@ -36,7 +37,8 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 }
 
 function ConsentBanner(props: PropTypes) {
-  if (props.trackingConsent === Unset) {
+  const showBanner = props.trackingConsent === Unset && getCookie('_post_deploy_user') !== 'true';
+  if (showBanner) {
     return (
       <div className={styles.root}>
         <div className={styles.copy}>
