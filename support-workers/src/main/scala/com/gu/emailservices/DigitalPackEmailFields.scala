@@ -3,6 +3,7 @@ package com.gu.emailservices
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
+import com.gu.support.workers.states.{DirectDebitEmailPaymentFields, EmailPaymentFields}
 
 // Output Json should look like this:
 //
@@ -41,21 +42,19 @@ case class DigitalPackEmailFields(
     user: User,
     paymentSchedule: PaymentSchedule,
     currency: Currency,
-    paymentMethod: PaymentMethod,
+    paymentMethod: EmailPaymentFields,
     sfContactId: SfContactId,
-    directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 
   val paymentFields = paymentMethod match {
-    case dd: DirectDebitPaymentMethod => List(
-      "Account number" -> mask(dd.bankTransferAccountNumber),
-      "Sort Code" -> hyphenate(dd.bankCode),
-      "Account Name" -> dd.bankTransferAccountName,
+    case dd: DirectDebitEmailPaymentFields => List(
+      "Account number" -> dd.bankAccountNumberMask,
+      "Sort Code" -> hyphenate(dd.bankSortCode),
+      "Account Name" -> dd.bankAccountName,
       "Default payment method" -> "Direct Debit",
-      "MandateID" -> directDebitMandateId.getOrElse("")
+      "MandateID" -> dd.mandateId.getOrElse("")
     )
-    case _: CreditCardReferenceTransaction => List("Default payment method" -> "Credit/Debit Card")
-    case _: PayPalReferenceTransaction => Seq("Default payment method" -> "PayPal")
+    case other => List("Default payment method" -> other.description)
   }
 
   override val fields = List(

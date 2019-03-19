@@ -4,6 +4,7 @@ import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, ProductOptions}
 import com.gu.support.workers._
+import com.gu.support.workers.states.{DirectDebitEmailPaymentFields, EmailPaymentFields}
 import org.joda.time.LocalDate
 
 case class PaperEmailFields(
@@ -15,9 +16,8 @@ case class PaperEmailFields(
   paymentSchedule: PaymentSchedule,
   firstDeliveryDate: Option[LocalDate],
   currency: Currency,
-  paymentMethod: PaymentMethod,
+  paymentMethod: EmailPaymentFields,
   sfContactId: SfContactId,
-  directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 
   val dataExtension = fulfilmentOptions match {
@@ -28,15 +28,14 @@ case class PaperEmailFields(
   val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date
 
   val paymentFields = paymentMethod match {
-    case dd: DirectDebitPaymentMethod => List(
-      "bank_account_no" -> mask(dd.bankTransferAccountNumber),
-      "bank_sort_code" -> hyphenate(dd.bankCode),
-      "account_holder" -> dd.bankTransferAccountName,
+    case dd: DirectDebitEmailPaymentFields => List(
+      "bank_account_no" -> dd.bankAccountNumberMask,
+      "bank_sort_code" -> hyphenate(dd.bankSortCode),
+      "account_holder" -> dd.bankAccountName,
       "payment_method" -> "Direct Debit",
-      "mandate_id" -> directDebitMandateId.getOrElse("")
+      "mandate_id" -> dd.mandateId.getOrElse("")
     )
-    case _: CreditCardReferenceTransaction => List("payment_method" -> "Credit/Debit Card")
-    case _: PayPalReferenceTransaction => List("payment_method" -> "PayPal")
+    case other => List("payment_method" -> other.description)
   }
 
   val deliveryAddressFields = user.deliveryAddress.map { address =>

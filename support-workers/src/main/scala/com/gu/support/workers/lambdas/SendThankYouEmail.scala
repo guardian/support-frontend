@@ -8,7 +8,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{Collection, HomeDelivery}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers._
-import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.states.{DirectDebitEmailPaymentFields, EmailPaymentFields, SendThankYouEmailState}
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
@@ -27,11 +27,28 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     context: Context,
     services: Services
   ): FutureHandlerResult = {
+
+    def completePaymentMethod(state: SendThankYouEmailState): Future[SendThankYouEmailState] = state.paymentMethod match {
+      case ddFields: DirectDebitEmailPaymentFields => addMandateIdIfNeeded(ddFields).map(ddFieldsWithMandateId => state.copy(paymentMethod = ddFieldsWithMandateId))
+      case otherPaymentMethod => Future.successful(state)
+    }
+
+    def addMandateIdIfNeeded(directDebitFields: DirectDebitEmailPaymentFields): Future[DirectDebitEmailPaymentFields] = {
+      directDebitFields.mandateId match {
+        case Some(mandateId) => Future.successful(directDebitFields)
+        case None => fetchDirectDebitMandateId(state, services.zuoraService).map { fetchedMandateId =>
+          directDebitFields.copy(mandateId = fetchedMandateId)
+        }
+      }
+    }
+
     for {
-      mandateId <- fetchDirectDebitMandateId(state, services.zuoraService)
-      emailResult <- sendEmail(state, mandateId)
+      stateWithMandateId <- completePaymentMethod(state)
+      emailResult <- sendEmail(stateWithMandateId)
     } yield HandlerResult(emailResult, requestInfo)
+
   }
+
 
   def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
     case _: DirectDebitPaymentMethod =>
@@ -52,7 +69,6 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           billingPeriod = state.product.billingPeriod,
           sfContactId = SfContactId(state.salesForceContact.Id),
           paymentMethod = state.paymentMethod,
-          directDebitMandateId = directDebitMandateId
         )
         case d: DigitalPack => DigitalPackEmailFields(
           subscriptionNumber = state.subscriptionNumber,
@@ -61,7 +77,6 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           paymentSchedule = state.paymentSchedule,
           currency = d.currency,
           paymentMethod = state.paymentMethod,
-          directDebitMandateId = directDebitMandateId,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
         case p: Paper => PaperEmailFields(
@@ -74,7 +89,6 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           firstDeliveryDate = state.firstDeliveryDate,
           currency = p.currency,
           paymentMethod = state.paymentMethod,
-          directDebitMandateId = directDebitMandateId,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
       }

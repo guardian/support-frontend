@@ -181,7 +181,9 @@ object Fixtures {
        |  $requestIdJson,
        |  $userJson,
        |  "product": $product,
-       |  "paymentMethod": $stripePaymentMethod,
+       |  "paymentMethod": {
+       |    "description" : "Credit/Debit Card"
+       |  },
        |  "salesForceContact": {
        |    "Id": "123",
        |    "AccountId": "123"

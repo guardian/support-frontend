@@ -7,7 +7,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers._
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.states._
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.domain.DomainSubscription
@@ -87,7 +87,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.requestId,
       state.user,
       state.product,
-      state.paymentMethod,
+      toEmailPaymentFields(state.paymentMethod),
       state.firstDeliveryDate,
       state.salesForceContact,
       accountNumber.value,
@@ -95,6 +95,19 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       paymentSchedule,
       state.acquisitionData
     )
+
+  private def toEmailPaymentFields(paymentMethod: PaymentMethod): EmailPaymentFields = paymentMethod match{
+    case dd: DirectDebitPaymentMethod => DirectDebitEmailPaymentFields(
+      bankAccountNumberMask = mask(dd.bankTransferAccountNumber),
+      bankSortCode = dd.bankCode,
+      bankAccountName = dd.bankTransferAccountName,
+      mandateId = None
+    )
+    case cc:CreditCardReferenceTransaction => NonDirectDebitEmailPaymentFields("Credit/Debit Card")
+    case pp: PayPalReferenceTransaction => NonDirectDebitEmailPaymentFields("PayPal")
+  }
+
+  protected def mask(s: String): String = s.replace(s.substring(0, 6), "******")
 
   private def buildSubscribeItem(state: CreateZuoraSubscriptionState, promotionService: PromotionService): SubscribeItem = {
     //Documentation for this request is here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe

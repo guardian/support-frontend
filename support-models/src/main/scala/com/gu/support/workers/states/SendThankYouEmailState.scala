@@ -2,15 +2,16 @@ package com.gu.support.workers.states
 
 import java.util.UUID
 
-import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
+import com.gu.support.workers.{SalesforceContactRecord, User, _}
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import org.joda.time.LocalDate
+
 
 case class SendThankYouEmailState(
   requestId: UUID,
   user: User,
   product: ProductType,
-  paymentMethod: PaymentMethod,
+  paymentMethod: EmailPaymentFields,
   firstDeliveryDate: Option[LocalDate],
   salesForceContact: SalesforceContactRecord,
   accountNumber: String,
