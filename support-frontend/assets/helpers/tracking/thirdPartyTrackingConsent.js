@@ -1,8 +1,10 @@
 // @flow
 
-import { get as getCookie } from '../cookie';
+import { get as getCookie, set as setCookie } from '../cookie';
 
 const ConsentCookieName = 'GU_TK';
+const DaysToLive = 30 * 18;
+
 const OptedIn: 'OptedIn' = 'OptedIn';
 const OptedOut: 'OptedOut' = 'OptedOut';
 const Unset: 'Unset' = 'Unset';
@@ -18,4 +20,11 @@ const getTrackingConsent = (): ThirdPartyTrackingConsent => {
   return Unset;
 };
 
-export { getTrackingConsent, OptedIn, OptedOut, Unset, ConsentCookieName };
+const writeTrackingConsentCookie = (trackingConsent: ThirdPartyTrackingConsent) => {
+  if (trackingConsent !== Unset) {
+    const cookie = [trackingConsent === OptedIn ? '1' : '0', Date.now()].join('.');
+    setCookie(ConsentCookieName, cookie, DaysToLive);
+  }
+};
+
+export { getTrackingConsent, writeTrackingConsentCookie, OptedIn, OptedOut, Unset, ConsentCookieName };

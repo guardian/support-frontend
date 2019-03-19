@@ -1,0 +1,72 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.root {
+  z-index: 99;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+
+  padding: ($gu-v-spacing / 2) 0 $gu-v-spacing * 2;
+  background: gu-colour(neutral-20);
+}
+
+
+.copy {
+  position: relative;
+  margin: 0 $gu-h-spacing/2;
+
+  @include mq($from: (gu-span(10) +gu-span(1) + $gu-h-spacing/2)) {
+    margin: auto;
+    max-width: gu-span(10);
+    padding-left: gu-span(1) + $gu-h-spacing;
+  }
+
+  @include mq($from: desktop) {
+    .roundel {
+      display: block;
+    }
+    max-width: gu-span(11);
+    padding-left: gu-span(1) + $gu-h-spacing;
+  }
+
+  @include mq($from: leftCol) {
+    max-width: gu-span(13);
+    padding-left: gu-span(1) + $gu-h-spacing;
+  }
+
+  @include mq($from: wide) {
+    max-width: gu-span(14);
+    padding-left: gu-span(2) + $gu-h-spacing;
+  }
+}
+
+.roundel {
+  position: absolute;
+  display: none;
+  left: 0;
+  top: 0;
+}
+
+.text {
+  max-width: gu-span(8);
+}
+
+.copy, .text {
+  color: gu-colour(neutral-100);
+}
+
+.actions {
+  margin-top: $gu-v-spacing * 2;
+  @include gu-fontset-body-sans;
+  font-weight: bold;
+}
+
+.actions a {
+  color: currentColor;
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,.5);
+}
+
+.actions button {
+  margin-right: $gu-h-spacing/2;
+}

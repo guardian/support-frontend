@@ -41,7 +41,7 @@ class Subscriptions(
       title,
       mainElement,
       Left(RefPath(js)),
-      Left(RefPath("subscriptionsLandingPageStyles.css")),
+      Left(RefPath("subscriptionsLandingPage.css")),
       description = stringsConfig.subscriptionsLandingDescription
     )()).withSettingsSurrogateKey
 

@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 import React from 'react';
 
-import { statelessInit as pageInit } from 'helpers/page/page';
+import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
 import Page from 'components/page/page';
@@ -22,30 +22,35 @@ import Hero from './components/hero';
 import CtaSubscribe from './components/ctaSubscribe';
 import CtaContribute from './components/ctaContribute';
 import OtherProducts from './components/otherProducts';
+import ConsentBanner from 'components/consentBanner/consentBanner';
 
 import './showcase.scss';
+import { Provider } from 'react-redux';
 
 // ----- Page Startup ----- //
 
-pageInit();
+const store = pageInit();
 
 // ----- Render ----- //
 
 const content = (
-  <Page header={<Header />} footer={<Footer />}>
-    <Hero />
-    <WhySupportMatters />
-    <BreakingHeadlines />
-    <NoOneEdits />
-    <Content id="support">
-      <Heading size={2} className="anchor">
-        Ways you can support The Guardian
-      </Heading>
-    </Content>
-    <CtaSubscribe />
-    <CtaContribute />
-    <OtherProducts />
-  </Page>
+  <Provider store={store}>
+    <Page header={<Header />} footer={<Footer />}>
+      <Hero />
+      <WhySupportMatters />
+      <BreakingHeadlines />
+      <NoOneEdits />
+      <Content id="support">
+        <Heading size={2} className="anchor">
+          Ways you can support The Guardian
+        </Heading>
+      </Content>
+      <CtaSubscribe />
+      <CtaContribute />
+      <OtherProducts />
+      <ConsentBanner />
+    </Page>
+  </Provider>
 );
 
 renderPage(content, 'showcase-landing-page');
