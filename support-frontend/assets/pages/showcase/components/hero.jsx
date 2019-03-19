@@ -11,16 +11,23 @@ import './hero.scss';
 
 class BreakingHeadlines extends React.Component {
 
+  state = { isAnimated: false }
+
   componentDidMount() {
-    const bannerWrapper = document.querySelector('.showcase-hero');
+    const startAnimation = () => {
+      this.setState({
+        isAnimated: !this.state.isAnimated,
+      });
+    };
     setTimeout(() => {
-      bannerWrapper.classList.add('loaded');
+      startAnimation();
     }, 800);
   }
 
   render() {
+    const isLoaded = this.state.isAnimated ? 'loaded' : '';
     return (
-      <div className="showcase-hero">
+      <div className={`showcase-hero  ${isLoaded}`}>
         <HeroWrapper appearance="custom">
           <div className="showcase-hero-heading">
             <h1 className="accessibility-hint">Support the guardian</h1>
