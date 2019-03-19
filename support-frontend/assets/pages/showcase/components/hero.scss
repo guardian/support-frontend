@@ -4,7 +4,6 @@
   background: gu-colour(highlight-main);
   color: gu-colour(neutral-7);
   
-
   .component-left-margin-section__content {
     padding-top: $gu-v-spacing;
     padding-bottom: $gu-v-spacing;
@@ -41,30 +40,46 @@
 }
 
 .showcase-hero__image {
-  background: #fff;
   filter: grayscale(1) contrast(120%);
   overflow: hidden;
-  opacity: 0;
   will-change: transform;
-  transition: opacity 0.6s ease-out,
-              transform 0.6s ease-out;
+  opacity: 0;
 
   &:nth-of-type(1)  {
-    transform: translateX(-20px);
+    animation: animateInLeft 0.8s 1s ease-out forwards 1;
   }
   &:nth-of-type(2)  {
-    transform: translateX(-20px);
-    transition-delay: 0.30s;
+    animation: animateInLeft 0.8s 1.30s ease-out forwards 1;
   }
   &:nth-of-type(3)  {
-    transform: translateX(20px);
-    transition-delay: 0.15s;
+    animation: animateInRight 0.8s 1.15s ease-out forwards 1;
   }
   &:nth-of-type(4)  {
-    transform: translateX(20px);
-    transition-delay: 0.45s;
+    animation: animateInRight 0.8s 1.45s ease-out forwards 1;
   }
-  
+
+  @keyframes animateInLeft {
+    0% {
+      transform: translateX(-20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes animateInRight {
+    0% {
+      transform: translateX(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+    
   &:nth-of-type(1) img,
   &:nth-of-type(4) img {
     height: 100%;
@@ -87,22 +102,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
     @supports (object-fit: cover) {
-      position: relative;
-      object-fit: cover;
+      position: relative !important;
+      object-fit: cover !important;
       height: 100% !important;
       width: 100% !important;
       transform: none;
       top: auto;
       left: auto;
-    }
-  }
-  .loaded & {
-    &:nth-of-type(1),
-    &:nth-of-type(2),
-    &:nth-of-type(3),
-    &:nth-of-type(4) {
-      opacity: 1;
-      transform: translateX(0);
     }
   }
   @media (prefers-reduced-motion) {
@@ -115,8 +121,6 @@
     }
   }
 }
-
-
 
 .showcase-hero-heading svg {
   width: 100%;
@@ -165,16 +169,20 @@
     &:nth-child(1) {
       margin-left: -($gu-h-spacing/2);
       margin-right: 25%;
+      animation: animateInLeft 0.8s 1s ease-out forwards 1;
     }
     &:nth-child(2) {
       margin-left: 25%;
+      animation: animateInRight 0.8s 1.15s ease-out forwards 1;
     }
     &:nth-child(3) {
       margin-right: 25%;
+      animation: animateInLeft 0.8s 1.30s ease-out forwards 1;
     }
     &:nth-child(4) {
       margin-right: -($gu-h-spacing/2);
       margin-left: 25%;
+      animation: animateInRight 0.8s 1.45s ease-out forwards 1;
     }
   }
 }
@@ -217,28 +225,33 @@
     position: absolute;
     top: 0;
     left: 0;
+    
     &:nth-child(1) {
       height: $photo-1-height;
       width: gu-span(4);
       left: gu-span(3) + $gu-h-spacing;
+      animation: animateInLeft 0.8s 1s ease-out forwards 1;
     }
     &:nth-child(2) {
       top: $photo-1-height + $gu-v-spacing;
       height: $photo-2-height;
       width: gu-span(7);
       left: 0;
+      animation: animateInLeft 0.8s 1.30s ease-out forwards 1;
     }
     &:nth-child(3) {
       top: 0;
       height: $photo-3-height;
       width: gu-span(4);
       left: gu-span(7) + $gu-h-spacing + 1;
+      animation: animateInRight 0.8s 1.15s ease-out forwards 1;
     }
     &:nth-child(4) {
       top: $photo-3-height + $gu-v-spacing;
       height: $photo-4-height;
       width: gu-span(4);
       left: gu-span(7) + $gu-h-spacing + 1;
+      animation: animateInRight 0.8s 1.45s ease-out forwards 1;
     }
     @include mq($from: leftCol) {
       &:nth-child(3) {
