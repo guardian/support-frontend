@@ -276,7 +276,7 @@ const getNewsstandPrice = (productOption: PaperProductOptions) =>
 
 const paperHasDeliveryEnabled = (): boolean => {
   try {
-    return window.guardian.settings.switches.experiments.hidePaperHomeDelivery.state === 'Off';
+    return window.guardian.settings.switches.experiments.paperHomeDeliveryEnabled.state === 'On';
   } catch {
     return true;
   }
