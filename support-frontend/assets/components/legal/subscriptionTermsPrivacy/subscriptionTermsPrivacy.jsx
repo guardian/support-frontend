@@ -6,6 +6,7 @@ import React from 'react';
 
 import { subscriptionsTermsLinks, privacyLink } from 'helpers/legal';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import './subscriptionTermsPrivacy.scss';
 
@@ -18,8 +19,23 @@ type PropTypes = {|
 // ----- Component ----- //
 
 function SubscriptionTermsPrivacy(props: PropTypes) {
-  const terms = <a className="component-subscription-terms-privacy__href" href={subscriptionsTermsLinks[props.subscriptionProduct]}>Terms and Conditions</a>;
-  const privacy = <a className="component-subscription-terms-privacy__href" href={privacyLink}>Privacy Policy</a>;
+  const terms = (
+    <a
+      className="component-subscription-terms-privacy__href"
+      href={subscriptionsTermsLinks[props.subscriptionProduct]}
+      onClick={sendTrackingEventsOnClick('subscription_terms', props.subscriptionProduct, null)}
+    >
+      Terms and Conditions
+    </a>);
+
+  const privacy = (
+    <a
+      className="component-subscription-terms-privacy__href"
+      href={privacyLink}
+      onClick={sendTrackingEventsOnClick('privacy_policy', props.subscriptionProduct, null)}
+    >
+      Privacy Policy
+    </a>);
 
   return (
     <div className="component-subscription-terms-privacy">
