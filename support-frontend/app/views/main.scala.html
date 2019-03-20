@@ -6,7 +6,7 @@
   mainElement: ReactDiv,
   mainJsBundle: Either[RefPath, StyleContent],
   mainStyleBundle: Either[RefPath, StyleContent],
-  fontLoaderBundle: Option[Either[RefPath, StyleContent]] = None,
+  fontLoaderBundle: Either[RefPath, StyleContent],
   description: Option[String] = None,
   canonicalLink: Option[String] = None,
   hrefLangLinks: Map[String, String] = Map(),

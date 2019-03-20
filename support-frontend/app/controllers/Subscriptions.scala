@@ -43,6 +43,7 @@ class Subscriptions(
       mainElement,
       Left(RefPath(js)),
       Left(RefPath("subscriptionsLandingPage.css")),
+      fontLoaderBundle,
       description = stringsConfig.subscriptionsLandingDescription
     )()).withSettingsSurrogateKey
 
@@ -54,7 +55,7 @@ class Subscriptions(
     val mainElement = EmptyDiv("premium-tier-landing-page-" + countryCode)
     val js = Left(RefPath("premiumTierLandingPage.js"))
     val css = Left(RefPath("premiumTierLandingPageStyles.css"))
-    Ok(views.html.main(title, mainElement, js, css)()).withSettingsSurrogateKey
+    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle)()).withSettingsSurrogateKey
   }
 
   def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/weekly")
@@ -76,7 +77,7 @@ class Subscriptions(
       "en" -> buildCanonicalWeeklySubscriptionLink("int"),
       "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
-    Ok(views.html.main(title, mainElement, js, css, Some(fontLoaderBundle), description, canonicalLink, hrefLangLinks)()).withSettingsSurrogateKey
+    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks)()).withSettingsSurrogateKey
   }
 
   def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")

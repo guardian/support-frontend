@@ -71,7 +71,7 @@ class PayPalRegular(
       EmptyDiv("paypal-error-page"),
       Left(RefPath("payPalErrorPage.js")),
       Left(RefPath("payPalErrorPageStyles.css")),
-      Some(fontLoaderBundle)
+      fontLoaderBundle
     )()).withSettingsSurrogateKey
   }
 
@@ -85,7 +85,7 @@ class PayPalRegular(
       EmptyDiv("paypal-error-page"),
       Left(RefPath("payPalErrorPage.js")),
       Left(RefPath("payPalErrorPageStyles.css")),
-      Some(fontLoaderBundle)
+      fontLoaderBundle
     )()).withSettingsSurrogateKey
   }
 }

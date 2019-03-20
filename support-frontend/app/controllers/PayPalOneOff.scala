@@ -45,7 +45,7 @@ class PayPalOneOff(
       EmptyDiv("paypal-error-page"),
       Left(RefPath("payPalErrorPage.js")),
       Left(RefPath("payPalErrorPageStyles.css")),
-      Some(fontLoaderBundle)
+      fontLoaderBundle
     )()).withSettingsSurrogateKey
   }
 

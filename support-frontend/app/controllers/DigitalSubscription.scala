@@ -63,7 +63,7 @@ class DigitalSubscription(
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCode)
 
     Ok(views.html.main(
-      title, mainElement, js, css, Some(fontLoaderBundle), description, canonicalLink, hrefLangLinks
+      title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks
     ) {
       Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
     }).withSettingsSurrogateKey
@@ -136,7 +136,8 @@ class DigitalSubscription(
       title,
       mainElement,
       js,
-      css
+      css,
+      fontLoaderBundle
     )())
   }
 

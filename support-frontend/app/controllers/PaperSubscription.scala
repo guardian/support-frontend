@@ -62,7 +62,7 @@ class PaperSubscription(
     val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, promoCode)
 
-    Ok(views.html.main(title, mainElement, js, css, Some(fontLoaderBundle), description, canonicalLink){
+    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink){
       Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
     }).withSettingsSurrogateKey
   }
