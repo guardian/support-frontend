@@ -5,6 +5,7 @@
 import React, { Component, type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
@@ -17,6 +18,7 @@ import './header.scss';
 
 export type PropTypes = {|
   utility: Option<Node>,
+  countryGroupId: ?CountryGroupId,
   displayNavigation: boolean,
 |};
 export type State = {|
@@ -65,6 +67,7 @@ const TopNav = ({ getLogoRef, utility }: TopNavPropTypes) => (
 export default class Header extends Component<PropTypes, State> {
   static defaultProps = {
     utility: null,
+    countryGroupId: null,
     displayNavigation: true,
   };
 
@@ -96,7 +99,7 @@ export default class Header extends Component<PropTypes, State> {
   observer: ElementResizer;
 
   render() {
-    const { utility, displayNavigation } = this.props;
+    const { utility, displayNavigation, countryGroupId } = this.props;
     const { fitsLinksInOneRow, fitsLinksAtAll } = this.state;
 
     return (
@@ -116,12 +119,12 @@ export default class Header extends Component<PropTypes, State> {
               getLogoRef={(el) => { this.logoRef = el; }}
             />
             {displayNavigation &&
-              <MobileMenuToggler utility={utility} />
+              <MobileMenuToggler countryGroupId={countryGroupId} utility={utility} />
             }
           </div>
           {displayNavigation &&
             <div className="component-header__row">
-              <Links location="desktop" getRef={(el) => { this.menuRef = el; }} />
+              <Links countryGroupId={countryGroupId} location="desktop" getRef={(el) => { this.menuRef = el; }} />
             </div>
           }
         </div>

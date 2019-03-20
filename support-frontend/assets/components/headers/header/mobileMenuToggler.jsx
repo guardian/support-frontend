@@ -6,12 +6,16 @@ import React, { Component, type Node } from 'react';
 
 import Dialog from 'components/dialog/dialog';
 import SvgMenu from 'components/svgs/menu';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { clickedEvent } from 'helpers/tracking/clickTracking';
 
 import MobileMenu, { type Position } from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 
-export default class MobileMenuToggler extends Component<{ utility: Node }, {
+export default class MobileMenuToggler extends Component<{
+  utility: Node,
+  countryGroupId: ?CountryGroupId,
+}, {
   menuOpen: boolean,
   buttonPosition: Position
 }> {
@@ -25,7 +29,7 @@ export default class MobileMenuToggler extends Component<{ utility: Node }, {
 
   render() {
     const { menuOpen, buttonPosition } = this.state;
-    const { utility } = this.props;
+    const { utility, countryGroupId } = this.props;
     return (
       <div className="component-header-mobile-menu-toggler">
         <VeggieBurgerButton
@@ -59,6 +63,7 @@ export default class MobileMenuToggler extends Component<{ utility: Node }, {
           }}
         >
           <MobileMenu
+            countryGroupId={countryGroupId}
             closeButtonAt={buttonPosition}
             utility={utility}
             onClose={() => {
