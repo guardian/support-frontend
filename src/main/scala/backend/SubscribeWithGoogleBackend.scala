@@ -21,7 +21,7 @@ import services._
 import scala.concurrent.Future
 
 
-case class SubscribeWithGoogleDuplicateEventError(msg: String) extends Exception(msg)
+case class SubscribeWithGoogleDuplicateInsertEventError(msg: String) extends Exception(msg)
 
 case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
                                       identityService: IdentityService,
@@ -54,7 +54,7 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     logger.error(s"Received a duplicate payment id for payment : $googleRecordPayment")
     cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
     EitherT.leftT[Future, Unit](BackendError.fromSubscribeWithGoogleDuplicatePaymentError(
-      SubscribeWithGoogleDuplicateEventError(s"Received a duplicate payment id for payment : $googleRecordPayment")))
+      SubscribeWithGoogleDuplicateInsertEventError(s"Received a duplicate payment id for payment : $googleRecordPayment")))
   }
 
   private def handleFirstInstanceOfPayment(googleRecordPayment: GoogleRecordPayment,

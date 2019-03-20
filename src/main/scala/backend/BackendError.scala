@@ -30,7 +30,7 @@ object BackendError {
   final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
-  final case class SubscribeWithGoogleDuplicateEventError(error: SubscribeWithGoogleDuplicateEventError) extends BackendError
+  final case class SubscribeWithGoogleDuplicateEventError(error: SubscribeWithGoogleDuplicateInsertEventError) extends BackendError
   final case class Email(error: EmailService.Error) extends BackendError
   final case class MultipleErrors(errors: List[BackendError]) extends BackendError
 
@@ -54,7 +54,7 @@ object BackendError {
   def fromPaypalAPIError(err: PaypalAPIError): BackendError = PaypalApiError(err)
   def fromStripeApiError(err: StripeError): BackendError = StripeApiError(err)
   def fromEmailError(err: EmailService.Error): BackendError = Email(err)
-  def fromSubscribeWithGoogleDuplicatePaymentError(err: SubscribeWithGoogleDuplicateEventError): BackendError =
+  def fromSubscribeWithGoogleDuplicatePaymentError(err: SubscribeWithGoogleDuplicateInsertEventError): BackendError =
     SubscribeWithGoogleDuplicateEventError(err)
 
 }
