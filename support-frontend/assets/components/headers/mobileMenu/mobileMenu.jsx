@@ -5,10 +5,8 @@
 import React, { type Node } from 'react';
 
 import { type Option } from 'helpers/types/option';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import SvgClose from 'components/svgs/close';
 
-import Links from '../links/links';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 
 import './mobileMenu.scss';
@@ -18,7 +16,7 @@ export type Position = Option<{x: number, y: number}>;
 export type PropTypes = {|
   onClose: () => void,
   utility: Node,
-  countryGroupId: ?CountryGroupId,
+  links: Node,
   closeButtonAt?: Position,
 |};
 
@@ -26,7 +24,7 @@ export type PropTypes = {|
 
 
 const MobileMenu = ({
-  onClose, closeButtonAt, utility, countryGroupId,
+  onClose, closeButtonAt, utility, links,
 }: PropTypes) =>
   (
     <div
@@ -34,7 +32,7 @@ const MobileMenu = ({
       style={closeButtonAt && { width: closeButtonAt.x }}
     >
       <div className="component-header-mobile-menu__scroll">
-        <Links countryGroupId={countryGroupId} location="mobile" />
+        {links}
         {utility &&
           <div className="component-header-mobile-menu__utility">
             {utility}

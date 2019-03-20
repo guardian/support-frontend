@@ -119,7 +119,11 @@ export default class Header extends Component<PropTypes, State> {
               getLogoRef={(el) => { this.logoRef = el; }}
             />
             {displayNavigation &&
-              <MobileMenuToggler countryGroupId={countryGroupId} utility={utility} />
+              <MobileMenuToggler
+                links={<Links countryGroupId={countryGroupId} location="mobile" />}
+                countryGroupId={countryGroupId}
+                utility={utility}
+              />
             }
           </div>
           {displayNavigation &&
