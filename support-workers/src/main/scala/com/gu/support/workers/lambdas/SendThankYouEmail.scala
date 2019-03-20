@@ -8,7 +8,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{Collection, HomeDelivery}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers._
-import com.gu.support.workers.states.{DirectDebitEmailPaymentFields, EmailPaymentFields, SendThankYouEmailState}
+import com.gu.support.workers.states.{DirectDebitDisplayFields, PaymentMethodDisplayFields, SendThankYouEmailState}
 import com.gu.threadpools.CustomPool.executionContext
 import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
@@ -29,11 +29,11 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
   ): FutureHandlerResult = {
 
     def completePaymentMethod(state: SendThankYouEmailState): Future[SendThankYouEmailState] = state.paymentMethod match {
-      case ddFields: DirectDebitEmailPaymentFields => addMandateIdIfNeeded(ddFields).map(ddFieldsWithMandateId => state.copy(paymentMethod = ddFieldsWithMandateId))
+      case ddFields: DirectDebitDisplayFields => addMandateIdIfNeeded(ddFields).map(ddFieldsWithMandateId => state.copy(paymentMethod = ddFieldsWithMandateId))
       case otherPaymentMethod => Future.successful(state)
     }
 
-    def addMandateIdIfNeeded(directDebitFields: DirectDebitEmailPaymentFields): Future[DirectDebitEmailPaymentFields] = {
+    def addMandateIdIfNeeded(directDebitFields: DirectDebitDisplayFields): Future[DirectDebitDisplayFields] = {
       directDebitFields.mandateId match {
         case Some(mandateId) => Future.successful(directDebitFields)
         case None => fetchDirectDebitMandateId(state, services.zuoraService).map { fetchedMandateId =>

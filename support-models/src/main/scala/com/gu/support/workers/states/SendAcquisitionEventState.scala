@@ -1,11 +1,11 @@
 package com.gu.support.workers.states
 
-import com.gu.support.workers.{PaymentMethod, User, _}
+import com.gu.support.workers.{User, _}
 
 case class SendAcquisitionEventState(
   user: User,
   product: ProductType,
-  paymentMethod: PaymentMethod,
+  paymentMethod: PaymentMethodDisplayFields,
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
 

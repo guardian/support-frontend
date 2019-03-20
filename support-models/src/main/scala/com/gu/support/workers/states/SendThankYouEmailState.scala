@@ -11,7 +11,7 @@ case class SendThankYouEmailState(
   requestId: UUID,
   user: User,
   product: ProductType,
-  paymentMethod: EmailPaymentFields,
+  paymentMethod: PaymentMethodDisplayFields,
   firstDeliveryDate: Option[LocalDate],
   salesForceContact: SalesforceContactRecord,
   accountNumber: String,

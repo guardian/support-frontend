@@ -10,7 +10,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers._
-import com.gu.support.workers.states.SendAcquisitionEventState
+import com.gu.support.workers.states._
 import io.circe.generic.auto._
 import ophan.thrift.event.{Product => OphanProduct}
 import ophan.thrift.{event => thrift}
@@ -78,11 +78,11 @@ object SendAcquisitionEvent {
           case Annual => thrift.PaymentFrequency.Annually
         }
 
-      def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): thrift.PaymentProvider =
+      def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethodDisplayFields): thrift.PaymentProvider =
         paymentMethod match {
-          case _: CreditCardReferenceTransaction => thrift.PaymentProvider.Stripe
-          case _: PayPalReferenceTransaction => thrift.PaymentProvider.Paypal
-          case _: DirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
+          case CreditCardDisplayFields => thrift.PaymentProvider.Stripe
+          case PaypalDisplayFields => thrift.PaymentProvider.Paypal
+          case _: DirectDebitDisplayFields => thrift.PaymentProvider.Gocardless
         }
 
       override def buildAcquisition(state: SendAcquisitionEventState): Either[String, thrift.Acquisition] = {

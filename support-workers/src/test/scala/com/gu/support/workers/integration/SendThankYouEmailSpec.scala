@@ -15,6 +15,7 @@ import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.SendThankYouEmail
+import com.gu.support.workers.states.DirectDebitDisplayFields
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json
@@ -25,18 +26,12 @@ import org.joda.time.{DateTime, LocalDate}
 @IntegrationTest
 class SendThankYouEmailSpec extends LambdaSpec {
 
-  val directDebitPaymentMethod = DirectDebitPaymentMethod(
-    firstName = "Mickey",
-    lastName = "Mouse",
-    bankTransferAccountName = "Mickey Mouse",
-    bankCode = "202020",
-    bankTransferAccountNumber = "55779911",
-    country = Country.UK,
-    city = Some("London"),
-    postalCode = Some("post cde"),
-    state = None,
-    streetName = Some("streetname"),
-    streetNumber = Some("123")
+  val directDebitPaymentMethod = DirectDebitDisplayFields(
+     bankAccountName = "Mickey Mouse",
+    bankSortCode = "202020",
+    bankAccountNumberMask = "******11",
+    mandateId = Some("mandateId")
+
   )
 
   "SendThankYouEmail lambda" should "add message to sqs queue" in {
@@ -59,7 +54,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       new DateTime(1999, 12, 31, 11, 59),
       20,
       Currency.GBP,
-      "UK", "", Monthly, SfContactId("0036E00000WK8fDQAT"), directDebitPaymentMethod, Some(mandateId)
+      "UK", "", Monthly, SfContactId("0036E00000WK8fDQAT"), directDebitPaymentMethod
     )
     val service = new EmailService
     service.send(ef)
@@ -78,8 +73,7 @@ class SendThankYouEmailSpec extends LambdaSpec {
       PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
       GBP,
       directDebitPaymentMethod,
-      SfContactId("0036E00000WK8fDQAT"),
-      Some(mandateId)
+      SfContactId("0036E00000WK8fDQAT")
     )
     val service = new EmailService
     service.send(ef)
@@ -116,14 +110,12 @@ class SendThankYouEmailSpec extends LambdaSpec {
       GBP,
       directDebitPaymentMethod,
       SfContactId("0036E00000WK8fDQAT"),
-      Some(mandateId)
     )
     val service = new EmailService
     service.send(ef)
   }
 
   "EmailFields" should "include Direct Debit fields in the payload" in {
-    val mandateId = "65HK26E"
     val ef = ContributionEmailFields(
       "",
       new DateTime(1999, 12, 31, 11, 59),
@@ -134,15 +126,14 @@ class SendThankYouEmailSpec extends LambdaSpec {
       Monthly,
       SfContactId("sfContactId"),
       directDebitPaymentMethod,
-      Some(mandateId)
     )
     val resultJson = parse(ef.payload)
 
     resultJson.isRight should be(true)
 
     new JsonValidater(resultJson.right.get)
-      .validate("Mandate ID", mandateId)
-      .validate("account name", directDebitPaymentMethod.bankTransferAccountName)
+      .validate("Mandate ID", "mandateId")
+      .validate("account name", "Mickey Mouse")
       .validate("account number", "******11")
       .validate("sort code", "20-20-20")
       .validate("first payment date", "Monday, 10 January 2000")

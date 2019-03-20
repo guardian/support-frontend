@@ -176,14 +176,31 @@ object Fixtures {
           }
         """
 
-  def thankYouEmailJson(product: String = contribution()): String =
+  val thankYouEmailDirectDebitPaymentMethodJson =
+    """{
+      |  "bankAccountNumberMask" : "mask",
+      |  "bankSortCode" : "12-23-32",
+      |  "bankAccountName" : "accountName",
+      |  "mandateId" : "someId",
+      |  "type" : "BankTransfer"
+      |}
+      |
+    """.stripMargin
+
+  val thankYouEmailCardPaymentMethodJson =
+    """{"type" : "CreditCardReferenceTransaction"}
+    """.stripMargin
+
+  val thankYouEmailPaypalPaymentMethodJson =
+    """{"type" : "Paypal"}
+    """.stripMargin
+
+  val thankYouEmailJson: String =
     s"""{
        |  $requestIdJson,
        |  $userJson,
-       |  "product": $product,
-       |  "paymentMethod": {
-       |    "description" : "Credit/Debit Card"
-       |  },
+       |  "product": ${contribution()},
+       |  "paymentMethod": ${thankYouEmailCardPaymentMethodJson},
        |  "salesForceContact": {
        |    "Id": "123",
        |    "AccountId": "123"

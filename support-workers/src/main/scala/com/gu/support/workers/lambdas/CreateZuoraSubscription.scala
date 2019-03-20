@@ -87,7 +87,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.requestId,
       state.user,
       state.product,
-      toEmailPaymentFields(state.paymentMethod),
+      toPaymentMethodDisplayFields(state.paymentMethod),
       state.firstDeliveryDate,
       state.salesForceContact,
       accountNumber.value,
@@ -96,15 +96,15 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.acquisitionData
     )
 
-  private def toEmailPaymentFields(paymentMethod: PaymentMethod): EmailPaymentFields = paymentMethod match{
-    case dd: DirectDebitPaymentMethod => DirectDebitEmailPaymentFields(
+  private def toPaymentMethodDisplayFields(paymentMethod: PaymentMethod): PaymentMethodDisplayFields = paymentMethod match{
+    case dd: DirectDebitPaymentMethod => DirectDebitDisplayFields(
       bankAccountNumberMask = mask(dd.bankTransferAccountNumber),
       bankSortCode = dd.bankCode,
       bankAccountName = dd.bankTransferAccountName,
       mandateId = None
     )
-    case cc:CreditCardReferenceTransaction => NonDirectDebitEmailPaymentFields("Credit/Debit Card")
-    case pp: PayPalReferenceTransaction => NonDirectDebitEmailPaymentFields("PayPal")
+    case cc:CreditCardReferenceTransaction => CreditCardDisplayFields
+    case pp: PayPalReferenceTransaction => PaypalDisplayFields
   }
 
   protected def mask(s: String): String = s.replace(s.substring(0, 6), "******")
