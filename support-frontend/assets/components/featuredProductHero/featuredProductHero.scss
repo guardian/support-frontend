@@ -5,36 +5,19 @@
   & .component-featured-product-hero__heading,
   & .component-flash-sale-countdown, {
     color: gu-colour($color);
-  }}
+  }
+}
 
 .component-featured-product-hero {
   position: relative;
   overflow: hidden;
   background: gu-colour(neutral-97);
 
-  .component-cta-link {
-    background-color: gu-colour(highlight-main);
-    color: gu-colour(neutral-7);
-    width: 120px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 14px;
-    padding-left: 18px;
+  .component-button {
     margin-top: $gu-v-spacing;
 
     @include mq($from: phablet) {
       margin-top: $gu-v-spacing * 2;
-    }
-
-    .svg-arrow-right-straight {
-      fill: gu-colour(neutral-7);
-      height: 22px;
-      top: 9px;
-      left: calc(100% - 32px);
-    }
-
-    &:hover {
-      background-color: darken(gu-colour(highlight-main), 5%);
     }
   }
 
@@ -106,8 +89,7 @@
   }
 }
 
-.component-featured-product-hero__content {
-  @extend .gu-content-margin;
+.component-left-margin-section__content {
 
   @include mq($from: tablet) {
     position: relative;
@@ -121,22 +103,16 @@
 }
 
 .component-featured-product-hero__description {
-  @extend .gu-content-margin;
   position: relative;
-
-  @include mq($from: mobileLandscape) {
-    padding-left: 0;
-  }
+  padding-left: $gu-h-spacing/2;
 
   @include mq($from: desktop) {
     margin: 10px 0 0;
     padding-right: 0;
-    padding-left: $gu-h-spacing*2;
   }
 
   @include mq($from: leftCol) {
     min-height: 350px;
-    padding-left: $gu-h-spacing*1.5;
   }
 
   @include mq($from: wide) {
