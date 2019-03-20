@@ -19,7 +19,8 @@
   regularUatPayPalConfig: PayPalConfig,
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
-  idUser: Option[IdUser]
+  idUser: Option[IdUser],
+  fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @defining {
@@ -166,7 +167,7 @@
 
 } { ssr =>
 
-@main(title = title, mainJsBundle = js, description = description, mainElement = SSRContent(id, ssr), mainStyleBundle = css) {
+@main(title = title, mainJsBundle = js, fontLoaderBundle = Some(fontLoaderBundle), description = description, mainElement = SSRContent(id, ssr), mainStyleBundle = css) {
   <script type="text/javascript">
     window.guardian = window.guardian || {};
     @idUser.map { user =>

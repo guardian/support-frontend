@@ -6,6 +6,7 @@
   mainElement: ReactDiv,
   mainJsBundle: Either[RefPath, StyleContent],
   mainStyleBundle: Either[RefPath, StyleContent],
+  fontLoaderBundle: Option[Either[RefPath, StyleContent]] = None,
   description: Option[String] = None,
   canonicalLink: Option[String] = None,
   hrefLangLinks: Map[String, String] = Map(),
@@ -58,15 +59,29 @@
       </style>
     }
 
+    @* This script is intentionally at the bottom of the file. Please check
+    all the critical flows work correctly if you change its position *@
+    @linkedJs(path: RefPath) = {
+      <script type="text/javascript" src="@assets(path)"></script>
+    }
+
+      @inlineJs(inlineJs: StyleContent) = {
+        <script type="text/javascript">
+          @inlineJs.value
+        </script>
+      }
+
     @mainStyleBundle.fold(linkedCss, inline)
 
     <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
+    <link rel="preload" href="https://theguardian.com/font-loader" as="document">
     <link rel="apple-touch-icon" sizes="152x152" href="@assets("images/favicons/152x152.png")">
     <link rel="apple-touch-icon" sizes="144x144" href="@assets("images/favicons/144x144.png")">
     <link rel="apple-touch-icon" sizes="120x120" href="@assets("images/favicons/120x120.png")">
     <link rel="apple-touch-icon" sizes="114x114" href="@assets("images/favicons/114x114.png")">
     <link rel="apple-touch-icon" sizes="72x72" href="@assets("images/favicons/72x72.png")">
     <link rel="apple-touch-icon-precomposed" href="@assets("images/favicons/57x57.png")">
+    @fontLoaderBundle.map(_.fold(linkedJs, inlineJs))
 
     <script type="application/ld+json">
 		{
@@ -110,17 +125,7 @@
 
     @body
 
-    @* This script is intentionally at the bottom of the file. Please check
-    all the critical flows work correctly if you change its position *@
-    @linkedJs(path: RefPath) = {
-    <script type="text/javascript" src="@assets(path)"></script>
-  }
 
-    @inlineJs(inlineJs: StyleContent) = {
-    <script type="text/javascript">
-    @inlineJs.value
-    </script>
-  }
 
     @mainJsBundle.fold(linkedJs, inlineJs)
 

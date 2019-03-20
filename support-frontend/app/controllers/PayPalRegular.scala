@@ -3,7 +3,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath}
+import assets.{AssetsResolver, RefPath, StyleContent}
 import io.circe.syntax._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
@@ -22,7 +22,8 @@ class PayPalRegular(
     payPalNvpServiceProvider: PayPalNvpServiceProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
-    settingsProvider: AllSettingsProvider
+    settingsProvider: AllSettingsProvider,
+    fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
@@ -69,7 +70,8 @@ class PayPalRegular(
       "Support the Guardian | PayPal Error",
       EmptyDiv("paypal-error-page"),
       Left(RefPath("payPalErrorPage.js")),
-      Left(RefPath("payPalErrorPageStyles.css"))
+      Left(RefPath("payPalErrorPageStyles.css")),
+      Some(fontLoaderBundle)
     )()).withSettingsSurrogateKey
   }
 
@@ -82,7 +84,8 @@ class PayPalRegular(
       "Support the Guardian | PayPal Error",
       EmptyDiv("paypal-error-page"),
       Left(RefPath("payPalErrorPage.js")),
-      Left(RefPath("payPalErrorPageStyles.css"))
+      Left(RefPath("payPalErrorPageStyles.css")),
+      Some(fontLoaderBundle)
     )()).withSettingsSurrogateKey
   }
 }
