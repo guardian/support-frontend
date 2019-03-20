@@ -149,6 +149,12 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
+function getDays(fulfilmentOption: PaperFulfilmentOptions, productOption: PaperProductOptions) {
+  return (fulfilmentOption === HomeDelivery ? getDeliveryDays(Date.now(), productOption)
+    : getVoucherDays(Date.now(), productOption));
+}
+
+
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
@@ -234,9 +240,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
   const { productPrices } = window.guardian;
 
   const product = getInitialProduct(productInUrl, fulfillmentInUrl);
-  const days: Date[] = product.fulfilmentOption === HomeDelivery
-    ? getDeliveryDays(Date.now(), product.productOption)
-    : getVoucherDays(Date.now(), product.productOption);
+  const days: Date[] = getDays(product.fulfilmentOption, product.productOption);
 
   const initialState = {
     stage: 'checkout',
@@ -324,4 +328,5 @@ export {
   setFormSubmitted,
   signOut,
   formActionCreators,
+  getDays,
 };

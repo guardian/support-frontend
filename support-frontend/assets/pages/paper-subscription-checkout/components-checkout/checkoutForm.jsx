@@ -44,6 +44,7 @@ import {
   getDeliveryAddress,
   getBillingAddress,
   type State,
+  getDays,
 } from '../paperSubscriptionCheckoutReducer';
 import { withStore } from './addressFields';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
@@ -85,9 +86,7 @@ const BillingAddress = withStore('billing', getBillingAddress);
 
 function CheckoutForm(props: PropTypes) {
 
-  const days = props.fulfilmentOption === HomeDelivery
-    ? getDeliveryDays(Date.now(), props.productOption)
-    : getVoucherDays(Date.now(), props.productOption);
+  const days = getDays(props.fulfilmentOption, props.productOption);
 
   const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
     'Payment Attempt Failed';
