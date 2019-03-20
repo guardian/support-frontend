@@ -380,12 +380,22 @@ footer[role="contentinfo"] a {
 }
 
 .form__radio-group-list--border {
-  border-bottom: 1px solid gu-colour(neutral-86);
+  @include mq($from: mobileLandscape) {
+    border-bottom: 1px solid gu-colour(neutral-86);
+  }
 
   li label {
     font-family: $gu-headline;
     font-weight: 600;
     font-size: 22px;
+  }
+}
+
+.form__radio-group-list--border .form__radio-group-item {
+  border-bottom: 1px solid gu-colour(highlight-main);
+
+  @include mq($from: mobileLandscape) {
+    border-bottom: none;
   }
 }
 
@@ -617,6 +627,13 @@ form {
 .form__radio-group--tabs .form__radio-group-list {
   display: flex;
   margin: 0 -10px;
+  flex-flow: column-reverse nowrap;
+  text-align: center;
+
+  @include mq($from: mobileLandscape) {
+    flex-flow: row nowrap;
+    text-align: left;
+  }
 }
 
 .form__radio-group--tabs .form__radio-group-item {
