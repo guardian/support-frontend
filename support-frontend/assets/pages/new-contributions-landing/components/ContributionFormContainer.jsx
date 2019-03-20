@@ -17,11 +17,11 @@ import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOff
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import ContributionTicker from 'components/ticker/ContributionTicker';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
-import { ContributionTicker } from './ContributionTicker/ContributionTicker';
 
 import {
   paymentWaiting,
