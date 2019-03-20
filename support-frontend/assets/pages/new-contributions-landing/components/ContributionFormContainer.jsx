@@ -9,7 +9,7 @@ import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';

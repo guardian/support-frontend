@@ -4,8 +4,7 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Route } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { Route, BrowserRouter } from 'react-router-dom';
 
 import { isDetailsSupported, polyfillDetails } from 'helpers/details';
 import { init as pageInit } from 'helpers/page/page';
