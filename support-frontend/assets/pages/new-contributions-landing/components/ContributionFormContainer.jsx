@@ -18,7 +18,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
-import { type CampaignName, campaigns } from 'helpers/campaigns';
+import { type CampaignName, campaigns } from 'pages/new-contributions-landing/campaigns';
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';

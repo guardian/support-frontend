@@ -5,7 +5,7 @@
 import { type ErrorReason } from 'helpers/errorReasons';
 import { combineReducers } from 'redux';
 import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
-import { type CampaignName, getCampaignName } from 'helpers/campaigns';
+import { type CampaignName, getCampaignName } from 'pages/new-contributions-landing/campaigns';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';

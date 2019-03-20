@@ -8,7 +8,7 @@ import { privacyLink, contributionsTermsLinks } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import type { ContributionType } from 'helpers/contributions';
-import { type CampaignName, campaigns } from 'helpers/campaigns';
+import { type CampaignName, campaigns } from 'pages/new-contributions-landing/campaigns';
 
 // ---- Types ----- //
 
