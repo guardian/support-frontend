@@ -199,8 +199,9 @@ function CheckoutForm(props: PropTypes) {
               </FormSection>
             }
             <FormSection title="When would you like your subscription to start?">
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
-                {days.map((day) => {
+              <Rows>
+                <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
+                  {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
                     <RadioInput
@@ -212,15 +213,16 @@ function CheckoutForm(props: PropTypes) {
                     />
                   );
                 })}
-              </FieldsetWithError>
-              <Text>
-                <p>
+                </FieldsetWithError>
+                <Text>
+                  <p>
                   We will take the first payment on the date you receive your first {fulfilmentOptionDescriptor}.
-                </p>
-                <p>
+                  </p>
+                  <p>
                   Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
-                </p>
-              </Text>
+                  </p>
+                </Text>
+              </Rows>
             </FormSection>
             <FormSection title="How would you like to pay?">
               <Rows>
