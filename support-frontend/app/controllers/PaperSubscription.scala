@@ -53,7 +53,7 @@ class PaperSubscription(
   def paper(withDelivery: Boolean = false): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "The Guardian Newspaper Subscription | Vouchers and Delivery"
-    val mainElement = if (withDelivery) EmptyDiv("paper-subscription-landing-page-delivery") else EmptyDiv("paper-subscription-landing-page-collection")
+    val mainElement = EmptyDiv("paper-subscription-landing-page")
     val js = Left(RefPath("paperSubscriptionLandingPage.js"))
     val css = Left(RefPath("paperSubscriptionLandingPage.css"))
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())

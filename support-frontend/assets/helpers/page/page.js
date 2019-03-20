@@ -3,7 +3,8 @@
 // ----- Imports ----- //
 
 import 'ophan';
-import loadFonts from '@guardian/font-loader';
+
+import loadFonts from 'helpers/fontLoader';
 import type { Store } from 'redux';
 import { applyMiddleware, combineReducers, compose, createStore, type Reducer } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -30,6 +31,7 @@ import {
   trackAbTests,
   trackNewOptimizeExperiment,
 } from 'helpers/tracking/ophanComponentEventTracking';
+import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 
 if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
@@ -83,6 +85,7 @@ function buildInitialState(
 
   // Override the default amounts config with any test participations
   const amountsWithParticipationOverrides = overrideAmountsForParticipations(abParticipations, settings.amounts);
+  const trackingConsent = getTrackingConsent();
 
   return {
     campaign: acquisition ? getCampaign(acquisition) : null,
@@ -92,6 +95,7 @@ function buildInitialState(
     abParticipations,
     settings: { ...settings, amounts: amountsWithParticipationOverrides },
     optimizeExperiments,
+    trackingConsent,
   };
 
 }

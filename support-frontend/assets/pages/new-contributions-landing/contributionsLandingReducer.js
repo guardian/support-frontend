@@ -78,6 +78,7 @@ type FormState = {
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
   formIsValid: boolean,
   formIsSubmittable: boolean,
+  tickerGoalReached: boolean,
 };
 
 type PageState = {
@@ -150,6 +151,7 @@ function createFormReducer() {
     userTypeFromIdentityResponse: 'noRequestSent',
     formIsValid: true,
     formIsSubmittable: true,
+    tickerGoalReached: false,
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {
@@ -250,6 +252,9 @@ function createFormReducer() {
 
       case 'SET_PAYPAL_HAS_LOADED':
         return { ...state, payPalHasLoaded: true };
+
+      case 'SET_TICKER_GOAL_REACHED':
+        return { ...state, tickerGoalReached: true };
 
 
       case 'SELECT_AMOUNT':

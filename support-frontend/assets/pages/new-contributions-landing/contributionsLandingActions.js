@@ -75,7 +75,8 @@ export type Action =
   | { type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' }
   | { type: 'PAYMENT_SUCCESS' }
   | { type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE', userTypeFromIdentityResponse: UserTypeFromIdentityResponse }
-  | { type: 'SET_FORM_IS_VALID', isValid: boolean };
+  | { type: 'SET_FORM_IS_VALID', isValid: boolean }
+  | { type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: boolean };
 
 const setFormIsValid = (isValid: boolean): Action => ({ type: 'SET_FORM_IS_VALID', isValid });
 
@@ -209,6 +210,8 @@ const checkIfEmailHasPassword = (email: string) =>
         dispatch(setUserTypeFromIdentityResponse(userType)),
     );
   };
+
+const setTickerGoalReached = (): Action => ({ type: 'SET_TICKER_GOAL_REACHED', tickerGoalReached: true });
 
 const sendFormSubmitEventForPayPalRecurring = () =>
   (dispatch: Function, getState: () => State): void => {
@@ -482,4 +485,5 @@ export {
   onStripePaymentRequestApiPaymentAuthorised,
   setStripePaymentRequestButtonClicked,
   setStripeV3HasLoaded,
+  setTickerGoalReached,
 };

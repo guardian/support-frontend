@@ -14,12 +14,13 @@ import { setTab } from '../../paperSubscriptionLandingPageActions';
 
 import { ContentHelpBlock, LinkTo, ContentForm, type ContentTabPropTypes } from './helpers';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 
 // ----- Content ----- //
 const ContentDeliveryFaqBlock = ({ setTabAction }: {setTabAction: typeof setTab}) => (
   <Content
-    border
+    border={paperHasDeliveryEnabled()}
     image={<GridImage
       gridId="paperDeliveryFeature"
       srcSizes={[920, 500, 140]}

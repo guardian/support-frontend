@@ -19,6 +19,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
 import './digitalSubscriptionCheckout.scss';
+import ConsentBanner from '../../components/consentBanner/consentBanner';
 
 // ----- Redux Store ----- //
 
@@ -35,11 +36,16 @@ const content = (
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
-          <CustomerService selectedCountryGroup={countryGroupId} />
+          <CustomerService
+            selectedCountryGroup={countryGroupId}
+            subscriptionProduct="DigitalPack"
+            paperFulfilmentOptions={null}
+          />
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </Footer>}
     >
       <CheckoutStage />
+      <ConsentBanner />
     </Page>
   </Provider>
 );

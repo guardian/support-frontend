@@ -191,7 +191,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
 
   // This was how referrer pageview id used to be passed.
   const campaignCode =
-    (isFrontlineCampaign() ? 'thefrontline' : acquisitionData.campaignCode) ||
+    (isFrontlineCampaign() ? 'thefrontline-post-goal' : acquisitionData.campaignCode) ||
     getQueryParameter('INTCMP');
 
   const parameterExclusions =

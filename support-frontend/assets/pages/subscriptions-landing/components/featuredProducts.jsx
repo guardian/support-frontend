@@ -129,7 +129,7 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
   return {
     headingText: 'Guardian Weekly',
     subheadingText: 'Open up your world view',
-    bodyText: 'Discover our essential new magazine with free worldwide delivery.',
+    bodyText: 'The Guardian\'s essential news magazine with free worldwide delivery.',
   };
   // }
 };

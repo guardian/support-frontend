@@ -10,6 +10,7 @@ import UnorderedList from 'components/list/unorderedList';
 import OrderedList from 'components/list/orderedList';
 import GridImage from 'components/gridImage/gridImage';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpers';
 
@@ -17,7 +18,7 @@ import { ContentHelpBlock, ContentForm, type ContentTabPropTypes } from './helpe
 // ----- Content ----- //
 const ContentVoucherFaqBlock = () => (
   <Content
-    border
+    border={paperHasDeliveryEnabled()}
     image={<GridImage
       gridId="paperVoucherFeature"
       srcSizes={[750, 500, 140]}

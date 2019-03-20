@@ -12,6 +12,7 @@ import './text.scss';
 
 type PropTypes = {|
   title?: string | null,
+  className: ?string,
   children?: ?Node,
   headingSize: HeadingSize,
 |};
@@ -20,12 +21,12 @@ type PropTypes = {|
 // ----- Render ----- //
 
 const Text = ({
-  title, children, headingSize,
+  title, children, headingSize, className,
 }: PropTypes) => (
   <div className={
-    classNameWithModifiers('component-text', [
+    [className, classNameWithModifiers('component-text', [
       !children ? 'heading-only' : null,
-    ])}
+    ])].join(' ')}
   >
     {title && <Title size={headingSize}>{title}</Title>}
     {children}
@@ -36,6 +37,7 @@ Text.defaultProps = {
   headingSize: 2,
   children: null,
   title: null,
+  className: null,
 };
 
 

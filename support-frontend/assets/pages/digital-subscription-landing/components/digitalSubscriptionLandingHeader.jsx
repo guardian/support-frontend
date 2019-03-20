@@ -189,14 +189,18 @@ function SaleHeader(props: PropTypes) {
     >
       <div className="the-moment-hero">
         <div className="the-moment-hero__copy">
-          <h2>A better way to fund journalism. <br />
-            <span>A better way to read it.
+          <h2>A better way to fund journalism <br />
+            <span>A better way to read it
             </span>
           </h2>
         </div>
 
         <div className="the-moment-hero__graphic-outer">
           <div className="the-moment-hero__graphic-inner">
+            <div className="the-moment-hero__badge">
+              <span className="the-moment-hero__badge-lgeCopy">14 Day</span>
+              <span>Free trial</span>
+            </div>
             <div className="the-moment-hero__graphic">
               <GridImage
                 gridId="theMomentDigiHero"

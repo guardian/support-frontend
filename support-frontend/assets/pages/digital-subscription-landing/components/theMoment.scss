@@ -25,7 +25,6 @@
 
 .the-moment-hero__copy {
     line-height: 1;
-    display: block;
     max-width: gu-span(6);
     padding-left: $gu-v-spacing;
     
@@ -39,16 +38,14 @@
       }
     }
 
-    @include mq($from: mobile) {
-      max-width: 60%;
-    }
-    
-    @include mq($from: mobileMedium) {
-      max-width: 50%;
+    @include mq($until: mobileLandscape) {
+      display: none;
     }
 
+    
     @include mq($from: mobileLandscape) {
       max-width: 50%;
+      
       h2 {
         font-size: 38px;
       }
@@ -79,6 +76,7 @@
         font-size: 56px;
       }
     }
+    
 }
 
 .the-moment-hero__graphic-outer {
@@ -199,5 +197,59 @@
   }
   .the-moment-hero__graphic-slider {
     display: none;
+  }
+}
+
+.the-moment-hero__badge {
+  position: absolute;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: gu-colour(neutral-100);
+  text-align: center;
+  line-height: 1;
+  font-family: $gu-headline;
+  font-size: 1rem;
+  font-weight: 700;
+  z-index: 10;
+  width: 100%;
+  top: 1.4rem;
+  
+  span {
+    display: block;
+    line-height: 1; 
+  }
+  
+  .the-moment-hero__badge-lgeCopy {
+    font-family: $gu-titlepiece;
+    position: relative;
+    font-size: 1.6rem;
+    font-variant-numeric: lining-nums;
+    -moz-font-feature-settings: "lnum";
+    -webkit-font-feature-settings: "lnum";
+    font-feature-settings: "lnum";
+  }
+  
+  @include mq($from: mobileMedium) {
+    top: 1.8rem;
+    font-size: 1rem;
+
+    .the-moment-hero__badge-lgeCopy {
+      font-size: 2.2rem;
+    }
+  }
+  
+  @include mq($from: tablet) {
+    top: 2.2rem;
+    font-size: 1.2rem;
+  }
+  
+  @include mq($from: leftCol) {
+    top: 3.25rem;
+
+    .the-moment-hero__badge-lgeCopy {
+      font-size: 2.8rem;
+    }
   }
 }

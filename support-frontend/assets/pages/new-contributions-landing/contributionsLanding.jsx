@@ -27,6 +27,8 @@ import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer from './components/ContributionThankYou/ContributionThankYouContainer';
 import { NewContributionBackground } from './components/ContributionBackground';
 import { setUserStateActions } from './setUserStateActions';
+import ConsentBanner from '../../components/consentBanner/consentBanner';
+import './contributionsLanding.scss';
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -78,6 +80,7 @@ const router = (
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
               />
               <NewContributionBackground />
+              <ConsentBanner />
             </Page>
             )
         }

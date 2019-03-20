@@ -20,7 +20,7 @@ import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import 'stylesheets/skeleton/skeleton.scss';
 
-import { DefaultHeader } from './components/hero/hero';
+import { SaleHeader } from './components/hero/hero';
 import Tabs from './components/tabs';
 import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
@@ -28,18 +28,15 @@ import reducer from './paperSubscriptionLandingPageReducer';
 import './paperSubscriptionLandingPage.scss';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import ConsentBanner from 'components/consentBanner/consentBanner';
 
 // ----- Collection or delivery ----- //
 
 const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
 const product = getQueryParameter('product');
 
-const reactElementId: {
-  [PaperFulfilmentOptions]: string,
-} = {
-  Collection: 'paper-subscription-landing-page-collection',
-  HomeDelivery: 'paper-subscription-landing-page-delivery',
-};
+const reactElementId = 'paper-subscription-landing-page';
 
 // ----- Internationalisation ----- //
 
@@ -71,16 +68,17 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <DefaultHeader />
-
-      <Content needsHigherZindex>
-        <Text>
-          <LargeParagraph>
-            {getStandfirst()}
-          </LargeParagraph>
-        </Text>
-        <Tabs />
-      </Content>
+      <SaleHeader />
+      {paperHasDeliveryEnabled() &&
+        <Content needsHigherZindex>
+          <Text>
+            <LargeParagraph>
+              {getStandfirst()}
+            </LargeParagraph>
+          </Text>
+          <Tabs />
+        </Content>
+      }
       <TabsContent />
       {flashSaleIsActive('Paper', GBPCountries) &&
         <Content>
@@ -90,9 +88,10 @@ const content = (
           </Text>
         </Content>
       }
+      <ConsentBanner />
     </Page>
   </Provider>
 );
 
-renderPage(content, reactElementId[fulfilment]);
+renderPage(content, reactElementId);
 

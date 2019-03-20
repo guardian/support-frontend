@@ -6,6 +6,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 
 import { createCommonReducer } from '../commonReducer';
 import { GBPCountries } from '../../internationalisation/countryGroup';
+import { Unset } from '../../tracking/thirdPartyTrackingConsent';
 
 
 // ----- Tests ----- //
@@ -33,6 +34,7 @@ describe('reducer tests', () => {
         currencyId: 'GBP',
       },
       abParticipations: {},
+      trackingConsent: Unset,
       otherQueryParams: [],
       settings: {
         switches: {
