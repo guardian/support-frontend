@@ -243,7 +243,11 @@ function ContributionFormContainer(props: PropTypes) {
   };
 
   return props.paymentComplete ?
-    <Redirect to={props.thankYouRoute} />
+    // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
+    // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
+    // back to /thankyou given the current state of the redux store.
+    // The effect is that clicking back in the browser will take the user to the page before they arrived at /contribute
+    <Redirect to={props.thankYouRoute} push={false}/>
     : (
       <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
         <div className="gu-content__blurb">
