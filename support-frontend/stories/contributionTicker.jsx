@@ -17,7 +17,7 @@ const stories = storiesOf('Tickers', module)
   .addDecorator(withCenterAlignment);
 
 stories.add('Contribution ticker', () => (
-  <div style={{width: '100%', maxWidth: '500px'}}>
+  <div style={{ width: '100%', maxWidth: '500px' }}>
     <ContributionTicker
       tickerJsonUrl={tickerJsonUrlInput()}
       onGoalReached={() => {}}

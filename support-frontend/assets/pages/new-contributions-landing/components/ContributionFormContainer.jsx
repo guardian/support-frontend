@@ -17,7 +17,7 @@ import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOff
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
-import ContributionTicker from 'components/ticker/ContributionTicker';
+import ContributionTicker from 'components/ticker/contributionTicker';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 
 import { type State } from '../contributionsLandingReducer';
@@ -247,7 +247,7 @@ function ContributionFormContainer(props: PropTypes) {
     // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
     // back to /thankyou given the current state of the redux store.
     // The effect is that clicking back in the browser will take the user to the page before they arrived at /contribute
-    <Redirect to={props.thankYouRoute} push={false}/>
+    <Redirect to={props.thankYouRoute} push={false} />
     : (
       <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
         <div className="gu-content__blurb">
