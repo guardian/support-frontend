@@ -33,7 +33,7 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
-import { getVoucherDays, getDeliveryDays, formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
+import { formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
 import {
   type FormActionCreators,
   formActionCreators,
