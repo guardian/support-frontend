@@ -3,6 +3,7 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService, PaperEmailFields}
+import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{Collection, HomeDelivery}
@@ -28,32 +29,26 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     services: Services
   ): FutureHandlerResult = {
 
-    def completePaymentMethod(state: SendThankYouEmailState): Future[SendThankYouEmailState] = state.paymentMethod match {
-      case ddFields: DirectDebitDisplayFields => addMandateIdIfNeeded(ddFields).map(ddFieldsWithMandateId => state.copy(paymentMethod = ddFieldsWithMandateId))
-      case otherPaymentMethod => Future.successful(state)
-    }
-
-    def addMandateIdIfNeeded(directDebitFields: DirectDebitDisplayFields): Future[DirectDebitDisplayFields] = {
-      directDebitFields.mandateId match {
-        case Some(mandateId) => Future.successful(directDebitFields)
-        case None => fetchDirectDebitMandateId(state, services.zuoraService).map { fetchedMandateId =>
-          directDebitFields.copy(mandateId = fetchedMandateId)
-        }
-      }
-    }
-
     for {
-      stateWithMandateId <- completePaymentMethod(state)
+      stateWithMandateId <- ensureMandateIdInState(services.zuoraService, state)
       emailResult <- sendEmail(stateWithMandateId)
     } yield HandlerResult(emailResult, requestInfo)
 
   }
 
+  def ensureMandateIdInState(zuoraService: ZuoraService, state: SendThankYouEmailState): Future[SendThankYouEmailState] = state.paymentMethod match {
+    case ddFields: DirectDebitDisplayFields => addMandateIdIfNeeded(zuoraService, state, ddFields).map(ddFieldsWithMandateId => state.copy(paymentMethod = ddFieldsWithMandateId))
+    case otherPaymentMethod => Future.successful(state)
+  }
 
-  def fetchDirectDebitMandateId(state: SendThankYouEmailState, zuoraService: ZuoraService): Future[Option[String]] = state.paymentMethod match {
-    case _: DirectDebitPaymentMethod =>
-      zuoraService.getMandateIdFromAccountNumber(state.accountNumber)
-    case _ => Future.successful(None)
+  def addMandateIdIfNeeded(zuoraService: ZuoraService, state:SendThankYouEmailState, directDebitFields: DirectDebitDisplayFields): Future[DirectDebitDisplayFields] = {
+    directDebitFields.mandateId match {
+      case Some(mandateId) => Future.successful(directDebitFields)
+
+      case None => zuoraService.getMandateIdFromAccountNumber(state.accountNumber).map { fetchedMandateId =>
+          directDebitFields.copy(mandateId = fetchedMandateId)
+        }
+    }
   }
 
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] =
