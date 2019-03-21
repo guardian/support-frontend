@@ -55,7 +55,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 // ----- Render ----- //
 
 function ContributionTypeTabs(props: PropTypes) {
-  const verticalTabsModifier = props.verticalContributionsTabsVariant === 'control' ? '' : 'mobile-vertical-tabs';
+  const verticalTabsModifier = props.verticalContributionsTabsVariant === 'verticalTabsMobile' ? 'mobile-vertical-tabs' : '';
   const contributionTypes = getValidContributionTypes(props.countryGroupId);
 
   if (contributionTypes.length === 1 && contributionTypes[0] === 'ONE_OFF') {

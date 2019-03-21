@@ -5,7 +5,7 @@ import type { Tests } from './abtest';
 
 
 export type EditorialiseAmountsVariant = 'control' | 'averageAnnualAmount' | 'monthlyBreakdownAnnual' | 'weeklyBreakdownAnnual' | 'notintest';
-export type VerticalContributionsTabsVariant = 'control' | 'verticalTabsMobile';
+export type VerticalContributionsTabsVariant = 'control' | 'verticalTabsMobile' | 'notintest';
 
 export const tests: Tests = {
 
