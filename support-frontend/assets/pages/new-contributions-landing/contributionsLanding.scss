@@ -1203,3 +1203,32 @@ form {
 .editorialise-amounts-test-copy:empty {
   display: none;
 }
+
+// Vertical contributions tabs test
+.form__radio-group--mobile-vertical-tabs {
+  .form__radio-group-list {
+    flex-flow: column-reverse nowrap;
+    text-align: center;
+
+    @include mq($from: mobileLandscape) {
+      flex-flow: row nowrap;
+      text-align: left;
+    }
+  }
+
+  .form__radio-group-list--border {
+    border-bottom: none;
+
+    @include mq($from: mobileLandscape) {
+      border-bottom: 1px solid gu-colour(neutral-86);
+    }
+  }
+
+  .form__radio-group-list--border .form__radio-group-item {
+    border-bottom: 1px solid gu-colour(highlight-main);
+
+    @include mq($from: mobileLandscape) {
+      border-bottom: none;
+    }
+  }
+}
