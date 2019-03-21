@@ -182,7 +182,7 @@ const getEditorialisedAmountsCopy = (
   }
 
   if (editorialiseAmountsVariant === 'weeklyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as${amountFormatted(amount/52.00, currencyString, countryGroupId)} each week`;
+    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount/52.00, currencyString, countryGroupId)} each week`;
   }
 
   return '';
