@@ -144,24 +144,12 @@ const localisedAverageAmountSentence: {
   },
 };
 
-
-function averageAmountVariantCopy(
-  countryGroupId: CountryGroupId,
-  contributionType: ContributionType,
-  currencyString: string,
-) {
-  const localAverageAmountInfo = localisedAverageAmountSentence[countryGroupId];
-  const localAverageAmount = Math.round(localAverageAmountInfo.averageAnnualAmount);
-  const localAverageAmountSentence = localAverageAmountInfo.amountSentence;
-  return `Please select the amount you'd like to contribute each year. ${localAverageAmountSentence} average is ${currencyString}${localAverageAmount}.`;
-}
-
 const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
   if (amount < 1 && countryGroupId === 'GBPCountries') {
     return `${(amount*100).toFixed(0)}p`
   }
   return `${currencyString}${(amount).toFixed(2)}`;
-}
+};
 
 const getEditorialisedAmountsCopy = (
   editorialiseAmountsVariant: EditorialiseAmountsVariant,
