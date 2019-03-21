@@ -185,24 +185,22 @@ class SubscribeWithGoogleBackendSpec extends WordSpec with Matchers with FutureE
 
       when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultNoPaymentExists)
       when(mockIdentityService.getOrCreateIdentityIdFromEmail(email)).thenReturn(identityError)
-      when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmissionError)
+      when(mockOphanService.submitAcquisition(Match.any())(Match.any())).thenReturn(acquisitionSubmission)
       when(mockDbService.insertContributionData(Match.any())).thenReturn(dbResult)
       when(mockEmailService.sendThankYouEmail(Match.any())).thenReturn(emailResult)
 
       val recordResult: EitherT[Future, BackendError, Unit] =
         subscribeWithGoogleBackend.recordPayment(subscribeWithGooglePayment, clientBrowserInfo)
 
-      recordResult.futureLeft shouldBe failedIdentityErrors.futureLeft
+      recordResult.futureRight shouldBe ()
 
       when(mockDbService.paymentAlreadyInserted(Match.any())).thenReturn(dbResultNoPaymentExists)
       verify(mockIdentityService, times(1)).getOrCreateIdentityIdFromEmail(email)
 
-      verify(mockOphanService, times(0)).submitAcquisition(Match.any())(Match.any())
-      verify(mockDbService, times(0)).insertContributionData(Match.any())
+      verify(mockOphanService, times(1)).submitAcquisition(Match.any())(Match.any())
+      verify(mockDbService, times(1)).insertContributionData(Match.any())
       verify(mockEmailService, times(0)).sendThankYouEmail(Match.any())
-      verify(mockCloudWatchService, times(0)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
-      verify(mockCloudWatchService, times(2))
-        .recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+      verify(mockCloudWatchService, times(1)).recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
 
     }
 

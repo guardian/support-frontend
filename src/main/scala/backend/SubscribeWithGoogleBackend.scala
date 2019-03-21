@@ -59,32 +59,65 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
 
   private def handleFirstInstanceOfPayment(googleRecordPayment: GoogleRecordPayment,
                                            clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
-    val identity = getOrCreateIdentityIdFromEmail(googleRecordPayment.email)
+    EitherT(getOrCreateIdentityIdFromEmail(googleRecordPayment.email).fold(
+      _ => {
+        logger.warn(s"unable to get identity id for email ${googleRecordPayment.email}, tracking acquisition anyway")
+        handleContributionWithoutIdentity(googleRecordPayment, clientBrowserInfo).value
+      }, id =>
+        handleContributionWithIdentity(id, googleRecordPayment, clientBrowserInfo).value
+    ).flatten)
+  }
 
-    val trackContributionResult = identity.flatMap { id =>
-      insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, Some(id)))
-    }.leftMap { err =>
-      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
-      logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
-      err
-    }.map { f =>
-      cloudWatchService.recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
-      f
-    }
 
-    val ophanTrackingResult = identity.flatMap { id =>
-      submitAcquisitionToOphan(googleRecordPayment, id, clientBrowserInfo)
-    }.leftMap { err =>
+  private def handleContributionWithoutIdentity(googleRecordPayment: GoogleRecordPayment, clientBrowserInfo: ClientBrowserInfo) = {
+    val trackContributionResult =
+      insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, None))
+        .leftMap { err =>
+          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+          logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
+          err
+        }.map { f =>
+        cloudWatchService.recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
+        f
+      }
+
+    val ophanTrackingResult = submitAcquisitionToOphan(googleRecordPayment, None, clientBrowserInfo).leftMap { err =>
       cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
       logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
       err
     }
 
-    val sendThankYouEmailResult = for {
-      identityId <- identity
-      contributorRow = contributorRowFromPayment(identityId, googleRecordPayment)
-      _ <- emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
-    } yield ()
+    BackendError.combineResults(
+      trackContributionResult,
+      ophanTrackingResult
+    )
+  }
+
+  private def handleContributionWithIdentity(identity: Long, googleRecordPayment: GoogleRecordPayment, clientBrowserInfo: ClientBrowserInfo) = {
+    val trackContributionResult =
+      insertContributionDataIntoDatabase(ContributionData.fromSubscribeWithGoogle(googleRecordPayment, Some(identity)))
+        .leftMap { err =>
+          cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+          logger.error(s"Unable to update contributions store with data: $googleRecordPayment due to error: ${err.getMessage}")
+          err
+        }.map { f =>
+        cloudWatchService.recordPaymentSuccess(PaymentProvider.SubscribeWithGoogle)
+        f
+      }
+
+    val ophanTrackingResult = submitAcquisitionToOphan(googleRecordPayment, Some(identity), clientBrowserInfo).leftMap { err =>
+      cloudWatchService.recordPostPaymentTasksError(PaymentProvider.SubscribeWithGoogle)
+      logger.error(s"Unable to submit data to Ophan with data: $googleRecordPayment due to error: ${err.getMessage}")
+      err
+    }
+
+    val sendThankYouEmailResult = {
+      val contributorRow = contributorRowFromPayment(identity, googleRecordPayment)
+      emailService.sendThankYouEmail(contributorRow).bimap(
+        l => BackendError.fromEmailError(l),
+        _ => ()
+      )
+    }
 
     BackendError.combineResults(
       BackendError.combineResults(
@@ -94,6 +127,7 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
       sendThankYouEmailResult
     )
   }
+
 
   private def contributorRowFromPayment(identityId: Long, googleRecordPayment: GoogleRecordPayment): ContributorRow = {
     ContributorRow(googleRecordPayment.email,
@@ -105,7 +139,7 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
   }
 
   private def submitAcquisitionToOphan(payment: GoogleRecordPayment,
-                                       identityId: Long,
+                                       identityId: Option[Long],
                                        clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
     ophanService.submitAcquisition(SubscribeWithGoogleAcquisition(payment, identityId, clientBrowserInfo))
       .bimap(BackendError.fromOphanError, _ => ())
