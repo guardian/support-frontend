@@ -58,9 +58,7 @@
       @inlineCss.value
       </style>
     }
-
-    @* This script is intentionally at the bottom of the file. Please check
-    all the critical flows work correctly if you change its position *@
+      
     @linkedJs(path: RefPath) = {
       <script type="text/javascript" src="@assets(path)"></script>
     }
