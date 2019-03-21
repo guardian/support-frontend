@@ -3,9 +3,9 @@
 import ReactDOM from 'react-dom';
 import { logException } from 'helpers/logger';
 
-const getElement = (id: string): ?Element => document.getElementById(id);
+const getElement = (id: string): ?HTMLElement => document.getElementById(id);
 
-const getElementOrBody = (id: ?string): Element => {
+const getElementOrBody = (id: ?string): HTMLElement => {
   let element;
   if (id) {
     element = getElement(id);
@@ -14,7 +14,7 @@ const getElementOrBody = (id: ?string): Element => {
     element = document.querySelector('.gu-render-to');
   }
   if (!element) {
-    element = ((document.body: any): Element);
+    element = ((document.body: any): HTMLElement);
   }
   return element;
 };
@@ -39,6 +39,7 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
   const element = getElement(id);
 
   if (element) {
+    delete element.dataset.notHydrated;
     try {
       ReactDOM.render(content, element, callBack);
     } catch {
