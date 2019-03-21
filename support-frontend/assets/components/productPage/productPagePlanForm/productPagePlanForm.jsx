@@ -4,10 +4,6 @@
 
 import React from 'react';
 
-import { Outset } from 'components/content/content';
-
-import { Fieldset } from 'components/forms/fieldset';
-
 import { type Option } from 'helpers/types/option';
 
 import ProductPagePlanFormLabel from './productPagePlanFormLabel';
@@ -27,21 +23,9 @@ export type Plan = {|
   saving: Option<string>,
 |}
 
-export type StatePropTypes<P> = {|
+export type PropTypes<P> = {|
   plans: {[P]: Plan},
-  selectedPlan: P | null,
 |};
-
-export type DispatchPropTypes<P> = {|
-  onSubmitAction: () => *,
-  setPlanAction: (P) => *,
-|};
-
-type PropTypes<P> = {|
-  ...StatePropTypes<P>,
-  ...DispatchPropTypes<P>,
-|};
-
 
 // ----- Render ----- //
 
@@ -55,9 +39,8 @@ export default function ProductPagePlanForm<P:string>({
     <div
       className="component-product-page-plan-form"
     >
-      <Outset>
-        <div className="component-product-page-plan-form__items">
-          {keys.map((key: P) => {
+      <div className="component-product-page-plan-form__items">
+        {keys.map((key: P) => {
             const {
               copy, title, offer, price, saving, href, onClick,
             } = plans[key];
@@ -77,8 +60,7 @@ export default function ProductPagePlanForm<P:string>({
               </div>
               );
             })}
-        </div>
-      </Outset>
+      </div>
     </div>
   );
 }

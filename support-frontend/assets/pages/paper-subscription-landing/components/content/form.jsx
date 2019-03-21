@@ -1,24 +1,15 @@
 // @flow
-
-// ----- Imports ----- //
-
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import { getNewsstandPrice, getNewsstandSaving } from 'helpers/subscriptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Price, showPrice } from 'helpers/productPrice/productPrices';
-import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import ProductPagePlanForm, {
-  type DispatchPropTypes,
-  type StatePropTypes,
-} from 'components/productPage/productPagePlanForm/productPagePlanForm';
+import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 import { type State } from '../../paperSubscriptionLandingPageReducer';
-import { redirectToCheckout, setPlan } from '../../paperSubscriptionLandingPageActions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes, Everyday, Sixday } from 'helpers/productPrice/productOptions';
@@ -127,18 +118,10 @@ const getPlans = (
 
 
 // ----- State/Props Maps ----- //
-const mapStateToProps = (state: State): StatePropTypes<PaperProductOptions> => ({
+const mapStateToProps = (state: State): PropTypes<PaperProductOptions> => ({
   plans: getPlans(state.page.tab, state.page.productPrices, state.common),
-  selectedPlan: state.page.plan.plan,
 });
-
-const mapDispatchToProps = (dispatch: Dispatch<Action<PaperProductOptions>>): DispatchPropTypes<PaperProductOptions> =>
-  ({
-    setPlanAction: bindActionCreators(setPlan, dispatch),
-    onSubmitAction: bindActionCreators(redirectToCheckout, dispatch),
-  });
-
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductPagePlanForm);
+export default connect(mapStateToProps)(ProductPagePlanForm);

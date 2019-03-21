@@ -13,7 +13,6 @@ import Text, { LargeParagraph } from 'components/text/text';
 
 
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
@@ -34,7 +33,6 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 // ----- Collection or delivery ----- //
 
 const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
-const product = getQueryParameter('product');
 
 const reactElementId = 'paper-subscription-landing-page';
 
@@ -47,7 +45,7 @@ const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supp
 
 // ----- Redux Store ----- //
 
-const store = pageInit(() => reducer(fulfilment, product), true);
+const store = pageInit(() => reducer(fulfilment), true);
 
 
 // ----- Render ----- //

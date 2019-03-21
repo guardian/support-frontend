@@ -1,9 +1,5 @@
 // @flow
-
-// ----- Imports ----- //
-
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
@@ -14,14 +10,9 @@ import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getPromoCode } from 'helpers/flashSale';
 import { getPromotionWeeklyProductPrice, getWeeklyProductPrice } from 'helpers/subscriptions';
-import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import ProductPagePlanForm, {
-  type DispatchPropTypes,
-  type StatePropTypes,
-} from 'components/productPage/productPagePlanForm/productPagePlanForm';
+import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
-import { redirectToWeeklyPage, setPlan } from '../weeklySubscriptionLandingActions';
 
 
 // ---- Plans ----- //
@@ -67,7 +58,7 @@ export const displayBillingPeriods = {
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => ({
+const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
   plans: Object.keys(displayBillingPeriods).reduce((ps, billingPeriod) => ({
     ...ps,
     [billingPeriod]: {
@@ -80,16 +71,9 @@ const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => (
       saving: null,
     },
   }), {}),
-  selectedPlan: state.page.plan,
 });
-
-const mapDispatchToProps = (dispatch: Dispatch<Action<WeeklyBillingPeriod>>): DispatchPropTypes<WeeklyBillingPeriod> =>
-  ({
-    setPlanAction: bindActionCreators(setPlan, dispatch),
-    onSubmitAction: bindActionCreators(redirectToWeeklyPage, dispatch),
-  });
 
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductPagePlanForm);
+export default connect(mapStateToProps)(ProductPagePlanForm);
