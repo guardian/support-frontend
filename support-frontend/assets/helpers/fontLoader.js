@@ -13,7 +13,7 @@ const fetchFonts = (window: Object, document: Document): void => {
 
   const loadFonts = (): void => {
     const iframe = document.createElement('iframe');
-    iframe.src = 'https://theguardian.com/font-loader';
+    iframe.src = 'https://www.theguardian.com/font-loader';
     // add iframe and wait for message
     iframe.style.display = 'none';
     window.addEventListener('message', (e: MessageEvent) => {
