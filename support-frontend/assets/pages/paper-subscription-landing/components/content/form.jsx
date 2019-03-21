@@ -19,6 +19,7 @@ import { getLegacyPaperCheckout } from 'helpers/externalLinks';
 import { getQueryParameter } from 'helpers/url';
 import { type CommonState } from 'helpers/page/commonReducer';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import type { OptimizeExperiments } from '../../../../helpers/optimize/optimize';
 
 
 // ---- Helpers ----- //
