@@ -108,42 +108,6 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
   }
 };
 
-const localisedAverageAmountSentence: {
-  [CountryGroupId]: {
-    amountSentence: string,
-    averageAnnualAmount: number,
-  }
-} = {
-  GBPCountries: {
-    amountSentence: 'In the UK, the',
-    averageAnnualAmount: 50.37,
-  },
-  UnitedStates: {
-    amountSentence: 'In the US, the',
-    averageAnnualAmount: 50.16,
-  },
-  AUDCountries: {
-    amountSentence: 'In Australia, the',
-    averageAnnualAmount: 82.65,
-  },
-  EURCountries: {
-    amountSentence: 'In Europe, the',
-    averageAnnualAmount: 52.92,
-  },
-  NZDCountries: {
-    amountSentence: 'In New Zealand, the',
-    averageAnnualAmount: 58.51,
-  },
-  Canada: {
-    amountSentence: 'In Canada, the',
-    averageAnnualAmount: 62.68,
-  },
-  International: {
-    amountSentence: 'The',
-    averageAnnualAmount: 61.78,
-  },
-};
-
 const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
   if (amount < 1 && countryGroupId === 'GBPCountries') {
     return `${(amount*100).toFixed(0)}p`
