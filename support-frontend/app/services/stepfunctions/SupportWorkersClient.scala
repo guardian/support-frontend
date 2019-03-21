@@ -110,7 +110,8 @@ class SupportWorkersClient(
       promoCode = request.body.promoCode,
       firstDeliveryDate = request.body.firstDeliveryDate
     )
-    underlying.triggerExecution(createPaymentMethodState, user.isTestUser).bimap(
+    val isExistingAccount = createPaymentMethodState.paymentFields.isInstanceOf[ExistingPaymentFields]
+    underlying.triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount).bimap(
       { error =>
         SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
         StateMachineFailure: SupportWorkersError
