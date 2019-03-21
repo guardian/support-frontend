@@ -2,6 +2,7 @@ const chalk = require('chalk');
 const { writeFile } = require('fs');
 const { Cluster } = require('puppeteer-cluster');
 const { resolve } = require('path');
+const os = require('os');
 
 const pages = ['uk/support', 'uk/subscribe/paper'];
 
@@ -9,7 +10,7 @@ const pages = ['uk/support', 'uk/subscribe/paper'];
 
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
-    maxConcurrency: require('os').cpus().length || 2,
+    maxConcurrency: os.cpus().length || 2,
   });
 
   await cluster.task(async ({ page, data }) => {
