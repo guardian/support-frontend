@@ -100,6 +100,7 @@ class PaperSubscription(
       id,
       js,
       css,
+      fontLoaderBundle,
       Some(csrf),
       idUser,
       uatMode,

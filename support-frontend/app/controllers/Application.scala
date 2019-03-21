@@ -146,6 +146,7 @@ class Application(
       mainElement = EmptyDiv("showcase-landing-page"),
       mainJsBundle = Left(RefPath("showcasePage.js")),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
+      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.showcaseLandingDescription,
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
     )()).withSettingsSurrogateKey

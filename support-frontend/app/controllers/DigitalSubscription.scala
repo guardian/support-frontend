@@ -113,6 +113,7 @@ class DigitalSubscription(
       id,
       js,
       css,
+      fontLoaderBundle,
       Some(csrf),
       idUser,
       uatMode,

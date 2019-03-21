@@ -167,7 +167,7 @@
 
 } { ssr =>
 
-@main(title = title, mainJsBundle = js, fontLoaderBundle = Some(fontLoaderBundle), description = description, mainElement = SSRContent(id, ssr), mainStyleBundle = css) {
+@main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = SSRContent(id, ssr), mainStyleBundle = css) {
   <script type="text/javascript">
     window.guardian = window.guardian || {};
     @idUser.map { user =>
