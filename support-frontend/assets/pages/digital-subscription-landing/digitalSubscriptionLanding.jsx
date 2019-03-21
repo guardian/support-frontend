@@ -35,7 +35,7 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(() => digitalSubscriptionLandingReducer(null), true);
+const store = pageInit(() => digitalSubscriptionLandingReducer(), true);
 
 // ----- Internationalisation ----- //
 
