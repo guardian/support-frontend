@@ -7,8 +7,9 @@ import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
 import FooterContainer from 'components/footer/footerContainer';
-import Header from 'components/headers/header/header';
+import { detect, type CountryGroupId, AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import SubscriptionsByCountryGroup from 'components/subscriptionsByCountryGroup/subscriptionsByCountryGroup';
+import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
@@ -18,7 +19,23 @@ import './subscriptionsLanding.scss';
 
 // ----- Redux Store ----- //
 
+const countryGroupId: CountryGroupId = detect();
 const store = pageInit();
+
+const Header = headerWithCountrySwitcherContainer({
+  path: '/subscribe/weekly',
+  countryGroupId,
+  listOfCountries: [
+    GBPCountries,
+    UnitedStates,
+    AUDCountries,
+    EURCountries,
+    Canada,
+    NZDCountries,
+    International,
+  ],
+  trackProduct: 'GuardianWeekly',
+});
 
 
 // ----- Render ----- //

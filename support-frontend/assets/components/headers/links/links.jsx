@@ -6,7 +6,7 @@ import { getPatronsLink } from 'helpers/externalLinks';
 import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { clickedEvent } from 'helpers/tracking/clickTracking';
-
+import { type CountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // types
 type HeaderNavLink = {
@@ -14,10 +14,12 @@ type HeaderNavLink = {
   text: string,
   trackAs: string,
   opensInNewWindow?: boolean,
+  include?: CountryGroupId[],
 }
 
 type PropTypes = {|
   location: 'desktop' | 'mobile',
+  countryGroupId: ?CountryGroupId,
   getRef: Option<(?Element) => void>
 |};
 
@@ -27,6 +29,7 @@ const links: HeaderNavLink[] = [
     href: routes.showcase,
     text: 'Support',
     trackAs: 'showcase',
+    include: [GBPCountries],
   },
   {
     href: routes.subscriptionsLanding,
@@ -42,6 +45,7 @@ const links: HeaderNavLink[] = [
     href: routes.paperSubscriptionLanding,
     text: 'Paper',
     trackAs: 'subscriptions:paper',
+    include: [GBPCountries],
   },
   {
     href: routes.guardianWeeklySubscriptionLanding,
@@ -58,10 +62,18 @@ const links: HeaderNavLink[] = [
 
 
 // Export
-const Links = ({ location, getRef }: PropTypes) => (
+const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
   <nav className={classNameWithModifiers('component-header-links', [location])}>
     <ul className="component-header-links__ul" ref={getRef}>
-      {links.map(({
+      {links.filter(({ include }) => {
+        if (!countryGroupId) {
+          return true;
+        }
+        if (include && !include.includes(countryGroupId)) {
+          return false;
+        }
+        return true;
+      }).map(({
         href, text, trackAs, opensInNewWindow,
         }) => (
           <li
