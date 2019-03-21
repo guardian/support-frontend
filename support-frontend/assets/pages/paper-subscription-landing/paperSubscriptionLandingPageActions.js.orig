@@ -1,0 +1,72 @@
+// @flow
+
+// ----- Imports ----- //
+
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
+
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+<<<<<<< HEAD
+import { paperSubsUrl } from 'helpers/routes';
+=======
+import { getQueryParameter } from 'helpers/url';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import { Everyday } from 'helpers/productPrice/productOptions';
+import type { OptimizeExperiments } from '../../helpers/optimize/optimize';
+>>>>>>> Set up the app to work with the local version of the test
+
+// ----- Types ----- //
+export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }
+
+
+// ----- Action Creators ----- //
+
+const setTab = (tab: PaperFulfilmentOptions): TabActions => {
+  sendClickedEvent(`paper_subscription_landing_page-switch_tab-${tab}`)();
+  window.history.replaceState({}, null, paperSubsUrl(tab === HomeDelivery));
+  return { type: 'SET_TAB', tab };
+};
+
+<<<<<<< HEAD
+=======
+const inPaperTestVariant = (optimizeExperiments: OptimizeExperiments): boolean => {
+  const experimentId = '-4fEHhjaSWaoNIDmV97AFw';
+  return optimizeExperiments.find(exp => exp.id === experimentId && exp.variant === '1') !== undefined;
+};
+
+const getCheckoutUrl = (state: State) => {
+  const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
+
+  if (inPaperTestVariant(optimizeExperiments) || getQueryParameter('newCheckout') === 'true') {
+    const product = state.page.plan.plan ? state.page.plan.plan : Everyday;
+    return paperCheckoutUrl(state.page.tab, product);
+  }
+
+  return state.page.plan.plan ? getLegacyPaperCheckout(
+    state.page.plan.plan,
+    state.page.tab,
+    referrerAcquisitionData,
+    abParticipations,
+    optimizeExperiments,
+  ) : null;
+};
+
+const redirectToCheckout = () =>
+  (dispatch: Dispatch<{||}>, getState: () => State) => {
+    /* this action does not dipatch anything at the moment */
+    const state = getState();
+    const location = getCheckoutUrl(state);
+
+    if (location) {
+      // this is annoying because we *know* state.page.plan.plan exists --------------v
+      const clickContext = 'paperSubscriptionLandingPage-'.concat(state.page.plan.plan ? state.page.plan.plan : '');
+      sendClickedEvent(clickContext.concat('-subscribe_now_cta'))();
+      window.location.href = location;
+    }
+  };
+
+>>>>>>> Set up the app to work with the local version of the test
+
+// ----- Exports ----- //
+
+export { setTab };

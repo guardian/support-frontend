@@ -121,7 +121,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
   }
 
-  "GET subscribe/digital/checkout?displayCheckout=true" should {
+  "GET subscribe/digital/checkout" should {
 
     "redirect unauthenticated user to signup page" in new DigitalSubscriptionsDisplayForm {
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)

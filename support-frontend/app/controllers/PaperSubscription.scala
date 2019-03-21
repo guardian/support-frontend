@@ -66,7 +66,7 @@ class PaperSubscription(
     }).withSettingsSurrogateKey
   }
 
-  def displayForm(displayCheckout: Boolean): Action[AnyContent] =
+  def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
@@ -75,12 +75,7 @@ class PaperSubscription(
           Future.successful(InternalServerError)
         },
         user => {
-          if (displayCheckout) {
-            Future.successful(Ok(paperSubscriptionFormHtml(user)))
-          }
-          else {
-            Future.successful(Redirect(routes.Subscriptions.geoRedirect))
-          }
+          Future.successful(Ok(paperSubscriptionFormHtml(user)))
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
