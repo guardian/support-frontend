@@ -107,7 +107,6 @@ header[role="banner"] {
 
   @include mq($from: tablet) {
     height: 115px;
-    //padding: 0 0 0 $content-left-margin-tablet;
   }
 
   @include mq($from: leftCol) {
@@ -310,10 +309,6 @@ footer[role="contentinfo"] a {
   flex-grow: 1;
   margin: 0 auto;
   border: none;
-
-  @include mq($from: tablet) {
-    //margin-left: $content-left-margin-tablet
-  }
 
   @include mq($from: leftCol) {
     margin-left: $content-left-margin-leftCol
