@@ -23,12 +23,17 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 // ---- Helpers ----- //
 
+const inPaperTestVariant = (optimizeExperiments: OptimizeExperiments): boolean => {
+  const experimentId = 'py5TUrpoSxOcKN80yjbqkg';
+  return optimizeExperiments.find(exp => exp.id === experimentId && exp.variant === '1') !== undefined;
+};
+
 const getCheckoutUrl = (
   fulfilmentOption: PaperFulfilmentOptions,
   productOptions: PaperProductOptions,
   commonState: CommonState,
 ) => {
-  if (getQueryParameter('displayCheckout') === 'true') {
+  if (inPaperTestVariant(commonState.optimizeExperiments) || getQueryParameter('newCheckout') === 'true') {
     return paperCheckoutUrl(fulfilmentOption, productOptions);
   }
 
