@@ -108,53 +108,12 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
   }
 };
 
-const localisedAverageAmountSentence: {
-  [CountryGroupId]: {
-    amountSentence: string,
-    averageAnnualAmount: number,
+const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
+  if (amount < 1 && countryGroupId === 'GBPCountries') {
+    return `${(amount*100).toFixed(0)}p`
   }
-} = {
-  GBPCountries: {
-    amountSentence: 'In the UK, the',
-    averageAnnualAmount: 50.37,
-  },
-  UnitedStates: {
-    amountSentence: 'In the US, the',
-    averageAnnualAmount: 50.16,
-  },
-  AUDCountries: {
-    amountSentence: 'In Australia, the',
-    averageAnnualAmount: 82.65,
-  },
-  EURCountries: {
-    amountSentence: 'In Europe, the',
-    averageAnnualAmount: 52.92,
-  },
-  NZDCountries: {
-    amountSentence: 'In New Zealand, the',
-    averageAnnualAmount: 58.51,
-  },
-  Canada: {
-    amountSentence: 'In Canada, the',
-    averageAnnualAmount: 62.68,
-  },
-  International: {
-    amountSentence: 'The',
-    averageAnnualAmount: 61.78,
-  },
+  return `${currencyString}${(amount).toFixed(2)}`;
 };
-
-
-function averageAmountVariantCopy(
-  countryGroupId: CountryGroupId,
-  contributionType: ContributionType,
-  currencyString: string,
-) {
-  const localAverageAmountInfo = localisedAverageAmountSentence[countryGroupId];
-  const localAverageAmount = Math.round(localAverageAmountInfo.averageAnnualAmount);
-  const localAverageAmountSentence = localAverageAmountInfo.amountSentence;
-  return `Please select the amount you'd like to contribute each year. ${localAverageAmountSentence} average is ${currencyString}${localAverageAmount}.`;
-}
 
 const getEditorialisedAmountsCopy = (
   editorialiseAmountsVariant: EditorialiseAmountsVariant,
@@ -170,16 +129,12 @@ const getEditorialisedAmountsCopy = (
     return '';
   }
 
-  if (editorialiseAmountsVariant === 'averageAnnualAmount' && contributionType === 'ANNUAL') {
-    return averageAmountVariantCopy(countryGroupId, contributionType, currencyString);
-  }
-
-  if (editorialiseAmountsVariant === 'monthlyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 12.00).toFixed(2)} each month`;
+  if (editorialiseAmountsVariant === 'dailyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
+    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount/365.00, currencyString, countryGroupId)} a day`;
   }
 
   if (editorialiseAmountsVariant === 'weeklyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 52.00).toFixed(2)} each week`;
+    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount/52.00, currencyString, countryGroupId)} each week`;
   }
 
   return '';
