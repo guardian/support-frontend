@@ -28,7 +28,11 @@ export default function LegalSection(props: PropTypes) {
   return (
     <div className="component-legal-section">
       <PageSection>
-        <TermsPrivacy countryGroupId={props.countryGroupId} contributionType={props.contributionType} />
+        <TermsPrivacy
+          countryGroupId={props.countryGroupId}
+          contributionType={props.contributionType}
+          campaignName={undefined}
+        />
         <ContribLegal countryGroupId={props.countryGroupId} />
       </PageSection>
     </div>

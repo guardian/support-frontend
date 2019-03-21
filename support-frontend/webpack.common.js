@@ -72,7 +72,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     contributionsLandingPage: 'pages/new-contributions-landing/contributionsLanding.jsx',
     fontLoader: 'helpers/fontLoader.js',
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
-    digitalSubscriptionLandingPageStyles: 'pages/digital-subscription-landing/digitalSubscriptionLanding.scss',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.jsx',
     paperSubscriptionCheckoutPage: 'pages/paper-subscription-checkout/paperSubscriptionCheckout.jsx',
     digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankYouExisting.jsx',
