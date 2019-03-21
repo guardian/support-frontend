@@ -27,7 +27,7 @@ class CustomHttpErrorHandler(
     router: => Option[Router],
     val assets: AssetsResolver,
     settingsProvider: AllSettingsProvider,
-    stage: Stage,
+    stage: Stage
 )(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with LazyLogging with SettingsSurrogateKeySyntax {
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
