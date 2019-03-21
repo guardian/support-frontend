@@ -13,6 +13,7 @@ import {
 } from 'helpers/checkouts';
 
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
+import type { VerticalContributionsTabsVariant } from 'helpers/abTests/abtestDefinitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -27,6 +28,7 @@ type PropTypes = {|
   countryGroupId: CountryGroupId,
   switches: Switches,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
+  verticalContributionsTabsVariant: VerticalContributionsTabsVariant
 |};
 
 const mapStateToProps = (state: State) => ({
@@ -34,6 +36,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
+  verticalContributionsTabsVariant: state.common.abParticipations.verticalContributionsTabs,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -52,6 +55,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 // ----- Render ----- //
 
 function ContributionTypeTabs(props: PropTypes) {
+  const verticalTabsModifier = props.verticalContributionsTabsVariant === 'control' ? '' : 'mobile-vertical-tabs';
   const contributionTypes = getValidContributionTypes(props.countryGroupId);
 
   if (contributionTypes.length === 1 && contributionTypes[0] === 'ONE_OFF') {
@@ -59,7 +63,7 @@ function ContributionTypeTabs(props: PropTypes) {
   }
 
   return (
-    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
+    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type', verticalTabsModifier])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
         {contributionTypes.map((contributionType: ContributionType) => (
