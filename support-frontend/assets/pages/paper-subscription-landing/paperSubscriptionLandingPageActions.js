@@ -3,16 +3,13 @@
 // ----- Imports ----- //
 
 import { ProductPagePlanFormActionsFor } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import { paperCheckoutUrl, paperSubsUrl } from 'helpers/routes';
-import { getLegacyPaperCheckout } from 'helpers/externalLinks';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import { type State } from './paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-import { getQueryParameter } from 'helpers/url';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
-import { Everyday } from 'helpers/productPrice/productOptions';
+import { paperSubsUrl } from 'helpers/routes';
 
 // ----- Types ----- //
 export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }
@@ -28,19 +25,6 @@ const setTab = (tab: PaperFulfilmentOptions): TabActions => {
 };
 
 const getCheckoutUrl = (state: State) => {
-  if (getQueryParameter('displayCheckout') === 'true') {
-    const product = state.page.plan.plan ? state.page.plan.plan : Everyday;
-    return paperCheckoutUrl(state.page.tab, product);
-  }
-
-  const { referrerAcquisitionData, abParticipations, optimizeExperiments } = state.common;
-  return state.page.plan.plan ? getLegacyPaperCheckout(
-    state.page.plan.plan,
-    state.page.tab,
-    referrerAcquisitionData,
-    abParticipations,
-    optimizeExperiments,
-  ) : null;
 };
 
 const redirectToCheckout = () =>

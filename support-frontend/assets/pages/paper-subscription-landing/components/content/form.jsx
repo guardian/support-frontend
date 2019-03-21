@@ -23,9 +23,35 @@ import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes, Everyday, Sixday } from 'helpers/productPrice/productOptions';
 import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
+import { paperCheckoutUrl } from 'helpers/routes';
+import { getLegacyPaperCheckout } from 'helpers/externalLinks';
+import { getQueryParameter } from 'helpers/url';
+import { type CommonState } from 'helpers/page/commonReducer';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 
 // ---- Helpers ----- //
+
+const getCheckoutUrl = (
+  fulfilmentOption: PaperFulfilmentOptions,
+  productOptions: PaperProductOptions,
+  commonState: CommonState,
+) => {
+  if (getQueryParameter('displayCheckout') === 'true') {
+    return paperCheckoutUrl(fulfilmentOption, productOptions);
+  }
+
+  const { referrerAcquisitionData, abParticipations, optimizeExperiments } = commonState;
+  return getLegacyPaperCheckout(
+    productOptions,
+    fulfilmentOption,
+    referrerAcquisitionData,
+    abParticipations,
+    optimizeExperiments,
+  );
+};
+
+
 // TODO: We will need to make this work for flash sales
 const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
 
@@ -73,12 +99,23 @@ const copy = {
   Collection: 'Collect your papers from your local retailer',
 };
 
-const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: ProductPrices) =>
+const getPlans = (
+  fulfilmentOption: PaperFulfilmentOptions,
+  productPrices: ProductPrices,
+  commonState: CommonState,
+) =>
   ActivePaperProductTypes.reduce((products, productOption) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     return {
       ...products,
       [productOption]: {
+        href: getCheckoutUrl(fulfilmentOption, productOption, commonState),
+        onClick: sendTrackingEventsOnClick(
+          'subscribe_now_cta',
+          'Paper',
+          null,
+          [productOption, fulfilmentOption].join(),
+        ),
         title: getTitle(productOption),
         copy: copy[fulfilmentOption],
         price: getPriceStr(price),
@@ -91,7 +128,7 @@ const getPlans = (fulfilmentOption: PaperFulfilmentOptions, productPrices: Produ
 
 // ----- State/Props Maps ----- //
 const mapStateToProps = (state: State): StatePropTypes<PaperProductOptions> => ({
-  plans: getPlans(state.page.tab, state.page.productPrices),
+  plans: getPlans(state.page.tab, state.page.productPrices, state.common),
   selectedPlan: state.page.plan.plan,
 });
 

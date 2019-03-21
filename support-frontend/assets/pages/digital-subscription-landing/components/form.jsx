@@ -20,6 +20,8 @@ import ProductPagePlanForm, {
 
 import { type State } from '../digitalSubscriptionLandingReducer';
 import { redirectToDigitalPage, setPlan } from '../digitalSubscriptionLandingActions';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { getDigitalCheckout } from 'helpers/externalLinks';
 
 
 // ---- Prices ----- //
@@ -106,6 +108,8 @@ const mapStateToProps = (state: State): StatePropTypes<DigitalBillingPeriod> => 
       title: billingPeriods[k].title,
       copy: billingPeriods[k].copy(state.page.productPrices, state.common.internationalisation.countryId),
       offer: billingPeriods[k].offer(state.common.internationalisation.countryId) || null,
+      href: getDigitalCheckout(state.common.internationalisation.countryGroupId, k),
+      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, k),
       price: null,
       saving: null,
     },

@@ -27,11 +27,11 @@ import { redirectToWeeklyPage, setPlan } from '../weeklySubscriptionLandingActio
 // ---- Plans ----- //
 
 const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingPeriod, state: CommonState}): string => {
-
   const {
     internationalisation: { countryGroupId }, referrerAcquisitionData, abParticipations, optimizeExperiments,
   } = state;
-  const location = getWeeklyCheckout(
+
+  return getWeeklyCheckout(
     referrerAcquisitionData,
     billingPeriod,
     countryGroupId,
@@ -39,8 +39,6 @@ const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingP
     optimizeExperiments,
     (billingPeriod === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
   );
-
-  return location;
 };
 
 
@@ -77,7 +75,7 @@ const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => (
       copy: displayBillingPeriods[billingPeriod].copy(state.common.internationalisation.countryGroupId),
       offer: displayBillingPeriods[billingPeriod].offer || null,
       href: getCheckoutUrl({ billingPeriod, state: state.common }),
-      onClick: sendTrackingEventsOnClick('main_cta_click', 'GuardianWeekly', null, billingPeriod),
+      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'GuardianWeekly', null, billingPeriod),
       price: null,
       saving: null,
     },
