@@ -156,6 +156,13 @@ function averageAmountVariantCopy(
   return `Please select the amount you'd like to contribute each year. ${localAverageAmountSentence} average is ${currencyString}${localAverageAmount}.`;
 }
 
+const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
+  if (amount < 1 && countryGroupId === 'GBPCountries') {
+    return `${(amount*100).toFixed(0)}p`
+  }
+  return `${currencyString}${(amount).toFixed(2)}`;
+}
+
 const getEditorialisedAmountsCopy = (
   editorialiseAmountsVariant: EditorialiseAmountsVariant,
   contributionType: ContributionType,
@@ -170,16 +177,12 @@ const getEditorialisedAmountsCopy = (
     return '';
   }
 
-  if (editorialiseAmountsVariant === 'averageAnnualAmount' && contributionType === 'ANNUAL') {
-    return averageAmountVariantCopy(countryGroupId, contributionType, currencyString);
-  }
-
-  if (editorialiseAmountsVariant === 'monthlyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 12.00).toFixed(2)} each month`;
+  if (editorialiseAmountsVariant === 'dailyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
+    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount/365.00, currencyString, countryGroupId)} a day`;
   }
 
   if (editorialiseAmountsVariant === 'weeklyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${currencyString}${(amount / 52.00).toFixed(2)} each week`;
+    return `Contributing ${currencyString}${amount} works out as${amountFormatted(amount/52.00, currencyString, countryGroupId)} each week`;
   }
 
   return '';
