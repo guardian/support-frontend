@@ -58,7 +58,7 @@
       @inlineCss.value
       </style>
     }
-      
+
     @linkedJs(path: RefPath) = {
       <script type="text/javascript" src="@assets(path)"></script>
     }
@@ -69,6 +69,7 @@
         </script>
       }
 
+    @fontLoaderBundle.fold(linkedJs, inlineJs)
     @mainStyleBundle.fold(linkedCss, inline)
 
     <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
@@ -78,7 +79,6 @@
     <link rel="apple-touch-icon" sizes="114x114" href="@assets("images/favicons/114x114.png")">
     <link rel="apple-touch-icon" sizes="72x72" href="@assets("images/favicons/72x72.png")">
     <link rel="apple-touch-icon-precomposed" href="@assets("images/favicons/57x57.png")">
-    @fontLoaderBundle.fold(linkedJs, inlineJs)
 
     <script type="application/ld+json">
 		{
