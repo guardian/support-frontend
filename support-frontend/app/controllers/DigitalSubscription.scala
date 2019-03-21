@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath}
+import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdUser}
 import com.gu.support.catalog.DigitalPack
@@ -37,8 +37,9 @@ class DigitalSubscription(
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
-    val supportUrl: String
-)(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
+    val supportUrl: String,
+    fontLoaderBundle: Either[RefPath, StyleContent])
+(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with Circe with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
 
@@ -62,7 +63,7 @@ class DigitalSubscription(
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCode)
 
     Ok(views.html.main(
-      title, mainElement, js, css, description, canonicalLink, hrefLangLinks
+      title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks
     ) {
       Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
     }).withSettingsSurrogateKey
@@ -112,6 +113,7 @@ class DigitalSubscription(
       id,
       js,
       css,
+      fontLoaderBundle,
       Some(csrf),
       idUser,
       uatMode,
@@ -135,7 +137,8 @@ class DigitalSubscription(
       title,
       mainElement,
       js,
-      css
+      css,
+      fontLoaderBundle
     )())
   }
 

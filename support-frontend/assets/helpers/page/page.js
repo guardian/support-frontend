@@ -3,8 +3,6 @@
 // ----- Imports ----- //
 
 import 'ophan';
-
-import loadFonts from 'helpers/fontLoader';
 import type { Store } from 'redux';
 import { applyMiddleware, combineReducers, compose, createStore, type Reducer } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -102,9 +100,6 @@ function buildInitialState(
 
 // For pages that don't need Redux.
 function statelessInit() {
-  // this script inserts guardian fonts into the head of the HTML document
-  loadFonts(window, document);
-
   const country: IsoCountry = detectCountry();
   const countryGroupId: CountryGroupId = detectCountryGroup();
   const participations: Participations = abTest.init(country, countryGroupId, window.guardian.settings);
@@ -135,10 +130,6 @@ function init<S, A>(
 ): Store<*, *, *> {
 
   try {
-
-    // this script inserts guardian fonts into the head of the HTML document
-    loadFonts(window, document);
-
     const { settings } = window.guardian;
     const countryGroupId: CountryGroupId = detectCountryGroup();
     const countryId: IsoCountry = detectCountry();

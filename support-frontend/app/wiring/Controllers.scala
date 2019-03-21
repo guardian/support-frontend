@@ -1,6 +1,7 @@
 package wiring
 
-import controllers._
+import assets.RefPath
+import controllers.{CSSElementForStage, _}
 import play.api.BuiltInComponentsFromContext
 import services.aws.AwsCloudwatchMetricPut
 
@@ -12,6 +13,8 @@ trait Controllers {
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
   lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes)
+  lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage)_
+  lazy val fontLoader = elementForStage(RefPath("fontLoader.js"))
 
   lazy val applicationController = new Application(
     actionRefiners,
@@ -26,7 +29,8 @@ trait Controllers {
     allSettingsProvider,
     appConfig.guardianDomain,
     appConfig.stage,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    fontLoader
   )
 
   lazy val subscriptionsController = new Subscriptions(
@@ -36,7 +40,8 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    fontLoader
   )
 
   lazy val digitalPackController = new DigitalSubscription(
@@ -51,7 +56,8 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    fontLoader
   )
 
   lazy val paperController = new PaperSubscription(
@@ -65,7 +71,8 @@ trait Controllers {
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
-    appConfig.supportUrl
+    appConfig.supportUrl,
+    fontLoader
   )
 
   lazy val createSubscriptionController = new CreateSubscription(
@@ -105,7 +112,8 @@ trait Controllers {
     payPalNvpServiceProvider,
     testUsers,
     controllerComponents,
-    allSettingsProvider
+    allSettingsProvider,
+    fontLoader
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
@@ -116,7 +124,8 @@ trait Controllers {
     paymentAPIService,
     identityService,
     allSettingsProvider,
-    tipMonitoring
+    tipMonitoring,
+    fontLoader
   )
 
   lazy val testUsersController = new TestUsersManagement(

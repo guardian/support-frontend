@@ -7,7 +7,7 @@ import org.scalatest.MustMatchers
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
-import assets.AssetsResolver
+import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.identity.play.AuthenticatedIdUser
 import config.StringsConfig
 import fixtures.TestCSRFComponents
@@ -50,7 +50,8 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[AllSettingsProvider],
         mock[GuardianDomain],
         mock[Stage],
-        "support.thegulocal.com"
+        "support.thegulocal.com",
+        mock[Either[RefPath, StyleContent]]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
     }
@@ -69,7 +70,8 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[AllSettingsProvider],
         mock[GuardianDomain],
         mock[Stage],
-        "support.thegulocal.com"
+        "support.thegulocal.com",
+        mock[Either[RefPath, StyleContent]]
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

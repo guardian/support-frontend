@@ -45,12 +45,10 @@ const fetchFonts = (window: Object, document: Document): void => {
     loadFontsFromLocalStorage();
 
     // even if we do load the fonts from storage, still check the localStorage of gu.com in case there are any new ones
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://theguardian.com/font-loader';
-    // add iframe and wait for message
-    iframe.style.display = 'none';
+    const iframe = document.getElementById('gu-font-loader-iframe');
     window.addEventListener('message', (e: MessageEvent) => {
       if (
+        iframe instanceof HTMLIFrameElement &&
         e &&
         e.data &&
         e.data.name &&
@@ -68,9 +66,6 @@ const fetchFonts = (window: Object, document: Document): void => {
         }
       }
     });
-    if (document.body) {
-      document.body.appendChild(iframe);
-    }
   };
 
   if (document.readyState === 'loading') {
@@ -82,4 +77,4 @@ const fetchFonts = (window: Object, document: Document): void => {
   }
 };
 
-export default fetchFonts;
+fetchFonts(window, document);

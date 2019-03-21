@@ -6,6 +6,7 @@
   mainElement: ReactDiv,
   mainJsBundle: Either[RefPath, StyleContent],
   mainStyleBundle: Either[RefPath, StyleContent],
+  fontLoaderBundle: Either[RefPath, StyleContent],
   description: Option[String] = None,
   canonicalLink: Option[String] = None,
   hrefLangLinks: Map[String, String] = Map(),
@@ -58,6 +59,17 @@
       </style>
     }
 
+    @linkedJs(path: RefPath) = {
+      <script type="text/javascript" src="@assets(path)"></script>
+    }
+
+      @inlineJs(inlineJs: StyleContent) = {
+        <script type="text/javascript">
+          @inlineJs.value
+        </script>
+      }
+
+    @fontLoaderBundle.fold(linkedJs, inlineJs)
     @mainStyleBundle.fold(linkedCss, inline)
 
     <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
@@ -110,17 +122,7 @@
 
     @body
 
-    @* This script is intentionally at the bottom of the file. Please check
-    all the critical flows work correctly if you change its position *@
-    @linkedJs(path: RefPath) = {
-    <script type="text/javascript" src="@assets(path)"></script>
-  }
 
-    @inlineJs(inlineJs: StyleContent) = {
-    <script type="text/javascript">
-    @inlineJs.value
-    </script>
-  }
 
     @mainJsBundle.fold(linkedJs, inlineJs)
 
@@ -128,5 +130,6 @@
     <script defer id="stripe-js" src="https://js.stripe.com/v3/"></script>
 
     <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
+    <iframe id="gu-font-loader-iframe" style="display:none" src="https://www.theguardian.com/font-loader"></iframe>
   </body>
 </html>

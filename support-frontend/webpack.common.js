@@ -70,6 +70,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     showcasePage: 'pages/showcase/showcase.jsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
     contributionsLandingPage: 'pages/new-contributions-landing/contributionsLanding.jsx',
+    fontLoader: 'helpers/fontLoader.js',
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.jsx',
     paperSubscriptionCheckoutPage: 'pages/paper-subscription-checkout/paperSubscriptionCheckout.jsx',
