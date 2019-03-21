@@ -1,5 +1,7 @@
 package com.gu.zuora
 
+import java.util.UUID
+
 import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.monitoring.SafeLogger
@@ -36,9 +38,10 @@ object ProductSubscriptionBuilders {
   }
 
   implicit class ContributionSubscriptionBuilder(val contribution: Contribution) extends ProductSubscriptionBuilder {
-    def build(config: ZuoraConfig): SubscriptionData = {
+    def build(requestId: UUID, config: ZuoraConfig): SubscriptionData = {
       val contributionConfig = config.contributionConfig(contribution.billingPeriod)
       buildProductSubscription(
+        requestId,
         contributionConfig.productRatePlanId,
         List(
           RatePlanChargeData(
@@ -51,6 +54,7 @@ object ProductSubscriptionBuilders {
 
   implicit class DigitalPackSubscriptionBuilder(val digitalPack: DigitalPack) extends ProductSubscriptionBuilder {
     def build(
+      requestId: UUID,
       config: ZuoraConfig,
       country: Country,
       maybePromoCode: Option[PromoCode],
@@ -66,6 +70,7 @@ object ProductSubscriptionBuilders {
       val productRatePlanId = getProductRatePlanId(catalog.DigitalPack, digitalPack, isTestUser)
 
       val subscriptionData = buildProductSubscription(
+        requestId,
         productRatePlanId,
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate
@@ -79,6 +84,7 @@ object ProductSubscriptionBuilders {
 
   implicit class PaperSubscriptionBuilder(val paper: Paper) extends ProductSubscriptionBuilder {
     def build(
+      requestId: UUID,
       country: Country,
       maybePromoCode: Option[PromoCode],
       firstDeliveryDate: Option[LocalDate],
@@ -96,9 +102,10 @@ object ProductSubscriptionBuilders {
       val productRatePlanId = getProductRatePlanId(catalog.Paper, paper, isTestUser)
 
       val subscriptionData = buildProductSubscription(
+        requestId,
         productRatePlanId,
         contractAcceptanceDate = contractAcceptanceDate,
-        contractEffectiveDate = contractEffectiveDate
+        contractEffectiveDate = contractEffectiveDate,
       )
       maybePromoCode
         .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
@@ -111,6 +118,7 @@ object ProductSubscriptionBuilders {
 trait ProductSubscriptionBuilder {
 
   protected def buildProductSubscription(
+    createdRequestId: UUID,
     productRatePlanId: ProductRatePlanId,
     ratePlanCharges: List[RatePlanChargeData] = Nil,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
@@ -124,6 +132,6 @@ trait ProductSubscriptionBuilder {
           Nil
         )
       ),
-      Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate)
+      Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate, createdRequestId.toString)
     )
 }
