@@ -12,12 +12,10 @@ const fetchFonts = (window: Object, document: Document): void => {
   };
 
   const loadFonts = (): void => {
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://www.theguardian.com/font-loader';
-    // add iframe and wait for message
-    iframe.style.display = 'none';
+    const iframe = document.getElementById("gu-font-loader-iframe");
     window.addEventListener('message', (e: MessageEvent) => {
       if (
+        iframe instanceof HTMLIFrameElement &&
         e &&
         e.data &&
         e.data.name &&
@@ -34,9 +32,6 @@ const fetchFonts = (window: Object, document: Document): void => {
         }
       }
     });
-    if (document.body) {
-      document.body.appendChild(iframe);
-    }
   };
 
   if (document.readyState === 'loading') {
