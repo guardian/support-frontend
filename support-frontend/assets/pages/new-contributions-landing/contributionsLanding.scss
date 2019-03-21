@@ -107,7 +107,7 @@ header[role="banner"] {
 
   @include mq($from: tablet) {
     height: 115px;
-    padding: 0 0 0 $content-left-margin-tablet;
+    //padding: 0 0 0 $content-left-margin-tablet;
   }
 
   @include mq($from: leftCol) {
@@ -312,7 +312,7 @@ footer[role="contentinfo"] a {
   border: none;
 
   @include mq($from: tablet) {
-    margin-left: $content-left-margin-tablet
+    //margin-left: $content-left-margin-tablet
   }
 
   @include mq($from: leftCol) {
@@ -358,8 +358,12 @@ footer[role="contentinfo"] a {
 
 .gu-content__content--flex {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-direction: row-reverse;
+
+  @include mq($from: leftCol) {
+    justify-content: flex-end;
+  }
 }
 
 .gu-content__form {
@@ -374,8 +378,8 @@ footer[role="contentinfo"] a {
   background-color: gu-colour(neutral-100);
 
   @include mq($from: tablet) {
-    width: 40%;
-    margin: 30px 10px;
+    margin: 30px 0 0 10px;
+    flex: 0 1 40%;
   }
 }
 
@@ -391,13 +395,16 @@ footer[role="contentinfo"] a {
 
 .gu-content__blurb {
   display: none;
-  border-top: 10px solid gu-colour(highlight-main);
-  margin-left: auto;
-  max-width: 404px;
 
   @include mq($from: tablet) {
     display: block;
-    margin: 30px 120px 30px 10px;
+    border-top: 10px solid gu-colour(highlight-main);
+    margin-top: 30px;
+    flex: 0 1 40%;
+  }
+
+  @include mq($from: leftCol) {
+    margin-left: 80px;
   }
 }
 
