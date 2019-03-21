@@ -6,14 +6,7 @@ import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
-<<<<<<< HEAD
 import { paperSubsUrl } from 'helpers/routes';
-=======
-import { getQueryParameter } from 'helpers/url';
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
-import { Everyday } from 'helpers/productPrice/productOptions';
-import type { OptimizeExperiments } from '../../helpers/optimize/optimize';
->>>>>>> Set up the app to work with the local version of the test
 
 // ----- Types ----- //
 export type TabActions = { type: 'SET_TAB', tab: PaperFulfilmentOptions }
@@ -30,7 +23,7 @@ const setTab = (tab: PaperFulfilmentOptions): TabActions => {
 <<<<<<< HEAD
 =======
 const inPaperTestVariant = (optimizeExperiments: OptimizeExperiments): boolean => {
-  const experimentId = '-4fEHhjaSWaoNIDmV97AFw';
+  const experimentId = 'py5TUrpoSxOcKN80yjbqkg';
   return optimizeExperiments.find(exp => exp.id === experimentId && exp.variant === '1') !== undefined;
 };
 
@@ -65,7 +58,7 @@ const redirectToCheckout = () =>
     }
   };
 
->>>>>>> Set up the app to work with the local version of the test
+>>>>>>> Set the correct experiment id for Paper checkout test
 
 // ----- Exports ----- //
 
