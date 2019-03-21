@@ -12,7 +12,7 @@ const fetchFonts = (window: Object, document: Document): void => {
   };
 
   const loadFonts = (): void => {
-    const iframe = document.getElementById("gu-font-loader-iframe");
+    const iframe = document.getElementById('gu-font-loader-iframe');
     window.addEventListener('message', (e: MessageEvent) => {
       if (
         iframe instanceof HTMLIFrameElement &&
@@ -43,4 +43,4 @@ const fetchFonts = (window: Object, document: Document): void => {
   }
 };
 
-export default fetchFonts;
+fetchFonts(window, document);
