@@ -18,13 +18,13 @@ const pages = ['uk/support', 'uk/subscribe/paper'];
     console.log(`started  ${path}`);
 
     const url = `http://localhost:9211/${path}`;
-    await page.goto(url);
     await page.setCookie({
       name: 'GU_TK',
-      value: '1.1553079258164',
+      value: '1.0',
       domain: 'localhost',
+      expires: Math.ceil(Date.now() / 1000) + 3600,
     });
-
+    await page.goto(url);
     await page.waitFor('.gu-render-to > *');
     const bodyHTML = await page.evaluate(() => document.documentElement.querySelector('.gu-render-to').innerHTML);
 
