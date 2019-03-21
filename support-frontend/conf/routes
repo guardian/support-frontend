@@ -108,7 +108,7 @@ GET  /subscribe/paper          controllers.PaperSubscription.paperMethodRedirect
 GET  /subscribe/paper/delivery          controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper          controllers.PaperSubscription.paper(withDelivery: Boolean = false)
 GET  /uk/subscribe/paper/delivery          controllers.PaperSubscription.paper(withDelivery: Boolean = true)
-GET  /subscribe/paper/checkout  controllers.PaperSubscription.displayForm(displayCheckout: Boolean ?= false)
+GET  /subscribe/paper/checkout  controllers.PaperSubscription.displayForm()
 
 GET /postcode-lookup/:postcode            controllers.GetAddress.findAddress(postcode: String)
 

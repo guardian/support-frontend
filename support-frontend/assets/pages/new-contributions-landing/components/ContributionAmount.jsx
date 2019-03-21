@@ -110,7 +110,7 @@ const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> =
 
 const amountFormatted = (amount: number, currencyString: string, countryGroupId: CountryGroupId) => {
   if (amount < 1 && countryGroupId === 'GBPCountries') {
-    return `${(amount*100).toFixed(0)}p`
+    return `${(amount * 100).toFixed(0)}p`;
   }
   return `${currencyString}${(amount).toFixed(2)}`;
 };
@@ -130,11 +130,11 @@ const getEditorialisedAmountsCopy = (
   }
 
   if (editorialiseAmountsVariant === 'dailyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount/365.00, currencyString, countryGroupId)} a day`;
+    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount / 365.00, currencyString, countryGroupId)} a day`;
   }
 
   if (editorialiseAmountsVariant === 'weeklyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount/52.00, currencyString, countryGroupId)} each week`;
+    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount / 52.00, currencyString, countryGroupId)} each week`;
   }
 
   return '';
