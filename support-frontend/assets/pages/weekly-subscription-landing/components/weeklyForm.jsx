@@ -8,7 +8,11 @@ import { bindActionCreators } from 'redux';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import { type CommonState } from 'helpers/page/commonReducer';
 import { Annual, Quarterly } from 'helpers/billingPeriods';
+import { getWeeklyCheckout } from 'helpers/externalLinks';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { getPromoCode } from 'helpers/flashSale';
 import { getPromotionWeeklyProductPrice, getWeeklyProductPrice } from 'helpers/subscriptions';
 import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
 import ProductPagePlanForm, {
@@ -21,6 +25,24 @@ import { redirectToWeeklyPage, setPlan } from '../weeklySubscriptionLandingActio
 
 
 // ---- Plans ----- //
+
+const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingPeriod, state: CommonState}): string => {
+
+  const {
+    internationalisation: { countryGroupId }, referrerAcquisitionData, abParticipations, optimizeExperiments,
+  } = state;
+  const location = getWeeklyCheckout(
+    referrerAcquisitionData,
+    billingPeriod,
+    countryGroupId,
+    abParticipations,
+    optimizeExperiments,
+    (billingPeriod === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
+  );
+
+  return location;
+};
+
 
 const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
   currencies[detect(countryGroupId)].extendedGlyph,
@@ -48,12 +70,14 @@ export const displayBillingPeriods = {
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State): StatePropTypes<WeeklyBillingPeriod> => ({
-  plans: Object.keys(displayBillingPeriods).reduce((ps, k) => ({
+  plans: Object.keys(displayBillingPeriods).reduce((ps, billingPeriod) => ({
     ...ps,
-    [k]: {
-      title: displayBillingPeriods[k].title,
-      copy: displayBillingPeriods[k].copy(state.common.internationalisation.countryGroupId),
-      offer: displayBillingPeriods[k].offer || null,
+    [billingPeriod]: {
+      title: displayBillingPeriods[billingPeriod].title,
+      copy: displayBillingPeriods[billingPeriod].copy(state.common.internationalisation.countryGroupId),
+      offer: displayBillingPeriods[billingPeriod].offer || null,
+      href: getCheckoutUrl({ billingPeriod, state: state.common }),
+      onClick: sendTrackingEventsOnClick('main_cta_click', 'GuardianWeekly', null, billingPeriod),
       price: null,
       saving: null,
     },
