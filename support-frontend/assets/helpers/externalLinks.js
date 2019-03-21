@@ -52,7 +52,7 @@ function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGr
   const quarterRow = 'weeklyrestofworld-gwoct18-quarterly-row';
 
   const yearDomestic = 'weeklydomestic-gwoct18-annual-domestic';
-  const yearRow = 'weeklyrestofworld-gwoct18-quarterly-row';
+  const yearRow = 'weeklyrestofworld-gwoct18-annual-row';
 
   const urls = {
     [SixForSix]: {
