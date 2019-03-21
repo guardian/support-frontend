@@ -200,7 +200,7 @@ object Fixtures {
        |  $requestIdJson,
        |  $userJson,
        |  "product": ${contribution()},
-       |  "paymentMethod": ${thankYouEmailCardPaymentMethodJson},
+       |  "paymentMethodDisplayFields": ${thankYouEmailCardPaymentMethodJson},
        |  "salesForceContact": {
        |    "Id": "123",
        |    "AccountId": "123"

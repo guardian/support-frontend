@@ -36,8 +36,8 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
 
   }
 
-  def ensureMandateIdInState(zuoraService: ZuoraService, state: SendThankYouEmailState): Future[SendThankYouEmailState] = state.paymentMethod match {
-    case ddFields: DirectDebitDisplayFields => addMandateIdIfNeeded(zuoraService, state, ddFields).map(ddFieldsWithMandateId => state.copy(paymentMethod = ddFieldsWithMandateId))
+  def ensureMandateIdInState(zuoraService: ZuoraService, state: SendThankYouEmailState): Future[SendThankYouEmailState] = state.paymentMethodDisplayFields match {
+    case ddFields: DirectDebitDisplayFields => addMandateIdIfNeeded(zuoraService, state, ddFields).map(ddFieldsWithMandateId => state.copy(paymentMethodDisplayFields = ddFieldsWithMandateId))
     case otherPaymentMethod => Future.successful(state)
   }
 
@@ -63,7 +63,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           name = state.user.firstName,
           billingPeriod = state.product.billingPeriod,
           sfContactId = SfContactId(state.salesForceContact.Id),
-          paymentMethod = state.paymentMethod,
+          paymentMethod = state.paymentMethodDisplayFields,
         )
         case d: DigitalPack => DigitalPackEmailFields(
           subscriptionNumber = state.subscriptionNumber,
@@ -71,7 +71,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           user = state.user,
           paymentSchedule = state.paymentSchedule,
           currency = d.currency,
-          paymentMethod = state.paymentMethod,
+          paymentMethod = state.paymentMethodDisplayFields,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
         case p: Paper => PaperEmailFields(
@@ -83,7 +83,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           paymentSchedule = state.paymentSchedule,
           firstDeliveryDate = state.firstDeliveryDate,
           currency = p.currency,
-          paymentMethod = state.paymentMethod,
+          paymentMethod = state.paymentMethodDisplayFields,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
       }

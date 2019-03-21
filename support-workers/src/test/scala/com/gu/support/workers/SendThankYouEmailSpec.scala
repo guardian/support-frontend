@@ -42,7 +42,7 @@ class SendThankYouEmailSpec extends AsyncFlatSpec with Matchers with MockitoSuga
         requestId = UUID.randomUUID(),
         user = user,
         product = Contribution(12, GBP, Monthly),
-        paymentMethod = directDebitWithoutMandateId,
+        paymentMethodDisplayFields = directDebitWithoutMandateId,
         firstDeliveryDate = None,
         salesForceContact = SalesforceContactRecord("id", "account"),
         accountNumber = "accountNumber",
@@ -57,7 +57,7 @@ class SendThankYouEmailSpec extends AsyncFlatSpec with Matchers with MockitoSuga
       val sendEmail = new SendThankYouEmail(null, null)
 
       val directDebitWithMandate = directDebitWithoutMandateId.copy(mandateId = Some("mandateId"))
-      val stateWithMandate = noMandateState.copy(paymentMethod = directDebitWithMandate)
+      val stateWithMandate = noMandateState.copy(paymentMethodDisplayFields = directDebitWithMandate)
 
 
       val futureActual = sendEmail.ensureMandateIdInState(

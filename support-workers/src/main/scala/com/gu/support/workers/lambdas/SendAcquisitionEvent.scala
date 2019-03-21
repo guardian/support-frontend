@@ -98,7 +98,7 @@ object SendAcquisitionEvent {
               paymentFrequency = paymentFrequencyFromBillingPeriod(state.product.billingPeriod),
               currency = state.product.currency.iso,
               amount = productAmount,
-              paymentProvider = Some(paymentProviderFromPaymentMethod(state.paymentMethod)),
+              paymentProvider = Some(paymentProviderFromPaymentMethod(state.paymentMethodDisplayFields)),
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
               abTests = Some(thrift.AbTestInfo(
