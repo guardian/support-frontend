@@ -99,7 +99,7 @@ object SendAcquisitionEvent {
             case (Collection, Sixday) => PrintProduct.VoucherSixday
             case (Collection, Weekend) => PrintProduct.VoucherWeekend
             case (Collection, Saturday) => PrintProduct.VoucherSaturday
-            case (Collection, Sunday) => PrintProduct.VoucherSunday
+            case _ => PrintProduct.VoucherSunday
           }
         }
 
