@@ -1,18 +1,22 @@
 package controllers
 
 import actions.CustomActionBuilders
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
+import admin.settings.AllSettings
+import cats.data.EitherT
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
-import services.IdentityService
+import services.{GetUserTypeResponse, IdentityService}
 import cats.implicits._
 import config.Configuration.GuardianDomain
 import models.identity.responses.SetGuestPasswordResponseCookies
 import codecs.CirceDecoders._
+import com.gu.identity.play.{IdMinimalUser, IdUser}
+import services.paypal.PayPalBillingDetails
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -81,7 +85,18 @@ class IdentityController(
         )
     }
   }
+
+  def getUser(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request => {
+    type Attempt[A] = EitherT[Future, String, A]
+    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+      _ => Ok("no"),
+      user => Ok(user.toString)
+    )
+  }
+  }
+
 }
+
 
 object SendMarketingRequest {
   implicit val decoder: Decoder[SendMarketingRequest] = deriveDecoder

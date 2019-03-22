@@ -79,7 +79,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     weeklySubscriptionLandingPage: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.jsx',
     premiumTierLandingPage: 'pages/premium-tier-landing/premiumTierLanding.jsx',
     premiumTierLandingPageStyles: 'pages/premium-tier-landing/premiumTierLanding.scss',
-    payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
     optimizeScript: 'helpers/optimize/optimizeScript.js',
