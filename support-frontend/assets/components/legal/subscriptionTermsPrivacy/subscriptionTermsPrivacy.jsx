@@ -8,8 +8,6 @@ import { subscriptionsTermsLinks, privacyLink } from 'helpers/legal';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
-import './subscriptionTermsPrivacy.scss';
-
 // ---- Types ----- //
 
 type PropTypes = {|
