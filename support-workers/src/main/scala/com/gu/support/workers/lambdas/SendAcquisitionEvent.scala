@@ -8,6 +8,7 @@ import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
+import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendAcquisitionEventState
@@ -85,6 +86,29 @@ object SendAcquisitionEvent {
           case _: DirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
         }
 
+      def printOptionsFromProduct(product: ProductType): Option[PrintOptions] = {
+
+        def printProduct(fulfilmentOptions: FulfilmentOptions, productOptions: ProductOptions): PrintProduct = {
+          (fulfilmentOptions, productOptions) match {
+            case (HomeDelivery, Everyday) => PrintProduct.HomeDeliveryEveryday
+            case (HomeDelivery, Sixday) => PrintProduct.HomeDeliverySixday
+            case (HomeDelivery, Weekend) => PrintProduct.HomeDeliveryWeekend
+            case (HomeDelivery, Saturday) => PrintProduct.HomeDeliverySaturday
+            case (HomeDelivery, Sunday) => PrintProduct.HomeDeliverySunday
+            case (Collection, Everyday) => PrintProduct.VoucherEveryday
+            case (Collection, Sixday) => PrintProduct.VoucherSixday
+            case (Collection, Weekend) => PrintProduct.VoucherWeekend
+            case (Collection, Saturday) => PrintProduct.VoucherSaturday
+            case (Collection, Sunday) => PrintProduct.VoucherSunday
+          }
+        }
+
+        product match {
+          case p: Paper => Some(PrintOptions(printProduct(p.fulfilmentOptions, p.productOptions), "GB"))
+          case _ => None
+        }
+      }
+
       override def buildAcquisition(state: SendAcquisitionEventState): Either[String, thrift.Acquisition] = {
         val (productType, productAmount) = state.product match {
           case c: Contribution => (OphanProduct.RecurringContribution, c.amount.toDouble)
@@ -92,17 +116,11 @@ object SendAcquisitionEvent {
           case _: Paper => (OphanProduct.PrintSubscription, 0D) //TODO: same as above
         }
 
-        val printOptions = state.product match {
-          case p: Paper => Some(PrintOptions(PrintProduct.HomeDeliverySixday, "GB"))
-          case _ => None
-        }
-        SafeLogger.info(s"Sending printoptions: ${printOptions}")
-
-
         Either.fromOption(
           state.acquisitionData.map { data =>
             thrift.Acquisition(
               product = productType,
+              printOptions = printOptionsFromProduct(state.product),
               paymentFrequency = paymentFrequencyFromBillingPeriod(state.product.billingPeriod),
               currency = state.product.currency.iso,
               amount = productAmount,
