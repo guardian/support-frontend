@@ -176,7 +176,8 @@ object Fixtures {
         "RenewalTerm" : 12,
         "TermType" : "TERMED",
         "InitialPromotionCode__c": "$promoCode",
-        "PromotionCode__c": "$promoCode"
+        "PromotionCode__c": "$promoCode",
+        "CreatedRequestId__c": "id123"
       }
     """
 
