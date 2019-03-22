@@ -77,8 +77,6 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankYouExisting.jsx',
     paperSubscriptionLandingPage: 'pages/paper-subscription-landing/paperSubscriptionLandingPage.jsx',
     weeklySubscriptionLandingPage: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.jsx',
-    premiumTierLandingPage: 'pages/premium-tier-landing/premiumTierLanding.jsx',
-    premiumTierLandingPageStyles: 'pages/premium-tier-landing/premiumTierLanding.scss',
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',
     googleTagManagerScript: 'helpers/tracking/googleTagManagerScript.js',
