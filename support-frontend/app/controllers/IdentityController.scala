@@ -94,7 +94,6 @@ class IdentityController(
     implicit val publicFieldsEncoder: Encoder[PublicFields] = deriveEncoder[PublicFields]
     implicit val statusFieldsEncoder: Encoder[StatusFields] = deriveEncoder[StatusFields]
     implicit val encodeIdUser: Encoder[IdUser] = deriveEncoder[IdUser]
-
     type Attempt[A] = EitherT[Future, String, A]
     request.user.traverse[Attempt, IdUser](identityService.getUser(_))
       .fold(
@@ -107,7 +106,6 @@ class IdentityController(
       )
     }
   }
-
 }
 
 
