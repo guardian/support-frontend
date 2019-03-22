@@ -44,13 +44,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
-<<<<<<< HEAD
-import { getVoucherDays, getDeliveryDays, formatMachineDate } from './helpers/deliveryDays';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
-
-=======
->>>>>>> Move personal details form fields to a separate component
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
