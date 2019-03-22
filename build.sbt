@@ -15,6 +15,7 @@ lazy val commonSettings = Seq(
   organization := "com.gu",
   scalaVersion := "2.12.7",
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
+  isSnapshot := false,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)

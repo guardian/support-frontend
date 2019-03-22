@@ -1,4 +1,5 @@
-import LibraryVersions.{circeVersion, catsVersion}
+import LibraryVersions.{catsVersion, circeVersion}
+import sbtrelease.ReleaseStateTransformations._
 
 name := "support-models"
 
@@ -13,4 +14,18 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion
 )
 
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  publishArtifacts,
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
 
