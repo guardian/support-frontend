@@ -15,7 +15,8 @@ import cats.implicits._
 import config.Configuration.GuardianDomain
 import models.identity.responses.SetGuestPasswordResponseCookies
 import codecs.CirceDecoders._
-import com.gu.identity.play.{IdMinimalUser, IdUser}
+import com.gu.identity.play._
+import play.api.libs.json.{Json, Reads}
 import services.paypal.PayPalBillingDetails
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -87,15 +88,29 @@ class IdentityController(
   }
 
   def getUser(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request => {
+    import io.circe.generic.semiauto.deriveEncoder
+    implicit val teleEncoder: Encoder[TelephoneNumber] = deriveEncoder[TelephoneNumber]
+    implicit val privateFieldsEncoder: Encoder[PrivateFields] = deriveEncoder[PrivateFields]
+    implicit val publicFieldsEncoder: Encoder[PublicFields] = deriveEncoder[PublicFields]
+    implicit val statusFieldsEncoder: Encoder[StatusFields] = deriveEncoder[StatusFields]
+    implicit val encodeIdUser: Encoder[IdUser] = deriveEncoder[IdUser]
+
     type Attempt[A] = EitherT[Future, String, A]
-    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok("no"),
-      user => Ok(user.toString)
-    )
-  }
+    request.user.traverse[Attempt, IdUser](identityService.getUser(_))
+      .fold(
+        _ => InternalServerError,
+        user => {
+          user.fold({
+           NotFound("User not found")
+          })({ x => Ok(x.asJson)})
+        }
+      )
+    }
   }
 
 }
+
+
 
 
 object SendMarketingRequest {
