@@ -85,7 +85,7 @@
 
 .component-content--dark {
   @include block-colours(
-    $border: gu-colour(neutral-100),
+    $border: gu-colour(neutral-46),
     $text: gu-colour(neutral-100),
     $bg: gu-colour(neutral-20),
   );
