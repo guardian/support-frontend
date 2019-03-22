@@ -1,15 +1,15 @@
 // @flow
 import React from 'react';
-import { firstError } from '../../helpers/subscriptionsForms/validation';
-import type { Option } from '../../helpers/types/option';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import type { Option } from 'helpers/types/option';
 import { compose } from 'redux';
-import { asControlled } from '../../hocs/asControlled';
-import { withError } from '../../hocs/withError';
-import { withLabel } from '../../hocs/withLabel';
-import { Input } from '../forms/input';
-import type { FormError } from '../../helpers/subscriptionsForms/validation';
-import Button from '../button/button';
-import CheckoutExpander from '../checkoutExpander/checkoutExpander';
+import { asControlled } from 'hocs/asControlled';
+import { withError } from 'hocs/withError';
+import { withLabel } from 'hocs/withLabel';
+import { Input } from 'components/forms/input';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import Button from 'components/button/button';
+import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 
 
 export type FormField = 'firstName' | 'lastName' | 'email' | 'telephone';
