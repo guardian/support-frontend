@@ -60,6 +60,7 @@ export type FormFields = {|
 
 export type FormField = $Keys<FormFields>;
 
+
 type CheckoutState = {|
   stage: Stage,
   ...FormFieldsInState,
