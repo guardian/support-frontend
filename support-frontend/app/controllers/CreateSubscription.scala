@@ -93,20 +93,21 @@ class CreateSubscription(
   protected def respondToClient(
     result: EitherT[Future, CreateSubscriptionError, StatusResponse],
     billingPeriod: BillingPeriod
- )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] =
+ )(implicit request: AuthRequest[CreateSupportWorkersRequest]): Future[Result] = {
+    val product = request.body.product.describe
     result.fold(
       { error =>
-        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod subscription, due to $error")
+        SafeLogger.error(scrub"[${request.uuid}] Failed to create new $billingPeriod $product subscription, due to $error")
         error match {
           case _: RequestValidationError => BadRequest
           case _: ServerError => InternalServerError
         }
       },
       { statusResponse =>
-        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod subscription")
+        SafeLogger.info(s"[${request.uuid}] Successfully created a support workers execution for a new $billingPeriod $product subscription")
         Accepted(statusResponse.asJson)
       }
     )
-
+  }
 }
 

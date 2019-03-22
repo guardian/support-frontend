@@ -49,15 +49,6 @@ class Subscriptions(
 
   }
 
-  def premiumTier(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "Support the Guardian | Premium Tier"
-    val mainElement = EmptyDiv("premium-tier-landing-page-" + countryCode)
-    val js = Left(RefPath("premiumTierLandingPage.js"))
-    val css = Left(RefPath("premiumTierLandingPageStyles.css"))
-    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle)()).withSettingsSurrogateKey
-  }
-
   def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/weekly")
 
   def weekly(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -79,7 +70,5 @@ class Subscriptions(
     )
     Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks)()).withSettingsSurrogateKey
   }
-
-  def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
 }
