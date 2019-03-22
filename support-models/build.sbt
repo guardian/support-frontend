@@ -1,4 +1,4 @@
-import LibraryVersions.{circeVersion, catsVersion}
+import LibraryVersions.{catsVersion, circeVersion}
 
 name := "support-models"
 
