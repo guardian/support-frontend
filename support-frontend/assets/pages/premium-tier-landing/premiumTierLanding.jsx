@@ -36,15 +36,15 @@ const reactElementId: {
   International: 'premium-tier-landing-page-int',
 };
 
-const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
-  '/subscribe/digital',
-  [
+const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
+  path: '/subscribe/digital',
+  listOfCountries: [
     GBPCountries,
     UnitedStates,
     AUDCountries,
     International,
   ],
-);
+});
 
 // ----- Render ----- //
 

@@ -13,6 +13,8 @@ import assets.{AssetsResolver, RefPath}
 import views.html.main
 import play.core.SourceMapper
 import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
+import com.gu.support.config.Stage
+import controllers.CSSElementForStage
 import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -24,25 +26,32 @@ class CustomHttpErrorHandler(
     sourceMapper: Option[SourceMapper],
     router: => Option[Router],
     val assets: AssetsResolver,
-    settingsProvider: AllSettingsProvider
+    settingsProvider: AllSettingsProvider,
+    stage: Stage
 )(implicit val ec: ExecutionContext) extends DefaultHttpErrorHandler(env, config, sourceMapper, router) with LazyLogging with SettingsSurrogateKeySyntax {
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String = ""): Future[Result] =
     super.onClientError(request, statusCode, message).map(_.withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*))
 
-  override protected def onNotFound(request: RequestHeader, message: String): Future[Result] =
+  override protected def onNotFound(request: RequestHeader, message: String): Future[Result] = {
+    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
+    val fontLoader = elementForStage(RefPath("fontLoader.js"))
     Future.successful(
       NotFound(main(
         "Error 404",
         EmptyDiv("error-404-page"),
         Left(RefPath("error404Page.js")),
-        Left(RefPath("error404Page.css"))
+        Left(RefPath("error404Page.css")),
+        fontLoader
       )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
         .withSettingsSurrogateKey
     )
+  }
 
   override protected def onProdServerError(request: RequestHeader, exception: UsefulException): Future[Result] = {
+    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
+    val fontLoader = elementForStage(RefPath("fontLoader.js"))
     logServerError(request, exception)
     Future.successful(
       InternalServerError(
@@ -50,7 +59,8 @@ class CustomHttpErrorHandler(
           "Error 500",
           EmptyDiv("error-500-page"),
           Left(RefPath("error500Page.js")),
-          Left(RefPath("error500Page.css"))
+          Left(RefPath("error500Page.css")),
+          fontLoader
         )()(assets, request, settingsProvider.getAllSettings()))
         .withHeaders(CacheControl.noCache)
         .withSettingsSurrogateKey

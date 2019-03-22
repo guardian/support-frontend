@@ -4,13 +4,10 @@
 
 import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
-import { ProductPagePlanFormReducerFor, type State as FormState } from 'components/productPage/productPagePlanForm/productPagePlanFormReducer';
 
 import { type TabActions } from './paperSubscriptionLandingPageActions';
 import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 
@@ -23,7 +20,6 @@ export type State = {
   page: {
     productPrices: ProductPrices,
     tab: ActiveTabState,
-    plan: FormState<PaperProductOptions>,
   }
 };
 
@@ -42,22 +38,14 @@ const getTabsReducer = (initialTab: PaperFulfilmentOptions) =>
 
   };
 
-const findInitialProduct = (product: ?string) => {
-  if (!product) { return null; }
-  // $FlowIgnore - Flow doesn't realise we've already checked product is not null
-  const index = ActivePaperProductTypes.findIndex(s => s.toLowerCase() === product.toLowerCase());
-  return index > -1 ? ActivePaperProductTypes[index] : null;
-};
-
 // ----- Exports ----- //
 
-export default (initialTab: PaperFulfilmentOptions, product: ?string) => {
+export default (initialTab: PaperFulfilmentOptions) => {
 
   const { productPrices } = window.guardian;
 
   return combineReducers({
     productPrices: () => productPrices,
-    plan: ProductPagePlanFormReducerFor<?PaperProductOptions>('Paper', findInitialProduct(product)),
     tab: getTabsReducer(paperHasDeliveryEnabled() ? initialTab : Collection),
   });
 };

@@ -193,8 +193,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub Support Workers Failure in ${Stage} (Recurring Contributions or Subscriptions Checkout)
       AlarmDescription: There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process
       MetricName: ExecutionsFailed
@@ -214,8 +213,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:simple-dev
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub Support Workers Timeout in ${Stage} (Recurring Contributions or Subscriptions Checkout)
       AlarmDescription: An execution of the Support Workers state machine has taken an excessively long time to complete
       MetricName: ExecutionsTimedOut

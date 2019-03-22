@@ -24,6 +24,7 @@ class DriverConfig {
   }
 
   // Used by Travis to run tests in BrowserStack
+  // See: https://www.browserstack.com/automate/java#getting-started
   private def instantiateRemoteBrowser(): WebDriver = {
     val chromeOptions = new ChromeOptions
     chromeOptions.setCapability("platform", "WINDOWS")

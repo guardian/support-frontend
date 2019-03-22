@@ -1,9 +1,5 @@
 // @flow
-
-// ----- Imports ----- //
-
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
@@ -12,14 +8,11 @@ import { showPrice, getCurrency, type Price, type ProductPrices } from 'helpers/
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
 import { getDiscount, getFormattedFlashSalePrice, flashSaleIsActive } from 'helpers/flashSale';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import { type Action } from 'components/productPage/productPagePlanForm/productPagePlanFormActions';
-import ProductPagePlanForm, {
-  type DispatchPropTypes,
-  type StatePropTypes,
-} from 'components/productPage/productPagePlanForm/productPagePlanForm';
+import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../digitalSubscriptionLandingReducer';
-import { redirectToDigitalPage, setPlan } from '../digitalSubscriptionLandingActions';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
+import { getDigitalCheckout } from 'helpers/externalLinks';
 
 
 // ---- Prices ----- //
@@ -99,28 +92,21 @@ const billingPeriods = {
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): StatePropTypes<DigitalBillingPeriod> => ({
+const mapStateToProps = (state: State): PropTypes<DigitalBillingPeriod> => ({
   plans: Object.keys(billingPeriods).reduce((ps, k) => ({
     ...ps,
     [k]: {
       title: billingPeriods[k].title,
       copy: billingPeriods[k].copy(state.page.productPrices, state.common.internationalisation.countryId),
       offer: billingPeriods[k].offer(state.common.internationalisation.countryId) || null,
+      href: getDigitalCheckout(state.common.internationalisation.countryGroupId, k),
+      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, k),
       price: null,
       saving: null,
     },
   }), {}),
-  selectedPlan: state.page.plan.plan,
 });
-
-const mapDispatchToProps =
-(dispatch: Dispatch<Action<DigitalBillingPeriod>>): DispatchPropTypes<DigitalBillingPeriod> =>
-  ({
-    setPlanAction: bindActionCreators(setPlan, dispatch),
-    onSubmitAction: bindActionCreators(redirectToDigitalPage, dispatch),
-  });
-
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductPagePlanForm);
+export default connect(mapStateToProps)(ProductPagePlanForm);

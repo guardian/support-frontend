@@ -11,7 +11,10 @@ import { clickedEvent } from 'helpers/tracking/clickTracking';
 import MobileMenu, { type Position } from '../mobileMenu/mobileMenu';
 import VeggieBurgerButton from '../veggieBurgerButton/veggieBurgerButton';
 
-export default class MobileMenuToggler extends Component<{ utility: Node }, {
+export default class MobileMenuToggler extends Component<{
+  utility: Node,
+  links: Node,
+}, {
   menuOpen: boolean,
   buttonPosition: Position
 }> {
@@ -25,7 +28,7 @@ export default class MobileMenuToggler extends Component<{ utility: Node }, {
 
   render() {
     const { menuOpen, buttonPosition } = this.state;
-    const { utility } = this.props;
+    const { utility, links } = this.props;
     return (
       <div className="component-header-mobile-menu-toggler">
         <VeggieBurgerButton
@@ -61,6 +64,7 @@ export default class MobileMenuToggler extends Component<{ utility: Node }, {
           <MobileMenu
             closeButtonAt={buttonPosition}
             utility={utility}
+            links={links}
             onClose={() => {
               this.setState({ menuOpen: false });
               clickedEvent(['header', 'menu-close'].join(' - '));

@@ -35,7 +35,7 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 
 // ----- Redux Store ----- //
 
-const store = pageInit(() => digitalSubscriptionLandingReducer(null), true);
+const store = pageInit(() => digitalSubscriptionLandingReducer(), true);
 
 // ----- Internationalisation ----- //
 
@@ -53,9 +53,10 @@ const reactElementId: {
   International: 'digital-subscription-landing-page-int',
 };
 
-const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
-  '/subscribe/digital',
-  [
+const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
+  path: '/subscribe/digital',
+  countryGroupId,
+  listOfCountries: [
     GBPCountries,
     UnitedStates,
     AUDCountries,
@@ -64,7 +65,7 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer(
     Canada,
     International,
   ],
-);
+});
 
 // ----- Render ----- //
 

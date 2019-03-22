@@ -25,6 +25,28 @@
   left: 0;
 }
 
+.component-radio-input__image {
+  position: absolute;
+  right: 0;
+}
+
+.component-radio-input__image > .svg-direct-debit-symbol {
+  width: 24px;
+}
+
+.component-radio-input__image > .svg-new-credit-card {
+  width: 24px;
+}
+
+.component-radio-input__image > .svg-paypal {
+  width: 24px;
+  height: 20px;
+}
+
+.component-radio-input__image svg {
+  height: 100%;
+}
+
 .component-radio-input__text:before {
   display: inline-block;
   content: '';

@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath}
+import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.identity.play.IdUser
 import com.gu.support.catalog.Paper
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
@@ -38,7 +38,8 @@ class PaperSubscription(
   components: ControllerComponents,
   stringsConfig: StringsConfig,
   settingsProvider: AllSettingsProvider,
-  val supportUrl: String
+  val supportUrl: String,
+  fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with Circe with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -61,12 +62,12 @@ class PaperSubscription(
     val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, promoCode)
 
-    Ok(views.html.main(title, mainElement, js, css, description, canonicalLink){
+    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink){
       Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
     }).withSettingsSurrogateKey
   }
 
-  def displayForm(displayCheckout: Boolean): Action[AnyContent] =
+  def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
@@ -75,12 +76,7 @@ class PaperSubscription(
           Future.successful(InternalServerError)
         },
         user => {
-          if (displayCheckout) {
-            Future.successful(Ok(paperSubscriptionFormHtml(user)))
-          }
-          else {
-            Future.successful(Redirect(routes.Subscriptions.geoRedirect))
-          }
+          Future.successful(Ok(paperSubscriptionFormHtml(user)))
         }
       ).flatten.map(_.withSettingsSurrogateKey)
     }
@@ -99,6 +95,7 @@ class PaperSubscription(
       id,
       js,
       css,
+      fontLoaderBundle,
       Some(csrf),
       idUser,
       uatMode,
