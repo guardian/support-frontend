@@ -12,7 +12,7 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendAcquisitionEventState
 import io.circe.generic.auto._
-import ophan.thrift.event.{Product => OphanProduct}
+import ophan.thrift.event.{PrintOptions, PrintProduct, Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -91,6 +91,14 @@ object SendAcquisitionEvent {
           case _: DigitalPack => (OphanProduct.DigitalSubscription, 0D) //TODO: Send the real amount in the acquisition event
           case _: Paper => (OphanProduct.PrintSubscription, 0D) //TODO: same as above
         }
+
+        val printOptions = state.product match {
+          case p: Paper => Some(PrintOptions(PrintProduct.HomeDeliverySixday, "GB"))
+          case _ => None
+        }
+        SafeLogger.info(s"Sending printoptions: ${printOptions}")
+
+
         Either.fromOption(
           state.acquisitionData.map { data =>
             thrift.Acquisition(
