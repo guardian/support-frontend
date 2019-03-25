@@ -1,0 +1,19 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.title {
+  @include gu-fontset-heading;
+  margin-bottom: $gu-v-spacing;
+}
+
+.titleTitle {
+  @include gu-fontset-heading;
+}
+
+.titleCopy {
+  @include gu-fontset-body-sans;
+}
+
+.pricing {
+  @include gu-fontset-heading;
+  font-weight: 400;
+}

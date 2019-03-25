@@ -6,3 +6,19 @@
     border-right: 1px solid gu-colour(neutral-86);
   }
 }
+
+.component-checkout--aside {
+  display: flex;
+  align-items: flex-start;
+  .component-checkout__form {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  .component-checkout__aside {
+    border-right: 1px solid gu-colour(neutral-86);
+    border-bottom: 1px solid gu-colour(neutral-86);  
+    width: 100%;
+    padding: $gu-v-spacing $gu-h-spacing/2;
+  }
+}
+

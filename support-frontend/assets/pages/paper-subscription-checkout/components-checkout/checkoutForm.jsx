@@ -25,6 +25,7 @@ import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout from 'components/subscriptionCheckouts/layout';
+import Summary from 'components/subscriptionCheckouts/summary';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -99,7 +100,20 @@ function CheckoutForm(props: PropTypes) {
   return (
     <Content modifierClasses={['your-details']}>
       <Outset>
-        <Layout>
+        <Layout aside={<Summary
+          productPrice={paperRegularPrice(
+                      props.productPrices,
+                      props.fulfilmentOption,
+                      props.productOption,
+                    )}
+          promotion={paperPromotion(
+                      props.productPrices,
+                      props.fulfilmentOption,
+                      props.productOption,
+                    )}
+          billingPeriod="Monthly"
+        />}
+        >
           <Form onSubmit={(ev) => {
             ev.preventDefault();
             props.submitForm();
