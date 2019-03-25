@@ -20,7 +20,7 @@ lazy val release = Seq[ReleaseStep](
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
-  publishArtifacts,
+  ReleaseStep(action = Command.process("publishSigned", _), enableCrossBuild = false),
   ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = false),
   setNextVersion,
   commitNextVersion,
