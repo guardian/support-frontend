@@ -45,7 +45,7 @@ class Application(
 
   implicit val a: AssetsResolver = assets
 
-  def csrf(): Action[AnyContent] = NoCacheAction() {  implicit request =>
+  def csrf(): Action[AnyContent] = PrivateAction {  implicit request =>
     CSRF.getToken.value.fold(Ok("didn't work"))((token: CSRF.Token) => Ok(token.toString))
   }
 
