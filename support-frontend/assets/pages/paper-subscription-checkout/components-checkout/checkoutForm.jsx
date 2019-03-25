@@ -29,7 +29,6 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
 import {
@@ -47,6 +46,8 @@ import {
 import { withStore } from './addressFields';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type { FormField as PersonalDetailsFormField } from '../../../components/subscriptionCheckouts/personalDetails';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
 
@@ -90,6 +91,8 @@ function CheckoutForm(props: PropTypes) {
   const errorState = props.submissionError ?
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
+
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'newspaper' : 'voucher booklet';
 
   return (
     <Content modifierClasses={['your-details']}>
