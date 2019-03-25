@@ -18,8 +18,9 @@ object SubscribeWithGoogleAcquisition {
         product = Product.Contribution,
         paymentFrequency = PaymentFrequency.OneOff,
         currency = a.googleRecordPayment.currency,
-        amount = a.googleRecordPayment.amount.toDouble
-      )) //todo: Add the rest of the data
+        amount = a.googleRecordPayment.amount.toDouble,
+        paymentProvider = Some(ophan.thrift.event.PaymentProvider.SubscribeWithGoogle)
+      ))
 
       override def buildGAData(a: SubscribeWithGoogleAcquisition): Either[String, GAData] = Right(GAData(
         "???",
