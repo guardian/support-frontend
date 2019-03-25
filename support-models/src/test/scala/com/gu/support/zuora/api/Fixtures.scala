@@ -133,7 +133,7 @@ object Fixtures {
   val productRatePlanId = "12345"
   val productRatePlanChargeId = "67890"
 
-  val subscription = Subscription(date, date, date, promoCode = Some(promoCode))
+  val subscription = Subscription(date, date, date, "id123", promoCode = Some(promoCode))
   val monthlySubscriptionData = SubscriptionData(
     List(
       RatePlanData(
@@ -176,7 +176,8 @@ object Fixtures {
         "RenewalTerm" : 12,
         "TermType" : "TERMED",
         "InitialPromotionCode__c": "$promoCode",
-        "PromotionCode__c": "$promoCode"
+        "PromotionCode__c": "$promoCode",
+        "CreatedRequestId__c": "id123"
       }
     """
 
@@ -252,7 +253,7 @@ object Fixtures {
         Nil
       )
     ),
-    Subscription(date, date, date, termType = "Invalid term type")
+    Subscription(date, date, date, "id123", termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
     SubscribeItem(account(), contactDetails, None, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())
