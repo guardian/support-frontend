@@ -15,18 +15,3 @@ libraryDependencies ++= Seq(
 )
 
 
-releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  publishArtifacts,
-  ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = false),
-  setNextVersion,
-  commitNextVersion,
-  pushChanges
-)
-
