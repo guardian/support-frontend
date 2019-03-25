@@ -4,40 +4,36 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import type { Dispatch } from 'redux';
 
-import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
+import { type FormError } from 'helpers/subscriptionsForms/validation';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 
 import Text from 'components/text/text';
-import { Outset } from 'components/content/content';
-import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
-import Button from 'components/button/button';
-import { Input } from 'components/forms/input';
+import Content, { Outset } from 'components/content/content';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
-import { withLabel } from 'hocs/withLabel';
-import { withError } from 'hocs/withError';
-import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import Content from 'components/content/content';
 import AddressForm from './addressForm';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
-  regularPrice as dpRegularPrice,
-  promotion as digitalPackPromotion,
   finalPrice as dpFinalPrice,
+  promotion as digitalPackPromotion,
+  regularPrice as dpRegularPrice,
 } from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { type Action, type FormActionCreators, formActionCreators } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import {
+  type Action,
+  type FormActionCreators,
+  formActionCreators,
+} from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { getQueryParameter } from 'helpers/url';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
@@ -47,12 +43,14 @@ import { signOut } from 'helpers/user/user';
 import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 
 import {
-  submitForm,
   type FormField,
   type FormFields,
   getFormFields,
   type State,
+  submitForm,
 } from '../digitalSubscriptionCheckoutReducer';
+import PersonalDetails from '../../../components/subscriptionCheckouts/personalDetails';
+import type { FormField as PersonalDetailsFormField } from '../../../components/subscriptionCheckouts/personalDetails';
 
 // ----- Types ----- //
 
@@ -112,10 +110,6 @@ function mapDispatchToProps() {
   };
 }
 
-// ----- Form Fields ----- //
-
-const InputWithLabel = withLabel(Input);
-const Input1 = compose(asControlled, withError)(InputWithLabel);
 
 // ----- Component ----- //
 
@@ -163,58 +157,16 @@ function CheckoutForm(props: PropTypes) {
           }}
           >
             <FormSection title="Your details">
-              <Input1
-                id="first-name"
-                label="First name"
-                type="text"
-                value={props.firstName}
-                setValue={props.setFirstName}
-                error={firstError('firstName', props.formErrors)}
-              />
-              <Input1
-                id="last-name"
-                label="Last name"
-                type="text"
-                value={props.lastName}
-                setValue={props.setLastName}
-                error={firstError('lastName', props.formErrors)}
-              />
-              <InputWithLabel
-                id="email"
-                label="Email"
-                type="email"
-                disabled
-                value={props.email}
-                footer={(
-                  <span>
-                    <CheckoutExpander copy="Want to use a different email address?">
-                      <p>You will be able to edit this in your account once you have completed this checkout.</p>
-                    </CheckoutExpander>
-                    <CheckoutExpander copy="Not you?">
-                      <p>
-                        <Button
-                          appearance="greyHollow"
-                          icon={null}
-                          type="button"
-                          aria-label={null}
-                          onClick={() => props.signOut()}
-                        >
-                          Sign out
-                        </Button> and create a new account.
-                      </p>
-                    </CheckoutExpander>
-                  </span>
-                )}
-              />
-              <Input1
-                id="telephone"
-                label="Telephone"
-                optional
-                type="tel"
-                value={props.telephone}
-                setValue={props.setTelephone}
-                footer="We may use this to get in touch with you about your subscription."
-                error={firstError('telephone', props.formErrors)}
+              <PersonalDetails
+                firstName={props.firstName}
+                setFirstName={props.setFirstName}
+                lastName={props.lastName}
+                setLastName={props.setLastName}
+                email={props.email}
+                telephone={props.telephone}
+                setTelephone={props.setTelephone}
+                formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+                signOut={props.signOut}
               />
             </FormSection>
             <FormSection title="Address">
