@@ -15,6 +15,7 @@ import cookies.ServersideAbTestCookie
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import play.api.mvc._
+import play.filters.csrf.CSRF
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
@@ -43,6 +44,10 @@ class Application(
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+
+  def csrf(): Action[AnyContent] = NoCacheAction() {  implicit request =>
+    CSRF.getToken.value.fold(Ok("didn't work"))((token: CSRF.Token) => Ok(token.toString))
+  }
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())
@@ -106,7 +111,7 @@ class Application(
   ): Action[AnyContent] = CachedAction() { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(contributionsHtml(countryCode, None)),
+    Ok(contributionsHtml(countryCode, None))
   }
 
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])

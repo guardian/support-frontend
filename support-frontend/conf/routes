@@ -122,6 +122,7 @@ GET  /loginAction                                   controllers.Login.loginActio
 GET  /oauth2callback                                controllers.Login.oauth2Callback
 GET  /logout                                        controllers.Login.logout
 GET  /test-users                                    controllers.TestUsersManagement.createTestUser
+GET  /csrf                                          controllers.Application.csrf
 
 
 # ----- PayPal (Recurring Endpoints) ----- #
