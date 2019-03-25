@@ -184,7 +184,7 @@ function CheckoutForm(props: PropTypes) {
                 error={firstError('telephone', props.formErrors)}
               />
             </FormSection>
-            <FormSection title="Where should we deliver your newspapers?">
+            <FormSection title="Where should we deliver your vouchers?">
               <DeliveryAddress />
             </FormSection>
             <FormSection title="Is the billing address the same as the delivery address?">
