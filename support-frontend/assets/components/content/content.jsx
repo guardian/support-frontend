@@ -22,7 +22,7 @@ export const Sides = {
   right: 'right', left: 'left',
 };
 
-type Appearance = $Keys<typeof Appearances>;
+export type Appearance = $Keys<typeof Appearances>;
 
 type PropTypes = {|
   appearance: Appearance,

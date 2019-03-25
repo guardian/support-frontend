@@ -33,7 +33,7 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
-import { getVoucherDays, getDeliveryDays, formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
+import { formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
 import {
   type FormActionCreators,
   formActionCreators,
@@ -44,6 +44,7 @@ import {
   getDeliveryAddress,
   getBillingAddress,
   type State,
+  getDays,
 } from '../paperSubscriptionCheckoutReducer';
 import { withStore } from './addressFields';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
@@ -85,15 +86,15 @@ const BillingAddress = withStore('billing', getBillingAddress);
 
 function CheckoutForm(props: PropTypes) {
 
-  const days = props.fulfilmentOption === HomeDelivery
-    ? getDeliveryDays(Date.now(), props.productOption)
-    : getVoucherDays(Date.now(), props.productOption);
+  const days = getDays(props.fulfilmentOption, props.productOption);
 
   const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
     'Payment Attempt Failed';
   const errorState = props.submissionError ?
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
+
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'newspaper' : 'voucher booklet';
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -169,7 +170,7 @@ function CheckoutForm(props: PropTypes) {
                 error={firstError('telephone', props.formErrors)}
               />
             </FormSection>
-            <FormSection title="Where should we deliver your newspapers?">
+            <FormSection title="Where should we deliver your vouchers?">
               <DeliveryAddress />
             </FormSection>
             <FormSection title="Is the billing address the same as the delivery address?">
@@ -197,8 +198,9 @@ function CheckoutForm(props: PropTypes) {
               </FormSection>
             }
             <FormSection title="When would you like your subscription to start?">
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
-                {days.map((day) => {
+              <Rows>
+                <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
+                  {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
                     <RadioInput
@@ -210,7 +212,16 @@ function CheckoutForm(props: PropTypes) {
                     />
                   );
                 })}
-              </FieldsetWithError>
+                </FieldsetWithError>
+                <Text>
+                  <p>
+                  We will take the first payment on the date you receive your first {fulfilmentOptionDescriptor}.
+                  </p>
+                  <p>
+                  Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                  </p>
+                </Text>
+              </Rows>
             </FormSection>
             <FormSection title="How would you like to pay?">
               <Rows>

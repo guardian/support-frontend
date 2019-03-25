@@ -1,39 +1,25 @@
 @import '~stylesheets/gu-sass/gu-sass';
-@import '~stylesheets/skeleton/html';
 
 .component-footer {
-  background-color: gu-colour(neutral-7);
-  font-family: $gu-text-sans-web;
-  font-size: 12px;
-  line-height: 16px;
-  padding: $gu-v-spacing 0;
+  @include gu-fontset-explainer;
+  font-weight: 400;
+  color: gu-colour(neutral-100);
 
-  .component-contrib-legal {
-    margin-top: $gu-v-spacing;
-    font-weight: 400;
-    display: block;
-    padding: 3px 0;
-    color: gu-colour(neutral-86);
+  .component-content__content {
+    padding-bottom: $gu-v-spacing * 2;
+    max-width: gu-span(8);
   }
 }
 
-.component-footer__content {
-  @extend .gu-content-margin;
-}
-
-.component-footer__privacy-policy {
-  text-decoration: none;
-  color: gu-colour(neutral-86);
-  padding: 5px 0;
-
+.component-footer a {
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,.86);
+  color: inherit;
   &:hover {
     text-decoration: underline;
   }
 }
 
-.component-footer__privacy-policy-text, .component-footer__copyright {
-  font-weight: 400;
-  display: block;
-  padding: 3px 0;
-  color: gu-colour(neutral-86);
+.component-footer__copyright {
+  font-size: 12px;
 }

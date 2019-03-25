@@ -2,15 +2,16 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { Children } from 'react';
 import type { Node } from 'react';
-
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
 import { privacyLink, copyrightNotice } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import Content, { type Appearance } from 'components/content/content';
 
 import './footer.scss';
+import Rows from '../base/rows';
 
 // ----- Props ----- //
 
@@ -19,42 +20,37 @@ type PropTypes = {|
   disclaimer: boolean,
   countryGroupId: CountryGroupId,
   children: Node,
+  appearance: Appearance,
 |};
 
 
-// ----- Functions ----- //
-
-function PrivacyPolicy(props: { privacyPolicy: boolean }) {
-
-  if (props.privacyPolicy) {
-    return (
-      <div className="component-footer__privacy-policy-text">
-        To find out what personal data we collect and how we use it, please visit our
-        <a className="component-footer__privacy-policy" href={privacyLink}> Privacy Policy</a>.
-      </div>
-    );
-  }
-
-  return null;
-
-}
-
-function Disclaimer(props: { disclaimer: boolean, countryGroupId: CountryGroupId }) {
-  return props.disclaimer ? <ContribLegal countryGroupId={props.countryGroupId} /> : null;
-}
-
 // ----- Component ----- //
 
-function Footer(props: PropTypes) {
+function Footer({
+  disclaimer, privacyPolicy, children, countryGroupId, appearance,
+}: PropTypes) {
 
   return (
     <footer className="component-footer" role="contentinfo">
-      <div className="component-footer__content">
-        <PrivacyPolicy privacyPolicy={props.privacyPolicy} />
-        {props.children}
-        <small className="component-footer__copyright">{copyrightNotice}</small>
-        <Disclaimer disclaimer={props.disclaimer} countryGroupId={props.countryGroupId} />
-      </div>
+      {(disclaimer || privacyPolicy || Children.count(children) > 0) &&
+        <Content appearance={appearance}>
+          <div className="component-footer__content">
+            <Rows>
+              {privacyPolicy &&
+              <div className="component-footer__privacy-policy-text">
+                To find out what personal data we collect and how we use it, please visit our
+                <a className="component-footer__privacy-policy" href={privacyLink}> Privacy Policy</a>.
+              </div>
+              }
+              {children}
+              {disclaimer && <ContribLegal countryGroupId={countryGroupId} />}
+            </Rows>
+          </div>
+        </Content>
+      }
+      <Content border appearance={appearance}>
+        <span className="component-footer__copyright">{copyrightNotice}</span>
+      </Content>
     </footer>
   );
 
@@ -66,6 +62,7 @@ function Footer(props: PropTypes) {
 Footer.defaultProps = {
   privacyPolicy: false,
   disclaimer: false,
+  appearance: 'feature',
   countryGroupId: GBPCountries,
   children: [],
 };

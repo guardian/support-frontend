@@ -44,6 +44,9 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
+import { getVoucherDays, getDeliveryDays, formatMachineDate } from './helpers/deliveryDays';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+
 
 // ----- Types ----- //
 
@@ -146,6 +149,12 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
+function getDays(fulfilmentOption: PaperFulfilmentOptions, productOption: PaperProductOptions) {
+  return (fulfilmentOption === HomeDelivery ? getDeliveryDays(Date.now(), productOption)
+    : getVoucherDays(Date.now(), productOption));
+}
+
+
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
@@ -230,20 +239,23 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const { productPrices } = window.guardian;
 
+  const product = getInitialProduct(productInUrl, fulfillmentInUrl);
+  const days: Date[] = getDays(product.fulfilmentOption, product.productOption);
+
   const initialState = {
     stage: 'checkout',
     title: null,
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    startDate: null,
+    startDate: formatMachineDate(days[0]) || null,
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? DirectDebit : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
     isTestUser: isTestUser(),
-    ...getInitialProduct(productInUrl, fulfillmentInUrl),
+    ...product,
     productPrices,
     billingAddressIsSame: true,
   };
@@ -316,4 +328,5 @@ export {
   setFormSubmitted,
   signOut,
   formActionCreators,
+  getDays,
 };

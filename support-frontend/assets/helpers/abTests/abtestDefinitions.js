@@ -16,10 +16,7 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'averageAnnualAmount',
-      },
-      {
-        id: 'monthlyBreakdownAnnual',
+        id: 'dailyBreakdownAnnual',
       },
       {
         id: 'weeklyBreakdownAnnual',

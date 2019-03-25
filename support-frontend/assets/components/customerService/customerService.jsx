@@ -8,7 +8,6 @@ import { type Option } from 'helpers/types/option';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { AUDCountries, GBPCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
-import './customerService.scss';
 
 // ----- Props ----- //
 
