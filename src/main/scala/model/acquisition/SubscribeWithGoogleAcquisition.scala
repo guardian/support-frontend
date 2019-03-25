@@ -4,6 +4,8 @@ import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import model.ClientBrowserInfo
 import model.subscribewithgoogle.GoogleRecordPayment
+import ophan.thrift.componentEvent.ComponentType.AcquisitionsHeader
+import ophan.thrift.event.Platform.Amp
 import ophan.thrift.event.{Acquisition, PaymentFrequency, Product}
 
 case class SubscribeWithGoogleAcquisition(googleRecordPayment: GoogleRecordPayment,
@@ -22,7 +24,10 @@ object SubscribeWithGoogleAcquisition {
         currency = a.googleRecordPayment.currency,
         amount = a.googleRecordPayment.amount.toDouble,
         identityId = a.identityId.map(_.toString()),
-        paymentProvider = Some(ophan.thrift.event.PaymentProvider.SubscribeWithGoogle)
+        paymentProvider = Some(ophan.thrift.event.PaymentProvider.SubscribeWithGoogle),
+        platform = Some(Amp),
+        componentTypeV2 = Some(AcquisitionsHeader),
+        componentId = Some("swg_amp_header")
       ))
 
       override def buildGAData(a: SubscribeWithGoogleAcquisition): Either[String, GAData] = Right(ClientBrowserInfo.toGAData(a.clientBrowserInfo))
