@@ -1,27 +1,49 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+.content {
+  padding: $gu-v-spacing $gu-h-spacing/2;
+}
+
+.img {
+  overflow: hidden;
+  background: gu-colour(neutral-97);
+  border-bottom: 1px solid gu-colour(neutral-86);
+  padding: $gu-v-spacing $gu-h-spacing/2 0;
+}
+
+.img img {
+  width: 75%;
+  margin: 5% auto 0;
+  display: block;
+}
+
+.header {
+  @include gu-fontset-heading;
+  display: inline;
+  background: gu-colour(neutral-7);
+  color: gu-colour(neutral-100);
+  padding: 0 4px;
+  margin: 0 -4px;
+}
+
 .title {
   @include gu-fontset-heading;
-  margin-bottom: $gu-v-spacing;
+  @include mq($from:leftCol) {
+    @include gu-typeface(headline, 32, $size-only: true);
+  }
 }
-
-.titleTitle {
-  @include gu-fontset-heading;
-}
-
-.titleCopy {
+.titleDescription {
   @include gu-fontset-body-sans;
 }
 
 .pricing {
   @include gu-fontset-heading;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .data {
   @include gu-fontset-body-sans;
   display: grid;
-  margin-top: $gu-v-spacing;
   grid-template-columns: max-content 1fr;
 }
 
@@ -32,11 +54,19 @@
 
 .promo {
   @include gu-fontset-body-sans;
-  color: gu-colour(neutral-46
-  );
+  color: gu-colour(neutral-46);
 }
 
 .promoTitle {
   color: gu-colour(state-success);
   font-weight: 700;
+}
+
+.children {
+  @include gu-fontset-body-sans; 
+  color: gu-colour(neutral-46);
+  margin-top: $gu-v-spacing * 2;
+  a {
+    color: inherit;
+  }
 }

@@ -12,14 +12,14 @@ type PropTypes = {
 };
 const Layout = ({ children, aside }: PropTypes) => (
   <div className={classNameWithModifiers('component-checkout', [aside ? 'aside' : null])}>
+    {aside &&
+      <div className="component-checkout__aside">
+        {aside}
+      </div>
+    }
     <div className="component-checkout__form">
       {children}
     </div>
-    {aside &&
-    <div className="component-checkout__aside">
-      {aside}
-    </div>
-    }
   </div>
 );
 

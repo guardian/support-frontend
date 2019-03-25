@@ -8,6 +8,7 @@ import { compose } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { regularPrice as paperRegularPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
+import { routes } from 'helpers/routes';
 
 import { Outset } from 'components/content/content';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -50,6 +51,8 @@ import {
 } from '../paperSubscriptionCheckoutReducer';
 import { withStore } from './addressFields';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import GridImage from 'components/gridImage/gridImage';
+
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -103,7 +106,16 @@ function CheckoutForm(props: PropTypes) {
       <Outset>
         <Layout aside={(
           <Summary
-            title={getTitle(props.productOption)}
+            image={
+              <GridImage
+                gridId="checkoutPackshotPaperGraunVoucher"
+                srcSizes={[696, 500]}
+                sizes="(max-width: 740px) 50vw, 696"
+                imgType="png"
+                altText=""
+              />
+            }
+            title={`${getTitle(props.productOption)} paper`}
             description={getShortDescription(props.productOption)}
             productPrice={paperRegularPrice(
               props.productPrices,
@@ -122,7 +134,9 @@ function CheckoutForm(props: PropTypes) {
             },
             ]}
             billingPeriod="Monthly"
-          />)}
+          >
+            <a href={routes.paperSubscriptionLanding}>Change Subscription</a>
+          </Summary>)}
         >
           <Form onSubmit={(ev) => {
             ev.preventDefault();

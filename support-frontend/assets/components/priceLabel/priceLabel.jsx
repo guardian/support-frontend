@@ -18,17 +18,17 @@ const displayPriceForPeriod = (productPrice: Price, billingPeriod: BillingPeriod
   `${showPrice(productPrice)}/${billingPeriodNoun(billingPeriod).toLowerCase()}`;
 
 function PriceLabel({
-  productPrice, promotion, billingPeriod,
+  productPrice, promotion, billingPeriod, ...props
 }: PropTypes) {
 
   if (hasPromotion(promotion)) {
     return (
-      <span>
+      <span {...props}>
         <del className={del} aria-hidden="true">{showPrice(productPrice)}</del>
         {displayPriceForPeriod(applyPromotion(productPrice, promotion), billingPeriod)}
       </span>);
   }
-  return displayPriceForPeriod(productPrice, billingPeriod);
+  return (<span {...props}>{displayPriceForPeriod(productPrice, billingPeriod)}</span>);
 }
 
 export { PriceLabel };

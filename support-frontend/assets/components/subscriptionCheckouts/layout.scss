@@ -8,17 +8,25 @@
 }
 
 .component-checkout--aside {
-  display: flex;
-  align-items: flex-start;
+  @include mq($from:desktop) {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+  }
+  @include mq($from:leftCol) {
+    margin-right: (gu-span(1) + $gu-h-spacing) * -1;
+  }
+  @include mq($from:wide) {
+    margin-right: (gu-span(2) + $gu-h-spacing) * -1;
+  }
   .component-checkout__form {
     flex: 0 0 auto;
     width: 100%;
   }
   .component-checkout__aside {
-    border-right: 1px solid gu-colour(neutral-86);
-    border-bottom: 1px solid gu-colour(neutral-86);  
+    border: 1px solid gu-colour(neutral-86);
+    border-left: 0;  
     width: 100%;
-    padding: $gu-v-spacing $gu-h-spacing/2;
   }
 }
 
