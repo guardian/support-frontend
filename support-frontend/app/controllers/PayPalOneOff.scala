@@ -3,7 +3,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath}
+import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.identity.play.AuthenticatedIdUser
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
@@ -28,7 +28,8 @@ class PayPalOneOff(
     paymentAPIService: PaymentAPIService,
     identityService: IdentityService,
     settingsProvider: AllSettingsProvider,
-    tipMonitoring: Tip
+    tipMonitoring: Tip,
+    fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with Circe with SettingsSurrogateKeySyntax {
 
   import actionBuilders._
@@ -43,7 +44,8 @@ class PayPalOneOff(
       "Support the Guardian | PayPal Error",
       EmptyDiv("paypal-error-page"),
       Left(RefPath("payPalErrorPage.js")),
-      Left(RefPath("payPalErrorPageStyles.css"))
+      Left(RefPath("payPalErrorPageStyles.css")),
+      fontLoaderBundle
     )()).withSettingsSurrogateKey
   }
 

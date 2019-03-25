@@ -125,9 +125,9 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     val isTestUser = state.user.isTestUser
     val config = zuoraConfigProvider.get(isTestUser)
     state.product match {
-      case c: Contribution => c.build(config)
-      case d: DigitalPack => d.build(config, state.user.billingAddress.country, state.promoCode, promotionService, isTestUser)
-      case p: Paper => p.build(state.user.billingAddress.country, state.promoCode, state.firstDeliveryDate, promotionService, isTestUser)
+      case c: Contribution => c.build(state.requestId, config)
+      case d: DigitalPack => d.build(state.requestId, config, state.user.billingAddress.country, state.promoCode, promotionService, isTestUser)
+      case p: Paper => p.build(state.requestId, state.user.billingAddress.country, state.promoCode, state.firstDeliveryDate, promotionService, isTestUser)
     }
   }
 

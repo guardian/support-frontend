@@ -95,10 +95,6 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout  controllers.
 GET  /subscribe/digital/checkout  controllers.DigitalSubscription.displayForm()
 GET  /subscribe/digital/checkout/thankyou-existing  controllers.DigitalSubscription.displayThankYouExisting()
 
-GET  /premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
-GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
-
 GET  /weekly                            controllers.Subscriptions.weeklyGeoRedirect()
 GET  /subscribe/weekly                            controllers.Subscriptions.weeklyGeoRedirect()
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly   controllers.Subscriptions.weekly(country: String)
@@ -108,7 +104,7 @@ GET  /subscribe/paper          controllers.PaperSubscription.paperMethodRedirect
 GET  /subscribe/paper/delivery          controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper          controllers.PaperSubscription.paper(withDelivery: Boolean = false)
 GET  /uk/subscribe/paper/delivery          controllers.PaperSubscription.paper(withDelivery: Boolean = true)
-GET  /subscribe/paper/checkout  controllers.PaperSubscription.displayForm(displayCheckout: Boolean ?= false)
+GET  /subscribe/paper/checkout  controllers.PaperSubscription.displayForm()
 
 GET /postcode-lookup/:postcode            controllers.GetAddress.findAddress(postcode: String)
 

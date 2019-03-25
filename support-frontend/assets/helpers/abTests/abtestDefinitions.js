@@ -4,7 +4,8 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 
 
-export type EditorialiseAmountsVariant = 'control' | 'averageAnnualAmount' | 'monthlyBreakdownAnnual' | 'weeklyBreakdownAnnual' | 'notintest';
+export type EditorialiseAmountsVariant = 'control' | 'dailyBreakdownAnnual' | 'weeklyBreakdownAnnual' | 'notintest';
+export type VerticalContributionsTabsVariant = 'control' | 'verticalTabsMobile' | 'notintest';
 
 export const tests: Tests = {
 
@@ -15,10 +16,7 @@ export const tests: Tests = {
         id: 'control',
       },
       {
-        id: 'averageAnnualAmount',
-      },
-      {
-        id: 'monthlyBreakdownAnnual',
+        id: 'dailyBreakdownAnnual',
       },
       {
         id: 'weeklyBreakdownAnnual',
@@ -33,6 +31,27 @@ export const tests: Tests = {
     isActive: true,
     independent: true,
     seed: 3,
+  },
+
+  verticalContributionsTabs: {
+    type: 'OTHER',
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'verticalTabsMobile',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: true,
+    independent: true,
+    seed: 4,
   },
 };
 

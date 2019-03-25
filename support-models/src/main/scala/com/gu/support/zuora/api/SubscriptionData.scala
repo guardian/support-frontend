@@ -112,6 +112,7 @@ case class Subscription(
   contractEffectiveDate: LocalDate,
   contractAcceptanceDate: LocalDate,
   termStartDate: LocalDate,
+  createdRequestId__c: String,
   autoRenew: Boolean = true,
   initialTerm: Int = 12,
   renewalTerm: Int = 12,

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/hero';
 import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
+import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
@@ -112,8 +113,8 @@ function ThankYouContent({
       <Content>
         <Text>
           <SansParagraph>
-            You can manage your subscription by visiting our <a href={manageSubsUrl}>Manage section</a> or accessing
-            it via <a href={myAccountUrl}>your Guardian account</a>.
+            You can manage your subscription by visiting our <a href={manageSubsUrl} onClick={sendTrackingEventsOnClick('checkout_mma', 'Paper', null)}>Manage section</a> or accessing
+            it via <a href={myAccountUrl} onClick={sendTrackingEventsOnClick('checkout_my_account', 'Paper', null)}>your Guardian account</a>.
           </SansParagraph>
         </Text>
       </Content>

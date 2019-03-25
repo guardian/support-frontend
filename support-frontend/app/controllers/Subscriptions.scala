@@ -2,7 +2,7 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath}
+import assets.{AssetsResolver, RefPath, StyleContent}
 import config.StringsConfig
 import play.api.mvc._
 import services.IdentityService
@@ -17,7 +17,8 @@ class Subscriptions(
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
-    val supportUrl: String
+    val supportUrl: String,
+    fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components) with GeoRedirect with CanonicalLinks with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -42,18 +43,10 @@ class Subscriptions(
       mainElement,
       Left(RefPath(js)),
       Left(RefPath("subscriptionsLandingPage.css")),
+      fontLoaderBundle,
       description = stringsConfig.subscriptionsLandingDescription
     )()).withSettingsSurrogateKey
 
-  }
-
-  def premiumTier(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val title = "Support the Guardian | Premium Tier"
-    val mainElement = EmptyDiv("premium-tier-landing-page-" + countryCode)
-    val js = Left(RefPath("premiumTierLandingPage.js"))
-    val css = Left(RefPath("premiumTierLandingPageStyles.css"))
-    Ok(views.html.main(title, mainElement, js, css)()).withSettingsSurrogateKey
   }
 
   def weeklyGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/weekly")
@@ -75,9 +68,7 @@ class Subscriptions(
       "en" -> buildCanonicalWeeklySubscriptionLink("int"),
       "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
-    Ok(views.html.main(title, mainElement, js, css, description, canonicalLink, hrefLangLinks)()).withSettingsSurrogateKey
+    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks)()).withSettingsSurrogateKey
   }
-
-  def premiumTierGeoRedirect: Action[AnyContent] = geoRedirect("subscribe/premium-tier")
 
 }

@@ -6,6 +6,7 @@ import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import Rows from 'components/base/rows';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import { getQueryParameter } from 'helpers/url';
 import { type Option } from 'helpers/types/option';
 import type { OptimizeExperiment } from 'helpers/optimize/optimize';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -23,6 +24,16 @@ type PropTypes = {|
   multiplePaymentMethodsEnabled: OptimizeExperiment | boolean,
 |}
 
+<<<<<<< HEAD
+const isPayPalEnabled = (optimizeExperiments: OptimizeExperiments) => {
+  const PayPalExperimentId = 'ol9MppFXRle6XJwSRj3psA';
+  const enabledByTest = optimizeExperiments.find(exp => exp.id === PayPalExperimentId && exp.variant === '1');
+  const enabledByQueryString = getQueryParameter('payPal') === 'true';
+  return enabledByTest || enabledByQueryString;
+};
+
+=======
+>>>>>>> refactor: added paypal props to PaymentMethodSelector
 function PaymentMethodSelector(props: PropTypes) {
 
   return (
