@@ -62,7 +62,7 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 }
 
 function applyPromotion(price: Price, promotion: ?Promotion) {
-  if (promotion && promotion.discountedPrice) {
+  if (promotion && promotion.discountedPrice !== null) {
     return {
       ...price,
       price: promotion.discountedPrice,
