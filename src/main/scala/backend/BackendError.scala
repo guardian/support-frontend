@@ -20,6 +20,7 @@ sealed abstract class BackendError extends Exception {
     case BackendError.PaypalApiError(err) => err.message
     case BackendError.Email(err) => err.getMessage
     case BackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString(" & ")
+    case BackendError.SubscribeWithGoogleDuplicateEventError(error) => error.getMessage
   }
 }
 
@@ -29,6 +30,7 @@ object BackendError {
   final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
+  final case class SubscribeWithGoogleDuplicateEventError(error: SubscribeWithGoogleDuplicateInsertEventError) extends BackendError
   final case class Email(error: EmailService.Error) extends BackendError
   final case class MultipleErrors(errors: List[BackendError]) extends BackendError
 
@@ -52,5 +54,7 @@ object BackendError {
   def fromPaypalAPIError(err: PaypalAPIError): BackendError = PaypalApiError(err)
   def fromStripeApiError(err: StripeError): BackendError = StripeApiError(err)
   def fromEmailError(err: EmailService.Error): BackendError = Email(err)
+  def fromSubscribeWithGoogleDuplicatePaymentError(err: SubscribeWithGoogleDuplicateInsertEventError): BackendError =
+    SubscribeWithGoogleDuplicateEventError(err)
 
 }
