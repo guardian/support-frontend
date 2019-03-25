@@ -19,12 +19,13 @@ case object CreditCardDisplayFields extends JustTypePaymentMethodDisplayFields{
 case object PaypalDisplayFields extends JustTypePaymentMethodDisplayFields{
   override val `type` = "Paypal"
 }
+
 case class DirectDebitDisplayFields(
-                                          bankAccountNumberMask: String,
-                                          bankSortCode: String,
-                                          bankAccountName: String,
-                                          mandateId: Option[String],
-                                        ) extends PaymentMethodDisplayFields {
+  bankAccountNumberMask: String,
+  bankSortCode: String,
+  bankAccountName: String,
+  mandateId: Option[String],
+) extends PaymentMethodDisplayFields {
   val `type`: String = "BankTransfer"
 
 }
@@ -37,14 +38,12 @@ object WireFields {
   case class JustTypeWirePaymentMethodDisplayFields(`type`: String) extends PaymentMethodDisplayFieldsWire
 
   case class DirectDebitWirePaymentMethodDisplayFields(
-                                            bankAccountNumberMask: String,
-                                            bankSortCode: String,
-                                            bankAccountName: String,
-                                            mandateId: Option[String],
-                                          `type`: String = "BankTransfer"
-                                          ) extends PaymentMethodDisplayFieldsWire {
-
-  }
+    bankAccountNumberMask: String,
+    bankSortCode: String,
+    bankAccountName: String,
+    mandateId: Option[String],
+    `type`: String = "BankTransfer"
+  ) extends PaymentMethodDisplayFieldsWire
 
   object PaymentMethodDisplayFieldsWire {
     implicit val JustWireFieldsCodec: Codec[JustTypeWirePaymentMethodDisplayFields] = deriveCodec
