@@ -19,7 +19,7 @@ function PriceLabel({
   productPrice, promotion, billingPeriod,
 }: PropTypes) {
 
-  if (promotion && promotion.discountedPrice) {
+  if (promotion && promotion.discountedPrice !== null) {
     return (
       <span>
         <del>{showPrice(productPrice)}</del>&nbsp;
