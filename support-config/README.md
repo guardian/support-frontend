@@ -1,6 +1,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-config_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-config_2.11)
 
-This project helps unifies the config settings for support-frontend and https://github.com/guardian/support-workers
+This project helps unify the config settings for support-frontend and https://github.com/guardian/support-workers
 
 ## Concepts
 
