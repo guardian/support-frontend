@@ -24,6 +24,7 @@ releaseProcess := Seq[ReleaseStep](
   commitReleaseVersion,
   tagRelease,
   publishArtifacts,
+  ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = false),
   setNextVersion,
   commitNextVersion,
   pushChanges
