@@ -244,6 +244,28 @@ function setPasswordGuest(
     });
 }
 
+function getCSFRToken(
+  password: string,
+  guestAccountRegistrationToken: string,
+  csrf: CsrfState,
+): Promise<boolean> {
+
+  const data = { password, guestAccountRegistrationToken };
+  return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestOptions(data, 'same-origin', 'PUT', csrf)))
+    .then((response) => {
+      if (response.status === 200) {
+        return true;
+      }
+      logException('/contribute/set-password-guest endpoint returned an error');
+      return false;
+
+    })
+    .catch(() => {
+      logException('Error while trying to interact with /contribute/set-password-guest');
+      return false;
+    });
+}
+
 export {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,

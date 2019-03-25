@@ -6,7 +6,7 @@ import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup._
-import com.gu.identity.play.IdUser
+import com.gu.identity.play.{IdUser, PrivateFields}
 import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
@@ -14,12 +14,16 @@ import config.StringsConfig
 import cookies.ServersideAbTestCookie
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import io.circe.Encoder
+import io.circe.generic.semiauto.deriveEncoder
 import play.api.mvc._
 import play.filters.csrf.CSRF
 import services.{IdentityService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
 import views.{EmptyDiv, Preload}
+import io.circe.syntax._
+import play.filters.csrf.CSRF.Token
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,8 +49,10 @@ class Application(
 
   implicit val a: AssetsResolver = assets
 
-  def csrf(): Action[AnyContent] = PrivateAction {  implicit request =>
-    CSRF.getToken.value.fold(Ok("didn't work"))((token: CSRF.Token) => Ok(token.toString))
+  def csrf(): Action[AnyContent] = PrivateAction { implicit request => {
+      implicit val privateFieldsEncoder: Encoder[Token] = deriveEncoder[Token]
+      CSRF.getToken.value.fold(Ok("didn't work"))((token: CSRF.Token) => Ok(token.asJson.noSpaces))
+    }
   }
 
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {

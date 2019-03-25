@@ -127,9 +127,13 @@ GET  /csrf                                          controllers.Application.csrf
 
 # ----- PayPal (Recurring Endpoints) ----- #
 
++nocsrf
 POST /paypal/setup-payment                          controllers.PayPalRegular.setupPayment
++nocsrf
 POST /paypal/create-agreement                       controllers.PayPalRegular.createAgreement
++nocsrf
 GET  /paypal/return                                 controllers.PayPalRegular.returnUrl
++nocsrf
 GET  /paypal/cancel                                 controllers.PayPalRegular.cancelUrl
 
 # ----- PayPal (One-off Endpoints) ----- #
