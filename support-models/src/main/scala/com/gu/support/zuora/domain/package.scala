@@ -6,7 +6,13 @@ package object domain {
 
   case class ZuoraIsActive(value: Boolean) extends AnyVal
 
-  case class DomainSubscription(accountNumber: ZuoraAccountNumber, subscriptionNumber: ZuoraSubscriptionNumber, isActive: ZuoraIsActive, ratePlans: List[RatePlan])
+  case class DomainSubscription(
+    accountNumber: ZuoraAccountNumber,
+    subscriptionNumber: ZuoraSubscriptionNumber,
+    isActive: ZuoraIsActive,
+    existingSubscriptionRequestId: Option[CreatedRequestId],
+    ratePlans: List[RatePlan]
+  )
 
   object DomainSubscription {
     def fromSubscription(subscription: Subscription): DomainSubscription =
@@ -14,6 +20,7 @@ package object domain {
         ZuoraAccountNumber(subscription.accountNumber),
         ZuoraSubscriptionNumber(subscription.subscriptionNumber),
         ZuoraIsActive(subscription.status == "Active"),
+        subscription.CreatedRequestId__c.filter(_.length > 0).map(CreatedRequestId.apply),
         subscription.ratePlans //this can be changed to map to a DomainRatePlan if necessary
       )
   }
