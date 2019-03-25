@@ -61,8 +61,10 @@ function getCurrency(country: IsoCountry): IsoCurrency {
   return currency;
 }
 
+function hasPromotion(promotion: ?Promotion) { return promotion && promotion.discountedPrice !== null; }
+
 function applyPromotion(price: Price, promotion: ?Promotion) {
-  if (promotion && promotion.discountedPrice !== null) {
+  if (promotion && hasPromotion(promotion)) {
     return {
       ...price,
       price: promotion.discountedPrice,
@@ -76,4 +78,5 @@ export {
   getCountryGroup,
   showPrice,
   applyPromotion,
+  hasPromotion,
 };

@@ -15,5 +15,28 @@
 
 .pricing {
   @include gu-fontset-heading;
-  font-weight: 400;
+  font-weight: 300;
+}
+
+.data {
+  @include gu-fontset-body-sans;
+  display: grid;
+  margin-top: $gu-v-spacing;
+  grid-template-columns: max-content 1fr;
+}
+
+.data dt {
+  font-weight: bold;
+  padding-right: $gu-h-spacing;
+}
+
+.promo {
+  @include gu-fontset-body-sans;
+  color: gu-colour(neutral-46
+  );
+}
+
+.promoTitle {
+  color: gu-colour(state-success);
+  font-weight: 700;
 }
