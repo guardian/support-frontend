@@ -7,8 +7,6 @@ import { showPrice, applyPromotion, hasPromotion, type Price, type Promotion } f
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { billingPeriodNoun } from 'helpers/billingPeriods';
 
-import { del } from './priceLabel.module.scss';
-
 export type PropTypes = {
   productPrice: Price,
   promotion: ?Promotion,
@@ -24,7 +22,7 @@ function PriceLabel({
   if (hasPromotion(promotion)) {
     return (
       <span {...props}>
-        <del className={del} aria-hidden="true">{showPrice(productPrice)}</del>
+        <del aria-hidden="true">{showPrice(productPrice)}</del>{' '}
         {displayPriceForPeriod(applyPromotion(productPrice, promotion), billingPeriod)}
       </span>);
   }
