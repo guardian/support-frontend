@@ -11,7 +11,6 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import Content, { Divider } from 'components/content/content';
-import Text, { LargeParagraph } from 'components/text/text';
 
 import { type Stage, type State } from './paperSubscriptionCheckoutReducer';
 
@@ -62,14 +61,9 @@ function CheckoutStage(props: PropTypes) {
       return (
         <div className="checkout-content">
           <HeroWrapper appearance="custom">
-            <HeadingBlock>Paper</HeadingBlock>
+            <HeadingBlock>Checkout</HeadingBlock>
           </HeroWrapper>
           <Content>
-            <Text>
-              <LargeParagraph>
-                Please enter your details below to complete your Paper subscription.
-              </LargeParagraph>
-            </Text>
             <Divider />
           </Content>
           <CheckoutForm />

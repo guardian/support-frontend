@@ -2,12 +2,15 @@
 
 .component-checkout__form {
   @include mq($from:desktop) {
-    max-width: gu-span(8) + $gu-h-spacing * 1.5;
+    max-width: gu-span(7) + $gu-h-spacing * 1.5;
     border-right: 1px solid gu-colour(neutral-86);
+  }
+  @include mq($from:wide) {
+    max-width: gu-span(8) + $gu-h-spacing * 1.5;
   }
 }
 
-.component-checkout--aside {
+.component-checkout--aside {  
   @include mq($from:desktop) {
     display: flex;
     flex-direction: row-reverse;
@@ -24,6 +27,9 @@
     width: 100%;
   }
   .component-checkout__aside {
+    position: sticky;
+    top: 0;
+    z-index: 999;  
     border: 1px solid gu-colour(neutral-86);
     border-left: 0;  
     width: 100%;

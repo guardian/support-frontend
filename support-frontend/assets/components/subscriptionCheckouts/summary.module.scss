@@ -1,14 +1,32 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+.root {
+  position: relative;
+}
+
 .content {
-  padding: $gu-v-spacing $gu-h-spacing/2;
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing;
+  @include mq($until: tablet) {
+    background: gu-colour(neutral-97);
+    display: grid;
+    grid-template-columns: max-content max-content;
+    justify-content: space-between;
+  }
+  @include mq($from: tablet) {
+    & > * + * {
+      margin-top: $gu-v-spacing;
+    }  
+  }
 }
 
 .img {
   overflow: hidden;
   background: gu-colour(neutral-97);
   border-bottom: 1px solid gu-colour(neutral-86);
-  padding: $gu-v-spacing $gu-h-spacing/2 0;
+  padding: $gu-v-spacing * 3 $gu-h-spacing/2 0;
+  @include mq($until: desktop) {
+    display: none;
+  }
 }
 
 .img img {
@@ -18,33 +36,53 @@
 }
 
 .header {
-  @include gu-fontset-heading;
-  display: inline;
-  background: gu-colour(neutral-7);
-  color: gu-colour(neutral-100);
-  padding: 0 4px;
-  margin: 0 -4px;
+  @include gu-fontset-body-sans;
+  font-weight: 600;
+  @include mq($from: tablet) {
+    @include gu-fontset-heading;
+    display: inline;
+    background: gu-colour(neutral-7);
+    color: gu-colour(neutral-100);
+    padding: 0 4px;
+    margin: 0 -4px;
+  }
+  @include mq($from: desktop) {
+    position: absolute;
+    top: $gu-v-spacing;
+  }
 }
 
 .title {
   @include gu-fontset-heading;
+  @include mq($until: tablet) {
+    @include gu-typeface(headline, 18, $size-only: true);
+  }
   @include mq($from:leftCol) {
     @include gu-typeface(headline, 32, $size-only: true);
   }
 }
 .titleDescription {
   @include gu-fontset-body-sans;
+  @include mq($until: tablet) {
+    display: none;
+  }
 }
 
 .pricing {
-  @include gu-fontset-heading;
-  font-weight: 400;
+  @include gu-fontset-body-sans;
+  @include mq($from: tablet) {
+    @include gu-fontset-heading;
+    font-weight: 400;
+  }
 }
 
 .data {
   @include gu-fontset-body-sans;
   display: grid;
   grid-template-columns: max-content 1fr;
+  @include mq($until: tablet) {
+    display: none;
+  }
 }
 
 .data dt {
@@ -66,6 +104,9 @@
   @include gu-fontset-body-sans; 
   color: gu-colour(neutral-46);
   margin-top: $gu-v-spacing * 2;
+  @include mq($until: tablet) {
+    display: none;
+  }
   a {
     color: inherit;
   }

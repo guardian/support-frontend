@@ -7,7 +7,6 @@ import styles from './summary.module.scss';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
-import Rows from '../base/rows';
 
 export type DataListItem = {
   title: string,
@@ -30,44 +29,42 @@ const Summary = ({
 }: PropTypes) => (
   <aside className={styles.root}>
     <div className={styles.img}>
-      <h2 className={styles.header}>Order summary</h2>
       {image}
     </div>
     <div className={styles.content}>
-      <Rows>
-        <header>
-          <h3 className={styles.title} title={`your subscription is ${title}`}>{title}</h3>
-          {description &&
+      <h2 className={styles.header}>Order summary</h2>
+      <header>
+        <h3 className={styles.title} title={`your subscription is ${title}`}>{title}</h3>
+        {description &&
           <h4 className={styles.titleDescription}>{description}</h4>
         }
-        </header>
-        <div>
-          <PriceLabel
-            className={styles.pricing}
-            productPrice={productPrice}
-            promotion={promotion}
-            billingPeriod={billingPeriod}
-          />
-          {promotion && hasPromotion(promotion) &&
-            <div className={styles.promo}>
-              <strong className={styles.promoTitle}>{promotion.description}</strong>
-              {' '}({promotion.promoCode})
-            </div>
-          }
+      </header>
+      <div>
+        <PriceLabel
+          className={styles.pricing}
+          productPrice={productPrice}
+          promotion={promotion}
+          billingPeriod={billingPeriod}
+        />
+        {promotion && hasPromotion(promotion) &&
+        <div className={styles.promo}>
+          <strong className={styles.promoTitle}>{promotion.description}</strong>
+          {' '}({promotion.promoCode})
         </div>
+          }
+      </div>
 
-        {dataList.length > 0 &&
-          <dl className={styles.data}>
-            {dataList.map(item => [
-              <dt>{item.title}</dt>,
-              <dd>{item.value}</dd>,
+      {dataList.length > 0 &&
+      <dl className={styles.data}>
+        {dataList.map(item => [
+          <dt>{item.title}</dt>,
+          <dd>{item.value}</dd>,
             ])}
-          </dl>
+      </dl>
         }
-        {children &&
-          <div className={styles.children}>{children}</div>
+      {children &&
+      <div className={styles.children}>{children}</div>
         }
-      </Rows>
     </div>
   </aside>
 );
