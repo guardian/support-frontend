@@ -25,6 +25,8 @@ object SubscribeWithGoogleAcquisition {
         amount = a.googleRecordPayment.amount.toDouble,
         identityId = a.identityId.map(_.toString()),
         paymentProvider = Some(ophan.thrift.event.PaymentProvider.SubscribeWithGoogle),
+        // The following 3 fields are valid because SwG is currently only implemented on AMP pages.
+        // These would need to become dynamic if we were to add SwG elsewhere. i.e. The Guardian Support page
         platform = Some(Amp),
         componentTypeV2 = Some(AcquisitionsHeader),
         componentId = Some("swg_amp_header")
