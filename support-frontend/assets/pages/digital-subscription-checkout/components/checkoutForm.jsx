@@ -8,16 +8,23 @@ import type { Dispatch } from 'redux';
 
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
+import { Annual, Monthly } from 'helpers/billingPeriods';
 
 import Text from 'components/text/text';
+import { Fieldset } from 'components/forms/fieldset';
+import { RadioInput } from 'components/forms/customFields/radioInput';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import AddressForm from './addressForm';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
   finalPrice as dpFinalPrice,
+  promotion as digitalPackPromotion,
+  regularPrice as dpRegularPrice,
 } from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
@@ -113,6 +120,22 @@ function CheckoutForm(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
+  const monthlyPriceLabel = props.country !== null ?
+    (<PriceLabel
+      country={props.country}
+      productPrice={dpRegularPrice(props.productPrices, Monthly, props.country)}
+      promotion={digitalPackPromotion(props.productPrices, Monthly, props.country)}
+      billingPeriod={Monthly}
+    />) : '';
+
+  const annualPriceLabel = props.country !== null ?
+    (<PriceLabel
+      country={props.country}
+      productPrice={dpRegularPrice(props.productPrices, Annual, props.country)}
+      promotion={digitalPackPromotion(props.productPrices, Annual, props.country)}
+      billingPeriod={Annual}
+    />) : '';
+
   const isPayPalEnabled = (optimizeExperiments: OptimizeExperiments) => {
     const PayPalExperimentId = '36Fk0f-QTtqmMqRVWDtBVg';
     const enabledByTest = optimizeExperiments.find(exp => exp.id === PayPalExperimentId && exp.variant === '1');
@@ -143,11 +166,44 @@ function CheckoutForm(props: PropTypes) {
               formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
               signOut={props.signOut}
             />
-            <PromotionSummary
+          </FormSection>
+          <FormSection title="Address">
+            <AddressForm
+              addressLine1={props.addressLine1}
+              addressLine2={props.addressLine2}
+              townCity={props.townCity}
               country={props.country}
-              productPrices={props.productPrices}
-              billingPeriod={props.billingPeriod}
+              postcode={props.postcode}
+              setAddressLine1={props.setAddressLine1}
+              setAddressLine2={props.setAddressLine2}
+              setTownCity={props.setTownCity}
+              setBillingCountry={props.setBillingCountry}
+              stateProvince={props.stateProvince}
+              setPostcode={props.setPostcode}
+              setStateProvince={props.setStateProvince}
+              formErrors={props.formErrors}
             />
+          </FormSection>
+          <FormSection title="How often would you like to pay?">
+            <Fieldset legend="How often would you like to pay?">
+              <RadioInput
+                text={monthlyPriceLabel}
+                name="billingPeriod"
+                checked={props.billingPeriod === Monthly}
+                onChange={() => props.setBillingPeriod(Monthly)}
+              />
+              <RadioInput
+                text={annualPriceLabel}
+                name="billingPeriod"
+                checked={props.billingPeriod === Annual}
+                onChange={() => props.setBillingPeriod(Annual)}
+              />
+              <PromotionSummary
+                country={props.country}
+                productPrices={props.productPrices}
+                billingPeriod={props.billingPeriod}
+              />
+            </Fieldset>
           </FormSection>
           <FormSection title={multiplePaymentMethodsEnabled ? 'How would you like to pay?' : null}>
             <PaymentMethodSelector
