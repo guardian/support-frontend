@@ -49,12 +49,6 @@ class Application(
 
   implicit val a: AssetsResolver = assets
 
-  def csrf(): Action[AnyContent] = PrivateAction { implicit request => {
-      implicit val privateFieldsEncoder: Encoder[Token] = deriveEncoder[Token]
-      CSRF.getToken.value.fold(Ok("didn't work"))((token: CSRF.Token) => Ok(token.asJson.noSpaces))
-    }
-  }
-
   def contributionsRedirect(): Action[AnyContent] = CachedAction() {
     Ok(views.html.contributionsRedirect())
   }

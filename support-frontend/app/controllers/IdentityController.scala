@@ -1,23 +1,20 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.AllSettings
 import cats.data.EitherT
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.Decoder
+import io.circe.generic.semiauto.deriveDecoder
 import io.circe.syntax._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
-import services.{GetUserTypeResponse, IdentityService}
+import services.IdentityService
 import cats.implicits._
 import config.Configuration.GuardianDomain
 import models.identity.responses.SetGuestPasswordResponseCookies
-import codecs.CirceDecoders._
+import codecs.CirceEncoders._
 import com.gu.identity.play._
-import play.api.libs.json.{Json, Reads}
-import services.paypal.PayPalBillingDetails
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -88,20 +85,21 @@ class IdentityController(
   }
 
   def getUser(): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request => {
-    import io.circe.generic.semiauto.deriveEncoder
-    implicit val teleEncoder: Encoder[TelephoneNumber] = deriveEncoder[TelephoneNumber]
-    implicit val privateFieldsEncoder: Encoder[PrivateFields] = deriveEncoder[PrivateFields]
-    implicit val publicFieldsEncoder: Encoder[PublicFields] = deriveEncoder[PublicFields]
-    implicit val statusFieldsEncoder: Encoder[StatusFields] = deriveEncoder[StatusFields]
-    implicit val encodeIdUser: Encoder[IdUser] = deriveEncoder[IdUser]
     type Attempt[A] = EitherT[Future, String, A]
     request.user.traverse[Attempt, IdUser](identityService.getUser(_))
       .fold(
-        _ => InternalServerError,
+        _ => {
+          SafeLogger.info(s"Failed to retrieve IdUser as no authenticated user found in request")
+          InternalServerError
+        },
         user => {
           user.fold({
-           NotFound("User not found")
-          })({ x => Ok(x.asJson)})
+            SafeLogger.info(s"User not found")
+            NotFound("User not found")
+          })({ idUser => {
+            SafeLogger.info(s"Successfully retrieved user with id ${idUser.id}")
+            Ok(idUser.asJson)
+          }})
         }
       )
     }

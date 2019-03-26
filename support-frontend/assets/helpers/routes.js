@@ -19,6 +19,7 @@ const routes: {
   contributionsSendMarketing: '/contribute/send-marketing',
   contributionsSetPasswordGuest: '/identity/set-password-guest',
   getUserType: '/identity/get-user-type',
+  getUser: '/identity/get-user',
   oneOffContribCheckout: '/contribute/one-off',
   oneOffContribThankyou: '/contribute/one-off/thankyou',
   oneOffContribAutofill: '/contribute/one-off/autofill',

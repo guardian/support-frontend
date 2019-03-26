@@ -63,15 +63,17 @@ GET  /contribute                                        controllers.Application.
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute      controllers.Application.contributionsLanding(country: String)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou        controllers.Application.contributionsLanding(country: String)
 
-
++nocsrf
 POST /contribute/recurring/create                   controllers.RegularContributions.create
 GET  /support-workers/status                        controllers.SupportWorkersStatus.status(jobId: String)
 
 # this endpoint should be removed once identity remove
 # the need for a client token
++nocsrf
 POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
 
 # ------ Identity ------ #
++nocsrf
 PUT /identity/set-password-guest                 controllers.IdentityController.setPasswordGuest
 GET /identity/get-user-type                      controllers.IdentityController.getUserType(maybeEmail: Option[String])
 GET /identity/get-user                           controllers.IdentityController.getUser
@@ -122,8 +124,6 @@ GET  /loginAction                                   controllers.Login.loginActio
 GET  /oauth2callback                                controllers.Login.oauth2Callback
 GET  /logout                                        controllers.Login.logout
 GET  /test-users                                    controllers.TestUsersManagement.createTestUser
-GET  /csrf                                          controllers.Application.csrf
-
 
 # ----- PayPal (Recurring Endpoints) ----- #
 
@@ -131,9 +131,7 @@ GET  /csrf                                          controllers.Application.csrf
 POST /paypal/setup-payment                          controllers.PayPalRegular.setupPayment
 +nocsrf
 POST /paypal/create-agreement                       controllers.PayPalRegular.createAgreement
-+nocsrf
 GET  /paypal/return                                 controllers.PayPalRegular.returnUrl
-+nocsrf
 GET  /paypal/cancel                                 controllers.PayPalRegular.cancelUrl
 
 # ----- PayPal (One-off Endpoints) ----- #
@@ -150,7 +148,7 @@ GET  /paypal/rest/error                                 controllers.PayPalOneOff
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return   controllers.PayPalOneOff.newReturnURL(paymentId: String, PayerID: String, country: String)
 
 # ----- Direct Debit ----- #
-
++nocsrf
 POST /direct-debit/check-account                      controllers.DirectDebit.checkAccount
 
 # ----- Verification ----- #

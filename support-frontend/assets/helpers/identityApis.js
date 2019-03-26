@@ -22,12 +22,11 @@ export type UserTypeFromIdentityResponse =
 
 function sendGetUserTypeFromIdentityRequest(
   email: string,
-  csrf: Csrf,
   setUserTypeFromIdentityResponse: UserTypeFromIdentityResponse => void,
 ): Promise<UserTypeFromIdentityResponse> {
   return fetchJson(
     `${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
-    getRequestOptions('same-origin', csrf),
+    getRequestOptions('same-origin', null),
   ).then((resp: { userType: UserType }) => {
     if (typeof resp.userType !== 'string') {
       throw new Error('userType string was not present in response');
@@ -36,6 +35,7 @@ function sendGetUserTypeFromIdentityRequest(
     return resp.userType;
   });
 }
+
 
 function getUserTypeFromIdentity(
   email: string,
@@ -51,12 +51,43 @@ function getUserTypeFromIdentity(
 
   setUserTypeFromIdentityResponse('requestPending');
 
-  return logPromise(sendGetUserTypeFromIdentityRequest(email, csrf, setUserTypeFromIdentityResponse))
+  return logPromise(sendGetUserTypeFromIdentityRequest(email, setUserTypeFromIdentityResponse))
     .catch(() => {
       setUserTypeFromIdentityResponse('requestFailed');
       return 'requestFailed';
     });
 }
+
+
+type IdUserFromIdentity = ?{
+  id: string,
+  primaryEmailAddress: string,
+  publicFields: ?{
+    displayName: ?string,
+  },
+  privateFields: ?{
+    firstName: ?string,
+    secondName: ?string,
+  },
+}
+
+function sendGetUserFromIdentityRequest(): Promise<IdUserFromIdentity> {
+  return fetchJson(
+    routes.getUser,
+    getRequestOptions('same-origin', null),
+  ).then((resp: IdUserFromIdentity) => {
+    return resp;
+  });
+}
+
+
+
+function getUserFromIdentity(
+): Promise<IdUserFromIdentity | null> {
+  return logPromise(sendGetUserFromIdentityRequest())
+    .catch(() => null);
+}
+
 
 function canContributeWithoutSigningIn(
   contributionType: ContributionType,
@@ -70,4 +101,4 @@ function canContributeWithoutSigningIn(
 }
 
 
-export { getUserTypeFromIdentity, canContributeWithoutSigningIn };
+export { getUserTypeFromIdentity, canContributeWithoutSigningIn, getUserFromIdentity };
