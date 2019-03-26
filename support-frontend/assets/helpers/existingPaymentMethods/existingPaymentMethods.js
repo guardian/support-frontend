@@ -15,20 +15,22 @@ export type ExistingPaymentMethodSubscription = {
   name: string
 }
 
+type ExistingPaymentType = 'Card' | 'DirectDebit';
+
 export type PartialExistingPaymentMethod = {
-  currencyISO: IsoCurrency
+  paymentType: ExistingPaymentType;
 };
 
 export type FullDetailExistingPaymentMethod = {
   billingAccountId: string,
   subscriptions: ExistingPaymentMethodSubscription[],
   card?: string,
-  mandate?: string
-}
+  mandate?: string,
+  // can't use Intersection types to avoid repeating this as it breaks isFullDetailExistingPaymentMethod because; Flow!
+  paymentType: ExistingPaymentType
+};
 
 export type ExistingPaymentMethod = PartialExistingPaymentMethod | FullDetailExistingPaymentMethod;
-export type ExistingPaymentMethodsResponse = ExistingPaymentMethod[];
-
 
 // ----- Functions ----- //
 
@@ -38,13 +40,10 @@ function isFullDetailExistingPaymentMethod(existingPaymentMethod: ExistingPaymen
 
 function sendGetExistingPaymentMethodsRequest(
   isoCurrency: IsoCurrency,
-  existingCardON: boolean,
-  existingDirectDebitON: boolean,
-  storeResponse: ExistingPaymentMethodsResponse => void,
+  storeResponse: ExistingPaymentMethod[] => void,
 ): void {
   fetchJson(
-    `${window.guardian.existingPaymentOptionsEndpoint}?currencyFilter=${isoCurrency}` +
-    `&cardEnabled=${existingCardON.toString()}&directDebitEnabled=${existingDirectDebitON.toString()}`,
+    `${window.guardian.existingPaymentOptionsEndpoint}?currencyFilter=${isoCurrency}`,
     {
       mode: 'cors',
       credentials: 'include',

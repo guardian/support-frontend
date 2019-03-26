@@ -30,7 +30,7 @@ import {
   trackNewOptimizeExperiment,
 } from 'helpers/tracking/ophanComponentEventTracking';
 import { sendGetExistingPaymentMethodsRequest } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import type { ExistingPaymentMethodsResponse } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { switchIsOn } from 'helpers/checkouts';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import {
@@ -175,11 +175,13 @@ function init<S, A>(
     if (isSignedIn && (existingCardON || existingDirectDebitON) && existingPaymentsEnabledViaUrlParam) {
       sendGetExistingPaymentMethodsRequest(
         currencyId,
-        !!existingCardON,
-        !!existingDirectDebitON,
-        (existingPaymentMethods: ExistingPaymentMethodsResponse) => {
-          store.dispatch(setExistingPaymentMethods(existingPaymentMethods));
-          const firstExistingPaymentMethod = (existingPaymentMethods[0]: any);
+        (allExistingPaymentMethods: ExistingPaymentMethod[]) => {
+          const filteredExistingPaymentMethods = allExistingPaymentMethods.filter(existingPaymentMethod => (
+            (existingPaymentMethod.paymentType === 'Card' && existingCardON) ||
+            (existingPaymentMethod.paymentType === 'DirectDebit' && existingDirectDebitON)
+          ));
+          store.dispatch(setExistingPaymentMethods(filteredExistingPaymentMethods));
+          const firstExistingPaymentMethod = (filteredExistingPaymentMethods[0]: any);
           if (firstExistingPaymentMethod && isFullDetailExistingPaymentMethod(firstExistingPaymentMethod)) {
             store.dispatch(updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(firstExistingPaymentMethod)));
             store.dispatch(updateSelectedExistingPaymentMethod(firstExistingPaymentMethod));
