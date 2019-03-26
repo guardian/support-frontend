@@ -2,7 +2,6 @@
 import { routes } from 'helpers/routes';
 import { type AcquisitionABTest, type OphanIds, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type ErrorReason } from 'helpers/errorReasons';
-import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type CaState, type IsoCountry, type UsState } from 'helpers/internationalisation/country';
@@ -146,7 +145,6 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
  */
 function checkRegularStatus(
   participations: Participations,
-  csrf: CsrfState,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Object => Promise<PaymentResult> {
@@ -183,7 +181,7 @@ function checkRegularStatus(
         return logPromise(pollUntilPromise(
           MAX_POLLS,
           POLLING_INTERVAL,
-          () => fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf)),
+          () => fetchJson(json.trackingUri, getRequestOptions('same-origin', null)),
           json2 => json2.status === 'pending',
         ).then(handleCompletion, handleExhaustedPolls));
 
@@ -198,11 +196,10 @@ function postRegularPaymentRequest(
   uri: string,
   data: RegularPaymentRequest,
   participations: Participations,
-  csrf: CsrfState,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
-  return logPromise(fetch(uri, requestOptions(data, 'same-origin', 'POST', csrf)))
+  return logPromise(fetch(uri, requestOptions(data, 'same-origin', 'POST', null)))
     .then((response) => {
       if (response.status === 500) {
         logException(`500 Error while trying to post to ${uri}`);
@@ -213,7 +210,7 @@ function postRegularPaymentRequest(
       }
 
       return response.json()
-        .then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage));
+        .then(checkRegularStatus(participations, setGuestAccountCreationToken, setThankYouPageStage));
 
     })
     .catch(() => {
@@ -225,11 +222,10 @@ function postRegularPaymentRequest(
 function setPasswordGuest(
   password: string,
   guestAccountRegistrationToken: string,
-  csrf: CsrfState,
 ): Promise<boolean> {
 
   const data = { password, guestAccountRegistrationToken };
-  return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestOptions(data, 'same-origin', 'PUT', csrf)))
+  return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestOptions(data, 'same-origin', 'PUT', null)))
     .then((response) => {
       if (response.status === 200) {
         return true;

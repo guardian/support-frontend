@@ -199,13 +199,11 @@ const updateContributionTypeAndPaymentMethod =
 const checkIfEmailHasPassword = (email: string) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
-    const { csrf } = state.page;
     const { isSignedIn } = state.page.user;
 
     getUserTypeFromIdentity(
       email,
       isSignedIn,
-      csrf,
       (userType: UserTypeFromIdentityResponse) =>
         dispatch(setUserTypeFromIdentityResponse(userType)),
     );
@@ -366,7 +364,6 @@ function recurringPaymentAuthorisationHandler(
     routes.recurringContribCreate,
     request,
     state.common.abParticipations,
-    state.page.csrf,
     (token: string) => dispatch(setGuestAccountCreationToken(token)),
     (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
   )));

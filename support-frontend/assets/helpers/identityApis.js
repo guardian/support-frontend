@@ -6,7 +6,6 @@ import { logPromise } from 'helpers/promise';
 import { routes } from 'helpers/routes';
 import { fetchJson } from 'helpers/fetch';
 import { checkEmail } from 'helpers/formValidation';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { ContributionType } from 'helpers/contributions';
 
 // ----- Types     ----- //
@@ -52,7 +51,6 @@ function sendGetUserTypeFromIdentityRequest(
 function getUserTypeFromIdentity(
   email: string,
   isSignedIn: boolean,
-  csrf: Csrf,
   setUserTypeFromIdentityResponse: UserTypeFromIdentityResponse => void,
 ): Promise<UserTypeFromIdentityResponse> {
 

@@ -6,7 +6,6 @@ import { type ErrorReason } from 'helpers/errorReasons';
 import { combineReducers } from 'redux';
 import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import { type CampaignName, getCampaignName } from 'pages/new-contributions-landing/campaigns';
-import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
@@ -15,7 +14,6 @@ import { type DirectDebitState } from 'components/directDebit/directDebitReducer
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type { StripePaymentMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
-import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
 import * as storage from 'helpers/storage';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
@@ -86,7 +84,6 @@ type FormState = {
 type PageState = {
   form: FormState,
   user: UserState,
-  csrf: CsrfState,
   directDebit: DirectDebitState,
   marketingConsent: MarketingConsentState,
 };
@@ -324,7 +321,6 @@ function initReducer(countryGroupId: CountryGroupId) {
     form: createFormReducer(),
     user: createUserReducer(countryGroupId),
     directDebit,
-    csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
 }
