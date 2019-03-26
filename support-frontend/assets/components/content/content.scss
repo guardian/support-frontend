@@ -151,7 +151,6 @@
   cancel out initial padding
   */
   .component-content__content > .component-content__divider:first-child,
-  .component-checkout,
   .component-product-page-tabs {
     margin-top: ($gu-v-spacing*-.5) - 1px;
   }

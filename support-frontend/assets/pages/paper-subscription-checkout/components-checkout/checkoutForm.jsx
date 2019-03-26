@@ -24,7 +24,7 @@ import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
-import Layout, { LeftColWrapper } from 'components/subscriptionCheckouts/layout';
+import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
@@ -100,8 +100,8 @@ function CheckoutForm(props: PropTypes) {
   const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Newspaper' : 'Voucher booklet';
 
   return (
-    <LeftColWrapper>
-      <Layout aside={(
+    <Content>
+      <CheckoutLayout aside={(
         <Summary
           image={
             <GridImage
@@ -318,8 +318,8 @@ function CheckoutForm(props: PropTypes) {
             </Text>
           </FormSection>
         </Form>
-      </Layout>
-    </LeftColWrapper>
+      </CheckoutLayout>
+    </Content>
   );
 
 }

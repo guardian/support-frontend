@@ -1,17 +1,17 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-.component-checkout-wrapper .component-left-margin-section__content {
+.wrapper :global(.component-left-margin-section__content) {
   border-left: 1px solid gu-colour(neutral-86);
   @include mq($from:tablet) {
     @include multiline-top-border()
   }
 }
 
-.component-checkout {
+.root {
   max-width: gu-span(14) + $gu-h-spacing;
 }
 
-.component-checkout__form {
+.form {
   @include mq($from:tablet) {
     max-width: gu-span(6) + $gu-h-spacing * 1.5;
     border-right: 1px solid gu-colour(neutral-86);
@@ -21,17 +21,17 @@
   }
 }
 
-.component-checkout--aside {  
+.withAside {  
   @include mq($from:tablet) {
     display: flex;
     flex-direction: row-reverse;
     align-items: flex-start;
   }
-  .component-checkout__form {
+  .form {
     flex: 0 0 auto;
     width: 100%;
   }
-  .component-checkout__aside {
+  .aside {
     position: sticky;
     top: 0;
     z-index: 999;  
