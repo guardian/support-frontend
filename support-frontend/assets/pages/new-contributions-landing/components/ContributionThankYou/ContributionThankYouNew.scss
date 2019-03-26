@@ -1,0 +1,13 @@
+.thank-you__container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+
+  .gu-content__blurb--thank-you {
+    border-top: 10px solid gu-colour(neutral-7);
+  }
+
+  .gu-content__blurb-blurb {
+    border-bottom: 1px solid gu-colour(neutral-7);
+  }
+}

@@ -23,7 +23,6 @@ import { initReducer } from './contributionsLandingReducer';
 import { NewContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer from './components/ContributionThankYou/ContributionThankYouContainer';
-import { NewContributionBackground } from './components/ContributionBackground';
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
@@ -81,7 +80,6 @@ const router = (
               <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
               />
-              <NewContributionBackground />
               <ConsentBanner />
             </Page>
             )
@@ -102,7 +100,6 @@ const router = (
                 footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
                 <ContributionThankYouContainer />
-                <NewContributionBackground />
               </Page>
             );
           }}
