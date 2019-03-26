@@ -98,10 +98,6 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout  controllers.
 GET  /subscribe/digital/checkout  controllers.DigitalSubscription.displayForm()
 GET  /subscribe/digital/checkout/thankyou-existing  controllers.DigitalSubscription.displayThankYouExisting()
 
-GET  /premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
-GET  /subscribe/premium-tier                            controllers.Subscriptions.premiumTierGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/premium-tier   controllers.Subscriptions.premiumTier(country: String)
-
 GET  /weekly                            controllers.Subscriptions.weeklyGeoRedirect()
 GET  /subscribe/weekly                            controllers.Subscriptions.weeklyGeoRedirect()
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly   controllers.Subscriptions.weekly(country: String)

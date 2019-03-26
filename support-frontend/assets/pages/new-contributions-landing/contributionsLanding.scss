@@ -273,36 +273,6 @@ header[role="banner"] {
   font-weight: bold;
 }
 
-
-/*= FOOTER */
-
-footer[role="contentinfo"] {
-  padding: 0 ($gu-h-spacing / 2);
-  background: gu-colour(neutral-20);
-  color: gu-colour(neutral-60);
-  font-size: 12px;
-  display: flex;
-
-  @include mq($from: tablet) {
-    padding: 0 0 ($gu-v-spacing * 2);
-    width: auto;
-  }
-
-  @include mq($from: leftCol) {
-    padding: 0 calc(50% - 550px) ($gu-v-spacing * 2) calc(50% - 390px);
-    width: 940px;
-  }
-}
-
-footer[role="contentinfo"] a {
-  color: gu-colour(neutral-100);
-}
-
-.component-footer__content {
-  padding-top: $gu-v-spacing;
-}
-
-
 /*= CONTENT */
 .gu-content__content {
   overflow: hidden;
@@ -483,23 +453,13 @@ button {
   }
 }
 
-footer[role="contentinfo"] {
-  font-family: $gu-text-sans-web;
-
-  @include mq($from: tablet) {
-    padding: 0 calc(50% - 350px) ($gu-v-spacing * 2);
-    width: 700px;
-  }
-
-  @include mq($from: wide) {
-    padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
-    width: 1240px;
-  }
-
-}
-
-
 /*= CONTENT */
+.component-footer {
+  font-size: 12px;
+  .component-content__content {
+    color: gu-colour(neutral-86);
+  }
+}
 .content {
   background: gu-colour(neutral-100);
   padding: 0 10px;

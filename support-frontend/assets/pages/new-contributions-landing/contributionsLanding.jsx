@@ -76,7 +76,7 @@ const router = (
             <Page
               classModifiers={['contribution-form', ...cssModifiers]}
               header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-              footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+              footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
             >
               <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}

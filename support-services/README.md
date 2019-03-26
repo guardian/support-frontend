@@ -2,7 +2,7 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu/support-services_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu/support-services_2.12)
 
-Shared services used by [support-workers](https://github.com/guardian/support-workers) and [support-frontend](https://github.com/guardian/support-frontend)
+Shared services used by support-workers and support-frontend
 
 Releasing to local repo
 ==================
