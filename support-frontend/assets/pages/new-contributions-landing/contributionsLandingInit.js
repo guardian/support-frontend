@@ -37,7 +37,7 @@ import {
   updateContributionTypeAndPaymentMethod,
   updateFirstName,
   updateLastName,
-  updateEmail
+  updateEmail,
 } from './contributionsLandingActions';
 import { setUserStateActions } from './setUserStateActions';
 import { type State } from './contributionsLandingReducer';

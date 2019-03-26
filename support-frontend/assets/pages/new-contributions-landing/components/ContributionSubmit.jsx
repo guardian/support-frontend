@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import React from 'react';
 import { connect } from 'react-redux';
 

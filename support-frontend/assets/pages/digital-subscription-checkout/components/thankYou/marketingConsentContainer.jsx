@@ -7,7 +7,6 @@ import MarketingConsent from 'components/marketingConsentNew/marketingConsent';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 import type { Dispatch } from 'redux';
 import type { Action } from 'helpers/user/userActions';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import { getEmail } from '../../digitalSubscriptionCheckoutReducer';
 

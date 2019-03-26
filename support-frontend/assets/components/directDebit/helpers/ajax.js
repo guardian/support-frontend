@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import { routes } from 'helpers/routes';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 
 type CheckBankAccountDetails = {
   accountNumber: string,
@@ -13,7 +12,6 @@ type CheckBankAccountDetails = {
 const checkAccount = (
   sortCode: string,
   accountNumber: string,
-  isTestUser: boolean,
 ) => {
 
   const bankAccountDetails: CheckBankAccountDetails = {

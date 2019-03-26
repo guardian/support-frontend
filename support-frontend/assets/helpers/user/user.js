@@ -2,8 +2,6 @@
 
 // ----- Imports ----- //
 
-import type { IdUserFromIdentity } from 'helpers/identityApis';
-import { getUserFromIdentity } from 'helpers/identityApis';
 import * as cookie from 'helpers/cookie';
 import { get as getCookie } from 'helpers/cookie';
 import { getSession } from 'helpers/storage';
@@ -39,7 +37,6 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
   } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
-  const userAppearsLoggedIn = cookie.get('GU_U');
 
   function getEmailFromBrowser(): ?string {
     if (window.guardian && window.guardian.email) {

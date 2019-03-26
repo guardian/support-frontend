@@ -33,7 +33,6 @@ import {
   type FormActionCreators,
   formActionCreators,
 } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { getQueryParameter } from 'helpers/url';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';

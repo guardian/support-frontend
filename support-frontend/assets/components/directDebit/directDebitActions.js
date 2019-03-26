@@ -74,7 +74,6 @@ function payDirectDebitClicked(): Function {
     } = getState().page.directDebit;
 
     const sortCode = sortCodeArray.join('');
-    const isTestUser: boolean = getState().page.user.isTestUser || false;
 
     dispatch(resetDirectDebitFormError());
 
@@ -83,7 +82,7 @@ function payDirectDebitClicked(): Function {
       return;
     }
 
-    checkAccount(sortCode, accountNumber, isTestUser)
+    checkAccount(sortCode, accountNumber)
       .then((response) => {
         if (!response.ok) {
           throw new Error('invalid_input');
