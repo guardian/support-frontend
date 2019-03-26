@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import Dialog from 'components/dialog/dialog';
 import { clickedEvent } from 'helpers/tracking/clickTracking';
-import Menu, { LinkButton } from '../menu/menu';
+import Menu, { LinkItem } from '../menu/menu';
 
 import {
   countryGroups,
@@ -24,6 +24,7 @@ export type PropTypes = {|
   countryGroupIds: CountryGroupId[],
   selectedCountryGroup: CountryGroupId,
   onCountryGroupSelect: CountryGroupId => void,
+  subPath: string,
 |};
 
 
@@ -39,7 +40,9 @@ class CountryGroupSwitcher extends Component<PropTypes, {menuOpen: boolean, boun
   buttonRef: ?Element;
 
   render() {
-    const { onCountryGroupSelect, selectedCountryGroup, countryGroupIds } = this.props;
+    const {
+      onCountryGroupSelect, subPath, selectedCountryGroup, countryGroupIds,
+    } = this.props;
     const { menuOpen, bounds: { top, left } } = this.state;
 
     return (
@@ -76,14 +79,15 @@ class CountryGroupSwitcher extends Component<PropTypes, {menuOpen: boolean, boun
             {
               countryGroupIds.map((countryGroupId: CountryGroupId) =>
               (
-                <LinkButton
+                <LinkItem
+                  href={`/${countryGroups[countryGroupId].supportInternationalisationId}${subPath}`}
                   onClick={() => onCountryGroupSelect(countryGroupId)}
                   isSelected={countryGroupId === selectedCountryGroup}
                 >
                   {countryGroups[countryGroupId].name}
-                  {'  '}
+                  {' '}
                   {currencies[countryGroups[countryGroupId].currency].extendedGlyph}
-                </LinkButton>
+                </LinkItem>
                 ))
             }
             <button
