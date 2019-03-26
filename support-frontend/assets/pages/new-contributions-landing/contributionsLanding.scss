@@ -10,7 +10,11 @@
 @import '~components/generalErrorMessage/generalErrorMessage';
 @import '~components/button/button';
 @import '~components/marketingConsentNew/marketingConsent';
+@import '~components/marketingConsentNew/marketingConsent';
+@import '~components/spreadTheWord/spreadTheWord';
+@import '~components/socialShare/socialShare';
 @import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYou';
+@import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYouNew';
 @import '~pages/new-contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
 @import '~pages/new-contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
 @import '~pages/new-contributions-landing/components/ContributionSurvey/ContributionSurvey';
@@ -301,25 +305,6 @@ header[role="banner"] {
 
 }
 
-.gu-content__content-thankyou {
-  background: gu-colour(neutral-100);
-  padding: 0 10px;
-  overflow: hidden;
-  flex-grow: 1;
-
-  @include mq($from: tablet) {
-    border-color: gu-colour(neutral-86);
-    border-style: none solid;
-    border-width: 0 1px;
-    width: 380px;
-  }
-
-  @include mq($from: leftCol) {
-    width: 380px;
-  }
-
-}
-
 .gu-content__content--flex {
   display: flex;
   justify-content: space-around;
@@ -359,10 +344,10 @@ header[role="banner"] {
 
 .gu-content__blurb {
   display: none;
+  border-top: 10px solid gu-colour(highlight-main);
 
   @include mq($from: tablet) {
     display: block;
-    border-top: 10px solid gu-colour(highlight-main);
     margin-top: 30px;
     flex: 0 1 40%;
   }
