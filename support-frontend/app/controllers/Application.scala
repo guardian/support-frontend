@@ -5,7 +5,6 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
 import com.gu.i18n.CountryGroup._
-import com.gu.identity.play.IdUser
 import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
@@ -105,15 +104,14 @@ class Application(
   ): Action[AnyContent] = CachedAction() { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(contributionsHtml(countryCode, None))
+    Ok(contributionsHtml(countryCode))
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
+  private def contributionsHtml(countryCode: String)
     (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
     val css = elementForStage(RefPath("contributionsLandingPage.css"))
-
     val js = elementForStage(RefPath("contributionsLandingPage.js"))
 
     views.html.newContributions(
@@ -131,7 +129,6 @@ class Application(
       regularUatPayPalConfig = payPalConfigProvider.get(true),
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      idUser = idUser
     )
   }
 
