@@ -49,13 +49,13 @@ type RegularDirectDebitPaymentFields = {|
   accountNumber: string,
 |};
 
-type RegualarExistingPaymentFields = {| billingAccountId: string |};
+type RegularExistingPaymentFields = {| billingAccountId: string |};
 
 export type RegularPaymentFields =
   RegularPayPalPaymentFields |
   RegularStripePaymentFields |
   RegularDirectDebitPaymentFields |
-  RegualarExistingPaymentFields;
+  RegularExistingPaymentFields;
 
 export type RegularPaymentRequestAddress = {|
   country: IsoCountry,

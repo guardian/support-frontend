@@ -124,9 +124,9 @@ object PaymentMethodsSwitch {
     PaymentMethodsSwitch(
       SwitchState.fromConfig(config, "stripe"),
       SwitchState.fromConfig(config, "payPal"),
-      SwitchState.optionFromConfig(config, "direcDebit"),
+      SwitchState.optionFromConfig(config, "directDebit"),
       SwitchState.optionFromConfig(config, "existingCard"),
-      SwitchState.optionFromConfig(config, "existingDirecDebit")
+      SwitchState.optionFromConfig(config, "existingDirectDebit")
     )
   implicit val paymentMethodsSwitchCodec: Codec[PaymentMethodsSwitch] = deriveCodec
 }
