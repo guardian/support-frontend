@@ -14,7 +14,6 @@ const checkAccount = (
   sortCode: string,
   accountNumber: string,
   isTestUser: boolean,
-  csrf: CsrfState,
 ) => {
 
   const bankAccountDetails: CheckBankAccountDetails = {
@@ -24,7 +23,7 @@ const checkAccount = (
 
   const requestData = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' },
+    headers: { 'Content-Type': 'application/json' },
     credentials: 'same-origin',
     body: JSON.stringify(bankAccountDetails),
   };

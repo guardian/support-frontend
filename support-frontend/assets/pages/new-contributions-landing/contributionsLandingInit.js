@@ -1,5 +1,8 @@
 // @flow
 
+import * as cookie from 'helpers/cookie';
+import type { IdUserFromIdentity } from 'helpers/identityApis';
+import { getUserFromIdentity } from 'helpers/identityApis';
 // ----- Imports ----- //
 import { type Store } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -32,8 +35,11 @@ import {
   selectAmount,
   setThirdPartyPaymentLibrary,
   updateContributionTypeAndPaymentMethod,
-  updateUserFormData,
+  updateFirstName,
+  updateLastName,
+  updateEmail
 } from './contributionsLandingActions';
+import { setUserStateActions } from './setUserStateActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
@@ -149,6 +155,25 @@ function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: F
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
+function autofillDetailsFromIdentity(dispatch) {
+  getUserFromIdentity().then((data: IdUserFromIdentity) => {
+    if (data) {
+      dispatch(setUserStateActions.setIsSignedIn(true));
+
+      if (data.privateFields && data.privateFields.firstName) {
+        dispatch(updateFirstName(data.privateFields.firstName));
+      }
+      if (data.privateFields && data.privateFields.secondName) {
+        dispatch(updateLastName(data.privateFields.secondName));
+      }
+      if (data.primaryEmailAddress) {
+        dispatch(checkIfEmailHasPassword(data.primaryEmailAddress));
+        dispatch(updateEmail(data.primaryEmailAddress));
+      }
+    }
+  });
+}
+
 const init = (store: Store<State, Action, Function>) => {
   const { dispatch } = store;
 
@@ -158,14 +183,9 @@ const init = (store: Store<State, Action, Function>) => {
   selectInitialAmounts(state, dispatch);
   selectInitialContributionTypeAndPaymentMethod(state, dispatch);
 
-  const {
-    firstName,
-    lastName,
-    email,
-  } = state.page.user;
-
-  dispatch(checkIfEmailHasPassword(email));
-  dispatch(updateUserFormData({ firstName, lastName, email }));
+  if (cookie.get('GU_U')) {
+    autofillDetailsFromIdentity(dispatch);
+  }
 
 };
 

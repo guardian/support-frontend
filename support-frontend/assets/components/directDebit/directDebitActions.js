@@ -75,7 +75,6 @@ function payDirectDebitClicked(): Function {
 
     const sortCode = sortCodeArray.join('');
     const isTestUser: boolean = getState().page.user.isTestUser || false;
-    const { csrf } = getState().page;
 
     dispatch(resetDirectDebitFormError());
 
@@ -84,7 +83,7 @@ function payDirectDebitClicked(): Function {
       return;
     }
 
-    checkAccount(sortCode, accountNumber, isTestUser, csrf)
+    checkAccount(sortCode, accountNumber, isTestUser)
       .then((response) => {
         if (!response.ok) {
           throw new Error('invalid_input');

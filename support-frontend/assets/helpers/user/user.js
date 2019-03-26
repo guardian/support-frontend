@@ -70,27 +70,6 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
     dispatch(setIsSignedIn(true));
-  } else if (userAppearsLoggedIn) {
-    getUserFromIdentity().then((data: IdUserFromIdentity) => {
-      if (data) {
-        if (data.id) {
-          dispatch(setIsSignedIn(true));
-          dispatch(setId(data.id));
-        }
-        if (data.privateFields && data.privateFields.firstName) {
-          dispatch(setFirstName(data.privateFields.firstName));
-        }
-        if (data.privateFields && data.privateFields.secondName) {
-          dispatch(setLastName(data.privateFields.secondName));
-        }
-        if (data.primaryEmailAddress) {
-          dispatch(setEmail(data.primaryEmailAddress));
-        }
-        if (data.publicFields && data.publicFields.displayName) {
-          dispatch(setDisplayName(data.publicFields.displayName));
-        }
-      }
-    });
   } else if (emailFromBrowser) {
     dispatch(setEmail(emailFromBrowser));
   }

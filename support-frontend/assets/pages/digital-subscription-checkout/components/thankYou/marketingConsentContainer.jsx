@@ -15,18 +15,16 @@ import { getEmail } from '../../digitalSubscriptionCheckoutReducer';
 const mapStateToProps = state => ({
   confirmOptIn: state.page.marketingConsent.confirmOptIn,
   email: getEmail(state),
-  csrf: state.page.csrf,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
-    onClick: (email: string, csrf: CsrfState) => {
+    onClick: (email: string) => {
       trackComponentClick('marketing-permissions');
       sendMarketingPreferencesToIdentity(
         true, // it's TRUE because the button says Sign Me Up!
         email,
         dispatch,
-        csrf,
         'MARKETING_CONSENT',
       );
     },

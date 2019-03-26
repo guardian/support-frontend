@@ -8,7 +8,6 @@ import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
 import SvgNewsletters from 'components/svgs/newsletters';
 import SvgInformation from 'components/svgs/information';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { checkEmail } from 'helpers/formValidation';
 import { logException } from 'helpers/logger';
@@ -22,8 +21,7 @@ import './marketingConsent.scss';
 type ButtonPropTypes = {|
   confirmOptIn: ?boolean,
   email: string,
-  csrf: CsrfState,
-  onClick: (?string, CsrfState) => void,
+  onClick: ?string => void,
   requestPending: boolean,
 |};
 
@@ -63,7 +61,7 @@ function MarketingButton(props: ButtonPropTypes) {
       iconSide="left"
       aria-label="Sign me up to news and offers from The Guardian"
       onClick={
-          () => props.onClick(props.email, props.csrf)
+          () => props.onClick(props.email)
         }
       icon={<SvgSubscribe />}
     >
@@ -94,7 +92,6 @@ function MarketingConsent(props: PropTypes) {
         {MarketingButton({
           confirmOptIn: props.confirmOptIn,
           email: props.email,
-          csrf: props.csrf,
           onClick: props.onClick,
           requestPending: props.requestPending,
         })}

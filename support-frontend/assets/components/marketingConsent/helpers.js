@@ -3,16 +3,13 @@
 // ----- Imports ----- //
 import { routes } from 'helpers/routes';
 import { logException } from 'helpers/logger';
-
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-
 import { marketingConsentActionsFor } from './marketingConsentActions';
 
 // ----- Functions ----- //
 
-const requestData = (email: string, csrf: CsrfState) => ({
+const requestData = (email: string) => ({
   method: 'POST',
-  headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrf.token || '' },
+  headers: { 'Content-Type': 'application/json' },
   credentials: 'same-origin',
   body: JSON.stringify({ email }),
 });
@@ -22,7 +19,6 @@ function sendMarketingPreferencesToIdentity(
   optIn: boolean,
   email: string,
   dispatch: Function,
-  csrf: CsrfState,
   scope: string,
 ): void {
   const { setConfirmMarketingConsent, setAPIError, setRequestPending } = marketingConsentActionsFor(scope);
@@ -33,7 +29,7 @@ function sendMarketingPreferencesToIdentity(
   }
 
   dispatch(setRequestPending(true));
-  fetch(`${routes.contributionsSendMarketing}`, requestData(email, csrf))
+  fetch(`${routes.contributionsSendMarketing}`, requestData(email))
     .then((response) => {
 
       dispatch(setRequestPending(false));

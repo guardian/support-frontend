@@ -14,20 +14,18 @@ import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/
 const mapStateToProps = state => ({
   confirmOptIn: state.page.marketingConsent.confirmOptIn,
   email: state.page.form.formData.email,
-  csrf: state.page.csrf,
   error: state.page.marketingConsent.error,
   requestPending: state.page.marketingConsent.requestPending,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
   return {
-    onClick: (email: string, csrf: CsrfState) => {
+    onClick: (email: string) => {
       trackComponentClick('marketing-permissions');
       sendMarketingPreferencesToIdentity(
         true, // it's TRUE because the button says Sign Me Up!
         email,
         dispatch,
-        csrf,
         'MARKETING_CONSENT',
       );
     },
