@@ -22,6 +22,8 @@ function isTestUser(): boolean {
 
 const signOut = () => { window.location.href = getSignoutUrl(); };
 
+const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
+
 const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
 
   const {
@@ -38,7 +40,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
   } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
-  const userAppearsLoggedIn = cookie.get('GU_U');
+  const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
 
   function getEmailFromBrowser(): ?string {
     if (window.guardian && window.guardian.email) {
@@ -97,4 +99,9 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
 
 // ----- Exports ----- //
 
-export { init, isTestUser, signOut };
+export {
+  init,
+  isTestUser,
+  signOut,
+  doesUserAppearToBeSignedIn
+};

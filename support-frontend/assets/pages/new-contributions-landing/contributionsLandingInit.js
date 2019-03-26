@@ -44,6 +44,7 @@ import {
 import { switchIsOn } from '../../helpers/checkouts';
 import type { ExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 import { setExistingPaymentMethods } from '../../helpers/page/commonActions';
+import {doesUserAppearToBeSignedIn} from "../../helpers/user/user";
 
 // ----- Functions ----- //
 
@@ -126,11 +127,11 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     });
 
     // initiate fetch of existing payment methods
-    const isSignedIn = window.guardian && window.guardian.user;
+    const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
     const existingDirectDebitON = switchIsOn(switches.recurringPaymentMethods, 'existingDirectDebit');
     const existingCardON = switchIsOn(switches.recurringPaymentMethods, 'existingCard');
     const existingPaymentsEnabledViaUrlParam = getQueryParameter('displayExistingPaymentOptions') === 'true';
-    if (isSignedIn && (existingCardON || existingDirectDebitON) && existingPaymentsEnabledViaUrlParam) {
+    if (userAppearsLoggedIn && (existingCardON || existingDirectDebitON) && existingPaymentsEnabledViaUrlParam) {
       sendGetExistingPaymentMethodsRequest(
         currencyId,
         (allExistingPaymentMethods: ExistingPaymentMethod[]) => {
