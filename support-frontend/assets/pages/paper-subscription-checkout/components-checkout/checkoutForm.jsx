@@ -14,9 +14,7 @@ import { Outset } from 'components/content/content';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
-import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import Button from 'components/button/button';
-import { Input } from 'components/forms/input';
 import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
 import { options } from 'components/forms/customFields/options';
@@ -52,6 +50,9 @@ import {
 import { withStore } from './addressFields';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import GridImage from 'components/gridImage/gridImage';
+import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+
 
 // ----- Types ----- //
 
@@ -78,9 +79,6 @@ function mapStateToProps(state: State) {
 
 // ----- Form Fields ----- //
 
-const StaticInputWithLabel = withLabel(Input);
-const InputWithLabel = asControlled(StaticInputWithLabel);
-const InputWithError = withError(InputWithLabel);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
@@ -154,58 +152,16 @@ function CheckoutForm(props: PropTypes) {
                 <option value="">--</option>
                 {options(titles)}
               </SelectWithLabel>
-              <InputWithError
-                id="first-name"
-                label="First name"
-                type="text"
-                value={props.firstName}
-                setValue={props.setFirstName}
-                error={firstError('firstName', props.formErrors)}
-              />
-              <InputWithError
-                id="last-name"
-                label="Last name"
-                type="text"
-                value={props.lastName}
-                setValue={props.setLastName}
-                error={firstError('lastName', props.formErrors)}
-              />
-              <StaticInputWithLabel
-                id="email"
-                label="Email"
-                type="email"
-                disabled
-                value={props.email}
-                footer={(
-                  <span>
-                    <CheckoutExpander copy="Want to use a different email address?">
-                      <p>You will be able to edit this in your account once you have completed this checkout.</p>
-                    </CheckoutExpander>
-                    <CheckoutExpander copy="Not you?">
-                      <p>
-                        <Button
-                          appearance="greyHollow"
-                          icon={null}
-                          type="button"
-                          aria-label={null}
-                          onClick={() => props.signOut()}
-                        >
-                          Sign out
-                        </Button> and create a new account.
-                      </p>
-                    </CheckoutExpander>
-                  </span>
-                )}
-              />
-              <InputWithError
-                id="telephone"
-                label="Telephone"
-                optional
-                type="tel"
-                value={props.telephone}
-                setValue={props.setTelephone}
-                footer="We may use this to get in touch with you about your subscription."
-                error={firstError('telephone', props.formErrors)}
+              <PersonalDetails
+                firstName={props.firstName}
+                setFirstName={props.setFirstName}
+                lastName={props.lastName}
+                setLastName={props.setLastName}
+                email={props.email}
+                telephone={props.telephone}
+                setTelephone={props.setTelephone}
+                formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+                signOut={props.signOut}
               />
             </FormSection>
             <FormSection title="Where should we deliver your vouchers?">
@@ -253,9 +209,7 @@ function CheckoutForm(props: PropTypes) {
                 </FieldsetWithError>
                 <Text>
                   <p>
-                  We will take the first payment
-                  on the date you receive your
-                  first {fulfilmentOptionDescriptor.toLowerCase()}.
+                  We will take the first payment on the date you receive your first {fulfilmentOptionDescriptor}.
                   </p>
                   <p>
                   Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
