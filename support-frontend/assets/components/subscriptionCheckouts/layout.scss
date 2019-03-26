@@ -1,26 +1,31 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
+.component-checkout-wrapper .component-left-margin-section__content {
+  border-left: 1px solid gu-colour(neutral-86);
+  @include mq($from:tablet) {
+    @include multiline-top-border()
+  }
+}
+
+.component-checkout {
+  max-width: gu-span(14) + $gu-h-spacing;
+}
+
 .component-checkout__form {
-  @include mq($from:desktop) {
-    max-width: gu-span(7) + $gu-h-spacing * 1.5;
+  @include mq($from:tablet) {
+    max-width: gu-span(6) + $gu-h-spacing * 1.5;
     border-right: 1px solid gu-colour(neutral-86);
   }
-  @include mq($from:wide) {
+  @include mq($from:leftCol) {
     max-width: gu-span(8) + $gu-h-spacing * 1.5;
   }
 }
 
 .component-checkout--aside {  
-  @include mq($from:desktop) {
+  @include mq($from:tablet) {
     display: flex;
     flex-direction: row-reverse;
     align-items: flex-start;
-  }
-  @include mq($from:leftCol) {
-    margin-right: (gu-span(1) + $gu-h-spacing) * -1;
-  }
-  @include mq($from:wide) {
-    margin-right: (gu-span(2) + $gu-h-spacing) * -1;
   }
   .component-checkout__form {
     flex: 0 0 auto;
@@ -30,9 +35,11 @@
     position: sticky;
     top: 0;
     z-index: 999;  
-    border: 1px solid gu-colour(neutral-86);
-    border-left: 0;  
     width: 100%;
+    border-bottom: 1px solid gu-colour(neutral-86);
+    @include mq($from: leftCol) {
+      border-right: 1px solid gu-colour(neutral-86);
+    }  
   }
 }
 

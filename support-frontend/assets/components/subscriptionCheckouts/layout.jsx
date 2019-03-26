@@ -4,7 +4,7 @@ import React, { type Node } from 'react';
 
 import './layout.scss';
 import { classNameWithModifiers } from 'helpers/utilities';
-
+import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 type PropTypes = {
   children: Node,
@@ -22,9 +22,15 @@ const Layout = ({ children, aside }: PropTypes) => (
     </div>
   </div>
 );
-
 Layout.defaultProps = {
   aside: null,
 };
 
+const LeftColWrapper = ({ children }: {children: Node}) => (
+  <LeftMarginSection className="component-checkout-wrapper">
+    {children}
+  </LeftMarginSection>
+);
+
+export { LeftColWrapper };
 export default Layout;

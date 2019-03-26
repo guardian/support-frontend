@@ -32,11 +32,11 @@ const Summary = ({
       {image}
     </div>
     <div className={styles.content}>
-      <h2 className={styles.header}>Order summary</h2>
+      <h1 className={styles.header}>Order summary</h1>
       <header>
-        <h3 className={styles.title} title={`your subscription is ${title}`}>{title}</h3>
+        <h2 className={styles.title} title={`your subscription is ${title}`}>{title}</h2>
         {description &&
-          <h4 className={styles.titleDescription}>{description}</h4>
+          <h3 className={styles.titleDescription}>{description}</h3>
         }
       </header>
       <div>
