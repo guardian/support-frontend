@@ -10,12 +10,12 @@ States:
         Next: GetPaymentMethod
     Default: CreatePaymentMethod
 
-    GetPaymentMethod:
-      Type: Task
-      Resource: "${GetPaymentMethodLambda.Arn}"
-      Next: CreateZuoraSubscription
-      {{> retry}}
-      {{> catch}}
+  GetPaymentMethod:
+    Type: Task
+    Resource: "${GetPaymentMethodLambda.Arn}"
+    Next: CreateZuoraSubscription
+    {{> retry}}
+    {{> catch}}
 
   CreatePaymentMethod:
     Type: Task

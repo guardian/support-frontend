@@ -4,11 +4,10 @@ import java.util.UUID
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.i18n.{Country, CountryGroup}
-import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.states.{ClonePaymentMethodState, CreateZuoraSubscriptionState}
-import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodDirectDebitResponse, GetPaymentMethodResponse}
+import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
