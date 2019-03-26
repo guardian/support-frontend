@@ -35,6 +35,9 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     postJson[AccountQueryResponse](s"action/query", queryData.asJson, authHeaders).map(_.records.map(DomainAccount.fromAccountRecord))
   }
 
+  def getObjectAccount(accountId:String): Future[GetObjectAccountResponse] =
+    get[GetObjectAccountResponse](s"object/account/$accountId", authHeaders)
+
   def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[DomainSubscription]] =
     get[SubscriptionsResponse](s"subscriptions/accounts/${accountNumber.value}", authHeaders).map { subscriptionsResponse =>
       subscriptionsResponse.subscriptions.map(DomainSubscription.fromSubscription)
@@ -45,6 +48,9 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
 
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     postJson[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson, authHeaders)
+
+  def getPaymentMethod(paymentMethodId:String): Future[GetPaymentMethodResponse] =
+    get[GetPaymentMethodResponse](s"object/payment-method/$paymentMethodId", authHeaders)
 
   def getDefaultPaymentMethodId(accountNumber: String): Future[Option[String]] = {
     // WARNING constructing queries from strings is inherently dangerous.  Be very careful.

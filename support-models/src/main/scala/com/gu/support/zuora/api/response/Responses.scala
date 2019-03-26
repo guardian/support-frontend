@@ -7,6 +7,8 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
+import io.circe.Decoder.Result
+import io.circe.{ACursor, Decoder, DecodingFailure, HCursor}
 import org.joda.time.LocalDate
 
 sealed trait ZuoraResponse {
@@ -75,6 +77,68 @@ object GetAccountResponse {
 }
 
 case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
+
+//this response cannot extend ZuoraResponse because this endpoint doesn't return a 'success' boolean field
+case class GetObjectAccountResponse(
+   IdentityId__c: Option[String],
+   sfContactId__c: Option[String],
+   CrmId: Option[String],
+   DefaultPaymentMethodId: Option[String],
+   AutoPay: Boolean,
+   Balance: Double,
+   Currency: String
+  )
+
+object GetObjectAccountResponse {
+  implicit val codec: Codec[GetObjectAccountResponse] = deriveCodec
+}
+
+
+//todo see if there is better way to deserialise this into separate classes using the the type field
+sealed trait GetPaymentMethodResponse {
+  def `type`: String
+  def paymentMethodStatus: String
+}
+
+case class GetPaymentMethodDirectDebitResponse(
+  `type`: String,
+  paymentMethodStatus: String,
+  //direct debit fields
+  mandateID: String, //todo should we make this optional to be able to handle cases closed dd payment methods where the mandate is delete ?
+  bankTransferAccountName: String,
+  bankTransferAccountNumberMask: String,
+  bankCode: String,
+  firstName: String,
+  lastName: String,
+  ) extends GetPaymentMethodResponse
+
+case class GetPaymentMethodCardReferenceResponse(
+  `type`: String,
+  paymentMethodStatus: String,
+  creditCardType: String,
+  tokenId: String,
+  secondTokenId: String,
+  creditCardCountry: Option[String] = None,
+  creditCardMaskNumber: String,
+  creditCardExpirationYear: Int,
+  creditCardExpirationMonth: Int
+) extends GetPaymentMethodResponse
+
+//todo paypal response, creditcard (non reference)?
+
+object GetPaymentMethodResponse {
+  implicit val ddCodec: Codec[GetPaymentMethodDirectDebitResponse] = capitalizingCodec
+  implicit val cardCodec: Codec[GetPaymentMethodCardReferenceResponse] = capitalizingCodec
+
+  implicit val decode: Decoder[GetPaymentMethodResponse] = new Decoder[GetPaymentMethodResponse] {
+    override def apply(c: HCursor): Result[GetPaymentMethodResponse] = {
+      c.downField("Type").as[String].flatMap{
+                case "BankTransfer" => ddCodec(c)
+                case "CreditCardReferenceTransaction" => cardCodec(c)
+      }
+    }
+  }
+}
 
 object SubscribeResponseAccount {
   implicit val codec: Codec[SubscribeResponseAccount] = capitalizingCodec

@@ -471,4 +471,15 @@ object JsonFixtures {
         }
       """.asInputStream
 
+  def clonePaymentMethodJson(billingAccountId:String) : String =
+    s"""
+          {
+            $requestIdJson,
+            $userJson,
+            "product": ${contribution()},
+            "paymentFields" : {"billingAccountId" : "$billingAccountId"}
+            }
+        """
+
+
 }

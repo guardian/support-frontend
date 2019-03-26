@@ -7,13 +7,13 @@ States:
     Choices:
       - Variable: "$.requestInfo.accountExists"
         BooleanEquals: true
-        Next: ClonePaymentMethod
+        Next: GetPaymentMethod
     Default: CreatePaymentMethod
 
-    ClonePaymentMethod:
+    GetPaymentMethod:
       Type: Task
-      Resource: "${ClonePaymentMethod.Arn}"
-      End: True
+      Resource: "${GetPaymentMethodLambda.Arn}"
+      Next: CreateZuoraSubscription
       {{> retry}}
       {{> catch}}
 
