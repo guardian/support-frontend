@@ -63,7 +63,6 @@ type PropTypes = {|
   productPrices: ProductPrices,
   currencyId: IsoCurrency,
   ...FormActionCreators,
-  csrf: Csrf,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
   amount: number,
@@ -84,7 +83,6 @@ function mapStateToProps(state: State) {
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
     currencyId: state.common.internationalisation.currencyId,
-    csrf: state.page.csrf,
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     paymentMethod: state.page.checkout.paymentMethod,
     isTestUser: state.page.checkout.isTestUser,
@@ -220,7 +218,6 @@ function CheckoutForm(props: PropTypes) {
               <SubscriptionSubmitButtons
                 paymentMethod={props.paymentMethod}
                 onPaymentAuthorised={props.onPaymentAuthorised}
-                csrf={props.csrf}
                 currencyId={props.currencyId}
                 payPalHasLoaded={props.payPalHasLoaded}
                 formIsValid={props.formIsValid}

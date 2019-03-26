@@ -8,7 +8,6 @@ import { type Dispatch } from 'redux';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 import { setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
@@ -34,7 +33,6 @@ type PropTypes = {|
   setPasswordHasBeenSubmitted: () => void,
   passwordHasBeenSubmitted: boolean,
   updatePassword: (Event) => void,
-  csrf: CsrfState,
   passwordError: boolean,
   setPasswordError: (boolean) => void,
 |};
@@ -48,7 +46,6 @@ const mapStateToProps = state => ({
   password: state.page.form.setPasswordData.password,
   passwordHasBeenSubmitted: state.page.form.setPasswordData.passwordHasBeenSubmitted,
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
-  csrf: state.page.csrf,
   passwordError: state.page.form.setPasswordData.passwordError,
 });
 
@@ -84,7 +81,7 @@ function onSubmit(props: PropTypes): Event => void {
     }
 
     // TODO: send user to thank you page with error if password was not set
-    setPasswordGuest(props.password, props.guestAccountCreationToken, props.csrf)
+    setPasswordGuest(props.password, props.guestAccountCreationToken)
       .then((response) => {
         if (response === true) {
           props.setThankYouPageStage('thankYouPasswordSet');

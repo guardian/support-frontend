@@ -4,8 +4,6 @@
 
 import ReactDOM from 'react-dom';
 import React from 'react';
-
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getPayPalOptions, type SetupPayPalRequestType } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import { type PayPalAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -14,7 +12,6 @@ import { PayPal } from 'helpers/paymentMethods';
 
 type PropTypes = {|
   onPaymentAuthorisation: Function,
-  csrf: CsrfState,
   currencyId: IsoCurrency,
   hasLoaded: boolean,
   canOpen: () => boolean,
@@ -70,7 +67,6 @@ export class PayPalExpressButton extends React.Component<PropTypes> {
       window.paypal.Button.driver('react', { React, ReactDOM }),
       getPayPalOptions(
         this.props.currencyId,
-        this.props.csrf,
         onPaymentAuthorisation,
         this.props.canOpen,
         this.props.onClick,

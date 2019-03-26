@@ -2,6 +2,7 @@
 import { routes } from 'helpers/routes';
 import { type AcquisitionABTest, type OphanIds, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { type ErrorReason } from 'helpers/errorReasons';
+import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 import { type Participations } from 'helpers/abTests/abtest';
 import { type CaState, type IsoCountry, type UsState } from 'helpers/internationalisation/country';
@@ -145,6 +146,7 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
  */
 function checkRegularStatus(
   participations: Participations,
+  csrf: CsrfState | null,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Object => Promise<PaymentResult> {
@@ -181,7 +183,7 @@ function checkRegularStatus(
         return logPromise(pollUntilPromise(
           MAX_POLLS,
           POLLING_INTERVAL,
-          () => fetchJson(json.trackingUri, getRequestOptions('same-origin', null)),
+          () => fetchJson(json.trackingUri, getRequestOptions('same-origin', csrf)),
           json2 => json2.status === 'pending',
         ).then(handleCompletion, handleExhaustedPolls));
 
@@ -196,10 +198,11 @@ function postRegularPaymentRequest(
   uri: string,
   data: RegularPaymentRequest,
   participations: Participations,
+  csrf: CsrfState | null,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
 ): Promise<PaymentResult> {
-  return logPromise(fetch(uri, requestOptions(data, 'same-origin', 'POST', null)))
+  return logPromise(fetch(uri, requestOptions(data, 'same-origin', 'POST', csrf)))
     .then((response) => {
       if (response.status === 500) {
         logException(`500 Error while trying to post to ${uri}`);
@@ -210,7 +213,7 @@ function postRegularPaymentRequest(
       }
 
       return response.json()
-        .then(checkRegularStatus(participations, setGuestAccountCreationToken, setThankYouPageStage));
+        .then(checkRegularStatus(participations, csrf, setGuestAccountCreationToken, setThankYouPageStage));
 
     })
     .catch(() => {

@@ -20,7 +20,6 @@ import { PayPal } from 'helpers/paymentMethods';
 type PropTypes = {|
   paymentMethod: Option<PaymentMethod>,
   currencyId: IsoCurrency,
-  csrf: CsrfState,
   setupRecurringPayPalPayment: SetupPayPalRequestType,
   payPalHasLoaded: boolean,
   isTestUser: boolean,
@@ -47,7 +46,6 @@ function SubscriptionSubmitButtons(props: PropTypes) {
       >
         <PayPalExpressButton
           onPaymentAuthorisation={props.onPaymentAuthorised}
-          csrf={props.csrf}
           currencyId={props.currencyId}
           hasLoaded={props.payPalHasLoaded}
           canOpen={props.formIsValid}

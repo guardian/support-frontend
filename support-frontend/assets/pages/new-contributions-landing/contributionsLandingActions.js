@@ -364,6 +364,7 @@ function recurringPaymentAuthorisationHandler(
     routes.recurringContribCreate,
     request,
     state.common.abParticipations,
+    null,
     (token: string) => dispatch(setGuestAccountCreationToken(token)),
     (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
   )));

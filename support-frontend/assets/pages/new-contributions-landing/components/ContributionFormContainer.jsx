@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import type { ContributionType } from 'helpers/contributions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
 import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -38,7 +37,6 @@ import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArro
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  csrf: Csrf,
   payPalHasLoaded: boolean,
   paymentComplete: boolean,
   payPalSwitchStatus: Status,
@@ -64,7 +62,6 @@ type PropTypes = {|
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
-  csrf: state.page.csrf,
   payPalHasLoaded: state.page.form.payPalHasLoaded,
   paymentComplete: state.page.form.paymentComplete,
   payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,

@@ -73,13 +73,10 @@ function sendGetUserFromIdentityRequest(): Promise<IdUserFromIdentity> {
   return fetchJson(
     routes.getUser,
     getRequestOptions('same-origin', null),
-  ).then((resp: IdUserFromIdentity) => {
-    return resp;
-  });
+  ).then((resp: IdUserFromIdentity) => resp);
 }
 
-function getUserFromIdentity(
-): Promise<IdUserFromIdentity | null> {
+function getUserFromIdentity(): Promise<IdUserFromIdentity | null> {
   return logPromise(sendGetUserFromIdentityRequest())
     .catch(() => null);
 }

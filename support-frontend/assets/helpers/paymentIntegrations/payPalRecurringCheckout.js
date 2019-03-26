@@ -4,20 +4,18 @@
 
 import { logException } from 'helpers/logger';
 import { routes } from 'helpers/routes';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/paymentMethods';
 import { billingPeriodFromContrib, getAmount } from '../contributions';
-import type { Csrf } from '../csrf/csrfReducer';
 import type { State } from '../../pages/new-contributions-landing/contributionsLandingReducer';
 
 export type SetupPayPalRequestType = (
   resolve: string => void,
   reject: Error => void,
-  IsoCurrency, CsrfState,
+  IsoCurrency,
   amount: number,
   billingPeriod: BillingPeriod,
 ) => void
@@ -42,12 +40,11 @@ const showPayPal = (dispatch: Function) => {
     });
 };
 
-
-function payPalRequestData(bodyObj: Object, csrfToken: string) {
+function payPalRequestData(bodyObj: Object) {
   return {
     credentials: 'include',
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(bodyObj),
   };
 }
@@ -61,11 +58,9 @@ const setupRecurringPayPalPayment = (
   resolve: string => void,
   reject: Error => void,
   currency: IsoCurrency,
-  csrf: Csrf,
 ) =>
   (dispatch: Function, getState: () => State): void => {
     const state = getState();
-    const csrfToken = csrf.token;
     const { contributionType } = state.page.form;
     const amount = getAmount(
       state.page.form.selectedAmounts,
@@ -80,7 +75,7 @@ const setupRecurringPayPalPayment = (
       currency,
     };
 
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody))
       .then(response => (response.ok ? response.json() : null))
       .then((token: { token: string } | null) => {
         if (token) {
@@ -101,12 +96,10 @@ const setupSubscriptionPayPalPayment = (
   resolve: string => void,
   reject: Error => void,
   currency: IsoCurrency,
-  csrf: CsrfState,
   amount: number,
   billingPeriod: BillingPeriod,
 ) =>
   (): void => {
-    const csrfToken = csrf.token;
     storage.setSession('selectedPaymentMethod', PayPal);
     const requestBody = {
       amount,
@@ -114,7 +107,7 @@ const setupSubscriptionPayPalPayment = (
       currency,
     };
 
-    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody, csrfToken || ''))
+    fetch(routes.payPalSetupPayment, payPalRequestData(requestBody))
       .then(response => (response.ok ? response.json() : null))
       .then((token: { token: string } | null) => {
         if (token) {
@@ -130,13 +123,12 @@ const setupSubscriptionPayPalPayment = (
 
 function setupPayment(
   currencyId: IsoCurrency,
-  csrf: CsrfState,
   amount: number,
   billingPeriod: BillingPeriod,
   setupPayPalPayment: SetupPayPalRequestType,
 ) {
   return (resolve, reject) => {
-    setupPayPalPayment(resolve, reject, currencyId, csrf, amount, billingPeriod);
+    setupPayPalPayment(resolve, reject, currencyId, amount, billingPeriod);
   };
 }
 
@@ -144,11 +136,10 @@ function getPayPalEnvironment(isTestUser: boolean): string {
   return isTestUser ? window.guardian.payPalEnvironment.uat : window.guardian.payPalEnvironment.default;
 }
 
-function createAgreement(payPalData: Object, csrf: CsrfState) {
+function createAgreement(payPalData: Object) {
   const body = { token: payPalData.paymentToken };
-  const csrfToken = csrf.token;
 
-  return fetch(routes.payPalCreateAgreement, payPalRequestData(body, csrfToken || ''))
+  return fetch(routes.payPalCreateAgreement, payPalRequestData(body))
     .then(response => response.json());
 }
 
@@ -156,7 +147,7 @@ let validateCalled;
 
 function getPayPalOptions(
   currencyId: IsoCurrency,
-  csrf: CsrfState,
+
   onPaymentAuthorisation: string => void,
   canOpen: () => boolean,
   onClick: () => void,
@@ -209,11 +200,11 @@ function getPayPalOptions(
     onClick,
 
     // This function is called when user clicks the PayPal button.
-    payment: setupPayment(currencyId, csrf, amount, billingPeriod, setupPayPalPayment),
+    payment: setupPayment(currencyId, amount, billingPeriod, setupPayPalPayment),
 
     // This function is called when the user finishes with PayPal interface (approves payment).
     onAuthorize: (data) => {
-      createAgreement(data, csrf)
+      createAgreement(data)
         .then((baid: Object) => {
           onPaymentAuthorisation(baid.token);
         })
