@@ -1,7 +1,22 @@
 Comment: Carries out the steps needed to create a Monthly Contributor
-StartAt: CreatePaymentMethod
+StartAt: ShouldClonePaymentMethodChoice
 TimeoutSeconds: 86400
 States:
+  ShouldClonePaymentMethodChoice:
+    Type: Choice
+    Choices:
+      - Variable: "$.requestInfo.accountExists"
+        BooleanEquals: true
+        Next: ClonePaymentMethod
+    Default: CreatePaymentMethod
+
+    ClonePaymentMethod:
+      Type: Task
+      Resource: "${ClonePaymentMethod.Arn}"
+      End: True
+      {{> retry}}
+      {{> catch}}
+
   CreatePaymentMethod:
     Type: Task
     Resource: "${CreatePaymentMethodLambda.Arn}"

@@ -17,5 +17,6 @@ deployments:
         - "-SendThankYouEmailLambda-"
         - "-FailureHandlerLambda-"
         - "-SendAcquisitionEventLambda-"
+        - "-ClonePaymentMethodLambda-"
       fileName: support-workers.jar
     dependencies: [cfn]
