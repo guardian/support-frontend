@@ -12,7 +12,7 @@ import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../../paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
-import { ActivePaperProductTypes, Everyday, Sixday } from 'helpers/productPrice/productOptions';
+import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
 import { paperCheckoutUrl } from 'helpers/routes';
 import { getLegacyPaperCheckout } from 'helpers/externalLinks';
@@ -20,7 +20,7 @@ import { getQueryParameter } from 'helpers/url';
 import { type CommonState } from 'helpers/page/commonReducer';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import type { OptimizeExperiments } from '../../../../helpers/optimize/optimize';
-
+import { getTitle } from '../../helpers/products';
 
 // ---- Helpers ----- //
 
@@ -80,16 +80,6 @@ const getSavingStr = (price: Price): Option<string> => {
 
 // ---- Plans ----- //
 
-const getTitle = (productOption: PaperProductOptions) => {
-  switch (productOption) {
-    case Everyday:
-      return 'Every day';
-    case Sixday:
-      return 'Monday to Saturday';
-    default:
-      return productOption;
-  }
-};
 
 const copy = {
   HomeDelivery: 'Have your papers delivered to your home',

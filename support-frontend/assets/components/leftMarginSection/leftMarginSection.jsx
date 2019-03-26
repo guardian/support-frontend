@@ -12,6 +12,7 @@ import './leftMarginSection.scss';
 
 type PropTypes = {|
   modifierClasses: Array<?string>,
+  className: ?string,
   children: Node,
 |};
 
@@ -21,7 +22,7 @@ type PropTypes = {|
 export default function LeftMarginSection(props: PropTypes) {
 
   return (
-    <section className={classNameWithModifiers('component-left-margin-section', props.modifierClasses)}>
+    <section className={[props.className, classNameWithModifiers('component-left-margin-section', props.modifierClasses)].join(' ')}>
       <div className="component-left-margin-section__content">
         {props.children}
       </div>
@@ -35,4 +36,5 @@ export default function LeftMarginSection(props: PropTypes) {
 
 LeftMarginSection.defaultProps = {
   modifierClasses: [],
+  className: null,
 };

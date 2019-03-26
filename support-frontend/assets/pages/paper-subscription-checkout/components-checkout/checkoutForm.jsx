@@ -8,6 +8,7 @@ import { compose } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import { regularPrice as paperRegularPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
+import { routes } from 'helpers/routes';
 
 import { Outset } from 'components/content/content';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -23,12 +24,15 @@ import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout from 'components/subscriptionCheckouts/layout';
+import Summary from 'components/subscriptionCheckouts/summary';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import Content from 'components/content/content';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { getTitle, getShortDescription } from '../../paper-subscription-landing/helpers/products';
+import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
 import {
@@ -45,9 +49,10 @@ import {
 } from '../paperSubscriptionCheckoutReducer';
 import { withStore } from './addressFields';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
-import type { FormField as PersonalDetailsFormField } from '../../../components/subscriptionCheckouts/personalDetails';
+import GridImage from 'components/gridImage/gridImage';
+import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+
 
 // ----- Types ----- //
 
@@ -92,12 +97,45 @@ function CheckoutForm(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'newspaper' : 'voucher booklet';
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Newspaper' : 'Voucher booklet';
 
   return (
     <Content modifierClasses={['your-details']}>
       <Outset>
-        <Layout>
+        <Layout aside={(
+          <Summary
+            image={
+              <GridImage
+                gridId="checkoutPackshotPaperGraunVoucher"
+                srcSizes={[696, 500]}
+                sizes="(max-width: 740px) 50vw, 696"
+                imgType="png"
+                altText=""
+              />
+            }
+            title={`${getTitle(props.productOption)} paper`}
+            description={getShortDescription(props.productOption)}
+            productPrice={paperRegularPrice(
+              props.productPrices,
+              props.fulfilmentOption,
+              props.productOption,
+            )}
+            promotion={paperPromotion(
+              props.productPrices,
+              props.fulfilmentOption,
+              props.productOption,
+            )}
+            dataList={[
+            {
+              title: 'Delivery method',
+              value: fulfilmentOptionDescriptor,
+            },
+            ]}
+            billingPeriod="Monthly"
+          >
+            <a href={routes.paperSubscriptionLanding}>Change Subscription</a>
+          </Summary>)}
+        >
           <Form onSubmit={(ev) => {
             ev.preventDefault();
             props.submitForm();
