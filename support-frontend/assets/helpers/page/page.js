@@ -16,7 +16,7 @@ import * as logger from 'helpers/logger';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import { detect as detectCountry, type IsoCountry } from 'helpers/internationalisation/country';
 import { detect as detectCurrency, type IsoCurrency } from 'helpers/internationalisation/currency';
-import { getAllQueryParamsWithExclusions, getQueryParameter } from 'helpers/url';
+import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createCommonReducer } from 'helpers/page/commonReducer';
 import { getCampaign, getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -24,23 +24,12 @@ import { type CountryGroupId, detect as detectCountryGroup } from 'helpers/inter
 import { addOptimizeExperiments, readExperimentsFromSession } from 'helpers/optimize/optimize';
 import storeReferrer from 'helpers/tracking/awin';
 import type { OptimizeExperiment } from 'helpers/optimize/optimize';
-import { setExperimentVariant, setExistingPaymentMethods } from 'helpers/page/commonActions';
+import { setExperimentVariant } from 'helpers/page/commonActions';
 import {
   trackAbTests,
   trackNewOptimizeExperiment,
 } from 'helpers/tracking/ophanComponentEventTracking';
-import { sendGetExistingPaymentMethodsRequest } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { switchIsOn } from 'helpers/checkouts';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
-import {
-  updatePaymentMethod,
-  updateSelectedExistingPaymentMethod,
-} from '../../pages/new-contributions-landing/contributionsLandingActions';
-import {
-  isFullDetailExistingPaymentMethod,
-  mapExistingPaymentMethodToPaymentMethod,
-} from '../existingPaymentMethods/existingPaymentMethods';
 
 if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
@@ -166,31 +155,6 @@ function init<S, A>(
       trackNewOptimizeExperiment(exp, participations);
       store.dispatch(setExperimentVariant(exp));
     });
-
-    // initiate fetch of existing payment methods
-    const isSignedIn = window.guardian && window.guardian.user;
-    const existingDirectDebitON = switchIsOn(settings.switches.recurringPaymentMethods, 'existingDirectDebit');
-    const existingCardON = switchIsOn(settings.switches.recurringPaymentMethods, 'existingCard');
-    const existingPaymentsEnabledViaUrlParam = getQueryParameter('displayExistingPaymentOptions') === 'true';
-    if (isSignedIn && (existingCardON || existingDirectDebitON) && existingPaymentsEnabledViaUrlParam) {
-      sendGetExistingPaymentMethodsRequest(
-        currencyId,
-        (allExistingPaymentMethods: ExistingPaymentMethod[]) => {
-          const filteredExistingPaymentMethods = allExistingPaymentMethods.filter(existingPaymentMethod => (
-            (existingPaymentMethod.paymentType === 'Card' && existingCardON) ||
-            (existingPaymentMethod.paymentType === 'DirectDebit' && existingDirectDebitON)
-          ));
-          store.dispatch(setExistingPaymentMethods(filteredExistingPaymentMethods));
-          const firstExistingPaymentMethod = (filteredExistingPaymentMethods[0]: any);
-          if (firstExistingPaymentMethod && isFullDetailExistingPaymentMethod(firstExistingPaymentMethod)) {
-            store.dispatch(updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(firstExistingPaymentMethod)));
-            store.dispatch(updateSelectedExistingPaymentMethod(firstExistingPaymentMethod));
-          }
-        },
-      );
-    } else {
-      store.dispatch(setExistingPaymentMethods([]));
-    }
 
     return store;
   } catch (err) {

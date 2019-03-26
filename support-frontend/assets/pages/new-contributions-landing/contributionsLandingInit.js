@@ -31,12 +31,19 @@ import {
   paymentWaiting,
   selectAmount,
   setThirdPartyPaymentLibrary,
-  updateContributionTypeAndPaymentMethod,
+  updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
+import {
+  isFullDetailExistingPaymentMethod,
+  mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
+} from '../../helpers/existingPaymentMethods/existingPaymentMethods';
+import { switchIsOn } from '../../helpers/checkouts';
+import type { ExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
+import { setExistingPaymentMethods } from '../../helpers/page/commonActions';
 
 // ----- Functions ----- //
 
@@ -117,6 +124,31 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
         }
       });
     });
+
+    // initiate fetch of existing payment methods
+    const isSignedIn = window.guardian && window.guardian.user;
+    const existingDirectDebitON = switchIsOn(switches.recurringPaymentMethods, 'existingDirectDebit');
+    const existingCardON = switchIsOn(switches.recurringPaymentMethods, 'existingCard');
+    const existingPaymentsEnabledViaUrlParam = getQueryParameter('displayExistingPaymentOptions') === 'true';
+    if (isSignedIn && (existingCardON || existingDirectDebitON) && existingPaymentsEnabledViaUrlParam) {
+      sendGetExistingPaymentMethodsRequest(
+        currencyId,
+        (allExistingPaymentMethods: ExistingPaymentMethod[]) => {
+          const filteredExistingPaymentMethods = allExistingPaymentMethods.filter(existingPaymentMethod => (
+            (existingPaymentMethod.paymentType === 'Card' && existingCardON) ||
+            (existingPaymentMethod.paymentType === 'DirectDebit' && existingDirectDebitON)
+          ));
+          dispatch(setExistingPaymentMethods(filteredExistingPaymentMethods));
+          const firstExistingPaymentMethod = (filteredExistingPaymentMethods[0]: any);
+          if (firstExistingPaymentMethod && isFullDetailExistingPaymentMethod(firstExistingPaymentMethod)) {
+            dispatch(updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(firstExistingPaymentMethod)));
+            dispatch(updateSelectedExistingPaymentMethod(firstExistingPaymentMethod));
+          }
+        },
+      );
+    } else {
+      dispatch(setExistingPaymentMethods([]));
+    }
   }
 
   const recurringContributionsAvailable = contributionTypes.includes('MONTHLY')
