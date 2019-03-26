@@ -2,7 +2,8 @@
 
 // ----- Imports ----- //
 
-import { routes } from 'helpers/routes';
+import type { IdUserFromIdentity } from 'helpers/identityApis';
+import { getUserFromIdentity } from 'helpers/identityApis';
 import * as cookie from 'helpers/cookie';
 import { get as getCookie } from 'helpers/cookie';
 import { getSession } from 'helpers/storage';
@@ -70,23 +71,24 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
     dispatch(setIsSignedIn(true));
   } else if (userAppearsLoggedIn) {
-    fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
-      if (response.ok) {
-        response.json().then((data) => {
-          if (data.id) {
-            dispatch(setIsSignedIn(true));
-            dispatch(setId(data.id));
-          }
-          if (data.name) {
-            dispatch(setFullName(data.name));
-          }
-          if (data.email) {
-            dispatch(setEmail(data.email));
-          }
-          if (data.displayName) {
-            dispatch(setDisplayName(data.displayName));
-          }
-        });
+    getUserFromIdentity().then((data: IdUserFromIdentity) => {
+      if (data) {
+        if (data.id) {
+          dispatch(setIsSignedIn(true));
+          dispatch(setId(data.id));
+        }
+        if (data.privateFields && data.privateFields.firstName) {
+          dispatch(setFirstName(data.privateFields.firstName));
+        }
+        if (data.privateFields && data.privateFields.secondName) {
+          dispatch(setLastName(data.privateFields.secondName));
+        }
+        if (data.primaryEmailAddress) {
+          dispatch(setEmail(data.primaryEmailAddress));
+        }
+        if (data.publicFields && data.publicFields.displayName) {
+          dispatch(setDisplayName(data.publicFields.displayName));
+        }
       }
     });
   } else if (emailFromBrowser) {

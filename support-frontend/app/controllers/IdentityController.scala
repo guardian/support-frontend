@@ -106,9 +106,6 @@ class IdentityController(
   }
 }
 
-
-
-
 object SendMarketingRequest {
   implicit val decoder: Decoder[SendMarketingRequest] = deriveDecoder
 }

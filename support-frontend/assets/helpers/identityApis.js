@@ -18,6 +18,18 @@ export type UserTypeFromIdentityResponse =
   | 'requestPending'
   | 'requestFailed';
 
+export type IdUserFromIdentity = ?{
+  id: string,
+  primaryEmailAddress: string,
+  publicFields: ?{
+    displayName: ?string,
+  },
+  privateFields: ?{
+    firstName: ?string,
+    secondName: ?string,
+  },
+}
+
 // ----- Functions ----- //
 
 function sendGetUserTypeFromIdentityRequest(
@@ -59,18 +71,6 @@ function getUserTypeFromIdentity(
 }
 
 
-type IdUserFromIdentity = ?{
-  id: string,
-  primaryEmailAddress: string,
-  publicFields: ?{
-    displayName: ?string,
-  },
-  privateFields: ?{
-    firstName: ?string,
-    secondName: ?string,
-  },
-}
-
 function sendGetUserFromIdentityRequest(): Promise<IdUserFromIdentity> {
   return fetchJson(
     routes.getUser,
@@ -79,8 +79,6 @@ function sendGetUserFromIdentityRequest(): Promise<IdUserFromIdentity> {
     return resp;
   });
 }
-
-
 
 function getUserFromIdentity(
 ): Promise<IdUserFromIdentity | null> {

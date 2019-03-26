@@ -1,7 +1,5 @@
 // @flow
 
-import { getUserFromIdentity } from 'helpers/identityApis';
-import { setUserStateActions } from 'pages/new-contributions-landing/setUserStateActions';
 // ----- Imports ----- //
 import { type Store } from 'redux';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -151,43 +149,10 @@ function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: F
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }
 
-const {
-  setId,
-  setIsSignedIn,
-  setDisplayName,
-  setFirstName,
-  setLastName,
-  setEmail,
-} = setUserStateActions;
-
-function autofillUserDetails(dispatch: Function) {
-  getUserFromIdentity().then(data => {
-    if (data) {
-      if (data.id) {
-        dispatch(setIsSignedIn(true));
-        dispatch(setId(data.id));
-      }
-      if (data.privateFields && data.privateFields.firstName) {
-        dispatch(setFirstName(data.privateFields.firstName));
-      }
-      if (data.privateFields && data.privateFields.secondName) {
-        dispatch(setLastName(data.privateFields.secondName));
-      }
-      if (data.primaryEmailAddress) {
-        dispatch(setEmail(data.primaryEmailAddress));
-      }
-      if (data.publicFields && data.publicFields.displayName) {
-        dispatch(setDisplayName(data.publicFields.displayName));
-      }
-    }
-  });
-}
-
 const init = (store: Store<State, Action, Function>) => {
   const { dispatch } = store;
 
   const state = store.getState();
-  autofillUserDetails(dispatch);
   initialisePaymentMethods(state, dispatch);
 
   selectInitialAmounts(state, dispatch);
