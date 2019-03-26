@@ -31,7 +31,7 @@ Mappings:
     CODE:
       MaxInstances: 2
       MinInstances: 1
-      InstanceType: t3.small
+      InstanceType: t2.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/44e9f40c-c884-40e6-a171-6769e9a8b173
       AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/89f17663-c79e-4104-b718-ee0986402ad9
       DynamoDBTables:
@@ -40,7 +40,7 @@ Mappings:
     PROD:
       MaxInstances: 6
       MinInstances: 3
-      InstanceType: t3.small
+      InstanceType: t2.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/9d8ff96c-63d5-425b-88d1-f529770e5b6d
       AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
       DynamoDBTables:
