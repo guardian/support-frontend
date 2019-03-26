@@ -2,22 +2,21 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
-import { compose } from 'redux';
+import React, { Component } from 'react';
 
-import SelectInput from 'components/selectInput/selectInput';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
+import Dialog from 'components/dialog/dialog';
+import { clickedEvent } from 'helpers/tracking/clickTracking';
+import Menu, { LinkButton } from '../menu/menu';
 
 import {
   countryGroups,
-  stringToCountryGroupId,
   type CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 
-import type { SelectOption } from 'components/selectInput/selectInput';
-
 import './countryGroupSwitcher.scss';
+import styles from './countryGroupSwitcher.module.scss';
 
 // ----- Props ----- //
 
@@ -30,27 +29,76 @@ export type PropTypes = {|
 
 // ----- Component ----- //
 
-function CountryGroupSwitcher(props: PropTypes) {
+class CountryGroupSwitcher extends Component<PropTypes, {menuOpen: boolean, bounds: { top: number, left: number }}> {
 
-  const options: SelectOption[] =
-    props.countryGroupIds.map((countryGroupId: CountryGroupId) =>
-      ({
-        value: countryGroupId,
-        text: `${countryGroups[countryGroupId].name} (${currencies[countryGroups[countryGroupId].currency].extendedGlyph})`,
-        selected: countryGroupId === props.selectedCountryGroup,
-      }));
+  state = {
+    menuOpen: false,
+    bounds: { top: 0, left: 0 },
+  }
 
-  return (
-    <div className="component-country-group-switcher">
-      <SelectInput
-        id="qa-country-group-dropdown"
-        onChange={compose(props.onCountryGroupSelect, stringToCountryGroupId)}
-        options={options}
-        label="Select your region"
-      />
-      <SvgDropdownArrow />
-    </div>
-  );
+  buttonRef: ?Element;
+
+  render() {
+    const { onCountryGroupSelect, selectedCountryGroup, countryGroupIds } = this.props;
+    const { menuOpen, bounds: { top, left } } = this.state;
+
+    return (
+      <div className="component-country-group-switcher">
+        <button
+          aria-label="Select a country"
+          className={styles.button}
+          ref={(r) => { this.buttonRef = r; }}
+          onClick={() => {
+            if (this.buttonRef) {
+              this.setState({ bounds: this.buttonRef.getBoundingClientRect() });
+            }
+            this.setState({ menuOpen: true });
+            }}
+        >
+          {countryGroups[selectedCountryGroup].name}
+          {' '}
+          <strong>{currencies[countryGroups[selectedCountryGroup].currency].extendedGlyph}</strong>
+          <SvgDropdownArrow />
+        </button>
+        <Dialog
+          aria-label="Select a country"
+          open={menuOpen}
+          blocking={false}
+          styled={false}
+          onStatusChange={(status) => {
+            this.setState({ menuOpen: status });
+            if (status) {
+              clickedEvent(['header', 'language-switcher'].join(' - '));
+            }
+          }}
+        >
+          <Menu style={{ top, left, position: 'absolute' }}>
+            {
+              countryGroupIds.map((countryGroupId: CountryGroupId) =>
+              (
+                <LinkButton
+                  onClick={() => onCountryGroupSelect(countryGroupId)}
+                  isSelected={countryGroupId === selectedCountryGroup}
+                >
+                  {countryGroups[countryGroupId].name}
+                  {'  '}
+                  {currencies[countryGroups[countryGroupId].currency].extendedGlyph}
+                </LinkButton>
+                ))
+            }
+            <button
+              className="accessibility-hint"
+              onClick={() => {
+                this.setState({ menuOpen: false });
+              }}
+            >
+              Close
+            </button>
+          </Menu>
+        </Dialog>
+      </div>
+    );
+  }
 }
 
 

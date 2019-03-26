@@ -1,0 +1,22 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.button {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  color: gu-colour(neutral-100);
+  @include gu-fontset-body-sans;
+
+  :global(.svg-dropdown-arrow) {
+    position: inline-block;
+    margin-left: $gu-h-spacing/4;
+    path {
+      fill: currentColor;
+    }
+  }
+
+  &:hover {
+    color: gu-colour(highlight-main);
+  }
+}
