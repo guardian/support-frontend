@@ -63,9 +63,6 @@ function ContributionThankYou(props: PropTypes) {
         <div className="gu-content__return-link">
           <AnchorButton
             href={'https://www.theguardian.com'}
-            onClick={ev => {
-              ev.preventDefault();
-            }}
             appearance={'greyHollow'}
             aria-label={'Return to The Guardian'}
             icon={<SvgArrowLeft/>}

@@ -26,7 +26,7 @@ const mapStateToProps = state => ({
 function ContributionThankYouContainer(props: PropTypes) {
 
   const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
-    thankYou: (<ContributionThankYou />),
+    thankYou: (<ContributionThankYouSetPassword />),
     thankYouSetPassword: (<ContributionThankYouSetPassword />),
     thankYouPasswordDeclinedToSet: (<ContributionThankYou />),
     thankYouPasswordSet: (<ContributionThankYouPasswordSet />),
@@ -34,7 +34,7 @@ function ContributionThankYouContainer(props: PropTypes) {
 
 
   return (
-    <div className="gu-content__content gu-content__content-thankyou">
+    <div className="gu-content__content gu-content__content--thank-you">
       {thankYouPageStage[props.thankYouPageStage]}
     </div>
   );
