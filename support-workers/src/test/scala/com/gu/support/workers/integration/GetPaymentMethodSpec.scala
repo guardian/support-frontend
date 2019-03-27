@@ -15,7 +15,6 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.workers.{CreditCardReferenceTransaction, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.ZuoraService
-import io.circe.syntax._
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
