@@ -6,6 +6,11 @@
 
 .component-checkout-form-section {
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing * 2;
+
+  &:first-child {
+    padding-top: $gu-v-spacing;
+  }
+
   .component-form-label {
     margin-top: $gu-v-spacing * 2;
   }

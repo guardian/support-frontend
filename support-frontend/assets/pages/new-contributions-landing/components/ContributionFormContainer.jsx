@@ -9,7 +9,7 @@ import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
@@ -17,11 +17,12 @@ import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOff
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import ContributionTicker from 'components/ticker/contributionTicker';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
+import { type CampaignName, campaigns } from 'pages/new-contributions-landing/campaigns';
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
-import { ContributionTicker } from './ContributionTicker/ContributionTicker';
 
 import {
   paymentWaiting,
@@ -57,6 +58,7 @@ type PropTypes = {|
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
   tickerGoalReached: boolean,
+  campaignName: ?CampaignName,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -74,6 +76,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   tickerGoalReached: state.page.form.tickerGoalReached,
+  campaignName: state.page.form.campaignName,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -127,52 +130,6 @@ const countryGroupSpecificDetails: {
   NZDCountries: defaultHeaderCopyAndContributeCopy,
   Canada: defaultHeaderCopyAndContributeCopy,
 };
-
-function campaignSpecificDetails() {
-  if (isFrontlineCampaign()) {
-    return {
-      formMessage: (
-        <div>
-          <div className="form-message__headline">Make a contribution</div>
-          <div className="form-message__body">to our dedicated series ‘The Frontline’</div>
-        </div>
-      ),
-      headerCopy: 'The Frontline: Australia and the climate emergency',
-      contributeCopy: (
-        <div>
-          <p>
-            The north is flooded, the south parched by drought.
-            The Murray Darling, our greatest river system, has dried to a trickle,
-            crippling communities and turning up millions of dead fish.
-            The ancient alpine forests of Tasmania have burned.
-            The summer was the hottest on record.
-            We are living the reality of climate change.
-          </p>
-          <p>
-            That’s why we need your help to bring our reporting on the climate crisis to light.
-            We asked our readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
-            Your response has been immediate and overwhelming, and thanks to your encouragement we have increased
-            the goal to $150,000.
-          </p>
-          <p>
-            <span>
-              With your support, we can cut through the rhetoric and focus the debate on the facts.
-              That way everyone can learn about the devastating and immediate
-              threats to our country and how best to find a solution.
-            </span>
-          </p>
-        </div>
-      ),
-      tickerJsonUrl: '/ticker.json',
-      // stuff for campaign that's not set here:
-      // - CSS class (contributionsLanding.jsx)
-      // - Terms & Conditions
-      // - Just single contributions (via URL)
-    };
-  }
-
-  return {};
-}
 
 function goalReachedTemplate() {
   if (isFrontlineCampaign()) {
@@ -238,12 +195,16 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = {
     ...countryGroupSpecificDetails[props.countryGroupId],
-    ...campaignSpecificDetails(),
+    ...props.campaignName ? campaigns[props.campaignName] : {},
     ...urlSpecificDetails(),
   };
 
   return props.paymentComplete ?
-    <Redirect to={props.thankYouRoute} />
+    // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
+    // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
+    // back to /thankyou given the current state of the redux store.
+    // The effect is that clicking back in the browser will take the user to the page before they arrived at /contribute
+    <Redirect to={props.thankYouRoute} push={false} />
     : (
       <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
         <div className="gu-content__blurb">

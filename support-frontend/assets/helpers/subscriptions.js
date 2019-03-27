@@ -271,6 +271,18 @@ const getNewsstandSaving = (subscriptionMonthlyCost: number, newsstandWeeklyCost
 const getNewsstandPrice = (productOption: PaperProductOptions) =>
   newsstandPrices[productOption];
 
+
+// Paper product
+
+const paperHasDeliveryEnabled = (): boolean => {
+  try {
+    return window.guardian.settings.switches.experiments.paperHomeDeliveryEnabled.state === 'On';
+  } catch {
+    return true;
+  }
+};
+
+
 // ----- Exports ----- //
 
 export {
@@ -282,4 +294,5 @@ export {
   getNewsstandSaving,
   getNewsstandPrice,
   fixDecimals,
+  paperHasDeliveryEnabled,
 };

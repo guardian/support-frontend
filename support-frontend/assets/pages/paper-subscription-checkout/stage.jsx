@@ -5,13 +5,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import HeadingBlock from 'components/headingBlock/headingBlock';
-import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import Content, { Divider } from 'components/content/content';
-import Text, { LargeParagraph } from 'components/text/text';
 
 import { type Stage, type State } from './paperSubscriptionCheckoutReducer';
 
@@ -61,17 +57,6 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <div className="checkout-content">
-          <HeroWrapper appearance="custom">
-            <HeadingBlock>Paper</HeadingBlock>
-          </HeroWrapper>
-          <Content>
-            <Text>
-              <LargeParagraph>
-                Please enter your details below to complete your Paper subscription.
-              </LargeParagraph>
-            </Text>
-            <Divider />
-          </Content>
           <CheckoutForm />
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>

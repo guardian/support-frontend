@@ -52,9 +52,10 @@ const reactElementId: {
 };
 
 
-const Header = headerWithCountrySwitcherContainer(
-  '/subscribe/weekly',
-  [
+const Header = headerWithCountrySwitcherContainer({
+  path: '/subscribe/weekly',
+  countryGroupId,
+  listOfCountries: [
     GBPCountries,
     UnitedStates,
     AUDCountries,
@@ -63,8 +64,8 @@ const Header = headerWithCountrySwitcherContainer(
     NZDCountries,
     International,
   ],
-  'GuardianWeekly',
-);
+  trackProduct: 'GuardianWeekly',
+});
 
 // ----- Render ----- //
 

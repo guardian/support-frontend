@@ -1,0 +1,45 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+.wrapper :global(.component-left-margin-section__content) {
+  border-left: 1px solid gu-colour(neutral-86);
+  @include mq($from:tablet) {
+    @include multiline-top-border()
+  }
+}
+
+.root {
+  max-width: gu-span(14) + $gu-h-spacing;
+}
+
+.form {
+  @include mq($from:tablet) {
+    max-width: gu-span(6) + $gu-h-spacing * 1.5;
+    border-right: 1px solid gu-colour(neutral-86);
+  }
+  @include mq($from:leftCol) {
+    max-width: gu-span(8) + $gu-h-spacing * 1.5;
+  }
+}
+
+.withAside {  
+  @include mq($from:tablet) {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+  }
+  .form {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  .aside {
+    position: sticky;
+    top: 0;
+    z-index: 999;  
+    width: 100%;
+    border-bottom: 1px solid gu-colour(neutral-86);
+    @include mq($from: leftCol) {
+      border-right: 1px solid gu-colour(neutral-86);
+    }  
+  }
+}
+

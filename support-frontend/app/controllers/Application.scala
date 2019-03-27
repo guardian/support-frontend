@@ -35,7 +35,8 @@ class Application(
     settingsProvider: AllSettingsProvider,
     guardianDomain: GuardianDomain,
     stage: Stage,
-    val supportUrl: String
+    val supportUrl: String,
+    fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit val ec: ExecutionContext) extends AbstractController(components)
   with SettingsSurrogateKeySyntax with CanonicalLinks with StrictLogging with ServersideAbTestCookie {
 
@@ -124,6 +125,7 @@ class Application(
       id = s"new-contributions-landing-page-$countryCode",
       js = js,
       css = css,
+      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.contributionsLandingDescription,
       oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
       oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
@@ -144,6 +146,7 @@ class Application(
       mainElement = EmptyDiv("showcase-landing-page"),
       mainJsBundle = Left(RefPath("showcasePage.js")),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
+      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.showcaseLandingDescription,
       canonicalLink = Some(buildCanonicalShowcaseLink("uk"))
     )()).withSettingsSurrogateKey

@@ -85,7 +85,7 @@
 
 .component-content--dark {
   @include block-colours(
-    $border: gu-colour(neutral-100),
+    $border: gu-colour(neutral-46),
     $text: gu-colour(neutral-100),
     $bg: gu-colour(neutral-20),
   );
@@ -151,7 +151,6 @@
   cancel out initial padding
   */
   .component-content__content > .component-content__divider:first-child,
-  .component-checkout,
   .component-product-page-tabs {
     margin-top: ($gu-v-spacing*-.5) - 1px;
   }

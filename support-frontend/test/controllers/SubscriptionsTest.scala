@@ -3,6 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings._
 import admin.settings.SwitchState.On
+import assets.RefPath
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup
@@ -63,9 +64,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
-
       val amounts = Amounts(Nil,Nil,Nil)
-
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(
         AllSettings(
@@ -73,7 +72,6 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
           AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts)
         )
       )
-
       val client = mock[SupportWorkersClient]
       val testUserService = mock[TestUserService]
       val tip = mock[Tip]
@@ -108,7 +106,8 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
         stubControllerComponents(),
         new StringsConfig(),
         settingsProvider,
-        "support.thegulocal.com"
+        "support.thegulocal.com",
+        Left(RefPath("test"))
       )
     }
 
@@ -121,7 +120,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
   }
 
-  "GET subscribe/digital/checkout?displayCheckout=true" should {
+  "GET subscribe/digital/checkout" should {
 
     "redirect unauthenticated user to signup page" in new DigitalSubscriptionsDisplayForm {
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)

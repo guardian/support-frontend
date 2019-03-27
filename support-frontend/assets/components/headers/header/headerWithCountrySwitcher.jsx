@@ -14,13 +14,19 @@ import Header from './header';
 
 // ------ Component ----- //
 
-export default function (
-  subPath: string,
+export default function ({
+  path,
+  countryGroupId,
+  listOfCountries,
+  trackProduct,
+}: {
+  path: string,
+  countryGroupId?: CountryGroupId,
   listOfCountries: CountryGroupId[],
   trackProduct?: Option<SubscriptionProduct>,
-) {
+}) {
 
-  const Switcher = countrySwitcherContainer(subPath, listOfCountries, trackProduct);
+  const Switcher = countrySwitcherContainer(path, listOfCountries, trackProduct);
 
-  return () => <Header utility={<Switcher />} />;
+  return () => <Header countryGroupId={countryGroupId} utility={<Switcher />} />;
 }

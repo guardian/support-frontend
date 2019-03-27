@@ -5,53 +5,51 @@
 import React, { type Node } from 'react';
 import SvgCheckmark from 'components/svgs/checkmark';
 import { type Option } from 'helpers/types/option';
-
-import uuidv4 from 'uuid';
+import AnchorButton from 'components/button/anchorButton';
 
 import './productPagePlanFormLabel.scss';
 
 // ---- Types ----- //
 
 type PropTypes = {|
-  type: string,
   title: string,
   offer: Option<string>,
   footer: Option<Node>,
+  onClick: Option<() => void>,
   children: Node,
-  checked: boolean,
-  onChange: (Event) => void,
+  href: string,
 |};
 
 
 // ----- Render ----- //
 
 export default ({
-  type, title, offer, children, checked, onChange, footer,
-}: PropTypes) => {
-  const id = uuidv4();
-  const descriptionId = uuidv4();
-  return (
-    <label onChange={onChange} htmlFor={id} className="component-product-page-plan-form-label">
-      <input aria-describedby={descriptionId} aria-label={title} checked={checked} className="component-product-page-plan-form-label__input" id={id} type="radio" name="sub-type" value={type} />
-      <div className="component-product-page-plan-form-label__box" id={descriptionId} aria-hidden="true">
-        <div className="component-product-page-plan-form-label__title">
-          {title}
-          <div aria-hidden="true" className="component-product-page-plan-form-label__check"><SvgCheckmark /></div>
-        </div>
-        <div className="component-product-page-plan-form-label__content">
-          {offer &&
-            <strong className="component-product-page-plan-form-label-offer">
-              <span className="component-product-page-plan-form-label-offer__inside">{offer}</span>
-            </strong>
-          }
-          <div className="component-product-page-plan-form-label__children">{children}</div>
-        </div>
-        {footer &&
-          <div className="component-product-page-plan-form-label__footer">
-            {footer}
-          </div>
-        }
+  title, offer, children, onClick, footer, href,
+}: PropTypes) => (
+  <div className="component-product-page-plan-form-label">
+    <div className="component-product-page-plan-form-label__box" aria-hidden="true">
+      <div className="component-product-page-plan-form-label__title">
+        {title}
+        <div aria-hidden="true" className="component-product-page-plan-form-label__check"><SvgCheckmark /></div>
       </div>
-    </label>
-  );
-};
+      <div className="component-product-page-plan-form-label__content">
+        {offer &&
+        <strong className="component-product-page-plan-form-label-offer">
+          <span className="component-product-page-plan-form-label-offer__inside">{offer}</span>
+        </strong>
+          }
+        <div className="component-product-page-plan-form-label__children">{children}</div>
+      </div>
+      {footer &&
+      <div className="component-product-page-plan-form-label__footer">
+        {footer}
+      </div>
+        }
+      <div className="component-product-page-plan-form-label__cta" >
+        <AnchorButton onClick={onClick} aria-label={`Subscribe – ${title}`} href={href}>
+            Subscribe now
+        </AnchorButton>
+      </div>
+    </div>
+  </div>
+);

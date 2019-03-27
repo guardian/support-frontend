@@ -4,8 +4,7 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Route } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { Route, BrowserRouter } from 'react-router-dom';
 
 import { isDetailsSupported, polyfillDetails } from 'helpers/details';
 import { init as pageInit } from 'helpers/page/page';
@@ -14,11 +13,10 @@ import { detect, countryGroups, type CountryGroupId } from 'helpers/internationa
 import * as user from 'helpers/user/user';
 import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
-import { isFrontlineCampaign } from 'helpers/url';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
-
+import { campaigns } from 'pages/new-contributions-landing/campaigns';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -63,6 +61,10 @@ const setOneOffContributionCookie = () => {
   );
 };
 
+const { campaignName } = store.getState().page.form;
+const cssModifiers = campaignName && campaigns[campaignName].cssModifiers ?
+  campaigns[campaignName].cssModifiers : [];
+
 const router = (
   <BrowserRouter>
     <Provider store={store}>
@@ -72,9 +74,9 @@ const router = (
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
           render={() => (
             <Page
-              classModifiers={['contribution-form', ...(isFrontlineCampaign() ? ['frontline-campaign'] : [])]}
+              classModifiers={['contribution-form', ...cssModifiers]}
               header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-              footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+              footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
             >
               <NewContributionFormContainer
                 thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}

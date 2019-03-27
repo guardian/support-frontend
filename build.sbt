@@ -1,5 +1,6 @@
 import sbt.Keys.{publishTo, resolvers, scalaVersion}
 import SeleniumTestConfig.{SeleniumTest, seleniumTestFilter, unitTestFilter}
+import sbtrelease.ReleaseStateTransformations._
 
 skip in publish := true
 
@@ -11,10 +12,26 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
 
 lazy val testScalastyle = taskKey[Unit]("testScalastyle")
 
+lazy val release = Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  ReleaseStep(action = Command.process("publishSigned", _), enableCrossBuild = false),
+  ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = false),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
+
 lazy val commonSettings = Seq(
   organization := "com.gu",
   scalaVersion := "2.12.7",
   resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.bintrayRepo("guardian", "ophan")),
+  isSnapshot := false,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -23,6 +40,13 @@ lazy val commonSettings = Seq(
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+  releaseProcess := release,
+  releaseUseGlobalVersion := false,
+  releaseVersionFile := file(name.value + "/version.sbt"),
+  scmInfo := Some(ScmInfo(
+    url("https://github.com/guardian/support-frontend"),
+    "scm:git:git@github.com:guardian/support-frontend.git"
+  )),
 )
 
 lazy val commonDependencies = Seq(

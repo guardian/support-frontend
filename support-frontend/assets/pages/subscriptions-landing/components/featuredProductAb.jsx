@@ -5,7 +5,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import CtaLink from 'components/ctaLink/ctaLink';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getSubsLinks } from 'helpers/externalLinks';
@@ -18,6 +17,7 @@ import { type CommonState } from 'helpers/page/commonReducer';
 import FeaturedProductHero from 'components/featuredProductHero/featuredProductHero';
 import { getProduct, type Product } from './featuredProducts';
 import { showCountdownTimer } from '../../../helpers/flashSale';
+import AnchorButton from 'components/button/anchorButton';
 
 
 // ----- Types ----- //
@@ -55,12 +55,13 @@ function FeaturedProductAb(props: PropTypes) {
   } = props;
 
   const getCta = ({ link, name }: Product) => (
-    <CtaLink
-      text="Subscribe now"
-      url={link}
-      accessibilityHint="Subscribe now"
+    <AnchorButton
+      href={link}
+      aria-label="Subscribe now"
       onClick={sendTrackingEventsOnClick(`featured_${name}_cta`, name, abTest)}
-    />
+    >
+      Subscribe now
+    </AnchorButton>
   );
 
   const subsLinks = getSubsLinks(

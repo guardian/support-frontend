@@ -1,8 +1,0 @@
-@import '~stylesheets/gu-sass/gu-sass';
-
-.component-checkout__form {
-  @include mq($from:desktop) {
-    max-width: gu-span(8) + $gu-h-spacing * 1.5;
-    border-right: 1px solid gu-colour(neutral-86);
-  }
-}

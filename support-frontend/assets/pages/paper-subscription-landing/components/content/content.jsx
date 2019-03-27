@@ -15,7 +15,6 @@ import CollectionTab from './collectionTab';
 import './content.scss';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 
-
 // ----- Render ----- //
 class Content extends Component<ContentPropTypes> {
 

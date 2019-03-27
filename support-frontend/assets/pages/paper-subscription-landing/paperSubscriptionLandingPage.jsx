@@ -13,7 +13,6 @@ import Text, { LargeParagraph } from 'components/text/text';
 
 
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getQueryParameter } from 'helpers/url';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
@@ -28,19 +27,14 @@ import reducer from './paperSubscriptionLandingPageReducer';
 import './paperSubscriptionLandingPage.scss';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import ConsentBanner from 'components/consentBanner/consentBanner';
 
 // ----- Collection or delivery ----- //
 
 const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes('delivery') ? HomeDelivery : Collection;
-const product = getQueryParameter('product');
 
-const reactElementId: {
-  [PaperFulfilmentOptions]: string,
-} = {
-  Collection: 'paper-subscription-landing-page-collection',
-  HomeDelivery: 'paper-subscription-landing-page-delivery',
-};
+const reactElementId = 'paper-subscription-landing-page';
 
 // ----- Internationalisation ----- //
 
@@ -51,7 +45,7 @@ const subsCountry = (['us', 'au'].includes(supportInternationalisationId) ? supp
 
 // ----- Redux Store ----- //
 
-const store = pageInit(() => reducer(fulfilment, product), true);
+const store = pageInit(() => reducer(fulfilment), true);
 
 
 // ----- Render ----- //
@@ -73,15 +67,16 @@ const content = (
       footer={<Footer />}
     >
       <SaleHeader />
-
-      <Content needsHigherZindex>
-        <Text>
-          <LargeParagraph>
-            {getStandfirst()}
-          </LargeParagraph>
-        </Text>
-        <Tabs />
-      </Content>
+      {paperHasDeliveryEnabled() &&
+        <Content needsHigherZindex>
+          <Text>
+            <LargeParagraph>
+              {getStandfirst()}
+            </LargeParagraph>
+          </Text>
+          <Tabs />
+        </Content>
+      }
       <TabsContent />
       {flashSaleIsActive('Paper', GBPCountries) &&
         <Content>
@@ -96,5 +91,5 @@ const content = (
   </Provider>
 );
 
-renderPage(content, reactElementId[fulfilment]);
+renderPage(content, reactElementId);
 

@@ -2,18 +2,34 @@
 
 import React, { type Node } from 'react';
 
-import './layout.scss';
-
+import styles from './layout.module.scss';
+import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
 type PropTypes = {
   children: Node,
+  aside: ?Node,
 };
-const Layout = ({ children }: PropTypes) => (
-  <div className="component-checkout">
-    <div className="component-checkout__form">
+const CheckoutLayout = ({ children, aside }: PropTypes) => (
+  <div className={[styles.root, aside ? styles.withAside : null].join(' ')}>
+    {aside &&
+      <div className={styles.aside}>
+        {aside}
+      </div>
+    }
+    <div className={styles.form}>
       {children}
     </div>
   </div>
 );
+CheckoutLayout.defaultProps = {
+  aside: null,
+};
 
-export default Layout;
+const Content = ({ children }: {children: Node}) => (
+  <LeftMarginSection className={styles.wrapper}>
+    {children}
+  </LeftMarginSection>
+);
+
+export { Content };
+export default CheckoutLayout;

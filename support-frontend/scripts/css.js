@@ -16,7 +16,9 @@ const getClassName = (resource, localName) => {
       name.substr(0, name.indexOf('.')),
     ].filter(Boolean).join('-'));
 
-  if (localName !== 'root') {
+  if (localName.substring(0, 4) === 'with') {
+    identity += `--${camelCaseToDash(localName.substring(4))}`;
+  } else if (localName !== 'root') {
     identity += `__${camelCaseToDash(localName)}`;
   }
   return identity;

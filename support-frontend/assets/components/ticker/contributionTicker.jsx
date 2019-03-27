@@ -4,6 +4,8 @@
 import React, { Component } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 
+import './contributionTicker.scss';
+
 // ---- Types ----- //
 type StateTypes = {|
   totalSoFar: number,
@@ -36,7 +38,7 @@ const percentageTotalAsNegative = (total: number, goal: number) => {
 
 
 // ----- Component ----- //
-export class ContributionTicker extends Component<PropTypes, StateTypes> {
+export default class ContributionTicker extends Component<PropTypes, StateTypes> {
 
   constructor(props: PropTypes) {
     super(props);

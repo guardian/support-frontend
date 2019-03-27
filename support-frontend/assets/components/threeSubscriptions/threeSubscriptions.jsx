@@ -4,8 +4,8 @@
 
 import React from 'react';
 
-import PageSection from 'components/pageSection/pageSection';
-
+import Content from 'components/content/content';
+import Text, { Title } from 'components/text/text';
 
 // ----- Types ----- //
 
@@ -20,11 +20,13 @@ type PropTypes = {|
 function ThreeSubscriptions(props: PropTypes) {
 
   return (
-    <div className="component-three-subscriptions">
-      <PageSection heading={props.heading} modifierClass="three-subscriptions">
+    <Content modifierClasses={['three-subscriptions']}>
+      <Text><Title size={2}>{props.heading}</Title></Text>
+      <div className="component-three-subscriptions">
         {props.children}
-      </PageSection>
-    </div>
+      </div>
+    </Content>
+
   );
 
 }

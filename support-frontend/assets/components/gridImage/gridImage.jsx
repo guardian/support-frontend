@@ -6,7 +6,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 
 import { gridUrl, gridSrcset } from 'helpers/theGrid';
 import { ascending } from 'helpers/utilities';
@@ -36,7 +36,7 @@ type PropTypes = GridImg;
 
 // ----- Component ----- //
 
-export default function GridImage(props: PropTypes) {
+export default function GridImage(props: PropTypes): Node {
   if (props.srcSizes.length < 1) {
     return null;
   }

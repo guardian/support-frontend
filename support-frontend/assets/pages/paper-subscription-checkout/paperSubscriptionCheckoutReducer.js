@@ -23,7 +23,7 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
   Everyday,
   type PaperProductOptions, ActivePaperProductTypes,
@@ -42,6 +42,10 @@ import {
 } from './components-checkout/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+
+import { getVoucherDays, getDeliveryDays, formatMachineDate } from './helpers/deliveryDays';
+
 
 // ----- Types ----- //
 
@@ -144,6 +148,12 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
+function getDays(fulfilmentOption: PaperFulfilmentOptions, productOption: PaperProductOptions) {
+  return (fulfilmentOption === HomeDelivery ? getDeliveryDays(Date.now(), productOption)
+    : getVoucherDays(Date.now(), productOption));
+}
+
+
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
@@ -219,14 +229,17 @@ const getInitialProduct = (productInUrl: ?string, fulfillmentInUrl: ?string): Pr
       ? (productInUrl: PaperProductOptions)
       : Everyday,
   fulfilmentOption:
-    fulfillmentInUrl === 'Collection' || fulfillmentInUrl === 'HomeDelivery'
-      ? (fulfillmentInUrl: PaperFulfilmentOptions)
-      : Collection,
+  paperHasDeliveryEnabled() && (fulfillmentInUrl === 'Collection' || fulfillmentInUrl === 'HomeDelivery')
+    ? (fulfillmentInUrl: PaperFulfilmentOptions)
+    : Collection,
 });
 
 function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillmentInUrl: ?string) {
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const { productPrices } = window.guardian;
+
+  const product = getInitialProduct(productInUrl, fulfillmentInUrl);
+  const days: Date[] = getDays(product.fulfilmentOption, product.productOption);
 
   const initialState = {
     stage: 'checkout',
@@ -234,14 +247,14 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    startDate: null,
+    startDate: formatMachineDate(days[0]) || null,
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? DirectDebit : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
     isTestUser: isTestUser(),
-    ...getInitialProduct(productInUrl, fulfillmentInUrl),
+    ...product,
     productPrices,
     billingAddressIsSame: true,
   };
@@ -314,4 +327,5 @@ export {
   setFormSubmitted,
   signOut,
   formActionCreators,
+  getDays,
 };

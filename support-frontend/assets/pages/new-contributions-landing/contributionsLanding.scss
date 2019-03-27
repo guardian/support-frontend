@@ -11,7 +11,6 @@
 @import '~components/button/button';
 @import '~components/marketingConsentNew/marketingConsent';
 @import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYou';
-@import '~pages/new-contributions-landing/components/ContributionTicker/ContributionTicker';
 @import '~pages/new-contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
 @import '~pages/new-contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
 @import '~pages/new-contributions-landing/components/ContributionSurvey/ContributionSurvey';
@@ -107,7 +106,6 @@ header[role="banner"] {
 
   @include mq($from: tablet) {
     height: 115px;
-    padding: 0 0 0 $content-left-margin-tablet;
   }
 
   @include mq($from: leftCol) {
@@ -274,46 +272,12 @@ header[role="banner"] {
   font-weight: bold;
 }
 
-
-/*= FOOTER */
-
-footer[role="contentinfo"] {
-  padding: 0 ($gu-h-spacing / 2);
-  background: gu-colour(neutral-20);
-  color: gu-colour(neutral-60);
-  font-size: 12px;
-  display: flex;
-
-  @include mq($from: tablet) {
-    padding: 0 0 ($gu-v-spacing * 2);
-    width: auto;
-  }
-
-  @include mq($from: leftCol) {
-    padding: 0 calc(50% - 550px) ($gu-v-spacing * 2) calc(50% - 390px);
-    width: 940px;
-  }
-}
-
-footer[role="contentinfo"] a {
-  color: gu-colour(neutral-100);
-}
-
-.component-footer__content {
-  padding-top: $gu-v-spacing;
-}
-
-
 /*= CONTENT */
 .gu-content__content {
   overflow: hidden;
   flex-grow: 1;
   margin: 0 auto;
   border: none;
-
-  @include mq($from: tablet) {
-    margin-left: $content-left-margin-tablet
-  }
 
   @include mq($from: leftCol) {
     margin-left: $content-left-margin-leftCol
@@ -358,8 +322,12 @@ footer[role="contentinfo"] a {
 
 .gu-content__content--flex {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-direction: row-reverse;
+
+  @include mq($from: leftCol) {
+    justify-content: flex-end;
+  }
 }
 
 .gu-content__form {
@@ -374,8 +342,8 @@ footer[role="contentinfo"] a {
   background-color: gu-colour(neutral-100);
 
   @include mq($from: tablet) {
-    width: 40%;
-    margin: 30px 10px;
+    margin: 30px 0 0 10px;
+    flex: 0 1 40%;
   }
 }
 
@@ -391,13 +359,16 @@ footer[role="contentinfo"] a {
 
 .gu-content__blurb {
   display: none;
-  border-top: 10px solid gu-colour(highlight-main);
-  margin-left: auto;
-  max-width: 404px;
 
   @include mq($from: tablet) {
     display: block;
-    margin: 30px 120px 30px 10px;
+    border-top: 10px solid gu-colour(highlight-main);
+    margin-top: 30px;
+    flex: 0 1 40%;
+  }
+
+  @include mq($from: leftCol) {
+    margin-left: 80px;
   }
 }
 
@@ -481,23 +452,13 @@ button {
   }
 }
 
-footer[role="contentinfo"] {
-  font-family: $gu-text-sans-web;
-
-  @include mq($from: tablet) {
-    padding: 0 calc(50% - 350px) ($gu-v-spacing * 2);
-    width: 700px;
-  }
-
-  @include mq($from: wide) {
-    padding: 0 calc(50% - 620px) ($gu-v-spacing * 2);
-    width: 1240px;
-  }
-
-}
-
-
 /*= CONTENT */
+.component-footer {
+  font-size: 12px;
+  .component-content__content {
+    color: gu-colour(neutral-86);
+  }
+}
 .content {
   background: gu-colour(neutral-100);
   padding: 0 10px;
@@ -1202,4 +1163,33 @@ form {
 
 .editorialise-amounts-test-copy:empty {
   display: none;
+}
+
+// Vertical contributions tabs test
+.form__radio-group--mobile-vertical-tabs {
+  .form__radio-group-list {
+    flex-flow: column-reverse nowrap;
+    text-align: center;
+
+    @include mq($from: mobileLandscape) {
+      flex-flow: row nowrap;
+      text-align: left;
+    }
+  }
+
+  .form__radio-group-list--border {
+    border-bottom: none;
+
+    @include mq($from: mobileLandscape) {
+      border-bottom: 1px solid gu-colour(neutral-86);
+    }
+  }
+
+  .form__radio-group-list--border .form__radio-group-item {
+    border-bottom: 1px solid gu-colour(highlight-main);
+
+    @include mq($from: mobileLandscape) {
+      border-bottom: none;
+    }
+  }
 }

@@ -65,7 +65,7 @@ object Fixtures {
         Nil
       )
     ),
-    Subscription(date, date, date)
+    Subscription(date, date, date, "id123")
   )
 
   val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
@@ -79,7 +79,7 @@ object Fixtures {
         Nil
       )
     ),
-    Subscription(date, date, date)
+    Subscription(date, date, date, "id123")
   )
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
@@ -114,7 +114,7 @@ object Fixtures {
         Nil
       )
     ),
-    Subscription(date, date, date, termType = "Invalid term type")
+    Subscription(date, date, date, "id123", termType = "Invalid term type")
   )
   val invalidSubscriptionRequest = SubscribeRequest(List(
     SubscribeItem(account(), contactDetails, None, creditCardPaymentMethod, invalidMonthlySubsData, SubscribeOptions())

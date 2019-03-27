@@ -29,17 +29,6 @@
     }
   }
 
-  .svg-dropdown-arrow {
-    position: inline-block;
-    padding-top: 2px;
-    margin-left: $gu-h-spacing * -.5;
-    z-index: 9;
-    position: relative;
-    path {
-      fill: gu-colour(neutral-100);
-    }
-  }
-
   &:hover {
     .component-select-input__select {
       color: gu-colour(highlight-main);

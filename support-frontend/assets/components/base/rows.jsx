@@ -12,16 +12,19 @@ import './rows.scss';
 
 type PropTypes = {
   gap: 'small' | 'normal' | 'large',
-  children: Node
+  children: Node,
+  className: ?string,
 };
 
 
 // ----- Component ----- //
 
-function Rows({ children, gap, ...props }: PropTypes) {
+function Rows({
+  children, className, gap, ...props
+}: PropTypes) {
 
   return (
-    <div className={classNameWithModifiers('component-base-rows', [gap])} {...props} >
+    <div className={[className, classNameWithModifiers('component-base-rows', [gap])].join(' ')} {...props} >
       {children}
     </div>
   );
@@ -30,6 +33,7 @@ function Rows({ children, gap, ...props }: PropTypes) {
 
 Rows.defaultProps = {
   gap: 'normal',
+  className: null,
 };
 
 
