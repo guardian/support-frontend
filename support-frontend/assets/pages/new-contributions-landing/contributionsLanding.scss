@@ -16,11 +16,7 @@
 @import '~pages/new-contributions-landing/components/ContributionSurvey/ContributionSurvey';
 
 
-$content-left-margin-tablet: calc(50% - 361px);
-$content-left-margin-leftCol: calc(50% - 401px);
-
-$content-right-margin-tablet: calc(50% + 361px);
-$content-right-margin-leftCol: calc(50% + 401px);
+$content-left-margin-leftCol: calc(50% - 480px);
 
 body {
   min-height: 100vh;
@@ -278,27 +274,22 @@ header[role="banner"] {
   flex-grow: 1;
   margin: 0 auto;
   border: none;
-
-  @include mq($from: leftCol) {
-    margin-left: $content-left-margin-leftCol
+  max-width: gu-span(9) + $gu-h-spacing;
+  @include mq($from: tablet) {
+    margin: 30px auto 10px;
+    padding: 0 $gu-h-spacing;
   }
-
+  @include mq($from: desktop) {
+    max-width: gu-span(10) + $gu-h-spacing;
+  }
+  @include mq($from: leftCol) {
+    max-width: gu-span(12) + $gu-h-spacing;
+  }
 }
 
 .gu-content__content-contributions {
   width: 100%;
-  max-width: 1015px;
-  padding: 0;
   background-color: transparent;
-
-  @include mq($from: tablet) {
-    margin-right: $content-right-margin-tablet
-  }
-
-  @include mq($from: leftCol) {
-    margin-right: $content-right-margin-leftCol
-  }
-
 }
 
 .gu-content__content-thankyou {
@@ -312,6 +303,7 @@ header[role="banner"] {
     border-style: none solid;
     border-width: 0 1px;
     width: 380px;
+    padding: 0 10px;
   }
 
   @include mq($from: leftCol) {
@@ -342,8 +334,14 @@ header[role="banner"] {
   background-color: gu-colour(neutral-100);
 
   @include mq($from: tablet) {
-    margin: 30px 0 0 10px;
-    flex: 0 1 40%;
+    width: gu-span(4) + $gu-h-spacing*1.5;
+    flex: 0 0 auto;
+  }
+  @include mq($from: desktop) {
+    width: gu-span(5) - $gu-h-spacing*.75;
+  }
+  @include mq($from: leftCol) {
+    width: gu-span(6);
   }
 }
 
@@ -363,12 +361,12 @@ header[role="banner"] {
   @include mq($from: tablet) {
     display: block;
     border-top: 10px solid gu-colour(highlight-main);
-    margin-top: 30px;
-    flex: 0 1 40%;
+    flex: 1 1 0;
+    margin-left: $gu-h-spacing;
   }
 
   @include mq($from: leftCol) {
-    margin-left: 80px;
+    margin-left: gu-span(1) + $gu-h-spacing*1.5;
   }
 }
 
@@ -377,8 +375,8 @@ header[role="banner"] {
   left: 10px;
   padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
   width: 100%;
-  font-size: 44px;
-  line-height: 46px;
+  font-size: 36px;
+  line-height: 1.05;
   font-family: $gu-headline;
   font-weight: bold;
   margin: 0 -10px;
@@ -387,6 +385,9 @@ header[role="banner"] {
 
   @include mq($from: tablet) {
     padding: 0 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+  }
+  @include mq($from: desktop) {
+    font-size: 44px;
   }
 }
 
