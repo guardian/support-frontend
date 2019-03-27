@@ -49,7 +49,7 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
   def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] =
     postJson[List[SubscribeResponseAccount]]("action/subscribe", subscribeRequest.asJson, authHeaders)
 
-  def getPaymentMethod(paymentMethodId:String): Future[GetPaymentMethodResponse] =
+  def getPaymentMethod(paymentMethodId: String): Future[GetPaymentMethodResponse] =
     get[GetPaymentMethodResponse](s"object/payment-method/$paymentMethodId", authHeaders)
 
   def getDefaultPaymentMethodId(accountNumber: String): Future[Option[String]] = {

@@ -8,7 +8,7 @@ import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
 import io.circe.Decoder.Result
-import io.circe.{ACursor, Decoder, DecodingFailure, HCursor}
+import io.circe.{Decoder, HCursor}
 import org.joda.time.LocalDate
 
 sealed trait ZuoraResponse {
@@ -93,8 +93,6 @@ object GetObjectAccountResponse {
   implicit val codec: Codec[GetObjectAccountResponse] = deriveCodec
 }
 
-
-//todo see if there is better way to deserialise this into separate classes using the the type field
 sealed trait GetPaymentMethodResponse {
   def `type`: String
   def paymentMethodStatus: String
@@ -104,7 +102,7 @@ case class GetPaymentMethodDirectDebitResponse(
   `type`: String,
   paymentMethodStatus: String,
   //direct debit fields
-  mandateID: String, //todo should we make this optional to be able to handle cases closed dd payment methods where the mandate is delete ?
+  mandateID: String,
   bankTransferAccountName: String,
   bankTransferAccountNumberMask: String,
   bankCode: String,
@@ -122,19 +120,27 @@ case class GetPaymentMethodCardReferenceResponse(
   creditCardMaskNumber: String,
   creditCardExpirationYear: Int,
   creditCardExpirationMonth: Int
-) extends GetPaymentMethodResponse
+  ) extends GetPaymentMethodResponse
 
-//todo paypal response, creditcard (non reference)?
+case class GetPaymentMethodPaypalResponse(
+  `type`: String,
+  paymentMethodStatus: String,
+  paypalEmail: String,
+  paypalBaid: String
+  ) extends GetPaymentMethodResponse
+
 
 object GetPaymentMethodResponse {
   implicit val ddCodec: Codec[GetPaymentMethodDirectDebitResponse] = capitalizingCodec
   implicit val cardCodec: Codec[GetPaymentMethodCardReferenceResponse] = capitalizingCodec
+  implicit val payPalCodec: Codec[GetPaymentMethodPaypalResponse] = capitalizingCodec
 
   implicit val decode: Decoder[GetPaymentMethodResponse] = new Decoder[GetPaymentMethodResponse] {
     override def apply(c: HCursor): Result[GetPaymentMethodResponse] = {
       c.downField("Type").as[String].flatMap{
                 case "BankTransfer" => ddCodec(c)
                 case "CreditCardReferenceTransaction" => cardCodec(c)
+                case "PayPal" => payPalCodec(c)
       }
     }
   }
