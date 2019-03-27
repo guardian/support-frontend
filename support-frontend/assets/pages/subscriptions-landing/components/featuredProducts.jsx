@@ -7,12 +7,10 @@ import { type SubsUrls } from 'helpers/externalLinks';
 import { getQueryParameter } from 'helpers/url';
 import { type SubscriptionProduct } from 'helpers/subscriptions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { findIsoCountry } from 'helpers/internationalisation/country';
-
 import GridPicture from 'components/gridPicture/gridPicture';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { showPrice, getCurrency, type Price } from 'helpers/productPrice/productPrices';
+import { showPrice, type Price } from 'helpers/productPrice/productPrices';
 import { fromCountryGroupId } from '../../../helpers/internationalisation/currency';
 
 // ----- Types ----- //
@@ -128,14 +126,14 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
   }
 
   const maybeCurrency = fromCountryGroupId(countryGroupId);
-  const thePrice: Price = {
+  const sixPrice: Price = {
     price: 6,
     currency: maybeCurrency !== null && maybeCurrency !== undefined ? maybeCurrency : 'GBP',
   };
   // if (product === 'GuardianWeekly') {
   return {
     headingText: 'Guardian Weekly',
-    subheadingText: `6 issues for ${showPrice(thePrice)}`,
+    subheadingText: `6 issues for ${showPrice(sixPrice)}`,
     bodyText: 'The Guardian\'s essential news magazine with free worldwide delivery.',
   };
   // }
