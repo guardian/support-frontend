@@ -20,16 +20,18 @@ class GetPaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   override protected def servicesHandler(state: GetPaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
 
     val zuoraService = services.zuoraService
+    val accountId = state.paymentFields.billingAccountId
     for {
-      account <- zuoraService.getObjectAccount(state.paymentFields.billingAccountId)
-      accountIdentityId <- getOrFailWithMessage(account.IdentityId__c, "Zuora account has no identityId")
-      _ <- ifFalseReturnError(accountIdentityId == state.user.id, s"Zuora identity id: $accountIdentityId does not match user identity id ${state.user.id}")
-      paymentId <- getOrFailWithMessage(account.DefaultPaymentMethodId, "Zuora account has no default payment method")
+      account <- zuoraService.getObjectAccount(accountId)
+      accountIdentityId <- getOrFailWithMessage(account.IdentityId__c, s"Zuora account $accountId has no identityId")
+      _ <- ifFalseReturnError(accountIdentityId == state.user.id, s"Zuora account $accountId identity id: $accountIdentityId does not match ${state.user.id}")
+      paymentId <- getOrFailWithMessage(account.DefaultPaymentMethodId, s"Zuora account $accountId has no default payment method")
       getPaymentMethodResponse <- zuoraService.getPaymentMethod(paymentId)
-      _ <- ifFalseReturnError(getPaymentMethodResponse.paymentMethodStatus == "Active", "Zuora account has a non active default payment method")
-      sfContactId <- getOrFailWithMessage(account.sfContactId__c, "Zuora account has no sfContact")
+      _ <- ifFalseReturnError(getPaymentMethodResponse.paymentMethodStatus == "Active", s"Zuora account $accountId has a non active default payment method")
+      sfContactId <- getOrFailWithMessage(account.sfContactId__c, s"Zuora account $accountId has no sfContact")
+      crmId <- getOrFailWithMessage(account.CrmId, s"Zuora account $accountId has not CrmId")
       paymentMethod <- asFuture(toPaymentMethod(getPaymentMethodResponse))
-      sfContact = SalesforceContactRecord(sfContactId, account.CrmId)
+      sfContact = SalesforceContactRecord(sfContactId, crmId)
     } yield  HandlerResult(
         CreateZuoraSubscriptionState(
           requestId = UUID.randomUUID(),
