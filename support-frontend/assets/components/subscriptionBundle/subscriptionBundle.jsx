@@ -52,7 +52,12 @@ export default function SubscriptionBundle(props: PropTypes) {
 
   return (
     <div className={classNameWithModifiers('component-subscription-bundle', [props.modifierClass])}>
-      <GridImage {...props.gridImage} />
+      {
+        props.ctas.length === 1 ?
+          <a href={props.ctas[0].url} onClick={props.ctas[0].onClick}><GridImage {...props.gridImage} /></a>
+        :
+          <GridImage {...props.gridImage} />
+      }
       <div className="component-subscription-bundle__content">
         <DoubleHeading
           heading={props.heading}
