@@ -14,7 +14,6 @@
 @import '~components/spreadTheWord/spreadTheWord';
 @import '~components/socialShare/socialShare';
 @import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYou';
-@import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYouNew';
 @import '~pages/new-contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
 @import '~pages/new-contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
 @import '~pages/new-contributions-landing/components/ContributionSurvey/ContributionSurvey';
@@ -510,7 +509,34 @@ button {
   .component-terms-privacy__change {
     padding-bottom: 4px;
   }
+}
 
+.button {
+  align-items: center;
+  border: 1px solid currentColor;
+  background-color: gu-colour(neutral-100);
+  border-radius: $gu-v-spacing * 2;
+  font-family: $gu-text-sans-web;
+  height: $gu-v-spacing * 3.5;
+  line-height: 1;
+  padding: 0 $gu-h-spacing;
+  text-decoration: none;
+  position: relative;
+  font-weight: 600;
+
+  svg {
+    position: absolute;
+    fill: currentColor;
+    overflow: visible;
+  }
+
+  &:enabled {
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(90%);
+    }
+  }
 }
 
 /*= TYPOGRAPHY */
