@@ -34,9 +34,18 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
   ): FutureHandlerResult = {
     SafeLogger.info(s"Sending acquisition event to ophan: ${state.toString}")
     // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
-    services.acquisitionService.submit(state).fold(errors => throw AnalyticsServiceErrorList(errors), _ => HandlerResult(Unit, requestInfo))
+    services.acquisitionService.submit(
+      SendAcquisitionEventStateAndRequestInfo(state, requestInfo)
+    ).fold(
+      errors => throw AnalyticsServiceErrorList(errors), _ => HandlerResult(Unit, requestInfo)
+    )
   }
 }
+
+case class SendAcquisitionEventStateAndRequestInfo(
+  state: SendAcquisitionEventState,
+  requestInfo: RequestInfo
+)
 
 object SendAcquisitionEvent {
 
@@ -45,18 +54,18 @@ object SendAcquisitionEvent {
   }
 
   // Typeclass instance used by the Ophan service to attempt to build a submission from the state.
-  private implicit val stateAcquisitionSubmissionBuilder: AcquisitionSubmissionBuilder[SendAcquisitionEventState] =
+  private implicit val stateAcquisitionSubmissionBuilder: AcquisitionSubmissionBuilder[SendAcquisitionEventStateAndRequestInfo] =
 
-    new AcquisitionSubmissionBuilder[SendAcquisitionEventState] {
+    new AcquisitionSubmissionBuilder[SendAcquisitionEventStateAndRequestInfo] {
 
       import cats.syntax.either._
 
-      override def buildOphanIds(state: SendAcquisitionEventState): Either[String, OphanIds] =
-        Either.fromOption(state.acquisitionData.map(_.ophanIds), "acquisition data not included")
+      override def buildOphanIds(stateAndInfo: SendAcquisitionEventStateAndRequestInfo): Either[String, OphanIds] =
+        Either.fromOption(stateAndInfo.state.acquisitionData.map(_.ophanIds), "acquisition data not included")
 
-      override def buildGAData(a: SendAcquisitionEventState): Either[String, GAData] = {
+      override def buildGAData(stateAndInfo: SendAcquisitionEventStateAndRequestInfo): Either[String, GAData] = {
         for {
-          acquisitionData <- Either.fromOption(a.acquisitionData, "acquisition data not included")
+          acquisitionData <- Either.fromOption(stateAndInfo.state.acquisitionData, "acquisition data not included")
           ref = acquisitionData.referrerAcquisitionData
           hostname <- Either.fromOption(ref.hostname, "missing hostname in referrer acquisition data")
           gaClientId = ref.gaClientId.getOrElse(UUID.randomUUID().toString)
@@ -109,28 +118,28 @@ object SendAcquisitionEvent {
         }
       }
 
-      override def buildAcquisition(state: SendAcquisitionEventState): Either[String, thrift.Acquisition] = {
-        val (productType, productAmount) = state.product match {
+      override def buildAcquisition(stateAndInfo: SendAcquisitionEventStateAndRequestInfo): Either[String, thrift.Acquisition] = {
+        val (productType, productAmount) = stateAndInfo.state.product match {
           case c: Contribution => (OphanProduct.RecurringContribution, c.amount.toDouble)
           case _: DigitalPack => (OphanProduct.DigitalSubscription, 0D) //TODO: Send the real amount in the acquisition event
           case _: Paper => (OphanProduct.PrintSubscription, 0D) //TODO: same as above
         }
 
         Either.fromOption(
-          state.acquisitionData.map { data =>
+          stateAndInfo.state.acquisitionData.map { data =>
             thrift.Acquisition(
               product = productType,
-              printOptions = printOptionsFromProduct(state.product),
-              paymentFrequency = paymentFrequencyFromBillingPeriod(state.product.billingPeriod),
-              currency = state.product.currency.iso,
+              printOptions = printOptionsFromProduct(stateAndInfo.state.product),
+              paymentFrequency = paymentFrequencyFromBillingPeriod(stateAndInfo.state.product.billingPeriod),
+              currency = stateAndInfo.state.product.currency.iso,
               amount = productAmount,
-              paymentProvider = Some(paymentProviderFromPaymentMethod(state.paymentMethod)),
+              paymentProvider = Some(paymentProviderFromPaymentMethod(stateAndInfo.state.paymentMethod)),
               // Currently only passing through at most one campaign code
               campaignCode = data.referrerAcquisitionData.campaignCode.map(Set(_)),
               abTests = Some(thrift.AbTestInfo(
                 data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set())
               )),
-              countryCode = Some(state.user.billingAddress.country.alpha2),
+              countryCode = Some(stateAndInfo.state.user.billingAddress.country.alpha2),
               referrerPageViewId = data.referrerAcquisitionData.referrerPageviewId,
               referrerUrl = data.referrerAcquisitionData.referrerUrl,
               componentId = data.referrerAcquisitionData.componentId,
@@ -138,7 +147,8 @@ object SendAcquisitionEvent {
               source = data.referrerAcquisitionData.source,
               platform = Some(ophan.thrift.event.Platform.Support),
               queryParameters = data.referrerAcquisitionData.queryParameters,
-              identityId = Some(state.user.id)
+              identityId = Some(stateAndInfo.state.user.id),
+              labels = if(stateAndInfo.requestInfo.accountExists) Some(Set("REUSED_EXISTING_PAYMENT_METHOD")) else None
             )
           },
           "acquisition data not included"
