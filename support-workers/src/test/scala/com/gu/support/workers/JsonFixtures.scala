@@ -18,7 +18,7 @@ object JsonFixtures {
   def wrapFixture(string: String): ByteArrayInputStream =
     Wrapper.wrapString(string, RequestInfo(useEncryption, testUser = false, failed = false, Nil, false)).asJson.noSpaces.asInputStream
 
-  def userJson(id:String = idId) : String =
+  def userJson(id: String = idId): String =
     s"""
       "user":{
           "id": "$id",
