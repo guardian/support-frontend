@@ -20,6 +20,8 @@ export default function SpreadTheWord() {
       <div className="component-spread-the-word__share">
         <SocialShare name="facebook" />
         <SocialShare name="twitter" />
+        <SocialShare name="facebook" />
+        <SocialShare name="twitter" />
       </div>
     </div>
   );

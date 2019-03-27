@@ -10,6 +10,9 @@ import MarketingConsent from '../MarketingConsentContainer';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import AnchorButton from 'components/button/anchorButton';
+import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
+
 
 // import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArrow';
 // import { DirectDebit } from 'helpers/paymentMethods';
@@ -57,6 +60,20 @@ function ContributionThankYou(props: PropTypes) {
       <div className="gu-content__form gu-content__form--thank-you">
         <MarketingConsent />
         <SpreadTheWord />
+        <div className="gu-content__return-link">
+          <AnchorButton
+            href={'https://www.theguardian.com'}
+            onClick={ev => {
+              ev.preventDefault();
+            }}
+            appearance={'greyHollow'}
+            aria-label={'Return to The Guardian'}
+            icon={<SvgArrowLeft/>}
+            iconSide={'left'}
+          >
+            Return to The Guardian
+          </AnchorButton>
+        </div>
       </div>
 
       <div className="gu-content__blurb gu-content__blurb--thank-you">
