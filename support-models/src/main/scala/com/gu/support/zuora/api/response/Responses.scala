@@ -101,7 +101,6 @@ sealed trait GetPaymentMethodResponse {
 case class GetPaymentMethodDirectDebitResponse(
   `type`: String,
   paymentMethodStatus: String,
-  //direct debit fields
   mandateID: String,
   bankTransferAccountName: String,
   bankTransferAccountNumberMask: String,
