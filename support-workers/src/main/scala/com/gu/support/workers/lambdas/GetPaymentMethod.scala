@@ -39,11 +39,12 @@ class GetPaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
           salesForceContact = sfContact,
           acquisitionData = state.acquisitionData
         ),
-        requestInfo
-      )
+      requestInfo
+
+    )
   }
 
-  def toPaymentMethod(getPaymentMethodResponse: GetPaymentMethodResponse): Either[String, CreditCardReferenceTransaction] = getPaymentMethodResponse match {
+  def toPaymentMethod(getPaymentMethodResponse: GetPaymentMethodResponse): Either[String, PaymentMethod] = getPaymentMethodResponse match {
 
     case cardResponse: GetPaymentMethodCardReferenceResponse => {
       val maybeCountry: Option[Country] = cardResponse.creditCardCountry.flatMap(CountryGroup.byOptimisticCountryNameOrCode(_))
