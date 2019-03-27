@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import Dialog from 'components/dialog/dialog';
 import { clickedEvent } from 'helpers/tracking/clickTracking';
-import Menu, { LinkItem } from '../menu/menu';
+import Menu, { LinkItem } from 'components/menu/menu';
 
 import {
   countryGroups,

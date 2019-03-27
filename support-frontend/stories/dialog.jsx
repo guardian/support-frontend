@@ -11,6 +11,7 @@ import Button from 'components/button/button';
 import Text from 'components/text/text';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
 import WithState from '../.storybook/util/withState';
+import Menu, { ButtonItem } from 'components/menu/menu';
 
 
 // Teeny helpers
@@ -38,10 +39,6 @@ const inlineDialogStyle = bounds => ({
   top: bounds.top,
   left: bounds.left,
   position: 'absolute',
-  background: '#fafafa',
-  border: '1px solid #ddd',
-  padding: '.5em',
-  borderRadius: '1.25em',
 });
 
 
@@ -117,20 +114,20 @@ stories.add('Unstyled dialog', () => (
               blocking={false} // this lets you click outside to close
               styled={false}
             >
-              <div
+              <Menu
                 style={inlineDialogStyle(state.bounds)}
               >
-                <GreyButton>This could be a dropdown menu</GreyButton><br />
-                <GreyButton>Click outside to close</GreyButton><br />
-                <GreyButton>
+                <ButtonItem>This could be a dropdown menu</ButtonItem>
+                <ButtonItem>Click outside to close</ButtonItem>
+                <ButtonItem>
                   BUT! you still need a close button for keyboard + srd users even if its visibly hidden
-                </GreyButton><br />
-                <GreyButton
+                </ButtonItem>
+                <ButtonItem
                   onClick={() => { setState({ open: false }); }}
                 >
                   Close
-                </GreyButton>
-              </div>
+                </ButtonItem>
+              </Menu>
             </Dialog>
           </div>)}
       </WithState>
