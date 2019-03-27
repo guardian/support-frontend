@@ -61,13 +61,12 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
                                            clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
     EitherT(getOrCreateIdentityIdFromEmail(googleRecordPayment.email).fold(
       _ => {
-        logger.warn(s"unable to get identity id for email ${googleRecordPayment.email}, tracking acquisition anyway")
+        logger.warn(s"unable to get identity id for email ${googleRecordPayment.email} with paymentId : ${googleRecordPayment.paymentId}, tracking acquisition anyway")
         handleContributionWithoutIdentity(googleRecordPayment, clientBrowserInfo).value
       }, id =>
         handleContributionWithIdentity(id, googleRecordPayment, clientBrowserInfo).value
     ).flatten)
   }
-
 
   private def handleContributionWithoutIdentity(googleRecordPayment: GoogleRecordPayment, clientBrowserInfo: ClientBrowserInfo) = {
     val trackContributionResult =

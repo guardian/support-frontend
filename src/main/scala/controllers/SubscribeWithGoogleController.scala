@@ -30,13 +30,14 @@ class SubscribeWithGoogleController(
     requestBody.status match {
       case PaymentStatus.Paid =>
         subscribeWithGoogleBackendProvider.getInstanceFor(request)
-          .recordPayment(request.body, ClientBrowserInfo.fromRequest(request, None)).bimap(
-          err => err match {
-            case dbError: BackendError.SubscribeWithGoogleDuplicateEventError => Ok("{}").as(ContentTypes.JSON)
-            case er: BackendError => InternalServerError
-          },
-          success => Ok("{}").as(ContentTypes.JSON)
-        ).merge
+          .recordPayment(request.body, ClientBrowserInfo.fromRequest(request, None))
+          .bimap(
+            err => err match {
+              case dbError: BackendError.SubscribeWithGoogleDuplicateEventError => Ok("{}").as(ContentTypes.JSON)
+              case er: BackendError => InternalServerError
+            },
+            success => Ok("{}").as(ContentTypes.JSON)
+          ).merge
       case PaymentStatus.Failed | PaymentStatus.Refunded =>
         logger.error(
           s"Received $requestBody - as a payment but has a Payment Status of ${requestBody.status} - this is not a payment"
