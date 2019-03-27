@@ -82,7 +82,7 @@ case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends Zu
 case class GetObjectAccountResponse(
    IdentityId__c: Option[String],
    sfContactId__c: Option[String],
-   CrmId: Option[String],
+   CrmId: String,
    DefaultPaymentMethodId: Option[String],
    AutoPay: Boolean,
    Balance: Double,

@@ -27,7 +27,7 @@ class GetPaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       _ <- ifFalseReturnError(getPaymentMethodResponse.paymentMethodStatus == "Active", "Account has a non active default payment method")
       sfContactId <- getOrFailWithMessage(account.sfContactId__c, "account has no sfContact!")
       paymentMethod <- asFuture(toPaymentMethod(getPaymentMethodResponse))
-      sfContact = SalesforceContactRecord(sfContactId, account.CrmId.getOrElse("")) //todo what is this account id in the salesforceContactRecord ?
+      sfContact = SalesforceContactRecord(sfContactId, account.CrmId)
     } yield  HandlerResult(
         CreateZuoraSubscriptionState(
           requestId = UUID.randomUUID(),
