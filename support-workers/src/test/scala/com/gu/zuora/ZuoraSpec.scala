@@ -5,7 +5,7 @@ import java.util.UUID
 import com.gu.config.Configuration.zuoraConfigProvider
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
-import com.gu.support.workers.{GetRecurringSubscription, IdentityId, Monthly}
+import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId, Monthly}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -48,25 +48,13 @@ class ZuoraSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "be able to find a monthly recurring subscription" in {
-    GetRecurringSubscription(uatService, UUID.fromString("cac90497-3001-4dbc-88c3-1f47d54c511c"), IdentityId("30001758").get, Monthly).map {
+    GetSubscriptionWithCurrentRequestId(uatService, UUID.fromString("cac90497-3001-4dbc-88c3-1f47d54c511c"), IdentityId("30001758").get, Monthly).map {
       _.flatMap(_.ratePlans.headOption.map(_.productName)) should be(Some("Contributor"))
     }
   }
 
-  it should "ignore a monthly recurring subscription with wrong session id" in {
-    GetRecurringSubscription(uatService, UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"), IdentityId("30001758").get, Monthly).map {
-      _.flatMap(_.ratePlans.headOption) should be(None)
-    }
-  }
-
-  it should "ignore active subscriptions which do not have a recurring contributor plan" in {
-    GetRecurringSubscription(uatService, UUID.fromString("cac90497-3001-4dbc-88c3-1f47d54c511c"), IdentityId("18390845").get, Monthly).map {
-      _ should be(None)
-    }
-  }
-
-  it should "ignore cancelled recurring contributions" in {
-    GetRecurringSubscription(uatService, UUID.fromString("cac90497-3001-4dbc-88c3-1f47d54c511c"), IdentityId("30001780").get, Monthly).map {
+  it should "ignore a subscription with wrong session id" in {
+    GetSubscriptionWithCurrentRequestId(uatService, UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"), IdentityId("30001758").get, Monthly).map {
       _ should be(None)
     }
   }
