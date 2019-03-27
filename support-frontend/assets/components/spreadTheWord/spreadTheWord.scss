@@ -1,5 +1,6 @@
 .component-spread-the-word {
-
+  padding-bottom: 20px;
+  border-bottom: gu-colour(gu-colour(neutral-86));
 }
 
 .component-spread-the-word__title {
@@ -10,9 +11,17 @@
   margin: ($gu-v-spacing / 3) 0;
 }
 
+.component-spread-the-word__description {
+  font-family: $gu-text-egyptian-web;
+  letter-spacing: -0.5px;
+  margin-bottom: $gu-v-spacing * 2;
+  line-height: 20px;
+}
+
 .component-spread-the-word__share {
 
 }
+
 //.component-spread-the-word {
 //
 //  .component-page-section {
