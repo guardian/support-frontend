@@ -1,19 +1,18 @@
-package services.aws
+package com.gu.aws
 
 import com.amazonaws.regions.Regions
-import com.amazonaws.services.cloudwatch.model._
+import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, StandardUnit}
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchClientBuilder}
 import com.gu.support.config.Stage
-import services.aws
 
 import scala.util.Try
 
-object AwsCloudwatchMetricPut {
-  val cloudWatchEffect: AmazonCloudWatch =
+object AwsCloudWatchMetricPut {
+  val client: AmazonCloudWatch =
     AmazonCloudWatchClientBuilder
       .standard()
       .withRegion(Regions.EU_WEST_1)
-      .withCredentials(aws.CredentialsProvider)
+      .withCredentials(CredentialsProvider)
       .build()
 
   case class MetricNamespace(value: String) extends AnyVal
@@ -27,7 +26,7 @@ object AwsCloudwatchMetricPut {
       dimensions: Map[MetricDimensionName, MetricDimensionValue]
   )
 
-  def apply(s3Client: AmazonCloudWatch)(request: MetricRequest): Try[Unit] = {
+  def apply(client: AmazonCloudWatch)(request: MetricRequest): Try[Unit] = {
 
     val putMetricDataRequest = new PutMetricDataRequest
     putMetricDataRequest.setNamespace(request.namespace.value)
@@ -46,7 +45,7 @@ object AwsCloudwatchMetricPut {
     metricDatum1.setValue(1.00)
     metricDatum1.setUnit(StandardUnit.Count)
     putMetricDataRequest.getMetricData.add(metricDatum1)
-    Try(s3Client.putMetricData(putMetricDataRequest)).map(_ => ())
+    Try(client.putMetricData(putMetricDataRequest)).map(_ => ())
   }
 
   def setupWarningRequest(stage: Stage): MetricRequest = {

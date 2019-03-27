@@ -1,9 +1,9 @@
 package wiring
 
 import assets.RefPath
+import com.gu.aws.AwsCloudWatchMetricPut
 import controllers.{CSSElementForStage, _}
 import play.api.BuiltInComponentsFromContext
-import services.aws.AwsCloudwatchMetricPut
 
 trait Controllers {
 
@@ -147,7 +147,7 @@ trait Controllers {
     controllerComponents,
     actionRefiners,
     appConfig.guardianDomain,
-    () => AwsCloudwatchMetricPut(AwsCloudwatchMetricPut.cloudWatchEffect)(AwsCloudwatchMetricPut.setupWarningRequest(appConfig.stage))
+    () => AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(AwsCloudWatchMetricPut.setupWarningRequest(appConfig.stage))
   )
 
   lazy val directDebitController = new DirectDebit(
