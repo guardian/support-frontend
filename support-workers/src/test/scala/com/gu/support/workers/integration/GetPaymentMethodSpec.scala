@@ -30,7 +30,8 @@ class GetPaymentMethodSpec extends LambdaSpec with MockServicesCreator {
 
     val outStream = new ByteArrayOutputStream()
     val cardAccount = "2c92c0f869330b7a01694982970a2b34"
-    val in = wrapFixture(clonePaymentMethodJson(billingAccountId = cardAccount))
+    val in = wrapFixture(getPaymentMethodJson(billingAccountId = cardAccount, userId = "100004131"))
+
 
     addZuoraSubscription.handleRequest(in, outStream, context)
 

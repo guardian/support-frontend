@@ -22,10 +22,12 @@ class GetPaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     val zuoraService = services.zuoraService
     for {
       account <- zuoraService.getObjectAccount(state.paymentFields.billingAccountId)
-      paymentId <- getOrFailWithMessage(account.DefaultPaymentMethodId, "Account has no default payment method")
+      accountIdentityId <- getOrFailWithMessage(account.IdentityId__c, "Zuora account has no identityId")
+      _ <- ifFalseReturnError(accountIdentityId == state.user.id, s"Zuora identity id: $accountIdentityId does not match user identity id ${state.user.id}")
+      paymentId <- getOrFailWithMessage(account.DefaultPaymentMethodId, "Zuora account has no default payment method")
       getPaymentMethodResponse <- zuoraService.getPaymentMethod(paymentId)
-      _ <- ifFalseReturnError(getPaymentMethodResponse.paymentMethodStatus == "Active", "Account has a non active default payment method")
-      sfContactId <- getOrFailWithMessage(account.sfContactId__c, "account has no sfContact!")
+      _ <- ifFalseReturnError(getPaymentMethodResponse.paymentMethodStatus == "Active", "Zuora account has a non active default payment method")
+      sfContactId <- getOrFailWithMessage(account.sfContactId__c, "Zuora account has no sfContact")
       paymentMethod <- asFuture(toPaymentMethod(getPaymentMethodResponse))
       sfContact = SalesforceContactRecord(sfContactId, account.CrmId)
     } yield  HandlerResult(
