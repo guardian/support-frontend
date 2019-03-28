@@ -117,7 +117,3 @@ Docs on how emails are sent from this app are [here](/docs/triggered-send-in-exa
 The state machine executions of this app have been identified as a data store which we would need to include in a response to any subject
 access requests we may receive ([this is a good explanation of what these are](https://ico.org.uk/media/for-organisations/documents/2014223/subject-access-code-of-practice.pdf)).
 Should it become necessary to search them, this can be done using the `StepFunctionsService` class, see `StepFunctionsSpec` for how to do this.
-
-## TODO
-
-[List of improvements we should make](/docs/TODO.md)
