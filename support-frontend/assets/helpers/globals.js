@@ -10,16 +10,14 @@ function getGlobal<T>(key: string): ?T {
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');
 
-
-type ExperimentSwitch = {
-  state: ?string,
-}
-const getExperimentSwitch = (key: string): ExperimentSwitch => {
+const isTestSwitchedOn = (testName: string): boolean => {
   const settings = getGlobal('settings');
-  if (settings && settings.switches.experiments && settings.switches.experiments[key]) {
-    return settings.switches.experiments[key];
+  if (settings && settings.switches.experiments && settings.switches.experiments[testName]) {
+    const test = settings.switches.experiments[testName];
+    return !!(test && test.state && test.state === 'On');
   }
-  return { state: null };
+  return false;
 };
 
-export { getProductPrices, getGlobal, getExperimentSwitch };
+
+export { getProductPrices, getGlobal, isTestSwitchedOn };

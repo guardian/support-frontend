@@ -14,7 +14,7 @@ import {
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
-import { getExperimentSwitch } from 'helpers/globals';
+import { isTestSwitchedOn } from 'helpers/globals';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 
@@ -274,14 +274,7 @@ const getNewsstandPrice = (productOption: PaperProductOptions) =>
 
 
 // Paper product
-
-const paperHasDeliveryEnabled = (): boolean => {
-  try {
-    return getExperimentSwitch('paperHomeDeliveryEnabled').state === 'On';
-  } catch {
-    return true;
-  }
-};
+const paperHasDeliveryEnabled = (): boolean => isTestSwitchedOn('paperHomeDeliveryEnabled');
 
 
 // ----- Exports ----- //
