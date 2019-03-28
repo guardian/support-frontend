@@ -42,6 +42,14 @@ const cssLoaders = [{
 }];
 
 module.exports = (cssFilename, outputFilename, minimizeCss) => ({
+  node: {
+    global: true,
+    __dirname: 'mock',
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    child_process: 'empty'
+  },
   plugins: [
     new ManifestPlugin({
       fileName: '../../conf/assets.map',
@@ -66,6 +74,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
   context: path.resolve(__dirname, 'assets'),
 
   entry: {
+    ssr: 'ssr.js',
     favicons: 'images/favicons.js',
     showcasePage: 'pages/showcase/showcase.jsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
@@ -170,6 +179,10 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           ...cssLoaders,
         ],
       },
+      {
+         test: /ssr.js$/,
+         use: 'exports-loader?html,getHtml'
+       }
     ],
   },
 });

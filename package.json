@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "puppeteer": "^1.13.0",
     "webpack-bundle-analyzer": "^3.0.4"
   }
 }

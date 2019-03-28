@@ -93,3 +93,4 @@ const content = (
 
 renderPage(content, reactElementId);
 
+export { content }
