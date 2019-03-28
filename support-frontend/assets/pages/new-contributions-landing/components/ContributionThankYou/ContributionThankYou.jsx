@@ -10,13 +10,12 @@ import MarketingConsent from '../MarketingConsentContainer';
 import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
-import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
-
-
-// import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArrow';
 import { DirectDebit } from 'helpers/paymentMethods';
+
+//  TBD: Implement Social On this page beneath Marketing Consent:
+// import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 
 // ----- Types ----- //
 
@@ -52,7 +51,7 @@ function ContributionThankYou(props: PropTypes) {
 
   if (props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy) {
     directDebitHeaderSuffix = 'Your Direct Debit has been set up. ';
-    directDebitMessageSuffix = 'This will appear as \'Guardian Media Group\' on your bank statements';
+    directDebitMessageSuffix = '. This will appear as \'Guardian Media Group\' on your bank statements';
     props.setHasSeenDirectDebitThankYouCopy();
   }
 
@@ -62,12 +61,11 @@ function ContributionThankYou(props: PropTypes) {
         {props.contributionType !== 'ONE_OFF' ? (
           <section className="confirmation">
             <h3 className="confirmation__title">
-              {`${directDebitHeaderSuffix}Look out for an email within three business days confirming your ${getSpokenType(props.contributionType)} recurring payment. ${directDebitMessageSuffix}`}
+              {`${directDebitHeaderSuffix}Look out for an email within three business days confirming your ${getSpokenType(props.contributionType)} recurring payment${directDebitMessageSuffix}`}
             </h3>
           </section>
         ) : null}
         <MarketingConsent />
-        <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
             href="https://www.theguardian.com"
