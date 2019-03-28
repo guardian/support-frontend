@@ -6,8 +6,6 @@ import React, { type Node } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
-import SvgNewsletters from 'components/svgs/newsletters';
-import SvgInformation from 'components/svgs/information';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { checkEmail } from 'helpers/formValidation';
@@ -40,7 +38,7 @@ function MarketingButton(props: ButtonPropTypes) {
     return (
       <NonInteractiveButton
         appearance="greenHollow"
-        iconSide="left"
+        iconSide="right"
         icon={<SvgSubscribed />}
       >
         Signed up
@@ -50,7 +48,7 @@ function MarketingButton(props: ButtonPropTypes) {
     return (
       <NonInteractiveButton
         appearance="greyHollow"
-        iconSide="left"
+        iconSide="right"
         icon={<SvgSubscribe />}
       >
         Pending...
@@ -60,7 +58,7 @@ function MarketingButton(props: ButtonPropTypes) {
   return (
     <Button
       appearance="green"
-      iconSide="left"
+      iconSide="right"
       aria-label="Sign me up to news and offers from The Guardian"
       onClick={
           () => props.onClick(props.email, props.csrf)
@@ -87,8 +85,8 @@ function MarketingConsent(props: PropTypes) {
     return (
       <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
         {props.render({
-          title: 'Subscriptions, membership and contributions',
-          message: 'Get related news and offers – whether you are a subscriber, member, contributor or would like to become one.',
+          title: 'Contributions, subscriptions and membership',
+          message: 'Get related news and offers – whether you are a contributor subscriber, member or would like to become one',
         })}
 
         {MarketingButton({
@@ -104,13 +102,11 @@ function MarketingConsent(props: PropTypes) {
             {props.confirmOptIn === true ?
               'We\'ll be in touch. Check your inbox for a confirmation link.' :
               <div>
-                <SvgInformation />
                 <span className="component-marketing-consent-confirmation__message">You can unsubscribe at any time</span>
               </div>
             }
           </small>
         </p>
-        <SvgNewsletters />
       </section>
     );
   }
