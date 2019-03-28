@@ -10,4 +10,16 @@ function getGlobal<T>(key: string): ?T {
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');
 
-export { getProductPrices, getGlobal };
+
+type ExperimentSwitch = {
+  state: ?string,
+}
+const getExperimentSwitch = (key: string): ExperimentSwitch => {
+  const settings = getGlobal('settings');
+  if (settings && settings.switches.experiments && settings.switches.experiments[key]) {
+    return settings.switches.experiments[key];
+  }
+  return { state: null };
+};
+
+export { getProductPrices, getGlobal, getExperimentSwitch };

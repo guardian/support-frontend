@@ -14,6 +14,7 @@ import {
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
+import { getExperimentSwitch } from 'helpers/globals';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 
@@ -276,7 +277,7 @@ const getNewsstandPrice = (productOption: PaperProductOptions) =>
 
 const paperHasDeliveryEnabled = (): boolean => {
   try {
-    return window.guardian.settings.switches.experiments.paperHomeDeliveryEnabled.state === 'On';
+    return getExperimentSwitch('paperHomeDeliveryEnabled').state === 'On';
   } catch {
     return true;
   }
