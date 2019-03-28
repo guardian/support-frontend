@@ -18,12 +18,12 @@ export type State = {
 
 // ----- Export ----- //
 
-export default () => {
 
   const { productPrices } = window.guardian;
 
   return combineReducers({
     productPrices: () => productPrices,
-    promotion: promotionPopUpReducer,
-  });
-};
+export default () => combineReducers({
+  productPrices: getProductPrices,
+  promotion: promotionPopUpReducer,
+});

@@ -92,20 +92,26 @@ const billingPeriods = {
 
 // ----- State/Props Maps ----- //
 
-const mapStateToProps = (state: State): PropTypes<DigitalBillingPeriod> => ({
-  plans: Object.keys(billingPeriods).reduce((ps, k) => ({
-    ...ps,
-    [k]: {
-      title: billingPeriods[k].title,
-      copy: billingPeriods[k].copy(state.page.productPrices, state.common.internationalisation.countryId),
-      offer: billingPeriods[k].offer(state.common.internationalisation.countryId) || null,
-      href: getDigitalCheckout(state.common.internationalisation.countryGroupId, k),
-      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, k),
-      price: null,
-      saving: null,
-    },
-  }), {}),
-});
+const mapStateToProps = (state: State): PropTypes<DigitalBillingPeriod> => {
+  const { productPrices } = state.page;
+  if (productPrices) {
+    return ({
+      plans: Object.keys(billingPeriods).reduce((ps, k) => ({
+        ...ps,
+        [k]: {
+          title: billingPeriods[k].title,
+          copy: billingPeriods[k].copy(productPrices, state.common.internationalisation.countryId),
+          offer: billingPeriods[k].offer(state.common.internationalisation.countryId) || null,
+          href: getDigitalCheckout(state.common.internationalisation.countryGroupId, k),
+          onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, k),
+          price: null,
+          saving: null,
+        },
+      }), {}),
+    });
+  }
+  return { plans: {} };
+};
 
 // ----- Exports ----- //
 

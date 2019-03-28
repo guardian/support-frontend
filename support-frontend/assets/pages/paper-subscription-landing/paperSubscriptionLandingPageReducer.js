@@ -9,6 +9,7 @@ import { type TabActions } from './paperSubscriptionLandingPageActions';
 import { Collection, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import { getProductPrices } from 'helpers/globals';
 
 
 // ----- Types ----- //
@@ -18,7 +19,7 @@ export type ActiveTabState = PaperFulfilmentOptions;
 export type State = {
   common: CommonState,
   page: {
-    productPrices: ProductPrices,
+    productPrices: ?ProductPrices,
     tab: ActiveTabState,
   }
 };
@@ -40,12 +41,7 @@ const getTabsReducer = (initialTab: PaperFulfilmentOptions) =>
 
 // ----- Exports ----- //
 
-export default (initialTab: PaperFulfilmentOptions) => {
-
-  const { productPrices } = window.guardian;
-
-  return combineReducers({
-    productPrices: () => productPrices,
-    tab: getTabsReducer(paperHasDeliveryEnabled() ? initialTab : Collection),
-  });
-};
+export default (initialTab: PaperFulfilmentOptions) => combineReducers({
+  productPrices: getProductPrices,
+  tab: getTabsReducer(paperHasDeliveryEnabled() ? initialTab : Collection),
+});
