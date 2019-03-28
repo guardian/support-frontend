@@ -44,7 +44,7 @@ import {
 import { switchIsOn } from '../../helpers/checkouts';
 import type { ExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 import { setExistingPaymentMethods } from '../../helpers/page/commonActions';
-import {doesUserAppearToBeSignedIn} from "../../helpers/user/user";
+import { doesUserAppearToBeSignedIn } from '../../helpers/user/user';
 
 // ----- Functions ----- //
 

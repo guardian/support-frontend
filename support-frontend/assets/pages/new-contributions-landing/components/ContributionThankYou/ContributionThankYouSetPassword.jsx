@@ -41,35 +41,33 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Render ----- //
 
 function ContributionThankYouSetPassword(props: PropTypes) {
-  if (props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy) {
+  const renderDirectDebit = () => {
     props.setHasSeenDirectDebitThankYouCopy();
     return (
-      <div className="set-password__content">
-        <h1 className="header">Thank you for a valuable contribution. Your Direct Debit has been set up.</h1>
-        <section className="confirmation">
-          <p className="confirmation__message">{'Look out for an email within three business days confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements.'}</p>
-        </section>
+      <section className="confirmation">
+        <h3 className="confirmation__title">{'Look out for an email within three business days confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements.'}</h3>
+      </section>
+    );
+  };
+
+  return (
+    <div className="thank-you__container">
+      <div className="gu-content__form gu-content__form--thank-you gu-content__form--set-password">
+        { props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy ?
+            renderDirectDebit() : null }
         <section className="set-password">
           <h3 className="set-password__title">Set up a free account to manage your payments</h3>
           <p className="set-password__message">
-            As a contributor, being signed in means you will no longer see the “Since you’re here …” messages asking you
-            to support our journalism.
+            {`As a contributor, being signed in means you will no longer see the “Since you’re here …”
+            messages asking you to support our journalism.`}
           </p>
           <SetPasswordForm />
         </section>
       </div>
-    );
-  }
-  return (
-    <div className="set-password__content">
-      <h1 className="header">Set up a free account to manage your payments</h1>
-      <section className="set-password">
-        <p className="blurb">
-          Thank you for a valuable contribution. As a contributor, being signed in means you will no
-          longer see the “Since you’re here …” messages asking you to support our journalism.
-        </p>
-        <SetPasswordForm />
-      </section>
+
+      <div className="gu-content__blurb gu-content__blurb--thank-you">
+        <h1 className="gu-content__blurb-header">Set up a free Guardian account</h1>
+      </div>
     </div>
   );
 }

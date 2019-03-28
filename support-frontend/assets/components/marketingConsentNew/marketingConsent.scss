@@ -1,10 +1,10 @@
-// -----  gu-sass ----- //	
+// -----  gu-sass ----- //
 @import '~stylesheets/gu-sass/gu-sass';
 
 .component-marketing-consent {
   font-weight: 300;
   margin: 0 -10px;
-  padding: 0 10px;
+  padding: 0 10px ($gu-v-spacing * 2);
   .svg-newsletters {
     width: 100%;
   }
@@ -12,10 +12,7 @@
 
 .component-marketing-consent-confirmation {
   font-family: $gu-text-sans-web;
-  font-size: 12px;
-}
-
-.component-marketing-consent-confirmation__message {
-  vertical-align: top;
-  padding-left: 5px;
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 3px;
 }

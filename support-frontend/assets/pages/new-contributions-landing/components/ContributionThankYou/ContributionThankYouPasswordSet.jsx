@@ -4,33 +4,40 @@
 
 import React from 'react';
 import MarketingConsent from '../MarketingConsentContainer';
-import { ButtonWithRightArrow } from '../ButtonWithRightArrow/ButtonWithRightArrow';
+import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import AnchorButton from 'components/button/anchorButton';
+import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
+import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 
 // ----- Render ----- //
 
 function ContributionThankYouPasswordSet() {
   return (
     <div className="thank-you__container">
-      <h1 className="header">You now have a Guardian account</h1>
-      <section className="confirmation">
-        <p className="confirmation__message">
-          Stay signed in so we can recognise you on The Guardian, and you can easily manage your payments and
-          preferences.
-        </p>
-      </section>
-      <MarketingConsent />
-      <ButtonWithRightArrow
-        componentClassName="confirmation confirmation--backtothegu"
-        buttonClassName=""
-        accessibilityHintId="accessibility-hint-return-to-guardian"
-        type="button"
-        buttonCopy="Return to The Guardian&nbsp;"
-        onClick={
-          () => {
-            window.location.assign('https://www.theguardian.com');
-          }
-        }
-      />
+      <div className="gu-content__form gu-content__form--thank-you gu-content__form--password-set">
+        <section className="confirmation">
+          <h3 className="confirmation__title">You now have a Guardian account</h3>
+          <p className="confirmation__message">
+            Stay signed in so we can recognise you on The Guardian, and you can easily manage your payments and
+            preferences.
+          </p>
+        </section>
+        <MarketingConsent />
+        <SpreadTheWord />
+        <div className="gu-content__return-link">
+          <AnchorButton
+            href="https://www.theguardian.com"
+            appearance="greyHollow"
+            aria-label="Return to The Guardian"
+            icon={<SvgArrowLeft />}
+            iconSide="left"
+          >
+            Return to The Guardian
+          </AnchorButton>
+        </div>
+      </div>
+
+      <ContributionThankYouBlurb />
     </div>
   );
 }
