@@ -15,7 +15,7 @@ import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 import { type PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 import { type ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
-import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -49,10 +49,13 @@ type RegularDirectDebitPaymentFields = {|
   accountNumber: string,
 |};
 
+type RegularExistingPaymentFields = {| billingAccountId: string |};
+
 export type RegularPaymentFields =
   RegularPayPalPaymentFields |
   RegularStripePaymentFields |
-  RegularDirectDebitPaymentFields;
+  RegularDirectDebitPaymentFields |
+  RegularExistingPaymentFields;
 
 export type RegularPaymentRequestAddress = {|
   country: IsoCountry,
@@ -87,12 +90,23 @@ export type StripeAuthorisation = {|
   token: string,
   stripePaymentMethod: StripePaymentMethod
 |};
-export type PayPalAuthorisation = {| paymentMethod: typeof PayPal, token: string |};
+export type PayPalAuthorisation = {|
+  paymentMethod: typeof PayPal,
+  token: string
+|};
 export type DirectDebitAuthorisation = {|
   paymentMethod: typeof DirectDebit,
   accountHolderName: string,
   sortCode: string,
   accountNumber: string
+|};
+export type ExistingCardAuthorisation = {|
+  paymentMethod: typeof ExistingCard,
+  billingAccountId: string
+|};
+export type ExistingDirectDebitAuthorisation = {|
+  paymentMethod: typeof ExistingDirectDebit,
+  billingAccountId: string
 |};
 
 // Represents an authorisation to execute payments with a given payment method.
@@ -100,7 +114,12 @@ export type DirectDebitAuthorisation = {|
 // It applies both to one-off payments, where it is sent to the Payment API which
 // immediately executes the payment, and recurring, where it ultimately ends up in Zuora
 // which uses it to execute payments in the future.
-export type PaymentAuthorisation = StripeAuthorisation | PayPalAuthorisation | DirectDebitAuthorisation;
+export type PaymentAuthorisation =
+  StripeAuthorisation |
+  PayPalAuthorisation |
+  DirectDebitAuthorisation |
+  ExistingCardAuthorisation |
+  ExistingDirectDebitAuthorisation;
 
 // Represents the end state of the checkout process,
 // standardised across payment methods & contribution types.
@@ -130,6 +149,10 @@ function regularPaymentFieldsFromAuthorisation(authorisation: PaymentAuthorisati
         sortCode: authorisation.sortCode,
         accountNumber: authorisation.accountNumber,
       };
+    case ExistingCard:
+    case ExistingDirectDebit:
+      return { billingAccountId: authorisation.billingAccountId };
+
     // TODO: what is a sane way to handle such cases?
     default:
       throw new Error('If Flow works, this cannot happen');

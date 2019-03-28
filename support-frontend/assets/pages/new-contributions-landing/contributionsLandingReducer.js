@@ -24,6 +24,7 @@ import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import type { FullDetailExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 
 // ----- Types ----- //
 
@@ -64,6 +65,7 @@ type StripePaymentRequestButtonData = {
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
+  existingPaymentMethod?: FullDetailExistingPaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
@@ -169,6 +171,9 @@ function createFormReducer() {
 
       case 'UPDATE_PAYMENT_METHOD':
         return { ...state, paymentMethod: action.paymentMethod };
+
+      case 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD':
+        return { ...state, existingPaymentMethod: action.existingPaymentMethod };
 
       case 'UPDATE_PAYMENT_READY':
         return {

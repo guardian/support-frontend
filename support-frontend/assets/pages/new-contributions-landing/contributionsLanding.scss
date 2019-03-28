@@ -683,7 +683,7 @@ form {
 .form__radio-group--buttons .form__radio-group-input + .form__radio-group-label .svg-paypal {
   height: 18px;
   width: 15px;
-  margin-right: 16px;
+  margin-right: 13px;
   margin-left: 5px;
 }
 
@@ -699,6 +699,29 @@ form {
   width: 24px;
   margin-right: 8px;
   margin-left: 5px;
+}
+
+.has-existing-payment-option-explainer {
+  padding-bottom: 0 !important;
+
+}
+
+.awaiting-existing-payment-options {
+  text-align: center;
+  height: 50px;
+}
+
+.reauthenticate-link {
+  color: inherit;
+}
+
+.form__radio-group-item .existing-payment-option-explainer {
+  font-size: small;
+  font-style: italic;
+  margin-left: 40px;
+  padding-bottom: $gu-v-spacing/2;
+  color: gu-colour(neutral-46);
+  padding-right: 40px;
 }
 
 .form__radio-group--contribution-pay .form__legend {

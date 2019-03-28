@@ -19,11 +19,12 @@ import type { Amount, SelectedAmounts } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
 
 
 // ----- Types ----- //
 
-export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe';
+export type PaymentMethodSwitch = 'directDebit' | 'payPal' | 'stripe' | 'existingCard' | 'existingDirectDebit';
 
 type StripeHandler = { open: Function, close: Function };
 
@@ -36,6 +37,8 @@ function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMetho
     case PayPal: return 'payPal';
     case Stripe: return 'stripe';
     case DirectDebit: return 'directDebit';
+    case ExistingCard: return 'existingCard';
+    case ExistingDirectDebit: return 'existingDirectDebit';
     default: return null;
   }
 }
@@ -120,7 +123,8 @@ function getPaymentMethodToSelect(
 
 function getPaymentMethodFromSession(): ?PaymentMethod {
   const pm: ?string = storage.getSession('selectedPaymentMethod');
-  if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal') {
+  // can't use Flow types for these comparisons for some strange reason
+  if (pm === 'DirectDebit' || pm === 'Stripe' || pm === 'PayPal' || pm === 'ExistingCard' || pm === 'ExistingDirectDebit') {
     return (pm: PaymentMethod);
   }
   return null;
@@ -187,8 +191,9 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
     case DirectDebit:
       return 'Direct debit';
     case PayPal:
-    default:
       return PayPal;
+    default:
+      return 'Other Payment Method';
   }
 }
 
@@ -207,4 +212,5 @@ export {
   getPaymentMethodFromSession,
   getPaymentDescription,
   getPaymentLabel,
+  switchIsOn,
 };

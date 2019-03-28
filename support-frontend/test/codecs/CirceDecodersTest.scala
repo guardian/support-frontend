@@ -101,7 +101,9 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |    "recurringPaymentMethods": {
           |      "stripe": "On",
           |      "payPal": "On",
-          |      "directDebit": "On"
+          |      "directDebit": "On",
+          |      "existingCard": "On",
+          |      "existingDirectDebit": "On"
           |    },
           |    "experiments": {
           |      "newFlow": {
@@ -214,12 +216,16 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           oneOffPaymentMethods = PaymentMethodsSwitch(
             stripe = On,
             payPal = On,
-            directDebit = None
+            directDebit = None,
+            existingCard = None,
+            existingDirectDebit = None
           ),
           recurringPaymentMethods = PaymentMethodsSwitch(
             stripe = On,
             payPal = On,
-            directDebit = Some(On)
+            directDebit = Some(On),
+            existingCard = Some(On),
+            existingDirectDebit = Some(On)
           ),
           experiments = Map(
             "newFlow" -> ExperimentSwitch(

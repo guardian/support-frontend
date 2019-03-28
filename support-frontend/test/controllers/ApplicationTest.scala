@@ -12,7 +12,7 @@ import com.gu.identity.play.AuthenticatedIdUser
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
-import services.{HttpIdentityService, PaymentAPIService, TestUserService}
+import services.{HttpIdentityService, MembersDataService, PaymentAPIService, TestUserService}
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import config.Configuration.GuardianDomain
 
@@ -46,6 +46,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[StripeConfigProvider],
         mock[PayPalConfigProvider],
         mock[PaymentAPIService],
+        mock[MembersDataService],
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[GuardianDomain],
@@ -66,6 +67,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
         mock[StripeConfigProvider],
         mock[PayPalConfigProvider],
         mock[PaymentAPIService],
+        mock[MembersDataService],
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[GuardianDomain],

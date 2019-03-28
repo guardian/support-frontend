@@ -19,6 +19,7 @@
   regularUatPayPalConfig: PayPalConfig,
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
+  existingPaymentOptionsEndpoint: String,
   idUser: Option[IdUser],
   fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
@@ -205,6 +206,7 @@
     };
     window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
     window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
+    window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
     window.guardian.csrf = { token: "@CSRF.getToken.value" };
   </script>
 }

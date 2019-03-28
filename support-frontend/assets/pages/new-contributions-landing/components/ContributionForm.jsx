@@ -48,8 +48,9 @@ import {
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
+import type { FullDetailExistingPaymentMethod } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 
 
 // ----- Types ----- //
@@ -60,6 +61,7 @@ type PropTypes = {|
   email: string,
   otherAmounts: OtherAmounts,
   paymentMethod: PaymentMethod,
+  existingPaymentMethod: FullDetailExistingPaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   contributionType: ContributionType,
   currency: IsoCurrency,
@@ -96,6 +98,7 @@ const mapStateToProps = (state: State) => ({
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
   otherAmounts: state.page.form.formData.otherAmounts,
   paymentMethod: state.page.form.paymentMethod,
+  existingPaymentMethod: state.page.form.existingPaymentMethod,
   thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
   contributionType: state.page.form.contributionType,
   currency: state.common.internationalisation.currencyId,
@@ -154,6 +157,14 @@ const formHandlersForRecurring = {
   DirectDebit: (props: PropTypes) => {
     props.openDirectDebitPopUp();
   },
+  ExistingCard: (props: PropTypes) => props.onPaymentAuthorisation({
+    paymentMethod: 'ExistingCard',
+    billingAccountId: props.existingPaymentMethod.billingAccountId,
+  }),
+  ExistingDirectDebit: (props: PropTypes) => props.onPaymentAuthorisation({
+    paymentMethod: 'ExistingDirectDebit',
+    billingAccountId: props.existingPaymentMethod.billingAccountId,
+  }),
 };
 
 const formHandlers: PaymentMatrix<PropTypes => void> = {
@@ -173,6 +184,8 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
       });
     },
     DirectDebit: () => { logInvalidCombination('ONE_OFF', DirectDebit); },
+    ExistingCard: () => { logInvalidCombination('ONE_OFF', ExistingCard); },
+    ExistingDirectDebit: () => { logInvalidCombination('ONE_OFF', ExistingDirectDebit); },
     None: () => { logInvalidCombination('ONE_OFF', 'None'); },
   },
   ANNUAL: {

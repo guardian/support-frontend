@@ -45,6 +45,8 @@ class MembersDataService(apiUrl: String)(implicit val ec: ExecutionContext, wsCl
 
   import MembersDataService._
 
+  val existingPaymentOptionsEndpoint = s"$apiUrl/user-attributes/me/existing-payment-options"
+
   def userAttributes(implicit accessCredentials: AccessCredentials.Cookies): EitherT[Future, MembersDataServiceError, UserAttributes] =
     get[UserAttributes](s"$apiUrl/user-attributes/me")
 
