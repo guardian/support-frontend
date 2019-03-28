@@ -2,10 +2,17 @@
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Settings } from 'helpers/settings';
 
-function getGlobal<T>(key: string): ?T {
-  if (window.guardian && window.guardian[key]) {
-    return window.guardian[key];
+function getGlobal<T>(path: string = ''): ?T {
+
+  const value = path
+    .replace(/\[(.+?)\]/g, '.$1')
+    .split('.')
+    .reduce((o, key: any) => o && o[key], window.guardian);
+
+  if (value) {
+    return ((value: any): T);
   }
+
   return null;
 }
 
@@ -23,7 +30,6 @@ const getSettings = (): Settings => getGlobal('settings') || {
       ONE_OFF: [],
       MONTHLY: [],
       ANNUAL: [],
-
     },
     EURCountries: {
       ONE_OFF: [],
@@ -55,14 +61,18 @@ const getSettings = (): Settings => getGlobal('settings') || {
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');
 
+const isSwitchOn = (switchName: string): boolean => {
+  const sw = getGlobal(`settings.switches.${switchName}`);
+  return !!(sw && sw === 'On');
+};
+
 const isTestSwitchedOn = (testName: string): boolean => {
-  const settings = getGlobal('settings');
-  if (settings && settings.switches.experiments && settings.switches.experiments[testName]) {
-    const test = settings.switches.experiments[testName];
+  const test = getGlobal(`settings.switches.experiments${testName}`);
+  if (test) {
     return !!(test && test.state && test.state === 'On');
   }
   return false;
 };
 
 
-export { getProductPrices, getGlobal, isTestSwitchedOn, getSettings };
+export { getProductPrices, getGlobal, isTestSwitchedOn, getSettings, isSwitchOn };
