@@ -9,7 +9,7 @@ import router.Routes
 import util.RequestBasedProvider
 import aws.AWSClientBuilder
 import backend.{GoCardlessBackend, PaypalBackend, StripeBackend, SubscribeWithGoogleBackend}
-import _root_.controllers.{AppController, ErrorHandler, GoCardlessController, PaypalController, StripeController, SubscribeWithGoogleController}
+import _root_.controllers.{AppController, ErrorHandler, GoCardlessController, PaypalController, StripeController}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{ConfigLoader, PlayConfigUpdater}
@@ -95,6 +95,5 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       new StripeController(controllerComponents, stripeBackendProvider),
       new PaypalController(controllerComponents, paypalBackendProvider),
       new GoCardlessController(controllerComponents, goCardlessBackendProvider),
-      new SubscribeWithGoogleController(controllerComponents, subscribeWithGoogleProvider)
     )
 }

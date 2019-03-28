@@ -54,6 +54,9 @@ OPTIONS  /direct-debit/check-account                          controllers.AppCon
 # SUBSCRIBE WITH GOOGLE
 #############################################
 
-
-POST /contribute/one-off/swg/record-payment                   controllers.SubscribeWithGoogleController.recordPayment
-POST /contribute/one-off/swg/refund-payment                   controllers.SubscribeWithGoogleController.refundPayment
+## These are disabled because they're currently unauthenticated, and record-payment
+## would let anyone insert junk data into our DB. SwG isn't actually live let,
+## so I'm switching these off until we add authentication or re-architect so the SwG
+## service can talk directly to the DB itself.
+# POST /contribute/one-off/swg/record-payment                   controllers.SubscribeWithGoogleController.recordPayment
+# POST /contribute/one-off/swg/refund-payment                   controllers.SubscribeWithGoogleController.refundPayment

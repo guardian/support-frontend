@@ -77,7 +77,6 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     new StripeController(controllerComponents, stripeBackendProvider)(DefaultThreadPool(ec), List.empty),
     payPalController,
     new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty),
-    new SubscribeWithGoogleController(controllerComponents, subscribeWithGoogleBackendProvider)(DefaultThreadPool(ec), List.empty)
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
