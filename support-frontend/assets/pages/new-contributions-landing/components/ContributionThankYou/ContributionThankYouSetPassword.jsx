@@ -9,7 +9,6 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributi
 import SetPasswordForm from '../SetPasswordForm';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit } from 'helpers/paymentMethods';
-import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 
 // ----- Types ----- //
 
@@ -46,7 +45,7 @@ function ContributionThankYouSetPassword(props: PropTypes) {
     props.setHasSeenDirectDebitThankYouCopy();
     return (
       <section className="confirmation">
-        <p className="confirmation__message">{'Look out for an email within three business days confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements.'}</p>
+        <h3 className="confirmation__title">{'Look out for an email within three business days confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements.'}</h3>
       </section>
     );
   };
@@ -66,7 +65,9 @@ function ContributionThankYouSetPassword(props: PropTypes) {
         </section>
       </div>
 
-      <ContributionThankYouBlurb />
+      <div className="gu-content__blurb gu-content__blurb--thank-you">
+        <h1 className="gu-content__blurb-header">Set up a free Guardian account</h1>
+      </div>
     </div>
   );
 }

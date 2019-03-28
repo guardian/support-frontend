@@ -51,7 +51,7 @@ function ContributionThankYou(props: PropTypes) {
   let directDebitMessageSuffix = '';
 
   if (props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy) {
-    directDebitHeaderSuffix = 'Your Direct Debit has been set up.';
+    directDebitHeaderSuffix = 'Your Direct Debit has been set up. ';
     directDebitMessageSuffix = 'This will appear as \'Guardian Media Group\' on your bank statements';
     props.setHasSeenDirectDebitThankYouCopy();
   }
@@ -61,10 +61,9 @@ function ContributionThankYou(props: PropTypes) {
       <div className="gu-content__form gu-content__form--thank-you">
         {props.contributionType !== 'ONE_OFF' ? (
           <section className="confirmation">
-            <h3 className="confirmation__title">Thank you. {directDebitHeaderSuffix}</h3>
-            <p className="confirmation__message">
-              {`Look out for an email within three business days confirming your ${getSpokenType(props.contributionType)} recurring payment. ${directDebitMessageSuffix}`}
-            </p>
+            <h3 className="confirmation__title">
+              {`${directDebitHeaderSuffix}Look out for an email within three business days confirming your ${getSpokenType(props.contributionType)} recurring payment. ${directDebitMessageSuffix}`}
+            </h3>
           </section>
         ) : null}
         <MarketingConsent />

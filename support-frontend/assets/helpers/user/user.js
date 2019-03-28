@@ -103,5 +103,5 @@ export {
   init,
   isTestUser,
   signOut,
-  doesUserAppearToBeSignedIn
+  doesUserAppearToBeSignedIn,
 };
