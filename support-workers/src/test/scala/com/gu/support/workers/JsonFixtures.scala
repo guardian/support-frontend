@@ -18,10 +18,10 @@ object JsonFixtures {
   def wrapFixture(string: String): ByteArrayInputStream =
     Wrapper.wrapString(string, RequestInfo(useEncryption, testUser = false, failed = false, Nil, false)).asJson.noSpaces.asInputStream
 
-  val userJson =
+  def userJson(id: String = idId): String =
     s"""
       "user":{
-          "id": "$idId",
+          "id": "$id",
           "primaryEmailAddress": "$emailAddress",
           "firstName": "test",
           "lastName": "user",
@@ -179,7 +179,7 @@ object JsonFixtures {
   def createPayPalPaymentMethodContributionJson(currency: Currency = GBP): String =
     s"""{
           $requestIdJson,
-          $userJson,
+          ${userJson()},
           "product": ${contribution(currency = currency)},
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData
@@ -188,7 +188,7 @@ object JsonFixtures {
   def createStripePaymentMethodContributionJson(billingPeriod: BillingPeriod = Monthly, amount: BigDecimal = 5): String =
     s"""{
           $requestIdJson,
-          $userJson,
+          ${userJson()},
           "product": ${contribution(amount = amount, billingPeriod = billingPeriod)},
           "paymentFields": $stripeJson,
           "sessionId": "testingToken"
@@ -197,7 +197,7 @@ object JsonFixtures {
   val createPayPalPaymentMethodDigitalPackJson =
     s"""{
           $requestIdJson,
-          $userJson,
+          ${userJson()},
           $digitalPackProductJson,
           "paymentFields": $payPalJson
         }"""
@@ -205,7 +205,7 @@ object JsonFixtures {
   val createDirectDebitDigitalPackJson =
     s"""{
           $requestIdJson,
-          $userJson,
+          ${userJson()},
           $digitalPackProductJson,
           "paymentFields": $directDebitJson
         }"""
@@ -214,7 +214,7 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            $userJson,
+            ${userJson()},
             "product": ${contribution()},
             "paymentMethod": $payPalPaymentMethod
           }
@@ -223,7 +223,7 @@ object JsonFixtures {
   def thankYouEmailJson(product: String = contribution()): String =
     s"""{
        |  $requestIdJson,
-       |  $userJson,
+       |  ${userJson()},
        |  "product": ${product},
        |  "paymentMethod": $stripePaymentMethod,
        |  "salesForceContact": {
@@ -263,7 +263,7 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            $userJson,
+            ${userJson()},
             "product": ${contribution(billingPeriod = billingPeriod)},
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson
@@ -273,7 +273,7 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            $userJson,
+            ${userJson()},
             "product": ${digitalPackJson},
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson
@@ -284,7 +284,7 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            $userJson,
+            ${userJson()},
             "product": ${digitalPackJson},
             "paymentMethod": $stripePaymentMethod,
             "promoCode": "DJP8L27FY",
@@ -296,7 +296,7 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            $userJsonWithDeliveryAddress,
+            ${userJson()}WithDeliveryAddress,
             "product": ${everydayPaperJson},
             "firstDeliveryDate": "2019-04-01",
             "paymentMethod": $stripePaymentMethod,
@@ -447,7 +447,7 @@ object JsonFixtures {
   val sendAcquisitionEventJson = wrapFixture(
     s"""{
           $requestIdJson,
-          $userJson,
+          ${userJson()},
           "product": ${contribution(currency = GBP)},
           "paymentMethod": $stripePaymentMethod,
           "acquisitionData": $acquisitionData
@@ -470,5 +470,16 @@ object JsonFixtures {
           }
         }
       """.asInputStream
+
+  def getPaymentMethodJson(billingAccountId: String, userId: String): String =
+    s"""
+          {
+            $requestIdJson,
+            ${userJson(userId)},
+            "product": ${contribution()},
+            "paymentFields" : {"billingAccountId" : "$billingAccountId"}
+            }
+        """
+
 
 }
