@@ -38,7 +38,7 @@ import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 import {
-  isFullDetailExistingPaymentMethod,
+  isUsableExistingPaymentMethod,
   mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
 } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
@@ -145,13 +145,13 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
       sendGetExistingPaymentMethodsRequest(
         currencyId,
         (allExistingPaymentMethods: ExistingPaymentMethod[]) => {
-          const filteredExistingPaymentMethods = allExistingPaymentMethods.filter(existingPaymentMethod => (
+          const switchedOnExistingPaymentMethods = allExistingPaymentMethods.filter(existingPaymentMethod => (
             (existingPaymentMethod.paymentType === 'Card' && existingCardON) ||
             (existingPaymentMethod.paymentType === 'DirectDebit' && existingDirectDebitON)
           ));
-          dispatch(setExistingPaymentMethods(filteredExistingPaymentMethods));
-          const firstExistingPaymentMethod = (filteredExistingPaymentMethods[0]: any);
-          if (firstExistingPaymentMethod && isFullDetailExistingPaymentMethod(firstExistingPaymentMethod)) {
+          dispatch(setExistingPaymentMethods(switchedOnExistingPaymentMethods));
+          const firstExistingPaymentMethod = (switchedOnExistingPaymentMethods[0]: any);
+          if (firstExistingPaymentMethod && isUsableExistingPaymentMethod(firstExistingPaymentMethod)) {
             dispatch(updatePaymentMethod(mapExistingPaymentMethodToPaymentMethod(firstExistingPaymentMethod)));
             dispatch(updateSelectedExistingPaymentMethod(firstExistingPaymentMethod));
           }

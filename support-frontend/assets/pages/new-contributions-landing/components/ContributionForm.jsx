@@ -47,7 +47,7 @@ import {
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
-import type { FullDetailExistingPaymentMethod } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'pages/new-contributions-landing/campaigns';
@@ -61,7 +61,7 @@ type PropTypes = {|
   email: string,
   otherAmounts: OtherAmounts,
   paymentMethod: PaymentMethod,
-  existingPaymentMethod: FullDetailExistingPaymentMethod,
+  existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   contributionType: ContributionType,
   currency: IsoCurrency,

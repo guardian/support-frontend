@@ -23,7 +23,7 @@ import { type Action } from './contributionsLandingActions';
 import { type State as MarketingConsentState } from '../../components/marketingConsent/marketingConsentReducer';
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import type { FullDetailExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 
 // ----- Types ----- //
 
@@ -64,7 +64,7 @@ type StripePaymentRequestButtonData = {
 type FormState = {
   contributionType: ContributionType,
   paymentMethod: PaymentMethod,
-  existingPaymentMethod?: FullDetailExistingPaymentMethod,
+  existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   selectedAmounts: SelectedAmounts,
   isWaiting: boolean,
