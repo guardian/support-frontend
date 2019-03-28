@@ -7,6 +7,7 @@ import com.gu.support.config.AwsConfig
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.JsonWrapper
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.Printer
 import io.circe.generic.auto._
 import io.circe.parser._
 
@@ -36,5 +37,8 @@ object StateDecoder extends App with LazyLogging {
     }
   })
 
-  def print(output: String): Unit = println(s"\n\n$output\n\n") // scalastyle:ignore
+  def print(output: String): Unit = {
+    val formattedOutput = parse(output).map(_.pretty(Printer.indented(" "))).getOrElse(output)
+    println(s"\n\n$formattedOutput\n\n")
+  } // scalastyle:ignore
 }
