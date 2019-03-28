@@ -13,7 +13,44 @@ const getSettings = (): Settings => getGlobal('settings') || {
   switches: {
     experiments: {},
   },
-  amounts: {},
+  amounts: {
+    GBPCountries: {
+      ONE_OFF: [],
+      MONTHLY: [],
+      ANNUAL: [],
+    },
+    UnitedStates: {
+      ONE_OFF: [],
+      MONTHLY: [],
+      ANNUAL: [],
+
+    },
+    EURCountries: {
+      ONE_OFF: [],
+      MONTHLY: [],
+      ANNUAL: [],
+    },
+    AUDCountries: {
+      ONE_OFF: [],
+      MONTHLY: [],
+      ANNUAL: [],
+    },
+    International: {
+      ONE_OFF: [],
+      MONTHLY: [],
+      ANNUAL: [],
+    },
+    NZDCountries: {
+      ONE_OFF: [],
+      MONTHLY: [],
+      ANNUAL: [],
+    },
+    Canada: {
+      ONE_OFF: [],
+      MONTHLY: [],
+      ANNUAL: [],
+    },
+  },
 };
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');
