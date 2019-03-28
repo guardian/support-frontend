@@ -1,5 +1,6 @@
 // @flow
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { type Settings } from 'helpers/settings';
 
 function getGlobal<T>(key: string): ?T {
   if (window.guardian && window.guardian[key]) {
@@ -7,6 +8,13 @@ function getGlobal<T>(key: string): ?T {
   }
   return null;
 }
+
+const getSettings = (): Settings => getGlobal('settings') || {
+  switches: {
+    experiments: {},
+  },
+  amounts: {},
+};
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');
 
@@ -20,4 +28,4 @@ const isTestSwitchedOn = (testName: string): boolean => {
 };
 
 
-export { getProductPrices, getGlobal, isTestSwitchedOn };
+export { getProductPrices, getGlobal, isTestSwitchedOn, getSettings };
