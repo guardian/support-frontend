@@ -10,9 +10,6 @@ import { HeroWrapper } from 'components/productPage/productPageHero/productPageH
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import Content from 'components/content/content';
-import Text, { LargeParagraph } from 'components/text/text';
-
 import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
 
 import ThankYouContent from './thankYouContent';
@@ -86,18 +83,6 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <div className="checkout-content">
-          <HeroWrapper appearance="custom">
-            <HeadingBlock>
-              Digital Pack
-            </HeadingBlock>
-          </HeroWrapper>
-          <Content>
-            <Text>
-              <LargeParagraph>
-                Please enter your details below to complete your Digital Pack subscription.
-              </LargeParagraph>
-            </Text>
-          </Content>
           <CheckoutForm />
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>

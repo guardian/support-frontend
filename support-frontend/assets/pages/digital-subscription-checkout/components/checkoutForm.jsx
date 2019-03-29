@@ -27,6 +27,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import Summary from 'components/subscriptionCheckouts/summary';
 import {
   type Action,
   type FormActionCreators,
@@ -40,6 +41,7 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { signOut } from 'helpers/user/user';
 import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
+import GridImage from 'components/gridImage/gridImage';
 
 import {
   type FormField,
@@ -148,7 +150,32 @@ function CheckoutForm(props: PropTypes) {
 
   return (
     <Content>
-      <CheckoutLayout>
+      <CheckoutLayout aside={(
+        <Summary
+          image={
+            <GridImage
+              gridId="checkoutPackshotDigitalPack"
+              srcSizes={[1000, 500]}
+              sizes="(max-width: 740px) 50vw, 500"
+              imgType="png"
+              altText=""
+            />
+          }
+          title="Digital Pack"
+          description="Premium App + iPad daily edition + Ad-free"
+          productPrice={dpRegularPrice(
+            props.productPrices,
+            props.billingPeriod,
+            props.country,
+          )}
+          promotion={digitalPackPromotion(
+            props.productPrices,
+            props.billingPeriod,
+            props.country,
+          )}
+          billingPeriod={props.billingPeriod}
+        />)}
+      >
         <Form onSubmit={(ev) => {
             ev.preventDefault();
             props.submitForm();
