@@ -12,7 +12,7 @@
 
 .component-marketing-consent-confirmation {
   font-family: $gu-text-sans-web;
-  font-size: 14px;
+  @include gu-fontset-explainer;
   font-style: italic;
   margin-top: 3px;
 }
