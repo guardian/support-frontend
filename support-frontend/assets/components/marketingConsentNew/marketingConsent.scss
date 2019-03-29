@@ -14,5 +14,5 @@
   font-family: $gu-text-sans-web;
   @include gu-fontset-explainer;
   font-style: italic;
-  margin-top: 3px;
+  margin-top: $gu-v-spacing/4;
 }
