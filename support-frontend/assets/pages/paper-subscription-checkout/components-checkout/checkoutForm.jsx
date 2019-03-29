@@ -10,7 +10,6 @@ import { firstError, type FormError } from 'helpers/subscriptionsForms/validatio
 import { regularPrice as paperRegularPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
 import { routes } from 'helpers/routes';
 
-import { PriceLabel } from 'components/priceLabel/priceLabel';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -95,7 +94,8 @@ function CheckoutForm(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Newspaper' : 'Voucher booklet';
+  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
+  const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -110,7 +110,7 @@ function CheckoutForm(props: PropTypes) {
               altText=""
             />
           }
-          title={`${getTitle(props.productOption)} paper`}
+          title={`${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`}
           description={getShortDescription(props.productOption)}
           productPrice={paperRegularPrice(
             props.productPrices,
@@ -125,12 +125,12 @@ function CheckoutForm(props: PropTypes) {
           dataList={[
           {
             title: 'Delivery method',
-            value: fulfilmentOptionDescriptor,
+            value: fulfilmentOptionName,
           },
           ]}
           billingPeriod="Monthly"
         >
-          <a href={routes.paperSubscriptionLanding}>Change Subscription</a>
+          <a href={routes.paperSubscriptionProductChoices}>Change Subscription</a>
         </Summary>)}
       >
         <Form onSubmit={(ev) => {
@@ -206,7 +206,8 @@ function CheckoutForm(props: PropTypes) {
               </FieldsetWithError>
               <Text>
                 <p>
-                We will take the first payment on the date you receive your first {fulfilmentOptionDescriptor}.
+                We will take the first payment on the
+                date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
                 </p>
                 <p>
                 Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
@@ -243,22 +244,6 @@ function CheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection>
             <Text>
-              <p>
-                You will pay{' '}
-                <PriceLabel
-                  productPrice={paperRegularPrice(
-                    props.productPrices,
-                    props.fulfilmentOption,
-                    props.productOption,
-                  )}
-                  promotion={paperPromotion(
-                    props.productPrices,
-                    props.fulfilmentOption,
-                    props.productOption,
-                  )}
-                  billingPeriod="Monthly"
-                />
-              </p>
               <p>
                 <strong>Money Back Guarantee.</strong>
                 If you wish to cancel your subscription, we will send you
