@@ -2,21 +2,67 @@
 
 .thank-you__container {
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
+  flex-flow: column-reverse nowrap;
+  justify-content: flex-start;
   margin: auto;
   max-width: 1015px;
+
+  @include mq($from: tablet) {
+    flex-flow: row nowrap;
+    justify-content: space-around;
+  }
 
   @include mq($from: leftCol) {
     justify-content: center;
   }
 
-  .gu-content__blurb--thank-you {
-    border-top: 10px solid gu-colour(neutral-7);
+  .gu-content__blurb.gu-content__blurb--thank-you {
+    display: block;
+    border-top: none;
+
+    @include mq($from: tablet) {
+      border-top: 10px solid gu-colour(neutral-7);
+    }
+  }
+
+  .gu-content__blurb-header {
+    margin: 0;
+    font-family: $gu-text-egyptian-web;
+    letter-spacing: -0.5px;
+    font-weight: 900;
+    font-size: 17px;
+    line-height: 22px;
+    padding-bottom: $gu-v-spacing * 2;
+
+    @include mq($from: tablet) {
+      margin: 0 -10px;
+      border: 0;
+      left: 10px;
+      padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing $gu-h-spacing/2;
+      width: 100%;
+      font-size: 36px;
+      line-height: 1.05;
+      font-family: $gu-headline;
+      font-weight: bold;
+      color: gu-colour(neutral-7);
+    }
+  }
+
+  .gu-content__blurb-header-break {
+    display: none;
+
+    @include mq($from: tablet) {
+      display: block;
+    }
   }
 
   .gu-content__blurb-blurb {
-    border-bottom: 1px solid gu-colour(neutral-7);
+    display: none;
+
+    @include mq($from: tablet) {
+      display: block;
+      border-bottom: 1px solid gu-colour(neutral-7);
+    }
   }
 
   .gu-content__return-link {
@@ -41,6 +87,7 @@
     font-weight: 900;
     font-size: 17px;
     margin: ($gu-v-spacing / 3) 0;
+    line-height: 22px;
   }
 
   .confirmation {
