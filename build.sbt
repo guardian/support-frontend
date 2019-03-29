@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "org.playframework.anorm" %% "anorm" % "2.6.0",
-  "org.postgresql" % "postgresql" % "42.2.1",
+  "org.postgresql" % "postgresql" % "42.2.5",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % "test",
   "org.mockito" % "mockito-all" % "1.10.19" % "test",
