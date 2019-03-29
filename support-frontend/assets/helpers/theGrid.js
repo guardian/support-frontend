@@ -70,6 +70,7 @@ export const imageCatalogue: {
   theMomentDigiHero3: 'f73e9336a0fb62916921c2956d12dd29a0f43d30/0_0_486_772',
   weeklyCampaignHeroImg: '3d4bf412afdf3c91faed55c9507a6d741575e3c5/0_0_1358_954',
   checkoutPackshotPaperGraunVoucher: '5aa8702d1de22589ec5dd1a20a6cf4bc4b7c9674/0_0_696_400',
+  checkoutPackshotDigitalPack: 'd22ba352cc867e09648d7156f41c09f4d19d2703/0_0_1017_957',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
