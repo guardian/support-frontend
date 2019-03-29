@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-// A monochrome version of the Twitter logo.
+// A monochrome version of the LinkedIn logo.
 export default function SvgLinkedin() {
   return (
     <svg
