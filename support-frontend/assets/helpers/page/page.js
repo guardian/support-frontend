@@ -30,6 +30,7 @@ import {
   trackNewOptimizeExperiment,
 } from 'helpers/tracking/ophanComponentEventTracking';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
+import { getSettings } from 'helpers/globals';
 
 if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');
@@ -130,7 +131,7 @@ function init<S, A>(
 ): Store<*, *, *> {
 
   try {
-    const { settings } = window.guardian;
+    const settings = getSettings();
     const countryGroupId: CountryGroupId = detectCountryGroup();
     const countryId: IsoCountry = detectCountry();
     const currencyId: IsoCurrency = detectCurrency(countryGroupId);

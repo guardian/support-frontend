@@ -11,7 +11,7 @@ import {
   toContributionTypeOrElse,
 } from 'helpers/contributions';
 import * as storage from 'helpers/storage';
-import { type Switches, type SwitchObject } from 'helpers/settings';
+import { type Switches } from 'helpers/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
@@ -20,6 +20,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
+import { isSwitchOn } from 'helpers/globals';
 
 
 // ----- Types ----- //
@@ -97,18 +98,15 @@ function getPaymentMethods(contributionType: ContributionType, countryId: IsoCou
     : [Stripe, PayPal];
 }
 
-const switchIsOn =
-  (switches: SwitchObject, switchName: PaymentMethodSwitch | null) =>
-    switchName && switches[switchName] && switches[switchName] === 'On';
-
 function getValidPaymentMethods(
   contributionType: ContributionType,
   allSwitches: Switches,
   countryId: IsoCountry,
 ): PaymentMethod[] {
-  const switches = (contributionType === 'ONE_OFF') ? allSwitches.oneOffPaymentMethods : allSwitches.recurringPaymentMethods;
+  const switchKey = (contributionType === 'ONE_OFF') ? 'oneOffPaymentMethods' : 'recurringPaymentMethods';
   return getPaymentMethods(contributionType, countryId)
-    .filter(paymentMethod => switchIsOn(switches, toPaymentMethodSwitchNaming(paymentMethod)));
+    .filter(paymentMethod =>
+      isSwitchOn(`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) || '-'}`));
 }
 
 function getPaymentMethodToSelect(
@@ -211,5 +209,4 @@ export {
   getPaymentMethodFromSession,
   getPaymentDescription,
   getPaymentLabel,
-  switchIsOn,
 };
