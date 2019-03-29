@@ -59,16 +59,15 @@ function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): C
 function getValidContributionTypes(countryGroupId: CountryGroupId): ContributionType[] {
 
   const defaultContributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
-  const contributionTypesNoMonthly = ['ONE_OFF', 'ANNUAL'];
 
   const mappings = {
     GBPCountries: defaultContributionTypes,
     UnitedStates: defaultContributionTypes,
-    AUDCountries: contributionTypesNoMonthly,
-    EURCountries: contributionTypesNoMonthly,
-    International: contributionTypesNoMonthly,
-    NZDCountries: contributionTypesNoMonthly,
-    Canada: contributionTypesNoMonthly,
+    AUDCountries: defaultContributionTypes,
+    EURCountries: defaultContributionTypes,
+    International: defaultContributionTypes,
+    NZDCountries: defaultContributionTypes,
+    Canada: defaultContributionTypes,
   };
   return getValidContributionTypesFromUrlOrElse(mappings[countryGroupId]);
 }

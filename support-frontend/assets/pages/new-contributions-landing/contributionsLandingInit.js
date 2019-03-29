@@ -64,7 +64,7 @@ function getInitialPaymentMethod(
 }
 
 function getInitialContributionType(countryGroupId: CountryGroupId): ContributionType {
-  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('ANNUAL'));
+  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
   return (
     // make sure we don't select a contribution type which isn't on the page
     getValidContributionTypes(countryGroupId).includes(contributionType)
