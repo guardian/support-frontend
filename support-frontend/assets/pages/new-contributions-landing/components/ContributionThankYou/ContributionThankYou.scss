@@ -5,7 +5,6 @@
   flex-flow: column-reverse nowrap;
   justify-content: flex-start;
   margin: auto;
-  max-width: 1015px;
 
   @include mq($from: tablet) {
     flex-flow: row nowrap;
