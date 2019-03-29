@@ -20,8 +20,8 @@ function ContributionThankYouPasswordSet() {
         <section className="confirmation">
           <h3 className="confirmation__title">You now have a Guardian account</h3>
           <p className="confirmation__message">
-            Stay signed in so we can recognise you on The Guardian, and you can easily manage your payments and
-            preferences
+            Stay signed in on all your devices to easily manage your
+            contributions and to stop seeing our appeals for support
           </p>
         </section>
         <MarketingConsent />

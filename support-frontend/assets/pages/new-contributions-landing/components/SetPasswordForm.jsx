@@ -136,14 +136,14 @@ function SetPasswordForm(props: PropTypes) {
           buttonClassName={classNameWithModifiers('form__submit-button', ['create-account'])}
           accessibilityHintId="accessibility-hint-create-account"
           type="submit"
-          buttonCopy="Create an account"
+          buttonCopy="Create a Guardian account"
         />
         <ButtonWithRightArrow
           componentClassName="form_no-submit"
           buttonClassName="button--no-thanks"
           accessibilityHintId="accessibility-hint-no-thanks"
           type="button"
-          buttonCopy="No, thank you"
+          buttonCopy="No thank you"
           onClick={
             () => {
               trackComponentClick('decline-to-set-password');

@@ -46,7 +46,7 @@ function ContributionThankYouSetPassword(props: PropTypes) {
     return (
       <section className="confirmation">
         <h3 className="confirmation__title">
-          {`Your Direct Debit has been set up. Look out for an email within three business days confirming your recurring payment. This will appear as 'Guardian Media Group' on your bank statements`}
+          {'Your Direct Debit has been set up. Look out for an email within three business days confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements'}
         </h3>
       </section>
     );
@@ -60,15 +60,15 @@ function ContributionThankYouSetPassword(props: PropTypes) {
         <section className="set-password">
           <h3 className="set-password__title">Set up a free account to manage your payments</h3>
           <p className="set-password__message">
-            {`As a contributor, being signed in means you will no longer see the “Since you’re here …”
-            messages asking you to support our journalism`}
+            If you stay signed in when you’re reading The Guardian as a contributor,
+            you’ll no longer see messages asking you to support our journalism
           </p>
           <SetPasswordForm />
         </section>
       </div>
 
       <div className="gu-content__blurb gu-content__blurb--thank-you">
-        <h1 className="gu-content__blurb-header">Set up a free Guardian account</h1>
+        <h1 className="gu-content__blurb-header">Set up a free<br />Guardian<br />account</h1>
       </div>
     </div>
   );
