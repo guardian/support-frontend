@@ -41,10 +41,10 @@ import {
   isFullDetailExistingPaymentMethod,
   mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
 } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
-import { switchIsOn } from '../../helpers/checkouts';
 import type { ExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
 import { setExistingPaymentMethods } from '../../helpers/page/commonActions';
 import { doesUserAppearToBeSignedIn } from '../../helpers/user/user';
+import { isSwitchOn } from 'helpers/globals';
 
 // ----- Functions ----- //
 
@@ -64,7 +64,7 @@ function getInitialPaymentMethod(
 }
 
 function getInitialContributionType(countryGroupId: CountryGroupId): ContributionType {
-  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('ANNUAL'));
+  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
   return (
     // make sure we don't select a contribution type which isn't on the page
     getValidContributionTypes(countryGroupId).includes(contributionType)
@@ -128,8 +128,8 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
 
     // initiate fetch of existing payment methods
     const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
-    const existingDirectDebitON = switchIsOn(switches.recurringPaymentMethods, 'existingDirectDebit');
-    const existingCardON = switchIsOn(switches.recurringPaymentMethods, 'existingCard');
+    const existingDirectDebitON = isSwitchOn('recurringPaymentMethods.existingDirectDebit');
+    const existingCardON = isSwitchOn('recurringPaymentMethods.existingCard');
     const existingPaymentsEnabledViaUrlParam = getQueryParameter('displayExistingPaymentOptions') === 'true';
     if (userAppearsLoggedIn && (existingCardON || existingDirectDebitON) && existingPaymentsEnabledViaUrlParam) {
       sendGetExistingPaymentMethodsRequest(

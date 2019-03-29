@@ -23,9 +23,3 @@ export type Settings = {
   switches: Switches,
   amounts: AmountsRegions,
 };
-
-export function isTestSwitchedOn(settings: Settings, testName: string): boolean {
-  const { experiments } = settings.switches;
-  const test = experiments[testName];
-  return !!(test && test.state && test.state === 'On');
-}

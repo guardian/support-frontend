@@ -6,6 +6,7 @@ import { combineReducers } from 'redux';
 import type { CommonState } from 'helpers/page/commonReducer';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import promotionPopUpReducer, { type FindOutMoreState } from './components/promotionPopUpReducer';
+import { getProductPrices } from 'helpers/globals';
 
 export type State = {
   common: CommonState,
@@ -18,12 +19,7 @@ export type State = {
 
 // ----- Export ----- //
 
-export default () => {
-
-  const { productPrices } = window.guardian;
-
-  return combineReducers({
-    productPrices: () => productPrices,
-    promotion: promotionPopUpReducer,
-  });
-};
+export default () => combineReducers({
+  productPrices: getProductPrices,
+  promotion: promotionPopUpReducer,
+});
