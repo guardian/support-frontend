@@ -9,7 +9,7 @@
   @include mq($until: tablet) {
     background: gu-colour(neutral-97);
     display: grid;
-    grid-template-columns: max-content max-content;
+    grid-template-columns: max-content minmax(50%, min-content);
     justify-content: space-between;
   }
   @include mq($from: tablet) {
