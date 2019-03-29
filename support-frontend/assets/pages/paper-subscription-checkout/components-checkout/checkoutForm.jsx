@@ -130,7 +130,7 @@ function CheckoutForm(props: PropTypes) {
           ]}
           billingPeriod="Monthly"
         >
-          <a href={routes.paperSubscriptionLanding}>Change Subscription</a>
+          <a href={routes.paperSubscriptionProductChoices}>Change Subscription</a>
         </Summary>)}
       >
         <Form onSubmit={(ev) => {
