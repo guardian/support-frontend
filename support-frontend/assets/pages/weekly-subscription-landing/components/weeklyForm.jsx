@@ -5,7 +5,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import { type CommonState } from 'helpers/page/commonReducer';
-import { Annual, Quarterly } from 'helpers/billingPeriods';
+import { Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
 import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getPromoCode } from 'helpers/flashSale';
@@ -44,6 +44,11 @@ const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBilling
 ].join('');
 
 export const displayBillingPeriods = {
+  [SixForSix]: {
+    title: '6 for 6',
+    offer: 'Introductory offer',
+    copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'SixForSix')} for the first 6 issues (then ${getPrice(countryGroupId, 'Quarterly')} quarterly)`,
+  },
   [Quarterly]: {
     title: 'Quarterly',
     copy: (countryGroupId: CountryGroupId) => `${getPrice(countryGroupId, 'Quarterly')} every 3 months`,
