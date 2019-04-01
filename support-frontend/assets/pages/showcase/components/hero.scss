@@ -79,14 +79,11 @@
       opacity: 1;
     }
   }
-    
+  
   &:nth-of-type(1) img,
-  &:nth-of-type(4) img {
-    height: 100%;
-    width: auto;
-  }
   &:nth-of-type(2) img,
-  &:nth-of-type(3) img {
+  &:nth-of-type(3) img,
+  &:nth-of-type(4) img {
     height: auto;
     width: 100%;
   }
@@ -101,15 +98,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    @supports (object-fit: cover) {
-      position: relative !important;
-      object-fit: cover !important;
-      height: 100% !important;
-      width: 100% !important;
-      transform: none;
-      top: auto;
-      left: auto;
-    }
   }
   @media (prefers-reduced-motion) {
     &:nth-of-type(1),
@@ -118,6 +106,14 @@
     &:nth-of-type(4) {
       opacity: 1 !important;
       transform: translateX(0) !important;
+    }
+  }
+
+  @include mq($from: desktop) {
+    &:nth-of-type(1) img,
+    &:nth-of-type(4) img {
+      height: 100%;
+      width: auto;
     }
   }
 }
