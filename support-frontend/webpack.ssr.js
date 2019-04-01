@@ -7,19 +7,11 @@ module.exports = merge(common('[name].css', '[name].js', false,
     test: /(showcase.jsx|paperSubscriptionLandingPage.jsx)/,
     use: 'exports-loader?getHtml,content'
   }]), {
-  mode: 'development',
-  devtool: 'inline-source-map',
-  devServer: {
-    proxy: {
-      '**': {
-        target: 'http://support.thegulocal.com:9210',
-        secure: false,
-      },
-    },
-  },
+  mode: 'production',
+  devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('DEV'),
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
   ],
 });
