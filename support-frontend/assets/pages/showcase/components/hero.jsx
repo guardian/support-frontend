@@ -10,6 +10,7 @@ import HeroImg from './hero.svg';
 import './hero.scss';
 
 export default function BreakingHeadlines() {
+
   return (
     <div className="showcase-hero">
       <HeroWrapper appearance="custom">
@@ -29,7 +30,7 @@ export default function BreakingHeadlines() {
           </div>
           <div className="showcase-hero__image">
             <GridImage
-              gridId="showcaseZuckEyes"
+              gridId="showcaseZuckGlass"
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
@@ -37,7 +38,7 @@ export default function BreakingHeadlines() {
           </div>
           <div className="showcase-hero__image">
             <GridImage
-              gridId="showcaseZuck"
+              gridId="showcaseNix"
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
