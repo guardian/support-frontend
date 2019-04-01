@@ -8,11 +8,13 @@ import type { Node } from 'react';
 
 import SvgFacebook from 'components/svgs/facebook';
 import SvgTwitter from 'components/svgs/twitter';
+import SvgLinkedin from 'components/svgs/linkedin';
+import SvgEmail from 'components/svgs/email';
 
 
 // ---- Types ----- //
 
-type Platform = 'facebook' | 'twitter';
+type Platform = 'facebook' | 'twitter' | 'linkedin' | 'email';
 
 type PropTypes = {| name: Platform |};
 
@@ -37,6 +39,16 @@ const socialMedia: {
     link: 'https://twitter.com/intent/tweet?text=I%27ve+just+contributed+to+the+Guardian.+Join+me+in+supporting+independent+journalism+https%3A%2F%2Fsupport.theguardian.com&amp;related=guardian',
     svg: <SvgTwitter />,
     a11yHint: 'Share on twitter',
+  },
+  linkedin: {
+    link: 'https://twitter.com/intent/tweet?text=I%27ve+just+contributed+to+the+Guardian.+Join+me+in+supporting+independent+journalism+https%3A%2F%2Fsupport.theguardian.com&amp;related=guardian',
+    svg: <SvgLinkedin />,
+    a11yHint: 'Share on linkedin',
+  },
+  email: {
+    link: 'https://twitter.com/intent/tweet?text=I%27ve+just+contributed+to+the+Guardian.+Join+me+in+supporting+independent+journalism+https%3A%2F%2Fsupport.theguardian.com&amp;related=guardian',
+    svg: <SvgEmail />,
+    a11yHint: 'Share by email',
   },
 };
 

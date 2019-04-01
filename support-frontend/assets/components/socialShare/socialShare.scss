@@ -1,10 +1,9 @@
 .component-social-share {
 	svg {
 		width: 20px;
-		border: 1px solid gu-colour(neutral-7);
+		border: 1px solid gu-colour(neutral-86);
 		border-radius: 600px;
 		padding: 8px;
-		// Fix for IE10.
-		height: 20px;
+    margin-right: 6px;
 	}
 }
