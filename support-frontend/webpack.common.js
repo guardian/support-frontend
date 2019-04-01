@@ -41,7 +41,7 @@ const cssLoaders = [{
   },
 }];
 
-module.exports = (cssFilename, outputFilename, minimizeCss) => ({
+module.exports = (cssFilename, outputFilename, minimizeCss, additionalModuleRules) => ({
   plugins: [
     new ManifestPlugin({
       fileName: '../../conf/assets.map',
@@ -169,11 +169,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
           },
           ...cssLoaders,
         ],
-      },
-      {
-         test: /(showcase.jsx|paperSubscriptionLandingPage.jsx)/,
-         use: 'exports-loader?getHtml,content'
-       }
-    ],
+      }
+    ].concat(additionalModuleRules || []),
   },
 });
