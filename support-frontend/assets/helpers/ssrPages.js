@@ -7,11 +7,11 @@ const render = content => ReactDOMServer.renderToString(content);
 
 export const pages = [
   {
-    path: 'uk/support',
+    filename: 'showcase.html',
     html: render(showcase),
   },
   {
-    path: 'uk/subscribe/paper',
+    filename: 'paper-subscription-landing.html',
     html: render(paper),
   },
 ];

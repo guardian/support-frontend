@@ -144,7 +144,7 @@ class Application(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       title = "Support the Guardian",
-      mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page","uk-support"),
+      mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page","showcase.html"),
       mainJsBundle = Left(RefPath("showcasePage.js")),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
       fontLoaderBundle = fontLoaderBundle,

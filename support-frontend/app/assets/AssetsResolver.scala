@@ -42,7 +42,7 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
   }
 
   def getSsrCacheContentsAsHtml(divId: String, file: String): ReactDiv = {
-    loadResource(s"ssr-cache/$file.html").map(string => SSRContent(divId,Html(string))).getOrElse(EmptyDiv(divId))
+    loadResource(s"ssr-cache/$file").map(string => SSRContent(divId,Html(string))).getOrElse(EmptyDiv(divId))
   }
 
 }

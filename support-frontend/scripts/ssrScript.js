@@ -33,14 +33,14 @@ global.Image = function image() { return this; };
 const { ssrPages } = require('../public/compiled-assets/javascripts/ssrPages').Support;
 
 ssrPages.pages.forEach((page) => {
-  const { path, html } = page;
-  console.log(`Writing ${path}`);
+  const { filename, html } = page;
+  console.log(`Writing ${filename}`);
 
   writeFileSync(
-    resolve(__dirname, '..', 'conf/ssr-cache/', `${path.replace(/\//g, '-')}.html`),
+    resolve(__dirname, '..', 'conf/ssr-cache/', `${filename}`),
     html, 'utf8',
   );
-  console.log(`Finished writing ${path}`);
+  console.log(`Finished writing ${filename}`);
 });
 
 console.log('Done');
