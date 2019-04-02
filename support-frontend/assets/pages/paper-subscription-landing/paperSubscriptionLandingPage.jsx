@@ -94,8 +94,6 @@ const content = (
 
 renderPage(content, reactElementId);
 
-function getHtml() {
+export function getHtml() {
   return ReactDOMServer.renderToString(content);
 }
-
-export { content, getHtml }

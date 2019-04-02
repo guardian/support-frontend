@@ -56,8 +56,6 @@ const content = (
 
 renderPage(content, 'showcase-landing-page');
 
-function getHtml() {
+export function getHtml() {
   return ReactDOMServer.renderToString(content);
 }
-
-export { content, getHtml };

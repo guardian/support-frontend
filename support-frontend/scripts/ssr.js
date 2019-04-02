@@ -39,9 +39,9 @@ function writePage(path, html) {
 
 //------------- Showcase page --------------
 
-const { getHtml: getShowcase } = require('../public/compiled-assets/javascripts/showcasePage');
+const { showcasePage } = require('../public/compiled-assets/javascripts/showcasePage').Support;
 
-writePage('uk/support', getShowcase());
+writePage('uk/support', showcasePage.getHtml());
 
 //------------- Paper landing page --------------
 
@@ -74,10 +74,9 @@ window.guardian.productPrices = {
   },
 };
 
-const { getHtml: getPaper } = require('../public/compiled-assets/javascripts/paperSubscriptionLandingPage');
+const { paperSubscriptionLandingPage } = require('../public/compiled-assets/javascripts/paperSubscriptionLandingPage').Support;
 
-writePage('uk/subscribe/paper', getPaper());
-
+writePage('uk/subscribe/paper', paperSubscriptionLandingPage.getHtml());
 
 console.log('Done');
 process.exit();
