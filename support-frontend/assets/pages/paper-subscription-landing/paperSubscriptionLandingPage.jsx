@@ -29,7 +29,6 @@ import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOpti
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import ConsentBanner from 'components/consentBanner/consentBanner';
-import ReactDOMServer from 'react-dom/server';
 
 // ----- Collection or delivery ----- //
 
@@ -94,6 +93,4 @@ const content = (
 
 renderPage(content, reactElementId);
 
-export function getHtml() {
-  return ReactDOMServer.renderToString(content);
-}
+export { content };

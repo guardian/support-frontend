@@ -1,10 +1,11 @@
 const { writeFileSync } = require('fs');
 const { resolve } = require('path');
 const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
-const { window } = new JSDOM(`...`, { url: 'http://localhost/' });
+const { ssr } = require('../public/compiled-assets/javascripts/ssr').Support;
 
-//------------- Set up global state --------------
+// ------------- Set up global state --------------
+const { JSDOM } = jsdom;
+const { window } = new JSDOM('...', { url: 'http://localhost/' });
 
 global.URL = require('url').URL;
 global.URLSearchParams = require('url').URLSearchParams;
@@ -16,71 +17,30 @@ global.window.guardian = {
 
 global.localStorage = {
   getItem: () => '',
-  setItem: (k) => {},
+  setItem: () => {},
 };
 global.sessionStorage = global.localStorage;
 global.document = window.document;
+global.document.cookie = 'GU_TK=1.1553079258164';
 global.navigator = {
   userAgent: 'node.js',
 };
 
-global.Image = function () {return this;};
+global.Image = function image() { return this; };
 
+// -------------- Write pages to file ----------------
 
-function writePage(path, html) {
+ssr.pages.forEach((page) => {
+  const { path, html } = page;
   console.log(`Writing ${path}`);
 
   writeFileSync(
     resolve(__dirname, '..', 'conf/ssr-cache/', `${path.replace(/\//g, '-')}.html`),
-    html, 'utf8');
+    html, 'utf8',
+  );
   console.log(`Finished writing ${path}`);
-}
-
-
-//------------- Showcase page --------------
-
-const { showcasePage } = require('../public/compiled-assets/javascripts/showcasePage').Support;
-
-writePage('uk/support', showcasePage.getHtml());
-
-//------------- Paper landing page --------------
-
-window.guardian.productPrices = {
-  'United Kingdom': {
-    'Collection': {
-      'SixdayPlus': { 'Monthly': { 'GBP': { 'price': 47.62 } } },
-      'SundayPlus': { 'Monthly': { 'GBP': { 'price': 22.06 } } },
-      'SaturdayPlus': { 'Monthly': { 'GBP': { 'price': 21.62 } } },
-      'Saturday': { 'Monthly': { 'GBP': { 'price': 10.36 } } },
-      'Sixday': { 'Monthly': { 'GBP': { 'price': 41.12 } } },
-      'Weekend': { 'Monthly': { 'GBP': { 'price': 20.76 } } },
-      'Sunday': { 'Monthly': { 'GBP': { 'price': 10.79 } } },
-      'WeekendPlus': { 'Monthly': { 'GBP': { 'price': 29.42 } } },
-      'Everyday': { 'Monthly': { 'GBP': { 'price': 47.62 } } },
-      'EverydayPlus': { 'Monthly': { 'GBP': { 'price': 51.96 } } },
-    },
-    'HomeDelivery': {
-      'SixdayPlus': { 'Monthly': { 'GBP': { 'price': 60.62 } } },
-      'SundayPlus': { 'Monthly': { 'GBP': { 'price': 26.39 } } },
-      'SaturdayPlus': { 'Monthly': { 'GBP': { 'price': 25.96 } } },
-      'Saturday': { 'Monthly': { 'GBP': { 'price': 14.69 } } },
-      'Sixday': { 'Monthly': { 'GBP': { 'price': 54.12 } } },
-      'Weekend': { 'Monthly': { 'GBP': { 'price': 25.09 } } },
-      'Sunday': { 'Monthly': { 'GBP': { 'price': 15.12 } } },
-      'WeekendPlus': { 'Monthly': { 'GBP': { 'price': 33.76 } } },
-      'Everyday': { 'Monthly': { 'GBP': { 'price': 62.79 } } },
-      'EverydayPlus': { 'Monthly': { 'GBP': { 'price': 67.12 } } },
-    },
-  },
-};
-
-const { paperSubscriptionLandingPage } = require('../public/compiled-assets/javascripts/paperSubscriptionLandingPage').Support;
-
-writePage('uk/subscribe/paper', paperSubscriptionLandingPage.getHtml());
+});
 
 console.log('Done');
 process.exit();
-
-
-
 

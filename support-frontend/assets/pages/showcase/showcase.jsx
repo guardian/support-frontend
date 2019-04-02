@@ -23,7 +23,6 @@ import CtaSubscribe from './components/ctaSubscribe';
 import CtaContribute from './components/ctaContribute';
 import OtherProducts from './components/otherProducts';
 import ConsentBanner from 'components/consentBanner/consentBanner';
-import ReactDOMServer from 'react-dom/server';
 
 import './showcase.scss';
 import { Provider } from 'react-redux';
@@ -56,6 +55,4 @@ const content = (
 
 renderPage(content, 'showcase-landing-page');
 
-export function getHtml() {
-  return ReactDOMServer.renderToString(content);
-}
+export { content };

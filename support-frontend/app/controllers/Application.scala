@@ -19,7 +19,6 @@ import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
 import views.{EmptyDiv, Preload}
-import play.twirl.api.Html
 import scala.concurrent.{ExecutionContext, Future}
 
 class Application(
