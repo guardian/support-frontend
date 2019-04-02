@@ -29,6 +29,7 @@ global.Image = function image() { return this; };
 
 // -------------- Write pages to file ----------------
 
+// eslint-disable-next-line
 const { ssrPages } = require('../public/compiled-assets/javascripts/ssrPages').Support;
 
 ssrPages.pages.forEach((page) => {
