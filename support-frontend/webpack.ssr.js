@@ -5,7 +5,7 @@ module.exports = merge(common('[name].css', '[name].js', false), {
   mode: 'production',
   devtool: 'source-map',
   entry: {
-    ssr: 'helpers/ssr.js',
+    ssrPages: 'helpers/ssrPages.js',
   },
   output: {
     library: ['Support', '[name]'],

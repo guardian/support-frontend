@@ -1,7 +1,6 @@
 const { writeFileSync } = require('fs');
 const { resolve } = require('path');
 const jsdom = require('jsdom');
-const { ssr } = require('../public/compiled-assets/javascripts/ssr').Support;
 
 // ------------- Set up global state --------------
 const { JSDOM } = jsdom;
@@ -30,7 +29,9 @@ global.Image = function image() { return this; };
 
 // -------------- Write pages to file ----------------
 
-ssr.pages.forEach((page) => {
+const { ssrPages } = require('../public/compiled-assets/javascripts/ssrPages').Support;
+
+ssrPages.pages.forEach((page) => {
   const { path, html } = page;
   console.log(`Writing ${path}`);
 

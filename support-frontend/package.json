@@ -8,7 +8,7 @@
     "flow": "flow",
     "lint": "eslint --ext .js --ext .jsx .",
     "build-dev": "webpack --config webpack.dev.js",
-    "build-ssr": "webpack --config webpack.ssr.js && node scripts/ssr.js",
+    "build-ssr": "webpack --config webpack.ssr.js && node scripts/ssrScript.js",
     "build-prod": "npm-run-all clean validate test storybook-static 'webpack --config webpack.prod.js --env.prod'",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com",
@@ -18,7 +18,7 @@
     "paparazzi": "paparazzi && open ./paparazzi",
     "storybook": "start-storybook --ci -p 9001 -c .storybook -s .storybook/static",
     "storybook-static": "build-storybook -c .storybook -o storybook-static  -s .storybook/static",
-    "cache-ssr": "node ./scripts/ssr.js",
+    "cache-ssr": "node scripts/ssrScript.js",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
     "flow-typed-install": "flow-typed install -s -o --ignoreDeps peer bundle"
   },
