@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
-import { hasPromotion, type Price, type Promotion } from 'helpers/productPrice/productPrices';
+import { hasDiscount, type Price, type Promotion } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import styles from './summary.module.scss';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -46,7 +46,7 @@ const Summary = ({
           promotion={promotion}
           billingPeriod={billingPeriod}
         />
-        {promotion && hasPromotion(promotion) &&
+        {promotion && hasDiscount(promotion) &&
         <div className={styles.promo}>
           <strong className={styles.promoTitle}>{promotion.description}</strong>
           {' '}({promotion.promoCode})
