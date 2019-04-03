@@ -46,7 +46,7 @@ const Summary = ({
           promotion={promotion}
           billingPeriod={billingPeriod}
         />
-        {promotion && hasDiscount(promotion) &&
+        {hasDiscount(promotion) &&
         <div className={styles.promo}>
           <strong className={styles.promoTitle}>{promotion.description}</strong>
           {' '}({promotion.promoCode})
