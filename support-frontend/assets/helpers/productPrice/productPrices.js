@@ -61,13 +61,13 @@ function getCurrency(country: IsoCountry): IsoCurrency {
   return currency;
 }
 
-const isNumeric = (num) => !isNaN(num);
+const isNumeric = num => !Number.isNaN(num);
 
 const hasDiscount = (promotion: ?Promotion) =>
   promotion && promotion.discountedPrice !== null && isNumeric(promotion.discountedPrice);
 
 function applyDiscount(price: Price, promotion: ?Promotion) {
-  if (hasDiscount(promotion)) {
+  if (promotion && hasDiscount(promotion)) {
     return {
       ...price,
       price: promotion.discountedPrice,
