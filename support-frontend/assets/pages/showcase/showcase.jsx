@@ -54,3 +54,5 @@ const content = (
 );
 
 renderPage(content, 'showcase-landing-page');
+
+export { content };
