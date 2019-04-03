@@ -245,11 +245,6 @@ function CheckoutForm(props: PropTypes) {
           <FormSection>
             <Text>
               <p>
-                <strong>Money Back Guarantee.</strong>
-                If you wish to cancel your subscription, we will send you
-                a refund of the unexpired part of your subscription.
-              </p>
-              <p>
                 <strong>Cancel any time you want.</strong>
                 There is no set time on your agreement so you can stop
                 your subscription anytime
