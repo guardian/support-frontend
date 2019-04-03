@@ -4,7 +4,7 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
-import { getCurrency, getCountryGroup, applyPromotion, type ProductPrices, type Price, type Promotion } from './productPrices';
+import { getCurrency, getCountryGroup, applyDiscount, type ProductPrices, type Price, type Promotion } from './productPrices';
 
 function promotion(
   productPrices: ProductPrices,
@@ -34,7 +34,7 @@ function finalPrice(
   billingPeriod: BillingPeriod,
   country: IsoCountry,
 ): Price {
-  return applyPromotion(
+  return applyDiscount(
     regularPrice(productPrices, billingPeriod, country),
     promotion(productPrices, billingPeriod, country),
   );

@@ -3,7 +3,7 @@ import { Monthly } from 'helpers/billingPeriods';
 import { type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { type PaperProductOptions } from 'helpers/productPrice/productOptions';
 
-import { getCurrency, getCountryGroup, applyPromotion, type ProductPrices, type Price, type Promotion } from './productPrices';
+import { getCurrency, getCountryGroup, applyDiscount, type ProductPrices, type Price, type Promotion } from './productPrices';
 
 const country = getCountryGroup('GB').name;
 const currency = getCurrency('GB');
@@ -32,7 +32,7 @@ function finalPrice(
   fulfilmentOption: FulfilmentOptions,
   productOption: PaperProductOptions,
 ): Price {
-  return applyPromotion(
+  return applyDiscount(
     regularPrice(productPrices, fulfilmentOption, productOption),
     promotion(productPrices, fulfilmentOption, productOption),
   );
