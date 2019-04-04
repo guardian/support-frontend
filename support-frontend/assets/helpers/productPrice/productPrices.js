@@ -61,7 +61,7 @@ function getCurrency(country: IsoCountry): IsoCurrency {
   return currency;
 }
 
-const isNumeric = (num: ?number)  =>
+const isNumeric = (num: ?number) =>
   num !== null &&
   num !== undefined &&
   !Number.isNaN(num);
