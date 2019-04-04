@@ -61,10 +61,15 @@ function getCurrency(country: IsoCountry): IsoCurrency {
   return currency;
 }
 
-const isNumeric = num => !Number.isNaN(num);
+const isNumeric = (num: ?number)  =>
+  num !== null &&
+  num !== undefined &&
+  !Number.isNaN(num);
 
 const hasDiscount = (promotion: ?Promotion) =>
-  promotion && promotion.discountedPrice !== null && isNumeric(promotion.discountedPrice);
+  promotion !== null &&
+  promotion !== undefined &&
+  isNumeric(promotion.discountedPrice);
 
 function applyDiscount(price: Price, promotion: ?Promotion) {
   if (promotion && hasDiscount(promotion)) {
@@ -82,4 +87,5 @@ export {
   showPrice,
   applyDiscount,
   hasDiscount,
+  isNumeric,
 };
