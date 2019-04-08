@@ -4,11 +4,10 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, StandardUnit}
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchClientBuilder}
 import com.gu.support.config.{Stage, TouchPointEnvironment}
-import com.typesafe.scalalogging.LazyLogging
 
 import scala.util.Try
 
-object AwsCloudWatchMetricPut  extends LazyLogging {
+object AwsCloudWatchMetricPut {
   val client: AmazonCloudWatch =
     AmazonCloudWatchClientBuilder
       .standard()
