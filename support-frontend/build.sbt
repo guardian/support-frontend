@@ -20,7 +20,6 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "org.typelevel" %% "cats-core" % "1.0.1",
   "com.dripower" %% "play-circe" % "2609.1",
   "com.gu" %% "fezziwig" % "0.8",

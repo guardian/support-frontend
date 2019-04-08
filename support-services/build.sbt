@@ -7,6 +7,7 @@ description := "Scala library to provide shared services to Guardian Support pro
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
   "com.amazonaws" % "aws-java-sdk-dynamodb" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "org.typelevel" %% "cats-core" % catsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
