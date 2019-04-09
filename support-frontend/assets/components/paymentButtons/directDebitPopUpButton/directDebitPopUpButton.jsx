@@ -76,8 +76,9 @@ function ButtonAndForm(props: PropTypes) {
           whenUnableToOpen={props.whenUnableToOpen}
         />
         <DirectDebitPopUpForm
-          buttonText={"Contribute with Direct Debit"}
-          onPaymentAuthorisation={props.onPaymentAuthorisation} />
+          buttonText="Contribute with Direct Debit"
+          onPaymentAuthorisation={props.onPaymentAuthorisation}
+        />
       </div>
     );
   }

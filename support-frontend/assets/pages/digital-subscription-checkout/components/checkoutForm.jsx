@@ -9,13 +9,10 @@ import type { Dispatch } from 'redux';
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-
-import Text from 'components/text/text';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import AddressForm from './addressForm';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
@@ -35,7 +32,6 @@ import {
 } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import { getQueryParameter } from 'helpers/url';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { OptimizeExperiments } from 'helpers/optimize/optimize';
@@ -50,8 +46,9 @@ import {
   type State,
   submitForm,
 } from '../digitalSubscriptionCheckoutReducer';
-import PersonalDetails from '../../../components/subscriptionCheckouts/personalDetails';
 import type { FormField as PersonalDetailsFormField } from '../../../components/subscriptionCheckouts/personalDetails';
+import PersonalDetails from '../../../components/subscriptionCheckouts/personalDetails';
+import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 
 // ----- Types ----- //
 
@@ -116,12 +113,6 @@ function mapDispatchToProps() {
 
 function CheckoutForm(props: PropTypes) {
 
-  const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
-    'Payment Attempt Failed';
-  const errorState = props.submissionError ?
-    <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
-    null;
-
   const monthlyPriceLabel = props.country !== null ?
     (<PriceLabel
       country={props.country}
@@ -137,16 +128,6 @@ function CheckoutForm(props: PropTypes) {
       promotion={digitalPackPromotion(props.productPrices, Annual, props.country)}
       billingPeriod={Annual}
     />) : '';
-
-  const isPayPalEnabled = (optimizeExperiments: OptimizeExperiments) => {
-    const PayPalExperimentId = '36Fk0f-QTtqmMqRVWDtBVg';
-    const enabledByTest = optimizeExperiments.find(exp => exp.id === PayPalExperimentId && exp.variant === '1');
-    const enabledByQueryString = getQueryParameter('payPal') === 'true';
-    return enabledByTest || enabledByQueryString;
-  };
-
-  const payPalEnabled = isPayPalEnabled(props.optimizeExperiments);
-  const multiplePaymentMethodsEnabled = payPalEnabled || props.countrySupportsDirectDebit;
 
   return (
     <Content>
@@ -232,16 +213,15 @@ function CheckoutForm(props: PropTypes) {
               />
             </Fieldset>
           </FormSection>
-          <FormSection title={multiplePaymentMethodsEnabled ? 'How would you like to pay?' : null}>
-            <PaymentMethodSelector
-              countrySupportsDirectDebit={props.countrySupportsDirectDebit}
-              paymentMethod={props.paymentMethod}
-              setPaymentMethod={props.setPaymentMethod}
-              onPaymentAuthorised={props.onPaymentAuthorised}
-              payPalEnabled={payPalEnabled}
-              multiplePaymentMethodsEnabled={multiplePaymentMethodsEnabled}
-            />
-            {errorState}
+          <PaymentMethodSelector
+            countrySupportsDirectDebit={props.countrySupportsDirectDebit}
+            paymentMethod={props.paymentMethod}
+            setPaymentMethod={props.setPaymentMethod}
+            onPaymentAuthorised={props.onPaymentAuthorised}
+            optimizeExperiments={props.optimizeExperiments}
+            submissionError={props.submissionError}
+          />
+          <FormSection>
             <SubscriptionSubmitButtons
               paymentMethod={props.paymentMethod}
               onPaymentAuthorised={props.onPaymentAuthorised}
@@ -255,16 +235,8 @@ function CheckoutForm(props: PropTypes) {
               amount={props.amount}
               billingPeriod={props.billingPeriod}
             />
-            <div>
-              <Text>
-                <p>
-                  <strong>Cancel any time you want.</strong>
-                    There is no set time on your agreement so you can stop
-                    your subscription anytime
-                </p>
-              </Text>
-            </div>
           </FormSection>
+          <CancellationSection />
         </Form>
       </CheckoutLayout>
     </Content>
