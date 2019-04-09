@@ -46,8 +46,8 @@ import {
   type State,
   submitForm,
 } from '../digitalSubscriptionCheckoutReducer';
-import type { FormField as PersonalDetailsFormField } from '../../../components/subscriptionCheckouts/personalDetails';
-import PersonalDetails from '../../../components/subscriptionCheckouts/personalDetails';
+import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
+import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 
 // ----- Types ----- //
