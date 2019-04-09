@@ -20,6 +20,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 // ---- Types ----- //
 
 type PropTypes = {|
+  buttonText: string,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   isPopUpOpen: boolean,
   closeDirectDebitPopUp: () => void,
@@ -70,7 +71,7 @@ const DirectDebitPopUpForm = (props: PropTypes) => {
               <SvgCross />
             </span>
           </button>
-          <DirectDebitForm onPaymentAuthorisation={props.onPaymentAuthorisation} />
+          <DirectDebitForm buttonText={props.buttonText} onPaymentAuthorisation={props.onPaymentAuthorisation} />
         </div>
       </div>
     );

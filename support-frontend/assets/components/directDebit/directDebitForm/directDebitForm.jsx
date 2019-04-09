@@ -32,6 +32,7 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 // ---- Types ----- //
 
 type PropTypes = {|
+  buttonText: string,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   isDDGuaranteeOpen: boolean,
   sortCodeArray: Array<string>,
@@ -137,6 +138,7 @@ const DirectDebitForm = (props: PropTypes) => (
     />
 
     <PaymentButton
+      buttonText={props.buttonText}
       phase={props.phase}
       onPayClick={() => props.payDirectDebitClicked()}
       onEditClick={() => props.editDirectDebitClicked()}
@@ -273,6 +275,7 @@ function ConfirmationInput(props: {phase: Phase, checked: boolean, onChange: Fun
 }
 
 function PaymentButton(props: {
+  buttonText: string,
   phase: Phase,
   onPayClick: Function,
   onEditClick: Function,
@@ -286,7 +289,7 @@ function PaymentButton(props: {
       >
         <SvgDirectDebitSymbol />
         <span className="component-direct-debit-form__cta-text">
-          Contribute with Direct Debit
+          {props.buttonText}
         </span>
         <SvgArrowRightStraight />
       </button>
