@@ -233,6 +233,7 @@ function ContributionFormContainer(props: PropTypes) {
           }
         </div>
         <DirectDebitPopUpForm
+          buttonText={"Contribute with Direct Debit"}
           onPaymentAuthorisation={onPaymentAuthorisation}
         />
       </div>

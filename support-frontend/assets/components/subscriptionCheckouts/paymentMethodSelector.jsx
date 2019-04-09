@@ -59,6 +59,7 @@ function PaymentMethodSelector(props: PropTypes) {
         }
       </Rows>
       <DirectDebitPopUpForm
+        buttonText={"Subscribe with Direct Debit"}
         onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
           props.onPaymentAuthorised(pa);
         }}

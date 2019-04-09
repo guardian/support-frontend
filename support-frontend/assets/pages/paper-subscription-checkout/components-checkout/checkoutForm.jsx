@@ -237,6 +237,7 @@ function CheckoutForm(props: PropTypes) {
           <FormSection>
             <Button aria-label={null} type="submit">Continue to payment</Button>
             <DirectDebitPopUpForm
+              buttonText={"Subscribe with Direct Debit"}
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                 props.onPaymentAuthorised(pa);
               }}
