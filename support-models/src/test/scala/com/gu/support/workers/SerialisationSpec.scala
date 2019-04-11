@@ -2,6 +2,7 @@ package com.gu.support.workers
 
 import com.gu.i18n.Currency
 import com.gu.support.SerialisationTestHelpers
+import com.gu.support.catalog.RestOfWorld
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.Fixtures._
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState, CreateZuoraSubscriptionState, SendThankYouEmailState}
@@ -22,6 +23,12 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
     testDecoding[CreatePaymentMethodState](createPayPalPaymentMethodDigitalPackJson)
     testDecoding[CreatePaymentMethodState](createDirectDebitDigitalPackJson,
       _.acquisitionData.get.ophanIds.pageviewId shouldBe Some("jkcg440imu1c0m8pxpxe")
+    )
+    testDecoding[CreatePaymentMethodState](createDirectDebitGuardianWeeklyJson,
+      state => state.product match {
+        case g: GuardianWeekly => g.fulfilmentOptions shouldBe RestOfWorld
+        case _ => fail()
+      }
     )
   }
 
