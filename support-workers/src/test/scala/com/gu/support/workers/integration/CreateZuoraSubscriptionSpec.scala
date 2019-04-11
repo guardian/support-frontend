@@ -12,7 +12,7 @@ import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.SendThankYouEmailState
-import com.gu.support.workers.{Annual, IdentityId, LambdaSpec, Monthly}
+import com.gu.support.workers.{Annual, IdentityId, LambdaSpec, Monthly, Quarterly}
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -30,75 +30,51 @@ import scala.concurrent.duration._
 class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
 
   "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
-    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
-
-    val outStream = new ByteArrayOutputStream()
-    val in = wrapFixture(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
-    createZuora.handleRequest(in, outStream, context)
-
-    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.subscriptionNumber.length should be > 0
+    createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
   }
 
-  "CreateZuoraSubscription lambda" should "create an annual Zuora subscription" in {
-    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
-
-    val outStream = new ByteArrayOutputStream()
-
-    createZuora.handleRequest(wrapFixture(createContributionZuoraSubscriptionJson(billingPeriod = Annual)), outStream, context)
-
-    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.subscriptionNumber.length should be > 0
+  it should "create an annual Zuora subscription" in {
+    createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual))
   }
 
-  "CreateZuoraSubscription lambda" should "create a Digital Pack subscription" in {
-    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
-
-    val outStream = new ByteArrayOutputStream()
-
-    createZuora.handleRequest(wrapFixture(createDigiPackZuoraSubscriptionJson), outStream, context)
-
-    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.subscriptionNumber.length should be > 0
+  it should "create a Digital Pack subscription" in {
+    createSubscription(createDigiPackZuoraSubscriptionJson)
   }
 
   it should "create a Digital Pack subscription with a discount" in {
-    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
-
-    val outStream = new ByteArrayOutputStream()
-
-    createZuora.handleRequest(wrapFixture(createDigiPackSubscriptionWithPromoJson), outStream, context)
-
-    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.subscriptionNumber.length should be > 0
+    createSubscription(createDigiPackSubscriptionWithPromoJson)
   }
 
   it should "create a Digital Pack subscription with a discount and free trial" in {
+    createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
+  }
 
+  it should "create an everyday paper subscription" in {
+    createSubscription(createEverydayPaperSubscriptionJson)
+  }
+
+  it should "create an Annual Guardian Weekly subscription" in {
+    createSubscription(createGuardianWeeklySubscriptionJson(Annual))
+  }
+
+  it should "create an Quarterly Guardian Weekly subscription" in {
+    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly))
+  }
+
+  private def createSubscription(json: String) = {
     val createZuora = new CreateZuoraSubscription(mockServiceProvider)
 
     val outStream = new ByteArrayOutputStream()
 
-    createZuora.handleRequest(digipackSubscriptionWithDiscountAndFreeTrialJson, outStream, context)
+    createZuora.handleRequest(wrapFixture(json), outStream, context)
 
     val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
     sendThankYouEmail._1.subscriptionNumber.length should be > 0
   }
 
-  "CreateZuoraSubscription lambda" should "create an everyday paper subscription" in {
-    val createZuora = new CreateZuoraSubscription(mockServiceProvider)
+  val realZuoraService = new ZuoraService(zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
 
-    val outStream = new ByteArrayOutputStream()
-
-    createZuora.handleRequest(wrapFixture(createEverydayPaperSubscriptionJson), outStream, context)
-
-    val sendThankYouEmail = Encoding.in[SendThankYouEmailState](outStream.toInputStream).get
-    sendThankYouEmail._1.subscriptionNumber.length should be > 0
-  }
-
-  val realZuoraService = new ZuoraService(zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
-
-  val realPromotionService = new PromotionService(promotionsConfigProvider.get(false))
+  val realPromotionService = new PromotionService(promotionsConfigProvider.get())
 
   val mockZuoraService = {
     val mockZuora = mock[ZuoraService]
