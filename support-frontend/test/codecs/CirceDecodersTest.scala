@@ -211,6 +211,22 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
         Canada = amounts
       )
 
+      val contributionTypesSettings = List(
+        ContributionTypeSetting(
+          contributionType = ONE_OFF,
+          isDefault = Some(true)
+        )
+      )
+      val contributionTypes = ContributionTypes(
+        GBPCountries = contributionTypesSettings,
+        UnitedStates = contributionTypesSettings,
+        EURCountries = contributionTypesSettings,
+        AUDCountries = contributionTypesSettings,
+        International = contributionTypesSettings,
+        NZDCountries = contributionTypesSettings,
+        Canada = contributionTypesSettings
+      )
+
       val settings = AllSettings(
         Switches(
           oneOffPaymentMethods = PaymentMethodsSwitch(
@@ -236,7 +252,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           ),
           optimize = Off
         ),
-        amountsRegions
+        amountsRegions,
+        contributionTypes
       )
 
       decode[AllSettings](json).right.value mustBe settings
