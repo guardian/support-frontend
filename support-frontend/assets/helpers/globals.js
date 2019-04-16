@@ -16,46 +16,24 @@ function getGlobal<T>(path: string = ''): ?T {
   return null;
 }
 
+const emptyAmountsSettings = {
+  ONE_OFF: [],
+  MONTHLY: [],
+  ANNUAL: [],
+};
+
 const getSettings = (): Settings => getGlobal('settings') || {
   switches: {
     experiments: {},
   },
   amounts: {
-    GBPCountries: {
-      ONE_OFF: [],
-      MONTHLY: [],
-      ANNUAL: [],
-    },
-    UnitedStates: {
-      ONE_OFF: [],
-      MONTHLY: [],
-      ANNUAL: [],
-    },
-    EURCountries: {
-      ONE_OFF: [],
-      MONTHLY: [],
-      ANNUAL: [],
-    },
-    AUDCountries: {
-      ONE_OFF: [],
-      MONTHLY: [],
-      ANNUAL: [],
-    },
-    International: {
-      ONE_OFF: [],
-      MONTHLY: [],
-      ANNUAL: [],
-    },
-    NZDCountries: {
-      ONE_OFF: [],
-      MONTHLY: [],
-      ANNUAL: [],
-    },
-    Canada: {
-      ONE_OFF: [],
-      MONTHLY: [],
-      ANNUAL: [],
-    },
+    GBPCountries: emptyAmountsSettings,
+    UnitedStates: emptyAmountsSettings,
+    EURCountries: emptyAmountsSettings,
+    AUDCountries: emptyAmountsSettings,
+    International: emptyAmountsSettings,
+    NZDCountries: emptyAmountsSettings,
+    Canada: emptyAmountsSettings,
   },
   contributionTypes: {
     GBPCountries: [],
