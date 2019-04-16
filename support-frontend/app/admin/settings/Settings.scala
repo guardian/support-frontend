@@ -17,10 +17,11 @@ import io.circe.{Decoder, Encoder}
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
 
-case class AllSettings(switches: Switches, amounts: AmountsRegions)
+case class AllSettings(switches: Switches, amounts: AmountsRegions, contributionTypes: ContributionTypes)
 
 object AllSettings {
   import Amounts._  // intellij doesn't think this is needed, but it is
+  import ContributionTypes._
 
   implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec[AllSettings]
 }
@@ -50,14 +51,15 @@ object Settings {
     } yield settings
 }
 
-case class SettingsSources(switches: SettingsSource, amounts: SettingsSource)
+case class SettingsSources(switches: SettingsSource, amounts: SettingsSource, contributionTypes: SettingsSource)
 
 object SettingsSources {
   def fromConfig(config: Config, stage: Stage): Either[Throwable, SettingsSources] = {
     for {
       switchesSource <- SettingsSource.fromConfig(config, "switches", stage)
       amountsSource <- SettingsSource.fromConfig(config, "amounts", stage)
-    } yield SettingsSources(switchesSource, amountsSource)
+      contributionTypesSource <- SettingsSource.fromConfig(config, "contributionTypes", stage)
+    } yield SettingsSources(switchesSource, amountsSource, contributionTypesSource)
   }
 }
 

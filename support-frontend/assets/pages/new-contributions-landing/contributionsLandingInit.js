@@ -45,6 +45,7 @@ import type { ExistingPaymentMethod } from '../../helpers/existingPaymentMethods
 import { setExistingPaymentMethods } from '../../helpers/page/commonActions';
 import { doesUserAppearToBeSignedIn } from '../../helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
+import type {ContributionTypes} from "../../helpers/contributions";
 
 // ----- Functions ----- //
 
@@ -63,13 +64,21 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(countryGroupId: CountryGroupId): ContributionType {
-  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
+function getInitialContributionType(countryGroupId: CountryGroupId, contributionTypes: ContributionTypes): ContributionType {
+  const getDefaultContributionType = () => {
+    const defaultContributionType = contributionTypes[countryGroupId].find(contributionType => contributionType.isDefault);
+    return defaultContributionType ? defaultContributionType.contributionType : contributionTypes[countryGroupId][0].contributionType;
+  };
+
+  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse(
+    getDefaultContributionType()
+  ));
+
   return (
     // make sure we don't select a contribution type which isn't on the page
-    getValidContributionTypes(countryGroupId).includes(contributionType)
+    contributionTypes[countryGroupId].find(ct => ct.contributionType === contributionType)
       ? contributionType
-      : getValidContributionTypes(countryGroupId)[0]
+      : contributionTypes[countryGroupId][0].contributionType
   );
 }
 
@@ -175,9 +184,9 @@ function selectInitialAmounts(state: State, dispatch: Function) {
 
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
   const { countryId } = state.common.internationalisation;
-  const { switches } = state.common.settings;
+  const { switches, contributionTypes } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
-  const contributionType = getInitialContributionType(countryGroupId);
+  const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }

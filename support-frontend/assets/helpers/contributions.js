@@ -54,6 +54,15 @@ export type AmountsRegions = {
   [CountryGroupId]: Amounts
 }
 
+export type ContributionTypeSetting = {
+  contributionType: ContributionType,
+  isDefault?: boolean,
+}
+
+export type ContributionTypes = {
+  [CountryGroupId]: ContributionTypeSetting,
+}
+
 type ParseError = 'ParseError';
 export type ValidationError = 'TooMuch' | 'TooLittle';
 export type ContributionError = ParseError | ValidationError;
