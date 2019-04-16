@@ -61,10 +61,18 @@ function getCurrency(country: IsoCountry): IsoCurrency {
   return currency;
 }
 
-function hasPromotion(promotion: ?Promotion) { return promotion && promotion.discountedPrice }
+const isNumeric = (num: ?number) =>
+  num !== null &&
+  num !== undefined &&
+  !Number.isNaN(num);
 
-function applyPromotion(price: Price, promotion: ?Promotion) {
-  if (promotion && hasPromotion(promotion)) {
+const hasDiscount = (promotion: ?Promotion) =>
+  promotion !== null &&
+  promotion !== undefined &&
+  isNumeric(promotion.discountedPrice);
+
+function applyDiscount(price: Price, promotion: ?Promotion) {
+  if (promotion && hasDiscount(promotion)) {
     return {
       ...price,
       price: promotion.discountedPrice,
@@ -77,6 +85,7 @@ export {
   getCurrency,
   getCountryGroup,
   showPrice,
-  applyPromotion,
-  hasPromotion,
+  applyDiscount,
+  hasDiscount,
+  isNumeric,
 };

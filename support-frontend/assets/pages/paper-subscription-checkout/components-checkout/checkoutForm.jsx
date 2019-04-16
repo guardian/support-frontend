@@ -7,7 +7,10 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { regularPrice as paperRegularPrice, promotion as paperPromotion } from 'helpers/productPrice/paperProductPrices';
+import {
+  promotion as paperPromotion,
+  regularPrice as paperRegularPrice,
+} from 'helpers/productPrice/paperProductPrices';
 import { routes } from 'helpers/routes';
 
 import Rows from 'components/base/rows';
@@ -23,32 +26,32 @@ import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
-import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getTitle, getShortDescription } from '../../paper-subscription-landing/helpers/products';
+import { getShortDescription, getTitle } from '../../paper-subscription-landing/helpers/products';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
-import { formatUserDate, formatMachineDate } from '../helpers/deliveryDays';
+import { formatMachineDate, formatUserDate } from '../helpers/deliveryDays';
 import {
   type FormActionCreators,
   formActionCreators,
-  signOut,
   type FormField,
   type FormFields,
-  getFormFields,
-  getDeliveryAddress,
   getBillingAddress,
-  type State,
   getDays,
+  getDeliveryAddress,
+  getFormFields,
+  signOut,
+  type State,
 } from '../paperSubscriptionCheckoutReducer';
 import { withStore } from './addressFields';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
+import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 
 
 // ----- Types ----- //
@@ -87,13 +90,6 @@ const BillingAddress = withStore('billing', getBillingAddress);
 function CheckoutForm(props: PropTypes) {
 
   const days = getDays(props.fulfilmentOption, props.productOption);
-
-  const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
-    'Payment Attempt Failed';
-  const errorState = props.submissionError ?
-    <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
-    null;
-
   const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
   const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
 
@@ -215,47 +211,24 @@ function CheckoutForm(props: PropTypes) {
               </Text>
             </Rows>
           </FormSection>
-          <FormSection title="How would you like to pay?">
-            <Rows>
-              <Fieldset legend="How would you like to pay?">
-                <RadioInput
-                  text="Direct debit"
-                  name="paymentMethod"
-                  checked={props.paymentMethod === DirectDebit}
-                  onChange={() => props.setPaymentMethod(DirectDebit)}
-                />
-                <RadioInput
-                  text="Credit/Debit card"
-                  name="paymentMethod"
-                  checked={props.paymentMethod === Stripe}
-                  onChange={() => props.setPaymentMethod(Stripe)}
-                />
-              </Fieldset>
-              {errorState}
-            </Rows>
-          </FormSection>
+          <PaymentMethodSelector
+            countrySupportsDirectDebit
+            paymentMethod={props.paymentMethod}
+            setPaymentMethod={props.setPaymentMethod}
+            onPaymentAuthorised={props.onPaymentAuthorised}
+            optimizeExperiments={null}
+            submissionError={props.submissionError}
+          />
           <FormSection>
             <Button aria-label={null} type="submit">Continue to payment</Button>
             <DirectDebitPopUpForm
+              buttonText="Subscribe with Direct Debit"
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
                 props.onPaymentAuthorised(pa);
               }}
             />
           </FormSection>
-          <FormSection>
-            <Text>
-              <p>
-                <strong>Money Back Guarantee.</strong>
-                If you wish to cancel your subscription, we will send you
-                a refund of the unexpired part of your subscription.
-              </p>
-              <p>
-                <strong>Cancel any time you want.</strong>
-                There is no set time on your agreement so you can stop
-                your subscription anytime
-              </p>
-            </Text>
-          </FormSection>
+          <CancellationSection />
         </Form>
       </Layout>
     </Content>

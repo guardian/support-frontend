@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { showPrice, applyPromotion, hasPromotion, type Price, type Promotion } from 'helpers/productPrice/productPrices';
+import { showPrice, applyDiscount, hasDiscount, type Price, type Promotion } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { billingPeriodNoun } from 'helpers/billingPeriods';
 
@@ -19,11 +19,11 @@ function PriceLabel({
   productPrice, promotion, billingPeriod, ...props
 }: PropTypes) {
 
-  if (hasPromotion(promotion)) {
+  if (hasDiscount(promotion)) {
     return (
       <span {...props}>
         <del aria-hidden="true">{showPrice(productPrice)}</del>{' '}
-        {displayPriceForPeriod(applyPromotion(productPrice, promotion), billingPeriod)}
+        {displayPriceForPeriod(applyDiscount(productPrice, promotion), billingPeriod)}
       </span>);
   }
   return (<span {...props}>{displayPriceForPeriod(productPrice, billingPeriod)}</span>);

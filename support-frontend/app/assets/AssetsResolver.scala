@@ -4,6 +4,8 @@ import play.api.Environment
 import play.api.libs.json._
 import play.twirl.api.Html
 
+import views.{SSRContent,EmptyDiv,ReactDiv}
+
 case class RefPath(value: String)
 case class StyleContent(value: Html) extends AnyVal
 
@@ -37,6 +39,10 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
     lookup.get(file).map(base + _).map(_.replaceFirst("^/assets/", "")) flatMap { resourcePath =>
       loadResource(s"public/compiled-assets/$resourcePath").map(string => StyleContent(Html(string)))
     }
+  }
+
+  def getSsrCacheContentsAsHtml(divId: String, file: String): ReactDiv = {
+    loadResource(s"ssr-cache/$file").map(string => SSRContent(divId,Html(string))).getOrElse(EmptyDiv(divId))
   }
 
 }

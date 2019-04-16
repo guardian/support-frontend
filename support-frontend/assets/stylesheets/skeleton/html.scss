@@ -77,3 +77,13 @@ Assistive technologies guidance (non-visible)
 .accessibility-hint {
   @include accessibility-hint;
 }
+
+
+/*
+Disable forms pre hydration
+*/
+[data-not-hydrated] {
+  input, button {
+    pointer-events: none;
+  }
+}

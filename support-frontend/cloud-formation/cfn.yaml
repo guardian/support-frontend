@@ -217,8 +217,6 @@ Resources:
       Name: !Sub ${Stack}-${Stage}-${App}
       Port: 9000
       Protocol: HTTP
-      VpcId:
-        Ref: VpcId
       HealthCheckIntervalSeconds: 10
       HealthCheckPath: /healthcheck
       HealthCheckPort: 9000
@@ -318,6 +316,25 @@ Resources:
     DependsOn:
     - TargetGroup
     - ElasticLoadBalancer
+
+  CatalogLoadingFailureAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: Support Frontend Catalog Load Failure
+      AlarmDescription: Fires an alarm if we fail to load the Zuora catalog pricing information from S3
+      MetricName: CatalogLoadingFailure
+      Namespace: support-frontend
+      Dimensions:
+        - Name: Environment
+          Value: PROD
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Average
 
   StateMachineUnavailableMetric:
     Type: "AWS::Logs::MetricFilter"

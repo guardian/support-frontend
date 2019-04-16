@@ -19,7 +19,6 @@ import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
 import views.{EmptyDiv, Preload}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class Application(
@@ -145,7 +144,7 @@ class Application(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       title = "Support the Guardian",
-      mainElement = EmptyDiv("showcase-landing-page"),
+      mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page","showcase.html"),
       mainJsBundle = Left(RefPath("showcasePage.js")),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
       fontLoaderBundle = fontLoaderBundle,

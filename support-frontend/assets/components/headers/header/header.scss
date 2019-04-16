@@ -41,6 +41,9 @@ $header-links-min-width: gu-span(12);
   .component-header--display-veggie-burger & {
     display: block;
   }
+  [data-not-hydrated] & {
+    display: none;
+  }
   & > .component-veggie-burger-button {
     margin-left: $gu-h-spacing / 4;
     /*aligned with the logo*/
