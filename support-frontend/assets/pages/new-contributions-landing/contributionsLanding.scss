@@ -1187,15 +1187,12 @@ form {
   border: 1px solid gu-colour(highlight-main);
 }
 
-
-// Editorialise Amounts Test
-
-.editorialise-amounts-test-copy {
+.amount-per-week-breakdown {
   margin-top: $gu-v-spacing;
   font-style: italic;
   line-height: 20px;
 }
 
-.editorialise-amounts-test-copy:empty {
+.amount-per-week-breakdown:empty {
   display: none;
 }

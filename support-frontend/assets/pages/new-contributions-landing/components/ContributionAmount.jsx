@@ -7,7 +7,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { config, type AmountsRegions, type Amount, type ContributionType, getAmount } from 'helpers/contributions';
 
-import type { EditorialiseAmountsVariant } from 'helpers/abTests/abtestDefinitions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
@@ -43,7 +42,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  editorialiseAmountsVariant: EditorialiseAmountsVariant,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -57,7 +55,6 @@ const mapStateToProps = state => ({
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
-  editorialiseAmountsVariant: state.common.abParticipations.editorialiseAmounts,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -115,8 +112,7 @@ const amountFormatted = (amount: number, currencyString: string, countryGroupId:
   return `${currencyString}${(amount).toFixed(2)}`;
 };
 
-const getEditorialisedAmountsCopy = (
-  editorialiseAmountsVariant: EditorialiseAmountsVariant,
+const getAmountPerWeekBreakdown = (
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   selectedAmounts: SelectedAmounts,
@@ -125,15 +121,7 @@ const getEditorialisedAmountsCopy = (
   const currencyString = currencies[detect(countryGroupId)].glyph;
   const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
 
-  if (editorialiseAmountsVariant === 'control') {
-    return '';
-  }
-
-  if (editorialiseAmountsVariant === 'dailyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount / 365.00, currencyString, countryGroupId)} a day`;
-  }
-
-  if (editorialiseAmountsVariant === 'weeklyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
+  if (contributionType === 'ANNUAL' && amount) {
     return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount / 52.00, currencyString, countryGroupId)} each week`;
   }
 
@@ -187,9 +175,8 @@ function ContributionAmount(props: PropTypes) {
           required
         />
       ) : null}
-      <p className="editorialise-amounts-test-copy">
-        {getEditorialisedAmountsCopy(
-          props.editorialiseAmountsVariant,
+      <p className="amount-per-week-breakdown">
+        {getAmountPerWeekBreakdown(
           props.contributionType,
           props.countryGroupId,
           props.selectedAmounts,
