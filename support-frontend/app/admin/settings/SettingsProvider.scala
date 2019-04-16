@@ -29,7 +29,9 @@ abstract class SettingsProvider[T] {
 
 class AllSettingsProvider private (switchesProvider: SettingsProvider[Switches], amountsProvider: SettingsProvider[AmountsRegions]) {
   def getAllSettings(): AllSettings = {
-    AllSettings(switchesProvider.settings(), amountsProvider.settings())
+    val s  = AllSettings(switchesProvider.settings(), amountsProvider.settings())
+    println(s)
+    s
   }
 }
 

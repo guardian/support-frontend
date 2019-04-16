@@ -6,6 +6,7 @@ import java.nio.file.{Files, Paths}
 import admin.ServersideAbTest
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
+import com.gu.support.config.Stage
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.typesafe.config.Config
@@ -52,10 +53,10 @@ object Settings {
 case class SettingsSources(switches: SettingsSource, amounts: SettingsSource)
 
 object SettingsSources {
-  def fromConfig(config: Config): Either[Throwable, SettingsSources] = {
+  def fromConfig(config: Config, stage: Stage): Either[Throwable, SettingsSources] = {
     for {
-      switchesSource <- SettingsSource.fromConfig(config, "switches")
-      amountsSource <- SettingsSource.fromConfig(config, "amounts")
+      switchesSource <- SettingsSource.fromConfig(config, "switches", stage)
+      amountsSource <- SettingsSource.fromConfig(config, "amounts", stage)
     } yield SettingsSources(switchesSource, amountsSource)
   }
 }
@@ -72,8 +73,8 @@ object SettingsSource extends LazyLogging {
     override def toString: String = s"local file at $path"
   }
 
-  def fromConfig(config: Config, name: String): Either[Throwable, SettingsSource] =
-    fromLocalFile(config, name).orElse(fromS3(config, name))
+  def fromConfig(config: Config, name: String, stage: Stage): Either[Throwable, SettingsSource] =
+    fromLocalFile(config, name).orElse(fromS3(config, name, stage))
       .leftMap(err => new Error(s"settingsSource was not correctly set in config. $err"))
 
   private def fromLocalFile(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
@@ -92,10 +93,10 @@ object SettingsSource extends LazyLogging {
     path.replaceFirst("~", homeDir)
   }
 
-  private def fromS3(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
+  private def fromS3(config: Config, name: String, stage: Stage): Either[Throwable, SettingsSource] = Either.catchNonFatal {
     S3(
-      config.getString(s"settingsSource.$name.s3.bucket"),
-      config.getString(s"settingsSource.$name.s3.key")
+      bucket = config.getString(s"settingsSource.s3.bucket"),
+      key = s"$stage/$name.json"
     )
   }
 
