@@ -57,6 +57,15 @@ const getSettings = (): Settings => getGlobal('settings') || {
       ANNUAL: [],
     },
   },
+  contributionTypes: {
+    GBPCountries: [],
+    UnitedStates: [],
+    EURCountries: [],
+    AUDCountries: [],
+    International: [],
+    NZDCountries: [],
+    Canada: [],
+  },
 };
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');

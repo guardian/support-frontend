@@ -60,7 +60,7 @@ export type ContributionTypeSetting = {
 }
 
 export type ContributionTypes = {
-  [CountryGroupId]: ContributionTypeSetting,
+  [CountryGroupId]: ContributionTypeSetting[],
 }
 
 type ParseError = 'ParseError';

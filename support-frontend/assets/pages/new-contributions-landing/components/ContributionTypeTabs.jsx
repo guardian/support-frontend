@@ -8,7 +8,6 @@ import { type ContributionType } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
   getPaymentMethodToSelect,
-  getValidContributionTypes,
   toHumanReadableContributionType,
 } from 'helpers/checkouts';
 
@@ -18,7 +17,7 @@ import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
-import type {ContributionTypes, ContributionTypeSetting} from "../../../helpers/contributions";
+import type { ContributionTypes, ContributionTypeSetting } from '../../../helpers/contributions';
 
 // ----- Types ----- //
 
@@ -66,7 +65,7 @@ function ContributionTypeTabs(props: PropTypes) {
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
         {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
-          const contributionType = contributionTypeSetting.contributionType;
+          const { contributionType } = contributionTypeSetting;
           return (
             <li className="form__radio-group-item">
               <input
@@ -76,14 +75,19 @@ function ContributionTypeTabs(props: PropTypes) {
                 name="contributionType"
                 value={contributionType}
                 onChange={() =>
-                  props.onSelectContributionType(contributionType, props.switches, props.countryId, props.countryGroupId)
+                  props.onSelectContributionType(
+                    contributionType,
+                    props.switches,
+                    props.countryId,
+                    props.countryGroupId,
+                  )
                 }
                 checked={props.contributionType === contributionType}
               />
               <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
                 {toHumanReadableContributionType(contributionType)}
               </label>
-            </li>)
+            </li>);
         })}
       </ul>
     </fieldset>

@@ -45,7 +45,7 @@ import type { ExistingPaymentMethod } from '../../helpers/existingPaymentMethods
 import { setExistingPaymentMethods } from '../../helpers/page/commonActions';
 import { doesUserAppearToBeSignedIn } from '../../helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
-import type {ContributionTypes} from "../../helpers/contributions";
+import type { ContributionTypes } from '../../helpers/contributions';
 
 // ----- Functions ----- //
 
@@ -64,15 +64,19 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(countryGroupId: CountryGroupId, contributionTypes: ContributionTypes): ContributionType {
+function getInitialContributionType(
+  countryGroupId: CountryGroupId,
+  contributionTypes: ContributionTypes,
+): ContributionType {
   const getDefaultContributionType = () => {
-    const defaultContributionType = contributionTypes[countryGroupId].find(contributionType => contributionType.isDefault);
-    return defaultContributionType ? defaultContributionType.contributionType : contributionTypes[countryGroupId][0].contributionType;
+    const defaultContributionType = contributionTypes[countryGroupId].find(ct => ct.isDefault);
+    return defaultContributionType ?
+      defaultContributionType.contributionType :
+      contributionTypes[countryGroupId][0].contributionType;
   };
 
-  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse(
-    getDefaultContributionType()
-  ));
+  const contributionType =
+    getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse(getDefaultContributionType()));
 
   return (
     // make sure we don't select a contribution type which isn't on the page
