@@ -40,12 +40,12 @@ import { Stripe } from 'helpers/paymentMethods';
 import {
   isFullDetailExistingPaymentMethod,
   mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
-} from '../../helpers/existingPaymentMethods/existingPaymentMethods';
-import type { ExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
-import { setExistingPaymentMethods } from '../../helpers/page/commonActions';
-import { doesUserAppearToBeSignedIn } from '../../helpers/user/user';
+} from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import { setExistingPaymentMethods } from 'helpers/page/commonActions';
+import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
-import type { ContributionTypes } from '../../helpers/contributions';
+import type { ContributionTypes } from 'helpers/contributions';
 
 // ----- Functions ----- //
 
