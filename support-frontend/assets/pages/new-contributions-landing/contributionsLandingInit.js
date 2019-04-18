@@ -14,8 +14,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import { getQueryParameter } from 'helpers/url';
 import {
-  getContributionTypeFromSessionOrElse,
-  getContributionTypeFromUrlOrElse,
+  getContributionTypeFromSession,
+  getContributionTypeFromUrl,
   getPaymentMethodFromSession,
   getValidContributionTypes,
   getValidPaymentMethods,
@@ -68,22 +68,19 @@ function getInitialContributionType(
   countryGroupId: CountryGroupId,
   contributionTypes: ContributionTypes,
 ): ContributionType {
-  const getDefaultContributionType = () => {
-    const defaultContributionType = contributionTypes[countryGroupId].find(ct => ct.isDefault);
-    return defaultContributionType ?
-      defaultContributionType.contributionType :
-      contributionTypes[countryGroupId][0].contributionType;
-  };
 
-  const contributionType =
-    getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse(getDefaultContributionType()));
+  const contributionType = getContributionTypeFromUrl() || getContributionTypeFromSession();
 
-  return (
-    // make sure we don't select a contribution type which isn't on the page
-    contributionTypes[countryGroupId].find(ct => ct.contributionType === contributionType)
-      ? contributionType
-      : contributionTypes[countryGroupId][0].contributionType
-  );
+  // make sure we don't select a contribution type which isn't on the page
+  if (contributionType &&
+    contributionTypes[countryGroupId].find(ct => ct.contributionType === contributionType)) {
+    return contributionType;
+  }
+
+  const defaultContributionType = contributionTypes[countryGroupId].find(ct => ct.isDefault);
+  return defaultContributionType ?
+    defaultContributionType.contributionType :
+    contributionTypes[countryGroupId][0].contributionType;
 }
 
 const stripeAccountForContributionType: {[ContributionType]: StripeAccount } = {
