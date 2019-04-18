@@ -27,20 +27,26 @@ abstract class SettingsProvider[T] {
   def settings(): T
 }
 
-class AllSettingsProvider private (switchesProvider: SettingsProvider[Switches], amountsProvider: SettingsProvider[AmountsRegions]) {
+class AllSettingsProvider private (
+  switchesProvider: SettingsProvider[Switches],
+  amountsProvider: SettingsProvider[AmountsRegions],
+  contributionTypesProvider: SettingsProvider[ContributionTypes]) {
+
   def getAllSettings(): AllSettings = {
-    AllSettings(switchesProvider.settings(), amountsProvider.settings())
+    AllSettings(switchesProvider.settings(), amountsProvider.settings(), contributionTypesProvider.settings())
   }
 }
 
 object AllSettingsProvider {
   import admin.settings.Amounts.amountsDecoder
+  import admin.settings.ContributionTypes.contributionTypesDecoder
 
   def fromConfig(config: Configuration)(implicit client: AmazonS3, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
       amountsProvider <- SettingsProvider.fromAppConfig[AmountsRegions](config.settingsSources.amounts, config)
-    } yield new AllSettingsProvider(switchesProvider, amountsProvider)
+      contributionTypesProvider <- SettingsProvider.fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
+    } yield new AllSettingsProvider(switchesProvider, amountsProvider, contributionTypesProvider)
   }
 }
 

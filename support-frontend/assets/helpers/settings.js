@@ -1,6 +1,6 @@
 // @flow
 
-import { type AmountsRegions } from 'helpers/contributions';
+import { type AmountsRegions, type ContributionTypes } from 'helpers/contributions';
 
 export type Status = 'On' | 'Off';
 
@@ -22,4 +22,5 @@ export type Switches = {
 export type Settings = {
   switches: Switches,
   amounts: AmountsRegions,
+  contributionTypes: ContributionTypes,
 };

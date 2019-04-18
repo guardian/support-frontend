@@ -8,7 +8,6 @@ import { type ContributionType } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
 import {
   getPaymentMethodToSelect,
-  getValidContributionTypes,
   toHumanReadableContributionType,
 } from 'helpers/checkouts';
 
@@ -18,6 +17,7 @@ import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type State } from '../contributionsLandingReducer';
 import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
+import type { ContributionTypes, ContributionTypeSetting } from 'helpers/contributions';
 
 // ----- Types ----- //
 
@@ -26,6 +26,7 @@ type PropTypes = {|
   countryId: IsoCountry,
   countryGroupId: CountryGroupId,
   switches: Switches,
+  contributionTypes: ContributionTypes,
   onSelectContributionType: (ContributionType, Switches, IsoCountry, CountryGroupId) => void,
 |};
 
@@ -34,6 +35,7 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   countryId: state.common.internationalisation.countryId,
   switches: state.common.settings.switches,
+  contributionTypes: state.common.settings.contributionTypes,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -52,7 +54,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 // ----- Render ----- //
 
 function ContributionTypeTabs(props: PropTypes) {
-  const contributionTypes = getValidContributionTypes(props.countryGroupId);
+  const contributionTypes = props.contributionTypes[props.countryGroupId];
 
   if (contributionTypes.length === 1 && contributionTypes[0] === 'ONE_OFF') {
     return (null);
@@ -62,23 +64,31 @@ function ContributionTypeTabs(props: PropTypes) {
     <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
-        {contributionTypes.map((contributionType: ContributionType) => (
-          <li className="form__radio-group-item">
-            <input
-              id={`contributionType-${contributionType}`}
-              className="form__radio-group-input"
-              type="radio"
-              name="contributionType"
-              value={contributionType}
-              onChange={() =>
-                props.onSelectContributionType(contributionType, props.switches, props.countryId, props.countryGroupId)
-              }
-              checked={props.contributionType === contributionType}
-            />
-            <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
-              {toHumanReadableContributionType(contributionType)}
-            </label>
-          </li>))}
+        {contributionTypes.map((contributionTypeSetting: ContributionTypeSetting) => {
+          const { contributionType } = contributionTypeSetting;
+          return (
+            <li className="form__radio-group-item">
+              <input
+                id={`contributionType-${contributionType}`}
+                className="form__radio-group-input"
+                type="radio"
+                name="contributionType"
+                value={contributionType}
+                onChange={() =>
+                  props.onSelectContributionType(
+                    contributionType,
+                    props.switches,
+                    props.countryId,
+                    props.countryGroupId,
+                  )
+                }
+                checked={props.contributionType === contributionType}
+              />
+              <label htmlFor={`contributionType-${contributionType}`} className="form__radio-group-label">
+                {toHumanReadableContributionType(contributionType)}
+              </label>
+            </li>);
+        })}
       </ul>
     </fieldset>
   );

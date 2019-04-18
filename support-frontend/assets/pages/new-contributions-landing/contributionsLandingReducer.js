@@ -16,7 +16,7 @@ import { directDebitReducer as directDebit } from 'components/directDebit/direct
 import type { StripePaymentMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import { getContributionTypeFromSessionOrElse } from 'helpers/checkouts';
+import { getContributionTypeFromSession } from 'helpers/checkouts';
 import * as storage from 'helpers/storage';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 
@@ -105,7 +105,7 @@ function createFormReducer() {
   // ----- Initial state ----- //
 
   const initialState: FormState = {
-    contributionType: getContributionTypeFromSessionOrElse('MONTHLY'),
+    contributionType: getContributionTypeFromSession() || 'MONTHLY',
     paymentMethod: 'None',
     thirdPartyPaymentLibraries: {
       ONE_OFF: {

@@ -59,19 +59,20 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
       membersDataService
     }
 
+    val amounts = Amounts(Nil,Nil,Nil)
+    val allSettings = AllSettings(
+      Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty, On),
+      AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts),
+      ContributionTypes(Nil,Nil,Nil,Nil,Nil,Nil,Nil)
+    )
+
     def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
       identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
-      val amounts = Amounts(Nil,Nil,Nil)
       val settingsProvider = mock[AllSettingsProvider]
-      when(settingsProvider.getAllSettings()).thenReturn(
-        AllSettings(
-          Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty, On),
-          AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts)
-        )
-      )
+      when(settingsProvider.getAllSettings()).thenReturn(allSettings)
       val client = mock[SupportWorkersClient]
       val testUserService = mock[TestUserService]
       val tip = mock[Tip]
