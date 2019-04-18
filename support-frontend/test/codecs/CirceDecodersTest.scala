@@ -194,49 +194,28 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |    }
           |  },
           |  "contributionTypes": {
-          |"GBPCountries": [
-          |{
-          |"contributionType": "ONE_OFF",
-          |"isDefault": true
-          |}
-          |],
-          |"UnitedStates": [
-          |{
-          |"contributionType": "ONE_OFF",
-          |"isDefault": true
-          |}
-          |],
-          |"EURCountries": [
-          |{
-          |"contributionType": "ONE_OFF",
-          |"isDefault": true
-          |}
-          |],
-          |"International": [
-          |{
-          |"contributionType": "ONE_OFF",
-          |"isDefault": true
-          |}
-          |],
-          |"Canada": [
-          |{
-          |"contributionType": "ONE_OFF",
-          |"isDefault": true
-          |}
-          |],
-          |"AUDCountries": [
-          |{
-          |"contributionType": "ONE_OFF",
-          |"isDefault": true
-          |}
-          |],
-          |"NZDCountries": [
-          |{
-          |"contributionType": "ONE_OFF",
-          |"isDefault": true
-          |}
-          |]
-          |}
+          |       "GBPCountries": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "UnitedStates": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "EURCountries": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "International": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "Canada": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "AUDCountries": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "NZDCountries": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ]
+          |  }
           |}""".stripMargin
 
       val amount = Amount(value = "25", isDefault = Some(true))
