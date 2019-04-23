@@ -42,22 +42,33 @@ case class Paper(
   override def describe: String = s"Paper-$fulfilmentOptions-$productOptions"
 }
 
+case class GuardianWeekly(
+  currency: Currency,
+  billingPeriod: BillingPeriod,
+  fulfilmentOptions: FulfilmentOptions,
+) extends ProductType {
+  override def describe: String = s"$billingPeriod-GuardianWeekly-$fulfilmentOptions-$currency"
+}
+
 object ProductType {
   import com.gu.support.encoding.CustomCodecs._
   implicit val codecDigitalPack: Codec[DigitalPack] = deriveCodec
   implicit val codecContribution: Codec[Contribution] = deriveCodec
   implicit val codecPaper: Codec[Paper] = deriveCodec
+  implicit val codecGuardianWeekly: Codec[GuardianWeekly] = deriveCodec
 
   implicit val encodeProduct: Encoder[ProductType] = Encoder.instance {
     case d: DigitalPack => d.asJson
     case c: Contribution => c.asJson
     case p: Paper => p.asJson
+    case g: GuardianWeekly => g.asJson
   }
 
   implicit val decodeProduct: Decoder[ProductType] =
     List[Decoder[ProductType]](
       Decoder[Contribution].widen,
       Decoder[Paper].widen,
+      Decoder[GuardianWeekly].widen,
       Decoder[DigitalPack].widen
     ).reduceLeft(_ or _)
 }

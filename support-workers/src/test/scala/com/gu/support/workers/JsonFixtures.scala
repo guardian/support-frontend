@@ -10,13 +10,14 @@ import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
 import io.circe.generic.auto._
 import io.circe.syntax._
+import org.joda.time.{DateTimeZone, LocalDate}
 
 //noinspection TypeAnnotation
 object JsonFixtures {
   val useEncryption = false
 
   def wrapFixture(string: String): ByteArrayInputStream =
-    Wrapper.wrapString(string, RequestInfo(useEncryption, testUser = false, failed = false, Nil, false)).asJson.noSpaces.asInputStream
+    Wrapper.wrapString(string, RequestInfo(useEncryption, testUser = false, failed = false, Nil, accountExists = false)).asJson.noSpaces.asInputStream
 
   def userJson(id: String = idId): String =
     s"""
@@ -89,7 +90,7 @@ object JsonFixtures {
          }
        """
 
-  def contribution(amount: BigDecimal = 5, currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly) =
+  def contribution(amount: BigDecimal = 5, currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly): String =
     s"""
       {
         "amount": $amount,
@@ -224,7 +225,7 @@ object JsonFixtures {
     s"""{
        |  $requestIdJson,
        |  ${userJson()},
-       |  "product": ${product},
+       |  "product": $product,
        |  "paymentMethod": $stripePaymentMethod,
        |  "salesForceContact": {
        |    "Id": "sfContactId123",
@@ -259,7 +260,7 @@ object JsonFixtures {
         }
       """
 
-  def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly) =
+  def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
     s"""
           {
             $requestIdJson,
@@ -274,7 +275,7 @@ object JsonFixtures {
           {
             $requestIdJson,
             ${userJson()},
-            "product": ${digitalPackJson},
+            "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
@@ -285,7 +286,7 @@ object JsonFixtures {
           {
             $requestIdJson,
             ${userJson()},
-            "product": ${digitalPackJson},
+            "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
             "promoCode": "DJP8L27FY",
             "salesForceContact": $salesforceContactJson
@@ -296,12 +297,28 @@ object JsonFixtures {
     s"""
           {
             $requestIdJson,
-            ${userJson()}WithDeliveryAddress,
-            "product": ${everydayPaperJson},
-            "firstDeliveryDate": "2019-04-01",
+            $userJsonWithDeliveryAddress,
+            "product": $everydayPaperJson,
+            "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC)}",
             "paymentMethod": $stripePaymentMethod,
             "salesForceContact": $salesforceContactJson
             }
+      """
+
+  def createGuardianWeeklySubscriptionJson(billingPeriod: BillingPeriod): String =
+    s"""
+      {
+        $requestIdJson,
+        $userJsonWithDeliveryAddress,
+        "product": {
+          "currency": "GBP",
+          "billingPeriod" : "$billingPeriod",
+          "fulfilmentOptions" : "RestOfWorld"
+        },
+        "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC).plusDays(3)}",
+        "paymentMethod": $stripePaymentMethod,
+        "salesForceContact": $salesforceContactJson
+        }
       """
 
   val failureJson =
@@ -469,7 +486,7 @@ object JsonFixtures {
             "accountExists": false
           }
         }
-      """.asInputStream
+      """
 
   def getPaymentMethodJson(billingAccountId: String, userId: String): String =
     s"""
