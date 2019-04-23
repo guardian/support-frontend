@@ -13,9 +13,7 @@ import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { DirectDebit } from 'helpers/paymentMethods';
-
-//  TBD: Implement Social On this page beneath Marketing Consent:
-// import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 
 // ----- Types ----- //
 
@@ -66,6 +64,7 @@ function ContributionThankYou(props: PropTypes) {
           </section>
         ) : null}
         <MarketingConsent />
+        <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
             href="https://www.theguardian.com"

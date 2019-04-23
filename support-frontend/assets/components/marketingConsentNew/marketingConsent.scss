@@ -11,8 +11,8 @@
 }
 
 .component-marketing-consent-confirmation {
-  font-family: $gu-text-sans-web;
   @include gu-fontset-explainer;
   font-style: italic;
   margin-top: $gu-v-spacing/4;
+  font-weight: 100;
 }

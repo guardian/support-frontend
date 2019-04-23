@@ -1,9 +1,13 @@
 .component-social-share {
+  border: 1px solid gu-colour(neutral-86);
+  border-radius: 600px;
+  height: 42px;
+  width: 42px;
+  margin-right: 12px;
+
 	svg {
-		width: 20px;
-		border: 1px solid gu-colour(neutral-86);
-		border-radius: 600px;
-		padding: 8px;
-    margin-right: 6px;
+		height: 25px;
+    line-height: 42px;
+    vertical-align: middle;
 	}
 }

@@ -7,9 +7,7 @@ import MarketingConsent from '../MarketingConsentContainer';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
-
-//  TBD: Implement Social On this page beneath Marketing Consent:
-// import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 
 // ----- Render ----- //
 
@@ -25,6 +23,7 @@ function ContributionThankYouPasswordSet() {
           </p>
         </section>
         <MarketingConsent />
+        <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
             href="https://www.theguardian.com"
