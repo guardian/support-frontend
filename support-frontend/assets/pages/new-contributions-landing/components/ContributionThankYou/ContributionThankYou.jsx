@@ -14,6 +14,7 @@ import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { DirectDebit } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 
 // ----- Types ----- //
 
@@ -64,6 +65,7 @@ function ContributionThankYou(props: PropTypes) {
           </section>
         ) : null}
         <MarketingConsent />
+        <ContributionSurvey contributionType={props.contributionType}/>
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
