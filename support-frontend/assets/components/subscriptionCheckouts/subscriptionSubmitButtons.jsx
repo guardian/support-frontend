@@ -40,7 +40,7 @@ function SubscriptionSubmitButtons(props: PropTypes) {
   // because we don't want to destroy and replace the iframe each time.
   // See PayPalExpressButton for more info.
   return (
-    <div className="component-paypal-button-checkout__container">
+    <div>
       <div
         id="component-paypal-button-checkout"
         className={hiddenIf(props.paymentMethod !== PayPal, 'component-paypal-button-checkout')}

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node, type Element, type ChildrenArray } from 'react';
+import React, { type Node, type Element, type ChildrenArray, type Boolean } from 'react';
 import { type Option } from 'helpers/types/option';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 
@@ -15,19 +15,24 @@ type FormSectionPropTypes = {|
   title: Option<string>,
   children: Node,
   headingSize: HeadingSize,
+  noBorder: Boolean,
 |};
 
-const FormSection = ({ children, title, headingSize }: FormSectionPropTypes) => (
-  <div className="component-checkout-form-section">
+const FormSection = ({
+  children, title, headingSize, noBorder,
+}: FormSectionPropTypes) => (
+  <div className={`component-checkout-form-section ${noBorder ? 'component-checkout-form-section--no-border' : ''}`}>
     <div className="component-checkout-form-section__wrap">
       {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
       {children}
     </div>
   </div>
 );
+
 FormSection.defaultProps = {
   headingSize: 2,
   title: null,
+  noBorder: false,
 };
 
 /*

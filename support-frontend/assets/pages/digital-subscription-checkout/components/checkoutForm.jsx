@@ -129,6 +129,8 @@ function CheckoutForm(props: PropTypes) {
       billingPeriod={Annual}
     />) : '';
 
+  const { payPalHasLoaded } = props;
+
   return (
     <Content>
       <CheckoutLayout aside={(
@@ -213,15 +215,15 @@ function CheckoutForm(props: PropTypes) {
               />
             </Fieldset>
           </FormSection>
-          <PaymentMethodSelector
+          {payPalHasLoaded && <PaymentMethodSelector
             countrySupportsDirectDebit={props.countrySupportsDirectDebit}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
             optimizeExperiments={props.optimizeExperiments}
             submissionError={props.submissionError}
-          />
-          <FormSection>
+          />}
+          <FormSection noBorder>
             <SubscriptionSubmitButtons
               paymentMethod={props.paymentMethod}
               onPaymentAuthorised={props.onPaymentAuthorised}

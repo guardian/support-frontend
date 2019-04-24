@@ -219,7 +219,7 @@ function CheckoutForm(props: PropTypes) {
             optimizeExperiments={null}
             submissionError={props.submissionError}
           />
-          <FormSection>
+          <FormSection noBorder>
             <Button aria-label={null} type="submit">Continue to payment</Button>
             <DirectDebitPopUpForm
               buttonText="Subscribe with Direct Debit"
