@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch, Boolean } from 'redux';
+import type { Dispatch } from 'redux';
 
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
@@ -62,7 +62,7 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   ...FormActionCreators,
   csrf: Csrf,
-  payPalHasLoaded: Boolean,
+  payPalHasLoaded: boolean,
   isTestUser: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
@@ -129,7 +129,6 @@ function CheckoutForm(props: PropTypes) {
       billingPeriod={Annual}
     />) : '';
 
-  const { payPalHasLoaded } = props;
 
   return (
     <Content>
@@ -215,14 +214,14 @@ function CheckoutForm(props: PropTypes) {
               />
             </Fieldset>
           </FormSection>
-          {payPalHasLoaded && <PaymentMethodSelector
+          <PaymentMethodSelector
             countrySupportsDirectDebit={props.countrySupportsDirectDebit}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
             optimizeExperiments={props.optimizeExperiments}
             submissionError={props.submissionError}
-          />}
+          />
           <FormSection noBorder>
             <SubscriptionSubmitButtons
               paymentMethod={props.paymentMethod}

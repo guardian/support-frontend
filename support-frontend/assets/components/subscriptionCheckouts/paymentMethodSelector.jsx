@@ -45,7 +45,7 @@ function PaymentMethodSelector(props: PropTypes) {
   const payPalEnabled = isPayPalEnabled(props.optimizeExperiments);
   const multiplePaymentMethodsEnabled = payPalEnabled || props.countrySupportsDirectDebit;
 
-  return (
+  return (multiplePaymentMethodsEnabled ?
     <FormSection title={multiplePaymentMethodsEnabled ? 'How would you like to pay?' : null}>
       <Rows gap="large">
         {multiplePaymentMethodsEnabled &&
@@ -86,7 +86,7 @@ function PaymentMethodSelector(props: PropTypes) {
         }}
       />
     </FormSection>
-  );
+    : null);
 }
 
 export { PaymentMethodSelector };
