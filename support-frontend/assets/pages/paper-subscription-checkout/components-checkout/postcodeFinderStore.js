@@ -41,7 +41,7 @@ const postcodeFinderActionCreatorsFor = (scope: Address) => ({
         .catch(() => {
           dispatch({
             type: 'SET_POSTCODE_FINDER_ERROR',
-            error: 'Couldn\'t find your postcode',
+            error: 'We couldn\'t find this postcode, please check and try again or enter your address below.',
             scope,
           });
         });
@@ -100,4 +100,3 @@ const postcodeFinderReducerFor = (scope: Address) => (
 };
 
 export { postcodeFinderReducerFor, postcodeFinderActionCreatorsFor };
-
