@@ -37,7 +37,7 @@ import ContributionAmount from './ContributionAmount';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import ContributionSubmit from './ContributionSubmit';
 
-import { type State, type ThankYouPageStage } from '../contributionsLandingReducer';
+import { type State, type ThankYouPageStage } from 'pages/new-contributions-landing/contributionsLandingReducer';
 
 import {
   paymentWaiting,
@@ -45,10 +45,10 @@ import {
   createOneOffPayPalPayment,
   setStripeV3HasLoaded,
   setThankYouPageStage,
-} from '../contributionsLandingActions';
+} from 'pages/new-contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
-import type { RecentlySignedInExistingPaymentMethod } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type { FullDetailExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
