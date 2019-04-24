@@ -1,6 +1,6 @@
 // @flow
 
-import React, { type Node, type Element, type ChildrenArray, type Boolean } from 'react';
+import React, { type Node, type Element, type ChildrenArray } from 'react';
 import { type Option } from 'helpers/types/option';
 import Heading, { type HeadingSize } from 'components/heading/heading';
 
@@ -15,7 +15,7 @@ type FormSectionPropTypes = {|
   title: Option<string>,
   children: Node,
   headingSize: HeadingSize,
-  noBorder: Boolean,
+  noBorder: boolean,
 |};
 
 const FormSection = ({
@@ -47,4 +47,3 @@ const Form = ({ children, ...otherProps }: FormPropTypes) => (<form {...otherPro
 
 export default Form;
 export { FormSection };
-
