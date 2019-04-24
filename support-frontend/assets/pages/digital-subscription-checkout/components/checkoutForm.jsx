@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
+import type { Dispatch, Boolean } from 'redux';
 
 import { type FormError } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
@@ -62,7 +62,7 @@ type PropTypes = {|
   currencyId: IsoCurrency,
   ...FormActionCreators,
   csrf: Csrf,
-  payPalHasLoaded: boolean,
+  payPalHasLoaded: Boolean,
   isTestUser: boolean,
   amount: number,
   billingPeriod: BillingPeriod,
