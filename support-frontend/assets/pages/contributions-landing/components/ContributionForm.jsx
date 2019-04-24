@@ -37,13 +37,14 @@ import ContributionAmount from './ContributionAmount';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import ContributionSubmit from './ContributionSubmit';
 
-import { type State } from '../contributionsLandingReducer';
+import { type State, type ThankYouPageStage } from '../contributionsLandingReducer';
 
 import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
   setStripeV3HasLoaded,
+  setThankYouPageStage,
 } from '../contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
@@ -82,6 +83,8 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
+  campaignName: ?CampaignName,
+  setThankYouPageStage: (ThankYouPageStage) => void,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -121,6 +124,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setCheckoutFormHasBeenSubmitted: () => { dispatch(setCheckoutFormHasBeenSubmitted()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
   setStripeV3HasLoaded: () => { dispatch(setStripeV3HasLoaded); },
+  setThankYouPageStage: (thankYouPageStage: ThankYouPageStage) => {
+    dispatch(setThankYouPageStage(thankYouPageStage));
+  },
 });
 
 // ----- Functions ----- //
@@ -207,6 +213,8 @@ function onSubmit(props: PropTypes): Event => void {
     if (props.isPostDeploymentTestUser && props.paymentMethod === Stripe) {
       props.onPaymentAuthorisation({ paymentMethod: Stripe, token: 'tok_visa', stripePaymentMethod: 'StripeCheckout' });
     } else {
+      props.setThankYouPageStage('thankYouSetPassword');
+
       const handlePayment = () => formHandlers[props.contributionType][props.paymentMethod](props);
       onFormSubmit({
         ...props,

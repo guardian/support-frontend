@@ -305,10 +305,11 @@ function createFormReducer() {
       case 'SET_GUEST_ACCOUNT_CREATION_TOKEN':
         return { ...state, guestAccountCreationToken: action.guestAccountCreationToken };
 
-      // Don't allow the stage to be set to thankYouSetPassword unless both an email and
+      // For recurring, don't allow the stage to be set to thankYouSetPassword unless both an email and
       // guest registration token is present
       case 'SET_THANK_YOU_PAGE_STAGE':
         if ((action.thankYouPageStage === 'thankYouSetPassword')
+          && state.contributionType !== 'ONE_OFF'
           && (!state.guestAccountCreationToken || !state.formData.email)) {
           return { ...state, thankYouPageStage: 'thankYou' };
         }
