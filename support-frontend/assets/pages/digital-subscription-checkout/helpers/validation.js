@@ -11,7 +11,6 @@ import type {
   State,
 } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-
 import { formError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 
 function isPostcodeOptional(country: Option<IsoCountry>): boolean {
@@ -29,26 +28,26 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       error: formError('lastName', 'Please enter a value.'),
     },
     {
-      rule: nonEmptyString(fields.addressLine1),
+      rule: nonEmptyString(fields.address.fields.lineOne),
       error: formError('addressLine1', 'Please enter a value'),
     },
     {
-      rule: nonEmptyString(fields.townCity),
+      rule: nonEmptyString(fields.address.fields.city),
       error: formError('townCity', 'Please enter a value'),
     },
     {
-      rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postcode),
+      rule: isPostcodeOptional(fields.address.fields.country) || nonEmptyString(fields.postcode),
       error: formError('postcode', 'Please enter a value'),
     },
     {
-      rule: notNull(fields.country),
+      rule: notNull(fields.address.fields.country),
       error: formError('country', 'Please select a country.'),
     },
     {
-      rule: fields.country === 'US' || fields.country === 'CA' || fields.country === 'AU' ? notNull(fields.stateProvince) : true,
+      rule: fields.address.fields.country === 'US' || fields.address.fields.country === 'CA' || fields.address.fields.country === 'AU' ? notNull(fields.address.fields.stateProvince) : true,
       error: formError(
         'stateProvince',
-        fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
+        fields.address.fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
       ),
     },
   ]);

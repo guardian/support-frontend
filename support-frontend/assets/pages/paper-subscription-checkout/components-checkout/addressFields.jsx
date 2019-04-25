@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { newspaperCountries } from 'helpers/internationalisation/country';
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 
 import { Input } from 'components/forms/input';
@@ -18,17 +17,20 @@ import { withStore as postcodeFinderWithStore } from './postcodeFinder';
 import { type PostcodeFinderState } from './postcodeFinderStore';
 import { type Address } from '../helpers/addresses';
 
-import { getPostcodeForm,
-  getFormFields,
-  getStateFormErrors,
+import {
+  type ActionCreators as AddressActionCreators,
   addressActionCreatorsFor,
   type FormField,
   type FormFields,
-  type ActionCreators as AddressActionCreators,
-  type State as AddressState } from './addressFieldsStore';
+  getFormFields,
+  getPostcodeForm,
+  getStateFormErrors,
+  type State as AddressState,
+} from './addressFieldsStore';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
+  countries: { [string]: string },
   scope: Address,
   traverseState: GlobalState => AddressState,
   formErrors: FormError<FormField>[],
@@ -72,6 +74,16 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
     const { ScopedPostcodeFinder } = this;
     return (
       <div>
+        <SelectWithError
+          id={`${scope}-country`}
+          label="Select Country"
+          value={props.country}
+          setValue={props.setCountry}
+          error={firstError('country', props.formErrors)}
+        >
+          <option value="">--</option>
+          {sortedOptions(props.countries)}
+        </SelectWithError>
         <ScopedPostcodeFinder
           id={`${scope}-postcode`}
           onPostcodeUpdate={props.setPostcode}
@@ -120,25 +132,16 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           setValue={props.setPostcode}
           error={firstError('postCode', props.formErrors)}
         />
-        <SelectWithError
-          id={`${scope}-country`}
-          label="Country"
-          value={props.country}
-          setValue={props.setCountry}
-          error={firstError('country', props.formErrors)}
-        >
-          <option value="">--</option>
-          {sortedOptions(newspaperCountries)}
-        </SelectWithError>
       </div>
     );
   }
 }
 
-export const withStore = <GlobalState>(scope: Address, traverseState: GlobalState => AddressState) => connect(
+export const withStore = <GlobalState>(countries: { [string]: string }, scope: Address, traverseState: GlobalState => AddressState) => connect(
   (state: GlobalState) => ({
+    countries,
     ...getFormFields(traverseState(state)),
-    formErrors: getStateFormErrors(traverseState(state)),
+    formErrors: getStateFormErrors(traverseState(state)) || [],
     traverseState,
     scope,
   }),

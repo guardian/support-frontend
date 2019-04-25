@@ -52,6 +52,7 @@ import type { FormField as PersonalDetailsFormField } from 'components/subscript
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
+import { newspaperCountries } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
@@ -82,8 +83,8 @@ function mapStateToProps(state: State) {
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
-const DeliveryAddress = withStore('delivery', getDeliveryAddress);
-const BillingAddress = withStore('billing', getBillingAddress);
+const DeliveryAddress = withStore( newspaperCountries, 'delivery', getDeliveryAddress);
+const BillingAddress = withStore( newspaperCountries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
