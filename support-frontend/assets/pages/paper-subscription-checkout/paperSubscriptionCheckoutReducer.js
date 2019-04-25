@@ -249,7 +249,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     lastName: user.lastName || '',
     startDate: formatMachineDate(days[0]) || null,
     telephone: null,
-    paymentMethod: null,
+    paymentMethod: countrySupportsDirectDebit(initialCountry) ? null : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
