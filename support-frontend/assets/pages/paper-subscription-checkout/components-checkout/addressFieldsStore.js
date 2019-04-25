@@ -4,13 +4,14 @@
 import { combineReducers, type Dispatch } from 'redux';
 
 import { fromString, type IsoCountry } from 'helpers/internationalisation/country';
-import { setCountry, type Action as CommonAction } from 'helpers/page/commonActions';
+import { type Action as CommonAction, setCountry } from 'helpers/page/commonActions';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { type RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type Scoped } from 'helpers/scoped';
 
 import { type Address } from '../helpers/addresses';
 import { postcodeFinderReducerFor, type PostcodeFinderState } from './postcodeFinderStore';
+import type { Option } from 'helpers/types/option';
 
 
 // ----- Types ----- //
@@ -57,6 +58,12 @@ const getFormFields = (state: State): FormFields => ({
 
 // ----- Functions ----- //
 
+const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
+  country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
+
+const isStateNullable = (country: Option<IsoCountry>): boolean =>
+  country !== 'AU' && country !== 'US' && country !== 'CA';
+
 const setFormErrorsFor = (scope: Address) => (errors: Array<FormError<FormField>>): Action => ({
   scope,
   type: 'SET_ADDRESS_FORM_ERRORS',
@@ -72,12 +79,19 @@ const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
     error: formError('city', 'Please enter a city'),
   },
   {
-    rule: nonEmptyString(fields.postCode),
+    rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
     error: formError('postCode', 'Please enter a post code'),
   },
   {
     rule: notNull(fields.country),
     error: formError('country', 'Please select a country.'),
+  },
+  {
+    rule: isStateNullable(fields.country) || notNull(fields.state),
+    error: formError(
+      'stateProvince',
+      fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
+    ),
   },
 ]);
 
@@ -181,4 +195,5 @@ export {
   getFormErrors,
   setFormErrorsFor,
   addressActionCreatorsFor,
+  isPostcodeOptional,
 };
