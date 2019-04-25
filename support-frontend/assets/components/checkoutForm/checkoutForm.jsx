@@ -15,19 +15,24 @@ type FormSectionPropTypes = {|
   title: Option<string>,
   children: Node,
   headingSize: HeadingSize,
+  noBorder: boolean,
 |};
 
-const FormSection = ({ children, title, headingSize }: FormSectionPropTypes) => (
-  <div className="component-checkout-form-section">
+const FormSection = ({
+  children, title, headingSize, noBorder,
+}: FormSectionPropTypes) => (
+  <div className={`component-checkout-form-section ${noBorder ? 'component-checkout-form-section--no-border' : ''}`}>
     <div className="component-checkout-form-section__wrap">
       {title && <Heading className="component-checkout-form-section__heading" size={headingSize}>{title}</Heading>}
       {children}
     </div>
   </div>
 );
+
 FormSection.defaultProps = {
   headingSize: 2,
   title: null,
+  noBorder: false,
 };
 
 /*
@@ -42,4 +47,3 @@ const Form = ({ children, ...otherProps }: FormPropTypes) => (<form {...otherPro
 
 export default Form;
 export { FormSection };
-

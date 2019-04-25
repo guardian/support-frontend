@@ -129,6 +129,7 @@ function CheckoutForm(props: PropTypes) {
       billingPeriod={Annual}
     />) : '';
 
+
   return (
     <Content>
       <CheckoutLayout aside={(
@@ -221,7 +222,7 @@ function CheckoutForm(props: PropTypes) {
             optimizeExperiments={props.optimizeExperiments}
             submissionError={props.submissionError}
           />
-          <FormSection>
+          <FormSection noBorder>
             <SubscriptionSubmitButtons
               paymentMethod={props.paymentMethod}
               onPaymentAuthorised={props.onPaymentAuthorised}
