@@ -41,7 +41,7 @@ import {
   type FormField as AddressFormField,
 } from './components-checkout/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { Stripe } from 'helpers/paymentMethods';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 import { getVoucherDays, getDeliveryDays, formatMachineDate } from './helpers/deliveryDays';
