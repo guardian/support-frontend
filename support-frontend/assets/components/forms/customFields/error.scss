@@ -4,7 +4,11 @@
   @include gu-fontset-explainer;
   color: gu-colour(state-error);
   display: block;
-  margin-top: $gu-v-spacing / 4;
+  margin-top: $gu-v-spacing;
+  
+  @include mq($from: mobileMedium) {
+    width: 80%;
+  }
 }
 
 .component-form-error .component-input:not([type-radio]) {
