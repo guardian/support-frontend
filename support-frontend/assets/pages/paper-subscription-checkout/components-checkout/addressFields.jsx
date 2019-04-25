@@ -51,7 +51,8 @@ const InputWithLabel = asControlled(StaticInputWithLabel);
 const InputWithError = withError(InputWithLabel);
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const SelectWithError = withError(SelectWithLabel);
-const MaybeShownSelect = canShow(SelectWithError);
+const MaybeSelect = canShow(SelectWithError);
+const MaybeInput = canShow(InputWithError);
 
 class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
 
@@ -64,6 +65,14 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
     if (prevProps.scope !== this.props.scope) {
       this.regeneratePostcodeFinder();
     }
+  }
+
+  static shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
+    return  country === 'US' || country === 'CA' || country === 'AU';
+  }
+
+  static shouldShowStateInput(country: Option<IsoCountry>): boolean {
+    return  country !== 'GB' && !AddressFields.shouldShowStateDropdown(country);
   }
 
   statesForCountry(country: Option<IsoCountry>): React$Node {
@@ -144,17 +153,26 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           setValue={props.setTownCity}
           error={firstError('city', props.formErrors)}
         />
-        <MaybeShownSelect
+        <MaybeSelect
           id="stateProvince"
           label={props.country === 'CA' ? 'Province/Territory' : 'State'}
           value={props.stateProvince}
           setValue={props.setStateProvince}
           error={firstError('stateProvince', props.formErrors)}
-          isShown={props.country === 'US' || props.country === 'CA' || props.country === 'AU'}
+          isShown={AddressFields.shouldShowStateDropdown(props.country)}
         >
           <option value="">--</option>
           {this.statesForCountry(props.country)}
-        </MaybeShownSelect>
+        </MaybeSelect>
+        <MaybeInput
+          id="stateProvince"
+          label="State"
+          value={props.stateProvince}
+          setValue={props.setStateProvince}
+          error={firstError('stateProvince', props.formErrors)}
+          optional
+          isShown={AddressFields.shouldShowStateInput(props.country)}
+        />
         <InputWithError
           id={`${scope}-postcode`}
           label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
