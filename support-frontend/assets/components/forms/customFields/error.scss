@@ -5,7 +5,10 @@
   color: gu-colour(state-error);
   display: block;
   margin-top: $gu-v-spacing;
-  width: 80%;
+  
+  @include mq($from: mobileMedium) {
+    width: 80%;
+  }
 }
 
 .component-form-error .component-input:not([type-radio]) {
