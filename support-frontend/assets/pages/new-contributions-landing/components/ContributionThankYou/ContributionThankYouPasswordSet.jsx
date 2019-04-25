@@ -8,10 +8,11 @@ import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
+import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 
 // ----- Render ----- //
 
-function ContributionThankYouPasswordSet() {
+function ContributionThankYouPasswordSet(props: PropTypes) {
   return (
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you gu-content__form--password-set">
@@ -23,6 +24,7 @@ function ContributionThankYouPasswordSet() {
           </p>
         </section>
         <MarketingConsent />
+        <ContributionSurvey contributionType={props.contributionType}/>
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton

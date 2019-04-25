@@ -8,7 +8,7 @@ import AnchorButton from 'components/button/anchorButton';
 // ----- Component ----- //
 
 export default function ContributionsSurvey(props) {
-  const surveyLink = props.contributionType === 'ONE_OFF' ? 'https://google.com' : 'https://yahoo.com'
+  const surveyLink = props.contributionType === 'ONE_OFF' ? 'https://www.surveymonkey.com/r/SCPJHTW' : 'https://www.surveymonkey.com/r/RY2G6HM';
 
   return (
     <div className="component-contributions-survey">
