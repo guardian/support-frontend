@@ -42,3 +42,7 @@
 .component-text__sans {
   @include gu-fontset-body-sans;
 }
+
+.component-text__paddingTop {
+  padding-top: ($gu-v-spacing);
+}
