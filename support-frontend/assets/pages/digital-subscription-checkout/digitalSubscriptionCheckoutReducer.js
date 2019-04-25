@@ -85,6 +85,7 @@ function getFormFields(state: State): FormFields {
     billingPeriod: state.page.checkout.billingPeriod,
     paymentMethod: state.page.checkout.paymentMethod,
     countrySupportsDirectDebit: countrySupportsDirectDebit(state.common.internationalisation.countryId),
+    address: getAddress(state),
   };
 }
 
