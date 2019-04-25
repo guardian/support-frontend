@@ -110,6 +110,8 @@ function mapDispatchToProps() {
   };
 }
 
+const Address = withStore( countries, 'billing', getAddress);
+
 
 // ----- Component ----- //
 
@@ -130,8 +132,6 @@ function CheckoutForm(props: PropTypes) {
       promotion={digitalPackPromotion(props.productPrices, Annual, props.country)}
       billingPeriod={Annual}
     />) : '';
-
-  const Address = withStore( countries, 'billing', getAddress);
 
   return (
     <Content>
