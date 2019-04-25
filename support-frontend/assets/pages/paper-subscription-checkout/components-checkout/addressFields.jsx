@@ -56,26 +56,15 @@ const MaybeInput = canShow(InputWithError);
 
 class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
 
-  constructor(props: PropTypes<GlobalState>) {
-    super(props);
-    this.regeneratePostcodeFinder();
-  }
-
-  componentDidUpdate(prevProps: PropTypes<GlobalState>) {
-    if (prevProps.scope !== this.props.scope) {
-      this.regeneratePostcodeFinder();
-    }
-  }
-
   static shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
-    return  country === 'US' || country === 'CA' || country === 'AU';
+    return country === 'US' || country === 'CA' || country === 'AU';
   }
 
   static shouldShowStateInput(country: Option<IsoCountry>): boolean {
-    return  country !== 'GB' && !AddressFields.shouldShowStateDropdown(country);
+    return country !== 'GB' && !AddressFields.shouldShowStateDropdown(country);
   }
 
-  statesForCountry(country: Option<IsoCountry>): React$Node {
+  static statesForCountry(country: Option<IsoCountry>): React$Node {
     switch (country) {
       case 'US':
         return sortedOptions(usStates);
@@ -88,18 +77,31 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
     }
   }
 
+  constructor(props: PropTypes<GlobalState>) {
+    super(props);
+    this.regeneratePostcodeFinder();
+  }
+
+  componentDidUpdate(prevProps: PropTypes<GlobalState>) {
+    if (prevProps.scope !== this.props.scope) {
+      this.regeneratePostcodeFinder();
+    }
+  }
+
   regeneratePostcodeFinder() {
     /*
     this is done to prevent preact from re-rendering the whole component on each keystroke sadface
     */
     const { scope, traverseState } = this.props;
-    this.MaybePostcodeFinder = canShow(postcodeFinderWithStore(scope, state => getPostcodeForm(traverseState(state))));
+    this.PostcodeFinder = postcodeFinderWithStore(scope, state => getPostcodeForm(traverseState(state)));
   }
-  MaybePostcodeFinder: $Call<typeof postcodeFinderWithStore, Address, () => PostcodeFinderState>;
+
+
+  PostcodeFinder: $Call<typeof postcodeFinderWithStore, Address, () => PostcodeFinderState>;
 
   render() {
     const { scope, ...props } = this.props;
-    const { MaybePostcodeFinder } = this;
+    const { PostcodeFinder } = this;
     return (
       <div>
         <SelectWithError
@@ -112,7 +114,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           <option value="">--</option>
           {sortedOptions(props.countries)}
         </SelectWithError>
-        <MaybePostcodeFinder
+        {props.country === 'GB' ? <PostcodeFinder
           id={`${scope}-postcode`}
           onPostcodeUpdate={props.setPostcode}
           onAddressUpdate={({ lineOne, lineTwo, city }) => {
@@ -126,8 +128,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
               props.setTownCity(city);
             }
           }}
-          isShown={props.country === 'GB'}
-        />
+        /> : null}
         <InputWithError
           id={`${scope}-lineOne`}
           label="Address Line 1"
@@ -156,20 +157,20 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
         <MaybeSelect
           id="stateProvince"
           label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-          value={props.stateProvince}
-          setValue={props.setStateProvince}
-          error={firstError('stateProvince', props.formErrors)}
+          value={props.state}
+          setValue={props.setState}
+          error={firstError('state', props.formErrors)}
           isShown={AddressFields.shouldShowStateDropdown(props.country)}
         >
           <option value="">--</option>
-          {this.statesForCountry(props.country)}
+          {AddressFields.statesForCountry(props.country)}
         </MaybeSelect>
         <MaybeInput
           id="stateProvince"
           label="State"
-          value={props.stateProvince}
-          setValue={props.setStateProvince}
-          error={firstError('stateProvince', props.formErrors)}
+          value={props.state}
+          setValue={props.setState}
+          error={firstError('state', props.formErrors)}
           optional
           isShown={AddressFields.shouldShowStateInput(props.country)}
         />
@@ -187,16 +188,20 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
   }
 }
 
-export const withStore = <GlobalState>(countries: { [string]: string }, scope: Address, traverseState: GlobalState => AddressState) => connect(
-  (state: GlobalState) => ({
-    countries,
-    ...getFormFields(traverseState(state)),
-    formErrors: getStateFormErrors(traverseState(state)) || [],
-    traverseState,
-    scope,
-  }),
-  addressActionCreatorsFor(scope),
-)(AddressFields);
+export const withStore = <GlobalState>(
+  countries: { [string]: string },
+  scope: Address,
+  traverseState: GlobalState => AddressState,
+) => connect(
+    (state: GlobalState) => ({
+      countries,
+      ...getFormFields(traverseState(state)),
+      formErrors: getStateFormErrors(traverseState(state)) || [],
+      traverseState,
+      scope,
+    }),
+    addressActionCreatorsFor(scope),
+  )(AddressFields);
 
 
 export default AddressFields;

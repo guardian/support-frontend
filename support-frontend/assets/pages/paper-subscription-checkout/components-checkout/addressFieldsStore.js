@@ -36,6 +36,7 @@ export type Action =
   | { type: 'SET_ADDRESS_LINE_1', lineOne: string, ...Scoped<Address> }
   | { type: 'SET_ADDRESS_LINE_2', lineTwo: string, ...Scoped<Address> }
   | { type: 'SET_TOWN_CITY', city: string, ...Scoped<Address> }
+  | { type: 'SET_STATE', state: string, ...Scoped<Address> }
   | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<Address> }
   | { type: 'SET_ADDRESS_FORM_ERRORS', errors: FormError<FormField>[], ...Scoped<Address> }
   | { type: 'SET_POSTCODE', postCode: string, ...Scoped<Address> };
@@ -89,7 +90,7 @@ const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
   {
     rule: isStateNullable(fields.country) || notNull(fields.state),
     error: formError(
-      'stateProvince',
+      'state',
       fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
     ),
   },
@@ -123,6 +124,11 @@ const addressActionCreatorsFor = (scope: Address) => ({
     scope,
     type: 'SET_TOWN_CITY',
     city,
+  }),
+  setState: (state: string): Action => ({
+    type: 'SET_STATE',
+    state,
+    scope,
   }),
   setPostcode: (postCode: string): Action => ({
     type: 'SET_POSTCODE',
@@ -163,6 +169,9 @@ function addressReducerFor(scope: Address, initialCountry: IsoCountry) {
 
       case 'SET_TOWN_CITY':
         return { ...state, city: action.city };
+
+      case 'SET_STATE':
+        return { ...state, state: action.state };
 
       case 'SET_POSTCODE':
         return { ...state, postCode: action.postCode };

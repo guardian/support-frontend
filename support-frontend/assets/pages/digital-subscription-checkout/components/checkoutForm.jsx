@@ -49,6 +49,7 @@ import type { FormField as PersonalDetailsFormField } from 'components/subscript
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 import { withStore } from 'pages/paper-subscription-checkout/components-checkout/addressFields';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 
@@ -56,6 +57,7 @@ import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscript
 
 type PropTypes = {|
   ...FormFields,
+  country: IsoCountry,
   signOut: typeof signOut,
   submitForm: Function,
   formErrors: FormError<FormField>[],
@@ -80,6 +82,7 @@ type PropTypes = {|
 function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
+    country: state.common.internationalisation.countryId,
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
@@ -110,7 +113,7 @@ function mapDispatchToProps() {
   };
 }
 
-const Address = withStore( countries, 'billing', getAddress);
+const Address = withStore(countries, 'billing', getAddress);
 
 
 // ----- Component ----- //
@@ -181,21 +184,6 @@ function CheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="Address">
             <Address />
-            {/*<AddressForm*/}
-            {/*  addressLine1={props.addressLine1}*/}
-            {/*  addressLine2={props.addressLine2}*/}
-            {/*  townCity={props.townCity}*/}
-            {/*  country={props.country}*/}
-            {/*  postcode={props.postcode}*/}
-            {/*  setAddressLine1={props.setAddressLine1}*/}
-            {/*  setAddressLine2={props.setAddressLine2}*/}
-            {/*  setTownCity={props.setTownCity}*/}
-            {/*  setBillingCountry={props.setBillingCountry}*/}
-            {/*  stateProvince={props.stateProvince}*/}
-            {/*  setPostcode={props.setPostcode}*/}
-            {/*  setStateProvince={props.setStateProvince}*/}
-            {/*  formErrors={props.formErrors}*/}
-            {/*/>*/}
           </FormSection>
           <FormSection title="How often would you like to pay?">
             <Fieldset legend="How often would you like to pay?">

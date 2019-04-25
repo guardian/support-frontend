@@ -83,8 +83,8 @@ function mapStateToProps(state: State) {
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
-const DeliveryAddress = withStore( newspaperCountries, 'delivery', getDeliveryAddress);
-const BillingAddress = withStore( newspaperCountries, 'billing', getBillingAddress);
+const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
+const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 

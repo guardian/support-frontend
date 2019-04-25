@@ -44,12 +44,10 @@ export type FormFieldsInState = {|
   telephone: Option<string>,
   billingPeriod: DigitalBillingPeriod,
   paymentMethod: Option<PaymentMethod>,
-  address: AddressState
 |};
 
 export type FormFields = {|
   ...FormFieldsInState,
-  country: IsoCountry,
   countrySupportsDirectDebit: boolean,
 |};
 
@@ -72,9 +70,16 @@ export type State = ReduxState<{|
   checkout: CheckoutState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
+  address: AddressState,
 |}>;
 
 // ----- Selectors ----- //
+
+const getAddress = (state: State): AddressState => state.page.address;
+const getAddressFields = (state: State): AddressFormFields => {
+  const { formErrors, ...formFields } = getAddress(state).fields;
+  return formFields;
+};
 
 function getFormFields(state: State): FormFields {
   return {
@@ -85,19 +90,12 @@ function getFormFields(state: State): FormFields {
     billingPeriod: state.page.checkout.billingPeriod,
     paymentMethod: state.page.checkout.paymentMethod,
     countrySupportsDirectDebit: countrySupportsDirectDebit(state.common.internationalisation.countryId),
-    address: getAddress(state),
   };
 }
 
 function getEmail(state: State): string {
   return state.page.checkout.email;
 }
-
-const getAddress = (state: State): AddressState => state.page.address;
-const getAddressFields = (state: State): AddressFormFields => {
-  const { formErrors, ...formFields } = getAddress(state).fields;
-  return formFields;
-};
 
 // ----- Functions ----- //
 
