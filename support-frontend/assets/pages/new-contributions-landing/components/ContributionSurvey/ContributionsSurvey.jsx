@@ -25,5 +25,4 @@ export default function ContributionsSurvey(props) {
       </AnchorButton>
     </div>
   );
-
 }
