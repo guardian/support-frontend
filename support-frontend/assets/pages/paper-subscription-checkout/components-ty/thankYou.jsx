@@ -88,7 +88,7 @@ function ThankYouContent({
         >
           {isPending ?
           `Your subscription to the ${productOption} package is being processed` :
-          `You are now subscribed to the ${productOption} package`
+          `You have now subscribed to the ${productOption} package`
   }
         </HeadingBlock>
       </HeroWrapper>
