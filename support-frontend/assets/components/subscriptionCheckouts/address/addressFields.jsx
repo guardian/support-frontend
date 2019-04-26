@@ -13,9 +13,9 @@ import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 
-import { withStore as postcodeFinderWithStore } from './postcodeFinder';
-import { type PostcodeFinderState } from './postcodeFinderStore';
-import { type Address } from '../helpers/addresses';
+import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
+import { type PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
 
 import {
   type ActionCreators as AddressActionCreators,
@@ -25,18 +25,18 @@ import {
   getFormFields,
   getPostcodeForm,
   getStateFormErrors,
+  isPostcodeOptional,
   type State as AddressState,
-} from './addressFieldsStore';
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { canShow } from 'hocs/canShow';
 import type { Option } from 'helpers/types/option';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { auStates, caStates, usStates } from 'helpers/internationalisation/country';
-import { isPostcodeOptional } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
   countries: { [string]: string },
-  scope: Address,
+  scope: AddressType,
   traverseState: GlobalState => AddressState,
   formErrors: FormError<FormField>[],
 |}
@@ -97,7 +97,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
   }
 
 
-  PostcodeFinder: $Call<typeof postcodeFinderWithStore, Address, () => PostcodeFinderState>;
+  PostcodeFinder: $Call<typeof postcodeFinderWithStore, AddressType, () => PostcodeFinderState>;
 
   render() {
     const { scope, ...props } = this.props;
@@ -190,7 +190,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
 
 export const withStore = <GlobalState>(
   countries: { [string]: string },
-  scope: Address,
+  scope: AddressType,
   traverseState: GlobalState => AddressState,
 ) => connect(
     (state: GlobalState) => ({

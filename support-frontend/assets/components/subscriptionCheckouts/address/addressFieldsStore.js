@@ -9,8 +9,11 @@ import { formError, type FormError, nonEmptyString, notNull, validate } from 'he
 import { type RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type Scoped } from 'helpers/scoped';
 
-import { type Address } from '../helpers/addresses';
-import { postcodeFinderReducerFor, type PostcodeFinderState } from './postcodeFinderStore';
+import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
+import {
+  postcodeFinderReducerFor,
+  type PostcodeFinderState,
+} from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 
 // ----- Types ----- //
@@ -32,13 +35,13 @@ export type State = {|
 |};
 
 export type Action =
-  | { type: 'SET_ADDRESS_LINE_1', lineOne: string, ...Scoped<Address> }
-  | { type: 'SET_ADDRESS_LINE_2', lineTwo: string, ...Scoped<Address> }
-  | { type: 'SET_TOWN_CITY', city: string, ...Scoped<Address> }
-  | { type: 'SET_STATE', state: string, ...Scoped<Address> }
-  | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<Address> }
-  | { type: 'SET_ADDRESS_FORM_ERRORS', errors: FormError<FormField>[], ...Scoped<Address> }
-  | { type: 'SET_POSTCODE', postCode: string, ...Scoped<Address> };
+  | { type: 'SET_ADDRESS_LINE_1', lineOne: string, ...Scoped<AddressType> }
+  | { type: 'SET_ADDRESS_LINE_2', lineTwo: string, ...Scoped<AddressType> }
+  | { type: 'SET_TOWN_CITY', city: string, ...Scoped<AddressType> }
+  | { type: 'SET_STATE', state: string, ...Scoped<AddressType> }
+  | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<AddressType> }
+  | { type: 'SET_ADDRESS_FORM_ERRORS', errors: FormError<FormField>[], ...Scoped<AddressType> }
+  | { type: 'SET_POSTCODE', postCode: string, ...Scoped<AddressType> };
 
 
 // ----- Selectors ----- //
@@ -64,7 +67,7 @@ const isPostcodeOptional = (country: Option<IsoCountry>): boolean =>
 const isStateNullable = (country: Option<IsoCountry>): boolean =>
   country !== 'AU' && country !== 'US' && country !== 'CA';
 
-const setFormErrorsFor = (scope: Address) => (errors: Array<FormError<FormField>>): Action => ({
+const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormField>>): Action => ({
   scope,
   type: 'SET_ADDRESS_FORM_ERRORS',
   errors,
@@ -100,7 +103,7 @@ const removeError = (field: FormField, formErrors: FormError<FormField>[]) =>
 
 // ----- Action Creators ----- //
 
-const addressActionCreatorsFor = (scope: Address) => ({
+const addressActionCreatorsFor = (scope: AddressType) => ({
   setCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
     const country = fromString(countryRaw);
     if (country) {
@@ -139,11 +142,11 @@ const addressActionCreatorsFor = (scope: Address) => ({
   }),
 });
 
-export type ActionCreators = $Call<typeof addressActionCreatorsFor, Address>;
+export type ActionCreators = $Call<typeof addressActionCreatorsFor, AddressType>;
 
 // ----- Reducer ----- //
 
-function addressReducerFor(scope: Address, initialCountry: IsoCountry) {
+function addressReducerFor(scope: AddressType, initialCountry: IsoCountry) {
 
   const initialState = {
     country: initialCountry,

@@ -3,11 +3,11 @@
 import type { Dispatch } from 'redux';
 import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import { getFormFields, setFormErrors } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
-import type { FormField as AddressFormField } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
+import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import {
   getFormErrors as getAddressFormErrors,
   setFormErrorsFor as setAddressFormErrorsFor,
-} from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type {
   FormField,
   FormFields,

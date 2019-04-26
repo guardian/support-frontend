@@ -48,7 +48,7 @@ import {
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
-import { withStore } from 'pages/paper-subscription-checkout/components-checkout/addressFields';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';

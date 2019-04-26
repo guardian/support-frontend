@@ -1,16 +1,13 @@
 // @flow
 
-import {
-  loadStripe,
-  openDialogBox,
-  setupStripeCheckout,
-} from 'helpers/paymentIntegrations/stripeCheckout';
+import { loadStripe, openDialogBox, setupStripeCheckout } from 'helpers/paymentIntegrations/stripeCheckout';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
+  type PaymentAuthorisation,
   type PaymentResult,
+  postRegularPaymentRequest,
+  regularPaymentFieldsFromAuthorisation,
   type RegularPaymentRequest,
-  postRegularPaymentRequest, regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
@@ -19,16 +16,16 @@ import { routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { Monthly } from 'helpers/billingPeriods';
-import { getFormFields, type FormFields } from '../components-checkout/addressFieldsStore';
+import { type FormFields, getFormFields } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
 import {
-  type State,
-  setSubmissionError,
-  setFormSubmitted,
-  getDeliveryAddress,
-  getBillingAddress,
   type Action,
+  getBillingAddress,
+  getDeliveryAddress,
+  setFormSubmitted,
   setStage,
+  setSubmissionError,
+  type State,
 } from '../paperSubscriptionCheckoutReducer';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
@@ -89,16 +86,13 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
 
 function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatch: Dispatch<Action>, state: State) {
   const handleSubscribeResult = (result: PaymentResult) => {
-    switch (result.paymentStatus) {
-      case 'success':
-        if (result.subscriptionCreationPending) {
-          dispatch(setStage('thankyou-pending'));
-        } else {
-          dispatch(setStage('thankyou'));
-        }
-        break;
-      default: dispatch(setSubmissionError(result.error));
-    }
+    if (result.paymentStatus === 'success') {
+      if (result.subscriptionCreationPending) {
+        dispatch(setStage('thankyou-pending'));
+      } else {
+        dispatch(setStage('thankyou'));
+      }
+    } else { dispatch(setSubmissionError(result.error)); }
   };
 
   dispatch(setFormSubmitted(true));

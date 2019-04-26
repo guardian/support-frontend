@@ -46,7 +46,7 @@ import {
   signOut,
   type State,
 } from '../paperSubscriptionCheckoutReducer';
-import { withStore } from './addressFields';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';

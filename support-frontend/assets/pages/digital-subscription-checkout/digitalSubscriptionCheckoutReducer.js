@@ -30,8 +30,8 @@ import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type {
   FormFields as AddressFormFields,
   State as AddressState,
-} from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
-import { addressReducerFor } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
 // ----- Types ----- //
 

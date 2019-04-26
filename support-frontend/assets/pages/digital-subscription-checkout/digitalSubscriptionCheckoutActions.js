@@ -14,7 +14,7 @@ import { getFormFields } from './digitalSubscriptionCheckoutReducer';
 import type { ErrorReason } from '../../helpers/errorReasons';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
-import type { Action as AddressAction } from 'pages/paper-subscription-checkout/components-checkout/addressFieldsStore';
+import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
