@@ -145,6 +145,13 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       rule: notNull(fields.startDate),
       error: formError('startDate', 'Please select a start date'),
     },
+    {
+      rule: notNull(fields.billingAddressIsSame),
+      error: formError(
+        'billingAddressIsSame',
+        'Please indicate whether the billing address is the same as the delivery address',
+      ),
+    },
   ]);
 }
 
@@ -256,7 +263,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     isTestUser: isTestUser(),
     ...product,
     productPrices,
-    billingAddressIsSame: true,
+    billingAddressIsSame: null,
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
