@@ -13,7 +13,6 @@ import { type Address } from '../helpers/addresses';
 import { postcodeFinderReducerFor, type PostcodeFinderState } from './postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
 
-
 // ----- Types ----- //
 
 export type FormFields = {|
@@ -53,7 +52,7 @@ const getFormFields = (state: State): FormFields => ({
   city: state.fields.city,
   country: state.fields.country,
   postCode: state.fields.postCode,
-  state: null,
+  state: state.fields.state,
 });
 
 
@@ -81,7 +80,7 @@ const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
   },
   {
     rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postCode),
-    error: formError('postCode', 'Please enter a post code'),
+    error: formError('postCode', 'Please enter a postcode'),
   },
   {
     rule: notNull(fields.country),
@@ -95,6 +94,9 @@ const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
     ),
   },
 ]);
+
+const removeError = (field: FormField, formErrors: FormError<FormField>[]) =>
+  formErrors.filter(error => error.field !== field);
 
 // ----- Action Creators ----- //
 
@@ -162,25 +164,30 @@ function addressReducerFor(scope: Address, initialCountry: IsoCountry) {
     switch (action.type) {
 
       case 'SET_ADDRESS_LINE_1':
-        return { ...state, lineOne: action.lineOne };
+        return { ...state, formErrors: removeError('lineOne', state.formErrors), lineOne: action.lineOne };
 
       case 'SET_ADDRESS_LINE_2':
         return { ...state, lineTwo: action.lineTwo };
 
       case 'SET_TOWN_CITY':
-        return { ...state, city: action.city };
+        return { ...state, formErrors: removeError('city', state.formErrors), city: action.city };
 
       case 'SET_STATE':
-        return { ...state, state: action.state };
+        return { ...state, formErrors: removeError('state', state.formErrors), state: action.state };
 
       case 'SET_POSTCODE':
-        return { ...state, postCode: action.postCode };
+        return { ...state, formErrors: removeError('postCode', state.formErrors), postCode: action.postCode };
 
       case 'SET_ADDRESS_FORM_ERRORS':
         return { ...state, formErrors: action.errors };
 
       case 'SET_COUNTRY_CHANGED':
-        return { ...state, country: action.country };
+        return {
+          ...state,
+          state: null,
+          formErrors: [],
+          country: action.country,
+        };
 
       default:
         return state;
