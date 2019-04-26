@@ -44,7 +44,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Render ----- //
 
 function ContributionThankYou(props: PropTypes) {
-
   let directDebitHeaderSuffix = '';
   let directDebitMessageSuffix = '';
 
@@ -65,7 +64,7 @@ function ContributionThankYou(props: PropTypes) {
           </section>
         ) : null}
         <MarketingConsent />
-        <ContributionSurvey contributionType={props.contributionType}/>
+        <ContributionSurvey contributionType={props.contributionType} />
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
