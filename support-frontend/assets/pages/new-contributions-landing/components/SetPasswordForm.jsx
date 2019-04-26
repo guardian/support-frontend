@@ -18,7 +18,7 @@ import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTrackin
 import { NewContributionTextInput } from './ContributionTextInput';
 import { type ThankYouPageStage } from '../contributionsLandingReducer';
 import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../contributionsLandingActions';
-import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
+import Button from 'components/button/button';
 
 const passwordErrorHeading = 'Account set up failure';
 const passwordErrorMessage = 'Sorry, we are unable to register you at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your registration. Thank you.';
@@ -131,26 +131,24 @@ function SetPasswordForm(props: PropTypes) {
           errorMessage="Please enter a password between 6 and 20 characters long"
           required
         />
-        <ButtonWithRightArrow
-          componentClassName={classNameWithModifiers('form__submit', ['create-account'])}
-          buttonClassName={classNameWithModifiers('form__submit-button', ['create-account'])}
-          accessibilityHintId="accessibility-hint-create-account"
+        <Button
+          modifierClasses={['create-account']}
+          aria-label="Create a guardian account"
           type="submit"
-          buttonCopy="Create a Guardian account"
-        />
-        <ButtonWithRightArrow
-          componentClassName="form_no-submit"
-          buttonClassName="button--no-thanks"
-          accessibilityHintId="accessibility-hint-no-thanks"
-          type="button"
-          buttonCopy="No thank you"
+        >
+          Create a Guardian account
+        </Button>
+        <Button
+          appearance="greyHollow"
+          aria-label="No thank you"
           onClick={
-            () => {
-              trackComponentClick('decline-to-set-password');
-              props.setThankYouPageStage('thankYouPasswordDeclinedToSet');
-            }
-          }
-        />
+          () => {
+            trackComponentClick('decline-to-set-password');
+            props.setThankYouPageStage('thankYouPasswordDeclinedToSet');
+          }}
+        >
+          No thank you
+        </Button>
       </form>
       {props.passwordError === true ?
         <div className="component-password-failure-message component-general-error-message">
