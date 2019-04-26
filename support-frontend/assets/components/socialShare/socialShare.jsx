@@ -33,7 +33,7 @@ const SocialWindowFeatures = 'menubar=no, toolbar=no, resizable=yes, scrollbars=
 // below have the following tracking based on what the given platform supports:
 // Facebook: acquisitionData parameter & INTCMP parameter
 // Twitter: INTCMP parameter (does not support object syntax in links / deletes link )
-// Linkedin: INTCMP parameter (does not support object syntax in links / strips out parameter value)
+// Linkedin: None (strips out parameter values whether in object format or plaintext)
 // email: INTCMP parameter ([gmail] decodes object syntax in links / doesn't appear clickable)
 
 const socialMedia: {
