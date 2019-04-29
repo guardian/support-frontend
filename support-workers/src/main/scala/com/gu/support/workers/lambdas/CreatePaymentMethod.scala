@@ -26,7 +26,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .map(paymentMethod =>
         HandlerResult(
           getCreateSalesforceContactState(state, paymentMethod),
-          requestInfo.appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+          requestInfo
+            .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+            .appendMessage(s"Product is ${state.product.describe}")
         ))
   }
 
