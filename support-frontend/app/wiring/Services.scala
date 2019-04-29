@@ -10,7 +10,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import services.aws.AwsS3Client.s3
 import services.paypal.PayPalNvpServiceProvider
 import services.stepfunctions.{Encryption, StateWrapper, SupportWorkersClient}
-import services.{IdentityService, _}
+import services._
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>

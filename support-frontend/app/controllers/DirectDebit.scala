@@ -5,7 +5,6 @@ import io.circe.syntax._
 import models.CheckBankAccountDetails
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.paypal.PayPalBillingDetails.codec
 import services.{GoCardlessFrontendServiceProvider, TestUserService}
 
 import scala.concurrent.ExecutionContext

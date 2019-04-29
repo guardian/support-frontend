@@ -27,6 +27,13 @@ case class ContributionEmailFields(
       "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
       "payment method" -> "Direct Debit"
     )
+    case dd: ClonedDirectDebitPaymentMethod => List(
+      "account name" -> dd.bankTransferAccountName,
+      "sort code" -> hyphenate(dd.bankCode),
+      "Mandate ID" -> directDebitMandateId.getOrElse(""),
+      "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
+      "payment method" -> "Direct Debit"
+    )
     case _: PayPalReferenceTransaction => List("payment method" -> "PayPal")
     case _: CreditCardReferenceTransaction => List("payment method" -> "credit / debit card")
   }

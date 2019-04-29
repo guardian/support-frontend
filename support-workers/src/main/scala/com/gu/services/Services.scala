@@ -1,8 +1,9 @@
 package com.gu.services
 
-import com.gu.config.Configuration._
-import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.acquisitions.AcquisitionServiceBuilder
+import com.gu.config.Configuration._
+import com.gu.gocardless.GoCardlessWorkersService
+import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
@@ -21,11 +22,13 @@ trait ServiceProvider {
 object ServiceProvider extends ServiceProvider
 
 class Services(isTestUser: Boolean) {
+
   lazy val stripeService: StripeService = new StripeService(stripeConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val payPalService: PayPalService = new PayPalService(payPalConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val salesforceService = new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
   lazy val acquisitionService = AcquisitionServiceBuilder.build(isTestUser)
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
+  lazy val goCardlessService = new GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
 }
 

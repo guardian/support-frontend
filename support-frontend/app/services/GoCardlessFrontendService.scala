@@ -6,15 +6,16 @@ import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.config.GoCardlessConfig
 import com.gu.support.gocardless.GoCardlessService
 import models.CheckBankAccountDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class GoCardlessFrontendService(token: String, environment: String) extends GoCardlessService(token, environment) {
+class GoCardlessFrontendService(config: GoCardlessConfig) extends GoCardlessService(config) {
 
-  lazy val client = GoCardlessClient.create(token, Environment.valueOf(environment))
+  lazy val client = GoCardlessClient.create(config.apiToken, Environment.valueOf(config.environment))
 
   /**
    *
