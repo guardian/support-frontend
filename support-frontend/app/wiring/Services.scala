@@ -3,7 +3,6 @@ package wiring
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.okhttp.RequestRunners
-import com.gu.support.config.Stages.PROD
 import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import play.api.BuiltInComponentsFromContext
@@ -24,7 +23,7 @@ trait Services {
 
   lazy val identityService = IdentityService(appConfig.identity)
 
-  lazy val goCardlessServiceProvider = new GoCardlessServiceProvider(appConfig.goCardlessConfigProvider)
+  lazy val goCardlessServiceProvider = new GoCardlessFrontendServiceProvider(appConfig.goCardlessConfigProvider)
 
   lazy val supportWorkersClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws), appConfig.aws.useEncryption)

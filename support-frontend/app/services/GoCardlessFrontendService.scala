@@ -4,21 +4,21 @@ import com.gocardless.GoCardlessClient
 import com.gocardless.GoCardlessClient.Environment
 import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
-import com.gu.support.touchpoint.TouchpointService
-import models.CheckBankAccountDetails
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.gocardless.GoCardlessService
+import models.CheckBankAccountDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class GoCardlessService(token: String, environment: Environment) extends TouchpointService {
+class GoCardlessFrontendService(token: String, environment: String) extends GoCardlessService(token, environment) {
 
-  lazy val client = GoCardlessClient.create(token, environment)
+  lazy val client = GoCardlessClient.create(token, Environment.valueOf(environment))
 
   /**
    *
-   * @return true if either the bank details are correct, or the rate limit for this enpoint is reached.
+   * @return true if either the bank details are correct, or the rate limit for this endpoint is reached.
    *         In the latter case an error is logged.
    */
   def checkBankDetails(bankAccountData: CheckBankAccountDetails): Future[Boolean] = {

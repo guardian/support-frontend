@@ -6,7 +6,6 @@ import com.gu.support.config._
 import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
 import config.Configuration.GuardianDomain
-import services.GoCardlessConfigProvider
 import services.stepfunctions.StateMachineArn
 
 class Configuration {

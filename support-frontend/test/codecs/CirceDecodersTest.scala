@@ -5,10 +5,10 @@ import admin.settings.SwitchState.{Off, On}
 import admin.settings._
 import cats.syntax.either._
 import codecs.CirceDecoders._
+import com.gu.support.gocardless.CheckBankAccountDetails
 import io.circe.Json
 import io.circe.parser.{parse, _}
 import io.circe.syntax._
-import models.CheckBankAccountDetails
 import ophan.thrift.event.AbTest
 import org.scalatest.EitherValues._
 import org.scalatest.{MustMatchers, WordSpec}
