@@ -7,7 +7,6 @@ import styles from './summary.module.scss';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
-import SvgDropdownArrow from 'components/svgs/dropdownArrow';
 import SvgDropdownArrowUp from 'components/svgs/dropdownArrowUp';
 
 
