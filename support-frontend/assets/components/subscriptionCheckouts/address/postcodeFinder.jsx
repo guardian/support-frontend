@@ -118,5 +118,3 @@ export const withStore = <GlobalState>(scope: AddressType, traverseState: Global
     traverseState,
     postcodeFinderActionCreatorsFor(scope),
   )(PostcodeFinder);
-
-export default PostcodeFinder;

@@ -202,6 +202,3 @@ export const withStore = <GlobalState>(
     }),
     addressActionCreatorsFor(scope),
   )(AddressFields);
-
-
-export default AddressFields;
