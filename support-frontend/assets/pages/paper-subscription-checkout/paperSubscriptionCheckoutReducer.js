@@ -65,7 +65,7 @@ export type FormFields = {|
   startDate: Option<string>,
   telephone: Option<string>,
   paymentMethod: Option<PaymentMethod>,
-  billingAddressIsSame: boolean,
+  billingAddressIsSame: boolean | null,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -101,7 +101,7 @@ export type Action =
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: boolean }
+  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: boolean | null }
   | DDAction
   | AddressAction;
 
@@ -144,6 +144,13 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
     {
       rule: notNull(fields.startDate),
       error: formError('startDate', 'Please select a start date'),
+    },
+    {
+      rule: notNull(fields.billingAddressIsSame),
+      error: formError(
+        'billingAddressIsSame',
+        'Please indicate whether the billing address is the same as the delivery address',
+      ),
     },
   ]);
 }
@@ -215,7 +222,7 @@ const formActionCreators = {
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) => (dispatch: Dispatch<Action>, getState: () => State) =>
     onPaymentAuthorised(authorisation, dispatch, getState()),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
-  setbillingAddressIsSame: (isSame: boolean): Action => ({ type: 'SET_BILLING_ADDRESS_IS_SAME', isSame }),
+  setbillingAddressIsSame: (isSame: boolean | null): Action => ({ type: 'SET_BILLING_ADDRESS_IS_SAME', isSame }),
 };
 
 export type FormActionCreators = typeof formActionCreators;
@@ -256,7 +263,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     isTestUser: isTestUser(),
     ...product,
     productPrices,
-    billingAddressIsSame: true,
+    billingAddressIsSame: null,
   };
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
