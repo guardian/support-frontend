@@ -25,7 +25,7 @@ import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
-import Summary from 'components/subscriptionCheckouts/summary';
+import Summary from './summary';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -125,9 +125,8 @@ function CheckoutForm(props: PropTypes) {
           },
           ]}
           billingPeriod="Monthly"
-        >
-          <a href={routes.paperSubscriptionProductChoices}>Change Subscription</a>
-        </Summary>)}
+          changeSubscription={routes.paperSubscriptionProductChoices}
+        />)}
       >
         <Form onSubmit={(ev) => {
           ev.preventDefault();
