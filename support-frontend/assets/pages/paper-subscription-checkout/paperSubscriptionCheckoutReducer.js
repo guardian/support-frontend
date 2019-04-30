@@ -41,7 +41,7 @@ import {
   type FormField as AddressFormField,
 } from './components-checkout/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { Stripe } from 'helpers/paymentMethods';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 import { getVoucherDays, getDeliveryDays, formatMachineDate } from './helpers/deliveryDays';
@@ -249,7 +249,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     lastName: user.lastName || '',
     startDate: formatMachineDate(days[0]) || null,
     telephone: null,
-    paymentMethod: countrySupportsDirectDebit(initialCountry) ? DirectDebit : Stripe,
+    paymentMethod: countrySupportsDirectDebit(initialCountry) ? null : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
