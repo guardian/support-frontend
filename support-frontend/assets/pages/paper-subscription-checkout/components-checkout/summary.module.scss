@@ -5,9 +5,7 @@
 }
 
 .content, .contentShowDetails {
-  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing;
   @include mq($until: tablet) {
-    background: gu-colour(neutral-97);
     display: grid;
     grid-template-columns: 40% 60%;
     justify-content: space-between;
@@ -20,8 +18,28 @@
   }
 }
 
-.contentShowDetails {
-  grid-template-columns: 60% 40%;
+.contentWrapper, .content {
+  padding: $gu-v-spacing/2 $gu-h-spacing/2 $gu-v-spacing;
+  @include mq($until: tablet) {
+    background: gu-colour(neutral-97);
+  }
+}
+
+.contentShowDetails, .contentShowDetailsLast {
+  grid-template-columns: 40% 55%;
+  text-align: left;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  margin-bottom: $gu-v-spacing *2 /3;
+  padding-bottom: $gu-v-spacing;
+}
+
+.contentShowDetailsLast {
+  border-bottom: none;
+  display: grid;
+  grid-template-columns: 40% 55%;
+  padding-bottom: 0;
+  margin-top: $gu-v-spacing;
+  margin-bottom: 0;
 }
 
 .img {
@@ -40,7 +58,7 @@
   display: block;
 }
 
-.header {
+.header, .headerShowDetails {
   @include gu-fontset-body-sans;
   font-weight: 600;
   @include mq($from: tablet) {
@@ -61,6 +79,10 @@
   }
 }
 
+.headerShowDetails {
+  margin-bottom: $gu-v-spacing;
+}
+
 .title, .titleLeftAlign {
   @include gu-fontset-heading;
   @include mq($until: tablet) {
@@ -73,9 +95,6 @@
 
 .titleDescription {
   @include gu-fontset-body-sans;
-  @include mq($until: tablet) {
-    display: none;
-  }
 }
 
 .titleLeftAlign {
@@ -106,6 +125,12 @@
   }
 }
 
+.dataList {
+  @include mq($from: tablet) {
+    margin-bottom: $gu-v-spacing;
+  }
+}
+
 .tabletAndDesktop {
   @include mq($until: tablet) {
     display: none;
@@ -122,14 +147,29 @@
   @include gu-fontset-body-sans;
   display: grid;
   grid-template-columns: max-content 1fr;
-  @include mq($until: tablet) {
-    display: none;
-  }
 }
 
-.data dt {
+.data dt, .dataUnderline, .dataBold {
   font-weight: bold;
   padding-right: $gu-h-spacing;
+}
+
+.dataBold {
+  font-weight: 600;
+}
+
+.spaceRight {
+  padding-right: $gu-h-spacing /2;
+}
+
+.defaultState svg {
+  transition: transform 300ms;
+  transform-origin: center;
+  transform: rotate(180deg);
+}
+
+.openState svg {
+  transform: rotate(0);
 }
 
 .promo {

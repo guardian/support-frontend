@@ -126,8 +126,8 @@ function CheckoutForm(props: PropTypes) {
           ]}
           billingPeriod="Monthly"
           changeSubscription={routes.paperSubscriptionProductChoices}
-        />)}
-      >
+        />
+      )}>
         <Form onSubmit={(ev) => {
           ev.preventDefault();
           props.submitForm();
@@ -161,31 +161,27 @@ function CheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
-              <FieldsetWithError
-                id="billingAddressIsSame"
-                error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the delivery address?">
+              <Fieldset legend="Is the billing address the same as the delivery address?">
                 <RadioInput
                   text="Yes"
                   name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame === true}
+                  checked={props.billingAddressIsSame}
                   onChange={() => props.setbillingAddressIsSame(true)}
                 />
                 <RadioInput
                   text="No"
                   name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame === false}
+                  checked={!props.billingAddressIsSame}
                   onChange={() => props.setbillingAddressIsSame(false)}
                 />
-              </FieldsetWithError>
+              </Fieldset>
             </Rows>
           </FormSection>
           {
-            props.billingAddressIsSame === false ?
+            props.billingAddressIsSame ? null :
             <FormSection title="Where should we bill you?">
               <BillingAddress />
             </FormSection>
-            : null
           }
           <FormSection title="When would you like your subscription to start?">
             <Rows>

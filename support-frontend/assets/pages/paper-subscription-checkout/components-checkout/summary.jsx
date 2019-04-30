@@ -8,7 +8,7 @@ import { PriceLabel } from 'components/priceLabel/priceLabel';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
-
+import SvgDropdownArrowUp from 'components/svgs/dropdownArrowUp';
 
 
 export type DataListItem = {
@@ -30,7 +30,7 @@ type PropTypes = {
 // Helpers
 
 const DataList = ({ dataList }) => (
-  <span>
+  <div className={styles.dataList}>
     {dataList.length > 0 &&
       <dl className={styles.data}>
         {dataList.map(item => [
@@ -41,7 +41,7 @@ const DataList = ({ dataList }) => (
         }
       </dl>
     }
-  </span>
+  </div>
 );
 
 const PromotionDiscount = ({ promotion }) => (
@@ -59,7 +59,19 @@ const PromotionDiscount = ({ promotion }) => (
 
 const ChangeSubscription = ({ route }) => (
   <a className={styles.changeSub} href={route}>Change Subscription</a>
-)
+);
+
+const DropDownButton = ({ onClick, showDropDown }) => (
+  <button
+    role="button"
+    aria-hidden="true"
+    className={styles.dropDown}
+    onClick={onClick}
+  >
+    <span className={styles.spaceRight}>{showDropDown ? 'Hide details' : 'Show all details'}</span>
+    <span className={showDropDown ? styles.openState : styles.defaultState}><SvgDropdownArrowUp /></span>
+  </button>
+);
 
 const TabletAndDesktop = ({
   billingPeriod, changeSubscription, dataList, description, image, productPrice, promotion, title
@@ -107,14 +119,7 @@ const HideDropDown = ({
     <header>
       <h2 className={styles.title} title={`your subscription is ${title}`}>{title}</h2>
     </header>
-    <button
-      role="button"
-      aria-hidden="true"
-      className={styles.dropDown}
-      onClick={onClick}
-    >
-      Show all details <SvgDropdownArrow />
-    </button>
+    <DropDownButton showDropDown={showDropDown} onClick={onClick} />
     <div>
       <PriceLabel
         className={styles.pricing}
@@ -125,34 +130,45 @@ const HideDropDown = ({
       <span className={styles.pricing}>
         &nbsp;&ndash; Voucher booklet
       </span>
-      <PromotionDiscount promotion={promotion} />
-      <DataList dataList={dataList} />
     </div>
   </div>
 );
 
-const ShowDropDown = ({ changeSubscription, description, onClick, title }) => (
-  <div className={styles.contentShowDetails}>
-    <h1 className={styles.header}>Order summary</h1>
-    <div />
-    <header>
-      <h2 className={styles.titleLeftAlign} title={`your subscription is ${title}`}>{title}</h2>
-    </header>
-    <span>
-      {description &&
-        <h3 className={styles.titleDescription}>{description}</h3>
-      }
-    </span>
-
-    <button
-      role="button"
-      aria-hidden="true"
-      className={styles.dropDown}
-      onClick={onClick}
-    >
-      Hide details
-    </button>
-    <ChangeSubscription route={changeSubscription} />
+const ShowDropDown = ({
+  changeSubscription,
+  deliveryMethod,
+  description,
+  onClick,
+  productPrice,
+  promotion,
+  billingPeriod,
+  title,
+}) => (
+  <div className={styles.contentWrapper}>
+    <h1 className={styles.headerShowDetails}>Order summary</h1>
+    <div className={styles.contentShowDetails}>
+      <header>
+        <h2 className={styles.titleLeftAlign} title={`your subscription is ${title}`}>{title}</h2>
+      </header>
+      <h3 className={styles.titleDescription}>{description}</h3>
+    </div>
+    <div className={styles.contentShowDetails}>
+      <div className={styles.dataBold}>Payment plan</div>
+      <PriceLabel
+        className={styles.data}
+        productPrice={productPrice}
+        promotion={promotion}
+        billingPeriod={billingPeriod}
+      />
+    </div>
+    <div className={styles.contentShowDetails}>
+      <div className={styles.dataBold}>Delivery method</div>
+      <div className={styles.data}>{deliveryMethod}</div>
+    </div>
+    <div className={styles.contentShowDetailsLast}>
+      <DropDownButton showDropDown={ShowDropDown} onClick={onClick} />
+      <ChangeSubscription route={changeSubscription} />
+    </div>
   </div>
 );
 
@@ -174,6 +190,10 @@ export default class Summary extends Component<PropTypes> {
     this.setState({ showDropDown: !this.state.showDropDown });
   }
 
+  getDeliveryMethod = () => {
+    return this.props.dataList.filter(item => item.title === 'Delivery method').pop().value
+  }
+
   render() {
     const { children, dataList, promotion } = this.props;
 
@@ -183,8 +203,9 @@ export default class Summary extends Component<PropTypes> {
         <Mobile
           onClick={this.toggleDetails}
           showDropDown={this.state.showDropDown}
-          children={children}
-          {...this.props} />
+          deliveryMethod={this.getDeliveryMethod()}
+          {...this.props}
+        />
       </aside>
     )
   }
