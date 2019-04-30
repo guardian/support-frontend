@@ -84,6 +84,8 @@ private[services] class GAService(implicit client: OkHttpClient)
           "cd12" -> acquisition.campaignCode.map(_.mkString(",")).getOrElse(""), // Campaign code
           "cd16" -> buildABTestPayload(acquisition.abTests), //'Experience' custom dimension
           "cd17" -> acquisition.paymentProvider.getOrElse(""), // Payment method
+          "cd19" -> acquisition.promoCode.getOrElse(""), // Promo code
+          "cd25" -> acquisition.labels.exists(_.contains("REUSED_EXISTING_PAYMENT_METHOD")), // usedExistingPaymentMethod
 
           // Custom metrics
           "cm10" -> getSuccessfulSubscriptionSignUpMetric(conversionCategory),
