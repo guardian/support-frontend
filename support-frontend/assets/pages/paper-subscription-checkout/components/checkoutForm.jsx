@@ -171,13 +171,13 @@ function CheckoutForm(props: PropTypes) {
                 <RadioInput
                   text="Yes"
                   name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame}
+                  checked={props.billingAddressIsSame === true}
                   onChange={() => props.setbillingAddressIsSame(true)}
                 />
                 <RadioInput
                   text="No"
                   name="billingAddressIsSame"
-                  checked={!props.billingAddressIsSame}
+                  checked={props.billingAddressIsSame === false}
                   onChange={() => props.setbillingAddressIsSame(false)}
                 />
               </FieldsetWithError>
