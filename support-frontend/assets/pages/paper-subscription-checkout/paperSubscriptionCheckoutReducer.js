@@ -8,8 +8,8 @@ import { type ReduxState } from 'helpers/page/page';
 import { type Option } from 'helpers/types/option';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type IsoCountry } from 'helpers/internationalisation/country';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { formError, type FormError, nonEmptyString, validate, notNull } from 'helpers/subscriptionsForms/validation';
+import { fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Action as DDAction } from 'components/directDebit/directDebitActions';
 import {
@@ -21,30 +21,26 @@ import { isTestUser } from 'helpers/user/user';
 import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { Collection, HomeDelivery, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-  Everyday,
-  type PaperProductOptions, ActivePaperProductTypes,
-} from 'helpers/productPrice/productOptions';
+import { ActivePaperProductTypes, Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from './helpers/user';
-import { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit } from './helpers/paymentProviders';
+import { countrySupportsDirectDebit, onPaymentAuthorised, showPaymentMethod } from './helpers/paymentProviders';
 import {
-  addressReducerFor,
-  getFormFields as getAddressFormFields,
-  getFormErrors as getAddressFormErrors,
-  setFormErrorsFor as setAddressFormErrorsFor,
   type Action as AddressAction,
-  type State as AddressState,
+  addressReducerFor,
   type FormField as AddressFormField,
-} from './components-checkout/addressFieldsStore';
+  getFormErrors as getAddressFormErrors,
+  getFormFields as getAddressFormFields,
+  setFormErrorsFor as setAddressFormErrorsFor,
+  type State as AddressState,
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
-import { getVoucherDays, getDeliveryDays, formatMachineDate } from './helpers/deliveryDays';
+import { formatMachineDate, getDeliveryDays, getVoucherDays } from './helpers/deliveryDays';
 
 
 // ----- Types ----- //

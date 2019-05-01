@@ -11,9 +11,9 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { type Stage, type State } from './paperSubscriptionCheckoutReducer';
 
-import CheckoutForm from './components-checkout/checkoutForm';
-import ReturnSection from './components-ty/returnSection';
-import ThankYouContent from './components-ty/thankYou';
+import CheckoutForm from './components/checkoutForm';
+import ReturnSection from 'pages/paper-subscription-checkout/components/thankYou/returnSection';
+import ThankYouContent from 'pages/paper-subscription-checkout/components/thankYou/thankYou';
 
 // ----- Types ----- //
 
