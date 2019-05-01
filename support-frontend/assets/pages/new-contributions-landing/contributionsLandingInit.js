@@ -46,7 +46,6 @@ import { setExistingPaymentMethods } from 'helpers/page/commonActions';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
-import type { EditorialiseAmountsRoundTwoVariant } from '../../helpers/abTests/abtestDefinitions';
 
 // ----- Functions ----- //
 
@@ -196,7 +195,7 @@ function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: F
   const contributionType = getInitialContributionType(
     countryGroupId,
     contributionTypes,
-    state.common.abParticipations.editorialiseAmountsRoundTwo
+    state.common.abParticipations.editorialiseAmountsRoundTwo,
   );
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
