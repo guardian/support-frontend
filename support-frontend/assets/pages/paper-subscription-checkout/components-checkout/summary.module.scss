@@ -162,13 +162,13 @@
   padding-right: $gu-h-spacing /2;
 }
 
-.defaultState svg {
+.defaultState {
   transition: transform 300ms;
   transform-origin: center;
   transform: rotate(180deg);
 }
 
-.openState svg {
+.openState {
   transform: rotate(0);
 }
 

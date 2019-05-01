@@ -1,13 +1,13 @@
 // @flow
 
-import React, { Component, type Node } from 'react';
+import React, { Component } from 'react';
 import { hasDiscount, type Price, type Promotion } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import styles from './summary.module.scss';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
-import SvgDropdownArrowUp from 'components/svgs/dropdownArrowUp';
+import SvgDropdownArrowUp from './dropdownArrowUp.svg';
 
 // Types
 
@@ -88,7 +88,7 @@ const DropDownButton = ({ onClick, showDropDown }: PropTypesDDB) => (
     onClick={onClick}
   >
     <span className={styles.spaceRight}>{showDropDown ? 'Hide details' : 'Show all details'}</span>
-    <span className={showDropDown ? styles.openState : styles.defaultState}><SvgDropdownArrowUp /></span>
+    <SvgDropdownArrowUp className={showDropDown ? styles.openState : styles.defaultState} />
   </button>
 );
 
