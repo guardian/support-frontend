@@ -7,7 +7,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { config, type AmountsRegions, type Amount, type ContributionType, getAmount } from 'helpers/contributions';
 
-import type { EditorialiseAmountsVariant } from 'helpers/abTests/abtestDefinitions';
+import type { EditorialiseAmountsRoundTwoVariant } from 'helpers/abTests/abtestDefinitions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
@@ -43,7 +43,7 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  editorialiseAmountsVariant: EditorialiseAmountsVariant,
+  editorialiseAmountsRoundTwoVariant: EditorialiseAmountsRoundTwoVariant,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -57,7 +57,7 @@ const mapStateToProps = state => ({
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
-  editorialiseAmountsVariant: state.common.abParticipations.editorialiseAmounts,
+  editorialiseAmountsRoundTwoVariant: state.common.abParticipations.editorialiseAmountsRoundTwo,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -115,8 +115,7 @@ const amountFormatted = (amount: number, currencyString: string, countryGroupId:
   return `${currencyString}${(amount).toFixed(2)}`;
 };
 
-const getEditorialisedAmountsCopy = (
-  editorialiseAmountsVariant: EditorialiseAmountsVariant,
+const getAmountPerWeekBreakdown = (
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
   selectedAmounts: SelectedAmounts,
@@ -125,16 +124,15 @@ const getEditorialisedAmountsCopy = (
   const currencyString = currencies[detect(countryGroupId)].glyph;
   const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
 
-  if (editorialiseAmountsVariant === 'control') {
-    return '';
+  let weeklyAmount: number;
+  if (contributionType === 'ANNUAL') {
+    weeklyAmount = amount / 52.0;
+  } else if (contributionType === 'MONTHLY') {
+    weeklyAmount = (amount * 12) / 52.0;
   }
 
-  if (editorialiseAmountsVariant === 'dailyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount / 365.00, currencyString, countryGroupId)} a day`;
-  }
-
-  if (editorialiseAmountsVariant === 'weeklyBreakdownAnnual' && contributionType === 'ANNUAL' && amount) {
-    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(amount / 52.00, currencyString, countryGroupId)} each week`;
+  if (amount && weeklyAmount) {
+    return `Contributing ${currencyString}${amount} works out as ${amountFormatted(weeklyAmount, currencyString, countryGroupId)} each week`;
   }
 
   return '';
@@ -143,12 +141,16 @@ const getEditorialisedAmountsCopy = (
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
+  const showWeeklyBreakdown: boolean = props.editorialiseAmountsRoundTwoVariant === 'weeklyBreakdownMonthlyAsWell'
+    ? props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL'
+    : props.contributionType === 'ANNUAL';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
   const maxAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
+
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
@@ -187,15 +189,16 @@ function ContributionAmount(props: PropTypes) {
           required
         />
       ) : null}
-      <p className="editorialise-amounts-test-copy">
-        {getEditorialisedAmountsCopy(
-          props.editorialiseAmountsVariant,
-          props.contributionType,
-          props.countryGroupId,
-          props.selectedAmounts,
-          props.otherAmounts,
-        )}
-      </p>
+      {showWeeklyBreakdown ? (
+        <p className="amount-per-week-breakdown">
+          {getAmountPerWeekBreakdown(
+            props.contributionType,
+            props.countryGroupId,
+            props.selectedAmounts,
+            props.otherAmounts,
+          )}
+        </p>
+      ) : null}
     </fieldset>
   );
 }

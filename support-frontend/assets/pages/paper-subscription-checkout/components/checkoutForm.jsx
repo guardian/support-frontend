@@ -166,7 +166,8 @@ function CheckoutForm(props: PropTypes) {
               <FieldsetWithError
                 id="billingAddressIsSame"
                 error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the delivery address?">
+                legend="Is the billing address the same as the delivery address?"
+              >
                 <RadioInput
                   text="Yes"
                   name="billingAddressIsSame"
@@ -184,9 +185,9 @@ function CheckoutForm(props: PropTypes) {
           </FormSection>
           {
             props.billingAddressIsSame === false ?
-            <FormSection title="Where should we bill you?">
-              <BillingAddress />
-            </FormSection>
+              <FormSection title="Where should we bill you?">
+                <BillingAddress />
+              </FormSection>
             : null
           }
           <FormSection title="When would you like your subscription to start?">
