@@ -185,49 +185,11 @@ const ShowDropDown = (props: {
   </div>
 );
 
-type PropTypesM = {|
-  billingPeriod: BillingPeriod,
-  changeSubscription: string,
-  deliveryMethod: string,
-  description: ?string,
-  onClick: Function,
-  productPrice: Price,
-  promotion: ?Promotion,
-  showDropDown: boolean,
-  title: string,
-|};
 
-const Mobile = ({
-  billingPeriod,
-  changeSubscription,
-  deliveryMethod,
-  description,
-  onClick,
-  productPrice,
-  promotion,
-  showDropDown,
-  title,
-}: PropTypesM) => (
+const Mobile = props => (
   <span className={styles.mobileOnly}>
-    {!showDropDown && <HideDropDown
-      billingPeriod={billingPeriod}
-      onClick={onClick}
-      productPrice={productPrice}
-      promotion={promotion}
-      showDropDown={showDropDown}
-      title={title}
-    />}
-    {showDropDown && <ShowDropDown
-      changeSubscription={changeSubscription}
-      deliveryMethod={deliveryMethod}
-      description={description}
-      onClick={onClick}
-      productPrice={productPrice}
-      promotion={promotion}
-      billingPeriod={billingPeriod}
-      showDropDown={showDropDown}
-      title={title}
-    />}
+    {!props.showDropDown && <HideDropDown {...props} />}
+    {props.showDropDown && <ShowDropDown {...props} />}
   </span>
 );
 
@@ -253,15 +215,6 @@ export default class Summary extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const {
-      billingPeriod,
-      changeSubscription,
-      description,
-      productPrice,
-      promotion,
-      title,
-    } = this.props;
-
     return (
       <aside className={styles.root}>
         <TabletAndDesktop {...this.props} />
@@ -269,12 +222,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
           onClick={this.toggleDetails}
           showDropDown={this.state.showDropDown}
           deliveryMethod={this.getDeliveryMethod()}
-          changeSubscription={changeSubscription}
-          description={description}
-          productPrice={productPrice}
-          promotion={promotion}
-          billingPeriod={billingPeriod}
-          title={title}
+          {...this.props}
         />
       </aside>
     );
