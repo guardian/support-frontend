@@ -9,41 +9,53 @@ import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import SvgDropdownArrowUp from 'components/svgs/dropdownArrowUp';
 
+// Types
 
 export type DataListItem = {
   title: string,
   value: string,
 }
 
-type PropTypes = {
+type PropTypes = {|
+  billingPeriod: BillingPeriod,
+  changeSubscription: string,
+  dataList: DataListItem[],
+  description: ?string,
   image: $Call<GridImageType, GridImg>,
-  children: Node,
   productPrice: Price,
   promotion: ?Promotion,
-  billingPeriod: BillingPeriod,
-  dataList: DataListItem[],
   title: string,
-  description: ?string,
-};
+|};
+
+type StateTypes = {
+  showDropDown: boolean,
+}
 
 // Helpers
 
-const DataList = ({ dataList }) => (
+type PropTypesDL = {|
+  dataList: DataListItem[],
+|};
+
+const DataList = ({ dataList }: PropTypesDL) => (
   <div className={styles.dataList}>
     {dataList.length > 0 &&
       <dl className={styles.data}>
         {dataList.map(item => [
           <dt>{item.title}</dt>,
           <dd>{item.value}</dd>,
-            ]
-          )
+            ])
         }
       </dl>
     }
   </div>
 );
 
-const PromotionDiscount = ({ promotion }) => (
+type PropTypesPD = {|
+  promotion: ?Promotion,
+|};
+
+const PromotionDiscount = ({ promotion }: PropTypesPD) => (
   <span>
     {promotion && hasDiscount(promotion) &&
       <div className={styles.promo}>
@@ -56,13 +68,21 @@ const PromotionDiscount = ({ promotion }) => (
   </span>
 );
 
-const ChangeSubscription = ({ route }) => (
+type PropTypesCS = {|
+  route: string,
+|};
+
+const ChangeSubscription = ({ route }: PropTypesCS) => (
   <a className={styles.changeSub} href={route}>Change Subscription</a>
 );
 
-const DropDownButton = ({ onClick, showDropDown }) => (
+type PropTypesDDB = {|
+  onClick: Function,
+  showDropDown: boolean,
+|};
+
+const DropDownButton = ({ onClick, showDropDown }: PropTypesDDB) => (
   <button
-    role="button"
     aria-hidden="true"
     className={styles.dropDown}
     onClick={onClick}
@@ -72,9 +92,20 @@ const DropDownButton = ({ onClick, showDropDown }) => (
   </button>
 );
 
+type PropTypesTD = {|
+  billingPeriod: BillingPeriod,
+  changeSubscription: string,
+  dataList: DataListItem[],
+  description: ?string,
+  image: $Call<GridImageType, GridImg>,
+  productPrice: Price,
+  promotion: ?Promotion,
+  title: string,
+|};
+
 const TabletAndDesktop = ({
-  billingPeriod, changeSubscription, dataList, description, image, productPrice, promotion, title
-}) => (
+  billingPeriod, changeSubscription, dataList, description, image, productPrice, promotion, title,
+}: PropTypesTD) => (
   <span className={styles.tabletAndDesktop}>
     <div className={styles.img}>
       {image}
@@ -102,17 +133,23 @@ const TabletAndDesktop = ({
   </span>
 );
 
+type PropTypesHDD = {|
+  billingPeriod: BillingPeriod,
+  onClick: Function,
+  productPrice: Price,
+  promotion: ?Promotion,
+  showDropDown: boolean,
+  title: string,
+|};
+
 const HideDropDown = ({
   billingPeriod,
-  dataList,
-  description,
-  image,
   onClick,
   productPrice,
   promotion,
   showDropDown,
   title,
-}) => (
+}: PropTypesHDD) => (
   <div className={styles.content}>
     <h1 className={styles.header}>Order summary</h1>
     <header>
@@ -133,6 +170,17 @@ const HideDropDown = ({
   </div>
 );
 
+type PropTypesSDD = {|
+  billingPeriod: BillingPeriod,
+  changeSubscription: string,
+  deliveryMethod: string,
+  description: string,
+  onClick: Function,
+  productPrice: Price,
+  promotion: ?Promotion,
+  title: string,
+|};
+
 const ShowDropDown = ({
   changeSubscription,
   deliveryMethod,
@@ -142,7 +190,7 @@ const ShowDropDown = ({
   promotion,
   billingPeriod,
   title,
-}) => (
+}: PropTypesSDD) => (
   <div className={styles.contentWrapper}>
     <h1 className={styles.headerShowDetails}>Order summary</h1>
     <div className={styles.contentShowDetails}>
@@ -171,31 +219,35 @@ const ShowDropDown = ({
   </div>
 );
 
-const Mobile = (props) => (
+const Mobile = props => (
   <span className={styles.mobileOnly}>
     {!props.showDropDown && <HideDropDown {...props} />}
     {props.showDropDown && <ShowDropDown {...props} />}
   </span>
 );
 
-// Main component
+// Main class
 
-export default class Summary extends Component<PropTypes> {
-  state = {
-    showDropDown: false,
+export default class Summary extends Component<PropTypes, StateTypes> {
+  static defaultProps = {
+    dataList: [],
   }
+
+  constructor(props: PropTypes) {
+    super(props);
+
+    this.state = {
+      showDropDown: false,
+    };
+  }
+
+  getDeliveryMethod = () => this.props.dataList.filter(item => item.title === 'Delivery method').pop().value
 
   toggleDetails = () => {
     this.setState({ showDropDown: !this.state.showDropDown });
   }
 
-  getDeliveryMethod = () => {
-    return this.props.dataList.filter(item => item.title === 'Delivery method').pop().value
-  }
-
   render() {
-    const { children, dataList, promotion } = this.props;
-
     return (
       <aside className={styles.root}>
         <TabletAndDesktop {...this.props} />
@@ -206,11 +258,6 @@ export default class Summary extends Component<PropTypes> {
           {...this.props}
         />
       </aside>
-    )
+    );
   }
 }
-
-Summary.defaultProps = {
-  dataList: [],
-  children: null,
-};
