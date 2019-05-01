@@ -46,6 +46,7 @@ import { setExistingPaymentMethods } from 'helpers/page/commonActions';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
+import type { EditorialiseAmountsRoundTwoVariant } from '../../helpers/abTests/abtestDefinitions';
 
 // ----- Functions ----- //
 
@@ -67,6 +68,7 @@ function getInitialPaymentMethod(
 function getInitialContributionType(
   countryGroupId: CountryGroupId,
   contributionTypes: ContributionTypes,
+  editorialiseAmountsRoundTwoVariant: string,
 ): ContributionType {
 
   const contributionType = getContributionTypeFromUrl() || getContributionTypeFromSession();
@@ -75,6 +77,10 @@ function getInitialContributionType(
   if (contributionType &&
     contributionTypes[countryGroupId].find(ct => ct.contributionType === contributionType)) {
     return contributionType;
+  }
+
+  if (editorialiseAmountsRoundTwoVariant === 'defaultAnnual') {
+    return 'ANNUAL';
   }
 
   const defaultContributionType = contributionTypes[countryGroupId].find(ct => ct.isDefault);
@@ -187,7 +193,11 @@ function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: F
   const { countryId } = state.common.internationalisation;
   const { switches, contributionTypes } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
-  const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
+  const contributionType = getInitialContributionType(
+    countryGroupId,
+    contributionTypes,
+    state.common.abParticipations.editorialiseAmountsRoundTwo
+  );
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }

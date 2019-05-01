@@ -4,21 +4,21 @@ import type { Tests } from './abtest';
 // ----- Tests ----- //
 
 
-export type EditorialiseAmountsVariant = 'control' | 'dailyBreakdownAnnual' | 'weeklyBreakdownAnnual' | 'notintest';
+export type EditorialiseAmountsRoundTwoVariant = 'control' | 'defaultAnnual' | 'weeklyBreakdownMonthlyAsWell' | 'notintest';
 
 export const tests: Tests = {
 
-  editorialiseAmounts: {
+  editorialiseAmountsRoundTwo: {
     type: 'OTHER',
     variants: [
       {
         id: 'control',
       },
       {
-        id: 'dailyBreakdownAnnual',
+        id: 'defaultAnnual',
       },
       {
-        id: 'weeklyBreakdownAnnual',
+        id: 'weeklyBreakdownMonthlyAsWell',
       },
     ],
     audiences: {
