@@ -16,6 +16,9 @@
       margin-top: $gu-v-spacing;
     }
   }
+  @include mq($until: mobileMedium) {
+    grid-template-columns: 50% 50%;
+  }
 }
 
 .contentWrapper, .content {
@@ -159,7 +162,7 @@
 }
 
 .spaceRight {
-  padding-right: $gu-h-spacing /2;
+  padding-right: $gu-h-spacing /3;
 }
 
 .defaultState {
