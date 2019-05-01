@@ -33,15 +33,11 @@ type StateTypes = {
 
 // Helpers
 
-type PropTypesDL = {|
-  dataList: DataListItem[],
-|};
-
-const DataList = ({ dataList }: PropTypesDL) => (
+const DataList = (props: { dataList: DataListItem[] }) => (
   <div className={styles.dataList}>
-    {dataList.length > 0 &&
+    {props.dataList.length > 0 &&
       <dl className={styles.data}>
-        {dataList.map(item => [
+        {props.dataList.map(item => [
           <dt>{item.title}</dt>,
           <dd>{item.value}</dd>,
             ])
@@ -51,48 +47,39 @@ const DataList = ({ dataList }: PropTypesDL) => (
   </div>
 );
 
-type PropTypesPD = {|
-  promotion: ?Promotion,
-|};
 
-const PromotionDiscount = ({ promotion }: PropTypesPD) => (
+const PromotionDiscount = (props: { promotion: ?Promotion }) => (
   <span>
-    {promotion && hasDiscount(promotion) &&
+    {props.promotion && hasDiscount(props.promotion) &&
       <div className={styles.promo}>
         <strong className={styles.promoTitle}>
-          {promotion.description}
+          {props.promotion.description}
         </strong>
-        {' '}({promotion.promoCode})
+        {' '}({props.promotion.promoCode})
       </div>
     }
   </span>
 );
 
-type PropTypesCS = {|
-  route: string,
-|};
 
-const ChangeSubscription = ({ route }: PropTypesCS) => (
-  <a className={styles.changeSub} href={route}>Change Subscription</a>
+const ChangeSubscription = (props: { route: string }) => (
+  <a className={styles.changeSub} href={props.route}>Change Subscription</a>
 );
 
-type PropTypesDDB = {|
-  onClick: Function,
-  showDropDown: boolean,
-|};
 
-const DropDownButton = ({ onClick, showDropDown }: PropTypesDDB) => (
+const DropDownButton = (props: { onClick: Function, showDropDown: boolean }) => (
   <button
     aria-hidden="true"
     className={styles.dropDown}
-    onClick={onClick}
+    onClick={props.onClick}
   >
-    <span className={styles.spaceRight}>{showDropDown ? 'Hide details' : 'Show all details'}</span>
-    <SvgDropdownArrowUp className={showDropDown ? styles.openState : styles.defaultState} />
+    <span className={styles.spaceRight}>{props.showDropDown ? 'Hide details' : 'Show all details'}</span>
+    <SvgDropdownArrowUp className={props.showDropDown ? styles.openState : styles.defaultState} />
   </button>
 );
 
-type PropTypesTD = {|
+
+const TabletAndDesktop = (props: {
   billingPeriod: BillingPeriod,
   changeSubscription: string,
   dataList: DataListItem[],
@@ -101,67 +88,55 @@ type PropTypesTD = {|
   productPrice: Price,
   promotion: ?Promotion,
   title: string,
-|};
-
-const TabletAndDesktop = ({
-  billingPeriod, changeSubscription, dataList, description, image, productPrice, promotion, title,
-}: PropTypesTD) => (
+}) => (
   <span className={styles.tabletAndDesktop}>
     <div className={styles.img}>
-      {image}
+      {props.image}
     </div>
     <div className={styles.content}>
       <h1 className={styles.header}>Order summary</h1>
       <header>
-        <h2 className={styles.title} title={`your subscription is ${title}`}>{title}</h2>
-        {description &&
-          <h3 className={styles.titleDescription}>{description}</h3>
+        <h2 className={styles.title} title={`your subscription is ${props.title}`}>{props.title}</h2>
+        {props.description &&
+          <h3 className={styles.titleDescription}>{props.description}</h3>
         }
       </header>
       <div>
         <PriceLabel
           className={styles.pricing}
-          productPrice={productPrice}
-          promotion={promotion}
-          billingPeriod={billingPeriod}
+          productPrice={props.productPrice}
+          promotion={props.promotion}
+          billingPeriod={props.billingPeriod}
         />
-        <PromotionDiscount promotion={promotion} />
-        <DataList dataList={dataList} />
+        <PromotionDiscount promotion={props.promotion} />
+        <DataList dataList={props.dataList} />
       </div>
-      <ChangeSubscription route={changeSubscription} />
+      <ChangeSubscription route={props.changeSubscription} />
     </div>
   </span>
 );
 
-type PropTypesHDD = {|
+
+const HideDropDown = (props: {
   billingPeriod: BillingPeriod,
   onClick: Function,
   productPrice: Price,
   promotion: ?Promotion,
   showDropDown: boolean,
   title: string,
-|};
-
-const HideDropDown = ({
-  billingPeriod,
-  onClick,
-  productPrice,
-  promotion,
-  showDropDown,
-  title,
-}: PropTypesHDD) => (
+}) => (
   <div className={styles.content}>
     <h1 className={styles.header}>Order summary</h1>
     <header>
-      <h2 className={styles.title} title={`your subscription is ${title}`}>{title}</h2>
+      <h2 className={styles.title} title={`your subscription is ${props.title}`}>{props.title}</h2>
     </header>
-    <DropDownButton showDropDown={showDropDown} onClick={onClick} />
+    <DropDownButton showDropDown={props.showDropDown} onClick={props.onClick} />
     <div>
       <PriceLabel
         className={styles.pricing}
-        productPrice={productPrice}
-        promotion={promotion}
-        billingPeriod={billingPeriod}
+        productPrice={props.productPrice}
+        promotion={props.promotion}
+        billingPeriod={props.billingPeriod}
       />
       <span className={styles.pricing}>
         &nbsp;&ndash; Voucher booklet
@@ -170,59 +145,89 @@ const HideDropDown = ({
   </div>
 );
 
-type PropTypesSDD = {|
+
+const ShowDropDown = (props: {
   billingPeriod: BillingPeriod,
   changeSubscription: string,
   deliveryMethod: string,
-  description: string,
+  description: ?string,
   onClick: Function,
   productPrice: Price,
   promotion: ?Promotion,
+  showDropDown: boolean,
+  title: string,
+}) => (
+  <div className={styles.contentWrapper}>
+    <h1 className={styles.headerShowDetails}>Order summary</h1>
+    <div className={styles.contentShowDetails}>
+      <header>
+        <h2 className={styles.titleLeftAlign} title={`your subscription is ${props.title}`}>{props.title}</h2>
+      </header>
+      <h3 className={styles.titleDescription}>{props.description}</h3>
+    </div>
+    <div className={styles.contentShowDetails}>
+      <div className={styles.dataBold}>Payment plan</div>
+      <PriceLabel
+        className={styles.data}
+        productPrice={props.productPrice}
+        promotion={props.promotion}
+        billingPeriod={props.billingPeriod}
+      />
+    </div>
+    <div className={styles.contentShowDetails}>
+      <div className={styles.dataBold}>Delivery method</div>
+      <div className={styles.data}>{props.deliveryMethod}</div>
+    </div>
+    <div className={styles.contentShowDetailsLast}>
+      <DropDownButton showDropDown={props.showDropDown} onClick={props.onClick} />
+      <ChangeSubscription route={props.changeSubscription} />
+    </div>
+  </div>
+);
+
+type PropTypesM = {|
+  billingPeriod: BillingPeriod,
+  changeSubscription: string,
+  deliveryMethod: string,
+  description: ?string,
+  onClick: Function,
+  productPrice: Price,
+  promotion: ?Promotion,
+  showDropDown: boolean,
   title: string,
 |};
 
-const ShowDropDown = ({
+const Mobile = ({
+  billingPeriod,
   changeSubscription,
   deliveryMethod,
   description,
   onClick,
   productPrice,
   promotion,
-  billingPeriod,
+  showDropDown,
   title,
-}: PropTypesSDD) => (
-  <div className={styles.contentWrapper}>
-    <h1 className={styles.headerShowDetails}>Order summary</h1>
-    <div className={styles.contentShowDetails}>
-      <header>
-        <h2 className={styles.titleLeftAlign} title={`your subscription is ${title}`}>{title}</h2>
-      </header>
-      <h3 className={styles.titleDescription}>{description}</h3>
-    </div>
-    <div className={styles.contentShowDetails}>
-      <div className={styles.dataBold}>Payment plan</div>
-      <PriceLabel
-        className={styles.data}
-        productPrice={productPrice}
-        promotion={promotion}
-        billingPeriod={billingPeriod}
-      />
-    </div>
-    <div className={styles.contentShowDetails}>
-      <div className={styles.dataBold}>Delivery method</div>
-      <div className={styles.data}>{deliveryMethod}</div>
-    </div>
-    <div className={styles.contentShowDetailsLast}>
-      <DropDownButton showDropDown={ShowDropDown} onClick={onClick} />
-      <ChangeSubscription route={changeSubscription} />
-    </div>
-  </div>
-);
-
-const Mobile = props => (
+}: PropTypesM) => (
   <span className={styles.mobileOnly}>
-    {!props.showDropDown && <HideDropDown {...props} />}
-    {props.showDropDown && <ShowDropDown {...props} />}
+    {!showDropDown && <HideDropDown
+      billingPeriod={billingPeriod}
+      onClick={onClick}
+      productPrice={productPrice}
+      promotion={promotion}
+      showDropDown={showDropDown}
+      title={title}
+    />}
+    {showDropDown && <ShowDropDown
+      changeSubscription={changeSubscription}
+      deliveryMethod={deliveryMethod}
+      description={description}
+      onClick={onClick}
+      productPrice={productPrice}
+      promotion={promotion}
+      billingPeriod={billingPeriod}
+      showDropDown={showDropDown}
+      title={title}
+    />}
   </span>
 );
 
@@ -248,6 +253,15 @@ export default class Summary extends Component<PropTypes, StateTypes> {
   }
 
   render() {
+    const {
+      billingPeriod,
+      changeSubscription,
+      description,
+      productPrice,
+      promotion,
+      title,
+    } = this.props;
+
     return (
       <aside className={styles.root}>
         <TabletAndDesktop {...this.props} />
@@ -255,7 +269,12 @@ export default class Summary extends Component<PropTypes, StateTypes> {
           onClick={this.toggleDetails}
           showDropDown={this.state.showDropDown}
           deliveryMethod={this.getDeliveryMethod()}
-          {...this.props}
+          changeSubscription={changeSubscription}
+          description={description}
+          productPrice={productPrice}
+          promotion={promotion}
+          billingPeriod={billingPeriod}
+          title={title}
         />
       </aside>
     );
