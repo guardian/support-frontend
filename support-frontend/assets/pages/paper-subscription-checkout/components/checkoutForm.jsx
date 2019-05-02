@@ -126,9 +126,9 @@ function CheckoutForm(props: PropTypes) {
           },
           ]}
           billingPeriod="Monthly"
-        >
-          <a href={routes.paperSubscriptionProductChoices}>Change Subscription</a>
-        </Summary>)}
+          changeSubscription={routes.paperSubscriptionProductChoices}
+        />
+      )}
       >
         <Form onSubmit={(ev) => {
           ev.preventDefault();
