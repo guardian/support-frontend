@@ -19,7 +19,7 @@ import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import 'stylesheets/skeleton/skeleton.scss';
 
-import { SaleHeader } from './components/hero/hero';
+import { CampaignHeader } from './components/hero/hero';
 import Tabs from './components/tabs';
 import TabsContent from './components/content/content';
 import reducer from './paperSubscriptionLandingPageReducer';
@@ -66,7 +66,7 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <SaleHeader />
+      <CampaignHeader />
       {paperHasDeliveryEnabled() &&
         <Content needsHigherZindex>
           <Text>

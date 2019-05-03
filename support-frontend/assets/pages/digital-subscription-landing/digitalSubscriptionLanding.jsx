@@ -22,7 +22,7 @@ import ProductPageInfoChip from 'components/productPage/productPageInfoChip/prod
 import 'stylesheets/skeleton/skeleton.scss';
 
 
-import { SaleHeader } from './components/digitalSubscriptionLandingHeader';
+import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
@@ -80,7 +80,7 @@ const content = (
         </Footer>}
     >
 
-      <SaleHeader countryGroupId={countryGroupId} />
+      <CampaignHeader countryGroupId={countryGroupId} />
 
       <ProductBlock countryGroupId={countryGroupId} />
       <AdFreeSection headingSize={2} />

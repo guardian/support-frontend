@@ -48,7 +48,7 @@ const DefaultHeader = () => (
   </header>
 );
 
-const SaleHeader = () => (
+const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
     overheading="Guardian Weekly subscriptions"
@@ -80,4 +80,4 @@ const SaleHeader = () => (
 );
 
 
-export { DefaultHeader, SaleHeader };
+export { DefaultHeader, CampaignHeader };
