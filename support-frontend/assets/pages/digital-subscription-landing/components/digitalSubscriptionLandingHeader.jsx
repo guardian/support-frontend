@@ -176,13 +176,14 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
   };
 }
 
-function SaleHeader(props: PropTypes) {
+function CampaignHeader(props: PropTypes) {
   const product: SubscriptionProduct = 'DigitalPack';
+  const copy = getCopy(product, props.countryGroupId);
   return (
     <ProductPagehero
       appearance="campaign"
-      overheading="Digital Pack subscriptions"
-      heading="The premium Guardian experience, ad-free on all your devices"
+      overheading={copy.heading}
+      heading={copy.subHeading}
       modifierClasses={['digital-campaign']}
       content={<AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       hasCampaign
@@ -283,4 +284,4 @@ function DigitalSubscriptionLandingHeader(props: PropTypes) {
   );
 }
 
-export { SaleHeader, DigitalSubscriptionLandingHeader };
+export { CampaignHeader, DigitalSubscriptionLandingHeader };
