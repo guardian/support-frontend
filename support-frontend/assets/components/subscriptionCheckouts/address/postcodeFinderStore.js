@@ -3,8 +3,11 @@ import { type Dispatch } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import { type Scoped } from 'helpers/scoped';
-import { type Address } from '../helpers/addresses';
-import { getAddressesForPostcode, type PostcodeFinderResult } from '../helpers/postcodeFinder';
+import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
+import {
+  getAddressesForPostcode,
+  type PostcodeFinderResult,
+} from 'components/subscriptionCheckouts/address/postcodeLookup';
 
 export type PostcodeFinderState = {|
   results: PostcodeFinderResult[],
@@ -14,12 +17,12 @@ export type PostcodeFinderState = {|
 |}
 
 export type PostcodeFinderActions =
-  {|type: 'FILL_POSTCODE_FINDER_RESULTS', results: PostcodeFinderResult[], ...Scoped<Address> |} |
-  {|type: 'SET_POSTCODE_FINDER_ERROR', error: Option<string>, ...Scoped<Address> |} |
-  {|type: 'START_POSTCODE_FINDER_FETCH_RESULTS', ...Scoped<Address> |} |
-  {|type: 'SET_POSTCODE_FINDER_POSTCODE', ...Scoped<Address>, postcode: Option<string> |};
+  {|type: 'FILL_POSTCODE_FINDER_RESULTS', results: PostcodeFinderResult[], ...Scoped<AddressType> |} |
+  {|type: 'SET_POSTCODE_FINDER_ERROR', error: Option<string>, ...Scoped<AddressType> |} |
+  {|type: 'START_POSTCODE_FINDER_FETCH_RESULTS', ...Scoped<AddressType> |} |
+  {|type: 'SET_POSTCODE_FINDER_POSTCODE', ...Scoped<AddressType>, postcode: Option<string> |};
 
-const postcodeFinderActionCreatorsFor = (scope: Address) => ({
+const postcodeFinderActionCreatorsFor = (scope: AddressType) => ({
   setPostcode: (postcode: string) => ({ type: 'SET_POSTCODE_FINDER_POSTCODE', postcode, scope }),
   fetchResults: (postcode: Option<string>) => (dispatch: Dispatch<PostcodeFinderActions>) => {
     if (!postcode) {
@@ -41,7 +44,7 @@ const postcodeFinderActionCreatorsFor = (scope: Address) => ({
         .catch(() => {
           dispatch({
             type: 'SET_POSTCODE_FINDER_ERROR',
-            error: 'Couldn\'t find your postcode',
+            error: 'We couldn\'t find this postcode, please check and try again or enter your address below.',
             scope,
           });
         });
@@ -49,7 +52,7 @@ const postcodeFinderActionCreatorsFor = (scope: Address) => ({
   },
 });
 
-export type PostcodeFinderActionCreators = $Call<typeof postcodeFinderActionCreatorsFor, Address>;
+export type PostcodeFinderActionCreators = $Call<typeof postcodeFinderActionCreatorsFor, AddressType>;
 
 const initialState = {
   results: [],
@@ -58,7 +61,7 @@ const initialState = {
   error: null,
 };
 
-const postcodeFinderReducerFor = (scope: Address) => (
+const postcodeFinderReducerFor = (scope: AddressType) => (
   state: PostcodeFinderState = initialState,
   action: PostcodeFinderActions,
 ): PostcodeFinderState => {
@@ -100,4 +103,3 @@ const postcodeFinderReducerFor = (scope: Address) => (
 };
 
 export { postcodeFinderReducerFor, postcodeFinderActionCreatorsFor };
-

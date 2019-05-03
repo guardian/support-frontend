@@ -1,7 +1,7 @@
 package com.gu.support.encoding
 
 import com.gu.support.promotions.{DiscountBenefit, FreeTrialBenefit, IncentiveBenefit}
-import io.circe.{ACursor, Json, JsonObject}
+import io.circe.{ACursor, Decoder, Json, JsonObject}
 
 object JsonHelpers {
 
@@ -96,6 +96,13 @@ object JsonHelpers {
 
   implicit class JsonExtensions(json: Json) {
     def getField(key: String) = json.hcursor.downField(key).focus
+  }
+
+  //Decodes an expected json string to T if the given partial function is defined for the string value
+  def decodeStringAndCollect[T](pf: PartialFunction[String,T]): Decoder[T] = Decoder.decodeString.emap { s =>
+    pf.lift(s)
+      .map(Right.apply)
+      .getOrElse(Left(s"Unexpected value: $s"))
   }
 
 }

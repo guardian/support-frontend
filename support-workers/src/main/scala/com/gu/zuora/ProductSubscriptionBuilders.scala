@@ -4,14 +4,13 @@ import java.util.UUID
 
 import com.gu.config.Configuration
 import com.gu.i18n.Country
-import com.gu.monitoring.SafeLogger
 import com.gu.support.catalog
 import com.gu.support.catalog.{Product, ProductRatePlan, ProductRatePlanId}
 import com.gu.support.config.TouchPointEnvironments.UAT
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
-import com.gu.support.workers.{Contribution, DigitalPack, Paper, ProductType}
+import com.gu.support.workers.{Contribution, DigitalPack, GuardianWeekly, Paper, ProductType}
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
 
@@ -22,13 +21,12 @@ object ProductSubscriptionBuilders {
   def getProductRatePlanId[PT <: ProductType, P <: Product](product: P, productType: PT, isTestUser: Boolean): ProductRatePlanId = {
     val touchpointEnvironment = if (isTestUser) UAT else TouchPointEnvironments.fromStage(Configuration.stage)
 
-    def getRatePlans[T <: Product](product: T): Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
-
-    val ratePlans: Seq[ProductRatePlan[Product]] = getRatePlans(product)
+    val ratePlans: Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
 
     val maybeProductRatePlanId: Option[ProductRatePlanId] = productType match {
-      case dp: DigitalPack => ratePlans.find(rp => rp.billingPeriod == dp.billingPeriod) map (_.id)
-      case p: Paper => ratePlans.find(rp => rp.fulfilmentOptions == p.fulfilmentOptions && rp.productOptions == p.productOptions) map (_.id)
+      case dp: DigitalPack => ratePlans.find(rp => rp.billingPeriod == dp.billingPeriod).map(_.id)
+      case p: Paper => ratePlans.find(rp => rp.fulfilmentOptions == p.fulfilmentOptions && rp.productOptions == p.productOptions).map(_.id)
+      case gw: GuardianWeekly => ratePlans.find(rp => rp.billingPeriod == gw.billingPeriod && rp.fulfilmentOptions == gw.fulfilmentOptions).map(_.id)
     }
 
     Try(maybeProductRatePlanId.get) match {
@@ -100,6 +98,37 @@ object ProductSubscriptionBuilders {
       }
 
       val productRatePlanId = getProductRatePlanId(catalog.Paper, paper, isTestUser)
+
+      val subscriptionData = buildProductSubscription(
+        requestId,
+        productRatePlanId,
+        contractAcceptanceDate = contractAcceptanceDate,
+        contractEffectiveDate = contractEffectiveDate,
+      )
+      maybePromoCode
+        .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
+        .getOrElse(subscriptionData)
+    }
+  }
+
+  implicit class GuardianWeeklySubscriptionBuilder(val guardianWeekly: GuardianWeekly) extends ProductSubscriptionBuilder {
+    def build(
+      requestId: UUID,
+      country: Country,
+      maybePromoCode: Option[PromoCode],
+      firstDeliveryDate: Option[LocalDate],
+      promotionService: PromotionService,
+      isTestUser: Boolean
+    ): SubscriptionData = {
+
+      val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
+
+      val contractAcceptanceDate = Try(firstDeliveryDate.get) match {
+        case Success(value) => value
+        case Failure(e) => throw new BadRequestException(s"First delivery date was not provided. It is required for a Guardian Weekly subscription.", e)
+      }
+
+      val productRatePlanId = getProductRatePlanId(catalog.GuardianWeekly, guardianWeekly, isTestUser)
 
       val subscriptionData = buildProductSubscription(
         requestId,

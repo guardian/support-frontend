@@ -6,6 +6,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
+import com.gu.i18n.Country
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
@@ -95,7 +96,7 @@ object SendAcquisitionEvent {
           case _: DirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
         }
 
-      def printOptionsFromProduct(product: ProductType): Option[PrintOptions] = {
+      def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {
 
         def printProduct(fulfilmentOptions: FulfilmentOptions, productOptions: ProductOptions): PrintProduct = {
           (fulfilmentOptions, productOptions) match {
@@ -114,6 +115,7 @@ object SendAcquisitionEvent {
 
         product match {
           case p: Paper => Some(PrintOptions(printProduct(p.fulfilmentOptions, p.productOptions), "GB"))
+          case _: GuardianWeekly => Some(PrintOptions(PrintProduct.GuardianWeekly, deliveryCountry.map(_.alpha2).getOrElse("")))
           case _ => None
         }
       }
@@ -123,13 +125,14 @@ object SendAcquisitionEvent {
           case c: Contribution => (OphanProduct.RecurringContribution, c.amount.toDouble)
           case _: DigitalPack => (OphanProduct.DigitalSubscription, 0D) //TODO: Send the real amount in the acquisition event
           case _: Paper => (OphanProduct.PrintSubscription, 0D) //TODO: same as above
+          case _: GuardianWeekly => (OphanProduct.PrintSubscription, 0D) //TODO: same as above
         }
 
         Either.fromOption(
           stateAndInfo.state.acquisitionData.map { data =>
             thrift.Acquisition(
               product = productType,
-              printOptions = printOptionsFromProduct(stateAndInfo.state.product),
+              printOptions = printOptionsFromProduct(stateAndInfo.state.product, stateAndInfo.state.user.deliveryAddress.map(_.country)),
               paymentFrequency = paymentFrequencyFromBillingPeriod(stateAndInfo.state.product.billingPeriod),
               currency = stateAndInfo.state.product.currency.iso,
               amount = productAmount,

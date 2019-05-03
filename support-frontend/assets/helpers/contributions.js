@@ -54,6 +54,15 @@ export type AmountsRegions = {
   [CountryGroupId]: Amounts
 }
 
+export type ContributionTypeSetting = {
+  contributionType: ContributionType,
+  isDefault?: boolean,
+}
+
+export type ContributionTypes = {
+  [CountryGroupId]: ContributionTypeSetting[],
+}
+
 type ParseError = 'ParseError';
 export type ValidationError = 'TooMuch' | 'TooLittle';
 export type ContributionError = ParseError | ValidationError;
@@ -252,18 +261,20 @@ function getMinContribution(contributionType: ContributionType, countryGroupId: 
   return config[countryGroupId][contributionType].min;
 }
 
-function toContributionType(s: string): ?ContributionType {
-  switch (s.toUpperCase()) {
-    case 'ANNUAL': return 'ANNUAL';
-    case 'MONTHLY': return 'MONTHLY';
-    case 'ONE_OFF': return 'ONE_OFF';
-    default: return null;
+function toContributionType(s: ?string): ?ContributionType {
+  if (s) {
+    switch (s.toUpperCase()) {
+      case 'ANNUAL':
+        return 'ANNUAL';
+      case 'MONTHLY':
+        return 'MONTHLY';
+      case 'ONE_OFF':
+        return 'ONE_OFF';
+      default:
+        return null;
+    }
   }
-}
-
-function toContributionTypeOrElse(s: ?string, fallback: ContributionType): ContributionType {
-  const contributionType = toContributionType(s || fallback);
-  return contributionType || fallback;
+  return null;
 }
 
 function parseRegularContributionType(s: string): RegularContributionType {
@@ -413,7 +424,6 @@ function getContributionAmountRadios(
 export {
   config,
   toContributionType,
-  toContributionTypeOrElse,
   validateContribution,
   parseContribution,
   getMinContribution,

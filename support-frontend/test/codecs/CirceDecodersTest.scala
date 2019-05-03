@@ -192,6 +192,29 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |            { "value": "25", "isDefault": true }
           |        ]
           |    }
+          |  },
+          |  "contributionTypes": {
+          |       "GBPCountries": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "UnitedStates": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "EURCountries": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "International": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "Canada": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "AUDCountries": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ],
+          |       "NZDCountries": [
+          |           { "contributionType": "ONE_OFF", "isDefault": true }
+          |       ]
           |  }
           |}""".stripMargin
 
@@ -209,6 +232,22 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
         International = amounts,
         NZDCountries = amounts,
         Canada = amounts
+      )
+
+      val contributionTypesSettings = List(
+        ContributionTypeSetting(
+          contributionType = ONE_OFF,
+          isDefault = Some(true)
+        )
+      )
+      val contributionTypes = ContributionTypes(
+        GBPCountries = contributionTypesSettings,
+        UnitedStates = contributionTypesSettings,
+        EURCountries = contributionTypesSettings,
+        AUDCountries = contributionTypesSettings,
+        International = contributionTypesSettings,
+        NZDCountries = contributionTypesSettings,
+        Canada = contributionTypesSettings
       )
 
       val settings = AllSettings(
@@ -236,7 +275,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           ),
           optimize = Off
         ),
-        amountsRegions
+        amountsRegions,
+        contributionTypes
       )
 
       decode[AllSettings](json).right.value mustBe settings

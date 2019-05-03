@@ -6,7 +6,8 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.i18n.{Country, CountryGroup}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
-import com.gu.support.workers.states.{GetPaymentMethodState, CreateZuoraSubscriptionState}
+import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, GetPaymentMethodState}
 import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,14 +45,15 @@ class GetPaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
           acquisitionData = state.acquisitionData
         ),
       requestInfo
-
+        .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+        .appendMessage(s"Product is ${state.product.describe}")
     )
   }
 
   def toPaymentMethod(getPaymentMethodResponse: GetPaymentMethodResponse): Either[String, PaymentMethod] = getPaymentMethodResponse match {
 
-    case cardResponse: GetPaymentMethodCardReferenceResponse => {
-      val maybeCountry: Option[Country] = cardResponse.creditCardCountry.flatMap(CountryGroup.byOptimisticCountryNameOrCode(_))
+    case cardResponse: GetPaymentMethodCardReferenceResponse =>
+      val maybeCountry: Option[Country] = cardResponse.creditCardCountry.flatMap(CountryGroup.byOptimisticCountryNameOrCode)
       Right(
         CreditCardReferenceTransaction(
           tokenId = cardResponse.tokenId,
@@ -63,7 +65,6 @@ class GetPaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
           creditCardType = cardResponse.creditCardType
         )
       )
-    }
     case other => Left(s"unsupported payment method: '$other'")
 
   }

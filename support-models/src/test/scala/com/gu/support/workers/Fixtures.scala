@@ -51,7 +51,7 @@ object Fixtures {
          }
        """
 
-  def contribution(amount: BigDecimal = 5, currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly) =
+  def contribution(amount: BigDecimal = 5, currency: Currency = GBP, billingPeriod: BillingPeriod = Monthly): String =
     s"""
       {
         "amount": $amount,
@@ -73,6 +73,14 @@ object Fixtures {
       "product": $digitalPackJson
     """
 
+  val guardianWeeklyJson =
+    s"""
+       "product": {
+        "currency": "GBP",
+        "billingPeriod" : "Annual",
+        "fulfilmentOptions": "RestOfWorld"
+      }
+     """
   val payPalJson =
     s"""
       {
@@ -165,6 +173,15 @@ object Fixtures {
           "acquisitionData": $acquisitionData
         }"""
 
+  val createDirectDebitGuardianWeeklyJson =
+    s"""{
+          $requestIdJson,
+          $userJson,
+          $guardianWeeklyJson,
+          "paymentFields": $directDebitJson,
+          "acquisitionData": $acquisitionData
+        }"""
+
   val createSalesforceContactJson =
     s"""
           {
@@ -215,7 +232,7 @@ object Fixtures {
         }
       """
 
-  def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly) =
+  def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
     s"""
           {
             $requestIdJson,
@@ -225,7 +242,7 @@ object Fixtures {
             "salesForceContact": $salesforceContactJson
             }
         """
-  def createDigiPackZuoraSubscriptionJson =
+  def createDigiPackZuoraSubscriptionJson: String =
     s"""
           {
             $requestIdJson,

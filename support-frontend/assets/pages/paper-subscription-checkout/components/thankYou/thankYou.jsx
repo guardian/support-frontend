@@ -6,24 +6,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/hero';
-import { HomeDelivery, Collection } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import OrderedList from 'components/list/orderedList';
 import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/content';
-import Text, { SansParagraph, LargeParagraph } from 'components/text/text';
+import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
-import typeof MarketingConsent from './marketingConsentContainer';
-import styles from './thankYou.module.scss';
-import { formatUserDate } from '../helpers/deliveryDays';
+import typeof MarketingConsent from 'pages/paper-subscription-checkout/components/thankYou/marketingConsentContainer';
+import styles from 'pages/paper-subscription-checkout/components/thankYou/thankYou.module.scss';
+import { formatUserDate } from '../../helpers/deliveryDays';
 
-import {
-  getFormFields,
-  type FormFields,
-} from '../paperSubscriptionCheckoutReducer';
+import { type FormFields, getFormFields } from '../../paperSubscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -88,7 +85,7 @@ function ThankYouContent({
         >
           {isPending ?
           `Your subscription to the ${productOption} package is being processed` :
-          `You are now subscribed to the ${productOption} package`
+          `You have now subscribed to the ${productOption} package`
   }
         </HeadingBlock>
       </HeroWrapper>
@@ -119,7 +116,7 @@ function ThankYouContent({
         </Text>
       </Content>
       <Content>
-        <Asyncronously loader={import('./marketingConsentContainer')}>
+        <Asyncronously loader={import('pages/paper-subscription-checkout/components/thankYou/marketingConsentContainer')}>
           {(MktConsent: MarketingConsent) => (
 
             <MktConsent

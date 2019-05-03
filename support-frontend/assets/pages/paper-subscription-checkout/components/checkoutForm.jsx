@@ -46,12 +46,13 @@ import {
   signOut,
   type State,
 } from '../paperSubscriptionCheckoutReducer';
-import { withStore } from './addressFields';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
+import { newspaperCountries } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
@@ -82,8 +83,8 @@ function mapStateToProps(state: State) {
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
-const DeliveryAddress = withStore('delivery', getDeliveryAddress);
-const BillingAddress = withStore('billing', getBillingAddress);
+const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
+const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 
@@ -125,9 +126,9 @@ function CheckoutForm(props: PropTypes) {
           },
           ]}
           billingPeriod="Monthly"
-        >
-          <a href={routes.paperSubscriptionProductChoices}>Change Subscription</a>
-        </Summary>)}
+          changeSubscription={routes.paperSubscriptionProductChoices}
+        />
+      )}
       >
         <Form onSubmit={(ev) => {
           ev.preventDefault();
@@ -162,27 +163,32 @@ function CheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
-              <Fieldset legend="Is the billing address the same as the delivery address?">
+              <FieldsetWithError
+                id="billingAddressIsSame"
+                error={firstError('billingAddressIsSame', props.formErrors)}
+                legend="Is the billing address the same as the delivery address?"
+              >
                 <RadioInput
                   text="Yes"
                   name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame}
+                  checked={props.billingAddressIsSame === true}
                   onChange={() => props.setbillingAddressIsSame(true)}
                 />
                 <RadioInput
                   text="No"
                   name="billingAddressIsSame"
-                  checked={!props.billingAddressIsSame}
+                  checked={props.billingAddressIsSame === false}
                   onChange={() => props.setbillingAddressIsSame(false)}
                 />
-              </Fieldset>
+              </FieldsetWithError>
             </Rows>
           </FormSection>
           {
-            props.billingAddressIsSame ? null :
-            <FormSection title="Where should we bill you?">
-              <BillingAddress />
-            </FormSection>
+            props.billingAddressIsSame === false ?
+              <FormSection title="Where should we bill you?">
+                <BillingAddress />
+              </FormSection>
+            : null
           }
           <FormSection title="When would you like your subscription to start?">
             <Rows>
@@ -200,7 +206,7 @@ function CheckoutForm(props: PropTypes) {
                 );
               })}
               </FieldsetWithError>
-              <Text>
+              <Text className="component-text__paddingTop">
                 <p>
                 We will take the first payment on the
                 date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
@@ -219,7 +225,7 @@ function CheckoutForm(props: PropTypes) {
             optimizeExperiments={null}
             submissionError={props.submissionError}
           />
-          <FormSection>
+          <FormSection noBorder>
             <Button aria-label={null} type="submit">Continue to payment</Button>
             <DirectDebitPopUpForm
               buttonText="Subscribe with Direct Debit"

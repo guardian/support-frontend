@@ -77,6 +77,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           directDebitMandateId = directDebitMandateId,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
+        case g: GuardianWeekly => ??? //TODO: Emails for Guardian Weekly
       }
     )
 

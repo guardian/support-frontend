@@ -13,7 +13,6 @@ import { Fieldset } from 'components/forms/fieldset';
 import { RadioInput } from 'components/forms/customFields/radioInput';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
-import AddressForm from './addressForm';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
   finalPrice as dpFinalPrice,
@@ -49,11 +48,16 @@ import {
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
+import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { countries } from 'helpers/internationalisation/country';
+import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   ...FormFields,
+  country: IsoCountry,
   signOut: typeof signOut,
   submitForm: Function,
   formErrors: FormError<FormField>[],
@@ -78,6 +82,7 @@ type PropTypes = {|
 function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
+    country: state.common.internationalisation.countryId,
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
@@ -107,6 +112,8 @@ function mapDispatchToProps() {
     signOut,
   };
 }
+
+const Address = withStore(countries, 'billing', getAddress);
 
 
 // ----- Component ----- //
@@ -176,21 +183,7 @@ function CheckoutForm(props: PropTypes) {
             />
           </FormSection>
           <FormSection title="Address">
-            <AddressForm
-              addressLine1={props.addressLine1}
-              addressLine2={props.addressLine2}
-              townCity={props.townCity}
-              country={props.country}
-              postcode={props.postcode}
-              setAddressLine1={props.setAddressLine1}
-              setAddressLine2={props.setAddressLine2}
-              setTownCity={props.setTownCity}
-              setBillingCountry={props.setBillingCountry}
-              stateProvince={props.stateProvince}
-              setPostcode={props.setPostcode}
-              setStateProvince={props.setStateProvince}
-              formErrors={props.formErrors}
-            />
+            <Address />
           </FormSection>
           <FormSection title="How often would you like to pay?">
             <Fieldset legend="How often would you like to pay?">
@@ -221,7 +214,7 @@ function CheckoutForm(props: PropTypes) {
             optimizeExperiments={props.optimizeExperiments}
             submissionError={props.submissionError}
           />
-          <FormSection>
+          <FormSection noBorder>
             <SubscriptionSubmitButtons
               paymentMethod={props.paymentMethod}
               onPaymentAuthorised={props.onPaymentAuthorised}

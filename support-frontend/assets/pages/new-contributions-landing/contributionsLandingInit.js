@@ -14,8 +14,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import { getQueryParameter } from 'helpers/url';
 import {
-  getContributionTypeFromSessionOrElse,
-  getContributionTypeFromUrlOrElse,
+  getContributionTypeFromSession,
+  getContributionTypeFromUrl,
   getPaymentMethodFromSession,
   getValidContributionTypes,
   getValidPaymentMethods,
@@ -40,11 +40,12 @@ import { Stripe } from 'helpers/paymentMethods';
 import {
   isFullDetailExistingPaymentMethod,
   mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
-} from '../../helpers/existingPaymentMethods/existingPaymentMethods';
-import type { ExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
-import { setExistingPaymentMethods } from '../../helpers/page/commonActions';
-import { doesUserAppearToBeSignedIn } from '../../helpers/user/user';
+} from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import { setExistingPaymentMethods } from 'helpers/page/commonActions';
+import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
+import type { ContributionTypes } from 'helpers/contributions';
 
 // ----- Functions ----- //
 
@@ -63,14 +64,28 @@ function getInitialPaymentMethod(
   );
 }
 
-function getInitialContributionType(countryGroupId: CountryGroupId): ContributionType {
-  const contributionType = getContributionTypeFromUrlOrElse(getContributionTypeFromSessionOrElse('MONTHLY'));
-  return (
-    // make sure we don't select a contribution type which isn't on the page
-    getValidContributionTypes(countryGroupId).includes(contributionType)
-      ? contributionType
-      : getValidContributionTypes(countryGroupId)[0]
-  );
+function getInitialContributionType(
+  countryGroupId: CountryGroupId,
+  contributionTypes: ContributionTypes,
+  editorialiseAmountsRoundTwoVariant: string,
+): ContributionType {
+
+  const contributionType = getContributionTypeFromUrl() || getContributionTypeFromSession();
+
+  // make sure we don't select a contribution type which isn't on the page
+  if (contributionType &&
+    contributionTypes[countryGroupId].find(ct => ct.contributionType === contributionType)) {
+    return contributionType;
+  }
+
+  if (editorialiseAmountsRoundTwoVariant === 'defaultAnnual') {
+    return 'ANNUAL';
+  }
+
+  const defaultContributionType = contributionTypes[countryGroupId].find(ct => ct.isDefault);
+  return defaultContributionType ?
+    defaultContributionType.contributionType :
+    contributionTypes[countryGroupId][0].contributionType;
 }
 
 const stripeAccountForContributionType: {[ContributionType]: StripeAccount } = {
@@ -175,9 +190,13 @@ function selectInitialAmounts(state: State, dispatch: Function) {
 
 function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
   const { countryId } = state.common.internationalisation;
-  const { switches } = state.common.settings;
+  const { switches, contributionTypes } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
-  const contributionType = getInitialContributionType(countryGroupId);
+  const contributionType = getInitialContributionType(
+    countryGroupId,
+    contributionTypes,
+    state.common.abParticipations.editorialiseAmountsRoundTwo,
+  );
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
   dispatch(updateContributionTypeAndPaymentMethod(contributionType, paymentMethod));
 }

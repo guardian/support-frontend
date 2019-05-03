@@ -7,9 +7,6 @@ import {
   type ContributionType, getFrequency,
   toContributionType,
 } from 'helpers/contributions';
-import {
-  toContributionTypeOrElse,
-} from 'helpers/contributions';
 import * as storage from 'helpers/storage';
 import { type Switches } from 'helpers/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -82,12 +79,12 @@ function toHumanReadableContributionType(contributionType: ContributionType): 'S
   }
 }
 
-function getContributionTypeFromSessionOrElse(fallback: ContributionType): ContributionType {
-  return toContributionTypeOrElse(storage.getSession('selectedContributionType'), fallback);
+function getContributionTypeFromSession(): ?ContributionType {
+  return toContributionType(storage.getSession('selectedContributionType'));
 }
 
-function getContributionTypeFromUrlOrElse(fallback: ContributionType): ContributionType {
-  return toContributionTypeOrElse(getQueryParameter('selectedContributionType', fallback), fallback);
+function getContributionTypeFromUrl(): ?ContributionType {
+  return toContributionType(getQueryParameter('selectedContributionType'));
 }
 
 // Returns an array of Payment Methods, in the order of preference,
@@ -201,8 +198,8 @@ export {
   getContributeButtonCopyWithPaymentType,
   formatAmount,
   getValidContributionTypes,
-  getContributionTypeFromSessionOrElse,
-  getContributionTypeFromUrlOrElse,
+  getContributionTypeFromSession,
+  getContributionTypeFromUrl,
   toHumanReadableContributionType,
   getValidPaymentMethods,
   getPaymentMethodToSelect,

@@ -10,11 +10,15 @@ import { asControlled } from 'hocs/asControlled';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 
-import { type PostcodeFinderState, type PostcodeFinderActionCreators, postcodeFinderActionCreatorsFor } from './postcodeFinderStore';
-import { type Address } from '../helpers/addresses';
-import { type PostcodeFinderResult } from '../helpers/postcodeFinder';
+import {
+  type PostcodeFinderActionCreators,
+  postcodeFinderActionCreatorsFor,
+  type PostcodeFinderState,
+} from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
+import { type PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 
-import styles from './postcodeFinder.module.scss';
+import styles from 'components/subscriptionCheckouts/address/postcodeFinder.module.scss';
 
 
 // Types
@@ -109,9 +113,8 @@ class PostcodeFinder extends Component<PropTypes> {
   }
 }
 
-export const withStore = <GlobalState>(scope: Address, traverseState: GlobalState => PostcodeFinderState) => connect(
-  traverseState,
-  postcodeFinderActionCreatorsFor(scope),
-)(PostcodeFinder);
-
-export default PostcodeFinder;
+export const withStore = <GlobalState>(scope: AddressType, traverseState: GlobalState => PostcodeFinderState) =>
+  connect(
+    traverseState,
+    postcodeFinderActionCreatorsFor(scope),
+  )(PostcodeFinder);

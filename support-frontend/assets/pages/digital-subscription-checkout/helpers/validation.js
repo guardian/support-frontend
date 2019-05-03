@@ -1,22 +1,21 @@
 // @flow
 
-import type { Option } from 'helpers/types/option';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Dispatch } from 'redux';
 import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
 import { getFormFields, setFormErrors } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import {
+  getFormErrors as getAddressFormErrors,
+  setFormErrorsFor as setAddressFormErrorsFor,
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type {
   FormField,
   FormFields,
   State,
 } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import { getAddressFields } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-
-import { formError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
-
-function isPostcodeOptional(country: Option<IsoCountry>): boolean {
-  return country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
-}
+import { formError, nonEmptyString, validate } from 'helpers/subscriptionsForms/validation';
 
 function getErrors(fields: FormFields): FormError<FormField>[] {
   return validate([
@@ -28,44 +27,37 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       rule: nonEmptyString(fields.lastName),
       error: formError('lastName', 'Please enter a value.'),
     },
-    {
-      rule: nonEmptyString(fields.addressLine1),
-      error: formError('addressLine1', 'Please enter a value'),
-    },
-    {
-      rule: nonEmptyString(fields.townCity),
-      error: formError('townCity', 'Please enter a value'),
-    },
-    {
-      rule: isPostcodeOptional(fields.country) || nonEmptyString(fields.postcode),
-      error: formError('postcode', 'Please enter a value'),
-    },
-    {
-      rule: notNull(fields.country),
-      error: formError('country', 'Please select a country.'),
-    },
-    {
-      rule: fields.country === 'US' || fields.country === 'CA' || fields.country === 'AU' ? notNull(fields.stateProvince) : true,
-      error: formError(
-        'stateProvince',
-        fields.country === 'CA' ? 'Please select a province/territory.' : 'Please select a state.',
-      ),
-    },
   ]);
 }
 
-const formIsValid = (state: State): boolean => {
-  const errors = getErrors(getFormFields(state));
-  return errors.length === 0;
-};
+const formIsValid = (state: State): boolean => getErrors(getFormFields(state)).length === 0 &&
+    getAddressFormErrors(getAddressFields(state)).length === 0;
 
 function validateForm(dispatch: Dispatch<Action>, state: State) {
-  const errors = getErrors(getFormFields(state));
-  const valid = errors.length === 0;
+  type Error<T> = {
+    errors: FormError<T>[],
+    dispatcher: any => Action,
+  }
+
+  const allErrors: (Error<AddressFormField> | Error<FormField>)[] = [
+    ({
+      errors: getErrors(getFormFields(state)),
+      dispatcher: setFormErrors,
+    }: Error<FormField>),
+    ({
+      errors: getAddressFormErrors(getAddressFields(state)),
+      dispatcher: setAddressFormErrorsFor('billing'),
+    }: Error<AddressFormField>),
+  ].filter(({ errors }) => errors.length > 0);
+
+  const valid = allErrors.length === 0;
+
   if (!valid) {
-    dispatch(setFormErrors(errors));
+    allErrors.forEach(({ errors, dispatcher }) => {
+      dispatch(dispatcher(errors));
+    });
   }
   return valid;
 }
 
-export { isPostcodeOptional, validateForm, formIsValid, getErrors };
+export { validateForm, formIsValid, getErrors };

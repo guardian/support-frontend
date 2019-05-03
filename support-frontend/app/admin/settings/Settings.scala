@@ -6,6 +6,7 @@ import java.nio.file.{Files, Paths}
 import admin.ServersideAbTest
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
+import com.gu.support.config.Stage
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.typesafe.config.Config
@@ -16,10 +17,11 @@ import io.circe.{Decoder, Encoder}
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
 
-case class AllSettings(switches: Switches, amounts: AmountsRegions)
+case class AllSettings(switches: Switches, amounts: AmountsRegions, contributionTypes: ContributionTypes)
 
 object AllSettings {
   import Amounts._  // intellij doesn't think this is needed, but it is
+  import ContributionTypes._
 
   implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec[AllSettings]
 }
@@ -49,14 +51,15 @@ object Settings {
     } yield settings
 }
 
-case class SettingsSources(switches: SettingsSource, amounts: SettingsSource)
+case class SettingsSources(switches: SettingsSource, amounts: SettingsSource, contributionTypes: SettingsSource)
 
 object SettingsSources {
-  def fromConfig(config: Config): Either[Throwable, SettingsSources] = {
+  def fromConfig(config: Config, stage: Stage): Either[Throwable, SettingsSources] = {
     for {
-      switchesSource <- SettingsSource.fromConfig(config, "switches")
-      amountsSource <- SettingsSource.fromConfig(config, "amounts")
-    } yield SettingsSources(switchesSource, amountsSource)
+      switchesSource <- SettingsSource.fromConfig(config, "switches", stage)
+      amountsSource <- SettingsSource.fromConfig(config, "amounts", stage)
+      contributionTypesSource <- SettingsSource.fromConfig(config, "contributionTypes", stage)
+    } yield SettingsSources(switchesSource, amountsSource, contributionTypesSource)
   }
 }
 
@@ -72,8 +75,8 @@ object SettingsSource extends LazyLogging {
     override def toString: String = s"local file at $path"
   }
 
-  def fromConfig(config: Config, name: String): Either[Throwable, SettingsSource] =
-    fromLocalFile(config, name).orElse(fromS3(config, name))
+  def fromConfig(config: Config, name: String, stage: Stage): Either[Throwable, SettingsSource] =
+    fromLocalFile(config, name).orElse(fromS3(config, name, stage))
       .leftMap(err => new Error(s"settingsSource was not correctly set in config. $err"))
 
   private def fromLocalFile(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
@@ -92,10 +95,10 @@ object SettingsSource extends LazyLogging {
     path.replaceFirst("~", homeDir)
   }
 
-  private def fromS3(config: Config, name: String): Either[Throwable, SettingsSource] = Either.catchNonFatal {
+  private def fromS3(config: Config, name: String, stage: Stage): Either[Throwable, SettingsSource] = Either.catchNonFatal {
     S3(
-      config.getString(s"settingsSource.$name.s3.bucket"),
-      config.getString(s"settingsSource.$name.s3.key")
+      bucket = config.getString(s"settingsSource.s3.bucket"),
+      key = s"$stage/$name.json"
     )
   }
 

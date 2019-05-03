@@ -10,13 +10,13 @@ import SocialShare from 'components/socialShare/socialShare';
 // ----- Component ----- //
 
 export default function SpreadTheWord() {
+  const title = 'Invite others to support The Guardian';
+  const message = 'To join you and over one million others in supporting a different model for open, independent journalism – so more people can access factual information for free';
 
   return (
     <div className="component-spread-the-word">
-      <h3 className="component-spread-the-word__title">Share your support for independent journalism</h3>
-      <p className="component-spread-the-word__description">
-          Let your friends, family and followers know that you made a valuable contribution to The Guardian today
-      </p>
+      <h3 className="component-spread-the-word__title">{title}</h3>
+      <p className="component-marketing-consent__message">{message}</p>
       <div className="component-spread-the-word__share">
         <SocialShare name="facebook" />
         <SocialShare name="twitter" />

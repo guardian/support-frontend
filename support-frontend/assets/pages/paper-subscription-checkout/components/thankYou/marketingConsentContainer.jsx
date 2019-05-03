@@ -9,7 +9,7 @@ import type { Dispatch } from 'redux';
 import type { Action } from 'helpers/user/userActions';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
-import { getEmail } from '../paperSubscriptionCheckoutReducer';
+import { getEmail } from '../../paperSubscriptionCheckoutReducer';
 
 
 const mapStateToProps = state => ({
