@@ -26,7 +26,6 @@ import type { Action } from './digitalSubscriptionCheckoutActions';
 import { getUser } from './helpers/user';
 import { countrySupportsDirectDebit, showPaymentMethod } from './helpers/paymentProviders';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import type {
   FormFields as AddressFormFields,
   State as AddressState,
@@ -122,7 +121,7 @@ function initReducer(initialCountry: IsoCountry) {
     lastName: user.lastName || '',
     telephone: null,
     billingPeriod: initialBillingPeriod,
-    paymentMethod: countrySupportsDirectDebit(initialCountry) ? DirectDebit : Stripe,
+    paymentMethod: null,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,

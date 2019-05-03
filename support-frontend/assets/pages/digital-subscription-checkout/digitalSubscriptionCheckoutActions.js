@@ -15,6 +15,8 @@ import type { ErrorReason } from '../../helpers/errorReasons';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import * as storage from 'helpers/storage';
+import { trackPaymentMethodSelected } from 'helpers/tracking/ophanComponentEventTracking';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -45,6 +47,8 @@ const formActionCreators = {
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {
     const state = getState();
+    storage.setSession('selectedPaymentMethod', paymentMethod);
+    trackPaymentMethodSelected(paymentMethod);
     if (paymentMethod === PayPal && !state.page.checkout.payPalHasLoaded) {
       showPayPal(dispatch);
     }
