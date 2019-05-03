@@ -24,6 +24,7 @@ function getHeading(): string {
   }
 
   return 'Save up to 37% on The Guardian and The Observer - all year round';
+
 }
 
 const TimerIfActive = () => (showCountdownTimer('Paper', GBPCountries) ? (
@@ -83,11 +84,11 @@ const DefaultHeader = () => (
   </header>
 );
 
-const SaleHeader = () => (
+const CampaignHeader = () => (
   <ProductPagehero
     appearance="campaign"
     overheading="The Guardian newspaper subscriptions"
-    heading="Save up to 37% on The Guardian and The Observer - all year round"
+    heading={getHeading()}
     modifierClasses={['paper-sale']}
     content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
@@ -120,4 +121,4 @@ const SaleHeader = () => (
   </ProductPagehero>
 );
 
-export { DefaultHeader, SaleHeader, HeroPicture };
+export { DefaultHeader, CampaignHeader, HeroPicture };
