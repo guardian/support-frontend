@@ -3,11 +3,11 @@
 
 import * as ophan from 'ophan';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations, TestId } from 'helpers/abTests/abtest';
 import { optimizeIdToTestName } from 'helpers/tracking/acquisitions';
 import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
-import type { TestId } from 'helpers/abTests/abtest';
 import { readExperimentsFromSession } from 'helpers/optimize/optimize';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -86,6 +86,23 @@ type OphanABPayload = {
 const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
   ophan.record({
     componentEvent,
+  });
+};
+
+const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
+  gaEvent({
+    category: 'click',
+    action: 'payment-method-selected',
+    label: paymentMethod,
+  });
+
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+      id: 'subscriptions-payment-method-selector',
+    },
+    action: 'CLICK',
+    value: paymentMethod,
   });
 };
 
@@ -179,4 +196,5 @@ export {
   trackCheckoutSubmitAttempt,
   trackAbTests,
   trackNewOptimizeExperiment,
+  trackPaymentMethodSelected,
 };
