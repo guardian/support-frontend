@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 
 import { type Option } from 'helpers/types/option';
-import { getNewsstandPrice, getNewsstandSaving } from 'helpers/subscriptions';
+import { getNewsstandPrice, getNewsstandSaving, sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Price, showPrice } from 'helpers/productPrice/productPrices';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
@@ -15,39 +15,9 @@ import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
 import { paperCheckoutUrl } from 'helpers/routes';
-import { getLegacyPaperCheckout } from 'helpers/externalLinks';
-import { getQueryParameter } from 'helpers/url';
-import { type CommonState } from 'helpers/page/commonReducer';
-import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import type { OptimizeExperiments } from '../../../../helpers/optimize/optimize';
 import { getTitle } from '../../helpers/products';
 
 // ---- Helpers ----- //
-
-const inPaperTestVariant = (optimizeExperiments: OptimizeExperiments): boolean => {
-  const experimentId = 'py5TUrpoSxOcKN80yjbqkg';
-  return optimizeExperiments.find(exp => exp.id === experimentId && exp.variant === '1') !== undefined;
-};
-
-const getCheckoutUrl = (
-  fulfilmentOption: PaperFulfilmentOptions,
-  productOptions: PaperProductOptions,
-  commonState: CommonState,
-) => {
-  if (inPaperTestVariant(commonState.optimizeExperiments) || getQueryParameter('newCheckout') === 'true') {
-    return paperCheckoutUrl(fulfilmentOption, productOptions);
-  }
-
-  const { referrerAcquisitionData, abParticipations, optimizeExperiments } = commonState;
-  return getLegacyPaperCheckout(
-    productOptions,
-    fulfilmentOption,
-    referrerAcquisitionData,
-    abParticipations,
-    optimizeExperiments,
-  );
-};
-
 
 // TODO: We will need to make this work for flash sales
 const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
@@ -89,14 +59,13 @@ const copy = {
 const getPlans = (
   fulfilmentOption: PaperFulfilmentOptions,
   productPrices: ProductPrices,
-  commonState: CommonState,
 ) =>
   ActivePaperProductTypes.reduce((products, productOption) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     return {
       ...products,
       [productOption]: {
-        href: getCheckoutUrl(fulfilmentOption, productOption, commonState),
+        href: paperCheckoutUrl(fulfilmentOption, productOption),
         onClick: sendTrackingEventsOnClick(
           'subscribe_now_cta',
           'Paper',
@@ -115,7 +84,7 @@ const getPlans = (
 
 // ----- State/Props Maps ----- //
 const mapStateToProps = (state: State): PropTypes<PaperProductOptions> => ({
-  plans: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices, state.common) : {},
+  plans: state.page.productPrices ? getPlans(state.page.tab, state.page.productPrices) : {},
 });
 
 // ----- Exports ----- //

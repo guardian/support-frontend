@@ -8,14 +8,18 @@ import { type Option } from 'helpers/types/option';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type OptimizeExperiments } from 'helpers/optimize/optimize';
 import { getBaseDomain } from 'helpers/url';
-import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod, type DigitalBillingPeriod } from 'helpers/billingPeriods';
+import {
+  Annual,
+  type DigitalBillingPeriod,
+  Monthly,
+  Quarterly,
+  SixForSix,
+  type WeeklyBillingPeriod,
+} from 'helpers/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
-import { getIntcmp, getPromoCode, getAnnualPlanPromoCode } from './flashSale';
+import { getAnnualPlanPromoCode, getIntcmp, getPromoCode } from './flashSale';
 import { getOrigin } from './url';
 import { GBPCountries } from './internationalisation/countryGroup';
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Types ----- //
 
@@ -242,38 +246,6 @@ function getSubsLinks(
 
 }
 
-// Puts in URL parameters
-const withParams = ({
-  referrerAcquisitionData,
-  cgId,
-  nativeAbParticipations,
-  optimizeExperiments,
-  promoCode,
-}: {
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  cgId: Option<CountryGroupId>,
-  nativeAbParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
-  promoCode: Option<string>,
-}) => (url: string) => {
-  const acquisitionData = deriveSubsAcquisitionData(
-    referrerAcquisitionData,
-    nativeAbParticipations,
-    optimizeExperiments,
-  );
-
-  const params = new URLSearchParams(window.location.search);
-
-  params.set('acquisitionData', JSON.stringify(acquisitionData));
-  if (cgId) {
-    params.set('countryGroup', countryGroups[cgId].supportInternationalisationId);
-  }
-  if (promoCode) {
-    params.set('promoCode', promoCode);
-  }
-  return [url, params.toString()].join('?');
-};
-
 function getDigitalPackPromoCode(cgId: CountryGroupId, billingPeriod: DigitalBillingPeriod): string {
   if (billingPeriod === 'Annual') {
     return getAnnualPlanPromoCode('DigitalPack', cgId, defaultPromos.DigitalPack);
@@ -324,29 +296,6 @@ function getWeeklyCheckout(
 
   return `${subsUrl}/checkout/${url}?${params.toString()}`;
 }
-
-
-// Builds a link to paper subs checkout
-function getLegacyPaperCheckout(
-  productOption: PaperProductOptions,
-  fulfilmentOption: PaperFulfilmentOptions,
-  referrerAcquisitionData: ReferrerAcquisitionData,
-  nativeAbParticipations: Participations,
-  optimizeExperiments: OptimizeExperiments,
-) {
-  const promoCode = getPromoCode('Paper', GBPCountries, defaultPromos.Paper);
-
-  const fulfilmentPart = fulfilmentOption === HomeDelivery ? 'delivery' : 'voucher';
-
-  return withParams({
-    referrerAcquisitionData,
-    cgId: null,
-    nativeAbParticipations,
-    optimizeExperiments,
-    promoCode,
-  })([subsUrl, 'checkout', `${fulfilmentPart}-${productOption.toLowerCase()}`].join('/'));
-}
-
 
 function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
   const groupFromId = countryGroups[cgId];
@@ -402,5 +351,4 @@ export {
   myAccountUrl,
   manageSubsUrl,
   getWeeklyCheckout,
-  getLegacyPaperCheckout,
 };
