@@ -25,15 +25,18 @@
     
     h2 {
       font-family: $gu-titlepiece;
-      max-width: gu-span(4);
+      max-width: gu-span(3);
       margin: 0 0 $gu-v-spacing/2 0;
-      color: #AD227E;
+      color: #E94D9E;
     }
     p {
       @include gu-fontset-heading;
     }
-    @include mq($from: tablet) {
-      font-size: 60px;
+  }
+  @include mq($from: desktop) {
+    font-size: 60px;
+    h2 {
+      max-width: gu-span(4);
     }
   }
 }
@@ -88,8 +91,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ab8b62;
-  color: gu-colour(neutral-100);
+  background: #f8c7d0;
+  color: gu-colour(neutral-7);
   text-align: center;
   border-radius: 50%;
   line-height: 1;
