@@ -13,6 +13,10 @@ type PropTypes = {|
 |};
 
 export default function ContributionsSurvey(props: PropTypes) {
+  /* *******************************************************
+   JTL: Survey links configurable below using payment type
+   make sure to update before launching component again
+   ****************************************************** */
   const surveyLink = props.contributionType === 'ONE_OFF' ? 'https://www.surveymonkey.com/r/SCPJHTW' : 'https://www.surveymonkey.com/r/RY2G6HM';
 
   return (
