@@ -20,6 +20,7 @@ export type PropTypes = {|
   utility: Option<Node>,
   countryGroupId: ?CountryGroupId,
   displayNavigation: boolean,
+  displayCheckout?: boolean | void,
 |};
 export type State = {|
   fitsLinksInOneRow: boolean,
@@ -45,16 +46,23 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
 };
 
 
-// ----- Component ----- //
+// ----- Components ----- //
 
 type TopNavPropTypes = {|
   utility: Node,
-  getLogoRef: (?Element) => void
+  getLogoRef: (?Element) => void,
+  displayCheckout: boolean | null,
 |};
 
-const TopNav = ({ getLogoRef, utility }: TopNavPropTypes) => (
+const TopNav = ({ displayCheckout, getLogoRef, utility }: TopNavPropTypes) => (
   <div className="component-header-topnav">
     <div className="component-header-topnav__utility">{utility}</div>
+    {displayCheckout && (
+      <div className="component-header-topnav__checkout">
+        <div className="component-header-topnav--empty" />
+        <div className="component-header-topnav--checkout-text">Checkout</div>
+      </div>
+    )}
     <div className="component-header-topnav-logo" ref={getLogoRef}>
       <a className="component-header-topnav-logo__graun" href="https://www.theguardian.com">
         <div className="accessibility-hint">The Guardian logo</div>
@@ -69,6 +77,7 @@ export default class Header extends Component<PropTypes, State> {
     utility: null,
     countryGroupId: null,
     displayNavigation: true,
+    displayCheckout: null,
   };
 
   state = {
@@ -99,7 +108,9 @@ export default class Header extends Component<PropTypes, State> {
   observer: ElementResizer;
 
   render() {
-    const { utility, displayNavigation, countryGroupId } = this.props;
+    const {
+      utility, displayNavigation, countryGroupId, displayCheckout,
+    } = this.props;
     const { fitsLinksInOneRow, fitsLinksAtAll } = this.state;
 
     return (
@@ -109,12 +120,14 @@ export default class Header extends Component<PropTypes, State> {
             fitsLinksInOneRow ? 'one-row' : null,
             displayNavigation ? 'display-navigation' : null,
             !fitsLinksAtAll ? 'display-veggie-burger' : null,
+            displayCheckout ? 'display-checkout' : null,
           ])
         }
       >
         <div className="component-header__wrapper" ref={(el) => { this.containerRef = el; }}>
           <div className="component-header__row">
             <TopNav
+              displayCheckout={displayCheckout}
               utility={(displayNavigation && fitsLinksAtAll) ? utility : null}
               getLogoRef={(el) => { this.logoRef = el; }}
             />
@@ -129,6 +142,11 @@ export default class Header extends Component<PropTypes, State> {
           {displayNavigation &&
             <div className="component-header__row">
               <Links countryGroupId={countryGroupId} location="desktop" getRef={(el) => { this.menuRef = el; }} />
+            </div>
+          }
+          {displayCheckout &&
+            <div className="component-header__row component-header-checkout--row">
+              Checkout
             </div>
           }
         </div>

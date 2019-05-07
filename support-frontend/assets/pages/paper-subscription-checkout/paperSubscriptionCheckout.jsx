@@ -43,7 +43,7 @@ const paperFulfilmentOption: PaperFulfilmentOptions = fulfilmentOption === 'Home
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header displayNavigation={false} />}
+      header={<Header displayNavigation={false} displayCheckout />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="Paper" />
