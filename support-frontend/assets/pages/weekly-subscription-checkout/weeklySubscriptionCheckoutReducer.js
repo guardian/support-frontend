@@ -22,8 +22,6 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import { createUserReducer } from 'helpers/user/userReducer';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { Collection, HomeDelivery, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { ActivePaperProductTypes, Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from 'helpers/user/getUser';
 import { buildRegularPaymentRequest } from './helpers/paymentProviders';
@@ -39,23 +37,16 @@ import {
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
-import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
-import { getDeliveryDays, getVoucherDays } from './helpers/deliveryDays';
 import { formatMachineDate } from 'helpers/dateConversions';
+import {buildRegularPaymentRequest} from "../paper-subscription-checkout/helpers/paymentProviders";
 
 
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 
-type Product = {|
-  fulfilmentOption: PaperFulfilmentOptions,
-  productOption: PaperProductOptions,
-|};
-
 export type FormFields = {|
-  ...Product,
   title: Option<Title>,
   firstName: string,
   lastName: string,
@@ -114,8 +105,6 @@ function getFormFields(state: State): FormFields {
     startDate: state.page.checkout.startDate,
     telephone: state.page.checkout.telephone,
     paymentMethod: state.page.checkout.paymentMethod,
-    fulfilmentOption: state.page.checkout.fulfilmentOption,
-    productOption: state.page.checkout.productOption,
     billingAddressIsSame: state.page.checkout.billingAddressIsSame,
   };
 }
@@ -151,11 +140,6 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
       ),
     },
   ]);
-}
-
-function getDays(fulfilmentOption: PaperFulfilmentOptions, productOption: PaperProductOptions) {
-  return (fulfilmentOption === HomeDelivery ? getDeliveryDays(Date.now(), productOption)
-    : getVoucherDays(Date.now(), productOption));
 }
 
 
@@ -227,24 +211,9 @@ export type FormActionCreators = typeof formActionCreators;
 
 // ----- Reducer ----- //
 
-const getInitialProduct = (productInUrl: ?string, fulfillmentInUrl: ?string): Product => ({
-  productOption:
-    ActivePaperProductTypes.includes(productInUrl)
-      // $FlowIgnore - flow doesn't recognise that we've checked the value of productInUrl
-      ? (productInUrl: PaperProductOptions)
-      : Everyday,
-  fulfilmentOption:
-  paperHasDeliveryEnabled() && (fulfillmentInUrl === 'Collection' || fulfillmentInUrl === 'HomeDelivery')
-    ? (fulfillmentInUrl: PaperFulfilmentOptions)
-    : Collection,
-});
-
-function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillmentInUrl: ?string) {
+function initReducer(initialCountry: IsoCountry) {
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const { productPrices } = window.guardian;
-
-  const product = getInitialProduct(productInUrl, fulfillmentInUrl);
-  const days: Date[] = getDays(product.fulfilmentOption, product.productOption);
 
   const initialState = {
     stage: 'checkout',
@@ -252,14 +221,13 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    startDate: formatMachineDate(days[0]) || null,
+    startDate: null,
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? null : Stripe,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
     isTestUser: isTestUser(),
-    ...product,
     productPrices,
     billingAddressIsSame: null,
   };

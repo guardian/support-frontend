@@ -77,6 +77,22 @@ trait Controllers {
     fontLoader
   )
 
+  lazy val weeklyController = new WeeklySubscription(
+    authAction,
+    priceSummaryServiceProvider,
+    assetsResolver,
+    actionRefiners,
+    identityService,
+    testUsers,
+    appConfig.regularStripeConfigProvider,
+    appConfig.regularPayPalConfigProvider,
+    controllerComponents,
+    stringsConfig,
+    allSettingsProvider,
+    appConfig.supportUrl,
+    fontLoader
+  )
+
   lazy val createSubscriptionController = new CreateSubscription(
     supportWorkersClient,
     actionRefiners,
