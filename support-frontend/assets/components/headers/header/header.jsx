@@ -51,7 +51,7 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
 type TopNavPropTypes = {|
   utility: Node,
   getLogoRef: (?Element) => void,
-  displayCheckout: boolean | null,
+  displayCheckout: boolean | void,
 |};
 
 const TopNav = ({ displayCheckout, getLogoRef, utility }: TopNavPropTypes) => (
@@ -77,7 +77,7 @@ export default class Header extends Component<PropTypes, State> {
     utility: null,
     countryGroupId: null,
     displayNavigation: true,
-    displayCheckout: null,
+    displayCheckout: false,
   };
 
   state = {
