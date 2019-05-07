@@ -94,7 +94,7 @@ const SaleHeader = () => (
   >
     <div className="sale-joy-of-print">
       <div className="sale-joy-of-print-copy">
-        <h2>Works with different browsers</h2>
+        <h2>Subscribe to the joy of print</h2>
         <p>Get your hands on journalism that’s really worth keeping.</p>
       </div>
 
