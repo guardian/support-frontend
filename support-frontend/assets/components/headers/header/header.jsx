@@ -60,7 +60,7 @@ const TopNav = ({ displayCheckout, getLogoRef, utility }: TopNavPropTypes) => (
     <div className="component-header-topnav__utility">{utility}</div>
     {displayCheckout && (
       <div className="component-header-topnav__checkout">
-        <div className="component-header-topnav--empty" />
+        <div />
         <div className="component-header-topnav--checkout-text">
           <div className="component-header--padlock"><Padlock /></div>
           <div>Checkout</div>
