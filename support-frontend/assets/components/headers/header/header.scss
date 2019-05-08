@@ -36,6 +36,12 @@ $header-links-min-width: gu-span(12);
   }
 }
 
+.component-header--padlock {
+  margin-right: $gu-h-spacing /3;
+  display: inline-block;
+  margin-top: 2px;
+}
+
 .component-header-mobile-menu-toggler {
   display: none;
   .component-header--display-veggie-burger & {
@@ -112,6 +118,7 @@ $header-links-min-width: gu-span(12);
 .component-header-topnav-logo {
   @include mq($from: tablet) {
     width: gu-span(5);
+    background-color: gu-colour(brand-main);
     float: right;
     .component-header--one-row & {
       border-left: 1px solid gu-colour(brand-pastel);
@@ -217,7 +224,13 @@ $header-links-min-width: gu-span(12);
   .component-header__wrapper {
     max-width: 50rem;
 
-    @include mq($from: wide) {
+    @include mq($from: tablet, $until: desktop) {
+      max-width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    @include mq($from: leftCol) {
       max-width: 60rem;
     }
 
@@ -255,6 +268,11 @@ $header-links-min-width: gu-span(12);
           border-top: 1px solid gu-colour(brand-pastel);
           border-left: 1px solid gu-colour(brand-pastel);
           padding: $gu-v-spacing;
+
+          :nth-child(2) {
+            display: inline-block;
+            vertical-align: top;
+          }
   
           @include mq($until: tablet) {
             border-left: none;
@@ -268,7 +286,7 @@ $header-links-min-width: gu-span(12);
           display: none;
         }
   
-        @include mq($from: wide) {
+        @include mq($from: leftCol) {
           flex: 0 0 650px;
         }
       }
@@ -279,10 +297,8 @@ $header-links-min-width: gu-span(12);
 
       @include mq($from: desktop) {
         margin-right: -30px;
-
       }
     }
-  
   }
 
   .component-header-topnav-logo {
@@ -297,7 +313,6 @@ $header-links-min-width: gu-span(12);
   @include gu-fontset-body-sans;
   padding: $gu-v-spacing;
   border-top: 1px solid gu-colour(brand-pastel);
-  margin-left: -10px;
 
   @include mq($from: desktop) {
     display: none;
@@ -306,6 +321,4 @@ $header-links-min-width: gu-span(12);
   @include mq($until: tablet) {
     display: none;
   }
-
-  
 }

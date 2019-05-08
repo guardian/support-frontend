@@ -9,6 +9,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { onElementResize, type ElementResizer } from 'helpers/layout';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
+import Padlock from './padlock.svg';
 
 
 import Links from '../links/links';
@@ -46,7 +47,7 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
 };
 
 
-// ----- Components ----- //
+// ----- Component ----- //
 
 type TopNavPropTypes = {|
   utility: Node,
@@ -60,7 +61,10 @@ const TopNav = ({ displayCheckout, getLogoRef, utility }: TopNavPropTypes) => (
     {displayCheckout && (
       <div className="component-header-topnav__checkout">
         <div className="component-header-topnav--empty" />
-        <div className="component-header-topnav--checkout-text">Checkout</div>
+        <div className="component-header-topnav--checkout-text">
+          <div className="component-header--padlock"><Padlock /></div>
+          <div>Checkout</div>
+        </div>
       </div>
     )}
     <div className="component-header-topnav-logo" ref={getLogoRef}>
@@ -146,7 +150,8 @@ export default class Header extends Component<PropTypes, State> {
           }
           {displayCheckout &&
             <div className="component-header__row component-header-checkout--row">
-              Checkout
+              <div className="component-header--padlock"><Padlock /></div>
+              <div>Checkout</div>
             </div>
           }
         </div>
