@@ -10,7 +10,7 @@ import { Label as FormLabel } from 'components/forms/label';
 import { Fieldset } from 'components/forms/fieldset';
 import { Select } from 'components/forms/select';
 import { RadioInput } from 'components/forms/customFields/radioInput';
-import CheckboxInput from 'components/checkboxInput/checkboxInput';
+import { CheckboxInput } from 'components/forms/customFields/checkbox';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
@@ -49,10 +49,10 @@ stories.add('Forms', () => (
         </Rows>
       </Fieldset>
     </FormLabel>
-    <FormLabel label="Thiis is a label" htmlFor={null}>
-      <Fieldset legend="Thiis is a legend">
+    <FormLabel label="Do you leave the skin on a kiwi fruit?" htmlFor={null}>
+      <Fieldset legend="This is a legend">
         <Rows gap="small">
-          <CheckboxInput id="2" text="test" name="gdpr" />
+          <CheckboxInput id="gift" text="I sure do!" name="gift" />
         </Rows>
       </Fieldset>
     </FormLabel>
