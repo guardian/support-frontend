@@ -64,7 +64,7 @@ function ContributionThankYou(props: PropTypes) {
           </section>
         ) : null}
         <MarketingConsent />
-        <ContributionSurvey contributionType={props.contributionType} />
+        <ContributionSurvey isRunning={false} contributionType={props.contributionType} />
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton

@@ -8,14 +8,23 @@ import AnchorButton from 'components/button/anchorButton';
 
 // ----- Component ----- //
 
+/* **********************************************************
+In order to display this component, a surveyLink must be
+configured below and the prop 'isRunning' needs to be set to
+`true` where the component is rendered (currently on the
+`ContributionThankYou` and `ContributionThankYouPasswordSet`)
+************************************************************/
+
+
 type PropTypes = {|
   contributionType: ContributionType,
+  isRunning: boolean
 |};
 
 export default function ContributionsSurvey(props: PropTypes) {
-  const surveyLink = props.contributionType === 'ONE_OFF' ? 'https://www.surveymonkey.com/r/SCPJHTW' : 'https://www.surveymonkey.com/r/RY2G6HM';
+  const surveyLink = props.contributionType === 'ONE_OFF' ? null : null;
 
-  return (
+  return props.isRunning && surveyLink ? (
     <div className="component-contributions-survey">
       <h3 className="confirmation__title">Tell us about your contribution</h3>
       <p className="confirmation__message">
@@ -26,8 +35,9 @@ export default function ContributionsSurvey(props: PropTypes) {
         appearance="secondary"
         aria-label="Link to contribution survey"
       >
-        Share your thoughts
+          Share your thoughts
       </AnchorButton>
     </div>
-  );
+  ) : null;
 }
+
