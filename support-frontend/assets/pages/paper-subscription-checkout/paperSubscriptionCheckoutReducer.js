@@ -40,6 +40,7 @@ import {
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import { finalPrice as paperFinalPrice } from 'helpers/productPrice/paperProductPrices';
 
 import { getDeliveryDays, getVoucherDays } from './helpers/deliveryDays';
 import { formatMachineDate } from 'helpers/dateConversions';
@@ -202,7 +203,17 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
       dispatch(dispatcher(errors));
     });
   } else {
-    showPaymentMethod(dispatch, state);
+    const { isTestUser } = state.page.checkout;
+
+    const { price, currency } = paperFinalPrice(
+      state.page.checkout.productPrices,
+      state.page.checkout.fulfilmentOption,
+      state.page.checkout.productOption,
+    );
+
+    const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(dispatch, buildRegularPaymentRequest(state, pa), state.page.csrf, state.common.abParticipations);
+
+    showPaymentMethod(dispatch, onAuthorised, isTestUser, price, currency, state.page.checkout.paymentMethod, state.page.checkout.email);
   }
 }
 
@@ -218,7 +229,12 @@ const formActionCreators = {
       paymentMethod,
     }),
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) => (dispatch: Dispatch<Action>, getState: () => State) =>
-    onPaymentAuthorised(dispatch, buildRegularPaymentRequest(getState(), authorisation), getState().page.csrf, getState().common.abParticipations),
+    onPaymentAuthorised(
+      dispatch,
+      buildRegularPaymentRequest(getState(), authorisation),
+      getState().page.csrf,
+      getState().common.abParticipations
+    ),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
   setbillingAddressIsSame: (isSame: boolean | null): Action => ({ type: 'SET_BILLING_ADDRESS_IS_SAME', isSame }),
 };

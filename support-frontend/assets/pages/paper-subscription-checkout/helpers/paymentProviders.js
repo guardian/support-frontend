@@ -14,7 +14,7 @@ import {
   getBillingAddress,
   getDeliveryAddress,
   type State,
-} from '../pages/paper-subscription-checkout/paperSubscriptionCheckoutReducer';
+} from '../paperSubscriptionCheckoutReducer';
 
 const getAddressFieldsState = (from: FormFields) => ({
   lineOne: from.lineOne,

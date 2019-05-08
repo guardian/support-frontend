@@ -39,7 +39,6 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 
 import { formatMachineDate } from 'helpers/dateConversions';
-import {buildRegularPaymentRequest} from "../paper-subscription-checkout/helpers/paymentProviders";
 
 
 // ----- Types ----- //
@@ -186,7 +185,13 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
       dispatch(dispatcher(errors));
     });
   } else {
-    showPaymentMethod(dispatch, state);
+    const { isTestUser } = state.page.checkout;
+
+    const { price, currency } = {price: 99.99, currency: 'GBP'};
+
+    const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(dispatch, buildRegularPaymentRequest(state, pa), state.page.csrf, state.common.abParticipations);
+
+    showPaymentMethod(dispatch, onAuthorised, isTestUser, price, currency, state.page.checkout.paymentMethod, state.page.checkout.email);
   }
 }
 
@@ -300,5 +305,4 @@ export {
   setFormSubmitted,
   signOut,
   formActionCreators,
-  getDays,
 };

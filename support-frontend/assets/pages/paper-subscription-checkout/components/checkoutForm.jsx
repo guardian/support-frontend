@@ -33,7 +33,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getShortDescription, getTitle } from '../../paper-subscription-landing/helpers/products';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
-import { formatMachineDate, formatUserDate } from '../helpers/deliveryDays';
+import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
   type FormActionCreators,
   formActionCreators,

@@ -18,7 +18,7 @@ import HeadingBlock from 'components/headingBlock/headingBlock';
 import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
 import typeof MarketingConsent from 'pages/paper-subscription-checkout/components/thankYou/marketingConsentContainer';
 import styles from 'pages/paper-subscription-checkout/components/thankYou/thankYou.module.scss';
-import { formatUserDate } from '../../helpers/deliveryDays';
+import { formatUserDate } from 'helpers/dateConversions';
 
 import { type FormFields, getFormFields } from '../../paperSubscriptionCheckoutReducer';
 

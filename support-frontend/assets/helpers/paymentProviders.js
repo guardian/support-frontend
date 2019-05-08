@@ -8,12 +8,13 @@ import {
   postRegularPaymentRequest,
   type RegularPaymentRequest,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { type Dispatch } from 'redux/index';
+import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
-import { finalPrice as paperFinalPrice } from 'helpers/productPrice/paperProductPrices';
 import { routes } from 'helpers/routes';
 import { type Csrf } from 'helpers/csrf/csrfReducer';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { type Option } from 'helpers/types/option';
 
 import {
   type Action,
@@ -50,34 +51,30 @@ function onPaymentAuthorised(dispatch: Dispatch<Action>, data: RegularPaymentReq
 
 function showStripe(
   dispatch: Dispatch<Action>,
-  data: (pa: PaymentAuthorisation) => RegularPaymentRequest, csrf: Csrf, abParticipations: Participations,
-  isTestUser: boolean, price: number, currency: IsoCurrency
+  onAuthorised: (pa: PaymentAuthorisation) => void,
+  isTestUser: boolean,
+  price: number,
+  currency: IsoCurrency,
+  email: string,
 ) {
-  const { isTestUser } = state.page.checkout;
-
-  const { price, currency } = paperFinalPrice(
-    state.page.checkout.productPrices,
-    state.page.checkout.fulfilmentOption,
-    state.page.checkout.productOption,
-  );
-
-  const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(dispatch, data(pa), csrf, abParticipations);
-
   loadStripe()
     .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
-    .then(stripe => openDialogBox(stripe, price, state.page.checkout.email));
+    .then(stripe => openDialogBox(stripe, price, email));
 }
 
 function showPaymentMethod(
   dispatch: Dispatch<Action>,
-  data: (pa: PaymentAuthorisation) => RegularPaymentRequest, csrf: Csrf, abParticipations: Participations,
-  isTestUser: boolean, price: number, currency: IsoCurrency
+  onAuthorised: (pa: PaymentAuthorisation) => void,
+  isTestUser: boolean,
+  price: number,
+  currency: IsoCurrency,
+  paymentMethod: Option<PaymentMethod>,
+  email: string,
 ): void {
-  const { paymentMethod } = state.page.checkout;
 
   switch (paymentMethod) {
     case Stripe:
-      showStripe(dispatch, state);
+      showStripe(dispatch, onAuthorised, isTestUser, price, currency, email);
       break;
     case DirectDebit:
       dispatch(openDirectDebitPopUp());

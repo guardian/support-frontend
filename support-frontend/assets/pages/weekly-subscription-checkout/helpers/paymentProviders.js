@@ -14,7 +14,7 @@ import {
   getBillingAddress,
   getDeliveryAddress,
   type State,
-} from '../pages/paper-subscription-checkout/paperSubscriptionCheckoutReducer';
+} from '../weeklySubscriptionCheckoutReducer';
 
 const getAddressFieldsState = (from: FormFields) => ({
   lineOne: from.lineOne,
@@ -36,8 +36,8 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const product = {
     currency: currencyId,
     billingPeriod: Monthly,
-    fulfilmentOptions: state.page.checkout.fulfilmentOption,
-    productOptions: state.page.checkout.productOption,
+    // fulfilmentOptions: state.page.checkout.fulfilmentOption,
+    // productOptions: state.page.checkout.productOption,
   };
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
