@@ -171,7 +171,7 @@ function getCopy(product: SubscriptionProduct, country: CountryGroupId) {
     };
   }
   return {
-    heading: 'Digital Pack',
+    heading: 'Digital Pack subscriptions',
     subHeading: 'The premium Guardian experience, ad-free on all your devices',
   };
 }
