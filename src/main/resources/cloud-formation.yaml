@@ -42,9 +42,12 @@ Parameters:
   VpcId:
     Type: String
     Description: VpcId of your Virtual Private Cloud (VPC)
-  Subnets:
-    Type: CommaDelimitedList
-    Description: The list of SubnetIds in your Virtual Private Cloud (VPC)
+  PrivateVpcSubnets:
+    Description: Private subnets to use for EC2 instances
+    Type: List<AWS::EC2::Subnet::Id>
+  PublicVpcSubnets:
+    Description: Public subnets to use for the ELB
+    Type: List<AWS::EC2::Subnet::Id>
   KingsPlaceIpRange:
     Description: CIDR description of the IP range of the Guardian office at Kings Place
     Type: String
@@ -129,8 +132,7 @@ Resources:
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      AvailabilityZones: !GetAZs
-      VPCZoneIdentifier: !Ref Subnets
+      VPCZoneIdentifier: !Ref PrivateVpcSubnets
       LaunchConfigurationName: !Ref LaunchConfig
       MinSize: !FindInMap [ StageVariables, !Ref Stage, MinInstances ]
       MaxSize: !FindInMap [ StageVariables, !Ref Stage, MaxInstances ]
@@ -251,7 +253,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Name: !Sub ${Stack}-${Stage}-${App}
-      Subnets: !Ref Subnets
+      Subnets: !Ref PublicVpcSubnets
       SecurityGroups:
         - !Ref LoadBalancerSecurityGroup
       Tags:
