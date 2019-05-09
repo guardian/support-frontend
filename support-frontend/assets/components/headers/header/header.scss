@@ -36,6 +36,12 @@ $header-links-min-width: gu-span(12);
   }
 }
 
+.component-header--padlock {
+  margin-right: $gu-h-spacing /3;
+  display: inline-block;
+  margin-top: 2px;
+}
+
 .component-header-mobile-menu-toggler {
   display: none;
   .component-header--display-veggie-burger & {
@@ -211,5 +217,104 @@ $header-links-min-width: gu-span(12);
     &:after {
       display: none;
     }
+  }
+}
+
+.component-header--display-checkout {
+  .component-header__wrapper {
+    max-width: 50rem;
+
+    @include mq($from: tablet, $until: desktop) {
+      max-width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    @include mq($from: leftCol) {
+      max-width: 60rem;
+    }
+
+    .component-header-topnav {
+      @include mq($until: tablet) {
+        justify-content: space-between;
+      }
+
+      @include mq($from: tablet, $until: desktop) {
+        justify-content: flex-end;
+      }
+
+      .component-header-topnav__utility {
+        display: none;
+      }
+
+      .component-header-topnav__checkout {
+        display: flex;
+        flex: 0 0 490px;
+        color: gu-colour(neutral-100);
+        @include gu-fontset-body-sans;
+        border-right: 1px solid gu-colour(brand-pastel);
+  
+        @include mq($until: tablet) {
+          flex: none;
+          border-right: none;
+        }
+      
+        .component-header-topnav--checkout-text {
+          border-top: 1px solid gu-colour(brand-pastel);
+          border-left: 1px solid gu-colour(brand-pastel);
+          padding: $gu-v-spacing $gu-h-spacing;
+          width: 100%;
+          align-self: flex-end;
+
+          :nth-child(2) {
+            display: inline-block;
+            vertical-align: top;
+          }
+  
+          @include mq($until: tablet) {
+            border-left: none;
+            border-top: none;
+            padding-left: $gu-h-spacing /4;
+          }
+        }
+      
+        @include mq($from: tablet, $until: desktop) {
+          display: none;
+        }
+  
+        @include mq($from: leftCol) {
+          flex: 0 0 650px;
+        }
+      }
+    }
+
+    .component-header-topnav-logo {
+      flex: 0 1 auto;
+
+      @include mq($from: desktop) {
+        margin-right: -30px;
+      }
+    }
+  }
+
+  .component-header-topnav-logo {
+    padding-right: $gu-h-spacing /2;
+    padding-top: $gu-v-spacing /2;
+  }
+}
+
+.component-header-checkout--row {
+  width: 100%;
+  color: gu-colour(neutral-100);
+  @include gu-fontset-body-sans;
+  padding: $gu-v-spacing;
+  border-top: 1px solid gu-colour(brand-pastel);
+
+  @include mq($from: desktop) {
+    display: none;
+  }
+
+  @include mq($until: tablet) {
+    display: none;
   }
 }

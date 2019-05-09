@@ -13,5 +13,5 @@ stories.add('Header', () => (
 ));
 
 stories.add('Header (no navigation)', () => (
-  <Header displayNavigation={false} />
+  <Header />
 ));
