@@ -13,7 +13,7 @@ In order to display this component, a surveyLink must be
 configured below and the prop 'isRunning' needs to be set to
 `true` where the component is rendered (currently on the
 `ContributionThankYou` and `ContributionThankYouPasswordSet`)
-************************************************************/
+*********************************************************** */
 
 
 type PropTypes = {|

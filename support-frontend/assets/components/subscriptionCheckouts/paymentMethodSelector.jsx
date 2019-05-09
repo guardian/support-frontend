@@ -7,14 +7,12 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import Rows from 'components/base/rows';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import { type Option } from 'helpers/types/option';
-import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgNewCreditCard from 'components/svgs/newCreditCard';
 import SvgPayPal from 'components/svgs/paypal';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
-import { getQueryParameter } from 'helpers/url';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { ErrorReason } from 'helpers/errorReasons';
 
@@ -24,7 +22,7 @@ type PropTypes = {|
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
   submissionError: ErrorReason | null,
-  optimizeExperiments: ?OptimizeExperiments,
+  payPalEnabled: boolean,
 |}
 
 function PaymentMethodSelector(props: PropTypes) {
@@ -34,16 +32,7 @@ function PaymentMethodSelector(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
-  const isPayPalEnabled = (optimizeExperiments: ?OptimizeExperiments) => {
-    const PayPalExperimentId = '36Fk0f-QTtqmMqRVWDtBVg';
-    const enabledByTest = optimizeExperiments &&
-      optimizeExperiments.find(exp => exp.id === PayPalExperimentId && exp.variant === '1');
-    const enabledByQueryString = getQueryParameter('payPal') === 'true';
-    return enabledByTest || enabledByQueryString;
-  };
-
-  const payPalEnabled = isPayPalEnabled(props.optimizeExperiments);
-  const multiplePaymentMethodsEnabled = payPalEnabled || props.countrySupportsDirectDebit;
+  const multiplePaymentMethodsEnabled = props.payPalEnabled || props.countrySupportsDirectDebit;
 
   return (multiplePaymentMethodsEnabled ?
     <FormSection title={multiplePaymentMethodsEnabled ? 'How would you like to pay?' : null}>
@@ -66,7 +55,7 @@ function PaymentMethodSelector(props: PropTypes) {
               checked={props.paymentMethod === Stripe}
               onChange={() => props.setPaymentMethod(Stripe)}
             />
-            {payPalEnabled &&
+            {props.payPalEnabled &&
             <RadioInput
               image={<SvgPayPal />}
               text="PayPal"
