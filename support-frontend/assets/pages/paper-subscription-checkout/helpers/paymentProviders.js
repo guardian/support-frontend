@@ -1,9 +1,7 @@
 // @flow
 
 import {
-  type PaymentAuthorisation,
   regularPaymentFieldsFromAuthorisation,
-  type RegularPaymentRequest,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { getQueryParameter } from 'helpers/url';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
@@ -11,10 +9,33 @@ import { Monthly } from 'helpers/billingPeriods';
 import { type FormFields, getFormFields } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
 import {
-  getBillingAddress,
-  getDeliveryAddress,
+  type Action,
+  setFormSubmitted,
+  setStage,
+  setSubmissionError,
   type State,
 } from '../paperSubscriptionCheckoutReducer';
+import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+
+import {
+  getBillingAddress,
+  getDeliveryAddress,
+} from '../paperSubscriptionCheckoutReducer';
+import type {IsoCurrency} from "../../../helpers/internationalisation/currency";
+import { type Dispatch } from 'redux';
+import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { routes } from 'helpers/routes';
+import { type Csrf } from 'helpers/csrf/csrfReducer';
+import type { Participations } from 'helpers/abTests/abtest';
+import type { PaymentMethod } from 'helpers/paymentMethods';
+import { type Option } from 'helpers/types/option';
+import { showStripe } from 'helpers/paymentProviders';
+import {
+  type PaymentAuthorisation,
+  type PaymentResult,
+  postRegularPaymentRequest,
+  type RegularPaymentRequest,
+} from 'helpers/paymentIntegrations/readerRevenueApis';
 
 const getAddressFieldsState = (from: FormFields) => ({
   lineOne: from.lineOne,
@@ -71,4 +92,53 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   };
 }
 
-export { buildRegularPaymentRequest };
+function onPaymentAuthorised(dispatch: Dispatch<Action>, data: RegularPaymentRequest, csrf: Csrf, abParticipations: Participations) {
+  const handleSubscribeResult = (result: PaymentResult) => {
+    if (result.paymentStatus === 'success') {
+      if (result.subscriptionCreationPending) {
+        dispatch(setStage('thankyou-pending'));
+      } else {
+        dispatch(setStage('thankyou'));
+      }
+    } else { dispatch(setSubmissionError(result.error)); }
+  };
+
+  dispatch(setFormSubmitted(true));
+
+  postRegularPaymentRequest(
+    routes.subscriptionCreate,
+    data,
+    abParticipations,
+    csrf,
+    () => {},
+    () => {},
+  ).then(handleSubscribeResult);
+}
+
+function showPaymentMethod(
+  dispatch: Dispatch<Action>,
+  onAuthorised: (pa: PaymentAuthorisation) => void,
+  isTestUser: boolean,
+  price: number,
+  currency: IsoCurrency,
+  paymentMethod: Option<PaymentMethod>,
+  email: string,
+): void {
+
+  switch (paymentMethod) {
+    case Stripe:
+      showStripe(onAuthorised, isTestUser, price, currency, email);
+      break;
+    case DirectDebit:
+      dispatch(openDirectDebitPopUp());
+      break;
+    case null:
+    case undefined:
+      console.log('Undefined payment method');
+      break;
+    default:
+      console.log(`Unknown payment method ${paymentMethod}`);
+  }
+}
+
+export { showPaymentMethod, onPaymentAuthorised, buildRegularPaymentRequest };

@@ -26,8 +26,8 @@ import { Collection, HomeDelivery, type PaperFulfilmentOptions } from 'helpers/p
 import { ActivePaperProductTypes, Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
 import { getUser } from 'helpers/user/getUser';
-import { buildRegularPaymentRequest } from './helpers/paymentProviders';
-import { countrySupportsDirectDebit, onPaymentAuthorised, showPaymentMethod } from 'helpers/paymentProviders';
+import { buildRegularPaymentRequest, onPaymentAuthorised, showPaymentMethod } from './helpers/paymentProviders';
+import { countrySupportsDirectDebit } from 'helpers/paymentProviders';
 import {
   type Action as AddressAction,
   addressReducerFor,

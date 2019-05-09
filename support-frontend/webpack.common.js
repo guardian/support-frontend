@@ -80,7 +80,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     paperSubscriptionCheckoutPage: 'pages/paper-subscription-checkout/paperSubscriptionCheckout.jsx',
 
     weeklySubscriptionLandingPage: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.jsx',
-    weeklySubscriptionCheckoutPage: 'pages/weekly-subscription-landing/weeklySubscriptionCheckoutPage.jsx',
+    weeklySubscriptionCheckoutPage: 'pages/weekly-subscription-checkout/weeklySubscriptionCheckout.jsx',
 
     payPalErrorPage: 'pages/paypal-error/payPalError.jsx',
     payPalErrorPageStyles: 'pages/paypal-error/payPalError.scss',

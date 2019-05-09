@@ -24,8 +24,8 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { type Title } from 'helpers/user/details';
 import { getUser } from 'helpers/user/getUser';
-import { buildRegularPaymentRequest } from './helpers/paymentProviders';
-import { countrySupportsDirectDebit, onPaymentAuthorised, showPaymentMethod } from 'helpers/paymentProviders';
+import { buildRegularPaymentRequest, onPaymentAuthorised, showPaymentMethod } from './helpers/paymentProviders';
+import { countrySupportsDirectDebit } from 'helpers/paymentProviders';
 import {
   type Action as AddressAction,
   addressReducerFor,
