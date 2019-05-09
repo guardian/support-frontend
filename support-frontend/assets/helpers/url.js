@@ -2,7 +2,7 @@
 
 // ----- Types ----- //
 
-import { frontlineCampaign, toxinsCampaign } from 'pages/new-contributions-landing/campaigns';
+import { frontlineCampaign } from 'pages/new-contributions-landing/campaigns';
 
 export type Domain
   = 'thegulocal.com'
@@ -102,12 +102,9 @@ function getPathAfterRoute(route: string): string[] {
   return pathName.splice(pathName.findIndex(r => r === route));
 }
 
+// Campaign pages currently implemented by query param, as follows:
 function isFrontlineCampaign(): boolean {
   return getQueryParameter(frontlineCampaign) === 'true';
-}
-
-function isToxinsCampaign(): boolean {
-  return getQueryParameter(toxinsCampaign) === 'true';
 }
 
 // ----- Exports ----- //

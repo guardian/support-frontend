@@ -172,9 +172,8 @@ function goalReachedTemplate() {
 }
 
 const showTicker: boolean = getQueryParameter('ticker') === 'true';
-const campaignName = isFrontlineCampaign() ? "thefrontline" : '';
+const campaignName = isFrontlineCampaign() ? 'thefrontline' : '';
 const campaign = campaigns[campaignName];
-
 
 
 // ----- Render ----- //
@@ -188,7 +187,7 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = {
     ...countryGroupSpecificDetails[props.countryGroupId],
-    ...props.campaignName ? campaigns[props.campaignName] : {}
+    ...campaignName ? campaigns[campaignName] : {},
   };
 
   return props.paymentComplete ?
@@ -207,7 +206,7 @@ function ContributionFormContainer(props: PropTypes) {
         </div>
 
         <div className="gu-content__form">
-          {showTicker && campaign ?
+          {showTicker && campaign && campaign.tickerJsonUrl ?
             <ContributionTicker
               tickerJsonUrl={campaign.tickerJsonUrl}
               onGoalReached={props.setTickerGoalReached}

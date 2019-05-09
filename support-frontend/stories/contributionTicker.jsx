@@ -21,6 +21,7 @@ stories.add('Contribution ticker', () => (
     <ContributionTicker
       tickerJsonUrl={tickerJsonUrlInput()}
       onGoalReached={() => {}}
+      tickerType="unlimited"
     />
   </div>
 ));

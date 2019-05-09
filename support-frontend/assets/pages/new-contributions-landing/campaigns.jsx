@@ -21,7 +21,6 @@ export type Campaigns = {
 };
 
 export const frontlineCampaign = 'frontline-campaign';
-export const toxinsCampaign = 'toxins-campaign';
 
 export const campaigns: Campaigns = {
   thefrontline: {

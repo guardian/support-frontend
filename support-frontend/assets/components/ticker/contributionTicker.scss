@@ -82,3 +82,25 @@ $progess-bar-height: 10px;
   transform: translateX(-100%);
   transition: transform 3s cubic-bezier(.25, .55, .2, .85);
 }
+
+// Post-goal styles:
+// Default post-goal style (hard stop)
+.contributions-landing-ticker--goal-reached .contributions-landing-ticker__progress-bar::after {
+  content: '';
+  position: absolute;
+  background: gu-colour(neutral-7);
+  width: 2px;
+  height: 15px;
+  right: 0;
+  bottom: -$progess-bar-height;
+}
+
+// "Unlimited" post-goal style
+.contributions-landing-ticker--goal-reached.contributions-landing-ticker--unlimited .contributions-landing-ticker__progress-bar::after {
+  right: 20%;
+}
+
+// Post-goal copy
+.contributions-landing-ticker--goal-reached .contributions-landing-ticker__count {
+  font-size: 16px;
+}

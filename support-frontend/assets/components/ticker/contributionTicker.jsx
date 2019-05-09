@@ -32,9 +32,11 @@ const getInitialTickerValues = (tickerJsonUrl: string): Promise<StateTypes> =>
       return { totalSoFar, goal };
     });
 
-const percentageTotalAsNegative = (total: number, goal: number) => {
+const percentageToTranslate = (total: number, goal: number, tickerType: TickerType) => {
   const percentage = ((total / goal) * 100) - 100;
-  return percentage > 0 ? 0 : percentage;
+  const endOfFillPercentage = tickerType === 'unlimited' ? -15 : 0;
+
+  return percentage > 0 ? endOfFillPercentage : percentage;
 };
 
 
@@ -71,9 +73,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
       }
 
       this.setState({ totalSoFar: initialTotal, goal });
-      window.setTimeout(() => {
-        window.requestAnimationFrame(this.increaseTextCounter);
-      }, 500);
+      window.requestAnimationFrame(this.increaseTextCounter);
     });
   }
 
@@ -81,6 +81,9 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
   tickerJsonUrl: string;
   totalSoFar: number;
   count = 0;
+  tickerType: TickerType;
+  classModifiers: Array<?string>;
+  goalReached: boolean;
 
   increaseTextCounter = () => {
     const { totalSoFar } = this;
@@ -95,7 +98,6 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
   }
 
   renderContributedSoFar = () => {
-    console.log(this.goalReached)
     if (!this.goalReached) {
       return (
         <div className="contributions-landing-ticker__so-far">
@@ -131,7 +133,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
     const allClassModifiers = readyToRender ? this.classModifiers : [...this.classModifiers, 'hidden'];
     const baseClassName = 'contributions-landing-ticker';
     const wrapperClassName = classNameWithModifiers(baseClassName, allClassModifiers);
-    const progressBarAnimation = `translateX(${percentageTotalAsNegative(this.state.totalSoFar, this.state.goal)}%)`;
+    const progressBarAnimation = `translate3d(${percentageToTranslate(this.state.totalSoFar, this.state.goal, this.tickerType)}%, 0, 0)`;
 
     return (
       <div className={wrapperClassName}>
@@ -148,7 +150,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
           <div className="contributions-landing-ticker__progress">
             <div
               className="contributions-landing-ticker__filled-progress"
-              style={{transform: progressBarAnimation}}
+              style={{ transform: progressBarAnimation }}
             />
           </div>
         </div>
