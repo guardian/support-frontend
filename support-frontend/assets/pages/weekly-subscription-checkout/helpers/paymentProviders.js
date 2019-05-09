@@ -1,8 +1,17 @@
 // @flow
 
+import { showStripe } from 'helpers/paymentProviders';
+import { type IsoCurrency } from "helpers/internationalisation/currency";
 import {
+  type PaymentAuthorisation,
+  type PaymentResult,
+  postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
+  type RegularPaymentRequest,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { type Dispatch } from 'redux';
+import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { Monthly } from 'helpers/billingPeriods';
@@ -10,6 +19,8 @@ import { type FormFields, getFormFields } from 'components/subscriptionCheckouts
 
 import {
   type Action,
+  getBillingAddress,
+  getDeliveryAddress,
   setFormSubmitted,
   setStage,
   setSubmissionError,
@@ -17,25 +28,10 @@ import {
 } from '../weeklySubscriptionCheckoutReducer';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
-import {
-  getBillingAddress,
-  getDeliveryAddress,
-} from '../weeklySubscriptionCheckoutReducer';
-import type {IsoCurrency} from "../../../helpers/internationalisation/currency";
-import { type Dispatch } from 'redux';
-import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
-import { routes } from 'helpers/routes';
 import { type Csrf } from 'helpers/csrf/csrfReducer';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type Option } from 'helpers/types/option';
-import { showStripe } from 'helpers/paymentProviders';
-import {
-  type PaymentAuthorisation,
-  type PaymentResult,
-  postRegularPaymentRequest,
-  type RegularPaymentRequest,
-} from 'helpers/paymentIntegrations/readerRevenueApis';
 
 const getAddressFieldsState = (from: FormFields) => ({
   lineOne: from.lineOne,

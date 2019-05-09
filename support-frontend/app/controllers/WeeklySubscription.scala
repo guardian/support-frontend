@@ -10,7 +10,6 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.Paper
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
 import play.api.libs.circe.Circe
@@ -18,7 +17,6 @@ import play.api.mvc._
 import play.twirl.api.Html
 import services.{IdentityService, TestUserService}
 import views.EmptyDiv
-import views.ViewHelpers.outputJson
 import views.html.helper.CSRF
 import views.html.subscriptionCheckout
 
@@ -50,7 +48,7 @@ class WeeklySubscription(
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {
-          SafeLogger.error(scrub"Failed to display paper subscriptions form for ${request.user.id} due to error from identityService: $error")
+          SafeLogger.error(scrub"Failed to display Guardian Weekly subscriptions form for ${request.user.id} due to error from identityService: $error")
           Future.successful(InternalServerError)
         },
         user => {

@@ -11,7 +11,7 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { type Stage, type State } from './weeklySubscriptionCheckoutReducer';
 
-import CheckoutForm from './components/checkoutForm';
+import CheckoutForm from './components/weeklyCheckoutForm';
 import ReturnSection from 'pages/paper-subscription-checkout/components/thankYou/returnSection';
 import ThankYouContent from 'pages/paper-subscription-checkout/components/thankYou/thankYou';
 

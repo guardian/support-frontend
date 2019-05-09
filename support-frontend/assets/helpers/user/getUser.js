@@ -1,13 +1,13 @@
 // @flow
 import { type Option } from 'helpers/types/option';
 
-export type GetUser = {|
+export type User = {|
   firstName: Option<string>,
   lastName: Option<string>,
   email: Option<string>,
 |};
 
-function getUser(): GetUser {
+function getUser(): User {
 
   if (window && window.guardian && window.guardian.user) {
 

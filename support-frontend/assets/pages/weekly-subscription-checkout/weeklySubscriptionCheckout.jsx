@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
-// import { getQueryParameter } from 'helpers/url';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
@@ -19,8 +18,6 @@ import 'stylesheets/skeleton/skeleton.scss';
 
 import { initReducer } from './weeklySubscriptionCheckoutReducer';
 import CheckoutStage from './stage';
-// import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-// import './_legacyImports.scss';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 
 
@@ -41,12 +38,12 @@ const content = (
       header={<Header displayNavigation={false} />}
       footer={
         <Footer>
-          <SubscriptionTermsPrivacy subscriptionProduct="Paper" />
+          <SubscriptionTermsPrivacy subscriptionProduct="GuardianWeekly" />
           <CustomerService
             selectedCountryGroup={countryGroupId}
-            subscriptionProduct="Paper"
+            subscriptionProduct="GuardianWeekly"
           />
-          <SubscriptionFaq subscriptionProduct="Paper" />
+          <SubscriptionFaq subscriptionProduct="GuardianWeekly" />
         </Footer>
       }
     >

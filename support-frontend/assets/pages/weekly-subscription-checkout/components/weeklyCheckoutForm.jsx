@@ -81,7 +81,7 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 
 // ----- Component ----- //
 
-function CheckoutForm(props: PropTypes) {
+function WeeklyCheckoutForm(props: PropTypes) {
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -89,7 +89,7 @@ function CheckoutForm(props: PropTypes) {
         <Summary
           image={
             <GridImage
-              gridId="checkoutPackshotPaperGraunVoucher"
+              gridId="checkoutPackshotWeekly"
               srcSizes={[696, 500]}
               sizes="(max-width: 740px) 50vw, 696"
               imgType="png"
@@ -103,7 +103,7 @@ function CheckoutForm(props: PropTypes) {
           dataList={[
           ]}
           billingPeriod="Monthly"
-          changeSubscription={routes.paperSubscriptionProductChoices}
+          changeSubscription="TODO placeholder"
         />
       )}
       >
@@ -220,4 +220,4 @@ function CheckoutForm(props: PropTypes) {
 export default connect(mapStateToProps, {
   ...formActionCreators,
   signOut,
-})(CheckoutForm);
+})(WeeklyCheckoutForm);
