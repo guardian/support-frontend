@@ -2,6 +2,8 @@
 
 // ----- Types ----- //
 
+import { frontlineCampaign, toxinsCampaign } from 'pages/new-contributions-landing/campaigns';
+
 export type Domain
   = 'thegulocal.com'
   | 'code.dev-theguardian.com'
@@ -101,7 +103,11 @@ function getPathAfterRoute(route: string): string[] {
 }
 
 function isFrontlineCampaign(): boolean {
-  return getQueryParameter('frontline-campaign') === 'true';
+  return getQueryParameter(frontlineCampaign) === 'true';
+}
+
+function isToxinsCampaign(): boolean {
+  return getQueryParameter(toxinsCampaign) === 'true';
 }
 
 // ----- Exports ----- //

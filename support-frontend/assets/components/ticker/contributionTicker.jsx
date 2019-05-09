@@ -3,8 +3,8 @@
 // ----- Imports ----- //
 import React, { Component } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
-
 import './contributionTicker.scss';
+import type { TickerType } from 'pages/new-contributions-landing/campaigns';
 
 // ---- Types ----- //
 type StateTypes = {|
@@ -16,6 +16,7 @@ type PropTypes = {|
   // URL to fetch ticker JSON from
   tickerJsonUrl: string,
   onGoalReached: () => void,
+  tickerType: TickerType,
 |}
 
 
@@ -45,6 +46,10 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
 
     this.tickerJsonUrl = props.tickerJsonUrl;
     this.onGoalReached = props.onGoalReached;
+    this.tickerType = props.tickerType;
+    this.classModifiers = [this.tickerType];
+    this.increaseTextCounter = this.increaseTextCounter.bind(this);
+    this.goalReached = false;
 
     this.state = {
       totalSoFar: 0,
@@ -61,12 +66,13 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
 
       if (totalSoFar >= goal) {
         this.onGoalReached();
+        this.classModifiers.push('goal-reached');
+        this.goalReached = true;
       }
 
       this.setState({ totalSoFar: initialTotal, goal });
       window.setTimeout(() => {
-        window.requestAnimationFrame(this.increaseCounter);
-        this.animateBar(totalSoFar, goal);
+        window.requestAnimationFrame(this.increaseTextCounter);
       }, 500);
     });
   }
@@ -75,17 +81,8 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
   tickerJsonUrl: string;
   totalSoFar: number;
   count = 0;
-  filledProgressBar: ?HTMLDivElement;
-  increaseCounter = this.increaseCounter.bind(this);
 
-  animateBar(totalSoFar: number, goal: number) {
-    const progressBarElement = this.filledProgressBar;
-    if (progressBarElement && progressBarElement instanceof HTMLElement) {
-      progressBarElement.style.transform = `translateX(${percentageTotalAsNegative(totalSoFar, goal)}%)`;
-    }
-  }
-
-  increaseCounter() {
+  increaseTextCounter = () => {
     const { totalSoFar } = this;
     this.count += Math.floor(totalSoFar / 100);
 
@@ -93,24 +90,53 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
       this.setState({ totalSoFar: this.totalSoFar });
     } else {
       this.setState({ totalSoFar: this.count });
-      window.requestAnimationFrame(this.increaseCounter);
+      window.requestAnimationFrame(this.increaseTextCounter);
     }
+  }
+
+  renderContributedSoFar = () => {
+    console.log(this.goalReached)
+    if (!this.goalReached) {
+      return (
+        <div className="contributions-landing-ticker__so-far">
+          <div className="contributions-landing-ticker__count">${Math.floor(this.state.totalSoFar).toLocaleString()}</div>
+          <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">contributed</div>
+        </div>
+      );
+    }
+
+    if (this.goalReached && this.tickerType === 'unlimited') {
+      return (
+        <div className="contributions-landing-ticker__so-far">
+          <div className="contributions-landing-ticker__count">We&#39;ve met our goal &mdash; thank you</div>
+          <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">Contributions are still being accepted</div>
+        </div>
+      );
+    }
+
+    if (this.goalReached && this.tickerType === 'hardstop') {
+      return (
+        <div className="contributions-landing-ticker__so-far">
+          <div className="contributions-landing-ticker__count">We&#39;ve met our goal &mdash; thank you</div>
+        </div>
+      );
+    }
+
+    return null;
   }
 
 
   render() {
+    const readyToRender = (this.state && this.state.totalSoFar && this.state.totalSoFar !== 0);
+    const allClassModifiers = readyToRender ? this.classModifiers : [...this.classModifiers, 'hidden'];
     const baseClassName = 'contributions-landing-ticker';
-    const wrapperClassName = (this.state && this.state.totalSoFar && this.state.totalSoFar !== 0) ?
-      baseClassName :
-      classNameWithModifiers(baseClassName, ['hidden']);
+    const wrapperClassName = classNameWithModifiers(baseClassName, allClassModifiers);
+    const progressBarAnimation = `translateX(${percentageTotalAsNegative(this.state.totalSoFar, this.state.goal)}%)`;
 
     return (
       <div className={wrapperClassName}>
         <div className="contributions-landing-ticker__values">
-          <div className="contributions-landing-ticker__so-far">
-            <div className="contributions-landing-ticker__count">${Math.floor(this.state.totalSoFar).toLocaleString()}</div>
-            <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">contributed</div>
-          </div>
+          {this.renderContributedSoFar()}
           <div className="contributions-landing-ticker__goal">
             <div className="contributions-landing-ticker__count">${Math.floor(this.state.goal).toLocaleString()}</div>
             <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">our
@@ -121,8 +147,8 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
         <div className="contributions-landing-ticker__progress-bar">
           <div className="contributions-landing-ticker__progress">
             <div
-              ref={(filledProgressBar) => { this.filledProgressBar = filledProgressBar; }}
               className="contributions-landing-ticker__filled-progress"
+              style={{transform: progressBarAnimation}}
             />
           </div>
         </div>

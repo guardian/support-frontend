@@ -82,7 +82,6 @@ type FormState = {
   formIsValid: boolean,
   formIsSubmittable: boolean,
   tickerGoalReached: boolean,
-  campaignName: ?CampaignName,
 };
 
 type PageState = {
@@ -156,7 +155,6 @@ function createFormReducer() {
     formIsValid: true,
     formIsSubmittable: true,
     tickerGoalReached: false,
-    campaignName: getCampaignName(),
   };
 
   return function formReducer(state: FormState = initialState, action: Action): FormState {

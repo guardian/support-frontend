@@ -26,6 +26,7 @@ import ContributionThankYouContainer from './components/ContributionThankYou/Con
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
+import { isFrontlineCampaign } from 'helpers/url';
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -60,7 +61,7 @@ const setOneOffContributionCookie = () => {
   );
 };
 
-const { campaignName } = store.getState().page.form;
+const campaignName = isFrontlineCampaign() ? "thefrontline" : '';
 const cssModifiers = campaignName && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
 
