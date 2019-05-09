@@ -37,7 +37,7 @@ const { countryGroupId } = store.getState().common.internationalisation;
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header displayNavigation={false} />}
+      header={<Header display={null} />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="DigitalPack" />
