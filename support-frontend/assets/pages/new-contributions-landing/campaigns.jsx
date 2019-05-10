@@ -3,6 +3,8 @@
 import React from 'react';
 import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
 
+export type TickerType = 'unlimited' | 'hardstop';
+
 export type CampaignSettings = {
   headerCopy?: string,
   contributeCopy?: React$Element<string>,
@@ -11,11 +13,14 @@ export type CampaignSettings = {
 
   tickerJsonUrl?: string,
   cssModifiers?: string[],
+  tickerType: TickerType,
 };
 
 export type Campaigns = {
   [string]: CampaignSettings,
 };
+
+export const frontlineCampaign = 'frontline-campaign';
 
 export const campaigns: Campaigns = {
   thefrontline: {
@@ -69,6 +74,7 @@ export const campaigns: Campaigns = {
       </div>
     ),
     tickerJsonUrl: '/ticker.json',
+    tickerType: 'hardstop',
     cssModifiers: ['frontline-campaign'],
   },
 };

@@ -5,7 +5,7 @@
 import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
+import { isFrontlineCampaign } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -19,7 +19,7 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
-import { type CampaignName, campaigns } from 'pages/new-contributions-landing/campaigns';
+import { campaigns, getCampaignName } from 'pages/new-contributions-landing/campaigns';
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
@@ -58,7 +58,6 @@ type PropTypes = {|
   contributionType: ContributionType,
   referrerAcquisitionData: ReferrerAcquisitionData,
   tickerGoalReached: boolean,
-  campaignName: ?CampaignName,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -76,7 +75,6 @@ const mapStateToProps = (state: State) => ({
   contributionType: state.page.form.contributionType,
   referrerAcquisitionData: state.common.referrerAcquisitionData,
   tickerGoalReached: state.page.form.tickerGoalReached,
-  campaignName: state.page.form.campaignName,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -173,15 +171,8 @@ function goalReachedTemplate() {
   return null;
 }
 
-function urlSpecificDetails() {
-  if (getQueryParameter('ticker') === 'true') {
-    return {
-      tickerJsonUrl: '/ticker.json',
-    };
-  }
-
-  return {};
-}
+const campaignName = getCampaignName();
+const campaign = campaignName ? campaigns[campaignName] : null;
 
 
 // ----- Render ----- //
@@ -195,8 +186,7 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = {
     ...countryGroupSpecificDetails[props.countryGroupId],
-    ...props.campaignName ? campaigns[props.campaignName] : {},
-    ...urlSpecificDetails(),
+    ...campaignName ? campaigns[campaignName] : {},
   };
 
   return props.paymentComplete ?
@@ -215,10 +205,11 @@ function ContributionFormContainer(props: PropTypes) {
         </div>
 
         <div className="gu-content__form">
-          {countryGroupDetails.tickerJsonUrl ?
+          {campaign && campaign.tickerJsonUrl ?
             <ContributionTicker
-              tickerJsonUrl={countryGroupDetails.tickerJsonUrl}
+              tickerJsonUrl={campaign.tickerJsonUrl}
               onGoalReached={props.setTickerGoalReached}
+              tickerType={campaign.tickerType}
             /> : null
           }
           {props.tickerGoalReached ? goalReachedTemplate() :

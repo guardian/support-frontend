@@ -20,7 +20,6 @@ import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/routes';
-import { type CampaignName } from 'pages/new-contributions-landing/campaigns';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
@@ -51,6 +50,7 @@ import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/St
 import type { FullDetailExistingPaymentMethod } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
+import { getCampaignName } from 'pages/new-contributions-landing/campaigns';
 
 
 // ----- Types ----- //
@@ -82,7 +82,6 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
-  campaignName: ?CampaignName,
 |};
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -113,7 +112,6 @@ const mapStateToProps = (state: State) => ({
   country: state.common.internationalisation.countryId,
   stripeV3HasLoaded: state.page.form.stripePaymentRequestButtonData.stripeV3HasLoaded,
   stripePaymentRequestButtonMethod: state.page.form.stripePaymentRequestButtonData.paymentMethod,
-  campaignName: state.page.form.campaignName,
 });
 
 
@@ -223,6 +221,8 @@ function onSubmit(props: PropTypes): Event => void {
 // ----- Render ----- //
 
 function ContributionForm(props: PropTypes) {
+  const campaignName = getCampaignName();
+
   return (
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <div>
@@ -251,7 +251,7 @@ function ContributionForm(props: PropTypes) {
         <TermsPrivacy
           countryGroupId={props.countryGroupId}
           contributionType={props.contributionType}
-          campaignName={props.campaignName}
+          campaignName={campaignName}
         />
         {props.isWaiting ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
       </div>

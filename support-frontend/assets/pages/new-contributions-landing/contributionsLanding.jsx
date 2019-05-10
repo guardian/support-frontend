@@ -16,7 +16,7 @@ import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
-import { campaigns } from 'pages/new-contributions-landing/campaigns';
+import { campaigns, getCampaignName } from 'pages/new-contributions-landing/campaigns';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -60,7 +60,7 @@ const setOneOffContributionCookie = () => {
   );
 };
 
-const { campaignName } = store.getState().page.form;
+const campaignName = getCampaignName();
 const cssModifiers = campaignName && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
 
