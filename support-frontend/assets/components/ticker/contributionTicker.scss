@@ -1,6 +1,6 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-$progess-bar-height: 10px;
+$progress-bar-height: 10px;
 
 .contributions-landing-ticker {
   padding: 18px 0 28px 0;
@@ -66,7 +66,7 @@ $progess-bar-height: 10px;
 
 .contributions-landing-ticker__progress {
   width: calc(100%);
-  height: $progess-bar-height;
+  height: $progress-bar-height;
   overflow: hidden;
   background-color: #dcdcdc;
   position: absolute;
@@ -92,7 +92,7 @@ $progess-bar-height: 10px;
   width: 2px;
   height: 15px;
   right: 0;
-  bottom: -$progess-bar-height;
+  bottom: -$progress-bar-height;
 }
 
 // "Unlimited" post-goal style
