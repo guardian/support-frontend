@@ -20,6 +20,13 @@ import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Types ------ //
 
+const DigitalPack: 'DigitalPack' = 'DigitalPack';
+const PremiumTier: 'PremiumTier' = 'PremiumTier';
+const DailyEdition: 'DailyEdition' = 'DailyEdition';
+const GuardianWeekly: 'GuardianWeekly' = 'GuardianWeekly';
+const Paper: 'Paper' = 'Paper';
+const PaperAndDigital: 'PaperAndDigital' = 'PaperAndDigital';
+
 export type SubscriptionProduct =
   'DigitalPack' |
   'PremiumTier' |
@@ -289,4 +296,10 @@ export {
   getNewsstandPrice,
   fixDecimals,
   paperHasDeliveryEnabled,
+  DigitalPack,
+  PaperAndDigital,
+  Paper,
+  PremiumTier,
+  DailyEdition,
+  GuardianWeekly,
 };

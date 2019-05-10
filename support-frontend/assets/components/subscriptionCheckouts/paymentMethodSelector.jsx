@@ -15,20 +15,19 @@ import SvgPayPal from 'components/svgs/paypal';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { ErrorReason } from 'helpers/errorReasons';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { FormField as DigitalPackFormField } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
-import type { FormField as AddressFormField } from 'pages/paper-subscription-checkout/paperSubscriptionCheckoutReducer';
 import { withError } from 'hocs/withError';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 type PropTypes = {|
-  countrySupportsDirectDebit: boolean,
+  country: IsoCountry,
   paymentMethod: Option<PaymentMethod>,
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
-  formErrors: FormError<DigitalPackFormField | AddressFormField>[],
-  submissionError: ErrorReason | null,
-  payPalEnabled: boolean,
+  validationError: Option<string>,
+  submissionError: Option<ErrorReason>,
+  product: SubscriptionProduct,
 |}
 
 const FieldsetWithError = withError(Fieldset);
@@ -40,19 +39,19 @@ function PaymentMethodSelector(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
-  const multiplePaymentMethodsEnabled = props.payPalEnabled || props.countrySupportsDirectDebit;
+  const paymentMethods = supportedPaymentMethods(props.country, props.product);
 
-  return (multiplePaymentMethodsEnabled ?
-    <FormSection title={multiplePaymentMethodsEnabled ? 'How would you like to pay?' : null}>
+
+  return (paymentMethods.length > 1 ?
+    <FormSection title="How would you like to pay?">
       <Rows gap="large">
-        {multiplePaymentMethodsEnabled &&
         <div>
           <FieldsetWithError
             id="payment-methods"
             legend="How would you like to pay?"
-            error={firstError('paymentMethod', props.formErrors)}
+            error={props.validationError}
           >
-            {props.countrySupportsDirectDebit &&
+            {paymentMethods.includes(DirectDebit) &&
             <RadioInput
               image={<SvgDirectDebitSymbol />}
               text="Direct debit"
@@ -67,7 +66,7 @@ function PaymentMethodSelector(props: PropTypes) {
               checked={props.paymentMethod === Stripe}
               onChange={() => props.setPaymentMethod(Stripe)}
             />
-            {props.payPalEnabled &&
+            {paymentMethods.includes(PayPal) &&
             <RadioInput
               image={<SvgPayPal />}
               text="PayPal"
@@ -77,7 +76,6 @@ function PaymentMethodSelector(props: PropTypes) {
             />}
           </FieldsetWithError>
         </div>
-        }
         {errorState}
       </Rows>
       <DirectDebitPopUpForm
