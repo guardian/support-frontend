@@ -1,0 +1,97 @@
+@import '../formFields';
+
+.component-checkbox {
+  @include gu-fontset-body-sans;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  cursor: pointer;
+  position: relative;
+}
+
+.component-checkbox__text {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.component-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  top: 0;
+  left: 0;
+}
+
+.component-checkbox__text:before {
+  display: inline-block;
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 1px solid gu-colour(neutral-86);
+  margin-right: $gu-h-spacing/2;
+  transition: background $gu-animation-speed,
+              box-shadow $gu-animation-speed;
+}
+
+.component-checkbox__input:checked + .component-checkbox__text:before {
+  background-color: gu-colour(green-main);
+  border-color: transparent;
+}
+
+.component-checkbox__tick {
+  position: absolute;
+  left: 7px;
+  top: 4px;
+  width: 6px;
+  height: 12px;
+  transform: rotate(45deg);
+  z-index: 5;
+}
+
+.component-checkbox__tick:after,
+.component-checkbox__tick:before {
+  position: absolute;
+  display: block;
+  background-color: #fff;
+  transition: all $gu-animation-speed-fast ease-in-out;
+  content: '';
+}
+
+.component-checkbox__tick:before {
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  right: 100%;
+  transition-delay: $gu-animation-speed-fast/2;
+}
+
+.component-checkbox__tick:after {
+  bottom: 0;
+  right: 0;
+  top: 100%;
+  width: 2px;
+  transition-delay: $gu-animation-speed-fast;
+}
+
+.component-checkbox__input:checked ~ .component-checkbox__tick:before {
+  right: 0
+}
+
+.component-checkbox__input:checked ~ .component-checkbox__tick:after {
+  top: 0
+}
+
+.component-checkbox:hover {
+  .component-checkbox__text:before {
+      box-shadow: 0 0 0 2px lighten(gu-colour(neutral-86), 6%);
+  }
+}
+
+.component-checkbox .component-checkbox__input {
+  &:focus + .component-checkbox__text:before {
+    box-shadow: 0 0 0 2px lighten(gu-colour(highlight-main), 6%);
+  }
+}
