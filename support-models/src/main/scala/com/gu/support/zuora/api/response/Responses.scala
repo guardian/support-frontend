@@ -107,7 +107,8 @@ case class GetPaymentMethodDirectDebitResponse(
   bankCode: String,
   firstName: String,
   lastName: String,
-  ) extends GetPaymentMethodResponse
+  tokenId: String
+) extends GetPaymentMethodResponse
 
 case class GetPaymentMethodCardReferenceResponse(
   `type`: String,
@@ -119,14 +120,14 @@ case class GetPaymentMethodCardReferenceResponse(
   creditCardMaskNumber: String,
   creditCardExpirationYear: Int,
   creditCardExpirationMonth: Int
-  ) extends GetPaymentMethodResponse
+) extends GetPaymentMethodResponse
 
 case class GetPaymentMethodPaypalResponse(
   `type`: String,
   paymentMethodStatus: String,
   paypalEmail: String,
   paypalBaid: String
-  ) extends GetPaymentMethodResponse
+) extends GetPaymentMethodResponse
 
 
 object GetPaymentMethodResponse {

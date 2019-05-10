@@ -93,7 +93,7 @@ object SendAcquisitionEvent {
         paymentMethod match {
           case _: CreditCardReferenceTransaction => thrift.PaymentProvider.Stripe
           case _: PayPalReferenceTransaction => thrift.PaymentProvider.Paypal
-          case _: DirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
+          case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
         }
 
       def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {

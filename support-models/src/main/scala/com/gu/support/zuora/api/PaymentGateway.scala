@@ -18,7 +18,7 @@ object PaymentGateway {
     case _: PayPalReferenceTransaction => PayPalGateway
     case _: CreditCardReferenceTransaction if currency == AUD => StripeGatewayAUD
     case _: CreditCardReferenceTransaction => StripeGatewayDefault
-    case _: DirectDebitPaymentMethod => DirectDebitGateway
+    case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => DirectDebitGateway
   }
 
   def fromString(s: String): Option[PaymentGateway] = condOpt(s) {

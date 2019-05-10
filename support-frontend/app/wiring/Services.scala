@@ -3,7 +3,6 @@ package wiring
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.okhttp.RequestRunners
-import com.gu.support.config.Stages.PROD
 import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import play.api.BuiltInComponentsFromContext
@@ -11,7 +10,7 @@ import play.api.libs.ws.ahc.AhcWSComponents
 import services.aws.AwsS3Client.s3
 import services.paypal.PayPalNvpServiceProvider
 import services.stepfunctions.{Encryption, StateWrapper, SupportWorkersClient}
-import services.{IdentityService, _}
+import services._
 
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
@@ -24,7 +23,7 @@ trait Services {
 
   lazy val identityService = IdentityService(appConfig.identity)
 
-  lazy val goCardlessServiceProvider = new GoCardlessServiceProvider(appConfig.goCardlessConfigProvider)
+  lazy val goCardlessServiceProvider = new GoCardlessFrontendServiceProvider(appConfig.goCardlessConfigProvider)
 
   lazy val supportWorkersClient = {
     val stateWrapper = new StateWrapper(Encryption.getProvider(appConfig.aws), appConfig.aws.useEncryption)

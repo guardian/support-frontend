@@ -35,6 +35,12 @@ case class PaperEmailFields(
       "payment_method" -> "Direct Debit",
       "mandate_id" -> directDebitMandateId.getOrElse("")
     )
+    case dd: ClonedDirectDebitPaymentMethod => List(
+      "bank_sort_code" -> hyphenate(dd.bankCode),
+      "account_holder" -> dd.bankTransferAccountName,
+      "payment_method" -> "Direct Debit",
+      "mandate_id" -> directDebitMandateId.getOrElse("")
+    )
     case _: CreditCardReferenceTransaction => List("payment_method" -> "Credit/Debit Card")
     case _: PayPalReferenceTransaction => List("payment_method" -> "PayPal")
   }
