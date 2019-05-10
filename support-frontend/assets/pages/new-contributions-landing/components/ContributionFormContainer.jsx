@@ -5,7 +5,7 @@
 import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
+import { isFrontlineCampaign } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -19,7 +19,7 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
-import { campaigns } from 'pages/new-contributions-landing/campaigns';
+import { campaigns, getCampaignName } from 'pages/new-contributions-landing/campaigns';
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
@@ -171,9 +171,8 @@ function goalReachedTemplate() {
   return null;
 }
 
-const showTicker: boolean = getQueryParameter('ticker') === 'true';
-const campaignName = isFrontlineCampaign() ? 'thefrontline' : '';
-const campaign = campaigns[campaignName];
+const campaignName = getCampaignName();
+const campaign = campaignName ? campaigns[campaignName] : null;
 
 
 // ----- Render ----- //
@@ -206,7 +205,7 @@ function ContributionFormContainer(props: PropTypes) {
         </div>
 
         <div className="gu-content__form">
-          {showTicker && campaign && campaign.tickerJsonUrl ?
+          {campaign && campaign.tickerJsonUrl ?
             <ContributionTicker
               tickerJsonUrl={campaign.tickerJsonUrl}
               onGoalReached={props.setTickerGoalReached}
