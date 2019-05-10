@@ -8,8 +8,8 @@ import type { TickerType } from 'pages/new-contributions-landing/campaigns';
 
 // ---- Types ----- //
 type StateTypes = {|
-  count: number | null,
-  goal: number | null,
+  count: number,
+  goal: number,
 |}
 
 type PropTypes = {|
@@ -83,6 +83,15 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
 
   componentDidMount(): void {
     getInitialTickerValues(this.tickerJsonUrl).then(({ totalContributed, goal }) => {
+      /* ***************************************************************
+      Starting the initial count at 80% of its total instead of 0
+      affects the increaseTextCounter animation by making it shorter &
+      therefore more performant. Animating from 0 to £50,000 (for instance)
+      would take significantly longer than we want to run this animation.
+      By running it for a short period, we give the experience of the
+      number going up as if in real time without taking a big performance
+      hit or making the user bored
+      ***************************************************************** */
       const initialCount = totalContributed ? totalContributed * 0.8 : 0;
 
       if (totalContributed && goal && totalContributed >= goal) {
@@ -92,7 +101,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
       }
 
       this.setState({
-        goal,
+        goal: goal || 0,
         count: initialCount || 0,
       });
 
@@ -116,18 +125,18 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
   dataFromServer: DataFromServer;
 
   increaseTextCounter = () => {
-    const nextCount = this.state.count ? this.state.count + Math.floor(this.state.count / 100) : null;
+    const nextCount = this.state.count + Math.floor(this.state.count / 100);
 
-    if (nextCount && this.dataFromServer.totalContributed && nextCount >= this.dataFromServer.totalContributed) {
+    if (this.dataFromServer.totalContributed && nextCount >= this.dataFromServer.totalContributed) {
       this.setState({ count: this.dataFromServer.totalContributed });
-    } else if (nextCount) {
+    } else {
       this.setState({ count: nextCount });
       window.requestAnimationFrame(this.increaseTextCounter);
     }
   }
 
   renderContributedSoFar = () => {
-    if (!this.goalReached && this.state.count) {
+    if (!this.goalReached) {
       return (
         <div className="contributions-landing-ticker__so-far">
           <div className="contributions-landing-ticker__count">${Math.floor(this.state.count).toLocaleString()}</div>
@@ -158,20 +167,29 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
 
 
   render() {
+    /* *************************************************************
+      `translate3d` is preferred to `translateX` because it uses the
+      gpu to accelerate the animation. This is especially helpful for
+      older computers or phones which may not have the CPU to handle
+      two animations happening at the same time (the text counter and
+      progress bar). Any transitions with `3d` or `z` in the name
+      give you this acceleration, even when the `z-axis` is not being
+      operated on.
+      https://blog.teamtreehouse.com/increase-your-sites-performance-with-hardware-accelerated-css
+      https://davidwalsh.name/translate3d
+      *************************************************************** */
+    const progressBarAnimation = `translate3d(${percentageToTranslate(this.dataFromServer.totalContributed || 0, this.dataFromServer.goal || 0, this.tickerType)}%, 0, 0)`;
     const readyToRender = (this.state && this.state.count && this.state.count !== 0);
     const allClassModifiers = readyToRender ? this.classModifiers : [...this.classModifiers, 'hidden'];
     const baseClassName = 'contributions-landing-ticker';
     const wrapperClassName = classNameWithModifiers(baseClassName, allClassModifiers);
-    const progressBarAnimation = `translate3d(${percentageToTranslate(this.dataFromServer.totalContributed || 0, this.dataFromServer.goal || 0, this.tickerType)}%, 0, 0)`;
-    const goalCount = this.state.goal ? Math.floor(this.state.goal).toLocaleString() : null;
-
 
     return (
       <div className={wrapperClassName}>
         <div className="contributions-landing-ticker__values">
           {this.renderContributedSoFar()}
           <div className="contributions-landing-ticker__goal">
-            <div className="contributions-landing-ticker__count">{goalCount}</div>
+            <div className="contributions-landing-ticker__count">{ Math.floor(this.state.goal).toLocaleString() }</div>
             <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">our
               goal
             </div>
