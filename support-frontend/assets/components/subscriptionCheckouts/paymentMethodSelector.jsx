@@ -22,12 +22,12 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 
 type PropTypes = {|
   country: IsoCountry,
+  product: SubscriptionProduct,
   paymentMethod: Option<PaymentMethod>,
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
   validationError: Option<string>,
   submissionError: Option<ErrorReason>,
-  product: SubscriptionProduct,
 |}
 
 const FieldsetWithError = withError(Fieldset);

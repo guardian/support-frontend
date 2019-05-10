@@ -28,12 +28,12 @@ const Paper: 'Paper' = 'Paper';
 const PaperAndDigital: 'PaperAndDigital' = 'PaperAndDigital';
 
 export type SubscriptionProduct =
-  'DigitalPack' |
-  'PremiumTier' |
-  'DailyEdition' |
-  'GuardianWeekly' |
-  'Paper' |
-  'PaperAndDigital';
+  typeof DigitalPack |
+  typeof PremiumTier |
+  typeof DailyEdition |
+  typeof GuardianWeekly |
+  typeof Paper |
+  typeof PaperAndDigital;
 
 type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
 

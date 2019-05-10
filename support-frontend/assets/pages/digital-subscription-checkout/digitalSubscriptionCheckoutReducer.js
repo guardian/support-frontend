@@ -32,6 +32,7 @@ import type {
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { defaultPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { DigitalPack } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
@@ -122,7 +123,7 @@ function initReducer(initialCountry: IsoCountry) {
     lastName: user.lastName || '',
     telephone: null,
     billingPeriod: initialBillingPeriod,
-    paymentMethod: defaultPaymentMethod(initialCountry, 'DigitalPack'),
+    paymentMethod: defaultPaymentMethod(initialCountry, DigitalPack),
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -155,7 +156,7 @@ function initReducer(initialCountry: IsoCountry) {
         return { ...state, billingPeriod: action.billingPeriod };
 
       case 'SET_COUNTRY_CHANGED':
-        return { ...state, paymentMethod: defaultPaymentMethod(action.country, 'DigitalPack') };
+        return { ...state, paymentMethod: defaultPaymentMethod(action.country, DigitalPack) };
 
       case 'SET_PAYMENT_METHOD':
         return {
