@@ -21,7 +21,7 @@ import SvgGift from 'components/svgs/gift';
 import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import 'stylesheets/skeleton/skeleton.scss';
 
-import { SaleHeader } from './components/hero/hero';
+import { CampaignHeader } from './components/hero/hero';
 
 import WeeklyForm from './components/weeklyForm';
 import reducer from './weeklySubscriptionLandingReducer';
@@ -75,7 +75,7 @@ const content = (
       header={<Header />}
       footer={<Footer />}
     >
-      <SaleHeader />
+      <CampaignHeader />
       <Content>
         <Text title="Open up your world view, Weekly">
           <LargeParagraph>Inside the essential magazine from
