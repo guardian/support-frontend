@@ -8,10 +8,10 @@ import Header from 'components/headers/header/header';
 
 const stories = storiesOf('Header', module);
 
-stories.add('Header', () => (
-  <Header />
+stories.add('Header (navigation)', () => (
+  <Header display="navigation" />
 ));
 
-stories.add('Header (no navigation)', () => (
-  <Header />
+stories.add('Header (checkout)', () => (
+  <Header display="checkout" />
 ));
