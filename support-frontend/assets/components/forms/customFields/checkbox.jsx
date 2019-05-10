@@ -15,7 +15,7 @@ type PropTypes = {
 // ----- Component ----- //
 
 function CheckboxInput({
-  text, appearance, ...otherProps
+  text, ...otherProps
 }: PropTypes) {
   return (
     <label className="component-checkbox">
