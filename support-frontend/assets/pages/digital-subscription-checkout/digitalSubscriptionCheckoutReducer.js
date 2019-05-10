@@ -31,6 +31,7 @@ import type {
   State as AddressState,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { defaultPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
 
 // ----- Types ----- //
 
@@ -121,7 +122,7 @@ function initReducer(initialCountry: IsoCountry) {
     lastName: user.lastName || '',
     telephone: null,
     billingPeriod: initialBillingPeriod,
-    paymentMethod: null,
+    paymentMethod: defaultPaymentMethod(initialCountry, 'DigitalPack'),
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -129,6 +130,10 @@ function initReducer(initialCountry: IsoCountry) {
     productPrices,
     payPalHasLoaded: false,
   };
+
+  const removeError = (field: FormField, formErrors: FormError<FormField>[]) =>
+    formErrors.filter(error => error.field !== field);
+
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
 
@@ -138,10 +143,10 @@ function initReducer(initialCountry: IsoCountry) {
         return { ...state, stage: action.stage };
 
       case 'SET_FIRST_NAME':
-        return { ...state, firstName: action.firstName };
+        return { ...state, firstName: action.firstName, formErrors: removeError('firstName', state.formErrors) };
 
       case 'SET_LAST_NAME':
-        return { ...state, lastName: action.lastName };
+        return { ...state, lastName: action.lastName, formErrors: removeError('lastName', state.formErrors) };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
@@ -149,10 +154,14 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_BILLING_PERIOD':
         return { ...state, billingPeriod: action.billingPeriod };
 
+      case 'SET_COUNTRY_CHANGED':
+        return { ...state, paymentMethod: defaultPaymentMethod(action.country, 'DigitalPack') };
+
       case 'SET_PAYMENT_METHOD':
         return {
           ...state,
           paymentMethod: action.paymentMethod,
+          formErrors: removeError('paymentMethod', state.formErrors),
         };
 
       case 'SET_FORM_ERRORS':

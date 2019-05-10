@@ -15,15 +15,23 @@ import SvgPayPal from 'components/svgs/paypal';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { ErrorReason } from 'helpers/errorReasons';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { firstError } from 'helpers/subscriptionsForms/validation';
+import type { FormField as DigitalPackFormField } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import type { FormField as AddressFormField } from 'pages/paper-subscription-checkout/paperSubscriptionCheckoutReducer';
+import { withError } from 'hocs/withError';
 
 type PropTypes = {|
   countrySupportsDirectDebit: boolean,
   paymentMethod: Option<PaymentMethod>,
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
+  formErrors: FormError<DigitalPackFormField | AddressFormField>[],
   submissionError: ErrorReason | null,
   payPalEnabled: boolean,
 |}
+
+const FieldsetWithError = withError(Fieldset);
 
 function PaymentMethodSelector(props: PropTypes) {
   const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
@@ -39,7 +47,11 @@ function PaymentMethodSelector(props: PropTypes) {
       <Rows gap="large">
         {multiplePaymentMethodsEnabled &&
         <div>
-          <Fieldset legend="How would you like to pay?">
+          <FieldsetWithError
+            id="payment-methods"
+            legend="How would you like to pay?"
+            error={firstError('paymentMethod', props.formErrors)}
+          >
             {props.countrySupportsDirectDebit &&
             <RadioInput
               image={<SvgDirectDebitSymbol />}
@@ -63,7 +75,7 @@ function PaymentMethodSelector(props: PropTypes) {
               checked={props.paymentMethod === PayPal}
               onChange={() => props.setPaymentMethod(PayPal)}
             />}
-          </Fieldset>
+          </FieldsetWithError>
         </div>
         }
         {errorState}

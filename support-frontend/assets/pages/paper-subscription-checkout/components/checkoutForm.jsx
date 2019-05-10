@@ -223,6 +223,7 @@ function CheckoutForm(props: PropTypes) {
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
             payPalEnabled={false}
+            formErrors={props.formErrors}
             submissionError={props.submissionError}
           />
           <FormSection noBorder>
