@@ -11,7 +11,7 @@
     "build-ssr": "webpack --config webpack.ssr.js && node scripts/ssrScript.js",
     "build-prod": "npm-run-all clean validate test storybook-static 'webpack --config webpack.prod.js --env.prod'",
     "webpack": "webpack",
-    "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com",
+    "webpack-dev-server": "webpack-dev-server --config webpack.dev.js --port 9211 --public support.thegulocal.com --disable-host-check",
     "devrun": "npm-run-all clean webpack-dev-server",
     "test": "echo 'Running JS tests' && jest",
     "stat": "yarn build-prod && webpack-bundle-analyzer public/compiled-assets/stats.json",
