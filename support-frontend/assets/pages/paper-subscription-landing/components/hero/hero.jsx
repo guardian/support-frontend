@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { HeroHanger, HeroWrapper, HeroHeading } from 'components/productPage/productPageHero/productPageHero';
 import AnchorButton from 'components/button/anchorButton';
@@ -12,9 +12,10 @@ import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSal
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { getQueryParameter } from 'helpers/url';
 import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-
+import { discountCopyChoices } from './discountCopy';
 import './joyOfPrint.scss';
 
 function getHeading(): string {
@@ -26,6 +27,17 @@ function getHeading(): string {
   return 'Save up to 37% on The Guardian and The Observer - all year round';
 
 }
+
+const getDiscountCopy = () => {
+  const discountParam = getQueryParameter('discount');
+  return discountCopyChoices[discountParam] || discountCopyChoices.control;
+}
+
+const Discount = (props: { discountCopy: string[] }) => (
+  <div>
+    {props.discountCopy.map(copy => <span>{ copy }</span>)}
+  </div>
+);
 
 const TimerIfActive = () => (showCountdownTimer('Paper', GBPCountries) ? (
   <FlashSaleCountdownInHero
@@ -102,8 +114,7 @@ const CampaignHeader = () => (
       <div className="sale-joy-of-print-graphic-outer">
         <div className="sale-joy-of-print-graphic-inner">
           <div className="sale-joy-of-print-badge">
-            <span>Save up to</span>
-            <span>37%</span>
+            <Discount discountCopy={getDiscountCopy()} />
           </div>
           <div className="sale-joy-of-print-graphic">
             <GridImage
