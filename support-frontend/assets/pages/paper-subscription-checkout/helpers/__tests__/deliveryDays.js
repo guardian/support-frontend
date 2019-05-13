@@ -2,9 +2,8 @@
 
 // ----- Imports ----- //
 
-import {
-  getVoucherDays, getDeliveryDays, formatMachineDate, formatUserDate,
-} from '../deliveryDays';
+import { getVoucherDays, getDeliveryDays } from '../deliveryDays';
+import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 
 
 // ----- Tests ----- //
