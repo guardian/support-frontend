@@ -192,8 +192,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
-            optimizeExperiments={null}
             submissionError={props.submissionError}
+            payPalEnabled={false}
           />
           <FormSection noBorder>
             <Button aria-label={null} type="submit">Continue to payment</Button>
