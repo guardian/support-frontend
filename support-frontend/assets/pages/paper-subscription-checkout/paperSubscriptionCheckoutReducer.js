@@ -9,7 +9,14 @@ import { type Option } from 'helpers/types/option';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
+import {
+  formError,
+  type FormError,
+  nonEmptyString,
+  notNull,
+  removeError,
+  validate,
+} from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import { type Action as DDAction } from 'components/directDebit/directDebitActions';
 import {
@@ -25,9 +32,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { Collection, HomeDelivery, type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { ActivePaperProductTypes, Everyday, type PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { type Title } from 'helpers/user/details';
-import { getUser } from 'helpers/user/getUser';
 import { buildRegularPaymentRequest, onPaymentAuthorised, showPaymentMethod } from './helpers/paymentProviders';
-import { countrySupportsDirectDebit } from 'helpers/paymentProviders';
 import {
   type Action as AddressAction,
   addressReducerFor,
@@ -38,12 +43,15 @@ import {
   type State as AddressState,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { Stripe } from 'helpers/paymentMethods';
-import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+
 import { finalPrice as paperFinalPrice } from 'helpers/productPrice/paperProductPrices';
+import { Paper, paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 import { getDeliveryDays, getVoucherDays } from './helpers/deliveryDays';
+
+import { defaultPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { formatMachineDate } from 'helpers/dateConversions';
+import { getUser } from 'helpers/user/user';
 
 
 // ----- Types ----- //
@@ -150,6 +158,10 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
         'billingAddressIsSame',
         'Please indicate whether the billing address is the same as the delivery address',
       ),
+    },
+    {
+      rule: notNull(fields.paymentMethod),
+      error: formError('paymentMethod', 'Please select a payment method.'),
     },
   ]);
 }
@@ -278,7 +290,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
     lastName: user.lastName || '',
     startDate: formatMachineDate(days[0]) || null,
     telephone: null,
-    paymentMethod: countrySupportsDirectDebit(initialCountry) ? null : Stripe,
+    paymentMethod: defaultPaymentMethod(initialCountry, Paper),
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -294,13 +306,13 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
         return { ...state, stage: action.stage };
 
       case 'SET_FIRST_NAME':
-        return { ...state, firstName: action.firstName };
+        return { ...state, firstName: action.firstName, formErrors: removeError('firstName', state.formErrors) };
 
       case 'SET_TITLE':
         return { ...state, title: action.title };
 
       case 'SET_LAST_NAME':
-        return { ...state, lastName: action.lastName };
+        return { ...state, lastName: action.lastName, formErrors: removeError('lastName', state.formErrors) };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
@@ -312,6 +324,7 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
         return {
           ...state,
           paymentMethod: action.paymentMethod,
+          formErrors: removeError('paymentMethod', state.formErrors),
         };
 
       case 'SET_FORM_ERRORS':
@@ -324,7 +337,11 @@ function initReducer(initialCountry: IsoCountry, productInUrl: ?string, fulfillm
         return { ...state, formSubmitted: action.formSubmitted };
 
       case 'SET_BILLING_ADDRESS_IS_SAME':
-        return { ...state, billingAddressIsSame: action.isSame };
+        return {
+          ...state,
+          billingAddressIsSame: action.isSame,
+          formErrors: removeError('billingAddressIsSame', state.formErrors),
+        };
 
       default:
         return state;

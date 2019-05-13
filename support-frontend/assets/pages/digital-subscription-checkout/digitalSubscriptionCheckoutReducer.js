@@ -11,7 +11,7 @@ import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { type FormError } from 'helpers/subscriptionsForms/validation';
+import { type FormError, removeError } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import {
   marketingConsentReducerFor,
@@ -131,9 +131,6 @@ function initReducer(initialCountry: IsoCountry) {
     productPrices,
     payPalHasLoaded: false,
   };
-
-  const removeError = (field: FormField, formErrors: FormError<FormField>[]) =>
-    formErrors.filter(error => error.field !== field);
 
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {

@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import { type Option, headOption } from 'helpers/types/option';
+import { headOption, type Option } from 'helpers/types/option';
 
 
 // ----- Types ----- //
@@ -33,6 +33,10 @@ function firstError<FormField>(field: FormField, errors: FormError<FormField>[])
 
 }
 
+function removeError<FormField>(field: FormField, formErrors: FormError<FormField>[]): FormError<FormField>[] {
+  return formErrors.filter(error => error.field !== field);
+}
+
 function formError<Field>(field: Field, message: string): FormError<Field> {
   return { field, message };
 }
@@ -49,5 +53,6 @@ export {
   notNull,
   firstError,
   formError,
+  removeError,
   validate,
 };

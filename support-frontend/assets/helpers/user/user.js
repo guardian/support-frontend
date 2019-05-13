@@ -9,9 +9,40 @@ import { getSession } from 'helpers/storage';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import type { UserSetStateActions } from 'helpers/user/userActions';
 import { getSignoutUrl } from 'helpers/externalLinks';
+import type { Option } from 'helpers/types/option';
+
+export type User = {|
+  firstName: Option<string>,
+  lastName: Option<string>,
+  email: Option<string>,
+|};
 
 
 // ----- Functions ----- //
+
+function getUser(): User {
+
+  if (window && window.guardian && window.guardian.user) {
+
+    const {
+      firstName, lastName, email,
+    } = window.guardian.user;
+
+    return {
+      firstName: typeof firstName === 'string' ? firstName : null,
+      lastName: typeof lastName === 'string' ? lastName : null,
+      email: typeof email === 'string' ? email : null,
+    };
+  }
+
+  return {
+    firstName: null,
+    lastName: null,
+    email: null,
+  };
+
+}
+
 
 function isTestUser(): boolean {
   const isDefined = x => x !== null && x !== undefined;
@@ -101,6 +132,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
 
 export {
   init,
+  getUser,
   isTestUser,
   signOut,
   doesUserAppearToBeSignedIn,
