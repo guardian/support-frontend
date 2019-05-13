@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React, { Fragment } from 'react';
+import React from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { HeroHanger, HeroWrapper, HeroHeading } from 'components/productPage/productPageHero/productPageHero';
 import AnchorButton from 'components/button/anchorButton';
