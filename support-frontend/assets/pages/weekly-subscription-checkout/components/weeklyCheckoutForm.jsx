@@ -7,11 +7,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import {
-  promotion as paperPromotion,
-  regularPrice as paperRegularPrice,
-} from 'helpers/productPrice/paperProductPrices';
-import { routes } from 'helpers/routes';
 
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
@@ -30,22 +25,18 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getShortDescription, getTitle } from '../../paper-subscription-landing/helpers/products';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
-import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
   type FormActionCreators,
   formActionCreators,
   type FormField,
   type FormFields,
   getBillingAddress,
-  getDays,
   getDeliveryAddress,
   getFormFields,
   signOut,
   type State,
-} from '../paperSubscriptionCheckoutReducer';
+} from '../weeklySubscriptionCheckoutReducer';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
@@ -88,11 +79,7 @@ const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddres
 
 // ----- Component ----- //
 
-function CheckoutForm(props: PropTypes) {
-
-  const days = getDays(props.fulfilmentOption, props.productOption);
-  const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
-  const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
+function WeeklyCheckoutForm(props: PropTypes) {
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -100,33 +87,21 @@ function CheckoutForm(props: PropTypes) {
         <Summary
           image={
             <GridImage
-              gridId="checkoutPackshotPaperGraunVoucher"
+              gridId="checkoutPackshotWeekly"
               srcSizes={[696, 500]}
               sizes="(max-width: 740px) 50vw, 696"
               imgType="png"
               altText=""
             />
           }
-          title={`${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`}
-          description={getShortDescription(props.productOption)}
-          productPrice={paperRegularPrice(
-            props.productPrices,
-            props.fulfilmentOption,
-            props.productOption,
-          )}
-          promotion={paperPromotion(
-            props.productPrices,
-            props.fulfilmentOption,
-            props.productOption,
-          )}
+          title="weekly holding page"
+          description="placeholder description"
+          productPrice={{ price: 99.89, currency: 'GBP' }}
+          promotion={undefined}
           dataList={[
-          {
-            title: 'Delivery method',
-            value: fulfilmentOptionName,
-          },
           ]}
           billingPeriod="Monthly"
-          changeSubscription={routes.paperSubscriptionProductChoices}
+          changeSubscription="TODO placeholder"
         />
       )}
       >
@@ -193,23 +168,18 @@ function CheckoutForm(props: PropTypes) {
           <FormSection title="When would you like your subscription to start?">
             <Rows>
               <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
-                {days.map((day) => {
-                const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
-                return (
-                  <RadioInput
-                    appearance="group"
-                    text={userDate}
-                    name={machineDate}
-                    checked={props.startDate === machineDate}
-                    onChange={() => props.setStartDate(machineDate)}
-                  />
-                );
-              })}
+                <RadioInput
+                  appearance="group"
+                  text="userDate"
+                  name="machineDate"
+                  checked="true"
+                  onChange={() => props.setStartDate('machineDate')}
+                />
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
                 <p>
                 We will take the first payment on the
-                date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
+                date you receive your first Guardian Weekly.
                 </p>
                 <p>
                 Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
@@ -222,7 +192,7 @@ function CheckoutForm(props: PropTypes) {
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
-            payPalEnabled={false}
+            optimizeExperiments={null}
             submissionError={props.submissionError}
           />
           <FormSection noBorder>
@@ -248,4 +218,4 @@ function CheckoutForm(props: PropTypes) {
 export default connect(mapStateToProps, {
   ...formActionCreators,
   signOut,
-})(CheckoutForm);
+})(WeeklyCheckoutForm);

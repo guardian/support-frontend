@@ -25,7 +25,7 @@ import {
   setStage,
   setSubmissionError,
   type State,
-} from '../paperSubscriptionCheckoutReducer';
+} from '../weeklySubscriptionCheckoutReducer';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 import { type Csrf } from 'helpers/csrf/csrfReducer';
@@ -53,8 +53,8 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   const product = {
     currency: currencyId,
     billingPeriod: Monthly,
-    fulfilmentOptions: state.page.checkout.fulfilmentOption,
-    productOptions: state.page.checkout.productOption,
+    // fulfilmentOptions: state.page.checkout.fulfilmentOption,
+    // productOptions: state.page.checkout.productOption,
   };
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
