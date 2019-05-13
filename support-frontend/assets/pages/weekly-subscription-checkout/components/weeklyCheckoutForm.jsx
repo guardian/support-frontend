@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { routes } from 'helpers/routes';
 
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
@@ -27,7 +26,6 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { titles } from 'helpers/user/details';
-import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
   type FormActionCreators,
   formActionCreators,
@@ -98,7 +96,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
           }
           title="weekly holding page"
           description="placeholder description"
-          productPrice={{price: 99.89, currency: 'GBP'}}
+          productPrice={{ price: 99.89, currency: 'GBP' }}
           promotion={undefined}
           dataList={[
           ]}
@@ -170,13 +168,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
           <FormSection title="When would you like your subscription to start?">
             <Rows>
               <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
-                  <RadioInput
-                    appearance="group"
-                    text={"userDate"}
-                    name={"machineDate"}
-                    checked={"true"}
-                    onChange={() => props.setStartDate("machineDate")}
-                  />
+                <RadioInput
+                  appearance="group"
+                  text="userDate"
+                  name="machineDate"
+                  checked="true"
+                  onChange={() => props.setStartDate('machineDate')}
+                />
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
                 <p>

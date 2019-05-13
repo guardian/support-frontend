@@ -203,7 +203,7 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
       dispatch(dispatcher(errors));
     });
   } else {
-    const { isTestUser } = state.page.checkout;
+    const testUser = state.page.checkout.isTestUser;
 
     const { price, currency } = paperFinalPrice(
       state.page.checkout.productPrices,
@@ -211,9 +211,17 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
       state.page.checkout.productOption,
     );
 
-    const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(dispatch, buildRegularPaymentRequest(state, pa), state.page.csrf, state.common.abParticipations);
+    const onAuthorised = (pa: PaymentAuthorisation) =>
+      onPaymentAuthorised(
+        dispatch,
+        buildRegularPaymentRequest(state, pa),
+        state.page.csrf,
+        state.common.abParticipations,
+      );
 
-    showPaymentMethod(dispatch, onAuthorised, isTestUser, price, currency, state.page.checkout.paymentMethod, state.page.checkout.email);
+    const { paymentMethod, email } = state.page.checkout;
+
+    showPaymentMethod(dispatch, onAuthorised, testUser, price, currency, paymentMethod, email);
   }
 }
 
@@ -233,7 +241,7 @@ const formActionCreators = {
       dispatch,
       buildRegularPaymentRequest(getState(), authorisation),
       getState().page.csrf,
-      getState().common.abParticipations
+      getState().common.abParticipations,
     ),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
   setbillingAddressIsSame: (isSame: boolean | null): Action => ({ type: 'SET_BILLING_ADDRESS_IS_SAME', isSame }),

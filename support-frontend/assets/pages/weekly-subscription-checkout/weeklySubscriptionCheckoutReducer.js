@@ -38,9 +38,6 @@ import {
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 
-import { formatMachineDate } from 'helpers/dateConversions';
-
-
 // ----- Types ----- //
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
@@ -185,13 +182,21 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
       dispatch(dispatcher(errors));
     });
   } else {
-    const { isTestUser } = state.page.checkout;
+    const testUser = state.page.checkout.isTestUser;
 
-    const { price, currency } = {price: 99.99, currency: 'GBP'};
+    const { price, currency } = { price: 99.99, currency: 'GBP' };
 
-    const onAuthorised = (pa: PaymentAuthorisation) => onPaymentAuthorised(dispatch, buildRegularPaymentRequest(state, pa), state.page.csrf, state.common.abParticipations);
+    const onAuthorised = (pa: PaymentAuthorisation) =>
+      onPaymentAuthorised(
+        dispatch,
+        buildRegularPaymentRequest(state, pa),
+        state.page.csrf,
+        state.common.abParticipations,
+      );
 
-    showPaymentMethod(dispatch, onAuthorised, isTestUser, price, currency, state.page.checkout.paymentMethod, state.page.checkout.email);
+    const { paymentMethod, email } = state.page.checkout;
+
+    showPaymentMethod(dispatch, onAuthorised, testUser, price, currency, paymentMethod, email);
   }
 }
 
@@ -207,7 +212,12 @@ const formActionCreators = {
       paymentMethod,
     }),
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) => (dispatch: Dispatch<Action>, getState: () => State) =>
-    onPaymentAuthorised(dispatch, buildRegularPaymentRequest(getState(), authorisation), getState().page.csrf, getState().common.abParticipations),
+    onPaymentAuthorised(
+      dispatch,
+      buildRegularPaymentRequest(getState(), authorisation),
+      getState().page.csrf,
+      getState().common.abParticipations,
+    ),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
   setbillingAddressIsSame: (isSame: boolean | null): Action => ({ type: 'SET_BILLING_ADDRESS_IS_SAME', isSame }),
 };

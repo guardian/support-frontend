@@ -1,7 +1,7 @@
 // @flow
 
 import { showStripe } from 'helpers/paymentProviders';
-import { type IsoCurrency } from "helpers/internationalisation/currency";
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import {
   type PaymentAuthorisation,
   type PaymentResult,
@@ -88,7 +88,12 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   };
 }
 
-function onPaymentAuthorised(dispatch: Dispatch<Action>, data: RegularPaymentRequest, csrf: Csrf, abParticipations: Participations) {
+function onPaymentAuthorised(
+  dispatch: Dispatch<Action>,
+  data: RegularPaymentRequest,
+  csrf: Csrf,
+  abParticipations: Participations,
+) {
   const handleSubscribeResult = (result: PaymentResult) => {
     if (result.paymentStatus === 'success') {
       if (result.subscriptionCreationPending) {

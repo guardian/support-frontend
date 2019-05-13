@@ -4,7 +4,7 @@ import { loadStripe, openDialogBox, setupStripeCheckout } from 'helpers/paymentI
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 
-import type {IsoCurrency} from "./internationalisation/currency";
+import type { IsoCurrency } from './internationalisation/currency';
 
 function showStripe(
   onAuthorised: (pa: PaymentAuthorisation) => void,
