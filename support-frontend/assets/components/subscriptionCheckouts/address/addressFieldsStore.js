@@ -5,7 +5,14 @@ import { combineReducers, type Dispatch } from 'redux';
 
 import { fromString, type IsoCountry } from 'helpers/internationalisation/country';
 import { type Action as CommonAction, setCountry } from 'helpers/page/commonActions';
-import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
+import {
+  formError,
+  type FormError,
+  nonEmptyString,
+  notNull,
+  removeError,
+  validate,
+} from 'helpers/subscriptionsForms/validation';
 import { type RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type Scoped } from 'helpers/scoped';
 
@@ -97,9 +104,6 @@ const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
     ),
   },
 ]);
-
-const removeError = (field: FormField, formErrors: FormError<FormField>[]) =>
-  formErrors.filter(error => error.field !== field);
 
 // ----- Action Creators ----- //
 

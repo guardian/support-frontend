@@ -15,7 +15,7 @@ import type {
 } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { getAddressFields } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { formError, nonEmptyString, validate } from 'helpers/subscriptionsForms/validation';
+import { formError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 
 function getErrors(fields: FormFields): FormError<FormField>[] {
   return validate([
@@ -26,6 +26,10 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
     {
       rule: nonEmptyString(fields.lastName),
       error: formError('lastName', 'Please enter a value.'),
+    },
+    {
+      rule: notNull(fields.paymentMethod),
+      error: formError('paymentMethod', 'Please select a payment method.'),
     },
   ]);
 }

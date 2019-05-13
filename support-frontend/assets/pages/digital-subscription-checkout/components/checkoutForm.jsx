@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import { type FormError } from 'helpers/subscriptionsForms/validation';
+import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import { Fieldset } from 'components/forms/fieldset';
@@ -52,6 +52,7 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import { DigitalPack } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
@@ -207,11 +208,12 @@ function CheckoutForm(props: PropTypes) {
             </Fieldset>
           </FormSection>
           <PaymentMethodSelector
-            countrySupportsDirectDebit={props.countrySupportsDirectDebit}
+            country={props.country}
+            product={DigitalPack}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
-            payPalEnabled
+            validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
           <FormSection noBorder>

@@ -53,6 +53,7 @@ import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 import { newspaperCountries } from 'helpers/internationalisation/country';
+import { Paper } from 'helpers/subscriptions';
 
 
 // ----- Types ----- //
@@ -218,11 +219,12 @@ function CheckoutForm(props: PropTypes) {
             </Rows>
           </FormSection>
           <PaymentMethodSelector
-            countrySupportsDirectDebit
+            country="GB"
+            product={Paper}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
-            payPalEnabled={false}
+            validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
           />
           <FormSection noBorder>
