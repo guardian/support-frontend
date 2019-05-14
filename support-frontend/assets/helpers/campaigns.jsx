@@ -5,6 +5,7 @@ import type { ContributionTypes } from 'helpers/contributions';
 import { generateContributionTypes } from 'helpers/contributions';
 
 export type TickerType = 'unlimited' | 'hardstop';
+export type ContributionType = 'monthly' | 'annual' | 'one-off';
 
 export type CampaignSettings = {
   headerCopy?: string,
