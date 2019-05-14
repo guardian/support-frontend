@@ -98,8 +98,8 @@ class Application(
   }
 
   def contributionsLanding(
-                            countryCode: String
-                          ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+    countryCode: String
+  ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -107,7 +107,6 @@ class Application(
       _ => Ok(contributionsHtml(countryCode, None)),
       user => Ok(contributionsHtml(countryCode, user))
     ).map(_.withSettingsSurrogateKey)
-
   }
 
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
