@@ -1,75 +1,117 @@
 // @flow
 
+// ----- Reducer ----- //
+
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { getUser } from 'pages/digital-subscription-checkout/helpers/user';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { defaultPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { isTestUser } from 'helpers/user/user';
+import type { Action } from './checkoutActions';
+import { removeError } from 'helpers/subscriptionsForms/validation';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { CheckoutState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
-import type { Title } from 'helpers/user/details';
-import type { PaymentMethod } from 'helpers/paymentMethods';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import type { ErrorReason } from 'helpers/errorReasons';
-import type { FormField, Stage } from './formFields';
-import type { BillingPeriod, DigitalBillingPeriod } from 'helpers/billingPeriods';
-import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
-import type { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
-import * as storage from 'helpers/storage';
-import { trackPaymentMethodSelected } from 'helpers/tracking/ophanComponentEventTracking';
-import { PayPal } from 'helpers/paymentMethods';
-import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { onPaymentAuthorised } from 'pages/digital-subscription-checkout/helpers/paymentProviders';
 
-export type Action =
-  | { type: 'SET_STAGE', stage: Stage }
-  | { type: 'SET_TITLE', title: Option<Title> }
-  | { type: 'SET_FIRST_NAME', firstName: string }
-  | { type: 'SET_LAST_NAME', lastName: string }
-  | { type: 'SET_TELEPHONE', telephone: string }
-  | { type: 'SET_START_DATE', startDate: string }
-  | { type: 'SET_BILLING_PERIOD', billingPeriod: BillingPeriod }
-  | { type: 'SET_PAYMENT_METHOD', paymentMethod: PaymentMethod }
-  | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
-  | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
-  | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean> };
+function createCheckoutReducer(
+  initialCountry: IsoCountry,
+  product: SubscriptionProduct,
+  initialBillingPeriod: BillingPeriod,
+  startDate: Option<string>,
+  productOption: Option<ProductOptions>,
+  fulfilmentOption: Option<FulfilmentOptions>,
+) {
+  const user = getUser(); // TODO: Is this unnecessary? It could use the user reducer
+  const { productPrices } = window.guardian;
+
+  const initialState = {
+    stage: 'checkout',
+    title: null,
+    email: user.email || '',
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
+    startDate,
+    telephone: null,
+    billingAddressIsSame: null,
+    billingPeriod: initialBillingPeriod,
+    paymentMethod: defaultPaymentMethod(initialCountry, product),
+    formErrors: [],
+    submissionError: null,
+    formSubmitted: false,
+    isTestUser: isTestUser(),
+    productPrices,
+    productOption: productOption || NoProductOptions,
+    fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
+    payPalHasLoaded: false,
+  };
 
 
-// ----- Action Creators ----- //
+  return (state: CheckoutState = initialState, action: Action): CheckoutState => {
 
-const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
-const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
-const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
+    switch (action.type) {
 
-const formActionCreators = {
-  setTitle: (title: string): Action => ({ type: 'SET_TITLE', title }),
-  setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
-  setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
-  setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
-  setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
-  setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
-  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {
-    const state = getState();
-    storage.setSession('selectedPaymentMethod', paymentMethod);
-    trackPaymentMethodSelected(paymentMethod);
-    if (paymentMethod === PayPal && !state.page.checkout.payPalHasLoaded) {
-      showPayPal(dispatch);
+      case 'SET_STAGE':
+        return { ...state, stage: action.stage };
+
+      case 'SET_TITLE':
+        return { ...state, title: action.title };
+
+      case 'SET_FIRST_NAME':
+        return { ...state, firstName: action.firstName, formErrors: removeError('firstName', state.formErrors) };
+
+      case 'SET_LAST_NAME':
+        return { ...state, lastName: action.lastName, formErrors: removeError('lastName', state.formErrors) };
+
+      case 'SET_TELEPHONE':
+        return { ...state, telephone: action.telephone };
+
+      case 'SET_START_DATE':
+        return { ...state, startDate: action.startDate };
+
+      case 'SET_BILLING_PERIOD':
+        return { ...state, billingPeriod: action.billingPeriod };
+
+      case 'SET_COUNTRY_CHANGED':
+        return {
+          ...state,
+          paymentMethod: defaultPaymentMethod(action.country, product),
+        };
+
+      case 'SET_PAYMENT_METHOD':
+        return {
+          ...state,
+          paymentMethod: action.paymentMethod,
+          formErrors: removeError('paymentMethod', state.formErrors),
+        };
+
+      case 'SET_FORM_ERRORS':
+        return { ...state, formErrors: action.errors };
+
+      case 'SET_SUBMISSION_ERROR':
+        return { ...state, submissionError: action.error, formSubmitted: false };
+
+      case 'SET_FORM_SUBMITTED':
+        return { ...state, formSubmitted: action.formSubmitted };
+
+      case 'SET_BILLING_ADDRESS_IS_SAME':
+        return {
+          ...state,
+          billingAddressIsSame: action.isSame,
+          formErrors: removeError('billingAddressIsSame', state.formErrors),
+        };
+
+      case 'SET_PAYPAL_HAS_LOADED':
+        return { ...state, payPalHasLoaded: true };
+
+      default:
+        return state;
     }
-    return dispatch({
-      type: 'SET_PAYMENT_METHOD',
-      paymentMethod,
-      country: state.common.internationalisation.countryId,
-    });
-  },
+  };
+}
 
-  onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
-    (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
-};
+export { createCheckoutReducer };
 
-
-export type FormActionCreators = typeof formActionCreators;
-
-export {
-  setStage,
-  setFormErrors,
-  setSubmissionError,
-  setFormSubmitted,
-  formActionCreators,
-};

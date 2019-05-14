@@ -11,6 +11,8 @@ import type { ReduxState } from 'helpers/page/page';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
 import type { State as AddressState } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 
@@ -24,6 +26,8 @@ export type FormFields = {|
   paymentMethod: Option<PaymentMethod>,
   startDate: Option<string>,
   billingAddressIsSame: Option<boolean>,
+  fulfilmentOption: FulfilmentOptions,
+  productOption: ProductOptions,
 |};
 
 export type FormField = $Keys<FormFields>;
