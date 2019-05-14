@@ -3,13 +3,12 @@
 import type { Dispatch } from 'redux';
 import { type Action, setFormErrors } from 'helpers/subscriptionsForms/checkoutActions';
 import type { FormField, FormFields, State } from 'helpers/subscriptionsForms/formFields';
-import { getFormFields } from 'helpers/subscriptionsForms/formFields';
+import { getBillingAddressFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import {
   getFormErrors as getAddressFormErrors,
   setFormErrorsFor as setAddressFormErrorsFor,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { getAddressFields } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { formError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 
@@ -31,7 +30,7 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
 }
 
 const formIsValid = (state: State): boolean => getErrors(getFormFields(state)).length === 0 &&
-    getAddressFormErrors(getAddressFields(state)).length === 0;
+    getAddressFormErrors(getBillingAddressFields(state)).length === 0;
 
 function validateForm(dispatch: Dispatch<Action>, state: State) {
   type Error<T> = {
@@ -45,7 +44,7 @@ function validateForm(dispatch: Dispatch<Action>, state: State) {
       dispatcher: setFormErrors,
     }: Error<FormField>),
     ({
-      errors: getAddressFormErrors(getAddressFields(state)),
+      errors: getAddressFormErrors(getBillingAddressFields(state)),
       dispatcher: setAddressFormErrorsFor('billing'),
     }: Error<AddressFormField>),
   ].filter(({ errors }) => errors.length > 0);

@@ -14,22 +14,10 @@ import { createUserReducer } from 'helpers/user/userReducer';
 import { validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 import type { Action } from 'helpers/subscriptionsForms/checkoutActions';
 import { showPaymentMethod } from './helpers/paymentProviders';
-import type {
-  FormFields as AddressFormFields,
-  State as AddressState,
-} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { DigitalPack } from 'helpers/subscriptions';
 import type { State } from 'helpers/subscriptionsForms/formFields';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/checkoutReducer';
-
-// ----- Selectors ----- //
-
-const getAddress = (state: State): AddressState => state.page.billingAddress;
-const getAddressFields = (state: State): AddressFormFields => {
-  const { formErrors, ...formFields } = getAddress(state).fields;
-  return formFields;
-};
 
 
 // ----- Functions ----- //
@@ -56,7 +44,7 @@ function initReducer(initialCountry: IsoCountry) {
     ),
     user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
     directDebit,
-    address: addressReducerFor('billing', initialCountry),
+    billingAddress: addressReducerFor('billing', initialCountry),
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
@@ -68,6 +56,4 @@ function initReducer(initialCountry: IsoCountry) {
 export {
   initReducer,
   submitForm,
-  getAddress,
-  getAddressFields,
 };

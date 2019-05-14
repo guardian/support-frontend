@@ -34,7 +34,13 @@ import { signOut } from 'helpers/user/user';
 import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 import GridImage from 'components/gridImage/gridImage';
 
-import { type FormField, type FormFields, getFormFields, type State } from 'helpers/subscriptionsForms/formFields';
+import {
+  type FormField,
+  type FormFields,
+  getBillingAddress,
+  getFormFields,
+  type State,
+} from 'helpers/subscriptionsForms/formFields';
 import { submitForm } from '../digitalSubscriptionCheckoutReducer';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
@@ -42,7 +48,6 @@ import CancellationSection from 'components/subscriptionCheckouts/cancellationSe
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
-import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { DigitalPack } from 'helpers/subscriptions';
 
 // ----- Types ----- //
@@ -105,7 +110,7 @@ function mapDispatchToProps() {
   };
 }
 
-const Address = withStore(countries, 'billing', getAddress);
+const Address = withStore(countries, 'billing', getBillingAddress);
 
 
 // ----- Component ----- //

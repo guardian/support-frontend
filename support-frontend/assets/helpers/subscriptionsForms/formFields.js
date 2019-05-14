@@ -75,10 +75,10 @@ function getEmail(state: State): string {
   return state.page.checkout.email;
 }
 
-const getAddress = (state: State): AddressState => state.page.billingAddress;
+const getBillingAddress = (state: State): AddressState => state.page.billingAddress;
 const getBillingAddressFields = (state: State): AddressFormFields => {
-  const { formErrors, ...formFields } = getAddress(state).fields;
+  const { formErrors, ...formFields } = getBillingAddress(state).fields;
   return formFields;
 };
 
-export { getFormFields, getEmail, getBillingAddressFields };
+export { getFormFields, getEmail, getBillingAddress, getBillingAddressFields };
