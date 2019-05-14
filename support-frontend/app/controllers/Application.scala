@@ -20,7 +20,6 @@ import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
 import views.{EmptyDiv, Preload}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class Application(
@@ -70,6 +69,11 @@ class Application(
   }
 
 
+  // In the case of /contribute/<wildcard> or /<country>/contribute/<wildcard>, we want to discard the wildcard and do a geo-redirect
+  // We have to pass both country and wildcard through to the controller here as play enforces it, even if the function doesn't need them
+  def contributeWildcardGeoRedirect(country: String, wildcard: String): Action[AnyContent] = contributeGeoRedirect(campaignCode = "")
+
+
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location, request.queryString, status = FOUND)
   }
@@ -94,22 +98,16 @@ class Application(
   }
 
   def contributionsLanding(
-                            countryCode: String,
-                            campaignCode: String
+                            countryCode: String
                           ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
-
     type Attempt[A] = EitherT[Future, String, A]
 
-    val campaignCodeExistsButIsInvalid = campaignCode != "" && campaignCode != "toxicamerica"
-    if (campaignCodeExistsButIsInvalid) {
-      Future.successful[Result](Redirect(getRedirectUrl(request.fastlyCountry), request.queryString, status = FOUND))
-    } else {
-      implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-        _ => Ok(contributionsHtml(countryCode, None)),
-        user => Ok(contributionsHtml(countryCode, user))
-      ).map(_.withSettingsSurrogateKey)
-    }
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+      _ => Ok(contributionsHtml(countryCode, None)),
+      user => Ok(contributionsHtml(countryCode, user))
+    ).map(_.withSettingsSurrogateKey)
+
   }
 
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
@@ -136,7 +134,7 @@ class Application(
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
-      idUser = idUser,
+      idUser = idUser
     )
   }
 

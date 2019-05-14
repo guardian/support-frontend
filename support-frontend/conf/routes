@@ -48,11 +48,20 @@ GET  /monthly-contributions                         controllers.Application.perm
 
 # ----- Contributions ----- #
 
-GET  /contribute/:campaignCode                      controllers.Application.contributeGeoRedirect(campaignCode: String)
 GET  /contribute                                    controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode  controllers.Application.contributionsLanding(country: String, campaignCode: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String, campaignCode = "")
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou    controllers.Application.contributionsLanding(country: String, campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String)
+
+# ----- Toxic America Campaign ---- #
+GET  /contribute/toxicamerica                       controllers.Application.contributeGeoRedirect(campaignCode = "toxicamerica")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/toxicamerica  controllers.Application.contributionsLanding(country: String)
+
+
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou    controllers.Application.contributionsLanding(country: String)
+
+
+# ---- Wildcard redirects ----- #
+GET  /contribute/:wildcard                          controllers.Application.contributeWildcardGeoRedirect(country = "", wildcard: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:wildcard controllers.Application.contributeWildcardGeoRedirect(country: String, wildcard: String)
 
 
 POST /contribute/recurring/create                   controllers.RegularContributions.create
