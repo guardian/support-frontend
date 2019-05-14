@@ -37,6 +37,8 @@ import {
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
+import { getWeeklyDays } from './helpers/deliveryDays';
+import { formatUserDate } from 'helpers/dateConversions';
 
 // ----- Types ----- //
 
@@ -111,6 +113,13 @@ function getEmail(state: State): string {
 
 const getDeliveryAddress = (state: State): AddressState => state.page.deliveryAddress;
 const getBillingAddress = (state: State): AddressState => state.page.billingAddress;
+
+const today = new Date().getTime();
+const days = getWeeklyDays(today);
+
+function getDays() {
+  return days.map(day => formatUserDate(day));
+}
 
 // ----- Functions ----- //
 
@@ -236,7 +245,7 @@ function initReducer(initialCountry: IsoCountry) {
     email: user.email || '',
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    startDate: null,
+    startDate: getDays()[0],
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? null : Stripe,
     formErrors: [],
@@ -307,6 +316,7 @@ export {
   initReducer,
   setStage,
   setFormErrors,
+  getDays,
   getFormFields,
   getEmail,
   getDeliveryAddress,

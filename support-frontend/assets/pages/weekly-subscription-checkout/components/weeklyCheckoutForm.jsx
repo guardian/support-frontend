@@ -33,6 +33,7 @@ import {
   type FormFields,
   getBillingAddress,
   getDeliveryAddress,
+  getDays,
   getFormFields,
   signOut,
   type State,
@@ -43,7 +44,7 @@ import type { FormField as PersonalDetailsFormField } from 'components/subscript
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
-import { newspaperCountries } from 'helpers/internationalisation/country';
+import { countries } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
@@ -74,8 +75,9 @@ function mapStateToProps(state: State) {
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
-const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
-const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddress);
+const DeliveryAddress = withStore(countries, 'delivery', getDeliveryAddress);
+const BillingAddress = withStore(countries, 'billing', getBillingAddress);
+const days = getDays();
 
 // ----- Component ----- //
 
@@ -94,8 +96,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
               altText=""
             />
           }
-          title="weekly holding page"
-          description="placeholder description"
+          title="Guardian Weekly"
+          description=""
           productPrice={{ price: 99.89, currency: 'GBP' }}
           promotion={undefined}
           dataList={[
@@ -133,7 +135,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
               signOut={props.signOut}
             />
           </FormSection>
-          <FormSection title="Where should we deliver your vouchers?">
+          <FormSection title="Where should we deliver your magazine?">
             <DeliveryAddress />
           </FormSection>
           <FormSection title="Is the billing address the same as the delivery address?">
@@ -168,13 +170,15 @@ function WeeklyCheckoutForm(props: PropTypes) {
           <FormSection title="When would you like your subscription to start?">
             <Rows>
               <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
-                <RadioInput
-                  appearance="group"
-                  text="userDate"
-                  name="machineDate"
-                  checked="true"
-                  onChange={() => props.setStartDate('machineDate')}
-                />
+                {days.map(day => (
+                  <RadioInput
+                    appearance="group"
+                    text={day}
+                    name="machineDate"
+                    checked={day === props.startDate}
+                    onChange={() => props.setStartDate(day)}
+                  />))
+                }
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
                 <p>
@@ -192,8 +196,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
-            optimizeExperiments={null}
             submissionError={props.submissionError}
+            payPalEnabled={false}
           />
           <FormSection noBorder>
             <Button aria-label={null} type="submit">Continue to payment</Button>
