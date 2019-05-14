@@ -11,7 +11,7 @@ import { getQueryParameter } from 'helpers/url';
 import csrf, { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { type FormError } from 'helpers/subscriptionsForms/validation';
+import { type FormError, removeError } from 'helpers/subscriptionsForms/validation';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import {
   marketingConsentReducerFor,
@@ -31,6 +31,8 @@ import type {
   State as AddressState,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { defaultPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import { DigitalPack } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
@@ -121,7 +123,7 @@ function initReducer(initialCountry: IsoCountry) {
     lastName: user.lastName || '',
     telephone: null,
     billingPeriod: initialBillingPeriod,
-    paymentMethod: null,
+    paymentMethod: defaultPaymentMethod(initialCountry, DigitalPack),
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -129,6 +131,7 @@ function initReducer(initialCountry: IsoCountry) {
     productPrices,
     payPalHasLoaded: false,
   };
+
 
   function reducer(state: CheckoutState = initialState, action: Action): CheckoutState {
 
@@ -138,10 +141,10 @@ function initReducer(initialCountry: IsoCountry) {
         return { ...state, stage: action.stage };
 
       case 'SET_FIRST_NAME':
-        return { ...state, firstName: action.firstName };
+        return { ...state, firstName: action.firstName, formErrors: removeError('firstName', state.formErrors) };
 
       case 'SET_LAST_NAME':
-        return { ...state, lastName: action.lastName };
+        return { ...state, lastName: action.lastName, formErrors: removeError('lastName', state.formErrors) };
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
@@ -149,10 +152,14 @@ function initReducer(initialCountry: IsoCountry) {
       case 'SET_BILLING_PERIOD':
         return { ...state, billingPeriod: action.billingPeriod };
 
+      case 'SET_COUNTRY_CHANGED':
+        return { ...state, paymentMethod: defaultPaymentMethod(action.country, DigitalPack) };
+
       case 'SET_PAYMENT_METHOD':
         return {
           ...state,
           paymentMethod: action.paymentMethod,
+          formErrors: removeError('paymentMethod', state.formErrors),
         };
 
       case 'SET_FORM_ERRORS':

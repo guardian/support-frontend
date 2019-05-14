@@ -29,8 +29,9 @@ case class ContributionEmailFields(
     )
     case dd: ClonedDirectDebitPaymentMethod => List(
       "account name" -> dd.bankTransferAccountName,
+      "account number" -> mask(dd.bankTransferAccountNumber),
       "sort code" -> hyphenate(dd.bankCode),
-      "Mandate ID" -> directDebitMandateId.getOrElse(""),
+      "Mandate ID" -> dd.mandateId,
       "first payment date" -> formatDate(created.plusDays(10).toLocalDate),
       "payment method" -> "Direct Debit"
     )

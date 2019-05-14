@@ -7,12 +7,12 @@ States:
     Choices:
       - Variable: "$.requestInfo.accountExists"
         BooleanEquals: true
-        Next: GetPaymentMethod
+        Next: PreparePaymentMethodForReuse
     Default: CreatePaymentMethod
 
-  GetPaymentMethod:
+  PreparePaymentMethodForReuse:
     Type: Task
-    Resource: "${GetPaymentMethodLambda.Arn}"
+    Resource: "${PreparePaymentMethodForReuseLambda.Arn}"
     Next: CreateZuoraSubscription
     {{> retry}}
     {{> catch}}

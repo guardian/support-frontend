@@ -8,18 +8,18 @@ import com.gu.i18n.{Country, CountryGroup}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, GetPaymentMethodState}
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
 import com.gu.support.zuora.api.response.{GetPaymentMethodCardReferenceResponse, GetPaymentMethodDirectDebitResponse, GetPaymentMethodResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class GetPaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[GetPaymentMethodState, CreateZuoraSubscriptionState](servicesProvider) {
+class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServiceProvider)
+    extends ServicesHandler[PreparePaymentMethodForReuseState, CreateZuoraSubscriptionState](servicesProvider) {
 
   def this() = this(ServiceProvider)
 
-  override protected def servicesHandler(state: GetPaymentMethodState, requestInfo: RequestInfo, context: Context, services: Services) = {
+  override protected def servicesHandler(state: PreparePaymentMethodForReuseState, requestInfo: RequestInfo, context: Context, services: Services) = {
 
     val zuoraService = services.zuoraService
     val accountId = state.paymentFields.billingAccountId

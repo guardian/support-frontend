@@ -44,13 +44,17 @@ import type { FormField as PersonalDetailsFormField } from 'components/subscript
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
+
 import { countries } from 'helpers/internationalisation/country';
+import { GuardianWeekly } from 'helpers/subscriptions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 
 // ----- Types ----- //
 
 type PropTypes = {|
   ...FormFields,
+  country: IsoCountry,
   signOut: typeof signOut,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
@@ -64,6 +68,7 @@ type PropTypes = {|
 function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
+    country: state.common.internationalisation.countryId,
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
@@ -192,10 +197,12 @@ function WeeklyCheckoutForm(props: PropTypes) {
             </Rows>
           </FormSection>
           <PaymentMethodSelector
-            countrySupportsDirectDebit
+            country={props.country}
+            product={GuardianWeekly}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
+            validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
             payPalEnabled={false}
           />
