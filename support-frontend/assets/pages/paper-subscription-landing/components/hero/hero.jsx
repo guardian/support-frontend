@@ -29,7 +29,7 @@ function getHeading(): string {
 }
 
 const getDiscountCopy = () => {
-  const discountParam = getQueryParameter('discount');
+  const discountParam = getQueryParameter('heroCopy');
   return discountCopyChoices[discountParam] || discountCopyChoices.control;
 }
 
