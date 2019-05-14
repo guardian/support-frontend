@@ -16,7 +16,7 @@ object RetryImplicits {
       case e @ (_: SocketTimeoutException | _: SocketException | _: WebServiceHelperError[_]) => new RetryUnlimited(message = e.getMessage, cause = throwable)
 
       //Invalid Json
-      case e: ParsingFailure => new RetryNone(message = e.getMessage, cause = throwable)
+      case e @ (_: ParsingFailure | _: MatchError) => new RetryNone(message = e.getMessage, cause = throwable)
 
       //Any Exception that we haven't specifically handled
       case e: Throwable => new RetryLimited(message = e.getMessage, cause = throwable)

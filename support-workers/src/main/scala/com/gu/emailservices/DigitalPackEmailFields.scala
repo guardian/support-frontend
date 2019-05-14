@@ -56,9 +56,10 @@ case class DigitalPackEmailFields(
     )
     case dd: ClonedDirectDebitPaymentMethod => List(
       "Sort Code" -> hyphenate(dd.bankCode),
+      "Account number" -> mask(dd.bankTransferAccountNumber),
       "Account Name" -> dd.bankTransferAccountName,
       "Default payment method" -> "Direct Debit",
-      "MandateID" -> directDebitMandateId.getOrElse("")
+      "MandateID" -> dd.mandateId
     )
     case _: CreditCardReferenceTransaction => List("Default payment method" -> "Credit/Debit Card")
     case _: PayPalReferenceTransaction => Seq("Default payment method" -> "PayPal")

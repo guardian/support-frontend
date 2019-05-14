@@ -10,7 +10,7 @@ import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
-import com.gu.support.workers.lambdas.GetPaymentMethod
+import com.gu.support.workers.lambdas.PreparePaymentMethodForReuse
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.workers.{CreditCardReferenceTransaction, LambdaSpec}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -23,10 +23,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 @IntegrationTest
-class GetPaymentMethodSpec extends LambdaSpec with MockServicesCreator {
+class PreparePaymentMethodForReuseSpec extends LambdaSpec with MockServicesCreator {
 
   "ClonePaymentMethod lambda" should "clone CreditCard Payment Method" in {
-    val addZuoraSubscription = new GetPaymentMethod(mockServiceProvider)
+    val addZuoraSubscription = new PreparePaymentMethodForReuse(mockServiceProvider)
 
     val outStream = new ByteArrayOutputStream()
     val cardAccount = "2c92c0f869330b7a01694982970a2b34"

@@ -4,7 +4,7 @@ import java.util.UUID
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.workers.{User, _}
 
-case class GetPaymentMethodState(
+case class PreparePaymentMethodForReuseState(
     requestId: UUID,
     product: ProductType,
     paymentFields: ExistingPaymentFields,
@@ -14,6 +14,6 @@ case class GetPaymentMethodState(
 
 import com.gu.support.encoding.Codec
 
-object GetPaymentMethodState {
-  implicit val codec: Codec[GetPaymentMethodState] = deriveCodec
+object PreparePaymentMethodForReuseState {
+  implicit val codec: Codec[PreparePaymentMethodForReuseState] = deriveCodec
 }
