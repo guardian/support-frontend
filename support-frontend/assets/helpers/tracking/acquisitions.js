@@ -12,7 +12,7 @@ import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
 import { OPTIMIZE_QUERY_PARAMETER } from 'helpers/optimize/optimize';
-import { getCampaignName } from 'pages/new-contributions-landing/campaigns';
+import { getCampaignName } from 'helpers/campaigns';
 
 
 // ----- Types ----- //

@@ -12,6 +12,7 @@ export type CampaignSettings = {
 
   tickerJsonUrl?: string,
   cssModifiers?: string[],
+  cssModifiers?: string[],
   tickerType: TickerType,
 };
 
@@ -79,5 +80,9 @@ export const campaigns: Campaigns = {
 export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
-  return window.location.pathname.endsWith('/toxicamerica') ? 'toxicamerica' : undefined;
+
+  const currentCampaignName = 'toxicamerica';
+  return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
 }
+
+

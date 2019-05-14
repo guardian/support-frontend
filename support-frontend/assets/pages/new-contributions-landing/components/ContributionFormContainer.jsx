@@ -19,7 +19,7 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
-import { campaigns, getCampaignName } from 'pages/new-contributions-landing/campaigns';
+import { campaigns, getCampaignName } from 'helpers/campaigns';
 
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';

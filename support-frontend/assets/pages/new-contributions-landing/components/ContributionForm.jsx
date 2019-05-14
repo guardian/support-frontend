@@ -50,7 +50,7 @@ import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/St
 import type { FullDetailExistingPaymentMethod } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
-import { getCampaignName } from 'pages/new-contributions-landing/campaigns';
+import { getCampaignName } from 'helpers/campaigns';
 
 
 // ----- Types ----- //
