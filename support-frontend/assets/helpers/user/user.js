@@ -82,7 +82,8 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
 
   const emailFromBrowser = getEmailFromBrowser();
 
-  if (isTestUser()) {
+  // Prevent use of test stripe token if logged in, as support-workers will try it in live mode if the identity cookie present
+  if (isTestUser() && !userAppearsLoggedIn) {
     dispatch(setTestUser(true));
   }
 
