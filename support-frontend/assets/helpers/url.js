@@ -104,6 +104,10 @@ function isFrontlineCampaign(): boolean {
   return getQueryParameter('frontline-campaign') === 'true';
 }
 
+function isToxicAmericaCampaign(): boolean {
+  return getQueryParameter('campaign-name') === 'toxicamerica';
+}
+
 // ----- Exports ----- //
 
 export {
@@ -116,4 +120,5 @@ export {
   getAbsoluteURL,
   getPathAfterRoute,
   isFrontlineCampaign,
+  isToxicAmericaCampaign,
 };

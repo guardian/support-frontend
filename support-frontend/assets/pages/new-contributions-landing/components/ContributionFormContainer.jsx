@@ -5,7 +5,7 @@
 import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { isFrontlineCampaign } from 'helpers/url';
+import { isToxicAmericaCampaign } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -32,8 +32,7 @@ import {
   setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
-
+import AnchorButton from 'components/button/anchorButton';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -130,39 +129,29 @@ const countryGroupSpecificDetails: {
 };
 
 function goalReachedTemplate() {
-  if (isFrontlineCampaign()) {
+  if (isToxicAmericaCampaign()) {
     return (
       <div className="goal-reached">
         <div className="goal-reached__message">
-          Thank you to everyone who supported ‘The Frontline’.
+          Thank you to everyone who supported ‘Toxic America’.
           We’re no longer accepting contributions for the series, but you can still support
           The Guardian’s journalism with a single or recurring contribution
         </div>
         <div className="goal-reached__buttons">
-          <ButtonWithRightArrow
-            componentClassName="goal-reached__button"
-            buttonClassName=""
-            accessibilityHintId="accessibility-hint-the-frontline"
-            type="button"
-            buttonCopy="Read ‘The Frontline’ series"
-            onClick={
-              () => {
-                window.location.assign('https://www.theguardian.com/environment/series/the-frontline');
-              }
-            }
-          />
-          <ButtonWithRightArrow
-            componentClassName="goal-reached__button"
-            buttonClassName="goal-reached__button--support"
-            accessibilityHintId="accessibility-hint-support"
-            type="button"
-            buttonCopy="Support The Guardian"
-            onClick={
-              () => {
-                window.location.assign('/contribute');
-              }
-            }
-          />
+          <AnchorButton
+            href="https://www.theguardian.com/environment/"
+            appearance="greyHollow"
+            aria-label="Read ‘Toxic America’ series on The Guardian"
+          >
+            Read ‘Toxic America’ series
+          </AnchorButton>
+          <AnchorButton
+            href="https://support.theguardian.com/contribute"
+            appearance="greyHollow"
+            aria-label="Support The Guardian"
+          >
+            Support The Guardian
+          </AnchorButton>
         </div>
       </div>
     );

@@ -23,18 +23,17 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = 'thefrontline';
-
+const currentCampaignName = 'toxicamerica';
 
 export const campaigns: Campaigns = {
-  thefrontline: {
+  toxicamerica: {
     formMessage: (
       <div>
         <div className="form-message__headline">Make a contribution</div>
-        <div className="form-message__body">to our dedicated series ‘The Frontline’</div>
+        <div className="form-message__body">to our dedicated series ‘Toxic America’</div>
       </div>
     ),
-    headerCopy: 'The Frontline: Australia and the climate emergency',
+    headerCopy: 'Toxic America: The US and the climate emergency',
     contributeCopy: (
       <div>
         <p>
@@ -47,7 +46,7 @@ export const campaigns: Campaigns = {
         </p>
         <p>
           That’s why we need your help to bring our reporting on the climate crisis to light.
-          We asked our readers to fund a new Guardian series – The Frontline: Australia and the climate emergency.
+          We asked our readers to fund a new Guardian series – Toxic America: The US and the climate emergency.
           Your response has been immediate and overwhelming, and thanks to your encouragement we have increased
           the goal to $150,000.
         </p>
@@ -61,11 +60,11 @@ export const campaigns: Campaigns = {
       </div>
     ),
     termsAndConditions: (contributionsTermsLink: string) => (
-      <div className="component-terms-privacy">
-        <p className="component-terms-thefrontline">
+      <div className="component-terms-privacy component-terms-privacy--toxic-america">
+        <p>
           By proceeding, you’re agreeing to our <span className="bold">Terms and Conditions</span>.
           If we hit our goal of $150,000, The Guardian will allocate this amount to its core operations
-          which will help fund the completion of the ‘The Frontline: Australia and the climate emergency’ series,
+          which will help fund the completion of the ‘Toxic America: The US and the climate emergency’ series,
           including editing, reporting, graphics and new commissions. If we fall short of the goal,
           The Guardian will allocate the funds for a scaled back project on climate change.
           Contributions will not be returned. Your contribution is also governed by
@@ -79,7 +78,7 @@ export const campaigns: Campaigns = {
     ),
     tickerJsonUrl: '/ticker.json',
     tickerType: 'hardstop',
-    cssModifiers: [currentCampaignName],
+    cssModifiers: ["campaign", currentCampaignName],
     contributionTypes: generateContributionTypes([
       { contributionType: 'ONE_OFF', isDefault: true },
     ]),
@@ -89,6 +88,5 @@ export const campaigns: Campaigns = {
 export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
-
   return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
 }
