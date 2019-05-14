@@ -2,9 +2,9 @@
 
 // ----- Imports ----- //
 
-import type { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
+import type { State } from 'helpers/subscriptionsForms/formFields';
 import { formIsValid } from 'pages/digital-subscription-checkout/helpers/validation';
-import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import type { Action } from 'helpers/subscriptionsForms/checkoutActions';
 
 // ----- Functions ----- //
 

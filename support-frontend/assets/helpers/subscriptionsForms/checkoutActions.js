@@ -6,16 +6,18 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { ErrorReason } from 'helpers/errorReasons';
-import type { FormField, Stage } from './formFields';
+import type { FormField, Stage, State } from './formFields';
 import type { BillingPeriod, DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
-import type { State } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import * as storage from 'helpers/storage';
 import { trackPaymentMethodSelected } from 'helpers/tracking/ophanComponentEventTracking';
 import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { onPaymentAuthorised } from 'pages/digital-subscription-checkout/helpers/paymentProviders';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { Action as DDAction } from 'components/directDebit/directDebitActions';
+import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
+import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -30,7 +32,10 @@ export type Action =
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean> };
+  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean>}
+  | AddressAction
+  | PayPalAction
+  | DDAction;
 
 
 // ----- Action Creators ----- //

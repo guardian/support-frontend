@@ -10,7 +10,7 @@ import { HeroWrapper } from 'components/productPage/productPageHero/productPageH
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import { type Stage, type State } from '../digitalSubscriptionCheckoutReducer';
+import type { Stage, State } from 'helpers/subscriptionsForms/formFields';
 
 import ThankYouContent from './thankYouContent';
 import ThankYouPendingContent from './thankYouPendingContent';

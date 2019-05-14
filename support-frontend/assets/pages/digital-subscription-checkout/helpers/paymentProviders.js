@@ -1,7 +1,6 @@
 // @flow
 
 import { loadStripe, openDialogBox, setupStripeCheckout } from 'helpers/paymentIntegrations/stripeCheckout';
-import { type IsoCountry } from 'helpers/internationalisation/country';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import {
   type PaymentResult,
@@ -15,8 +14,13 @@ import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
-import { getAddressFields, type State } from '../digitalSubscriptionCheckoutReducer';
-import { type Action, setFormSubmitted, setStage, setSubmissionError } from '../digitalSubscriptionCheckoutActions';
+import { getBillingAddressFields, type State } from 'helpers/subscriptionsForms/formFields';
+import {
+  type Action,
+  setFormSubmitted,
+  setStage,
+  setSubmissionError,
+} from 'helpers/subscriptionsForms/checkoutActions';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
@@ -29,7 +33,7 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
     telephone,
   } = state.page.checkout;
 
-  const addressFields = getAddressFields(state);
+  const addressFields = getBillingAddressFields(state);
 
   const product = {
     currency: currencyId,
@@ -100,7 +104,7 @@ function showStripe(
 }
 
 function showPaymentMethod(
-  dispatch: Dispatch<Action>,
+  dispatch: Dispatch<Action | Action>,
   state: State,
 ): void {
   const { paymentMethod } = state.page.checkout;
@@ -124,6 +128,4 @@ function showPaymentMethod(
   }
 }
 
-const countrySupportsDirectDebit = (country: ?IsoCountry): boolean => country !== null && country === 'GB';
-
-export { showPaymentMethod, onPaymentAuthorised, countrySupportsDirectDebit };
+export { showPaymentMethod, onPaymentAuthorised };

@@ -10,7 +10,10 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import type { ReduxState } from 'helpers/page/page';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
-import type { State as AddressState } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import type {
+  FormFields as AddressFormFields,
+  State as AddressState,
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
@@ -48,6 +51,34 @@ export type State = ReduxState<{|
   checkout: CheckoutState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
-  deliveryAddress: AddressState,
   billingAddress: AddressState,
+  deliveryAddress: Option<AddressState>,
 |}>;
+
+function getFormFields(state: State): FormFields {
+  return {
+    title: state.page.checkout.title,
+    firstName: state.page.checkout.firstName,
+    email: state.page.checkout.email,
+    lastName: state.page.checkout.lastName,
+    telephone: state.page.checkout.telephone,
+    startDate: state.page.checkout.startDate,
+    billingPeriod: state.page.checkout.billingPeriod,
+    paymentMethod: state.page.checkout.paymentMethod,
+    fulfilmentOption: state.page.checkout.fulfilmentOption,
+    productOption: state.page.checkout.productOption,
+    billingAddressIsSame: state.page.checkout.billingAddressIsSame,
+  };
+}
+
+function getEmail(state: State): string {
+  return state.page.checkout.email;
+}
+
+const getAddress = (state: State): AddressState => state.page.billingAddress;
+const getBillingAddressFields = (state: State): AddressFormFields => {
+  const { formErrors, ...formFields } = getAddress(state).fields;
+  return formFields;
+};
+
+export { getFormFields, getEmail, getBillingAddressFields };

@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { initReducer, type Stage } from '../digitalSubscriptionCheckoutReducer';
-import { setFormErrors, setStage } from '../digitalSubscriptionCheckoutActions';
+import { setFormErrors, setStage } from 'helpers/subscriptionsForms/checkoutActions';
 
 jest.mock('ophan', () => {});
 jest.mock('helpers/fontLoader', () => () => ({}));

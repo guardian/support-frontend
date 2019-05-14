@@ -24,11 +24,7 @@ import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import Summary from 'components/subscriptionCheckouts/summary';
-import {
-  type Action,
-  type FormActionCreators,
-  formActionCreators,
-} from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import { type Action, type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/checkoutActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
@@ -38,13 +34,8 @@ import { signOut } from 'helpers/user/user';
 import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 import GridImage from 'components/gridImage/gridImage';
 
-import {
-  type FormField,
-  type FormFields,
-  getFormFields,
-  type State,
-  submitForm,
-} from '../digitalSubscriptionCheckoutReducer';
+import { type FormField, type FormFields, getFormFields, type State } from 'helpers/subscriptionsForms/formFields';
+import { submitForm } from '../digitalSubscriptionCheckoutReducer';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
