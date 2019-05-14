@@ -22,6 +22,7 @@ import {
   type PostcodeFinderState,
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
+import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
 
 // ----- Types ----- //
 
@@ -119,31 +120,31 @@ const addressActionCreatorsFor = (scope: AddressType) => ({
       });
     }
   },
-  setAddressLineOne: (lineOne: string): Action => ({
+  setAddressLineOne: (lineOne: string): Function => (setFormSubmissionDependentValue(() => ({
     scope,
     type: 'SET_ADDRESS_LINE_1',
     lineOne,
-  }),
+  }))),
   setAddressLineTwo: (lineTwo: string): Action => ({
     scope,
     type: 'SET_ADDRESS_LINE_2',
     lineTwo,
   }),
-  setTownCity: (city: string): Action => ({
+  setTownCity: (city: string): Function => (setFormSubmissionDependentValue(() => ({
     scope,
     type: 'SET_TOWN_CITY',
     city,
-  }),
-  setState: (state: string): Action => ({
+  }))),
+  setState: (state: string): Function => (setFormSubmissionDependentValue(() => ({
     type: 'SET_STATE',
     state,
     scope,
-  }),
-  setPostcode: (postCode: string): Action => ({
+  }))),
+  setPostcode: (postCode: string): Function => (setFormSubmissionDependentValue(() => ({
     type: 'SET_POSTCODE',
     postCode,
     scope,
-  }),
+  }))),
 });
 
 export type ActionCreators = $Call<typeof addressActionCreatorsFor, AddressType>;
