@@ -63,7 +63,7 @@ class Application(
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
-  def contributeGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+  def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => "/uk/contribute"
       case Some(US) => "/us/contribute"
@@ -75,7 +75,9 @@ class Application(
       case _ => "/uk/contribute"
     }
 
-    Redirect(redirectUrl, request.queryString, status = FOUND)
+    val redirectUrlWithCampaignCode = s"$redirectUrl/$campaignCode"
+
+    Redirect(redirectUrlWithCampaignCode, request.queryString, status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -102,17 +104,21 @@ class Application(
   }
 
   def contributionsLanding(
-    countryCode: String
+    countryCode: String,
+    campaignCode: String
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val campaignCodeOption = if (campaignCode != "toxicamerica") Some(campaignCode) else None
+
+
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None)),
-      user => Ok(contributionsHtml(countryCode, user))
+      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption)),
+      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String])
     (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_

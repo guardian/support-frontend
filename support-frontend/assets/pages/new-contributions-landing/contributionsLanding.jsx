@@ -61,8 +61,23 @@ const setOneOffContributionCookie = () => {
 };
 
 const campaignName = getCampaignName();
-const cssModifiers = campaignName && campaigns[campaignName].cssModifiers ?
+const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
+
+function getPage() {
+  return (
+    <Page
+      classModifiers={['contribution-form', ...cssModifiers]}
+      header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+      footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
+    >
+      <NewContributionFormContainer
+        thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+      />
+      <ConsentBanner />
+    </Page>
+  );
+}
 
 const router = (
   <BrowserRouter>
@@ -70,19 +85,14 @@ const router = (
       <div>
         <Route
           exact
-          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
-          render={() => (
-            <Page
-              classModifiers={['contribution-form', ...cssModifiers]}
-              header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-              footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
-            >
-              <NewContributionFormContainer
-                thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-              />
-              <ConsentBanner />
-            </Page>
-            )
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/"
+          render={() => getPage()
+          }
+        />
+        <Route
+          exact
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/:campaignCode"
+          render={() => getPage()
         }
         />
         <Route
