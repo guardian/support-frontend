@@ -20,7 +20,7 @@ export type Campaigns = {
 };
 
 export const campaigns: Campaigns = {
-  thefrontline: {
+  toxicamerica: {
     formMessage: (
       <div>
         <div className="form-message__headline">Make a contribution</div>

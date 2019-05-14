@@ -174,7 +174,6 @@ function goalReachedTemplate() {
 const campaignName = getCampaignName();
 const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignName] : null;
 
-
 // ----- Render ----- //
 
 function ContributionFormContainer(props: PropTypes) {

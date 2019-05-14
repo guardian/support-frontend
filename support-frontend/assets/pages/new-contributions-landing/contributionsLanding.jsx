@@ -64,7 +64,7 @@ const campaignName = getCampaignName();
 const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
 
-function getPage() {
+function contributionsLandingPage() {
   return (
     <Page
       classModifiers={['contribution-form', ...cssModifiers]}
@@ -86,13 +86,13 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/"
-          render={() => getPage()
+          render={() => contributionsLandingPage()
           }
         />
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/:campaignCode"
-          render={() => getPage()
+          render={() => contributionsLandingPage()
         }
         />
         <Route

@@ -5,13 +5,14 @@
 import * as ophan from 'ophan';
 
 import { get as getCookie } from 'helpers/cookie';
-import { getQueryParameter, isFrontlineCampaign } from 'helpers/url';
+import { getQueryParameter } from 'helpers/url';
 import { deserialiseJsonObject } from 'helpers/utilities';
 import type { Participations } from 'helpers/abTests/abtest';
 import * as storage from 'helpers/storage';
 import { getAllQueryParamsWithExclusions } from 'helpers/url';
 import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
 import { OPTIMIZE_QUERY_PARAMETER } from 'helpers/optimize/optimize';
+import { getCampaignName } from 'pages/new-contributions-landing/campaigns';
 
 
 // ----- Types ----- //
@@ -191,8 +192,7 @@ function buildReferrerAcquisitionData(acquisitionData: Object = {}): ReferrerAcq
 
   // This was how referrer pageview id used to be passed.
   const campaignCode =
-    (isFrontlineCampaign() ? 'thefrontline-post-goal' : acquisitionData.campaignCode) ||
-    getQueryParameter('INTCMP');
+    getCampaignName() || acquisitionData.campaignCode || getQueryParameter('INTCMP');
 
   const parameterExclusions =
     ['REFPVID', 'INTCMP', 'acquisitionData', 'contributionValue', 'contribType', 'currency', OPTIMIZE_QUERY_PARAMETER];

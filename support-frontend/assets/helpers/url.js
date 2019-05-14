@@ -1,6 +1,8 @@
 // @flow
 
 // ----- Types ----- //
+import { getCampaignName } from 'pages/new-contributions-landing/campaigns';
+
 export type Domain
   = 'thegulocal.com'
   | 'code.dev-theguardian.com'
@@ -104,6 +106,10 @@ function isFrontlineCampaign(): boolean {
   return getQueryParameter('frontline-campaign') === 'true';
 }
 
+function isToxicAmericaCampaign(): boolean {
+  return getCampaignName() === 'toxicamerica';
+}
+
 // ----- Exports ----- //
 
 export {
@@ -116,4 +122,5 @@ export {
   getAbsoluteURL,
   getPathAfterRoute,
   isFrontlineCampaign,
+  isToxicAmericaCampaign,
 };
