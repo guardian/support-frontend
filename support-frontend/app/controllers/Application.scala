@@ -46,6 +46,9 @@ class Application(
 
   implicit val a: AssetsResolver = assets
 
+  def contributionsRedirect(): Action[AnyContent] = CachedAction() {
+    Ok(views.html.contributionsRedirect())
+  }
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
@@ -60,10 +63,6 @@ class Application(
     }
 
     Redirect(redirectUrl, request.queryString, status = FOUND)
-  }
-
-  def contributionsRedirect(): Action[AnyContent] = CachedAction() {
-    Ok(views.html.contributionsRedirect())
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
