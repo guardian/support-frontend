@@ -93,23 +93,24 @@ class Application(
   }
 
   def contributionsLanding(
-    countryCode: String
+    countryCode: String,
+    campaignCode: String,
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
+    val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
+
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None)),
-      user => Ok(contributionsHtml(countryCode, user))
+      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption)),
+      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption))
     ).map(_.withSettingsSurrogateKey)
   }
 
-
-  // Play makes us pass through the camoaign code here even though we are going to discard it
-  def contributionsLandingWithCampaignCode(countryCode: String, campaignCode: String): Action[AnyContent] = contributionsLanding(countryCode)
+  def contributionsLandingWithoutCampaignCode(countryCode: String): Action[AnyContent] = contributionsLanding(countryCode, "")
 
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String])
                                (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
@@ -133,7 +134,8 @@ class Application(
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
-      idUser = idUser
+      idUser = idUser,
+      campaignCodeModifier = campaignCode.map(code => s"gu-content--$code")
     )
   }
 
