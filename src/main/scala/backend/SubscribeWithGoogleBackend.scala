@@ -144,13 +144,18 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
       .bimap(BackendError.fromOphanError, _ => ())
   }
 
-  private def isPaymentAlreadyProcessed(googleRecordPayment: GoogleRecordPayment) = {
-    databaseService.paymentAlreadyInserted(googleRecordPayment.paymentId).leftMap(
-      err => {
-        logger.error(s"Failure to select from database - trying to record payment for : $googleRecordPayment", err)
-        BackendError.fromDatabaseError(err)
-      }
-    )
+  private def isPaymentAlreadyProcessed(googleRecordPayment: GoogleRecordPayment): EitherT[Future, BackendError, Boolean] = {
+    EitherT[Future, BackendError, Boolean](Future.successful(Right(false)))
+    /**
+      * This lookup was removed during the migration to using a queue for database writes.
+      * This lookup will need to be moved out to another app when swg is revisited.
+      */
+    //    databaseService.paymentAlreadyInserted(googleRecordPayment.paymentId).leftMap(
+//      err => {
+//        logger.error(s"Failure to select from database - trying to record payment for : $googleRecordPayment", err)
+//        BackendError.fromDatabaseError(err)
+//      }
+//    )
   }
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
