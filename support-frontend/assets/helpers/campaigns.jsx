@@ -81,7 +81,7 @@ export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
 
-  const currentCampaignName = 'toxicamerica';
+  const currentCampaignName = 'thefrontline';
   return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
 }
 
