@@ -18,19 +18,23 @@ import ProductPagehero from 'components/productPage/productPageHero/productPageH
 import { discountCopyChoices } from './discountCopy';
 import './joyOfPrint.scss';
 
+
+const getDiscountCopy = () => {
+  const discountParam = getQueryParameter('heroCopy');
+  return {
+    roundal: discountCopyChoices[discountParam].roundal || discountCopyChoices.control.roundal,
+    heading: discountCopyChoices[discountParam].heading || discountCopyChoices.control.heading,
+  }
+}
+
 function getHeading(): string {
   if (flashSaleIsActive('Paper', GBPCountries)) {
     const saleCopy = getSaleCopy('Paper', GBPCountries);
     return saleCopy.landingPage.subHeading;
   }
 
-  return 'Save up to 37% on The Guardian and The Observer - all year round';
+  return getDiscountCopy().heading;
 
-}
-
-const getDiscountCopy = () => {
-  const discountParam = getQueryParameter('heroCopy');
-  return discountCopyChoices[discountParam] || discountCopyChoices.control;
 }
 
 const Discount = (props: { discountCopy: string[] }) => (
@@ -114,7 +118,7 @@ const CampaignHeader = () => (
       <div className="sale-joy-of-print-graphic-outer">
         <div className="sale-joy-of-print-graphic-inner">
           <div className="sale-joy-of-print-badge">
-            <Discount discountCopy={getDiscountCopy()} />
+            <Discount discountCopy={getDiscountCopy().roundal} />
           </div>
           <div className="sale-joy-of-print-graphic">
             <GridImage
