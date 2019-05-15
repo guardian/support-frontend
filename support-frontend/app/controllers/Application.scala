@@ -69,11 +69,6 @@ class Application(
   }
 
 
-  // In the case of /contribute/<wildcard> or /<country>/contribute/<wildcard>, we want to discard the wildcard and do a geo-redirect
-  // We have to pass both country and wildcard through to the controller here as play enforces it, even if the function doesn't need them
-  def contributeWildcardGeoRedirect(country: String, wildcard: String): Action[AnyContent] = contributeGeoRedirect(campaignCode = "")
-
-
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location, request.queryString, status = FOUND)
   }
