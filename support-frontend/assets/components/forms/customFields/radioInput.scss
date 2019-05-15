@@ -16,6 +16,15 @@
   position: relative;
 }
 
+.component-radio-input__helper {
+  display: block;
+  margin-left: $gu-h-spacing * 1.5;
+}
+
+.component-radio-input__offer {
+  font-weight: bold;
+}
+
 .component-radio-input__input {
   position: absolute;
   opacity: 0;

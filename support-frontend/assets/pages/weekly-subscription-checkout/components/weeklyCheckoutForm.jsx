@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-
+import { type WeeklyBillingPeriod, Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -41,16 +41,22 @@ import {
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 import { countries } from 'helpers/internationalisation/country';
+import { displayBillingPeriods } from 'helpers/productPrice/weeklyProductPrice';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Option } from 'helpers/types/option';
 
 
 // ----- Types ----- //
 
 type PropTypes = {|
   ...FormFields,
+  country: IsoCountry,
+  countryGroupId: CountryGroupId,
   signOut: typeof signOut,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
@@ -64,9 +70,18 @@ type PropTypes = {|
 function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
+    country: state.common.internationalisation.countryId,
+    countryGroupId: state.common.internationalisation.countryGroupId,
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+  };
+}
+
+function mapDispatchToProps() {
+  return {
+    ...formActionCreators,
+    signOut,
   };
 }
 
@@ -80,8 +95,41 @@ const BillingAddress = withStore(countries, 'billing', getBillingAddress);
 const days = getDays();
 
 // ----- Component ----- //
+type Plans = {
+  [WeeklyBillingPeriod]: {
+    title: string,
+    copy: string,
+    offer: Option<string>,
+  }
+}
 
 function WeeklyCheckoutForm(props: PropTypes) {
+  const plans: Plans = Object.keys(displayBillingPeriods).reduce((ps, billingPeriod) => ({
+    ...ps,
+    [billingPeriod]: {
+      title: displayBillingPeriods[billingPeriod].title,
+      copy: displayBillingPeriods[billingPeriod].copy(props.countryGroupId),
+      offer: displayBillingPeriods[billingPeriod].offer || null,
+    },
+  }), {});
+
+  console.log('plans: ', plans);
+
+  const quarterlyPriceLabel = {
+    title: plans.Quarterly.title,
+    copy: plans.Quarterly.copy,
+  };
+
+  const annualPriceLabel = {
+    title: plans.Annual.title,
+    copy: plans.Annual.copy,
+  };
+
+  const sixForSixPriceLabel = {
+    title: plans.SixForSix.title,
+    copy: plans.SixForSix.copy,
+    offer: plans.SixForSix.offer,
+  };
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -191,6 +239,32 @@ function WeeklyCheckoutForm(props: PropTypes) {
               </Text>
             </Rows>
           </FormSection>
+          <FormSection title="How often would you like to pay?">
+            <Fieldset legend="How often would you like to pay?">
+              <RadioInput
+                text={quarterlyPriceLabel.title}
+                helper={quarterlyPriceLabel.copy}
+                name="billingPeriod"
+                checked={props.billingPeriod === Quarterly}
+                onChange={() => props.setBillingPeriod(Quarterly)}
+              />
+              <RadioInput
+                text={annualPriceLabel.title}
+                helper={annualPriceLabel.copy}
+                name="billingPeriod"
+                checked={props.billingPeriod === Annual}
+                onChange={() => props.setBillingPeriod(Annual)}
+              />
+              <RadioInput
+                text={sixForSixPriceLabel.title}
+                offer={sixForSixPriceLabel.offer || null}
+                helper={sixForSixPriceLabel.copy}
+                name="billingPeriod"
+                checked={props.billingPeriod === SixForSix}
+                onChange={() => props.setBillingPeriod(SixForSix)}
+              />
+            </Fieldset>
+          </FormSection>
           <PaymentMethodSelector
             countrySupportsDirectDebit
             paymentMethod={props.paymentMethod}
@@ -219,7 +293,4 @@ function WeeklyCheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, {
-  ...formActionCreators,
-  signOut,
-})(WeeklyCheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(WeeklyCheckoutForm);

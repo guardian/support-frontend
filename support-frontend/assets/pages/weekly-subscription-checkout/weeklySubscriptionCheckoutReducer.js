@@ -35,6 +35,8 @@ import {
   setFormErrorsFor as setAddressFormErrorsFor,
   type State as AddressState,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { getQueryParameter } from 'helpers/url';
+import { type WeeklyBillingPeriod, Quarterly } from 'helpers/billingPeriods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { Stripe } from 'helpers/paymentMethods';
 import { getWeeklyDays } from './helpers/deliveryDays';
@@ -53,6 +55,7 @@ export type FormFields = {|
   telephone: Option<string>,
   paymentMethod: Option<PaymentMethod>,
   billingAddressIsSame: boolean | null,
+  billingPeriod: WeeklyBillingPeriod,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -89,6 +92,7 @@ export type Action =
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
   | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: boolean | null }
+  | { type: 'SET_BILLING_PERIOD', billingPeriod: WeeklyBillingPeriod }
   | DDAction
   | AddressAction;
 
@@ -104,6 +108,7 @@ function getFormFields(state: State): FormFields {
     telephone: state.page.checkout.telephone,
     paymentMethod: state.page.checkout.paymentMethod,
     billingAddressIsSame: state.page.checkout.billingAddressIsSame,
+    billingPeriod: state.page.checkout.billingPeriod,
   };
 }
 
@@ -229,6 +234,7 @@ const formActionCreators = {
     ),
   submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
   setbillingAddressIsSame: (isSame: boolean | null): Action => ({ type: 'SET_BILLING_ADDRESS_IS_SAME', isSame }),
+  setBillingPeriod: (billingPeriod: WeeklyBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
 };
 
 export type FormActionCreators = typeof formActionCreators;
@@ -238,6 +244,10 @@ export type FormActionCreators = typeof formActionCreators;
 function initReducer(initialCountry: IsoCountry) {
   const user = getUser(); // TODO: this is unnecessary, it should use the user reducer
   const { productPrices } = window.guardian;
+  const billingPeriodInUrl = getQueryParameter('period');
+  const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixForSix' || billingPeriodInUrl === 'Quarterly' || billingPeriodInUrl === 'Annual'
+    ? billingPeriodInUrl
+    : Quarterly;
 
   const initialState = {
     stage: 'checkout',
@@ -248,6 +258,7 @@ function initReducer(initialCountry: IsoCountry) {
     startDate: getDays()[0],
     telephone: null,
     paymentMethod: countrySupportsDirectDebit(initialCountry) ? null : Stripe,
+    billingPeriod: initialBillingPeriod,
     formErrors: [],
     submissionError: null,
     formSubmitted: false,
@@ -272,6 +283,9 @@ function initReducer(initialCountry: IsoCountry) {
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
+
+      case 'SET_BILLING_PERIOD':
+        return { ...state, billingPeriod: action.billingPeriod };
 
       case 'SET_START_DATE':
         return { ...state, startDate: action.startDate };

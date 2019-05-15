@@ -119,7 +119,6 @@ const Address = withStore(countries, 'billing', getAddress);
 // ----- Component ----- //
 
 function CheckoutForm(props: PropTypes) {
-
   const monthlyPriceLabel = props.country !== null ?
     (<PriceLabel
       country={props.country}
