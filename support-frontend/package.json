@@ -41,7 +41,8 @@
     "moduleFileExtensions": [
       "js",
       "json",
-      "es6"
+      "es6",
+      "jsx"
     ],
     "modulePaths": [
       "assets"

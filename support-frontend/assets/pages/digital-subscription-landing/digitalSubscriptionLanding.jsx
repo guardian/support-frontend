@@ -2,10 +2,10 @@
 
 // ----- Imports ----- //
 
+import { renderPage } from 'helpers/render';
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { renderPage } from 'helpers/render';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
@@ -26,12 +26,12 @@ import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import PromotionPopUp from './components/promotionPopUp';
-import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 import Form from './components/form';
 
 import './digitalSubscriptionLanding.scss';
 import './components/theMoment.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
+import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
 

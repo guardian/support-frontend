@@ -5,6 +5,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.play.IdUser
 import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
@@ -63,20 +64,10 @@ class Application(
     Redirect(redirectUrl, request.queryString, status = FOUND)
   }
 
-  def contributeGeoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.fastlyCountry match {
-      case Some(UK) => "/uk/contribute"
-      case Some(US) => "/us/contribute"
-      case Some(Australia) => "/au/contribute"
-      case Some(Europe) => "/eu/contribute"
-      case Some(Canada) => "/ca/contribute"
-      case Some(NewZealand) => "/nz/contribute"
-      case Some(RestOfTheWorld) => "/int/contribute"
-      case _ => "/uk/contribute"
-    }
-
-    Redirect(redirectUrl, request.queryString, status = FOUND)
+  def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    Redirect(s"${getRedirectUrl(request.fastlyCountry)}/$campaignCode", request.queryString, status = FOUND)
   }
+
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     Redirect(location, request.queryString, status = FOUND)
@@ -105,6 +96,7 @@ class Application(
     countryCode: String
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
+
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
       _ => Ok(contributionsHtml(countryCode, None)),
@@ -112,10 +104,15 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
-    (implicit request: RequestHeader, settings: AllSettings) = {
 
-    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage)_
+  // Play makes us pass through the camoaign code here even though we are going to discard it
+  def contributionsLandingWithCampaignCode(countryCode: String, campaignCode: String): Action[AnyContent] = contributionsLanding(countryCode)
+
+
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
+                               (implicit request: RequestHeader, settings: AllSettings) = {
+
+    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
     val css = elementForStage(RefPath("contributionsLandingPage.css"))
 
     val js = elementForStage(RefPath("contributionsLandingPage.js"))
@@ -144,7 +141,7 @@ class Application(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       title = "Support the Guardian",
-      mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page","showcase.html"),
+      mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page", "showcase.html"),
       mainJsBundle = Left(RefPath("showcasePage.js")),
       mainStyleBundle = Left(RefPath("showcasePage.css")),
       fontLoaderBundle = fontLoaderBundle,
@@ -161,6 +158,20 @@ class Application(
   def removeTrailingSlash(path: String): Action[AnyContent] = CachedAction() {
     request =>
       Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
+  }
+
+
+  private def getRedirectUrl(fastlyCountry: Option[CountryGroup]): String = {
+    fastlyCountry match {
+      case Some(UK) => "/uk/contribute"
+      case Some(US) => "/us/contribute"
+      case Some(Australia) => "/au/contribute"
+      case Some(Europe) => "/eu/contribute"
+      case Some(Canada) => "/ca/contribute"
+      case Some(NewZealand) => "/nz/contribute"
+      case Some(RestOfTheWorld) => "/int/contribute"
+      case _ => "/uk/contribute"
+    }
   }
 }
 

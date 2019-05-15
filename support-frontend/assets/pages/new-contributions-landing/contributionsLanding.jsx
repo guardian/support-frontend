@@ -16,7 +16,7 @@ import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
-import { campaigns, getCampaignName } from 'pages/new-contributions-landing/campaigns';
+import { campaigns, getCampaignName } from 'helpers/campaigns';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
@@ -64,25 +64,35 @@ const campaignName = getCampaignName();
 const cssModifiers = campaignName && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
 
+function contributionsLandingPage() {
+  return (
+    <Page
+      classModifiers={['contribution-form', ...cssModifiers]}
+      header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
+      footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
+    >
+      <NewContributionFormContainer
+        thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+      />
+      <ConsentBanner />
+    </Page>
+  );
+}
+
 const router = (
   <BrowserRouter>
     <Provider store={store}>
       <div>
         <Route
           exact
-          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute"
-          render={() => (
-            <Page
-              classModifiers={['contribution-form', ...cssModifiers]}
-              header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-              footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
-            >
-              <NewContributionFormContainer
-                thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-              />
-              <ConsentBanner />
-            </Page>
-            )
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/"
+          render={() => contributionsLandingPage()
+          }
+        />
+        <Route
+          exact
+          path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/:campaignCode"
+          render={() => contributionsLandingPage()
         }
         />
         <Route

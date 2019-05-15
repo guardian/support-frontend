@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 import './contributionTicker.scss';
-import type { TickerType } from 'pages/new-contributions-landing/campaigns';
+import type { TickerType } from 'helpers/campaigns';
 
 // ---- Types ----- //
 type StateTypes = {|

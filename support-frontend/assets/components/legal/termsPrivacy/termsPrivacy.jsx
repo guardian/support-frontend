@@ -8,7 +8,7 @@ import { privacyLink, contributionsTermsLinks } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import type { ContributionType } from 'helpers/contributions';
-import { type CampaignName, campaigns } from 'pages/new-contributions-landing/campaigns';
+import { type CampaignName, campaigns } from 'helpers/campaigns';
 
 // ---- Types ----- //
 
@@ -25,7 +25,7 @@ function TermsPrivacy(props: PropTypes) {
   const terms = <a href={contributionsTermsLinks[props.countryGroupId]}>Terms and Conditions</a>;
   const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
-  if (props.campaignName && campaigns[props.campaignName].termsAndConditions) {
+  if (props.campaignName && campaigns[props.campaignName] && campaigns[props.campaignName].termsAndConditions) {
     return campaigns[props.campaignName].termsAndConditions(contributionsTermsLinks[props.countryGroupId]);
   }
 

@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import { isFrontlineCampaign, getQueryParameter } from 'helpers/url';
 
 export type TickerType = 'unlimited' | 'hardstop';
 
@@ -13,14 +12,13 @@ export type CampaignSettings = {
 
   tickerJsonUrl?: string,
   cssModifiers?: string[],
+  cssModifiers?: string[],
   tickerType: TickerType,
 };
 
 export type Campaigns = {
   [string]: CampaignSettings,
 };
-
-export const frontlineCampaign = 'frontline-campaign';
 
 export const campaigns: Campaigns = {
   thefrontline: {
@@ -82,9 +80,8 @@ export const campaigns: Campaigns = {
 export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
-  const name = getQueryParameter('campaignName') || (isFrontlineCampaign() === true ? 'thefrontline' : undefined);
-  if (Object.keys(campaigns).includes(name)) {
-    return name;
-  }
-  return undefined;
+
+  const currentCampaignName = 'thefrontline';
+  return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
 }
+
