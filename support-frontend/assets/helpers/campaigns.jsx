@@ -20,6 +20,9 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
+const currentCampaignName = 'thefrontline';
+
+
 export const campaigns: Campaigns = {
   thefrontline: {
     formMessage: (
@@ -73,7 +76,7 @@ export const campaigns: Campaigns = {
     ),
     tickerJsonUrl: '/ticker.json',
     tickerType: 'hardstop',
-    cssModifiers: ['frontline-campaign'],
+    cssModifiers: [currentCampaignName],
   },
 };
 
@@ -81,7 +84,6 @@ export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
 
-  const currentCampaignName = 'thefrontline';
   return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
 }
 
