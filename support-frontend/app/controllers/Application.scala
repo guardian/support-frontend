@@ -109,6 +109,11 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
+
+  // Play makes us pass through the camoaign code here even though we are going to discard it
+  def contributionsLandingWithCampaignCode(countryCode: String, campaignCode: String): Action[AnyContent] = contributionsLanding(countryCode)
+
+
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser])
                                (implicit request: RequestHeader, settings: AllSettings) = {
 
