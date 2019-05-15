@@ -50,12 +50,12 @@ GET  /monthly-contributions                         controllers.Application.perm
 
 GET  /contribute                                    controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET  /contribute/:campaignCode                      controllers.Application.contributeGeoRedirect(campaignCode: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLandingWithoutCampaignCode(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String, campaignCode = "")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode  controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
 
 
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou    controllers.Application.contributionsLandingWithoutCampaignCode(country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou    controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
 
 POST /contribute/recurring/create                   controllers.RegularContributions.create

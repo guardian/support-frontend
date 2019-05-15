@@ -94,7 +94,7 @@ class Application(
 
   def contributionsLanding(
     countryCode: String,
-    campaignCode: String,
+    campaignCode: String
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
@@ -106,9 +106,6 @@ class Application(
       user => Ok(contributionsHtml(countryCode, user, campaignCodeOption))
     ).map(_.withSettingsSurrogateKey)
   }
-
-  def contributionsLandingWithoutCampaignCode(countryCode: String): Action[AnyContent] = contributionsLanding(countryCode, "")
-
 
   private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String])
                                (implicit request: RequestHeader, settings: AllSettings) = {
