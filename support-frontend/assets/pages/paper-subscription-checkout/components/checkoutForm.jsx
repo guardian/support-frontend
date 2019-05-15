@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { compose, type Dispatch } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import {
@@ -35,17 +35,17 @@ import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import {
-  type FormActionCreators,
-  formActionCreators,
   type FormField,
   type FormFields,
   getBillingAddress,
-  getDays,
   getDeliveryAddress,
   getFormFields,
-  signOut,
   type State,
-} from '../paperSubscriptionCheckoutReducer';
+} from 'helpers/subscriptionsForms/formFields';
+
+import type { Action } from 'helpers/subscriptionsForms/checkoutActions';
+import { type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/checkoutActions';
+
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
@@ -54,6 +54,8 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { Paper } from 'helpers/subscriptions';
+import { getDays, submitForm } from 'pages/paper-subscription-checkout/paperSubscriptionCheckoutReducer';
+import { signOut } from 'helpers/user/user';
 
 
 // ----- Types ----- //
@@ -65,6 +67,7 @@ type PropTypes = {|
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   ...FormActionCreators,
+  submitForm: Function,
 |};
 
 
@@ -76,6 +79,14 @@ function mapStateToProps(state: State) {
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+  };
+}
+
+function mapDispatchToProps() {
+  return {
+    ...formActionCreators,
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
+    signOut,
   };
 }
 
@@ -173,13 +184,13 @@ function CheckoutForm(props: PropTypes) {
                   text="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
-                  onChange={() => props.setbillingAddressIsSame(true)}
+                  onChange={() => props.setBillingAddressIsSame(true)}
                 />
                 <RadioInput
                   text="No"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
-                  onChange={() => props.setbillingAddressIsSame(false)}
+                  onChange={() => props.setBillingAddressIsSame(false)}
                 />
               </FieldsetWithError>
             </Rows>
@@ -247,7 +258,4 @@ function CheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, {
-  ...formActionCreators,
-  signOut,
-})(CheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(CheckoutForm);

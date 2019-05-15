@@ -14,7 +14,7 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { CheckoutState } from 'helpers/subscriptionsForms/formFields';
+import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
 
 function createCheckoutReducer(
@@ -50,7 +50,7 @@ function createCheckoutReducer(
   };
 
 
-  return (state: CheckoutState = initialState, action: Action): CheckoutState => {
+  return (state: FormState = initialState, action: Action): FormState => {
 
     switch (action.type) {
 

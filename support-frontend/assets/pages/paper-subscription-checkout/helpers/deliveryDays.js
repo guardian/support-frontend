@@ -1,16 +1,16 @@
 // @flow
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import {
+  Everyday,
+  EverydayPlus,
   Saturday,
   SaturdayPlus,
+  Sixday,
+  SixdayPlus,
   Sunday,
   SundayPlus,
   Weekend,
   WeekendPlus,
-  Sixday,
-  SixdayPlus,
-  Everyday,
-  EverydayPlus,
-  type PaperProductOptions,
 } from 'helpers/productPrice/productOptions';
 
 type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -37,7 +37,7 @@ const getNextDaysOfTheWeek = (today: number, day: Day, length: number = numberOf
   return rt;
 };
 
-const getDeliveryDayForProduct = (product: PaperProductOptions): Day => {
+const getDeliveryDayForProduct = (product: ProductOptions): Day => {
   switch (product) {
     case SaturdayPlus:
     case Saturday:
@@ -56,7 +56,7 @@ const getDeliveryDayForProduct = (product: PaperProductOptions): Day => {
   }
 };
 
-const getVoucherDays = (today: number, product: PaperProductOptions): Date[] => {
+const getVoucherDays = (today: number, product: ProductOptions): Date[] => {
   const now = new Date(today);
   const [currentWeekday, currentHour] = [now.getDay(), now.getHours()];
   const weeksToAdd =
@@ -70,7 +70,7 @@ const getVoucherDays = (today: number, product: PaperProductOptions): Date[] => 
   ).splice(weeksToAdd);
 };
 
-const getDeliveryDays = (today: number, product: PaperProductOptions): Date[] =>
+const getDeliveryDays = (today: number, product: ProductOptions): Date[] =>
   getNextDaysOfTheWeek(today, getDeliveryDayForProduct(product), numberOfWeeksWeDeliverTo);
 
 export { getVoucherDays, getDeliveryDays };

@@ -2,10 +2,12 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Element } from 'react';
+
 import { connect } from 'react-redux';
 
 import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/hero';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
@@ -20,7 +22,7 @@ import typeof MarketingConsent from 'pages/paper-subscription-checkout/component
 import styles from 'pages/paper-subscription-checkout/components/thankYou/thankYou.module.scss';
 import { formatUserDate } from 'helpers/dateConversions';
 
-import { type FormFields, getFormFields } from '../../paperSubscriptionCheckoutReducer';
+import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
 // ----- Types ----- //
 
@@ -32,7 +34,7 @@ type PropTypes = {
 
 // ----- Component ----- //
 
-const whatNext = {
+const whatNext: {[FulfilmentOptions]: Element<*>} = {
   [HomeDelivery]: (
     <Text title="What happens next?">
       <OrderedList items={[

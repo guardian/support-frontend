@@ -9,11 +9,10 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 
-import { type Stage, type State } from './paperSubscriptionCheckoutReducer';
-
 import CheckoutForm from './components/checkoutForm';
 import ReturnSection from 'pages/paper-subscription-checkout/components/thankYou/returnSection';
 import ThankYouContent from 'pages/paper-subscription-checkout/components/thankYou/thankYou';
+import type { Stage, State } from 'helpers/subscriptionsForms/formFields';
 
 // ----- Types ----- //
 

@@ -35,7 +35,7 @@ export type FormFields = {|
 
 export type FormField = $Keys<FormFields>;
 
-export type CheckoutState = {|
+export type FormState = {|
   stage: Stage,
   ...FormFields,
   email: string,
@@ -48,7 +48,7 @@ export type CheckoutState = {|
 |};
 
 export type State = ReduxState<{|
-  checkout: CheckoutState,
+  checkout: FormState,
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
   billingAddress: AddressState,
@@ -75,10 +75,34 @@ function getEmail(state: State): string {
   return state.page.checkout.email;
 }
 
-const getBillingAddress = (state: State): AddressState => state.page.billingAddress;
-const getBillingAddressFields = (state: State): AddressFormFields => {
-  const { formErrors, ...formFields } = getBillingAddress(state).fields;
+const addressFieldsFromAddress = (address: AddressState) => {
+  const { formErrors, ...formFields } = address.fields;
   return formFields;
 };
+const getBillingAddress = (state: State): AddressState => state.page.billingAddress;
+const getBillingAddressFields = (state: State): AddressFormFields => addressFieldsFromAddress(getBillingAddress(state));
 
-export { getFormFields, getEmail, getBillingAddress, getBillingAddressFields };
+const getDeliveryAddress = (state: State): Option<AddressState> =>
+  (state.page.checkout.billingAddressIsSame ? state.page.billingAddress : state.page.deliveryAddress);
+
+const getDeliveryAddressFields = (state: State): AddressFormFields => {
+  const address = getDeliveryAddress(state);
+  return (address ? addressFieldsFromAddress(address) : {
+    lineOne: null,
+    lineTwo: null,
+    city: null,
+    country: 'GB',
+    postCode: null,
+    state: null,
+  });
+};
+
+
+export {
+  getFormFields,
+  getEmail,
+  getBillingAddress,
+  getBillingAddressFields,
+  getDeliveryAddress,
+  getDeliveryAddressFields,
+};
