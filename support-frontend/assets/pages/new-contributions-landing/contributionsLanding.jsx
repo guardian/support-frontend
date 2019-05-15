@@ -61,7 +61,7 @@ const setOneOffContributionCookie = () => {
 };
 
 const campaignName = getCampaignName();
-const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
+const cssModifiers = campaignName && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
 
 function contributionsLandingPage() {
