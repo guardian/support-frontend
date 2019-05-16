@@ -21,7 +21,6 @@ type PropTypes = {
 function RadioInput({
   text, appearance, image, ...otherProps
 }: PropTypes) {
-  console.log('otherProps in RadioInut: ', otherProps);
   return (
     <label className={classNameWithModifiers('component-radio-input', [appearance])}>
       <input className="component-radio-input__input" type="radio" {...otherProps} />
