@@ -112,7 +112,7 @@ const CampaignHeader = () => (
       <div className="sale-joy-of-print-graphic-outer">
         <div className="sale-joy-of-print-graphic-inner">
           <div className="sale-joy-of-print-badge">
-            <Discount discountCopy={getDiscountCopy(discountParam).roundal} />
+            <Discount discountCopy={getDiscountCopy(discountParam).roundel} />
           </div>
           <div className="sale-joy-of-print-graphic">
             <GridImage
