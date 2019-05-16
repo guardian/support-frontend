@@ -9,6 +9,18 @@
   position: relative;
 }
 
+.component-radio-input--with-helpers {
+  @include gu-fontset-body-sans;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  &:last-of-type {
+    .component-radio-input__helper {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .component-radio-input__text {
   font-weight: bold;
   display: flex;
@@ -17,8 +29,8 @@
 }
 
 .component-radio-input__helper {
-  display: block;
   margin-left: $gu-h-spacing * 1.5;
+  margin-bottom: $gu-v-spacing;
 }
 
 .component-radio-input__offer {

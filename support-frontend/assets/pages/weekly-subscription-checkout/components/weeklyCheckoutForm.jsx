@@ -15,6 +15,7 @@ import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
 import { options } from 'components/forms/customFields/options';
 import { RadioInput } from 'components/forms/customFields/radioInput';
+import { RadioInputWithHelper } from 'components/forms/customFields/radioInputWithHelper';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
@@ -240,21 +241,21 @@ function WeeklyCheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="How often would you like to pay?">
             <Fieldset legend="How often would you like to pay?">
-              <RadioInput
+              <RadioInputWithHelper
                 text={quarterlyPriceLabel.title}
                 helper={quarterlyPriceLabel.copy}
                 name="billingPeriod"
                 checked={props.billingPeriod === Quarterly}
                 onChange={() => props.setBillingPeriod(Quarterly)}
               />
-              <RadioInput
+              <RadioInputWithHelper
                 text={annualPriceLabel.title}
                 helper={annualPriceLabel.copy}
                 name="billingPeriod"
                 checked={props.billingPeriod === Annual}
                 onChange={() => props.setBillingPeriod(Annual)}
               />
-              <RadioInput
+              <RadioInputWithHelper
                 text={sixForSixPriceLabel.title}
                 offer={sixForSixPriceLabel.offer || null}
                 helper={sixForSixPriceLabel.copy}
