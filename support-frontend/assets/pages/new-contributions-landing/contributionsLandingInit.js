@@ -109,9 +109,9 @@ function initialiseStripeCheckout(
 }
 
 
-function initialisePaymentMethods(state: State, dispatch: Function) {
+function initialisePaymentMethods(state: State, dispatch: Function, contributionTypes: ContributionTypes) {
   const { countryId, currencyId, countryGroupId } = state.common.internationalisation;
-  const { switches, contributionTypes } = state.common.settings;
+  const { switches } = state.common.settings;
   const { isTestUser } = state.page.user;
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
@@ -212,10 +212,10 @@ const init = (store: Store<State, Action, Function>) => {
 
   const state = store.getState();
 
-  initialisePaymentMethods(state, dispatch);
-
   const contributionTypes = getContributionTypes(state);
   dispatch(setContributionTypes(contributionTypes));
+
+  initialisePaymentMethods(state, dispatch, contributionTypes);
 
   selectInitialAmounts(state, dispatch);
   selectInitialContributionTypeAndPaymentMethod(state, dispatch, contributionTypes);
