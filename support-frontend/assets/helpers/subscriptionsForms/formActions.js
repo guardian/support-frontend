@@ -61,18 +61,9 @@ const formActionCreators = {
   setTitle: (title: string): Action => ({ type: 'SET_TITLE', title }),
   setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
   setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
-  setTelephone: (telephone: string): Action => ({
-    type: 'SET_TELEPHONE',
-    telephone,
-  }),
-  setStartDate: (startDate: string): Action => ({
-    type: 'SET_START_DATE',
-    startDate,
-  }),
-  setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({
-    type: 'SET_BILLING_PERIOD',
-    billingPeriod,
-  }),
+  setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
+  setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
+  setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
     const state = getState();
     storage.setSession('selectedPaymentMethod', paymentMethod);
