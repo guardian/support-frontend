@@ -109,6 +109,5 @@ function submitForm(dispatch: Dispatch<Action>, state: WithDeliveryCheckoutState
 // ----- Export ----- //
 
 export {
-  getFormFields,
   submitForm,
 };

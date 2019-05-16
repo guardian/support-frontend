@@ -7,7 +7,7 @@ import { PayPal } from 'helpers/paymentMethods';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { FormField, Stage } from './formFields';
-import type { BillingPeriod, DigitalBillingPeriod } from 'helpers/billingPeriods';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
 import * as storage from 'helpers/storage';
 import { trackPaymentMethodSelected } from 'helpers/tracking/ophanComponentEventTracking';
@@ -52,7 +52,7 @@ const formActionCreators = {
   setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
-  setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
+  setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
     const state = getState();
     storage.setSession('selectedPaymentMethod', paymentMethod);

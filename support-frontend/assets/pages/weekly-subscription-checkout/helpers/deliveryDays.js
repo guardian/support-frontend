@@ -1,5 +1,7 @@
 // @flow
 
+import { formatUserDate } from 'helpers/dateConversions';
+
 type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 const milsInADay = 1000 * 60 * 60 * 24;
 
@@ -37,4 +39,9 @@ const getWeeklyDays = (today: number): Date[] => {
   ).splice(weeksToAdd);
 };
 
-export { getWeeklyDays };
+function getDisplayDays(): string[] {
+  const today = new Date().getTime();
+  return getWeeklyDays(today).map(day => formatUserDate(day));
+}
+
+export { getWeeklyDays, getDisplayDays };
