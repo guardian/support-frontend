@@ -15,7 +15,6 @@ import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { getQueryParameter } from 'helpers/url';
 import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-import { discountCopyChoices } from './discountCopy';
 import { getDiscountCopy } from '../hero/discountCopy';
 import './joyOfPrint.scss';
 
