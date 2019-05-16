@@ -39,7 +39,6 @@ const getPriceStr = (price: Price): string => {
 };
 
 const getOfferStr = (subscription: Option<number>, newsstand: Option<number>, index: number): Option<string> => {
-  console.log({ subscription, newsstand, index })
 
   if(discountParam !== 'save') {
     return getDiscountCopy(discountParam).offer[index];
