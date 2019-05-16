@@ -16,7 +16,7 @@ import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { showPaymentMethod } from './helpers/paymentProviders';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { DigitalPack } from 'helpers/subscriptions';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/formReducer';
+import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 
@@ -37,7 +37,7 @@ function initReducer(initialCountry: IsoCountry) {
     : Monthly;
 
   return combineReducers({
-    checkout: createCheckoutReducer(
+    checkout: createFormReducer(
       initialCountry,
       DigitalPack,
       initialBillingPeriod, null, null, null,

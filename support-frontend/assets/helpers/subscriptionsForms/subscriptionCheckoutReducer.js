@@ -3,7 +3,7 @@
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { combineReducers } from 'redux';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/formReducer';
+import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { createUserReducer } from 'helpers/user/userReducer';
 import { fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -50,7 +50,7 @@ function createReducer(
   addressReducers,
 ) {
   return combineReducers({
-    checkout: createCheckoutReducer(
+    checkout: createFormReducer(
       initialCountry,
       product,
       initialBillingPeriod, startDate, productOption, fulfilmentOption,
@@ -64,7 +64,7 @@ function createReducer(
 }
 
 
-function createDigitalCheckoutReducer(
+function createCheckoutReducer(
   initialCountry: IsoCountry,
   product: SubscriptionProduct,
   initialBillingPeriod: BillingPeriod,
@@ -113,19 +113,21 @@ const addressFieldsFromAddress = (address: AddressState) => {
   const { formErrors, ...formFields } = address.fields;
   return formFields;
 };
-const getBillingAddress = (state: AnyCheckoutState): AddressState => state.page.billingAddress;
+const getBillingAddress = (state: AnyCheckoutState): AddressState =>
+  (state.page.checkout.billingAddressIsSame ? state.page.deliveryAddress : state.page.billingAddress);
+
 const getBillingAddressFields = (state: AnyCheckoutState): AddressFormFields =>
   addressFieldsFromAddress(getBillingAddress(state));
 
 const getDeliveryAddress = (state: WithDeliveryCheckoutState): AddressState =>
-  (state.page.checkout.billingAddressIsSame ? state.page.billingAddress : state.page.deliveryAddress);
+  state.page.deliveryAddress;
 
 const getDeliveryAddressFields = (state: WithDeliveryCheckoutState): AddressFormFields =>
   addressFieldsFromAddress(getDeliveryAddress(state));
 
 
 export {
-  createDigitalCheckoutReducer,
+  createCheckoutReducer,
   createWithDeliveryCheckoutReducer,
   getBillingAddress,
   getBillingAddressFields,

@@ -17,7 +17,7 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
 
-function createCheckoutReducer(
+function createFormReducer(
   initialCountry: IsoCountry,
   product: SubscriptionProduct,
   initialBillingPeriod: BillingPeriod,
@@ -113,5 +113,5 @@ function createCheckoutReducer(
   };
 }
 
-export { createCheckoutReducer };
+export { createFormReducer };
 
