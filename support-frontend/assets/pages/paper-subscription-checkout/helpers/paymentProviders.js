@@ -16,12 +16,7 @@ import { getQueryParameter } from 'helpers/url';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { Monthly } from 'helpers/billingPeriods';
 
-import {
-  type Action,
-  setFormSubmitted,
-  setStage,
-  setSubmissionError,
-} from 'helpers/subscriptionsForms/checkoutActions';
+import { type Action, setFormSubmitted, setStage, setSubmissionError } from 'helpers/subscriptionsForms/formActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 

@@ -36,8 +36,8 @@ import {
   getDeliveryAddressFields,
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
-import { type Action, setFormErrors } from 'helpers/subscriptionsForms/checkoutActions';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/checkoutReducer';
+import { type Action, setFormErrors } from 'helpers/subscriptionsForms/formActions';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/formReducer';
 import { Monthly } from 'helpers/billingPeriods';
 
 // ----- Functions ----- //

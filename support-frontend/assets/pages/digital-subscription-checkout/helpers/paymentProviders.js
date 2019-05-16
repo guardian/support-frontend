@@ -15,12 +15,7 @@ import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions'
 import { getQueryParameter } from 'helpers/url';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
 import { getBillingAddressFields, type State } from 'helpers/subscriptionsForms/formFields';
-import {
-  type Action,
-  setFormSubmitted,
-  setStage,
-  setSubmissionError,
-} from 'helpers/subscriptionsForms/checkoutActions';
+import { type Action, setFormSubmitted, setStage, setSubmissionError } from 'helpers/subscriptionsForms/formActions';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {

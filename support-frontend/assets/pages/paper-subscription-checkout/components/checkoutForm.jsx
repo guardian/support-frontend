@@ -43,8 +43,8 @@ import {
   type State,
 } from 'helpers/subscriptionsForms/formFields';
 
-import type { Action } from 'helpers/subscriptionsForms/checkoutActions';
-import { type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/checkoutActions';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
+import { type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/formActions';
 
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';

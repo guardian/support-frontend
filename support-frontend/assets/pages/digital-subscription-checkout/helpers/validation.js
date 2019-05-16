@@ -1,7 +1,7 @@
 // @flow
 
 import type { Dispatch } from 'redux';
-import { type Action, setFormErrors } from 'helpers/subscriptionsForms/checkoutActions';
+import { type Action, setFormErrors } from 'helpers/subscriptionsForms/formActions';
 import type { FormField, FormFields, State } from 'helpers/subscriptionsForms/formFields';
 import { getBillingAddressFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';

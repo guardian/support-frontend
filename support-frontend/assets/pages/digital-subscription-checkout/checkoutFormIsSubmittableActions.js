@@ -4,7 +4,7 @@
 
 import type { State } from 'helpers/subscriptionsForms/formFields';
 import { formIsValid } from 'pages/digital-subscription-checkout/helpers/validation';
-import type { Action } from 'helpers/subscriptionsForms/checkoutActions';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
 
 // ----- Functions ----- //
 

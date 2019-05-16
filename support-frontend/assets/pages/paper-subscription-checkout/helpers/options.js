@@ -1,0 +1,32 @@
+// @flow
+
+import type { PaperProductOptions, ProductOptions } from 'helpers/productPrice/productOptions';
+import { ActivePaperProductTypes, Everyday } from 'helpers/productPrice/productOptions';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
+import type { FulfilmentOptions, PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
+import { getQueryParameter } from 'helpers/url';
+import { getDeliveryDays, getVoucherDays } from 'pages/paper-subscription-checkout/helpers/deliveryDays';
+import { formatMachineDate } from 'helpers/dateConversions';
+
+function getProductOption(): PaperProductOptions {
+  const productInUrl = getQueryParameter('product');
+  // $FlowIgnore - flow doesn't recognise that we've checked the value of productInUrl
+  return ActivePaperProductTypes.includes(productInUrl) ? productInUrl : Everyday;
+}
+
+function getFulfilmentOption(): PaperFulfilmentOptions {
+  const fulfilmentInUrl = getQueryParameter('fulfilment');
+  return paperHasDeliveryEnabled() && (fulfilmentInUrl === 'HomeDelivery') ? HomeDelivery : Collection;
+}
+
+function getDays(fulfilmentOption: FulfilmentOptions, productOption: ProductOptions) {
+  return (fulfilmentOption === HomeDelivery ? getDeliveryDays(Date.now(), productOption)
+    : getVoucherDays(Date.now(), productOption));
+}
+
+const getStartDate = (fulfilmentOption: FulfilmentOptions, productOption: ProductOptions) =>
+  formatMachineDate(getDays(fulfilmentOption, productOption)[0]) || null;
+
+
+export { getProductOption, getFulfilmentOption, getDays, getStartDate };

@@ -24,7 +24,7 @@ import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import Summary from 'components/subscriptionCheckouts/summary';
-import { type Action, type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/checkoutActions';
+import { type Action, type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';

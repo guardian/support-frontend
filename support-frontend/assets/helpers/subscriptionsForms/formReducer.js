@@ -8,7 +8,7 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import { defaultPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { isTestUser } from 'helpers/user/user';
-import type { Action } from './checkoutActions';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';

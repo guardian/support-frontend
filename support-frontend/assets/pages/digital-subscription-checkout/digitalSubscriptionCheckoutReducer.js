@@ -12,12 +12,12 @@ import { directDebitReducer as directDebit } from 'components/directDebit/direct
 import { marketingConsentReducerFor } from 'components/marketingConsent/marketingConsentReducer';
 import { createUserReducer } from 'helpers/user/userReducer';
 import { validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
-import type { Action } from 'helpers/subscriptionsForms/checkoutActions';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { showPaymentMethod } from './helpers/paymentProviders';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { DigitalPack } from 'helpers/subscriptions';
 import type { State } from 'helpers/subscriptionsForms/formFields';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/checkoutReducer';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/formReducer';
 
 
 // ----- Functions ----- //
@@ -28,7 +28,7 @@ function submitForm(dispatch: Dispatch<Action>, state: State) {
   }
 }
 
-// ----- Reducer ----- //
+// ----- Reducer ----- //xc
 
 function initReducer(initialCountry: IsoCountry) {
   const billingPeriodInUrl = getQueryParameter('period');
