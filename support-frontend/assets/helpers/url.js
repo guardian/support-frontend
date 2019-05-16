@@ -99,15 +99,6 @@ function getPathAfterRoute(route: string): string[] {
   return pathName.splice(pathName.findIndex(r => r === route));
 }
 
-// Campaign pages currently implemented by query param, as follows:
-function isFrontlineCampaign(): boolean {
-  return getQueryParameter('frontline-campaign') === 'true';
-}
-
-function isToxicAmericaCampaign(): boolean {
-  return getQueryParameter('campaign-name') === 'toxicamerica';
-}
-
 // ----- Exports ----- //
 
 export {
@@ -119,6 +110,4 @@ export {
   addQueryParamsToURL,
   getAbsoluteURL,
   getPathAfterRoute,
-  isFrontlineCampaign,
-  isToxicAmericaCampaign,
 };

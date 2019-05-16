@@ -5,7 +5,6 @@
 import type { ContributionType } from 'helpers/contributions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Status } from 'helpers/settings';
-import { isToxicAmericaCampaign } from 'helpers/url';
 import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -20,7 +19,6 @@ import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions'
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
-
 import { type State } from '../contributionsLandingReducer';
 import { NewContributionForm } from './ContributionForm';
 
@@ -32,7 +30,6 @@ import {
   setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import AnchorButton from 'components/button/anchorButton';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -128,38 +125,6 @@ const countryGroupSpecificDetails: {
   Canada: defaultHeaderCopyAndContributeCopy,
 };
 
-function goalReachedTemplate() {
-  if (isToxicAmericaCampaign()) {
-    return (
-      <div className="goal-reached">
-        <div className="goal-reached__message">
-          Thank you to everyone who supported ‘Toxic America’.
-          We’re no longer accepting contributions for the series, but you can still support
-          The Guardian’s journalism with a single or recurring contribution
-        </div>
-        <div className="goal-reached__buttons">
-          <AnchorButton
-            href="https://www.theguardian.com/environment/"
-            appearance="greyHollow"
-            aria-label="Read ‘Toxic America’ series on The Guardian"
-          >
-            Read ‘Toxic America’ series
-          </AnchorButton>
-          <AnchorButton
-            href="https://support.theguardian.com/contribute"
-            appearance="greyHollow"
-            aria-label="Support The Guardian"
-          >
-            Support The Guardian
-          </AnchorButton>
-        </div>
-      </div>
-    );
-  }
-
-  return null;
-}
-
 const campaignName = getCampaignName();
 const campaign = campaignName ? campaigns[campaignName] : null;
 
@@ -202,7 +167,7 @@ function ContributionFormContainer(props: PropTypes) {
               tickerType={campaign.tickerType}
             /> : null
           }
-          {props.tickerGoalReached ? goalReachedTemplate() :
+          {props.tickerGoalReached && campaign && campaign.goalReachedCopy ? campaign.goalReachedCopy :
           <div>
             {countryGroupDetails.formMessage ?
               <div className="form-message">{countryGroupDetails.formMessage}</div> : null

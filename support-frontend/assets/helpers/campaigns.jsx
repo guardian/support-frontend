@@ -5,7 +5,6 @@ import type { ContributionTypes } from 'helpers/contributions';
 import { generateContributionTypes } from 'helpers/contributions';
 
 export type TickerType = 'unlimited' | 'hardstop';
-export type ContributionType = 'monthly' | 'annual' | 'one-off';
 
 export type CampaignSettings = {
   headerCopy?: string | React$Element<string>,
@@ -17,6 +16,7 @@ export type CampaignSettings = {
   tickerType: TickerType,
   contributionTypes?: ContributionTypes,
   backgroundImage?: string,
+  goalReachedCopy: React$Element<string> | null,
 };
 
 export type Campaigns = {
@@ -97,6 +97,7 @@ export const campaigns: Campaigns = {
         </p>
       </div>
     ),
+    goalReachedCopy: null,
     tickerJsonUrl: '/ticker.json',
     tickerType: 'hardstop',
     cssModifiers: ['campaign-landing', currentCampaignName],
