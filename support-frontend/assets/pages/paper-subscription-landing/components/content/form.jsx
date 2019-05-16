@@ -16,10 +16,15 @@ import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
 import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
+import { getDiscountCopy } from '../hero/discountCopy';
+import { getQueryParameter } from 'helpers/url';
 
 // ---- Helpers ----- //
 
-// TODO: We will need to make this work for flash sales
+
+const discountParam: ?string = getQueryParameter('heroCopy');
+
+// TODO: We will need to make this work for flash sales 
 const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
 
 const getPriceStr = (price: Price): string => {
@@ -33,10 +38,17 @@ const getPriceStr = (price: Price): string => {
   return getRegularPriceStr(price);
 };
 
-const getOfferStr = (subscription: Option<number>, newsstand: Option<number>): Option<string> => {
+const getOfferStr = (subscription: Option<number>, newsstand: Option<number>, index: number): Option<string> => {
+  console.log({ subscription, newsstand, index })
+
+  if(discountParam !== 'save') {
+    return getDiscountCopy(discountParam).offer[index];
+  }
+
   if ((subscription && newsstand && parseFloat(getNewsstandSaving(subscription, newsstand)) > 0)) {
     return `Save £${getNewsstandSaving(subscription, newsstand)} a month on retail price`;
   }
+
   return null;
 };
 
@@ -60,7 +72,7 @@ const getPlans = (
   fulfilmentOption: PaperFulfilmentOptions,
   productPrices: ProductPrices,
 ) =>
-  ActivePaperProductTypes.reduce((products, productOption) => {
+  ActivePaperProductTypes.reduce((products, productOption, index) => {
     const price = finalPrice(productPrices, fulfilmentOption, productOption);
     return {
       ...products,
@@ -75,7 +87,7 @@ const getPlans = (
         title: getTitle(productOption),
         copy: copy[fulfilmentOption],
         price: getPriceStr(price),
-        offer: getOfferStr(price.price, getNewsstandPrice(productOption)),
+        offer: getOfferStr(price.price, getNewsstandPrice(productOption), index),
         saving: getSavingStr(regularPrice(productPrices, fulfilmentOption, productOption)),
       },
     };

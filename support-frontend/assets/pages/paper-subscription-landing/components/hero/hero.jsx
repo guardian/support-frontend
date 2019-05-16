@@ -16,16 +16,10 @@ import { getQueryParameter } from 'helpers/url';
 import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
 import { discountCopyChoices } from './discountCopy';
+import { getDiscountCopy } from '../hero/discountCopy';
 import './joyOfPrint.scss';
 
-
-const getDiscountCopy = () => {
-  const discountParam = getQueryParameter('heroCopy');
-  return {
-    roundal: discountCopyChoices[discountParam].roundal || discountCopyChoices.control.roundal,
-    heading: discountCopyChoices[discountParam].heading || discountCopyChoices.control.heading,
-  }
-}
+const discountParam = getQueryParameter('heroCopy');
 
 function getHeading(): string {
   if (flashSaleIsActive('Paper', GBPCountries)) {
@@ -33,7 +27,7 @@ function getHeading(): string {
     return saleCopy.landingPage.subHeading;
   }
 
-  return getDiscountCopy().heading;
+  return getDiscountCopy(discountParam).heading;
 
 }
 
@@ -118,7 +112,7 @@ const CampaignHeader = () => (
       <div className="sale-joy-of-print-graphic-outer">
         <div className="sale-joy-of-print-graphic-inner">
           <div className="sale-joy-of-print-badge">
-            <Discount discountCopy={getDiscountCopy().roundal} />
+            <Discount discountCopy={getDiscountCopy(discountParam).roundal} />
           </div>
           <div className="sale-joy-of-print-graphic">
             <GridImage
