@@ -15,15 +15,30 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
-
-import { initReducer } from './digitalSubscriptionCheckoutReducer';
 import CheckoutStage from './components/checkoutStage';
 import './digitalSubscriptionCheckout.scss';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
+import { getQueryParameter } from 'helpers/url';
+import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
+import { Monthly } from 'helpers/billingPeriods';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { DigitalPack } from 'helpers/subscriptions';
 
 // ----- Redux Store ----- //
+const billingPeriodInUrl = getQueryParameter('period');
+const initialBillingPeriod: DigitalBillingPeriod = billingPeriodInUrl === 'Monthly' || billingPeriodInUrl === 'Annual'
+  ? billingPeriodInUrl
+  : Monthly;
 
-const store = pageInit(commonState => initReducer(commonState.internationalisation.countryId), true);
+const reducer = (commonState: CommonState) => createCheckoutReducer(
+  commonState.internationalisation.countryId,
+  DigitalPack,
+  initialBillingPeriod,
+  null, null, null,
+);
+
+const store = pageInit(reducer, true);
 
 const { countryGroupId } = store.getState().common.internationalisation;
 

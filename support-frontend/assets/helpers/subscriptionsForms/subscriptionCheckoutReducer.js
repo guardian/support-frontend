@@ -114,7 +114,7 @@ const addressFieldsFromAddress = (address: AddressState) => {
   return formFields;
 };
 const getBillingAddress = (state: AnyCheckoutState): AddressState =>
-  (state.page.checkout.billingAddressIsSame ? state.page.deliveryAddress : state.page.billingAddress);
+  state.page.billingAddress;
 
 const getBillingAddressFields = (state: AnyCheckoutState): AddressFormFields =>
   addressFieldsFromAddress(getBillingAddress(state));
