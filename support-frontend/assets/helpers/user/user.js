@@ -89,9 +89,9 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
   const emailMatchesTestUser = (): boolean => {
     const testUsername = cookie.get('_test_username');
     if (emailFromBrowser && testUsername) {
-      return emailFromBrowser.toLowerCase().startsWith(testUsername.toLowerCase())
+      return emailFromBrowser.toLowerCase().startsWith(testUsername.toLowerCase());
     }
-    return false
+    return false;
   };
 
   if (isTestUser() && (!userAppearsLoggedIn || emailMatchesTestUser())) {

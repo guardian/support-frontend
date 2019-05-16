@@ -72,6 +72,16 @@ function createCommonReducer(initialState: CommonState): (state?: CommonState, a
         return { ...state, trackingConsent: action.trackingConsent };
       }
 
+      case 'SET_CONTRIBUTION_TYPES': {
+        return {
+          ...state,
+          settings: {
+            ...state.settings,
+            contributionTypes: action.contributionTypes,
+          },
+        };
+      }
+
       default:
         return state;
     }

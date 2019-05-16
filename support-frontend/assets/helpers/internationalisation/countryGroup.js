@@ -42,7 +42,7 @@ export type CountryGroup = {
   supportInternationalisationId: string,
 };
 
-type CountryGroups = {
+export type CountryGroups = {
   [CountryGroupId]: CountryGroup
 }
 

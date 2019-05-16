@@ -1,6 +1,8 @@
 // @flow
 
 import React from 'react';
+import type {ContributionType, ContributionTypes, ContributionTypeSetting} from 'helpers/contributions';
+import {generateContributionTypes} from 'helpers/contributions';
 
 export type TickerType = 'unlimited' | 'hardstop';
 
@@ -14,6 +16,7 @@ export type CampaignSettings = {
   cssModifiers?: string[],
   cssModifiers?: string[],
   tickerType: TickerType,
+  contributionTypes?: ContributionTypes,
 };
 
 export type Campaigns = {
@@ -77,6 +80,9 @@ export const campaigns: Campaigns = {
     tickerJsonUrl: '/ticker.json',
     tickerType: 'hardstop',
     cssModifiers: [currentCampaignName],
+    contributionTypes: generateContributionTypes([
+      {contributionType: 'ONE_OFF', isDefault: true}
+    ]),
   },
 };
 
@@ -86,4 +92,3 @@ export function getCampaignName(): ?CampaignName {
 
   return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
 }
-

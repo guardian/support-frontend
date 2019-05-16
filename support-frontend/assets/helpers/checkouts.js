@@ -4,8 +4,10 @@
 
 import { getQueryParameter } from 'helpers/url';
 import {
-  type ContributionType, getFrequency,
+  type ContributionType, type ContributionTypes,
+  getFrequency,
   toContributionType,
+  generateContributionTypes,
 } from 'helpers/contributions';
 import * as storage from 'helpers/storage';
 import { type Switches } from 'helpers/settings';
@@ -42,32 +44,19 @@ function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMetho
 }
 
 
-function getValidContributionTypesFromUrlOrElse(fallback: ContributionType[]): ContributionType[] {
+function getValidContributionTypesFromUrlOrElse(fallback: ContributionTypes): ContributionTypes {
   const contributionTypesFromUrl = getQueryParameter('contributionTypes');
   if (contributionTypesFromUrl) {
-    return contributionTypesFromUrl
-      .split(',')
-      .map(toContributionType)
-      .filter(Boolean);
+    return generateContributionTypes(
+      contributionTypesFromUrl
+        .split(',')
+        .map(toContributionType)
+        .filter(Boolean)
+        .map(contributionType => { return {contributionType} })
+    );
   }
 
   return fallback;
-}
-
-function getValidContributionTypes(countryGroupId: CountryGroupId): ContributionType[] {
-
-  const defaultContributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
-
-  const mappings = {
-    GBPCountries: defaultContributionTypes,
-    UnitedStates: defaultContributionTypes,
-    AUDCountries: defaultContributionTypes,
-    EURCountries: defaultContributionTypes,
-    International: defaultContributionTypes,
-    NZDCountries: defaultContributionTypes,
-    Canada: defaultContributionTypes,
-  };
-  return getValidContributionTypesFromUrlOrElse(mappings[countryGroupId]);
 }
 
 function toHumanReadableContributionType(contributionType: ContributionType): 'Single' | 'Monthly' | 'Annual' {
@@ -197,7 +186,7 @@ export {
   getContributeButtonCopy,
   getContributeButtonCopyWithPaymentType,
   formatAmount,
-  getValidContributionTypes,
+  getValidContributionTypesFromUrlOrElse,
   getContributionTypeFromSession,
   getContributionTypeFromUrl,
   toHumanReadableContributionType,
