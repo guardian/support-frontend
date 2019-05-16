@@ -17,7 +17,7 @@ type PropTypes = {|
   footer: Node,
   children: Node,
   classModifiers: Array<?string>,
-  backgroundImageSrc?: string | null,
+  backgroundImageSrc: ?string,
 |};
 
 

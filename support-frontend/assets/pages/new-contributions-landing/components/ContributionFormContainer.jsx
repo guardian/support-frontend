@@ -126,7 +126,7 @@ const countryGroupSpecificDetails: {
 };
 
 const campaignName = getCampaignName();
-const campaign = campaignName ? campaigns[campaignName] : null;
+const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignName] : null;
 
 // ----- Render ----- //
 
