@@ -14,11 +14,15 @@ import { type Dispatch } from 'redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { getQueryParameter } from 'helpers/url';
 import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
-import { getBillingAddressFields, type State } from 'helpers/subscriptionsForms/formFields';
 import { type Action, setFormSubmitted, setStage, setSubmissionError } from 'helpers/subscriptionsForms/formActions';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getBillingAddressFields } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
-function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
+function buildRegularPaymentRequest(
+  state: CheckoutState,
+  paymentAuthorisation: PaymentAuthorisation,
+): RegularPaymentRequest {
   const { currencyId } = state.common.internationalisation;
   const {
     firstName,
@@ -54,7 +58,11 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
   };
 }
 
-function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatch: Dispatch<Action>, state: State) {
+function onPaymentAuthorised(
+  paymentAuthorisation: PaymentAuthorisation,
+  dispatch: Dispatch<Action>,
+  state: CheckoutState,
+) {
   const data = buildRegularPaymentRequest(state, paymentAuthorisation);
 
   const handleSubscribeResult = (result: PaymentResult) => {
@@ -75,12 +83,13 @@ function onPaymentAuthorised(paymentAuthorisation: PaymentAuthorisation, dispatc
     state.page.csrf,
     () => {},
     () => {},
-  ).then(handleSubscribeResult);
+  )
+    .then(handleSubscribeResult);
 }
 
 function showStripe(
   dispatch: Dispatch<Action>,
-  state: State,
+  state: CheckoutState,
 ) {
   const { currencyId, countryId } = state.common.internationalisation;
   const { isTestUser } = state.page.checkout;
@@ -100,7 +109,7 @@ function showStripe(
 
 function showPaymentMethod(
   dispatch: Dispatch<Action | Action>,
-  state: State,
+  state: CheckoutState,
 ): void {
   const { paymentMethod } = state.page.checkout;
 

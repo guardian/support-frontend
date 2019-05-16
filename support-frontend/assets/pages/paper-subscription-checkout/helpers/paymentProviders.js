@@ -23,9 +23,16 @@ import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 import { type Csrf } from 'helpers/csrf/csrfReducer';
 import type { Participations } from 'helpers/abTests/abtest';
 import { type Option } from 'helpers/types/option';
-import { getBillingAddressFields, getDeliveryAddressFields, type State } from 'helpers/subscriptionsForms/formFields';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import {
+  getBillingAddressFields,
+  getDeliveryAddressFields,
+} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
-function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
+function buildRegularPaymentRequest(
+  state: WithDeliveryCheckoutState,
+  paymentAuthorisation: PaymentAuthorisation,
+): RegularPaymentRequest {
   const { currencyId } = state.common.internationalisation;
   const {
     firstName,

@@ -7,15 +7,9 @@ import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import type { ReduxState } from 'helpers/page/page';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import type { State as MarketingConsentState } from 'components/marketingConsent/marketingConsentReducer';
-import type {
-  FormFields as AddressFormFields,
-  State as AddressState,
-} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { AnyCheckoutState, CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 
@@ -47,15 +41,7 @@ export type FormState = {|
   payPalHasLoaded: boolean,
 |};
 
-export type State = ReduxState<{|
-  checkout: FormState,
-  csrf: CsrfState,
-  marketingConsent: MarketingConsentState,
-  billingAddress: AddressState,
-  deliveryAddress: Option<AddressState>,
-|}>;
-
-function getFormFields(state: State): FormFields {
+function getFormFields(state: AnyCheckoutState): FormFields {
   return {
     title: state.page.checkout.title,
     firstName: state.page.checkout.firstName,
@@ -71,38 +57,11 @@ function getFormFields(state: State): FormFields {
   };
 }
 
-function getEmail(state: State): string {
+function getEmail(state: CheckoutState): string {
   return state.page.checkout.email;
 }
-
-const addressFieldsFromAddress = (address: AddressState) => {
-  const { formErrors, ...formFields } = address.fields;
-  return formFields;
-};
-const getBillingAddress = (state: State): AddressState => state.page.billingAddress;
-const getBillingAddressFields = (state: State): AddressFormFields => addressFieldsFromAddress(getBillingAddress(state));
-
-const getDeliveryAddress = (state: State): Option<AddressState> =>
-  (state.page.checkout.billingAddressIsSame ? state.page.billingAddress : state.page.deliveryAddress);
-
-const getDeliveryAddressFields = (state: State): AddressFormFields => {
-  const address = getDeliveryAddress(state);
-  return (address ? addressFieldsFromAddress(address) : {
-    lineOne: null,
-    lineTwo: null,
-    city: null,
-    country: 'GB',
-    postCode: null,
-    state: null,
-  });
-};
-
 
 export {
   getFormFields,
   getEmail,
-  getBillingAddress,
-  getBillingAddressFields,
-  getDeliveryAddress,
-  getDeliveryAddressFields,
 };

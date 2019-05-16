@@ -6,7 +6,7 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { ErrorReason } from 'helpers/errorReasons';
-import type { FormField, Stage, State } from './formFields';
+import type { FormField, Stage } from './formFields';
 import type { BillingPeriod, DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
 import * as storage from 'helpers/storage';
@@ -18,6 +18,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -52,7 +53,7 @@ const formActionCreators = {
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
   setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
   setBillingPeriod: (billingPeriod: DigitalBillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
-  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => State) => {
+  setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
     const state = getState();
     storage.setSession('selectedPaymentMethod', paymentMethod);
     trackPaymentMethodSelected(paymentMethod);
@@ -67,7 +68,8 @@ const formActionCreators = {
   },
   setBillingAddressIsSame: (isSame: boolean | null): Action => ({ type: 'SET_BILLING_ADDRESS_IS_SAME', isSame }),
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
-    (dispatch: Dispatch<Action>, getState: () => State) => onPaymentAuthorised(authorisation, dispatch, getState()),
+    (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+      onPaymentAuthorised(authorisation, dispatch, getState()),
 };
 
 

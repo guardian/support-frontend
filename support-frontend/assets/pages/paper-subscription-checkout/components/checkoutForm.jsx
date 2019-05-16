@@ -34,14 +34,7 @@ import { getShortDescription, getTitle } from '../../paper-subscription-landing/
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
-import {
-  type FormField,
-  type FormFields,
-  getBillingAddress,
-  getDeliveryAddress,
-  getFormFields,
-  type State,
-} from 'helpers/subscriptionsForms/formFields';
+import { type FormField, type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/formActions';
@@ -54,8 +47,11 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { Paper } from 'helpers/subscriptions';
-import { getDays, submitForm } from 'pages/paper-subscription-checkout/paperSubscriptionCheckoutReducer';
+import { submitForm } from 'pages/paper-subscription-checkout/paperSubscriptionCheckoutReducer';
 import { signOut } from 'helpers/user/user';
+import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getBillingAddress, getDeliveryAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 
 // ----- Types ----- //
@@ -73,7 +69,7 @@ type PropTypes = {|
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: WithDeliveryCheckoutState) {
   return {
     ...getFormFields(state),
     formErrors: state.page.checkout.formErrors,
@@ -85,7 +81,8 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
-    submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+      submitForm(dispatch, getState()),
     signOut,
   };
 }
@@ -132,10 +129,10 @@ function CheckoutForm(props: PropTypes) {
             props.productOption,
           )}
           dataList={[
-          {
-            title: 'Delivery method',
-            value: fulfilmentOptionName,
-          },
+            {
+              title: 'Delivery method',
+              value: fulfilmentOptionName,
+            },
           ]}
           billingPeriod="Monthly"
           changeSubscription={routes.paperSubscriptionProductChoices}
@@ -200,31 +197,35 @@ function CheckoutForm(props: PropTypes) {
               <FormSection title="Where should we bill you?">
                 <BillingAddress />
               </FormSection>
-            : null
+              : null
           }
           <FormSection title="When would you like your subscription to start?">
             <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
+              <FieldsetWithError
+                id="startDate"
+                error={firstError('startDate', props.formErrors)}
+                legend="When would you like your subscription to start?"
+              >
                 {days.map((day) => {
-                const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
-                return (
-                  <RadioInput
-                    appearance="group"
-                    text={userDate}
-                    name={machineDate}
-                    checked={props.startDate === machineDate}
-                    onChange={() => props.setStartDate(machineDate)}
-                  />
-                );
-              })}
+                  const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                  return (
+                    <RadioInput
+                      appearance="group"
+                      text={userDate}
+                      name={machineDate}
+                      checked={props.startDate === machineDate}
+                      onChange={() => props.setStartDate(machineDate)}
+                    />
+                  );
+                })}
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
                 <p>
-                We will take the first payment on the
-                date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
+                  We will take the first payment on the
+                  date you receive your first {fulfilmentOptionDescriptor.toLowerCase()}.
                 </p>
                 <p>
-                Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                  Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
             </Rows>

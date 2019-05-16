@@ -12,7 +12,8 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import CheckoutForm from './components/checkoutForm';
 import ReturnSection from 'pages/paper-subscription-checkout/components/thankYou/returnSection';
 import ThankYouContent from 'pages/paper-subscription-checkout/components/thankYou/thankYou';
-import type { Stage, State } from 'helpers/subscriptionsForms/formFields';
+import type { Stage } from 'helpers/subscriptionsForms/formFields';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -24,7 +25,7 @@ type PropTypes = {|
 
 // ----- State/Props Maps ----- //
 
-function mapStateToProps(state: State): PropTypes {
+function mapStateToProps(state: WithDeliveryCheckoutState): PropTypes {
   return {
     stage: state.page.checkout.stage,
     formSubmitted: state.page.checkout.formSubmitted,

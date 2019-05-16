@@ -34,13 +34,7 @@ import { signOut } from 'helpers/user/user';
 import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 import GridImage from 'components/gridImage/gridImage';
 
-import {
-  type FormField,
-  type FormFields,
-  getBillingAddress,
-  getFormFields,
-  type State,
-} from 'helpers/subscriptionsForms/formFields';
+import { type FormField, type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { submitForm } from '../digitalSubscriptionCheckoutReducer';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
@@ -49,6 +43,8 @@ import { withStore } from 'components/subscriptionCheckouts/address/addressField
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { DigitalPack } from 'helpers/subscriptions';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -76,7 +72,7 @@ type PropTypes = {|
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: CheckoutState) {
   return {
     ...getFormFields(state),
     country: state.common.internationalisation.countryId,
@@ -102,9 +98,10 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
-    formIsValid: () => (dispatch: Dispatch<Action>, getState: () => State) => formIsValid(getState()),
-    submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
-    validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
+    formIsValid: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => formIsValid(getState()),
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => submitForm(dispatch, getState()),
+    validateForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+      validateForm(dispatch, getState()),
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
     signOut,
   };

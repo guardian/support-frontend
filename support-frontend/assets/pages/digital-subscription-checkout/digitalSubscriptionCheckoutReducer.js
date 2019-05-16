@@ -16,13 +16,13 @@ import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { showPaymentMethod } from './helpers/paymentProviders';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { DigitalPack } from 'helpers/subscriptions';
-import type { State } from 'helpers/subscriptionsForms/formFields';
 import { createCheckoutReducer } from 'helpers/subscriptionsForms/formReducer';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 
 // ----- Functions ----- //
 
-function submitForm(dispatch: Dispatch<Action>, state: State) {
+function submitForm(dispatch: Dispatch<Action>, state: CheckoutState) {
   if (validateForm(dispatch, state)) {
     showPaymentMethod(dispatch, state);
   }
