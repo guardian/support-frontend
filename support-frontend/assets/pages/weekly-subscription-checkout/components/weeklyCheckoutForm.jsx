@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-
+import { type WeeklyBillingPeriod, Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -15,6 +15,7 @@ import { Select } from 'components/forms/select';
 import { Fieldset } from 'components/forms/fieldset';
 import { options } from 'components/forms/customFields/options';
 import { RadioInput } from 'components/forms/customFields/radioInput';
+import { RadioInputWithHelper } from 'components/forms/customFields/radioInputWithHelper';
 import { withLabel } from 'hocs/withLabel';
 import { withError } from 'hocs/withError';
 import { asControlled } from 'hocs/asControlled';
@@ -33,6 +34,7 @@ import {
   type FormFields,
   getBillingAddress,
   getDeliveryAddress,
+  getDays,
   getFormFields,
   signOut,
   type State,
@@ -40,19 +42,23 @@ import {
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
-import { newspaperCountries } from 'helpers/internationalisation/country';
-import { GuardianWeekly } from 'helpers/subscriptions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 
+import { countries } from 'helpers/internationalisation/country';
+import { displayBillingPeriods } from 'helpers/productPrice/weeklyProductPrice';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type Option } from 'helpers/types/option';
+import { GuardianWeekly } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
 type PropTypes = {|
   ...FormFields,
   country: IsoCountry,
+  countryGroupId: CountryGroupId,
   signOut: typeof signOut,
   formErrors: FormError<FormField>[],
   submissionError: ErrorReason | null,
@@ -67,9 +73,17 @@ function mapStateToProps(state: State) {
   return {
     ...getFormFields(state),
     country: state.common.internationalisation.countryId,
+    countryGroupId: state.common.internationalisation.countryGroupId,
     formErrors: state.page.checkout.formErrors,
     submissionError: state.page.checkout.submissionError,
     productPrices: state.page.checkout.productPrices,
+  };
+}
+
+function mapDispatchToProps() {
+  return {
+    ...formActionCreators,
+    signOut,
   };
 }
 
@@ -78,12 +92,44 @@ function mapStateToProps(state: State) {
 const SelectWithLabel = compose(asControlled, withLabel)(Select);
 const FieldsetWithError = withError(Fieldset);
 
-const DeliveryAddress = withStore(newspaperCountries, 'delivery', getDeliveryAddress);
-const BillingAddress = withStore(newspaperCountries, 'billing', getBillingAddress);
+const DeliveryAddress = withStore(countries, 'delivery', getDeliveryAddress);
+const BillingAddress = withStore(countries, 'billing', getBillingAddress);
+const days = getDays();
 
 // ----- Component ----- //
+type Plans = {
+  [WeeklyBillingPeriod]: {
+    title: string,
+    copy: string,
+    offer: Option<string>,
+  }
+}
 
 function WeeklyCheckoutForm(props: PropTypes) {
+  const plans: Plans = Object.keys(displayBillingPeriods).reduce((ps, billingPeriod) => ({
+    ...ps,
+    [billingPeriod]: {
+      title: displayBillingPeriods[billingPeriod].title,
+      copy: displayBillingPeriods[billingPeriod].copy(props.countryGroupId),
+      offer: displayBillingPeriods[billingPeriod].offer || null,
+    },
+  }), {});
+
+  const quarterlyPriceLabel = {
+    title: plans.Quarterly.title,
+    copy: plans.Quarterly.copy,
+  };
+
+  const annualPriceLabel = {
+    title: plans.Annual.title,
+    copy: plans.Annual.copy,
+  };
+
+  const sixForSixPriceLabel = {
+    title: plans.SixForSix.title,
+    copy: plans.SixForSix.copy,
+    offer: plans.SixForSix.offer,
+  };
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -98,8 +144,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
               altText=""
             />
           }
-          title="weekly holding page"
-          description="placeholder description"
+          title="Guardian Weekly"
+          description=""
           productPrice={{ price: 99.89, currency: 'GBP' }}
           promotion={undefined}
           dataList={[
@@ -137,7 +183,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
               signOut={props.signOut}
             />
           </FormSection>
-          <FormSection title="Where should we deliver your vouchers?">
+          <FormSection title="Where should we deliver your magazine?">
             <DeliveryAddress />
           </FormSection>
           <FormSection title="Is the billing address the same as the delivery address?">
@@ -172,13 +218,15 @@ function WeeklyCheckoutForm(props: PropTypes) {
           <FormSection title="When would you like your subscription to start?">
             <Rows>
               <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
-                <RadioInput
-                  appearance="group"
-                  text="userDate"
-                  name="machineDate"
-                  checked="true"
-                  onChange={() => props.setStartDate('machineDate')}
-                />
+                {days.map(day => (
+                  <RadioInput
+                    appearance="group"
+                    text={day}
+                    name="machineDate"
+                    checked={day === props.startDate}
+                    onChange={() => props.setStartDate(day)}
+                  />))
+                }
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
                 <p>
@@ -190,6 +238,32 @@ function WeeklyCheckoutForm(props: PropTypes) {
                 </p>
               </Text>
             </Rows>
+          </FormSection>
+          <FormSection title="How often would you like to pay?">
+            <Fieldset legend="How often would you like to pay?">
+              <RadioInputWithHelper
+                text={quarterlyPriceLabel.title}
+                helper={quarterlyPriceLabel.copy}
+                name="billingPeriod"
+                checked={props.billingPeriod === Quarterly}
+                onChange={() => props.setBillingPeriod(Quarterly)}
+              />
+              <RadioInputWithHelper
+                text={annualPriceLabel.title}
+                helper={annualPriceLabel.copy}
+                name="billingPeriod"
+                checked={props.billingPeriod === Annual}
+                onChange={() => props.setBillingPeriod(Annual)}
+              />
+              <RadioInputWithHelper
+                text={sixForSixPriceLabel.title}
+                offer={sixForSixPriceLabel.offer || null}
+                helper={sixForSixPriceLabel.copy}
+                name="billingPeriod"
+                checked={props.billingPeriod === SixForSix}
+                onChange={() => props.setBillingPeriod(SixForSix)}
+              />
+            </Fieldset>
           </FormSection>
           <PaymentMethodSelector
             country={props.country}
@@ -220,7 +294,4 @@ function WeeklyCheckoutForm(props: PropTypes) {
 
 // ----- Exports ----- //
 
-export default connect(mapStateToProps, {
-  ...formActionCreators,
-  signOut,
-})(WeeklyCheckoutForm);
+export default connect(mapStateToProps, mapDispatchToProps())(WeeklyCheckoutForm);

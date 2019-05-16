@@ -5,6 +5,7 @@
 import React, { type Node } from 'react';
 
 import { classNameWithModifiers } from 'helpers/utilities';
+import { type Option } from 'helpers/types/option';
 
 import './radioInput.scss';
 
@@ -12,19 +13,24 @@ import './radioInput.scss';
 
 type PropTypes = {
   text: Node | string,
+  offer?: Option<string>,
+  helper: string,
   appearance: 'normal' | 'group',
   image?: Node,
 };
 
 // ----- Component ----- //
 
-function RadioInput({
-  text, appearance, image, ...otherProps
+function RadioInputWithHelper({
+  text, offer, helper, appearance, image, ...otherProps
 }: PropTypes) {
   return (
-    <label className={classNameWithModifiers('component-radio-input', [appearance])}>
+    <label className={classNameWithModifiers('component-radio-input--with-helpers', [appearance])}>
       <input className="component-radio-input__input" type="radio" {...otherProps} />
-      <span className="component-radio-input__text">{text}</span>
+      <div className="component-radio-input__text">{text}</div>
+      <p className="component-radio-input__helper">
+        {offer ? <span className="component-radio-input__offer">{offer}</span> : ''} {helper}
+      </p>
       <span className="component-radio-input__image">{image}</span>
     </label>
   );
@@ -32,8 +38,9 @@ function RadioInput({
 
 // ----- Exports ----- //
 
-RadioInput.defaultProps = {
+RadioInputWithHelper.defaultProps = {
   appearance: 'normal',
   image: null,
+  offer: '',
 };
-export { RadioInput };
+export { RadioInputWithHelper };
