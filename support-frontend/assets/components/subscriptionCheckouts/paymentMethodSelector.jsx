@@ -15,15 +15,22 @@ import SvgPayPal from 'components/svgs/paypal';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { ErrorReason } from 'helpers/errorReasons';
+import { withError } from 'hocs/withError';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 
 type PropTypes = {|
-  countrySupportsDirectDebit: boolean,
+  country: IsoCountry,
+  product: SubscriptionProduct,
   paymentMethod: Option<PaymentMethod>,
   onPaymentAuthorised: Function,
   setPaymentMethod: Function,
-  submissionError: ErrorReason | null,
-  payPalEnabled: boolean,
+  validationError: Option<string>,
+  submissionError: Option<ErrorReason>,
 |}
+
+const FieldsetWithError = withError(Fieldset);
 
 function PaymentMethodSelector(props: PropTypes) {
   const errorHeading = props.submissionError === 'personal_details_incorrect' ? 'Failed to Create Subscription' :
@@ -32,15 +39,19 @@ function PaymentMethodSelector(props: PropTypes) {
     <GeneralErrorMessage errorReason={props.submissionError} errorHeading={errorHeading} /> :
     null;
 
-  const multiplePaymentMethodsEnabled = props.payPalEnabled || props.countrySupportsDirectDebit;
+  const paymentMethods = supportedPaymentMethods(props.country, props.product);
 
-  return (multiplePaymentMethodsEnabled ?
-    <FormSection title={multiplePaymentMethodsEnabled ? 'How would you like to pay?' : null}>
+
+  return (paymentMethods.length > 1 ?
+    <FormSection title="How would you like to pay?">
       <Rows gap="large">
-        {multiplePaymentMethodsEnabled &&
         <div>
-          <Fieldset legend="How would you like to pay?">
-            {props.countrySupportsDirectDebit &&
+          <FieldsetWithError
+            id="payment-methods"
+            legend="How would you like to pay?"
+            error={props.validationError}
+          >
+            {paymentMethods.includes(DirectDebit) &&
             <RadioInput
               image={<SvgDirectDebitSymbol />}
               text="Direct debit"
@@ -55,7 +66,7 @@ function PaymentMethodSelector(props: PropTypes) {
               checked={props.paymentMethod === Stripe}
               onChange={() => props.setPaymentMethod(Stripe)}
             />
-            {props.payPalEnabled &&
+            {paymentMethods.includes(PayPal) &&
             <RadioInput
               image={<SvgPayPal />}
               text="PayPal"
@@ -63,9 +74,8 @@ function PaymentMethodSelector(props: PropTypes) {
               checked={props.paymentMethod === PayPal}
               onChange={() => props.setPaymentMethod(PayPal)}
             />}
-          </Fieldset>
+          </FieldsetWithError>
         </div>
-        }
         {errorState}
       </Rows>
       <DirectDebitPopUpForm

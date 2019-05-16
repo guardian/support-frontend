@@ -45,11 +45,12 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
+
 import { countries } from 'helpers/internationalisation/country';
 import { displayBillingPeriods } from 'helpers/productPrice/weeklyProductPrice';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
-
+import { GuardianWeekly } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
@@ -112,8 +113,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
       offer: displayBillingPeriods[billingPeriod].offer || null,
     },
   }), {});
-
-  console.log('plans: ', plans);
 
   const quarterlyPriceLabel = {
     title: plans.Quarterly.title,
@@ -266,12 +265,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
             </Fieldset>
           </FormSection>
           <PaymentMethodSelector
-            countrySupportsDirectDebit
+            country={props.country}
+            product={GuardianWeekly}
             paymentMethod={props.paymentMethod}
             setPaymentMethod={props.setPaymentMethod}
             onPaymentAuthorised={props.onPaymentAuthorised}
+            validationError={firstError('paymentMethod', props.formErrors)}
             submissionError={props.submissionError}
-            payPalEnabled={false}
           />
           <FormSection noBorder>
             <Button aria-label={null} type="submit">Continue to payment</Button>

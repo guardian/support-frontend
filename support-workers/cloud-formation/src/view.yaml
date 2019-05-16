@@ -13,5 +13,5 @@ lambdas:
   description: Send thank-you email
 - name: SendAcquisitionEvent
   description: Submit Acquisition events to Ophan
-- name: GetPaymentMethod
+- name: PreparePaymentMethodForReuse
   description: Retrieves payment details for existing account and clones mandate in case of direct debit
