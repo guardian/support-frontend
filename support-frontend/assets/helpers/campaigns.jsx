@@ -8,16 +8,15 @@ export type TickerType = 'unlimited' | 'hardstop';
 export type ContributionType = 'monthly' | 'annual' | 'one-off';
 
 export type CampaignSettings = {
-  headerCopy?: string,
+  headerCopy?: string | React$Element<string>,
   contributeCopy?: React$Element<string>,
   formMessage?: React$Element<string>,
   termsAndConditions?: (contributionsTermsLink: string) => React$Element<string>,
-
   tickerJsonUrl?: string,
-  cssModifiers?: string[],
   cssModifiers?: string[],
   tickerType: TickerType,
   contributionTypes?: ContributionTypes,
+  backgroundImage?: string,
 };
 
 export type Campaigns = {
@@ -34,34 +33,53 @@ export const campaigns: Campaigns = {
         <div className="form-message__body">to our dedicated series ‘Toxic America’</div>
       </div>
     ),
-    headerCopy: 'Toxic America: The US and the climate emergency',
+    headerCopy: (
+      <span>Toxic America: Help us fight for <br className="responsive-break" />a cleaner world</span>
+    ),
     contributeCopy: (
       <div>
         <p>
-          The north is flooded, the south parched by drought.
-          The Murray Darling, our greatest river system, has dried to a trickle,
-          crippling communities and turning up millions of dead fish.
-          The ancient alpine forests of Tasmania have burned.
-          The summer was the hottest on record.
-          We are living the reality of climate change.
+          We’re asking our readers to support a six-month Guardian series about the growing scale
+          and deepening health implications of living in an environment that exposes us to chemical
+          contamination on a daily basis through the air we breathe, the food we eat, the products
+          we use and the water we drink. The project will:
         </p>
+        <ul>
+          <li className="blurb-list-item">
+            Hold politicians, the Trump administration, the EPA and the FDA
+            accountable for regulatory rollbacks and failures keep dangerous
+            chemicals out of products and off of store shelves
+          </li>
+          <li className="blurb-list-item">
+            Offer advice on how to navigate the supermarket and make food
+            choices to reduce your exposure
+          </li>
+          <li className="blurb-list-item">
+            Look at everyday dangers in our homes, from flame retardants in the sofa to
+            carcinogens in dry cleaning
+          </li>
+          <li className="blurb-list-item">
+            Explore how plastic pollution is impacting human health
+          </li>
+          <li className="blurb-list-item">
+            Report on threats to our drinking water supply
+          </li>
+          <li className="blurb-list-item">
+            Deliver rigorous, accessible, scientific reporting that explains what we
+            know about how the chemicals in our environment are impacting our health
+            and raises public awareness about this issue
+          </li>
+        </ul>
         <p>
-          That’s why we need your help to bring our reporting on the climate crisis to light.
-          We asked our readers to fund a new Guardian series – Toxic America: The US and the climate emergency.
-          Your response has been immediate and overwhelming, and thanks to your encouragement we have increased
-          the goal to $150,000.
-        </p>
-        <p>
-          <span>
-              With your support, we can cut through the rhetoric and focus the debate on the facts.
-              That way everyone can learn about the devastating and immediate
-              threats to our country and how best to find a solution.
-          </span>
+          Reader support protects The Guardian’s independence and ensures our in-depth
+          environmental journalism remains open to all. Our editorial independence allows us
+          to fight for transparency and accountability – and deliver the facts with
+          clarity. <span className="bold">Please help us reach our goal by contributing today.</span>
         </p>
       </div>
     ),
     termsAndConditions: (contributionsTermsLink: string) => (
-      <div className="component-terms-privacy component-terms-privacy--toxic-america">
+      <div className="component-terms-privacy component-terms-privacy--campaign-landing">
         <p>
           By proceeding, you’re agreeing to our <span className="bold">Terms and Conditions</span>.
           If we hit our goal of $150,000, The Guardian will allocate this amount to its core operations
@@ -71,18 +89,21 @@ export const campaigns: Campaigns = {
           Contributions will not be returned. Your contribution is also governed by
           our standard <a href={contributionsTermsLink}>contribution terms and conditions</a>.
         </p>
+
         <p>
-          We also take larger gifts from companies, foundations and individuals to help support The Guardian’s
-          independent, public interest journalism. If you would like to get involved, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
+          We’re also seeking larger contributions to support The Guardian’s reporting from companies,
+          foundations and individuals. If you would like to get involved with this project or provide
+          matching funds, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
         </p>
       </div>
     ),
     tickerJsonUrl: '/ticker.json',
     tickerType: 'hardstop',
-    cssModifiers: ["campaign", currentCampaignName],
+    cssModifiers: ['campaign-landing', currentCampaignName],
     contributionTypes: generateContributionTypes([
       { contributionType: 'ONE_OFF', isDefault: true },
     ]),
+    backgroundImage: 'https://media.guim.co.uk/de76ba8d8823325d02ff93376cfe0c39962b215d/0_0_2000_577/2000.jpg',
   },
 };
 

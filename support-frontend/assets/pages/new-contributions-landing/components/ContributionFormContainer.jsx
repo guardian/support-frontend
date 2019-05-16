@@ -174,7 +174,7 @@ function ContributionFormContainer(props: PropTypes) {
 
   const countryGroupDetails = {
     ...countryGroupSpecificDetails[props.countryGroupId],
-    ...campaignName ? campaigns[campaignName] : {},
+    ...campaign || {},
   };
 
   return props.paymentComplete ?
@@ -186,7 +186,9 @@ function ContributionFormContainer(props: PropTypes) {
     : (
       <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
         <div className="gu-content__blurb">
-          <h1 className="gu-content__blurb-header">{countryGroupDetails.headerCopy}</h1>
+          <div className="gu-content__blurb-header-container">
+            <h1 className="gu-content__blurb-header">{countryGroupDetails.headerCopy}</h1>
+          </div>
           { countryGroupDetails.contributeCopy ?
             <p className="gu-content__blurb-blurb">{countryGroupDetails.contributeCopy}</p> : null
           }

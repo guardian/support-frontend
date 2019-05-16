@@ -16,19 +16,26 @@ type PropTypes = {|
   header: Node,
   footer: Node,
   children: Node,
-  classModifiers: Array<?string>
+  classModifiers: Array<?string>,
+  backgroundImageSrc?: string | null,
 |};
 
 
 // ----- Component ----- //
 
 export default function Page(props: PropTypes) {
+  const backgroundImage = props.backgroundImageSrc ? (
+    <div className="background-image-container">
+      <img className="background-image" alt="landing page background illustration" src={props.backgroundImageSrc} />
+    </div>
+  ) : null;
 
   return (
     <div id={props.id} className={classNameWithModifiers('gu-content', props.classModifiers)}>
       <TimeTravelBanner />
       {props.header}
       <main role="main" className="gu-content__main">
+        {backgroundImage}
         {props.children}
       </main>
       {props.footer}
@@ -43,4 +50,5 @@ export default function Page(props: PropTypes) {
 Page.defaultProps = {
   id: null,
   classModifiers: [],
+  backgroundImageSrc: null,
 };
