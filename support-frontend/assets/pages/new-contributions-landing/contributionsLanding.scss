@@ -1041,6 +1041,16 @@ form {
     margin-right: 8px;
     background-color: gu-colour(neutral-86);
   }
+
+  .component-terms-privacy p:not(:last-child) {
+    margin-bottom: $gu-v-spacing;
+  }
+
+  .component-terms-privacy p:last-child {
+    margin: $gu-v-spacing -10px 0;
+    padding: $gu-v-spacing 10px 0;
+    border-top: 1px solid gu-colour(neutral-86);
+  }
 }
 
 
