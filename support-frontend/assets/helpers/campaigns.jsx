@@ -1,8 +1,8 @@
 // @flow
 
 import React from 'react';
-import type {ContributionType, ContributionTypes, ContributionTypeSetting} from 'helpers/contributions';
-import {generateContributionTypes} from 'helpers/contributions';
+import type { ContributionTypes } from 'helpers/contributions';
+import { generateContributionTypes } from 'helpers/contributions';
 
 export type TickerType = 'unlimited' | 'hardstop';
 
@@ -81,7 +81,7 @@ export const campaigns: Campaigns = {
     tickerType: 'hardstop',
     cssModifiers: [currentCampaignName],
     contributionTypes: generateContributionTypes([
-      {contributionType: 'ONE_OFF', isDefault: true}
+      { contributionType: 'ONE_OFF', isDefault: true },
     ]),
   },
 };

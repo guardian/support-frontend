@@ -15,7 +15,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency, IsoCurrency, SpokenCurrency } from 'helpers/internationalisation/currency';
 import { currencies, spokenCurrencies } from 'helpers/internationalisation/currency';
 import type { Amount, SelectedAmounts } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 import { ExistingCard, ExistingDirectDebit } from './paymentMethods';
@@ -47,13 +46,11 @@ function toPaymentMethodSwitchNaming(paymentMethod: PaymentMethod): PaymentMetho
 function getValidContributionTypesFromUrlOrElse(fallback: ContributionTypes): ContributionTypes {
   const contributionTypesFromUrl = getQueryParameter('contributionTypes');
   if (contributionTypesFromUrl) {
-    return generateContributionTypes(
-      contributionTypesFromUrl
-        .split(',')
-        .map(toContributionType)
-        .filter(Boolean)
-        .map(contributionType => { return {contributionType} })
-    );
+    return generateContributionTypes(contributionTypesFromUrl
+      .split(',')
+      .map(toContributionType)
+      .filter(Boolean)
+      .map(contributionType => ({ contributionType })));
   }
 
   return fallback;

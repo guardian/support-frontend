@@ -193,7 +193,12 @@ function getContributionTypes(state: State): ContributionTypes {
   return getValidContributionTypesFromUrlOrElse(state.common.settings.contributionTypes);
 }
 
-function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function, contributionTypes: ContributionTypes) {
+function selectInitialContributionTypeAndPaymentMethod(
+  state: State,
+  dispatch: Function,
+  contributionTypes: ContributionTypes,
+) {
+
   const { countryId } = state.common.internationalisation;
   const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
