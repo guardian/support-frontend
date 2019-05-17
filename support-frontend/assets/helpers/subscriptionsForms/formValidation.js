@@ -58,10 +58,11 @@ function withDeliveryValidation(state: WithDeliveryCheckoutState): AnyErrorType[
       errors: applyAddressRules(getDeliveryAddressFields(state)),
       errorAction: setAddressFormErrorsFor('delivery'),
     }: Error<AddressFormField>),
-    ...(formFields.billingAddressIsSame ? [] : [({
-      errors: applyAddressRules(getBillingAddressFields(state)),
-      errorAction: setAddressFormErrorsFor('billing'),
-    }: Error<AddressFormField>)]
+    ...(formFields.billingAddressIsSame ? [] : [
+      ({
+        errors: applyAddressRules(getBillingAddressFields(state)),
+        errorAction: setAddressFormErrorsFor('billing'),
+      }: Error<AddressFormField>)]
     ),
   ];
 }
@@ -97,4 +98,15 @@ function validateWithDeliveryForm(
   return allErrors.length === 0;
 }
 
-export { validateWithDeliveryForm, validateCheckoutForm };
+const checkoutFormIsValid = (state: CheckoutState) =>
+  checkoutValidation(state).length === 0;
+
+const withDeliveryFormIsValid = (state: WithDeliveryCheckoutState) =>
+  withDeliveryValidation(state).length === 0;
+
+export {
+  validateWithDeliveryForm,
+  validateCheckoutForm,
+  checkoutFormIsValid,
+  withDeliveryFormIsValid,
+};
