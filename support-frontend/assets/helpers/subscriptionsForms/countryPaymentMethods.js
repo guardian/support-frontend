@@ -9,7 +9,7 @@ import type { Option } from 'helpers/types/option';
 
 function supportedPaymentMethods(country: IsoCountry, product: SubscriptionProduct): PaymentMethod[] {
   const productSpecific: PaymentMethod[] = product === DigitalPack ? [PayPal] : [];
-  const countrySpecific: PaymentMethod[] = country === [Stripe];
+  const countrySpecific: PaymentMethod[] = [Stripe];
 
   return countrySpecific.concat(productSpecific);
 }
