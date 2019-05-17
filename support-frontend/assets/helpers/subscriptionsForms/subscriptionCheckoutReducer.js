@@ -28,7 +28,7 @@ export type CheckoutState = ReduxState<{|
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
   billingAddress: AddressState,
-  isPhysicalProduct: false,
+  hasDeliveryAddress: false,
 |}>;
 
 export type WithDeliveryCheckoutState = ReduxState<{|
@@ -37,7 +37,7 @@ export type WithDeliveryCheckoutState = ReduxState<{|
   marketingConsent: MarketingConsentState,
   billingAddress: AddressState,
   deliveryAddress: AddressState,
-  isPhysicalProduct: true,
+  hasDeliveryAddress: true,
 |}>;
 
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;

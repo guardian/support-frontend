@@ -20,7 +20,7 @@ function submitForm(dispatch: Dispatch<Action>, state: WithDeliveryCheckoutState
   if (validateWithDeliveryForm(dispatch, state)) {
     const testUser = state.page.checkout.isTestUser;
 
-    const { price, currency } = { price: 99.99, currency: 'GBP' }; //TODO
+    const { price, currency } = { price: 99.99, currency: 'GBP' }; // TODO
 
     const onAuthorised = (pa: PaymentAuthorisation) =>
       onPaymentAuthorised(
