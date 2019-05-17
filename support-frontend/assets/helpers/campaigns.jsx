@@ -98,6 +98,13 @@ export const campaigns: Campaigns = {
           support The Guardian’s journalism.
         </p>
         <p>
+          Please note that The Guardian is not a charity, will not use your support for charitable
+          programs, and your support of The Guardian’s journalism does not constitute a charitable
+          donation. As far as The Guardian is aware, your contribution is not eligible to be treated as
+          a charitable deduction for tax purposes in the US or elsewhere. If you have any questions
+          about contributing to The Guardian, please contact us.
+        </p>
+        <p>
           We’re also seeking larger contributions to support The Guardian’s reporting from companies,
           foundations and individuals. If you would like to get involved with this project or provide
           matching funds, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
