@@ -82,14 +82,21 @@ export const campaigns: Campaigns = {
       <div className="component-terms-privacy component-terms-privacy--campaign-landing">
         <p>
           By proceeding, you’re agreeing to our <span className="bold">Terms and Conditions</span>.
-          If we hit our goal of $150,000, The Guardian will allocate this amount to its core operations
-          which will help fund the completion of the ‘Toxic America: The US and the climate emergency’ series,
-          including editing, reporting, graphics and new commissions. If we fall short of the goal,
-          The Guardian will allocate the funds for a scaled back project on climate change.
-          Contributions will not be returned. Your contribution is also governed by
-          our standard <a href={contributionsTermsLink}>contribution terms and conditions</a>.
+          If we hit our goal of $150,000, The Guardian will allocate this amount to its core
+          operations which will help fund the completion of Toxic America series, including
+          editing, reporting, graphics, and new commissions. If we exceed our goal, additional
+          funds will be directed to The Guardian’s core operations and newsroom to support
+          The Guardian’s independent journalism. Contributions will fund news, investigative
+          reporting, commentary, and general operations. If we fall short of the goal, The Guardian
+          will allocate the funds for a scaled-back project on the impact of toxins in America.
+          Contributions will not be returned. Your contribution is also governed by our
+          standard <a href={contributionsTermsLink}>contribution terms and conditions</a>.
         </p>
-
+        <p>
+          The ultimate owner of The Guardian is the Scott Trust Limited, whose role is to secure the
+          editorial and financial independence of The Guardian in perpetuity. Reader contributions
+          support The Guardian’s journalism.
+        </p>
         <p>
           We’re also seeking larger contributions to support The Guardian’s reporting from companies,
           foundations and individuals. If you would like to get involved with this project or provide
