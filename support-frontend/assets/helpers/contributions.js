@@ -277,6 +277,18 @@ function toContributionType(s: ?string): ?ContributionType {
   return null;
 }
 
+function generateContributionTypes(contributionTypes: ContributionTypeSetting[]): ContributionTypes {
+  return {
+    GBPCountries: contributionTypes,
+    UnitedStates: contributionTypes,
+    AUDCountries: contributionTypes,
+    EURCountries: contributionTypes,
+    NZDCountries: contributionTypes,
+    Canada: contributionTypes,
+    International: contributionTypes,
+  };
+}
+
 function parseRegularContributionType(s: string): RegularContributionType {
   if (s === 'ANNUAL') {
     return 'ANNUAL';
@@ -424,6 +436,7 @@ function getContributionAmountRadios(
 export {
   config,
   toContributionType,
+  generateContributionTypes,
   validateContribution,
   parseContribution,
   getMinContribution,

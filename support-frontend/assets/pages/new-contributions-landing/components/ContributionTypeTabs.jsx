@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 function ContributionTypeTabs(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
-  if (contributionTypes.length === 1 && contributionTypes[0] === 'ONE_OFF') {
+  if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
     return (null);
   }
 
