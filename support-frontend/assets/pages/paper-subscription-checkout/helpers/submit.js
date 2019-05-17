@@ -5,7 +5,11 @@
 import { type Dispatch } from 'redux';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { buildRegularPaymentRequest, onPaymentAuthorised, showPaymentMethod } from './helpers/paymentProviders';
+import {
+  buildRegularPaymentRequest,
+  onPaymentAuthorised,
+  showPaymentMethod,
+} from 'pages/paper-subscription-checkout/helpers/paymentProviders';
 import {
   type FormField as AddressFormField,
   getFormErrors as getAddressFormErrors,
@@ -73,10 +77,13 @@ function submitForm(dispatch: Dispatch<Action>, state: WithDeliveryCheckoutState
   ].filter(({ errors }) => errors.length > 0);
 
   if (!formFields.billingAddressIsSame) {
-    allErrors.push(({
+    const billingErrors = ({
       errors: getAddressFormErrors(getBillingAddressFields(state)),
       dispatcher: setAddressFormErrorsFor('billing'),
-    }: Error<AddressFormField>));
+    }: Error<AddressFormField>);
+    if (billingErrors.errors.length > 0) {
+      allErrors.push(billingErrors);
+    }
   }
 
   if (allErrors.length > 0) {

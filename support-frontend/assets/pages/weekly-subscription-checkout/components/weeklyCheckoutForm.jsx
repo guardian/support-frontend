@@ -47,7 +47,7 @@ import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getBillingAddress, getDeliveryAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getDisplayDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import { submitForm } from 'pages/weekly-subscription-checkout/weeklySubscriptionCheckoutReducer';
+import { submitForm } from 'pages/weekly-subscription-checkout/helpers/submit';
 
 
 // ----- Types ----- //

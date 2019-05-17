@@ -47,7 +47,7 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { Paper } from 'helpers/subscriptions';
-import { submitForm } from 'pages/paper-subscription-checkout/paperSubscriptionCheckoutReducer';
+import { submitForm } from 'pages/paper-subscription-checkout/helpers/submit';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';

@@ -5,7 +5,7 @@
 import { type Dispatch } from 'redux';
 import { validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-import { showPaymentMethod } from './helpers/paymentProviders';
+import { showPaymentMethod } from 'pages/digital-subscription-checkout/helpers/paymentProviders';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 

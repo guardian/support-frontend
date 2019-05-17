@@ -35,7 +35,7 @@ import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/h
 import GridImage from 'components/gridImage/gridImage';
 
 import { type FormField, type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
-import { submitForm } from '../digitalSubscriptionCheckoutReducer';
+import { submitForm } from 'pages/digital-subscription-checkout/helpers/submit';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';

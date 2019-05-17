@@ -5,7 +5,11 @@
 import { type Dispatch } from 'redux';
 import { formError, type FormError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { buildRegularPaymentRequest, onPaymentAuthorised, showPaymentMethod } from './helpers/paymentProviders';
+import {
+  buildRegularPaymentRequest,
+  onPaymentAuthorised,
+  showPaymentMethod,
+} from 'pages/weekly-subscription-checkout/helpers/paymentProviders';
 import {
   type FormField as AddressFormField,
   getFormErrors as getAddressFormErrors,
