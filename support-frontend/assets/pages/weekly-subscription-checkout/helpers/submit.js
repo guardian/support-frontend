@@ -12,7 +12,7 @@ import {
 } from 'pages/weekly-subscription-checkout/helpers/paymentProviders';
 import {
   type FormField as AddressFormField,
-  getFormErrors as getAddressFormErrors,
+  applyAddressRules as getAddressFormErrors,
   getFormFields as getAddressFormFields,
   setFormErrorsFor as setAddressFormErrorsFor,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';

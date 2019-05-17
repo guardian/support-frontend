@@ -42,6 +42,18 @@ export type ComponentAbTest = {
   variant: string,
 };
 
+const isPhysicalProduct = (product: SubscriptionProduct) => {
+  switch (product) {
+    case Paper:
+    case PaperAndDigital:
+    case GuardianWeekly:
+      return true;
+    default:
+      return false;
+  }
+};
+
+
 const dailyNewsstandPrice = 2.20;
 const weekendNewsstandPrice = 3.20;
 const newsstandPrices: {[PaperProductOptions]: number} = {
@@ -302,4 +314,5 @@ export {
   PremiumTier,
   DailyEdition,
   GuardianWeekly,
+  isPhysicalProduct,
 };

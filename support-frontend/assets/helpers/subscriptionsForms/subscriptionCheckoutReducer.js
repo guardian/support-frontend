@@ -28,6 +28,7 @@ export type CheckoutState = ReduxState<{|
   csrf: CsrfState,
   marketingConsent: MarketingConsentState,
   billingAddress: AddressState,
+  isPhysicalProduct: false,
 |}>;
 
 export type WithDeliveryCheckoutState = ReduxState<{|
@@ -36,6 +37,7 @@ export type WithDeliveryCheckoutState = ReduxState<{|
   marketingConsent: MarketingConsentState,
   billingAddress: AddressState,
   deliveryAddress: AddressState,
+  isPhysicalProduct: true,
 |}>;
 
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
@@ -62,7 +64,6 @@ function createReducer(
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
   });
 }
-
 
 function createCheckoutReducer(
   initialCountry: IsoCountry,

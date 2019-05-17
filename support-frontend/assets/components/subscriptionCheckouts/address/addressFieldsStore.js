@@ -80,7 +80,7 @@ const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormFi
   type: 'SET_ADDRESS_FORM_ERRORS',
   errors,
 });
-const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
+const applyAddressRules = (fields: FormFields): FormError<FormField>[] => validate([
   {
     rule: nonEmptyString(fields.lineOne),
     error: formError('lineOne', 'Please enter an address'),
@@ -216,7 +216,7 @@ export {
   getFormFields,
   getStateFormErrors,
   getPostcodeForm,
-  getFormErrors,
+  applyAddressRules,
   setFormErrorsFor,
   addressActionCreatorsFor,
   isPostcodeOptional,

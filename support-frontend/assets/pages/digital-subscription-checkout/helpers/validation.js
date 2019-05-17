@@ -6,7 +6,7 @@ import type { FormField, FormFields } from 'helpers/subscriptionsForms/formField
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import {
-  getFormErrors as getAddressFormErrors,
+  applyAddressRules as getAddressFormErrors,
   setFormErrorsFor as setAddressFormErrorsFor,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -61,4 +61,4 @@ function validateForm(dispatch: Dispatch<Action>, state: CheckoutState) {
   return valid;
 }
 
-export { validateForm, formIsValid, getErrors };
+export { validateForm, formIsValid };
