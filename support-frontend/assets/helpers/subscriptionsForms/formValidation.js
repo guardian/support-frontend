@@ -5,9 +5,14 @@ import {
   type Action,
   setFormErrors,
 } from 'helpers/subscriptionsForms/formActions';
-import type { FormField } from 'helpers/subscriptionsForms/formFields';
+import type {
+  FormField,
+  FormFields,
+} from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import type {
+  FormField as AddressFormField,
+} from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import {
   applyAddressRules,
   setFormErrorsFor as setAddressFormErrorsFor,
@@ -43,13 +48,12 @@ function checkoutValidation(state: CheckoutState): AnyErrorType[] {
   ];
 }
 
+const shouldValidateBillingAddress = (fields: FormFields) =>
+  fields.billingAddressIsSame === false;
+
 function withDeliveryValidation(state: WithDeliveryCheckoutState): AnyErrorType[] {
   const formFields = getFormFields(state);
   return [
-    ({
-      errors: applyCheckoutRules(formFields),
-      errorAction: setFormErrors,
-    }: Error<FormField>),
     ({
       errors: applyDeliveryRules(formFields),
       errorAction: setFormErrors,
@@ -58,11 +62,11 @@ function withDeliveryValidation(state: WithDeliveryCheckoutState): AnyErrorType[
       errors: applyAddressRules(getDeliveryAddressFields(state)),
       errorAction: setAddressFormErrorsFor('delivery'),
     }: Error<AddressFormField>),
-    ...(formFields.billingAddressIsSame ? [] : [
+    ...(shouldValidateBillingAddress(formFields) ? [
       ({
         errors: applyAddressRules(getBillingAddressFields(state)),
         errorAction: setAddressFormErrorsFor('billing'),
-      }: Error<AddressFormField>)]
+      }: Error<AddressFormField>)] : []
     ),
   ];
 }

@@ -34,7 +34,7 @@ function applyDeliveryRules(fields: FormFields): FormError<FormField>[] {
         'Please indicate whether the billing address is the same as the delivery address',
       ),
     },
-  ]);
+  ]).concat(applyCheckoutRules(fields));
 }
 
 export { applyCheckoutRules, applyDeliveryRules };
