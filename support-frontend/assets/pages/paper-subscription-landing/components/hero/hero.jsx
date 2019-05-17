@@ -12,10 +12,13 @@ import { FlashSaleCountdownInHero } from 'components/flashSaleCountdown/flashSal
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { getQueryParameter } from 'helpers/url';
 import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
 import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
-
+import { getDiscountCopy } from '../hero/discountCopy';
 import './joyOfPrint.scss';
+
+const discountParam = getQueryParameter('heroCopy');
 
 function getHeading(): string {
   if (flashSaleIsActive('Paper', GBPCountries)) {
@@ -23,9 +26,15 @@ function getHeading(): string {
     return saleCopy.landingPage.subHeading;
   }
 
-  return 'Save up to 37% on The Guardian and The Observer - all year round';
+  return getDiscountCopy(discountParam).heading;
 
 }
+
+const Discount = (props: { discountCopy: string[] }) => (
+  <div>
+    {props.discountCopy.map(copy => <span>{ copy }</span>)}
+  </div>
+);
 
 const TimerIfActive = () => (showCountdownTimer('Paper', GBPCountries) ? (
   <FlashSaleCountdownInHero
@@ -102,8 +111,7 @@ const CampaignHeader = () => (
       <div className="sale-joy-of-print-graphic-outer">
         <div className="sale-joy-of-print-graphic-inner">
           <div className="sale-joy-of-print-badge">
-            <span>Save up to</span>
-            <span>37%</span>
+            <Discount discountCopy={getDiscountCopy(discountParam).roundel} />
           </div>
           <div className="sale-joy-of-print-graphic">
             <GridImage
