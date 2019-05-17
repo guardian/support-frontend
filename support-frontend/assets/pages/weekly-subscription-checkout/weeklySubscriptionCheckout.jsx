@@ -12,22 +12,24 @@ import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
 import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
-import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
+import SubscriptionTermsPrivacy
+  from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
 import CheckoutStage from './stage';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { Paper } from 'helpers/subscriptions';
+import { GuardianWeekly } from 'helpers/subscriptions';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
 import { getDisplayDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
-
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 // ----- Redux Store ----- //
+
 const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixForSix' || billingPeriodInUrl === 'Quarterly' || billingPeriodInUrl === 'Annual'
   ? billingPeriodInUrl
@@ -37,10 +39,10 @@ const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixFor
 const startDate = getDisplayDays()[0];
 const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(
   commonState.internationalisation.countryId,
-  Paper,
+  GuardianWeekly,
   initialBillingPeriod,
   startDate,
-  null,
+  NoProductOptions,
   Domestic, // TODO: we need to work this out from the country
 );
 

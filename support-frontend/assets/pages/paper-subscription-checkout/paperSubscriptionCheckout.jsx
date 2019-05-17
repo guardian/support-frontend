@@ -24,7 +24,6 @@ import type { CommonState } from 'helpers/page/commonReducer';
 import { Monthly } from 'helpers/billingPeriods';
 import { Paper } from 'helpers/subscriptions';
 
-
 // ----- Redux Store ----- //
 
 const fulfilmentOption = getFulfilmentOption();
