@@ -6,7 +6,6 @@ import cats.syntax.applicativeError._
 import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.db.Database
-import anorm.SqlParser.scalar
 
 import scala.concurrent.Future
 import model.JdbcThreadPool
@@ -21,7 +20,6 @@ trait DatabaseService {
   // See e.g. backend.StripeBackend for more context.
   def insertContributionData(data: ContributionData): EitherT[Future, DatabaseService.Error, Unit]
   def flagContributionAsRefunded(paymentId: String): EitherT[Future, DatabaseService.Error, Unit]
-  def paymentAlreadyInserted(paymentId: String): EitherT[Future, DatabaseService.Error, Boolean]
 }
 
 object DatabaseService {
@@ -90,20 +88,6 @@ class PostgresDatabaseService private (database: Database)(implicit pool: JdbcTh
         },
         _ => logger.info(s"contribution with payment_id $paymentId was flagged as refunded")
       )
-  }
-
-  override def paymentAlreadyInserted(paymentId: String): EitherT[Future, DatabaseService.Error, Boolean] = {
-    val query =
-      SQL"""
-        SELECT EXISTS(SELECT * FROM contributions WHERE payment_id = $paymentId LIMIT 1)
-       """
-    Future(database.withConnection { implicit conn => query.as(scalar[Boolean].single) })
-      .attemptT
-      .leftMap(err => {
-        val msg = s"Unable to query database when doing an existence check for $paymentId"
-        logger.error(msg, err)
-        DatabaseService.Error(msg, Some(err))
-      })
   }
 }
 
