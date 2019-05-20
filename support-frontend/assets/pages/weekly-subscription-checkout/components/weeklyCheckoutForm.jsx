@@ -35,7 +35,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
-import { displayBillingPeriods } from 'helpers/productPrice/weeklyProductPrice';
+import { displayBillingPeriods, getCurrencyAndPrice } from 'helpers/productPrice/weeklyProductPrice';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import { GuardianWeekly } from 'helpers/subscriptions';
@@ -105,6 +105,7 @@ type Plans = {
     title: string,
     copy: string,
     offer: Option<string>,
+    priceObject: Object,
   }
 }
 
@@ -115,6 +116,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
       title: displayBillingPeriods[billingPeriod].title,
       copy: displayBillingPeriods[billingPeriod].copy(props.countryGroupId),
       offer: displayBillingPeriods[billingPeriod].offer || null,
+      priceObject: getCurrencyAndPrice(props.countryGroupId, billingPeriod),
     },
   }), {});
 
@@ -134,6 +136,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
     offer: plans.SixForSix.offer,
   };
 
+  const summaryPrice = { ...plans[props.billingPeriod].priceObject };
+
   return (
     <Content modifierClasses={['your-details']}>
       <Layout aside={(
@@ -149,12 +153,16 @@ function WeeklyCheckoutForm(props: PropTypes) {
           }
           title="Guardian Weekly"
           description=""
-          productPrice={{ price: 99.89, currency: 'GBP' }}
+          productPrice={summaryPrice}
           promotion={undefined}
           dataList={[
+            {
+              title: 'Delivery method',
+              value: 'Home delivery',
+            },
           ]}
-          billingPeriod="Monthly"
-          changeSubscription="TODO placeholder"
+          billingPeriod={props.billingPeriod}
+          changeSubscription="/subscribe/weekly"
         />
       )}
       >

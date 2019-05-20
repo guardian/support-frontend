@@ -116,7 +116,6 @@ TabletAndDesktop.defaultProps = {
   dataList: [],
 };
 
-
 const HideDropDown = (props: {
   billingPeriod: BillingPeriod,
   onClick: Function,
@@ -124,8 +123,10 @@ const HideDropDown = (props: {
   promotion: ?Promotion,
   showDropDown: boolean,
   title: string,
+  paper: boolean,
 }) => (
   <div className={styles.content}>
+    {console.log(props.paper)}
     <h1 className={styles.header}>Order summary</h1>
     <header>
       <h2 className={styles.title} title={`your subscription is ${props.title}`}>{props.title}</h2>
@@ -138,9 +139,11 @@ const HideDropDown = (props: {
         promotion={props.promotion}
         billingPeriod={props.billingPeriod}
       />
-      <span className={styles.pricing}>
-        &nbsp;&ndash; Voucher booklet
-      </span>
+      {props.paper ?
+        <span className={styles.pricing}>
+          &nbsp;&ndash; Voucher booklet
+        </span>
+      : null}
     </div>
   </div>
 );
@@ -154,7 +157,7 @@ const ShowDropDown = (props: {
 }) => (
   <div className={styles.contentWrapper}>
     <h1 className={styles.headerShowDetails}>Order summary</h1>
-    <div className={styles.contentShowDetails}>
+    <div className={props.description ? styles.contentShowDetails : styles.contentShowDetailsNoDecription}>
       <header>
         <h2 className={styles.titleLeftAlign} title={`your subscription is ${props.title}`}>{props.title}</h2>
       </header>
@@ -215,6 +218,9 @@ export default class Summary extends Component<PropTypes, StateTypes> {
   }
 
   render() {
+    const url = new URL(window.location).pathname;
+    const isPaperCheckout = url.includes('paper');
+
     return (
       <aside className={styles.root}>
         <TabletAndDesktop {...this.props} />
@@ -222,6 +228,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
           onClick={this.toggleDetails}
           showDropDown={this.state.showDropDown}
           deliveryMethod={this.props.dataList.length ? this.getDeliveryMethod() : null}
+          paper={isPaperCheckout}
           {...this.props}
         />
       </aside>
