@@ -20,7 +20,7 @@ import {
   setSubmissionError,
 } from 'helpers/subscriptionsForms/formActions';
 import type {
-  AnyCheckoutState,
+  AnyCheckoutState, CheckoutState,
   WithDeliveryCheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
@@ -28,7 +28,6 @@ import {
   getDeliveryAddressFields,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { finalPrice } from 'helpers/productPrice/productPrices';
-import { Monthly } from 'helpers/billingPeriods';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { getQueryParameter } from 'helpers/url';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
@@ -37,9 +36,18 @@ import { routes } from 'helpers/routes';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
-import { DirectDebit, Stripe } from 'helpers/paymentMethods';
+import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 import { showStripe } from 'helpers/paymentProviders';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
+import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import {
+  validateCheckoutForm,
+  validateWithDeliveryForm,
+} from 'helpers/subscriptionsForms/formValidation';
+import { isPhysicalProduct } from 'helpers/subscriptions';
 
 // ----- Functions ----- //
 
@@ -72,7 +80,7 @@ function onPaymentAuthorised(
 }
 
 function getAddresses(state: AnyCheckoutState) {
-  if (state.page.hasDeliveryAddress) {
+  if (isPhysicalProduct(state.page.checkout.product)) {
     const deliveryAddressFields =
       getDeliveryAddressFields(((state: any): WithDeliveryCheckoutState));
     return {
@@ -88,6 +96,15 @@ function getAddresses(state: AnyCheckoutState) {
   };
 }
 
+const getOptions = (
+  fulfilmentOptions: FulfilmentOptions,
+  productOptions: ProductOptions,
+) =>
+  ({
+    ...(fulfilmentOptions !== NoFulfilmentOptions ? { fulfilmentOptions } : {}),
+    ...(productOptions !== NoProductOptions ? { productOptions } : {}),
+  });
+
 function buildRegularPaymentRequest(
   state: AnyCheckoutState,
   paymentAuthorisation: PaymentAuthorisation,
@@ -98,13 +115,15 @@ function buildRegularPaymentRequest(
     lastName,
     email,
     telephone,
+    billingPeriod,
+    fulfilmentOption,
+    productOption,
   } = state.page.checkout;
 
   const product = {
     currency: currencyId,
-    billingPeriod: Monthly,
-    fulfilmentOptions: state.page.checkout.fulfilmentOption,
-    productOptions: state.page.checkout.productOption,
+    billingPeriod,
+    ...getOptions(fulfilmentOption, productOption),
   };
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
@@ -145,6 +164,9 @@ function showPaymentMethod(
     case DirectDebit:
       dispatch(openDirectDebitPopUp());
       break;
+    case PayPal:
+      // PayPal is more complicated and is handled differently, see PayPalExpressButton component
+      break;
     case null:
     case undefined:
       console.log('Undefined payment method');
@@ -156,37 +178,55 @@ function showPaymentMethod(
 
 function submitForm(
   dispatch: Dispatch<Action>,
-  state: WithDeliveryCheckoutState,
-  validationFunction: (Dispatch<Action>, AnyCheckoutState) => boolean,
+  state: AnyCheckoutState,
 ) {
-  if (validationFunction(dispatch, state)) {
-    const testUser = state.page.checkout.isTestUser;
+  const testUser = state.page.checkout.isTestUser;
 
-    const { price, currency } = finalPrice(
-      state.page.checkout.productPrices,
-      state.page.billingAddress.fields.country,
-      state.page.checkout.fulfilmentOption,
-      state.page.checkout.productOption,
+  const { price, currency } = finalPrice(
+    state.page.checkout.productPrices,
+    state.page.billingAddress.fields.country,
+    state.page.checkout.fulfilmentOption,
+    state.page.checkout.productOption,
+  );
+
+  const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
+    onPaymentAuthorised(
+      dispatch,
+      buildRegularPaymentRequest(state, paymentAuthorisation),
+      state.page.csrf,
+      state.common.abParticipations,
     );
 
-    const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
-      onPaymentAuthorised(
-        dispatch,
-        buildRegularPaymentRequest(state, paymentAuthorisation),
-        state.page.csrf,
-        state.common.abParticipations,
-      );
+  const { paymentMethod, email } = state.page.checkout;
+  showPaymentMethod(
+    dispatch, onAuthorised, testUser, price, currency,
+    paymentMethod, email,
+  );
+}
 
-    const { paymentMethod, email } = state.page.checkout;
-    showPaymentMethod(
-      dispatch, onAuthorised, testUser, price, currency,
-      paymentMethod, email,
-    );
+function submitWithDeliveryForm(
+  dispatch: Dispatch<Action>,
+  state: WithDeliveryCheckoutState,
+) {
+  if (validateWithDeliveryForm(dispatch, state)) {
+    submitForm(dispatch, state);
+  }
+}
+
+function submitCheckoutForm(
+  dispatch: Dispatch<Action>,
+  state: CheckoutState,
+) {
+  if (validateCheckoutForm(dispatch, state)) {
+    submitForm(dispatch, state);
   }
 }
 
 // ----- Export ----- //
 
 export {
-  submitForm,
+  onPaymentAuthorised,
+  buildRegularPaymentRequest,
+  submitCheckoutForm,
+  submitWithDeliveryForm,
 };

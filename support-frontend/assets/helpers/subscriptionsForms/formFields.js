@@ -10,6 +10,7 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { AnyCheckoutState, CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
 
@@ -31,6 +32,7 @@ export type FormField = $Keys<FormFields>;
 
 export type FormState = {|
   stage: Stage,
+  product: SubscriptionProduct,
   ...FormFields,
   email: string,
   formErrors: FormError<FormField>[],

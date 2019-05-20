@@ -48,7 +48,7 @@ class CreateSubscription(
     implicit request: AuthRequest[CreateSupportWorkersRequest],
     validator: CreateSupportWorkersRequest => Boolean
   ): Future[Result] = {
-    SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new subscription")
+    SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.product} subscription")
 
     val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
 

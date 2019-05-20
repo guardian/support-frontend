@@ -3,7 +3,7 @@
 // ----- Reducer ----- //
 
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { getUser } from 'pages/digital-subscription-checkout/helpers/user';
+import { getUser } from 'helpers/subscriptionsForms/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { defaultPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
@@ -30,6 +30,7 @@ function createFormReducer(
 
   const initialState = {
     stage: 'checkout',
+    product,
     title: null,
     email: user.email || '',
     firstName: user.firstName || '',

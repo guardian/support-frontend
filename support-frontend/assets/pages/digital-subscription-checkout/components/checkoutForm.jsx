@@ -6,7 +6,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
-import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
+import {
+  firstError,
+  type FormError,
+} from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import { Fieldset } from 'components/forms/fieldset';
@@ -24,7 +27,11 @@ import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import Summary from 'components/subscriptionCheckouts/summary';
-import { type Action, type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import {
+  type Action,
+  type FormActionCreators,
+  formActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
@@ -33,11 +40,15 @@ import type { OptimizeExperiments } from 'helpers/optimize/optimize';
 import { signOut } from 'helpers/user/user';
 import GridImage from 'components/gridImage/gridImage';
 
-import { type FormField, type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
-import { submitForm } from 'pages/digital-subscription-checkout/helpers/submit';
+import {
+  type FormField,
+  type FormFields,
+  getFormFields,
+} from 'helpers/subscriptionsForms/formFields';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
+import CancellationSection
+  from 'components/subscriptionCheckouts/cancellationSection';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
@@ -48,6 +59,9 @@ import {
   checkoutFormIsValid,
   validateCheckoutForm,
 } from 'helpers/subscriptionsForms/formValidation';
+import {
+  submitCheckoutForm,
+} from 'helpers/subscriptionsForms/submit';
 
 // ----- Types ----- //
 
@@ -102,7 +116,8 @@ function mapDispatchToProps() {
   return {
     ...formActionCreators,
     formIsValid: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => checkoutFormIsValid(getState()),
-    submitForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => submitForm(dispatch, getState()),
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+      submitCheckoutForm(dispatch, getState()),
     validateForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
       validateCheckoutForm(dispatch, getState()),
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
