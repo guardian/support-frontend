@@ -108,7 +108,7 @@ function showStripe(
 }
 
 function showPaymentMethod(
-  dispatch: Dispatch<Action | Action>,
+  dispatch: Dispatch<Action>,
   state: CheckoutState,
 ): void {
   const { paymentMethod } = state.page.checkout;
