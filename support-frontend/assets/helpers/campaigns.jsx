@@ -113,7 +113,7 @@ export const campaigns: Campaigns = {
     ),
     goalReachedCopy: null,
     tickerJsonUrl: '/ticker.json',
-    tickerType: 'hardstop',
+    tickerType: 'unlimited',
     cssModifiers: ['campaign-landing', currentCampaignName],
     contributionTypes: generateContributionTypes([
       { contributionType: 'ONE_OFF', isDefault: true },
