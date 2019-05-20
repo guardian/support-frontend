@@ -45,7 +45,7 @@ function checkoutValidation(state: CheckoutState): AnyErrorType[] {
       errors: applyAddressRules(getBillingAddressFields(state)),
       errorAction: setAddressFormErrorsFor('billing'),
     }: Error<AddressFormField>),
-  ];
+  ].filter(({ errors }) => errors.length > 0);
 }
 
 const shouldValidateBillingAddress = (fields: FormFields) =>
@@ -68,7 +68,7 @@ function withDeliveryValidation(state: WithDeliveryCheckoutState): AnyErrorType[
         errorAction: setAddressFormErrorsFor('billing'),
       }: Error<AddressFormField>)] : []
     ),
-  ];
+  ].filter(({ errors }) => errors.length > 0);
 }
 
 function dispatchErrors(
@@ -84,9 +84,7 @@ function validateCheckoutForm(
   dispatch: Dispatch<Action>,
   state: CheckoutState,
 ): boolean {
-  const allErrors = checkoutValidation(state)
-    .filter(({ errors }) => errors.length > 0);
-
+  const allErrors = checkoutValidation(state);
   dispatchErrors(dispatch, allErrors);
   return allErrors.length === 0;
 }
@@ -95,9 +93,7 @@ function validateWithDeliveryForm(
   dispatch: Dispatch<Action>,
   state: WithDeliveryCheckoutState,
 ): boolean {
-  const allErrors = withDeliveryValidation(state)
-    .filter(({ errors }) => errors.length > 0);
-
+  const allErrors = withDeliveryValidation(state);
   dispatchErrors(dispatch, allErrors);
   return allErrors.length === 0;
 }
