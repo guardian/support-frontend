@@ -16,7 +16,7 @@ import {
 import { type RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type Scoped } from 'helpers/scoped';
 
-import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
+import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import {
   postcodeFinderReducerFor,
   type PostcodeFinderState,

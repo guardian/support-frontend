@@ -3,7 +3,7 @@ import { type Dispatch } from 'redux';
 
 import { type Option } from 'helpers/types/option';
 import { type Scoped } from 'helpers/scoped';
-import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
+import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import {
   getAddressesForPostcode,
   type PostcodeFinderResult,

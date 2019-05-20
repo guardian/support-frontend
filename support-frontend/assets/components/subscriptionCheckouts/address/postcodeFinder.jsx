@@ -15,7 +15,7 @@ import {
   postcodeFinderActionCreatorsFor,
   type PostcodeFinderState,
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
-import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
+import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import { type PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 
 import styles from 'components/subscriptionCheckouts/address/postcodeFinder.module.scss';

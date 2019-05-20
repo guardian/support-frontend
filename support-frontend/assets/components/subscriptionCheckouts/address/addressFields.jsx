@@ -15,7 +15,7 @@ import { asControlled } from 'hocs/asControlled';
 
 import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
 import { type PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
-import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
+import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 
 import {
   type ActionCreators as AddressActionCreators,

@@ -1,37 +1,21 @@
 // @flow
 
-import { formatUserDate } from 'helpers/dateConversions';
+import {
+  getNextDaysOfTheWeek,
+  numberOfWeeksWeDeliverTo,
+} from 'helpers/subscriptionsForms/deliveryDays';
 
-type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-const milsInADay = 1000 * 60 * 60 * 24;
-
-const numberOfWeeksWeDeliverTo = 4;
-// The cut off for getting vouchers in two weeks is Wednesday (day #3 in ISO format) at 6 AM GMT
-const weeklyExtraDelayCutoffWeekday = 3;
-const weeklyNormalDelayWeeks = 1;
-const weeklyExtraDelayWeeks = 2;
-
-const getNextDayOfTheWeek = (today: number, day: Day): Date => {
-  const diff = (7 + (day - new Date(today).getDay())) % 7;
-  return new Date(today + (diff * milsInADay));
-};
-
-const getNextDaysOfTheWeek = (today: number, day: Day, length: number = numberOfWeeksWeDeliverTo): Date[] => {
-  const initial = getNextDayOfTheWeek(today, day);
-  const rt = [initial];
-  for (let i = 1; i <= length; i += 1) {
-    rt.push(new Date(rt[i - 1].getTime() + (7 * milsInADay)));
-  }
-  return rt;
-};
+const extraDelayCutoffWeekday = 3;
+const normalDelayWeeks = 1;
+const extraDelayWeeks = 2;
 
 const getWeeklyDays = (today: ?number): Date[] => {
   const now = new Date(today || new Date().getTime());
   const currentWeekday = now.getDay();
   const weeksToAdd =
-      currentWeekday > weeklyExtraDelayCutoffWeekday
-        ? weeklyExtraDelayWeeks
-        : weeklyNormalDelayWeeks;
+      currentWeekday > extraDelayCutoffWeekday
+        ? extraDelayWeeks
+        : normalDelayWeeks;
   return getNextDaysOfTheWeek(
     now.getTime(),
     5,
@@ -39,9 +23,4 @@ const getWeeklyDays = (today: ?number): Date[] => {
   ).splice(weeksToAdd);
 };
 
-function getDisplayDays(): string[] {
-  const today = new Date().getTime();
-  return getWeeklyDays(today).map(day => formatUserDate(day));
-}
-
-export { getWeeklyDays, getDisplayDays };
+export { getWeeklyDays };
