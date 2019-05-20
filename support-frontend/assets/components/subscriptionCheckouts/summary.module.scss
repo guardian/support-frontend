@@ -4,7 +4,7 @@
   position: relative;
 }
 
-.content, .contentShowDetails {
+.content, .contentShowDetails, .contentShowDetailsNoDecription {
   @include mq($until: tablet) {
     display: grid;
     grid-template-columns: 40% 60%;
@@ -19,6 +19,13 @@
   @include mq($until: mobileMedium) {
     grid-template-columns: 50% 50%;
   }
+}
+
+.contentShowDetailsNoDecription {
+  display: block;
+  border-bottom: 1px solid gu-colour(neutral-86);
+  margin-bottom: $gu-v-spacing *2 /3;
+  padding-bottom: $gu-v-spacing;
 }
 
 .contentWrapper, .content {

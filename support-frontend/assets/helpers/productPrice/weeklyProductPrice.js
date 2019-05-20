@@ -7,12 +7,24 @@ import { Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
 import { getPromotionWeeklyProductPrice, getWeeklyProductPrice } from 'helpers/subscriptions';
 
 
-const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
+export const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
   currencies[detect(countryGroupId)].extendedGlyph,
   getWeeklyProductPrice(countryGroupId, period),
 ].join('');
 
-const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod, promoCode: string) => [
+type CurrencyAndPrice = {
+  price: number,
+  currency: string,
+}
+
+export const getCurrencyAndPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod): CurrencyAndPrice => (
+  {
+    currency: detect(countryGroupId),
+    price: parseFloat(getWeeklyProductPrice(countryGroupId, period)),
+  }
+);
+
+export const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod, promoCode: string) => [
   currencies[detect(countryGroupId)].extendedGlyph,
   getPromotionWeeklyProductPrice(countryGroupId, period, promoCode),
 ].join('');

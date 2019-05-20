@@ -18,7 +18,6 @@ const displayPriceForPeriod = (productPrice: Price, billingPeriod: BillingPeriod
 function PriceLabel({
   productPrice, promotion, billingPeriod, ...props
 }: PropTypes) {
-
   if (hasDiscount(promotion)) {
     return (
       <span {...props}>
