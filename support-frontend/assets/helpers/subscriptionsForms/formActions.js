@@ -8,7 +8,6 @@ import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { FormField, Stage } from './formFields';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
 import * as storage from 'helpers/storage';
 import { trackPaymentMethodSelected } from 'helpers/tracking/ophanComponentEventTracking';
 import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
@@ -22,6 +21,7 @@ import {
   buildRegularPaymentRequest,
   onPaymentAuthorised,
 } from 'helpers/subscriptionsForms/submit';
+import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }

@@ -37,7 +37,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
-import { showStripe } from 'helpers/paymentProviders';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -48,6 +47,10 @@ import {
   validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
 import { isPhysicalProduct } from 'helpers/subscriptions';
+import {
+  loadStripe, openDialogBox,
+  setupStripeCheckout,
+} from 'helpers/paymentIntegrations/stripeCheckout';
 
 // ----- Functions ----- //
 
@@ -145,6 +148,18 @@ function buildRegularPaymentRequest(
     ),
     promoCode: getQueryParameter('promoCode'),
   };
+}
+
+function showStripe(
+  onAuthorised: (pa: PaymentAuthorisation) => void,
+  isTestUser: boolean,
+  price: number,
+  currency: IsoCurrency,
+  email: string,
+) {
+  loadStripe()
+    .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
+    .then(stripe => openDialogBox(stripe, price, email));
 }
 
 function showPaymentMethod(
