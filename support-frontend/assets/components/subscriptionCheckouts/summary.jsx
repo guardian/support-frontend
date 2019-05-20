@@ -126,7 +126,6 @@ const HideDropDown = (props: {
   paper: boolean,
 }) => (
   <div className={styles.content}>
-    {console.log(props.paper)}
     <h1 className={styles.header}>Order summary</h1>
     <header>
       <h2 className={styles.title} title={`your subscription is ${props.title}`}>{props.title}</h2>
