@@ -187,6 +187,7 @@ function submitForm(
     state.page.billingAddress.fields.country,
     state.page.checkout.fulfilmentOption,
     state.page.checkout.productOption,
+    state.page.checkout.billingPeriod,
   );
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>

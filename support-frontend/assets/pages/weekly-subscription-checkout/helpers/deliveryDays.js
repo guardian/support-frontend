@@ -25,15 +25,15 @@ const getNextDaysOfTheWeek = (today: number, day: Day, length: number = numberOf
   return rt;
 };
 
-const getWeeklyDays = (today: number): Date[] => {
-  const now = new Date(today);
+const getWeeklyDays = (today: ?number): Date[] => {
+  const now = new Date(today || new Date().getTime());
   const currentWeekday = now.getDay();
   const weeksToAdd =
       currentWeekday > weeklyExtraDelayCutoffWeekday
         ? weeklyExtraDelayWeeks
         : weeklyNormalDelayWeeks;
   return getNextDaysOfTheWeek(
-    today,
+    now.getTime(),
     5,
     numberOfWeeksWeDeliverTo + weeksToAdd,
   ).splice(weeksToAdd);

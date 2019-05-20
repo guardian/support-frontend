@@ -17,7 +17,6 @@ import {
   glyph,
   extendedGlyph,
 } from 'helpers/internationalisation/currency';
-import { Monthly } from 'helpers/billingPeriods';
 
 // ----- Types ----- //
 
@@ -87,8 +86,10 @@ function getPromotion(
   countryGroup: CountryGroup,
   fulfilmentOption: FulfilmentOptions,
   productOption: ProductOptions,
+  billingPeriod: BillingPeriod,
 ): ?Promotion {
-  return productPrices[countryGroup.name][fulfilmentOption][productOption][Monthly][countryGroup.currency].promotion;
+  // eslint-disable-next-line max-len
+  return productPrices[countryGroup.name][fulfilmentOption][productOption][billingPeriod][countryGroup.currency].promotion;
 }
 
 function regularPrice(
@@ -96,9 +97,11 @@ function regularPrice(
   countryGroup: CountryGroup,
   fulfilmentOption: FulfilmentOptions,
   productOption: ProductOptions,
+  billingPeriod: BillingPeriod,
 ): Price {
   return {
-    price: productPrices[countryGroup.name][fulfilmentOption][productOption][Monthly][countryGroup.currency].price,
+    // eslint-disable-next-line max-len
+    price: productPrices[countryGroup.name][fulfilmentOption][productOption][billingPeriod][countryGroup.currency].price,
     currency: countryGroup.currency,
   };
 }
@@ -108,11 +111,12 @@ function finalPrice(
   country: IsoCountry,
   fulfilmentOption: FulfilmentOptions,
   productOption: ProductOptions,
+  billingPeriod: BillingPeriod,
 ): Price {
   const countryGroup = getCountryGroup(country);
   return applyDiscount(
-    regularPrice(productPrices, countryGroup, fulfilmentOption, productOption),
-    getPromotion(productPrices, countryGroup, fulfilmentOption, productOption),
+    regularPrice(productPrices, countryGroup, fulfilmentOption, productOption, billingPeriod),
+    getPromotion(productPrices, countryGroup, fulfilmentOption, productOption, billingPeriod),
   );
 }
 

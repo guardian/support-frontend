@@ -8,7 +8,7 @@ import com.gu.googleauth.AuthAction
 import com.gu.identity.play.IdUser
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.support.catalog.Paper
+import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
@@ -76,7 +76,7 @@ class WeeklySubscription(
       Some(csrf),
       idUser,
       uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(Paper, promoCode),
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCode),
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),

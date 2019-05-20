@@ -24,9 +24,12 @@ import { GuardianWeekly } from 'helpers/subscriptions';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly } from 'helpers/billingPeriods';
 import { getQueryParameter } from 'helpers/url';
-import { getDisplayDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import {
+  getWeeklyDays,
+} from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { formatMachineDate } from 'helpers/dateConversions';
 
 // ----- Redux Store ----- //
 
@@ -36,7 +39,7 @@ const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixFor
   : Quarterly;
 
 
-const startDate = getDisplayDays()[0];
+const startDate = formatMachineDate(getWeeklyDays()[0]);
 const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(
   commonState.internationalisation.countryId,
   GuardianWeekly,
