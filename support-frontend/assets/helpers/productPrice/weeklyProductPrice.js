@@ -5,6 +5,7 @@ import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
 import { getPromotionWeeklyProductPrice, getWeeklyProductPrice } from 'helpers/subscriptions';
+import type { Price } from 'helpers/productPrice/productPrices';
 
 
 export const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
@@ -12,12 +13,7 @@ export const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPe
   getWeeklyProductPrice(countryGroupId, period),
 ].join('');
 
-type CurrencyAndPrice = {
-  price: number,
-  currency: string,
-}
-
-export const getCurrencyAndPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod): CurrencyAndPrice => (
+export const getCurrencyAndPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod): Price => (
   {
     currency: detect(countryGroupId),
     price: parseFloat(getWeeklyProductPrice(countryGroupId, period)),
