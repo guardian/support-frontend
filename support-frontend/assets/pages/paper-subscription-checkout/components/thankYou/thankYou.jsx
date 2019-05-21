@@ -43,7 +43,7 @@ const whatNext: {[FulfilmentOptions]: Element<*>} = {
           It has everything you need to know about how manage it in the future.
         </span>,
         <span>
-          Your newspaper will be delivered to your door. Here{'\''}s a reminder of how home delivery works.
+          Your newspaper will be delivered to your door.
         </span>,
         ]}
       />
@@ -60,7 +60,6 @@ const whatNext: {[FulfilmentOptions]: Element<*>} = {
           </span>,
           <span>
             You will receive your personalised book of vouchers.
-            Here{'\''}s a reminder of how the voucher booklet works.
           </span>,
           <span>
             Exchange your voucher for a newspaper at your newsagent or wherever you buy your paper
