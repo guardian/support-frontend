@@ -162,8 +162,11 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
     }
   }
 
-  const recurringContributionsAvailable = contributionTypes[countryGroupId].includes('MONTHLY')
-    || contributionTypes[countryGroupId].includes('ANNUAL');
+  const contributionTypeAvailable = (contributionType: ContributionType): boolean =>
+    contributionTypes[countryGroupId].some(settings => settings.contributionType === contributionType);
+
+  const recurringContributionsAvailable = contributionTypeAvailable('MONTHLY')
+    || contributionTypeAvailable('ANNUAL');
 
   if (getQueryParameter('paypal-js') !== 'no' && recurringContributionsAvailable) {
     loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
