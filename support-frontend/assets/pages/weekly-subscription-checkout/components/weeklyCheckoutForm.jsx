@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { Annual, Quarterly, SixForSix, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -36,6 +36,7 @@ import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 import { displayBillingPeriods, getCurrencyAndPrice } from 'helpers/productPrice/weeklyProductPrice';
+import type { Price } from 'helpers/productPrice/productPrices';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import { GuardianWeekly } from 'helpers/subscriptions';
@@ -101,11 +102,11 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 type Plans = {
-  [WeeklyBillingPeriod]: {
+  [WeeklyBillingPeriod | typeof Monthly]: {
     title: string,
     copy: string,
     offer: Option<string>,
-    priceObject: Object,
+    priceObject: Price,
   }
 }
 
