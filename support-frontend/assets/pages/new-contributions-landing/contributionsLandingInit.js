@@ -21,7 +21,7 @@ import {
   type ThirdPartyPaymentLibrary,
   getValidContributionTypesFromUrlOrElse,
 } from 'helpers/checkouts';
-import { type ContributionType } from 'helpers/contributions';
+import { type ContributionType, contributionTypeAvailable } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
@@ -162,9 +162,6 @@ function initialisePaymentMethods(state: State, dispatch: Function, contribution
     }
   }
 
-  const contributionTypeAvailable = (contributionType: ContributionType): boolean =>
-    contributionTypes[countryGroupId].some(settings => settings.contributionType === contributionType);
-
   const recurringContributionsAvailable = contributionTypeAvailable('MONTHLY')
     || contributionTypeAvailable('ANNUAL');
 
@@ -215,7 +212,7 @@ const init = (store: Store<State, Action, Function>) => {
 
   const state = store.getState();
 
-  //TODO - move these settings out of the redux store, as they only change once, upon initialisation
+  // TODO - move these settings out of the redux store, as they only change once, upon initialisation
   const contributionTypes = getContributionTypes(state);
   dispatch(setContributionTypes(contributionTypes));
 
