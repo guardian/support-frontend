@@ -24,7 +24,7 @@ import { getQueryParameter } from 'helpers/url';
 
 const discountParam: ?string = getQueryParameter('heroCopy');
 
-// TODO: We will need to make this work for flash sales 
+// TODO: We will need to make this work for flash sales
 const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
 
 const getPriceStr = (price: Price): string => {
@@ -40,7 +40,7 @@ const getPriceStr = (price: Price): string => {
 
 const getOfferStr = (subscription: Option<number>, newsstand: Option<number>, index: number): Option<string> => {
 
-  if(discountParam !== 'save') {
+  if (discountParam !== 'save') {
     return getDiscountCopy(discountParam).offer[index];
   }
 
