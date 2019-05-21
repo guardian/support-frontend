@@ -35,7 +35,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
-import { countries } from 'helpers/internationalisation/country';
 import { displayBillingPeriods, getCurrencyAndPrice } from 'helpers/productPrice/weeklyProductPrice';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
