@@ -431,6 +431,13 @@ function getContributionAmountRadios(
   }));
 }
 
+const contributionTypeAvailable = (
+  contributionType: ContributionType,
+  countryGroupId: CountryGroupId,
+  contributionTypes: ContributionTypes,
+): boolean =>
+  contributionTypes[countryGroupId].some(settings => settings.contributionType === contributionType);
+
 // ----- Exports ----- //
 
 export {
@@ -450,4 +457,5 @@ export {
   getContributionAmountRadios,
   parseRegularContributionType,
   getAmount,
+  contributionTypeAvailable,
 };
