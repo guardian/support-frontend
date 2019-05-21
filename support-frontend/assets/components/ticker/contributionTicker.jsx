@@ -179,7 +179,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
       https://davidwalsh.name/translate3d
       *************************************************************** */
     const progressBarAnimation = `translate3d(${percentageToTranslate(this.dataFromServer.totalContributed || 0, this.dataFromServer.goal || 0, this.tickerType)}%, 0, 0)`;
-    const readyToRender = (this.state && this.state.count && this.state.count !== 0);
+    const readyToRender = (this.state && !isNaN(this.state.count) && this.state.count > -1);
     const allClassModifiers = readyToRender ? this.classModifiers : [...this.classModifiers, 'hidden'];
     const baseClassName = 'contributions-landing-ticker';
     const wrapperClassName = classNameWithModifiers(baseClassName, allClassModifiers);
