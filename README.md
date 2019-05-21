@@ -2,7 +2,7 @@
 
 The payment service provides an API for creating PayPal and Stripe payments.
 
-## URL Healthcheack
+## URL Healthcheck
 
 * Production: https://payment.guardianapis.com/healthcheck
 * CODE: https://payment.code.dev-guardianapis.com/healthcheck
