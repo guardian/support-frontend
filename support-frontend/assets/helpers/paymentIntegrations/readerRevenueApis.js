@@ -11,11 +11,11 @@ import { logPromise, pollUntilPromise } from 'helpers/promise';
 import { logException } from 'helpers/logger';
 import { fetchJson, getRequestOptions, requestOptions } from 'helpers/fetch';
 import trackConversion from 'helpers/tracking/conversions';
-import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { type PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 import { type ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
-import { DirectDebit, PayPal, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
+import { DirectDebit, ExistingCard, ExistingDirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
@@ -33,8 +33,8 @@ type DigitalSubscription = {|
 type PaperSubscription = {|
   currency: string,
   billingPeriod: BillingPeriod,
-  fulfilmentOptions: PaperFulfilmentOptions,
-  productOptions: PaperProductOptions,
+  fulfilmentOptions: FulfilmentOptions,
+  productOptions: ProductOptions,
 |};
 
 type ProductFields = RegularContribution | DigitalSubscription | PaperSubscription

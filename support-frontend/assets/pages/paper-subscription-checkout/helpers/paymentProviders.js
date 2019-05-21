@@ -15,33 +15,25 @@ import { routes } from 'helpers/routes';
 import { getQueryParameter } from 'helpers/url';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { Monthly } from 'helpers/billingPeriods';
-import { type FormFields, getFormFields } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
-import {
-  type Action,
-  getBillingAddress,
-  getDeliveryAddress,
-  setFormSubmitted,
-  setStage,
-  setSubmissionError,
-  type State,
-} from '../paperSubscriptionCheckoutReducer';
+import { type Action, setFormSubmitted, setStage, setSubmissionError } from 'helpers/subscriptionsForms/formActions';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 import { type Csrf } from 'helpers/csrf/csrfReducer';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type Option } from 'helpers/types/option';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import {
+  getBillingAddressFields,
+  getDeliveryAddressFields,
+} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
-const getAddressFieldsState = (from: FormFields) => ({
-  lineOne: from.lineOne,
-  lineTwo: from.lineTwo,
-  city: from.city,
-  postCode: from.postCode,
-});
-
-function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
-  const { currencyId, countryId } = state.common.internationalisation;
+function buildRegularPaymentRequest(
+  state: WithDeliveryCheckoutState,
+  paymentAuthorisation: PaymentAuthorisation,
+): RegularPaymentRequest {
+  const { currencyId } = state.common.internationalisation;
   const {
     firstName,
     lastName,
@@ -59,18 +51,9 @@ function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentA
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 
-  const deliveryAddress = {
-    ...getAddressFieldsState(getFormFields(getDeliveryAddress(state))),
-    state: null,
-    country: countryId,
-  };
+  const deliveryAddress = getDeliveryAddressFields(state);
 
-  const billingAddress = billingAddressIsSame ? deliveryAddress : {
-    ...getAddressFieldsState(getFormFields(getBillingAddress(state))),
-    state: null,
-    country: countryId,
-  };
-
+  const billingAddress = billingAddressIsSame ? deliveryAddress : getBillingAddressFields(state);
   return {
     firstName,
     lastName,

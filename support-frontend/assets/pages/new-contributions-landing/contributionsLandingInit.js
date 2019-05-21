@@ -17,9 +17,9 @@ import {
   getContributionTypeFromSession,
   getContributionTypeFromUrl,
   getPaymentMethodFromSession,
-  getValidContributionTypes,
   getValidPaymentMethods,
   type ThirdPartyPaymentLibrary,
+  getValidContributionTypesFromUrlOrElse,
 } from 'helpers/checkouts';
 import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -42,10 +42,11 @@ import {
   mapExistingPaymentMethodToPaymentMethod, sendGetExistingPaymentMethodsRequest,
 } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { ExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
-import { setExistingPaymentMethods } from 'helpers/page/commonActions';
+import { setExistingPaymentMethods, setContributionTypes } from 'helpers/page/commonActions';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
+import { campaigns, getCampaignName } from 'helpers/campaigns';
 
 // ----- Functions ----- //
 
@@ -108,7 +109,7 @@ function initialiseStripeCheckout(
 }
 
 
-function initialisePaymentMethods(state: State, dispatch: Function) {
+function initialisePaymentMethods(state: State, dispatch: Function, contributionTypes: ContributionTypes) {
   const { countryId, currencyId, countryGroupId } = state.common.internationalisation;
   const { switches } = state.common.settings;
   const { isTestUser } = state.page.user;
@@ -118,16 +119,15 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation));
   };
 
-  const contributionTypes = getValidContributionTypes(countryGroupId);
 
   if (getQueryParameter('stripe-checkout-js') !== 'no') {
     loadStripe().then(() => {
-      contributionTypes.forEach((contribType) => {
-        const validPayments = getValidPaymentMethods(contribType, switches, countryId);
+      contributionTypes[countryGroupId].forEach((contributionTypeSetting) => {
+        const validPayments = getValidPaymentMethods(contributionTypeSetting.contributionType, switches, countryId);
         if (validPayments.includes(Stripe)) {
           initialiseStripeCheckout(
             onPaymentAuthorisation,
-            contribType,
+            contributionTypeSetting.contributionType,
             currencyId,
             !!isTestUser,
             dispatch,
@@ -162,8 +162,8 @@ function initialisePaymentMethods(state: State, dispatch: Function) {
     }
   }
 
-  const recurringContributionsAvailable = contributionTypes.includes('MONTHLY')
-    || contributionTypes.includes('ANNUAL');
+  const recurringContributionsAvailable = contributionTypes[countryGroupId].includes('MONTHLY')
+    || contributionTypes[countryGroupId].includes('ANNUAL');
 
   if (getQueryParameter('paypal-js') !== 'no' && recurringContributionsAvailable) {
     loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
@@ -183,9 +183,24 @@ function selectInitialAmounts(state: State, dispatch: Function) {
   });
 }
 
-function selectInitialContributionTypeAndPaymentMethod(state: State, dispatch: Function) {
+// Override the settings from the server if contributionTypes are defined in url params or campaign settings
+function getContributionTypes(state: State): ContributionTypes {
+  const campaignName = getCampaignName();
+  if (campaignName && campaigns[campaignName] && campaigns[campaignName].contributionTypes) {
+    return campaigns[campaignName].contributionTypes;
+  }
+
+  return getValidContributionTypesFromUrlOrElse(state.common.settings.contributionTypes);
+}
+
+function selectInitialContributionTypeAndPaymentMethod(
+  state: State,
+  dispatch: Function,
+  contributionTypes: ContributionTypes,
+) {
+
   const { countryId } = state.common.internationalisation;
-  const { switches, contributionTypes } = state.common.settings;
+  const { switches } = state.common.settings;
   const { countryGroupId } = state.common.internationalisation;
   const contributionType = getInitialContributionType(countryGroupId, contributionTypes);
   const paymentMethod = getInitialPaymentMethod(contributionType, countryId, switches);
@@ -197,10 +212,14 @@ const init = (store: Store<State, Action, Function>) => {
 
   const state = store.getState();
 
-  initialisePaymentMethods(state, dispatch);
+  //TODO - move these settings out of the redux store, as they only change once, upon initialisation
+  const contributionTypes = getContributionTypes(state);
+  dispatch(setContributionTypes(contributionTypes));
+
+  initialisePaymentMethods(state, dispatch, contributionTypes);
 
   selectInitialAmounts(state, dispatch);
-  selectInitialContributionTypeAndPaymentMethod(state, dispatch);
+  selectInitialContributionTypeAndPaymentMethod(state, dispatch, contributionTypes);
 
   const {
     firstName,

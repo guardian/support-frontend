@@ -1,9 +1,16 @@
 // @flow
 import { Monthly } from 'helpers/billingPeriods';
 import { type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { type PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
-import { getCurrency, getCountryGroup, applyDiscount, type ProductPrices, type Price, type Promotion } from './productPrices';
+import {
+  applyDiscount,
+  getCountryGroup,
+  getCurrency,
+  type Price,
+  type ProductPrices,
+  type Promotion,
+} from './productPrices';
 
 const country = getCountryGroup('GB').name;
 const currency = getCurrency('GB');
@@ -11,7 +18,7 @@ const currency = getCurrency('GB');
 function promotion(
   productPrices: ProductPrices,
   fulfilmentOption: FulfilmentOptions,
-  productOption: PaperProductOptions,
+  productOption: ProductOptions,
 ): ?Promotion {
   return productPrices[country][fulfilmentOption][productOption][Monthly][currency].promotion;
 }
@@ -19,7 +26,7 @@ function promotion(
 function regularPrice(
   productPrices: ProductPrices,
   fulfilmentOption: FulfilmentOptions,
-  productOption: PaperProductOptions,
+  productOption: ProductOptions,
 ): Price {
   return {
     price: productPrices[country][fulfilmentOption][productOption][Monthly][currency].price,
@@ -30,7 +37,7 @@ function regularPrice(
 function finalPrice(
   productPrices: ProductPrices,
   fulfilmentOption: FulfilmentOptions,
-  productOption: PaperProductOptions,
+  productOption: ProductOptions,
 ): Price {
   return applyDiscount(
     regularPrice(productPrices, fulfilmentOption, productOption),

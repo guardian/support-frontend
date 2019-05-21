@@ -124,14 +124,14 @@
   }
   
   @include mq($from: tablet) {
-    left: -4.4rem;
+    left: -5.8rem;
     top: 2.4rem;
-    width: 9.5rem;
-    height: 9.5rem;
+    width: 10.5rem;
+    height: 10.5rem;
     font-size: 0.875rem;
 
     span:nth-child(2) {
-      font-size: 3.8rem;
+      font-size: 3.3rem;
       top: -0.3rem;
     }
   }

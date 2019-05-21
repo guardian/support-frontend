@@ -61,8 +61,10 @@ const setOneOffContributionCookie = () => {
 };
 
 const campaignName = getCampaignName();
-const cssModifiers = campaignName && campaigns[campaignName].cssModifiers ?
+const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campaignName].cssModifiers ?
   campaigns[campaignName].cssModifiers : [];
+const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
+  campaigns[campaignName].backgroundImage : null;
 
 function contributionsLandingPage() {
   return (
@@ -70,6 +72,7 @@ function contributionsLandingPage() {
       classModifiers={['contribution-form', ...cssModifiers]}
       header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
       footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
+      backgroundImageSrc={backgroundImageSrc}
     >
       <NewContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}

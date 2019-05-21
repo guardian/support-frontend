@@ -17,21 +17,15 @@ import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { Monthly } from 'helpers/billingPeriods';
 import { type FormFields, getFormFields } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 
-import {
-  type Action,
-  getBillingAddress,
-  getDeliveryAddress,
-  setFormSubmitted,
-  setStage,
-  setSubmissionError,
-  type State,
-} from '../weeklySubscriptionCheckoutReducer';
+import { type Action, setFormSubmitted, setStage, setSubmissionError } from 'helpers/subscriptionsForms/formActions';
+import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
 
 import { type Csrf } from 'helpers/csrf/csrfReducer';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { PaymentMethod } from 'helpers/paymentMethods';
 import { type Option } from 'helpers/types/option';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getBillingAddress, getDeliveryAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 const getAddressFieldsState = (from: FormFields) => ({
   lineOne: from.lineOne,
@@ -40,7 +34,10 @@ const getAddressFieldsState = (from: FormFields) => ({
   postCode: from.postCode,
 });
 
-function buildRegularPaymentRequest(state: State, paymentAuthorisation: PaymentAuthorisation): RegularPaymentRequest {
+function buildRegularPaymentRequest(
+  state: WithDeliveryCheckoutState,
+  paymentAuthorisation: PaymentAuthorisation,
+): RegularPaymentRequest {
   const { currencyId, countryId } = state.common.internationalisation;
   const {
     firstName,
