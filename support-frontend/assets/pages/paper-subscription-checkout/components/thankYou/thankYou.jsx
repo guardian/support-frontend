@@ -103,7 +103,7 @@ function ThankYouContent({
           )
         }
         {startDate &&
-          <Text title="Your first issue will arrive on">
+          <Text title="You can start using your vouchers from">
             <LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
           </Text>
         }
