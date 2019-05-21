@@ -39,23 +39,23 @@ export const campaigns: Campaigns = {
     contributeCopy: (
       <div>
         <p>
-          We’re asking our readers to support a six-month Guardian series about the growing scale
-          and deepening health implications of living in an environment that exposes us to chemical
-          contamination on a daily basis through the air we breathe, the food we eat, the products
-          we use and the water we drink. The project will:
+          We’re asking our readers to support a six-month Guardian series about the health implications
+          of living in an environment that may expose us to chemical contamination on a daily basis
+          through the air we breathe, the food we eat, the products we use and the water we drink.
+          The project will:
         </p>
         <ul>
           <li className="blurb-list-item">
-            Hold politicians, the Trump administration, the EPA and the FDA
-            accountable for regulatory rollbacks and failures keep dangerous
-            chemicals out of products and off of store shelves
+            Hold politicians, the Trump administration, the EPA and the FDA accountable for any
+            regulatory rollbacks and failures keep dangerous chemicals out of products and off of
+            store shelves
           </li>
           <li className="blurb-list-item">
-            Offer advice on how to navigate the supermarket and make food
-            choices to reduce your exposure
+            Offer advice on how to navigate the supermarket and make food choices to reduce your
+            exposure
           </li>
           <li className="blurb-list-item">
-            Look at everyday dangers in our homes, from flame retardants in the sofa to
+            Look at potential everyday dangers in our homes, from flame retardants in the sofa to
             carcinogens in dry cleaning
           </li>
           <li className="blurb-list-item">
@@ -65,9 +65,9 @@ export const campaigns: Campaigns = {
             Report on threats to our drinking water supply
           </li>
           <li className="blurb-list-item">
-            Deliver rigorous, accessible, scientific reporting that explains what we
-            know about how the chemicals in our environment are impacting our health
-            and raises public awareness about this issue
+            Deliver rigorous, accessible, scientific reporting that explains what we know about
+            how the chemicals in our environment are impacting our health and raises public awareness
+            about this issue
           </li>
         </ul>
         <p>
@@ -98,6 +98,13 @@ export const campaigns: Campaigns = {
           support The Guardian’s journalism.
         </p>
         <p>
+          Please note that The Guardian is not a charity, will not use your support for charitable
+          programs, and your support of The Guardian’s journalism does not constitute a charitable
+          donation. As far as The Guardian is aware, your contribution is not eligible to be treated as
+          a charitable deduction for tax purposes in the US or elsewhere. If you have any questions
+          about contributing to The Guardian, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
+        </p>
+        <p>
           We’re also seeking larger contributions to support The Guardian’s reporting from companies,
           foundations and individuals. If you would like to get involved with this project or provide
           matching funds, please <a href="mailto:apac.help@theguardian.com">contact us</a>.
@@ -106,7 +113,7 @@ export const campaigns: Campaigns = {
     ),
     goalReachedCopy: null,
     tickerJsonUrl: '/ticker.json',
-    tickerType: 'hardstop',
+    tickerType: 'unlimited',
     cssModifiers: ['campaign-landing', currentCampaignName],
     contributionTypes: generateContributionTypes([
       { contributionType: 'ONE_OFF', isDefault: true },

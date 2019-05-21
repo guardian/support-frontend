@@ -976,6 +976,9 @@ form {
   }
 
   .gu-content__blurb-header {
+    // IE requires a max-width on this el
+    max-width: 400px;
+
     @include mq(desktop) {
       color: gu-colour(neutral-97);
       background-color: gu-colour(neutral-7);
