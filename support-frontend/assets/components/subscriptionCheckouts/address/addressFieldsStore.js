@@ -16,13 +16,13 @@ import {
 import { type RegularPaymentRequestAddress } from 'helpers/paymentIntegrations/readerRevenueApis';
 import { type Scoped } from 'helpers/scoped';
 
-import { type AddressType } from 'pages/paper-subscription-checkout/helpers/addressType';
+import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import {
   postcodeFinderReducerFor,
   type PostcodeFinderState,
 } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { Option } from 'helpers/types/option';
-import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
+import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 
 // ----- Types ----- //
 
@@ -80,7 +80,7 @@ const setFormErrorsFor = (scope: AddressType) => (errors: Array<FormError<FormFi
   type: 'SET_ADDRESS_FORM_ERRORS',
   errors,
 });
-const getFormErrors = (fields: FormFields): FormError<FormField>[] => validate([
+const applyAddressRules = (fields: FormFields): FormError<FormField>[] => validate([
   {
     rule: nonEmptyString(fields.lineOne),
     error: formError('lineOne', 'Please enter an address'),
@@ -216,7 +216,7 @@ export {
   getFormFields,
   getStateFormErrors,
   getPostcodeForm,
-  getFormErrors,
+  applyAddressRules,
   setFormErrorsFor,
   addressActionCreatorsFor,
   isPostcodeOptional,

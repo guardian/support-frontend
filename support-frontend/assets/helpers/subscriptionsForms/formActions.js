@@ -8,17 +8,20 @@ import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { FormField, Stage } from './formFields';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { setFormSubmissionDependentValue } from 'pages/digital-subscription-checkout/checkoutFormIsSubmittableActions';
 import * as storage from 'helpers/storage';
 import { trackPaymentMethodSelected } from 'helpers/tracking/ophanComponentEventTracking';
 import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { onPaymentAuthorised } from 'pages/digital-subscription-checkout/helpers/paymentProviders';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { Action as PayPalAction } from 'helpers/paymentIntegrations/payPalActions';
 import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import {
+  buildRegularPaymentRequest,
+  onPaymentAuthorised,
+} from 'helpers/subscriptionsForms/submit';
+import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 
 export type Action =
   | { type: 'SET_STAGE', stage: Stage }
@@ -33,26 +36,43 @@ export type Action =
   | { type: 'SET_FORM_ERRORS', errors: FormError<FormField>[] }
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
-  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean>}
+  | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean> }
   | AddressAction
   | PayPalAction
   | DDAction;
 
-
 // ----- Action Creators ----- //
 
 const setStage = (stage: Stage): Action => ({ type: 'SET_STAGE', stage });
-const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({ type: 'SET_FORM_ERRORS', errors });
-const setSubmissionError = (error: ErrorReason): Action => ({ type: 'SET_SUBMISSION_ERROR', error });
-const setFormSubmitted = (formSubmitted: boolean) => ({ type: 'SET_FORM_SUBMITTED', formSubmitted });
+const setFormErrors = (errors: Array<FormError<FormField>>): Action => ({
+  type: 'SET_FORM_ERRORS',
+  errors,
+});
+const setSubmissionError = (error: ErrorReason): Action => ({
+  type: 'SET_SUBMISSION_ERROR',
+  error,
+});
+const setFormSubmitted = (formSubmitted: boolean) => ({
+  type: 'SET_FORM_SUBMITTED',
+  formSubmitted,
+});
 
 const formActionCreators = {
   setTitle: (title: string): Action => ({ type: 'SET_TITLE', title }),
   setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
   setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
-  setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
-  setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
-  setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
+  setTelephone: (telephone: string): Action => ({
+    type: 'SET_TELEPHONE',
+    telephone,
+  }),
+  setStartDate: (startDate: string): Action => ({
+    type: 'SET_START_DATE',
+    startDate,
+  }),
+  setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({
+    type: 'SET_BILLING_PERIOD',
+    billingPeriod,
+  }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
     const state = getState();
     storage.setSession('selectedPaymentMethod', paymentMethod);
@@ -66,12 +86,22 @@ const formActionCreators = {
       country: state.common.internationalisation.countryId,
     });
   },
-  setBillingAddressIsSame: (isSame: boolean | null): Action => ({ type: 'SET_BILLING_ADDRESS_IS_SAME', isSame }),
+  setBillingAddressIsSame: (isSame: boolean | null): Action => ({
+    type: 'SET_BILLING_ADDRESS_IS_SAME',
+    isSame,
+  }),
   onPaymentAuthorised: (authorisation: PaymentAuthorisation) =>
-    (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
-      onPaymentAuthorised(authorisation, dispatch, getState()),
-};
+    (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+      const state = getState();
+      onPaymentAuthorised(
+        dispatch,
+        buildRegularPaymentRequest(state, authorisation),
+        state.page.csrf,
+        state.common.abParticipations,
+      );
+    },
 
+};
 
 export type FormActionCreators = typeof formActionCreators;
 

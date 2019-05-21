@@ -46,8 +46,11 @@ import type { Action, FormActionCreators } from 'helpers/subscriptionsForms/form
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getBillingAddress, getDeliveryAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getDisplayDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
-import { submitForm } from 'pages/weekly-subscription-checkout/helpers/submit';
+import {
+  getWeeklyDays,
+} from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
+import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 
 
 // ----- Types ----- //
@@ -82,7 +85,7 @@ function mapDispatchToProps() {
   return {
     ...formActionCreators,
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
-      submitForm(dispatch, getState()),
+      submitWithDeliveryForm(dispatch, getState()),
     signOut,
   };
 }
@@ -94,7 +97,7 @@ const FieldsetWithError = withError(Fieldset);
 
 const DeliveryAddress = withStore(countries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(countries, 'billing', getBillingAddress);
-const days = getDisplayDays();
+const days = getWeeklyDays();
 
 // ----- Component ----- //
 type Plans = {
@@ -218,14 +221,18 @@ function WeeklyCheckoutForm(props: PropTypes) {
           <FormSection title="When would you like your subscription to start?">
             <Rows>
               <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
-                {days.map(day => (
-                  <RadioInput
-                    appearance="group"
-                    text={day}
-                    name="machineDate"
-                    checked={day === props.startDate}
-                    onChange={() => props.setStartDate(day)}
-                  />))
+                {days.map((day) => {
+                  const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                  return (
+                    <RadioInput
+                      appearance="group"
+                      text={userDate}
+                      name={machineDate}
+                      checked={machineDate === props.startDate}
+                      onChange={() => props.setStartDate(machineDate)}
+                    />
+                  );
+                })
                 }
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
