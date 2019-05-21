@@ -2,14 +2,14 @@
 
 // ----- Imports ----- //
 
-import { initReducer, type Stage } from '../digitalSubscriptionCheckoutReducer';
-import { setFormErrors, setStage } from '../digitalSubscriptionCheckoutActions';
+import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { setFormErrors, setStage } from 'helpers/subscriptionsForms/formActions';
 
 jest.mock('ophan', () => {});
 jest.mock('helpers/fontLoader', () => () => ({}));
 // ----- Tests ----- //
 
-describe('Digital Subscription Checkout Reducer', () => {
+describe('Subscription Checkout Reducer', () => {
 
   global.guardian = { productPrices: null };
 
@@ -19,7 +19,7 @@ describe('Digital Subscription Checkout Reducer', () => {
     const stage: Stage = 'thankyou';
     const action = setStage(stage);
 
-    const newState = initReducer('GB')(undefined, action);
+    const newState = createCheckoutReducer('GB')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
@@ -30,7 +30,7 @@ describe('Digital Subscription Checkout Reducer', () => {
     const stage: Stage = 'checkout';
     const action = setStage(stage);
 
-    const newState = initReducer('GB')(undefined, action);
+    const newState = createCheckoutReducer('GB')(undefined, action);
 
     expect(newState.checkout.stage).toEqual(stage);
 
@@ -46,7 +46,7 @@ describe('Digital Subscription Checkout Reducer', () => {
 
     const action = setFormErrors(errors);
 
-    const newState = initReducer('GB')(undefined, action);
+    const newState = createCheckoutReducer('GB')(undefined, action);
 
     expect(newState.checkout.formErrors).toEqual(errors);
 

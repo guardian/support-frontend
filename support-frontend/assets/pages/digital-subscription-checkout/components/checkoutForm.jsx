@@ -24,11 +24,7 @@ import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import Summary from 'components/subscriptionCheckouts/summary';
-import {
-  type Action,
-  type FormActionCreators,
-  formActionCreators,
-} from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import { type Action, type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { setupSubscriptionPayPalPayment } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import { SubscriptionSubmitButtons } from 'components/subscriptionCheckouts/subscriptionSubmitButtons';
@@ -38,21 +34,17 @@ import { signOut } from 'helpers/user/user';
 import { formIsValid, validateForm } from 'pages/digital-subscription-checkout/helpers/validation';
 import GridImage from 'components/gridImage/gridImage';
 
-import {
-  type FormField,
-  type FormFields,
-  getFormFields,
-  type State,
-  submitForm,
-} from '../digitalSubscriptionCheckoutReducer';
+import { type FormField, type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
+import { submitForm } from 'pages/digital-subscription-checkout/helpers/submit';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
-import { getAddress } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import { DigitalPack } from 'helpers/subscriptions';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 // ----- Types ----- //
 
@@ -80,7 +72,7 @@ type PropTypes = {|
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: CheckoutState) {
   return {
     ...getFormFields(state),
     country: state.common.internationalisation.countryId,
@@ -106,15 +98,16 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
-    formIsValid: () => (dispatch: Dispatch<Action>, getState: () => State) => formIsValid(getState()),
-    submitForm: () => (dispatch: Dispatch<Action>, getState: () => State) => submitForm(dispatch, getState()),
-    validateForm: () => (dispatch: Dispatch<Action>, getState: () => State) => validateForm(dispatch, getState()),
+    formIsValid: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => formIsValid(getState()),
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => submitForm(dispatch, getState()),
+    validateForm: () => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+      validateForm(dispatch, getState()),
     setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
     signOut,
   };
 }
 
-const Address = withStore(countries, 'billing', getAddress);
+const Address = withStore(countries, 'billing', getBillingAddress);
 
 
 // ----- Component ----- //

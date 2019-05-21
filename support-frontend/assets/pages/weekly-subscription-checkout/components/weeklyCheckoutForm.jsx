@@ -4,10 +4,10 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { compose, type Dispatch } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { type WeeklyBillingPeriod, Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
+import { Annual, Quarterly, SixForSix, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -27,31 +27,28 @@ import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRev
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { titles } from 'helpers/user/details';
-import {
-  type FormActionCreators,
-  formActionCreators,
-  type FormField,
-  type FormFields,
-  getBillingAddress,
-  getDeliveryAddress,
-  getDays,
-  getFormFields,
-  signOut,
-  type State,
-} from '../weeklySubscriptionCheckoutReducer';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
-
-import { countries } from 'helpers/internationalisation/country';
 import { displayBillingPeriods } from 'helpers/productPrice/weeklyProductPrice';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import { GuardianWeekly } from 'helpers/subscriptions';
+import type { FormField, FormFields } from 'helpers/subscriptionsForms/formFields';
+import { getFormFields } from 'helpers/subscriptionsForms/formFields';
+import { signOut } from 'helpers/user/user';
+import type { Action, FormActionCreators } from 'helpers/subscriptionsForms/formActions';
+import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getBillingAddress, getDeliveryAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getDisplayDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { submitForm } from 'pages/weekly-subscription-checkout/helpers/submit';
+
 
 // ----- Types ----- //
 
@@ -64,12 +61,13 @@ type PropTypes = {|
   submissionError: ErrorReason | null,
   productPrices: ProductPrices,
   ...FormActionCreators,
+  submitForm: Function,
 |};
 
 
 // ----- Map State/Props ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: WithDeliveryCheckoutState) {
   return {
     ...getFormFields(state),
     country: state.common.internationalisation.countryId,
@@ -83,6 +81,8 @@ function mapStateToProps(state: State) {
 function mapDispatchToProps() {
   return {
     ...formActionCreators,
+    submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+      submitForm(dispatch, getState()),
     signOut,
   };
 }
@@ -94,7 +94,7 @@ const FieldsetWithError = withError(Fieldset);
 
 const DeliveryAddress = withStore(countries, 'delivery', getDeliveryAddress);
 const BillingAddress = withStore(countries, 'billing', getBillingAddress);
-const days = getDays();
+const days = getDisplayDays();
 
 // ----- Component ----- //
 type Plans = {
@@ -197,13 +197,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   text="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
-                  onChange={() => props.setbillingAddressIsSame(true)}
+                  onChange={() => props.setBillingAddressIsSame(true)}
                 />
                 <RadioInput
                   text="No"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
-                  onChange={() => props.setbillingAddressIsSame(false)}
+                  onChange={() => props.setBillingAddressIsSame(false)}
                 />
               </FieldsetWithError>
             </Rows>

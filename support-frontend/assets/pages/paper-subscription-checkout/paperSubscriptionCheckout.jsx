@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 
 import { renderPage } from 'helpers/render';
 import { init as pageInit } from 'helpers/page/page';
-import { getQueryParameter } from 'helpers/url';
 
 import Page from 'components/page/page';
 import Header from 'components/headers/header/header';
@@ -16,27 +15,37 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
-
-import { initReducer } from './paperSubscriptionCheckoutReducer';
 import CheckoutStage from './stage';
-import { type PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import './_legacyImports.scss';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
+import { getFulfilmentOption, getProductOption, getStartDate } from 'pages/paper-subscription-checkout/helpers/options';
+import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { CommonState } from 'helpers/page/commonReducer';
+import { Monthly } from 'helpers/billingPeriods';
+import { Paper } from 'helpers/subscriptions';
 
 
 // ----- Redux Store ----- //
 
-const fulfilmentOption = getQueryParameter('fulfilment');
-const productOption = getQueryParameter('product');
+const fulfilmentOption = getFulfilmentOption();
+const productOption = getProductOption();
+const startDate = getStartDate(fulfilmentOption, productOption);
+const reducer = (commonState: CommonState) => createWithDeliveryCheckoutReducer(
+  commonState.internationalisation.countryId,
+  Paper,
+  Monthly,
+  startDate,
+  productOption,
+  fulfilmentOption,
+);
+
 
 const store = pageInit(
-  commonState => initReducer(commonState.internationalisation.countryId, productOption, fulfilmentOption),
+  reducer,
   true,
 );
 
 const { countryGroupId } = store.getState().common.internationalisation;
-
-const paperFulfilmentOption: PaperFulfilmentOptions = fulfilmentOption === 'HomeDelivery' ? 'HomeDelivery' : 'Collection';
 
 // ----- Render ----- //
 
@@ -50,7 +59,7 @@ const content = (
           <CustomerService
             selectedCountryGroup={countryGroupId}
             subscriptionProduct="Paper"
-            paperFulfilmentOptions={paperFulfilmentOption}
+            paperFulfilmentOptions={fulfilmentOption}
           />
           <SubscriptionFaq subscriptionProduct="Paper" />
         </Footer>

@@ -12,10 +12,7 @@ import Text, { LargeParagraph } from 'components/text/text';
 import MarketingConsent from './thankYou/marketingConsentContainer';
 import AppsSection from './thankYou/appsSection';
 
-import {
-  getFormFields,
-  type FormFields,
-} from '../digitalSubscriptionCheckoutReducer';
+import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { DirectDebit } from 'helpers/paymentMethods';
 
 // ----- Types ----- //

@@ -1,21 +1,18 @@
 // @flow
 
 import type { Dispatch } from 'redux';
-import type { Action } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
-import { getFormFields, setFormErrors } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutActions';
+import { type Action, setFormErrors } from 'helpers/subscriptionsForms/formActions';
+import type { FormField, FormFields } from 'helpers/subscriptionsForms/formFields';
+import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import {
   getFormErrors as getAddressFormErrors,
   setFormErrorsFor as setAddressFormErrorsFor,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import type {
-  FormField,
-  FormFields,
-  State,
-} from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
-import { getAddressFields } from 'pages/digital-subscription-checkout/digitalSubscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { formError, nonEmptyString, notNull, validate } from 'helpers/subscriptionsForms/validation';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getBillingAddressFields } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 function getErrors(fields: FormFields): FormError<FormField>[] {
   return validate([
@@ -34,10 +31,10 @@ function getErrors(fields: FormFields): FormError<FormField>[] {
   ]);
 }
 
-const formIsValid = (state: State): boolean => getErrors(getFormFields(state)).length === 0 &&
-    getAddressFormErrors(getAddressFields(state)).length === 0;
+const formIsValid = (state: CheckoutState): boolean => getErrors(getFormFields(state)).length === 0 &&
+    getAddressFormErrors(getBillingAddressFields(state)).length === 0;
 
-function validateForm(dispatch: Dispatch<Action>, state: State) {
+function validateForm(dispatch: Dispatch<Action>, state: CheckoutState) {
   type Error<T> = {
     errors: FormError<T>[],
     dispatcher: any => Action,
@@ -49,7 +46,7 @@ function validateForm(dispatch: Dispatch<Action>, state: State) {
       dispatcher: setFormErrors,
     }: Error<FormField>),
     ({
-      errors: getAddressFormErrors(getAddressFields(state)),
+      errors: getAddressFormErrors(getBillingAddressFields(state)),
       dispatcher: setAddressFormErrorsFor('billing'),
     }: Error<AddressFormField>),
   ].filter(({ errors }) => errors.length > 0);
