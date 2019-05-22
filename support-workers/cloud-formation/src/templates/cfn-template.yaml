@@ -203,3 +203,23 @@ Resources:
       EvaluationPeriods: 1
       Statistic: Sum
     DependsOn: SupportWorkersPROD
+
+  NoPaypalPaymentsInTwoHoursAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub ${App} ${Stage} CP Recurring contributions with PayPal might be down
+      AlarmDescription: There have been no recurring contributions using paypal in the last 2 hours
+      MetricName: PaymentSuccess
+      Namespace: support-frontend
+      Dimensions:
+        - Name: PaymentProvider
+          Value: Paypal
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      Period: 600
+      EvaluationPeriods: 12
+      Statistic: Sum
+      TreatMissingData: breaching
