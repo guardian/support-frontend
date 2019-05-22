@@ -6,6 +6,8 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
+import com.gu.aws.AwsCloudWatchMetricPut
+import com.gu.aws.AwsCloudWatchMetricPut.{client, paymentSuccessRequest}
 import com.gu.i18n.Country
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
@@ -38,7 +40,13 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     services.acquisitionService.submit(
       SendAcquisitionEventStateAndRequestInfo(state, requestInfo)
     ).fold(
-      errors => throw AnalyticsServiceErrorList(errors), _ => HandlerResult(Unit, requestInfo)
+      errors => throw AnalyticsServiceErrorList(errors),
+      _ => {
+        val cloudwatchEvent = paymentSuccessRequest(paymentProviderFromPaymentMethod(state.paymentMethod))
+        AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+
+        HandlerResult(Unit, requestInfo)
+      }
     )
   }
 }
@@ -53,6 +61,13 @@ object SendAcquisitionEvent {
   case class AnalyticsServiceErrorList(errors: List[AnalyticsServiceError]) extends Throwable {
     override def getMessage: String = errors.map(_.getMessage).mkString(". ")
   }
+
+  def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): thrift.PaymentProvider =
+    paymentMethod match {
+      case _: CreditCardReferenceTransaction => thrift.PaymentProvider.Stripe
+      case _: PayPalReferenceTransaction => thrift.PaymentProvider.Paypal
+      case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
+    }
 
   // Typeclass instance used by the Ophan service to attempt to build a submission from the state.
   private implicit val stateAcquisitionSubmissionBuilder: AcquisitionSubmissionBuilder[SendAcquisitionEventStateAndRequestInfo] =
@@ -87,13 +102,6 @@ object SendAcquisitionEvent {
           case Monthly => thrift.PaymentFrequency.Monthly
           case Quarterly => thrift.PaymentFrequency.Quarterly
           case Annual => thrift.PaymentFrequency.Annually
-        }
-
-      def paymentProviderFromPaymentMethod(paymentMethod: PaymentMethod): thrift.PaymentProvider =
-        paymentMethod match {
-          case _: CreditCardReferenceTransaction => thrift.PaymentProvider.Stripe
-          case _: PayPalReferenceTransaction => thrift.PaymentProvider.Paypal
-          case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => thrift.PaymentProvider.Gocardless
         }
 
       def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {

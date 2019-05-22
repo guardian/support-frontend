@@ -4,6 +4,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, StandardUnit}
 import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchClientBuilder}
 import com.gu.support.config.{Stage, TouchPointEnvironment}
+import ophan.thrift.event.PaymentProvider
 
 import scala.util.Try
 
@@ -60,6 +61,14 @@ object AwsCloudWatchMetricPut {
       Map(
         MetricDimensionName("Environment") -> MetricDimensionValue(environment.toString)
       ))
+
+  def paymentSuccessRequest(paymentProvider: PaymentProvider): MetricRequest =
+    getMetricRequest(
+      MetricName("PaymentSuccess"),
+      Map(
+        MetricDimensionName("PaymentProvider") -> MetricDimensionValue(paymentProvider.name)
+      )
+    )
 
   def getMetricRequest(name: MetricName, dimensions: Map[MetricDimensionName, MetricDimensionValue]) : MetricRequest =
     MetricRequest(
