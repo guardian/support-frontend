@@ -252,13 +252,13 @@ Resources:
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
-  NoGocardlessContributionsInOneHourAlarm:
+  NoGocardlessContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for an hour
+      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for two hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
       Dimensions:
@@ -271,7 +271,7 @@ Resources:
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 300
-      EvaluationPeriods: 12
+      EvaluationPeriods: 24
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
