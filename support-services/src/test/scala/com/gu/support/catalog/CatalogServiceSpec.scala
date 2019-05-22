@@ -53,7 +53,7 @@ class CatalogServiceSpec extends FlatSpec with Matchers {
 }
 
 object CatalogServiceSpec{
-  private val json = parse(Fixtures.loadCatalog).right.get
+  private val json = parse(ServiceFixtures.loadCatalog).right.get
   private val jsonProvider = new SimpleJsonProvider(json)
   val serviceWithFixtures = new CatalogService(PROD, jsonProvider)
 }
