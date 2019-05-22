@@ -81,9 +81,9 @@ export const campaigns: Campaigns = {
     termsAndConditions: (contributionsTermsLink: string) => (
       <div className="component-terms-privacy component-terms-privacy--campaign-landing">
         <p>
-          By proceeding, you’re agreeing to our <span className="bold">Terms and Conditions</span>.
-          If we hit our goal of $150,000, The Guardian will allocate this amount to its core
-          operations which will help fund the completion of Toxic America series, including
+          By proceeding, you’re agreeing to our Terms and Conditions. If we hit our goal of
+          $150,000, The Guardian will allocate this amount to its core operations which will
+          help fund the completion of Toxic America series, including
           editing, reporting, graphics, and new commissions. If we exceed our goal, additional
           funds will be directed to The Guardian’s core operations and newsroom to support
           The Guardian’s independent journalism. Contributions will fund news, investigative
