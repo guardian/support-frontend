@@ -43,7 +43,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     ).fold(
       errors => throw AnalyticsServiceErrorList(errors),
       _ => {
-        val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, paymentProviderFromPaymentMethod(state.paymentMethod))
+        val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, paymentProviderFromPaymentMethod(state.paymentMethod), state.product)
         AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
         HandlerResult(Unit, requestInfo)
