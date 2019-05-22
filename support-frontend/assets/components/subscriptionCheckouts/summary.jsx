@@ -8,6 +8,7 @@ import { PriceLabel } from 'components/priceLabel/priceLabel';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import SvgDropdownArrowUp from './dropDownArrowUp.svg';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 // Types
 
@@ -25,6 +26,7 @@ type PropTypes = {|
   productPrice: Price,
   promotion: ?Promotion,
   title: string,
+  product: SubscriptionProduct,
 |};
 
 type StateTypes = {
@@ -217,8 +219,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const url = new URL(window.location).pathname;
-    const isPaperCheckout = url.includes('paper');
+    const isPaper = this.props.product.toLowerCase().includes('paper');
 
     return (
       <aside className={styles.root}>
@@ -227,7 +228,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
           onClick={this.toggleDetails}
           showDropDown={this.state.showDropDown}
           deliveryMethod={this.props.dataList.length ? this.getDeliveryMethod() : null}
-          paper={isPaperCheckout}
+          paper={isPaper}
           {...this.props}
         />
       </aside>

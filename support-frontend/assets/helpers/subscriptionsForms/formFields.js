@@ -25,6 +25,7 @@ export type FormFields = {|
   startDate: Option<string>,
   billingAddressIsSame: Option<boolean>,
   fulfilmentOption: FulfilmentOptions,
+  product: SubscriptionProduct,
   productOption: ProductOptions,
 |};
 
@@ -55,6 +56,7 @@ function getFormFields(state: AnyCheckoutState): FormFields {
     paymentMethod: state.page.checkout.paymentMethod,
     fulfilmentOption: state.page.checkout.fulfilmentOption,
     productOption: state.page.checkout.productOption,
+    product: state.page.checkout.product,
     billingAddressIsSame: state.page.checkout.billingAddressIsSame,
   };
 }

@@ -173,6 +173,7 @@ function CheckoutForm(props: PropTypes) {
             props.country,
           )}
           billingPeriod={props.billingPeriod}
+          product={props.product}
         />)}
       >
         <Form onSubmit={(ev) => {

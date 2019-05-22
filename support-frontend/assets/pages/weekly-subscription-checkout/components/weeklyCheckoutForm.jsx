@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { Annual, Quarterly, SixForSix, Monthly, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import { Annual, Quarterly, SixForSix, type BillingPeriod } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -52,6 +52,7 @@ import {
 } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
+import { routes } from 'helpers/routes';
 
 
 // ----- Types ----- //
@@ -102,7 +103,7 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 type Plans = {
-  [WeeklyBillingPeriod | typeof Monthly]: {
+  [BillingPeriod]: {
     title: string,
     copy: string,
     offer: Option<string>,
@@ -163,7 +164,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
             },
           ]}
           billingPeriod={props.billingPeriod}
-          changeSubscription="/subscribe/weekly"
+          changeSubscription={routes.guardianWeeklySubscriptionLanding}
+          product={props.product}
         />
       )}
       >
