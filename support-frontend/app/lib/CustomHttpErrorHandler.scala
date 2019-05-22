@@ -67,6 +67,8 @@ class CustomHttpErrorHandler(
     )
   }
 
+  val renderErrorInDev = onProdServerError _
+
   override protected def onBadRequest(request: RequestHeader, message: String): Future[Result] =
     super.onBadRequest(request, message).map(_.withHeaders(CacheControl.noCache))
 
