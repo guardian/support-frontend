@@ -189,7 +189,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
         <div className="contributions-landing-ticker__values">
           {this.renderContributedSoFar()}
           <div className="contributions-landing-ticker__goal">
-            <div className="contributions-landing-ticker__count">{ Math.floor(this.state.goal).toLocaleString() }</div>
+            <div className="contributions-landing-ticker__count">${Math.floor(this.state.goal).toLocaleString()}</div>
             <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">our
               goal
             </div>
