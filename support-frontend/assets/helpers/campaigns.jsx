@@ -17,6 +17,7 @@ export type CampaignSettings = {
   contributionTypes?: ContributionTypes,
   backgroundImage?: string,
   goalReachedCopy: React$Element<string> | null,
+  localCurrencySymbol: string,
 };
 
 export type Campaigns = {
@@ -119,6 +120,7 @@ export const campaigns: Campaigns = {
       { contributionType: 'ONE_OFF', isDefault: true },
     ]),
     backgroundImage: 'https://media.guim.co.uk/de76ba8d8823325d02ff93376cfe0c39962b215d/0_0_2000_577/2000.jpg',
+    localCurrencySymbol: '$',
   },
 };
 
