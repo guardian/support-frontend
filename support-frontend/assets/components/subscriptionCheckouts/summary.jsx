@@ -26,6 +26,7 @@ type PropTypes = {|
   productPrice: Price,
   promotion: ?Promotion,
   title: string,
+  // eslint-disable-next-line react/no-unused-prop-types
   product: SubscriptionProduct,
 |};
 
@@ -219,7 +220,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
   }
 
   render() {
-    const isPaper = this.props.product.toLowerCase().includes('paper');
+    const { product } = this.props;
 
     return (
       <aside className={styles.root}>
@@ -228,7 +229,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
           onClick={this.toggleDetails}
           showDropDown={this.state.showDropDown}
           deliveryMethod={this.props.dataList.length ? this.getDeliveryMethod() : null}
-          paper={isPaper}
+          paper={product.toLowerCase().includes('paper')}
           {...this.props}
         />
       </aside>
