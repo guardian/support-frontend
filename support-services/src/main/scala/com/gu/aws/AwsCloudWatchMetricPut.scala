@@ -68,7 +68,7 @@ object AwsCloudWatchMetricPut {
       MetricName("PaymentSuccess"),
       Map(
         MetricDimensionName("PaymentProvider") -> MetricDimensionValue(paymentProvider.name),
-        MetricDimensionName("ProductType") -> MetricDimensionValue(ProductType.toString),
+        MetricDimensionName("ProductType") -> MetricDimensionValue(productType.toString),
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString)
       )
     )
