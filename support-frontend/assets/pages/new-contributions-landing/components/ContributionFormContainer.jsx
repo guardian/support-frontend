@@ -165,6 +165,7 @@ function ContributionFormContainer(props: PropTypes) {
               tickerJsonUrl={campaign.tickerJsonUrl}
               onGoalReached={props.setTickerGoalReached}
               tickerType={campaign.tickerType}
+              currencySymbol={campaign.localCurrencySymbol}
             /> : null
           }
           {props.tickerGoalReached && campaign && campaign.goalReachedCopy ? campaign.goalReachedCopy :

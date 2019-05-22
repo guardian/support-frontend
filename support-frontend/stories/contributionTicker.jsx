@@ -22,6 +22,7 @@ stories.add('Contribution ticker', () => (
       tickerJsonUrl={tickerJsonUrlInput()}
       onGoalReached={() => {}}
       tickerType="unlimited"
+      currencySymbol="£"
     />
   </div>
 ));
