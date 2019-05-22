@@ -8,6 +8,7 @@ import com.gu.acquisition.model.{GAData, OphanIds}
 import com.gu.acquisition.typeclasses.AcquisitionSubmissionBuilder
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, paymentSuccessRequest}
+import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
@@ -42,7 +43,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     ).fold(
       errors => throw AnalyticsServiceErrorList(errors),
       _ => {
-        val cloudwatchEvent = paymentSuccessRequest(paymentProviderFromPaymentMethod(state.paymentMethod))
+        val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, paymentProviderFromPaymentMethod(state.paymentMethod))
         AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
         HandlerResult(Unit, requestInfo)

@@ -217,6 +217,8 @@ Resources:
       Dimensions:
         - Name: PaymentProvider
           Value: Paypal
+        - Name: Stage
+          Value: ${Stage}
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 600
