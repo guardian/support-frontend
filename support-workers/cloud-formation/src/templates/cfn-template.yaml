@@ -210,7 +210,7 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub ${App} ${Stage} CP Recurring contributions with PayPal might be down
+      AlarmName: !Sub support-workers ${Stage} CP Recurring contributions with PayPal might be down
       AlarmDescription: There have been no recurring contributions using paypal in the last 2 hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
