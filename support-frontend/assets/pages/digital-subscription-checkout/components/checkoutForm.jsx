@@ -17,12 +17,12 @@ import { RadioInput } from 'components/forms/customFields/radioInput';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
-import {
-  finalPrice as dpFinalPrice,
-  promotion as digitalPackPromotion,
-  regularPrice as dpRegularPrice,
-} from 'helpers/productPrice/digitalProductPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import {
+  finalPrice,
+  getPromotion,
+  regularPrice,
+} from 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -59,9 +59,7 @@ import {
   checkoutFormIsValid,
   validateCheckoutForm,
 } from 'helpers/subscriptionsForms/formValidation';
-import {
-  submitCheckoutForm,
-} from 'helpers/subscriptionsForms/submit';
+import { submitCheckoutForm } from 'helpers/subscriptionsForms/submit';
 
 // ----- Types ----- //
 
@@ -101,10 +99,10 @@ function mapStateToProps(state: CheckoutState) {
     payPalHasLoaded: state.page.checkout.payPalHasLoaded,
     paymentMethod: state.page.checkout.paymentMethod,
     isTestUser: state.page.checkout.isTestUser,
-    amount: dpFinalPrice(
+    amount: finalPrice(
       state.page.checkout.productPrices,
-      state.page.checkout.billingPeriod,
       state.common.internationalisation.countryId,
+      state.page.checkout.billingPeriod,
     ).price,
     billingPeriod: state.page.checkout.billingPeriod,
     optimizeExperiments: state.common.optimizeExperiments,
@@ -134,16 +132,16 @@ function CheckoutForm(props: PropTypes) {
   const monthlyPriceLabel = props.country !== null ?
     (<PriceLabel
       country={props.country}
-      productPrice={dpRegularPrice(props.productPrices, Monthly, props.country)}
-      promotion={digitalPackPromotion(props.productPrices, Monthly, props.country)}
+      productPrice={regularPrice(props.productPrices, props.country, Monthly)}
+      promotion={getPromotion(props.productPrices, props.country, Monthly)}
       billingPeriod={Monthly}
     />) : '';
 
   const annualPriceLabel = props.country !== null ?
     (<PriceLabel
       country={props.country}
-      productPrice={dpRegularPrice(props.productPrices, Annual, props.country)}
-      promotion={digitalPackPromotion(props.productPrices, Annual, props.country)}
+      productPrice={regularPrice(props.productPrices, props.country, Annual)}
+      promotion={getPromotion(props.productPrices, props.country, Annual)}
       billingPeriod={Annual}
     />) : '';
 
@@ -162,15 +160,15 @@ function CheckoutForm(props: PropTypes) {
           }
           title="Digital Pack"
           description="Premium App + iPad daily edition + Ad-free"
-          productPrice={dpRegularPrice(
+          productPrice={regularPrice(
             props.productPrices,
-            props.billingPeriod,
             props.country,
+            props.billingPeriod,
           )}
-          promotion={digitalPackPromotion(
+          promotion={getPromotion(
             props.productPrices,
-            props.billingPeriod,
             props.country,
+            props.billingPeriod,
           )}
           billingPeriod={props.billingPeriod}
           product={props.product}

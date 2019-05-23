@@ -7,7 +7,11 @@ import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
 
 import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
+<<<<<<< HEAD
 import { Annual, Quarterly, SixForSix, type BillingPeriod } from 'helpers/billingPeriods';
+=======
+import { Annual, Quarterly, SixWeekly, type WeeklyBillingPeriod } from 'helpers/billingPeriods';
+>>>>>>> Use Zuora prices in the weekly checkout
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -116,7 +120,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
     ...ps,
     [billingPeriod]: {
       title: displayBillingPeriods[billingPeriod].title,
-      copy: displayBillingPeriods[billingPeriod].copy(props.countryGroupId),
+      copy: displayBillingPeriods[billingPeriod].copy(props.country, props.productPrices),
       offer: displayBillingPeriods[billingPeriod].offer || null,
       priceObject: getCurrencyAndPrice(props.countryGroupId, billingPeriod),
     },
@@ -133,9 +137,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
   };
 
   const sixForSixPriceLabel = {
-    title: plans.SixForSix.title,
-    copy: plans.SixForSix.copy,
-    offer: plans.SixForSix.offer,
+    title: plans.SixWeekly.title,
+    copy: plans.SixWeekly.copy,
+    offer: plans.SixWeekly.offer,
   };
 
   const summaryPrice = { ...plans[props.billingPeriod].priceObject };
@@ -278,8 +282,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
                 offer={sixForSixPriceLabel.offer || null}
                 helper={sixForSixPriceLabel.copy}
                 name="billingPeriod"
-                checked={props.billingPeriod === SixForSix}
-                onChange={() => props.setBillingPeriod(SixForSix)}
+                checked={props.billingPeriod === SixWeekly}
+                onChange={() => props.setBillingPeriod(SixWeekly)}
               />
             </Fieldset>
           </FormSection>
