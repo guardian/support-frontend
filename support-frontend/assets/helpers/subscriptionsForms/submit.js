@@ -243,6 +243,8 @@ function submitCheckoutForm(
 export {
   onPaymentAuthorised,
   buildRegularPaymentRequest,
+  showPaymentMethod,
+  showStripe,
   submitCheckoutForm,
   submitWithDeliveryForm,
 };

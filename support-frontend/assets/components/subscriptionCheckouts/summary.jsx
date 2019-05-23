@@ -8,6 +8,7 @@ import { PriceLabel } from 'components/priceLabel/priceLabel';
 import typeof GridImageType from 'components/gridImage/gridImage';
 import { type GridImg } from 'components/gridImage/gridImage';
 import SvgDropdownArrowUp from './dropDownArrowUp.svg';
+import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 // Types
 
@@ -25,6 +26,8 @@ type PropTypes = {|
   productPrice: Price,
   promotion: ?Promotion,
   title: string,
+  // eslint-disable-next-line react/no-unused-prop-types
+  product: SubscriptionProduct,
 |};
 
 type StateTypes = {
@@ -116,7 +119,6 @@ TabletAndDesktop.defaultProps = {
   dataList: [],
 };
 
-
 const HideDropDown = (props: {
   billingPeriod: BillingPeriod,
   onClick: Function,
@@ -124,6 +126,7 @@ const HideDropDown = (props: {
   promotion: ?Promotion,
   showDropDown: boolean,
   title: string,
+  paper: boolean,
 }) => (
   <div className={styles.content}>
     <h1 className={styles.header}>Order summary</h1>
@@ -138,9 +141,11 @@ const HideDropDown = (props: {
         promotion={props.promotion}
         billingPeriod={props.billingPeriod}
       />
-      <span className={styles.pricing}>
-        &nbsp;&ndash; Voucher booklet
-      </span>
+      {props.paper ?
+        <span className={styles.pricing}>
+          &nbsp;&ndash; Voucher booklet
+        </span>
+      : null}
     </div>
   </div>
 );
@@ -154,7 +159,7 @@ const ShowDropDown = (props: {
 }) => (
   <div className={styles.contentWrapper}>
     <h1 className={styles.headerShowDetails}>Order summary</h1>
-    <div className={styles.contentShowDetails}>
+    <div className={props.description ? styles.contentShowDetails : styles.contentShowDetailsNoDecription}>
       <header>
         <h2 className={styles.titleLeftAlign} title={`your subscription is ${props.title}`}>{props.title}</h2>
       </header>
@@ -215,6 +220,8 @@ export default class Summary extends Component<PropTypes, StateTypes> {
   }
 
   render() {
+    const { product } = this.props;
+
     return (
       <aside className={styles.root}>
         <TabletAndDesktop {...this.props} />
@@ -222,6 +229,7 @@ export default class Summary extends Component<PropTypes, StateTypes> {
           onClick={this.toggleDetails}
           showDropDown={this.state.showDropDown}
           deliveryMethod={this.props.dataList.length ? this.getDeliveryMethod() : null}
+          paper={product.toLowerCase().includes('paper')}
           {...this.props}
         />
       </aside>

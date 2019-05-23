@@ -4,6 +4,7 @@ import {
   getNextDaysOfTheWeek,
   numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
+import { formatUserDate } from 'helpers/dateConversions';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
@@ -23,4 +24,9 @@ const getWeeklyDays = (today: ?number): Date[] => {
   ).splice(weeksToAdd);
 };
 
-export { getWeeklyDays };
+function getDisplayDays(): string[] {
+  const today = new Date().getTime();
+  return getWeeklyDays(today).map(day => formatUserDate(day));
+}
+
+export { getWeeklyDays, getDisplayDays };
