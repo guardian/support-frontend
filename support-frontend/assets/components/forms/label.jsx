@@ -30,7 +30,7 @@ function Label({
     <div className="component-form-label">
       <Element className="component-form-label__label" htmlFor={htmlFor}>
         {label}
-        {optional && <span className="component-form-label__note">optional</span>}
+        {optional && <span className="component-form-label__note">Optional</span>}
       </Element>
       {children}
       {footer && <div className="component-form-label__footer">{footer}</div>}

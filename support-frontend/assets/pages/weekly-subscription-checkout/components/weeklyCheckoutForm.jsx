@@ -224,7 +224,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
           </FormSection>
           {
             props.billingAddressIsSame === false ?
-              <FormSection title="Where should we bill you?">
+              <FormSection title="Your billing address">
                 <BillingAddress />
               </FormSection>
             : null
