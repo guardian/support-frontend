@@ -6,29 +6,6 @@ import {
   GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
-<<<<<<< HEAD
-import { Annual, Quarterly, SixForSix } from 'helpers/billingPeriods';
-import { getPromotionWeeklyProductPrice, getWeeklyProductPrice } from 'helpers/subscriptions';
-import type { Price } from 'helpers/productPrice/productPrices';
-
-
-export const getPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod) => [
-  currencies[detect(countryGroupId)].extendedGlyph,
-  getWeeklyProductPrice(countryGroupId, period),
-].join('');
-
-export const getCurrencyAndPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod): Price => (
-  {
-    currency: detect(countryGroupId),
-    price: parseFloat(getWeeklyProductPrice(countryGroupId, period)),
-  }
-);
-
-export const getPromotionPrice = (countryGroupId: CountryGroupId, period: WeeklyBillingPeriod, promoCode: string) => [
-  currencies[detect(countryGroupId)].extendedGlyph,
-  getPromotionWeeklyProductPrice(countryGroupId, period, promoCode),
-].join('');
-=======
 import { Annual, Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { displayPrice } from 'helpers/productPrice/productPrices';
@@ -47,7 +24,6 @@ const getPromotionPrice = (country: IsoCountry, period: WeeklyBillingPeriod, pro
 
 const getFulfilmentOption = (country: IsoCountry) =>
   (countryGroups.International.countries.includes(country) ? RestOfWorld : Domestic);
->>>>>>> Use Zuora prices in the weekly checkout
 
 const displayBillingPeriods = {
   [SixWeekly]: {

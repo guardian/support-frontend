@@ -1,7 +1,5 @@
 // @flow
 
-import { SixWeekly } from 'helpers/billingPeriods_REMOTE_80836';
-
 const Annual: 'Annual' = 'Annual';
 const Monthly: 'Monthly' = 'Monthly';
 const Quarterly: 'Quarterly' = 'Quarterly';

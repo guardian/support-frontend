@@ -149,48 +149,6 @@ const subscriptionPromoPricesForGuardianWeekly: {
   },
 };
 
-const subscriptionPricesForGuardianWeekly: {
-  [CountryGroupId]: {
-    [WeeklyBillingPeriod]: number,
-  }
-} = {
-  GBPCountries: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
-    [SixWeekly]: 6,
-    [Annual]: 150,
-  },
-  EURCountries: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
-    [SixWeekly]: 6,
-    [Annual]: 245.20,
-  },
-  UnitedStates: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
-    [SixWeekly]: 6,
-    [Annual]: 300,
-  },
-  Canada: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
-    [SixWeekly]: 6,
-    [Annual]: 320,
-  },
-  AUDCountries: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
-    [SixWeekly]: 6,
-    [Annual]: 390,
-  },
-  NZDCountries: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
-    [SixWeekly]: 6,
-    [Annual]: 492,
-  },
-  International: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
-    [SixWeekly]: 6,
-    [Annual]: 325.20,
-  },
-};
-
 const defaultBillingPeriods: {
   [SubscriptionProduct]: BillingPeriod
 } = {
@@ -219,10 +177,6 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = getProductPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
-}
-
-function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
-  return fixDecimals(subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod]);
 }
 
 function getPromotionWeeklyProductPrice(
@@ -302,7 +256,6 @@ export {
   sendTrackingEventsOnClick,
   displayPrice,
   getProductPrice,
-  getWeeklyProductPrice,
   getPromotionWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
