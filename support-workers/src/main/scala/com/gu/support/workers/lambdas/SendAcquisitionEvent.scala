@@ -46,7 +46,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, paymentProviderFromPaymentMethod(state.paymentMethod), state.product)
         AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
-        HandlerResult(Unit, requestInfo)
+        HandlerResult((), requestInfo)
       }
     )
   }
