@@ -72,7 +72,7 @@ object PromotionServiceSpec {
   val config = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
   val serviceWithFixtures = new PromotionService(
     config,
-    Some(new SimplePromotionCollection(List(freeTrial, discount, double, tracking.promotion, renewal.promotion)))
+    Some(new SimplePromotionCollection(List(freeTrial, discount, double, tracking.promotion, renewal.promotion, weeklyAnnual)))
   )
 
   val serviceWithDynamo = new PromotionService(

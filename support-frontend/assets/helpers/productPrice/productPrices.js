@@ -20,6 +20,8 @@ import {
   type IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import { fixDecimals } from 'helpers/subscriptions';
+import type { Option } from 'helpers/types/option';
+import { getQueryParameter } from 'helpers/url';
 
 // ----- Types ----- //
 
@@ -40,7 +42,7 @@ export type Promotion =
 
 export type ProductPrice = {
   price: number,
-  promotion?: Promotion
+  promotions?: Promotion[],
 }
 
 export type ProductPrices = {
@@ -60,12 +62,12 @@ export type Price = {|
   currency: IsoCurrency,
 |};
 
-const isNumeric = (num: ?number) =>
+const isNumeric = (num: ?number): boolean %checks =>
   num !== null &&
   num !== undefined &&
   !Number.isNaN(num);
 
-const hasDiscount = (promotion: ?Promotion) =>
+const hasDiscount = (promotion: ?Promotion): boolean %checks =>
   promotion !== null &&
   promotion !== undefined &&
   isNumeric(promotion.discountedPrice);
@@ -96,6 +98,16 @@ function getProductPrice(
   return productPrices[countryGroup.name][fulfilmentOption || NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod][countryGroup.currency];
 }
 
+function getAppliedPromo(promotions: ?Promotion[]): Option<Promotion> {
+  if (promotions && promotions.length > 0) {
+    if (promotions.length > 1) {
+      return promotions.find(promotion => getQueryParameter('promoCode') === promotion.promoCode) || promotions[0];
+    }
+    return promotions[0];
+  }
+  return null;
+}
+
 function getPromotion(
   productPrices: ProductPrices,
   country: IsoCountry,
@@ -103,13 +115,13 @@ function getPromotion(
   fulfilmentOption: ?FulfilmentOptions,
   productOption: ?ProductOptions,
 ): ?Promotion {
-  return getProductPrice(
+  return getAppliedPromo(getProductPrice(
     productPrices,
     country,
     billingPeriod,
     fulfilmentOption,
     productOption,
-  ).promotion;
+  ).promotions);
 }
 
 function regularPrice(
@@ -182,6 +194,8 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 }
 
 export {
+  getAppliedPromo,
+  getProductPrice,
   regularPrice,
   getPromotion,
   finalPrice,
