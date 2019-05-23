@@ -21,6 +21,7 @@ import ophan.thrift.event.{PrintOptions, PrintProduct, Product => OphanProduct}
 import ophan.thrift.{event => thrift}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
@@ -37,18 +38,19 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     services: Services
   ): FutureHandlerResult = {
     SafeLogger.info(s"Sending acquisition event to ophan: ${state.toString}")
+
     // Throw any error in the EitherT monad so that in can be processed by ErrorHandler.handleException
-    services.acquisitionService.submit(
+    val result: Future[(Unit, RequestInfo)] = services.acquisitionService.submit(
       SendAcquisitionEventStateAndRequestInfo(state, requestInfo)
     ).fold(
       errors => throw AnalyticsServiceErrorList(errors),
-      _ => {
-        val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, paymentProviderFromPaymentMethod(state.paymentMethod), state.product)
-        AwsCloudWatchMetricPut(client)(cloudwatchEvent)
-
-        HandlerResult((), requestInfo)
-      }
+      _ => HandlerResult((), requestInfo)
     )
+    
+    val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, paymentProviderFromPaymentMethod(state.paymentMethod), state.product)
+    AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+
+    result
   }
 }
 
