@@ -24,7 +24,7 @@ trait AppComponents extends PlayComponents
   with Monitoring {
   self: BuiltInComponentsFromContext =>
 
-  private val customHandler: CustomHttpErrorHandler = new CustomHttpErrorHandler(
+  private lazy val customHandler: CustomHttpErrorHandler = new CustomHttpErrorHandler(
     environment,
     configuration,
     sourceMapper,
