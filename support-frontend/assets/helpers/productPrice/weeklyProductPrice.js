@@ -29,22 +29,21 @@ const displayBillingPeriods = {
   [SixWeekly]: {
     title: '6 for 6',
     offer: 'Introductory offer',
-    copy: (country: IsoCountry, productPrices: ProductPrices) =>
+    copy: (productPrices: ProductPrices, country: IsoCountry) =>
       `${displayPrice(productPrices, country, SixWeekly, getFulfilmentOption(country))} for the first 6 issues (then 
       ${displayPrice(productPrices, country, Quarterly, getFulfilmentOption(country))} quarterly)`,
   },
   [Quarterly]: {
     title: 'Quarterly',
-    copy: (country: IsoCountry, productPrices: ProductPrices) =>
+    copy: (productPrices: ProductPrices, country: IsoCountry) =>
       `${displayPrice(productPrices, country, Quarterly, getFulfilmentOption(country))} every 3 months`,
   },
   [Annual]: {
     title: 'Annually',
     offer: 'Save 10%',
-    copy: (country: IsoCountry, productPrices: ProductPrices) =>
-      `${getPromotionPrice(country, 'Annual', '10ANNUAL')} for 1 year, then standard rate (
-      ${displayPrice(productPrices, country, Annual, getFulfilmentOption(country))} every year)`,
+    copy: (productPrices: ProductPrices, country: IsoCountry) =>
+      `${getPromotionPrice(country, 'Annual', '10ANNUAL')} for 1 year, then standard rate (${displayPrice(productPrices, country, Annual, getFulfilmentOption(country))} every year)`,
   },
 };
 
-export { getFulfilmentOption, displayBillingPeriods };
+export { getFulfilmentOption, getPromotionPrice, displayBillingPeriods };

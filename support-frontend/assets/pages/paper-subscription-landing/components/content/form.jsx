@@ -10,7 +10,6 @@ import {
 import {
   finalPrice,
   regularPrice,
-  showPrice,
 } from 'helpers/productPrice/paperProductPrices';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
@@ -24,7 +23,8 @@ import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
 import { getDiscountCopy } from '../hero/discountCopy';
 import { getQueryParameter } from 'helpers/url';
-import type { Price } from 'helpers/productPrice/productPrices';
+import type { Price, ProductPrices } from 'helpers/productPrice/productPrices';
+import { showPrice } from 'helpers/productPrice/productPrices';
 
 // ---- Helpers ----- //
 

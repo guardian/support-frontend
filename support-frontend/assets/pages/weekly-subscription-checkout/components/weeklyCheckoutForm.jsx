@@ -131,7 +131,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
     ...ps,
     [billingPeriod]: {
       title: displayBillingPeriods[billingPeriod].title,
-      copy: displayBillingPeriods[billingPeriod].copy(props.country, props.productPrices),
+      copy: displayBillingPeriods[billingPeriod].copy(props.productPrices, props.country),
       offer: displayBillingPeriods[billingPeriod].offer || null,
       priceObject: regularPrice(props.productPrices, props.country, billingPeriod, getFulfilmentOption(props.country)),
     },

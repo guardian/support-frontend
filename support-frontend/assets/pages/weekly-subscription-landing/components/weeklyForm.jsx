@@ -39,8 +39,8 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
       [billingPeriod]: {
         title: period.title,
         copy: state.page.productPrices ? period.copy(
-          state.common.internationalisation.countryId,
           state.page.productPrices,
+          state.common.internationalisation.countryId,
         ) : '',
         offer: period.offer || null,
         href: getCheckoutUrl({ billingPeriod, state: state.common }),

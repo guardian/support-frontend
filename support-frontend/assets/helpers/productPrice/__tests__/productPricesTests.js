@@ -2,8 +2,6 @@
 
 // ----- Imports ----- //
 import { hasDiscount, isNumeric } from 'helpers/productPrice/productPrices';
-import { getFulfilmentOption } from 'helpers/productPrice/weeklyProductPrice';
-import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 
 // ----- Tests ----- //
 
@@ -29,16 +27,6 @@ describe('productPrices', () => {
       expect(hasDiscount({ discountedPrice: 50 })).toEqual(true);
       expect(hasDiscount({ discountedPrice: 0 })).toEqual(true);
 
-    });
-  });
-
-  describe('getFulfilmentOption', () => {
-    it('should work out the correct fulfilment option for a country', () => {
-      expect(getFulfilmentOption('GB')).toEqual(Domestic);
-      expect(getFulfilmentOption('FR')).toEqual(Domestic);
-      expect(getFulfilmentOption('US')).toEqual(Domestic);
-      expect(getFulfilmentOption('AU')).toEqual(Domestic);
-      expect(getFulfilmentOption('AE')).toEqual(RestOfWorld);
     });
   });
 
