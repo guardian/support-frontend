@@ -47,7 +47,7 @@ Eg. if 40% of our goal has been fulfilled, we want to translate
 the progress bar from -100% left to -60% left. The translation
 grows nearer to 0 which represents 100% fulfilled.
 *************************************************************** */
-const percentageToTranslate = (total: number, end: number, tickerType: TickerType) => {
+const percentageToTranslate = (total: number, end: number) => {
   const percentage = ((total / end) * 100) - 100;
 
   return percentage > 0 ? 0 : percentage;
@@ -167,7 +167,7 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
     const goal = this.dataFromServer.goal || 0;
     const total = this.dataFromServer.totalContributed || 0;
     // If we've exceeded the goal then extend the bar 15% beyond the total
-    const end = total > goal ? total + (total * 0.15) : goal;
+    const end = this.tickerType === 'unlimited' && total > goal ? total + (total * 0.15) : goal;
 
     /* *************************************************************
       `translate3d` is preferred to `translateX` because it uses the
@@ -180,8 +180,8 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
       https://blog.teamtreehouse.com/increase-your-sites-performance-with-hardware-accelerated-css
       https://davidwalsh.name/translate3d
       *************************************************************** */
-    const progressBarAnimation = `translate3d(${percentageToTranslate(total, end, this.tickerType)}%, 0, 0)`;
-    const markerAnimation = `translate3d(${(goal / end) * 100 - 100}%, 0, 0)`;
+    const progressBarAnimation = `translate3d(${percentageToTranslate(total, end)}%, 0, 0)`;
+    const markerAnimation = `translate3d(${((goal / end) * 100) - 100}%, 0, 0)`;
 
     const readyToRender = (this.state && !Number.isNaN(this.state.count) && this.state.count > -1);
     const allClassModifiers = readyToRender ? this.classModifiers : [...this.classModifiers, 'hidden'];
@@ -205,9 +205,10 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
               className="contributions-landing-ticker__filled-progress"
               style={{ transform: progressBarAnimation }}
             />
-            <div className="contributions-landing-ticker__marker"
-                 style={{ transform: markerAnimation }}
-            ></div>
+            <div
+              className="contributions-landing-ticker__marker"
+              style={{ transform: markerAnimation }}
+            />
           </div>
         </div>
       </div>
