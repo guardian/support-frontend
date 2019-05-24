@@ -188,12 +188,14 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
     const baseClassName = 'contributions-landing-ticker';
     const wrapperClassName = classNameWithModifiers(baseClassName, allClassModifiers);
 
+    const goalValue = (this.tickerType === 'unlimited' && total > goal) ? total : this.state.goal;
+
     return (
       <div className={wrapperClassName}>
         <div className="contributions-landing-ticker__values">
           {this.renderContributedSoFar()}
           <div className="contributions-landing-ticker__goal">
-            <div className="contributions-landing-ticker__count">{this.props.currencySymbol}{Math.floor(this.state.goal).toLocaleString()}</div>
+            <div className="contributions-landing-ticker__count">{this.props.currencySymbol}{Math.floor(goalValue).toLocaleString()}</div>
             <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">our
               goal
             </div>
