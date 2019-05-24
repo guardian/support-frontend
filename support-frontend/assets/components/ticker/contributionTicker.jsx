@@ -128,14 +128,17 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
   increaseTextCounter = () => {
     const nextCount = this.state.count + Math.floor(this.state.count / 100);
 
-    if (this.dataFromServer.totalContributed &&
-      (nextCount >= this.dataFromServer.totalContributed || nextCount <= this.state.count)) {
+    const finishedCounting = this.dataFromServer.totalContributed &&
+      (nextCount <= this.state.count || //count isn't going up because total is too small
+      nextCount >= this.dataFromServer.totalContributed);
+
+    if (finishedCounting) {
       this.setState({ count: this.dataFromServer.totalContributed });
     } else {
       this.setState({ count: nextCount });
       window.requestAnimationFrame(this.increaseTextCounter);
     }
-  }
+  };
 
   renderContributedSoFar = () => {
     if (!this.goalReached) {
