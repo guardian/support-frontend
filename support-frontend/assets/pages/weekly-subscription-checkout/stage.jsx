@@ -13,7 +13,7 @@ import { type Stage } from 'helpers/subscriptionsForms/formFields';
 
 import CheckoutForm from './components/weeklyCheckoutForm';
 import ReturnSection from 'pages/paper-subscription-checkout/components/thankYou/returnSection';
-import ThankYouContent from 'pages/paper-subscription-checkout/components/thankYou/thankYou';
+import ThankYouContent from 'pages/weekly-subscription-checkout/components/thankYou/thankYou';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 // ----- Types ----- //
