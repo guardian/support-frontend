@@ -15,5 +15,5 @@ export type State = {
 
 // ----- Export ----- //
 export default () => ({
-  productPrices: getProductPrices,
+  productPrices: getProductPrices(),
 });

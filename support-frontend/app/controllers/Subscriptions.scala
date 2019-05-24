@@ -3,16 +3,22 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
+import com.gu.support.catalog.GuardianWeekly
+import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
 import play.api.mvc._
+import play.twirl.api.Html
 import services.IdentityService
 import views.EmptyDiv
+import com.gu.support.encoding.CustomCodecs._
+import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
 
 class Subscriptions(
     val actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
     val assets: AssetsResolver,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
@@ -59,6 +65,8 @@ class Subscriptions(
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
+    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCode)
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
       "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),
@@ -68,7 +76,9 @@ class Subscriptions(
       "en" -> buildCanonicalWeeklySubscriptionLink("int"),
       "en" -> buildCanonicalWeeklySubscriptionLink("eu")
     )
-    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks)()).withSettingsSurrogateKey
+    Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks){
+      Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
+    }).withSettingsSurrogateKey
   }
 
 }
