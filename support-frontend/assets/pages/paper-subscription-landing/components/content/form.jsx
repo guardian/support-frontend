@@ -2,9 +2,15 @@
 import { connect } from 'react-redux';
 
 import { type Option } from 'helpers/types/option';
-import { getNewsstandPrice, getNewsstandSaving, sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { type Price, showPrice } from 'helpers/productPrice/productPrices';
+import {
+  getNewsstandPrice,
+  getNewsstandSaving,
+  sendTrackingEventsOnClick,
+} from 'helpers/subscriptions';
+import {
+  finalPrice,
+  regularPrice,
+} from 'helpers/productPrice/paperProductPrices';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -13,11 +19,12 @@ import { type State } from '../../paperSubscriptionLandingPageReducer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
-import { finalPrice, regularPrice } from 'helpers/productPrice/paperProductPrices';
 import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
 import { getDiscountCopy } from '../hero/discountCopy';
 import { getQueryParameter } from 'helpers/url';
+import type { Price, ProductPrices } from 'helpers/productPrice/productPrices';
+import { showPrice } from 'helpers/productPrice/productPrices';
 
 // ---- Helpers ----- //
 

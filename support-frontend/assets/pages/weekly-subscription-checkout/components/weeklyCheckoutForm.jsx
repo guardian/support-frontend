@@ -6,8 +6,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
 
-import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
-import { Annual, Quarterly, SixForSix, type BillingPeriod } from 'helpers/billingPeriods';
+import {
+  firstError,
+  type FormError,
+} from 'helpers/subscriptionsForms/validation';
+import type { BillingPeriod } from 'helpers/billingPeriods';
+import { Annual, Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -22,10 +26,12 @@ import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
-import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import DirectDebitPopUpForm
+  from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { Price, ProductPrices } from 'helpers/productPrice/productPrices';
+import { regularPrice } from 'helpers/productPrice/productPrices';
 import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
@@ -34,26 +40,35 @@ import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
-import { displayBillingPeriods, getCurrencyAndPrice } from 'helpers/productPrice/weeklyProductPrice';
-import type { Price } from 'helpers/productPrice/productPrices';
+import CancellationSection
+  from 'components/subscriptionCheckouts/cancellationSection';
+import {
+  displayBillingPeriods,
+  getFulfilmentOption,
+} from 'helpers/productPrice/weeklyProductPrice';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type Option } from 'helpers/types/option';
 import { GuardianWeekly } from 'helpers/subscriptions';
-import type { FormField, FormFields } from 'helpers/subscriptionsForms/formFields';
+import type {
+  FormField,
+  FormFields,
+} from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { signOut } from 'helpers/user/user';
-import type { Action, FormActionCreators } from 'helpers/subscriptionsForms/formActions';
+import type {
+  Action,
+  FormActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getBillingAddress, getDeliveryAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
-  getWeeklyDays,
-} from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+  getBillingAddress,
+  getDeliveryAddress,
+} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
-
 
 // ----- Types ----- //
 
@@ -116,9 +131,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
     ...ps,
     [billingPeriod]: {
       title: displayBillingPeriods[billingPeriod].title,
-      copy: displayBillingPeriods[billingPeriod].copy(props.countryGroupId),
+      copy: displayBillingPeriods[billingPeriod].copy(props.productPrices, props.country),
       offer: displayBillingPeriods[billingPeriod].offer || null,
-      priceObject: getCurrencyAndPrice(props.countryGroupId, billingPeriod),
+      priceObject: regularPrice(props.productPrices, props.country, billingPeriod, getFulfilmentOption(props.country)),
     },
   }), {});
 
@@ -133,9 +148,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
   };
 
   const sixForSixPriceLabel = {
-    title: plans.SixForSix.title,
-    copy: plans.SixForSix.copy,
-    offer: plans.SixForSix.offer,
+    title: plans.SixWeekly.title,
+    copy: plans.SixWeekly.copy,
+    offer: plans.SixWeekly.offer,
   };
 
   const summaryPrice = { ...plans[props.billingPeriod].priceObject };
@@ -278,8 +293,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
                 offer={sixForSixPriceLabel.offer || null}
                 helper={sixForSixPriceLabel.copy}
                 name="billingPeriod"
-                checked={props.billingPeriod === SixForSix}
-                onChange={() => props.setBillingPeriod(SixForSix)}
+                checked={props.billingPeriod === SixWeekly}
+                onChange={() => props.setBillingPeriod(SixWeekly)}
               />
             </Fieldset>
           </FormSection>

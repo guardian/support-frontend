@@ -4,16 +4,24 @@ import { connect } from 'react-redux';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { DigitalBillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import { showPrice, getCurrency, type Price, type ProductPrices } from 'helpers/productPrice/productPrices';
-import { finalPrice as dpFinalPrice } from 'helpers/productPrice/digitalProductPrices';
-import { getDiscount, getFormattedFlashSalePrice, flashSaleIsActive } from 'helpers/flashSale';
+import {
+  finalPrice,
+  getCurrency,
+  type Price,
+  type ProductPrices,
+  showPrice,
+} from 'helpers/productPrice/productPrices';
+import {
+  flashSaleIsActive,
+  getDiscount,
+  getFormattedFlashSalePrice,
+} from 'helpers/flashSale';
 import { type IsoCountry } from 'helpers/internationalisation/country';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../digitalSubscriptionLandingReducer';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getDigitalCheckout } from 'helpers/externalLinks';
-
 
 // ---- Prices ----- //
 
@@ -28,7 +36,7 @@ const getPrice = (productPrices: ProductPrices, period: DigitalBillingPeriod, co
     };
   }
 
-  return (dpFinalPrice(productPrices, period, country));
+  return (finalPrice(productPrices, country, period));
 };
 
 const getAnnualSaving = (

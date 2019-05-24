@@ -13,7 +13,7 @@ import {
   type DigitalBillingPeriod,
   Monthly,
   Quarterly,
-  SixForSix,
+  SixWeekly,
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
@@ -59,7 +59,7 @@ function getWeeklyZuoraCode(period: WeeklyBillingPeriod, countryGroup: CountryGr
   const yearRow = 'weeklyrestofworld-gwoct18-annual-row';
 
   const urls = {
-    [SixForSix]: {
+    [SixWeekly]: {
       GBPCountries: sixWeekDomestic,
       UnitedStates: sixWeekDomestic,
       AUDCountries: sixWeekDomestic,

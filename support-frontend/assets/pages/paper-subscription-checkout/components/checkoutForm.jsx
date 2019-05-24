@@ -6,11 +6,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
 
-import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
 import {
-  promotion as paperPromotion,
-  regularPrice as paperRegularPrice,
-} from 'helpers/productPrice/paperProductPrices';
+  firstError,
+  type FormError,
+} from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/routes';
 
 import Rows from 'components/base/rows';
@@ -26,33 +25,48 @@ import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
-import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
+import DirectDebitPopUpForm
+  from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getShortDescription, getTitle } from '../../paper-subscription-landing/helpers/products';
+import { getPromotion, regularPrice } from 'helpers/productPrice/paperProductPrices';
+import {
+  getShortDescription,
+  getTitle,
+} from '../../paper-subscription-landing/helpers/products';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
-import { type FormField, type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
+import {
+  type FormField,
+  type FormFields,
+  getFormFields,
+} from 'helpers/subscriptionsForms/formFields';
 
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-import { type FormActionCreators, formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import {
+  type FormActionCreators,
+  formActionCreators,
+} from 'helpers/subscriptionsForms/formActions';
 
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
-import CancellationSection from 'components/subscriptionCheckouts/cancellationSection';
+import CancellationSection
+  from 'components/subscriptionCheckouts/cancellationSection';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { Paper } from 'helpers/subscriptions';
 import { signOut } from 'helpers/user/user';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { getBillingAddress, getDeliveryAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import {
+  getBillingAddress,
+  getDeliveryAddress,
+} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
-
 
 // ----- Types ----- //
 
@@ -118,12 +132,12 @@ function CheckoutForm(props: PropTypes) {
           }
           title={`${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`}
           description={getShortDescription(props.productOption)}
-          productPrice={paperRegularPrice(
+          productPrice={regularPrice(
             props.productPrices,
             props.fulfilmentOption,
             props.productOption,
           )}
-          promotion={paperPromotion(
+          promotion={getPromotion(
             props.productPrices,
             props.fulfilmentOption,
             props.productOption,
