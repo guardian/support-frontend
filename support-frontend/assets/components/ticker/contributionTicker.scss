@@ -83,21 +83,17 @@ $progress-bar-height: 10px;
   transition: transform 3s cubic-bezier(.25, .55, .2, .85);
 }
 
-// Post-goal styles:
-// Default post-goal style (hard stop)
-.contributions-landing-ticker--goal-reached .contributions-landing-ticker__progress-bar::after {
-  content: '';
-  position: absolute;
-  background: gu-colour(neutral-7);
-  width: 2px;
+.contributions-landing-ticker__marker {
+  visibility: hidden;
+  border-right: 2px solid gu-colour(neutral-7);
+  content: ' ';
+  display: block;
   height: 15px;
-  right: 0;
-  bottom: -$progress-bar-height;
+  margin-top: -5px;
 }
 
-// "Unlimited" post-goal style
-.contributions-landing-ticker--goal-reached.contributions-landing-ticker--unlimited .contributions-landing-ticker__progress-bar::after {
-  right: 20%;
+.contributions-landing-ticker--goal-reached .contributions-landing-ticker__marker {
+  visibility: visible;
 }
 
 // Post-goal copy
