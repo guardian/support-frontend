@@ -3,7 +3,7 @@
 const Annual: 'Annual' = 'Annual';
 const Monthly: 'Monthly' = 'Monthly';
 const Quarterly: 'Quarterly' = 'Quarterly';
-const SixWeekly: 'SixWeekly' = 'SixWeekly'; // TODO: SixWeekly is not a real billing period it's an introductory offer
+const SixWeekly: 'SixWeekly' = 'SixWeekly';
 export type BillingPeriod = typeof SixWeekly | typeof Annual | typeof Monthly | typeof Quarterly;
 export type DigitalBillingPeriod = typeof Monthly | typeof Annual;
 export type WeeklyBillingPeriod = typeof SixWeekly | typeof Quarterly | typeof Annual;

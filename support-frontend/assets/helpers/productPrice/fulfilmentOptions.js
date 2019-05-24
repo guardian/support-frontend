@@ -20,5 +20,4 @@ export type FulfilmentOptions =
   | typeof RestOfWorld
   | typeof NoFulfilmentOptions
 
-
 export { HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions };

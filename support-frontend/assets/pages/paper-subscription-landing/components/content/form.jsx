@@ -2,13 +2,16 @@
 import { connect } from 'react-redux';
 
 import { type Option } from 'helpers/types/option';
-import { getNewsstandPrice, getNewsstandSaving, sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import {
+  getNewsstandPrice,
+  getNewsstandSaving,
+  sendTrackingEventsOnClick,
+} from 'helpers/subscriptions';
 import {
   finalPrice,
-  type Price, regularPrice,
+  regularPrice,
   showPrice,
-} from 'helpers/productPrice/productPrices';
+} from 'helpers/productPrice/paperProductPrices';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -21,7 +24,7 @@ import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
 import { getDiscountCopy } from '../hero/discountCopy';
 import { getQueryParameter } from 'helpers/url';
-import { Monthly } from 'helpers/billingPeriods';
+import type { Price } from 'helpers/productPrice/productPrices';
 
 // ---- Helpers ----- //
 
@@ -76,13 +79,7 @@ const getPlans = (
   productPrices: ProductPrices,
 ) =>
   ActivePaperProductTypes.reduce((products, productOption, index) => {
-    const price = finalPrice(
-      productPrices,
-      'GB',
-      Monthly,
-      fulfilmentOption,
-      productOption,
-    );
+    const price = finalPrice(productPrices, fulfilmentOption, productOption);
     return {
       ...products,
       [productOption]: {
@@ -97,13 +94,7 @@ const getPlans = (
         copy: copy[fulfilmentOption],
         price: getPriceStr(price),
         offer: getOfferStr(price.price, getNewsstandPrice(productOption), index),
-        saving: getSavingStr(regularPrice(
-          productPrices,
-          'GB',
-          Monthly,
-          fulfilmentOption,
-          productOption,
-        )),
+        saving: getSavingStr(regularPrice(productPrices, fulfilmentOption, productOption)),
       },
     };
   }, {});

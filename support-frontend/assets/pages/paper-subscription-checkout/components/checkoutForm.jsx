@@ -30,7 +30,7 @@ import DirectDebitPopUpForm
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion, regularPrice } from 'helpers/productPrice/productPrices';
+import { getPromotion, regularPrice } from 'helpers/productPrice/paperProductPrices';
 import {
   getShortDescription,
   getTitle,
@@ -67,7 +67,6 @@ import {
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
-import { Monthly } from 'helpers/billingPeriods';
 
 // ----- Types ----- //
 
@@ -135,15 +134,11 @@ function CheckoutForm(props: PropTypes) {
           description={getShortDescription(props.productOption)}
           productPrice={regularPrice(
             props.productPrices,
-            'GB',
-            Monthly,
             props.fulfilmentOption,
             props.productOption,
           )}
           promotion={getPromotion(
             props.productPrices,
-            'GB',
-            Monthly,
             props.fulfilmentOption,
             props.productOption,
           )}
