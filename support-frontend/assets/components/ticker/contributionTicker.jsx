@@ -205,11 +205,11 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
               className="contributions-landing-ticker__filled-progress"
               style={{ transform: progressBarAnimation }}
             />
-            <div
-              className="contributions-landing-ticker__marker"
-              style={{ transform: markerAnimation }}
-            />
           </div>
+          <div
+            className="contributions-landing-ticker__marker"
+            style={{ transform: markerAnimation }}
+          />
         </div>
       </div>
     );
