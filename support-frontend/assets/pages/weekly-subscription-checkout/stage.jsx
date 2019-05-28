@@ -10,10 +10,9 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { type Stage } from 'helpers/subscriptionsForms/formFields';
-
+import ThankYouContent from './components/thankYou';
 import CheckoutForm from './components/weeklyCheckoutForm';
-import ReturnSection from 'pages/paper-subscription-checkout/components/thankYou/returnSection';
-import ThankYouContent from 'pages/weekly-subscription-checkout/components/thankYou/thankYou';
+import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 // ----- Types ----- //
@@ -42,7 +41,7 @@ function CheckoutStage(props: PropTypes) {
       return (
         <div>
           <ThankYouContent isPending={false} />
-          <ReturnSection />
+          <ReturnSection subscriptionProduct="GuardianWeekly" />
         </div>
       );
 
@@ -50,7 +49,7 @@ function CheckoutStage(props: PropTypes) {
       return (
         <div>
           <ThankYouContent isPending />
-          <ReturnSection />
+          <ReturnSection subscriptionProduct="GuardianWeekly" />
         </div>
       );
 

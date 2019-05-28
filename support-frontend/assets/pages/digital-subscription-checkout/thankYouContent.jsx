@@ -9,8 +9,8 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
-import MarketingConsent from './thankYou/marketingConsentContainer';
-import AppsSection from './thankYou/appsSection';
+import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import AppsSection from './components/thankYou/appsSection';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { DirectDebit } from 'helpers/paymentMethods';

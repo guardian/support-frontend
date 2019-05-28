@@ -12,8 +12,8 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import type { Stage } from 'helpers/subscriptionsForms/formFields';
 
-import ThankYouContent from './thankYouContent';
-import ThankYouPendingContent from './thankYouPendingContent';
+import ThankYouContent from '../thankYouContent';
+import ThankYouPendingContent from '../thankYouPendingContent';
 import CheckoutForm from './checkoutForm';
 import ReturnSection from './returnSection';
 import ThankYouHero from './thankYou/hero';

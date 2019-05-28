@@ -16,8 +16,8 @@ import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
-import typeof MarketingConsent from 'pages/weekly-subscription-checkout/components/thankYou/marketingConsentContainer';
-import styles from 'pages/weekly-subscription-checkout/components/thankYou/thankYou.module.scss';
+import typeof MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import { formatUserDate } from 'helpers/dateConversions';
 
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
@@ -83,7 +83,7 @@ function ThankYouContent({
           <OrderedList items={[
             <span>
               Look out for an email from us confirming your subscription.
-              It has everything you need to know about how manage it in the future.
+              It has everything you need to know about how to manage it in the future.
             </span>,
             <span>
               Your magazine will be delivered to your door. <a href="/help/2017/dec/11/help-with-delivery">Here&apos;s a reminder of how home delivery works</a>.
@@ -101,7 +101,7 @@ function ThankYouContent({
         </Text>
       </Content>
       <Content>
-        <Asyncronously loader={import('pages/paper-subscription-checkout/components/thankYou/marketingConsentContainer')}>
+        <Asyncronously loader={import('components/subscriptionCheckouts/thankYou/marketingConsentContainer')}>
           {(MktConsent: MarketingConsent) => (
 
             <MktConsent

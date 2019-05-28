@@ -8,7 +8,7 @@ import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-import AppsSection from './thankYou/appsSection';
+import AppsSection from './components/thankYou/appsSection';
 
 // ----- Types ----- //
 
