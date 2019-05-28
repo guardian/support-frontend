@@ -26,14 +26,14 @@ object ServicesFixtures {
   val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))
   val discountBenefit = Some(DiscountBenefit(30, Some(Months.months(3))))
 
-  val freeTrial = promotion(validProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
-  val validFreeTrial = ValidatedPromotion(freeTrialPromoCode, freeTrial)
+  val freeTrial =  promotion(validProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
+  val freeTrialWithCode = PromotionWithCode(freeTrialPromoCode, freeTrial)
   val discount = promotion(validProductRatePlanIds, discountPromoCode, discountBenefit)
-  val validDiscount = ValidatedPromotion(discountPromoCode, discount)
+  val discountWithCode = PromotionWithCode(discountPromoCode, discount)
   val double = promotion(validProductRatePlanIds, doublePromoCode, discountBenefit, freeTrialBenefit)
-  val validDouble = ValidatedPromotion(doublePromoCode, double)
-  val tracking = promotion(validProductRatePlanIds, trackingPromoCode, tracking = true)
-  val renewal = promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true)
+  val doubleWithCode = PromotionWithCode(doublePromoCode, double)
+  val tracking = PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
+  val renewal = PromotionWithCode(renewalPromoCode, promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true))
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(
