@@ -12,20 +12,30 @@ import scala.math.BigDecimal.RoundingMode
 
 class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
+  case class PromotionWithCode(promoCode: PromoCode, promotion: Promotion)
 
-  def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPrices =
+  private def findPromotion(maybePromoCode: Option[PromoCode]) =
+    for {
+      promoCode <- maybePromoCode
+      promotion <- promotionService.findPromotion(promoCode)
+    } yield PromotionWithCode(promoCode, promotion)
+
+  def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPrices = {
+    val maybePromotion = findPromotion(maybePromoCode)
+
     product.supportedCountries(catalogService.environment).map(
       countryGroup =>
-        countryGroup -> getPricesForCountryGroup(product, countryGroup, maybePromoCode)
+        countryGroup -> getPricesForCountryGroup(product, countryGroup, maybePromotion)
     ).toMap
+  }
 
-  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, maybePromoCode: Option[PromoCode]): CountryGroupPrices = {
+  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, maybePromotion: Option[PromotionWithCode]): CountryGroupPrices = {
     val grouped = product.ratePlans(catalogService.environment).groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, productRatePlans) =>
         val priceSummaries = for {
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)
           price <- filterCurrencies(catalogService.getPriceList(productRatePlan).map(_.prices), countryGroup)
-        } yield getPriceSummary(maybePromoCode, countryGroup, productRatePlan, price)
+        } yield getPriceSummary(maybePromotion, countryGroup, productRatePlan, price)
         (keys, priceSummaries.toMap)
     }
     nestPriceLists(grouped)
@@ -41,12 +51,18 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       .filter(price => countryGroup.supportedCurrencies.contains(price.currency))
 
 
-  private def getPriceSummary(maybePromoCode: Option[PromoCode], countryGroup: CountryGroup, productRatePlan: ProductRatePlan[Product], price: Price) = {
+  private def getPriceSummary(
+    maybePromotion: Option[PromotionWithCode],
+    countryGroup: CountryGroup,
+    productRatePlan: ProductRatePlan[Product],
+    price: Price
+  ) = {
     val promotionSummary: Option[PromotionSummary] = for {
-      promoCode <- maybePromoCode
+      promotion <- maybePromotion
       country <- countryGroup.defaultCountry.orElse(countryGroup.countries.headOption)
-      validPromotion <- promotionService.validatePromoCode(promoCode, country, productRatePlan.id, isRenewal = false).toOption //Not dealing with renewals for now
-    } yield getPromotionSummary(validPromotion, price, productRatePlan.billingPeriod)
+      validPromotion <- promotionService
+        .validatePromotion(promotion.promotion, country, productRatePlan.id, isRenewal = false).toOption //Not dealing with renewals for now
+    } yield getPromotionSummary(promotion.promoCode, validPromotion, price, productRatePlan.billingPeriod)
 
     price.currency -> PriceSummary(
       price.value,
@@ -54,8 +70,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
     )
   }
 
-  private def getPromotionSummary(validatedPromotion: ValidatedPromotion, price: Price, billingPeriod: BillingPeriod) = {
-    import validatedPromotion._
+  private def getPromotionSummary(promoCode: PromoCode, promotion: Promotion, price: Price, billingPeriod: BillingPeriod) = {
     PromotionSummary(
       promotion.name,
       promotion.description,
