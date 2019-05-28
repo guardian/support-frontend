@@ -68,11 +68,11 @@ object GoCardlessThreadPool extends CustomThreadPoolLoader[GoCardlessThreadPool]
   override val threadPoolId: String = "gocardless"
 }
 
-// Should be used as the execution context for database IO.
-case class JdbcThreadPool private (underlying: ExecutionContext) extends AppThreadPool
+// Should be used as the execution context for database queue.
+case class SQSThreadPool private(underlying: ExecutionContext) extends AppThreadPool
 
-object JdbcThreadPool extends CustomThreadPoolLoader[JdbcThreadPool] {
-  override val threadPoolId: String = "jdbc"
+object SQSThreadPool extends CustomThreadPoolLoader[SQSThreadPool] {
+  override val threadPoolId: String = "sqs"
 }
 
 // Should be used as the execution context for subscribeWithGoogle IO.
@@ -88,7 +88,7 @@ case class AppThreadPools private (
   stripe: StripeThreadPool,
   paypal: PaypalThreadPool,
   goCardless: GoCardlessThreadPool,
-  jdbc: JdbcThreadPool,
+  sqs: SQSThreadPool,
   subscribeWithGoogle: SubscribeWithGoogleThreadPool
 )
 
@@ -99,7 +99,7 @@ object AppThreadPools {
     StripeThreadPool.load(),
     PaypalThreadPool.load(),
     GoCardlessThreadPool.load(),
-    JdbcThreadPool.load(),
+    SQSThreadPool.load(),
     SubscribeWithGoogleThreadPool.load()
   ).mapN(AppThreadPools.apply)
 }
@@ -115,6 +115,6 @@ trait AppThreadPoolsProvider {
   implicit lazy val stripeThreadPool: StripeThreadPool = threadPools.stripe
   implicit lazy val paypalThreadPool: PaypalThreadPool = threadPools.paypal
   implicit lazy val goCardlessThreadPool: GoCardlessThreadPool = threadPools.goCardless
-  implicit lazy val jdbcThreadPool: JdbcThreadPool = threadPools.jdbc
+  implicit lazy val sqsThreadPool: SQSThreadPool = threadPools.sqs
   implicit lazy val subscribeWithGoogleThreadPool: SubscribeWithGoogleThreadPool = threadPools.subscribeWithGoogle
 }

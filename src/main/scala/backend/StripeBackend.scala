@@ -23,12 +23,12 @@ import scala.concurrent.Future
 
 // Provides methods required by the Stripe controller
 class StripeBackend(
-    stripeService: StripeService,
-    databaseService: DatabaseService,
-    identityService: IdentityService,
-    ophanService: AnalyticsService,
-    emailService: EmailService,
-    cloudWatchService: CloudWatchService
+                     stripeService: StripeService,
+                     databaseService: ContributionsStoreService,
+                     identityService: IdentityService,
+                     ophanService: AnalyticsService,
+                     emailService: EmailService,
+                     cloudWatchService: CloudWatchService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
@@ -146,20 +146,20 @@ class StripeBackend(
 object StripeBackend {
 
   private def apply(
-    stripeService: StripeService,
-    databaseService: DatabaseService,
-    identityService: IdentityService,
-    ophanService: AnalyticsService,
-    emailService: EmailService,
-    cloudWatchService: CloudWatchService
+                     stripeService: StripeService,
+                     databaseService: ContributionsStoreService,
+                     identityService: IdentityService,
+                     ophanService: AnalyticsService,
+                     emailService: EmailService,
+                     cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): StripeBackend = {
     new StripeBackend(stripeService, databaseService, identityService, ophanService, emailService, cloudWatchService)
   }
 
-  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
     implicit defaultThreadPool: DefaultThreadPool,
     stripeThreadPool: StripeThreadPool,
-    jdbcThreadPool: JdbcThreadPool,
+    sqsThreadPool: SQSThreadPool,
     wsClient: WSClient
   ) extends EnvironmentBasedBuilder[StripeBackend] {
 
@@ -167,9 +167,9 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, StripeConfig](env)
         .map(StripeService.fromStripeConfig): InitializationResult[StripeService],
-      databaseProvider
-        .loadDatabase(env)
-        .map(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService],
+      configLoader
+        .loadConfig[Environment, ContributionsStoreQueueConfig](env)
+        .andThen(ContributionsStoreQueueService.fromContributionsStoreQueueConfig): InitializationResult[ContributionsStoreQueueService],
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],

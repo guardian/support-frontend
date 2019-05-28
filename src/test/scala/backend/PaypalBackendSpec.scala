@@ -36,7 +36,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     headers = Map.empty
   )
   val ophanError: List[AnalyticsServiceError] = List(AnalyticsServiceError.BuildError("Ophan error response"))
-  val dbError = DatabaseService.Error("DB error response", None)
+  val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
 
   val identityError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
@@ -74,9 +74,9 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(mock[AcquisitionSubmission]))
   val acquisitionResponseError: EitherT[Future, List[AnalyticsServiceError], AcquisitionSubmission] =
     EitherT.left(Future.successful(ophanError))
-  val databaseResponse: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseResponse: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.right(Future.successful(()))
-  val databaseResponseError: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.right(Future.successful(1L))
@@ -87,7 +87,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   //-- service mocks
   val mockPaypalService: PaypalService = mock[PaypalService]
-  val mockDatabaseService: DatabaseService = mock[DatabaseService]
+  val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
   val mockOphanService: AnalyticsService = mock[AnalyticsService]
   val mockEmailService: EmailService = mock[EmailService]
@@ -249,7 +249,7 @@ class PaypalBackendSpec
 
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError, Unit]]('postPaymentTasks)
         val errors = BackendError.MultipleErrors(List(
-          BackendError.Database(DatabaseService.Error("DB error response", None)),
+          BackendError.Database(dbError),
           BackendError.Email(emailError)
         ))
         val result = paypalBackend invokePrivate postPaymentTasks(enrichedPaymentMock, mockAcquisitionData, clientBrowserInfo)
@@ -269,7 +269,7 @@ class PaypalBackendSpec
         val trackContribution = PrivateMethod[EitherT[Future, BackendError, Unit]]('trackContribution)
         val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None, clientBrowserInfo)
 
-        result.futureLeft shouldBe BackendError.Database(DatabaseService.Error("DB error response", None))
+        result.futureLeft shouldBe BackendError.Database(dbError)
       }
 
       "return a combined error if Ophan and DB fail" in new PaypalBackendFixture {
@@ -283,7 +283,7 @@ class PaypalBackendSpec
           BackendError.fromOphanError(
             List(AnalyticsServiceError.BuildError("Ophan error response"))
           ),
-          BackendError.Database(DatabaseService.Error("DB error response", None))
+          BackendError.Database(dbError)
         ))
         val result = paypalBackend invokePrivate trackContribution(paymentMock, mockAcquisitionData, "a@b.com", None, clientBrowserInfo)
         result.futureLeft shouldBe errors

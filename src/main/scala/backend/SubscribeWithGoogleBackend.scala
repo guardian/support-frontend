@@ -6,7 +6,7 @@ import cats.syntax.validated._
 import cats.syntax.apply._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.typesafe.scalalogging.StrictLogging
-import conf.{ConfigLoader, EmailConfig, IdentityConfig}
+import conf.{ConfigLoader, EmailConfig, IdentityConfig, ContributionsStoreQueueConfig}
 import model._
 import model.db.ContributionData
 import model.email.ContributorRow
@@ -23,7 +23,7 @@ import scala.concurrent.Future
 
 case class SubscribeWithGoogleDuplicateInsertEventError(msg: String) extends Exception(msg)
 
-case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
+case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService,
                                       identityService: IdentityService,
                                       ophanService: AnalyticsService,
                                       emailService: EmailService,
@@ -42,7 +42,7 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
     } yield processOutcome
   }
 
-  def recordRefund(googleRecordPayment: GoogleRecordPayment): EitherT[Future, DatabaseService.Error, Unit] = {
+  def recordRefund(googleRecordPayment: GoogleRecordPayment): EitherT[Future, ContributionsStoreService.Error, Unit] = {
     databaseService.flagContributionAsRefunded(googleRecordPayment.paymentId).leftMap { e =>
       logger.error(s"Failed to mark payment as failed for paymentId: ${googleRecordPayment.paymentId} with reason: ${e.getMessage}")
       cloudWatchService.recordTrackingRefundFailure(PaymentProvider.SubscribeWithGoogle)
@@ -175,17 +175,17 @@ case class SubscribeWithGoogleBackend(databaseService: DatabaseService,
 
 object SubscribeWithGoogleBackend {
 
-  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
     implicit defaultThreadPool: DefaultThreadPool,
     subscribeWithGoogleThreadPool: SubscribeWithGoogleThreadPool,
-    jdbcThreadPool: JdbcThreadPool,
+    sqsThreadPool: SQSThreadPool,
     wsClient: WSClient
   ) extends EnvironmentBasedBuilder[SubscribeWithGoogleBackend] {
 
     override def build(env: Environment): InitializationResult[SubscribeWithGoogleBackend] = (
-      databaseProvider
-        .loadDatabase(env)
-        .map(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService],
+      configLoader
+        .loadConfig[Environment, ContributionsStoreQueueConfig](env)
+        .andThen(ContributionsStoreQueueService.fromContributionsStoreQueueConfig): InitializationResult[ContributionsStoreQueueService],
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],

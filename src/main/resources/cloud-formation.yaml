@@ -110,6 +110,12 @@ Parameters:
   KinesisStreamArn:
     Type: String
     Description: ARN of the kinesis stream to write events to
+  ContributionsStoreSQSArn:
+    Type: String
+    Description: ARN of the SQS queue
+  SqsKmsArn:
+    Type: String
+    Description: ARN of the KMS key for encrypting SQS data
 
 
 Conditions:
@@ -241,6 +247,18 @@ Resources:
               Action: kinesis:*
               Resource:
                 Ref: KinesisStreamArn
+        - PolicyName: SQSPut
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: sqs:SendMessage
+              Resource: !Ref ContributionsStoreSQSArn
+        - PolicyName: SqsKmsEncryption
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action: kms:Encrypt
+              Resource: !Ref SqsKmsArn
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile

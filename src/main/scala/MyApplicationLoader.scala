@@ -13,7 +13,6 @@ import _root_.controllers.{AppController, ErrorHandler, GoCardlessController, Pa
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import conf.{ConfigLoader, PlayConfigUpdater}
-import services.DatabaseProvider
 import com.typesafe.scalalogging.StrictLogging
 
 class MyApplicationLoader extends ApplicationLoader with StrictLogging {
@@ -56,8 +55,6 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
     .updateConfiguration(super.configuration, requestEnvironments, environment.mode)
     .valueOr(throw _)
 
-  val databaseProvider = new DatabaseProvider(dbApi)
-
   override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
 
   implicit val _wsClient: WSClient = wsClient
@@ -67,12 +64,12 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
   val cloudWatchClient: AmazonCloudWatchAsync = AWSClientBuilder.buildCloudWatchAsyncClient()
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
-    new StripeBackend.Builder(configLoader, databaseProvider, cloudWatchClient)
+    new StripeBackend.Builder(configLoader, cloudWatchClient)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
   val paypalBackendProvider: RequestBasedProvider[PaypalBackend] =
-    new PaypalBackend.Builder(configLoader, databaseProvider, cloudWatchClient)
+    new PaypalBackend.Builder(configLoader, cloudWatchClient)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
@@ -82,7 +79,7 @@ class MyComponents(context: Context) extends BuiltInComponentsFromContext(contex
       .valueOr(throw _)
 
   val subscribeWithGoogleProvider: RequestBasedProvider[SubscribeWithGoogleBackend] =
-    new SubscribeWithGoogleBackend.Builder(configLoader, databaseProvider, cloudWatchClient)
+    new SubscribeWithGoogleBackend.Builder(configLoader, cloudWatchClient)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 

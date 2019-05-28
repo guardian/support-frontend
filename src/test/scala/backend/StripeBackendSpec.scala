@@ -34,7 +34,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val stripeHookData = StripeHookData(stripeHookObject)
   val stripeHook = StripeRefundHook("id", PaymentStatus.Paid, stripeHookData)
   val ophanError: List[AnalyticsServiceError] = List(AnalyticsServiceError.BuildError("Ophan error response"))
-  val dbError = DatabaseService.Error("DB error response", None)
+  val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
 
   val identityError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
@@ -68,16 +68,16 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val validateRefundHookFailure: EitherT[Future, StripeApiError, Unit] =
     EitherT.left(Future.successful(stripeApiError))
-  val databaseResponseError: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
-  val databaseResponse: EitherT[Future, DatabaseService.Error, Unit] =
+  val databaseResponse: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.right(Future.successful(()))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
 
   //-- service mocks
   val mockStripeService: StripeService = mock[StripeService]
-  val mockDatabaseService: DatabaseService = mock[DatabaseService]
+  val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
   val mockOphanService: AnalyticsService = mock[AnalyticsService]
   val mockEmailService: EmailService = mock[EmailService]
@@ -193,7 +193,7 @@ class StripeBackendSpec
         val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
         val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, clientBrowserInfo)
         val errors = BackendError.MultipleErrors(List(
-          BackendError.Database(DatabaseService.Error("DB error response", None)),
+          BackendError.Database(dbError),
           BackendError.Email(emailError)
         ))
         result.futureLeft shouldBe errors
@@ -209,7 +209,7 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None, clientBrowserInfo)
-        result.futureLeft shouldBe BackendError.Database(DatabaseService.Error("DB error response", None))
+        result.futureLeft shouldBe BackendError.Database(dbError)
       }
 
       "return a combined error if Ophan and DB fail" in new StripeBackendFixture {
@@ -220,7 +220,7 @@ class StripeBackendSpec
         val trackContribution = PrivateMethod[EitherT[Future, BackendError,Unit]]('trackContribution)
         val result = stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeData, None, clientBrowserInfo)
         val error = BackendError.MultipleErrors(List(
-          BackendError.Database(DatabaseService.Error("DB error response", None)),
+          BackendError.Database(dbError),
           BackendError.fromOphanError(List(AnalyticsServiceError.BuildError("Ophan error response"))))
         )
         result.futureLeft shouldBe error

@@ -1,13 +1,13 @@
 package model
 
-import enumeratum.{Enum, EnumEntry}
+import enumeratum.{CirceEnum, Enum, EnumEntry}
 import model.stripe.StripePaymentMethod
 
 import scala.collection.immutable.IndexedSeq
 
 sealed abstract class PaymentProvider extends EnumEntry
 
-object PaymentProvider extends Enum[PaymentProvider] {
+object PaymentProvider extends Enum[PaymentProvider] with CirceEnum[PaymentProvider] {
 
   def fromStripePaymentMethod(stripePaymentMethod: Option[StripePaymentMethod]): PaymentProvider = {
     stripePaymentMethod match {

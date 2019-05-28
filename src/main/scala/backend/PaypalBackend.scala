@@ -24,12 +24,12 @@ import scala.collection.JavaConverters._
 import scala.util.Try
 
 class PaypalBackend(
-    paypalService: PaypalService,
-    databaseService: DatabaseService,
-    identityService: IdentityService,
-    ophanService: AnalyticsService,
-    emailService: EmailService,
-    cloudWatchService: CloudWatchService
+                     paypalService: PaypalService,
+                     databaseService: ContributionsStoreService,
+                     identityService: IdentityService,
+                     ophanService: AnalyticsService,
+                     emailService: EmailService,
+                     cloudWatchService: CloudWatchService
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   /*
@@ -217,20 +217,20 @@ class PaypalBackend(
 object PaypalBackend {
 
   private def apply(
-      paypalService: PaypalService,
-      databaseService: DatabaseService,
-      identityService: IdentityService,
-      ophanService: AnalyticsService,
-      emailService: EmailService,
-      cloudWatchService: CloudWatchService
+                     paypalService: PaypalService,
+                     databaseService: ContributionsStoreService,
+                     identityService: IdentityService,
+                     ophanService: AnalyticsService,
+                     emailService: EmailService,
+                     cloudWatchService: CloudWatchService
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
     new PaypalBackend(paypalService, databaseService, identityService, ophanService, emailService, cloudWatchService)
   }
 
-  class Builder(configLoader: ConfigLoader, databaseProvider: DatabaseProvider, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
+  class Builder(configLoader: ConfigLoader, cloudWatchAsyncClient: AmazonCloudWatchAsync)(
     implicit defaultThreadPool: DefaultThreadPool,
     paypalThreadPool: PaypalThreadPool,
-    jdbcThreadPool: JdbcThreadPool,
+    sqsThreadPool: SQSThreadPool,
     wsClient: WSClient
   ) extends EnvironmentBasedBuilder[PaypalBackend] {
 
@@ -238,9 +238,9 @@ object PaypalBackend {
       configLoader
         .loadConfig[Environment, PaypalConfig](env)
         .map(PaypalService.fromPaypalConfig): InitializationResult[PaypalService],
-      databaseProvider
-        .loadDatabase(env)
-        .map(PostgresDatabaseService.fromDatabase): InitializationResult[DatabaseService],
+      configLoader
+        .loadConfig[Environment, ContributionsStoreQueueConfig](env)
+        .andThen(ContributionsStoreQueueService.fromContributionsStoreQueueConfig): InitializationResult[ContributionsStoreQueueService],
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
@@ -248,7 +248,7 @@ object PaypalBackend {
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
-      new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService]
+      new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
     ).mapN(PaypalBackend.apply)
   }
 }

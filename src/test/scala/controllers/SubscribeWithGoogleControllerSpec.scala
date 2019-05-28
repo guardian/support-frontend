@@ -20,7 +20,7 @@ import io.circe.syntax._
 import org.mockito.{Matchers => Match}
 import org.mockito.Mockito._
 import org.scalatest.{Matchers, WordSpec}
-import services.DatabaseService
+import services.ContributionsStoreService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -60,17 +60,17 @@ class SubscribeWithGoogleControllerFixture()(implicit _ec: ExecutionContext, con
     System.currentTimeMillis()
   )
 
-  val dbInsertResult: EitherT[Future, DatabaseService.Error, Unit] =
+  val dbInsertResult: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.right(Future.successful(()))
 
-  val dbInsertError: EitherT[Future, DatabaseService.Error, Unit] =
-    EitherT.left(Future.successful(DatabaseService.Error("Didn't update :(", None)))
+  val dbInsertError: EitherT[Future, ContributionsStoreService.Error, Unit] =
+    EitherT.left(Future.successful(ContributionsStoreService.Error(new Exception("Didn't update :("))))
 
   val recordPaymentResult: EitherT[Future, BackendError, Unit] =
     EitherT.right(Future.successful(()))
 
   val recordPaymentError: EitherT[Future, BackendError, Unit] =
-    EitherT.left(Future.successful(BackendError.fromDatabaseError(DatabaseService.Error("Didn't update :(", None))))
+    EitherT.left(Future.successful(BackendError.fromDatabaseError(ContributionsStoreService.Error(new Exception("Didn't update :(")))))
 
   val mockSubscribeWithGoogleBackend = mock[SubscribeWithGoogleBackend]
 

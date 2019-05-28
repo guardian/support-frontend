@@ -4,7 +4,7 @@ import cats.data.EitherT
 import cats.kernel.Semigroup
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import model.DefaultThreadPool
-import services.{DatabaseService, EmailService, IdentityClient}
+import services.{ContributionsStoreService, EmailService, IdentityClient}
 import model.paypal.{PaypalApiError => PaypalAPIError}
 import cats.implicits._
 import model.stripe.{StripeApiError => StripeError}
@@ -25,7 +25,7 @@ sealed abstract class BackendError extends Exception {
 }
 
 object BackendError {
-  final case class Database(error: DatabaseService.Error) extends BackendError
+  final case class Database(error: ContributionsStoreService.Error) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
@@ -49,7 +49,7 @@ object BackendError {
   }
 
   def fromIdentityError(err: IdentityClient.ContextualError): BackendError = IdentityServiceError(err)
-  def fromDatabaseError(err: DatabaseService.Error): BackendError = Database(err)
+  def fromDatabaseError(err: ContributionsStoreService.Error): BackendError = Database(err)
   def fromOphanError(err: List[AnalyticsServiceError]): BackendError = Ophan(err)
   def fromPaypalAPIError(err: PaypalAPIError): BackendError = PaypalApiError(err)
   def fromStripeApiError(err: StripeError): BackendError = StripeApiError(err)
