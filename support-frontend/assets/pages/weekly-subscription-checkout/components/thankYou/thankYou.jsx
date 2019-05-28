@@ -2,13 +2,11 @@
 
 // ----- Imports ----- //
 
-import React, { type Element } from 'react';
+import React from 'react';
 
 import { connect } from 'react-redux';
 
 import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/hero';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import OrderedList from 'components/list/orderedList';
@@ -49,7 +47,7 @@ const getPackageTitle = (billingPeriod) => {
 
 
 function ThankYouContent({
-  fulfilmentOption, billingPeriod, startDate, isPending,
+  billingPeriod, startDate, isPending,
 }: PropTypes) {
   const packageTitle = getPackageTitle(billingPeriod);
   return (
