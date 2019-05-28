@@ -83,7 +83,6 @@ type PropTypes = {|
   isTestUser: boolean,
   country: IsoCountry,
   stripePaymentRequestButtonMethod: StripePaymentRequestButtonMethod,
-  campaignName: ?CampaignName,
   setThankYouPageStage: (ThankYouPageStage) => void,
 |};
 
