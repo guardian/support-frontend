@@ -11,7 +11,8 @@ class PromotionServiceIntegrationSpec extends FlatSpec with Matchers {
   "PromotionService" should "apply a real promo code" in {
     val realPromoCode = "DJP8L27FY"
     val digipackMonthlyProductRatePlanId = "2c92c0f84bbfec8b014bc655f4852d9d"
-    val result = serviceWithDynamo.applyPromotion(realPromoCode, UK, digipackMonthlyProductRatePlanId, subscriptionData, isRenewal = false)
+    val promotionWithCode = serviceWithDynamo.findPromotion(realPromoCode).get
+    val result = serviceWithDynamo.applyPromotion(promotionWithCode, UK, digipackMonthlyProductRatePlanId, subscriptionData, isRenewal = false)
     result.ratePlanData.length shouldBe 2
   }
 

@@ -65,7 +65,8 @@ class Subscriptions(
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, None) //TODO: support promo codes
+    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCode)
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
       "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),
