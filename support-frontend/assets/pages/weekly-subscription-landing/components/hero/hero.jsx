@@ -12,6 +12,31 @@ import ProductPagehero from 'components/productPage/productPageHero/productPageH
 
 import './weeklyCampaign.scss';
 
+const HeroImage = () => (
+  <GridPicture
+    sources={[
+        {
+          gridId: 'weeklyLandingHero',
+          srcSizes: [500, 1000],
+          imgType: 'png',
+          sizes: '100vw',
+          media: '(max-width: 739px)',
+        },
+        {
+          gridId: 'weeklyLandingHero',
+          srcSizes: [1000, 2000],
+          imgType: 'png',
+          sizes: '(min-width: 1000px) 2000px, 1000px',
+          media: '(min-width: 740px)',
+        },
+      ]}
+    fallback="weeklyLandingHero"
+    fallbackSize={1000}
+    altText="A collection of Guardian Weekly magazines"
+    fallbackImgType="png"
+  />
+);
+
 const DefaultHeader = () => (
   <header>
     <ProductPagehero
@@ -80,4 +105,4 @@ const CampaignHeader = () => (
 );
 
 
-export { DefaultHeader, CampaignHeader };
+export { DefaultHeader, CampaignHeader, HeroImage };

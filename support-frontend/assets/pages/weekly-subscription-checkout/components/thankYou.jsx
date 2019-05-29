@@ -6,7 +6,7 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import { HeroPicture } from 'pages/paper-subscription-landing/components/hero/hero';
+import { HeroImage } from 'pages/weekly-subscription-landing/components/hero/hero';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 
 import OrderedList from 'components/list/orderedList';
@@ -53,7 +53,7 @@ function ThankYouContent({
   return (
     <div>
       <HeroWrapper appearance="custom" className={styles.hero}>
-        <HeroPicture />
+        <HeroImage />
         <HeadingBlock
           overheading="Thank you for supporting our journalism!"
         >
@@ -86,7 +86,7 @@ function ThankYouContent({
               It has everything you need to know about how to manage it in the future.
             </span>,
             <span>
-              Your magazine will be delivered to your door. <a href="/help/2017/dec/11/help-with-delivery">Here&apos;s a reminder of how home delivery works</a>.
+              Your magazine will be delivered to your door. <a className="thank-you-link" href="/help/2017/dec/11/help-with-delivery#nav1">Here&apos;s a reminder of how home delivery works</a>.
             </span>,
             ]}
           />

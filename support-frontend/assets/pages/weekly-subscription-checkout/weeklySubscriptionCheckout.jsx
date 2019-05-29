@@ -51,13 +51,14 @@ const store = pageInit(
 );
 
 const { countryGroupId } = store.getState().common.internationalisation;
+const { stage } = store.getState().page.checkout;
 
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header display="checkout" />}
+      header={<Header display={stage === 'checkout' ? 'checkout' : 'guardianLogo'} />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="GuardianWeekly" />
