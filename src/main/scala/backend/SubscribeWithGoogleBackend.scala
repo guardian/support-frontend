@@ -63,8 +63,8 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
       _ => {
         logger.warn(s"unable to get identity id for email ${googleRecordPayment.email} with paymentId : ${googleRecordPayment.paymentId}, tracking acquisition anyway")
         handleContributionWithoutIdentity(googleRecordPayment, clientBrowserInfo).value
-      }, id =>
-        handleContributionWithIdentity(id, googleRecordPayment, clientBrowserInfo).value
+      }, idWithGuestToken =>
+        handleContributionWithIdentity(idWithGuestToken.identityId, googleRecordPayment, clientBrowserInfo).value
     ).flatten)
   }
 
@@ -165,7 +165,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
       .leftMap(BackendError.fromDatabaseError)
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Long] =
+  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, IdentityIdWithGuestAccountToken] =
     identityService.getOrCreateIdentityIdFromEmail(email)
       .leftMap { err =>
         logger.error("Error getting identityId", err.getMessage)

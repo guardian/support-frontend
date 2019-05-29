@@ -25,6 +25,7 @@ sealed abstract class BackendError extends Exception {
 }
 
 object BackendError {
+  final case class IdentityIdMissingError(error: String) extends BackendError
   final case class Database(error: ContributionsStoreService.Error) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class Ophan(error: List[AnalyticsServiceError]) extends BackendError
@@ -48,6 +49,7 @@ object BackendError {
     })
   }
 
+  def identityIdMissingError(err: String): BackendError = IdentityIdMissingError(err)
   def fromIdentityError(err: IdentityClient.ContextualError): BackendError = IdentityServiceError(err)
   def fromDatabaseError(err: ContributionsStoreService.Error): BackendError = Database(err)
   def fromOphanError(err: List[AnalyticsServiceError]): BackendError = Ophan(err)

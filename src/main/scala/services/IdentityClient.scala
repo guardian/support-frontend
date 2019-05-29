@@ -108,7 +108,7 @@ object IdentityClient extends StrictLogging {
   )
 
   object GuestRegistrationResponse {
-    @JsonCodec case class GuestRegistrationRequest(userId: Long)
+    @JsonCodec case class GuestRegistrationRequest(userId: Long, token: Option[String])
   }
 
   // Models the response of successfully looking up user details via email address.

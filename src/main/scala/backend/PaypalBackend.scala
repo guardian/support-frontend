@@ -118,11 +118,11 @@ class PaypalBackend(
     val payment = enrichedPayment.payment
     EitherT.fromEither(getEmail(enrichedPayment)).flatMap { email =>
 
-      val identityIdM = getOrCreateIdentityIdFromEmail(email)
+      val identityIdWithGuestAccountTokenMonad = getOrCreateIdentityIdFromEmail(email)
 
-      val trackContributionResult: EitherT[Future, BackendError, Unit] = identityIdM
-        .flatMap { identityId =>
-          trackContribution(payment, acquisitionData, email, Option(identityId), clientBrowserInfo)
+      val trackContributionResult: EitherT[Future, BackendError, Unit] = identityIdWithGuestAccountTokenMonad
+        .flatMap { identityIdWithGuestAccountToken =>
+          trackContribution(payment, acquisitionData, email, Option(identityIdWithGuestAccountToken.identityId), clientBrowserInfo)
         }
         .leftMap { err =>
           logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway")
@@ -132,8 +132,8 @@ class PaypalBackend(
         }
 
       val sendThankYouEmailResult = for {
-        identityId <- identityIdM
-        contributorRow <- contributorRowFromPayment(email, identityId, payment)
+        identityIdWithGuestAccountToken <- identityIdWithGuestAccountTokenMonad
+        contributorRow <- contributorRowFromPayment(email, identityIdWithGuestAccountToken.identityId, payment)
         _ <- emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
       } yield ()
 
@@ -164,7 +164,7 @@ class PaypalBackend(
   }
 
 
-  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Long] =
+  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, IdentityIdWithGuestAccountToken] =
     identityService.getOrCreateIdentityIdFromEmail(email)
       .leftMap { err =>
         logger.error("Error getting identityId", err.getMessage)
