@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { type ThirdPartyPaymentLibrary, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
 import { type Switches } from 'helpers/settings';
 import {
-  type ContributionType,
+  type ContributionType, contributionTypeIsRecurring,
   type ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -99,10 +99,6 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
   }
 }
 
-function isRecurringContribution(contributionType: ContributionType) {
-  return contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
-}
-
 function PaymentMethodSelector(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
@@ -125,13 +121,13 @@ function PaymentMethodSelector(props: PropTypes) {
 
       { paymentMethods.length ?
         <ul className="form__radio-group-list">
-          {isRecurringContribution(props.contributionType) && !props.existingPaymentMethods && (
-              <div className="awaiting-existing-payment-options">
-                <AnimatedDots appearance="medium" />
-              </div>
+          {contributionTypeIsRecurring(props.contributionType) && !props.existingPaymentMethods && (
+          <div className="awaiting-existing-payment-options">
+            <AnimatedDots appearance="medium" />
+          </div>
             )
           }
-          {isRecurringContribution(props.contributionType) &&
+          {contributionTypeIsRecurring(props.contributionType) &&
           fullExistingPaymentMethods.map((existingPaymentMethod: RecentlySignedInExistingPaymentMethod) => (
             <li className="form__radio-group-item">
               <input
@@ -185,7 +181,7 @@ function PaymentMethodSelector(props: PropTypes) {
             </li>
           ))}
           {
-            isRecurringContribution(props.contributionType) &&
+            contributionTypeIsRecurring(props.contributionType) &&
             props.existingPaymentMethods &&
             props.existingPaymentMethods.length > 0 &&
             fullExistingPaymentMethods.length === 0 && (
