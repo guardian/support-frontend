@@ -17,24 +17,23 @@ export type ExistingPaymentMethodSubscription = {
 
 type ExistingPaymentType = 'Card' | 'DirectDebit';
 
-export type PartialExistingPaymentMethod = {
-  paymentType: ExistingPaymentType;
+export type NotRecentlySignedInExistingPaymentMethod = {
+  paymentType: ExistingPaymentType,
 };
 
-export type FullDetailExistingPaymentMethod = {
+export type RecentlySignedInExistingPaymentMethod = {
+  paymentType: ExistingPaymentType,
   billingAccountId: string,
   subscriptions: ExistingPaymentMethodSubscription[],
   card?: string,
   mandate?: string,
-  // can't use Intersection types to avoid repeating this as it breaks isFullDetailExistingPaymentMethod because; Flow!
-  paymentType: ExistingPaymentType
 };
 
-export type ExistingPaymentMethod = PartialExistingPaymentMethod | FullDetailExistingPaymentMethod;
+export type ExistingPaymentMethod = NotRecentlySignedInExistingPaymentMethod | RecentlySignedInExistingPaymentMethod;
 
 // ----- Functions ----- //
 
-function isFullDetailExistingPaymentMethod(existingPaymentMethod: ExistingPaymentMethod): boolean %checks {
+function isUsableExistingPaymentMethod(existingPaymentMethod: ExistingPaymentMethod): boolean %checks {
   return !!existingPaymentMethod.billingAccountId;
 }
 
@@ -62,14 +61,14 @@ function sendGetExistingPaymentMethodsRequest(
     });
 }
 
-function mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod: FullDetailExistingPaymentMethod) {
+function mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod: RecentlySignedInExistingPaymentMethod) {
   if (existingPaymentMethod.mandate) {
     return ExistingDirectDebit;
   }
   return ExistingCard;
 }
 
-function getExistingPaymentMethodLabel(existingPaymentMethod: FullDetailExistingPaymentMethod): string {
+function getExistingPaymentMethodLabel(existingPaymentMethod: RecentlySignedInExistingPaymentMethod): string {
   if (existingPaymentMethod.mandate) {
     const last3: string = existingPaymentMethod.mandate.slice(-3);
     return `${getPaymentLabel(DirectDebit)} (account ending ${last3})`;
@@ -92,7 +91,7 @@ function subscriptionsToExplainerList(subscriptionParts: string[]) {
 
 export {
   sendGetExistingPaymentMethodsRequest,
-  isFullDetailExistingPaymentMethod,
+  isUsableExistingPaymentMethod,
   mapExistingPaymentMethodToPaymentMethod,
   getExistingPaymentMethodLabel,
   subscriptionToExplainerPart,

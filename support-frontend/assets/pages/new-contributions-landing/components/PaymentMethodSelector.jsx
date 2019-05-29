@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { type ThirdPartyPaymentLibrary, getPaymentLabel, getValidPaymentMethods } from 'helpers/checkouts';
 import { type Switches } from 'helpers/settings';
 import {
-  type ContributionType,
+  type ContributionType, contributionTypeIsRecurring,
   type ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import { classNameWithModifiers } from 'helpers/utilities';
@@ -29,10 +29,10 @@ import {
   setThirdPartyPaymentLibrary,
   updateSelectedExistingPaymentMethod,
 } from '../contributionsLandingActions';
-import { isFullDetailExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import { isUsableExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type {
   ExistingPaymentMethod,
-  FullDetailExistingPaymentMethod,
+  RecentlySignedInExistingPaymentMethod,
 } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { getReauthenticateUrl } from 'helpers/externalLinks';
 import AnimatedDots from 'components/spinners/animatedDots';
@@ -54,11 +54,11 @@ type PropTypes = {|
   currency: IsoCurrency,
   existingPaymentMethods: ExistingPaymentMethod[] | typeof undefined,
   paymentMethod: PaymentMethod,
-  existingPaymentMethod: FullDetailExistingPaymentMethod,
+  existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
   onPaymentAuthorisation: PaymentAuthorisation => void,
   thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries,
   updatePaymentMethod: PaymentMethod => Action,
-  updateSelectedExistingPaymentMethod: (FullDetailExistingPaymentMethod | typeof undefined) => Action,
+  updateSelectedExistingPaymentMethod: (RecentlySignedInExistingPaymentMethod | typeof undefined) => Action,
   setThirdPartyPaymentLibrary: (?{ [ContributionType]: { [PaymentMethod]: ThirdPartyPaymentLibrary }}) => Action,
   isTestUser: boolean,
   switches: Switches,
@@ -112,8 +112,8 @@ function PaymentMethodSelector(props: PropTypes) {
     />);
 
   // having to do this nasty cast because Flow sucks and type guards don't work through .filter
-  const fullExistingPaymentMethods: FullDetailExistingPaymentMethod[] =
-    ((props.existingPaymentMethods || []).filter(isFullDetailExistingPaymentMethod): any);
+  const fullExistingPaymentMethods: RecentlySignedInExistingPaymentMethod[] =
+    ((props.existingPaymentMethods || []).filter(isUsableExistingPaymentMethod): any);
 
   return (
     <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
@@ -121,15 +121,14 @@ function PaymentMethodSelector(props: PropTypes) {
 
       { paymentMethods.length ?
         <ul className="form__radio-group-list">
-          {
-            props.contributionType !== 'ONE_OFF' && !props.existingPaymentMethods && (
-              <div className="awaiting-existing-payment-options">
-                <AnimatedDots appearance="medium" />
-              </div>
+          {contributionTypeIsRecurring(props.contributionType) && !props.existingPaymentMethods && (
+          <div className="awaiting-existing-payment-options">
+            <AnimatedDots appearance="medium" />
+          </div>
             )
           }
-          {props.contributionType !== 'ONE_OFF' &&
-          fullExistingPaymentMethods.map((existingPaymentMethod: FullDetailExistingPaymentMethod) => (
+          {contributionTypeIsRecurring(props.contributionType) &&
+          fullExistingPaymentMethods.map((existingPaymentMethod: RecentlySignedInExistingPaymentMethod) => (
             <li className="form__radio-group-item">
               <input
                 id={`paymentMethodSelector-existing${existingPaymentMethod.billingAccountId}`}
@@ -182,7 +181,7 @@ function PaymentMethodSelector(props: PropTypes) {
             </li>
           ))}
           {
-            props.contributionType !== 'ONE_OFF' &&
+            contributionTypeIsRecurring(props.contributionType) &&
             props.existingPaymentMethods &&
             props.existingPaymentMethods.length > 0 &&
             fullExistingPaymentMethods.length === 0 && (
