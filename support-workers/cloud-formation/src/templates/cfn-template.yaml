@@ -219,7 +219,7 @@ Resources:
         - Name: ProductType
           Value: Contribution
         - Name: Stage
-          Value: ${Stage}
+          Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 300
@@ -243,7 +243,7 @@ Resources:
         - Name: ProductType
           Value: Contribution
         - Name: Stage
-          Value: ${Stage}
+          Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 300
@@ -267,7 +267,7 @@ Resources:
         - Name: ProductType
           Value: Contribution
         - Name: Stage
-          Value: ${Stage}
+          Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 300
