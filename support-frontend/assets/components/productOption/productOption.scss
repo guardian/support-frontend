@@ -1,0 +1,60 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
+
+.product-option {
+  background-color: gu-colour(neutral-100);
+}
+
+.product-option__title {
+  @include gu-fontset-heading-sans;
+  padding: $gu-v-spacing/2.15 $gu-h-spacing/2;
+  background-color: gu-colour(neutral-86);
+  position: relative;
+  transition: .2s background;
+}
+
+.product-option__content {
+  padding: 5px;
+}
+
+.product-option__price {
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.product-option__copy {
+  @include gu-fontset-body-sans;
+
+  &--bold {
+    font-weight: 600;
+  }
+}
+
+.product-option__line {
+  display: block;
+  width: 0;
+  border-top: 1px solid gu-colour(neutral-86);
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  &--show {
+    width: 100%;
+  }
+}
+
+.product-option__offer {
+  @include gu-fontset-body-sans;
+  padding: 5px;
+  background: gu-colour(neutral-7);
+  color: gu-colour(neutral-100);
+  font-weight: 600;
+  line-height: 1.4;
+}  
+
+.product-option__button {
+  // padding-top: $gu-v-spacing/2;
+  padding-bottom: $gu-v-spacing;
+  .component-button {
+    width: 100%;
+  }
+}

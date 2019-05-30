@@ -9,7 +9,7 @@ import './button.scss';
 
 // ----- Render ----- //
 
-type PropTypes = {
+export type PropTypes = {
   ...SharedButtonPropTypes,
   'aria-label': ?string,
   href: string,
