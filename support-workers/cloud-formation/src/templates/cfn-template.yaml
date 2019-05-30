@@ -252,6 +252,17 @@ Resources:
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
+  # Why 10 hours for gocardless? Well...
+  #
+  # select
+  # event_timestamp,
+  # (to_unixtime(event_timestamp) - lag(to_unixtime(event_timestamp)) over (order by event_timestamp))/60/60 as hours_between_go_cardless_acquisitions
+  # from acquisitions
+  # where received_date>date'2019-04-01'
+  # and received_date<date'2019-05-01'
+  # and payment_provider='GOCARDLESS'
+  # order by hours_between_go_cardless_acquisitions desc;
+  #
   NoGocardlessContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
@@ -271,7 +282,7 @@ Resources:
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 3600
-      EvaluationPeriods: 3
+      EvaluationPeriods: 10
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
