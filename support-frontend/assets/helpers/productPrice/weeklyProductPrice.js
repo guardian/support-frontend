@@ -5,14 +5,27 @@ import {
   fromCountry,
   GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
+import type {
+  BillingPeriod,
+  WeeklyBillingPeriod,
+} from 'helpers/billingPeriods';
 import { Annual, Quarterly, SixWeekly } from 'helpers/billingPeriods';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { displayPrice } from 'helpers/productPrice/productPrices';
+import type {
+  Price,
+  ProductPrices,
+  Promotion,
+} from 'helpers/productPrice/productPrices';
+import {
+  displayPrice,
+  getPromotion as genericGetPromotion,
+  regularPrice as genericRegularPrice,
+} from 'helpers/productPrice/productPrices';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 import { getPromotionWeeklyProductPrice } from 'helpers/subscriptions';
 import { currencies, detect } from 'helpers/internationalisation/currency';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 
 const getPromotionPrice = (country: IsoCountry, period: WeeklyBillingPeriod, promoCode: string) => {
   const countryGroupId = fromCountry(country) || GBPCountries;
@@ -21,6 +34,37 @@ const getPromotionPrice = (country: IsoCountry, period: WeeklyBillingPeriod, pro
     getPromotionWeeklyProductPrice(countryGroupId, period, promoCode),
   ].join('');
 };
+
+function getPromotion(
+  productPrices: ProductPrices,
+  country: IsoCountry,
+  billingPeriod: BillingPeriod,
+  fulfilmentOption: ?FulfilmentOptions,
+): ?Promotion {
+  return genericGetPromotion(
+    productPrices,
+    country,
+    billingPeriod,
+    fulfilmentOption,
+    NoProductOptions,
+  );
+}
+
+function regularPrice(
+  productPrices: ProductPrices,
+  country: IsoCountry,
+  billingPeriod: BillingPeriod,
+  fulfilmentOption: ?FulfilmentOptions,
+): Price {
+  return genericRegularPrice(
+    productPrices,
+    country,
+    billingPeriod,
+    fulfilmentOption,
+    NoProductOptions,
+  );
+}
+
 
 const getFulfilmentOption = (country: IsoCountry) =>
   (countryGroups.International.countries.includes(country) ? RestOfWorld : Domestic);
@@ -46,4 +90,4 @@ const displayBillingPeriods = {
   },
 };
 
-export { getFulfilmentOption, getPromotionPrice, displayBillingPeriods };
+export { getPromotion, regularPrice, getFulfilmentOption, getPromotionPrice, displayBillingPeriods };

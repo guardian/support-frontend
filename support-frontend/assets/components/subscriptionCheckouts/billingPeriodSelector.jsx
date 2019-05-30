@@ -10,6 +10,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
   extendedGlyph,
   fromCountryGroupId,
@@ -25,9 +26,9 @@ type PropTypes = {|
   productPrices: ProductPrices,
   billingPeriods: BillingPeriod[],
   fulfilmentOption?: FulfilmentOptions,
-  country: IsoCountry,
+  billingCountry: IsoCountry,
   selected: BillingPeriod,
-  onChange: (BillingPeriod) => void,
+  onChange: (BillingPeriod) => Action,
 |}
 
 function getTitle(billingPeriod: BillingPeriod) {
@@ -47,14 +48,14 @@ function BillingPeriodSelector(props: PropTypes) {
         {props.billingPeriods.map((billingPeriod) => {
           const productPrice = getProductPrice(
             props.productPrices,
-            props.country,
+            props.billingCountry,
             billingPeriod,
             props.fulfilmentOption,
           );
           return (<RadioInputWithHelper
             text={getTitle(billingPeriod)}
             helper={getPriceDescription(
-              getGlyph(props.country),
+              getGlyph(props.billingCountry),
               productPrice,
               billingPeriod,
             )}
