@@ -39,13 +39,14 @@ object ServicesFixtures {
   val doubleWithCode = PromotionWithCode(doublePromoCode, double)
   val tracking = PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
   val renewal = PromotionWithCode(renewalPromoCode, promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true))
-  val weeklyAnnual = promotion(
+  val guardianWeeklyAnnual = promotion(
     GuardianWeekly
       .getProductRatePlan(TouchPointEnvironments.PROD, Annual, Domestic, NoProductOptions)
       .map(p => List(p.id)).getOrElse(List()),
     guardianWeeklyAnnualPromoCode,
     Some(DiscountBenefit(10, Some(Months.TWELVE)))
   )
+  val guardianWeeklyWithCode = PromotionWithCode(guardianWeeklyAnnualPromoCode, guardianWeeklyAnnual)
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(

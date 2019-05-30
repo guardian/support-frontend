@@ -16,6 +16,12 @@ class PromotionServiceSpec extends FlatSpec with Matchers {
     serviceWithFixtures.findPromotion(invalidPromoCode) should be(None)
   }
 
+  it should "find multiple promo codes" in {
+    val promotions = serviceWithFixtures.findPromotions(List(freeTrialPromoCode, guardianWeeklyAnnualPromoCode))
+    promotions should contain (freeTrialWithCode)
+    promotions should contain (guardianWeeklyWithCode)
+  }
+
   it should "validate a PromoCode" in {
     serviceWithFixtures.validatePromotion(
       freeTrialWithCode,
@@ -72,7 +78,7 @@ object PromotionServiceSpec {
   val config = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
   val serviceWithFixtures = new PromotionService(
     config,
-    Some(new SimplePromotionCollection(List(freeTrial, discount, double, tracking.promotion, renewal.promotion, weeklyAnnual)))
+    Some(new SimplePromotionCollection(List(freeTrial, discount, double, tracking.promotion, renewal.promotion, guardianWeeklyAnnual)))
   )
 
   val serviceWithDynamo = new PromotionService(
