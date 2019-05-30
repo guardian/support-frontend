@@ -15,7 +15,7 @@ import Content from 'components/content/content';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import { manageSubsUrl, myAccountUrl } from 'helpers/externalLinks';
+import { manageSubsUrl, myAccountUrl, homeDeliveryUrl } from 'helpers/externalLinks';
 import typeof MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import { formatUserDate } from 'helpers/dateConversions';
@@ -86,7 +86,7 @@ function ThankYouContent({
               It has everything you need to know about how to manage it in the future.
             </span>,
             <span>
-              Your magazine will be delivered to your door. <a className="thank-you-link" href="/help/2017/dec/11/help-with-delivery#nav1">Here&apos;s a reminder of how home delivery works</a>.
+              Your magazine will be delivered to your door. <a className="thank-you-link" href={homeDeliveryUrl}>Here&apos;s a reminder of how home delivery works</a>.
             </span>,
             ]}
           />
