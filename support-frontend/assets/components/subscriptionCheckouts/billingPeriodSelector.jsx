@@ -10,6 +10,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
   extendedGlyph,
@@ -20,7 +21,6 @@ import {
   fromCountry,
   GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 
 type PropTypes = {|
   productPrices: ProductPrices,
@@ -69,7 +69,7 @@ function BillingPeriodSelector(props: PropTypes) {
 }
 
 BillingPeriodSelector.defaultProps = {
-  fulfilmentOption: Domestic,
+  fulfilmentOption: NoFulfilmentOptions,
 };
 
 export { BillingPeriodSelector };
