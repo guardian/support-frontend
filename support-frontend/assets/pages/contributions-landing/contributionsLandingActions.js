@@ -357,9 +357,13 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
     dispatch(onCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
   };
 
-const executeStripeOneOffPayment = (data: StripeChargeData, setGuestToken: (string) => void, setThankYouPageStage: (ThankYouPageStage) => void) =>
+const executeStripeOneOffPayment = (
+  data: StripeChargeData,
+  setGuestToken: (string) => void,
+  setThankYouPage: (ThankYouPageStage) => void,
+) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPageStage)));
+    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
 
 
 function recurringPaymentAuthorisationHandler(

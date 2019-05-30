@@ -103,7 +103,11 @@ function paymentApiEndpointWithMode(url: string) {
 // Object is expected to have structure:
 // { type: "error", error: { failureReason: string } }, or
 // { type: "success", data: { currency: string, amount: number } }
-function paymentResultFromObject(json: Object, setGuestAccountCreationToken: (string) => void, setThankYouPageStage: (ThankYouPageStage) => void): Promise<PaymentResult> {
+function paymentResultFromObject(
+  json: Object,
+  setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
+): Promise<PaymentResult> {
   if (json.error) {
     const failureReason: ErrorReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
