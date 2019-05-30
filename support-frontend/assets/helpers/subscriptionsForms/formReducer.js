@@ -29,7 +29,7 @@ function createFormReducer(
   const { productPrices } = window.guardian;
 
   const initialState = {
-    stage: 'thankyou',
+    stage: 'checkout',
     product,
     title: null,
     email: user.email || '',
