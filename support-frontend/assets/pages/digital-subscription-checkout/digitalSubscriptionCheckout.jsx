@@ -66,7 +66,7 @@ const content = (
       <CheckoutStage
         checkoutForm={<CheckoutForm />}
         thankYouContentPending={<ThankYouPendingContent countryGroupId={countryGroupId} />}
-        thankYouContentNotPending={<ThankYouContent countryGroupId={countryGroupId} />}
+        thankYouContent={<ThankYouContent countryGroupId={countryGroupId} />}
         subscriptionProduct="DigitalPack"
       />
       <ConsentBanner />

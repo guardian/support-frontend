@@ -28,7 +28,7 @@ type StagePropTypes = {
   countryGroupId: CountryGroupId,
   checkoutForm: Node,
   thankYouContentPending: Node,
-  thankYouContentNotPending: Node,
+  thankYouContent: Node,
   subscriptionProduct: SubscriptionProduct,
 }
 
@@ -49,7 +49,7 @@ function CheckoutStage(props: StagePropTypes) {
     case 'thankyou':
       return (
         <div>
-          {props.thankYouContentNotPending}
+          {props.thankYouContent}
           <ReturnSection subscriptionProduct={props.subscriptionProduct} />
         </div>
       );

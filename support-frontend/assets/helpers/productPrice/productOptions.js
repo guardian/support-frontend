@@ -13,9 +13,6 @@ const Sixday: 'Sixday' = 'Sixday';
 const SixdayPlus: 'SixdayPlus' = 'SixdayPlus';
 const Everyday: 'Everyday' = 'Everyday';
 const EverydayPlus: 'EverydayPlus' = 'EverydayPlus';
-const Annual: 'Annual' = 'Annual';
-const Quarterly: 'Quarterly' = 'Quarterly';
-const SixForSix: 'SixForSix' = 'SixForSix';
 
 export type ProductOptions =
   typeof NoProductOptions
@@ -28,10 +25,7 @@ export type ProductOptions =
   | typeof Sixday
   | typeof SixdayPlus
   | typeof Everyday
-  | typeof EverydayPlus
-  | typeof Annual
-  | typeof Quarterly
-  | typeof SixForSix;
+  | typeof EverydayPlus;
 
 export type PaperProductOptions =
   | typeof Saturday
@@ -40,13 +34,7 @@ export type PaperProductOptions =
   | typeof Sixday
   | typeof Everyday;
 
-export type WeeklyProductOptions =
-  | typeof Annual
-  | typeof Quarterly
-  | typeof SixForSix;
-
 const ActivePaperProductTypes = [Everyday, Sixday, Weekend, Sunday];
-const ActiveWeeklyProductTypes = [Quarterly, Annual, SixForSix];
 
 export {
   NoProductOptions,
@@ -61,8 +49,4 @@ export {
   Everyday,
   EverydayPlus,
   ActivePaperProductTypes,
-  ActiveWeeklyProductTypes,
-  Quarterly,
-  Annual,
-  SixForSix,
 };

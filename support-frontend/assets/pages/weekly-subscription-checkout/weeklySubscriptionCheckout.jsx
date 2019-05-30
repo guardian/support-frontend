@@ -75,7 +75,7 @@ const content = (
       <CheckoutStage
         checkoutForm={<CheckoutForm />}
         thankYouContentPending={<ThankYouContent isPending />}
-        thankYouContentNotPending={<ThankYouContent isPending={false} />}
+        thankYouContent={<ThankYouContent isPending={false} />}
         subscriptionProduct="GuardianWeekly"
       />
       <ConsentBanner />
