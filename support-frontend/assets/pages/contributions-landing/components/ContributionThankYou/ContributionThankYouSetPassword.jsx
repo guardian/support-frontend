@@ -44,6 +44,24 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Render ----- //
 
 function ContributionThankYouSetPassword(props: PropTypes) {
+  const recurringTitle = 'Set up a free account to manage your payments';
+  const recurringBody = 'If you stay signed in when you’re reading The Guardian as a contributor, you’ll no longer see messages asking you to support our journalism';
+
+  const setPasswordContents = {
+    ONE_OFF: {
+      title: 'Set up a free Guardian account',
+      body: 'Having an account means you’ll notice far fewer messages asking you for financial support. And, if you do want to support us again in the future, making a contribution will be even easier. Please make sure you validate your account via your inbox, and stay signed in on each of your devices.',
+    },
+    MONTHLY: {
+      title: recurringTitle,
+      body: recurringBody,
+    },
+    ANNUAL: {
+      title: recurringTitle,
+      body: recurringBody,
+    },
+  };
+
   const renderDirectDebit = () => {
     props.setHasSeenDirectDebitThankYouCopy();
     return (
@@ -61,10 +79,9 @@ function ContributionThankYouSetPassword(props: PropTypes) {
         { props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy ?
             renderDirectDebit() : null }
         <section className="set-password">
-          <h3 className="set-password__title">Set up a free account to manage your payments</h3>
+          <h3 className="set-password__title">{setPasswordContents[props.contributionType].title}</h3>
           <p className="set-password__message">
-            If you stay signed in when you’re reading The Guardian as a contributor,
-            you’ll no longer see messages asking you to support our journalism
+            {setPasswordContents[props.contributionType].body}
           </p>
           <SetPasswordForm />
         </section>

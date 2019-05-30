@@ -309,6 +309,7 @@ function createFormReducer() {
       // guest registration token is present
       case 'SET_THANK_YOU_PAGE_STAGE':
         if ((action.thankYouPageStage === 'thankYouSetPassword')
+          && state.contributionType !== 'ONE_OFF'
           && (!state.guestAccountCreationToken || !state.formData.email)) {
           return { ...state, thankYouPageStage: 'thankYou' };
         }
