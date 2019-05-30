@@ -22,6 +22,11 @@ class PromotionServiceSpec extends FlatSpec with Matchers {
     promotions should contain (guardianWeeklyWithCode)
   }
 
+  it should "handle Nil in findPromotions" in {
+    val promotions = serviceWithFixtures.findPromotions(Nil)
+    promotions shouldBe Nil
+  }
+
   it should "validate a PromoCode" in {
     serviceWithFixtures.validatePromotion(
       freeTrialWithCode,
