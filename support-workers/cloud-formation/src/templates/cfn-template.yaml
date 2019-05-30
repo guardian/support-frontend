@@ -222,8 +222,8 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 12
+      Period: 3600
+      EvaluationPeriods: 1
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
@@ -246,8 +246,8 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 12
+      Period: 3600
+      EvaluationPeriods: 1
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
@@ -258,7 +258,7 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for two hours
+      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for three hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
       Dimensions:
@@ -270,8 +270,8 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 24
+      Period: 3600
+      EvaluationPeriods: 3
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
