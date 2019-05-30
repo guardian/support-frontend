@@ -14,8 +14,11 @@ import Footer from 'components/footer/footer';
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
+import ThankYouContent from './thankYouContent';
+import ThankYouPendingContent from './thankYouPendingContent';
+import CheckoutForm from './components/checkoutForm';
 import 'stylesheets/skeleton/skeleton.scss';
-import CheckoutStage from './components/checkoutStage';
+import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import './digitalSubscriptionCheckout.scss';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import { getQueryParameter } from 'helpers/url';
@@ -60,7 +63,12 @@ const content = (
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </Footer>}
     >
-      <CheckoutStage />
+      <CheckoutStage
+        checkoutForm={<CheckoutForm />}
+        thankYouContentPending={<ThankYouPendingContent countryGroupId={countryGroupId} />}
+        thankYouContentNotPending={<ThankYouContent countryGroupId={countryGroupId} />}
+        subscriptionProduct="DigitalPack"
+      />
       <ConsentBanner />
     </Page>
   </Provider>

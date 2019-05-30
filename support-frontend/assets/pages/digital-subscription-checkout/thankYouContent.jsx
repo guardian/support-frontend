@@ -11,7 +11,9 @@ import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import AppsSection from './components/thankYou/appsSection';
-
+import HeadingBlock from 'components/headingBlock/headingBlock';
+import ThankYouHero from './components/thankYou/hero';
+import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { DirectDebit } from 'helpers/paymentMethods';
 
@@ -28,7 +30,15 @@ type PropTypes = {
 function ThankYouContent(props: PropTypes) {
 
   return (
-    <div>
+    <div className="thank-you-stage">
+      <ThankYouHero
+        countryGroupId={props.countryGroupId}
+      />
+      <HeroWrapper appearance="custom">
+        <HeadingBlock>
+          Your Digital Pack subscription is now live
+        </HeadingBlock>
+      </HeroWrapper>
       <Content>
         <Text>
           <LargeParagraph>

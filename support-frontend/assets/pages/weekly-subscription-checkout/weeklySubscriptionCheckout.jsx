@@ -16,7 +16,9 @@ import SubscriptionTermsPrivacy
   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
-import CheckoutStage from './stage';
+import CheckoutStage from 'components/subscriptionCheckouts/stage';
+import ThankYouContent from './components/thankYou';
+import CheckoutForm from './components/weeklyCheckoutForm';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -70,7 +72,12 @@ const content = (
         </Footer>
       }
     >
-      <CheckoutStage />
+      <CheckoutStage
+        checkoutForm={<CheckoutForm />}
+        thankYouContentPending={<ThankYouContent isPending />}
+        thankYouContentNotPending={<ThankYouContent isPending={false} />}
+        subscriptionProduct="GuardianWeekly"
+      />
       <ConsentBanner />
     </Page>
   </Provider>
