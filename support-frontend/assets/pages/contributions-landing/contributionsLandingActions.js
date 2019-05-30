@@ -357,9 +357,10 @@ const createOneOffPayPalPayment = (data: CreatePaypalPaymentData) =>
     dispatch(onCreateOneOffPayPalPaymentResponse(postOneOffPayPalCreatePaymentRequest(data)));
   };
 
-const executeStripeOneOffPayment = (data: StripeChargeData) =>
+const executeStripeOneOffPayment = (data: StripeChargeData, setGuestToken: (string) => void) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data)));
+    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken)));
+
 
 function recurringPaymentAuthorisationHandler(
   dispatch: Dispatch<Action>,
@@ -411,7 +412,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
       paymentAuthorisation: PaymentAuthorisation,
     ): Promise<PaymentResult> => {
       if (paymentAuthorisation.paymentMethod === Stripe) {
-        return dispatch(executeStripeOneOffPayment(stripeChargeDataFromAuthorisation(paymentAuthorisation, state)));
+        return dispatch(executeStripeOneOffPayment(
+          stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
+          (token: string) => dispatch(setGuestAccountCreationToken(token)),
+        ));
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
       return Promise.resolve(error);

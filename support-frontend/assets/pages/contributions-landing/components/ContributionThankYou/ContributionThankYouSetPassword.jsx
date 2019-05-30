@@ -9,11 +9,13 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributi
 import SetPasswordForm from '../SetPasswordForm';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit } from 'helpers/paymentMethods';
+import type { ContributionType } from '../../../../helpers/contributions';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
+  contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   passwordFailed: boolean,
   hasSeenDirectDebitThankYouCopy: boolean,
@@ -25,6 +27,7 @@ type PropTypes = {|
 // ----- State Maps ----- //
 
 const mapStateToProps = state => ({
+  contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
   passwordFailed: state.page.form.passwordFailed,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
