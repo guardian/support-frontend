@@ -5,8 +5,6 @@
 import React, { type Node } from 'react';
 import { connect } from 'react-redux';
 
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
 import ProgressMessage from 'components/progressMessage/progressMessage';
 
 import { type Stage } from 'helpers/subscriptionsForms/formFields';
@@ -19,13 +17,11 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 type PropTypes = {|
   stage: Stage,
   formSubmitted: boolean,
-  countryGroupId: CountryGroupId,
 |};
 
 type StagePropTypes = {
   stage: Stage,
   formSubmitted: boolean,
-  countryGroupId: CountryGroupId,
   checkoutForm: Node,
   thankYouContentPending: Node,
   thankYouContent: Node,
@@ -38,7 +34,6 @@ function mapStateToProps(state: WithDeliveryCheckoutState): PropTypes {
   return {
     stage: state.page.checkout.stage,
     formSubmitted: state.page.checkout.formSubmitted,
-    countryGroupId: state.common.internationalisation.countryGroupId,
   };
 }
 
