@@ -110,7 +110,7 @@ const router = (
               <Page
                 classModifiers={['contribution-thankyou']}
                 header={<RoundelHeader />}
-                footer={<Footer disclaimer countryGroupId={countryGroupId} />}
+                footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
               >
                 <ContributionThankYouContainer />
               </Page>

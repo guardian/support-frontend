@@ -132,6 +132,7 @@ function SetPasswordForm(props: PropTypes) {
           required
         />
         <Button
+          appearance="secondary"
           modifierClasses={['create-account']}
           aria-label="Create a guardian account"
           type="submit"
