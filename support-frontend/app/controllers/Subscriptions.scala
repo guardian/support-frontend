@@ -4,13 +4,13 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.GuardianWeekly
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
 import play.api.mvc._
 import play.twirl.api.Html
 import services.IdentityService
 import views.EmptyDiv
-import com.gu.support.encoding.CustomCodecs._
 import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
@@ -65,8 +65,8 @@ class Subscriptions(
     val css = Left(RefPath("weeklySubscriptionLandingPage.css"))
     val description = stringsConfig.weeklyLandingDescription
     val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk"))
-    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCode)
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) :+ "10ANNUAL"
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(GuardianWeekly, promoCodes)
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalWeeklySubscriptionLink("us"),
       "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk"),

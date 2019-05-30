@@ -17,6 +17,15 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
       .find(_.promoCodes.exists(_ == promoCode))
       .map(PromotionWithCode(promoCode, _))
 
+  def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] =
+    promotionCollection
+      .all
+      .foldLeft(List.empty[PromotionWithCode]) {
+        (acc, promotion) =>
+          val maybeCode = promoCodes.intersect(promotion.promoCodes.toList).headOption
+          maybeCode.map(code => acc :+ PromotionWithCode(code, promotion)).getOrElse(acc)
+      }
+
   def validatePromotion(promotion: PromotionWithCode, country: Country, productRatePlanId: ProductRatePlanId, isRenewal: Boolean):
   Either[PromoError, PromotionWithCode] =
     promotion.promotion.validateFor(productRatePlanId, country, isRenewal)

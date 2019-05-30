@@ -53,14 +53,14 @@ class DigitalSubscription(
     val css = Left(RefPath("digitalSubscriptionLandingPage.css"))
     val description = stringsConfig.digitalPackLandingDescription
     val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk"))
-    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val hrefLangLinks = Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us"),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk"),
       "en-au" -> buildCanonicalDigitalSubscriptionLink("au"),
       "en" -> buildCanonicalDigitalSubscriptionLink("int")
     )
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCode)
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(DigitalPack, promoCodes)
 
     Ok(views.html.main(
       title, mainElement, js, css, fontLoaderBundle, description, canonicalLink, hrefLangLinks
@@ -106,7 +106,7 @@ class DigitalSubscription(
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
-    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
     subscriptionCheckout(
       title,
@@ -117,7 +117,7 @@ class DigitalSubscription(
       Some(csrf),
       idUser,
       uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCode),
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCodes),
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
