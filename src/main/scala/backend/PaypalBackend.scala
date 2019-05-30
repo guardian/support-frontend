@@ -44,14 +44,13 @@ class PaypalBackend(
         error
       }
 
-
   /*
    * Used by Android app clients.
    * The Android app creates and approves the payment directly via PayPal.
    * Funds are captured via this endpoint.
    */
-  def capturePayment(c: CapturePaypalPaymentData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
-    paypalService.capturePayment(c)
+  def capturePayment(capturePaymentData: CapturePaypalPaymentData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
+    paypalService.capturePayment(capturePaymentData)
       .bimap(
         err => {
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
@@ -59,45 +58,35 @@ class PaypalBackend(
         },
         payment => {
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
-          val enrichedPaypalPayment = EnrichedPaypalPayment.create(payment, c.signedInUserEmail)
-          postPaymentTasks(enrichedPaypalPayment, c.acquisitionData, clientBrowserInfo)
-            .leftMap { err =>
-              cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Paypal)
-              logger.error(s"Didn't complete post-payment tasks after capturing PayPal payment. " +
-                s"Payment: ${payment.toString}. " +
-                s"Error(s): ${err.getMessage}")
 
-              err
+          val maybeEmail = capturePaymentData.signedInUserEmail.orElse(
+            Try(payment.getPayer.getPayerInfo.getEmail).toOption.filterNot(_.isEmpty)
+          )
+
+          maybeEmail.foreach { email =>
+            getOrCreateIdentityIdFromEmail(email).foreach { identityIdWithGuestAccountCreationToken =>
+              postPaymentTasks(payment, email, identityIdWithGuestAccountCreationToken.map(_.identityId), capturePaymentData.acquisitionData, clientBrowserInfo)
             }
-          enrichedPaypalPayment
+          }
+
+          // The app doesn't need the guest account token in the response, because it has no 'set password' step after payment
+          EnrichedPaypalPayment(payment, maybeEmail, guestAccountCreationToken = None)
         }
       )
 
-  def executePayment(e: ExecutePaypalPaymentData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
-    paypalService.executePayment(e)
-      .bimap(
-        err => {
+  def executePayment(executePaymentData: ExecutePaypalPaymentData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
+    paypalService.executePayment(executePaymentData)
+      .leftMap(err => {
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
           err
-        },
-        payment => {
-          val enrichedPaypalPayment = EnrichedPaypalPayment.create(payment, e.signedInUserEmail)
-          cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
-          postPaymentTasks(enrichedPaypalPayment, e.acquisitionData, clientBrowserInfo)
-            .leftMap {
-              err => {
-                cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Paypal)
-                logger.error(s"Didn't complete post-payment tasks after executing PayPal payment. " +
-                  s"Payment: ${payment.toString}. " +
-                  s"Error(s): ${err.getMessage}")
+      })
+      .semiflatMap { payment =>
+        getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityIdWithGuestAccountCreationToken =>
+          postPaymentTasks(payment, executePaymentData.email, identityIdWithGuestAccountCreationToken.map(_.identityId), executePaymentData.acquisitionData, clientBrowserInfo)
 
-                err
-              }
-            }
-
-          enrichedPaypalPayment
+          EnrichedPaypalPayment(payment, Some(executePaymentData.email), identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken))
         }
-      )
+      }
 
   def processRefundHook(data: PaypalRefundWebHookData): EitherT[Future, BackendError, Unit] = {
     for {
@@ -106,41 +95,22 @@ class PaypalBackend(
     } yield dbUpdateResult
   }
 
-  def getEmail(enrichedPaypalPayment: EnrichedPaypalPayment): Either[BackendError, String] = {
-    Either.fromOption(
-      enrichedPaypalPayment.email,
-      BackendError.fromPaypalAPIError(PaypalApiError.fromString("Could not get email from payment object in PayPal SDK"))
-    )
-  }
-
   // Success or failure of these steps shouldn't affect the response to the client
-  private def postPaymentTasks(enrichedPayment: EnrichedPaypalPayment, acquisitionData: AcquisitionData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
-    val payment = enrichedPayment.payment
-    EitherT.fromEither(getEmail(enrichedPayment)).flatMap { email =>
+  private def postPaymentTasks(payment: Payment, email: String, identityId: Option[Long], acquisitionData: AcquisitionData, clientBrowserInfo: ClientBrowserInfo): Unit = {
+    trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo)
+      .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
 
-      val identityIdWithGuestAccountTokenMonad = getOrCreateIdentityIdFromEmail(email)
-
-      val trackContributionResult: EitherT[Future, BackendError, Unit] = identityIdWithGuestAccountTokenMonad
-        .flatMap { identityIdWithGuestAccountToken =>
-          trackContribution(payment, acquisitionData, email, Option(identityIdWithGuestAccountToken.identityId), clientBrowserInfo)
-        }
-        .leftMap { err =>
-          logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway")
-          trackContribution(payment, acquisitionData, email, identityId = None, clientBrowserInfo)
-            .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
-          err
-        }
-
-      val sendThankYouEmailResult = for {
-        identityIdWithGuestAccountToken <- identityIdWithGuestAccountTokenMonad
-        contributorRow <- contributorRowFromPayment(email, identityIdWithGuestAccountToken.identityId, payment)
-        _ <- emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
-      } yield ()
-
-      BackendError.combineResults(
-        trackContributionResult,
-        sendThankYouEmailResult
+    val emailResult = for {
+      id <- EitherT.fromOption(
+        identityId,
+        BackendError.identityIdMissingError(s"no identity ID for $email")
       )
+      contributorRow <- contributorRowFromPayment(email, id, payment)
+      _ <- emailService.sendThankYouEmail(contributorRow).leftMap(BackendError.fromEmailError)
+    } yield ()
+
+    emailResult.leftMap { err =>
+      logger.error(s"unable to send email: ${err.getMessage}", err)
     }
   }
 
@@ -164,12 +134,15 @@ class PaypalBackend(
   }
 
 
-  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, IdentityIdWithGuestAccountToken] =
+  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[IdentityIdWithGuestAccountCreationToken]] =
     identityService.getOrCreateIdentityIdFromEmail(email)
-      .leftMap { err =>
-        logger.error("Error getting identityId", err.getMessage)
-        BackendError.fromIdentityError(err)
-      }
+      .fold(
+        err => {
+          logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
+          None
+        },
+        identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken)
+      )
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
     // log so that if something goes wrong we can reconstruct the missing data from the logs

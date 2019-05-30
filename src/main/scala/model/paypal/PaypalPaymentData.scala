@@ -98,5 +98,5 @@ case class CapturePaypalPaymentData(
 case class ExecutePaypalPaymentData(
   paymentData: ExecutePaymentData,
   acquisitionData: AcquisitionData,
-  signedInUserEmail: Option[String]
+  email: String
 )

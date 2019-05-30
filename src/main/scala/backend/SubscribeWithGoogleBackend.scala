@@ -165,7 +165,7 @@ case class SubscribeWithGoogleBackend(databaseService: ContributionsStoreService
       .leftMap(BackendError.fromDatabaseError)
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, IdentityIdWithGuestAccountToken] =
+  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, IdentityIdWithGuestAccountCreationToken] =
     identityService.getOrCreateIdentityIdFromEmail(email)
       .leftMap { err =>
         logger.error("Error getting identityId", err.getMessage)

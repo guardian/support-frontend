@@ -14,20 +14,20 @@ trait IdentityService extends StrictLogging {
   def getIdentityIdFromEmail(email: String): IdentityClient.Result[Option[Long]]
 
   // Should return the identity id of the created account along with an optional guest account token.
-  def createGuestAccount(email: String): IdentityClient.Result[IdentityIdWithGuestAccountToken]
+  def createGuestAccount(email: String): IdentityClient.Result[IdentityIdWithGuestAccountCreationToken]
 
   // TODO: better method name
   // Look up the identity id for the given email address.
   // If one exists then return it, otherwise create a guest account and return the associated identity id.
-  def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityIdWithGuestAccountToken]
+  def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityIdWithGuestAccountCreationToken]
 
 }
 
-case class IdentityIdWithGuestAccountToken(identityId: Long, guestAccountRegistrationToken: Option[String])
+case class IdentityIdWithGuestAccountCreationToken(identityId: Long, guestAccountCreationToken: Option[String])
 
-object IdentityIdWithGuestAccountToken {
-  def fromGuestRegistrationResponse(guestRegistrationResponse: GuestRegistrationResponse): IdentityIdWithGuestAccountToken =
-    IdentityIdWithGuestAccountToken(
+object IdentityIdWithGuestAccountCreationToken {
+  def fromGuestRegistrationResponse(guestRegistrationResponse: GuestRegistrationResponse): IdentityIdWithGuestAccountCreationToken =
+    IdentityIdWithGuestAccountCreationToken(
       guestRegistrationResponse.guestRegistrationRequest.userId,
       guestRegistrationResponse.guestRegistrationRequest.token
     )
@@ -43,19 +43,19 @@ class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThr
       case ContextualError(error: ApiError, _) if error.isNotFound => Option.empty[Long]
     }
 
-  override def createGuestAccount(email: String): IdentityClient.Result[IdentityIdWithGuestAccountToken] =
+  override def createGuestAccount(email: String): IdentityClient.Result[IdentityIdWithGuestAccountCreationToken] =
     client.createGuestAccount(email).map { response =>
       // Logs are only retained for 14 days so we're OK to log email address
       logger.info(s"guest account created for email address: $email")
-      IdentityIdWithGuestAccountToken.fromGuestRegistrationResponse(response)
+      IdentityIdWithGuestAccountCreationToken.fromGuestRegistrationResponse(response)
     }
 
-  override def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityIdWithGuestAccountToken] =
+  override def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityIdWithGuestAccountCreationToken] =
     for {
       preExistingIdentityId <- getIdentityIdFromEmail(email)
       // pure lifts the identity id into the monadic context.
-      userIdWithGuestAccountToken <- preExistingIdentityId.fold(createGuestAccount(email))(id => Monad[IdentityClient.Result].pure(IdentityIdWithGuestAccountToken(id, None)))
-    } yield userIdWithGuestAccountToken
+      userIdWithGuestAccountCreationToken <- preExistingIdentityId.fold(createGuestAccount(email))(id => Monad[IdentityClient.Result].pure(IdentityIdWithGuestAccountCreationToken(id, None)))
+    } yield userIdWithGuestAccountCreationToken
 }
 
 object IdentityService {

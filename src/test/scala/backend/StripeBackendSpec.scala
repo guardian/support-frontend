@@ -27,7 +27,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   //-- entities
   val acquisitionData = AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
   val stripePaymentData = StripePaymentData("email@email.com", Currency.USD, 12, "token", None)
-  val stripeChargeData = StripeChargeData(stripePaymentData, acquisitionData, None)
+  val stripeChargeData = StripeChargeData(stripePaymentData, acquisitionData)
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo =  ClientBrowserInfo("","",None,"",countrySubdivisionCode)
   val stripeHookObject = StripeHookObject("id", "GBP")
@@ -60,9 +60,9 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(mock[AcquisitionSubmission]))
   val acquisitionResponseError: EitherT[Future, List[AnalyticsServiceError], AcquisitionSubmission] =
     EitherT.left(Future.successful(ophanError))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
-    EitherT.right(Future.successful(1L))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
+    EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, Some("guest-token"))))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.left(Future.successful(identityError))
   val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
     EitherT.right(Future.successful(()))
@@ -74,6 +74,8 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
+  val emailServiceErrorResponse: EitherT[Future, EmailService.Error, SendMessageResult] =
+    EitherT.left(Future.successful(EmailService.Error(new Exception("email service failure"))))
 
   //-- service mocks
   val mockStripeService: StripeService = mock[StripeService]
@@ -127,11 +129,22 @@ class StripeBackendSpec
 
       "return successful payment response even if identityService, " +
         "ophanService, databaseService and emailService all fail" in new StripeBackendFixture {
+        populateChargeMock()
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        stripeBackend.createCharge(stripeChargeData, clientBrowserInfo).futureRight shouldBe StripeChargeSuccess.fromCharge(chargeMock)
+        stripeBackend.createCharge(stripeChargeData, clientBrowserInfo).futureRight shouldBe StripeCreateChargeResponse.fromCharge(chargeMock, None)
+      }
+
+      "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
+        populateChargeMock()
+        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
+        stripeBackend.createCharge(stripeChargeData, clientBrowserInfo).futureRight shouldBe StripeCreateChargeResponse.fromCharge(chargeMock, Some("guest-token"))
       }
     }
 
@@ -155,49 +168,6 @@ class StripeBackendSpec
         stripeBackend.processRefundHook(stripeHook).futureRight shouldBe(())
       }
 
-    }
-
-
-    "executing post-payment tasks" should {
-
-      "return just an email send error if tracking succeeds but email send fails" in new StripeBackendFixture {
-        populateChargeMock()
-
-        // Tracking services all OK
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
-        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
-
-        // But email fails
-        when(mockEmailService.sendThankYouEmail(ContributorRow("email@email.com", "USD", 1l, PaymentProvider.Stripe, None, BigDecimal(12)))).thenReturn(emailResponseError)
-
-        val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
-        val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, clientBrowserInfo)
-
-        result.futureLeft shouldBe BackendError.Email(emailError)
-      }
-
-      "return a combined error if tracking and email send fail" in new StripeBackendFixture {
-        populateChargeMock()
-
-        // Identity and Ophan are  OK
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
-        when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponse)
-
-        // But DB - and thus tracking - fails
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-
-        // And email fails
-        when(mockEmailService.sendThankYouEmail(ContributorRow("email@email.com", "USD", 1l, PaymentProvider.Stripe, None, BigDecimal(12)))).thenReturn(emailResponseError)
-
-        val postPaymentTasks = PrivateMethod[EitherT[Future, BackendError,Unit]]('postPaymentTasks)
-        val result = stripeBackend invokePrivate postPaymentTasks("email@email.com", stripeChargeData, chargeMock, clientBrowserInfo)
-        val errors = BackendError.MultipleErrors(List(
-          BackendError.Database(dbError),
-          BackendError.Email(emailError)
-        ))
-        result.futureLeft shouldBe errors
-      }
     }
 
     "tracking the contribution" should {

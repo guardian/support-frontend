@@ -14,7 +14,7 @@ class StripeChargeSuccessSpec extends WordSpec with Matchers with MockitoSugar {
         val chargeMock: Charge = mock[Charge]
         when(chargeMock.getCurrency).thenReturn("GBP")
         when(chargeMock.getAmount).thenReturn(123L)
-        val stripeChargeSuccess = StripeChargeSuccess.fromCharge(chargeMock)
+        val stripeChargeSuccess = StripeCreateChargeResponse.fromCharge(chargeMock, None)
         stripeChargeSuccess.amount shouldBe 1.23
       }
 

@@ -65,8 +65,7 @@ object StripeJsonDecoder {
             .filter(_.nonEmpty),
           queryParameters = queryParameters,
           gaId = gaId
-        ),
-        signedInUserEmail = None
+        )
       )
     }
   }
@@ -76,7 +75,7 @@ object StripeJsonDecoder {
 
 // https://stripe.com/docs/api/java#create_charge
 @JsonCodec case class StripePaymentData(
-  email: String,
+  email: String,  //for receipt_email
   currency: Currency,
   amount: BigDecimal,
   token: String,
@@ -98,9 +97,7 @@ object StripePaymentMethod extends Enum[StripePaymentMethod] with CirceEnum[Stri
 // Fields are grouped by what they're used for:
 // - paymentData - required to create a Stripe charge
 // - acquisitionData - required to create an acquisition event (used for analytics)
-// - identityData
 case class StripeChargeData(
-    paymentData: StripePaymentData,
-    acquisitionData: AcquisitionData,
-    signedInUserEmail: Option[String]
+  paymentData: StripePaymentData,
+  acquisitionData: AcquisitionData
 )
