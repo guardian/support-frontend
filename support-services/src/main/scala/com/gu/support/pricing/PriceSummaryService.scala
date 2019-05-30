@@ -13,19 +13,22 @@ import scala.math.BigDecimal.RoundingMode
 class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
-  def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPrices =
+  def getPrices[T <: Product](product: T, promoCodes: List[PromoCode]): ProductPrices = {
+    val promotions = promotionService.findPromotions(promoCodes)
     product.supportedCountries(catalogService.environment).map(
       countryGroup =>
-        countryGroup -> getPricesForCountryGroup(product, countryGroup, maybePromoCode)
+        countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions)
     ).toMap
+  }
 
-  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, maybePromoCode: Option[PromoCode]): CountryGroupPrices = {
+
+  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, promotions: List[PromotionWithCode]): CountryGroupPrices = {
     val grouped = product.ratePlans(catalogService.environment).groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, productRatePlans) =>
         val priceSummaries = for {
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)
           price <- filterCurrencies(catalogService.getPriceList(productRatePlan).map(_.prices), countryGroup)
-        } yield getPriceSummary(maybePromoCode, countryGroup, productRatePlan, price)
+        } yield getPriceSummary(promotions, countryGroup, productRatePlan, price)
         (keys, priceSummaries.toMap)
     }
     nestPriceLists(grouped)
@@ -40,31 +43,34 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       .getOrElse(Nil)
       .filter(price => countryGroup.supportedCurrencies.contains(price.currency))
 
-
-  private def getPriceSummary(maybePromoCode: Option[PromoCode], countryGroup: CountryGroup, productRatePlan: ProductRatePlan[Product], price: Price) = {
-    val promotionSummary: Option[PromotionSummary] = for {
-      promoCode <- maybePromoCode
+  private def getPriceSummary(promotions: List[PromotionWithCode], countryGroup: CountryGroup, productRatePlan: ProductRatePlan[Product], price: Price) = {
+    val promotionSummaries: List[PromotionSummary] = for {
+      promotion <- promotions
       country <- countryGroup.defaultCountry.orElse(countryGroup.countries.headOption)
-      validPromotion <- promotionService.validatePromoCode(promoCode, country, productRatePlan.id, isRenewal = false).toOption //Not dealing with renewals for now
+      validPromotion <- promotionService.validatePromotion(
+        promotion,
+        country,
+        productRatePlan.id,
+        isRenewal = false
+      ).toOption //Not dealing with renewals for now
     } yield getPromotionSummary(validPromotion, price, productRatePlan.billingPeriod)
 
     price.currency -> PriceSummary(
       price.value,
-      promotionSummary
+      promotionSummaries
     )
   }
 
-  private def getPromotionSummary(validatedPromotion: ValidatedPromotion, price: Price, billingPeriod: BillingPeriod) = {
-    import validatedPromotion._
+  private def getPromotionSummary(promotion: PromotionWithCode, price: Price, billingPeriod: BillingPeriod) = {
     PromotionSummary(
-      promotion.name,
-      promotion.description,
-      promoCode,
-      promotion.discount.map(getDiscountedPrice(price, _, billingPeriod).value),
-      promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
-      promotion.discount,
-      promotion.freeTrial,
-      promotion.incentive
+      promotion.promotion.name,
+      promotion.promotion.description,
+      promotion.promoCode,
+      promotion.promotion.discount.map(getDiscountedPrice(price, _, billingPeriod).value),
+      promotion.promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
+      promotion.promotion.discount,
+      promotion.promotion.freeTrial,
+      promotion.promotion.incentive
     )
   }
 

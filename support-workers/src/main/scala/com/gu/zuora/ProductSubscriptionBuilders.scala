@@ -74,9 +74,7 @@ object ProductSubscriptionBuilders {
         contractEffectiveDate = contractEffectiveDate
       )
 
-      maybePromoCode
-        .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
-        .getOrElse(subscriptionData)
+      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
     }
   }
 
@@ -105,9 +103,8 @@ object ProductSubscriptionBuilders {
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate,
       )
-      maybePromoCode
-        .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
-        .getOrElse(subscriptionData)
+
+      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
     }
   }
 
@@ -136,9 +133,8 @@ object ProductSubscriptionBuilders {
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate,
       )
-      maybePromoCode
-        .map(promotionService.applyPromotion(_, country, productRatePlanId, subscriptionData, isRenewal = false))
-        .getOrElse(subscriptionData)
+
+      applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
     }
   }
 
@@ -163,4 +159,19 @@ trait ProductSubscriptionBuilder {
       ),
       Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate, createdRequestId.toString)
     )
+
+  protected def applyPromoCode(
+    promotionService: PromotionService,
+    maybePromoCode: Option[PromoCode],
+    country: Country,
+    productRatePlanId: ProductRatePlanId,
+    subscriptionData: SubscriptionData
+  ) = {
+    val withPromotion = for {
+      promoCode <- maybePromoCode
+      promotionWithCode <- promotionService.findPromotion(promoCode)
+    } yield promotionService.applyPromotion(promotionWithCode, country, productRatePlanId, subscriptionData, isRenewal = false)
+
+    withPromotion.getOrElse(subscriptionData)
+  }
 }

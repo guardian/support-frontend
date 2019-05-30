@@ -8,7 +8,7 @@ import {
   type BillingPeriod,
   Monthly,
   Quarterly,
-  SixForSix,
+  SixWeekly,
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
@@ -113,81 +113,39 @@ const subscriptionPromoPricesForGuardianWeekly: {
   '10ANNUAL': {
     GBPCountries: {
       [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
-      [SixForSix]: 6,
+      [SixWeekly]: 6,
       [Annual]: 135,
     },
     EURCountries: {
       [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
-      [SixForSix]: 6,
+      [SixWeekly]: 6,
       [Annual]: 220.68,
     },
     UnitedStates: {
       [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
-      [SixForSix]: 6,
+      [SixWeekly]: 6,
       [Annual]: 270,
     },
     Canada: {
       [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
-      [SixForSix]: 6,
+      [SixWeekly]: 6,
       [Annual]: 288,
     },
     AUDCountries: {
       [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
-      [SixForSix]: 6,
+      [SixWeekly]: 6,
       [Annual]: 351,
     },
     NZDCountries: {
       [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
-      [SixForSix]: 6,
+      [SixWeekly]: 6,
       [Annual]: 442.8,
     },
     International: {
       [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
-      [SixForSix]: 6,
+      [SixWeekly]: 6,
       [Annual]: 292.68,
     },
-  },
-};
-
-const subscriptionPricesForGuardianWeekly: {
-  [CountryGroupId]: {
-    [WeeklyBillingPeriod]: number,
-  }
-} = {
-  GBPCountries: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
-    [SixForSix]: 6,
-    [Annual]: 150,
-  },
-  EURCountries: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
-    [SixForSix]: 6,
-    [Annual]: 245.20,
-  },
-  UnitedStates: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
-    [SixForSix]: 6,
-    [Annual]: 300,
-  },
-  Canada: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
-    [SixForSix]: 6,
-    [Annual]: 320,
-  },
-  AUDCountries: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
-    [SixForSix]: 6,
-    [Annual]: 390,
-  },
-  NZDCountries: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
-    [SixForSix]: 6,
-    [Annual]: 492,
-  },
-  International: {
-    [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
-    [SixForSix]: 6,
-    [Annual]: 325.20,
   },
 };
 
@@ -219,10 +177,6 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = getProductPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
-}
-
-function getWeeklyProductPrice(countryGroupId: CountryGroupId, billingPeriod: WeeklyBillingPeriod): string {
-  return fixDecimals(subscriptionPricesForGuardianWeekly[countryGroupId][billingPeriod]);
 }
 
 function getPromotionWeeklyProductPrice(
@@ -302,7 +256,6 @@ export {
   sendTrackingEventsOnClick,
   displayPrice,
   getProductPrice,
-  getWeeklyProductPrice,
   getPromotionWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,

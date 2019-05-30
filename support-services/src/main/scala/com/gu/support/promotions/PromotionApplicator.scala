@@ -4,19 +4,19 @@ import com.gu.support.config.PromotionsDiscountConfig
 import com.gu.support.zuora.api._
 import com.typesafe.scalalogging.LazyLogging
 
-class PromotionApplicator(validPromotion: ValidatedPromotion, config: PromotionsDiscountConfig) {
+class PromotionApplicator(promotion: PromotionWithCode, config: PromotionsDiscountConfig) {
   def applyTo(subscriptionData: SubscriptionData): SubscriptionData = {
 
     val benefitApplicators = List(
-      validPromotion.promotion.freeTrial.map(new FreeTrialApplicator(_)),
-      validPromotion.promotion.discount.map(new DiscountApplicator(_, config)),
-      validPromotion.promotion.incentive.map(new IncentiveApplicator(_))
+      promotion.promotion.freeTrial.map(new FreeTrialApplicator(_)),
+      promotion.promotion.discount.map(new DiscountApplicator(_, config)),
+      promotion.promotion.incentive.map(new IncentiveApplicator(_))
     ).flatten
 
     val withBenefits = benefitApplicators
       .foldLeft(subscriptionData) { case (currentData, applicator) => applicator.applyTo(currentData) }
 
-    withBenefits.copy(subscription = withBenefits.subscription.copy(promoCode = Some(validPromotion.promoCode)))
+    withBenefits.copy(subscription = withBenefits.subscription.copy(promoCode = Some(promotion.promoCode)))
   }
 }
 
@@ -25,7 +25,7 @@ trait BenefitApplicator {
 }
 
 class FreeTrialApplicator(freeTrial: FreeTrialBenefit) extends BenefitApplicator {
-  def applyTo(subscriptionData: SubscriptionData) = {
+  def applyTo(subscriptionData: SubscriptionData): SubscriptionData = {
     val subscription = subscriptionData.subscription
     subscriptionData.copy(
       subscription = subscription.copy(
@@ -36,13 +36,13 @@ class FreeTrialApplicator(freeTrial: FreeTrialBenefit) extends BenefitApplicator
 }
 
 class DiscountApplicator(discount: DiscountBenefit, config: PromotionsDiscountConfig) extends BenefitApplicator {
-  def applyTo(subscriptionData: SubscriptionData) = {
+  def applyTo(subscriptionData: SubscriptionData): SubscriptionData = {
     subscriptionData.copy(
       ratePlanData = subscriptionData.ratePlanData.::(discountRatePlan)
     )
   }
 
-  def discountRatePlan = RatePlanData(
+  def discountRatePlan: RatePlanData = RatePlanData(
     RatePlan(config.productRatePlanId),
     List(RatePlanChargeData(
       DiscountRatePlanCharge(
@@ -56,12 +56,12 @@ class DiscountApplicator(discount: DiscountBenefit, config: PromotionsDiscountCo
 }
 
 class IncentiveApplicator(incentive: IncentiveBenefit) extends BenefitApplicator with LazyLogging {
-  def applyTo(subscriptionData: SubscriptionData) = {
+  def applyTo(subscriptionData: SubscriptionData): SubscriptionData = {
     logger.warn(s"Ignoring promo code $incentive because Incentive codes are not currently implemented")
     subscriptionData
   }
 }
 
 object PromotionApplicator {
-  def apply(validPromotion: ValidatedPromotion, config: PromotionsDiscountConfig): PromotionApplicator = new PromotionApplicator(validPromotion, config)
+  def apply(promotion: PromotionWithCode, config: PromotionsDiscountConfig): PromotionApplicator = new PromotionApplicator(promotion, config)
 }

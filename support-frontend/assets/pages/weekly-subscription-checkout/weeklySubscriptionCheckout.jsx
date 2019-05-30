@@ -33,7 +33,7 @@ import { formatMachineDate } from 'helpers/dateConversions';
 
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
-const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixForSix' || billingPeriodInUrl === 'Quarterly' || billingPeriodInUrl === 'Annual'
+const initialBillingPeriod: WeeklyBillingPeriod = billingPeriodInUrl === 'SixWeekly' || billingPeriodInUrl === 'Quarterly' || billingPeriodInUrl === 'Annual'
   ? billingPeriodInUrl
   : Quarterly;
 

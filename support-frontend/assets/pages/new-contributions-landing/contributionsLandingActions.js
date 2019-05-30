@@ -45,13 +45,13 @@ import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActi
 import { type State, type ThankYouPageStage, type UserFormData } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe } from 'helpers/paymentMethods';
-import type { FullDetailExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import { ExistingCard, ExistingDirectDebit } from '../../helpers/paymentMethods';
 
 export type Action =
   | { type: 'UPDATE_CONTRIBUTION_TYPE', contributionType: ContributionType }
   | { type: 'UPDATE_PAYMENT_METHOD', paymentMethod: PaymentMethod }
-  | { type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD', existingPaymentMethod: FullDetailExistingPaymentMethod }
+  | { type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD', existingPaymentMethod: RecentlySignedInExistingPaymentMethod }
   | { type: 'UPDATE_FIRST_NAME', firstName: string }
   | { type: 'UPDATE_LAST_NAME', lastName: string }
   | { type: 'UPDATE_EMAIL', email: string }
@@ -97,7 +97,7 @@ const updatePaymentMethod = (paymentMethod: PaymentMethod): Action => {
   return ({ type: 'UPDATE_PAYMENT_METHOD', paymentMethod });
 };
 
-const updateSelectedExistingPaymentMethod = (existingPaymentMethod: FullDetailExistingPaymentMethod): Action =>
+const updateSelectedExistingPaymentMethod = (existingPaymentMethod: RecentlySignedInExistingPaymentMethod): Action =>
   ({ type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD', existingPaymentMethod });
 
 const updateFirstName = (firstName: string): ((Function) => void) =>

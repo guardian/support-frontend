@@ -32,18 +32,24 @@ const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingP
 // ----- State/Props Maps ----- //
 
 const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
-  plans: Object.keys(displayBillingPeriods).reduce((ps, billingPeriod) => ({
-    ...ps,
-    [billingPeriod]: {
-      title: displayBillingPeriods[billingPeriod].title,
-      copy: displayBillingPeriods[billingPeriod].copy(state.common.internationalisation.countryGroupId),
-      offer: displayBillingPeriods[billingPeriod].offer || null,
-      href: getCheckoutUrl({ billingPeriod, state: state.common }),
-      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'GuardianWeekly', null, billingPeriod),
-      price: null,
-      saving: null,
-    },
-  }), {}),
+  plans: Object.keys(displayBillingPeriods).reduce((ps, billingPeriod) => {
+    const period = displayBillingPeriods[billingPeriod];
+    return {
+      ...ps,
+      [billingPeriod]: {
+        title: period.title,
+        copy: state.page.productPrices ? period.copy(
+          state.page.productPrices,
+          state.common.internationalisation.countryId,
+        ) : '',
+        offer: period.offer || null,
+        href: getCheckoutUrl({ billingPeriod, state: state.common }),
+        onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'GuardianWeekly', null, billingPeriod),
+        price: null,
+        saving: null,
+      },
+    };
+  }, {}),
 });
 
 

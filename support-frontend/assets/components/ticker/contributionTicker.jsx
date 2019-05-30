@@ -45,15 +45,12 @@ by finding the percentage of the goal that has been fulfilled:
 ((total / goal) * 100) and then subtracting 100 from it.
 Eg. if 40% of our goal has been fulfilled, we want to translate
 the progress bar from -100% left to -60% left. The translation
-grows nearer to 0 which represents 100% fulfilled. The max this
-number can be is 0 but when the goal is 'unlimited' the max
-is -15% (representing 85% filled)
+grows nearer to 0 which represents 100% fulfilled.
 *************************************************************** */
-const percentageToTranslate = (total: number, goal: number, tickerType: TickerType) => {
-  const percentage = ((total / goal) * 100) - 100;
-  const endOfFillPercentage = tickerType === 'unlimited' ? -15 : 0;
+const percentageToTranslate = (total: number, end: number) => {
+  const percentage = ((total / end) * 100) - 100;
 
-  return percentage > 0 ? endOfFillPercentage : percentage;
+  return percentage > 0 ? 0 : percentage;
 };
 
 
@@ -166,8 +163,12 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
     return (<div className="contributions-landing-ticker__so-far" />);
   }
 
-
   render() {
+    const goal = this.dataFromServer.goal || 0;
+    const total = this.dataFromServer.totalContributed || 0;
+    // If we've exceeded the goal then extend the bar 15% beyond the total
+    const end = this.tickerType === 'unlimited' && total > goal ? total + (total * 0.15) : goal;
+
     /* *************************************************************
       `translate3d` is preferred to `translateX` because it uses the
       gpu to accelerate the animation. This is especially helpful for
@@ -179,20 +180,24 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
       https://blog.teamtreehouse.com/increase-your-sites-performance-with-hardware-accelerated-css
       https://davidwalsh.name/translate3d
       *************************************************************** */
-    const progressBarAnimation = `translate3d(${percentageToTranslate(this.dataFromServer.totalContributed || 0, this.dataFromServer.goal || 0, this.tickerType)}%, 0, 0)`;
+    const progressBarAnimation = `translate3d(${percentageToTranslate(total, end)}%, 0, 0)`;
+    const markerAnimation = `translate3d(${((goal / end) * 100) - 100}%, 0, 0)`;
+
     const readyToRender = (this.state && !Number.isNaN(this.state.count) && this.state.count > -1);
     const allClassModifiers = readyToRender ? this.classModifiers : [...this.classModifiers, 'hidden'];
     const baseClassName = 'contributions-landing-ticker';
     const wrapperClassName = classNameWithModifiers(baseClassName, allClassModifiers);
+
+    const goalValue = (this.tickerType === 'unlimited' && total > goal) ? total : this.state.goal;
 
     return (
       <div className={wrapperClassName}>
         <div className="contributions-landing-ticker__values">
           {this.renderContributedSoFar()}
           <div className="contributions-landing-ticker__goal">
-            <div className="contributions-landing-ticker__count">{this.props.currencySymbol}{Math.floor(this.state.goal).toLocaleString()}</div>
-            <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">our
-              goal
+            <div className="contributions-landing-ticker__count">{this.props.currencySymbol}{Math.floor(goalValue).toLocaleString()}</div>
+            <div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">
+              { (this.tickerType === 'unlimited' && total > goal) ? 'contributed' : 'our goal' }
             </div>
           </div>
         </div>
@@ -203,6 +208,10 @@ export default class ContributionTicker extends Component<PropTypes, StateTypes>
               style={{ transform: progressBarAnimation }}
             />
           </div>
+          <div
+            className="contributions-landing-ticker__marker"
+            style={{ transform: markerAnimation }}
+          />
         </div>
       </div>
     );
