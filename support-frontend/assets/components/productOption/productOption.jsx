@@ -1,6 +1,5 @@
 // @flow
-import React from 'react';
-import type { Node } from 'react';
+import React, { type Node } from 'react';
 import cx from 'classnames';
 
 // components
