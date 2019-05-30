@@ -4,6 +4,7 @@ import assets.RefPath
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client, setupWarningRequest}
 import controllers.{CSSElementForStage, _}
+import lib.ErrorController
 import play.api.BuiltInComponentsFromContext
 
 trait Controllers {
@@ -14,6 +15,7 @@ trait Controllers {
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
   lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes)
+  def errorController: ErrorController
   lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage)_
   lazy val fontLoader = elementForStage(RefPath("fontLoader.js"))
 
@@ -38,6 +40,7 @@ trait Controllers {
   lazy val subscriptionsController = new Subscriptions(
     actionRefiners,
     identityService,
+    priceSummaryServiceProvider,
     assetsResolver,
     controllerComponents,
     stringsConfig,

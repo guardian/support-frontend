@@ -9,7 +9,7 @@ class PromotionApplicatorSpec extends FlatSpec with Matchers {
   val correctDate = subscriptionData.subscription.contractEffectiveDate.plusDays(freeTrial.freeTrial.get.duration.getDays)
 
   "PromotionApplicator" should "add a discount rate plan" in {
-    val result = PromotionApplicator(validDiscount, config)
+    val result = PromotionApplicator(discountWithCode, config)
       .applyTo(subscriptionData)
 
     result.ratePlanData.length shouldBe 2
@@ -17,7 +17,7 @@ class PromotionApplicatorSpec extends FlatSpec with Matchers {
   }
 
   it should "apply a free trial" in {
-    val result = PromotionApplicator(validFreeTrial, config)
+    val result = PromotionApplicator(freeTrialWithCode, config)
       .applyTo(subscriptionData)
 
     result.subscription.contractAcceptanceDate shouldBe correctDate
@@ -25,7 +25,7 @@ class PromotionApplicatorSpec extends FlatSpec with Matchers {
   }
 
   it should "apply both benefits of a double promotion" in {
-    val result = PromotionApplicator(validDouble, config)
+    val result = PromotionApplicator(doubleWithCode, config)
       .applyTo(subscriptionData)
 
     result.subscription.contractAcceptanceDate shouldBe correctDate

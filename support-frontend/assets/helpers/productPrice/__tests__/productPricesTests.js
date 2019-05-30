@@ -5,6 +5,8 @@ import { hasDiscount, isNumeric } from 'helpers/productPrice/productPrices';
 
 // ----- Tests ----- //
 
+jest.mock('ophan', () => {});
+
 
 describe('productPrices', () => {
 

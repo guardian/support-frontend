@@ -1,10 +1,14 @@
 package com.gu.support.promotions
 
 import com.gu.support.catalog._
+import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.workers.Annual
 import com.gu.support.config.TouchPointEnvironments.PROD
+import com.gu.support.promotions.ServicesFixtures.guardianWeeklyAnnualPromoCode
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
+import com.gu.support.config.TouchPointEnvironments
+import org.joda.time.{DateTime, Days, LocalDate, Months, Years}
 
 /**
  * Promotions are quite laborious to construct
@@ -18,6 +22,7 @@ object ServicesFixtures {
   val invalidPromoCode = "INVALID_CODE"
   val renewalPromoCode = "RENEWAL_CODE"
   val trackingPromoCode = "TRACKING_CODE"
+  val guardianWeeklyAnnualPromoCode = "10ANNUAL"
 
   val validProductRatePlanIds = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
   val validProductRatePlanId = validProductRatePlanIds.head
@@ -26,14 +31,22 @@ object ServicesFixtures {
   val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))
   val discountBenefit = Some(DiscountBenefit(30, Some(Months.months(3))))
 
-  val freeTrial = promotion(validProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
-  val validFreeTrial = ValidatedPromotion(freeTrialPromoCode, freeTrial)
+  val freeTrial =  promotion(validProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
+  val freeTrialWithCode = PromotionWithCode(freeTrialPromoCode, freeTrial)
   val discount = promotion(validProductRatePlanIds, discountPromoCode, discountBenefit)
-  val validDiscount = ValidatedPromotion(discountPromoCode, discount)
+  val discountWithCode = PromotionWithCode(discountPromoCode, discount)
   val double = promotion(validProductRatePlanIds, doublePromoCode, discountBenefit, freeTrialBenefit)
-  val validDouble = ValidatedPromotion(doublePromoCode, double)
-  val tracking = promotion(validProductRatePlanIds, trackingPromoCode, tracking = true)
-  val renewal = promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true)
+  val doubleWithCode = PromotionWithCode(doublePromoCode, double)
+  val tracking = PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
+  val renewal = PromotionWithCode(renewalPromoCode, promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true))
+  val guardianWeeklyAnnual = promotion(
+    GuardianWeekly
+      .getProductRatePlan(TouchPointEnvironments.PROD, Annual, Domestic, NoProductOptions)
+      .map(p => List(p.id)).getOrElse(List()),
+    guardianWeeklyAnnualPromoCode,
+    Some(DiscountBenefit(10, Some(Months.TWELVE)))
+  )
+  val guardianWeeklyWithCode = PromotionWithCode(guardianWeeklyAnnualPromoCode, guardianWeeklyAnnual)
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(

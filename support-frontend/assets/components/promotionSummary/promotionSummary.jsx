@@ -4,7 +4,6 @@
 
 import React from 'react';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { regularPrice as dpRegularPrice, promotion as digitalPackPromotion } from 'helpers/productPrice/digitalProductPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { billingPeriodNoun } from 'helpers/billingPeriods';
 import { countryGroups, fromCountry } from 'helpers/internationalisation/countryGroup';
@@ -13,6 +12,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fixDecimals } from 'helpers/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { getPromotion, regularPrice } from 'helpers/productPrice/productPrices';
 
 export type PropTypes = {
   productPrices: ProductPrices,
@@ -73,8 +73,8 @@ function discountSummary(
 function PromotionSummary(props: PropTypes) {
   if (props.country) {
     const { country } = props;
-    const productPrice = dpRegularPrice(props.productPrices, props.billingPeriod, country);
-    const promotion = digitalPackPromotion(props.productPrices, props.billingPeriod, country);
+    const productPrice = regularPrice(props.productPrices, country, props.billingPeriod);
+    const promotion = getPromotion(props.productPrices, country, props.billingPeriod);
     if (promotion &&
       promotion.discountedPrice &&
       promotion.discount) {

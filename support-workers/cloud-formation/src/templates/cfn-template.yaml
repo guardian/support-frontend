@@ -203,3 +203,75 @@ Resources:
       EvaluationPeriods: 1
       Statistic: Sum
     DependsOn: SupportWorkersPROD
+
+  NoPaypalContributionsInOneHourAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub support-workers ${Stage} No successful recurring paypal contributions for an hour
+      MetricName: PaymentSuccess
+      Namespace: support-frontend
+      Dimensions:
+        - Name: PaymentProvider
+          Value: Paypal
+        - Name: ProductType
+          Value: Contribution
+        - Name: Stage
+          Value: !Ref Stage
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 12
+      Statistic: Sum
+      TreatMissingData: breaching
+    DependsOn: SupportWorkersPROD
+
+  NoStripeContributionsInOneHourAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub support-workers ${Stage} No successful recurring stripe contributions for an hour
+      MetricName: PaymentSuccess
+      Namespace: support-frontend
+      Dimensions:
+        - Name: PaymentProvider
+          Value: Stripe
+        - Name: ProductType
+          Value: Contribution
+        - Name: Stage
+          Value: !Ref Stage
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 12
+      Statistic: Sum
+      TreatMissingData: breaching
+    DependsOn: SupportWorkersPROD
+
+  NoGocardlessContributionsInTwoHoursAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
+      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for two hours
+      MetricName: PaymentSuccess
+      Namespace: support-frontend
+      Dimensions:
+        - Name: PaymentProvider
+          Value: Gocardless
+        - Name: ProductType
+          Value: Contribution
+        - Name: Stage
+          Value: !Ref Stage
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: 0
+      Period: 300
+      EvaluationPeriods: 24
+      Statistic: Sum
+      TreatMissingData: breaching
+    DependsOn: SupportWorkersPROD

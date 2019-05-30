@@ -2,7 +2,7 @@ package wiring
 
 import controllers.AssetsComponents
 import filters.{CacheHeadersCheck, SetCookiesCheck}
-import lib.CustomHttpErrorHandler
+import lib.{CustomHttpErrorHandler, ErrorController}
 import monitoring.{SentryLogging, StateMachineMonitor}
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -24,7 +24,7 @@ trait AppComponents extends PlayComponents
   with Monitoring {
   self: BuiltInComponentsFromContext =>
 
-  override lazy val httpErrorHandler = new CustomHttpErrorHandler(
+  private lazy val customHandler: CustomHttpErrorHandler = new CustomHttpErrorHandler(
     environment,
     configuration,
     sourceMapper,
@@ -33,6 +33,8 @@ trait AppComponents extends PlayComponents
     allSettingsProvider,
     appConfig.stage
   )
+  override lazy val httpErrorHandler = customHandler
+  override lazy val errorController = new ErrorController(actionRefiners, customHandler)
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
     new SetCookiesCheck(),
@@ -44,6 +46,7 @@ trait AppComponents extends PlayComponents
   override lazy val router: Router = new _root_.router.Routes(
     httpErrorHandler,
     applicationController,
+    errorController,
     siteMapController,
     regularContributionsController,
     supportWorkersStatusController,

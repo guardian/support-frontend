@@ -472,20 +472,19 @@ object JsonFixtures {
   )
 
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
-    """
+    s"""
         {
-          "state": "eyJyZXF1ZXN0SWQiOiI5NjViOTU1Zi00MmQ4LWEwMDEtMDAwMC0wMDAwMDAwMDAwMDIiLCJ1c2VyIjp7ImlkIjoiMTAwMDAzNDUzIiwicHJpbWFyeUVtYWlsQWRkcmVzcyI6InNzbGpmc2Rsa2ZzZGxmQGd1LmNvbSIsImZpcnN0TmFtZSI6InNsZmtzZGtsZiIsImxhc3ROYW1lIjoic2xka2ZqZHNsZmoiLCAiYmlsbGluZ0FkZHJlc3MiOiB7ImNvdW50cnkiOiJHQiJ9LCAiY291bnRyeSI6IkdCIiwic3RhdGUiOm51bGwsInRlbGVwaG9uZU51bWJlciI6IiIsImFsbG93TWVtYmVyc2hpcE1haWwiOmZhbHNlLCJhbGxvd1RoaXJkUGFydHlNYWlsIjpmYWxzZSwiYWxsb3dHVVJlbGF0ZWRNYWlsIjpmYWxzZSwiaXNUZXN0VXNlciI6ZmFsc2V9LCJwcm9kdWN0Ijp7ImN1cnJlbmN5IjoiR0JQIiwiYmlsbGluZ1BlcmlvZCI6Ik1vbnRobHkifSwicGF5bWVudE1ldGhvZCI6eyJUb2tlbklkIjoiY2FyZF9FUmY1dHcyNDVGY2Q0RiIsIlNlY29uZFRva2VuSWQiOiJjdXNfRVJmNWM2ajJ5OUEwWFYiLCJDcmVkaXRDYXJkTnVtYmVyIjoiNDI0MiIsIkNyZWRpdENhcmRDb3VudHJ5IjoiVVMiLCJDcmVkaXRDYXJkRXhwaXJhdGlvbk1vbnRoIjoyLCJDcmVkaXRDYXJkRXhwaXJhdGlvblllYXIiOjIwMjIsIkNyZWRpdENhcmRUeXBlIjoiVmlzYSIsIlR5cGUiOiJDcmVkaXRDYXJkUmVmZXJlbmNlVHJhbnNhY3Rpb24ifSwicHJvbW9Db2RlIjoiREpSSFlNRFM4Iiwic2FsZXNGb3JjZUNvbnRhY3QiOnsiSWQiOiIwMDM2RTAwMDAwVmxPUERRQTMiLCJBY2NvdW50SWQiOiIwMDE2RTAwMDAwZjE3cFlRQVEifSwiYWNxdWlzaXRpb25EYXRhIjp7Im9waGFuSWRzIjp7InBhZ2V2aWV3SWQiOiJqcmwxcnpyY25qNWdrM2oyMXN0dyIsInZpc2l0SWQiOm51bGwsImJyb3dzZXJJZCI6bnVsbH0sInJlZmVycmVyQWNxdWlzaXRpb25EYXRhIjp7ImNhbXBhaWduQ29kZSI6bnVsbCwicmVmZXJyZXJQYWdldmlld0lkIjpudWxsLCJyZWZlcnJlclVybCI6bnVsbCwiY29tcG9uZW50SWQiOm51bGwsImNvbXBvbmVudFR5cGUiOm51bGwsInNvdXJjZSI6bnVsbCwiYWJUZXN0cyI6bnVsbCwicXVlcnlQYXJhbWV0ZXJzIjpbeyJuYW1lIjoiZGlzcGxheUNoZWNrb3V0IiwidmFsdWUiOiJ0cnVlIn1dLCJob3N0bmFtZSI6InN1cHBvcnQudGhlZ3Vsb2NhbC5jb20iLCJnYUNsaWVudElkIjoiR0ExLjIuMTUwNjcwMTk4OC4xNTQ1NDA5MDcxIiwidXNlckFnZW50IjoiTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTNfMikgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzcxLjAuMzU3OC45OCBTYWZhcmkvNTM3LjM2IiwiaXBBZGRyZXNzIjoiMTI3LjAuMC4xIn0sInN1cHBvcnRBYlRlc3RzIjpbXX19",
-          "error": null,
-          "requestInfo": {
-            "encrypted": false,
-            "testUser": false,
-            "failed": false,
-            "messages": [
-              "Payment method is Stripe"
-            ],
-            "accountExists": false
-          }
-        }
+          $requestIdJson,
+          ${userJson()},
+          "product": $digitalPackJson,
+          "paymentMethod": $stripePaymentMethod,
+          "promoCode": "DJRHYMDS8",
+          "salesForceContact": {
+              "Id": "0036E00000VlOPDQA3",
+              "AccountId": "0016E00000f17pYQAQ"
+          },
+          "acquisitionData": $acquisitionData
+      }
       """
 
   def getPaymentMethodJson(billingAccountId: String, userId: String): String =

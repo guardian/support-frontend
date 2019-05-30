@@ -1,7 +1,7 @@
 // @flow
 import type {
-  CountryGroupName,
   CountryGroup,
+  CountryGroupName,
 } from 'helpers/internationalisation/countryGroup';
 import {
   countryGroups,
@@ -10,13 +10,18 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
-  type IsoCurrency,
-  glyph,
   extendedGlyph,
+  glyph,
+  type IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import { fixDecimals } from 'helpers/subscriptions';
+import type { Option } from 'helpers/types/option';
+import { getQueryParameter } from 'helpers/url';
 
 // ----- Types ----- //
 
@@ -37,7 +42,7 @@ export type Promotion =
 
 export type ProductPrice = {
   price: number,
-  promotion?: Promotion
+  promotions?: Promotion[],
 }
 
 export type ProductPrices = {
@@ -57,12 +62,12 @@ export type Price = {|
   currency: IsoCurrency,
 |};
 
-const isNumeric = (num: ?number) =>
+const isNumeric = (num: ?number): boolean %checks =>
   num !== null &&
   num !== undefined &&
   !Number.isNaN(num);
 
-const hasDiscount = (promotion: ?Promotion) =>
+const hasDiscount = (promotion: ?Promotion): boolean %checks =>
   promotion !== null &&
   promotion !== undefined &&
   isNumeric(promotion.discountedPrice);
@@ -81,49 +86,107 @@ function getCountryGroup(country: IsoCountry): CountryGroup {
   return countryGroups[fromCountry(country) || GBPCountries];
 }
 
+function getProductPrice(
+  productPrices: ProductPrices,
+  country: IsoCountry,
+  billingPeriod: BillingPeriod,
+  fulfilmentOption: ?FulfilmentOptions,
+  productOption: ?ProductOptions,
+): ProductPrice {
+  const countryGroup = getCountryGroup(country);
+  // eslint-disable-next-line max-len
+  return productPrices[countryGroup.name][fulfilmentOption || NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod][countryGroup.currency];
+}
+
+function getAppliedPromo(promotions: ?Promotion[]): Option<Promotion> {
+  if (promotions && promotions.length > 0) {
+    if (promotions.length > 1) {
+      return promotions.find(promotion => getQueryParameter('promoCode') === promotion.promoCode) || promotions[0];
+    }
+    return promotions[0];
+  }
+  return null;
+}
+
 function getPromotion(
   productPrices: ProductPrices,
-  countryGroup: CountryGroup,
-  fulfilmentOption: FulfilmentOptions,
-  productOption: ProductOptions,
+  country: IsoCountry,
   billingPeriod: BillingPeriod,
+  fulfilmentOption: ?FulfilmentOptions,
+  productOption: ?ProductOptions,
 ): ?Promotion {
-  // eslint-disable-next-line max-len
-  return productPrices[countryGroup.name][fulfilmentOption][productOption][billingPeriod][countryGroup.currency].promotion;
+  return getAppliedPromo(getProductPrice(
+    productPrices,
+    country,
+    billingPeriod,
+    fulfilmentOption,
+    productOption,
+  ).promotions);
 }
 
 function regularPrice(
   productPrices: ProductPrices,
-  countryGroup: CountryGroup,
-  fulfilmentOption: FulfilmentOptions,
-  productOption: ProductOptions,
+  country: IsoCountry,
   billingPeriod: BillingPeriod,
+  fulfilmentOption: ?FulfilmentOptions,
+  productOption: ?ProductOptions,
 ): Price {
   return {
-    // eslint-disable-next-line max-len
-    price: productPrices[countryGroup.name][fulfilmentOption][productOption][billingPeriod][countryGroup.currency].price,
-    currency: countryGroup.currency,
+    price: getProductPrice(
+      productPrices,
+      country,
+      billingPeriod,
+      fulfilmentOption,
+      productOption,
+    ).price,
+    currency: getCountryGroup(country).currency,
   };
 }
 
 function finalPrice(
   productPrices: ProductPrices,
   country: IsoCountry,
-  fulfilmentOption: FulfilmentOptions,
-  productOption: ProductOptions,
   billingPeriod: BillingPeriod,
+  fulfilmentOption: ?FulfilmentOptions,
+  productOption: ?ProductOptions,
 ): Price {
-  const countryGroup = getCountryGroup(country);
   return applyDiscount(
-    regularPrice(productPrices, countryGroup, fulfilmentOption, productOption, billingPeriod),
-    getPromotion(productPrices, countryGroup, fulfilmentOption, productOption, billingPeriod),
+    regularPrice(
+      productPrices,
+      country,
+      billingPeriod,
+      fulfilmentOption,
+      productOption,
+    ),
+    getPromotion(
+      productPrices,
+      country,
+      billingPeriod,
+      fulfilmentOption,
+      productOption,
+    ),
   );
 }
 
 const showPrice = (p: Price, isExtended: boolean = true): string => {
   const showGlyph = isExtended ? extendedGlyph : glyph;
-  return `${showGlyph(p.currency)}${p.price.toFixed(2)}`;
+  return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };
+
+const displayPrice = (
+  productPrices: ProductPrices,
+  country: IsoCountry,
+  billingPeriod: BillingPeriod,
+  fulfilmentOption: ?FulfilmentOptions,
+  productOption: ?ProductOptions,
+) => showPrice(regularPrice(
+  productPrices,
+  country,
+  billingPeriod,
+  fulfilmentOption,
+  productOption,
+));
+
 
 function getCurrency(country: IsoCountry): IsoCurrency {
   const { currency } = getCountryGroup(country);
@@ -131,10 +194,15 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 }
 
 export {
+  getAppliedPromo,
+  getProductPrice,
+  regularPrice,
+  getPromotion,
   finalPrice,
   getCurrency,
   getCountryGroup,
   showPrice,
+  displayPrice,
   applyDiscount,
   hasDiscount,
   isNumeric,

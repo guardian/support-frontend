@@ -31,8 +31,9 @@
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), fontLoaderBundle = fontLoaderBundle, csrf = csrf) {
     <script type="text/javascript">
-      window.guardian.productPrices = @{Html(outputJson(productPrices))}
       window.guardian = window.guardian || {};
+
+      window.guardian.productPrices = @{Html(outputJson(productPrices))}
 
       window.guardian.user = {
         firstName: "@user.privateFields.map(_.firstName).getOrElse("")",
