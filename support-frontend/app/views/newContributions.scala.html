@@ -22,6 +22,7 @@
   existingPaymentOptionsEndpoint: String,
   idUser: Option[IdUser],
   campaignCodeModifier: Option[String],
+  guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -234,6 +235,10 @@
     window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
     window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
     window.guardian.csrf = { token: "@CSRF.getToken.value" };
+
+    @guestAccountCreationToken.map { guestAccountCreationToken =>
+      window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
+    }
   </script>
 }
 

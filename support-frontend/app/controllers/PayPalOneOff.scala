@@ -79,13 +79,9 @@ class PayPalOneOff(
         region => verify(TipPath(region, OneOffContribution, PayPal), tipMonitoring.verify)
       }
     }
-    success.email.fold({
-      SafeLogger.info("Redirecting to thank you page without email in flash session")
-      redirect
-    })({ email =>
-      SafeLogger.info("Redirecting to thank you page with email in flash session")
-      redirect.flashing("email" -> email)
-    })
+
+    SafeLogger.info("Redirecting to thank you page with success.guestAccountCreationToken in flash session")
+    redirect.flashing("success.guestAccountCreationToken" -> success.guestAccountCreationToken)
   }
 
   //TODO - more cleanup

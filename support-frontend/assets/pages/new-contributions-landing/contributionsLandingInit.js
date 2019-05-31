@@ -29,7 +29,7 @@ import {
   checkIfEmailHasPassword,
   onThirdPartyPaymentAuthorised,
   paymentWaiting,
-  selectAmount,
+  selectAmount, setGuestAccountCreationToken,
   setThirdPartyPaymentLibrary,
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
@@ -217,6 +217,13 @@ const init = (store: Store<State, Action, Function>) => {
   dispatch(setContributionTypes(contributionTypes));
 
   initialisePaymentMethods(state, dispatch, contributionTypes);
+
+  // This will be in window.guardian if it has come from a PayPal one-off contribution,
+  // where it is returned by the Payment API to the backend, flashed into the session to preserve
+  // it through a serverside redirect, and then written into window.guardian on the thank-you page.
+  if (window.guardian.guestAccountCreationToken) {
+    setGuestAccountCreationToken(window.guardian.guestAccountCreationToken);
+  }
 
   selectInitialAmounts(state, dispatch);
   selectInitialContributionTypeAndPaymentMethod(state, dispatch, contributionTypes);

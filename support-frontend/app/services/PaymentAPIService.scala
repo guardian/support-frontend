@@ -14,7 +14,7 @@ import io.circe.generic.semiauto.deriveDecoder
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class PayPalSuccess(email: Option[String])
+case class PayPalSuccess(guestAccountCreationToken: String)
 
 object PayPalSuccess {
   implicit val payPalSuccessDecoder: Decoder[PayPalSuccess] = deriveDecoder

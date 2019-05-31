@@ -100,14 +100,17 @@ class Application(
 
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
 
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.session.get("guestAccountCreationToken")
+
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption)),
-      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption))
+      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption, guestAccountCreationToken)),
+      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String])
+  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String], guestAccountCreationToken: Option[String])
                                (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
@@ -132,7 +135,8 @@ class Application(
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       idUser = idUser,
-      campaignCodeModifier = campaignCode.map(code => s"gu-content--$code")
+      campaignCodeModifier = campaignCode.map(code => s"gu-content--$code"),
+      guestAccountCreationToken = guestAccountCreationToken
     )
   }
 
