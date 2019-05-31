@@ -62,11 +62,13 @@ object Benefit {
     case d: DiscountBenefit => d.asJson
     case f: FreeTrialBenefit => f.asJson
     case i: IncentiveBenefit => i.asJson
+    case ip: IntroductoryPriceBenefit => ip.asJson
   }
 
   implicit val decoder: Decoder[Benefit] = List[Decoder[Benefit]](
     Decoder[DiscountBenefit].widen,
     Decoder[FreeTrialBenefit].widen,
-    Decoder[IncentiveBenefit].widen
+    Decoder[IncentiveBenefit].widen,
+    Decoder[IntroductoryPriceBenefit].widen
   ).reduceLeft(_ or _)
 }

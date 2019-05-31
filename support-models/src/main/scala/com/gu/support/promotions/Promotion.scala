@@ -1,5 +1,7 @@
 package com.gu.support.promotions
 
+import com.gu.i18n.CountryGroup
+import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.encoding.JsonHelpers._
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.{ACursor, Decoder, Json}
@@ -35,4 +37,28 @@ object Promotion {
       .checkKeyExists("tracking", Json.fromBoolean(false))
     )
   }
+}
+
+object Promotions {
+  val SixForSixPromotion = Promotion(
+    name = "Six For Six",
+    description = "Introductory offer",
+    appliesTo = AppliesTo(
+      Set(
+        "2c92a0086619bf8901661ab02752722f",
+        "2c92a0fe6619b4b301661aa494392ee2",
+        "2c92c0f9660fc4d70166109c01465f10",
+        "2c92c0f8660fb5d601661081ea010391",
+        "2c92c0f965f2122101660fb81b745a06",
+        "2c92c0f965dc30640165f150c0956859"
+      ),
+      CountryGroup.countries.toSet
+    ),
+    campaignCode = "Six For Six campaign code",
+    channelCodes = Map("dummy channel" -> Set(GuardianWeekly.SixForSixPromoCode)),
+    starts = new DateTime(1971, 2, 20, 12, 0, 0, 0),
+    expires = None,
+    discount = None, freeTrial = None, incentive = None,
+    introductoryPrice = Some(IntroductoryPriceBenefit(6, 6, Issue))
+  )
 }
