@@ -204,13 +204,13 @@ Resources:
       Statistic: Sum
     DependsOn: SupportWorkersPROD
 
-  NoPaypalContributionsInOneHourAlarm:
+  NoPaypalContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring paypal contributions for an hour
+      AlarmName: !Sub support-workers ${Stage} No successful recurring paypal contributions for two hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
       Dimensions:
@@ -223,18 +223,18 @@ Resources:
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 3600
-      EvaluationPeriods: 1
+      EvaluationPeriods: 2
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
-  NoStripeContributionsInOneHourAlarm:
+  NoStripeContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring stripe contributions for an hour
+      AlarmName: !Sub support-workers ${Stage} No successful recurring stripe contributions for two hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
       Dimensions:
@@ -247,7 +247,7 @@ Resources:
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 3600
-      EvaluationPeriods: 1
+      EvaluationPeriods: 2
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
@@ -263,13 +263,13 @@ Resources:
   # and payment_provider='GOCARDLESS'
   # order by hours_between_go_cardless_acquisitions desc;
   #
-  NoGocardlessContributionsInTwoHoursAlarm:
+  NoGocardlessContributionsInTenHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for three hours
+      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for ten hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
       Dimensions:
