@@ -65,7 +65,8 @@ class WeeklySubscription(
     val css = "weeklySubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
-    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) :+ "10ANNUAL"
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil) ++
+      List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode)
 
     subscriptionCheckout(
       title,
