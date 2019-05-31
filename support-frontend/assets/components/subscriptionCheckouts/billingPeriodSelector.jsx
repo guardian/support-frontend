@@ -4,10 +4,16 @@ import React from 'react';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInputWithHelper } from 'components/forms/customFields/radioInputWithHelper';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { SixWeekly } from 'helpers/billingPeriods';
+import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getProductPrice } from 'helpers/productPrice/productPrices';
+import type {
+  ProductPrice,
+  ProductPrices,
+} from 'helpers/productPrice/productPrices';
+import {
+  getAppliedPromo,
+  getProductPrice,
+} from 'helpers/productPrice/productPrices';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -36,6 +42,18 @@ function getTitle(billingPeriod: BillingPeriod) {
   return billingPeriod;
 }
 
+function getOffer(billingPeriod: BillingPeriod, productPrice: ProductPrice) {
+  const appliedPromo = getAppliedPromo(productPrice.promotions);
+  if (
+    appliedPromo === null ||
+    appliedPromo.introductoryPrice && billingPeriod === Quarterly
+  ){
+    return '';
+  }
+
+  return  appliedPromo.description;
+}
+
 const getGlyph = (country: IsoCountry) => {
   const currency = fromCountryGroupId(fromCountry(country) || GBPCountries);
   return extendedGlyph(currency || 'GBP');
@@ -49,9 +67,10 @@ function BillingPeriodSelector(props: PropTypes) {
           const productPrice = getProductPrice(
             props.productPrices,
             props.billingCountry,
-            billingPeriod,
+            billingPeriod === SixWeekly ? Quarterly : billingPeriod,
             props.fulfilmentOption,
           );
+
           return (<RadioInputWithHelper
             text={getTitle(billingPeriod)}
             helper={getPriceDescription(
@@ -59,6 +78,7 @@ function BillingPeriodSelector(props: PropTypes) {
               productPrice,
               billingPeriod,
             )}
+            offer={getOffer(billingPeriod, productPrice)}
             name="billingPeriod"
             checked={billingPeriod === props.selected}
             onChange={() => props.onChange(billingPeriod)}
