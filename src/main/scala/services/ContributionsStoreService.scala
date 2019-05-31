@@ -91,7 +91,8 @@ class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: St
         .map(_ => Right.apply(()))
         .recover {
           case NonFatal(e) =>
-            logger.error(s"Failed to publish update to SQS.\nError was $e.\nMessage was: $message")
+            // The tabs make CloudWatch group the log lines together
+            logger.error(s"Failed to publish to contributions-store-queue.\n\tError was $e.\n\tMessage was: $message")
             Left(ContributionsStoreService.Error(e))
         }
     }
