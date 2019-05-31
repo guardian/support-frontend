@@ -1,17 +1,15 @@
 package com.gu.support.pricing
 
-import com.gu.i18n.CountryGroup.UK
-import com.gu.i18n.CountryGroup.Europe
+import com.gu.i18n.CountryGroup.{Europe, UK}
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
+import com.gu.support.promotions.ServicesFixtures.discountPromoCode
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{Annual, BillingPeriod, Monthly, Quarterly}
 import org.joda.time.Months
 import org.scalatest.{Assertion, FlatSpec, Matchers}
-import org.scalatest.{FlatSpec, Matchers}
-import com.gu.support.promotions.ServicesFixtures.{discountPromoCode, guardianWeeklyAnnualPromoCode}
 
 class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
@@ -35,12 +33,16 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
   it should "return correct prices for Guardian Weekly" in {
     val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
-    val guardianWeekly = service.getPrices(GuardianWeekly, List(discountPromoCode, guardianWeeklyAnnualPromoCode))
+    val guardianWeekly = service.getPrices(GuardianWeekly, List(discountPromoCode, GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode))
+
+    //Quarterly should have the 6 for 6 introductory promotion
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 2
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 37.50
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
       .find(_.promoCode == discountPromoCode).get.discountedPrice shouldBe Some(26.25)
-
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
+      .find(_.promoCode == GuardianWeekly.SixForSixPromoCode).get.introductoryPrice.get.price shouldBe 6
 
     //Annual should have 2 discounts applied,
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions.size shouldBe 2
@@ -51,7 +53,7 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
     guardianWeekly(Europe)(RestOfWorld)(NoProductOptions)(Annual)(EUR).price shouldBe 270
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
-      .find(_.promoCode == guardianWeeklyAnnualPromoCode).get.discountedPrice shouldBe Some(135.00)
+      .find(_.promoCode == GuardianWeekly.AnnualPromoCode).get.discountedPrice shouldBe Some(135.00)
 
   }
 

@@ -6,6 +6,7 @@ import org.joda.time.Days.days
 import org.joda.time.Months.months
 import org.scalatest.FlatSpec
 
+//noinspection ScalaStyle
 class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with LazyLogging {
 
   "Circe" should "be able to decode a discount Promotion" in {
@@ -64,7 +65,19 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
     testDecoding[Promotion](Fixtures.incentivePromotion,
       promotion => {
         promotion.incentive.isDefined shouldBe true
-        promotion.incentive.get.redemptionInstructions shouldBe "We'll send you an email with instructions on redeeming your English Heritage offer within 35 days."
+        promotion.incentive.get.redemptionInstructions shouldBe
+          "We'll send you an email with instructions on redeeming your English Heritage offer within 35 days."
+      }
+    )
+  }
+
+  it should "be able to decode an introductory price Promotion" in {
+    testDecoding[Promotion](Fixtures.introductoryPricePromotion,
+      promotion => {
+        promotion.introductoryPrice shouldBe defined
+        promotion.introductoryPrice.get.price shouldBe 6
+        promotion.introductoryPrice.get.periodType shouldBe Issue
+        promotion.introductoryPrice.get.periodLength shouldBe 6
       }
     )
   }

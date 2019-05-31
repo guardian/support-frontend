@@ -2,6 +2,7 @@ package com.gu.support.promotions
 
 import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
+import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.{PromotionsConfigProvider, Stages}
 import com.gu.support.promotions.PromotionServiceSpec._
 import com.gu.support.promotions.ServicesFixtures.{freeTrialPromoCode, _}
@@ -17,7 +18,7 @@ class PromotionServiceSpec extends FlatSpec with Matchers {
   }
 
   it should "find multiple promo codes" in {
-    val promotions = serviceWithFixtures.findPromotions(List(freeTrialPromoCode, guardianWeeklyAnnualPromoCode))
+    val promotions = serviceWithFixtures.findPromotions(List(freeTrialPromoCode, GuardianWeekly.AnnualPromoCode))
     promotions should contain (freeTrialWithCode)
     promotions should contain (guardianWeeklyWithCode)
   }
@@ -25,6 +26,11 @@ class PromotionServiceSpec extends FlatSpec with Matchers {
   it should "handle Nil in findPromotions" in {
     val promotions = serviceWithFixtures.findPromotions(Nil)
     promotions shouldBe Nil
+  }
+
+  it should "find all the Guardian Weekly promotions" in {
+    val promotions = serviceWithFixtures.findPromotions(List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode))
+    promotions.length shouldBe 2
   }
 
   it should "validate a PromoCode" in {

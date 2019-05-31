@@ -61,16 +61,18 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
     )
   }
 
-  private def getPromotionSummary(promotion: PromotionWithCode, price: Price, billingPeriod: BillingPeriod) = {
+  private def getPromotionSummary(promotionWithCode: PromotionWithCode, price: Price, billingPeriod: BillingPeriod) = {
+    import promotionWithCode._
     PromotionSummary(
-      promotion.promotion.name,
-      promotion.promotion.description,
-      promotion.promoCode,
-      promotion.promotion.discount.map(getDiscountedPrice(price, _, billingPeriod).value),
-      promotion.promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
-      promotion.promotion.discount,
-      promotion.promotion.freeTrial,
-      promotion.promotion.incentive
+      name = promotion.name,
+      description = promotion.description,
+      promoCode = promoCode,
+      discountedPrice = promotion.discount.map(getDiscountedPrice(price, _, billingPeriod).value),
+      numberOfDiscountedPeriods = promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
+      discount = promotion.discount,
+      freeTrialBenefit = promotion.freeTrial,
+      incentive = promotion.incentive,
+      introductoryPrice = promotion.introductoryPrice
     )
   }
 

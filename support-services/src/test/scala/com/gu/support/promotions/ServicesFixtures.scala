@@ -2,13 +2,10 @@ package com.gu.support.promotions
 
 import com.gu.support.catalog._
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.workers.Annual
 import com.gu.support.config.TouchPointEnvironments.PROD
-import com.gu.support.promotions.ServicesFixtures.guardianWeeklyAnnualPromoCode
+import com.gu.support.workers.Annual
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
-import com.gu.support.config.TouchPointEnvironments
-import org.joda.time.{DateTime, Days, LocalDate, Months, Years}
 
 /**
  * Promotions are quite laborious to construct
@@ -22,7 +19,6 @@ object ServicesFixtures {
   val invalidPromoCode = "INVALID_CODE"
   val renewalPromoCode = "RENEWAL_CODE"
   val trackingPromoCode = "TRACKING_CODE"
-  val guardianWeeklyAnnualPromoCode = "10ANNUAL"
 
   val validProductRatePlanIds = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
   val validProductRatePlanId = validProductRatePlanIds.head
@@ -43,10 +39,10 @@ object ServicesFixtures {
     GuardianWeekly
       .getProductRatePlan(TouchPointEnvironments.PROD, Annual, Domestic, NoProductOptions)
       .map(p => List(p.id)).getOrElse(List()),
-    guardianWeeklyAnnualPromoCode,
+    GuardianWeekly.AnnualPromoCode,
     Some(DiscountBenefit(10, Some(Months.TWELVE)))
   )
-  val guardianWeeklyWithCode = PromotionWithCode(guardianWeeklyAnnualPromoCode, guardianWeeklyAnnual)
+  val guardianWeeklyWithCode = PromotionWithCode(GuardianWeekly.AnnualPromoCode, guardianWeeklyAnnual)
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(
