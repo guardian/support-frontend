@@ -11,7 +11,7 @@ import ProductOption, {
   ProductOptionCopy,
   ProductOptionOffer,
   ProductOptionButton,
-  ProductOptionLine
+  ProductOptionLine,
 } from 'components/productOption/productOption';
 
 // storybook
