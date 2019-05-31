@@ -204,13 +204,13 @@ Resources:
       Statistic: Sum
     DependsOn: SupportWorkersPROD
 
-  NoPaypalContributionsInOneHourAlarm:
+  NoPaypalContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring paypal contributions for an hour
+      AlarmName: !Sub support-workers ${Stage} No successful recurring paypal contributions for two hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
       Dimensions:
@@ -222,19 +222,19 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 12
+      Period: 3600
+      EvaluationPeriods: 2
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
-  NoStripeContributionsInOneHourAlarm:
+  NoStripeContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring stripe contributions for an hour
+      AlarmName: !Sub support-workers ${Stage} No successful recurring stripe contributions for two hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
       Dimensions:
@@ -246,19 +246,30 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 12
+      Period: 3600
+      EvaluationPeriods: 2
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
-  NoGocardlessContributionsInTwoHoursAlarm:
+  # Why 10 hours for gocardless? Well...
+  #
+  # select
+  # event_timestamp,
+  # (to_unixtime(event_timestamp) - lag(to_unixtime(event_timestamp)) over (order by event_timestamp))/60/60 as hours_between_go_cardless_acquisitions
+  # from acquisitions
+  # where received_date>date'2019-04-01'
+  # and received_date<date'2019-05-01'
+  # and payment_provider='GOCARDLESS'
+  # order by hours_between_go_cardless_acquisitions desc;
+  #
+  NoGocardlessContributionsInTenHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for two hours
+      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for ten hours
       MetricName: PaymentSuccess
       Namespace: support-frontend
       Dimensions:
@@ -270,8 +281,8 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 24
+      Period: 3600
+      EvaluationPeriods: 10
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
