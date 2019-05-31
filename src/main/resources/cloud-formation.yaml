@@ -27,15 +27,12 @@ Metadata:
           - Subnets
           - KingsPlaceIpRange
       - Label:
-          default: "Security Group IDs for Database Access"
-        Parameters:
-          - SecurityGroupForCodeDb
-          - SecurityGroupForProdDb
-      - Label:
           default: "AWS Resources"
         Parameters:
           - EmailSqsQueueCodeArn
           - EmailSqsQueueProdArn
+          - ContributionsStoreSqsQueueCodeArn
+          - ContributionsStoreSqsQueueProdArn
           - CertificateArn
 
 Parameters:
@@ -94,25 +91,22 @@ Parameters:
   CertificateArn:
     Description: The ARN of the HTTPS certificate
     Type: String
-  SecurityGroupForCodeDb:
-    Description: >
-      For the PROD stack you still need to supply this,
-      because PROD instances need access to both PROD and CODE DBs.
-    Type: String
-  SecurityGroupForProdDb:
-    Description: >
-      For the CODE stack you can leave this empty since it won't be used.
-      For the PROD stack you need to set it.
-    Type: String
   OphanRole:
     Type: String
     Description: ARN of the Ophan cross-account role
   KinesisStreamArn:
     Type: String
     Description: ARN of the kinesis stream to write events to
-  ContributionsStoreSQSArn:
+  ContributionsStoreSqsQueueProdArn:
     Type: String
-    Description: ARN of the SQS queue
+    Description: >
+      For the CODE stack you can leave this empty since it won't be used.
+      For the PROD stack you need to set it.
+  ContributionsStoreSqsQueueCodeArn:
+    Type: String
+    Description: >
+      For the PROD stack you still need to supply this,
+      because PROD instances need access to both PROD and CODE contribution store queues.
   SqsKmsArn:
     Type: String
     Description: ARN of the KMS key for encrypting SQS data
@@ -160,11 +154,7 @@ Resources:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       ImageId: !Ref AMI
-      SecurityGroups: !If [CreateProdResources,
-        # The PROD instance needs access to PROD & CODE DBs because it can accept requests in test mode
-        [ !Ref InstanceSecurityGroup, !Ref SecurityGroupForProdDb, !Ref SecurityGroupForCodeDb ],
-        [ !Ref InstanceSecurityGroup, !Ref SecurityGroupForCodeDb ]
-      ]
+      SecurityGroups: [!Ref InstanceSecurityGroup]
       InstanceType: !FindInMap [ StageVariables, !Ref Stage, InstanceType ]
       IamInstanceProfile: !Ref InstanceProfile
       AssociatePublicIpAddress: true
@@ -252,13 +242,19 @@ Resources:
             Statement:
             - Effect: Allow
               Action: sqs:SendMessage
-              Resource: !Ref ContributionsStoreSQSArn
+              Resource: !If [CreateProdResources,
+                # The PROD instance needs access to PROD & CODE contributions-store queues because it can accept requests in test mode
+                [ !Ref ContributionsStoreSqsQueueCodeArn, !Ref ContributionsStoreSqsQueueProdArn],
+                [ !Ref ContributionsStoreSqsQueueCodeArn]
+              ]
         - PolicyName: SqsKmsEncryption
           PolicyDocument:
             Statement:
             - Effect: Allow
               Action: kms:Encrypt
               Resource: !Ref SqsKmsArn
+
+
 
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
