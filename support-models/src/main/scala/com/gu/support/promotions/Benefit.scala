@@ -3,10 +3,10 @@ package com.gu.support.promotions
 import cats.syntax.functor._
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.encoding.CustomCodecs._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 import org.joda.time.{Days, Months}
-import com.gu.support.encoding.CustomCodecs._
 
 sealed trait Benefit
 
@@ -32,6 +32,29 @@ object IncentiveBenefit {
   val jsonName = "incentive"
 
   implicit val incentiveCodec: Codec[IncentiveBenefit] = deriveCodec
+}
+
+sealed trait IntroductoryPeriodType
+
+case object Issue extends IntroductoryPeriodType
+
+object IntroductoryPeriodType {
+  implicit val decodePeriod: Decoder[IntroductoryPeriodType] = Decoder.decodeString.map(code => fromString(code))
+  implicit val encodePeriod: Encoder[IntroductoryPeriodType] = Encoder.encodeString.contramap[IntroductoryPeriodType](_.toString)
+
+  private def fromString(s: String) = {
+    s.toLowerCase match {
+      case "issue" => Issue
+    }
+  }
+}
+
+case class IntroductoryPriceBenefit(price: Double, periodLength: Int, periodType: IntroductoryPeriodType) extends Benefit
+
+object IntroductoryPriceBenefit {
+  val jsonName = "introductory_price"
+
+  implicit val incentiveCodec: Codec[IntroductoryPriceBenefit] = deriveCodec
 }
 
 object Benefit {

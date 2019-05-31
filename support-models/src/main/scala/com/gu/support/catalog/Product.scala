@@ -139,6 +139,9 @@ case object Paper extends Product {
 
 case object GuardianWeekly extends Product {
 
+  val AnnualPromoCode = "10ANNUAL"
+  val SixForSixPromoCode = "6FOR6"
+
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianWeekly.type]]] =
     Map(
       PROD -> List(

@@ -16,6 +16,7 @@ case class Promotion(
   discount: Option[DiscountBenefit],
   freeTrial: Option[FreeTrialBenefit],
   incentive: Option[IncentiveBenefit] = None,
+  introductoryPrice: Option[IntroductoryPriceBenefit] = None,
   renewalOnly: Boolean = false,
   tracking: Boolean = false
 ) {

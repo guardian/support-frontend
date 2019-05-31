@@ -9,7 +9,7 @@ import play.api.routing.Router
 import play.core.DefaultWebCommands
 import play.filters.csrf.CSRFComponents
 
-trait TestCSRFComponents {
+trait  TestCSRFComponents {
 
   private lazy val appComponents = {
     val env = Environment.simple(new File("."))
