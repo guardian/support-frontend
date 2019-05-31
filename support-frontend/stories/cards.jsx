@@ -4,7 +4,15 @@ import ProductPagePlanFormLabel from 'components/productPage/productPagePlanForm
 import ProductPagePlanFormPrice from 'components/productPage/productPagePlanForm/productPagePlanFormPrice';
 
 // components
-import ProductOption, { Content, Title, Price, Copy, Offer, Button, Line } from 'components/productOption/productOption';
+import ProductOption, {
+  ProductOptionContent,
+  ProductOptionTitle,
+  ProductOptionPrice,
+  ProductOptionCopy,
+  ProductOptionOffer,
+  ProductOptionButton,
+  ProductOptionLine
+} from 'components/productOption/productOption';
 
 // storybook
 import { storiesOf } from '@storybook/react';
@@ -23,7 +31,7 @@ stories.add('Old Product Option', () => (
         key={1}
         href="http://localhost:productOptions"
         onClick={noOp}
-        footer={<ProductPagePlanFormPrice title="should this be a string?" copy="this is a saving" />}
+        footer={<ProductPagePlanFormPrice title="You pay £24.86 a month" copy="Your saving is £2.94 per month" />}
       >
           You pay: £20.76 a month for 12 months
       </ProductPagePlanFormLabel>
@@ -34,15 +42,15 @@ stories.add('Old Product Option', () => (
 stories.add('Product Option 1', () => (
   <div style={{ width: '300px', margin: '0 20px' }}>
     <ProductOption>
-      <Title>Monday to Saturday</Title>
-      <Content>
-        <Price>£135.00</Price>
-        <Copy>for 1 year, then £150 a year</Copy>
-        <Line />
-        <Offer>Save £xx a month on retail price</Offer>
-        <Line />
-        <Button href="#" aria-label="Subscribe-button">Subscribe now</Button>
-      </Content>
+      <ProductOptionTitle>Monday to Saturday</ProductOptionTitle>
+      <ProductOptionContent>
+        <ProductOptionPrice>£135.00</ProductOptionPrice>
+        <ProductOptionCopy>for 1 year, then £150 a year</ProductOptionCopy>
+        <ProductOptionLine />
+        <ProductOptionOffer>Save £xx a month on retail price</ProductOptionOffer>
+        <ProductOptionLine />
+        <ProductOptionButton href="#" aria-label="Subscribe-button">Subscribe now</ProductOptionButton>
+      </ProductOptionContent>
     </ProductOption>
   </div>
 ));
@@ -50,14 +58,14 @@ stories.add('Product Option 1', () => (
 stories.add('Product Option 2', () => (
   <div style={{ width: '300px', margin: '0 20px' }}>
     <ProductOption>
-      <Title>Monday to Saturday</Title>
-      <Content>
-        <Offer>Save £xx a month on</Offer>
-        <Price>£11.99</Price>
-        <Copy>a month for 12 months</Copy>
-        <Line showLine={false} style={{ margin: '10px 0' }} />
-        <Button href="#" aria-label="Subscribe-button">Subscribe now</Button>
-      </Content>
+      <ProductOptionTitle>Monday to Saturday</ProductOptionTitle>
+      <ProductOptionContent>
+        <ProductOptionOffer>Save £xx a month on</ProductOptionOffer>
+        <ProductOptionPrice>£11.99</ProductOptionPrice>
+        <ProductOptionCopy>a month for 12 months</ProductOptionCopy>
+        <ProductOptionLine showLine={false} style={{ margin: '10px 0' }} />
+        <ProductOptionButton href="#" aria-label="Subscribe-button">Subscribe now</ProductOptionButton>
+      </ProductOptionContent>
     </ProductOption>
   </div>
 ));
@@ -65,16 +73,16 @@ stories.add('Product Option 2', () => (
 stories.add('Product Option 3', () => (
   <div style={{ width: '300px', margin: '0 20px' }}>
     <ProductOption>
-      <Title>Monday to Saturday</Title>
-      <Content>
-        <Offer>Save £xx a month on retail</Offer>
-        <Price>£11.99</Price>
-        <Copy bold>a month for 12 months</Copy>
-        <Line />
-        <Copy>Collect your papers from your local retailer</Copy>
-        <Line showLine={false} style={{ margin: '5px 0' }} />
-        <Button href="#" aria-label="Subscribe-button">Subscribe now</Button>
-      </Content>
+      <ProductOptionTitle>Monday to Saturday</ProductOptionTitle>
+      <ProductOptionContent>
+        <ProductOptionOffer>Save £xx a month on retail</ProductOptionOffer>
+        <ProductOptionPrice>£11.99</ProductOptionPrice>
+        <ProductOptionCopy bold>a month for 12 months</ProductOptionCopy>
+        <ProductOptionLine />
+        <ProductOptionCopy>Collect your papers from your local retailer</ProductOptionCopy>
+        <ProductOptionLine showLine={false} style={{ margin: '5px 0' }} />
+        <ProductOptionButton href="#" aria-label="Subscribe-button">Subscribe now</ProductOptionButton>
+      </ProductOptionContent>
     </ProductOption>
   </div>
 ));

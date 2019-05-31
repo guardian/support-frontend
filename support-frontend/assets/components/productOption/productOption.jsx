@@ -21,46 +21,46 @@ const withProductOptionsStyle = WrappedComponent => (props: PropTypes) => (
 );
 
 // presentation components
-export const Line = ({ showLine, style }: { showLine: boolean, style?: { [string]: string } }) =>
+export const ProductOptionLine = ({ showLine, style }: { showLine: boolean, style?: { [string]: string } }) =>
   (<span style={style} className={cx({ 'product-option__line': true, 'product-option__line--show': showLine })} />);
 
-export const Content = ({ children }: { children: Node}) => (
+export const ProductOptionContent = ({ children }: { children: Node}) => (
   <div className="product-option__content">{ children }</div>
 );
 
-export const Title = (props: Props) => (
+export const ProductOptionTitle = (props: Props) => (
   <div className="product-option__title">{ props.children }</div>
 );
 
-export const Price = ({ children }: { children: Node}) => (
+export const ProductOptionPrice = ({ children }: { children: Node}) => (
   <div className="product-option__price">{ children }</div>
 );
 
-export const Copy = ({ children, bold }: { children: Node, bold?: boolean }) => (
+export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: boolean }) => (
   <div className={cx({ 'product-option__copy': true, 'product-option__copy--bold': bold })}>{ children }</div>
 );
 
-export const Offer = ({ children }: { children: Node }) => (
+export const ProductOptionOffer = ({ children }: { children: Node }) => (
   <div className="product-option__offer">{ children }</div>
 );
 
-export const Button = withProductOptionsStyle(AnchorButton);
+export const ProductOptionButton = withProductOptionsStyle(AnchorButton);
 
 // default component
 const ProductOption = ({ children }: { children: Node }) => (
   <div className="product-option">{ children }</div>
 );
 
-Line.defaultProps = {
+ProductOptionLine.defaultProps = {
   showLine: true,
   style: {},
 };
 
-Copy.defaultProps = {
+ProductOptionCopy.defaultProps = {
   bold: false,
 };
 
-Button.defaultProps = {
+ProductOptionButton.defaultProps = {
   ...defaultProps,
 };
 
