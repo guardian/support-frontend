@@ -13,4 +13,5 @@ module.exports = () => {
   require('./tabs.jsx');
   require('./animatedDots.jsx');
   require('./contributionTicker.jsx');
+  require('./cards.jsx');
 };
