@@ -20,8 +20,8 @@ import 'stylesheets/skeleton/skeleton.scss';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 
-import ReturnSection from './components/returnSection';
-import ThankYouExistingContent from './components/thankYouExistingContent';
+import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
+import ThankYouExistingContent from './thankYouExistingContent';
 import ThankYouContent from './components/thankYou/hero';
 
 import './digitalSubscriptionCheckout.scss';
@@ -53,7 +53,7 @@ const content = (
           </HeadingBlock>
         </HeroWrapper>
         <ThankYouExistingContent countryGroupId={countryGroupId} />
-        <ReturnSection />
+        <ReturnSection subscriptionProduct="DigitalPack" />
       </div>
     </Page>
   </Provider>

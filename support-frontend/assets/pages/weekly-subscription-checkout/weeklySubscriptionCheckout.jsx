@@ -16,7 +16,9 @@ import SubscriptionTermsPrivacy
   from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
-import CheckoutStage from './stage';
+import CheckoutStage from 'components/subscriptionCheckouts/stage';
+import ThankYouContent from './components/thankYou';
+import CheckoutForm from './components/weeklyCheckoutForm';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import type { CommonState } from 'helpers/page/commonReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -51,13 +53,14 @@ const store = pageInit(
 );
 
 const { countryGroupId } = store.getState().common.internationalisation;
+const { stage } = store.getState().page.checkout;
 
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header display="checkout" />}
+      header={<Header display={stage === 'checkout' ? 'checkout' : 'guardianLogo'} />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="GuardianWeekly" />
@@ -69,7 +72,12 @@ const content = (
         </Footer>
       }
     >
-      <CheckoutStage />
+      <CheckoutStage
+        checkoutForm={<CheckoutForm />}
+        thankYouContentPending={<ThankYouContent isPending />}
+        thankYouContent={<ThankYouContent isPending={false} />}
+        subscriptionProduct="GuardianWeekly"
+      />
       <ConsentBanner />
     </Page>
   </Provider>

@@ -112,3 +112,7 @@
     transform: translateX(20%);
   }
 }
+
+.component-button--visited-white-text:visited {
+  color: gu-colour(neutral-100);
+}

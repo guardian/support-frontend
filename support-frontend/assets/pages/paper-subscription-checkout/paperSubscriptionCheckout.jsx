@@ -15,7 +15,9 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionTermsPrivacy from 'components/legal/subscriptionTermsPrivacy/subscriptionTermsPrivacy';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import 'stylesheets/skeleton/skeleton.scss';
-import CheckoutStage from './stage';
+import CheckoutStage from 'components/subscriptionCheckouts/stage';
+import ThankYouContent from './components/thankYou';
+import CheckoutForm from './components/checkoutForm';
 import './_legacyImports.scss';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import { getFulfilmentOption, getProductOption, getStartDate } from 'pages/paper-subscription-checkout/helpers/options';
@@ -45,13 +47,14 @@ const store = pageInit(
 );
 
 const { countryGroupId } = store.getState().common.internationalisation;
+const { stage } = store.getState().page.checkout;
 
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <Page
-      header={<Header display="checkout" />}
+      header={<Header display={stage === 'checkout' ? 'checkout' : 'guardianLogo'} />}
       footer={
         <Footer>
           <SubscriptionTermsPrivacy subscriptionProduct="Paper" />
@@ -64,7 +67,12 @@ const content = (
         </Footer>
       }
     >
-      <CheckoutStage />
+      <CheckoutStage
+        checkoutForm={<CheckoutForm />}
+        thankYouContentPending={<ThankYouContent isPending />}
+        thankYouContent={<ThankYouContent isPending={false} />}
+        subscriptionProduct="Paper"
+      />
       <ConsentBanner />
     </Page>
   </Provider>

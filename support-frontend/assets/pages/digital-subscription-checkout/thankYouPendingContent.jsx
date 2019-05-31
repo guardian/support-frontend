@@ -6,16 +6,27 @@ import React from 'react';
 
 import Content from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
-
+import HeadingBlock from 'components/headingBlock/headingBlock';
+import ThankYouHero from './components/thankYou/hero';
+import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { sendClickedEvent } from 'helpers/tracking/clickTracking';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 
 // ----- Component ----- //
 
-function ThankYouPendingContent() {
+function ThankYouPendingContent(props: {countryGroupId: CountryGroupId}) {
 
   return (
-    <div>
+    <div className="thank-you-stage">
+      <ThankYouHero
+        countryGroupId={props.countryGroupId}
+      />
+      <HeroWrapper appearance="custom">
+        <HeadingBlock>
+          Your Digital Pack subscription is being processed
+        </HeadingBlock>
+      </HeroWrapper>
       <Content>
         <Text>
           <LargeParagraph>
