@@ -69,6 +69,17 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
     )
   }
 
+  it should "be able to decode an introductory price Promotion" in {
+    testDecoding[Promotion](Fixtures.introductoryPricePromotion,
+      promotion => {
+        promotion.introductoryPrice.isDefined shouldBe true
+        promotion.introductoryPrice.get.price shouldBe 6
+        promotion.introductoryPrice.get.periodType shouldBe Issue
+        promotion.introductoryPrice.get.periodLength shouldBe 6
+      }
+    )
+  }
+
   it should "be able to decode a double benefit Promotion containing an incentive" in {
     testDecoding[Promotion](Fixtures.doubleWithIncentive,
       promotion => {

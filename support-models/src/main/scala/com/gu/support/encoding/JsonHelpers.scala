@@ -1,6 +1,6 @@
 package com.gu.support.encoding
 
-import com.gu.support.promotions.{DiscountBenefit, FreeTrialBenefit, IncentiveBenefit}
+import com.gu.support.promotions.{DiscountBenefit, FreeTrialBenefit, IncentiveBenefit, IntroductoryPriceBenefit}
 import io.circe.{ACursor, Decoder, Json, JsonObject}
 
 object JsonHelpers {
@@ -65,6 +65,7 @@ object JsonHelpers {
         case DiscountBenefit.jsonName => jsonObject.add("discount", json)
         case FreeTrialBenefit.jsonName => jsonObject.add("freeTrial", json)
         case IncentiveBenefit.jsonName => jsonObject.add("incentive", json)
+        case IntroductoryPriceBenefit.jsonName => jsonObject.add("introductoryPrice", json)
         case "retention" => jsonObject.add("renewalOnly", Json.fromBoolean(true))
         case "tracking" => jsonObject.add("tracking", Json.fromBoolean(true))
         case "double" => extractDouble(json, jsonObject)

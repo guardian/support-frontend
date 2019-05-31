@@ -13,7 +13,7 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
   val promotionCollection = maybeCollection.getOrElse(new DynamoPromotionCollection(config.tables))
 
   val SixForSixPromotion = Promotion(
-    "Six for Six",
+    "Six For Six",
     "Introductory offer",
     AppliesTo(
       Set(
@@ -34,6 +34,7 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
     Some(IntroductoryPriceBenefit(6, 6, Issue))
   )
 
+  //This is a small hack to allow us to start using promotions to handle 6 for 6 without having to build the tooling
   private def allWith6For6 = promotionCollection.all.toList :+ SixForSixPromotion
 
   def findPromotion(promoCode: PromoCode): Option[PromotionWithCode] =

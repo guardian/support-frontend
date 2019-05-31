@@ -20,5 +20,4 @@ class PromotionServiceIntegrationSpec extends FlatSpec with Matchers {
     val promotion = serviceWithDynamo.findPromotion("DISC503")
     promotion.isDefined shouldBe true
   }
-
 }

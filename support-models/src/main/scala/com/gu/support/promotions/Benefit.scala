@@ -40,7 +40,7 @@ case object Issue extends IntroductoryPeriodType
 
 object IntroductoryPeriodType {
   implicit val decodePeriod: Decoder[IntroductoryPeriodType] = Decoder.decodeString.map(code => fromString(code))
-  implicit val encodePeriod: Encoder[IntroductoryPeriodType] = Encoder.encodeString.contramap[IntroductoryPeriodType](_.toString)
+  implicit val encodePeriod: Encoder[IntroductoryPeriodType] = Encoder.encodeString.contramap[IntroductoryPeriodType](_.toString.toLowerCase)
 
   private def fromString(s: String) = {
     s.toLowerCase match {
