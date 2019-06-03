@@ -3,16 +3,16 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { showPrice, applyDiscount, hasDiscount, type Price, type Promotion } from 'helpers/productPrice/productPrices';
+import { showPrice, applyDiscount, hasDiscount, type ProductPrice, type Promotion } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { billingPeriodNoun } from 'helpers/billingPeriods';
 
 export type PropTypes = {
-  productPrice: Price,
+  productPrice: ProductPrice,
   promotion: ?Promotion,
   billingPeriod: BillingPeriod,
 }
-const displayPriceForPeriod = (productPrice: Price, billingPeriod: BillingPeriod) =>
+const displayPriceForPeriod = (productPrice: ProductPrice, billingPeriod: BillingPeriod) =>
   `${showPrice(productPrice)}/${billingPeriodNoun(billingPeriod).toLowerCase()}`;
 
 function PriceLabel({

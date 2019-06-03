@@ -32,7 +32,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import {
   getFulfilmentOption,
   getPromotion,
-  regularPrice,
+  getProductPrice,
 } from 'helpers/productPrice/weeklyProductPrice';
 import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
@@ -122,7 +122,7 @@ const days = getWeeklyDays();
 
 function WeeklyCheckoutForm(props: PropTypes) {
   const fulfilmentOption = getFulfilmentOption(props.deliveryCountry);
-  const price = regularPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+  const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const promotion = getPromotion(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
 

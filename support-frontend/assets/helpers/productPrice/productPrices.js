@@ -51,6 +51,7 @@ export type Promotion =
 
 export type ProductPrice = {
   price: number,
+  currency: IsoCurrency,
   promotions?: Promotion[],
 }
 
@@ -66,11 +67,6 @@ export type ProductPrices = {
   }
 }
 
-export type Price = {|
-  price: number,
-  currency: IsoCurrency,
-|};
-
 const isNumeric = (num: ?number): boolean %checks =>
   num !== null &&
   num !== undefined &&
@@ -81,7 +77,7 @@ const hasDiscount = (promotion: ?Promotion): boolean %checks =>
   promotion !== undefined &&
   isNumeric(promotion.discountedPrice);
 
-function applyDiscount(price: Price, promotion: ?Promotion) {
+function applyDiscount(price: ProductPrice, promotion: ?Promotion) {
   if (promotion && hasDiscount(promotion)) {
     return {
       ...price,
@@ -133,34 +129,15 @@ function getPromotion(
   ).promotions);
 }
 
-function regularPrice(
-  productPrices: ProductPrices,
-  country: IsoCountry,
-  billingPeriod: BillingPeriod,
-  fulfilmentOption: ?FulfilmentOptions,
-  productOption: ?ProductOptions,
-): Price {
-  return {
-    price: getProductPrice(
-      productPrices,
-      country,
-      billingPeriod,
-      fulfilmentOption,
-      productOption,
-    ).price,
-    currency: getCountryGroup(country).currency,
-  };
-}
-
 function finalPrice(
   productPrices: ProductPrices,
   country: IsoCountry,
   billingPeriod: BillingPeriod,
   fulfilmentOption: ?FulfilmentOptions,
   productOption: ?ProductOptions,
-): Price {
+): ProductPrice {
   return applyDiscount(
-    regularPrice(
+    getProductPrice(
       productPrices,
       country,
       billingPeriod,
@@ -177,7 +154,7 @@ function finalPrice(
   );
 }
 
-const showPrice = (p: Price, isExtended: boolean = true): string => {
+const showPrice = (p: ProductPrice, isExtended: boolean = true): string => {
   const showGlyph = isExtended ? extendedGlyph : glyph;
   return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };
@@ -188,7 +165,7 @@ const displayPrice = (
   billingPeriod: BillingPeriod,
   fulfilmentOption: ?FulfilmentOptions,
   productOption: ?ProductOptions,
-) => showPrice(regularPrice(
+) => showPrice(getProductPrice(
   productPrices,
   country,
   billingPeriod,
@@ -205,7 +182,6 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 export {
   getAppliedPromo,
   getProductPrice,
-  regularPrice,
   getPromotion,
   finalPrice,
   getCurrency,

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { hasDiscount, type Price, type Promotion } from 'helpers/productPrice/productPrices';
+import { hasDiscount, type ProductPrice, type Promotion } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import styles from './summary.module.scss';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -23,7 +23,7 @@ type PropTypes = {|
   dataList: DataListItem[],
   description: ?string,
   image: $Call<GridImageType, GridImg>,
-  productPrice: Price,
+  productPrice: ProductPrice,
   promotion: ?Promotion,
   title: string,
   // eslint-disable-next-line react/no-unused-prop-types
@@ -122,7 +122,7 @@ TabletAndDesktop.defaultProps = {
 const HideDropDown = (props: {
   billingPeriod: BillingPeriod,
   onClick: Function,
-  productPrice: Price,
+  productPrice: ProductPrice,
   promotion: ?Promotion,
   showDropDown: boolean,
   title: string,

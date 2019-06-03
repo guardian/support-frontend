@@ -4,14 +4,14 @@ import { Monthly } from 'helpers/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type {
-  Price,
+  ProductPrice,
   ProductPrices,
   Promotion,
 } from 'helpers/productPrice/productPrices';
 import {
   finalPrice as genericFinalPrice,
   getPromotion as genericGetPromotion,
-  regularPrice as genericRegularPrice,
+  getProductPrice as genericGetProductPrice,
 } from 'helpers/productPrice/productPrices';
 
 const country = 'GB';
@@ -31,12 +31,12 @@ function getPromotion(
   );
 }
 
-function regularPrice(
+function getProductPrice(
   productPrices: ProductPrices,
   fulfilmentOption: ?FulfilmentOptions,
   productOption: ?ProductOptions,
-): Price {
-  return genericRegularPrice(
+): ProductPrice {
+  return genericGetProductPrice(
     productPrices,
     country,
     billingPeriod,
@@ -49,7 +49,7 @@ function finalPrice(
   productPrices: ProductPrices,
   fulfilmentOption: ?FulfilmentOptions,
   productOption: ?ProductOptions,
-): Price {
+): ProductPrice {
   return genericFinalPrice(
     productPrices,
     country,
@@ -59,4 +59,4 @@ function finalPrice(
   );
 }
 
-export { regularPrice, finalPrice, getPromotion };
+export { getProductPrice, finalPrice, getPromotion };

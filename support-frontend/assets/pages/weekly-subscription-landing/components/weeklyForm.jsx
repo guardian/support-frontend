@@ -51,7 +51,7 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
       countryId,
       billingPeriod === SixWeekly ? Quarterly : billingPeriod, // for 6 for 6 we need the quarterly pricing
       getFulfilmentOption(countryId),
-    ) : { price: 0 };
+    ) : { price: 0, currency: 'GBP' };
     return {
       ...plans,
       [billingPeriod]: {
