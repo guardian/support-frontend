@@ -67,7 +67,7 @@ class PayPalOneOff(
 
   def resultFromPaypalSuccess(success: PayPalSuccess, country: String, isTestUser: Boolean)(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
-    val redirect = Redirect("/contribute/one-off/thankyou")
+    val redirect = Redirect(s"/$country/thankyou")
     if (!isTestUser) {
       monitoredRegion(country).map {
         region => verify(TipPath(region, OneOffContribution, PayPal), tipMonitoring.verify)
