@@ -57,6 +57,7 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
 
     price.currency -> PriceSummary(
       price.value,
+      price.currency,
       promotionSummaries
     )
   }
