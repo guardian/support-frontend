@@ -35,7 +35,10 @@ object PaymentAPIResponseError {
 }
 
 case class ExecutePaymentBody(
-    signedInUserEmail: Option[String],
+    // TODO: question: should we put the email in the paymentData for consistency with Stripe?
+    // downside is it breaks the model of "paymentData contains exactly what we need to send to the third-party"
+    // since we don't need to send email to PayPal but we do to Stripe
+    email: String,
     acquisitionData: JsValue,
     paymentData: JsObject
 )
@@ -101,7 +104,7 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
     paymentJSON: JsObject,
     acquisitionData: JsValue,
     queryStrings: Map[String, Seq[String]],
-    email: Option[String],
+    email: String,
     isTestUser: Boolean,
     userAgent: Option[String]
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
