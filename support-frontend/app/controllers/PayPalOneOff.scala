@@ -106,7 +106,7 @@ class PayPalOneOff(
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
     val userAgent = request.headers.get("user-agent")
 
-    paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, email, isTestUser, userAgent)
+    paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent)
       .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, isTestUser))
   }
 }

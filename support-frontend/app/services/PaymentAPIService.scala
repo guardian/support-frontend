@@ -59,25 +59,17 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
   val stripeExecutePaymentEndpoint: String = s"$paymentAPIUrl$stripeExecutePaymentPath"
 
-  private def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
-    queryString.foldLeft(List.empty[(String, String)]) {
-      case (list, (key, values)) => list ::: values.map(x => (key, x)).toList
-    }
-  }
-
   private def postPaypalData[A](
     data: ExecutePaymentBody,
-    queryStrings: Map[String, Seq[String]],
     isTestUser: Boolean,
     userAgent: Option[String]
   ): EitherT[Future, PaymentAPIResponseError[A], WSResponse] = {
 
-    val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
-
     val headers = Seq("Accept" -> "application/json") ++ userAgent.map("User-Agent" -> _)
+    val queryStringParameters = if (isTestUser) Seq("mode" -> "test") else Seq()
 
     wsClient.url(payPalExecutePaymentEndpoint)
-      .withQueryStringParameters(convertQueryString(allQueryParams): _*)
+      .withQueryStringParameters(queryStringParameters: _*)
       .withHttpHeaders(headers: _*)
       .withBody(Json.toJson(data))
       .withMethod("POST")
@@ -105,12 +97,11 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
   def executePaypalPayment(
     paymentJSON: JsObject,
     acquisitionData: JsValue,
-    queryStrings: Map[String, Seq[String]],
     email: String,
     isTestUser: Boolean,
     userAgent: Option[String]
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
     val data = ExecutePaymentBody(Some(email), email, acquisitionData, paymentJSON)
-    postPaypalData(data, queryStrings, isTestUser, userAgent).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
+    postPaypalData(data, isTestUser, userAgent).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
   }
 }
