@@ -28,10 +28,31 @@ describe('getPriceDescription', () => {
 
     const gwQuarterly = { price: 37.5, promotions: [] };
     expect(getPriceDescription('£', gwQuarterly, Quarterly))
-      .toEqual('£37.50 every 3 months');
+      .toEqual('£37.50 every quarter');
+
+    const gwQuarterlyWithPromo = {
+      price: 37.5,
+      promotions: [
+        {
+          name: '15% discount - WJWGEX9A8',
+          description: '15% discount - WJWGEX9A8',
+          promoCode: 'WJWGEX9A8',
+          discountedPrice: 31.87,
+          numberOfDiscountedPeriods: 1,
+          discount: { amount: 15, durationMonths: 3 },
+        },
+        {
+          name: 'Six For Six',
+          description: 'Introductory offer',
+          promoCode: '6FOR6',
+          introductoryPrice: { price: 6, periodLength: 6, periodType: 'issue' },
+        }],
+    };
+    expect(getPriceDescription('£', gwQuarterlyWithPromo, Quarterly))
+      .toEqual('£31.87 for 1 quarter, then standard rate (£37.50 every quarter)');
 
     const gwSixWeekly = { price: 81.30, promotions: [] };
     expect(getPriceDescription('US$', gwSixWeekly, SixWeekly))
-      .toEqual('US$6 for the first 6 issues (then US$81.30 every 3 months)');
+      .toEqual('US$6 for the first 6 issues (then US$81.30 every quarter)');
   });
 });

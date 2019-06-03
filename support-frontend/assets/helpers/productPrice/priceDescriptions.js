@@ -21,7 +21,7 @@ const billingPeriodQuantifier = (numberOfBillingPeriods: number, noun: string) =
     ` for 1 ${noun}`);
 
 const billingPeriodDescription = (billingPeriod: BillingPeriod) =>
-  ((billingPeriod === Quarterly) ? '3 months' : billingPeriodNoun(billingPeriod).toLowerCase());
+  billingPeriodNoun(billingPeriod).toLowerCase();
 
 const standardRate = (glyph: string, price: number, billingPeriod: BillingPeriod) => `${displayPrice(glyph, price)} every ${billingPeriodDescription(billingPeriod)}`;
 
@@ -72,6 +72,7 @@ function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: 
   const appliedPromo = getAppliedPromo(productPrice.promotions);
   if (
     appliedPromo === null ||
+    billingPeriod === SixWeekly ||
     (appliedPromo.introductoryPrice && billingPeriod === Quarterly)
   ) {
     return '';
