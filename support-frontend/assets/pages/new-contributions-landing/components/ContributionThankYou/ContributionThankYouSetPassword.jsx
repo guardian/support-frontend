@@ -68,7 +68,7 @@ function ContributionThankYouSetPassword(props: PropTypes) {
       </div>
 
       <div className="gu-content__blurb gu-content__blurb--thank-you">
-        <h1 className="gu-content__blurb-header">Set up a free <br className="gu-content__blurb-header-break" />Guardian account</h1>
+        <h1 className="gu-content__blurb-header">Set up a free <br className="gu-content__blurb-header-break" />Guardian <br className="gu-content__blurb-header-break" />account</h1>
       </div>
     </div>
   );

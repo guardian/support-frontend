@@ -89,12 +89,14 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/"
-          render={() => contributionsLandingPage()}
+          render={() => contributionsLandingPage()
+          }
         />
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/:campaignCode"
-          render={() => contributionsLandingPage()}
+          render={() => contributionsLandingPage()
+        }
         />
         <Route
           exact
@@ -108,7 +110,7 @@ const router = (
               <Page
                 classModifiers={['contribution-thankyou']}
                 header={<RoundelHeader />}
-                footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
+                footer={<Footer disclaimer countryGroupId={countryGroupId} />}
               >
                 <ContributionThankYouContainer />
               </Page>
