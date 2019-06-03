@@ -44,10 +44,6 @@ object ExecutePaymentBody {
   implicit val jf: OFormat[ExecutePaymentBody] = Json.format[ExecutePaymentBody]
 }
 
-object PaymentAPIService {
-  case class Email(value: String)
-}
-
 class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: ExecutionContext) {
 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
