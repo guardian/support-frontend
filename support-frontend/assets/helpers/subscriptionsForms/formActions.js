@@ -29,6 +29,10 @@ export type Action =
   | { type: 'SET_FIRST_NAME', firstName: string }
   | { type: 'SET_LAST_NAME', lastName: string }
   | { type: 'SET_TELEPHONE', telephone: string }
+  | { type: 'SET_TITLE_GIFT', titleGiftRecipient: Option<Title> }
+  | { type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient: string }
+  | { type: 'SET_LAST_NAME_GIFT', lastNameGiftRecipient: string }
+  | { type: 'SET_EMAIL_GIFT', emailGiftRecipient: string }
   | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry }
   | { type: 'SET_START_DATE', startDate: string }
   | { type: 'SET_BILLING_PERIOD', billingPeriod: BillingPeriod }
@@ -37,6 +41,7 @@ export type Action =
   | { type: 'SET_SUBMISSION_ERROR', error: ErrorReason }
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
   | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean> }
+  | { type: 'SET_ORDER_IS_GIFT', orderIsAGift: Option<boolean>}
   | AddressAction
   | PayPalAction
   | DDAction;
@@ -62,6 +67,10 @@ const formActionCreators = {
   setFirstName: (firstName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME', firstName }))),
   setLastName: (lastName: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME', lastName }))),
   setTelephone: (telephone: string): Action => ({ type: 'SET_TELEPHONE', telephone }),
+  setTitleGift: (titleGiftRecipient: string): Action => ({ type: 'SET_TITLE_GIFT', titleGiftRecipient }),
+  setFirstNameGift: (firstNameGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_FIRST_NAME_GIFT', firstNameGiftRecipient }))),
+  setLastNameGift: (lastNameGiftRecipient: string): Function => (setFormSubmissionDependentValue(() => ({ type: 'SET_LAST_NAME_GIFT', lastNameGiftRecipient }))),
+  setEmailGift: (emailGiftRecipient: string): Action => ({ type: 'SET_EMAIL_GIFT', emailGiftRecipient }),
   setStartDate: (startDate: string): Action => ({ type: 'SET_START_DATE', startDate }),
   setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({ type: 'SET_BILLING_PERIOD', billingPeriod }),
   setPaymentMethod: (paymentMethod: PaymentMethod) => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
@@ -91,7 +100,10 @@ const formActionCreators = {
         state.common.abParticipations,
       );
     },
-
+  setGiftStatus: (orderIsAGift: boolean | null): Action => ({
+    type: 'SET_ORDER_IS_GIFT',
+    orderIsAGift,
+  }),
 };
 
 export type FormActionCreators = typeof formActionCreators;
