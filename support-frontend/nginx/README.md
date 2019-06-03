@@ -8,14 +8,6 @@ Support™ depends on Identity, so **you'll need to perform the**
 
 ## Support-specific setup
 
-#### Update your hosts file
-
-Add the following local development domain to your hosts file in `/etc/hosts`:
-
-```
-127.0.0.1   support.thegulocal.com
-```
-
 #### Run Support's Nginx setup script
 
 Run the Support-specific [setup.sh](setup.sh) script from the root
