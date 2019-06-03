@@ -22,6 +22,7 @@ import {
 import { fixDecimals } from 'helpers/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/url';
+import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 
 // ----- Types ----- //
 
@@ -77,6 +78,11 @@ const hasDiscount = (promotion: ?Promotion): boolean %checks =>
   promotion !== undefined &&
   isNumeric(promotion.discountedPrice);
 
+const hasIntroductoryPrice = (promotion: ?Promotion): boolean %checks =>
+  promotion !== null &&
+  promotion !== undefined &&
+  !!promotion.introductoryPrice;
+
 function applyDiscount(price: ProductPrice, promotion: ?Promotion) {
   if (promotion && hasDiscount(promotion)) {
     return {
@@ -100,13 +106,24 @@ function getProductPrice(
 ): ProductPrice {
   const countryGroup = getCountryGroup(country);
   // eslint-disable-next-line max-len
-  return productPrices[countryGroup.name][fulfilmentOption || NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod][countryGroup.currency];
+  return productPrices[countryGroup.name][fulfilmentOption ||
+  NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod ===
+  SixWeekly ? Quarterly : billingPeriod][countryGroup.currency];
 }
+
+const matchesQueryParam = promotion =>
+  getQueryParameter('promoCode') === promotion.promoCode;
+
+const introductoryPrice = promotion =>
+  promotion.introductoryPrice !== null && promotion.introductoryPrice !==
+  undefined;
 
 function getAppliedPromo(promotions: ?Promotion[]): Option<Promotion> {
   if (promotions && promotions.length > 0) {
     if (promotions.length > 1) {
-      return promotions.find(promotion => getQueryParameter('promoCode') === promotion.promoCode) || promotions[0];
+      return promotions.find(introductoryPrice) ||
+        promotions.find(matchesQueryParam) ||
+        promotions[0];
     }
     return promotions[0];
   }
@@ -173,7 +190,6 @@ const displayPrice = (
   productOption,
 ));
 
-
 function getCurrency(country: IsoCountry): IsoCurrency {
   const { currency } = getCountryGroup(country);
   return currency;
@@ -190,5 +206,6 @@ export {
   displayPrice,
   applyDiscount,
   hasDiscount,
+  hasIntroductoryPrice,
   isNumeric,
 };

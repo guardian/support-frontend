@@ -30,7 +30,7 @@ import DirectDebitPopUpForm
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion, getProductPrice } from 'helpers/productPrice/paperProductPrices';
+import { getProductPrice } from 'helpers/productPrice/paperProductPrices';
 import {
   getShortDescription,
   getTitle,
@@ -132,11 +132,6 @@ function CheckoutForm(props: PropTypes) {
           title={`${getTitle(props.productOption)} ${fulfilmentOptionDescriptor.toLowerCase()}`}
           description={getShortDescription(props.productOption)}
           productPrice={getProductPrice(
-            props.productPrices,
-            props.fulfilmentOption,
-            props.productOption,
-          )}
-          promotion={getPromotion(
             props.productPrices,
             props.fulfilmentOption,
             props.productOption,

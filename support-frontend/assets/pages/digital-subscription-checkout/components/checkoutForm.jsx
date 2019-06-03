@@ -18,7 +18,6 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import {
   finalPrice,
-  getPromotion,
   getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -142,11 +141,6 @@ function CheckoutForm(props: PropTypes) {
           title="Digital Pack"
           description="Premium App + iPad daily edition + Ad-free"
           productPrice={getProductPrice(
-            props.productPrices,
-            props.country,
-            props.billingPeriod,
-          )}
-          promotion={getPromotion(
             props.productPrices,
             props.country,
             props.billingPeriod,
