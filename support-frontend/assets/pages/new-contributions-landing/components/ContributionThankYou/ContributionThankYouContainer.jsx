@@ -8,7 +8,6 @@ import { type ThankYouPageStageMap, type ThankYouPageStage } from '../../contrib
 import ContributionThankYou from './ContributionThankYou';
 import ContributionThankYouSetPassword from './ContributionThankYouSetPassword';
 import ContributionThankYouPasswordSet from './ContributionThankYouPasswordSet';
-import { classNameWithModifiers } from 'helpers/utilities';
 
 // ----- Types ----- //
 
@@ -25,14 +24,6 @@ const mapStateToProps = state => ({
 // ----- Render ----- //
 
 function ContributionThankYouContainer(props: PropTypes) {
-  const classModifiers = {
-    thankYou: ['thankyou'],
-    thankYouSetPassword: [],
-    thankYouPasswordDeclinedToSet: ['thankyou'],
-    thankYouPasswordSet: ['thankyou'],
-  };
-
-  const classNames = classNameWithModifiers('gu-content__content', classModifiers[props.thankYouPageStage]);
 
   const thankYouPageStage: ThankYouPageStageMap<React$Element<*>> = {
     thankYou: (<ContributionThankYou />),
@@ -42,7 +33,7 @@ function ContributionThankYouContainer(props: PropTypes) {
   };
 
   return (
-    <div className={classNames}>
+    <div className="gu-content__content gu-content__content-thankyou">
       {thankYouPageStage[props.thankYouPageStage]}
     </div>
   );
