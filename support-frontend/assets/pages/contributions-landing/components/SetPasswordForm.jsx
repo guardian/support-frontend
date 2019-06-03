@@ -15,7 +15,7 @@ import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { checkEmail, emailRegexPattern } from 'helpers/formValidation';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
-import { ContributionTextInput } from './ContributionTextInput';
+import ContributionTextInput from './ContributionTextInput';
 import { type ThankYouPageStage } from '../contributionsLandingReducer';
 import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../contributionsLandingActions';
 import Button from 'components/button/button';

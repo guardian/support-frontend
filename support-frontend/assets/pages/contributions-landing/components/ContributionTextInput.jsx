@@ -35,7 +35,7 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-function ContributionTextInput(props: PropTypes) {
+export default function ContributionTextInput(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   const modifiersArray = showError ? ['invalid', props.id] : [props.id];
   const showRequiredLabel = props.required && props.showRequiredLabel;
@@ -99,5 +99,3 @@ ContributionTextInput.defaultProps = {
   isValid: true,
   showRequiredLabel: false,
 };
-
-export { ContributionTextInput };
