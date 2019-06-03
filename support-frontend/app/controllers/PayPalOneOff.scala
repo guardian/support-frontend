@@ -80,8 +80,8 @@ class PayPalOneOff(
       }
     }
 
-    SafeLogger.info("Redirecting to thank you page with success.guestAccountCreationToken in flash session")
-    redirect.flashing("success.guestAccountCreationToken" -> success.guestAccountCreationToken)
+    SafeLogger.info("Redirecting to thank you page with guestAccountCreationToken in flash session")
+    redirect.flashing("guestAccountCreationToken" -> success.guestAccountCreationToken)
   }
 
   //TODO - more cleanup
