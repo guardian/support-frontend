@@ -10,7 +10,7 @@ import {
   firstError,
   type FormError,
 } from 'helpers/subscriptionsForms/validation';
-import { Annual, Quarterly, SixWeekly } from 'helpers/billingPeriods';
+import { weeklyBillingPeriods } from 'helpers/billingPeriods';
 import Rows from 'components/base/rows';
 import Text from 'components/text/text';
 import Button from 'components/button/button';
@@ -243,7 +243,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
           <BillingPeriodSelector
             fulfilmentOption={fulfilmentOption}
             onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
-            billingPeriods={[Quarterly, Annual, SixWeekly]}
+            billingPeriods={weeklyBillingPeriods}
             billingCountry={props.billingCountry}
             productPrices={props.productPrices}
             selected={props.billingPeriod}

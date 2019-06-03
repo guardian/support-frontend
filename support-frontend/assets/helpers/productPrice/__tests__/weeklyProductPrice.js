@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 import {
-  displayBillingPeriods,
   getFulfilmentOption,
   getPromotionPrice,
 } from '../weeklyProductPrice';
@@ -158,7 +157,7 @@ describe('getFulfilmentOption', () => {
 });
 
 
-describe('getpromotionPrice', () => {
+describe('getPromotionPrice', () => {
   it('should return a price based on inputs including a promotion', () => {
     const usdPriceAnnualWithPromo = getPromotionPrice(
       'US', 'Annual',
@@ -172,24 +171,4 @@ describe('getpromotionPrice', () => {
     );
     expect(gbpPriceAnnualWithPromo).toEqual('£135');
   });
-});
-
-describe('displayBillingPeriods', () => {
-  it(
-    'should return a phrase about the price based on the location and product',
-    () => {
-      const annualCopyObject = displayBillingPeriods.Annual;
-      expect(typeof annualCopyObject).toEqual('object');
-      expect(annualCopyObject).toHaveProperty('title');
-      expect(annualCopyObject).toHaveProperty('offer');
-
-      const phraseUSA = annualCopyObject.copy(productPrices, 'US');
-      expect(phraseUSA)
-        .toBe('US$270 for 1 year, then standard rate (US$300 every year)');
-
-      const phraseUK = annualCopyObject.copy(productPrices, 'GB');
-      expect(phraseUK)
-        .toBe('£135 for 1 year, then standard rate (£150 every year)');
-    },
-  );
 });

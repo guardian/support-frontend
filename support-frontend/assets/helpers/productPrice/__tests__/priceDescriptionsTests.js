@@ -30,7 +30,7 @@ describe('getPriceDescription', () => {
     expect(getPriceDescription('£', gwQuarterly, Quarterly))
       .toEqual('£37.50 every 3 months');
 
-    const gwSixWeekly = { price: 6, promotions: [] };
+    const gwSixWeekly = { price: 81.30, promotions: [] };
     expect(getPriceDescription('US$', gwSixWeekly, SixWeekly))
       .toEqual('US$6 for the first 6 issues (then US$81.30 every 3 months)');
   });

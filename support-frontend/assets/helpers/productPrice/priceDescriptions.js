@@ -55,7 +55,7 @@ function getPriceDescription(
   billingPeriod: BillingPeriod,
 ): string {
   if (billingPeriod === SixWeekly) {
-    return getSixForSixDescription(glyph, productPrice); // TODO: use promotions
+    return getSixForSixDescription(glyph, productPrice);
   }
   const promotion = getAppliedPromo(productPrice.promotions);
   return hasDiscount(promotion) ? getDiscountDescription(
@@ -68,5 +68,17 @@ function getPriceDescription(
   ) : standardRate(glyph, productPrice.price, billingPeriod);
 }
 
+function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: ProductPrice) {
+  const appliedPromo = getAppliedPromo(productPrice.promotions);
+  if (
+    appliedPromo === null ||
+    (appliedPromo.introductoryPrice && billingPeriod === Quarterly)
+  ) {
+    return '';
+  }
 
-export { getPriceDescription };
+  return appliedPromo.description;
+}
+
+
+export { getPriceDescription, getAppliedPromoDescription };
