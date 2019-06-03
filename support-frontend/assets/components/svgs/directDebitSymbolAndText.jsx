@@ -4,7 +4,14 @@ import React from 'react';
 
 export default function SvgDirectDebitSymbolAndText() {
   return (
-    <svg className="svg-direct-debit-symbol-and-text" width="86" height="28" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      className="svg-direct-debit-symbol-and-text"
+      width="86"
+      height="28"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
       <g>
         <g
           stroke="null"
