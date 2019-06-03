@@ -113,16 +113,8 @@ function paymentResultFromObject(
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
 
-  // TBD: REMOVE
-  /* eslint-disable */
-  if (json.data && !json.data.guestAccountRegistrationToken) {
-    json.data.guestAccountRegistrationToken = 'dataToken';
-  }
-  /* eslint-enable */
-  // REMOVE ABOVE
-
-  if (json.data && json.data.guestAccountRegistrationToken) {
-    setGuestAccountCreationToken(json.data.guestAccountRegistrationToken);
+  if (json.data && json.data.guestAccountToken) {
+    setGuestAccountCreationToken(json.data.guestAccountToken);
     setThankYouPageStage('thankYouSetPassword');
   } else {
     setThankYouPageStage('thankYou');
