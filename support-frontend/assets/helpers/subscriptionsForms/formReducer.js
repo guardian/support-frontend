@@ -39,6 +39,10 @@ function createFormReducer(
     telephone: null,
     billingAddressIsSame: null,
     billingPeriod: initialBillingPeriod,
+    titleGiftRecipient: null,
+    firstNameGiftRecipient: '',
+    lastNameGiftRecipient: '',
+    emailGiftRecipient: '',
     paymentMethod: defaultPaymentMethod(initialCountry, product),
     formErrors: [],
     submissionError: null,
@@ -48,6 +52,7 @@ function createFormReducer(
     productOption: productOption || NoProductOptions,
     fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
     payPalHasLoaded: false,
+    orderIsAGift: false,
   };
 
 
@@ -69,6 +74,18 @@ function createFormReducer(
 
       case 'SET_TELEPHONE':
         return { ...state, telephone: action.telephone };
+
+      case 'SET_TITLE_GIFT':
+        return { ...state, titleGiftRecipient: action.titleGiftRecipient };
+
+      case 'SET_FIRST_NAME_GIFT':
+        return { ...state, firstNameGiftRecipient: action.firstNameGiftRecipient, formErrors: removeError('firstName', state.formErrors) };
+
+      case 'SET_LAST_NAME_GIFT':
+        return { ...state, lastNameGiftRecipient: action.lastNameGiftRecipient, formErrors: removeError('lastName', state.formErrors) };
+
+      case 'SET_EMAIL_GIFT':
+        return { ...state, emailGiftRecipient: action.emailGiftRecipient };
 
       case 'SET_START_DATE':
         return { ...state, startDate: action.startDate };
@@ -107,6 +124,9 @@ function createFormReducer(
 
       case 'SET_PAYPAL_HAS_LOADED':
         return { ...state, payPalHasLoaded: true };
+
+      case 'SET_ORDER_IS_GIFT':
+        return { ...state, orderIsAGift: action.orderIsAGift };
 
       default:
         return state;
