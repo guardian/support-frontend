@@ -3,12 +3,10 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-
 import { classNameWithModifiers } from 'helpers/utilities';
-
 import TimeTravelBanner from 'components/headerBanners/timeTravelBanner';
 import { connect } from 'react-redux';
-import type { State, ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
+import type { State, ThankYouPageStage } from 'pages/new-contributions-landing/contributionsLandingReducer';
 
 
 // ----- Types ----- //
