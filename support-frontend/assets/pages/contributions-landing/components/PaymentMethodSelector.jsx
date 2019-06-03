@@ -198,6 +198,4 @@ function PaymentMethodSelector(props: PropTypes) {
   );
 }
 
-const NewPaymentMethodSelector = connect(mapStateToProps, mapDispatchToProps)(PaymentMethodSelector);
-
-export { NewPaymentMethodSelector };
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentMethodSelector);

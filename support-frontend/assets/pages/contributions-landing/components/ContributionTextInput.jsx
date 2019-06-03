@@ -35,7 +35,7 @@ type PropTypes = {|
 
 // ----- Render ----- //
 
-function NewContributionTextInput(props: PropTypes) {
+function ContributionTextInput(props: PropTypes) {
   const showError = !props.isValid && props.formHasBeenSubmitted;
   const modifiersArray = showError ? ['invalid', props.id] : [props.id];
   const showRequiredLabel = props.required && props.showRequiredLabel;
@@ -80,7 +80,7 @@ function NewContributionTextInput(props: PropTypes) {
   );
 }
 
-NewContributionTextInput.defaultProps = {
+ContributionTextInput.defaultProps = {
   type: 'text',
   placeholder: false,
   required: false,
@@ -100,4 +100,4 @@ NewContributionTextInput.defaultProps = {
   showRequiredLabel: false,
 };
 
-export { NewContributionTextInput };
+export { ContributionTextInput };

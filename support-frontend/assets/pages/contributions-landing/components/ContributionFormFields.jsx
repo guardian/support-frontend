@@ -17,8 +17,8 @@ import {
   emailRegexPattern,
 } from 'helpers/formValidation';
 import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { NewContributionState } from './ContributionState';
-import { NewContributionTextInput } from './ContributionTextInput';
+import ContributionState from './ContributionState';
+import ContributionTextInput from './ContributionTextInput';
 import { MustSignIn } from './MustSignIn';
 import { type State } from '../contributionsLandingReducer';
 import {
@@ -79,7 +79,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Render ----- //
 
-function FormFields(props: PropTypes) {
+function ContributionFormFields(props: PropTypes) {
   const {
     firstName,
     lastName,
@@ -91,7 +91,7 @@ function FormFields(props: PropTypes) {
 
   return (
     <div className="form-fields">
-      <NewContributionTextInput
+      <ContributionTextInput
         id="contributionEmail"
         name="contribution-email"
         label="Email address"
@@ -120,7 +120,7 @@ function FormFields(props: PropTypes) {
       />
       {props.contributionType !== 'ONE_OFF' ?
         <div>
-          <NewContributionTextInput
+          <ContributionTextInput
             id="contributionFirstName"
             name="contribution-fname"
             label="First name"
@@ -135,7 +135,7 @@ function FormFields(props: PropTypes) {
             required
             showRequiredLabel
           />
-          <NewContributionTextInput
+          <ContributionTextInput
             id="contributionLastName"
             name="contribution-lname"
             label="Last name"
@@ -152,7 +152,7 @@ function FormFields(props: PropTypes) {
           />
         </div> : null
       }
-      <NewContributionState
+      <ContributionState
         onChange={props.updateState}
         selectedState={state}
         isValid={checkState(state)}
@@ -163,6 +163,4 @@ function FormFields(props: PropTypes) {
   );
 }
 
-const ContributionFormFields = connect(mapStateToProps, mapDispatchToProps)(FormFields);
-
-export { ContributionFormFields };
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionFormFields);

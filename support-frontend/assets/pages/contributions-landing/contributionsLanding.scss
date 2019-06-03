@@ -13,10 +13,10 @@
 @import '~components/marketingConsentNew/marketingConsent';
 @import '~components/spreadTheWord/spreadTheWord';
 @import '~components/socialShare/socialShare';
-@import '~pages/new-contributions-landing/components/ContributionThankYou/ContributionThankYou';
-@import '~pages/new-contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
-@import '~pages/new-contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
-@import '~pages/new-contributions-landing/components/ContributionSurvey/ContributionSurvey';
+@import '~pages/contributions-landing/components/ContributionThankYou/ContributionThankYou';
+@import '~pages/contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
+@import '~pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
+@import '~pages/contributions-landing/components/ContributionSurvey/ContributionSurvey';
 
 
 $content-left-margin-leftCol: calc(50% - 480px);

@@ -26,7 +26,7 @@ import SvgEuro from 'components/svgs/euro';
 import SvgPound from 'components/svgs/pound';
 
 import { selectAmount, updateOtherAmount } from '../contributionsLandingActions';
-import { NewContributionTextInput } from './ContributionTextInput';
+import ContributionTextInput from './ContributionTextInput';
 
 // ----- Types ----- //
 
@@ -170,7 +170,7 @@ function ContributionAmount(props: PropTypes) {
         </li>
       </ul>
       {showOther ? (
-        <NewContributionTextInput
+        <ContributionTextInput
           id="contributionOther"
           name="contribution-other-amount"
           type="number"
@@ -203,7 +203,4 @@ function ContributionAmount(props: PropTypes) {
   );
 }
 
-const NewContributionAmount = connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
-
-
-export { formatAmount, NewContributionAmount };
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
