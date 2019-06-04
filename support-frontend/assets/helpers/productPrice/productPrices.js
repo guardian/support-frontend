@@ -30,6 +30,14 @@ export type DiscountBenefit = {
   durationMonths?: number,
 }
 
+export type IntroductoryPeriodType = 'issue';
+
+export type IntroductoryPriceBenefit = {
+  price: number,
+  periodLength: number,
+  periodType: IntroductoryPeriodType,
+}
+
 export type Promotion =
   {
     name: string,
@@ -38,6 +46,7 @@ export type Promotion =
     discountedPrice?: number,
     numberOfDiscountedPeriods?: number,
     discount?: DiscountBenefit,
+    introductoryPrice?: IntroductoryPriceBenefit,
   }
 
 export type ProductPrice = {
