@@ -134,6 +134,4 @@ function ContributionSubmit(props: PropTypes) {
   return null;
 }
 
-const NewContributionSubmit = connect(mapStateToProps, mapDispatchToProps)(ContributionSubmit);
-
-export { NewContributionSubmit };
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionSubmit);

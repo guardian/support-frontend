@@ -20,7 +20,7 @@ import ContributionTicker from 'components/ticker/contributionTicker';
 import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
-import { NewContributionForm } from './ContributionForm';
+import ContributionForm from './ContributionForm';
 
 import {
   paymentWaiting,
@@ -173,7 +173,7 @@ function ContributionFormContainer(props: PropTypes) {
             {countryGroupDetails.formMessage ?
               <div className="form-message">{countryGroupDetails.formMessage}</div> : null
               }
-            <NewContributionForm
+            <ContributionForm
               onPaymentAuthorisation={onPaymentAuthorisation}
             />
           </div>
@@ -187,6 +187,4 @@ function ContributionFormContainer(props: PropTypes) {
     );
 }
 
-const NewContributionFormContainer = connect(mapStateToProps, mapDispatchToProps)(ContributionFormContainer);
-
-export { NewContributionFormContainer };
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionFormContainer);

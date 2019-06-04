@@ -80,6 +80,4 @@ ContributionState.defaultProps = {
   onChange: false,
 };
 
-const NewContributionState = connect(mapStateToProps)(ContributionState);
-
-export { NewContributionState };
+export default connect(mapStateToProps)(ContributionState);
