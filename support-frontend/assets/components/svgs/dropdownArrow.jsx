@@ -11,6 +11,8 @@ export default function SvgDropdownArrow() {
       width={10}
       height={10}
       preserveAspectRatio
+      aria-hidden="true"
+      focusable="false"
     >
       <path fill="#000" fillRule="nonzero" d="M5 5.828l3.535-3.535.707.707-4.242 4.242-4.242-4.242.707-.707z" />
     </svg>
