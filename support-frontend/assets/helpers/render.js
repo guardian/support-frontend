@@ -22,7 +22,7 @@ const getElementOrBody = (id: ?string): HTMLElement => {
 const renderError = (e: any, id: ?string) => {
   const element = getElementOrBody(id);
 
-  logException(['Fatal error rendering a page.', id ? `id:${id}.` : null, 'Error string:', e].join(' '));
+  logException(`Fatal error rendering a page. ${id ? id : ""} Error string: ${e}`);
   import('pages/error/components/errorPage').then(({ default: ErrorPage }) => {
     if (element) {
       ReactDOM.render(ErrorPage({
