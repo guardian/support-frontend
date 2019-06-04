@@ -14,7 +14,6 @@
 @import '~components/spreadTheWord/spreadTheWord';
 @import '~components/socialShare/socialShare';
 @import '~pages/contributions-landing/components/ContributionThankYou/ContributionThankYou';
-@import '~pages/contributions-landing/components/ButtonWithRightArrow/ButtonWithRightArrow';
 @import '~pages/contributions-landing/components/StripePaymentRequestButton/StripePaymentRequestButton';
 @import '~pages/contributions-landing/components/ContributionSurvey/ContributionSurvey';
 
@@ -829,13 +828,8 @@ form {
   padding-bottom: 20px;
 }
 
-.form__submit-button.button {
-  background: gu-colour(highlight-main);
-  border: 1px solid gu-colour(highlight-main);
-}
-
-.form__submit-button--hidden {
-  display: none;
+.form__submit .component-button {
+  width: 100%;
 }
 
 .form__radio-group--contribution-amount {

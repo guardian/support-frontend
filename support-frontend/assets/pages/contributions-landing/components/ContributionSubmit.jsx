@@ -17,9 +17,9 @@ import type { BillingPeriod } from 'helpers/billingPeriods';
 import { PayPalExpressButton } from 'components/paypalExpressButton/PayPalExpressButton';
 import { type State } from '../contributionsLandingReducer';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
-import { ButtonWithRightArrow } from './ButtonWithRightArrow/ButtonWithRightArrow';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { PayPal } from 'helpers/paymentMethods';
+import Button from 'components/button/button';
 
 // ----- Types ----- //
 
@@ -119,14 +119,14 @@ function ContributionSubmit(props: PropTypes) {
             billingPeriod={props.billingPeriod}
           />
         </div>
-        <ButtonWithRightArrow
-          accessibilityHintId="accessibility-hint-submit-contribution"
-          disabled={props.isWaiting}
-          type="submit"
-          componentClassName="form__submit--contribution"
-          buttonClassName={hiddenIf(showPayPalRecurringButton, 'form__submit-button')}
-          buttonCopy={submitButtonCopy}
-        />
+        {!showPayPalRecurringButton ?
+          <Button
+            type="submit"
+            aria-label={submitButtonCopy}
+            disabled={props.isWaiting}
+          >
+            {submitButtonCopy}
+          </Button> : null }
       </div>
     );
   }
