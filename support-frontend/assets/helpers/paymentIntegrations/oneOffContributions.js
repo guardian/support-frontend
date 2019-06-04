@@ -11,7 +11,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
-import type { ThankYouPageStage } from '../../pages/new-contributions-landing/contributionsLandingReducer';
+import type { ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
 
 // ----- Types ----- //
 
