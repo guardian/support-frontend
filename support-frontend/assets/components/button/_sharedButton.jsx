@@ -25,6 +25,12 @@ export const Sides = {
 type Appearance = $Keys<typeof Appearances>;
 type IconSide = $Keys<typeof Sides>;
 
+/* **********************************************************************
+Note: postDeploymentTestID will be prefixed with 'qa' to indicate it is
+used in a test and avoid any confusion by anyone looking at the DOM that
+we are using ID for anything other than QA testing.
+************************************************************************ */
+
 type SharedButtonPropTypes = {|
   children: string,
   icon?: Node,
@@ -32,6 +38,7 @@ type SharedButtonPropTypes = {|
   iconSide: IconSide,
   getRef?: (?Element) => void,
   modifierClasses: string[],
+  postDeploymentTestID?: string,
 |};
 
 type PropTypes = {
@@ -42,7 +49,7 @@ type PropTypes = {
 // ----- Render ----- //
 
 const SharedButton = ({
-  element, appearance, iconSide, modifierClasses, children, icon, getRef, ...otherProps
+  element, appearance, iconSide, modifierClasses, children, icon, getRef, postDeploymentTestID, ...otherProps
 }: PropTypes) => {
 
   const className = classNameWithModifiers('component-button', [
@@ -59,6 +66,7 @@ const SharedButton = ({
   return createElement(element, {
     className,
     ref: getRef,
+    id: postDeploymentTestID ? `qa-${postDeploymentTestID}` : null,
     ...otherProps,
   }, contents);
 };

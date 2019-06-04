@@ -35,17 +35,18 @@ object PaymentAPIResponseError {
 }
 
 case class ExecutePaymentBody(
-    signedInUserEmail: Option[String],
-    acquisitionData: JsValue,
-    paymentData: JsObject
+  // TODO: remove this field once the Payment API switches over to use mandatory email field
+  signedInUserEmail: Option[String],
+  // TODO: question: should we put the email in the paymentData for consistency with Stripe?
+  // downside is it breaks the model of "paymentData contains exactly what we need to send to the third-party"
+  // since we don't need to send email to PayPal but we do to Stripe
+  email: String,
+  acquisitionData: JsValue,
+  paymentData: JsObject
 )
 
 object ExecutePaymentBody {
   implicit val jf: OFormat[ExecutePaymentBody] = Json.format[ExecutePaymentBody]
-}
-
-object PaymentAPIService {
-  case class Email(value: String)
 }
 
 class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: ExecutionContext) {
@@ -58,25 +59,17 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
   val stripeExecutePaymentEndpoint: String = s"$paymentAPIUrl$stripeExecutePaymentPath"
 
-  private def convertQueryString(queryString: Map[String, Seq[String]]): List[(String, String)] = {
-    queryString.foldLeft(List.empty[(String, String)]) {
-      case (list, (key, values)) => list ::: values.map(x => (key, x)).toList
-    }
-  }
-
   private def postPaypalData[A](
     data: ExecutePaymentBody,
-    queryStrings: Map[String, Seq[String]],
     isTestUser: Boolean,
     userAgent: Option[String]
   ): EitherT[Future, PaymentAPIResponseError[A], WSResponse] = {
 
-    val allQueryParams = if (isTestUser) queryStrings + ("mode" -> Seq("test")) else queryStrings
-
     val headers = Seq("Accept" -> "application/json") ++ userAgent.map("User-Agent" -> _)
+    val queryStringParameters = if (isTestUser) Seq("mode" -> "test") else Seq()
 
     wsClient.url(payPalExecutePaymentEndpoint)
-      .withQueryStringParameters(convertQueryString(allQueryParams): _*)
+      .withQueryStringParameters(queryStringParameters: _*)
       .withHttpHeaders(headers: _*)
       .withBody(Json.toJson(data))
       .withMethod("POST")
@@ -104,12 +97,11 @@ class PaymentAPIService(wsClient: WSClient, paymentAPIUrl: String)(implicit ec: 
   def executePaypalPayment(
     paymentJSON: JsObject,
     acquisitionData: JsValue,
-    queryStrings: Map[String, Seq[String]],
-    email: Option[String],
+    email: String,
     isTestUser: Boolean,
     userAgent: Option[String]
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
-    val data = ExecutePaymentBody(email, acquisitionData, paymentJSON)
-    postPaypalData(data, queryStrings, isTestUser, userAgent).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
+    val data = ExecutePaymentBody(Some(email), email, acquisitionData, paymentJSON)
+    postPaypalData(data, isTestUser, userAgent).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
   }
 }

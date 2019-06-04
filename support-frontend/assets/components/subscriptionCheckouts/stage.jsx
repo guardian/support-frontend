@@ -2,17 +2,14 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { type Node } from 'react';
 import { connect } from 'react-redux';
-
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import ProgressMessage from 'components/progressMessage/progressMessage';
 
-import CheckoutForm from './components/checkoutForm';
-import ReturnSection from 'pages/paper-subscription-checkout/components/thankYou/returnSection';
-import ThankYouContent from 'pages/paper-subscription-checkout/components/thankYou/thankYou';
-import type { Stage } from 'helpers/subscriptionsForms/formFields';
+import { type Stage } from 'helpers/subscriptionsForms/formFields';
+import { type SubscriptionProduct } from 'helpers/subscriptions';
+import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 // ----- Types ----- //
@@ -20,8 +17,16 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 type PropTypes = {|
   stage: Stage,
   formSubmitted: boolean,
-  countryGroupId: CountryGroupId,
 |};
+
+type StagePropTypes = {
+  stage: Stage,
+  formSubmitted: boolean,
+  checkoutForm: Node,
+  thankYouContentPending: Node,
+  thankYouContent: Node,
+  subscriptionProduct: SubscriptionProduct,
+}
 
 // ----- State/Props Maps ----- //
 
@@ -29,27 +34,26 @@ function mapStateToProps(state: WithDeliveryCheckoutState): PropTypes {
   return {
     stage: state.page.checkout.stage,
     formSubmitted: state.page.checkout.formSubmitted,
-    countryGroupId: state.common.internationalisation.countryGroupId,
   };
 }
 
 // ----- Component ----- //
 
-function CheckoutStage(props: PropTypes) {
+function CheckoutStage(props: StagePropTypes) {
   switch (props.stage) {
     case 'thankyou':
       return (
         <div>
-          <ThankYouContent isPending={false} />
-          <ReturnSection />
+          {props.thankYouContent}
+          <ReturnSection subscriptionProduct={props.subscriptionProduct} />
         </div>
       );
 
     case 'thankyou-pending':
       return (
         <div>
-          <ThankYouContent isPending />
-          <ReturnSection />
+          {props.thankYouContentPending}
+          <ReturnSection subscriptionProduct={props.subscriptionProduct} />
         </div>
       );
 
@@ -57,7 +61,7 @@ function CheckoutStage(props: PropTypes) {
     default:
       return (
         <div className="checkout-content">
-          <CheckoutForm />
+          {props.checkoutForm}
           {props.formSubmitted ? <ProgressMessage message={['Processing transaction', 'Please wait']} /> : null}
         </div>
       );

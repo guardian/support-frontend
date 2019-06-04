@@ -59,8 +59,8 @@ class PaperSubscription(
     val css = Left(RefPath("paperSubscriptionLandingPage.css"))
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
     val description = stringsConfig.paperLandingDescription
-    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, promoCode)
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(Paper, promoCodes)
 
     Ok(views.html.main(title, mainElement, js, css, fontLoaderBundle, description, canonicalLink){
       Html(s"""<script type="text/javascript">window.guardian.productPrices = ${outputJson(productPrices)}</script>""")
@@ -88,7 +88,7 @@ class PaperSubscription(
     val css = "paperSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
     val uatMode = testUsers.isTestUser(idUser.publicFields.displayName)
-    val promoCode = request.queryString.get("promoCode").flatMap(_.headOption)
+    val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
     subscriptionCheckout(
       title,
@@ -99,7 +99,7 @@ class PaperSubscription(
       Some(csrf),
       idUser,
       uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(Paper, promoCode),
+      priceSummaryServiceProvider.forUser(uatMode).getPrices(Paper, promoCodes),
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),

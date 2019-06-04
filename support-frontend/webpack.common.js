@@ -69,7 +69,7 @@ module.exports = (cssFilename, outputFilename, minimizeCss) => ({
     favicons: 'images/favicons.js',
     showcasePage: 'pages/showcase/showcase.jsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.jsx',
-    contributionsLandingPage: 'pages/new-contributions-landing/contributionsLanding.jsx',
+    contributionsLandingPage: 'pages/contributions-landing/contributionsLanding.jsx',
     fontLoader: 'helpers/fontLoader.js',
 
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.jsx',

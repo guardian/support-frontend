@@ -5,7 +5,7 @@ import com.gu.support.promotions._
 
 case class PriceSummary(
   price: BigDecimal,
-  promotion: Option[PromotionSummary]
+  promotions: List[PromotionSummary]
 )
 
 case class PromotionSummary(
@@ -16,7 +16,8 @@ case class PromotionSummary(
   numberOfDiscountedPeriods: Option[Int],
   discount: Option[DiscountBenefit],
   freeTrialBenefit: Option[FreeTrialBenefit],
-  incentive: Option[IncentiveBenefit] = None
+  incentive: Option[IncentiveBenefit] = None,
+  introductoryPrice: Option[IntroductoryPriceBenefit] = None
 )
 
 import com.gu.support.encoding.Codec

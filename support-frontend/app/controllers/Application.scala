@@ -118,9 +118,9 @@ class Application(
 
     val js = elementForStage(RefPath("contributionsLandingPage.js"))
 
-    views.html.newContributions(
+    views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
-      id = s"new-contributions-landing-page-$countryCode",
+      id = s"contributions-landing-page-$countryCode",
       js = js,
       css = css,
       fontLoaderBundle = fontLoaderBundle,

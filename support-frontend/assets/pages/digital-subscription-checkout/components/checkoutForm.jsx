@@ -12,8 +12,6 @@ import {
 } from 'helpers/subscriptionsForms/validation';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
-import { Fieldset } from 'components/forms/fieldset';
-import { RadioInput } from 'components/forms/customFields/radioInput';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import CheckoutLayout, { Content } from 'components/subscriptionCheckouts/layout';
 import type { ErrorReason } from 'helpers/errorReasons';
@@ -23,8 +21,6 @@ import {
   getPromotion,
   regularPrice,
 } from 'helpers/productPrice/productPrices';
-import { PriceLabel } from 'components/priceLabel/priceLabel';
-import { PromotionSummary } from 'components/promotionSummary/promotionSummary';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import Summary from 'components/subscriptionCheckouts/summary';
 import {
@@ -60,6 +56,7 @@ import {
   validateCheckoutForm,
 } from 'helpers/subscriptionsForms/formValidation';
 import { submitCheckoutForm } from 'helpers/subscriptionsForms/submit';
+import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 
 // ----- Types ----- //
 
@@ -129,21 +126,6 @@ const Address = withStore(countries, 'billing', getBillingAddress);
 // ----- Component ----- //
 
 function CheckoutForm(props: PropTypes) {
-  const monthlyPriceLabel = props.country !== null ?
-    (<PriceLabel
-      country={props.country}
-      productPrice={regularPrice(props.productPrices, props.country, Monthly)}
-      promotion={getPromotion(props.productPrices, props.country, Monthly)}
-      billingPeriod={Monthly}
-    />) : '';
-
-  const annualPriceLabel = props.country !== null ?
-    (<PriceLabel
-      country={props.country}
-      productPrice={regularPrice(props.productPrices, props.country, Annual)}
-      promotion={getPromotion(props.productPrices, props.country, Annual)}
-      billingPeriod={Annual}
-    />) : '';
 
   return (
     <Content>
@@ -195,27 +177,13 @@ function CheckoutForm(props: PropTypes) {
           <FormSection title="Address">
             <Address />
           </FormSection>
-          <FormSection title="How often would you like to pay?">
-            <Fieldset legend="How often would you like to pay?">
-              <RadioInput
-                text={monthlyPriceLabel}
-                name="billingPeriod"
-                checked={props.billingPeriod === Monthly}
-                onChange={() => props.setBillingPeriod(Monthly)}
-              />
-              <RadioInput
-                text={annualPriceLabel}
-                name="billingPeriod"
-                checked={props.billingPeriod === Annual}
-                onChange={() => props.setBillingPeriod(Annual)}
-              />
-              <PromotionSummary
-                country={props.country}
-                productPrices={props.productPrices}
-                billingPeriod={props.billingPeriod}
-              />
-            </Fieldset>
-          </FormSection>
+          <BillingPeriodSelector
+            billingCountry={props.country}
+            billingPeriods={[Monthly, Annual]}
+            productPrices={props.productPrices}
+            selected={props.billingPeriod}
+            onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
+          />
           <PaymentMethodSelector
             country={props.country}
             product={DigitalPack}

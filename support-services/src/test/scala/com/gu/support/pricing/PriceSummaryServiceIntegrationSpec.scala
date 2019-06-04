@@ -12,7 +12,7 @@ class PriceSummaryServiceIntegrationSpec  extends FlatSpec with Matchers with La
 
   "PriceSummaryService" should "return prices" in {
     val service = new PriceSummaryService(PromotionServiceSpec.serviceWithDynamo, CatalogService(TouchPointEnvironments.SANDBOX))
-    val result = service.getPrices(GuardianWeekly, Some("WJW7OAJ3A"))
+    val result = service.getPrices(GuardianWeekly, List("WJW7OAJ3A"))
     result.size shouldBe 7
   }
 }

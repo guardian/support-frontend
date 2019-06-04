@@ -381,4 +381,41 @@ object Fixtures {
             "campaignCode": "C_IUJPNBPQ"
         }
     """
+
+  val introductoryPricePromotion =
+    s"""
+    {
+      "codes": {
+          "Customer Experience": [
+              "6FOR6"
+          ]
+      },
+      "promotionType": {
+          "price": 6,
+          "periodLength": 6,
+          "periodType": "issue",
+          "name": "introductory_price"
+      },
+      "name": "Six For Six",
+      "appliesTo": {
+          "productRatePlanIds": [
+              "2c92a0086619bf8901661ab02752722f",
+              "2c92a0fe6619b4b301661aa494392ee2",
+              "2c92c0f9660fc4d70166109c01465f10",
+              "2c92c0f8660fb5d601661081ea010391",
+              "2c92c0f965f2122101660fb81b745a06",
+              "2c92c0f965dc30640165f150c0956859"
+          ],
+          "countries": [
+              "AZ",
+              "NF",
+              "PW"
+          ]
+      },
+      "description": "Introductory offer",
+      "starts": "$startDate",
+      "uuid": "b8992d84-dbd3-406c-b3c4-0209b74a66e9",
+      "campaignCode": "C_IZY6K6ZY"
+    }
+  """
 }

@@ -65,17 +65,11 @@ class PayPalOneOff(
     }
   }
 
-  def resultFromPaypalSuccess(success: PayPalSuccess, country: Option[String], isTestUser: Boolean)(implicit request: RequestHeader): Result = {
+  def resultFromPaypalSuccess(success: PayPalSuccess, country: String, isTestUser: Boolean)(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
-    val redirect = Redirect {
-      country match {
-        // TODO: more cleanup
-        case Some(c) => s"/$c/thankyou"
-        case None => "/contribute/one-off/thankyou"
-      }
-    }
+    val redirect = Redirect(s"/$country/thankyou")
     if (!isTestUser) {
-      monitoredRegion(country.getOrElse("Unknown")).map {
+      monitoredRegion(country).map {
         region => verify(TipPath(region, OneOffContribution, PayPal), tipMonitoring.verify)
       }
     }
@@ -84,10 +78,7 @@ class PayPalOneOff(
     redirect.flashing("guestAccountCreationToken" -> success.guestAccountCreationToken)
   }
 
-  //TODO - more cleanup
-  def newReturnURL(paymentId: String, PayerID: String, country: String): Action[AnyContent] = returnURL(paymentId, PayerID, Some(country))
-
-  def returnURL(paymentId: String, PayerID: String, country: Option[String] = None): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
 
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
@@ -111,27 +102,7 @@ class PayPalOneOff(
     val isTestUser = testUsers.isTestUser(testUsername.map(_.value))
     val userAgent = request.headers.get("user-agent")
 
-    def emailForUser(user: Option[AuthenticatedIdUser])(
-      implicit
-      request: RequestHeader
-    ): EitherT[Future, PaymentAPIResponseError[PayPalError], Option[String]] = {
-
-      val noEmail = EitherT.pure[Future, PaymentAPIResponseError[PayPalError]](Option.empty[String])
-
-      user.fold(noEmail) { authUser =>
-        identityService.getUser(authUser)
-          .map(idUser => Option(idUser.primaryEmailAddress))
-          .leftFlatMap(_ => noEmail)
-      }
-    }
-
-    emailForUser(request.user)
-      .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser, userAgent))
+    paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent)
       .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, isTestUser))
-  }
-
-  def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
-    SafeLogger.info("The user selected cancel payment and decided not to contribute.")
-    Redirect(routes.PayPalOneOff.paypalError())
   }
 }

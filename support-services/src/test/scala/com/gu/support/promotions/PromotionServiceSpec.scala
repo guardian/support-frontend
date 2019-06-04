@@ -2,6 +2,7 @@ package com.gu.support.promotions
 
 import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
+import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.{PromotionsConfigProvider, Stages}
 import com.gu.support.promotions.PromotionServiceSpec._
 import com.gu.support.promotions.ServicesFixtures.{freeTrialPromoCode, _}
@@ -14,6 +15,22 @@ class PromotionServiceSpec extends FlatSpec with Matchers {
   "PromotionService" should "find a PromoCode" in {
     serviceWithFixtures.findPromotion(freeTrialPromoCode) should be(Some(freeTrialWithCode))
     serviceWithFixtures.findPromotion(invalidPromoCode) should be(None)
+  }
+
+  it should "find multiple promo codes" in {
+    val promotions = serviceWithFixtures.findPromotions(List(freeTrialPromoCode, GuardianWeekly.AnnualPromoCode))
+    promotions should contain (freeTrialWithCode)
+    promotions should contain (guardianWeeklyWithCode)
+  }
+
+  it should "handle Nil in findPromotions" in {
+    val promotions = serviceWithFixtures.findPromotions(Nil)
+    promotions shouldBe Nil
+  }
+
+  it should "find all the Guardian Weekly promotions" in {
+    val promotions = serviceWithFixtures.findPromotions(List(GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode))
+    promotions.length shouldBe 2
   }
 
   it should "validate a PromoCode" in {
@@ -72,7 +89,7 @@ object PromotionServiceSpec {
   val config = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
   val serviceWithFixtures = new PromotionService(
     config,
-    Some(new SimplePromotionCollection(List(freeTrial, discount, double, tracking.promotion, renewal.promotion)))
+    Some(new SimplePromotionCollection(List(freeTrial, discount, double, tracking.promotion, renewal.promotion, guardianWeeklyAnnual)))
   )
 
   val serviceWithDynamo = new PromotionService(

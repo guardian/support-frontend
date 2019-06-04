@@ -20,7 +20,7 @@ import { campaigns, getCampaignName } from 'helpers/campaigns';
 
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
-import { NewContributionFormContainer } from './components/ContributionFormContainer';
+import ContributionFormContainer from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';
@@ -42,7 +42,7 @@ user.init(store.dispatch, setUserStateActions);
 formInit(store);
 
 
-const reactElementId = `new-contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
+const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 
 // ----- Internationalisation ----- //
 
@@ -74,7 +74,7 @@ function contributionsLandingPage() {
       footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
-      <NewContributionFormContainer
+      <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
       />
       <ConsentBanner />

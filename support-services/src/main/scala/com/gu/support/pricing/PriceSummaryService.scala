@@ -13,23 +13,22 @@ import scala.math.BigDecimal.RoundingMode
 class PriceSummaryService(promotionService: PromotionService, catalogService: CatalogService) extends TouchpointService {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
-
-  def getPrices[T <: Product](product: T, maybePromoCode: Option[PromoCode]): ProductPrices = {
-    val maybePromotion = maybePromoCode.flatMap(promotionService.findPromotion)
-
+  def getPrices[T <: Product](product: T, promoCodes: List[PromoCode]): ProductPrices = {
+    val promotions = promotionService.findPromotions(promoCodes)
     product.supportedCountries(catalogService.environment).map(
       countryGroup =>
-        countryGroup -> getPricesForCountryGroup(product, countryGroup, maybePromotion)
+        countryGroup -> getPricesForCountryGroup(product, countryGroup, promotions)
     ).toMap
   }
 
-  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, maybePromotion: Option[PromotionWithCode]): CountryGroupPrices = {
+
+  def getPricesForCountryGroup[T <: Product](product: T, countryGroup: CountryGroup, promotions: List[PromotionWithCode]): CountryGroupPrices = {
     val grouped = product.ratePlans(catalogService.environment).groupBy(p => (p.fulfilmentOptions, p.productOptions, p.billingPeriod)).map {
       case (keys, productRatePlans) =>
         val priceSummaries = for {
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)
           price <- filterCurrencies(catalogService.getPriceList(productRatePlan).map(_.prices), countryGroup)
-        } yield getPriceSummary(maybePromotion, countryGroup, productRatePlan, price)
+        } yield getPriceSummary(promotions, countryGroup, productRatePlan, price)
         (keys, priceSummaries.toMap)
     }
     nestPriceLists(grouped)
@@ -44,36 +43,36 @@ class PriceSummaryService(promotionService: PromotionService, catalogService: Ca
       .getOrElse(Nil)
       .filter(price => countryGroup.supportedCurrencies.contains(price.currency))
 
-
-  private def getPriceSummary(
-    maybePromotion: Option[PromotionWithCode],
-    countryGroup: CountryGroup,
-    productRatePlan: ProductRatePlan[Product],
-    price: Price
-  ) = {
-    val promotionSummary: Option[PromotionSummary] = for {
-      promotion <- maybePromotion
+  private def getPriceSummary(promotions: List[PromotionWithCode], countryGroup: CountryGroup, productRatePlan: ProductRatePlan[Product], price: Price) = {
+    val promotionSummaries: List[PromotionSummary] = for {
+      promotion <- promotions
       country <- countryGroup.defaultCountry.orElse(countryGroup.countries.headOption)
-      validPromotion <- promotionService
-        .validatePromotion(promotion, country, productRatePlan.id, isRenewal = false).toOption //Not dealing with renewals for now
+      validPromotion <- promotionService.validatePromotion(
+        promotion,
+        country,
+        productRatePlan.id,
+        isRenewal = false
+      ).toOption //Not dealing with renewals for now
     } yield getPromotionSummary(validPromotion, price, productRatePlan.billingPeriod)
 
     price.currency -> PriceSummary(
       price.value,
-      promotionSummary
+      promotionSummaries
     )
   }
 
-  private def getPromotionSummary(promotion: PromotionWithCode, price: Price, billingPeriod: BillingPeriod) = {
+  private def getPromotionSummary(promotionWithCode: PromotionWithCode, price: Price, billingPeriod: BillingPeriod) = {
+    import promotionWithCode._
     PromotionSummary(
-      promotion.promotion.name,
-      promotion.promotion.description,
-      promotion.promoCode,
-      promotion.promotion.discount.map(getDiscountedPrice(price, _, billingPeriod).value),
-      promotion.promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
-      promotion.promotion.discount,
-      promotion.promotion.freeTrial,
-      promotion.promotion.incentive
+      name = promotion.name,
+      description = promotion.description,
+      promoCode = promoCode,
+      discountedPrice = promotion.discount.map(getDiscountedPrice(price, _, billingPeriod).value),
+      numberOfDiscountedPeriods = promotion.discount.flatMap(_.durationMonths).map(getNumberOfDiscountedPeriods(_, billingPeriod)),
+      discount = promotion.discount,
+      freeTrialBenefit = promotion.freeTrial,
+      incentive = promotion.incentive,
+      introductoryPrice = promotion.introductoryPrice
     )
   }
 

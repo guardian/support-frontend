@@ -20,7 +20,7 @@ import './header.scss';
 export type PropTypes = {|
   utility: Option<Node>,
   countryGroupId: ?CountryGroupId,
-  display?: 'navigation' | 'checkout' | void,
+  display?: 'navigation' | 'checkout' | 'guardianLogo' | void,
 |};
 export type State = {|
   fitsLinksInOneRow: boolean,
@@ -51,7 +51,7 @@ const getMenuStateMetrics = ({ menuRef, logoRef, containerRef }): State => {
 type TopNavPropTypes = {|
   utility: Node,
   getLogoRef: (?Element) => void,
-  display: 'navigation' | 'checkout' | void,
+  display: 'navigation' | 'checkout' | 'guardianLogo' | void,
 |};
 
 const TopNav = ({ display, getLogoRef, utility }: TopNavPropTypes) => (

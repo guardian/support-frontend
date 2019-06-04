@@ -1,11 +1,11 @@
 package com.gu.support.pricing
 
-import com.gu.i18n.CountryGroup.UK
-import com.gu.i18n.CountryGroup.Europe
+import com.gu.i18n.CountryGroup.{Europe, UK}
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.support.catalog._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
+import com.gu.support.promotions.ServicesFixtures.discountPromoCode
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{Annual, BillingPeriod, Monthly, Quarterly}
 import org.joda.time.Months
@@ -17,24 +17,44 @@ class PriceSummaryServiceSpec extends FlatSpec with Matchers {
 
     val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
 
-    val paper = service.getPrices(Paper, Some("DISCOUNT_CODE"))
+    val paper = service.getPrices(Paper, List(discountPromoCode))
     paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 54.12
-    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).promotion.flatMap(_.discountedPrice) shouldBe Some(37.88)
+    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(37.88)
     paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).price shouldBe 51.96
-    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).promotion.flatMap(_.discountedPrice) shouldBe Some(36.37)
+    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(36.37)
 
-    val guardianWeekly = service.getPrices(GuardianWeekly, Some("DISCOUNT_CODE"))
+    val digitalPack = service.getPrices(DigitalPack, List(discountPromoCode))
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 11.99
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(8.39)
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 119.90
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(110.91)
+  }
+
+  it should "return correct prices for Guardian Weekly" in {
+    val service = new PriceSummaryService(PromotionServiceSpec.serviceWithFixtures, CatalogServiceSpec.serviceWithFixtures)
+
+    val guardianWeekly = service.getPrices(GuardianWeekly, List(discountPromoCode, GuardianWeekly.AnnualPromoCode, GuardianWeekly.SixForSixPromoCode))
+
+    //Quarterly should have the 6 for 6 introductory promotion
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 2
+
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 37.50
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotion.flatMap(_.discountedPrice) shouldBe Some(26.25)
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
+      .find(_.promoCode == discountPromoCode).get.discountedPrice shouldBe Some(26.25)
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
+      .find(_.promoCode == GuardianWeekly.SixForSixPromoCode).get.introductoryPrice.get.price shouldBe 6
+
+    //Annual should have 2 discounts applied,
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions.size shouldBe 2
+
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).price shouldBe 150
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotion.flatMap(_.discountedPrice) shouldBe Some(138.75)
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
+      .find(_.promoCode == discountPromoCode).get.discountedPrice shouldBe Some(138.75)
     guardianWeekly(Europe)(RestOfWorld)(NoProductOptions)(Annual)(EUR).price shouldBe 270
 
-    val digitalPack = service.getPrices(DigitalPack, Some("DISCOUNT_CODE"))
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 11.99
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).promotion.get.discountedPrice shouldBe Some(8.39)
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 119.90
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotion.get.discountedPrice shouldBe Some(110.91)
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
+      .find(_.promoCode == GuardianWeekly.AnnualPromoCode).get.discountedPrice shouldBe Some(135.00)
+
   }
 
   it should "work out a discount correctly" in {

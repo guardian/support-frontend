@@ -1,8 +1,9 @@
 package com.gu.support.promotions
 
 import com.gu.support.catalog._
-import com.gu.support.workers.Annual
+import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.config.TouchPointEnvironments.PROD
+import com.gu.support.workers.Annual
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
@@ -34,6 +35,14 @@ object ServicesFixtures {
   val doubleWithCode = PromotionWithCode(doublePromoCode, double)
   val tracking = PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
   val renewal = PromotionWithCode(renewalPromoCode, promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true))
+  val guardianWeeklyAnnual = promotion(
+    GuardianWeekly
+      .getProductRatePlan(TouchPointEnvironments.PROD, Annual, Domestic, NoProductOptions)
+      .map(p => List(p.id)).getOrElse(List()),
+    GuardianWeekly.AnnualPromoCode,
+    Some(DiscountBenefit(10, Some(Months.TWELVE)))
+  )
+  val guardianWeeklyWithCode = PromotionWithCode(GuardianWeekly.AnnualPromoCode, guardianWeeklyAnnual)
 
   val now = LocalDate.now()
   val subscriptionData = SubscriptionData(
