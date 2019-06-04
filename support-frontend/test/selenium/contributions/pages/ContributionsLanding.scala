@@ -8,7 +8,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   val url = s"${Config.supportFrontendUrl}/$region/contribute"
 
-  private val contributeButton = className("form__submit-button")
+  private val contributeButton = cssSelector(".form__submit .component-button")
 
   private val contributePayPalButton = className("paypal-button")
 
