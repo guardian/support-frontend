@@ -74,8 +74,13 @@ class PayPalOneOff(
       }
     }
 
-    SafeLogger.info("Redirecting to thank you page with guestAccountCreationToken in flash session")
-    redirect.flashing("guestAccountCreationToken" -> success.guestAccountCreationToken)
+    success.guestAccountCreationToken.fold {
+      SafeLogger.info("Redirecting to thank you page without guestAccountCreationToken")
+      redirect
+    } { guestAccountCreationToken =>
+      SafeLogger.info("Redirecting to thank you page with guestAccountCreationToken in flash session")
+      redirect.flashing("guestAccountCreationToken" -> guestAccountCreationToken)
+    }
   }
 
   def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
