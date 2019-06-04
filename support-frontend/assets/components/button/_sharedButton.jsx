@@ -32,6 +32,7 @@ type SharedButtonPropTypes = {|
   iconSide: IconSide,
   getRef?: (?Element) => void,
   modifierClasses: string[],
+  postDeploymentTestID?: string,
 |};
 
 type PropTypes = {
@@ -42,7 +43,7 @@ type PropTypes = {
 // ----- Render ----- //
 
 const SharedButton = ({
-  element, appearance, iconSide, modifierClasses, children, icon, getRef, ...otherProps
+  element, appearance, iconSide, modifierClasses, children, icon, getRef, postDeploymentTestID, ...otherProps
 }: PropTypes) => {
 
   const className = classNameWithModifiers('component-button', [
@@ -59,6 +60,7 @@ const SharedButton = ({
   return createElement(element, {
     className,
     ref: getRef,
+    id: postDeploymentTestID,
     ...otherProps,
   }, contents);
 };
