@@ -12,7 +12,7 @@ import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/paymentMethods';
 import { billingPeriodFromContrib, getAmount } from '../contributions';
 import type { Csrf } from '../csrf/csrfReducer';
-import type { State } from '../../pages/new-contributions-landing/contributionsLandingReducer';
+import type { State } from '../../pages/contributions-landing/contributionsLandingReducer';
 
 export type SetupPayPalRequestType = (
   resolve: string => void,

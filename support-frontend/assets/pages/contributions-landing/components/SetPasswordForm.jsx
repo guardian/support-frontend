@@ -15,7 +15,7 @@ import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { checkEmail, emailRegexPattern } from 'helpers/formValidation';
 import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
 
-import { NewContributionTextInput } from './ContributionTextInput';
+import ContributionTextInput from './ContributionTextInput';
 import { type ThankYouPageStage } from '../contributionsLandingReducer';
 import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../contributionsLandingActions';
 import Button from 'components/button/button';
@@ -102,7 +102,7 @@ function SetPasswordForm(props: PropTypes) {
   return (
     <div className="set-password__form">
       <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-        <NewContributionTextInput
+        <ContributionTextInput
           id="email"
           name="contribution-email"
           label="Email address"
@@ -116,7 +116,7 @@ function SetPasswordForm(props: PropTypes) {
           required
           disabled
         />
-        <NewContributionTextInput
+        <ContributionTextInput
           id="password"
           type="password"
           name="contribution-password"

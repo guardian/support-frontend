@@ -31,11 +31,11 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { StripePaymentRequestButtonMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 
-import { ContributionFormFields } from './ContributionFormFields';
+import ContributionFormFields from './ContributionFormFields';
 import ContributionTypeTabs from './ContributionTypeTabs';
-import { NewContributionAmount } from './ContributionAmount';
-import { NewPaymentMethodSelector } from './PaymentMethodSelector';
-import { NewContributionSubmit } from './ContributionSubmit';
+import ContributionAmount from './ContributionAmount';
+import PaymentMethodSelector from './PaymentMethodSelector';
+import ContributionSubmit from './ContributionSubmit';
 
 import { type State } from '../contributionsLandingReducer';
 
@@ -227,7 +227,7 @@ function ContributionForm(props: PropTypes) {
     <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
       <div>
         <ContributionTypeTabs />
-        <NewContributionAmount
+        <ContributionAmount
           checkOtherAmount={checkAmount}
         />
         <StripePaymentRequestButtonContainer
@@ -242,9 +242,9 @@ function ContributionForm(props: PropTypes) {
         />
         <div className={classNameWithModifiers('form', ['content'])}>
           <ContributionFormFields />
-          <NewPaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
+          <PaymentMethodSelector onPaymentAuthorisation={props.onPaymentAuthorisation} />
           <ContributionErrorMessage />
-          <NewContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
+          <ContributionSubmit onPaymentAuthorisation={props.onPaymentAuthorisation} />
         </div>
       </div>
       <div>
@@ -259,6 +259,4 @@ function ContributionForm(props: PropTypes) {
   );
 }
 
-const NewContributionForm = connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
-
-export { NewContributionForm };
+export default connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
