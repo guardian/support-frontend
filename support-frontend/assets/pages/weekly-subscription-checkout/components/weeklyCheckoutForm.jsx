@@ -287,6 +287,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
             billingCountry={props.billingCountry}
             productPrices={props.productPrices}
             selected={props.billingPeriod}
+            orderIsAGift={props.orderIsAGift}
           />
           <PaymentMethodSelector
             country={props.billingCountry}

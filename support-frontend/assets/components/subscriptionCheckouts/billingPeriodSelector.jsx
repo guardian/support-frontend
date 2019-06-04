@@ -29,6 +29,7 @@ type PropTypes = {|
   billingCountry: IsoCountry,
   selected: BillingPeriod,
   onChange: (BillingPeriod) => Action,
+  orderIsAGift?: boolean | null,
 |}
 
 function BillingPeriodSelector(props: PropTypes) {
@@ -42,19 +43,20 @@ function BillingPeriodSelector(props: PropTypes) {
             billingPeriod === SixWeekly ? Quarterly : billingPeriod, // for 6 for 6 we need the quarterly pricing
             props.fulfilmentOption,
           );
-
-          return (<RadioInputWithHelper
-            text={billingPeriodTitle(billingPeriod)}
-            helper={getPriceDescription(
-              extendedGlyphForCountry(props.billingCountry),
-              productPrice,
-              billingPeriod,
-            )}
-            offer={getAppliedPromoDescription(billingPeriod, productPrice)}
-            name="billingPeriod"
-            checked={billingPeriod === props.selected}
-            onChange={() => props.onChange(billingPeriod)}
-          />);
+          return !props.orderIsAGift || billingPeriod !== SixWeekly ?
+            <RadioInputWithHelper
+              text={billingPeriodTitle(billingPeriod)}
+              helper={getPriceDescription(
+                extendedGlyphForCountry(props.billingCountry),
+                productPrice,
+                billingPeriod,
+              )}
+              offer={getAppliedPromoDescription(billingPeriod, productPrice)}
+              name="billingPeriod"
+              checked={billingPeriod === props.selected}
+              onChange={() => props.onChange(billingPeriod)}
+            />
+          : null;
         })}
       </Fieldset>
     </FormSection>);
@@ -62,6 +64,7 @@ function BillingPeriodSelector(props: PropTypes) {
 
 BillingPeriodSelector.defaultProps = {
   fulfilmentOption: NoFulfilmentOptions,
+  orderIsAGift: false,
 };
 
 export { BillingPeriodSelector };
