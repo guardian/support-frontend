@@ -124,6 +124,7 @@ function ContributionSubmit(props: PropTypes) {
             type="submit"
             aria-label={submitButtonCopy}
             disabled={props.isWaiting}
+            postDeploymentTestID="contributions-landing-submit-contribution-button"
           >
             {submitButtonCopy}
           </Button> : null }
