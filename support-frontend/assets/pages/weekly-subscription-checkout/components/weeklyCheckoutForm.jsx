@@ -225,33 +225,33 @@ function WeeklyCheckoutForm(props: PropTypes) {
             {!props.orderIsAGift ? <DeliveryAddress /> : null}
           </FormSection>
           {props.orderIsAGift ? (
-            <FormSection title="Gift recipient's details">
-              <SelectWithLabel
-                id="title"
-                label="Title"
-                optional
-                value={props.titleGiftRecipient}
-                setValue={props.setTitleGift}
-              >
-                <option value="">--</option>
-                {options(titles)}
-              </SelectWithLabel>
-              <PersonalDetailsGift
-                firstName={props.firstNameGiftRecipient}
-                setFirstName={props.setFirstNameGift}
-                lastName={props.lastNameGiftRecipient}
-                setLastName={props.setLastNameGift}
-                email={props.emailGiftRecipient}
-                setEmailGift={props.setEmailGift}
-                formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
-                isGiftRecipient
-              />
-            </FormSection>)
-          : null}
-          {props.orderIsAGift ? (
-            <FormSection title="Gift recipient's address">
-              <DeliveryAddress />
-            </FormSection>)
+            <span>
+              <FormSection title="Gift recipient's details">
+                <SelectWithLabel
+                  id="title"
+                  label="Title"
+                  optional
+                  value={props.titleGiftRecipient}
+                  setValue={props.setTitleGift}
+                >
+                  <option value="">--</option>
+                  {options(titles)}
+                </SelectWithLabel>
+                <PersonalDetailsGift
+                  firstName={props.firstNameGiftRecipient}
+                  setFirstName={props.setFirstNameGift}
+                  lastName={props.lastNameGiftRecipient}
+                  setLastName={props.setLastNameGift}
+                  email={props.emailGiftRecipient}
+                  setEmailGift={props.setEmailGift}
+                  formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+                  isGiftRecipient
+                />
+              </FormSection>
+              <FormSection title="Gift recipient's address">
+                <DeliveryAddress />
+              </FormSection>
+            </span>)
           : null}
           <FormSection title={props.orderIsAGift ?
             'Is the billing address the same as the recipient\'s address?'
