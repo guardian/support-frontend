@@ -54,8 +54,8 @@ function payPalCancelUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
 }
 
-function payPalReturnUrl(cgId: CountryGroupId): string {
-  return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/paypal/rest/return`;
+function payPalReturnUrl(cgId: CountryGroupId, email: string): string {
+  return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/paypal/rest/return?email=${email}`;
 }
 
 // ----- Exports ----- //

@@ -177,7 +177,7 @@ const formHandlers: PaymentMatrix<PropTypes => void> = {
           props.otherAmounts,
           props.contributionType,
         ),
-        returnURL: payPalReturnUrl(props.countryGroupId),
+        returnURL: payPalReturnUrl(props.countryGroupId, props.email),
         cancelURL: payPalCancelUrl(props.countryGroupId),
       });
     },
