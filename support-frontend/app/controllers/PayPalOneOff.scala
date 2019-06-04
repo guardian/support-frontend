@@ -65,17 +65,11 @@ class PayPalOneOff(
     }
   }
 
-  def resultFromPaypalSuccess(success: PayPalSuccess, country: Option[String], isTestUser: Boolean)(implicit request: RequestHeader): Result = {
+  def resultFromPaypalSuccess(success: PayPalSuccess, country: String, isTestUser: Boolean)(implicit request: RequestHeader): Result = {
     SafeLogger.info(s"One-off contribution for Paypal payment is successful")
-    val redirect = Redirect {
-      country match {
-        // TODO: more cleanup
-        case Some(c) => s"/$c/thankyou"
-        case None => "/contribute/one-off/thankyou"
-      }
-    }
+    val redirect = Redirect(s"/$country/thankyou")
     if (!isTestUser) {
-      monitoredRegion(country.getOrElse("Unknown")).map {
+      monitoredRegion(country).map {
         region => verify(TipPath(region, OneOffContribution, PayPal), tipMonitoring.verify)
       }
     }
@@ -88,10 +82,7 @@ class PayPalOneOff(
     })
   }
 
-  //TODO - more cleanup
-  def newReturnURL(paymentId: String, PayerID: String, country: String): Action[AnyContent] = returnURL(paymentId, PayerID, Some(country))
-
-  def returnURL(paymentId: String, PayerID: String, country: Option[String] = None): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
+  def returnURL(paymentId: String, PayerID: String, country: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
 
     val acquisitionData = (for {
       cookie <- request.cookies.get("acquisition_data")
@@ -132,10 +123,5 @@ class PayPalOneOff(
     emailForUser(request.user)
       .flatMap(paymentAPIService.executePaypalPayment(paymentJSON, acquisitionData, queryStrings, _, isTestUser, userAgent))
       .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, isTestUser))
-  }
-
-  def cancelURL(): Action[AnyContent] = PrivateAction { implicit request =>
-    SafeLogger.info("The user selected cancel payment and decided not to contribute.")
-    Redirect(routes.PayPalOneOff.paypalError())
   }
 }

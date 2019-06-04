@@ -49,11 +49,11 @@ function paperCheckoutUrl(fulfilmentOption: FulfilmentOptions, productOptions: P
   return `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
 }
 
+// If the user cancels before completing the payment flow, send them back to the contribute page.
 function payPalCancelUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/contribute`;
 }
 
-// TODO: cleanup
 function payPalReturnUrl(cgId: CountryGroupId): string {
   return `${getOrigin()}/${countryGroups[cgId].supportInternationalisationId}/paypal/rest/return`;
 }
