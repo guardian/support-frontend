@@ -25,6 +25,12 @@ export const Sides = {
 type Appearance = $Keys<typeof Appearances>;
 type IconSide = $Keys<typeof Sides>;
 
+/* **********************************************************************
+Note: postDeploymentTestID will be prefixed with 'qa' to indicate it is
+used in a test and avoid any confusion by anyone looking at the DOM that
+we are using ID for anything other than QA testing.
+************************************************************************ */
+
 type SharedButtonPropTypes = {|
   children: string,
   icon?: Node,
@@ -60,7 +66,7 @@ const SharedButton = ({
   return createElement(element, {
     className,
     ref: getRef,
-    id: postDeploymentTestID,
+    id: `qa-${postDeploymentTestID}`,
     ...otherProps,
   }, contents);
 };
