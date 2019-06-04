@@ -13,7 +13,7 @@ import SvgPennyFarthingCircles from 'components/svgs/pennyFarthingCircles';
 import { GBPCountries, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 import CtaSwitch from './ctaSwitch';
-
+import ProductBlockB from './productBlockB/productBlockB';
 
 // ----- Types ----- //
 
@@ -169,7 +169,6 @@ function ProductBlock(props: PropTypes) {
 
 }
 
-
 // ----- Auxiliary Components ----- //
 
 function Product(props: {
@@ -209,4 +208,4 @@ Product.defaultProps = {
 
 // ----- Exports ----- //
 
-export default ProductBlock;
+export default ProductBlockB;
