@@ -3,7 +3,7 @@
 import { fixDecimals } from 'helpers/subscriptions';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import {
-  billingPeriodNoun,
+  billingPeriodNoun as upperCasePeriodNoun,
   Quarterly,
   SixWeekly,
 } from 'helpers/billingPeriods';
@@ -20,10 +20,11 @@ const billingPeriodQuantifier = (numberOfBillingPeriods: number, noun: string) =
     `/${noun} for ${numberOfBillingPeriods} ${noun}s` :
     ` for 1 ${noun}`);
 
-const billingPeriodDescription = (billingPeriod: BillingPeriod) =>
-  billingPeriodNoun(billingPeriod).toLowerCase();
+const billingPeriodNoun = (billingPeriod: BillingPeriod) =>
+  upperCasePeriodNoun(billingPeriod).toLowerCase();
 
-const standardRate = (glyph: string, price: number, billingPeriod: BillingPeriod) => `${displayPrice(glyph, price)} every ${billingPeriodDescription(billingPeriod)}`;
+const standardRate = (glyph: string, price: number, billingPeriod: BillingPeriod) =>
+  `${displayPrice(glyph, price)} every ${billingPeriodNoun(billingPeriod)}`;
 
 function getDiscountDescription(
   glyph: string,
@@ -32,7 +33,7 @@ function getDiscountDescription(
   numberOfDiscountedPeriods: ?number,
   billingPeriod: BillingPeriod,
 ) {
-  const noun = billingPeriodDescription(billingPeriod);
+  const noun = billingPeriodNoun(billingPeriod);
 
   if (numberOfDiscountedPeriods) {
     const discountCopy = `${displayPrice(glyph, discountedPrice)}${billingPeriodQuantifier(numberOfDiscountedPeriods, noun)}`;
