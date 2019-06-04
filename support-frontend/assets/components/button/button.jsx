@@ -13,6 +13,7 @@ type PropTypes = {
   ...SharedButtonPropTypes,
   'aria-label': ?string,
   type: ?('button' | 'submit'),
+  disabled: ?boolean,
 };
 
 const Button = (props: PropTypes) => (
@@ -25,6 +26,7 @@ const Button = (props: PropTypes) => (
 Button.defaultProps = {
   ...defaultProps,
   type: 'button',
+  disabled: false,
 };
 
 export default Button;

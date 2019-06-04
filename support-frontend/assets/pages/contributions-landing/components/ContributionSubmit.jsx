@@ -123,6 +123,7 @@ function ContributionSubmit(props: PropTypes) {
           <Button
             type="submit"
             aria-label={submitButtonCopy}
+            disabled={props.isWaiting}
           >
             {submitButtonCopy}
           </Button> : null }
