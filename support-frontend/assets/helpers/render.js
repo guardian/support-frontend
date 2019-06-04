@@ -19,10 +19,10 @@ const getElementOrBody = (id: ?string): HTMLElement => {
   return element;
 };
 
-const renderError = (id: ?string) => {
+const renderError = (e: any, id: ?string) => {
   const element = getElementOrBody(id);
 
-  logException(['Fatal error rendering a page', id ? `id:${id}` : null].join(' '));
+  logException(['Fatal error rendering a page.', id ? `id:${id}.` : null, 'Error string:', e].join(' '));
   import('pages/error/components/errorPage').then(({ default: ErrorPage }) => {
     if (element) {
       ReactDOM.render(ErrorPage({
@@ -42,8 +42,8 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
     delete element.dataset.notHydrated;
     try {
       ReactDOM.render(content, element, callBack);
-    } catch {
-      renderError(id);
+    } catch (e) {
+      renderError(e, id);
     }
   } else {
     logException(`Fatal error trying to render a page. id:${id}`);
