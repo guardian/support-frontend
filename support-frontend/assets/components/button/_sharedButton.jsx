@@ -66,7 +66,7 @@ const SharedButton = ({
   return createElement(element, {
     className,
     ref: getRef,
-    id: `qa-${postDeploymentTestID}`,
+    id: postDeploymentTestID ? `qa-${postDeploymentTestID}` : null,
     ...otherProps,
   }, contents);
 };
