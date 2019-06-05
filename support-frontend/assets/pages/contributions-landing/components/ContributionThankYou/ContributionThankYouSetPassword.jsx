@@ -9,7 +9,7 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributi
 import SetPasswordForm from '../SetPasswordForm';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit } from 'helpers/paymentMethods';
-import type { ContributionType } from '../../../../helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 
 // ----- Types ----- //
 
