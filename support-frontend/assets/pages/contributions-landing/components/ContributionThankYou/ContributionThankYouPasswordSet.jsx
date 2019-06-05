@@ -24,30 +24,15 @@ const mapStateToProps = state => ({
 
 function ContributionThankYouPasswordSet(props: PropTypes) {
   const title = 'Set up a free account to manage your payments';
-  const recurringBody = 'Stay signed in on all your devices to easily manage your contributions and to stop seeing our appeals for support';
-
-  const passwordSetCopy = {
-    ONE_OFF: {
-      title,
-      body: 'Remember to stay signed in on each of your devices to see fewer support messages, and to make contributing again even easier.',
-    },
-    MONTHLY: {
-      title,
-      body: recurringBody,
-    },
-    ANNUAL: {
-      title,
-      body: recurringBody,
-    },
-  };
+  const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
   return (
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you gu-content__form--password-set">
         <section className="confirmation">
-          <h3 className="confirmation__title">{passwordSetCopy[props.contributionType].title}</h3>
+          <h3 className="confirmation__title">{title}</h3>
           <p className="confirmation__message">
-            {passwordSetCopy[props.contributionType].body}
+            {body}
           </p>
         </section>
         <MarketingConsent />
