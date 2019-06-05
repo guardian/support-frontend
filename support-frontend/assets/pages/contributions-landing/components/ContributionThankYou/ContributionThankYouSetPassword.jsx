@@ -45,7 +45,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 function ContributionThankYouSetPassword(props: PropTypes) {
   const oneOffTitle = 'Complete your Guardian account';
-  const oneOffBody = 'Having an account means you’ll notice far fewer messages asking you for financial support. And if you want to support us again in the future, making a contribution will be even easier. Please make sure you validate your account via your inbox, and stay signed in on each of your devices.';
+  const oneOffBody = 'If you create an account and stay signed in on each of your devices, you’ll notice far fewer messages asking you for financial support. Please make sure you validate your account via your inbox.';
   const recurringTitle = 'Set up a free account to manage your payments';
   const recurringBody = 'If you stay signed in when you’re reading The Guardian as a contributor, you’ll no longer see messages asking you to support our journalism';
 
