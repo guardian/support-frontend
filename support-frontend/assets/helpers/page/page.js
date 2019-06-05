@@ -159,7 +159,7 @@ function init<S, A>(
 
     return store;
   } catch (err) {
-    renderError(null);
+    renderError(err, null);
     throw (err);
   }
 }
