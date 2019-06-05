@@ -9,11 +9,13 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributi
 import SetPasswordForm from '../SetPasswordForm';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit } from 'helpers/paymentMethods';
+import type { ContributionType } from 'helpers/contributions';
 
 // ----- Types ----- //
 
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
+  contributionType: ContributionType,
   paymentMethod: PaymentMethod,
   passwordFailed: boolean,
   hasSeenDirectDebitThankYouCopy: boolean,
@@ -25,6 +27,7 @@ type PropTypes = {|
 // ----- State Maps ----- //
 
 const mapStateToProps = state => ({
+  contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
   passwordFailed: state.page.form.passwordFailed,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
@@ -41,6 +44,26 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Render ----- //
 
 function ContributionThankYouSetPassword(props: PropTypes) {
+  const oneOffTitle = 'Complete your Guardian account';
+  const oneOffBody = 'If you create an account and stay signed in on each of your devices, you’ll notice far fewer messages asking you for financial support. Please make sure you validate your account via your inbox.';
+  const recurringTitle = 'Set up a free account to manage your payments';
+  const recurringBody = 'If you stay signed in when you’re reading The Guardian as a contributor, you’ll no longer see messages asking you to support our journalism';
+
+  const setPasswordCopy = {
+    ONE_OFF: {
+      title: oneOffTitle,
+      body: oneOffBody,
+    },
+    MONTHLY: {
+      title: recurringTitle,
+      body: recurringBody,
+    },
+    ANNUAL: {
+      title: recurringTitle,
+      body: recurringBody,
+    },
+  };
+
   const renderDirectDebit = () => {
     props.setHasSeenDirectDebitThankYouCopy();
     return (
@@ -58,10 +81,9 @@ function ContributionThankYouSetPassword(props: PropTypes) {
         { props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy ?
             renderDirectDebit() : null }
         <section className="set-password">
-          <h3 className="set-password__title">Set up a free account to manage your payments</h3>
+          <h3 className="set-password__title">{setPasswordCopy[props.contributionType].title}</h3>
           <p className="set-password__message">
-            If you stay signed in when you’re reading The Guardian as a contributor,
-            you’ll no longer see messages asking you to support our journalism
+            {setPasswordCopy[props.contributionType].body}
           </p>
           <SetPasswordForm />
         </section>

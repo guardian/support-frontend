@@ -23,15 +23,16 @@ const mapStateToProps = state => ({
 // ----- Render ----- //
 
 function ContributionThankYouPasswordSet(props: PropTypes) {
+  const title = 'You now have a Guardian account';
+  const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
   return (
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you gu-content__form--password-set">
         <section className="confirmation">
-          <h3 className="confirmation__title">You now have a Guardian account</h3>
+          <h3 className="confirmation__title">{title}</h3>
           <p className="confirmation__message">
-            Stay signed in on all your devices to easily manage your
-            contributions and to stop seeing our appeals for support
+            {body}
           </p>
         </section>
         <MarketingConsent />

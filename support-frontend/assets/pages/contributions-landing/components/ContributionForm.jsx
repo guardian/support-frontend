@@ -37,17 +37,17 @@ import ContributionAmount from './ContributionAmount';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import ContributionSubmit from './ContributionSubmit';
 
-import { type State } from '../contributionsLandingReducer';
+import { type State } from 'pages/contributions-landing/contributionsLandingReducer';
 
 import {
   paymentWaiting,
   setCheckoutFormHasBeenSubmitted,
   createOneOffPayPalPayment,
   setStripeV3HasLoaded,
-} from '../contributionsLandingActions';
+} from 'pages/contributions-landing/contributionsLandingActions';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import StripePaymentRequestButtonContainer from './StripePaymentRequestButton/StripePaymentRequestButtonContainer';
-import type { RecentlySignedInExistingPaymentMethod } from '../../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, Stripe, ExistingCard, ExistingDirectDebit } from 'helpers/paymentMethods';
 import { getCampaignName } from 'helpers/campaigns';
