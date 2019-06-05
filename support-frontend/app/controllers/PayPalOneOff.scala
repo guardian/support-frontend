@@ -73,13 +73,14 @@ class PayPalOneOff(
         region => verify(TipPath(region, OneOffContribution, PayPal), tipMonitoring.verify)
       }
     }
-    success.email.fold({
-      SafeLogger.info("Redirecting to thank you page without email in flash session")
+
+    success.guestAccountCreationToken.fold {
+      SafeLogger.info("Redirecting to thank you page without guestAccountCreationToken")
       redirect
-    })({ email =>
-      SafeLogger.info("Redirecting to thank you page with email in flash session")
-      redirect.flashing("email" -> email)
-    })
+    } { guestAccountCreationToken =>
+      SafeLogger.info("Redirecting to thank you page with guestAccountCreationToken in flash session")
+      redirect.flashing("guestAccountCreationToken" -> guestAccountCreationToken)
+    }
   }
 
   def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
