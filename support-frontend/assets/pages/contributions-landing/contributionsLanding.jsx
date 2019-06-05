@@ -71,7 +71,7 @@ function contributionsLandingPage() {
     <Page
       classModifiers={['contribution-form', ...cssModifiers]}
       header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-      footer={<Footer appearance="dark" disclaimer countryGroupId={countryGroupId} />}
+      footer={<Footer disclaimer countryGroupId={countryGroupId} />}
       backgroundImageSrc={backgroundImageSrc}
     >
       <ContributionFormContainer
