@@ -48,6 +48,7 @@ export default function PersonalDetailsGift(props: PropTypes) {
         type="emailGiftRecipient"
         value={props.emailGiftRecipient}
         setValue={props.setEmailGift}
+        optional
         error={firstError('emailGiftRecipient', props.formErrors)}
       />
     </div>
