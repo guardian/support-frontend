@@ -29,10 +29,6 @@ function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
       rule: nonEmptyString(fields.lastNameGiftRecipient),
       error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
     },
-    {
-      rule: nonEmptyString(fields.emailGiftRecipient),
-      error: formError('emailGiftRecipient', 'Please enter the recipient\'s email address.'),
-    },
   ];
   const formFieldsToCheck = orderIsAGift ?
     [...userFormFields, ...giftFormFields]

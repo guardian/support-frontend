@@ -41,7 +41,7 @@ import {
   type FormFields,
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
-import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
+import { type FormField as PersonalDetailsFormField } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';

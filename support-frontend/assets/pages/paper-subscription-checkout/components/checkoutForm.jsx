@@ -52,7 +52,7 @@ import {
 
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
-import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
+import { type FormField as PersonalDetailsFormField } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection

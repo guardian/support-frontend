@@ -10,9 +10,8 @@ import { Input } from 'components/forms/input';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import Button from 'components/button/button';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
+import { type FormField } from 'helpers/subscriptionsForms/formFields';
 
-
-export type FormField = 'firstName' | 'lastName' | 'email' | 'telephone';
 
 export type PropTypes = {
   firstName: string,
