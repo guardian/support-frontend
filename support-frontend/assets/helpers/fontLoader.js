@@ -31,7 +31,7 @@ const fetchFonts = (window: Object, document: Document): void => {
     const fonts = storage.getLocal('guFonts');
     if (fonts) {
       const fontsObject = JSON.parse(fonts);
-      const values = Object.values(fontsObject);
+      const values = Object.keys(fontsObject).map(font => fontsObject[font]);
       values.forEach((value) => {
         if (value instanceof Object && value.fontName && value.css) {
           useFont(value);
