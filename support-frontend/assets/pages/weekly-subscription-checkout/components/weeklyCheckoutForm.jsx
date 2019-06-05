@@ -37,8 +37,10 @@ import {
 import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
-import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
+import type { FormField as PersonalDetailsFormField } from 'helpers/subscriptionsForms/formFields';
+import PersonalDetailsGift
+  from 'components/subscriptionCheckouts/personalDetailsGift';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -66,6 +68,7 @@ import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
+import { CheckboxInput } from 'components/forms/customFields/checkbox';
 
 // ----- Types ----- //
 
@@ -118,10 +121,10 @@ const days = getWeeklyDays();
 // ----- Component ----- //
 
 function WeeklyCheckoutForm(props: PropTypes) {
-
   const fulfilmentOption = getFulfilmentOption(props.deliveryCountry);
   const price = regularPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const promotion = getPromotion(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+  const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -176,14 +179,53 @@ function WeeklyCheckoutForm(props: PropTypes) {
               email={props.email}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
-              formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+              formErrors={props.formErrors}
               signOut={props.signOut}
             />
           </FormSection>
           <FormSection title="Where should we deliver your magazine?">
-            <DeliveryAddress />
+            {props.billingPeriod !== 'SixWeekly' ?
+              <CheckboxInput
+                text="This is a gift"
+                checked={props.orderIsAGift}
+                onChange={() => props.setGiftStatus(!props.orderIsAGift)}
+              />
+            : null}
+            {!props.orderIsAGift ? <DeliveryAddress /> : null}
           </FormSection>
-          <FormSection title="Is the billing address the same as the delivery address?">
+          {props.orderIsAGift ? (
+            <span>
+              <FormSection title="Gift recipient's details">
+                <SelectWithLabel
+                  id="title"
+                  label="Title"
+                  optional
+                  value={props.titleGiftRecipient}
+                  setValue={props.setTitleGift}
+                >
+                  <option value="">--</option>
+                  {options(titles)}
+                </SelectWithLabel>
+                <PersonalDetailsGift
+                  firstNameGiftRecipient={props.firstNameGiftRecipient}
+                  setFirstNameGift={props.setFirstNameGift}
+                  lastNameGiftRecipient={props.lastNameGiftRecipient}
+                  setLastNameGift={props.setLastNameGift}
+                  emailGiftRecipient={props.emailGiftRecipient}
+                  setEmailGift={props.setEmailGift}
+                  formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+                  isGiftRecipient
+                />
+              </FormSection>
+              <FormSection title="Gift recipient's address">
+                <DeliveryAddress />
+              </FormSection>
+            </span>)
+          : null}
+          <FormSection title={props.orderIsAGift ?
+            'Is the billing address the same as the recipient\'s address?'
+            : 'Is the billing address the same as the delivery address?'}
+          >
             <Rows>
               <FieldsetWithError
                 id="billingAddressIsSame"
@@ -212,9 +254,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
               </FormSection>
             : null
           }
-          <FormSection title="When would you like your subscription to start?">
+          <FormSection title={subscriptionStart}>
             <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
+              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend={subscriptionStart}>
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
@@ -230,11 +272,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
                 }
               </FieldsetWithError>
               <Text className="component-text__paddingTop">
-                <p>
+                <p className="component-text__sans">
                 We will take the first payment on the
                 date you receive your first Guardian Weekly.
                 </p>
-                <p>
+                <p className="component-text__sans">
                 Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
                 </p>
               </Text>
@@ -247,6 +289,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
             billingCountry={props.billingCountry}
             productPrices={props.productPrices}
             selected={props.billingPeriod}
+            orderIsAGift={props.orderIsAGift}
           />
           <PaymentMethodSelector
             country={props.billingCountry}

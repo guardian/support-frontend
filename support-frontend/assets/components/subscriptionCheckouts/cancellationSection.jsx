@@ -8,9 +8,8 @@ export default function CancellationSection() {
     <FormSection>
       <Text>
         <p>
-          <strong>Cancel any time you want.</strong>
-          There is no set time on your agreement so you can stop
-          your subscription anytime
+          <strong>Cancel at any point.</strong> There is no set time on your agreement with us so you can end
+          your subscription whenever you wish
         </p>
       </Text>
     </FormSection>);

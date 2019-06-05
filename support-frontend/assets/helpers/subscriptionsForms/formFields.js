@@ -20,6 +20,10 @@ export type FormFields = {|
   lastName: string,
   email: string,
   telephone: Option<string>,
+  titleGiftRecipient: Option<Title>,
+  firstNameGiftRecipient: string,
+  lastNameGiftRecipient: string,
+  emailGiftRecipient: string,
   billingPeriod: BillingPeriod,
   paymentMethod: Option<PaymentMethod>,
   startDate: Option<string>,
@@ -27,6 +31,7 @@ export type FormFields = {|
   fulfilmentOption: FulfilmentOptions,
   product: SubscriptionProduct,
   productOption: ProductOptions,
+  orderIsAGift: Option<boolean>,
 |};
 
 export type FormField = $Keys<FormFields>;
@@ -48,9 +53,13 @@ function getFormFields(state: AnyCheckoutState): FormFields {
   return {
     title: state.page.checkout.title,
     firstName: state.page.checkout.firstName,
-    email: state.page.checkout.email,
     lastName: state.page.checkout.lastName,
+    email: state.page.checkout.email,
     telephone: state.page.checkout.telephone,
+    titleGiftRecipient: state.page.checkout.titleGiftRecipient,
+    firstNameGiftRecipient: state.page.checkout.firstNameGiftRecipient,
+    lastNameGiftRecipient: state.page.checkout.lastNameGiftRecipient,
+    emailGiftRecipient: state.page.checkout.emailGiftRecipient,
     startDate: state.page.checkout.startDate,
     billingPeriod: state.page.checkout.billingPeriod,
     paymentMethod: state.page.checkout.paymentMethod,
@@ -58,6 +67,7 @@ function getFormFields(state: AnyCheckoutState): FormFields {
     productOption: state.page.checkout.productOption,
     product: state.page.checkout.product,
     billingAddressIsSame: state.page.checkout.billingAddressIsSame,
+    orderIsAGift: state.page.checkout.orderIsAGift,
   };
 }
 
