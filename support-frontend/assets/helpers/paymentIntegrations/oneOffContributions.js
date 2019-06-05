@@ -113,8 +113,8 @@ function paymentResultFromObject(
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
 
-  if (json.data && json.data.guestAccountToken) {
-    setGuestAccountCreationToken(json.data.guestAccountToken);
+  if (json.data && json.data.guestAccountCreationToken) {
+    setGuestAccountCreationToken(json.data.guestAccountCreationToken);
     setThankYouPageStage('thankYouSetPassword');
   } else {
     setThankYouPageStage('thankYou');
