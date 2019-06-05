@@ -23,7 +23,7 @@ export type PropTypes = {
 const InputWithLabel = withLabel(Input);
 const InputWithError = compose(asControlled, withError)(InputWithLabel);
 
-export default function PersonalDetails(props: PropTypes) {
+export default function PersonalDetailsGift(props: PropTypes) {
   return (
     <div>
       <InputWithError
