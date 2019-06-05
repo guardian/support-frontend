@@ -41,7 +41,6 @@ import {
   type FormFields,
   getFormFields,
 } from 'helpers/subscriptionsForms/formFields';
-import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';
@@ -170,7 +169,7 @@ function CheckoutForm(props: PropTypes) {
               email={props.email}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
-              formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+              formErrors={props.formErrors}
               signOut={props.signOut}
             />
           </FormSection>
