@@ -356,7 +356,7 @@ Resources:
           Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
         - Name: TargetGroup
           Value: !GetAtt TargetGroup.TargetGroupFullName
-      Namespace: AWS/ELB
+      Namespace: AWS/ApplicationELB
       EvaluationPeriods: 2
       Period: 60
       Statistic: Average
