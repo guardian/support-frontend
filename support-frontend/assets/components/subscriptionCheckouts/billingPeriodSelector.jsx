@@ -4,6 +4,7 @@ import React from 'react';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInputWithHelper } from 'components/forms/customFields/radioInputWithHelper';
 import type { BillingPeriod } from 'helpers/billingPeriods';
+import { type Option } from 'helpers/types/option';
 import {
   billingPeriodTitle,
   Quarterly,
@@ -29,7 +30,7 @@ type PropTypes = {|
   billingCountry: IsoCountry,
   selected: BillingPeriod,
   onChange: (BillingPeriod) => Action,
-  orderIsAGift?: boolean | null,
+  orderIsAGift?: Option<boolean>,
 |}
 
 function BillingPeriodSelector(props: PropTypes) {
