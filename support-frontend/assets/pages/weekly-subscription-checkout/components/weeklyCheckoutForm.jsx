@@ -38,6 +38,7 @@ import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import type { FormField as PersonalDetailsFormField } from 'components/subscriptionCheckouts/personalDetails';
+import type { FormFieldGift as PersonalDetailsGiftFormField } from 'components/subscriptionCheckouts/personalDetailsGift';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import PersonalDetailsGift from 'components/subscriptionCheckouts/personalDetailsGift';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -206,13 +207,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   {options(titles)}
                 </SelectWithLabel>
                 <PersonalDetailsGift
-                  firstName={props.firstNameGiftRecipient}
-                  setFirstName={props.setFirstNameGift}
-                  lastName={props.lastNameGiftRecipient}
-                  setLastName={props.setLastNameGift}
-                  email={props.emailGiftRecipient}
+                  firstNameGiftRecipient={props.firstNameGiftRecipient}
+                  setFirstNameGift={props.setFirstNameGift}
+                  lastNameGiftRecipient={props.lastNameGiftRecipient}
+                  setLastNameGift={props.setLastNameGift}
+                  emailGiftRecipient={props.emailGiftRecipient}
                   setEmailGift={props.setEmailGift}
-                  formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+                  formErrors={((props.formErrors: any): FormError<PersonalDetailsGiftFormField>[])}
                   isGiftRecipient
                 />
               </FormSection>

@@ -79,13 +79,13 @@ function createFormReducer(
         return { ...state, titleGiftRecipient: action.titleGiftRecipient };
 
       case 'SET_FIRST_NAME_GIFT':
-        return { ...state, firstNameGiftRecipient: action.firstNameGiftRecipient, formErrors: removeError('firstName', state.formErrors) };
+        return { ...state, firstNameGiftRecipient: action.firstNameGiftRecipient, formErrors: removeError('firstNameGiftRecipient', state.formErrors) };
 
       case 'SET_LAST_NAME_GIFT':
-        return { ...state, lastNameGiftRecipient: action.lastNameGiftRecipient, formErrors: removeError('lastName', state.formErrors) };
+        return { ...state, lastNameGiftRecipient: action.lastNameGiftRecipient, formErrors: removeError('lastNameGiftRecipient', state.formErrors) };
 
       case 'SET_EMAIL_GIFT':
-        return { ...state, emailGiftRecipient: action.emailGiftRecipient };
+        return { ...state, emailGiftRecipient: action.emailGiftRecipient, formErrors: removeError('emailGiftRecipient', state.formErrors) };
 
       case 'SET_START_DATE':
         return { ...state, startDate: action.startDate };

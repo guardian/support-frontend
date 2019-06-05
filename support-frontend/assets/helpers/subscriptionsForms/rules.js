@@ -5,20 +5,40 @@ import type { FormField, FormFields } from './formFields';
 import type { FormError } from './validation';
 
 function applyCheckoutRules(fields: FormFields): FormError<FormField>[] {
-  return validate([
+  const { orderIsAGift } = fields;
+  const userFormFields = [
     {
       rule: nonEmptyString(fields.firstName),
-      error: formError('firstName', 'Please enter a value.'),
+      error: formError('firstName', 'Please enter a first name.'),
     },
     {
       rule: nonEmptyString(fields.lastName),
-      error: formError('lastName', 'Please enter a value.'),
+      error: formError('lastName', 'Please enter a last name.'),
     },
     {
       rule: notNull(fields.paymentMethod),
       error: formError('paymentMethod', 'Please select a payment method.'),
     },
-  ]);
+  ];
+  const giftFormFields = [
+    {
+      rule: nonEmptyString(fields.firstNameGiftRecipient),
+      error: formError('firstNameGiftRecipient', 'Please enter the recipient\'s first name.'),
+    },
+    {
+      rule: nonEmptyString(fields.lastNameGiftRecipient),
+      error: formError('lastNameGiftRecipient', 'Please enter the recipient\'s last name.'),
+    },
+    {
+      rule: nonEmptyString(fields.emailGiftRecipient),
+      error: formError('emailGiftRecipient', 'Please enter the recipient\'s email address.'),
+    },
+  ];
+  const formFieldsToCheck = orderIsAGift ?
+    [...userFormFields, ...giftFormFields]
+    : [...userFormFields];
+
+  return validate(formFieldsToCheck);
 }
 
 function applyDeliveryRules(fields: FormFields): FormError<FormField>[] {

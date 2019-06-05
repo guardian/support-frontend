@@ -9,15 +9,16 @@ import { Input } from 'components/forms/input';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 
 
-export type FormField = 'firstName' | 'lastName' | 'email' | 'telephone';
+export type FormFieldGift = 'firstNameGiftRecipient' | 'lastNameGiftRecipient' | 'emailGiftRecipient';
 
 export type PropTypes = {
-  firstName: string,
-  setFirstName: Function,
-  lastName: string,
-  setLastName: Function,
-  email: string,
-  formErrors: FormError<FormField>[],
+  firstNameGiftRecipient: string,
+  setFirstNameGift: Function,
+  lastNameGiftRecipient: string,
+  setLastNameGift: Function,
+  emailGiftRecipient: string,
+  setEmailGift: Function,
+  formErrors: FormError<FormFieldGift>[],
 }
 
 const InputWithLabel = withLabel(Input);
@@ -27,26 +28,28 @@ export default function PersonalDetailsGift(props: PropTypes) {
   return (
     <div>
       <InputWithError
-        id="first-name"
+        id="firstNameGiftRecipient"
         label="First name"
         type="text"
-        value={props.firstName}
-        setValue={props.setFirstName}
-        error={firstError('firstName', props.formErrors)}
+        value={props.firstNameGiftRecipient}
+        setValue={props.setFirstNameGift}
+        error={firstError('firstNameGiftRecipient', props.formErrors)}
       />
       <InputWithError
-        id="last-name"
+        id="lastNameGiftRecipient"
         label="Last name"
         type="text"
-        value={props.lastName}
-        setValue={props.setLastName}
-        error={firstError('lastName', props.formErrors)}
+        value={props.lastNameGiftRecipient}
+        setValue={props.setLastNameGift}
+        error={firstError('lastNameGiftRecipient', props.formErrors)}
       />
-      <InputWithLabel
-        id="email"
+      <InputWithError
+        id="emailGiftRecipient"
         label="Email"
-        type="email"
-        value={props.email}
+        type="emailGiftRecipient"
+        value={props.emailGiftRecipient}
+        setValue={props.setEmailGift}
+        error={firstError('emailGiftRecipient', props.formErrors)}
       />
     </div>
   );
