@@ -278,7 +278,8 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub No healthy instances for support-frontend in ${Stage}
+      AlarmName: !Sub HIGH severity - No healthy instances for support-frontend in ${Stage}
+      AlarmDescription: Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
       MetricName: HealthyHostCount
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -301,7 +302,8 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub High 5XX rate for support-frontend in ${Stage}
+      AlarmName: !Sub HIGH severity - support-frontend instances are returning 5XX errors in ${Stage}
+      AlarmDescription: Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
       MetricName: HTTPCode_Target_5XX_Count
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -318,14 +320,57 @@ Resources:
     - TargetGroup
     - ElasticLoadBalancer
 
+  HighELB5XXRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub HIGH severity - support-frontend ELB is returning 5XX errors in ${Stage}
+      AlarmDescription: Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      MetricName: HTTPCode_ELB_5XX_Count
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 3
+      Period: 60
+      EvaluationPeriods: 2
+      Statistic: Sum
+    DependsOn:
+      - TargetGroup
+      - ElasticLoadBalancer
+
+  LatencyNotificationAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub HIGH severity - support-frontend has high latency ${Stage}
+      AlarmDescription: Impact - support-frontend users are seeing slow responses. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      MetricName: TargetResponseTime
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroup.TargetGroupFullName
+      Namespace: AWS/ELB
+      EvaluationPeriods: 2
+      Period: 60
+      Statistic: Average
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+
   CatalogLoadingFailureAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: Support Frontend Catalog Load Failure
-      AlarmDescription: Fires an alarm if we fail to load the Zuora catalog pricing information from S3
+      AlarmName: !Sub HIGH severity - support-frontend could not load the Zuora catalog from S3 in ${Stage}
+      AlarmDescription: Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
       MetricName: CatalogLoadingFailure
       Namespace: support-frontend
       Dimensions:
@@ -352,7 +397,8 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub Regular contributions state machine unavailable in ${Stage}
+      AlarmName: !Sub HIGH severity - support-workers state machine unavailable in ${Stage}
+      AlarmDescription: Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
       MetricName: state-machine-unavailable
       Namespace: !Sub support-frontend-${Stage}
       ComparisonOperator: GreaterThanOrEqualToThreshold
