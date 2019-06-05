@@ -52,7 +52,11 @@ function RoundelHeader(props: PropTypes) {
             </div>
           </summary>
           <ul className="countryGroups__list">
-            {(Object.values(countryGroups): any).map(renderCountryGroup((props.selectedCountryGroup: any)))}
+            {
+              Object.keys(countryGroups)
+                .map(countryGroup => countryGroups[countryGroup])
+                .map(renderCountryGroup((props.selectedCountryGroup: any)))
+            }
           </ul>
         </details>
       ) : null}
