@@ -123,6 +123,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
   const fulfilmentOption = getFulfilmentOption(props.deliveryCountry);
   const price = regularPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const promotion = getPromotion(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+  const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -252,9 +253,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
               </FormSection>
             : null
           }
-          <FormSection title={`When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`}>
+          <FormSection title={subscriptionStart}>
             <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend="When would you like your subscription to start?">
+              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend={subscriptionStart}>
                 {days.map((day) => {
                   const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
                   return (
