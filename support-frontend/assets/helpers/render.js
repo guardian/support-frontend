@@ -19,10 +19,10 @@ const getElementOrBody = (id: ?string): HTMLElement => {
   return element;
 };
 
-const renderError = (e: any, id: ?string) => {
+const renderError = (e: Error, id: ?string) => {
   const element = getElementOrBody(id);
 
-  logException(`Fatal error rendering a page. ${id ? id : ""} Error string: ${e}`);
+  logException(`Fatal error rendering page: ${id ? id : ""}. Error message: ${e.message}. Stack trace: ${e.stack ? e.stack : "none"}`);
   import('pages/error/components/errorPage').then(({ default: ErrorPage }) => {
     if (element) {
       ReactDOM.render(ErrorPage({
