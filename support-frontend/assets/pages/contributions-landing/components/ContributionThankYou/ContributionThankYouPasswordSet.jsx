@@ -23,7 +23,7 @@ const mapStateToProps = state => ({
 // ----- Render ----- //
 
 function ContributionThankYouPasswordSet(props: PropTypes) {
-  const title = 'Set up a free account to manage your payments';
+  const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
   return (

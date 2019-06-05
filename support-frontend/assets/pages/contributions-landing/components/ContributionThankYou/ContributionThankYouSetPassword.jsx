@@ -44,13 +44,15 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 // ----- Render ----- //
 
 function ContributionThankYouSetPassword(props: PropTypes) {
+  const oneOffTitle = 'Complete your Guardian account';
+  const oneOffBody = 'Having an account means you’ll notice far fewer messages asking you for financial support. And if you want to support us again in the future, making a contribution will be even easier. Please make sure you validate your account via your inbox, and stay signed in on each of your devices.';
   const recurringTitle = 'Set up a free account to manage your payments';
   const recurringBody = 'If you stay signed in when you’re reading The Guardian as a contributor, you’ll no longer see messages asking you to support our journalism';
 
   const setPasswordCopy = {
     ONE_OFF: {
-      title: 'Set up a free Guardian account',
-      body: 'Having an account means you’ll notice far fewer messages asking you for financial support. And, if you do want to support us again in the future, making a contribution will be even easier. Please make sure you validate your account via your inbox, and stay signed in on each of your devices.',
+      title: oneOffTitle,
+      body: oneOffBody,
     },
     MONTHLY: {
       title: recurringTitle,
