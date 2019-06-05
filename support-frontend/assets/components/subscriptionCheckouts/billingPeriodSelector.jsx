@@ -44,8 +44,8 @@ function BillingPeriodSelector(props: PropTypes) {
             billingPeriod === SixWeekly ? Quarterly : billingPeriod, // for 6 for 6 we need the quarterly pricing
             props.fulfilmentOption,
           );
-          return !props.orderIsAGift || billingPeriod !== SixWeekly ?
-            <RadioInputWithHelper
+          return props.orderIsAGift && billingPeriod === SixWeekly ? null
+            : <RadioInputWithHelper
               text={billingPeriodTitle(billingPeriod)}
               helper={getPriceDescription(
                 extendedGlyphForCountry(props.billingCountry),
@@ -56,8 +56,7 @@ function BillingPeriodSelector(props: PropTypes) {
               name="billingPeriod"
               checked={billingPeriod === props.selected}
               onChange={() => props.onChange(billingPeriod)}
-            />
-          : null;
+            />;
         })}
       </Fieldset>
     </FormSection>);
