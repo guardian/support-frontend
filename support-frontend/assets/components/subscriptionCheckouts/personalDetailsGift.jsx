@@ -7,9 +7,8 @@ import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 import { Input } from 'components/forms/input';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { type FormField } from 'helpers/subscriptionsForms/formFields';
 
-
-export type FormFieldGift = 'firstNameGiftRecipient' | 'lastNameGiftRecipient' | 'emailGiftRecipient';
 
 export type PropTypes = {
   firstNameGiftRecipient: string,
@@ -18,7 +17,7 @@ export type PropTypes = {
   setLastNameGift: Function,
   emailGiftRecipient: string,
   setEmailGift: Function,
-  formErrors: FormError<FormFieldGift>[],
+  formErrors: FormError<FormField>[],
 }
 
 const InputWithLabel = withLabel(Input);
