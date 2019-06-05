@@ -30,7 +30,10 @@ import DirectDebitPopUpForm
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion, regularPrice } from 'helpers/productPrice/paperProductPrices';
+import {
+  getPromotion,
+  regularPrice,
+} from 'helpers/productPrice/paperProductPrices';
 import {
   getShortDescription,
   getTitle,
@@ -52,7 +55,6 @@ import {
 
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
-import { type FormField as PersonalDetailsFormField } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import CancellationSection
@@ -178,7 +180,7 @@ function CheckoutForm(props: PropTypes) {
               email={props.email}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
-              formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+              formErrors={props.formErrors}
               signOut={props.signOut}
             />
           </FormSection>

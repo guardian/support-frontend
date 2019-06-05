@@ -37,9 +37,10 @@ import {
 import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
-import { type FormField as PersonalDetailsFormField } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import PersonalDetailsGift from 'components/subscriptionCheckouts/personalDetailsGift';
+import type { FormField as PersonalDetailsFormField } from 'helpers/subscriptionsForms/formFields';
+import PersonalDetailsGift
+  from 'components/subscriptionCheckouts/personalDetailsGift';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countries } from 'helpers/internationalisation/country';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -178,7 +179,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
               email={props.email}
               telephone={props.telephone}
               setTelephone={props.setTelephone}
-              formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+              formErrors={props.formErrors}
               signOut={props.signOut}
             />
           </FormSection>
