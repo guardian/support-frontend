@@ -110,7 +110,7 @@ const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
   gaEvent({
     category: 'debug',
     action: 'polyfill-script-status',
-    label: polyfillScriptStatus || '',
+    label: polyfillScriptStatus || 'empty',
   });
 
   trackComponentEvents({
@@ -119,7 +119,7 @@ const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
       id: 'polyfill-script-status',
     },
     action: 'CLICK',
-    value: polyfillScriptStatus || '',
+    value: polyfillScriptStatus || 'empty',
   });
 };
 
