@@ -81,6 +81,8 @@ class PaypalBackend(
           err
       })
       .semiflatMap { payment =>
+        cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
+
         getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityIdWithGuestAccountCreationToken =>
           postPaymentTasks(payment, executePaymentData.email, identityIdWithGuestAccountCreationToken.map(_.identityId), executePaymentData.acquisitionData, clientBrowserInfo)
 
