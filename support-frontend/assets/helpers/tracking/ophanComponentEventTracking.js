@@ -107,12 +107,6 @@ const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
 };
 
 const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
-  gaEvent({
-    category: 'debug',
-    action: 'polyfill-script-status',
-    label: polyfillScriptStatus || 'empty',
-  });
-
   trackComponentEvents({
     component: {
       componentType: 'ACQUISITIONS_OTHER',
