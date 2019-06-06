@@ -117,7 +117,7 @@ const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
   });
 };
 
-const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill', objectFunction: 'entries'  | 'values'): void => {
+const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill', objectFunction: string): void => {
   gaEvent({
     category: 'debug',
     action: when,
@@ -135,18 +135,23 @@ const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill',
 };
 
 const trackPolyfilledObjectFunctions = (): void => {
+  const beforePolyfill = [];
   if (window.guardian.beforePolyfill.objectEntries) {
-    trackPolyfilledObjectFunction('beforePolyfill', 'entries');
+    beforePolyfill.push('entries');
   }
   if (window.guardian.beforePolyfill.objectValues) {
-    trackPolyfilledObjectFunction('beforePolyfill', 'values');
+    beforePolyfill.push('values');
   }
+  trackPolyfilledObjectFunction('beforePolyfill', beforePolyfill.join(','));
+
+  const afterPolyfill = [];
   if (Object.entries) {
-    trackPolyfilledObjectFunction('afterPolyfill', 'entries');
+    afterPolyfill.push('entries');
   }
   if (Object.values) {
-    trackPolyfilledObjectFunction('afterPolyfill', 'values');
+    afterPolyfill.push('values');
   }
+  trackPolyfilledObjectFunction('afterPolyfill', afterPolyfill.join(','));
 };
 
 const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): void => {

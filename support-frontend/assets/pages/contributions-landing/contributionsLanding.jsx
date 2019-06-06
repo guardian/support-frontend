@@ -27,10 +27,10 @@ import ContributionThankYouContainer from './components/ContributionThankYou/Con
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
+import { trackPolyfilledObjectFunctions } from '../../helpers/tracking/ophanComponentEventTracking';
 
 const polyfillSuccess = window.guardian.polyfillScriptStatus;
 trackPolyfillScriptStatus(polyfillSuccess);
-trackPolyfilledObjectFunctions();
 
 if (!isDetailsSupported) {
   polyfillDetails();
@@ -43,6 +43,7 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(() => initReducer(countryGroupId), true);
 
+trackPolyfilledObjectFunctions();
 gaEvent({
   category: 'debug',
   action: 'polyfill-script-status',
