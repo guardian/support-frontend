@@ -106,6 +106,23 @@ const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
   });
 };
 
+const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
+  gaEvent({
+    category: 'debug',
+    action: 'polyfill-script-status',
+    label: polyfillScriptStatus || 'empty',
+  });
+
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+      id: 'polyfill-script-status',
+    },
+    action: 'CLICK',
+    value: polyfillScriptStatus || 'empty',
+  });
+};
+
 const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): void => {
   gaEvent({
     category: 'click',
@@ -197,4 +214,5 @@ export {
   trackAbTests,
   trackNewOptimizeExperiment,
   trackPaymentMethodSelected,
+  trackPolyfillScriptStatus,
 };

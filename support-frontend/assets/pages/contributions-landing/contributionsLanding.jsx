@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import { trackPolyfillScriptStatus } from 'helpers/tracking/ophanComponentEventTracking';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Route, BrowserRouter } from 'react-router-dom';
@@ -17,7 +18,6 @@ import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
-
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import ContributionFormContainer from './components/ContributionFormContainer';
@@ -27,9 +27,13 @@ import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
 
+const polyfillSuccess = window.guardian.polyfillScriptStatus;
+trackPolyfillScriptStatus(polyfillSuccess);
+
 if (!isDetailsSupported) {
   polyfillDetails();
 }
+
 
 // ----- Redux Store ----- //
 
