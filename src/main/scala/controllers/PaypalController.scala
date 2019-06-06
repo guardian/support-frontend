@@ -56,7 +56,7 @@ class PaypalController(
         .executePayment(executeRequest.body, ClientBrowserInfo.fromRequest(executeRequest, executeRequest.body.acquisitionData.gaId))
         .fold(
           err => toErrorResult(err),
-          payment => Ok(ResultBody.Success(ExecutePaymentResponse(payment.email)))
+          payment => Ok(ResultBody.Success(ExecutePaymentResponse(payment.email, payment.guestAccountCreationToken)))
         )
       }.withLogging(this.getClass.getCanonicalName, "executePayment")
 

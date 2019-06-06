@@ -479,6 +479,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             .thenReturn(enrichedPaymentServiceResponse)
           when(enrichedPaymentMock.email)
             .thenReturn(Some("a@b.com"))
+          when(enrichedPaymentMock.guestAccountCreationToken).thenReturn(None)
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
@@ -511,7 +512,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             |        }
             |      ]
             |  },
-            | "signedInUserEmail": "a@b.com"
+            | "email": "a@b.com"
             |}
           """.stripMargin))
 
@@ -570,7 +571,8 @@ class PaypalControllerSpec extends PlaySpec with Status {
               |    "componentId": "componentId",
               |    "componentType": "AcquisitionsOther",
               |    "source": "GuardianWeb"
-              |  }
+              |  },
+              |  "email": "a@b.com"
               |}
             """.stripMargin))
 
@@ -589,6 +591,7 @@ class PaypalControllerSpec extends PlaySpec with Status {
             .thenReturn(enrichedPaymentServiceResponse)
           when(enrichedPaymentMock.email)
             .thenReturn(Some("a@b.com"))
+          when(enrichedPaymentMock.guestAccountCreationToken).thenReturn(None)
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
@@ -608,7 +611,8 @@ class PaypalControllerSpec extends PlaySpec with Status {
               |    "componentId": "componentId",
               |    "componentType": "AcquisitionsOther",
               |    "source": "GuardianWeb"
-              |  }
+              |  },
+              |  "email": "a@b.com"
               |}
             """.stripMargin)).withHeaders("origin" -> "https://cors.com")
 

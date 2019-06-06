@@ -8,7 +8,7 @@ import cats.implicits._
 import com.stripe.exception.{CardException, InvalidRequestException}
 import com.stripe.model.{Charge, Event}
 import model.DefaultThreadPool
-import model.stripe.{StripeApiError, StripeChargeSuccess}
+import model.stripe.{StripeApiError, StripeCreateChargeResponse}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -43,16 +43,16 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val mockStripeRequestBasedProvider: RequestBasedProvider[StripeBackend] =
     mock[RequestBasedProvider[StripeBackend]]
 
-  val stripeChargeSuccessMock: StripeChargeSuccess = StripeChargeSuccess.fromCharge(mockCharge)
+  val stripeChargeSuccessMock: StripeCreateChargeResponse = StripeCreateChargeResponse.fromCharge(mockCharge, None)
 
-  val stripeServiceResponse: EitherT[Future, StripeApiError, StripeChargeSuccess] =
+  val stripeServiceResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(StripeApiError.fromStripeException)
 
-  val stripeServiceInvalidRequestErrorResponse: EitherT[Future, StripeApiError, StripeChargeSuccess] =
-    EitherT.leftT[Future, StripeChargeSuccess](StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", 500, new Throwable)))
+  val stripeServiceInvalidRequestErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
+    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromThrowable(new InvalidRequestException("failure", "param1", "id12345", 500, new Throwable)))
 
-  val stripeServiceCardErrorResponse: EitherT[Future, StripeApiError, StripeChargeSuccess] =
-    EitherT.leftT[Future, StripeChargeSuccess](StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable)))
+  val stripeServiceCardErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
+    EitherT.leftT[Future, StripeCreateChargeResponse](StripeApiError.fromStripeException(new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable)))
 
   val mockEvent: Event = mock[Event]
 

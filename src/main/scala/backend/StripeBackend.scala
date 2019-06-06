@@ -32,31 +32,26 @@ class StripeBackend(
 )(implicit pool: DefaultThreadPool) extends StrictLogging {
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
-  def createCharge(data: StripeChargeData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripeChargeSuccess] =
-    stripeService.createCharge(data)
-      .bimap(
-        err => {
-          logger.error(s"unable to create Stripe charge ($data)", err)
-          cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
-          err
-        },
-        charge => {
-          cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
-          val email = data.signedInUserEmail.getOrElse(data.paymentData.email)
+  def createCharge(chargeData: StripeChargeData, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
+    stripeService.createCharge(chargeData)
+      .leftMap(err => {
+        logger.error(s"unable to create Stripe charge ($chargeData)", err)
+        cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
+        err
+      })
+      .semiflatMap { charge =>
 
-          postPaymentTasks(email, data, charge, clientBrowserInfo)
-            .leftMap { err =>
-              cloudWatchService.recordPostPaymentTasksError(PaymentProvider.Stripe)
-              logger.error(
-                s"didn't complete post-payment tasks after creating Stripe charge - ${charge.toString}",
-                err
-              )
-              err
-            }
+        cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
-          StripeChargeSuccess.fromCharge(charge)
+        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email).map { identityIdWithGuestAccountCreationToken =>
+          postPaymentTasks(chargeData.paymentData.email, chargeData, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId))
+
+          StripeCreateChargeResponse.fromCharge(
+            charge,
+            identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken)
+          )
         }
-      )
+      }
 
   def processRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] = {
     for {
@@ -65,30 +60,16 @@ class StripeBackend(
     } yield dbUpdateResult
   }
 
-  private def postPaymentTasks(email: String, data: StripeChargeData, charge: Charge, clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit] = {
-
-    val identityIdM: EitherT[Future, BackendError, Long] = getOrCreateIdentityIdFromEmail(email)
-
-    val trackContributionResult = {
-      identityIdM
-        .flatMap(identityId => trackContribution(charge, data, Option(identityId), clientBrowserInfo))
-        .leftMap { err =>
-          logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway")
-          trackContribution(charge, data, identityId = None, clientBrowserInfo)
-            .leftMap(trackErr => logger.error(s"unable to track contribution due to error: ${trackErr.getMessage}"))
-          err
-        }
+  private def postPaymentTasks(email: String, chargeData: StripeChargeData, charge: Charge, clientBrowserInfo: ClientBrowserInfo, identityId: Option[Long]): Unit = {
+    trackContribution(charge, chargeData, identityId, clientBrowserInfo).leftMap { err =>
+      logger.error(s"unable to track contribution due to error: ${err.getMessage}")
     }
 
-    val sendThankYouEmailResult = for {
-      identityId <- identityIdM
-      _ <- sendThankYouEmail(email, data, identityId)
-    } yield ()
-
-    BackendError.combineResults(
-      trackContributionResult,
-      sendThankYouEmailResult
-    )
+    identityId.foreach { id =>
+      sendThankYouEmail(email, chargeData, id).leftMap { err =>
+        logger.error(s"unable to send thank you email: ${err.getMessage}")
+      }
+    }
   }
 
   private def trackContribution(charge: Charge, data: StripeChargeData, identityId: Option[Long], clientBrowserInfo: ClientBrowserInfo): EitherT[Future, BackendError, Unit]  =
@@ -104,10 +85,14 @@ class StripeBackend(
       submitAcquisitionToOphan(StripeAcquisition(data, charge, identityId, clientBrowserInfo))
     )
 
-  // Convert the result of the identity id operation,
-  // into the monad used by the for comprehension in the createCharge() method.
-  private def getOrCreateIdentityIdFromEmail(email: String): EitherT[Future, BackendError, Long] =
-    identityService.getOrCreateIdentityIdFromEmail(email).leftMap(BackendError.fromIdentityError)
+  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[IdentityIdWithGuestAccountCreationToken]] =
+    identityService.getOrCreateIdentityIdFromEmail(email).fold(
+      err => {
+        logger.warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
+        None
+      },
+      identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken)
+    )
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
     // log so that if something goes wrong we can reconstruct the missing data from the logs
