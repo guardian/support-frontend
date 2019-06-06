@@ -123,6 +123,38 @@ const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
   });
 };
 
+const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill', objectFunction: 'entries'  | 'values'): void => {
+  gaEvent({
+    category: 'debug',
+    action: when,
+    label: objectFunction,
+  });
+
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+      id: when,
+    },
+    action: 'CLICK',
+    value: objectFunction,
+  });
+};
+
+const trackPolyfilledObjectFunctions = (): void => {
+  if (window.guardian.beforePolyfill.objectEntries) {
+    trackPolyfilledObjectFunction('beforePolyfill', 'entries');
+  }
+  if (window.guardian.beforePolyfill.objectValues) {
+    trackPolyfilledObjectFunction('beforePolyfill', 'values');
+  }
+  if (Object.entries) {
+    trackPolyfilledObjectFunction('afterPolyfill', 'entries');
+  }
+  if (Object.values) {
+    trackPolyfilledObjectFunction('afterPolyfill', 'values');
+  }
+};
+
 const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): void => {
   gaEvent({
     category: 'click',
@@ -215,4 +247,5 @@ export {
   trackNewOptimizeExperiment,
   trackPaymentMethodSelected,
   trackPolyfillScriptStatus,
+  trackPolyfilledObjectFunctions,
 };

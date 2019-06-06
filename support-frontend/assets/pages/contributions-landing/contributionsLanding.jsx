@@ -29,6 +29,7 @@ import './contributionsLanding.scss';
 
 const polyfillSuccess = window.guardian.polyfillScriptStatus;
 trackPolyfillScriptStatus(polyfillSuccess);
+trackPolyfilledObjectFunctions();
 
 if (!isDetailsSupported) {
   polyfillDetails();
