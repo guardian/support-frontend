@@ -86,7 +86,7 @@ function MarketingConsent(props: PropTypes) {
       <section className={classNameWithModifiers('component-marketing-consent', ['newsletter'])}>
         {props.render({
           title: 'Contributions, subscriptions and membership',
-          message: 'Get related news and offers – whether you are a contributor subscriber, member or would like to become one',
+          message: 'Get related news and offers – whether you are a contributor, subscriber, member or would like to become one',
         })}
 
         {MarketingButton({
