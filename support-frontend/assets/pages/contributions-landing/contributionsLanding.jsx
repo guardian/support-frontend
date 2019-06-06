@@ -12,6 +12,7 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
@@ -40,6 +41,13 @@ if (!isDetailsSupported) {
 const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(() => initReducer(countryGroupId), true);
+
+gaEvent({
+  category: 'debug',
+  action: 'polyfill-script-status',
+  label: polyfillSuccess || 'empty'
+});
+
 // We need to initialise in this order, as
 // formInit depends on the user being populated
 user.init(store.dispatch, setUserStateActions);
