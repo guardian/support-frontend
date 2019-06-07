@@ -121,7 +121,7 @@ const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill',
   gaEvent({
     category: 'debug',
     action: when,
-    label: objectFunction,
+    label: objectFunction || 'none',
   });
 
   trackComponentEvents({
@@ -130,7 +130,7 @@ const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill',
       id: when,
     },
     action: 'CLICK',
-    value: objectFunction,
+    value: objectFunction || 'none',
   });
 };
 
