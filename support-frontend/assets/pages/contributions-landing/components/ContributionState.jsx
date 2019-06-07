@@ -49,7 +49,7 @@ const renderStatesField = (
       <select id="contributionState" className={classNameWithModifiers('form__input', selectedState ? [] : ['placeholder'])} onChange={onChange} required>
         <option value="">Please select your {label.toLowerCase()}</option>
         {Object.keys(states)
-          .map(key => ({abbreviation: key, name: states[key]}))
+          .map(key => ({ abbreviation: key, name: states[key] }))
           .map(renderState(selectedState))}
       </select>
       <span className="form__icon">

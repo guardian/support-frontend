@@ -47,13 +47,16 @@ describe('getPriceDescription', () => {
     expect(getPriceDescription(gwQuarterlyWithPromo, Quarterly))
       .toEqual('£31.87 for 1 quarter, then standard rate (£37.50 every quarter)');
 
-    const gwSixWeekly = { price: 81.30, currency: 'USD', promotions: [
+    const gwSixWeekly = {
+      price: 81.30,
+      currency: 'USD',
+      promotions: [
         {
           name: 'Six For Six',
           description: 'Introductory offer',
           promoCode: '6FOR6',
           introductoryPrice: { price: 6, periodLength: 6, periodType: 'issue' },
-        }]
+        }],
     };
     expect(getPriceDescription(gwSixWeekly, SixWeekly))
       .toEqual('US$6 for the first 6 issues (then US$81.30 every quarter)');

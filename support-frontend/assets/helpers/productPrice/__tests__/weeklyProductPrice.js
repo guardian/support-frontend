@@ -34,8 +34,8 @@ const productPrices = {
               }],
           },
         },
-        SixWeekly: {GBP: {price: 6, currency: 'GBP', promotions: []}},
-        Annual: {GBP: {price: 240, currency: 'GBP', promotions: []}},
+        SixWeekly: { GBP: { price: 6, currency: 'GBP', promotions: [] } },
+        Annual: { GBP: { price: 240, currency: 'GBP', promotions: [] } },
       },
     },
     Domestic: {
@@ -75,7 +75,7 @@ const productPrices = {
                 promoCode: '10ANNUAL',
                 discountedPrice: 135,
                 numberOfDiscountedPeriods: 1,
-                discount: {amount: 10, durationMonths: 12},
+                discount: { amount: 10, durationMonths: 12 },
               }],
           },
         },
@@ -102,7 +102,7 @@ const productPrices = {
               }],
           },
         },
-        Annual: {EUR: {price: 270, currency: 'EUR', promotions: []}},
+        Annual: { EUR: { price: 270, currency: 'EUR', promotions: [] } },
       },
     },
     Domestic: {
@@ -142,7 +142,7 @@ const productPrices = {
                 promoCode: '10ANNUAL',
                 discountedPrice: 220.68,
                 numberOfDiscountedPeriods: 1,
-                discount: {amount: 10, durationMonths: 12},
+                discount: { amount: 10, durationMonths: 12 },
               }],
           },
         },
@@ -169,7 +169,7 @@ const productPrices = {
               }],
           },
         },
-        Annual: {NZD: {price: 530, currency: 'NZD', promotions: []}},
+        Annual: { NZD: { price: 530, currency: 'NZD', promotions: [] } },
       },
     },
     Domestic: {
@@ -209,7 +209,7 @@ const productPrices = {
                 promoCode: '10ANNUAL',
                 discountedPrice: 442.8,
                 numberOfDiscountedPeriods: 1,
-                discount: {amount: 10, durationMonths: 12},
+                discount: { amount: 10, durationMonths: 12 },
               }],
           },
         },
@@ -236,7 +236,7 @@ const productPrices = {
               }],
           },
         },
-        Annual: {CAD: {price: 345, currency: 'CAD', promotions: []}},
+        Annual: { CAD: { price: 345, currency: 'CAD', promotions: [] } },
       },
     },
     Domestic: {
@@ -276,7 +276,7 @@ const productPrices = {
                 promoCode: '10ANNUAL',
                 discountedPrice: 288,
                 numberOfDiscountedPeriods: 1,
-                discount: {amount: 10, durationMonths: 12},
+                discount: { amount: 10, durationMonths: 12 },
               }],
           },
         },
@@ -303,7 +303,7 @@ const productPrices = {
               }],
           },
         },
-        Annual: {AUD: {price: 424, currency: 'AUD', promotions: []}},
+        Annual: { AUD: { price: 424, currency: 'AUD', promotions: [] } },
       },
     },
     Domestic: {
@@ -343,7 +343,7 @@ const productPrices = {
                 promoCode: '10ANNUAL',
                 discountedPrice: 351,
                 numberOfDiscountedPeriods: 1,
-                discount: {amount: 10, durationMonths: 12},
+                discount: { amount: 10, durationMonths: 12 },
               }],
           },
         },
@@ -386,19 +386,20 @@ const productPrices = {
           },
         },
         SixWeekly: {
-          GBP: {price: 6, currency: 'GBP', promotions: []},
-          USD: {price: 6, currency: 'USD', promotions: []},
+          GBP: { price: 6, currency: 'GBP', promotions: [] },
+          USD: { price: 6, currency: 'USD', promotions: [] },
         },
         Annual: {
-          GBP: {price: 240, currency: 'GBP', promotions: []},
-          USD: {price: 325.2, currency: 'USD', promotions: []},
+          GBP: { price: 240, currency: 'GBP', promotions: [] },
+          USD: { price: 325.2, currency: 'USD', promotions: [] },
         },
       },
-    }, Domestic: {
+    },
+    Domestic: {
       NoProductOptions: {
         SixWeekly: {
-          GBP: {price: 6, currency: 'GBP', promotions: []},
-          USD: {price: 6, currency: 'USD', promotions: []},
+          GBP: { price: 6, currency: 'GBP', promotions: [] },
+          USD: { price: 6, currency: 'USD', promotions: [] },
         },
         Quarterly: {
           GBP: {
@@ -443,7 +444,7 @@ const productPrices = {
                 promoCode: '10ANNUAL',
                 discountedPrice: 135,
                 numberOfDiscountedPeriods: 1,
-                discount: {amount: 10, durationMonths: 12},
+                discount: { amount: 10, durationMonths: 12 },
               }],
           },
           USD: {
@@ -456,7 +457,7 @@ const productPrices = {
                 promoCode: '10ANNUAL',
                 discountedPrice: 270,
                 numberOfDiscountedPeriods: 1,
-                discount: {amount: 10, durationMonths: 12},
+                discount: { amount: 10, durationMonths: 12 },
               }],
           },
         },
@@ -483,8 +484,8 @@ const productPrices = {
               }],
           },
         },
-        SixWeekly: {USD: {price: 6, currency: 'USD', promotions: []}},
-        Annual: {USD: {price: 325.2, currency: 'USD', promotions: []}},
+        SixWeekly: { USD: { price: 6, currency: 'USD', promotions: [] } },
+        Annual: { USD: { price: 325.2, currency: 'USD', promotions: [] } },
       },
     },
     Domestic: {
@@ -524,7 +525,7 @@ const productPrices = {
                 promoCode: '10ANNUAL',
                 discountedPrice: 270,
                 numberOfDiscountedPeriods: 1,
-                discount: {amount: 10, durationMonths: 12},
+                discount: { amount: 10, durationMonths: 12 },
               }],
           },
         },
@@ -535,35 +536,43 @@ const productPrices = {
 
 describe('getPrice', () => {
   it('should return a price based on inputs', () => {
-    const euroPriceQuarterly = getProductPrice(productPrices, 'FR', Quarterly,
-      Domestic);
-    expect(euroPriceQuarterly).
-      toEqual({
+    const euroPriceQuarterly = getProductPrice(
+      productPrices, 'FR', Quarterly,
+      Domestic,
+    );
+    expect(euroPriceQuarterly)
+      .toEqual({
         currency: 'EUR',
         price: 61.3,
         promotions: [
           {
             description: 'Introductory offer',
-            introductoryPrice: {periodLength: 6, periodType: 'issue', price: 6},
+            introductoryPrice: { periodLength: 6, periodType: 'issue', price: 6 },
             name: 'Six For Six',
             promoCode: '6FOR6',
           }],
       });
 
-    const audPriceSixForSix = getProductPrice(productPrices, 'AU', SixWeekly,
-      Domestic);
+    const audPriceSixForSix = getProductPrice(
+      productPrices, 'AU', SixWeekly,
+      Domestic,
+    );
     expect(audPriceSixForSix).toEqual({
-      currency: 'AUD', price: 97.5, promotions: [
+      currency: 'AUD',
+      price: 97.5,
+      promotions: [
         {
           description: 'Introductory offer',
-          introductoryPrice: {periodLength: 6, periodType: 'issue', price: 6},
+          introductoryPrice: { periodLength: 6, periodType: 'issue', price: 6 },
           name: 'Six For Six',
           promoCode: '6FOR6',
         }],
     });
 
-    const gbpPriceAnnual = getProductPrice(productPrices, 'GB', Annual,
-      Domestic);
+    const gbpPriceAnnual = getProductPrice(
+      productPrices, 'GB', Annual,
+      Domestic,
+    );
     expect(gbpPriceAnnual).toEqual({
       price: 150,
       currency: 'GBP',
@@ -574,13 +583,15 @@ describe('getPrice', () => {
           promoCode: '10ANNUAL',
           discountedPrice: 135,
           numberOfDiscountedPeriods: 1,
-          discount: {amount: 10, durationMonths: 12},
+          discount: { amount: 10, durationMonths: 12 },
         }],
     });
 
-    const intPriceAnnual = getProductPrice(productPrices, 'CG', Annual,
-      RestOfWorld);
-    expect(intPriceAnnual).toEqual({currency: 'USD', price: 325.20, promotions: []});
+    const intPriceAnnual = getProductPrice(
+      productPrices, 'CG', Annual,
+      RestOfWorld,
+    );
+    expect(intPriceAnnual).toEqual({ currency: 'USD', price: 325.20, promotions: [] });
   });
 });
 
