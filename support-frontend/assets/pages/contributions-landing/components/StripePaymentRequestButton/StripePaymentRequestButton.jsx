@@ -16,7 +16,7 @@ import {
   type StripePaymentRequestButtonMethod,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
+import { trackComponentClick } from 'helpers/tracking/ophan';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { logException } from 'helpers/logger';
 import type { State } from '../../contributionsLandingReducer';

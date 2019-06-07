@@ -11,7 +11,7 @@ import {
   SixWeekly,
   type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
-import { trackComponentEvents } from './tracking/ophanComponentEventTracking';
+import { trackComponentEvents } from './tracking/ophan';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
 import { isTestSwitchedOn } from 'helpers/globals';
