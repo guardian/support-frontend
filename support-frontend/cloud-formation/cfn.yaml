@@ -49,6 +49,8 @@ Mappings:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      AlarmProcess: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      AlarmUrgent: URGENT 9-5 -
 Resources:
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -279,8 +281,15 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub HIGH severity - No healthy instances for support-frontend in ${Stage}
-      AlarmDescription: Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+          - !Ref 'Stage'
+          - 'no healthy instances for support-frontend'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Cannot sell any subscriptions or contributions products.'
+          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
       MetricName: HealthyHostCount
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -303,8 +312,15 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub HIGH severity - Reduced number of healthy instances for support-frontend in ${Stage}
-      AlarmDescription: Impact - Imminent issue cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+          - !Ref 'Stage'
+          - 'Reduced number of healthy instances for support-frontend'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Imminent issue cannot sell any subscriptions or contributions products.'
+          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
       MetricName: HealthyHostCount
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -327,8 +343,15 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub HIGH severity - support-frontend instances are returning 5XX errors in ${Stage}
-      AlarmDescription: Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+          - !Ref 'Stage'
+          - 'support-frontend instances are returning 5XX errors'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Some or all actions on support website are failing.'
+          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
       MetricName: HTTPCode_Target_5XX_Count
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -351,8 +374,15 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub HIGH severity - support-frontend ELB is returning 5XX errors in ${Stage}
-      AlarmDescription: Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+          - !Ref 'Stage'
+          - 'support-frontend ELB is returning 5XX errors'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Some or all actions on support website are failing.'
+          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
       MetricName: HTTPCode_ELB_5XX_Count
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -373,8 +403,15 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub HIGH severity - support-frontend has high latency ${Stage}
-      AlarmDescription: Impact - support-frontend users are seeing slow responses. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+          - !Ref 'Stage'
+          - 'support-frontend has high latency'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - support-frontend users are seeing slow responses.'
+          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
       MetricName: TargetResponseTime
       Dimensions:
         - Name: LoadBalancer
@@ -394,8 +431,15 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub HIGH severity - support-frontend could not load the Zuora catalog from S3 in ${Stage}
-      AlarmDescription: Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+          - !Ref 'Stage'
+          - 'support-frontend could not load the Zuora catalog from S3'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Cannot sell any subscriptions products.'
+          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
       MetricName: CatalogLoadingFailure
       Namespace: support-frontend
       Dimensions:
@@ -422,8 +466,15 @@ Resources:
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Sub HIGH severity - support-workers state machine unavailable in ${Stage}
-      AlarmDescription: Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      AlarmName: !Join
+        - ' '
+        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+          - !Ref 'Stage'
+          - 'support-workers state machine unavailable'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Impact - Cannot sell any subscriptions or contributions products.'
+          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
       MetricName: state-machine-unavailable
       Namespace: !Sub support-frontend-${Stage}
       ComparisonOperator: GreaterThanOrEqualToThreshold
