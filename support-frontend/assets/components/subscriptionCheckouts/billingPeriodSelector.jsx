@@ -30,7 +30,7 @@ type PropTypes = {|
   billingCountry: IsoCountry,
   selected: BillingPeriod,
   onChange: (BillingPeriod) => Action,
-  orderIsAGift?: Option<boolean>,
+  sixWeeklySelected?: Option<boolean>,
 |}
 
 function BillingPeriodSelector(props: PropTypes) {
@@ -44,7 +44,7 @@ function BillingPeriodSelector(props: PropTypes) {
             billingPeriod === SixWeekly ? Quarterly : billingPeriod, // for 6 for 6 we need the quarterly pricing
             props.fulfilmentOption,
           );
-          return props.orderIsAGift && billingPeriod === SixWeekly ? null
+          return billingPeriod === SixWeekly && !props.sixWeeklySelected ? null
             : <RadioInputWithHelper
               text={billingPeriodTitle(billingPeriod)}
               helper={getPriceDescription(
@@ -64,7 +64,7 @@ function BillingPeriodSelector(props: PropTypes) {
 
 BillingPeriodSelector.defaultProps = {
   fulfilmentOption: NoFulfilmentOptions,
-  orderIsAGift: false,
+  sixWeeklySelected: false,
 };
 
 export { BillingPeriodSelector };

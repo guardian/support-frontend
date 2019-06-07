@@ -42,6 +42,7 @@ export type Action =
   | { type: 'SET_FORM_SUBMITTED', formSubmitted: boolean }
   | { type: 'SET_BILLING_ADDRESS_IS_SAME', isSame: Option<boolean> }
   | { type: 'SET_ORDER_IS_GIFT', orderIsAGift: Option<boolean>}
+  | { type: 'SET_SIX_WEEKLY_SELECTED', sixWeeklySelected: Option<boolean>}
   | AddressAction
   | PayPalAction
   | DDAction;
@@ -103,6 +104,10 @@ const formActionCreators = {
   setGiftStatus: (orderIsAGift: boolean | null): Action => ({
     type: 'SET_ORDER_IS_GIFT',
     orderIsAGift,
+  }),
+  setSixWeeklySelected: (sixWeeklySelected: boolean): Action => ({
+    type: 'SET_SIX_WEEKLY_SELECTED',
+    sixWeeklySelected,
   }),
 };
 

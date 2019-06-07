@@ -52,6 +52,11 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
       billingPeriod === SixWeekly ? Quarterly : billingPeriod, // for 6 for 6 we need the quarterly pricing
       getFulfilmentOption(countryId),
     ) : { price: 0 };
+    const clickHandler = (bp) => {
+      // The following is a temporary fix until there is a url builder for the weekly checkout
+      window.localStorage.setItem('billingPeriodSelected', bp);
+      sendTrackingEventsOnClick('subscribe_now_cta', 'GuardianWeekly', null, bp);
+    };
     return {
       ...plans,
       [billingPeriod]: {
@@ -63,14 +68,13 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
         ),
         offer: getAppliedPromoDescription(billingPeriod, productPrice),
         href: getCheckoutUrl({ billingPeriod, state: state.common }),
-        onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'GuardianWeekly', null, billingPeriod),
+        onClick: () => clickHandler(billingPeriod),
         price: null,
         saving: null,
       },
     };
   }, {}),
 });
-
 
 // ----- Exports ----- //
 

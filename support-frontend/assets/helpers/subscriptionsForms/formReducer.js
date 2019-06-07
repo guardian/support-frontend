@@ -53,6 +53,7 @@ function createFormReducer(
     fulfilmentOption: fulfilmentOption || NoFulfilmentOptions,
     payPalHasLoaded: false,
     orderIsAGift: false,
+    sixWeeklySelected: false,
   };
 
 
@@ -127,6 +128,9 @@ function createFormReducer(
 
       case 'SET_ORDER_IS_GIFT':
         return { ...state, orderIsAGift: action.orderIsAGift };
+
+      case 'SET_SIX_WEEKLY_SELECTED':
+        return { ...state, sixWeeklySelected: action.sixWeeklySelected };
 
       default:
         return state;
