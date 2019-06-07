@@ -46,7 +46,7 @@ const store = pageInit(() => initReducer(countryGroupId), true);
 trackPolyfilledObjectFunctions();
 gaEvent({
   category: 'debug',
-  action: 'polyfill-script-status',
+  action: 'polyfill-v3-script-status',
   label: polyfillSuccess || 'empty'
 });
 
