@@ -42,6 +42,7 @@ Mappings:
     PROD:
       MaxInstances: 6
       MinInstances: 3
+      InsufficientInstances: 2
       InstanceType: t3.small
       CertificateARN: arn:aws:acm:eu-west-1:865473395570:certificate/9d8ff96c-63d5-425b-88d1-f529770e5b6d
       AwsKeyARN: arn:aws:kms:eu-west-1:865473395570:key/d7aed06c-e961-4078-8604-0aeedae08613
@@ -290,6 +291,30 @@ Resources:
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0.5
       Period: 60
+      EvaluationPeriods: 2
+      Statistic: Average
+    DependsOn:
+      - TargetGroup
+      - ElasticLoadBalancer
+
+  ReducedHealthyInstancesAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Sub HIGH severity - Reduced number of healthy instances for support-frontend in ${Stage}
+      AlarmDescription: Impact - Imminent issue cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      MetricName: HealthyHostCount
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt ElasticLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroup.TargetGroupFullName
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Threshold: !FindInMap [ StageVariables, !Ref Stage, InsufficientInstances ]
+      Period: 300
       EvaluationPeriods: 2
       Statistic: Average
     DependsOn:
