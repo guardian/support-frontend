@@ -7,7 +7,7 @@ import uuidv4 from 'uuid';
 
 import { classNameWithModifiers } from 'helpers/utilities';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
+import { trackComponentClick } from 'helpers/tracking/ophan';
 
 
 // ----- Types ----- //

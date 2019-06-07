@@ -18,7 +18,7 @@ import {
   detect,
 } from 'helpers/internationalisation/currency';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
+import { trackComponentClick } from 'helpers/tracking/ophan';
 import { EURCountries, GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { formatAmount } from 'helpers/checkouts';
 import SvgDollar from 'components/svgs/dollar';

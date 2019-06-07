@@ -11,6 +11,8 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
+// These are to match Thrift definitions which can be found here:
+// https://dashboard.ophan.co.uk/docs/thrift/componentevent.html#Struct_ComponentEvent
 type OphanProduct =
   | 'CONTRIBUTION'
   | 'RECURRING_CONTRIBUTION'
