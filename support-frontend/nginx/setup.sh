@@ -11,7 +11,6 @@ DOMAINS=(
 
 for domain in ${DOMAINS[@]}; do
   dev-nginx setup-cert $domain
-  dev-nginx add-to-hosts-file $domain
 done
 
 dev-nginx link-config ${SITE_CONFIG}
