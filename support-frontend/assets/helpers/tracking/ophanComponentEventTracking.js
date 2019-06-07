@@ -110,7 +110,7 @@ const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
   trackComponentEvents({
     component: {
       componentType: 'ACQUISITIONS_OTHER',
-      id: 'polyfill-script-status',
+      id: 'polyfill-v3-script-status',
     },
     action: 'CLICK',
     value: polyfillScriptStatus || 'empty',
@@ -120,14 +120,14 @@ const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
 const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill', objectFunction: string): void => {
   gaEvent({
     category: 'debug',
-    action: when,
+    action: `${when}-v3`,
     label: objectFunction || 'none',
   });
 
   trackComponentEvents({
     component: {
       componentType: 'ACQUISITIONS_OTHER',
-      id: when,
+      id: `${when}-v3`,
     },
     action: 'CLICK',
     value: objectFunction || 'none',
