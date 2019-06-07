@@ -237,7 +237,6 @@ class WeeklyCheckoutForm extends Component<PropTypes> {
                     emailGiftRecipient={props.emailGiftRecipient}
                     setEmailGift={props.setEmailGift}
                     formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
-                    isGiftRecipient
                   />
                 </FormSection>
                 <FormSection title="Gift recipient's address">
