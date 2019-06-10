@@ -13,7 +13,10 @@ import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import {
+  getWeeklyFulfilmentOption,
+  NoFulfilmentOptions,
+} from 'helpers/productPrice/fulfilmentOptions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import type { Option } from 'helpers/types/option';
 
@@ -56,6 +59,8 @@ function createFormReducer(
     sixWeeklySelected: false,
   };
 
+  const getFulfilmentOption = (action, currentOption) =>
+    (action.scope === 'delivery' ? getWeeklyFulfilmentOption(action.country) : currentOption);
 
   return (state: FormState = initialState, action: Action): FormState => {
 
@@ -98,6 +103,9 @@ function createFormReducer(
         return {
           ...state,
           paymentMethod: defaultPaymentMethod(action.country, product),
+          // When the country changes we need to update the fulfilment option because it may mean
+          // a switch between domestic and rest of the world
+          fulfilmentOption: getFulfilmentOption(action, state.fulfilmentOption),
         };
 
       case 'SET_PAYMENT_METHOD':

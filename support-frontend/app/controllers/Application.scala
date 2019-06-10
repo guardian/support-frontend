@@ -101,7 +101,7 @@ class Application(
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
 
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
-    val guestAccountCreationToken = request.session.get("guestAccountCreationToken")
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(

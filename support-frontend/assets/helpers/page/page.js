@@ -28,7 +28,7 @@ import { setExperimentVariant } from 'helpers/page/commonActions';
 import {
   trackAbTests,
   trackNewOptimizeExperiment,
-} from 'helpers/tracking/ophanComponentEventTracking';
+} from 'helpers/tracking/ophan';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import { getSettings } from 'helpers/globals';
 

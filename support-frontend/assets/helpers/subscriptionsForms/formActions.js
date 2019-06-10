@@ -9,7 +9,7 @@ import type { ErrorReason } from 'helpers/errorReasons';
 import type { FormField, Stage } from './formFields';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import * as storage from 'helpers/storage';
-import { trackPaymentMethodSelected } from 'helpers/tracking/ophanComponentEventTracking';
+import { trackPaymentMethodSelected } from 'helpers/tracking/ophan';
 import { showPayPal } from 'helpers/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';

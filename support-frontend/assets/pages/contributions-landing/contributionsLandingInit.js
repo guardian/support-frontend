@@ -33,6 +33,7 @@ import {
   setThirdPartyPaymentLibrary,
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
+  setThankYouPageStage,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -222,7 +223,8 @@ const init = (store: Store<State, Action, Function>) => {
   // where it is returned by the Payment API to the backend, flashed into the session to preserve
   // it through a serverside redirect, and then written into window.guardian on the thank-you page.
   if (window.guardian.guestAccountCreationToken) {
-    setGuestAccountCreationToken(window.guardian.guestAccountCreationToken);
+    dispatch(setGuestAccountCreationToken(window.guardian.guestAccountCreationToken));
+    dispatch(setThankYouPageStage('thankYouSetPassword'));
   }
 
   selectInitialAmounts(state, dispatch);

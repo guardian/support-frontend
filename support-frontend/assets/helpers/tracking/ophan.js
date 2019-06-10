@@ -11,6 +11,8 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
+// These are to match Thrift definitions which can be found here:
+// https://dashboard.ophan.co.uk/docs/thrift/componentevent.html#Struct_ComponentEvent
 type OphanProduct =
   | 'CONTRIBUTION'
   | 'RECURRING_CONTRIBUTION'
@@ -106,6 +108,54 @@ const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
   });
 };
 
+const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+      id: 'polyfill-v3-script-status',
+    },
+    action: 'CLICK',
+    value: polyfillScriptStatus || 'empty',
+  });
+};
+
+const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill', objectFunction: string): void => {
+  gaEvent({
+    category: 'debug',
+    action: `${when}-v3`,
+    label: objectFunction || 'none',
+  });
+
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+      id: `${when}-v3`,
+    },
+    action: 'CLICK',
+    value: objectFunction || 'none',
+  });
+};
+
+const trackPolyfilledObjectFunctions = (): void => {
+  const beforePolyfill = [];
+  if (window.guardian.beforePolyfill.objectEntries) {
+    beforePolyfill.push('entries');
+  }
+  if (window.guardian.beforePolyfill.objectValues) {
+    beforePolyfill.push('values');
+  }
+  trackPolyfilledObjectFunction('beforePolyfill', beforePolyfill.join(','));
+
+  const afterPolyfill = [];
+  if (Object.entries) {
+    afterPolyfill.push('entries');
+  }
+  if (Object.values) {
+    afterPolyfill.push('values');
+  }
+  trackPolyfilledObjectFunction('afterPolyfill', afterPolyfill.join(','));
+};
+
 const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): void => {
   gaEvent({
     category: 'click',
@@ -197,4 +247,6 @@ export {
   trackAbTests,
   trackNewOptimizeExperiment,
   trackPaymentMethodSelected,
+  trackPolyfillScriptStatus,
+  trackPolyfilledObjectFunctions,
 };

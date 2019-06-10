@@ -13,7 +13,7 @@ import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { checkEmail, emailRegexPattern } from 'helpers/formValidation';
-import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
+import { trackComponentClick } from 'helpers/tracking/ophan';
 
 import ContributionTextInput from './ContributionTextInput';
 import { type ThankYouPageStage } from '../contributionsLandingReducer';

@@ -28,12 +28,10 @@ import DirectDebitPopUpForm
   from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import {
-  getFulfilmentOption,
-  getPromotion,
-  regularPrice,
-} from 'helpers/productPrice/weeklyProductPrice';
+  getProductPrice,
+  type ProductPrices,
+} from 'helpers/productPrice/productPrices';
 import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
@@ -68,6 +66,7 @@ import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 
 // ----- Types ----- //

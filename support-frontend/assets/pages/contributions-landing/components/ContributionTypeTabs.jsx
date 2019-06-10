@@ -11,7 +11,7 @@ import {
   toHumanReadableContributionType,
 } from 'helpers/checkouts';
 
-import { trackComponentClick } from 'helpers/tracking/ophanComponentEventTracking';
+import { trackComponentClick } from 'helpers/tracking/ophan';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Switches } from 'helpers/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

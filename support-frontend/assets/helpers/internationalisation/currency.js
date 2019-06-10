@@ -7,10 +7,8 @@ import { getQueryParameter } from 'helpers/url';
 import {
   type CountryGroup,
   type CountryGroupId,
-  countryGroups, fromCountry, GBPCountries,
+  countryGroups,
 } from './countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-
 
 // ----- Types ----- //
 
@@ -133,12 +131,6 @@ function detect(countryGroup: CountryGroupId): IsoCurrency {
 const glyph = (c: IsoCurrency): string => currencies[c].glyph;
 const extendedGlyph = (c: IsoCurrency): string => currencies[c].extendedGlyph;
 
-const extendedGlyphForCountry = (country: IsoCountry) => {
-  const currency = fromCountryGroupId(fromCountry(country) || GBPCountries);
-  return extendedGlyph(currency || 'GBP');
-};
-
-
 // ----- Exports ----- //
 
 export {
@@ -148,5 +140,4 @@ export {
   currencies,
   glyph,
   extendedGlyph,
-  extendedGlyphForCountry,
 };

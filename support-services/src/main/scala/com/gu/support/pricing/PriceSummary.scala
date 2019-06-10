@@ -1,10 +1,12 @@
 package com.gu.support.pricing
 
+import com.gu.i18n.Currency
 import com.gu.support.promotions._
 
 
 case class PriceSummary(
   price: BigDecimal,
+  currency: Currency,
   promotions: List[PromotionSummary]
 )
 

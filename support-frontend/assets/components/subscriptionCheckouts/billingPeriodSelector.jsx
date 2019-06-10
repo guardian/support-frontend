@@ -17,7 +17,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-import { extendedGlyphForCountry } from 'helpers/internationalisation/currency';
 import {
   getAppliedPromoDescription,
   getPriceDescription,
@@ -48,7 +47,6 @@ function BillingPeriodSelector(props: PropTypes) {
             : <RadioInputWithHelper
               text={billingPeriodTitle(billingPeriod)}
               helper={getPriceDescription(
-                extendedGlyphForCountry(props.billingCountry),
                 productPrice,
                 billingPeriod,
               )}

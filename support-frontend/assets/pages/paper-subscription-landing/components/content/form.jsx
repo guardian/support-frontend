@@ -9,7 +9,7 @@ import {
 } from 'helpers/subscriptions';
 import {
   finalPrice,
-  regularPrice,
+  getProductPrice,
 } from 'helpers/productPrice/paperProductPrices';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 import { flashSaleIsActive, getDuration } from 'helpers/flashSale';
@@ -23,7 +23,7 @@ import { paperCheckoutUrl } from 'helpers/routes';
 import { getTitle } from '../../helpers/products';
 import { getDiscountCopy } from '../hero/discountCopy';
 import { getQueryParameter } from 'helpers/url';
-import type { Price, ProductPrices } from 'helpers/productPrice/productPrices';
+import type { ProductPrice, ProductPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 
 // ---- Helpers ----- //
@@ -32,9 +32,9 @@ import { showPrice } from 'helpers/productPrice/productPrices';
 const discountParam: ?string = getQueryParameter('heroCopy');
 
 // TODO: We will need to make this work for flash sales
-const getRegularPriceStr = (price: Price): string => `You pay ${showPrice(price)} a month`;
+const getRegularPriceStr = (price: ProductPrice): string => `You pay ${showPrice(price)} a month`;
 
-const getPriceStr = (price: Price): string => {
+const getPriceStr = (price: ProductPrice): string => {
   if (flashSaleIsActive('Paper', GBPCountries)) {
     const duration = getDuration('Paper', GBPCountries);
     if (duration) {
@@ -58,7 +58,7 @@ const getOfferStr = (subscription: Option<number>, newsstand: Option<number>, in
   return null;
 };
 
-const getSavingStr = (price: Price): Option<string> => {
+const getSavingStr = (price: ProductPrice): Option<string> => {
   if (flashSaleIsActive('Paper', GBPCountries) && getDuration('Paper', GBPCountries)) {
     return `${showPrice(price)} a month thereafter`;
   }
@@ -94,7 +94,7 @@ const getPlans = (
         copy: copy[fulfilmentOption],
         price: getPriceStr(price),
         offer: getOfferStr(price.price, getNewsstandPrice(productOption), index),
-        saving: getSavingStr(regularPrice(productPrices, fulfilmentOption, productOption)),
+        saving: getSavingStr(getProductPrice(productPrices, fulfilmentOption, productOption)),
       },
     };
   }, {});

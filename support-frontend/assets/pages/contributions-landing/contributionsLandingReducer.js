@@ -121,7 +121,7 @@ function createFormReducer() {
     formData: {
       firstName: null,
       lastName: null,
-      email: storage.getSession('email') || null,
+      email: storage.getSession('gu.email') || null,
       otherAmounts: {
         ONE_OFF: { amount: null },
         MONTHLY: { amount: null },

@@ -20,16 +20,20 @@ import {
   setSubmissionError,
 } from 'helpers/subscriptionsForms/formActions';
 import type {
-  AnyCheckoutState, CheckoutState,
+  AnyCheckoutState,
+  CheckoutState,
   WithDeliveryCheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import {
   getBillingAddressFields,
   getDeliveryAddressFields,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { finalPrice } from 'helpers/productPrice/productPrices';
+import {
+  finalPrice,
+  getAppliedPromo,
+  getProductPrice,
+} from 'helpers/productPrice/productPrices';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { getQueryParameter } from 'helpers/url';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { Participations } from 'helpers/abTests/abtest';
 import { routes } from 'helpers/routes';
@@ -38,17 +42,18 @@ import type { Option } from 'helpers/types/option';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
   validateCheckoutForm,
   validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
 import { isPhysicalProduct } from 'helpers/subscriptions';
 import {
-  loadStripe, openDialogBox,
+  loadStripe,
+  openDialogBox,
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 
@@ -121,7 +126,15 @@ function buildRegularPaymentRequest(
     billingPeriod,
     fulfilmentOption,
     productOption,
+    productPrices,
   } = state.page.checkout;
+
+  const price = getProductPrice(
+    productPrices,
+    state.page.billingAddress.fields.country,
+    billingPeriod,
+    fulfilmentOption,
+  );
 
   const product = {
     currency: currencyId,
@@ -130,6 +143,7 @@ function buildRegularPaymentRequest(
   };
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
+  const promotion = getAppliedPromo(price.promotions);
 
   return {
     firstName,
@@ -146,7 +160,7 @@ function buildRegularPaymentRequest(
       state.common.abParticipations,
       state.common.optimizeExperiments,
     ),
-    promoCode: getQueryParameter('promoCode'),
+    promoCode: promotion ? promotion.promoCode : null,
   };
 }
 

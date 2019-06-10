@@ -2,6 +2,7 @@
 
 // ----- Imports ----- //
 
+import { trackPolyfillScriptStatus } from 'helpers/tracking/ophan';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Route, BrowserRouter } from 'react-router-dom';
@@ -11,13 +12,13 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as user from 'helpers/user/user';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as storage from 'helpers/storage';
 import { set as setCookie } from 'helpers/cookie';
 import Page from 'components/page/page';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
-
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
 import ContributionFormContainer from './components/ContributionFormContainer';
@@ -26,16 +27,29 @@ import ContributionThankYouContainer from './components/ContributionThankYou/Con
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
+import { trackPolyfilledObjectFunctions } from '../../helpers/tracking/ophan';
+
+const polyfillSuccess = window.guardian.polyfillScriptStatus;
+trackPolyfillScriptStatus(polyfillSuccess);
 
 if (!isDetailsSupported) {
   polyfillDetails();
 }
+
 
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(() => initReducer(countryGroupId), true);
+
+trackPolyfilledObjectFunctions();
+gaEvent({
+  category: 'debug',
+  action: 'polyfill-v3-script-status',
+  label: polyfillSuccess || 'empty',
+});
+
 // We need to initialise in this order, as
 // formInit depends on the user being populated
 user.init(store.dispatch, setUserStateActions);
