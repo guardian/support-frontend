@@ -13,7 +13,6 @@ describe('getPriceDescription', () => {
   it('should return a price based on inputs', () => {
     const gwAnnual = {
       price: 150,
-      currency: 'GBP',
       promotions: [
         {
           name: '10% Off Annual Guardian Weekly Subs',
@@ -24,16 +23,15 @@ describe('getPriceDescription', () => {
           discount: { amount: 10, durationMonths: 12 },
         }],
     };
-    expect(getPriceDescription(gwAnnual, Annual))
+    expect(getPriceDescription('£', gwAnnual, Annual))
       .toEqual('£135 for 1 year, then standard rate (£150 every year)');
 
-    const gwQuarterly = { price: 37.5, currency: 'GBP', promotions: [] };
-    expect(getPriceDescription(gwQuarterly, Quarterly))
+    const gwQuarterly = { price: 37.5, promotions: [] };
+    expect(getPriceDescription('£', gwQuarterly, Quarterly))
       .toEqual('£37.50 every quarter');
 
     const gwQuarterlyWithPromo = {
       price: 37.5,
-      currency: 'GBP',
       promotions: [
         {
           name: '15% discount - WJWGEX9A8',
@@ -42,15 +40,7 @@ describe('getPriceDescription', () => {
           discountedPrice: 31.87,
           numberOfDiscountedPeriods: 1,
           discount: { amount: 15, durationMonths: 3 },
-        }],
-    };
-    expect(getPriceDescription(gwQuarterlyWithPromo, Quarterly))
-      .toEqual('£31.87 for 1 quarter, then standard rate (£37.50 every quarter)');
-
-    const gwSixWeekly = {
-      price: 81.30,
-      currency: 'USD',
-      promotions: [
+        },
         {
           name: 'Six For Six',
           description: 'Introductory offer',
@@ -58,7 +48,11 @@ describe('getPriceDescription', () => {
           introductoryPrice: { price: 6, periodLength: 6, periodType: 'issue' },
         }],
     };
-    expect(getPriceDescription(gwSixWeekly, SixWeekly))
+    expect(getPriceDescription('£', gwQuarterlyWithPromo, Quarterly))
+      .toEqual('£31.87 for 1 quarter, then standard rate (£37.50 every quarter)');
+
+    const gwSixWeekly = { price: 81.30, promotions: [] };
+    expect(getPriceDescription('US$', gwSixWeekly, SixWeekly))
       .toEqual('US$6 for the first 6 issues (then US$81.30 every quarter)');
   });
 });

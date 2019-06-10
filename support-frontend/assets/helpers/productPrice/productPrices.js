@@ -22,7 +22,6 @@ import {
 import { fixDecimals } from 'helpers/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/url';
-import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 
 // ----- Types ----- //
 
@@ -52,7 +51,6 @@ export type Promotion =
 
 export type ProductPrice = {
   price: number,
-  currency: IsoCurrency,
   promotions?: Promotion[],
 }
 
@@ -68,6 +66,11 @@ export type ProductPrices = {
   }
 }
 
+export type Price = {|
+  price: number,
+  currency: IsoCurrency,
+|};
+
 const isNumeric = (num: ?number): boolean %checks =>
   num !== null &&
   num !== undefined &&
@@ -78,12 +81,7 @@ const hasDiscount = (promotion: ?Promotion): boolean %checks =>
   promotion !== undefined &&
   isNumeric(promotion.discountedPrice);
 
-const hasIntroductoryPrice = (promotion: ?Promotion): boolean %checks =>
-  promotion !== null &&
-  promotion !== undefined &&
-  !!promotion.introductoryPrice;
-
-function applyDiscount(price: ProductPrice, promotion: ?Promotion) {
+function applyDiscount(price: Price, promotion: ?Promotion) {
   if (promotion && hasDiscount(promotion)) {
     return {
       ...price,
@@ -106,24 +104,13 @@ function getProductPrice(
 ): ProductPrice {
   const countryGroup = getCountryGroup(country);
   // eslint-disable-next-line max-len
-  return productPrices[countryGroup.name][fulfilmentOption ||
-  NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod ===
-  SixWeekly ? Quarterly : billingPeriod][countryGroup.currency];
+  return productPrices[countryGroup.name][fulfilmentOption || NoFulfilmentOptions][productOption || NoProductOptions][billingPeriod][countryGroup.currency];
 }
-
-const matchesQueryParam = promotion =>
-  getQueryParameter('promoCode') === promotion.promoCode;
-
-const introductoryPrice = promotion =>
-  promotion.introductoryPrice !== null && promotion.introductoryPrice !==
-  undefined;
 
 function getAppliedPromo(promotions: ?Promotion[]): Option<Promotion> {
   if (promotions && promotions.length > 0) {
     if (promotions.length > 1) {
-      return promotions.find(introductoryPrice) ||
-        promotions.find(matchesQueryParam) ||
-        promotions[0];
+      return promotions.find(promotion => getQueryParameter('promoCode') === promotion.promoCode) || promotions[0];
     }
     return promotions[0];
   }
@@ -146,15 +133,34 @@ function getPromotion(
   ).promotions);
 }
 
+function regularPrice(
+  productPrices: ProductPrices,
+  country: IsoCountry,
+  billingPeriod: BillingPeriod,
+  fulfilmentOption: ?FulfilmentOptions,
+  productOption: ?ProductOptions,
+): Price {
+  return {
+    price: getProductPrice(
+      productPrices,
+      country,
+      billingPeriod,
+      fulfilmentOption,
+      productOption,
+    ).price,
+    currency: getCountryGroup(country).currency,
+  };
+}
+
 function finalPrice(
   productPrices: ProductPrices,
   country: IsoCountry,
   billingPeriod: BillingPeriod,
   fulfilmentOption: ?FulfilmentOptions,
   productOption: ?ProductOptions,
-): ProductPrice {
+): Price {
   return applyDiscount(
-    getProductPrice(
+    regularPrice(
       productPrices,
       country,
       billingPeriod,
@@ -171,7 +177,7 @@ function finalPrice(
   );
 }
 
-const showPrice = (p: ProductPrice, isExtended: boolean = true): string => {
+const showPrice = (p: Price, isExtended: boolean = true): string => {
   const showGlyph = isExtended ? extendedGlyph : glyph;
   return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };
@@ -182,13 +188,14 @@ const displayPrice = (
   billingPeriod: BillingPeriod,
   fulfilmentOption: ?FulfilmentOptions,
   productOption: ?ProductOptions,
-) => showPrice(getProductPrice(
+) => showPrice(regularPrice(
   productPrices,
   country,
   billingPeriod,
   fulfilmentOption,
   productOption,
 ));
+
 
 function getCurrency(country: IsoCountry): IsoCurrency {
   const { currency } = getCountryGroup(country);
@@ -198,6 +205,7 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 export {
   getAppliedPromo,
   getProductPrice,
+  regularPrice,
   getPromotion,
   finalPrice,
   getCurrency,
@@ -206,6 +214,5 @@ export {
   displayPrice,
   applyDiscount,
   hasDiscount,
-  hasIntroductoryPrice,
   isNumeric,
 };

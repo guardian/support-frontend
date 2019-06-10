@@ -1,9 +1,6 @@
 // @flow
 
 // Fulfilment options describe the various ways that a user can receive a product
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
-
 const HomeDelivery: 'HomeDelivery' = 'HomeDelivery';
 const Collection: 'Collection' = 'Collection';
 const Domestic: 'Domestic' = 'Domestic';
@@ -24,10 +21,3 @@ export type FulfilmentOptions =
   | typeof NoFulfilmentOptions
 
 export { HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions };
-
-const getWeeklyFulfilmentOption = (country: IsoCountry) =>
-  (countryGroups.International.countries.includes(country)
-    ? RestOfWorld
-    : Domestic);
-
-export { getWeeklyFulfilmentOption };

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import type { WeeklyBillingPeriod } from 'helpers/billingPeriods';
 import {
   billingPeriodTitle,
+  Quarterly,
+  SixWeekly,
   weeklyBillingPeriods,
 } from 'helpers/billingPeriods';
 import { type CommonState } from 'helpers/page/commonReducer';
@@ -11,6 +13,7 @@ import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import { getPromoCode } from 'helpers/flashSale';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
+import { getFulfilmentOption } from 'helpers/productPrice/weeklyProductPrice';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
@@ -18,7 +21,7 @@ import {
   getAppliedPromoDescription,
   getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
+import { extendedGlyphForCountry } from 'helpers/internationalisation/currency';
 
 // ---- Plans ----- //
 
@@ -46,14 +49,15 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
     const productPrice = productPrices ? getProductPrice(
       productPrices,
       countryId,
-      billingPeriod,
-      getWeeklyFulfilmentOption(countryId),
-    ) : { price: 0, currency: 'GBP' };
+      billingPeriod === SixWeekly ? Quarterly : billingPeriod, // for 6 for 6 we need the quarterly pricing
+      getFulfilmentOption(countryId),
+    ) : { price: 0 };
     return {
       ...plans,
       [billingPeriod]: {
         title: billingPeriodTitle(billingPeriod),
         copy: getPriceDescription(
+          extendedGlyphForCountry(countryId),
           productPrice,
           billingPeriod,
         ),
