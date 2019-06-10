@@ -77,6 +77,15 @@ const subscriptionPricesForDefaultBillingPeriod: {
     AUDCountries: 21.50,
     International: 19.99,
   },
+  GuardianWeekly: {
+    GBPCountries: 37.50,
+    EURCountries: 61.30,
+    UnitedStates: 75,
+    Canada: 80,
+    AUDCountries: 97.50,
+    NZDCountries: 123,
+    International: 81.30,
+  },
   Paper: {
     GBPCountries: 10.79,
   },
