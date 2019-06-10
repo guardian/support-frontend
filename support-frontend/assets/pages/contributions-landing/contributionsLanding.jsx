@@ -47,7 +47,7 @@ trackPolyfilledObjectFunctions();
 gaEvent({
   category: 'debug',
   action: 'polyfill-v3-script-status',
-  label: polyfillSuccess || 'empty'
+  label: polyfillSuccess || 'empty',
 });
 
 // We need to initialise in this order, as
