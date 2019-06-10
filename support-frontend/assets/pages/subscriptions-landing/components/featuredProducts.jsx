@@ -10,7 +10,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { flashSaleIsActive, getSaleCopy } from 'helpers/flashSale';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { showPrice, type ProductPrice } from 'helpers/productPrice/productPrices';
+import { showPrice, type Price } from 'helpers/productPrice/productPrices';
 import { fromCountryGroupId } from '../../../helpers/internationalisation/currency';
 
 // ----- Types ----- //
@@ -126,7 +126,7 @@ const getProductHeadingsAndBody = (product: SubscriptionProduct, countryGroupId:
   }
 
   const maybeCurrency = fromCountryGroupId(countryGroupId);
-  const sixPrice: ProductPrice = {
+  const sixPrice: Price = {
     price: 6,
     currency: maybeCurrency !== null && maybeCurrency !== undefined ? maybeCurrency : 'GBP',
   };

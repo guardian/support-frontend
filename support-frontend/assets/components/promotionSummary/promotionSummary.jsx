@@ -12,7 +12,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fixDecimals } from 'helpers/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { getPromotion, getProductPrice } from 'helpers/productPrice/productPrices';
+import { getPromotion, regularPrice } from 'helpers/productPrice/productPrices';
 
 export type PropTypes = {
   productPrices: ProductPrices,
@@ -73,7 +73,7 @@ function discountSummary(
 function PromotionSummary(props: PropTypes) {
   if (props.country) {
     const { country } = props;
-    const productPrice = getProductPrice(props.productPrices, country, props.billingPeriod);
+    const productPrice = regularPrice(props.productPrices, country, props.billingPeriod);
     const promotion = getPromotion(props.productPrices, country, props.billingPeriod);
     if (promotion &&
       promotion.discountedPrice &&

@@ -7,7 +7,7 @@ import { Annual, Monthly } from 'helpers/billingPeriods';
 import {
   finalPrice,
   getCurrency,
-  type ProductPrice,
+  type Price,
   type ProductPrices,
   showPrice,
 } from 'helpers/productPrice/productPrices';
@@ -42,7 +42,7 @@ const getPrice = (productPrices: ProductPrices, period: DigitalBillingPeriod, co
 const getAnnualSaving = (
   productPrices: ProductPrices,
   country: IsoCountry,
-): ?ProductPrice => {
+): ?Price => {
   const annualizedMonthlyCost = getPrice(productPrices, Monthly, country).price * 12;
   const annualCost = getPrice(productPrices, Annual, country);
   const saving = annualizedMonthlyCost - annualCost.price;
