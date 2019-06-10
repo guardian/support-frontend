@@ -4,19 +4,15 @@
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-  Annual,
   type BillingPeriod,
   Monthly,
   Quarterly,
-  SixWeekly,
-  type WeeklyBillingPeriod,
 } from 'helpers/billingPeriods';
 import { trackComponentEvents } from './tracking/ophan';
 import { gaEvent } from './tracking/googleTagManager';
 import { currencies, detect } from './internationalisation/currency';
 import { isTestSwitchedOn } from 'helpers/globals';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
-
 
 // ----- Types ------ //
 
@@ -53,14 +49,12 @@ const isPhysicalProduct = (product: SubscriptionProduct) => {
   }
 };
 
-
 const dailyNewsstandPrice = 2.20;
 const weekendNewsstandPrice = 3.20;
 const newsstandPrices: {[PaperProductOptions]: number} = {
   Saturday: weekendNewsstandPrice,
   Sunday: weekendNewsstandPrice,
   Everyday: (dailyNewsstandPrice * 5) + (weekendNewsstandPrice * 2),
-  Sixday: (dailyNewsstandPrice * 5) + weekendNewsstandPrice,
   Weekend: weekendNewsstandPrice * 2,
 };
 
@@ -83,15 +77,6 @@ const subscriptionPricesForDefaultBillingPeriod: {
     AUDCountries: 21.50,
     International: 19.99,
   },
-  GuardianWeekly: {
-    GBPCountries: 37.50,
-    EURCountries: 61.30,
-    UnitedStates: 75,
-    Canada: 80,
-    AUDCountries: 97.50,
-    NZDCountries: 123,
-    International: 81.30,
-  },
   Paper: {
     GBPCountries: 10.79,
   },
@@ -100,52 +85,6 @@ const subscriptionPricesForDefaultBillingPeriod: {
   },
   DailyEdition: {
     GBPCountries: 11.99,
-  },
-};
-
-const subscriptionPromoPricesForGuardianWeekly: {
-  [string]: {
-    [CountryGroupId]: {
-      [WeeklyBillingPeriod]: number,
-    }
-  }
-} = {
-  '10ANNUAL': {
-    GBPCountries: {
-      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.GBPCountries,
-      [SixWeekly]: 6,
-      [Annual]: 135,
-    },
-    EURCountries: {
-      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.EURCountries,
-      [SixWeekly]: 6,
-      [Annual]: 220.68,
-    },
-    UnitedStates: {
-      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.UnitedStates,
-      [SixWeekly]: 6,
-      [Annual]: 270,
-    },
-    Canada: {
-      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.Canada,
-      [SixWeekly]: 6,
-      [Annual]: 288,
-    },
-    AUDCountries: {
-      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.AUDCountries,
-      [SixWeekly]: 6,
-      [Annual]: 351,
-    },
-    NZDCountries: {
-      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.NZDCountries,
-      [SixWeekly]: 6,
-      [Annual]: 442.8,
-    },
-    International: {
-      [Quarterly]: subscriptionPricesForDefaultBillingPeriod.GuardianWeekly.International,
-      [SixWeekly]: 6,
-      [Annual]: 292.68,
-    },
   },
 };
 
@@ -177,14 +116,6 @@ function displayPrice(product: SubscriptionProduct, countryGroupId: CountryGroup
   const currency = currencies[detect(countryGroupId)].glyph;
   const price = getProductPrice(product, countryGroupId);
   return `${currency}${price}/${defaultBillingPeriods[product]}`;
-}
-
-function getPromotionWeeklyProductPrice(
-  countryGroupId: CountryGroupId,
-  billingPeriod: WeeklyBillingPeriod,
-  promoCode: string,
-): string {
-  return fixDecimals(subscriptionPromoPricesForGuardianWeekly[promoCode][countryGroupId][billingPeriod]);
 }
 
 function ophanProductFromSubscriptionProduct(product: SubscriptionProduct): OphanSubscriptionsProduct {
@@ -256,7 +187,6 @@ export {
   sendTrackingEventsOnClick,
   displayPrice,
   getProductPrice,
-  getPromotionWeeklyProductPrice,
   getNewsstandSaving,
   getNewsstandPrice,
   fixDecimals,
