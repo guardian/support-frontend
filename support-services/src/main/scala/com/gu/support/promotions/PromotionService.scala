@@ -9,7 +9,7 @@ import com.gu.support.zuora.api.SubscriptionData
 import com.typesafe.scalalogging.LazyLogging
 
 class PromotionService(config: PromotionsConfig, maybeCollection: Option[PromotionCollection] = None) extends TouchpointService with LazyLogging {
-  val promotionCollection = maybeCollection.getOrElse(new CachedDynamoPromotionCollection(config.tables))
+  val promotionCollection = maybeCollection.getOrElse(new DynamoPromotionCollection(config.tables))
 
   //This is a small hack to allow us to start using promotions to handle 6 for 6 without having to build the tooling
   private def allWith6For6 = promotionCollection.all.toList :+ Promotions.SixForSixPromotion
