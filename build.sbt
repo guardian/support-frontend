@@ -10,9 +10,9 @@ scalacOptions ++= Seq(
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 
-val circeVersion = "0.9.1"
-val AWSJavaSDKVersion = "1.11.475"
-val jacksonVersion = "2.9.8"
+val circeVersion = "0.11.1"
+val AWSJavaSDKVersion = "1.11.568"
+val jacksonVersion = "2.9.9"
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -23,7 +23,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sqs" % AWSJavaSDKVersion,
   "com.beachape" %% "enumeratum" % "1.5.12",
   "com.beachape" %% "enumeratum-circe" % "1.5.12",
-  "com.dripower" %% "play-circe" % "2609.0",
+  "com.dripower" %% "play-circe" % "2611.0",
   "com.github.mpilquist" %% "simulacrum" % "0.11.0",
   "com.stripe" % "stripe-java" % "5.28.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
@@ -50,7 +50,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "support-models" % "0.65",
   "com.gu" %% "ophan-event-model" % "0.0.10",
   "org.apache.thrift" % "libthrift" % "0.12.0",// needed for snyk deps https://app.snyk.io/vuln/SNYK-JAVA-ORGAPACHETHRIFT-173706
-  "com.gu" %% "fezziwig" % "0.6" excludeAll ExclusionRule(organization = "com.twitter"),
+  "com.gu" %% "fezziwig" % "1.1" excludeAll ExclusionRule(organization = "com.twitter"),
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,
