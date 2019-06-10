@@ -16,7 +16,7 @@ $content-padding: 10px;
 .product-block__header {
   width: 100%;
   font-weight: 600;
-  font-size: 32px;
+  font-size: 36px;
   padding: $content-padding;
 }
 
@@ -25,7 +25,21 @@ $content-padding: 10px;
   flex-wrap: wrap-reverse;
 }
 
-.product-block__sub-header {
+.product-block__content--subtitle {
+  display: none;
+  @include mq($from: leftCol) {
+    display: block;
+  }
+}
+
+.product-block__subtitle--container {
+  display: block;
+
+  @include mq($from: leftCol) {
+    display: none;
+  }
+}
+.product-block__sub-title {
   @include narrow-content;
   padding: 0 $content-padding 30px;
   font-size: 24px;
@@ -96,8 +110,5 @@ $content-padding: 10px;
 #digital-subscription-landing-page-int
 .product-block #product-block__right-content
 img.component-grid-image {
-  @media screen and (min-width: 1140px) {
-    float: right;
-    width: 90%;    
-  }
+  width: 100%;
 }

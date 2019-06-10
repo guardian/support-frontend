@@ -20,8 +20,8 @@ const ProductBlockHeader = ({ children }: ChildProps) => (
   </div>
 );
 
-const ProductBlockSubHeader = ({ children }: ChildProps) => (
-  <div className="product-block__sub-header">
+const ProductBlockSubTitle = ({ children }: ChildProps) => (
+  <div className="product-block__sub-title">
     { children }
   </div>
 );
@@ -59,14 +59,31 @@ function ProductBlockB() {
       <LeftMarginSection>
         <ProductBlockHeader>Daily Edition</ProductBlockHeader>
 
+        {/* This is a hide/show hack for the sub-title due to
+          * the ordering of the content in mobile vs desktop
+          */}
+        <div className="product-block__subtitle--container">
+          <ProductBlockSubTitle>
+            <h1>
+              Every issue of The Guardian and Observer UK newspapers,
+               designed for your iPad and available offline
+            </h1>
+          </ProductBlockSubTitle>
+        </div>
 
         <ProductBlockContent>
           <ProductBlockLeftContent>
-
-            <ProductBlockSubHeader>
-              <h1>Every issue of The Guardian and Observer UK newspapers, designed for your iPad and available offline</h1>
-            </ProductBlockSubHeader>
-
+            {/* This is a hide/show hack for the sub-title due to
+              * the ordering of the content in mobile vs desktop
+              */}
+            <div className="product-block__content--subtitle">
+              <ProductBlockSubTitle>
+                <h1>
+                  Every issue of The Guardian and Observer UK newspapers,
+                    designed for your iPad and available offline
+                </h1>
+              </ProductBlockSubTitle>
+            </div>
 
             <ProductBlockFeature>
               <h1 className="product-block__feature-title">Read on the go</h1>
@@ -98,7 +115,6 @@ function ProductBlockB() {
               imgType="png"
             />
           </ProductBlockRightContent>
-
         </ProductBlockContent>
       </LeftMarginSection>
     </div>

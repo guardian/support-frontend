@@ -16,6 +16,7 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
+import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
@@ -25,6 +26,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
+import ProductBlockB from './components/productBlockB/productBlockB';
 import PromotionPopUp from './components/promotionPopUp';
 import Form from './components/form';
 
@@ -67,6 +69,13 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
+const { optimizeExperiments } = store.getState().common;
+
+const dailyEditionsId = 'NEPFjv3FSEuGQPfNN17aZg';
+const dailyEditionsVariant = optimizeExperiments
+  .filter(exp => exp.id === dailyEditionsId && exp.variant === '1')
+  .length !== 0;
+
 // ----- Render ----- //
 
 const content = (
@@ -81,9 +90,19 @@ const content = (
     >
 
       <CampaignHeader countryGroupId={countryGroupId} />
-
-      <ProductBlock countryGroupId={countryGroupId} />
-      <AdFreeSection headingSize={2} />
+      {dailyEditionsVariant ?
+        (
+          <div>
+            <ProductBlockB />
+            <AdFreeSectionB />
+          </div>
+        ) : (
+          <div>
+            <ProductBlock countryGroupId={countryGroupId} />
+            <AdFreeSection headingSize={2} />
+          </div>
+        )
+      }
       <Content appearance="feature" id="subscribe">
         <Text title="Subscribe to Digital Pack today">
           <p>Choose how you’d like to pay</p>
