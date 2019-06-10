@@ -2,7 +2,8 @@ package selenium.util
 
 import java.net.URL
 import java.util.Date
-import io.github.bonigarcia.wdm.ChromeDriverManager
+
+import io.github.bonigarcia.wdm.{ChromeDriverManager, WebDriverManager}
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.{Cookie, JavascriptExecutor, WebDriver}
@@ -19,7 +20,7 @@ class DriverConfig {
 
   // Used in dev to run tests locally
   private def instantiateLocalBrowser(): WebDriver = {
-    ChromeDriverManager.getInstance().setup()
+    WebDriverManager.chromedriver().setup()
     new ChromeDriver()
   }
 
