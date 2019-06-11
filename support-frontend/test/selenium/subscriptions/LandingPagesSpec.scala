@@ -3,7 +3,7 @@ package selenium.subscriptions
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.subscriptions.pages.{PaperSubs, WeeklySubs}
+import selenium.subscriptions.pages.{DigitalPackSubs, PaperSubs, ProductPage, SubsLandingPage, WeeklySubs}
 import selenium.util._
 
 class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
@@ -24,28 +24,36 @@ class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
   feature("Paper landing page") {
     scenario("Basic loading") {
-
-      val paperSubsPage = new PaperSubs()
-
-      Given("that a user goes to the page")
-      goTo(paperSubsPage)
-      Then("it should display")
-      assert(paperSubsPage.pageHasLoaded)
+      testPageLoads(new PaperSubs())
 
     }
   }
 
   feature("Weekly landing page") {
     scenario("Basic loading") {
-
-      val weeklySubsPage = new WeeklySubs()
-
-      Given("that a user goes to the page")
-      goTo(weeklySubsPage)
-      Then("it should display")
-      assert(weeklySubsPage.pageHasLoaded)
+      testPageLoads(new WeeklySubs())
 
     }
+  }
+
+  feature("Subscriptions landing page") {
+    scenario("Basic loading") {
+      testPageLoads(new SubsLandingPage())
+    }
+  }
+
+  feature("Digital Pack landing page") {
+    scenario("Basic loading") {
+      testPageLoads(new DigitalPackSubs())
+    }
+  }
+
+
+  def testPageLoads(page: ProductPage): Unit ={
+    Given("that a user goes to the page")
+    goTo(page)
+    Then("it should display")
+    assert(page.pageHasLoaded)
   }
 
 
