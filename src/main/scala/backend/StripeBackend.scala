@@ -51,11 +51,12 @@ class StripeBackend(
           identityIdWithGuestAccountCreationToken <- identityIdWithGuestAccountCreationTokenFuture
           userSignInDetails <- userSignInDetailsFuture
         } yield {
-          postPaymentTasks(chargeData.paymentData.email, chargeData, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId), userSignInDetails)
+          postPaymentTasks(chargeData.paymentData.email, chargeData, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId))
 
           StripeCreateChargeResponse.fromCharge(
             charge,
-            identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken)
+            identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken),
+            userSignInDetails
           )
         }
       }
@@ -67,7 +68,7 @@ class StripeBackend(
     } yield dbUpdateResult
   }
 
-  private def postPaymentTasks(email: String, chargeData: StripeChargeData, charge: Charge, clientBrowserInfo: ClientBrowserInfo, identityId: Option[Long], signInDetails: Option[UserSignInDetails]): Unit = {
+  private def postPaymentTasks(email: String, chargeData: StripeChargeData, charge: Charge, clientBrowserInfo: ClientBrowserInfo, identityId: Option[Long]): Unit = {
     trackContribution(charge, chargeData, identityId, clientBrowserInfo).leftMap { err =>
       logger.error(s"unable to track contribution due to error: ${err.getMessage}")
     }
