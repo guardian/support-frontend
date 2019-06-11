@@ -28,13 +28,12 @@ const mapStateToProps = (state: State) => ({
 });
 
 // ----- Render ----- //
-
-const renderState = (selectedState: CaState | UsState | null) => ([stateValue, stateName]: [string, string]) => (
-  <option value={stateValue} selected={selectedState === stateValue}>{stateName}</option>
+const renderState = (selectedState: CaState | UsState | null) => (state: {abbreviation: string, name: string}) => (
+  <option value={state.abbreviation} selected={selectedState === state.abbreviation}>{state.name}</option>
 );
 
 const renderStatesField = (
-  states: { [string]: string },
+  states: {[string]: string},
   selectedState: UsState | CaState | null,
   onChange: (Event => void) | false,
   showError: boolean,
@@ -49,7 +48,9 @@ const renderStatesField = (
     <span className="form__input-with-icon">
       <select id="contributionState" className={classNameWithModifiers('form__input', selectedState ? [] : ['placeholder'])} onChange={onChange} required>
         <option value="">Please select your {label.toLowerCase()}</option>
-        {(Object.entries(states): any).map(renderState(selectedState))}
+        {Object.keys(states)
+          .map(key => ({ abbreviation: key, name: states[key] }))
+          .map(renderState(selectedState))}
       </select>
       <span className="form__icon">
         <SvgGlobe />

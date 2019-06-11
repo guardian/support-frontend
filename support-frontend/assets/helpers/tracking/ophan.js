@@ -11,6 +11,8 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 
 // ----- Types ----- //
 
+// These are to match Thrift definitions which can be found here:
+// https://dashboard.ophan.co.uk/docs/thrift/componentevent.html#Struct_ComponentEvent
 type OphanProduct =
   | 'CONTRIBUTION'
   | 'RECURRING_CONTRIBUTION'
@@ -110,7 +112,7 @@ const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
   trackComponentEvents({
     component: {
       componentType: 'ACQUISITIONS_OTHER',
-      id: 'polyfill-script-status',
+      id: 'polyfill-v3-script-status',
     },
     action: 'CLICK',
     value: polyfillScriptStatus || 'empty',
@@ -120,17 +122,17 @@ const trackPolyfillScriptStatus = (polyfillScriptStatus: string): void => {
 const trackPolyfilledObjectFunction = (when: 'beforePolyfill' | 'afterPolyfill', objectFunction: string): void => {
   gaEvent({
     category: 'debug',
-    action: when,
-    label: objectFunction,
+    action: `${when}-v3`,
+    label: objectFunction || 'none',
   });
 
   trackComponentEvents({
     component: {
       componentType: 'ACQUISITIONS_OTHER',
-      id: when,
+      id: `${when}-v3`,
     },
     action: 'CLICK',
-    value: objectFunction,
+    value: objectFunction || 'none',
   });
 };
 

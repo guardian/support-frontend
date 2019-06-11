@@ -89,7 +89,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
           Map(NoFulfilmentOptions ->
             Map(NoProductOptions ->
               Map(Monthly ->
-                Map(GBP -> PriceSummary(10, Nil))))))
+                Map(GBP -> PriceSummary(10, GBP, Nil))))))
       val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
       val priceSummaryService = mock[PriceSummaryService]
       when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]])).thenReturn(prices)

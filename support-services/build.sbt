@@ -13,5 +13,6 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "com.squareup.okhttp3" % "okhttp" % okhttpVersion
+  "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
+  "org.scala-stm" %% "scala-stm" % "0.8",
 )

@@ -2,7 +2,7 @@
 
 import { doNotTrack } from 'helpers/page/page';
 import { getAbsoluteURL } from '../url';
-import { pageView } from './ophanComponentEventTracking';
+import { pageView } from './ophan';
 import { successfulConversion } from './googleTagManager';
 import type { Participations } from '../abTests/abtest';
 
