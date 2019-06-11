@@ -6,7 +6,6 @@ import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.acquisition.model.AcquisitionSubmission
 import com.gu.acquisition.model.errors.AnalyticsServiceError
 import com.stripe.model.{Charge, Event, ExternalAccount}
-import model.email.ContributorRow
 import model.paypal.PaypalApiError
 import model.stripe.{StripeApiError, _}
 import model.{AcquisitionData, _}
@@ -16,6 +15,7 @@ import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{Matchers, WordSpec}
+import services.IdentityClient.UserSignInDetailsResponse.UserSignInDetails
 import services._
 import util.FutureEitherValues
 
@@ -62,7 +62,11 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(ophanError))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, Some("guest-token"))))
+  val identityUserDetailsResponse: EitherT[Future, IdentityClient.ContextualError, UserSignInDetails] =
+    EitherT.right(Future.successful(UserSignInDetails(true, false, false, false, false)))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
+    EitherT.left(Future.successful(identityError))
+  val identityUserDetailsResponseError: EitherT[Future, IdentityClient.ContextualError, UserSignInDetails] =
     EitherT.left(Future.successful(identityError))
   val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
     EitherT.right(Future.successful(()))
@@ -134,8 +138,9 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        stripeBackend.createCharge(stripeChargeData, clientBrowserInfo).futureRight shouldBe StripeCreateChargeResponse.fromCharge(chargeMock, None)
-      }
+        when(mockIdentityService.getUserSignInDetailsFromEmail("email@email.com")).thenReturn(identityUserDetailsResponseError)
+        stripeBackend.createCharge(stripeChargeData, clientBrowserInfo).futureRight shouldBe StripeCreateChargeResponse.fromCharge(chargeMock, None, None)
+    }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
         populateChargeMock()
@@ -143,8 +148,13 @@ class StripeBackendSpec
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockStripeService.createCharge(stripeChargeData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockIdentityService.getUserSignInDetailsFromEmail("email@email.com")).thenReturn(identityUserDetailsResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
-        stripeBackend.createCharge(stripeChargeData, clientBrowserInfo).futureRight shouldBe StripeCreateChargeResponse.fromCharge(chargeMock, Some("guest-token"))
+        stripeBackend.createCharge(stripeChargeData, clientBrowserInfo).futureRight shouldBe StripeCreateChargeResponse.fromCharge(
+          chargeMock,
+          Some("guest-token"),
+          Some(UserSignInDetails(true, false, false, false, false))
+        )
       }
     }
 
