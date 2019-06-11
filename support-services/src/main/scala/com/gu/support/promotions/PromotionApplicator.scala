@@ -60,12 +60,17 @@ class DiscountApplicator(discount: DiscountBenefit, config: PromotionsDiscountCo
 
 class IntroductoryPriceApplicator(introductoryPriceBenefit: IntroductoryPriceBenefit) extends BenefitApplicator {
   def applyTo(subscriptionData: SubscriptionData): SubscriptionData = {
-    introductoryPriceRatePlanData(subscriptionData).map(
+    val subscription = subscriptionData.subscription
+    val result = introductoryPriceRatePlanData(subscriptionData).map(
       ratePlanData =>
         subscriptionData.copy(
-          ratePlanData = subscriptionData.ratePlanData.::(ratePlanData)
+          ratePlanData = subscriptionData.ratePlanData.::(ratePlanData),
+          subscription = subscription.copy(
+            contractAcceptanceDate = subscription.contractAcceptanceDate.plusWeeks(introductoryPriceBenefit.periodLength)
+          )
         )
     ).getOrElse(subscriptionData)
+    result
   }
 
 

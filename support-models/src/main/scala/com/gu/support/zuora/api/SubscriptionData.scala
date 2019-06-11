@@ -16,6 +16,8 @@ object RatePlanCharge {
   val subscriptionEnd = "SubscriptionEnd"
   val endDateCondition = "EndDateCondition"
   val upToPeriods = "UpToPeriods"
+  val triggerEvent = "TriggerEvent"
+  val specificEvent = "SpecificDate"
 
   implicit val discountEncoder: Encoder[DiscountRatePlanCharge] = capitalizingEncoder[DiscountRatePlanCharge]
     .mapJsonObject { jo =>
@@ -36,7 +38,9 @@ object RatePlanCharge {
       .add(endDateCondition, Json.fromString(subscriptionEnd)))
   implicit val contributionDecoder: Decoder[ContributionRatePlanCharge] = decapitalizingDecoder
 
-  implicit val introductoryPriceEncoder: Encoder[IntroductoryPriceRatePlanCharge] = capitalizingEncoder
+  implicit val introductoryPriceEncoder: Encoder[IntroductoryPriceRatePlanCharge] = capitalizingEncoder[IntroductoryPriceRatePlanCharge]
+    .mapJsonObject(_
+      .add(triggerEvent, Json.fromString(specificEvent)))
   implicit val introductoryPriceDecoder: Decoder[IntroductoryPriceRatePlanCharge] = decapitalizingDecoder
 
   implicit val encodeRatePlanCharge: Encoder[RatePlanCharge] = Encoder.instance {
@@ -72,7 +76,9 @@ case class IntroductoryPriceRatePlanCharge(
   productRatePlanChargeId: ProductRatePlanChargeId,
   price: BigDecimal,
   triggerDate: LocalDate,
-) extends RatePlanCharge
+) extends RatePlanCharge {
+  val TriggerEvent = "SpecificDate"
+}
 
 sealed trait PeriodType
 
