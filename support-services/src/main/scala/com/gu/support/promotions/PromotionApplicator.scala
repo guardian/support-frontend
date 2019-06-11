@@ -1,6 +1,8 @@
 package com.gu.support.promotions
 
+import com.gu.support.catalog.{GuardianWeekly, ProductRatePlan}
 import com.gu.support.config.PromotionsDiscountConfig
+import com.gu.support.workers.SixWeekly
 import com.gu.support.zuora.api._
 import com.typesafe.scalalogging.LazyLogging
 
@@ -10,7 +12,8 @@ class PromotionApplicator(promotion: PromotionWithCode, config: PromotionsDiscou
     val benefitApplicators = List(
       promotion.promotion.freeTrial.map(new FreeTrialApplicator(_)),
       promotion.promotion.discount.map(new DiscountApplicator(_, config)),
-      promotion.promotion.incentive.map(new IncentiveApplicator(_))
+      promotion.promotion.incentive.map(new IncentiveApplicator(_)),
+      promotion.promotion.introductoryPrice.map(new IntroductoryPriceApplicator(_))
     ).flatten
 
     val withBenefits = benefitApplicators
@@ -53,6 +56,51 @@ class DiscountApplicator(discount: DiscountBenefit, config: PromotionsDiscountCo
     )),
     Nil
   )
+}
+
+class IntroductoryPriceApplicator(introductoryPriceBenefit: IntroductoryPriceBenefit) extends BenefitApplicator {
+  def applyTo(subscriptionData: SubscriptionData): SubscriptionData = {
+    introductoryPriceRatePlanData(subscriptionData).map(
+      ratePlanData =>
+        subscriptionData.copy(
+          ratePlanData = subscriptionData.ratePlanData.::(ratePlanData)
+        )
+    ).getOrElse(subscriptionData)
+  }
+
+
+  def introductoryPriceRatePlanData(subscriptionData: SubscriptionData): Option[RatePlanData] = {
+    // For the moment we need to find the productRatePlanId and productRatePlanChargeId for the SixWeekly version of the
+    // Quarterly GW product rate plan where the fulfilment option is the same ie. RestOfWorld or Domestic.
+    // To genericise this for N for N or even to work with other products, we would need to have a separate product rate plan
+    // for the introductory period which can apply to all products (in the way that discounts work currently) and then change
+    // the fulfilment lambda to pick this up.
+
+    val introductoryPriceStartDate = subscriptionData.subscription.contractAcceptanceDate
+
+    for {
+      recurringRatePlan <- subscriptionData.ratePlanData.headOption
+      recurringProductRatePlanId = recurringRatePlan.ratePlan.productRatePlanId
+      productRatePlansForEnvironment <- GuardianWeekly.ratePlans.find(_._2.exists(_.id == recurringProductRatePlanId)).map(_._2)
+      recurringProductRatePlan <- productRatePlansForEnvironment.find(_.id == recurringProductRatePlanId)
+      introductoryProductRatePlan <- productRatePlansForEnvironment.find(equivalentSixWeeklyProductRatePlan(recurringProductRatePlan))
+      introductoryProductRatePlanChargeId <- introductoryProductRatePlan.productRatePlanChargeId
+    } yield RatePlanData(RatePlan(introductoryProductRatePlan.id),
+      List(RatePlanChargeData(
+        IntroductoryPriceRatePlanCharge(
+          introductoryProductRatePlanChargeId,
+          introductoryPriceBenefit.price,
+          introductoryPriceStartDate
+        )
+      )),
+      Nil
+    )
+  }
+
+  private def equivalentSixWeeklyProductRatePlan
+  (recurringProduct: ProductRatePlan[GuardianWeekly.type])(productRatePlan: ProductRatePlan[GuardianWeekly.type]) =
+    productRatePlan.fulfilmentOptions == recurringProduct.fulfilmentOptions && productRatePlan.billingPeriod == SixWeekly
+
 }
 
 class IncentiveApplicator(incentive: IncentiveBenefit) extends BenefitApplicator with LazyLogging {

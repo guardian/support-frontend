@@ -6,6 +6,7 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Wrapper
 import io.circe.generic.auto._
@@ -305,7 +306,8 @@ object JsonFixtures {
             }
       """
 
-  def createGuardianWeeklySubscriptionJson(billingPeriod: BillingPeriod): String =
+  def createGuardianWeeklySubscriptionJson(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode] = None): String ={
+    val promoJson = maybePromoCode.map(promo => s""""promoCode": "$promo",""").getOrElse("")
     s"""
       {
         $requestIdJson,
@@ -316,10 +318,12 @@ object JsonFixtures {
           "fulfilmentOptions" : "RestOfWorld"
         },
         "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC).plusDays(3)}",
+        ${promoJson}
         "paymentMethod": $stripePaymentMethod,
         "salesForceContact": $salesforceContactJson
         }
       """
+    }
 
   val failureJson =
     """{

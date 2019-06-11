@@ -145,26 +145,33 @@ case object GuardianWeekly extends Product {
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianWeekly.type]]] =
     Map(
       PROD -> List(
-        ProductRatePlan("2c92a0086619bf8901661ab545f51b21", SixWeekly, RestOfWorld, NoProductOptions), //TODO: remove SixWeekly and use promotions instead
+        ProductRatePlan("2c92a0086619bf8901661ab545f51b21", SixWeekly, RestOfWorld, NoProductOptions,
+          productRatePlanChargeId = Some("2c92a0086619bf8901661ab546091b23")), //TODO: remove SixWeekly and use promotions instead
         ProductRatePlan("2c92a0fe6619b4b601661ab300222651", Annual, RestOfWorld, NoProductOptions),
         ProductRatePlan("2c92a0086619bf8901661ab02752722f", Quarterly, RestOfWorld, NoProductOptions),
-        ProductRatePlan("2c92a0086619bf8901661aaac94257fe", SixWeekly, Domestic, NoProductOptions),
+        ProductRatePlan("2c92a0086619bf8901661aaac94257fe", SixWeekly, Domestic, NoProductOptions,
+          productRatePlanChargeId = Some("2c92a0086619bf8901661aaac95d5800")
+        ),
         ProductRatePlan("2c92a0fe6619b4b901661aa8e66c1692", Annual, Domestic, NoProductOptions),
         ProductRatePlan("2c92a0fe6619b4b301661aa494392ee2", Quarterly, Domestic, NoProductOptions),
       ),
       UAT -> List(
-          ProductRatePlan("2c92c0f9660fc4c70166109dfd08092c", SixWeekly, RestOfWorld, NoProductOptions),
+          ProductRatePlan("2c92c0f9660fc4c70166109dfd08092c", SixWeekly, RestOfWorld, NoProductOptions,
+            productRatePlanChargeId = Some("2c92c0f9660fc4c70166109dfd17092e")),
           ProductRatePlan("2c92c0f9660fc4d70166109a2eb0607c", Annual, RestOfWorld, NoProductOptions),
           ProductRatePlan("2c92c0f9660fc4d70166109c01465f10", Quarterly, RestOfWorld, NoProductOptions),
-          ProductRatePlan("2c92c0f8660fb5dd016610858eb90658", SixWeekly, Domestic, NoProductOptions),
+          ProductRatePlan("2c92c0f8660fb5dd016610858eb90658", SixWeekly, Domestic, NoProductOptions,
+            productRatePlanChargeId = Some("2c92c0f8660fb5dd016610858ed3065a")),
           ProductRatePlan("2c92c0f9660fc4d70166107fa5412641", Annual, Domestic, NoProductOptions),
           ProductRatePlan("2c92c0f8660fb5d601661081ea010391", Quarterly, Domestic, NoProductOptions),
         ),
       SANDBOX -> List(
-        ProductRatePlan("2c92c0f965f2122101660fbc75a16c38", SixWeekly, RestOfWorld, NoProductOptions),
+        ProductRatePlan("2c92c0f965f2122101660fbc75a16c38", SixWeekly, RestOfWorld, NoProductOptions,
+          productRatePlanChargeId = Some("2c92c0f965f2122101660fbc75ba6c3c")),
         ProductRatePlan("2c92c0f965f2122101660fb33ed24a45", Annual, RestOfWorld, NoProductOptions),
         ProductRatePlan("2c92c0f965f2122101660fb81b745a06", Quarterly, RestOfWorld, NoProductOptions),
-        ProductRatePlan("2c92c0f965f212210165f69b94c92d66", SixWeekly, Domestic, NoProductOptions),
+        ProductRatePlan("2c92c0f965f212210165f69b94c92d66", SixWeekly, Domestic, NoProductOptions,
+          productRatePlanChargeId = Some("2c92c0f865f204440165f69f407d66f1")),
         ProductRatePlan("2c92c0f965d280590165f16b1b9946c2", Annual, Domestic, NoProductOptions),
         ProductRatePlan("2c92c0f965dc30640165f150c0956859", Quarterly, Domestic, NoProductOptions),
       )

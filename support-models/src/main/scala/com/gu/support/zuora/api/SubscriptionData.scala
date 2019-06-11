@@ -2,15 +2,14 @@ package com.gu.support.zuora.api
 
 import cats.syntax.functor._
 import com.gu.support.catalog.{ProductRatePlanChargeId, ProductRatePlanId}
-import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec._
+import com.gu.support.encoding.CustomCodecs.{decodeDateTime, encodeDateTime, monthDecoder, _}
+import com.gu.support.encoding.JsonHelpers._
+import com.gu.support.promotions.PromoCode
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.{LocalDate, Months}
-import com.gu.support.encoding.CustomCodecs.monthDecoder
-import com.gu.support.encoding.JsonHelpers._
-import com.gu.support.promotions.PromoCode
 
 object RatePlanCharge {
   val fixedPeriod = "FixedPeriod"
@@ -37,15 +36,20 @@ object RatePlanCharge {
       .add(endDateCondition, Json.fromString(subscriptionEnd)))
   implicit val contributionDecoder: Decoder[ContributionRatePlanCharge] = decapitalizingDecoder
 
+  implicit val introductoryPriceEncoder: Encoder[IntroductoryPriceRatePlanCharge] = capitalizingEncoder
+  implicit val introductoryPriceDecoder: Decoder[IntroductoryPriceRatePlanCharge] = decapitalizingDecoder
+
   implicit val encodeRatePlanCharge: Encoder[RatePlanCharge] = Encoder.instance {
     case f: DiscountRatePlanCharge => f.asJson
     case s: ContributionRatePlanCharge => s.asJson
+    case i: IntroductoryPriceRatePlanCharge => i.asJson
   }
 
   implicit val decodeRatePlanCharge: Decoder[RatePlanCharge] =
     List[Decoder[RatePlanCharge]](
       Decoder[DiscountRatePlanCharge].widen,
-      Decoder[ContributionRatePlanCharge].widen
+      Decoder[ContributionRatePlanCharge].widen,
+      Decoder[IntroductoryPriceRatePlanCharge].widen,
     ).reduceLeft(_ or _)
 }
 
@@ -62,6 +66,12 @@ case class DiscountRatePlanCharge(
 case class ContributionRatePlanCharge(
   productRatePlanChargeId: ProductRatePlanChargeId,
   price: BigDecimal
+) extends RatePlanCharge
+
+case class IntroductoryPriceRatePlanCharge(
+  productRatePlanChargeId: ProductRatePlanChargeId,
+  price: BigDecimal,
+  triggerDate: LocalDate,
 ) extends RatePlanCharge
 
 sealed trait PeriodType
