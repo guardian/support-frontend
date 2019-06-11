@@ -49,8 +49,10 @@ Mappings:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
-      AlarmProcess: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
-      AlarmUrgent: URGENT 9-5 -
+  Constants:
+    Alarm:
+      Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
+      Urgent: URGENT 9-5 -
 Resources:
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -283,13 +285,13 @@ Resources:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Join
         - ' '
-        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+        - - !FindInMap [ Constants, Alarm, Urgent ]
           - !Ref 'Stage'
           - 'no healthy instances for support-frontend'
       AlarmDescription: !Join
         - ' '
         - - 'Impact - Cannot sell any subscriptions or contributions products.'
-          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
+          - !FindInMap [ Constants, Alarm, Process ]
       MetricName: HealthyHostCount
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -314,13 +316,13 @@ Resources:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Join
         - ' '
-        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+        - - !FindInMap [ Constants, Alarm, Urgent ]
           - !Ref 'Stage'
           - 'Reduced number of healthy instances for support-frontend'
       AlarmDescription: !Join
         - ' '
         - - 'Impact - Imminent issue cannot sell any subscriptions or contributions products.'
-          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
+          - !FindInMap [ Constants, Alarm, Process ]
       MetricName: HealthyHostCount
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -345,13 +347,13 @@ Resources:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Join
         - ' '
-        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+        - - !FindInMap [ Constants, Alarm, Urgent ]
           - !Ref 'Stage'
           - 'support-frontend instances are returning 5XX errors'
       AlarmDescription: !Join
         - ' '
         - - 'Impact - Some or all actions on support website are failing.'
-          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
+          - !FindInMap [ Constants, Alarm, Process ]
       MetricName: HTTPCode_Target_5XX_Count
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -376,13 +378,13 @@ Resources:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Join
         - ' '
-        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+        - - !FindInMap [ Constants, Alarm, Urgent ]
           - !Ref 'Stage'
           - 'support-frontend ELB is returning 5XX errors'
       AlarmDescription: !Join
         - ' '
         - - 'Impact - Some or all actions on support website are failing.'
-          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
+          - !FindInMap [ Constants, Alarm, Process ]
       MetricName: HTTPCode_ELB_5XX_Count
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -405,13 +407,13 @@ Resources:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Join
         - ' '
-        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+        - - !FindInMap [ Constants, Alarm, Urgent ]
           - !Ref 'Stage'
           - 'support-frontend has high latency'
       AlarmDescription: !Join
         - ' '
         - - 'Impact - support-frontend users are seeing slow responses.'
-          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
+          - !FindInMap [ Constants, Alarm, Process ]
       MetricName: TargetResponseTime
       Dimensions:
         - Name: LoadBalancer
@@ -433,13 +435,13 @@ Resources:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Join
         - ' '
-        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+        - - !FindInMap [ Constants, Alarm, Urgent ]
           - !Ref 'Stage'
           - 'support-frontend could not load the Zuora catalog from S3'
       AlarmDescription: !Join
         - ' '
         - - 'Impact - Cannot sell any subscriptions products.'
-          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
+          - !FindInMap [ Constants, Alarm, Process ]
       MetricName: CatalogLoadingFailure
       Namespace: support-frontend
       Dimensions:
@@ -463,18 +465,19 @@ Resources:
 
   StateMachineUnavailableAlarm:
     Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
     Properties:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Join
         - ' '
-        - - !FindInMap [ StageVariables, !Ref Stage, AlarmUrgent ]
+        - - !FindInMap [ Constants, Alarm, Urgent ]
           - !Ref 'Stage'
           - 'support-workers state machine unavailable'
       AlarmDescription: !Join
         - ' '
         - - 'Impact - Cannot sell any subscriptions or contributions products.'
-          - !FindInMap [ StageVariables, !Ref Stage, AlarmProcess ]
+          - !FindInMap [ Constants, Alarm, Process ]
       MetricName: state-machine-unavailable
       Namespace: !Sub support-frontend-${Stage}
       ComparisonOperator: GreaterThanOrEqualToThreshold
