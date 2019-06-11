@@ -1,7 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import { hasDiscount, type Price, type Promotion } from 'helpers/productPrice/productPrices';
+import {
+  getAppliedPromo,
+  hasDiscount,
+  type ProductPrice,
+  type Promotion,
+} from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import styles from './summary.module.scss';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
@@ -23,8 +28,7 @@ type PropTypes = {|
   dataList: DataListItem[],
   description: ?string,
   image: $Call<GridImageType, GridImg>,
-  productPrice: Price,
-  promotion: ?Promotion,
+  productPrice: ProductPrice,
   title: string,
   // eslint-disable-next-line react/no-unused-prop-types
   product: SubscriptionProduct,
@@ -99,10 +103,9 @@ const TabletAndDesktop = (props: PropTypes) => (
         <PriceLabel
           className={styles.pricing}
           productPrice={props.productPrice}
-          promotion={props.promotion}
           billingPeriod={props.billingPeriod}
         />
-        <PromotionDiscount promotion={props.promotion} />
+        <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
         {props.dataList ?
           <DataList dataList={props.dataList} />
         : null}
@@ -122,8 +125,7 @@ TabletAndDesktop.defaultProps = {
 const HideDropDown = (props: {
   billingPeriod: BillingPeriod,
   onClick: Function,
-  productPrice: Price,
-  promotion: ?Promotion,
+  productPrice: ProductPrice,
   showDropDown: boolean,
   title: string,
   paper: boolean,
@@ -138,7 +140,6 @@ const HideDropDown = (props: {
       <PriceLabel
         className={styles.pricing}
         productPrice={props.productPrice}
-        promotion={props.promotion}
         billingPeriod={props.billingPeriod}
       />
       {props.paper ?
@@ -170,7 +171,6 @@ const ShowDropDown = (props: {
       <PriceLabel
         className={styles.data}
         productPrice={props.productPrice}
-        promotion={props.promotion}
         billingPeriod={props.billingPeriod}
       />
     </div>

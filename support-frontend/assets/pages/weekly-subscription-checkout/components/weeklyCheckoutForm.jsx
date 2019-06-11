@@ -28,12 +28,10 @@ import DirectDebitPopUpForm
   from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import {
-  getFulfilmentOption,
-  getPromotion,
-  regularPrice,
-} from 'helpers/productPrice/weeklyProductPrice';
+  getProductPrice,
+  type ProductPrices,
+} from 'helpers/productPrice/productPrices';
 import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
@@ -68,6 +66,7 @@ import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 
 // ----- Types ----- //
@@ -121,9 +120,8 @@ const days = getWeeklyDays();
 // ----- Component ----- //
 
 function WeeklyCheckoutForm(props: PropTypes) {
-  const fulfilmentOption = getFulfilmentOption(props.deliveryCountry);
-  const price = regularPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
-  const promotion = getPromotion(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
+  const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
+  const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
 
   return (
@@ -142,7 +140,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
           title="Guardian Weekly"
           description=""
           productPrice={price}
-          promotion={promotion}
           dataList={[
             {
               title: 'Delivery method',
