@@ -18,6 +18,8 @@ class AppLoader extends ApplicationLoader with StrictLogging {
         FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))  //assume conf is available locally
     }
 
+    logger.info(loadedConfig.toString)
+
     initialConfiguration ++ Configuration(loadedConfig)
   }
 
