@@ -38,10 +38,15 @@ export const checkAmountOrOtherAmount: (SelectedAmounts, OtherAmounts, Contribut
   contributionType: ContributionType,
   countryGroupId: CountryGroupId,
 ) => {
-  const amount = selectedAmounts[contributionType] === 'other'
-    ? otherAmounts[contributionType].amount || ''
-    : selectedAmounts[contributionType].value || '';
-  return checkAmount(amount, countryGroupId, contributionType);
+  let amt = '';
+  if (selectedAmounts[contributionType] && selectedAmounts[contributionType] === 'other') {
+    if (otherAmounts[contributionType] && otherAmounts[contributionType].amount) {
+      amt = otherAmounts[contributionType].amount;
+    }
+  } else if (selectedAmounts[contributionType] && selectedAmounts[contributionType].value) {
+    amt = selectedAmounts[contributionType].value;
+  }
+  return checkAmount(amt, countryGroupId, contributionType);
 };
 
 export const checkStateIfApplicable: ((string | null), CountryGroupId) => boolean = (
