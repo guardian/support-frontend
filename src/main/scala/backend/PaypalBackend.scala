@@ -65,7 +65,6 @@ class PaypalBackend(
           )
 
           maybeEmail.foreach { email =>
-
             getOrCreateIdentityIdFromEmail(email).foreach { identityIdWithGuestAccountCreationToken =>
               postPaymentTasks(payment, email, identityIdWithGuestAccountCreationToken.map(_.identityId), capturePaymentData.acquisitionData, clientBrowserInfo)
             }
