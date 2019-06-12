@@ -76,7 +76,7 @@ function SubscriptionsByCountryGroup(props: PropTypes) {
 
   if (countryGroupId === GBPCountries) {
     return (
-      <div id='qa-component-subscriptions-by-country-group' className={className} {...otherProps}>
+      <div id="qa-component-subscriptions-by-country-group" className={className} {...otherProps}>
         <DigitalSection
           headingSize={headingSize}
           subsLinks={subsLinks}
