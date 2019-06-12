@@ -76,9 +76,7 @@ case class IntroductoryPriceRatePlanCharge(
   productRatePlanChargeId: ProductRatePlanChargeId,
   price: BigDecimal,
   triggerDate: LocalDate,
-) extends RatePlanCharge {
-  val TriggerEvent = "SpecificDate"
-}
+) extends RatePlanCharge
 
 sealed trait PeriodType
 

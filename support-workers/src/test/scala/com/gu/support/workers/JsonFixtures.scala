@@ -317,8 +317,8 @@ object JsonFixtures {
           "billingPeriod" : "$billingPeriod",
           "fulfilmentOptions" : "RestOfWorld"
         },
-        "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC).plusDays(3)}",
-        ${promoJson}
+        "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC).plusDays(10)}",
+        $promoJson
         "paymentMethod": $stripePaymentMethod,
         "salesForceContact": $salesforceContactJson
         }
