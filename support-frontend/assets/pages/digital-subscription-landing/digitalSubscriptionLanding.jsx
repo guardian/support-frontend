@@ -71,9 +71,10 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const { optimizeExperiments } = store.getState().common;
 
+// daily editions Id test 'NEPFjv3FSEuGQPfNN17aZg' this can be removed once the test is live
 const dailyEditionsId = 'NEPFjv3FSEuGQPfNN17aZg';
 const dailyEditionsVariant = optimizeExperiments
-  .filter(exp => exp.id === dailyEditionsId && exp.variant === '1')
+  .filter(exp => exp.id === dailyEditionsId && exp.variant === '2') // this variant should be "1", this value is "2" so this will always return false
   .length !== 0;
 
 // ----- Render ----- //
