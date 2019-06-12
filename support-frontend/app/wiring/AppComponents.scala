@@ -4,6 +4,7 @@ import controllers.AssetsComponents
 import filters.{CacheHeadersCheck, SetCookiesCheck}
 import lib.{CustomHttpErrorHandler, ErrorController}
 import monitoring.{SentryLogging, StateMachineMonitor}
+import play.api.ApplicationLoader.Context
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
@@ -11,18 +12,24 @@ import play.api.routing.Router
 import play.filters.HttpFiltersComponents
 import play.filters.gzip.GzipFilter
 
-trait AppComponents extends PlayComponents
+class AppComponents(context: Context) extends BuiltInComponentsFromContext(context)
+  with ApplicationConfiguration
+  with PlayComponents
   with AhcWSComponents
   with AssetsComponents
   with Controllers
   with Services
-  with ApplicationConfiguration
   with ActionBuilders
   with Assets
   with GoogleAuth
   with HttpFiltersComponents
   with Monitoring {
   self: BuiltInComponentsFromContext =>
+
+//  val (appConfig, stringsConfig) = {
+//    val conf = new ApplicationConfiguration(configuration.underlying)
+//    (conf.appConfig, conf.stringsConfig)
+//  }
 
   private lazy val customHandler: CustomHttpErrorHandler = new CustomHttpErrorHandler(
     environment,

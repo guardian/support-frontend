@@ -5,7 +5,7 @@ import play.api.BuiltInComponentsFromContext
 import play.filters.HttpFiltersComponents
 
 trait ActionBuilders {
-  self: Services with BuiltInComponentsFromContext with ApplicationConfiguration with HttpFiltersComponents =>
+  self: Services with AppComponents with BuiltInComponentsFromContext with HttpFiltersComponents =>
 
   implicit lazy val actionRefiners = new CustomActionBuilders(
     authenticatedIdUserProvider = authenticationService,

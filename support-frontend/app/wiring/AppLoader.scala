@@ -15,10 +15,10 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     val loadedConfig = ConfigurationLoader.load(identity) {
       case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$stack/$app/$stage")
       case DevIdentity(app) =>
-        FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))  //assume conf is available locally
+        SSMConfigurationLocation(s"/support/frontend/CODE")
+//        FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))  //assume conf is available locally
     }
-
-    logger.info(loadedConfig.toString)
+    println(s"LOADED SSM CONFIG: $loadedConfig")
 
     initialConfiguration ++ Configuration(loadedConfig)
   }
@@ -32,7 +32,8 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     val contextWithConfig = context.copy(initialConfiguration = getParameterStoreConfig(context.initialConfiguration))
 
     try {
-      (new BuiltInComponentsFromContext(contextWithConfig) with AppComponents).application
+//      (new BuiltInComponentsFromContext(contextWithConfig) with AppComponents).application
+      new AppComponents(contextWithConfig).application
     } catch {
       case err: Throwable => {
         logger.error("Could not start application", err)

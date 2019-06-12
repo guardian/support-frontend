@@ -1,9 +1,8 @@
 package wiring
 
 import config.{Configuration, StringsConfig}
-import services.aws.AwsS3Client.s3
 
-trait ApplicationConfiguration {
-  val appConfig = new Configuration()
+trait ApplicationConfiguration { self: AppComponents =>
+  val appConfig = new Configuration(configuration.underlying)
   val stringsConfig = new StringsConfig()
 }

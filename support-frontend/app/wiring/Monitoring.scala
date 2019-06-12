@@ -6,7 +6,7 @@ import play.api.BuiltInComponentsFromContext
 
 trait Monitoring {
 
-  self: BuiltInComponentsFromContext with ApplicationConfiguration =>
+  self: BuiltInComponentsFromContext with AppComponents =>
 
   lazy val tipMonitoring: Tip = TipFromConfig(appConfig)
 
