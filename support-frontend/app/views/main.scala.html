@@ -121,47 +121,18 @@
     @mainElement.fold(emptyDiv, withContent)
 
     <script>
-      function polyfillOnLoad() {
-        window.guardian.polyfillScriptStatus = 'loaded'
+      function polyfillLoaded() {
+        window.guardian.polyfillScriptLoaded = true;
       }
     </script>
 
-    <script>
-      function polyfillOnError() {
-        window.guardian.polyfillScriptStatus = 'error'
-      }
-    </script>
-
-    <script>
-      function polyfillOnAbort() {
-        window.guardian.polyfillScriptStatus = 'aborted'
-      }
-    </script>
-    <script>
-      window.guardian.beforePolyfill = {};
-      if (Object.values) {
-        window.guardian.beforePolyfill.objectValues = true;
-      }
-      if (Object.entries) {
-        window.guardian.beforePolyfill.objectEntries = true;
-      }
-    </script>
-    <script
-      id="polyfill-script"
-      src="https://polyfill.io/v3/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries"
-      onload="polyfillOnLoad()"
-      onerror="polyfillOnError()"
-      onabort="polyfillOnAbort()"
-    >
-    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries&callback=polyfillLoaded"></script>
     <script type="text/javascript">
       window.guardian = window.guardian || {};
       window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
     </script>
 
     @body
-
-
 
     @mainJsBundle.fold(linkedJs, inlineJs)
 

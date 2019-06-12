@@ -2,7 +2,6 @@
 
 // ----- Imports ----- //
 
-import { trackPolyfillScriptStatus } from 'helpers/tracking/ophan';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Route, BrowserRouter } from 'react-router-dom';
@@ -27,15 +26,10 @@ import ContributionThankYouContainer from './components/ContributionThankYou/Con
 import { setUserStateActions } from './setUserStateActions';
 import ConsentBanner from '../../components/consentBanner/consentBanner';
 import './contributionsLanding.scss';
-import { trackPolyfilledObjectFunctions } from '../../helpers/tracking/ophan';
-
-const polyfillSuccess = window.guardian.polyfillScriptStatus;
-trackPolyfillScriptStatus(polyfillSuccess);
 
 if (!isDetailsSupported) {
   polyfillDetails();
 }
-
 
 // ----- Redux Store ----- //
 
@@ -43,12 +37,21 @@ const countryGroupId: CountryGroupId = detect();
 
 const store = pageInit(() => initReducer(countryGroupId), true);
 
-trackPolyfilledObjectFunctions();
-gaEvent({
-  category: 'debug',
-  action: 'polyfill-v3-script-status',
-  label: polyfillSuccess || 'empty',
-});
+if (!window.guardian.polyfillScriptLoaded) {
+  gaEvent({
+    category: 'polyfill',
+    action: 'not loaded',
+    label: '',
+  });
+}
+
+if (typeof Object.values !== 'function') {
+  gaEvent({
+    category: 'polyfill',
+    action: 'Object.values not available after polyfill',
+    label: '',
+  });
+}
 
 // We need to initialise in this order, as
 // formInit depends on the user being populated
