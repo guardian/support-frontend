@@ -134,6 +134,7 @@ function buildRegularPaymentRequest(
     state.page.billingAddress.fields.country,
     billingPeriod,
     fulfilmentOption,
+    productOption,
   );
 
   const product = {
