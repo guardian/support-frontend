@@ -49,6 +49,13 @@ class Application(
     Ok(views.html.contributionsRedirect())
   }
 
+  //Encode the querystring parameter keys, as Play only encodes the values
+  def redirectWithEncodedQueryString(url: String, queryString: Map[String, Seq[String]] = Map.empty, status: Int = SEE_OTHER): Result = Redirect(
+    url = url,
+    queryString = queryString.map { case (k,v) => java.net.URLEncoder.encode(k, "utf-8") -> v },
+    status = status
+  )
+
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.fastlyCountry match {
       case Some(UK) => buildCanonicalShowcaseLink("uk")
@@ -61,29 +68,33 @@ class Application(
       case _ => "/uk/contribute"
     }
 
-    Redirect(redirectUrl, request.queryString, status = FOUND)
+    redirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    Redirect(s"${getRedirectUrl(request.fastlyCountry)}/$campaignCode", request.queryString, status = FOUND)
+    val url = List(getRedirectUrl(request.fastlyCountry), campaignCode)
+      .filter(_.nonEmpty)
+      .mkString("/")
+
+    redirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Redirect(location, request.queryString, status = FOUND)
+    redirectWithEncodedQueryString(location, request.queryString, status = FOUND)
   }
 
   def permanentRedirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Redirect(location, request.queryString, status = MOVED_PERMANENTLY)
+    redirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
   }
 
   // Country code is required here because it's a parameter in the route.
   def permanentRedirectWithCountry(country: String, location: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Redirect(location, request.queryString, status = MOVED_PERMANENTLY)
+    redirectWithEncodedQueryString(location, request.queryString, status = MOVED_PERMANENTLY)
   }
 
   def redirectPath(location: String, path: String): Action[AnyContent] = CachedAction() { implicit request =>
-    Redirect(location + path, request.queryString)
+    redirectWithEncodedQueryString(location + path, request.queryString)
   }
 
   def unsupportedBrowser: Action[AnyContent] = NoCacheAction() { implicit request =>
@@ -160,7 +171,7 @@ class Application(
   // Remove trailing slashes so that /uk/ redirects to /uk
   def removeTrailingSlash(path: String): Action[AnyContent] = CachedAction() {
     request =>
-      Redirect("/" + path, request.queryString, MOVED_PERMANENTLY)
+      redirectWithEncodedQueryString("/" + path, request.queryString, MOVED_PERMANENTLY)
   }
 
 
