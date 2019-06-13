@@ -59,8 +59,6 @@ user.init(store.dispatch, setUserStateActions);
 formInit(store);
 
 
-const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
-
 // ----- Internationalisation ----- //
 
 const selectedCountryGroup = countryGroups[countryGroupId];
@@ -139,4 +137,4 @@ const router = (
   </BrowserRouter>
 );
 
-renderPage(router, reactElementId, () => store.dispatch(enableOrDisableForm()));
+renderPage(router, 'contributions-landing-page', () => store.dispatch(enableOrDisableForm()));

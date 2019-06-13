@@ -131,7 +131,7 @@ class Application(
 
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
-      id = s"contributions-landing-page-$countryCode",
+      id = s"contributions-landing-page",
       js = js,
       css = css,
       fontLoaderBundle = fontLoaderBundle,
