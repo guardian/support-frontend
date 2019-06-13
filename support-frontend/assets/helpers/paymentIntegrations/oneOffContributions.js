@@ -111,7 +111,11 @@ export type UserSignInDetails = {
 
 export type UserCohort = 'cohort2' | 'cohort3' | 'cohort4' | 'cohort5' | null;
 
-function thankYouPageCopy(userDetails: UserSignInDetails, hasSignInToken: Boolean): UserCohort {
+function thankYouPageCopy(
+  userDetails: UserSignInDetails,
+  hasSignInToken: Boolean,
+  setUserCohort: (UserCohort) => void,
+): () => void {
   const isSignedIn = doesUserAppearToBeSignedIn();
   const hasFullAccount = userDetails &&
     (userDetails.hasPassword || userDetails.hasFacebookSocialLink || userDetails.hasGoogleSocialLink);
@@ -119,25 +123,26 @@ function thankYouPageCopy(userDetails: UserSignInDetails, hasSignInToken: Boolea
 
   if (isSignedIn && !isVerified) {
     console.log('Cohort 2');
-    return 'cohort2';
+    setUserCohort('cohort2');
   }
 
   if (!isSignedIn && hasFullAccount && isVerified) {
     console.log('Cohort 3a');
-    return 'cohort3';
+    setUserCohort('cohort3');
   }
 
   if (!isSignedIn && hasFullAccount && !isVerified) {
     console.log('Cohort 3b');
-    return 'cohort3';
+    setUserCohort('cohort3');
   }
 
   if (!isSignedIn && !hasFullAccount && !hasSignInToken) {
+    // BUG: this is setting 'cohort4' for cohort 5
     console.log('Cohort 4');
-    return 'cohort4';
+    setUserCohort('cohort4');
   }
 
-  return null;
+  setUserCohort(null)
 }
 
 // Object is expected to have structure:
@@ -161,20 +166,20 @@ function paymentResultFromObject(
   json: Object,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
+  setUserCohort: (UserCohort) => void,
 ): Promise<PaymentResult> {
   if (json.error) {
     const failureReason: ErrorReason = json.error.failureReason ? json.error.failureReason : 'unknown';
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
 
-  console.log(json.data);
+  const hasSignInToken = json.data && !!json.data.guestAccountRegistrationToken;
 
   if (json.data && json.data.userSignInDetails) {
-    const hasSignInToken = !!json.data.guestAccountRegistrationToken;
-    thankYouPageCopy(json.data.userSignInDetails, hasSignInToken);
+    thankYouPageCopy(json.data.userSignInDetails, hasSignInToken, setUserCohort);
   }
 
-  if (json.data && json.data.guestAccountCreationToken) {
+  if (hasSignInToken) {
     setGuestAccountCreationToken(json.data.guestAccountCreationToken);
     setThankYouPageStage('thankYouSetPassword');
   } else {
@@ -190,11 +195,12 @@ function postOneOffStripeExecutePaymentRequest(
   data: StripeChargeData,
   setGuestAccountCreationToken: (string) => void,
   setThankYouPageStage: (ThankYouPageStage) => void,
+  setUserCohort: (UserCohort) => void,
 ): Promise<PaymentResult> {
   return logPromise(fetchJson(
     paymentApiEndpointWithMode(window.guardian.paymentApiStripeEndpoint),
     requestOptions(data, 'omit', 'POST', null),
-  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage)));
+  ).then(result => paymentResultFromObject(result, setGuestAccountCreationToken, setThankYouPageStage, setUserCohort)));
 }
 
 // Object is expected to have structure:

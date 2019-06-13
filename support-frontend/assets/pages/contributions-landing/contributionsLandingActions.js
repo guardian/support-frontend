@@ -171,6 +171,9 @@ const setGuestAccountCreationToken = (guestAccountCreationToken: string): Action
 const setThankYouPageStage = (thankYouPageStage: ThankYouPageStage): Action =>
   ({ type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage });
 
+const setUserCohort = (userCohort: UserCohort): Action =>
+  ({ type: 'SET_USER_COHORT', userCohort });
+
 const setHasSeenDirectDebitThankYouCopy = (): Action => ({ type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY' });
 
 const setThirdPartyPaymentLibrary =
@@ -362,9 +365,10 @@ const executeStripeOneOffPayment = (
   data: StripeChargeData,
   setGuestToken: (string) => void,
   setThankYouPage: (ThankYouPageStage) => void,
+  setCohort: (UserCohort) => void,
 ) =>
   (dispatch: Dispatch<Action>): Promise<PaymentResult> =>
-    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage)));
+    dispatch(onPaymentResult(postOneOffStripeExecutePaymentRequest(data, setGuestToken, setThankYouPage, setCohort)));
 
 
 function recurringPaymentAuthorisationHandler(
@@ -421,6 +425,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<(
           stripeChargeDataFromAuthorisation(paymentAuthorisation, state),
           (token: string) => dispatch(setGuestAccountCreationToken(token)),
           (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+          (userCohort: UserCohort) => dispatch(setUserCohort(userCohort)),
         ));
       }
       logException(`Invalid payment authorisation: Tried to use the ${paymentAuthorisation.paymentMethod} handler with Stripe`);
