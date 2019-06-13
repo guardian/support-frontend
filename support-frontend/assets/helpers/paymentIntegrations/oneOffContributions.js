@@ -109,7 +109,9 @@ export type UserSignInDetails = {
   isUserEmailValidated: boolean,
 }
 
-function thankYouPageCopy(userDetails: UserSignInDetails, hasSignInToken: Boolean) {
+export type UserCohort = 'cohort2' | 'cohort3' | 'cohort4' | 'cohort5' | null;
+
+function thankYouPageCopy(userDetails: UserSignInDetails, hasSignInToken: Boolean): UserCohort {
   const isSignedIn = doesUserAppearToBeSignedIn();
   const hasFullAccount = userDetails &&
     (userDetails.hasPassword || userDetails.hasFacebookSocialLink || userDetails.hasGoogleSocialLink);
@@ -117,19 +119,25 @@ function thankYouPageCopy(userDetails: UserSignInDetails, hasSignInToken: Boolea
 
   if (isSignedIn && !isVerified) {
     console.log('Cohort 2');
+    return 'cohort2';
   }
 
   if (!isSignedIn && hasFullAccount && isVerified) {
     console.log('Cohort 3a');
+    return 'cohort3';
   }
 
   if (!isSignedIn && hasFullAccount && !isVerified) {
     console.log('Cohort 3b');
+    return 'cohort3';
   }
 
   if (!isSignedIn && !hasFullAccount && !hasSignInToken) {
     console.log('Cohort 4');
+    return 'cohort4';
   }
+
+  return null;
 }
 
 // Object is expected to have structure:
@@ -216,4 +224,5 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
 export {
   postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
+  thankYouPageCopy,
 };

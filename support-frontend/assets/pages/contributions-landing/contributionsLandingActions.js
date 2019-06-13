@@ -24,7 +24,7 @@ import {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
 } from 'helpers/paymentIntegrations/readerRevenueApis';
-import type { StripeChargeData } from 'helpers/paymentIntegrations/oneOffContributions';
+import type { StripeChargeData, UserCohort } from 'helpers/paymentIntegrations/oneOffContributions';
 import {
   type CreatePaypalPaymentData,
   type CreatePayPalPaymentResponse,
@@ -70,6 +70,7 @@ export type Action =
   | { type: 'SET_GUEST_ACCOUNT_CREATION_TOKEN', guestAccountCreationToken: string }
   | { type: 'SET_FORM_IS_SUBMITTABLE', formIsSubmittable: boolean }
   | { type: 'SET_THANK_YOU_PAGE_STAGE', thankYouPageStage: ThankYouPageStage }
+  | { type: 'SET_USER_COHORT', userCohort: UserCohort }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_OBJECT', stripePaymentRequestObject: Object }
   | { type: 'SET_PAYMENT_REQUEST_BUTTON_PAYMENT_METHOD', paymentMethod: StripePaymentRequestButtonMethod }
   | { type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED' }

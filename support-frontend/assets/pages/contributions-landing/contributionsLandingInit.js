@@ -48,6 +48,7 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
+import { thankYouPageCopy } from 'helpers/paymentIntegrations/oneOffContributions';
 
 // ----- Functions ----- //
 
@@ -222,9 +223,16 @@ const init = (store: Store<State, Action, Function>) => {
   // This will be in window.guardian if it has come from a PayPal one-off contribution,
   // where it is returned by the Payment API to the backend, flashed into the session to preserve
   // it through a serverside redirect, and then written into window.guardian on the thank-you page.
-  if (window.guardian.guestAccountCreationToken) {
+
+  const hasGuestAccountToken = !!window.guardian.guestAccountCreationToken;
+
+  if (hasGuestAccountToken) {
     dispatch(setGuestAccountCreationToken(window.guardian.guestAccountCreationToken));
     dispatch(setThankYouPageStage('thankYouSetPassword'));
+  }
+
+  if (window.guardian.userSignInDetails) {
+    thankYouPageCopy(window.guardian.userSignInDetails, hasGuestAccountToken);
   }
 
   selectInitialAmounts(state, dispatch);

@@ -24,6 +24,7 @@ import { type State as MarketingConsentState } from '../../components/marketingC
 import { marketingConsentReducerFor } from '../../components/marketingConsent/marketingConsentReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/existingPaymentMethods/existingPaymentMethods';
+import type { UserCohort } from 'helpers/paymentIntegrations/oneOffContributions';
 
 // ----- Types ----- //
 
@@ -75,6 +76,7 @@ type FormState = {
   paymentError: ErrorReason | null,
   guestAccountCreationToken: ?string,
   thankYouPageStage: ThankYouPageStage,
+  userCohort: UserCohort,
   hasSeenDirectDebitThankYouCopy: boolean,
   payPalHasLoaded: boolean,
   userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
@@ -148,6 +150,7 @@ function createFormReducer() {
     paymentError: null,
     guestAccountCreationToken: null,
     thankYouPageStage: 'thankYou',
+    userCohort: null,
     payPalHasLoaded: false,
     hasSeenDirectDebitThankYouCopy: false,
     userTypeFromIdentityResponse: 'noRequestSent',
@@ -313,6 +316,9 @@ function createFormReducer() {
           return { ...state, thankYouPageStage: 'thankYou' };
         }
         return { ...state, thankYouPageStage: action.thankYouPageStage };
+
+      case 'SET_USER_COHORT':
+        return { ...state, userCohort: action.userCohort };
 
       default:
         return state;
