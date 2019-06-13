@@ -102,16 +102,22 @@ class Application(
 
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+    val userSignInDetails = request.flash.get("userSignInDetails")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption, guestAccountCreationToken)),
-      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken))
+      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption, guestAccountCreationToken, userSignInDetails)),
+      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken, userSignInDetails))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String], guestAccountCreationToken: Option[String])
-                               (implicit request: RequestHeader, settings: AllSettings) = {
+  private def contributionsHtml(
+    countryCode: String,
+    idUser: Option[IdUser],
+    campaignCode: Option[String],
+    guestAccountCreationToken: Option[String],
+    userSignInDetails: Option[String]
+  )(implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
     val css = elementForStage(RefPath("contributionsLandingPage.css"))
@@ -136,7 +142,8 @@ class Application(
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       idUser = idUser,
       campaignCodeModifier = campaignCode.map(code => s"gu-content--$code"),
-      guestAccountCreationToken = guestAccountCreationToken
+      guestAccountCreationToken = guestAccountCreationToken,
+      userSignInDetails = userSignInDetails
     )
   }
 

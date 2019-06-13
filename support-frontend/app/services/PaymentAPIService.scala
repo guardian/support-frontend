@@ -6,17 +6,32 @@ import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
 import codecs.CirceDecoders._
-import io.circe.Decoder
+import io.circe.{Decoder, Encoder}
 import io.circe.parser.decode
 import com.gu.monitoring.SafeLogger
 import cats.implicits._
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class PayPalSuccess(guestAccountCreationToken: Option[String])
+case class UserSignInDetails(
+  hasAccount: Boolean,
+  hasPassword: Boolean,
+  isUserEmailValidated: Boolean,
+  hasGoogleSocialLink: Boolean,
+  hasFacebookSocialLink: Boolean
+)
+
+object UserSignInDetails {
+  implicit val userSignInDetailsEncoder: Encoder[UserSignInDetails] = deriveEncoder
+  implicit val userSignInDetailsDecoder: Decoder[UserSignInDetails] = deriveDecoder
+}
+
+case class PayPalSuccess(guestAccountCreationToken: Option[String], userSignInDetails: Option[UserSignInDetails])
 
 object PayPalSuccess {
+  import UserSignInDetails.userSignInDetailsDecoder
   implicit val payPalSuccessDecoder: Decoder[PayPalSuccess] = deriveDecoder
 }
 

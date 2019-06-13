@@ -4,21 +4,20 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.identity.play.AuthenticatedIdUser
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
 import services._
-import cats.data.EitherT
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import monitoring.PathVerification.{OneOffContribution, PayPal, TipPath, monitoredRegion, verify}
-
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 import scala.util.Try
 import services.{IdentityService, PaymentAPIService, TestUserService}
 import com.gu.tip.Tip
 import views.EmptyDiv
+import io.circe.syntax._
+import services.UserSignInDetails.userSignInDetailsEncoder
 
 class PayPalOneOff(
     actionBuilders: CustomActionBuilders,
@@ -74,13 +73,14 @@ class PayPalOneOff(
       }
     }
 
-    success.guestAccountCreationToken.fold {
-      SafeLogger.info("Redirecting to thank you page without guestAccountCreationToken")
-      redirect
-    } { guestAccountCreationToken =>
-      SafeLogger.info("Redirecting to thank you page with guestAccountCreationToken in flash session")
-      redirect.flashing("guestAccountCreationToken" -> guestAccountCreationToken)
-    }
+    val flashValues: List[(String,String)] = List(
+      success.guestAccountCreationToken.map(token => "guestAccountCreationToken" -> token),
+      success.userSignInDetails.map(details => "userSignInDetails" -> details.asJson.noSpaces)
+    ).flatten
+
+    SafeLogger.info(s"Redirecting to thank you page with flashed values: ${flashValues.map { case (key,_) => key }}")
+
+    redirect.flashing(flashValues: _*)
   }
 
   def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>

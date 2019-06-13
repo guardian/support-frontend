@@ -5,6 +5,7 @@
 @import com.gu.support.config.{PayPalConfig, StripeConfig}
 @import helper.CSRF
 @import views.{Preload, SSRContent}
+
 @(
   title: String,
   id: String,
@@ -23,6 +24,7 @@
   idUser: Option[IdUser],
   campaignCodeModifier: Option[String],
   guestAccountCreationToken: Option[String],
+  userSignInDetails: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -238,6 +240,10 @@
 
     @guestAccountCreationToken.map { guestAccountCreationToken =>
       window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
+    }
+
+    @userSignInDetails.map { userSignInDetails =>
+      window.guardian.userSignInDetails = "@userSignInDetails";
     }
   </script>
 }

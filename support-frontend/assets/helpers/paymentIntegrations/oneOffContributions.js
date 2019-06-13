@@ -12,6 +12,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
 import type { ThankYouPageStage } from 'pages/contributions-landing/contributionsLandingReducer';
+import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 
 // ----- Types ----- //
 
@@ -101,8 +102,22 @@ function paymentApiEndpointWithMode(url: string) {
 }
 
 // Object is expected to have structure:
-// { type: "error", error: { failureReason: string } }, or
-// { type: "success", data: { currency: string, amount: number } }
+// { type: "error", error: { failureReason: string } }
+// OR
+// { type: "success",
+//   data: {
+//     currency: string,
+//     amount: number,
+//     gustAccountCreationToken?: string,
+//     userSignInDetails: {
+//       hasAccount: boolean,
+//       hasFacebookSocialLink: boolean,
+//       hasGoogleSocialLink: boolean,
+//       hasPassword: boolean,
+//       isUserEmailValidated: boolean,
+//     }
+//   }
+// }
 function paymentResultFromObject(
   json: Object,
   setGuestAccountCreationToken: (string) => void,
@@ -113,6 +128,13 @@ function paymentResultFromObject(
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
 
+  console.log(json.data);
+
+  if (json.data && json.data.userSignInDetails) {
+    const hasSignInToken = json.data.guestAccountRegistrationToken ? true : false;
+    thankYouPageCopy(json.data.userSignInDetails, hasSignInToken);
+  }
+
   if (json.data && json.data.guestAccountCreationToken) {
     setGuestAccountCreationToken(json.data.guestAccountCreationToken);
     setThankYouPageStage('thankYouSetPassword');
@@ -121,6 +143,37 @@ function paymentResultFromObject(
   }
 
   return Promise.resolve(PaymentSuccess);
+}
+
+export type UserSignInDetails = {
+    hasAccount: boolean,
+    hasFacebookSocialLink: boolean,
+    hasGoogleSocialLink: boolean,
+    hasPassword: boolean,
+    isUserEmailValidated: boolean,
+}
+
+function thankYouPageCopy(userDetails: UserSignInDetails, hasSignInToken: Boolean) {
+  const isSignedIn = doesUserAppearToBeSignedIn();
+  const hasFullAccount = userDetails && (userDetails.hasPassword || userDetails.hasFacebookSocialLink || userDetails.hasGoogleSocialLink);
+  const isVerified = userDetails && userDetails.isUserEmailValidated;
+
+  if (isSignedIn && !isVerified) {
+    console.log("Cohort 2")
+  }
+
+  if (!isSignedIn && hasFullAccount && isVerified) {
+    console.log("Cohort 3a")
+  }
+
+  if (!isSignedIn && hasFullAccount && !isVerified) {
+    console.log("Cohort 3b")
+  }
+
+  if (!isSignedIn && !hasFullAccount && !hasSignInToken) {
+    console.log("Cohort 4")
+  }
+
 }
 
 // Sends a one-off payment request to the payment API and standardises the result
