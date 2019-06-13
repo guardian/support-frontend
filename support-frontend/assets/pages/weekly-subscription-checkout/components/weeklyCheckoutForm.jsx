@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose, type Dispatch } from 'redux';
 
@@ -32,6 +32,7 @@ import {
   getProductPrice,
   type ProductPrices,
 } from 'helpers/productPrice/productPrices';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
@@ -66,7 +67,6 @@ import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
 import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
 
 // ----- Types ----- //
@@ -119,199 +119,221 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 
-function WeeklyCheckoutForm(props: PropTypes) {
-  const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-  const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
-  const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
+class WeeklyCheckoutForm extends Component<PropTypes> {
+  componentDidMount() {
+    const { props } = this;
+    // The localStorage solution is a temporary fix until we have a url builder for weekly checkout
+    const billingPeriodSelected = window.localStorage.getItem('billingPeriodSelected');
+    props.setBillingPeriod(billingPeriodSelected);
+    props.setSixWeeklySelected(billingPeriodSelected === 'SixWeekly');
+  }
 
-  return (
-    <Content modifierClasses={['your-details']}>
-      <Layout aside={(
-        <Summary
-          image={
-            <GridImage
-              gridId="checkoutPackshotWeekly"
-              srcSizes={[696, 500]}
-              sizes="(max-width: 740px) 50vw, 696"
-              imgType="png"
-              altText=""
-            />
-          }
-          title="Guardian Weekly"
-          description=""
-          productPrice={price}
-          dataList={[
-            {
-              title: 'Delivery method',
-              value: 'Home delivery',
-            },
-          ]}
-          billingPeriod={props.billingPeriod}
-          changeSubscription={routes.guardianWeeklySubscriptionLanding}
-          product={props.product}
-        />
-      )}
-      >
-        <Form onSubmit={(ev) => {
-          ev.preventDefault();
-          props.submitForm();
-        }}
+  componentWillUnmount() {
+    window.localStorage.removeItem('billingPeriodSelected');
+  }
+
+  render() {
+    const { props } = this;
+    const {
+      deliveryCountry,
+      billingAddressIsSame,
+      billingPeriod,
+      billingCountry,
+      productPrices,
+      orderIsAGift,
+      product,
+      submitForm,
+    } = props;
+
+    const fulfilmentOption = getWeeklyFulfilmentOption(deliveryCountry);
+    const price = getProductPrice(productPrices, billingCountry, billingPeriod, fulfilmentOption);
+    const subscriptionStart = `When would you like ${orderIsAGift ? 'the' : 'your'} subscription to start?`;
+
+    return (
+      <Content modifierClasses={['your-details']}>
+        <Layout aside={(
+          <Summary
+            image={
+              <GridImage
+                gridId="checkoutPackshotWeekly"
+                srcSizes={[696, 500]}
+                sizes="(max-width: 740px) 50vw, 696"
+                imgType="png"
+                altText=""
+              />
+            }
+            title="Guardian Weekly"
+            description=""
+            productPrice={price}
+            dataList={[
+              {
+                title: 'Delivery method',
+                value: 'Home delivery',
+              },
+            ]}
+            billingPeriod={billingPeriod}
+            changeSubscription={routes.guardianWeeklySubscriptionLanding}
+            product={product}
+          />
+        )}
         >
-          <FormSection title="Your details">
-            <SelectWithLabel
-              id="title"
-              label="Title"
-              optional
-              value={props.title}
-              setValue={props.setTitle}
-            >
-              <option value="">--</option>
-              {options(titles)}
-            </SelectWithLabel>
-            <PersonalDetails
-              firstName={props.firstName}
-              setFirstName={props.setFirstName}
-              lastName={props.lastName}
-              setLastName={props.setLastName}
-              email={props.email}
-              telephone={props.telephone}
-              setTelephone={props.setTelephone}
-              formErrors={props.formErrors}
-              signOut={props.signOut}
-            />
-          </FormSection>
-          <FormSection title="Where should we deliver your magazine?">
-            {props.billingPeriod !== 'SixWeekly' ?
+          <Form onSubmit={(ev) => {
+            ev.preventDefault();
+            submitForm();
+          }}
+          >
+            <FormSection title="Your details">
+              <SelectWithLabel
+                id="title"
+                label="Title"
+                optional
+                value={props.title}
+                setValue={props.setTitle}
+              >
+                <option value="">--</option>
+                {options(titles)}
+              </SelectWithLabel>
+              <PersonalDetails
+                firstName={props.firstName}
+                setFirstName={props.setFirstName}
+                lastName={props.lastName}
+                setLastName={props.setLastName}
+                email={props.email}
+                telephone={props.telephone}
+                setTelephone={props.setTelephone}
+                formErrors={props.formErrors}
+                signOut={props.signOut}
+              />
+            </FormSection>
+            <FormSection title="Where should we deliver your magazine?">
               <CheckboxInput
                 text="This is a gift"
-                checked={props.orderIsAGift}
-                onChange={() => props.setGiftStatus(!props.orderIsAGift)}
+                checked={orderIsAGift}
+                onChange={() => props.setGiftStatus(!orderIsAGift)}
               />
+              {!orderIsAGift ? <DeliveryAddress /> : null}
+            </FormSection>
+            {orderIsAGift ? (
+              <span>
+                <FormSection title="Gift recipient's details">
+                  <SelectWithLabel
+                    id="title"
+                    label="Title"
+                    optional
+                    value={props.titleGiftRecipient}
+                    setValue={props.setTitleGift}
+                  >
+                    <option value="">--</option>
+                    {options(titles)}
+                  </SelectWithLabel>
+                  <PersonalDetailsGift
+                    firstNameGiftRecipient={props.firstNameGiftRecipient}
+                    setFirstNameGift={props.setFirstNameGift}
+                    lastNameGiftRecipient={props.lastNameGiftRecipient}
+                    setLastNameGift={props.setLastNameGift}
+                    emailGiftRecipient={props.emailGiftRecipient}
+                    setEmailGift={props.setEmailGift}
+                    formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
+                  />
+                </FormSection>
+                <FormSection title="Gift recipient's address">
+                  <DeliveryAddress />
+                </FormSection>
+              </span>)
             : null}
-            {!props.orderIsAGift ? <DeliveryAddress /> : null}
-          </FormSection>
-          {props.orderIsAGift ? (
-            <span>
-              <FormSection title="Gift recipient's details">
-                <SelectWithLabel
-                  id="title"
-                  label="Title"
-                  optional
-                  value={props.titleGiftRecipient}
-                  setValue={props.setTitleGift}
+            <FormSection title={orderIsAGift ?
+              'Is the billing address the same as the recipient\'s address?'
+              : 'Is the billing address the same as the delivery address?'}
+            >
+              <Rows>
+                <FieldsetWithError
+                  id="billingAddressIsSame"
+                  error={firstError('billingAddressIsSame', props.formErrors)}
+                  legend="Is the billing address the same as the delivery address?"
                 >
-                  <option value="">--</option>
-                  {options(titles)}
-                </SelectWithLabel>
-                <PersonalDetailsGift
-                  firstNameGiftRecipient={props.firstNameGiftRecipient}
-                  setFirstNameGift={props.setFirstNameGift}
-                  lastNameGiftRecipient={props.lastNameGiftRecipient}
-                  setLastNameGift={props.setLastNameGift}
-                  emailGiftRecipient={props.emailGiftRecipient}
-                  setEmailGift={props.setEmailGift}
-                  formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
-                  isGiftRecipient
-                />
-              </FormSection>
-              <FormSection title="Gift recipient's address">
-                <DeliveryAddress />
-              </FormSection>
-            </span>)
-          : null}
-          <FormSection title={props.orderIsAGift ?
-            'Is the billing address the same as the recipient\'s address?'
-            : 'Is the billing address the same as the delivery address?'}
-          >
-            <Rows>
-              <FieldsetWithError
-                id="billingAddressIsSame"
-                error={firstError('billingAddressIsSame', props.formErrors)}
-                legend="Is the billing address the same as the delivery address?"
-              >
-                <RadioInput
-                  text="Yes"
-                  name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame === true}
-                  onChange={() => props.setBillingAddressIsSame(true)}
-                />
-                <RadioInput
-                  text="No"
-                  name="billingAddressIsSame"
-                  checked={props.billingAddressIsSame === false}
-                  onChange={() => props.setBillingAddressIsSame(false)}
-                />
-              </FieldsetWithError>
-            </Rows>
-          </FormSection>
-          {
-            props.billingAddressIsSame === false ?
-              <FormSection title="Your billing address">
-                <BillingAddress />
-              </FormSection>
-            : null
-          }
-          <FormSection title={subscriptionStart}>
-            <Rows>
-              <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend={subscriptionStart}>
-                {days.map((day) => {
-                  const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
-                  return (
-                    <RadioInput
-                      appearance="group"
-                      text={userDate}
-                      name={machineDate}
-                      checked={machineDate === props.startDate}
-                      onChange={() => props.setStartDate(machineDate)}
-                    />
-                  );
-                })
-                }
-              </FieldsetWithError>
-              <Text className="component-text__paddingTop">
-                <p className="component-text__sans">
-                We will take the first payment on the
-                date you receive your first Guardian Weekly.
-                </p>
-                <p className="component-text__sans">
-                Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
-                </p>
-              </Text>
-            </Rows>
-          </FormSection>
-          <BillingPeriodSelector
-            fulfilmentOption={fulfilmentOption}
-            onChange={billingPeriod => props.setBillingPeriod(billingPeriod)}
-            billingPeriods={weeklyBillingPeriods}
-            billingCountry={props.billingCountry}
-            productPrices={props.productPrices}
-            selected={props.billingPeriod}
-            orderIsAGift={props.orderIsAGift}
-          />
-          <PaymentMethodSelector
-            country={props.billingCountry}
-            product={GuardianWeekly}
-            paymentMethod={props.paymentMethod}
-            setPaymentMethod={props.setPaymentMethod}
-            onPaymentAuthorised={props.onPaymentAuthorised}
-            validationError={firstError('paymentMethod', props.formErrors)}
-            submissionError={props.submissionError}
-          />
-          <FormSection noBorder>
-            <Button aria-label={null} type="submit">Continue to payment</Button>
-            <DirectDebitPopUpForm
-              buttonText="Subscribe with Direct Debit"
-              onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
-                props.onPaymentAuthorised(pa);
-              }}
+                  <RadioInput
+                    text="Yes"
+                    name="billingAddressIsSame"
+                    checked={billingAddressIsSame === true}
+                    onChange={() => props.setBillingAddressIsSame(true)}
+                  />
+                  <RadioInput
+                    text="No"
+                    name="billingAddressIsSame"
+                    checked={billingAddressIsSame === false}
+                    onChange={() => props.setBillingAddressIsSame(false)}
+                  />
+                </FieldsetWithError>
+              </Rows>
+            </FormSection>
+            {
+              props.billingAddressIsSame === false ?
+                <FormSection title="Your billing address">
+                  <BillingAddress />
+                </FormSection>
+              : null
+            }
+            <FormSection title={subscriptionStart}>
+              <Rows>
+                <FieldsetWithError id="startDate" error={firstError('startDate', props.formErrors)} legend={subscriptionStart}>
+                  {days.map((day) => {
+                    const [userDate, machineDate] = [formatUserDate(day), formatMachineDate(day)];
+                    return (
+                      <RadioInput
+                        appearance="group"
+                        text={userDate}
+                        name={machineDate}
+                        checked={machineDate === props.startDate}
+                        onChange={() => props.setStartDate(machineDate)}
+                      />
+                    );
+                  })
+                  }
+                </FieldsetWithError>
+                <Text className="component-text__paddingTop">
+                  <p className="component-text__sans">
+                  We will take the first payment on the
+                  date you receive your first Guardian Weekly.
+                  </p>
+                  <p className="component-text__sans">
+                  Subscription starts dates are automatically selected to be the earliest we can fulfil your order.
+                  </p>
+                </Text>
+              </Rows>
+            </FormSection>
+            <BillingPeriodSelector
+              fulfilmentOption={fulfilmentOption}
+              onChange={() => props.setBillingPeriod(billingPeriod)}
+              billingPeriods={weeklyBillingPeriods}
+              billingCountry={props.billingCountry}
+              productPrices={props.productPrices}
+              selected={props.billingPeriod}
+              sixWeeklySelected={props.sixWeeklySelected}
             />
-          </FormSection>
-          <CancellationSection />
-        </Form>
-      </Layout>
-    </Content>
-  );
-
+            <PaymentMethodSelector
+              country={props.billingCountry}
+              product={GuardianWeekly}
+              paymentMethod={props.paymentMethod}
+              setPaymentMethod={props.setPaymentMethod}
+              onPaymentAuthorised={props.onPaymentAuthorised}
+              validationError={firstError('paymentMethod', props.formErrors)}
+              submissionError={props.submissionError}
+            />
+            <FormSection noBorder>
+              <Button aria-label={null} type="submit">Continue to payment</Button>
+              <DirectDebitPopUpForm
+                buttonText="Subscribe with Direct Debit"
+                onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
+                  props.onPaymentAuthorised(pa);
+                }}
+              />
+            </FormSection>
+            <CancellationSection />
+          </Form>
+        </Layout>
+      </Content>
+    );
+  }
 }
 
 
