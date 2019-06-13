@@ -12,7 +12,6 @@ import com.gu.monitoring.SafeLogger
 import cats.implicits._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
-
 import scala.concurrent.{ExecutionContext, Future}
 
 case class UserSignInDetails(
