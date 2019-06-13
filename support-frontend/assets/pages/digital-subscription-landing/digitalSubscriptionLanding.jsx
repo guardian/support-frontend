@@ -16,6 +16,7 @@ import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
 import AdFreeSection from 'components/adFreeSection/adFreeSection';
+import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
 import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
@@ -25,6 +26,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
 import IndependentJournalismSection from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
+import ProductBlockB from './components/productBlockB/productBlockB';
 import PromotionPopUp from './components/promotionPopUp';
 import Form from './components/form';
 
@@ -67,6 +69,14 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
+const { optimizeExperiments } = store.getState().common;
+
+// daily editions test experiment ID 'NEPFjv3FSEuGQPfNN17aZg' this can be removed once the test is live
+const dailyEditionsExpermentId = 'NEPFjv3FSEuGQPfNN17aZg';
+const dailyEditionsVariant = optimizeExperiments
+  .filter(exp => exp.id === dailyEditionsExpermentId && exp.variant === '2') // this variant should be "1", the variant is "2" so this will always return false, thus hiding this experiment until we start the test
+  .length !== 0;
+
 // ----- Render ----- //
 
 const content = (
@@ -81,9 +91,19 @@ const content = (
     >
 
       <CampaignHeader countryGroupId={countryGroupId} />
-
-      <ProductBlock countryGroupId={countryGroupId} />
-      <AdFreeSection headingSize={2} />
+      {dailyEditionsVariant ?
+        (
+          <div>
+            <ProductBlockB />
+            <AdFreeSectionB />
+          </div>
+        ) : (
+          <div>
+            <ProductBlock countryGroupId={countryGroupId} />
+            <AdFreeSection headingSize={2} />
+          </div>
+        )
+      }
       <Content appearance="feature" id="subscribe">
         <Text title="Subscribe to Digital Pack today">
           <p>Choose how you’d like to pay</p>

@@ -14,7 +14,6 @@ import { GBPCountries, type CountryGroupId } from 'helpers/internationalisation/
 
 import CtaSwitch from './ctaSwitch';
 
-
 // ----- Types ----- //
 
 type PropTypes = {|
@@ -168,7 +167,6 @@ function ProductBlock(props: PropTypes) {
   );
 
 }
-
 
 // ----- Auxiliary Components ----- //
 
