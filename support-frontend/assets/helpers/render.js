@@ -46,7 +46,7 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
       renderError(e, id);
     }
   } else {
-    logException(`Fatal error trying to render a page. id:${id}`);
+    logException(`Could not find element with id ${id} to render react app into`);
   }
 };
 
