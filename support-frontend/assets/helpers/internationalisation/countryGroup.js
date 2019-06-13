@@ -103,20 +103,21 @@ const countryGroups: CountryGroups = {
 
 // ----- Functions ----- //
 
-function fromPath(path: string = window.location.pathname): ?CountryGroupId {
-  if (path === '/uk' || path.startsWith('/uk/')) {
+function fromUrl(): ?CountryGroupId {
+  const url = window.location.href;
+  if (url.includes('/uk')) {
     return GBPCountries;
-  } else if (path === '/us' || path.startsWith('/us/')) {
+  } else if (url.includes('/us')) {
     return UnitedStates;
-  } else if (path === '/au' || path.startsWith('/au/')) {
+  } else if (url.includes('/au')) {
     return AUDCountries;
-  } else if (path === '/eu' || path.startsWith('/eu/')) {
+  } else if (url.includes('/eu')) {
     return EURCountries;
-  } else if (path === '/int' || path.startsWith('/int/')) {
+  } else if (url.includes('/int')) {
     return International;
-  } else if (path === '/nz' || path.startsWith('/nz/')) {
+  } else if (url.includes('/nz')) {
     return NZDCountries;
-  } else if (path === '/ca' || path.startsWith('/ca/')) {
+  } else if (url.includes('/ca')) {
     return Canada;
   }
   return null;
@@ -172,7 +173,7 @@ function fromGeolocation(): ?CountryGroupId {
 }
 
 function detect(): CountryGroupId {
-  return fromPath() || fromQueryParameter() || fromCookie() || fromGeolocation() || GBPCountries;
+  return fromUrl() || fromQueryParameter() || fromCookie() || fromGeolocation() || GBPCountries;
 }
 
 function stringToCountryGroupId(countryGroupId: string): CountryGroupId {
