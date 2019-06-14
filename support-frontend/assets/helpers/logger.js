@@ -1,5 +1,4 @@
 // @flow
-// import Raven from 'raven-js';
 
 const EventualSentry = import('@sentry/browser');
 
