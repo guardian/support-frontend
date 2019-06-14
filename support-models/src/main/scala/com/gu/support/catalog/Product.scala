@@ -146,7 +146,7 @@ case object GuardianWeekly extends Product {
     Map(
       PROD -> List(
         ProductRatePlan("2c92a0086619bf8901661ab545f51b21", SixWeekly, RestOfWorld, NoProductOptions,
-          productRatePlanChargeId = Some("2c92a0086619bf8901661ab546091b23")), //TODO: remove SixWeekly and use promotions instead
+          productRatePlanChargeId = Some("2c92a0086619bf8901661ab546091b23")),
         ProductRatePlan("2c92a0fe6619b4b601661ab300222651", Annual, RestOfWorld, NoProductOptions),
         ProductRatePlan("2c92a0086619bf8901661ab02752722f", Quarterly, RestOfWorld, NoProductOptions),
         ProductRatePlan("2c92a0086619bf8901661aaac94257fe", SixWeekly, Domestic, NoProductOptions,
