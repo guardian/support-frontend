@@ -34,6 +34,7 @@ import {
   updateContributionTypeAndPaymentMethod, updatePaymentMethod, updateSelectedExistingPaymentMethod,
   updateUserFormData,
   setThankYouPageStage,
+  setUserCohort,
 } from './contributionsLandingActions';
 import { type State } from './contributionsLandingReducer';
 import type { PaymentMethod } from 'helpers/paymentMethods';
@@ -48,7 +49,9 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { isSwitchOn } from 'helpers/globals';
 import type { ContributionTypes } from 'helpers/contributions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
-import { thankYouPageCopy } from 'helpers/paymentIntegrations/oneOffContributions';
+import { renderThankYouPageWithCohort } from 'helpers/paymentIntegrations/oneOffContributions';
+import type { ThankYouPageStage } from './contributionsLandingReducer';
+import type { UserCohort } from 'helpers/paymentIntegrations/oneOffContributions';
 
 // ----- Functions ----- //
 
@@ -223,16 +226,19 @@ const init = (store: Store<State, Action, Function>) => {
   // This will be in window.guardian if it has come from a PayPal one-off contribution,
   // where it is returned by the Payment API to the backend, flashed into the session to preserve
   // it through a serverside redirect, and then written into window.guardian on the thank-you page.
+  const signInToken = window.guardian && window.guardian.guestAccountCreationToken ?
+    window.guardian.guestAccountCreationToken : null;
 
-  const hasGuestAccountToken = !!window.guardian.guestAccountCreationToken;
-
-  if (hasGuestAccountToken) {
-    dispatch(setGuestAccountCreationToken(window.guardian.guestAccountCreationToken));
-    dispatch(setThankYouPageStage('thankYouSetPassword'));
-  }
-
-  if (window.guardian.userSignInDetails) {
-    thankYouPageCopy(window.guardian.userSignInDetails, hasGuestAccountToken);
+  if (window.guardian && window.guardian.userSignInDetails) {
+    renderThankYouPageWithCohort(
+      window.guardian.userSignInDetails,
+      signInToken,
+      (token: string) => dispatch(setGuestAccountCreationToken(token)),
+      (thankYouPageStage: ThankYouPageStage) => dispatch(setThankYouPageStage(thankYouPageStage)),
+      (userCohort: UserCohort) => dispatch(setUserCohort(userCohort)),
+    );
+  } else {
+    dispatch(setThankYouPageStage('thankYou'));
   }
 
   selectInitialAmounts(state, dispatch);

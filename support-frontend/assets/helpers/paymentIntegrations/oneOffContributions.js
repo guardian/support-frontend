@@ -109,40 +109,65 @@ export type UserSignInDetails = {
   isUserEmailValidated: boolean,
 }
 
-export type UserCohort = 'cohort2' | 'cohort3' | 'cohort4' | 'cohort5' | null;
+export type UserCohort = 'signed-in-verified' | 'signed-in-unverified' | 'signed-out-verified' | 'signed-out-unverified' | 'guest' | 'new' | null;
 
-function thankYouPageCopy(
+function renderThankYouPageWithCohort(
   userDetails: UserSignInDetails,
-  hasSignInToken: Boolean,
+  signInToken: string | null,
+  setGuestAccountCreationToken: (string) => void,
+  setThankYouPageStage: (ThankYouPageStage) => void,
   setUserCohort: (UserCohort) => void,
-): () => void {
+) {
   const isSignedIn = doesUserAppearToBeSignedIn();
   const hasFullAccount = userDetails &&
     (userDetails.hasPassword || userDetails.hasFacebookSocialLink || userDetails.hasGoogleSocialLink);
   const isVerified = userDetails && userDetails.isUserEmailValidated;
 
-  if (isSignedIn && !isVerified) {
-    console.log('Cohort 2');
-    setUserCohort('cohort2');
+  const isNewUser = !!signInToken;
+  const isGuestUser = !isSignedIn && !hasFullAccount && !isNewUser;
+  const isSignedOutVerifiedUser = !isSignedIn && hasFullAccount && isVerified;
+  const isSignedOutUnverifiedUser = !isSignedIn && hasFullAccount && !isVerified;
+  const isSignedInUnverifiedUser = isSignedIn && !isVerified;
+  const isSignedInVerifiedUser = isSignedIn && isVerified;
+
+  if (isNewUser && signInToken) {
+    // Cohort 5 - "New"
+    setUserCohort('new');
+    setGuestAccountCreationToken(signInToken);
+    setThankYouPageStage('thankYouSetPassword');
   }
 
-  if (!isSignedIn && hasFullAccount && isVerified) {
-    console.log('Cohort 3a');
-    setUserCohort('cohort3');
+  if (isGuestUser) {
+    // Cohort 4 - "Guest"
+    setUserCohort('guest');
+    setThankYouPageStage('thankYouSetPassword');
   }
 
-  if (!isSignedIn && hasFullAccount && !isVerified) {
-    console.log('Cohort 3b');
-    setUserCohort('cohort3');
+  if (isSignedOutVerifiedUser) {
+    // Cohort 3a - "Signed out verified"
+    setUserCohort('signed-out-verified');
+    setThankYouPageStage('thankYou');
   }
 
-  if (!isSignedIn && !hasFullAccount && !hasSignInToken) {
-    // BUG: this is setting 'cohort4' for cohort 5
-    console.log('Cohort 4');
-    setUserCohort('cohort4');
+  if (isSignedOutUnverifiedUser) {
+    // Cohort 3b - "Signed out unverified"
+    setUserCohort('signed-out-verified');
+    setThankYouPageStage('thankYou');
   }
 
-  setUserCohort(null)
+  if (isSignedInUnverifiedUser) {
+    // Cohort 2 - "Signed in unverified"
+    setUserCohort('signed-in-unverified');
+    setThankYouPageStage('thankYou');
+  }
+
+  if (isSignedInVerifiedUser) {
+    // Cohort 1 - "Signed in verified"
+    setUserCohort('signed-in-verified');
+    setThankYouPageStage('thankYou');
+  }
+
+  setThankYouPageStage('thankYou');
 }
 
 // Object is expected to have structure:
@@ -173,15 +198,17 @@ function paymentResultFromObject(
     return Promise.resolve({ paymentStatus: 'failure', error: failureReason });
   }
 
-  const hasSignInToken = json.data && !!json.data.guestAccountRegistrationToken;
+  const signInToken = json.data && json.data.guestAccountCreationToken ?
+    json.data.guestAccountCreationToken : null;
 
   if (json.data && json.data.userSignInDetails) {
-    thankYouPageCopy(json.data.userSignInDetails, hasSignInToken, setUserCohort);
-  }
-
-  if (hasSignInToken) {
-    setGuestAccountCreationToken(json.data.guestAccountCreationToken);
-    setThankYouPageStage('thankYouSetPassword');
+    renderThankYouPageWithCohort(
+      json.data.userSignInDetails,
+      signInToken,
+      setGuestAccountCreationToken,
+      setThankYouPageStage,
+      setUserCohort,
+    );
   } else {
     setThankYouPageStage('thankYou');
   }
@@ -230,5 +257,5 @@ function postOneOffPayPalCreatePaymentRequest(data: CreatePaypalPaymentData): Pr
 export {
   postOneOffStripeExecutePaymentRequest,
   postOneOffPayPalCreatePaymentRequest,
-  thankYouPageCopy,
+  renderThankYouPageWithCohort,
 };

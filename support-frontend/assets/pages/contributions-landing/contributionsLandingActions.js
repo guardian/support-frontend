@@ -504,6 +504,7 @@ export {
   setCheckoutFormHasBeenSubmitted,
   setGuestAccountCreationToken,
   setThankYouPageStage,
+  setUserCohort,
   setPasswordHasBeenSubmitted,
   setPasswordError,
   updatePassword,
