@@ -2,22 +2,50 @@
 
 
 .product-option {
+  display: block;
+  box-sizing: border-box;
   background-color: gu-colour(neutral-100);
+  border: 1px solid gu-colour(neutral-86);
+  transition: .4s all;
+  cursor: pointer;
+  border-radius: 3px;
+  text-decoration: none;
+  color: gu-colour(neutral-7);
+
+  &:hover {
+    box-shadow: 0px 2px 10px 0px rgba(153,153,153,0.3);
+    border: 1px solid gu-colour(neutral-60);
+    .product-option__button {
+      .component-button--primary {
+        background-color: gu-colour(highlight-dark);
+      }
+    }
+  }
+}
+
+input[type="radio"]:checked + .product-option {
+  box-shadow: 0px 2px 10px 0px rgba(153,153,153,0.3);
+  border: 1px solid gu-colour(neutral-60);
+  .product-option__button {
+    .component-button--primary {
+      background-color: gu-colour(highlight-dark);
+    }
+  }
 }
 
 .product-option__title {
   @include gu-fontset-heading-sans;
-  padding: $gu-v-spacing/2.15 $gu-h-spacing/2;
-  background-color: gu-colour(neutral-86);
+  margin-bottom: 10px;
   position: relative;
   transition: .2s background;
 }
 
 .product-option__content {
-  padding: 5px;
+  padding: 15px 24px;
 }
 
 .product-option__price {
+  @include gu-fontset-body-sans;
   font-size: 36px;
   font-weight: 600;
 }
@@ -42,19 +70,28 @@
   }
 }
 
+.product-option__offer-container {
+  margin-top: 15px;
+}
+
 .product-option__offer {
-  @include gu-fontset-body-sans;
   padding: 5px;
-  background: gu-colour(neutral-7);
-  color: gu-colour(neutral-100);
-  font-weight: 600;
+  margin-top: 20px;
+  background: gu-colour(highlight-main);
+  color: gu-colour(neutral-7);
   line-height: 1.4;
+  @include gu-fontset-body-sans;
 }  
 
 .product-option__button {
   // padding-top: $gu-v-spacing/2;
-  padding-bottom: $gu-v-spacing;
+  // padding-bottom: $gu-v-spacing;
+  border-top: 1px solid gu-colour(neutral-86);
+  margin-left: 24px;
+  padding: 15px 24px 15px 0;
+
   .component-button {
     width: 100%;
   }
+  
 }

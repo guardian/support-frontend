@@ -113,6 +113,9 @@ const content = (
             You can cancel your subscription at any time
         </ProductPageInfoChip>
       </Content>
+
+      <ProductBlock countryGroupId={countryGroupId} />
+      <AdFreeSection headingSize={2} />
       <IndependentJournalismSection />
       <PromotionPopUp />
       <ConsentBanner />

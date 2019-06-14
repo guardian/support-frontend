@@ -3,10 +3,14 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
-import HeadingBlock from 'components/headingBlock/headingBlock';
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Option } from 'helpers/types/option';
+
+// ----- Component Imports ----- //
+import HeadingBlock from 'components/headingBlock/headingBlock';
+import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
+
+import PaymentSelection from 'components/paymentSelection/paymentSelection';
 
 import './productPageHero.scss';
 
@@ -66,6 +70,14 @@ const HeroHeading = ({
   </div>
 );
 
+const PaymentSelectionContainer = () => (
+  <div className="payment-selection-container">
+    <LeftMarginSection>
+      <PaymentSelection />
+    </LeftMarginSection>
+  </div>
+);
+
 const ProductPageHero = ({
   overheading, heading, content, modifierClasses, children, appearance, hasCampaign,
 }: PropTypes) => (
@@ -73,11 +85,13 @@ const ProductPageHero = ({
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
     </HeroWrapper>
-    <HeroHeading {...{ hasCampaign }}>
+
+    <PaymentSelectionContainer />
+    {/* <HeroHeading {...{ hasCampaign }}>
       <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
-    </HeroHeading>
-    {content &&
-      <HeroHanger>{content}</HeroHanger>
+    </HeroHeading> */}
+    {content && null
+      // <HeroHanger>{content}</HeroHanger>
     }
   </header>
 );
