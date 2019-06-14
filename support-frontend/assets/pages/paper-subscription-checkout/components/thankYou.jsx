@@ -78,7 +78,7 @@ function ThankYouContent({
 }: PropTypes) {
 
   return (
-    <div>
+    <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
         <HeroPicture />
         <HeadingBlock

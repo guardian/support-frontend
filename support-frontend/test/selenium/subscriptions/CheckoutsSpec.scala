@@ -3,7 +3,7 @@ package selenium.subscriptions
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.subscriptions.pages.{DigitalPackCheckout, Register}
+import selenium.subscriptions.pages.{CheckoutPage, DigitalPackCheckout, PaperCheckout, Register}
 import selenium.util._
 
 class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
@@ -13,61 +13,74 @@ class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter w
 
   override implicit val patienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
 
-  before { driverConfig.reset() }
+  before {
+    driverConfig.reset()
+  }
 
   override def beforeAll(): Unit = {
     Config.printSummary(driverConfig.sessionId)
     Dependencies.dependencyCheck
   }
 
-  override def afterAll(): Unit = { driverConfig.quit() }
+  override def afterAll(): Unit = {
+    driverConfig.quit()
+  }
 
   feature("Digital Pack checkout") {
-    scenario("Credit card checkout") {
-      val testUser = new TestUser(driverConfig)
-      val checkoutPage = new DigitalPackCheckout(testUser)
+    scenario("Stripe checkout") {
+      testCheckout("Digital Pack", new DigitalPackCheckout)
+    }
+  }
 
-      Given("that a user goes to the Digital Pack checkout page")
-      goTo(checkoutPage)
+  feature("Paper checkout") {
+    scenario("Stripe checkout") {
+      testCheckout("Paper", new PaperCheckout)
+    }
+  }
 
-      Then("they should be redirected to register as an Identity user")
-      val register = Register(testUser, "digital")
-      assert(register.firstPageHasLoaded)
+  def testCheckout(checkoutName: String, checkoutPage: CheckoutPage): Unit = {
+    val testUser = new TestUser(driverConfig)
 
-      Given("that the user fills in their email address")
-      register.fillInEmail()
+    Given(s"that a user goes to the $checkoutName checkout page")
+    goTo(checkoutPage)
 
-      When("they click the next button")
-      register.next()
+    Then("they should be redirected to register as an Identity user")
+    val register = Register(testUser, "digital")
+    assert(register.firstPageHasLoaded)
 
-      Then("they should be taken to the second register page")
-      assert(register.secondPageHasLoaded)
+    Given("that the user fills in their email address")
+    register.fillInEmail()
 
-      Given("that the user fills in the rest of their details")
-      register.fillInPersonalDetails()
+    When("they click the next button")
+    register.next()
 
-      When("they click the create account button")
-      register.createAccount()
+    Then("they should be taken to the second register page")
+    assert(register.secondPageHasLoaded)
 
-      Then("they should be redirected to the Digital Pack checkout page")
-      assert(checkoutPage.pageHasLoaded)
+    Given("that the user fills in the rest of their details")
+    register.fillInPersonalDetails()
 
-      Given("The user fills in their details correctly")
-      checkoutPage.fillInAddress()
+    When("they click the create account button")
+    register.createAccount()
 
-      Given("that the user selects to pay with Stripe")
-      When("they press the Stripe payment button")
-      checkoutPage.selectStripePayment()
+    Then(s"they should be redirected to the $checkoutName checkout page")
+    assert(checkoutPage.pageHasLoaded)
 
-      When("they click continue to payment")
-      checkoutPage.clickSubmit
+    Given("The user fills in their details correctly")
+    checkoutPage.fillForm
 
-      And("the mock calls the backend using a test Stripe token")
+    Given("that the user selects to pay with Stripe")
+    When("they press the Stripe payment button")
+    checkoutPage.selectStripePaymentMethod()
 
-      Then("the thankyou page should display")
-      eventually {
-        assert(checkoutPage.thankYouPageHasLoaded)
-      }
+    When("they click continue to payment")
+    checkoutPage.clickSubmit
+
+    And("the mock calls the backend using a test Stripe token")
+
+    Then("the thankyou page should display")
+    eventually {
+      assert(checkoutPage.thankYouPageHasLoaded)
     }
   }
 }
