@@ -53,6 +53,7 @@ function PaymentMethodSelector(props: PropTypes) {
           >
             {paymentMethods.includes(DirectDebit) &&
             <RadioInput
+              inputId="qa-direct-debit"
               image={<SvgDirectDebitSymbol />}
               text="Direct debit"
               name="paymentMethod"
@@ -60,6 +61,7 @@ function PaymentMethodSelector(props: PropTypes) {
               onChange={() => props.setPaymentMethod(DirectDebit)}
             />}
             <RadioInput
+              inputId="qa-credit-card"
               image={<SvgNewCreditCard />}
               text="Credit/Debit card"
               name="paymentMethod"
@@ -68,6 +70,7 @@ function PaymentMethodSelector(props: PropTypes) {
             />
             {paymentMethods.includes(PayPal) &&
             <RadioInput
+              inputId="qa-paypal"
               image={<SvgPayPal />}
               text="PayPal"
               name="paymentMethod"

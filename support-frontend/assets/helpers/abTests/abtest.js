@@ -13,6 +13,7 @@ import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type AmountsRegions } from 'helpers/contributions';
 
 import { tests } from './abtestDefinitions';
+import { isPostDeployUser } from 'helpers/user/user';
 
 
 // ----- Types ----- //
@@ -146,7 +147,7 @@ function userInBreakpoint(audience: Audience): boolean {
 
 function userInTest(audiences: Audiences, mvtId: number, country: IsoCountry, countryGroupId: CountryGroupId) {
 
-  if (cookie.get('_post_deploy_user')) {
+  if (isPostDeployUser()) {
     return false;
   }
 

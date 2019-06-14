@@ -1,75 +1,43 @@
 package selenium.subscriptions.pages
 
-import org.openqa.selenium.WebDriver
+import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.selenium.Page
 import selenium.util.{Browser, Config, TestUser}
 
-class DigitalPackCheckout(region: String, testUser: TestUser)(implicit val webDriver: WebDriver) extends Page with Browser {
+class DigitalPackCheckout(testUser: TestUser)(implicit val webDriver: WebDriver) extends Page with Browser {
 
-  val url = s"${Config.supportFrontendUrl}/$region/subscribe/digital"
+  val url = s"${Config.supportFrontendUrl}/subscribe/digital/checkout"
 
-  private val contributeButton = cssSelector("#qa-contributions-landing-submit-contribution-button")
-
-  private val contributePayPalButton = className("paypal-button")
-
-  private val oneOffButton = cssSelector(".form__radio-group-label[for='contributionType-ONE_OFF']")
-  private val monthlyButton = cssSelector(".form__radio-group-label[for='contributionType-MONTHLY']")
-  private val annualButton = cssSelector(".form__radio-group-label[for='contributionType-ANNUAL']")
-
-  private val otherAmountButton = cssSelector(".form__radio-group-label[for='contributionAmount-other']")
-
-  private val otherAmount = id("contributionOther")
-
-  private val stripeSelector = cssSelector(".form__radio-group-label[for='paymentMethodSelector-Stripe']")
-  private val payPalSelector = cssSelector(".form__radio-group-label[for='paymentMethodSelector-PayPal']")
-  private val stateSelector = id("contributionState")
+  private val submitButton = id("qa-submit-button")
+  private val stripeSelector = id("qa-credit-card")
 
   private object RegisterFields {
-    private val firstName = id("contributionFirstName")
-    private val lastName = id("contributionLastName")
-    private val email = id("contributionEmail")
+    private val addressLineOne = id("billing-lineOne")
+    private val city = id("billing-city")
+    private val postcode = id("billing-postcode")
 
-    def fillIn(hasNameFields: Boolean) {
-
-      setValue(email, s"${testUser.username}@gu.com", clear = true)
-      if (hasNameFields) {
-        setValue(firstName, testUser.username, clear = true)
-        setValue(lastName, testUser.username, clear = true)
-      }
-    }
-
-    def clear(): Unit = {
-      clearValue(email)
-      clearValue(firstName)
-      clearValue(lastName)
+    def fillInAddress() {
+      setValue(addressLineOne, "Kings Place")
+      setValue(city, "London")
+      setValue(postcode, "N19GU")
     }
   }
 
-  def fillInPersonalDetails(hasNameFields: Boolean) {
-    RegisterFields.fillIn(hasNameFields)
+  def fillInAddress() {
+    RegisterFields.fillInAddress()
   }
 
-  def clearForm(): Unit = RegisterFields.clear()
-
-  def selectState: Unit = setSingleSelectionValue(stateSelector, "NY")
-
-  def selectStripePayment(): Unit = clickOn(stripeSelector)
+  def selectStripePayment(): Unit =  clickOn(stripeSelector)
 
   def pageHasLoaded: Boolean = {
-    pageHasElement(contributeButton)
-    elementIsClickable(contributeButton)
+    pageHasElement(submitButton)
+    elementIsClickable(submitButton)
   }
 
-  def clickContribute: Unit = clickOn(contributeButton)
+  def thankYouPageHasLoaded: Boolean = {
+    pageHasElement(className("thank-you-stage"))
+  }
 
-  def clickOneOff: Unit = clickOn(oneOffButton)
 
-  def clickMonthly: Unit = clickOn(monthlyButton)
-
-  def clickAnnual: Unit = clickOn(annualButton)
-
-  def clickOtherAmount: Unit = clickOn(otherAmountButton)
-
-  def enterAmount(amount: Double): Unit = setValueSlowly(otherAmount, amount.toString)
-
+  def clickSubmit: Unit = clickOn(submitButton)
 }
