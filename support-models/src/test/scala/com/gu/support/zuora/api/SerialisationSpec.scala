@@ -98,10 +98,10 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
 
   "IntroductoryPriceRatePlanCharge" should "serialise correctly" in {
     val correct = parse(
-      """{
+      s"""{
         "ProductRatePlanChargeId" : "123",
         "Price" : 6,
-        "TriggerDate" : "2019-06-11",
+        "TriggerDate" : "${LocalDate.now}",
         "TriggerEvent" : "SpecificDate"
       }""").right.get
 
