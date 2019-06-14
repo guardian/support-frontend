@@ -36,6 +36,6 @@ function RadioInput({
 RadioInput.defaultProps = {
   appearance: 'normal',
   image: null,
-  inputId: '',
+  inputId: null,
 };
 export { RadioInput };
