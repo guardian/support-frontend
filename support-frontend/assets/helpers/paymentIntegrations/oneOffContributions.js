@@ -166,8 +166,6 @@ function renderThankYouPageWithCohort(
     setUserCohort('signed-in-verified');
     setThankYouPageStage('thankYou');
   }
-
-  setThankYouPageStage('thankYou');
 }
 
 // Object is expected to have structure:

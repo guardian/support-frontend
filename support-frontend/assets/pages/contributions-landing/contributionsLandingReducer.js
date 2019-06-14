@@ -312,6 +312,8 @@ function createFormReducer() {
       // guest registration token is present
       case 'SET_THANK_YOU_PAGE_STAGE':
         if ((action.thankYouPageStage === 'thankYouSetPassword')
+          // TBD: uncomment line below for one-off cohort 4 ('guest') targeting
+          // && state.contributionType !== 'ONE_OFF'
           && (!state.guestAccountCreationToken || !state.formData.email)) {
           return { ...state, thankYouPageStage: 'thankYou' };
         }
