@@ -480,7 +480,6 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(enrichedPaymentMock.email)
             .thenReturn(Some("a@b.com"))
           when(enrichedPaymentMock.guestAccountCreationToken).thenReturn(None)
-          when(enrichedPaymentMock.signInDetails).thenReturn(None)
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")
@@ -593,7 +592,6 @@ class PaypalControllerSpec extends PlaySpec with Status {
           when(enrichedPaymentMock.email)
             .thenReturn(Some("a@b.com"))
           when(enrichedPaymentMock.guestAccountCreationToken).thenReturn(None)
-          when(enrichedPaymentMock.signInDetails).thenReturn(None)
         }
 
         val executePaymentRequest = FakeRequest("POST", "/contribute/one-off/paypal/execute-payment")

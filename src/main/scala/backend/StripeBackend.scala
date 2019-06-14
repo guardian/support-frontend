@@ -16,7 +16,6 @@ import model.db.ContributionData
 import model.email.ContributorRow
 import model.stripe._
 import play.api.libs.ws.WSClient
-import services.IdentityClient.UserSignInDetailsResponse.UserSignInDetails
 import services._
 import util.EnvironmentBasedBuilder
 
@@ -44,19 +43,12 @@ class StripeBackend(
 
         cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
-        val identityIdWithGuestAccountCreationTokenFuture = getOrCreateIdentityIdFromEmail(chargeData.paymentData.email)
-        val userSignInDetailsFuture = getUserSignInDetailsFromEmail(chargeData.paymentData.email)
-
-        for {
-          identityIdWithGuestAccountCreationToken <- identityIdWithGuestAccountCreationTokenFuture
-          userSignInDetails <- userSignInDetailsFuture
-        } yield {
+        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email).map { identityIdWithGuestAccountCreationToken =>
           postPaymentTasks(chargeData.paymentData.email, chargeData, charge, clientBrowserInfo, identityIdWithGuestAccountCreationToken.map(_.identityId))
 
           StripeCreateChargeResponse.fromCharge(
             charge,
-            identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken),
-            userSignInDetails
+            identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken)
           )
         }
       }
@@ -100,15 +92,6 @@ class StripeBackend(
         None
       },
       identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken)
-    )
-
-  private def getUserSignInDetailsFromEmail(email: String): Future[Option[UserSignInDetails]] =
-    identityService.getUserSignInDetailsFromEmail(email).fold(
-      err => {
-        logger.warn(s"unable to get sign in details for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
-        None
-      },
-      userSignInDetails => Some(userSignInDetails)
     )
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {

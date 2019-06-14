@@ -16,7 +16,6 @@ import model.acquisition.PaypalAcquisition
 import model.db.ContributionData
 import model.email.ContributorRow
 import model.paypal._
-import services.IdentityClient.UserSignInDetailsResponse.UserSignInDetails
 import services._
 import util.EnvironmentBasedBuilder
 
@@ -71,7 +70,7 @@ class PaypalBackend(
           }
 
           // The app doesn't need the guest account token in the response, because it has no 'set password' step after payment
-          EnrichedPaypalPayment(payment, maybeEmail, guestAccountCreationToken = None, signInDetails = None)
+          EnrichedPaypalPayment(payment, maybeEmail, guestAccountCreationToken = None)
         }
       )
 
@@ -84,16 +83,10 @@ class PaypalBackend(
       .semiflatMap { payment =>
         cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
 
-        val identityIdWithGuestAccountCreationTokenFuture = getOrCreateIdentityIdFromEmail(executePaymentData.email)
-        val userSignInDetailsFuture = getUserSignInDetailsFromEmail(executePaymentData.email)
-
-        for {
-          identityIdWithGuestAccountCreationToken <- identityIdWithGuestAccountCreationTokenFuture
-          userSignInDetails <- userSignInDetailsFuture
-        } yield {
+        getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityIdWithGuestAccountCreationToken =>
           postPaymentTasks(payment, executePaymentData.email, identityIdWithGuestAccountCreationToken.map(_.identityId), executePaymentData.acquisitionData, clientBrowserInfo)
 
-          EnrichedPaypalPayment(payment, Some(executePaymentData.email), identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken), userSignInDetails)
+          EnrichedPaypalPayment(payment, Some(executePaymentData.email), identityIdWithGuestAccountCreationToken.flatMap(_.guestAccountCreationToken))
         }
       }
 
@@ -152,15 +145,6 @@ class PaypalBackend(
         },
         identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken)
       )
-
-  private def getUserSignInDetailsFromEmail(email: String): Future[Option[UserSignInDetails]] =
-    identityService.getUserSignInDetailsFromEmail(email).fold(
-      err => {
-        logger.warn(s"unable to get sign in details for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
-        None
-      },
-      userSignInDetails => Some(userSignInDetails)
-    )
 
   private def insertContributionDataIntoDatabase(contributionData: ContributionData): EitherT[Future, BackendError, Unit] = {
     // log so that if something goes wrong we can reconstruct the missing data from the logs
