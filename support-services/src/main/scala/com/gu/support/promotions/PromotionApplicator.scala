@@ -86,7 +86,8 @@ class IntroductoryPriceApplicator(introductoryPriceBenefit: IntroductoryPriceBen
     for {
       recurringRatePlan <- subscriptionData.ratePlanData.headOption
       recurringProductRatePlanId = recurringRatePlan.ratePlan.productRatePlanId
-      productRatePlansForEnvironment <- GuardianWeekly.ratePlans.find(_._2.exists(_.id == recurringProductRatePlanId)).map(_._2)
+      weeklyProductRatePlans = GuardianWeekly.ratePlans.values
+      productRatePlansForEnvironment <- weeklyProductRatePlans.find(_.exists(_.id == recurringProductRatePlanId))
       recurringProductRatePlan <- productRatePlansForEnvironment.find(_.id == recurringProductRatePlanId)
       introductoryProductRatePlan <- productRatePlansForEnvironment.find(equivalentSixWeeklyProductRatePlan(recurringProductRatePlan))
       introductoryProductRatePlanChargeId <- introductoryProductRatePlan.productRatePlanChargeId
