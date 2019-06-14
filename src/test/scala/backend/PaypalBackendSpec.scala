@@ -15,7 +15,6 @@ import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{Matchers, WordSpec}
-import services.IdentityClient.UserSignInDetailsResponse.UserSignInDetails
 import services._
 import util.FutureEitherValues
 
@@ -81,11 +80,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(dbError))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
     EitherT.right(Future.successful(IdentityIdWithGuestAccountCreationToken(1L, Some("guest-token"))))
-  val identityUserDetailsResponse: EitherT[Future, IdentityClient.ContextualError, UserSignInDetails] =
-    EitherT.right(Future.successful(UserSignInDetails(true, false, false, false, false)))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityIdWithGuestAccountCreationToken] =
-    EitherT.left(Future.successful(identityError))
-  val identityUserDetailsResponseError: EitherT[Future, IdentityClient.ContextualError, UserSignInDetails] =
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
@@ -167,12 +162,11 @@ class PaypalBackendSpec
       "return successful payment response even if identityService, ophanService, " +
         "databaseService and emailService fail" in new PaypalBackendFixture {
         populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None, None)
+        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-
         paypalBackend
           .capturePayment(capturePaypalPaymentData, clientBrowserInfo)
           .futureRight shouldBe enrichedPaypalPaymentMock
@@ -191,29 +185,22 @@ class PaypalBackendSpec
       "return successful payment response even if identityService, " +
         "ophanService, databaseService and emailService fail" in new PaypalBackendFixture {
         populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None, None)
+        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None)
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-        when(mockIdentityService.getUserSignInDetailsFromEmail("email@email.com")).thenReturn(identityUserDetailsResponseError)
 
         paypalBackend.executePayment(executePaypalPaymentData, clientBrowserInfo).futureRight shouldBe enrichedPaypalPaymentMock
       }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new PaypalBackendFixture {
         populatePaymentMock()
-        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(
-          paymentMock,
-          Some(paymentMock.getPayer.getPayerInfo.getEmail),
-          Some("guest-token"),
-          Some(UserSignInDetails(true, false, false, false, false))
-        )
+        val enrichedPaypalPaymentMock = EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), Some("guest-token"))
         when(mockOphanService.submitAcquisition(any())(any())).thenReturn(acquisitionResponseError)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
-        when(mockIdentityService.getUserSignInDetailsFromEmail("email@email.com")).thenReturn(identityUserDetailsResponse)
 
         paypalBackend.executePayment(executePaypalPaymentData, clientBrowserInfo).futureRight shouldBe enrichedPaypalPaymentMock
       }

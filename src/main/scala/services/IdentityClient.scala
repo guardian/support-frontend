@@ -60,14 +60,6 @@ class IdentityClient private (config: IdentityConfig)(implicit ws: WSClient, poo
     // However, this would require additional re-factorisation which is getting deferred to another PR.
     .leftMap(error => ContextualError(error, GetUser(email)))
 
-  def getUserDetails(email: String): Result[UserSignInDetailsResponse] =
-    executeRequest[UserSignInDetailsResponse] {
-      requestForPath("/user/sign-in-details")
-        .withMethod("GET")
-        .withQueryStringParameters("emailAddress" -> email)
-    }
-    .leftMap(error => ContextualError(error, GetUserDetails(email)))
-
   def createGuestAccount(email: String): Result[GuestRegistrationResponse] =
     executeRequest[GuestRegistrationResponse] {
       requestForPath("/guest")
@@ -138,25 +130,6 @@ object IdentityClient extends StrictLogging {
     @JsonCodec case class User(id: Long)
   }
 
-  // Models the response of successfully looking up user details via email address.
-  //
-  // Example response:
-  // =================
-  // {
-  //  "status": "ok",
-  //  "userSignInDetails": {
-  //      "hasAccount": true,
-  //      "hasPassword": true,
-  //      "isUserEmailValidated": true,
-  //      "hasGoogleSocialLink": false,
-  //      "hasFacebookSocialLink": false
-  // }
-  @JsonCodec case class UserSignInDetailsResponse(userSignInDetails: UserSignInDetailsResponse.UserSignInDetails)
-
-  object UserSignInDetailsResponse {
-    @JsonCodec case class UserSignInDetails(hasAccount: Boolean, hasPassword: Boolean, isUserEmailValidated: Boolean, hasGoogleSocialLink: Boolean, hasFacebookSocialLink: Boolean)
-  }
-
   // Models an error created by a request to the identity client; either:
   // - an 'underlying' error occurred e.g. network error
   // - the client failed to correctly deserialize the JSON result
@@ -206,7 +179,6 @@ object IdentityClient extends StrictLogging {
 
   sealed trait Action
   case class GetUser(email: String) extends Action
-  case class GetUserDetails(email: String) extends Action
   case class CreateGuestAccount(email: String) extends Action
 
   // Allows for the creation of a useful monad M[A] = EitherT[Future, ContextualError, A]

@@ -6,16 +6,12 @@ import com.typesafe.scalalogging.StrictLogging
 import play.api.libs.ws.WSClient
 import conf.IdentityConfig
 import model.DefaultThreadPool
-import services.IdentityClient.UserSignInDetailsResponse.UserSignInDetails
-import services.IdentityClient.{ApiError, ContextualError, GuestRegistrationResponse, UserSignInDetailsResponse}
+import services.IdentityClient.{ApiError, ContextualError, GuestRegistrationResponse}
 
 trait IdentityService extends StrictLogging {
 
   // Should return the identity id associated with the email, or None if there isn't one.
   def getIdentityIdFromEmail(email: String): IdentityClient.Result[Option[Long]]
-
-  // Should return the sign in details associated with the email
-  def getUserSignInDetailsFromEmail(email: String): IdentityClient.Result[UserSignInDetails]
 
   // Should return the identity id of the created account along with an optional guest account token.
   def createGuestAccount(email: String): IdentityClient.Result[IdentityIdWithGuestAccountCreationToken]
@@ -47,9 +43,6 @@ class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThr
       case ContextualError(error: ApiError, _) if error.isNotFound => Option.empty[Long]
     }
 
-  override def getUserSignInDetailsFromEmail(email: String): IdentityClient.Result[UserSignInDetails] =
-    client.getUserDetails(email).map(response => response.userSignInDetails)
-
   override def createGuestAccount(email: String): IdentityClient.Result[IdentityIdWithGuestAccountCreationToken] =
     client.createGuestAccount(email).map { response =>
       // Logs are only retained for 14 days so we're OK to log email address
@@ -60,13 +53,8 @@ class GuardianIdentityService (client: IdentityClient)(implicit pool: DefaultThr
   override def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityIdWithGuestAccountCreationToken] =
     for {
       preExistingIdentityId <- getIdentityIdFromEmail(email)
-      userIdWithGuestAccountCreationToken <- preExistingIdentityId match {
-        case None =>
-          createGuestAccount(email)
-        case Some(id) =>
-          // pure lifts the identity id into the monadic context.
-          Monad[IdentityClient.Result].pure(IdentityIdWithGuestAccountCreationToken(id, None))
-      }
+      // pure lifts the identity id into the monadic context.
+      userIdWithGuestAccountCreationToken <- preExistingIdentityId.fold(createGuestAccount(email))(id => Monad[IdentityClient.Result].pure(IdentityIdWithGuestAccountCreationToken(id, None)))
     } yield userIdWithGuestAccountCreationToken
 }
 

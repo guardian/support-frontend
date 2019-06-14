@@ -24,7 +24,6 @@ import play.api.test.Helpers._
 import play.api.test._
 import play.core.DefaultWebCommands
 import router.Routes
-import services.IdentityClient.UserSignInDetailsResponse.UserSignInDetails
 import util.RequestBasedProvider
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,7 +43,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val mockStripeRequestBasedProvider: RequestBasedProvider[StripeBackend] =
     mock[RequestBasedProvider[StripeBackend]]
 
-  val stripeChargeSuccessMock: StripeCreateChargeResponse = StripeCreateChargeResponse.fromCharge(mockCharge, None, Some(UserSignInDetails(true, false, false, false, false)))
+  val stripeChargeSuccessMock: StripeCreateChargeResponse = StripeCreateChargeResponse.fromCharge(mockCharge, None)
 
   val stripeServiceResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     EitherT.right(Future.successful(stripeChargeSuccessMock)).leftMap(StripeApiError.fromStripeException)

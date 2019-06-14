@@ -2,16 +2,14 @@ package model.stripe
 
 import com.stripe.model.Charge
 import io.circe.generic.JsonCodec
-import services.IdentityClient.UserSignInDetailsResponse.UserSignInDetails
 
-@JsonCodec case class StripeCreateChargeResponse private (currency: String, amount: BigDecimal, guestAccountCreationToken: Option[String], userSignInDetails: Option[UserSignInDetails])
+@JsonCodec case class StripeCreateChargeResponse private (currency: String, amount: BigDecimal, guestAccountCreationToken: Option[String])
 
 object StripeCreateChargeResponse {
-  def fromCharge(charge: Charge, guestAccountCreationToken: Option[String], userSignInDetails: Option[UserSignInDetails]): StripeCreateChargeResponse =
+  def fromCharge(charge: Charge, guestAccountCreationToken: Option[String]): StripeCreateChargeResponse =
     StripeCreateChargeResponse(
       charge.getCurrency,
       BigDecimal(charge.getAmount) / 100,
-      guestAccountCreationToken,
-      userSignInDetails
+      guestAccountCreationToken
     )
 }
