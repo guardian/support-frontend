@@ -3,7 +3,7 @@ package selenium.subscriptions
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.subscriptions.pages.{DigitalPackSubs, PaperSubs, ProductPage, SubsLandingPage, WeeklySubs}
+import selenium.subscriptions.pages.{DigitalPackProductPage, PaperSubs, ProductPage, SubsLandingPage, WeeklySubs}
 import selenium.util._
 
 class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
@@ -44,7 +44,7 @@ class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
   feature("Digital Pack landing page") {
     scenario("Basic loading") {
-      testPageLoads(new DigitalPackSubs())
+      testPageLoads(new DigitalPackProductPage())
     }
   }
 

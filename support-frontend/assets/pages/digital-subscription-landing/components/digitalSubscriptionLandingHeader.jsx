@@ -185,7 +185,7 @@ function CampaignHeader(props: PropTypes) {
       overheading={copy.heading}
       heading={copy.subHeading}
       modifierClasses={['digital-campaign']}
-      content={<AnchorButton aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+      content={<AnchorButton id="qa-subscription-options" aria-label="See Subscription options for Digital Pack" onClick={sendTrackingEventsOnClick('options_cta_click', 'DigitalPack', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       hasCampaign
     >
       <div className="the-moment-hero">
