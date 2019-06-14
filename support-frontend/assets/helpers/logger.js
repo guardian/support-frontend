@@ -26,7 +26,7 @@ const logException = (ex: string, context?: Object): void => {
     );
 
     if (window.console && console.error) {
-      console.error('sentry', ex);
+      console.error('sentry exception: ', ex);
     }
   });
 };
