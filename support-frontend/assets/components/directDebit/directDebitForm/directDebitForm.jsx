@@ -236,6 +236,7 @@ function ConfirmationInput(props: {phase: Phase, checked: boolean, onChange: Fun
           checked={props.checked}
         />
         <label
+          id="qa-confirmation-input"
           className="component-direct-debit-form__confirmation-label"
           htmlFor="confirmation-input"
         />
@@ -284,6 +285,7 @@ function PaymentButton(props: {
   if (props.phase === 'entry') {
     return (
       <button
+        id="qa-submit-button-1"
         className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
         onClick={props.onPayClick}
       >
@@ -306,6 +308,7 @@ function PaymentButton(props: {
           <span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">Back</span>
         </button>
         <button
+          id="qa-submit-button-2"
           className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
           onClick={props.onConfirmClick}
         >

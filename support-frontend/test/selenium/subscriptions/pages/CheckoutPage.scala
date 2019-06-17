@@ -6,8 +6,11 @@ import selenium.util.Browser
 trait CheckoutPage extends Page with Browser {
   private val stripeRadioButton = id("qa-credit-card")
   private val submitButton = id("qa-submit-button")
+  private val directDebitButton = id("qa-direct-debit")
 
   def selectStripePaymentMethod(): Unit = clickOn(stripeRadioButton)
+
+  def selectDirectDebitPaymentMethod(): Unit = clickOn(directDebitButton)
 
   def pageHasLoaded: Boolean = {
     pageHasElement(submitButton)

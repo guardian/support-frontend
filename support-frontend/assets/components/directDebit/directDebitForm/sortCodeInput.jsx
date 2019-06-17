@@ -15,16 +15,19 @@ function SortCodeInput(props: SortCodePropTypes) {
   const editable = (
     <span>
       <SortCodeField
+        id="qa-sort-code-1"
         value={props.sortCodeArray[0]}
         onChange={event => props.onChange(0, event)}
       />
       <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
       <SortCodeField
+        id="qa-sort-code-2"
         value={props.sortCodeArray[1]}
         onChange={event => props.onChange(1, event)}
       />
       <span className="component-direct-debit-form__sort-code-separator">&mdash;</span>
       <SortCodeField
+        id="qa-sort-code-3"
         value={props.sortCodeArray[2]}
         onChange={event => props.onChange(2, event)}
       />
@@ -50,12 +53,13 @@ function SortCodeInput(props: SortCodePropTypes) {
 // ----- Auxiliary components ----- //
 
 function SortCodeField(props: {
+  id: string,
   value: string,
   onChange: (SyntheticInputEvent<HTMLInputElement>) => void
 }) {
   return (
     <input
-      id="sort-code-field"
+      id={props.id}
       value={props.value}
       onChange={props.onChange}
       type="tel"
