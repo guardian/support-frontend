@@ -20,11 +20,12 @@ class AppLoader extends ApplicationLoader with StrictLogging {
         ComposedConfigurationLocation(List(privateConfig, publicConfig))
 
       case DevIdentity(_) =>
-        //Use a local private config file in DEV
-        val privateConfig = FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))
+        //If a local private config file exists then override any DEV Parameter Store config
+        val privateConfigLocal = FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))
+        val privateConfigSSM = SSMConfigurationLocation(s"/support/frontend/DEV")
         val publicConfig = ResourceConfigurationLocation(s"DEV.public.conf")
 
-        ComposedConfigurationLocation(List(privateConfig, publicConfig))
+        ComposedConfigurationLocation(List(privateConfigLocal, privateConfigSSM, publicConfig))
     }
 
     initialConfiguration ++ Configuration(loadedConfig)
