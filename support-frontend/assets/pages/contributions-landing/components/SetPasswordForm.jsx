@@ -5,8 +5,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { type Dispatch } from 'redux';
-
 import { classNameWithModifiers } from 'helpers/utilities';
+
+import type { ContributionType } from 'helpers/contributions';
 import { setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import SvgPasswordKey from 'components/svgs/passwordKey';
@@ -37,6 +38,7 @@ type PropTypes = {|
   csrf: CsrfState,
   passwordError: boolean,
   setPasswordError: (boolean) => void,
+  contributionType: ContributionType
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -50,6 +52,7 @@ const mapStateToProps = state => ({
   guestAccountCreationToken: state.page.form.guestAccountCreationToken,
   csrf: state.page.csrf,
   passwordError: state.page.form.setPasswordData.passwordError,
+  contributionType: state.page.form.contributionType,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -78,7 +81,7 @@ function onSubmit(props: PropTypes): Event => void {
   return (event) => {
     props.setPasswordHasBeenSubmitted();
     event.preventDefault();
-    trackComponentClick('set-password');
+    trackComponentClick(`set-password-${props.contributionType}`);
     if (!(event.target: any).checkValidity()) {
       return;
     }
