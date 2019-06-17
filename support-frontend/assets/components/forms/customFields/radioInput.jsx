@@ -7,6 +7,7 @@ import React, { type Node } from 'react';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import './radioInput.scss';
+import type { Option } from 'helpers/types/option';
 
 // ----- Types ----- //
 
@@ -14,7 +15,7 @@ type PropTypes = {
   text: Node | string,
   appearance: 'normal' | 'group',
   image?: Node,
-  inputId?: string,
+  inputId?: Option<string>,
 };
 
 // ----- Component ----- //
