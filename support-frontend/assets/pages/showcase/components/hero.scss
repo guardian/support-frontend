@@ -1,7 +1,7 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
 .showcase-hero {
-  background: gu-colour(highlight-main);
+  background: gu-colour(sport-dark);
   color: gu-colour(neutral-7);
   
   .component-left-margin-section__content {
@@ -45,18 +45,18 @@
   will-change: transform;
   opacity: 0;
 
-  &:nth-of-type(1)  {
-    animation: animateInLeft 0.8s 1s ease-out forwards 1;
-  }
-  &:nth-of-type(2)  {
-    animation: animateInLeft 0.8s 1.30s ease-out forwards 1;
-  }
-  &:nth-of-type(3)  {
-    animation: animateInRight 0.8s 1.15s ease-out forwards 1;
-  }
-  &:nth-of-type(4)  {
-    animation: animateInRight 0.8s 1.45s ease-out forwards 1;
-  }
+  // &:nth-of-type(1)  {
+  //   animation: animateInLeft 0.8s 1s ease-out forwards 1;
+  // }
+  // &:nth-of-type(2)  {
+  //   animation: animateInLeft 0.8s 1.30s ease-out forwards 1;
+  // }
+  // &:nth-of-type(3)  {
+  //   animation: animateInRight 0.8s 1.15s ease-out forwards 1;
+  // }
+  // &:nth-of-type(4)  {
+  //   animation: animateInRight 0.8s 1.45s ease-out forwards 1;
+  // }
 
   @keyframes animateInLeft {
     0% {
@@ -120,8 +120,8 @@
 }
 
 .showcase-hero-heading svg {
-  width: 100%;
-  margin-top: $gu-h-spacing;
+  width: 90%;
+  margin: $gu-h-spacing;
   height: auto;
 }
 
@@ -149,11 +149,6 @@
 
   .showcase-hero .component-left-margin-section__content {
     margin: 0 $gu-h-spacing/2;
-    border-right: 1px solid rgba(0, 0, 0, .1);
-  }
-
-  .showcase-hero__caption {
-    display: none;
   }
 
   .showcase-hero__image {
@@ -182,6 +177,11 @@
       animation: animateInRight 0.8s 1.45s ease-out forwards 1;
     }
   }
+}
+
+.showcase-hero__caption {
+  color: gu-colour(neutral-100);
+  margin: $gu-h-spacing * 1.5;
 }
 
 @include mq($from: desktop) {
@@ -216,6 +216,7 @@
     left: 0;
     top: 0;
     width: gu-span(3);
+    color: gu-colour(neutral-100);
   }
 
   .showcase-hero__image {
