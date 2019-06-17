@@ -3,7 +3,7 @@ package wiring
 import java.io.File
 
 import com.gu.{AppIdentity, AwsIdentity, DevIdentity}
-import com.gu.conf.{ConfigurationLoader, FileConfigurationLocation, SSMConfigurationLocation}
+import com.gu.conf._
 import com.typesafe.scalalogging.StrictLogging
 import play.api.ApplicationLoader.Context
 import play.api._
@@ -13,12 +13,19 @@ class AppLoader extends ApplicationLoader with StrictLogging {
   private def getParameterStoreConfig(initialConfiguration: Configuration): Configuration = {
     val identity = AppIdentity.whoAmI(defaultAppName = "support-frontend")
     val loadedConfig = ConfigurationLoader.load(identity) {
-      case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$stack/$app/$stage")
-      case DevIdentity(app) =>
-        SSMConfigurationLocation(s"/support/frontend/CODE")
-//        FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))  //assume conf is available locally
+      case AwsIdentity(app, stack, stage, _) =>
+        val privateConfig = SSMConfigurationLocation(s"/$stack/$app/$stage")
+        val publicConfig = ResourceConfigurationLocation(s"$stage.public.conf")
+
+        ComposedConfigurationLocation(List(privateConfig, publicConfig))
+
+      case DevIdentity(_) =>
+        //Use a local private config file in DEV
+        val privateConfig = FileConfigurationLocation(new File(s"/etc/gu/support-frontend.private.conf"))
+        val publicConfig = ResourceConfigurationLocation(s"DEV.public.conf")
+
+        ComposedConfigurationLocation(List(privateConfig, publicConfig))
     }
-    println(s"LOADED SSM CONFIG: $loadedConfig")
 
     initialConfiguration ++ Configuration(loadedConfig)
   }
@@ -32,8 +39,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     val contextWithConfig = context.copy(initialConfiguration = getParameterStoreConfig(context.initialConfiguration))
 
     try {
-//      (new BuiltInComponentsFromContext(contextWithConfig) with AppComponents).application
-      new AppComponents(contextWithConfig).application
+      (new BuiltInComponentsFromContext(contextWithConfig) with AppComponents).application
     } catch {
       case err: Throwable => {
         logger.error("Could not start application", err)
