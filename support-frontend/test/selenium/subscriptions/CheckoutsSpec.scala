@@ -3,7 +3,7 @@ package selenium.subscriptions
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Minute, Seconds, Span}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FeatureSpec, GivenWhenThen}
-import selenium.subscriptions.pages.{CheckoutPage, DigitalPackCheckout, PaperCheckout, Register}
+import selenium.subscriptions.pages.{CheckoutPage, DigitalPackCheckout, DigitalPackSubs, PaperCheckout, Register}
 import selenium.util._
 
 class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll with Browser with Eventually {
@@ -40,6 +40,10 @@ class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter w
 
   def testCheckout(checkoutName: String, checkoutPage: CheckoutPage): Unit = {
     val testUser = new TestUser(driverConfig)
+
+    val landingPage = new DigitalPackSubs()
+    Given("that a user goes to the UK landing page")
+    goTo(landingPage)
 
     Given(s"that a user goes to the $checkoutName checkout page")
     goTo(checkoutPage)
