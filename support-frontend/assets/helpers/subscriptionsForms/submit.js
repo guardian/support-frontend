@@ -56,6 +56,7 @@ import {
   openDialogBox,
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/stripeCheckout';
+import { isPostDeployUser } from 'helpers/user/user';
 
 // ----- Functions ----- //
 
@@ -172,9 +173,17 @@ function showStripe(
   currency: IsoCurrency,
   email: string,
 ) {
-  loadStripe()
-    .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
-    .then(stripe => openDialogBox(stripe, price, email));
+  if (isPostDeployUser()) {
+    onAuthorised({
+      paymentMethod: Stripe,
+      token: 'tok_visa',
+      stripePaymentMethod: 'StripeCheckout',
+    });
+  } else {
+    loadStripe()
+      .then(() => setupStripeCheckout(onAuthorised, 'REGULAR', currency, isTestUser))
+      .then(stripe => openDialogBox(stripe, price, email));
+  }
 }
 
 function showPaymentMethod(

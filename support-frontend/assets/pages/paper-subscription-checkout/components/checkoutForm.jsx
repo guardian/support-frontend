@@ -187,12 +187,14 @@ function CheckoutForm(props: PropTypes) {
                 legend="Is the billing address the same as the delivery address?"
               >
                 <RadioInput
+                  inputId="qa-billing-address-same"
                   text="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
                   onChange={() => props.setBillingAddressIsSame(true)}
                 />
                 <RadioInput
+                  inputId="qa-billing-address-different"
                   text="No"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
@@ -249,7 +251,13 @@ function CheckoutForm(props: PropTypes) {
             submissionError={props.submissionError}
           />
           <FormSection noBorder>
-            <Button aria-label={null} type="submit">Continue to payment</Button>
+            <Button
+              id="qa-submit-button"
+              aria-label={null}
+              type="submit"
+            >
+              Continue to payment
+            </Button>
             <DirectDebitPopUpForm
               buttonText="Subscribe with Direct Debit"
               onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
