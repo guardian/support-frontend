@@ -1,0 +1,162 @@
+# Template secrets config file, for reference only.
+# Secrets are stored in AWS Parameter Store.
+
+play.crypto.secret=
+identity.api.token=
+identity.test.users.secret=
+supportWorkers.arn=
+
+aws {
+  useEncryption=true
+  encryptionKeyId=
+}
+
+googleAuth {
+  clientId =
+  clientSecret =
+}
+
+sentry.dsn=
+
+gocardless {
+  token=
+  environment=
+}
+
+fastly {
+  serviceId =
+  apiToken =
+}
+
+# PROD only
+get-address-io-api.key =
+
+touchpoint.backend.environments {
+  # PROD only
+  PROD {
+    // IMPORTANT: Without the 'unused' secret,
+    // there is a parsing error
+    stripe {
+      AUD {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+      default {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+
+    }
+
+    // IMPORTANT: Without the 'unused' secret,
+    // there is a parsing error
+    oneOffStripe {
+      AUD {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+      default {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+
+    }
+    paypal {
+      paypal-environment =
+      nvp-version =
+      url=
+      user=
+      password=
+      signature=
+    }
+    gocardless {
+      token=
+      environment=
+    }
+  }
+
+  UAT {
+    // IMPORTANT: Without the 'unused' secret,
+    // there is a parsing error
+    stripe {
+      AUD {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+      default {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+
+    }
+
+    // IMPORTANT: Without the 'unused' secret,
+    // there is a parsing error
+    oneOffStripe {
+      AUD {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+      default {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+
+    }
+    paypal {
+      paypal-environment =
+      nvp-version =
+      url=
+      user=
+      password=
+      signature=
+    }
+    gocardless {
+      token=
+      environment=
+    }
+  }
+
+  # CODE only
+  SANDBOX {
+    // IMPORTANT: Without the 'unused' secret,
+    // there is a parsing error
+    stripe {
+      AUD {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+      default {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+
+    }
+
+    // IMPORTANT: Without the 'unused' secret,
+    // there is a parsing error
+    oneOffStripe {
+      AUD {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+      default {
+        api.key.public =
+        api.key.secret = "unused"
+      }
+
+    }
+    paypal {
+      paypal-environment =
+      nvp-version =
+      url=
+      user=
+      password=
+      signature=
+    }
+    gocardless {
+      token=
+      environment=
+    }
+  }
+}
