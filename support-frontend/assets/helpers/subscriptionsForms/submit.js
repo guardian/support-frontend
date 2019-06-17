@@ -57,6 +57,7 @@ import {
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import { isPostDeployUser } from 'helpers/user/user';
+import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 
 // ----- Functions ----- //
 
@@ -140,7 +141,7 @@ function buildRegularPaymentRequest(
 
   const product = {
     currency: currencyId,
-    billingPeriod,
+    billingPeriod: billingPeriod === SixWeekly ? Quarterly : billingPeriod,
     ...getOptions(fulfilmentOption, productOption),
   };
 

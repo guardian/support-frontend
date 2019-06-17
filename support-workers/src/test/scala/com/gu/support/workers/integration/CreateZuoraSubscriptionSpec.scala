@@ -4,8 +4,9 @@ import java.io.ByteArrayOutputStream
 
 import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvider}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
+import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.promotions.PromotionService
+import com.gu.support.promotions.{PromotionService, Promotions}
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
@@ -59,6 +60,10 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
 
   it should "create an Quarterly Guardian Weekly subscription" in {
     createSubscription(createGuardianWeeklySubscriptionJson(Quarterly))
+  }
+
+  it should "create an 6 for 6 Guardian Weekly subscription" in {
+    createSubscription(createGuardianWeeklySubscriptionJson(Quarterly, Some(GuardianWeekly.SixForSixPromoCode)))
   }
 
   private def createSubscription(json: String) = {
