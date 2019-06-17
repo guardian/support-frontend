@@ -61,6 +61,18 @@ class IdentityController(
       )
   }
 
+  def resetPassword(): Action[ResetPasswordRequest] = PrivateAction.async(circe.json[ResetPasswordRequest]) { implicit request =>
+    identityService
+      .resetPassword(request.body.email).map { res =>
+      if (res) {
+        SafeLogger.info(s"Successfully sent consents preferences email for ${request.body.email}")
+        Ok
+      } else {
+        warnAndReturn()
+      }
+    }
+  }
+
   def getUserType(maybeEmail: Option[String]): Action[AnyContent] = PrivateAction.async { implicit request =>
     maybeEmail.fold {
       SafeLogger.error(scrub"No email provided")
@@ -83,12 +95,17 @@ class IdentityController(
   }
 }
 
+case class SendMarketingRequest(email: String)
 object SendMarketingRequest {
   implicit val decoder: Decoder[SendMarketingRequest] = deriveDecoder
 }
-case class SendMarketingRequest(email: String)
 
+case class SetPasswordRequest(password: String, guestAccountRegistrationToken: String)
 object SetPasswordRequest {
   implicit val decoder: Decoder[SetPasswordRequest] = deriveDecoder
 }
-case class SetPasswordRequest(password: String, guestAccountRegistrationToken: String)
+
+case class ResetPasswordRequest(email: String)
+object ResetPasswordRequest {
+  implicit val decoder: Decoder[ResetPasswordRequest] = deriveDecoder
+}

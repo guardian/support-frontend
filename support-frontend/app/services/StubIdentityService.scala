@@ -25,6 +25,11 @@ class StubIdentityService extends IdentityService {
     Future.successful(true)
   }
 
+  def resetPassword(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
+    SafeLogger.info("Stubbed identity service active. Returning true (Successful response from Identity Reset Password API) ")
+    Future.successful(true)
+  }
+
   def setPasswordGuest(
     password: String,
     guestAccountRegistrationToken: String

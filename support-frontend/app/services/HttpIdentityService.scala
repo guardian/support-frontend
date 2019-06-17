@@ -75,7 +75,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
     val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
-    request(s"consent-email").post(payload).map { response =>
+    request("consent-email").post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
       if (validResponse) SafeLogger.info("Successful response from Identity Consent API")
       else SafeLogger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
@@ -83,6 +83,20 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     } recover {
       case e: Exception =>
         SafeLogger.error(scrub"Failed to update the user's marketing preferences $e")
+        false
+    }
+  }
+
+  def resetPassword(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
+    val payload = Json.obj("email" -> email)
+    request("pwd-reset/send-password-reset-email").post(payload).map { response =>
+      val validResponse = response.status >= 200 && response.status < 300
+      if (validResponse) SafeLogger.info("Successfully sent reset password email using Identity Reset Password API")
+      else SafeLogger.error(scrub"Failed to send reset password email using Identity Reset Password API: ${response.toString}")
+      validResponse
+    } recover {
+      case e: Exception =>
+        SafeLogger.error(scrub"Failed to send reset password email using Identity Reset Password API: $e")
         false
     }
   }
@@ -202,5 +216,6 @@ trait IdentityService {
     password: String,
     guestAccountRegistrationToken: String
   )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies]
+  def resetPassword(email: String)(implicit ec: ExecutionContext): Future[Boolean]
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
 }
