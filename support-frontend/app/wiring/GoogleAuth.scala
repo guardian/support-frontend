@@ -8,7 +8,7 @@ import play.filters.HttpFiltersComponents
 import controllers.{Login, routes}
 import play.api.mvc.AnyContent
 
-trait GoogleAuth { self: BuiltInComponentsFromContext with AhcWSComponents with HttpFiltersComponents with AppComponents =>
+trait GoogleAuth { self: BuiltInComponentsFromContext with AhcWSComponents with HttpFiltersComponents with ApplicationConfiguration =>
 
   private val googleAuthConfig = GoogleAuthConfig(
     appConfig.googleAuth.clientId,

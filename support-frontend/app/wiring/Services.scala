@@ -13,7 +13,7 @@ import services.stepfunctions.{Encryption, StateWrapper, SupportWorkersClient}
 import services._
 
 trait Services {
-  self: BuiltInComponentsFromContext with AppComponents with AhcWSComponents with PlayComponents =>
+  self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
 
   implicit private val implicitWs = wsClient
 
