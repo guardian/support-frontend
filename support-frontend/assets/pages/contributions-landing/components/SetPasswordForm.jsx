@@ -8,7 +8,7 @@ import { type Dispatch } from 'redux';
 import { classNameWithModifiers } from 'helpers/utilities';
 
 import type { ContributionType } from 'helpers/contributions';
-import { setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
+import { resetPassword, setPasswordGuest } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import SvgPasswordKey from 'components/svgs/passwordKey';
 import SvgEnvelope from 'components/svgs/envelope';
@@ -77,7 +77,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 
 // ----- Functions ----- //
 
-function onSubmit(props: PropTypes): Event => void {
+function onSubmitSetPasswordGuest(props: PropTypes): Event => void {
   return (event) => {
     props.setPasswordHasBeenSubmitted();
     event.preventDefault();
@@ -98,13 +98,34 @@ function onSubmit(props: PropTypes): Event => void {
   };
 }
 
+function onSubmitResetPassword(props: PropTypes): Event => void {
+  return (event) => {
+    props.setPasswordHasBeenSubmitted();
+    event.preventDefault();
+    trackComponentClick(`set-password-${props.contributionType}`);
+    if (!(event.target: any).checkValidity()) {
+      return;
+    }
+
+    // TODO: send user to thank you page with error if password was not set
+    resetPassword(props.email, props.csrf)
+      .then((response) => {
+        if (response === true) {
+          props.setThankYouPageStage('thankYouPasswordSet');
+        } else {
+          props.setPasswordError(true);
+        }
+      });
+  };
+}
+
 
 // ----- Render ----- //
 
-function SetPasswordForm(props: PropTypes) {
+function renderNewPasswordForm(props: PropTypes) {
   return (
-    <div className="set-password__form">
-      <form onSubmit={onSubmit(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
+    <div>
+      <form onSubmit={onSubmitSetPasswordGuest(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
         <ContributionTextInput
           id="email"
           name="contribution-email"
@@ -140,7 +161,7 @@ function SetPasswordForm(props: PropTypes) {
           aria-label="Create a guardian account"
           type="submit"
         >
-          Create a Guardian account
+        Create a Guardian account
         </Button>
         <Button
           appearance="greyHollow"
@@ -151,6 +172,53 @@ function SetPasswordForm(props: PropTypes) {
             props.setThankYouPageStage('thankYouPasswordDeclinedToSet');
           }}
         >
+        No thank you
+        </Button>
+      </form>
+      {props.passwordError === true ?
+        <div className="component-password-failure-message component-general-error-message">
+          <SvgExclamationAlternate /><span className="component-general-error-message__error-heading">{passwordErrorHeading}</span>
+          <span className="component-general-error-message__small-print">{passwordErrorMessage}</span>
+        </div> : null
+  }
+    </div>);
+}
+
+function renderPasswordResetForm(props: PropTypes) {
+  return (
+    <div>
+      <form onSubmit={onSubmitResetPassword(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
+        <ContributionTextInput
+          id="email"
+          name="contribution-email"
+          label="Email address"
+          value={props.email}
+          isValid={checkEmail(props.email)}
+          pattern={emailRegexPattern}
+          icon={<SvgEnvelope />}
+          autoComplete="email"
+          type="email"
+          errorMessage="Please enter a valid email address"
+          required
+          disabled
+        />
+        <Button
+          appearance="secondary"
+          modifierClasses={['create-account']}
+          aria-label="Create a guardian account"
+          type="submit"
+        >
+          Create a Guardian account
+        </Button>
+        <Button
+          appearance="greyHollow"
+          aria-label="No thank you"
+          onClick={
+            () => {
+              trackComponentClick('decline-to-reset-password');
+              props.setThankYouPageStage('thankYouPasswordDeclinedToSet');
+            }}
+        >
           No thank you
         </Button>
       </form>
@@ -160,6 +228,13 @@ function SetPasswordForm(props: PropTypes) {
           <span className="component-general-error-message__small-print">{passwordErrorMessage}</span>
         </div> : null
       }
+    </div>);
+}
+
+function SetPasswordForm(props: PropTypes) {
+  return (
+    <div className="set-password__form">
+      {renderNewPasswordForm(props)}
     </div>
   );
 

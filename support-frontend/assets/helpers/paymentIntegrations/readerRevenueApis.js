@@ -267,9 +267,31 @@ function setPasswordGuest(
     });
 }
 
+function resetPassword(
+  email: string,
+  csrf: CsrfState,
+): Promise<boolean> {
+
+  const data = { email };
+  return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestOptions(data, 'same-origin', 'POST', csrf)))
+    .then((response) => {
+      if (response.status === 200) {
+        return true;
+      }
+      logException('/contribute/reset-password endpoint returned an error');
+      return false;
+
+    })
+    .catch(() => {
+      logException('Error while trying to interact with /contribute/reset-password');
+      return false;
+    });
+}
+
 export {
   postRegularPaymentRequest,
   regularPaymentFieldsFromAuthorisation,
   PaymentSuccess,
   setPasswordGuest,
+  resetPassword,
 };
