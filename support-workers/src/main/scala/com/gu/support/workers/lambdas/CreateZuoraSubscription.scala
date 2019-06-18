@@ -86,6 +86,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     SendThankYouEmailState(
       state.requestId,
       state.user,
+      state.giftRecipient,
       state.product,
       state.paymentMethod,
       state.firstDeliveryDate,
@@ -111,6 +112,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   private def buildSubscriptionData(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
     val isTestUser = state.user.isTestUser
     val config = zuoraConfigProvider.get(isTestUser)
+    val readerType: ReaderType = state.giftRecipient match  {
+      case _: Some[GiftRecipient] => ReaderType.Gift
+      case _ => ReaderType.Direct
+    }
+
     state.product match {
       case c: Contribution => c.build(state.requestId, config)
       case d: DigitalPack => d.build(state.requestId, config, state.user.billingAddress.country, state.promoCode, promotionService, isTestUser)
@@ -121,6 +127,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         state.promoCode,
         state.firstDeliveryDate,
         promotionService,
+        readerType,
         isTestUser
       )
     }

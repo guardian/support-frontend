@@ -51,6 +51,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     CreateSalesforceContactState(
       state.requestId,
       state.user,
+      state.giftRecipient,
       state.product,
       paymentMethod,
       state.firstDeliveryDate,

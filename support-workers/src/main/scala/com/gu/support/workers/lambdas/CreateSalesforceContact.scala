@@ -55,6 +55,7 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
     CreateZuoraSubscriptionState(
       state.requestId,
       state.user,
+      state.giftRecipient,
       state.product,
       state.paymentMethod,
       state.firstDeliveryDate,

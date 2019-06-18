@@ -38,6 +38,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         CreateZuoraSubscriptionState(
           requestId = UUID.randomUUID(),
           user = state.user,
+          giftRecipient = state.giftRecipient,
           product = state.product,
           paymentMethod =  paymentMethod,
           firstDeliveryDate = None,
