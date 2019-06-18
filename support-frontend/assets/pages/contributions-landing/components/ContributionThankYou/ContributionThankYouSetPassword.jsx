@@ -20,6 +20,7 @@ type PropTypes = {|
   passwordFailed: boolean,
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
+  guestAccountCreationToken: ?string,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -31,6 +32,7 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   passwordFailed: state.page.form.passwordFailed,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
+  guestAccountCreationToken: state.page.form.guestAccountCreationToken,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -48,6 +50,9 @@ function ContributionThankYouSetPassword(props: PropTypes) {
   const oneOffBody = 'If you create an account and stay signed in on each of your devices, you’ll notice far fewer messages asking you for financial support. Please make sure you validate your account via your inbox.';
   const recurringTitle = 'Set up a free account to manage your payments';
   const recurringBody = 'If you stay signed in when you’re reading The Guardian as a contributor, you’ll no longer see messages asking you to support our journalism';
+  const resetTitle = 'Finish setting up your Guardian account';
+  const resetBodyP1 = 'As a valued contributor, we want to ensure you are having the best experience on our site. To stop seeing requests for support at the bottom of articles, or in pop-up banners, please sign in on each of the devices you use to access The Guardian – mobile, tablet, laptop or desktop.';
+  const resetBodyP2 = 'We just need to validate your email address and help you set a password – it only takes a minute.';
 
   const setPasswordCopy = {
     ONE_OFF: {
@@ -62,6 +67,10 @@ function ContributionThankYouSetPassword(props: PropTypes) {
       title: recurringTitle,
       body: recurringBody,
     },
+    RESET: {
+      title: resetTitle,
+      body: [resetBodyP1, resetBodyP2],
+    },
   };
 
   const renderDirectDebit = () => {
@@ -75,16 +84,31 @@ function ContributionThankYouSetPassword(props: PropTypes) {
     );
   };
 
+  const renderPasswordCopy = () => (
+    props.guestAccountCreationToken ?
+      <div>
+        <h3 className="set-password__title">{setPasswordCopy[props.contributionType].title}</h3>
+        <p className="set-password__message">
+          {setPasswordCopy[props.contributionType].body}
+        </p>
+      </div> :
+      <div>
+        <h3 className="set-password__title">{setPasswordCopy.RESET.title}</h3>
+        {setPasswordCopy.RESET.body.map(paragraph => (
+          <p className="set-password__message">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+  );
+
   return (
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you gu-content__form--set-password">
         { props.paymentMethod === DirectDebit && !props.hasSeenDirectDebitThankYouCopy ?
             renderDirectDebit() : null }
         <section className="set-password">
-          <h3 className="set-password__title">{setPasswordCopy[props.contributionType].title}</h3>
-          <p className="set-password__message">
-            {setPasswordCopy[props.contributionType].body}
-          </p>
+          {renderPasswordCopy()}
           <SetPasswordForm />
         </section>
       </div>

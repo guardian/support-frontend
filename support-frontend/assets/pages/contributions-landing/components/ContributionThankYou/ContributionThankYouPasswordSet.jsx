@@ -14,25 +14,29 @@ import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 
 type PropTypes = {|
   contributionType: ContributionType,
+  guestAccountCreationToken: ?string,
 |};
 
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
+  guestAccountCreationToken: state.page.form.guestAccountCreationToken,
 });
 
 // ----- Render ----- //
 
 function ContributionThankYouPasswordSet(props: PropTypes) {
-  const title = 'You now have a Guardian account';
-  const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
+  const passwordSetTitle = 'You now have a Guardian account';
+  const passwordSetBody = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
+  const passwordResetTitle = 'Check your inbox';
+  const passwordResetBody = 'Please follow the steps in the email to set up a password – it only takes a minute. And then, remember to sign in on each of the devices you use to access The Guardian.';
 
   return (
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you gu-content__form--password-set">
         <section className="confirmation">
-          <h3 className="confirmation__title">{title}</h3>
+          <h3 className="confirmation__title">{props.guestAccountCreationToken ? passwordSetTitle : passwordResetTitle}</h3>
           <p className="confirmation__message">
-            {body}
+            {props.guestAccountCreationToken ? passwordSetBody : passwordResetBody}
           </p>
         </section>
         <MarketingConsent />

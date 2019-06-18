@@ -220,8 +220,8 @@ function SetPasswordForm(props: PropTypes) {
   return (
     <div className="set-password__form">
       {props.guestAccountCreationToken ?
-      renderNewPasswordForm(props) :
-      renderPasswordResetForm(props)}
+       renderNewPasswordForm(props) :
+       renderPasswordResetForm(props)}
     </div>
   );
 
