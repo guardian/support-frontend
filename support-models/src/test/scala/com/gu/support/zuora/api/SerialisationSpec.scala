@@ -11,6 +11,7 @@ import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
 import io.circe.parser._
 import io.circe.syntax._
+import org.joda.time.{DateTime, LocalDate}
 import org.joda.time.Months.months
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -93,6 +94,18 @@ class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with Lazy
         c.price shouldBe 15
       }
     )
+  }
+
+  "IntroductoryPriceRatePlanCharge" should "serialise correctly" in {
+    val correct = parse(
+      s"""{
+        "ProductRatePlanChargeId" : "123",
+        "Price" : 6,
+        "TriggerDate" : "${LocalDate.now}",
+        "TriggerEvent" : "SpecificDate"
+      }""").right.get
+
+    IntroductoryPriceRatePlanCharge("123", 6, LocalDate.now).asJson shouldBe correct
   }
 
   "InvoiceResult" should "deserialise correctly" in {

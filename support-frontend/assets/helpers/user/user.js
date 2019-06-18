@@ -51,6 +51,9 @@ function isTestUser(): boolean {
   return isDefined(uatMode) || isDefined(testCookie);
 }
 
+const isPostDeployUser = (): boolean =>
+  cookie.get('_post_deploy_user') === 'true';
+
 const signOut = () => { window.location.href = getSignoutUrl(); };
 
 const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
@@ -98,7 +101,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setTestUser(true));
   }
 
-  if (isTestUser() && cookie.get('_post_deploy_user')) {
+  if (isTestUser() && isPostDeployUser()) {
     dispatch(setPostDeploymentTestUser(true));
   }
 
@@ -146,6 +149,7 @@ export {
   init,
   getUser,
   isTestUser,
+  isPostDeployUser,
   signOut,
   doesUserAppearToBeSignedIn,
 };

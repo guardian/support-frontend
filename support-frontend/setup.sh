@@ -133,16 +133,6 @@ install_js_deps() {
   yarn install
 }
 
-fetch_dev_cert() {
-  aws s3 cp s3://identity-local-ssl/STAR_thegulocal_com_exp2020-01-09.crt ${NGINX_ROOT} --profile membership
-  aws s3 cp s3://identity-local-ssl/STAR_thegulocal_com_exp2020-01-09.key ${NGINX_ROOT} --profile membership
-}
-
-link_nginx_config() {
-  mkdir -p ${NGINX_ROOT}sites-enabled
-  ln -sf ${PWD}/nginx/support.conf ${NGINX_ROOT}sites-enabled/support.conf
-}
-
 report() {
   if [[ ${#EXTRA_STEPS[@]} -gt 0 ]]; then
     for i in "${!EXTRA_STEPS[@]}"; do
@@ -158,8 +148,6 @@ main () {
   install_homebrew
   install_nginx
   install_awscli
-  fetch_dev_cert
-  link_nginx_config
   install_jdk
   install_sbt
   install_yarn

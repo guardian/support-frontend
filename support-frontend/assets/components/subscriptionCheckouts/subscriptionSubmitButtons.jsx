@@ -60,6 +60,7 @@ function SubscriptionSubmitButtons(props: PropTypes) {
         />
       </div>
       <Button
+        id="qa-submit-button"
         aria-label={null}
         type="submit"
         modifierClasses={props.paymentMethod === PayPal ? ['hidden'] : []}
