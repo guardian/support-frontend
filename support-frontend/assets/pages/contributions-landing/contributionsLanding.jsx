@@ -41,7 +41,7 @@ if (!window.guardian.polyfillScriptLoaded) {
   gaEvent({
     category: 'polyfill',
     action: 'not loaded',
-    label: '',
+    label: window.guardian.polyfillVersion || '',
   });
 }
 
@@ -49,7 +49,7 @@ if (typeof Object.values !== 'function') {
   gaEvent({
     category: 'polyfill',
     action: 'Object.values not available after polyfill',
-    label: '',
+    label: window.guardian.polyfillVersion || '',
   });
 }
 
