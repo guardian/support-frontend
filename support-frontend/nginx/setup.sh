@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 DOMAIN=support.thegulocal.com
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SITE_CONFIG=${DIR}/support.conf
