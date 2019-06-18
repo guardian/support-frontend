@@ -1,9 +1,19 @@
-#!/bin/bash -x
+#!/usr/bin/env bash
 
+set -e
+
+DOMAIN=support.thegulocal.com
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-NGINX_HOME=$(nginx -V 2>&1 | grep 'configure arguments:' | sed 's#.*conf-path=\([^ ]*\)/nginx\.conf.*#\1#g')
+SITE_CONFIG=${DIR}/support.conf
 
-echo "\n\nUsing NGINX_HOME=$NGINX_HOME"
+DOMAINS=(
+  "support.thegulocal.com"
+  "support-ui.thegulocal.com"
+)
 
-sudo mkdir -p $NGINX_HOME/sites-enabled
-sudo ln -fs $DIR/support.conf $NGINX_HOME/sites-enabled/support.conf
+for domain in ${DOMAINS[@]}; do
+  dev-nginx setup-cert $domain
+done
+
+dev-nginx link-config ${SITE_CONFIG}
+dev-nginx restart-nginx
