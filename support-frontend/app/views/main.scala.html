@@ -1,6 +1,7 @@
 @import admin.settings.AllSettings
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import views.{EmptyDiv, Preload, ReactDiv, SSRContent}
+@import scala.util.Random
 @(
   title: String,
   mainElement: ReactDiv,
@@ -126,7 +127,13 @@
       }
     </script>
 
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries&callback=polyfillLoaded"></script>
+    @if(Random.nextBoolean) {
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries&callback=polyfillLoaded"></script>
+      <script>window.guardian.polyfillVersion = 'v3';</script>
+    } else {
+      <script src="https://polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.find,fetch,Array.prototype.includes,Number.isInteger,Object.values,Object.entries&callback=polyfillLoaded"></script>
+      <script>window.guardian.polyfillVersion = 'v2';</script>
+    }
     <script type="text/javascript">
       window.guardian = window.guardian || {};
       window.guardian.gitCommitId = '@app.BuildInfo.gitCommitId';
