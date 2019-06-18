@@ -39,8 +39,8 @@ case class CreateSupportWorkersRequest(
   billingAddress: Address,
   deliveryAddress: Option[Address],
   titleGiftRecipient: Option[String],
-  firstNameGiftRecipient: String,
-  lastNameGiftRecipient: String,
+  firstNameGiftRecipient: Option[String],
+  lastNameGiftRecipient: Option[String],
   emailGiftRecipient: Option[String],
   product: ProductType,
   firstDeliveryDate: Option[LocalDate],
@@ -100,6 +100,18 @@ class SupportWorkersClient(
     request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
   }
 
+  private def getGiftRecipient(request: CreateSupportWorkersRequest) =
+    for {
+      firstName <- request.firstNameGiftRecipient
+      lastName <- request.lastNameGiftRecipient
+    } yield GiftRecipient(
+      request.titleGiftRecipient,
+      firstName,
+      lastName,
+      request.emailGiftRecipient
+    )
+
+
   def createSubscription(
     request: AnyAuthRequest[CreateSupportWorkersRequest],
     user: User,
@@ -110,6 +122,7 @@ class SupportWorkersClient(
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
+      giftRecipient = getGiftRecipient(request.body),
       product = request.body.product,
       paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(
