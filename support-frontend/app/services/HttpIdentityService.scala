@@ -88,7 +88,7 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
   }
 
   def resetPassword(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {
-    val payload = Json.obj("email" -> email)
+    val payload = Json.obj("email-address" -> email)
     request("pwd-reset/send-password-reset-email").post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
       if (validResponse) SafeLogger.info("Successfully sent reset password email using Identity Reset Password API")

@@ -65,7 +65,7 @@ class IdentityController(
     identityService
       .resetPassword(request.body.email).map { res =>
       if (res) {
-        SafeLogger.info(s"Successfully sent consents preferences email for ${request.body.email}")
+        SafeLogger.info(s"Successfully sent reset password email for ${request.body.email}")
         Ok
       } else {
         warnAndReturn()
