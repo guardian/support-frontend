@@ -136,7 +136,7 @@ function renderEmailField(email: string) {
       required
       disabled
     />
-  )
+  );
 }
 
 function renderNewPasswordForm(props: PropTypes) {
