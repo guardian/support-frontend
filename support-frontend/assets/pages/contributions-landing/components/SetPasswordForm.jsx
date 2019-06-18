@@ -30,7 +30,7 @@ const passwordErrorMessage = 'Sorry, we are unable to register you at this time.
 type PropTypes = {|
   email: string,
   password: string,
-  guestAccountCreationToken: string,
+  guestAccountCreationToken: ?string,
   setThankYouPageStage: (ThankYouPageStage) => void,
   setPasswordHasBeenSubmitted: () => void,
   passwordHasBeenSubmitted: boolean,
@@ -102,12 +102,11 @@ function onSubmitResetPassword(props: PropTypes): Event => void {
   return (event) => {
     props.setPasswordHasBeenSubmitted();
     event.preventDefault();
-    trackComponentClick(`set-password-${props.contributionType}`);
+    trackComponentClick(`reset-password-${props.contributionType}`);
     if (!(event.target: any).checkValidity()) {
       return;
     }
 
-    // TODO: send user to thank you page with error if password was not set
     resetPassword(props.email, props.csrf)
       .then((response) => {
         if (response === true) {
@@ -121,25 +120,30 @@ function onSubmitResetPassword(props: PropTypes): Event => void {
 
 
 // ----- Render ----- //
+function renderEmailField(email: string) {
+  return (
+    <ContributionTextInput
+      id="email"
+      name="contribution-email"
+      label="Email address"
+      value={email}
+      isValid={checkEmail(email)}
+      pattern={emailRegexPattern}
+      icon={<SvgEnvelope />}
+      autoComplete="email"
+      type="email"
+      errorMessage="Please enter a valid email address"
+      required
+      disabled
+    />
+  )
+}
 
 function renderNewPasswordForm(props: PropTypes) {
   return (
     <div>
       <form onSubmit={onSubmitSetPasswordGuest(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-        <ContributionTextInput
-          id="email"
-          name="contribution-email"
-          label="Email address"
-          value={props.email}
-          isValid={checkEmail(props.email)}
-          pattern={emailRegexPattern}
-          icon={<SvgEnvelope />}
-          autoComplete="email"
-          type="email"
-          errorMessage="Please enter a valid email address"
-          required
-          disabled
-        />
+        {renderEmailField(props.email)}
         <ContributionTextInput
           id="password"
           type="password"
@@ -180,7 +184,7 @@ function renderNewPasswordForm(props: PropTypes) {
           <SvgExclamationAlternate /><span className="component-general-error-message__error-heading">{passwordErrorHeading}</span>
           <span className="component-general-error-message__small-print">{passwordErrorMessage}</span>
         </div> : null
-  }
+      }
     </div>);
 }
 
@@ -188,27 +192,14 @@ function renderPasswordResetForm(props: PropTypes) {
   return (
     <div>
       <form onSubmit={onSubmitResetPassword(props)} className={classNameWithModifiers('form', ['contribution'])} noValidate>
-        <ContributionTextInput
-          id="email"
-          name="contribution-email"
-          label="Email address"
-          value={props.email}
-          isValid={checkEmail(props.email)}
-          pattern={emailRegexPattern}
-          icon={<SvgEnvelope />}
-          autoComplete="email"
-          type="email"
-          errorMessage="Please enter a valid email address"
-          required
-          disabled
-        />
+        {renderEmailField(props.email)}
         <Button
           appearance="secondary"
           modifierClasses={['create-account']}
           aria-label="Create a guardian account"
           type="submit"
         >
-          Create a Guardian account
+          Validate my email address
         </Button>
         <Button
           appearance="greyHollow"
@@ -216,25 +207,21 @@ function renderPasswordResetForm(props: PropTypes) {
           onClick={
             () => {
               trackComponentClick('decline-to-reset-password');
-              props.setThankYouPageStage('thankYouPasswordDeclinedToSet');
+              props.setThankYouPageStage('thankYou');
             }}
         >
           No thank you
         </Button>
       </form>
-      {props.passwordError === true ?
-        <div className="component-password-failure-message component-general-error-message">
-          <SvgExclamationAlternate /><span className="component-general-error-message__error-heading">{passwordErrorHeading}</span>
-          <span className="component-general-error-message__small-print">{passwordErrorMessage}</span>
-        </div> : null
-      }
     </div>);
 }
 
 function SetPasswordForm(props: PropTypes) {
   return (
     <div className="set-password__form">
-      {renderNewPasswordForm(props)}
+      {props.guestAccountCreationToken ?
+      renderNewPasswordForm(props) :
+      renderPasswordResetForm(props)}
     </div>
   );
 

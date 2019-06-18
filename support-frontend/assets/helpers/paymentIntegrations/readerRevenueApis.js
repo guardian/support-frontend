@@ -247,7 +247,7 @@ function postRegularPaymentRequest(
 
 function setPasswordGuest(
   password: string,
-  guestAccountRegistrationToken: string,
+  guestAccountRegistrationToken: ?string,
   csrf: CsrfState,
 ): Promise<boolean> {
 
@@ -273,7 +273,7 @@ function resetPassword(
 ): Promise<boolean> {
 
   const data = { email };
-  return logPromise(fetch(`${routes.contributionsSetPasswordGuest}`, requestOptions(data, 'same-origin', 'POST', csrf)))
+  return logPromise(fetch(`${routes.contributionsResetPassword}`, requestOptions(data, 'same-origin', 'POST', csrf)))
     .then((response) => {
       if (response.status === 200) {
         return true;
