@@ -26,27 +26,37 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
+
   import codecs.CirceDecoders._
+
   implicit val codec: Codec[CreateSupportWorkersRequest] = deriveCodec
 }
+
 case class CreateSupportWorkersRequest(
-    firstName: String,
-    lastName: String,
-    billingAddress: Address,
-    deliveryAddress: Option[Address],
-    product: ProductType,
-    firstDeliveryDate: Option[LocalDate],
-    paymentFields: PaymentFields,
-    promoCode: Option[PromoCode],
-    ophanIds: OphanIds,
-    referrerAcquisitionData: ReferrerAcquisitionData,
-    supportAbTests: Set[AbTest],
-    email: String,
-    telephoneNumber: Option[String]
+  title: Option[String],
+  firstName: String,
+  lastName: String,
+  billingAddress: Address,
+  deliveryAddress: Option[Address],
+  titleGiftRecipient: Option[String],
+  firstNameGiftRecipient: String,
+  lastNameGiftRecipient: String,
+  emailGiftRecipient: Option[String],
+  product: ProductType,
+  firstDeliveryDate: Option[LocalDate],
+  paymentFields: PaymentFields,
+  promoCode: Option[PromoCode],
+  ophanIds: OphanIds,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  supportAbTests: Set[AbTest],
+  email: String,
+  telephoneNumber: Option[String]
 )
 
 object SupportWorkersClient {
+
   sealed trait SupportWorkersError
+
   case object StateMachineFailure extends SupportWorkersError
 
   def apply(
@@ -59,10 +69,10 @@ object SupportWorkersClient {
 }
 
 case class StatusResponse(
-    status: Status,
-    trackingUri: String,
-    failureReason: Option[CheckoutFailureReason] = None,
-    guestAccountCreationToken: Option[String] = None
+  status: Status,
+  trackingUri: String,
+  failureReason: Option[CheckoutFailureReason] = None,
+  guestAccountCreationToken: Option[String] = None
 )
 
 object StatusResponse {
@@ -73,10 +83,10 @@ object StatusResponse {
 }
 
 class SupportWorkersClient(
-    arn: StateMachineArn,
-    stateWrapper: StateWrapper,
-    supportUrl: String,
-    statusCall: String => Call
+  arn: StateMachineArn,
+  stateWrapper: StateWrapper,
+  supportUrl: String,
+  statusCall: String => Call
 )(implicit system: ActorSystem) {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher

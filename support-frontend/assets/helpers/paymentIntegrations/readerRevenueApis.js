@@ -16,6 +16,7 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 import { type ThankYouPageStage } from '../../pages/contributions-landing/contributionsLandingReducer';
 import { DirectDebit, ExistingCard, ExistingDirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import type { Title } from 'helpers/user/details';
 
 // ----- Types ----- //
 
@@ -67,11 +68,16 @@ export type RegularPaymentRequestAddress = {|
 |};
 
 export type RegularPaymentRequest = {|
+  title?: Option<Title>,
   firstName: string,
   lastName: string,
   billingAddress: RegularPaymentRequestAddress,
   deliveryAddress: Option<RegularPaymentRequestAddress>,
   email: string,
+  titleGiftRecipient?: Option<Title>,
+  firstNameGiftRecipient?: string,
+  lastNameGiftRecipient?: string,
+  emailGiftRecipient?: Option<string>,
   product: ProductFields,
   firstDeliveryDate: Option<string>,
   paymentFields: RegularPaymentFields,
