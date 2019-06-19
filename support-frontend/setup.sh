@@ -106,6 +106,8 @@ install_nginx() {
     EXTRA_STEPS+=("nginx is installed. Ensure you have 'include sites-enabled/*' in your nginx configuration ${NGINX_ROOT}/nginx.conf and add '127.0.0.1 support.thegulocal.com' and '127.0.0.1 support-ui.thegulocal.com' to /etc/hosts")
   fi
 
+  install_dev_nginx 
+
   ./nginx/setup.sh
 }
 
@@ -114,6 +116,14 @@ install_awscli() {
     brew install awscli
   fi
 }
+
+install_dev_nginx() {
+  if ! installed dev-nginx; then
+    brew tap "guardian/devtools"
+    brew install "guardian/devtools/dev-nginx"
+  fi
+}
+
 
 install_sbt() {
   if ! installed sbt; then
