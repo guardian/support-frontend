@@ -104,10 +104,8 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
     val payload = Json.obj("password" -> password)
     val headers =
       List("X-Guest-Registration-Token" -> guestAccountRegistrationToken, "Content-Type" -> "application/json")
-    val urlParameters = List("validate-email" -> "0")
     request(s"guest/password")
       .addHttpHeaders(headers: _*)
-      .withQueryStringParameters(urlParameters: _*)
       .put(payload)
       .attemptT
       .leftMap(_.toString)
