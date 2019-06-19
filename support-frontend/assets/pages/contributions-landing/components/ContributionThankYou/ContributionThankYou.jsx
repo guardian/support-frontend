@@ -34,7 +34,7 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
   isSignedIn: state.page.user.isSignedIn,
-  email: state.page.user.email,
+  email: state.page.form.formData.email,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -68,11 +68,11 @@ function ContributionThankYou(props: PropTypes) {
           </section>
         ) : null}
         {!props.isSignedIn ?
-          <section className="confirmation">
-            <h3 className="component-marketing-consent__title">
+          <section className="contribution-thank-you-block">
+            <h3 className="contribution-thank-you-block__title">
               Sign into The Guardian
             </h3>
-            <p className="component-marketing-consent__message">If you stay signed into a validated account on each of your devices, you’ll notice far fewer messages asking you for financial support.</p>
+            <p className="contribution-thank-you-block__message">If you stay signed into a validated account on each of your devices, you’ll notice far fewer messages asking you for financial support.</p>
             <AnchorButton
               href={`https://profile.theguardian.com/signin?email=${props.email}`}
               aria-label="Sign into The Guardian"
