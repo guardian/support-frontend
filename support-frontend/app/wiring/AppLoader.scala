@@ -2,6 +2,7 @@ package wiring
 
 import java.io.File
 
+import com.gu.aws.CredentialsProvider
 import com.gu.{AppIdentity, AwsIdentity, DevIdentity}
 import com.gu.conf._
 import com.typesafe.scalalogging.StrictLogging
@@ -11,8 +12,8 @@ import play.api._
 class AppLoader extends ApplicationLoader with StrictLogging {
 
   private def getParameterStoreConfig(initialConfiguration: Configuration): Configuration = {
-    val identity = AppIdentity.whoAmI(defaultAppName = "support-frontend")
-    val loadedConfig = ConfigurationLoader.load(identity) {
+    val identity = AppIdentity.whoAmI(defaultAppName = "support-frontend", CredentialsProvider)
+    val loadedConfig = ConfigurationLoader.load(identity, CredentialsProvider) {
       case AwsIdentity(app, stack, stage, _) =>
         val privateConfig = SSMConfigurationLocation(s"/$stack/$app/$stage")
         val publicConfig = ResourceConfigurationLocation(s"$stage.public.conf")
