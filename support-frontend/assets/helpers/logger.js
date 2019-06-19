@@ -1,24 +1,24 @@
 // @flow
-// import Raven from 'raven-js';
 
-const EventualRaven = import('raven-js');
+const EventualSentry = import('@sentry/browser');
 
 // ----- Functions ----- //
 
-const init = () => EventualRaven.then((Raven) => {
+const init = () => EventualSentry.then((Sentry) => {
   const dsn: string = 'https://65f7514888b6407881f34a6cf1320d06@sentry.io/1213654';
   const { gitCommitId } = window.guardian;
 
-  Raven.default.config(dsn, {
-    whitelistUrls: ['support.theguardian.com', 'localhost'],
+  Sentry.init({
+    dsn,
+    whitelistUrls: ['support.theguardian.com'],
     release: gitCommitId,
-  }).install();
+  });
 });
 
 
 const logException = (ex: string, context?: Object): void => {
-  EventualRaven.then((Raven) => {
-    Raven.default.captureException(
+  EventualSentry.then((Sentry) => {
+    Sentry.captureException(
       new Error(ex),
       {
         extra: context,
@@ -26,14 +26,14 @@ const logException = (ex: string, context?: Object): void => {
     );
 
     if (window.console && console.error) {
-      console.error(ex);
+      console.error('sentry exception: ', ex);
     }
   });
 };
 
 const logInfo = (message: string): void => {
-  EventualRaven.then((Raven) => {
-    Raven.default.captureMessage(
+  EventualSentry.then((Sentry) => {
+    Sentry.captureMessage(
       message,
       {
         level: 'info',
