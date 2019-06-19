@@ -24,13 +24,17 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
-  |};
+  isSignedIn: boolean,
+  email: string,
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
+  isSignedIn: state.page.user.isSignedIn,
+  email: state.page.user.email,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -63,6 +67,19 @@ function ContributionThankYou(props: PropTypes) {
             </h3>
           </section>
         ) : null}
+        {!props.isSignedIn ?
+          <section className="confirmation">
+            <h3 className="component-marketing-consent__title">
+              Sign into The Guardian
+            </h3>
+            <p className="component-marketing-consent__message">If you stay signed into a validated account on each of your devices, you’ll notice far fewer messages asking you for financial support.</p>
+            <AnchorButton
+              href={`https://profile.theguardian.com/signin?email=${props.email}`}
+              aria-label="Sign into The Guardian"
+            >
+              Sign in now
+            </AnchorButton>
+          </section> : null }
         <MarketingConsent />
         <ContributionSurvey isRunning={false} contributionType={props.contributionType} />
         <SpreadTheWord />
