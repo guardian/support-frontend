@@ -19,32 +19,32 @@ export default function BreakingHeadlines() {
         <figure className="showcase-hero__figure">
           <div className="showcase-hero__image">
             <GridImage
-              gridId="windrushMobile"
-              srcSizes={[400]}
-              sizes="(max-width: 740px) 100vw, 600px"
+              gridId="showcaseChris"
+              srcSizes={[1000, 500]}
+              sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
             />
           </div>
           <div className="showcase-hero__image">
             <GridImage
-              gridId="windrushMobile"
-              srcSizes={[400]}
-              sizes="(max-width: 740px) 100vw, 600px"
+              gridId="showcaseZuckGlass"
+              srcSizes={[1000, 500]}
+              sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
             />
           </div>
           <div className="showcase-hero__image">
             <GridImage
-              gridId="windrushMobile"
-              srcSizes={[400]}
-              sizes="(max-width: 740px) 100vw, 600px"
+              gridId="showcaseNix"
+              srcSizes={[1000, 500]}
+              sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
             />
           </div>
           <div className="showcase-hero__image">
             <GridImage
-              gridId="windrushMobile"
-              srcSizes={[400]}
+              gridId="showcaseBrit"
+              srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 600px"
               imgType="jpg"
             />
