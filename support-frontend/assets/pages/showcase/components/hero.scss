@@ -210,10 +210,23 @@
     }
 
     .showcase-hero__caption {
+      order: 3;
+      z-index: 10;
       position: absolute;
-      left: 0;
+      width: gu-span(2.75);
       bottom: 0;
-      width: gu-span(3);
+      padding-left: $gu-h-spacing / 2;
+      margin-bottom: -$gu-v-spacing / 3;
+
+      @include mq($from: leftCol) {
+        margin-bottom: $gu-v-spacing * 5.5;
+        padding-bottom: $gu-v-spacing;
+      }
+
+      @include mq($from: wide) {
+        margin-bottom: $gu-v-spacing;
+        padding-bottom: $gu-v-spacing;
+      }
     }
   }
 
@@ -232,7 +245,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    order: 3;
+    order: 4;
     margin-top: -350px;
     @include mq($from: leftCol) {
       margin-top: -330px;
