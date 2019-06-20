@@ -1,6 +1,7 @@
 package com.gu.salesforce
 
-import com.gu.salesforce.Salesforce.NewContact
+import com.gu.i18n.Title
+import com.gu.salesforce.Salesforce.{DeliveryContact, NewContact}
 
 object Fixtures {
   val idId = "9999999"
@@ -16,7 +17,26 @@ object Fixtures {
   val state = "CA"
   val allowMail = false
 
-  val newContactUK = NewContact(idId, emailAddress, name, name, None, None, None, None, uk, None, None, None, None, None, None, allowMail, allowMail, allowMail)
+  val newContactUK = NewContact(
+    IdentityID__c = idId,
+    Email = emailAddress,
+    FirstName = name,
+    LastName = name,
+    OtherStreet = None,
+    OtherCity = None,
+    OtherState = None,
+    OtherPostalCode = None,
+    OtherCountry = uk,
+    MailingStreet = None,
+    MailingCity = None,
+    MailingState = None,
+    MailingPostalCode = None,
+    MailingCountry = None,
+    Phone = None,
+    Allow_Membership_Mail__c = allowMail,
+    Allow_3rd_Party_Mail__c = allowMail,
+    Allow_Guardian_Related_Mail__c = allowMail
+  )
   val newContactUKWithBillingAddress = newContactUK.copy(
     OtherStreet = Some("123 trash alley"),
     OtherCity = Some("London"),
@@ -33,6 +53,19 @@ object Fixtures {
     Phone = Some(telephoneNumber)
   )
   val newContactUS = newContactUK.copy(OtherCountry = us, OtherState = Some(state))
+
+  val giftRecipientUpsert = DeliveryContact(
+    AccountId = salesforceId,
+    Email = Some(emailAddress),
+    Title = Some(Title.Mr),
+    FirstName = name,
+    LastName = name,
+    MailingStreet = Some(street),
+    MailingCity = Some(city),
+    MailingState = None,
+    MailingPostalCode = Some(postCode),
+    MailingCountry = Some(uk)
+  )
 
 
   val upsertJson =
@@ -114,6 +147,22 @@ object Fixtures {
         "Allow_Membership_Mail__c": $allowMail,
         "Allow_3rd_Party_Mail__c": $allowMail,
         "Allow_Guardian_Related_Mail__c": $allowMail
+       }
+      }"""
+
+  val giftRecipientUpsertJson =
+    s"""{
+      "newContact": {
+        "AccountId": "$salesforceId",
+        "Email": "$emailAddress",
+        "Title": "Mr",
+        "FirstName": "$name",
+        "LastName": "$name",
+        "MailingStreet": "$street",
+        "MailingCity": "$city",
+        "MailingPostalCode": "$postCode",
+        "MailingCountry": "$uk",
+        "RecordTypeId": "01220000000VB50AAG"
        }
       }"""
 

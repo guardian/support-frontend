@@ -33,6 +33,10 @@ class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
       pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAndDeliveryAddresses).right.get.noSpaces)
   }
 
+  "Gift recipient upsert data" should "serialise to correct json" in {
+    giftRecipientUpsert.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(giftRecipientUpsertJson).right.get.noSpaces)
+  }
+
   "Authentication" should "deserialize correctly" in {
     val now = DateTime.now()
     val stale = DateTime.parse("1971-02-20")

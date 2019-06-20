@@ -11,9 +11,9 @@ import com.gu.support.workers.AddressLine.asFormattedString
 import com.gu.support.workers.AddressLineTransformer.combinedAddressLine
 import com.gu.support.workers.{Address, GiftRecipient, SalesforceContactRecord, User}
 import io.circe
+import io.circe.Decoder
 import io.circe.parser._
 import io.circe.syntax._
-import io.circe.{Decoder, Json}
 import okhttp3.Request
 
 import scala.concurrent.duration._
@@ -90,7 +90,6 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   private def getGiftRecipient(buyerAccountId: String, deliveryAddress: Address, giftRecipient: GiftRecipient) =
     DeliveryContact(
       buyerAccountId,
-      RecordType.deliveryRecipientContactId,
       giftRecipient.email,
       giftRecipient.title,
       giftRecipient.firstName,

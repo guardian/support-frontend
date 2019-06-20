@@ -11,17 +11,10 @@ import com.gu.support.workers.SalesforceContactRecord
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.DateTime
 
 object Salesforce {
-
-  type RecordTypeId = String
-
-  object RecordType {
-    val deliveryRecipientContactId: RecordTypeId = "01220000000VB50AAG"
-    val standardCustomerId: RecordTypeId = "01220000000VB52AAG"
-  }
 
   implicit val salesforceContactRecordCodec: Codec[SalesforceContactRecord] = deriveCodec
 
@@ -32,7 +25,11 @@ object Salesforce {
 
   object DeliveryContact {
     implicit val decoder: Decoder[DeliveryContact] = deriveDecoder
-    implicit val encoder: Encoder[DeliveryContact] = deriveEncoder[DeliveryContact].mapJsonObject(_.wrapObject("newContact"))
+    implicit val encoder: Encoder[DeliveryContact] = deriveEncoder[DeliveryContact]
+      .mapJsonObject(
+        _.add("RecordTypeId", Json.fromString("01220000000VB50AAG"))
+          .wrapObject("newContact")
+      )
   }
 
   //The odd field names on these class are to match with the Salesforce api and allow us to serialise and deserialise
@@ -76,7 +73,6 @@ object Salesforce {
 
   case class DeliveryContact(
     AccountId: String,
-    RecordTypeId: RecordTypeId,
     Email: Option[String],
     Title: Option[Title],
     FirstName: String,
