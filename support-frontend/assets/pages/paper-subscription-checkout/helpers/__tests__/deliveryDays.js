@@ -8,6 +8,7 @@ import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 
 // ----- Tests ----- //
 const tuesday = 1551175752198; /* 2019-02-26 */
+const wednesday5amGMT = 1551243600000 /* 2019-02-27 05:00 GMT */
 const wednesday = 1551275752198; /* 2019-02-27 */
 const sunday = 1551577952198; /* 2019-03-03 */
 
@@ -36,13 +37,21 @@ describe('deliveryDays', () => {
 
 
   describe('getVoucherDays', () => {
-    it('out of the fast delivery window, it delivers the Saturday paper on the next Saturday after three weeks', () => {
+    it('out of the fast delivery window, it delivers the Saturday paper on the next Saturday after four weeks', () => {
       const days = getVoucherDays(wednesday, 'Saturday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-30');
+    });
+    it('in the fast delivery window, delivers the Saturday paper on the next Saturday after three weeks', () => {
+      const days = getVoucherDays(tuesday, 'Saturday');
       expect(formatMachineDate(days[0])).toEqual('2019-03-23');
     });
-    it('in the fast delivery window, delivers the Saturday paper on the next Saturday after two weeks', () => {
-      const days = getVoucherDays(tuesday, 'Saturday');
-      expect(formatMachineDate(days[0])).toEqual('2019-03-16');
+    it('just inside the fast delivery window, delivers the Saturday paper on the next Saturday after three weeks', () => {
+      const days = getVoucherDays(wednesday5amGMT, 'Saturday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-23');
+    });
+    it('inside the fast delivery window, delivers Sixday on the next Monday after three weeks', () => {
+      const days = getVoucherDays(sunday, 'Sixday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-25');
     });
   });
 

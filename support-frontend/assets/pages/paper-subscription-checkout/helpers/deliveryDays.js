@@ -23,8 +23,8 @@ import type { Day } from 'helpers/subscriptionsForms/deliveryDays';
 // The cut off for getting vouchers in two weeks is Wednesday (day #3 in ISO format) at 6 AM GMT
 const voucherExtraDelayCutoffWeekday = 3;
 const voucherExtraDelayCutoffHour = 6;
-const voucherNormalDelayWeeks = 2;
-const voucherExtraDelayWeeks = 3;
+const voucherNormalDelayWeeks = 3;
+const voucherExtraDelayWeeks = 4;
 
 const getDeliveryDayForProduct = (product: ProductOptions): Day => {
   switch (product) {
