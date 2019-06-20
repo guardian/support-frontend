@@ -2,7 +2,7 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.monitoring.SafeLogger
-import com.gu.salesforce.Salesforce.{DeliveryContact, NewContact, RecordType, SalesforceContactRecords, SalesforceContactResponse}
+import com.gu.salesforce.Salesforce.{DeliveryContact, NewContact, SalesforceContactRecords, SalesforceContactResponse}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.RequestInfo
 import com.gu.support.workers.exceptions.SalesforceException
