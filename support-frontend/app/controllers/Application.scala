@@ -119,10 +119,7 @@ class Application(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, UserWithSignInDetails](identityService.getUserWithSignInDetails(_)).fold(
       _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption, guestAccountCreationToken)),
-      user => {
-
-        Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken))
-      }
+      userWithSignInDetails => Ok(contributionsHtml(countryCode, userWithSignInDetails, campaignCodeOption, guestAccountCreationToken))
     ).map(_.withSettingsSurrogateKey)
   }
 
