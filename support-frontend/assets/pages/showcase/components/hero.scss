@@ -5,16 +5,20 @@
 .showcase-hero {
   background: gu-colour(sport-dark);
   color: gu-colour(neutral-100);
-  min-height: 565px;
+  // min-height: 565px;
 }
 
 // Media agnostic heading styles
 
 .showcase-hero-heading svg {
-  margin-left: $gu-h-spacing;
+  margin-left: $gu-v-spacing;
 
   @include mq($from: tablet) {
     padding-left: $gu-h-spacing / 2;
+  }
+
+  @include mq($from: desktop) {
+    padding-left: 0;
   }
 }
 
@@ -26,10 +30,6 @@
   @include gu-fontset-explainer;
   margin: $gu-h-spacing $gu-h-spacing $gu-h-spacing / 2;
   font-size: 14px;
-
-  @include mq($from: tablet) {
-    font-size: 16px;
-  }
   
   > strong {
     font-weight: 600;
@@ -48,9 +48,6 @@
   will-change: transform;
   opacity: 0;
   
-  &:nth-of-type(1) img,
-  &:nth-of-type(2) img,
-  &:nth-of-type(2) img,
   &:nth-of-type(4) img {
     height: auto;
     width: 100%;
@@ -79,10 +76,18 @@
   }
 
   @include mq($from: desktop) {
-    &:nth-of-type(1) img,
-    &:nth-of-type(4) img {
-      height: 100%;
-      width: auto;
+    .showcase-hero--left {
+      &:nth-child(2) img {
+        height: 100%;
+        width: auto;
+      }
+    }
+
+    .showcase-hero--right {
+      &:nth-child(2) img {
+        width: 200%;
+        height: auto;
+      }
     }
   }
 }
@@ -93,7 +98,7 @@
 @include mq($until: desktop) {
   .showcase-hero {
     min-height: 550px;
-    @include mq($from: phablet) {
+    @include mq($from: mobileLandscape) {
       padding-bottom: 20px;
     }
   }
@@ -103,6 +108,11 @@
       width: 90%;
       max-width: gu-span(6);
     }
+
+    @include mq($from: mobileLandscape) {
+      padding: $gu-v-spacing;
+    }
+
     @include mq($from: phablet) {
       padding: $gu-h-spacing;
     }
@@ -120,11 +130,6 @@
     width: 47%;
     margin-top: -20px;
     margin-bottom: 0;
-
-    @include mq($from: tablet) {
-      width: 22.9%;
-      height: 32vw;
-    }
   }
 
   .showcase-hero--left {
@@ -169,19 +174,30 @@
 // Desktop view
 
 @include mq($from: desktop) {
-  $heading-height: 260px;
+  $heading-height: 280px;
   $photo-1-height: 280px;
   $photo-2-height: 120px;
   $photo-3-height: 120px;
   $photo-4-height: 440px;
 
   .showcase-hero .component-left-margin-section__content {
-    height: $heading-height + $photo-1-height + $photo-2-height + $gu-v-spacing * 2;
+    height: $heading-height + $photo-1-height + $photo-2-height + $gu-v-spacing;
+  }
+
+  .showcase-hero {
+    display: flex;
+    justify-content: center;
   }
 
   .showcase-hero-wrapper {
     display: flex;
     flex-wrap: wrap;
+    max-width: 1050px;
+    padding-bottom: $gu-v-spacing;
+
+    @include mq($from: wide) {
+      max-width: 1200px;
+    }
 
     .showcase-hero-heading {
       display: flex;
@@ -219,7 +235,11 @@
     order: 3;
     margin-top: -350px;
     @include mq($from: leftCol) {
-      margin-top: -300px;
+      margin-top: -330px;
+    }
+
+    @include mq($from: wide) {
+      margin-top: -330px;
     }
 
     .showcase-hero__image {
@@ -229,8 +249,8 @@
       &:nth-child(1) {
         height: $photo-1-height;
         width: gu-span(4);
-        left: gu-span(3) + $gu-h-spacing;
         animation: animateInLeft 0.8s 1s ease-out forwards 1;
+        margin-bottom: $gu-v-spacing;
       }
       &:nth-child(2) {
         height: $photo-2-height;
@@ -255,7 +275,7 @@
         @include mq($from: wide) {
           width: gu-span(7);
         }
-        margin: $gu-v-spacing * 2 0 $gu-v-spacing * 1.5 60px;
+        margin: $gu-v-spacing * 2 0 $gu-v-spacing * 1.5 75px;
         animation: animateInRight 0.8s 1.15s ease-out forwards 1;
       }
       &:nth-child(2) {
@@ -264,7 +284,7 @@
         @include mq($from: leftCol) {
           width: gu-span(5);
         }
-        margin-left: 60px;
+        margin-left: 75px;
         animation: animateInRight 0.8s 1.45s ease-out forwards 1;
       }
     }
