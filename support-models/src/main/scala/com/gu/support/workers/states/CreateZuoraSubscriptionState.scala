@@ -2,6 +2,7 @@ package com.gu.support.workers.states
 
 import java.util.UUID
 
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
@@ -15,7 +16,8 @@ case class CreateZuoraSubscriptionState(
   paymentMethod: PaymentMethod,
   firstDeliveryDate: Option[LocalDate],
   promoCode: Option[PromoCode],
-  salesForceContact: SalesforceContactRecord,
+  salesForceContact: SalesforceContactRecord, //TODO: Remove this it is redundant now we have gifting
+  salesforceContacts: SalesforceContactRecords,
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
 

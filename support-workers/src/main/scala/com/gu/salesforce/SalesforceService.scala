@@ -5,12 +5,15 @@ import com.gu.helpers.{Retry, WebServiceHelper}
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
-import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceContactResponse, SalesforceErrorResponse, UpsertData}
+import com.gu.salesforce.Salesforce._
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.workers.AddressLine.asFormattedString
+import com.gu.support.workers.AddressLineTransformer.combinedAddressLine
+import com.gu.support.workers.{Address, GiftRecipient, SalesforceContactRecord, User}
 import io.circe
-import io.circe.Decoder
 import io.circe.parser._
 import io.circe.syntax._
+import io.circe.{Decoder, Json}
 import okhttp3.Request
 
 import scala.concurrent.duration._
@@ -18,7 +21,7 @@ import scala.concurrent.stm._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[SalesforceErrorResponse] {
+  extends WebServiceHelper[SalesforceErrorResponse] {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = client
@@ -42,6 +45,67 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   def upsert(data: UpsertData): Future[SalesforceContactResponse] = {
     postJson[SalesforceContactResponse](upsertEndpoint, data.asJson)
   }
+
+  def createContactRecords(user: User, giftRecipient: Option[GiftRecipient]): Future[SalesforceContactRecordsResponse] = {
+    for {
+      contactRecord <- upsert(getNewContact(user))
+      recipientContactRecord <- maybeAddGiftRecipient(
+        contactRecord.ContactRecord,
+        giftRecipient,
+        user.deliveryAddress.getOrElse(user.billingAddress)
+      )
+    } yield SalesforceContactRecordsResponse(contactRecord, recipientContactRecord)
+  }
+
+  private def maybeAddGiftRecipient(contactRecord: SalesforceContactRecord, maybeGiftRecipient: Option[GiftRecipient], deliveryAddress: Address) =
+    maybeGiftRecipient.map(
+      giftRecipient =>
+        upsert(getGiftRecipient(contactRecord.AccountId, deliveryAddress, giftRecipient)).map(Some(_))
+    ).getOrElse(Future.successful(None))
+
+
+  private def getNewContact(user: User) =
+    NewContact(
+      user.id,
+      user.primaryEmailAddress,
+      user.firstName,
+      user.lastName,
+      getAddressLine(user.billingAddress),
+      user.billingAddress.city,
+      user.billingAddress.state,
+      user.billingAddress.postCode,
+      user.billingAddress.country.name,
+      getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
+      user.deliveryAddress.flatMap(_.city), //TODO: only if not gift?
+      user.deliveryAddress.flatMap(_.state),
+      user.deliveryAddress.flatMap(_.postCode),
+      user.deliveryAddress.map(_.country.name),
+      user.telephoneNumber,
+      user.allowMembershipMail,
+      user.allowThirdPartyMail,
+      user.allowGURelatedMail
+    )
+
+
+  private def getGiftRecipient(buyerAccountId: String, deliveryAddress: Address, giftRecipient: GiftRecipient) =
+    DeliveryContact(
+      buyerAccountId,
+      RecordType.deliveryRecipientContactId,
+      giftRecipient.email,
+      giftRecipient.title,
+      giftRecipient.firstName,
+      giftRecipient.lastName,
+      getAddressLine(deliveryAddress),
+      deliveryAddress.city,
+      deliveryAddress.state,
+      deliveryAddress.postCode,
+      Some(deliveryAddress.country.name)
+    )
+
+  private def getAddressLine(address: Address) = combinedAddressLine(
+    address.lineOne,
+    address.lineTwo
+  ).map(asFormattedString)
 }
 
 /**
@@ -53,6 +117,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
  * is stale a new one is fetched
  */
 object AuthService {
+
   import scala.concurrent.ExecutionContext.Implicits.global
 
   private val authRef = Ref[Map[String, Authentication]](Map())
@@ -77,7 +142,7 @@ object AuthService {
 }
 
 class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
-    extends WebServiceHelper[SalesforceAuthenticationErrorResponse] {
+  extends WebServiceHelper[SalesforceAuthenticationErrorResponse] {
   val sfConfig = config
   val wsUrl = sfConfig.url
   val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)

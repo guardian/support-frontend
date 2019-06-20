@@ -12,28 +12,25 @@ import org.scalatest.{FlatSpec, Matchers}
 class SerialisationSpec extends FlatSpec with Matchers with LazyLogging {
 
   "UpsertData" should "serialise to correct UK json" in {
-    val upsertData = UpsertData(newContactUK)
-    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJson).right.get.noSpaces)
+    newContactUK.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJson).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct US json" in {
-    val upsertData = UpsertData(newContactUS)
-    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithState).right.get.noSpaces)
+    newContactUS.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithState).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct json when telephoneNumber provided" in {
-    val upsertData = UpsertData(newContactUK.copy(Phone = Some(telephoneNumber)))
-    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithTelephoneNumber).right.get.noSpaces)
+    val newContactWithTelephone = newContactUK.copy(Phone = Some(telephoneNumber))
+    newContactWithTelephone.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithTelephoneNumber).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct json when billing address provided" in {
-    val upsertData = UpsertData(newContactUKWithBillingAddress)
-    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAddress).right.get.noSpaces)
+    newContactUKWithBillingAddress.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAddress).right.get.noSpaces)
   }
 
   "UpsertData" should "serialise to correct json when billing address and delivery address provided" in {
-    val upsertData = UpsertData(newContactUKWithBothAddressesAndTelephone)
-    upsertData.asJson.pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAndDeliveryAddresses).right.get.noSpaces)
+    newContactUKWithBothAddressesAndTelephone.asJson.
+      pretty(Printer.noSpaces.copy(dropNullValues = true)) should be(parse(upsertJsonWithBillingAndDeliveryAddresses).right.get.noSpaces)
   }
 
   "Authentication" should "deserialize correctly" in {

@@ -8,7 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import com.gu.i18n.Country
+import com.gu.i18n.{Country, Title}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.encoding.Codec
@@ -33,12 +33,12 @@ object CreateSupportWorkersRequest {
 }
 
 case class CreateSupportWorkersRequest(
-  title: Option[String],
+  title: Option[Title],
   firstName: String,
   lastName: String,
   billingAddress: Address,
   deliveryAddress: Option[Address],
-  titleGiftRecipient: Option[String],
+  titleGiftRecipient: Option[Title],
   firstNameGiftRecipient: Option[String],
   lastNameGiftRecipient: Option[String],
   emailGiftRecipient: Option[String],
