@@ -27,7 +27,6 @@ type PropTypes = {|
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
   isSignedIn: boolean,
-  email: string,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -36,7 +35,6 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
   isSignedIn: state.page.user.isSignedIn,
-  email: state.page.form.formData.email,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -85,7 +83,7 @@ function ContributionThankYou(props: PropTypes) {
               onClick={
                 () => {
                   trackComponentClick(`sign-into-the-guardian-link-${props.contributionType}`);
-                  window.location.href = `https://profile.theguardian.com/signin?email=${props.email}`;
+                  window.location.href = `https://profile.theguardian.com/signin`;
                 }}
             >
               Sign in now
