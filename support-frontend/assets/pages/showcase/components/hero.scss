@@ -6,10 +6,6 @@
   background: gu-colour(sport-dark);
   color: gu-colour(neutral-100);
   min-height: 565px;
-
-  @include mq($from: phablet) {
-    padding-bottom: 20px;
-  }
 }
 
 // Media agnostic heading styles
@@ -28,7 +24,7 @@
   display: block;
   text-align: left;
   @include gu-fontset-explainer;
-  margin: $gu-h-spacing $gu-h-spacing * 1.5 $gu-h-spacing / 2;
+  margin: $gu-h-spacing $gu-h-spacing $gu-h-spacing / 2;
   font-size: 14px;
 
   @include mq($from: tablet) {
@@ -95,12 +91,22 @@
 // Mobile and tablet view
 
 @include mq($until: desktop) {
+  .showcase-hero {
+    min-height: 550px;
+    @include mq($from: phablet) {
+      padding-bottom: 20px;
+    }
+  }
+
   .showcase-hero-heading {
-    padding-right: $gu-h-spacing * 1;
     svg {
       width: 90%;
       max-width: gu-span(6);
     }
+    @include mq($from: phablet) {
+      padding: $gu-h-spacing;
+    }
+    
   }
 
   .showcase-hero .component-left-margin-section__content {
@@ -112,6 +118,8 @@
     height: 37vw;
     box-sizing: content-box;
     width: 47%;
+    margin-top: -20px;
+    margin-bottom: 0;
 
     @include mq($from: tablet) {
       width: 22.9%;
@@ -126,7 +134,7 @@
 
     .showcase-hero__image {
       &:nth-of-type(2) {
-        margin-top: 13px;
+        margin-top: -7px;
       }
       &:nth-child(1) {
         animation: animateInLeft 0.8s 1s ease-out forwards 1;
@@ -146,11 +154,10 @@
 
     .showcase-hero__image {
       &:nth-of-type(2) {
-        margin-top: 13px;
+        margin-top: -7px;
       }
       &:nth-child(1) {
         animation: animateInLeft 0.8s 1.30s ease-out forwards 1;
-        margin-bottom: 13px;
       }
       &:nth-child(2) {
         animation: animateInRight 0.8s 1.45s ease-out forwards 1;
@@ -162,13 +169,14 @@
 // Desktop view
 
 @include mq($from: desktop) {
+  $heading-height: 260px;
   $photo-1-height: 280px;
   $photo-2-height: 120px;
   $photo-3-height: 120px;
   $photo-4-height: 440px;
 
   .showcase-hero .component-left-margin-section__content {
-    height: $photo-3-height + $photo-4-height + $gu-v-spacing;
+    height: $heading-height + $photo-1-height + $photo-2-height + $gu-v-spacing * 2;
   }
 
   .showcase-hero-wrapper {
@@ -194,7 +202,6 @@
   }
 
   .showcase-hero__image {
-
     @include mq($from: leftCol) {
       &:nth-child(3) {
         width: gu-span(6);
@@ -210,7 +217,10 @@
     flex-direction: column;
     align-items: flex-end;
     order: 3;
-    margin-top: -300px;
+    margin-top: -350px;
+    @include mq($from: leftCol) {
+      margin-top: -300px;
+    }
 
     .showcase-hero__image {
       &:nth-of-type(1) {
@@ -223,11 +233,11 @@
         animation: animateInLeft 0.8s 1s ease-out forwards 1;
       }
       &:nth-child(2) {
-        top: $photo-1-height + $gu-v-spacing;
         height: $photo-2-height;
         width: gu-span(7);
-        left: 0;
         animation: animateInLeft 0.8s 1.30s ease-out forwards 1;
+        margin-bottom: $gu-v-spacing * 1.5;
+        margin-left: $gu-h-spacing * 1.5;
       }
     }
   }
@@ -237,17 +247,24 @@
 
     .showcase-hero__image {
       &:nth-child(1) {
-        top: 0;
         height: $photo-3-height;
         width: gu-span(4);
-        left: gu-span(7) + $gu-h-spacing + 1;
+        @include mq($from: leftCol) {
+          width: gu-span(6);
+        }
+        @include mq($from: wide) {
+          width: gu-span(7);
+        }
+        margin: $gu-v-spacing * 2 0 $gu-v-spacing * 1.5 60px;
         animation: animateInRight 0.8s 1.15s ease-out forwards 1;
       }
       &:nth-child(2) {
-        top: $photo-3-height + $gu-v-spacing;
         height: $photo-4-height;
         width: gu-span(4);
-        left: gu-span(7) + $gu-h-spacing + 1;
+        @include mq($from: leftCol) {
+          width: gu-span(5);
+        }
+        margin-left: 60px;
         animation: animateInRight 0.8s 1.45s ease-out forwards 1;
       }
     }
