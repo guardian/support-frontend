@@ -11,10 +11,12 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributi
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import AnchorButton from 'components/button/anchorButton';
+import Button from 'components/button/button';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { DirectDebit } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
+import { trackComponentClick } from 'helpers/tracking/ophan';
 
 // ----- Types ----- //
 
@@ -61,8 +63,8 @@ function ContributionThankYou(props: PropTypes) {
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you">
         {props.contributionType !== 'ONE_OFF' ? (
-          <section className="confirmation">
-            <h3 className="confirmation__title">
+          <section className="contribution-thank-you-block">
+            <h3 className="contribution-thank-you-block__title">
               {`${directDebitHeaderSuffix}Look out for an email within three business days confirming your ${getSpokenType(props.contributionType)} recurring payment${directDebitMessageSuffix}`}
             </h3>
           </section>
@@ -70,15 +72,24 @@ function ContributionThankYou(props: PropTypes) {
         {!props.isSignedIn ?
           <section className="contribution-thank-you-block">
             <h3 className="contribution-thank-you-block__title">
-              Sign into The Guardian
+              Stay signed in to The Guardian
             </h3>
-            <p className="contribution-thank-you-block__message">If you stay signed into a validated account on each of your devices, you’ll notice far fewer messages asking you for financial support.</p>
-            <AnchorButton
-              href={`https://profile.theguardian.com/signin?email=${props.email}`}
+            <p className="contribution-thank-you-block__message">
+              As a valued contributor, we want to ensure you are having the best experience on our site.
+              To stop seeing requests for support at the bottom of articles, or in pop-up banners, please sign in
+              on each of the devices you use to access The Guardian – mobile, tablet, laptop or desktop.
+            </p>
+            <Button
               aria-label="Sign into The Guardian"
+              appearance="secondary"
+              onClick={
+                () => {
+                  trackComponentClick(`sign-into-the-guardian-link-${props.contributionType}`);
+                  window.location.href = `https://profile.theguardian.com/signin?email=${props.email}`;
+                }}
             >
               Sign in now
-            </AnchorButton>
+            </Button>
           </section> : null }
         <MarketingConsent />
         <ContributionSurvey isRunning={false} contributionType={props.contributionType} />
