@@ -29,9 +29,9 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
   return (
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you gu-content__form--password-set">
-        <section className="confirmation">
-          <h3 className="confirmation__title">{title}</h3>
-          <p className="confirmation__message">
+        <section className="contribution-thank-you-block">
+          <h3 className="contribution-thank-you-block__title">{title}</h3>
+          <p className="contribution-thank-you-block__message">
             {body}
           </p>
         </section>
