@@ -5,6 +5,7 @@
 @import com.gu.support.config.{PayPalConfig, StripeConfig}
 @import helper.CSRF
 @import views.{Preload, SSRContent}
+@import models.identity.UserWithSignInDetails
 @(
   title: String,
   id: String,
@@ -20,7 +21,7 @@
   paymentApiStripeEndpoint: String,
   paymentApiPayPalEndpoint: String,
   existingPaymentOptionsEndpoint: String,
-  idUser: Option[IdUser],
+  userWithSignInDetails: Option[UserWithSignInDetails],
   campaignCodeModifier: Option[String],
   guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent]
@@ -194,14 +195,21 @@
 @main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = SSRContent(id, ssr), mainStyleBundle = css) {
   <script type="text/javascript">
     window.guardian = window.guardian || {};
-    @idUser.map { user =>
+    @userWithSignInDetails.map { userWithSignInDetails =>
       window.guardian.user = {
-        id: "@user.id",
-        email: "@user.primaryEmailAddress",
-        @user.publicFields.displayName.map { displayName =>
+        id: "@userWithSignInDetails.user.id",
+        email: "@userWithSignInDetails.user.primaryEmailAddress",
+        @userWithSignInDetails.user.publicFields.displayName.map { displayName =>
           displayName: "@displayName",
         }
-    @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
+        signInDetails: {
+          hasAccount: "@userWithSignInDetails.signInDetails.hasAccount",
+          hasPassword: "@userWithSignInDetails.signInDetails.hasPassword",
+          isUserEmailValidated: "@userWithSignInDetails.signInDetails.isUserEmailValidated",
+          hasGoogleSocialLink: "@userWithSignInDetails.signInDetails.hasGoogleSocialLink",
+          hasFacebookSocialLink: "@userWithSignInDetails.signInDetails.hasFacebookSocialLink"
+        },
+    @for(fields <- userWithSignInDetails.user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
           firstName: "@firstName",
           lastName: "@lastName",
         }

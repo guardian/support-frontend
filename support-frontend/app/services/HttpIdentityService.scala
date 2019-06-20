@@ -11,9 +11,10 @@ import com.gu.monitoring.SafeLogger._
 import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
-import models.identity.UserIdWithGuestAccountToken
+import models.identity.{UserIdWithGuestAccountToken, UserWithSignInDetails}
 import models.identity.requests.CreateGuestAccountRequestBody
-import models.identity.responses.{GuestRegistrationResponse, SetGuestPasswordResponseCookies, UserResponse}
+import models.identity.responses.UserSignInDetailsResponse.UserSignInDetails
+import models.identity.responses.{GuestRegistrationResponse, SetGuestPasswordResponseCookies, UserResponse, UserSignInDetailsResponse}
 import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
@@ -95,6 +96,29 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => resp.json.validate[GetUserTypeResponse].asEither.leftMap(_.mkString(",")))
+  }
+
+  def getUserSignInDetails(
+    email: String
+  )(implicit ec: ExecutionContext): EitherT[Future, String, UserSignInDetails] = {
+    request(s"/user/sign-in-details")
+      .withQueryStringParameters("emailAddress" -> email)
+      .get
+      .attemptT
+      .leftMap(_.toString)
+      .subflatMap(resp => (resp.json \ "userSignInDetails").validate[UserSignInDetails].asEither.leftMap(_.mkString(",")))
+  }
+
+  // TODO: QUESTION: should this actually return an optional signInDetails, in case one request succeeds but the second fails?
+  def getUserWithSignInDetails(
+    idMinimalUser: IdMinimalUser
+  )(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserWithSignInDetails] = {
+    for {
+      user <- getUser(idMinimalUser)
+      signInDetails <- getUserSignInDetails(user.primaryEmailAddress)
+    } yield {
+      UserWithSignInDetails(user, signInDetails)
+    }
   }
 
   def setPasswordGuest(
@@ -194,6 +218,8 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
 
 trait IdentityService {
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
+  def getUserSignInDetails(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, UserSignInDetails]
+  def getUserWithSignInDetails(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserWithSignInDetails]
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
   def getUserType(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, GetUserTypeResponse]
   def setPasswordGuest(

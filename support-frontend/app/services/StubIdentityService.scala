@@ -3,9 +3,10 @@ package services
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.identity.play.{IdMinimalUser, IdUser, PrivateFields, PublicFields}
-import models.identity.UserIdWithGuestAccountToken
+import models.identity.{UserIdWithGuestAccountToken, UserWithSignInDetails}
 import models.identity.responses.SetGuestPasswordResponseCookies
 import com.gu.monitoring.SafeLogger
+import models.identity.responses.UserSignInDetailsResponse.UserSignInDetails
 import play.api.mvc.RequestHeader
 import org.joda.time.DateTime
 
@@ -18,6 +19,36 @@ class StubIdentityService extends IdentityService {
 
     SafeLogger.info(s"Stubbed identity service active. Returning test names $privateFields")
     EitherT.rightT[Future, String](stubTestUser)
+  }
+
+  def getUserSignInDetails(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, UserSignInDetails] = {
+    val stubTestUserSignInDetails: UserSignInDetails = UserSignInDetails(
+      hasAccount = true,
+      hasPassword = true,
+      isUserEmailValidated = false,
+      hasGoogleSocialLink = false,
+      hasFacebookSocialLink = false
+    )
+
+    SafeLogger.info(s"Stubbed identity service active. Returning sign-in details")
+    EitherT.rightT[Future, String](stubTestUserSignInDetails)
+  }
+
+  def getUserWithSignInDetails(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserWithSignInDetails] = {
+    val privateFields = PrivateFields(firstName = Some("Frosty"), secondName = Some("The Snowman"))
+    val stubTestUserWithSignInDetails: UserWithSignInDetails = UserWithSignInDetails(
+      IdUser("123456", "nonsense@gu.com", PublicFields(None), Some(privateFields), None),
+      UserSignInDetails(
+        hasAccount = true,
+        hasPassword = true,
+        isUserEmailValidated = false,
+        hasGoogleSocialLink = false,
+        hasFacebookSocialLink = false
+      )
+    )
+
+    SafeLogger.info(s"Stubbed identity service active. Returning test names $privateFields")
+    EitherT.rightT[Future, String](stubTestUserWithSignInDetails)
   }
 
   def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean] = {

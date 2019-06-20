@@ -15,11 +15,13 @@ import config.StringsConfig
 import cookies.ServersideAbTestCookie
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import models.identity.UserWithSignInDetails
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
 import utils.RequestCountry._
 import views.{EmptyDiv, Preload}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class Application(
@@ -115,14 +117,21 @@ class Application(
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
+    request.user.traverse[Attempt, UserWithSignInDetails](identityService.getUserWithSignInDetails(_)).fold(
       _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption, guestAccountCreationToken)),
-      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken))
+      user => {
+
+        Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken))
+      }
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String], guestAccountCreationToken: Option[String])
-                               (implicit request: RequestHeader, settings: AllSettings) = {
+  private def contributionsHtml(
+    countryCode: String,
+    userWithSignInDetails: Option[UserWithSignInDetails],
+    campaignCode: Option[String],
+    guestAccountCreationToken: Option[String]
+  )(implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
     val css = elementForStage(RefPath("contributionsLandingPage.css"))
@@ -145,7 +154,7 @@ class Application(
       paymentApiStripeEndpoint = paymentAPIService.stripeExecutePaymentEndpoint,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
-      idUser = idUser,
+      userWithSignInDetails = userWithSignInDetails,
       campaignCodeModifier = campaignCode.map(code => s"gu-content--$code"),
       guestAccountCreationToken = guestAccountCreationToken
     )
