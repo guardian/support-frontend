@@ -90,7 +90,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.product,
       state.paymentMethod,
       state.firstDeliveryDate,
-      state.salesForceContact,
+      state.salesforceContacts.buyer,
       accountNumber.value,
       subscriptionNumber.value,
       paymentSchedule,
@@ -148,12 +148,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   }
 
   private def buildAccount(state: CreateZuoraSubscriptionState) = Account(
-    state.salesForceContact.AccountId, //We store the Salesforce Account id in the name field
-    state.product.currency,
-    state.salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
-    state.salesForceContact.Id,
-    state.user.id,
-    PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
-    state.requestId.toString
+    name = state.salesforceContacts.recipient.AccountId, //We store the Salesforce Account id in the name field
+    currency = state.product.currency,
+    crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
+    sfContactId__c = state.salesforceContacts.buyer.Id,
+    identityId__c = state.user.id,
+    paymentGateway = PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
+    createdRequestId__c = state.requestId.toString
   )
 }

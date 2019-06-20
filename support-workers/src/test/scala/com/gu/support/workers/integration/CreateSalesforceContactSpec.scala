@@ -25,6 +25,6 @@ class CreateSalesforceContactSpec extends LambdaSpec {
 
     val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
     result.isSuccess should be(true)
-    result.get._1.salesForceContact.Id should be(salesforceId)
+    result.get._1.salesforceContacts.buyer.Id should be(salesforceId)
   }
 }

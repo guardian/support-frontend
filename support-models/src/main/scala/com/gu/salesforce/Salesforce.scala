@@ -102,7 +102,9 @@ object Salesforce {
 
   case class SalesforceContactResponse(Success: Boolean, ErrorString: Option[String], ContactRecord: SalesforceContactRecord) extends SalesforceResponse
 
-  case class SalesforceContactRecords(buyer: SalesforceContactRecord, giftRecipient: Option[SalesforceContactRecord])
+  case class SalesforceContactRecords(buyer: SalesforceContactRecord, giftRecipient: Option[SalesforceContactRecord]){
+    def recipient: SalesforceContactRecord = giftRecipient.getOrElse(buyer)
+  }
 
   case class SalesforceContactRecordsResponse(buyer: SalesforceContactResponse, giftRecipient: Option[SalesforceContactResponse]) {
     def successful: Boolean = buyer.Success && giftRecipient.forall(_.Success)

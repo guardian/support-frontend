@@ -16,14 +16,14 @@ class CreateSalesforceContact extends ServicesHandler[CreateSalesforceContactSta
     SafeLogger.debug(s"CreateSalesforceContact state: $state")
 
     services.salesforceService.createContactRecords(state.user, state.giftRecipient)
-    .map(response =>
-      if (response.successful) {
-        HandlerResult(getCreateZuoraSubscriptionState(state, response.contactRecords), requestInfo)
-      } else {
-        val errorMessage = response.errorMessage.getOrElse("No error message returned")
-        SafeLogger.warn(s"Error creating Salesforce contact:\n$errorMessage")
-        throw new SalesforceException(errorMessage)
-      })
+      .map(response =>
+        if (response.successful) {
+          HandlerResult(getCreateZuoraSubscriptionState(state, response.contactRecords), requestInfo)
+        } else {
+          val errorMessage = response.errorMessage.getOrElse("No error message returned")
+          SafeLogger.warn(s"Error creating Salesforce contact:\n$errorMessage")
+          throw new SalesforceException(errorMessage)
+        })
   }
 
   private def getCreateZuoraSubscriptionState(state: CreateSalesforceContactState, response: SalesforceContactRecords) =
