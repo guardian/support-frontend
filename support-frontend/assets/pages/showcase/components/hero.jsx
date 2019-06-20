@@ -16,7 +16,7 @@ export default function BreakingHeadlines() {
           <h2 className="accessibility-hint">Help us support investigative independent journalism</h2>
           <HeroImg />
         </div>
-        <figure className="showcase-hero__figure">
+        <div className="showcase-hero--left">
           <div className="showcase-hero__image">
             <GridImage
               gridId="showcaseChris"
@@ -33,6 +33,8 @@ export default function BreakingHeadlines() {
               imgType="jpg"
             />
           </div>
+        </div>
+        <div className="showcase-hero--right">
           <div className="showcase-hero__image">
             <GridImage
               gridId="showcaseNix"
@@ -49,17 +51,17 @@ export default function BreakingHeadlines() {
               imgType="jpg"
             />
           </div>
-          <figcaption className="showcase-hero__caption">
-            <strong>Cambridge Analytica</strong>
-            <p>A year-long investigation in which we revealed how the data
-              analytics firm Cambridge Analytica that was behind Trump’s 2016
-              campaign and played a role in Brexit, had used the data harvested
-              from 87 million Facebook users without their consent.
-              This reporting led to a public apology from Facebook’s
-              Mark Zuckerberg who was forced to testify before Congress.
-            </p>
-          </figcaption>
-        </figure>
+        </div>
+        <caption className="showcase-hero__caption">
+          <strong>Cambridge Analytica</strong>
+          <p>A year-long investigation in which we revealed how the data
+            analytics firm Cambridge Analytica that was behind Trump’s 2016
+            campaign and played a role in Brexit, had used the data harvested
+            from 87 million Facebook users without their consent.
+            This reporting led to a public apology from Facebook’s
+            Mark Zuckerberg who was forced to testify before Congress.
+          </p>
+        </caption>
       </div>
     </div>
   );
