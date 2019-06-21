@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import ProductOption, {
   ProductOptionContent,
   ProductOptionTitle,
-  ProductOptionPrice, // this will be used in the next design version
-  ProductOptionCopy, // this will be used in the next design version
   ProductOptionOffer,
   ProductOptionButton,
 } from 'components/productOption/productOption';
