@@ -58,13 +58,18 @@ const signOut = () => { window.location.href = getSignoutUrl(); };
 
 const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
 
-const getUserEmailValidatedFromCookie = () => {
+const getEmailValidatedFromUserCookie = () => {
   const guu = cookie.get('GU_U');
   if (guu) {
-    debugger
-  } else {
-    return false
+    const tokens = guu.split('.');
+    try {
+      return JSON.parse(atob(tokens[0]))[7];
+    } catch(e) {
+      return false
+    }
   }
+
+  return false
 };
 
 const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
@@ -120,7 +125,6 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
   }
 
   if (windowHasUser) {
-    debugger
     dispatch(setId(window.guardian.user.id));
     dispatch(setEmail(window.guardian.user.email));
     dispatch(setDisplayName(window.guardian.user.displayName));
@@ -128,10 +132,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
     dispatch(setIsSignedIn(true));
-    //TODO - get emailValidated from cookie
-
-    const emailValidated = getUserEmailValidatedFromCookie();
-    dispatch(setEmailValidated(emailValidated))
+    dispatch(setEmailValidated(getEmailValidatedFromUserCookie()))
   } else if (userAppearsLoggedIn) {
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
