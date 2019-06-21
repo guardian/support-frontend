@@ -121,8 +121,8 @@ MarketingConsent.defaultProps = {
   requestPending: false,
   render: ({ title, message }: {title: string, message: string}) => (
     <div>
-      <h3 className="component-marketing-consent__title">{title}</h3>
-      <p className="component-marketing-consent__message">
+      <h3 className="contribution-thank-you-block__title">{title}</h3>
+      <p className="contribution-thank-you-block__message">
         {message}
       </p>
     </div>

@@ -11,10 +11,12 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributi
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import AnchorButton from 'components/button/anchorButton';
+import Button from 'components/button/button';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { DirectDebit } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
+import { trackComponentClick } from 'helpers/tracking/ophan';
 
 // ----- Types ----- //
 
@@ -24,13 +26,15 @@ type PropTypes = {|
   paymentMethod: PaymentMethod,
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
-  |};
+  isSignedIn: boolean,
+|};
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = state => ({
   contributionType: state.page.form.contributionType,
   paymentMethod: state.page.form.paymentMethod,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
+  isSignedIn: state.page.user.isSignedIn,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -57,12 +61,34 @@ function ContributionThankYou(props: PropTypes) {
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you">
         {props.contributionType !== 'ONE_OFF' ? (
-          <section className="confirmation">
-            <h3 className="confirmation__title">
+          <section className="contribution-thank-you-block">
+            <h3 className="contribution-thank-you-block__title">
               {`${directDebitHeaderSuffix}Look out for an email within three business days confirming your ${getSpokenType(props.contributionType)} recurring payment${directDebitMessageSuffix}`}
             </h3>
           </section>
         ) : null}
+        {!props.isSignedIn ?
+          <section className="contribution-thank-you-block">
+            <h3 className="contribution-thank-you-block__title">
+              Stay signed in to The Guardian
+            </h3>
+            <p className="contribution-thank-you-block__message">
+              As a valued contributor, we want to ensure you are having the best experience on our site. To see
+              far fewer requests for support, please sign in on each of the devices you use to access The
+              Guardian – mobile, tablet, laptop or desktop. Please make sure you’ve verified your email address.
+            </p>
+            <Button
+              aria-label="Sign into The Guardian"
+              appearance="secondary"
+              onClick={
+                () => {
+                  trackComponentClick(`sign-into-the-guardian-link-${props.contributionType}`);
+                  window.location.href = 'https://profile.theguardian.com/signin';
+                }}
+            >
+              Sign in now
+            </Button>
+          </section> : null }
         <MarketingConsent />
         <ContributionSurvey isRunning={false} contributionType={props.contributionType} />
         <SpreadTheWord />

@@ -67,8 +67,8 @@ function ContributionThankYouSetPassword(props: PropTypes) {
   const renderDirectDebit = () => {
     props.setHasSeenDirectDebitThankYouCopy();
     return (
-      <section className="confirmation">
-        <h3 className="confirmation__title">
+      <section className="contribution-thank-you-block">
+        <h3 className="contribution-thank-you-block__title">
           {'Your Direct Debit has been set up. Look out for an email within three business days confirming your recurring payment. This will appear as \'Guardian Media Group\' on your bank statements'}
         </h3>
       </section>

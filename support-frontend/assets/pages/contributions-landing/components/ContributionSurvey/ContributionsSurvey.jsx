@@ -26,8 +26,8 @@ export default function ContributionsSurvey(props: PropTypes) {
 
   return props.isRunning && surveyLink ? (
     <div className="component-contributions-survey">
-      <h3 className="confirmation__title">Tell us about your contribution</h3>
-      <p className="confirmation__message">
+      <h3 className="contribution-thank-you-block__title">Tell us about your contribution</h3>
+      <p className="contribution-thank-you-block__message">
           Please fill out this short form to help us learn a little more about your support for The Guardian
       </p>
       <AnchorButton
