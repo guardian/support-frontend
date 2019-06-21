@@ -115,7 +115,7 @@ class RegularContributions(
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
-      title = Some(Title.Mrs),
+      title = request.title,
       firstName = request.firstName,
       lastName = request.lastName,
       billingAddress = billingAddress(request),
