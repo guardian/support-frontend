@@ -40,7 +40,10 @@ stories.add('Old Product Option', () => (
 
 stories.add('Product Option', () => (
   <div style={{ width: '230px', margin: '0 20px' }}>
-    <ProductOption>
+    <ProductOption
+      href="#"
+      onClick={() => {}}
+    >
       <ProductOptionContent>
         <ProductOptionTitle>Monthly</ProductOptionTitle>
         <ProductOptionPrice>

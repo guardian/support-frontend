@@ -57,7 +57,7 @@ ProductOptionButton.defaultProps = {
 };
 
 // default component
-const ProductOption = ({ onClick, href, children }: { children: Node }) => (
+const ProductOption = ({ onClick, href, children }: { children: Node, onClick: Function, href: string }) => (
   <a href={href} onClick={onClick} className="product-option">{ children }</a>
 );
 

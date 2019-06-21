@@ -16,14 +16,14 @@ const BILLING_PERIOD = {
   [Monthly]: {
     title: 'Monthly',
     singlePeriod: 'month',
-    salesCopy: (displayPrice: string, saving?: string): Node => (
+    salesCopy: (displayPrice: string, saving?: string) => (
       <span>14 day free trial, then <strong>{displayPrice}</strong> a month for 12 months {saving}</span>
     ),
   },
   [Annual]: {
     title: 'Annually',
     singlePeriod: 'year',
-    salesCopy: (displayPrice: string, saving?: string): Node => (
+    salesCopy: (displayPrice: string, saving?: string) => (
       <span>
         14 day free trial, then <strong>{displayPrice}</strong>
         &nbsp;for the first year<br />
