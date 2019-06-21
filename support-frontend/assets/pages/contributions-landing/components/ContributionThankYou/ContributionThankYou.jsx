@@ -73,9 +73,9 @@ function ContributionThankYou(props: PropTypes) {
               Stay signed in to The Guardian
             </h3>
             <p className="contribution-thank-you-block__message">
-              As a valued contributor, we want to ensure you are having the best experience on our site.
-              To stop seeing requests for support at the bottom of articles, or in pop-up banners, please sign in
-              on each of the devices you use to access The Guardian – mobile, tablet, laptop or desktop.
+              As a valued contributor, we want to ensure you are having the best experience on our site. To see
+              far fewer requests for support, please sign in on each of the devices you use to access The
+              Guardian – mobile, tablet, laptop or desktop. Please make sure you’ve verified your email address.
             </p>
             <Button
               aria-label="Sign into The Guardian"
@@ -83,7 +83,7 @@ function ContributionThankYou(props: PropTypes) {
               onClick={
                 () => {
                   trackComponentClick(`sign-into-the-guardian-link-${props.contributionType}`);
-                  window.location.href = `https://profile.theguardian.com/signin`;
+                  window.location.href = 'https://profile.theguardian.com/signin';
                 }}
             >
               Sign in now
