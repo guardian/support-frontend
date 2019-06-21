@@ -15,23 +15,14 @@ import ProductOption, {
 import './paymentSelection.scss';
 
 import { mapStateToProps } from './helpers/paymentSelection';
-
-type PaymentOption = {|
-  title: string,
-  singlePeriod: string,
-  price: string,
-  href: string,
-  onClick: () => void,
-  salesCopy: string,
-  offer: string,
-|}
+import { type PaymentOption } from './helpers/paymentSelection';
 
 type PropTypes = {
   paymentOptions: Array<PaymentOption>;
 }
 
 const PaymentSelection = ({ paymentOptions }: PropTypes) => {
-
+  console.log(paymentOptions);
   return (
     <div className="payment-selection">
       {paymentOptions.map(paymentOption => (
@@ -42,10 +33,6 @@ const PaymentSelection = ({ paymentOptions }: PropTypes) => {
           >
             <ProductOptionContent>
               <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
-              {/* <ProductOptionPrice>
-                {paymentOption.price}&nbsp;
-                <ProductOptionCopy>/{paymentOption.singlePeriod}</ProductOptionCopy>
-              </ProductOptionPrice> */}
               <ProductOptionOffer hidden={paymentOption.title === 'Monthly'} >Save {paymentOption.offer}</ProductOptionOffer>
             </ProductOptionContent>
             <ProductOptionButton

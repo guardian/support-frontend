@@ -16,14 +16,14 @@ const BILLING_PERIOD = {
   [Monthly]: {
     title: 'Monthly',
     singlePeriod: 'month',
-    salesCopy: (displayPrice: string, saving?: string) => (
+    salesCopy: (displayPrice: string, saving?: string): Node => (
       <span>14 day free trial, then <strong>{displayPrice}</strong> a month for 12 months {saving}</span>
     ),
   },
   [Annual]: {
     title: 'Annually',
     singlePeriod: 'year',
-    salesCopy: (displayPrice: string, saving?: string) => (
+    salesCopy: (displayPrice: string, saving?: string): Node => (
       <span>
         14 day free trial, then <strong>{displayPrice}</strong>
         &nbsp;for the first year<br />
@@ -33,13 +33,13 @@ const BILLING_PERIOD = {
   },
 };
 
-type PaymentOption = {
+export type PaymentOption = {
   title: string,
   singlePeriod: string,
-  salesCopy: Element<'span'>,
+  href: string,
+  salesCopy: Node,
   offer: Option<string>,
   price: Option<string>,
-  href: string,
   onClick?: Option<() => void>,
 }
 
