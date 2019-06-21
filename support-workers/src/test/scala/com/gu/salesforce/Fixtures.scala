@@ -9,6 +9,7 @@ object Fixtures {
   val salesforceAccountId = "0013E000011gxQuQAI"
   val emailAddress = "integration-test@gu.com"
   val telephoneNumber = "0123456789"
+  val title = Title.Mrs
   val name = "integration-test"
   val street = "123 trash alley"
   val city = "London"

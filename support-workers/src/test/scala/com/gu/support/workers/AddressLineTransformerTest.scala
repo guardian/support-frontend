@@ -1,8 +1,9 @@
 package com.gu.support.workers
 
 import com.gu.i18n.Currency
-import com.gu.support.workers.AddressLineTransformer.combinedAddressLine
-import com.gu.support.workers.AddressLineTransformer.clipForZuoraStreetNameLimit
+import com.gu.salesforce.AddressLine
+import com.gu.salesforce.AddressLineTransformer.combinedAddressLine
+import com.gu.salesforce.AddressLineTransformer.clipForZuoraStreetNameLimit
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
 

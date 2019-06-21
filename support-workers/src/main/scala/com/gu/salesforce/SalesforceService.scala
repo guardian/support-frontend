@@ -5,10 +5,9 @@ import com.gu.helpers.{Retry, WebServiceHelper}
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
+import com.gu.salesforce.AddressLine.getAddressLine
 import com.gu.salesforce.Salesforce._
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.AddressLine.asFormattedString
-import com.gu.support.workers.AddressLineTransformer.combinedAddressLine
 import com.gu.support.workers.{Address, GiftRecipient, SalesforceContactRecord, User}
 import io.circe
 import io.circe.Decoder
@@ -48,7 +47,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
 
   def createContactRecords(user: User, giftRecipient: Option[GiftRecipient]): Future[SalesforceContactRecordsResponse] = {
     for {
-      contactRecord <- upsert(getNewContact(user))
+      contactRecord <- upsert(getNewContact(user, giftRecipient))
       recipientContactRecord <- maybeAddGiftRecipient(
         contactRecord.ContactRecord,
         giftRecipient,
@@ -64,29 +63,53 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
     ).getOrElse(Future.successful(None))
 
 
-  private def getNewContact(user: User) =
-    NewContact(
-      user.id,
-      user.primaryEmailAddress,
-      user.title,
-      user.firstName,
-      user.lastName,
-      getAddressLine(user.billingAddress),
-      user.billingAddress.city,
-      user.billingAddress.state,
-      user.billingAddress.postCode,
-      user.billingAddress.country.name,
-      getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
-      user.deliveryAddress.flatMap(_.city), //TODO: only if not gift?
-      user.deliveryAddress.flatMap(_.state),
-      user.deliveryAddress.flatMap(_.postCode),
-      user.deliveryAddress.map(_.country.name),
-      user.telephoneNumber,
-      user.allowMembershipMail,
-      user.allowThirdPartyMail,
-      user.allowGURelatedMail
+  private def getNewContact(user: User, giftRecipient: Option[GiftRecipient]) =
+    giftRecipient.map(_ =>
+      // If we have a gift recipient then don't update the delivery address
+      NewContact(
+        IdentityID__c = user.id,
+        Email = user.primaryEmailAddress,
+        Salutation = user.title,
+        FirstName = user.firstName,
+        LastName = user.lastName,
+        OtherStreet = getAddressLine(user.billingAddress),
+        OtherCity = user.billingAddress.city,
+        OtherState = user.billingAddress.state,
+        OtherPostalCode = user.billingAddress.postCode,
+        OtherCountry = user.billingAddress.country.name,
+        MailingStreet = None,
+        MailingCity = None,
+        MailingState = None,
+        MailingPostalCode = None,
+        MailingCountry = None,
+        Phone = user.telephoneNumber,
+        Allow_Membership_Mail__c = user.allowMembershipMail,
+        Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
+        Allow_Guardian_Related_Mail__c = user.allowGURelatedMail
+      )
+    ).getOrElse(
+      NewContact(
+        user.id,
+        user.primaryEmailAddress,
+        user.title,
+        user.firstName,
+        user.lastName,
+        getAddressLine(user.billingAddress),
+        user.billingAddress.city,
+        user.billingAddress.state,
+        user.billingAddress.postCode,
+        user.billingAddress.country.name,
+        getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
+        user.deliveryAddress.flatMap(_.city),
+        user.deliveryAddress.flatMap(_.state),
+        user.deliveryAddress.flatMap(_.postCode),
+        user.deliveryAddress.map(_.country.name),
+        user.telephoneNumber,
+        user.allowMembershipMail,
+        user.allowThirdPartyMail,
+        user.allowGURelatedMail
+      )
     )
-
 
   private def getGiftRecipient(buyerAccountId: String, deliveryAddress: Address, giftRecipient: GiftRecipient) =
     DeliveryContact(
@@ -101,11 +124,6 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
       deliveryAddress.postCode,
       Some(deliveryAddress.country.name)
     )
-
-  private def getAddressLine(address: Address) = combinedAddressLine(
-    address.lineOne,
-    address.lineTwo
-  ).map(asFormattedString)
 }
 
 /**

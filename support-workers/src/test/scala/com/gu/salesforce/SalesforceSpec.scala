@@ -1,10 +1,12 @@
 package com.gu.salesforce
 
 import com.gu.config.Configuration
-import com.gu.i18n.Title
+import com.gu.i18n.{Country, Title}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
 import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
+import com.gu.support.workers
+import com.gu.support.workers.{Address, GiftRecipient}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
@@ -112,7 +114,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     val upsertData = DeliveryContact(
       AccountId = salesforceAccountId,
       Email = Some("integration-test-recipient@gu.com"),
-      Salutation = Some(Title.Ms),
+      Salutation = Some(Title.Dr),
       FirstName = name,
       LastName = name,
       MailingStreet = Some(street),
@@ -126,5 +128,18 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       response.Success shouldBe true
       response.ContactRecord.AccountId shouldBe salesforceAccountId
     }
+  }
+
+  "NewContact" should "only include delivery fields for purchases without a gift recipient" in {
+    val address = Address(Some(street), None, Some(city), None, Some(postCode), Country.UK)
+    val user = workers.User(idId, emailAddress, Some(title), name, name, address, Some(address))
+
+    val newContactNoGift = NewContact.forUser(user, None)
+
+    newContactNoGift.MailingStreet shouldBe Some(street)
+
+    val newContactWithGift = NewContact.forUser(user, Some(GiftRecipient(None, "", "", None)))
+
+    newContactWithGift.MailingStreet shouldBe None
   }
 }

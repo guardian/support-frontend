@@ -7,18 +7,68 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.JsonHelpers.JsonObjectExtensions
-import com.gu.support.workers.SalesforceContactRecord
+import com.gu.support.workers.{GiftRecipient, SalesforceContactRecord, User}
 import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.DateTime
+import AddressLine.getAddressLine
 
 object Salesforce {
 
   implicit val salesforceContactRecordCodec: Codec[SalesforceContactRecord] = deriveCodec
 
   object NewContact {
+    def forUser(user: User, giftRecipient: Option[GiftRecipient]) =
+      giftRecipient.map(_ =>
+        // If we have a gift recipient then don't update the delivery address
+        NewContact(
+          IdentityID__c = user.id,
+          Email = user.primaryEmailAddress,
+          Salutation = user.title,
+          FirstName = user.firstName,
+          LastName = user.lastName,
+          // 'Other' address fields = billing address
+          OtherStreet = getAddressLine(user.billingAddress),
+          OtherCity = user.billingAddress.city,
+          OtherState = user.billingAddress.state,
+          OtherPostalCode = user.billingAddress.postCode,
+          OtherCountry = user.billingAddress.country.name,
+          // 'Mailing' address fields = delivery address
+          MailingStreet = None,
+          MailingCity = None,
+          MailingState = None,
+          MailingPostalCode = None,
+          MailingCountry = None,
+          Phone = user.telephoneNumber,
+          Allow_Membership_Mail__c = user.allowMembershipMail,
+          Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
+          Allow_Guardian_Related_Mail__c = user.allowGURelatedMail
+        )
+      ).getOrElse(
+        NewContact(
+          IdentityID__c = user.id,
+          Email = user.primaryEmailAddress,
+          Salutation = user.title,
+          FirstName = user.firstName,
+          LastName = user.lastName,
+          OtherStreet = getAddressLine(user.billingAddress),
+          OtherCity = user.billingAddress.city,
+          OtherState = user.billingAddress.state,
+          OtherPostalCode = user.billingAddress.postCode,
+          OtherCountry = user.billingAddress.country.name,
+          MailingStreet = getAddressLine(user.deliveryAddress.getOrElse(user.billingAddress)),
+          MailingCity = user.deliveryAddress.flatMap(_.city),
+          MailingState = user.deliveryAddress.flatMap(_.state),
+          MailingPostalCode = user.deliveryAddress.flatMap(_.postCode),
+          MailingCountry = user.deliveryAddress.map(_.country.name),
+          Phone = user.telephoneNumber,
+          Allow_Membership_Mail__c = user.allowMembershipMail,
+          Allow_3rd_Party_Mail__c = user.allowThirdPartyMail,
+          Allow_Guardian_Related_Mail__c = user.allowGURelatedMail
+        )
+      )
     implicit val decoder: Decoder[NewContact] = deriveDecoder
     implicit val encoder: Encoder[NewContact] = deriveEncoder[NewContact].mapJsonObject(_.wrapObject("newContact"))
   }
