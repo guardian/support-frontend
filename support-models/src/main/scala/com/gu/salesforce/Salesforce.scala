@@ -32,9 +32,6 @@ object Salesforce {
       )
   }
 
-  //The odd field names on these class are to match with the Salesforce api and allow us to serialise and deserialise
-  //without a lot of custom mapping code
-
   sealed trait UpsertData
 
   object UpsertData {
@@ -50,6 +47,8 @@ object Salesforce {
       ).reduceLeft(_ or _)
   }
 
+  //The odd field names on these class are to match with the Salesforce api and allow us to serialise and deserialise
+  //without a lot of custom mapping code
   case class NewContact(
     IdentityID__c: String,
     Email: String,
