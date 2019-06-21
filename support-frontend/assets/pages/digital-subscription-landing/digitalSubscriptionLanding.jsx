@@ -90,7 +90,10 @@ const content = (
         </Footer>}
     >
 
-      <CampaignHeader countryGroupId={countryGroupId} />
+      <CampaignHeader 
+        countryGroupId={countryGroupId} 
+        dailyEditionsVariant={dailyEditionsVariant} 
+      />
       {dailyEditionsVariant ?
         (
           <div>

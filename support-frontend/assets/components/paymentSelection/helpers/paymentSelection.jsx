@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import type { Node, Element } from 'react';
+
 // helpers
 import { getDigitalCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';

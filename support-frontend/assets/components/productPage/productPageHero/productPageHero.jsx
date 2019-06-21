@@ -14,6 +14,7 @@ import PaymentSelection from 'components/paymentSelection/paymentSelection';
 
 import './productPageHero.scss';
 
+
 // ---- Types ----- //
 type WrapperPropTypes = {|
   children: Node,
@@ -27,7 +28,8 @@ type PropTypes = {|
   overheading: string,
   heading: string,
   content?: Option<Node>,
-  hasCampaign: boolean
+  hasCampaign: boolean,
+  dailyEditionsVariant: boolean
 |};
 
 // ----- Render ----- //
@@ -79,20 +81,23 @@ const PaymentSelectionContainer = () => (
 );
 
 const ProductPageHero = ({
-  overheading, heading, content, modifierClasses, children, appearance, hasCampaign,
+  overheading, heading, content, modifierClasses, children, appearance, hasCampaign, dailyEditionsVariant,
 }: PropTypes) => (
   <header>
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
     </HeroWrapper>
 
-    <PaymentSelectionContainer />
-    {/* <HeroHeading {...{ hasCampaign }}>
-      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
-    </HeroHeading> */}
-    {content && null
-      // <HeroHanger>{content}</HeroHanger>
-    }
+    {dailyEditionsVariant ? (
+      <PaymentSelectionContainer />
+      ) : (
+        <div>
+          <HeroHeading {...{ hasCampaign }}>
+            <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
+          </HeroHeading>
+          {content && <HeroHanger>{content}</HeroHanger>}
+        </div>
+      )}
   </header>
 );
 
