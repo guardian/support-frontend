@@ -64,12 +64,12 @@ const getEmailValidatedFromUserCookie = () => {
     const tokens = guu.split('.');
     try {
       return JSON.parse(atob(tokens[0]))[7];
-    } catch(e) {
-      return false
+    } catch (e) {
+      return false;
     }
   }
 
-  return false
+  return false;
 };
 
 const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
@@ -132,7 +132,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
     dispatch(setIsSignedIn(true));
-    dispatch(setEmailValidated(getEmailValidatedFromUserCookie()))
+    dispatch(setEmailValidated(getEmailValidatedFromUserCookie()));
   } else if (userAppearsLoggedIn) {
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
