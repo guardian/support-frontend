@@ -90,9 +90,9 @@ class IdentityController(
           SafeLogger.error(scrub"Failed to create a sign in token for ${request.body.email}: ${err.toString}")
           warnAndReturn()
         },
-        cookiesFromResponse => {
+        response => {
           SafeLogger.info(s"Successfully created a sign in token for ${request.body.email}")
-          Ok
+          Ok(response.asJson)
         }
       )
   }

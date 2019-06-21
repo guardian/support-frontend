@@ -64,11 +64,11 @@ object GetUserTypeResponse {
   implicit val getUserTypeEncoder: Encoder[GetUserTypeResponse] = deriveEncoder
 }
 
-case class CreateSignInTokenResponse(userType: String)
+case class CreateSignInTokenResponse(encryptedEmail: String)
 
 object CreateSignInTokenResponse {
-  implicit val readsGetUserTypeResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
-  implicit val getUserTypeEncoder: Encoder[CreateSignInTokenResponse] = deriveEncoder
+  implicit val readCreateSignInTokenResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
+  implicit val createSignInTokenResponseEncoder: Encoder[CreateSignInTokenResponse] = deriveEncoder
 }
 
 class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {
@@ -122,8 +122,9 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
   def createSignInToken(
     email: String
   )(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse] = {
-    request(s"/signin-token/email")
-      .get
+    val payload = Json.obj("email" -> email)
+    request(s"signin-token/email")
+      .post(payload)
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
