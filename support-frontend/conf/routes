@@ -71,7 +71,6 @@ PUT /identity/set-password-guest                                   controllers.I
 GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])
 POST /identity/sign-in-token                                       controllers.IdentityController.createSignInToken
 
-
 # ----- Subscriptions ----- #
 
 GET  /subscribe                                                    controllers.Subscriptions.geoRedirect()
