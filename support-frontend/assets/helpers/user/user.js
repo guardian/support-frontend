@@ -58,6 +58,15 @@ const signOut = () => { window.location.href = getSignoutUrl(); };
 
 const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
 
+const getUserEmailValidatedFromCookie = () => {
+  const guu = cookie.get('GU_U');
+  if (guu) {
+    debugger
+  } else {
+    return false
+  }
+};
+
 const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActionFunctions) => {
 
   const {
@@ -71,7 +80,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     setIsRecurringContributor,
     setTestUser,
     setPostDeploymentTestUser,
-    setSignInDetails,
+    setEmailValidated,
   } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
@@ -111,6 +120,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
   }
 
   if (windowHasUser) {
+    debugger
     dispatch(setId(window.guardian.user.id));
     dispatch(setEmail(window.guardian.user.email));
     dispatch(setDisplayName(window.guardian.user.displayName));
@@ -118,7 +128,10 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
     dispatch(setIsSignedIn(true));
-    dispatch(setSignInDetails(window.guardian.user.signInDetails))
+    //TODO - get emailValidated from cookie
+
+    const emailValidated = getUserEmailValidatedFromCookie();
+    dispatch(setEmailValidated(emailValidated))
   } else if (userAppearsLoggedIn) {
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
