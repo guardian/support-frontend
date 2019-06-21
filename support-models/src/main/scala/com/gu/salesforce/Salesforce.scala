@@ -53,6 +53,7 @@ object Salesforce {
   case class NewContact(
     IdentityID__c: String,
     Email: String,
+    Salutation: Option[Title],
     FirstName: String,
     LastName: String,
     OtherStreet: Option[String],
@@ -74,7 +75,7 @@ object Salesforce {
   case class DeliveryContact(
     AccountId: String,
     Email: Option[String],
-    Title: Option[Title],
+    Salutation: Option[Title],
     FirstName: String,
     LastName: String,
     MailingStreet: Option[String],

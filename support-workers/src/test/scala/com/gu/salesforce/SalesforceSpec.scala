@@ -1,9 +1,10 @@
 package com.gu.salesforce
 
 import com.gu.config.Configuration
+import com.gu.i18n.Title
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
-import com.gu.salesforce.Salesforce.{Authentication, NewContact, SalesforceContactResponse}
+import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{AsyncFlatSpec, Matchers}
@@ -14,6 +15,28 @@ import scala.concurrent.duration._
 class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   implicit override def executionContext = scala.concurrent.ExecutionContext.Implicits.global
+
+  val customer = NewContact(
+    IdentityID__c = idId,
+    Email = emailAddress,
+    Salutation = Some(Title.Mr),
+    FirstName = name,
+    LastName = name,
+    OtherStreet = None,
+    OtherCity = None,
+    OtherState = None,
+    OtherPostalCode = None,
+    OtherCountry = uk,
+    MailingStreet = None,
+    MailingCity = None,
+    MailingState = None,
+    MailingPostalCode = None,
+    MailingCountry = None,
+    Phone = None,
+    Allow_Membership_Mail__c = allowMail,
+    Allow_3rd_Party_Mail__c = allowMail,
+    Allow_Guardian_Related_Mail__c = allowMail
+  )
 
   "AuthService" should "be able to retrieve an authtoken" in {
     val authService = new AuthService(Configuration.salesforceConfigProvider.get())
@@ -52,60 +75,56 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
   "SalesforceService" should "be able to upsert a customer" in {
     val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
-    val upsertData = NewContact(
-      IdentityID__c = idId,
-      Email = emailAddress,
-      FirstName = name,
-      LastName = name,
-      OtherStreet = None,
-      OtherCity = None,
-      OtherState = None,
-      OtherPostalCode = None,
-      OtherCountry = uk,
-      MailingStreet = None,
-      MailingCity = None,
-      MailingState = None,
-      MailingPostalCode = None,
-      MailingCountry = None,
-      Phone = None,
-      Allow_Membership_Mail__c = allowMail,
-      Allow_3rd_Party_Mail__c = allowMail,
-      Allow_Guardian_Related_Mail__c = allowMail
-    )
 
-    service.upsert(upsertData).map { response: SalesforceContactResponse =>
-      response.Success should be(true)
-      response.ContactRecord.Id should be(salesforceId)
+    service.upsert(customer).map { response: SalesforceContactResponse =>
+      response.Success shouldBe true
+      response.ContactRecord.Id shouldBe salesforceId
+      response.ContactRecord.AccountId shouldBe salesforceAccountId
     }
   }
 
-  "SalesforceService" should "be able to upsert a customer that has optional fields" in {
+  it should "be able to upsert a customer that has optional fields" in {
     val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
-    val upsertData = NewContact(
-      IdentityID__c = idId,
-      Email = emailAddress,
-      FirstName = name,
-      LastName = name,
+    val upsertData = customer.copy(
       OtherStreet = Some(street),
       OtherCity = Some(city),
-      OtherState = Some(postCode),
-      OtherPostalCode = None,
+      OtherPostalCode = Some(postCode),
       OtherCountry = uk,
       MailingStreet = Some(street),
       MailingCity = Some(city),
-      MailingState = Some(postCode),
-      MailingPostalCode = None,
+      MailingPostalCode = Some(postCode),
       MailingCountry = Some(uk),
-      Phone = Some(telephoneNumber),
-      Allow_Membership_Mail__c = allowMail,
-      Allow_3rd_Party_Mail__c = allowMail,
-      Allow_Guardian_Related_Mail__c = allowMail
+      Phone = Some(telephoneNumber)
     )
 
     service.upsert(upsertData).map { response: SalesforceContactResponse =>
-      response.Success should be(true)
-      response.ContactRecord.Id should be(salesforceId)
+      response.Success shouldBe true
+      response.ContactRecord.Id shouldBe salesforceId
+      response.ContactRecord.AccountId shouldBe salesforceAccountId
+    }
+  }
+
+  it should "be able to add a related contact record" in {
+    val service = new SalesforceService(Configuration.salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+
+    val name = "integration-test-recipient"
+    val upsertData = DeliveryContact(
+      AccountId = salesforceAccountId,
+      Email = Some("integration-test-recipient@gu.com"),
+      Salutation = Some(Title.Ms),
+      FirstName = name,
+      LastName = name,
+      MailingStreet = Some(street),
+      MailingCity = Some(city),
+      MailingState = None,
+      MailingPostalCode = Some(postCode),
+      MailingCountry = Some(uk)
+    )
+
+    service.upsert(upsertData).map { response: SalesforceContactResponse =>
+      response.Success shouldBe true
+      response.ContactRecord.AccountId shouldBe salesforceAccountId
     }
   }
 }

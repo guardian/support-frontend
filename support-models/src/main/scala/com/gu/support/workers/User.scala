@@ -1,12 +1,13 @@
 package com.gu.support.workers
 
-import com.gu.i18n.Country
+import com.gu.i18n.Title
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 
 case class User(
   id: String,
   primaryEmailAddress: String,
+  title: Option[Title],
   firstName: String,
   lastName: String,
   billingAddress: Address,

@@ -68,6 +68,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
     NewContact(
       user.id,
       user.primaryEmailAddress,
+      user.title,
       user.firstName,
       user.lastName,
       getAddressLine(user.billingAddress),

@@ -1,6 +1,7 @@
 package com.gu.support.workers.errors
 
 import com.gu.config.Configuration
+import com.gu.i18n.Title
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
@@ -26,6 +27,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
   val upsertData = NewContact(
     IdentityID__c = idId,
     Email = emailAddress,
+    Salutation = Some(Title.Ms),
     FirstName = name,
     LastName = name,
     OtherStreet = None,

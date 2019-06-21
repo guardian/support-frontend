@@ -6,9 +6,10 @@ import com.gu.salesforce.Salesforce.{DeliveryContact, NewContact}
 object Fixtures {
   val idId = "9999999"
   val salesforceId = "0033E000017rqXsQAI"
-  val emailAddress = "yjcysqxfcqqytuzupjc@gu.com"
+  val salesforceAccountId = "0013E000011gxQuQAI"
+  val emailAddress = "integration-test@gu.com"
   val telephoneNumber = "0123456789"
-  val name = "YJCysqXFCqqYtuzuPJc"
+  val name = "integration-test"
   val street = "123 trash alley"
   val city = "London"
   val postCode = "n1 9gu"
@@ -20,6 +21,7 @@ object Fixtures {
   val newContactUK = NewContact(
     IdentityID__c = idId,
     Email = emailAddress,
+    Salutation= Some(Title.Mrs),
     FirstName = name,
     LastName = name,
     OtherStreet = None,
@@ -57,7 +59,7 @@ object Fixtures {
   val giftRecipientUpsert = DeliveryContact(
     AccountId = salesforceId,
     Email = Some(emailAddress),
-    Title = Some(Title.Mr),
+    Salutation = Some(Title.Mr),
     FirstName = name,
     LastName = name,
     MailingStreet = Some(street),
@@ -73,6 +75,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherCountry": "$uk",
@@ -86,6 +89,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherState": "$state",
@@ -101,6 +105,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherCountry": "$uk",
@@ -116,6 +121,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherStreet": "$street",
@@ -133,6 +139,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherStreet": "$street",
@@ -155,7 +162,7 @@ object Fixtures {
       "newContact": {
         "AccountId": "$salesforceId",
         "Email": "$emailAddress",
-        "Title": "Mr",
+        "Salutation": "Mr",
         "FirstName": "$name",
         "LastName": "$name",
         "MailingStreet": "$street",
