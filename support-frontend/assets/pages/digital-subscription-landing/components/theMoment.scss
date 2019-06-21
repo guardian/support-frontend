@@ -253,3 +253,22 @@
     }
   }
 }
+
+.payment-selection__title-container {
+  text-align: center;
+
+  max-width: 38.5rem;
+  margin-bottom: 130px;
+  @include mq($from: mobileLandscape) {
+    padding-left: 10px;
+    text-align: left
+  }
+
+  @include mq($from: leftCol) {
+    padding-left: 0;
+  }
+}
+
+.payment-selection__title {
+  font: 600 24px $gu-headline;
+}

@@ -1,8 +1,37 @@
+@import '~stylesheets/gu-sass/gu-sass';
+
 .payment-selection {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  // padding-left: 10px;
+
+  @include mq($from: phablet) {
+    justify-content: left;
+  }
+
+  @include mq($from: leftCol) {
+    padding-left: 0;
+  }
 }
 
 .payment-selection__card {
-  max-width: 230px;
-  margin-right: 20px
+  width: 100%;
+
+  margin: 0 10px 20px 10px;
+  display: flex;
+  @include mq($from: tablet) {
+    margin-left: 0;
+    max-width: 30rem;
+  }
+
+  @include mq($from: leftCol) {
+    width: 230px;
+  }
+}
+
+.payment-selection__card:first-child {
+  @include mq($from: mobileLandscape) {
+    // margin-right: 20px;
+  }
 }

@@ -16,6 +16,7 @@ type Props = {
 // hocs
 const withProductOptionsStyle = WrappedComponent => (props: PropTypes) => (
   <div className="product-option__button">
+    <div className="product-option__sales-copy">{props.salesCopy}</div>
     <WrappedComponent {...props} />
   </div>
 );
@@ -37,8 +38,8 @@ export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: b
   <span className={cx({ 'product-option__copy': true, 'product-option__copy--bold': bold })}>{ children }</span>
 );
 
-export const ProductOptionOffer = ({ children }: { children: Node }) => (
-  <div className="product-option__offer-container">
+export const ProductOptionOffer = ({ children, hidden }: { children: Node, hidden: boolean }) => (
+  <div className={cx({ 'product-option__offer-container': true, hidden })}>
     <span className="product-option__offer">{ children }</span>
   </div>
 
@@ -46,11 +47,7 @@ export const ProductOptionOffer = ({ children }: { children: Node }) => (
 
 export const ProductOptionButton = withProductOptionsStyle(AnchorButton);
 
-// default component
-const ProductOption = ({ onClick, href, children }: { children: Node }) => (
-  <a href={href} onClick={onClick} className="product-option">{ children }</a>
-);
-
+// default props
 ProductOptionCopy.defaultProps = {
   bold: false,
 };
@@ -58,5 +55,10 @@ ProductOptionCopy.defaultProps = {
 ProductOptionButton.defaultProps = {
   ...defaultProps,
 };
+
+// default component
+const ProductOption = ({ onClick, href, children }: { children: Node }) => (
+  <a href={href} onClick={onClick} className="product-option">{ children }</a>
+);
 
 export default ProductOption;
