@@ -81,14 +81,34 @@ class IdentityController(
         )
     }
   }
+
+  def createSignInToken(): Action[CreateSignInTokenRequest] = PrivateAction.async(circe.json[CreateSignInTokenRequest]) { implicit request =>
+    identityService
+      .createSignInToken(request.body.email)
+      .fold(
+        err => {
+          SafeLogger.error(scrub"Failed to create a sign in token for ${request.body.email}: ${err.toString}")
+          warnAndReturn()
+        },
+        cookiesFromResponse => {
+          SafeLogger.info(s"Successfully created a sign in token for ${request.body.email}")
+          Ok
+        }
+      )
+  }
 }
 
+case class SendMarketingRequest(email: String)
 object SendMarketingRequest {
   implicit val decoder: Decoder[SendMarketingRequest] = deriveDecoder
 }
-case class SendMarketingRequest(email: String)
 
+case class SetPasswordRequest(password: String, guestAccountRegistrationToken: String)
 object SetPasswordRequest {
   implicit val decoder: Decoder[SetPasswordRequest] = deriveDecoder
 }
-case class SetPasswordRequest(password: String, guestAccountRegistrationToken: String)
+
+case class CreateSignInTokenRequest(email: String)
+object CreateSignInTokenRequest {
+  implicit val decoder: Decoder[CreateSignInTokenRequest] = deriveDecoder
+}

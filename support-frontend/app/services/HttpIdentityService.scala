@@ -64,6 +64,13 @@ object GetUserTypeResponse {
   implicit val getUserTypeEncoder: Encoder[GetUserTypeResponse] = deriveEncoder
 }
 
+case class CreateSignInTokenResponse(userType: String)
+
+object CreateSignInTokenResponse {
+  implicit val readsGetUserTypeResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
+  implicit val getUserTypeEncoder: Encoder[CreateSignInTokenResponse] = deriveEncoder
+}
+
 class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {
 
   import IdentityServiceEnrichers._
@@ -110,6 +117,16 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => (resp.json \ "cookies").validate[SetGuestPasswordResponseCookies].asEither.leftMap(_.mkString(",")))
+  }
+
+  def createSignInToken(
+    email: String
+  )(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse] = {
+    request(s"/signin-token/email")
+      .get
+      .attemptT
+      .leftMap(_.toString)
+      .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
   private def getHeaders(request: RequestHeader): List[(String, String)] = List(
@@ -201,4 +218,5 @@ trait IdentityService {
     guestAccountRegistrationToken: String
   )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies]
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
+  def createSignInToken(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse]
 }
