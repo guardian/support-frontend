@@ -11,6 +11,14 @@ import { Canada, UnitedStates } from '../internationalisation/countryGroup';
 
 // ----- Types ----- //
 
+export type SignInDetails = {
+  hasAccount: boolean,
+  hasFacebookSocialAccount: boolean,
+  hasGoogleSocialAccount: boolean,
+  hasPassword: boolean,
+  isUserEmailValidated: boolean,
+};
+
 export type User = {
   id: ?string,
   email: string,
@@ -24,6 +32,7 @@ export type User = {
   gnmMarketing: boolean,
   isSignedIn: boolean,
   isRecurringContributor: boolean,
+  signInDetails: SignInDetails,
 };
 
 
@@ -41,6 +50,13 @@ const initialState: User = {
   gnmMarketing: false,
   isSignedIn: false,
   isRecurringContributor: false,
+  signInDetails: {
+    hasAccount: false,
+    hasFacebookSocialAccount: false,
+    hasGoogleSocialAccount: false,
+    hasPassword: false,
+    isUserEmailValidated: false,
+  }
 };
 
 
@@ -107,6 +123,9 @@ function createUserReducer(countryGroup: CountryGroupId) {
 
       case 'SET_IS_RECURRING_CONTRIBUTOR':
         return { ...state, isRecurringContributor: true };
+
+      case 'SET_SIGN_IN_DETAILS':
+        return { ...state, signInDetails: action.signInDetails };
 
       default:
         return state;

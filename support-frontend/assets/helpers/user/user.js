@@ -71,6 +71,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     setIsRecurringContributor,
     setTestUser,
     setPostDeploymentTestUser,
+    setSignInDetails,
   } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
@@ -117,6 +118,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
     dispatch(setIsSignedIn(true));
+    dispatch(setSignInDetails(window.guardian.user.signInDetails))
   } else if (userAppearsLoggedIn) {
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {

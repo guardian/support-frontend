@@ -36,6 +36,7 @@ type PropTypes = {|
   isSignedIn: boolean,
   email: string,
   csrf: string,
+  signInDetails: SignInDetails,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -46,6 +47,7 @@ const mapStateToProps = state => ({
   isSignedIn: state.page.user.isSignedIn,
   email: state.page.form.formData.email,
   csrf: state.page.csrf.token,
+  signInDetails: state.page.user.signInDetails,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {

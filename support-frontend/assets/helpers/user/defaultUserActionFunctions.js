@@ -2,6 +2,7 @@
 
 import { setSession } from 'helpers/storage';
 import { type Action } from './userActions';
+import type {SignInDetails} from "assets/helpers/user/userReducer";
 
 // ----- Actions Creators ----- //
 
@@ -57,6 +58,10 @@ function setGnmMarketing(preference: boolean): Action {
   return { type: 'SET_GNM_MARKETING', preference };
 }
 
+function setSignInDetails(signInDetails: SignInDetails): Action {
+  return { type: 'SET_SIGN_IN_DETAILS', signInDetails };
+}
+
 const defaultUserActionFunctions = {
   setId,
   setDisplayName,
@@ -70,6 +75,7 @@ const defaultUserActionFunctions = {
   setTestUser,
   setPostDeploymentTestUser,
   setGnmMarketing,
+  setSignInDetails,
 };
 
 export { defaultUserActionFunctions };
