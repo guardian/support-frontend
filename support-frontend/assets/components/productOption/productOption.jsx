@@ -12,9 +12,13 @@ import './productOption.scss';
 type Props = {
   children: Node,
 };
+type WrappedProps = {
+  ...PropTypes,
+  salesCopy: Node,
+}
 
 // hocs
-const withProductOptionsStyle = WrappedComponent => (props: PropTypes) => (
+const withProductOptionsStyle = WrappedComponent => (props: WrappedProps) => (
   <div className="product-option__button">
     <div className="product-option__sales-copy">{props.salesCopy}</div>
     <WrappedComponent {...props} />

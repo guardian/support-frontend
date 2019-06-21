@@ -52,7 +52,7 @@ stories.add('Product Option', () => (
         </ProductOptionPrice>
         <ProductOptionOffer hidden={false}>Save 22% a month on <br />&nbsp;retail price</ProductOptionOffer>
       </ProductOptionContent>
-      <ProductOptionButton href="#" aria-label="Subscribe-button">Subscribe now</ProductOptionButton>
+      <ProductOptionButton salesCopy={<span>This is sales copy</span>} href="#" aria-label="Subscribe-button">Subscribe now</ProductOptionButton>
     </ProductOption>
   </div>
 ));
