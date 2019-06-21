@@ -79,7 +79,7 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
     };
 
   });
-  console.log({ paymentOptions });
+
   return {
     paymentOptions,
   };

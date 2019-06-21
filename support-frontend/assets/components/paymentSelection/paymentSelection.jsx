@@ -21,33 +21,30 @@ type PropTypes = {
   paymentOptions: Array<PaymentOption>;
 }
 
-const PaymentSelection = ({ paymentOptions }: PropTypes) => {
-  console.log(paymentOptions);
-  return (
-    <div className="payment-selection">
-      {paymentOptions.map(paymentOption => (
-        <div className="payment-selection__card">
-          <ProductOption
+const PaymentSelection = ({ paymentOptions }: PropTypes) => (
+  <div className="payment-selection">
+    {paymentOptions.map(paymentOption => (
+      <div className="payment-selection__card">
+        <ProductOption
+          href={paymentOption.href}
+          onClick={paymentOption.onClick}
+        >
+          <ProductOptionContent>
+            <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
+            <ProductOptionOffer hidden={paymentOption.title === 'Monthly'} >Save {paymentOption.offer}</ProductOptionOffer>
+          </ProductOptionContent>
+          <ProductOptionButton
             href={paymentOption.href}
             onClick={paymentOption.onClick}
+            aria-label="Subscribe-button"
+            salesCopy={paymentOption.salesCopy}
           >
-            <ProductOptionContent>
-              <ProductOptionTitle>{paymentOption.title}</ProductOptionTitle>
-              <ProductOptionOffer hidden={paymentOption.title === 'Monthly'} >Save {paymentOption.offer}</ProductOptionOffer>
-            </ProductOptionContent>
-            <ProductOptionButton
-              href={paymentOption.href}
-              onClick={paymentOption.onClick}
-              aria-label="Subscribe-button"
-              salesCopy={paymentOption.salesCopy}
-            >
-              Subscribe now
-            </ProductOptionButton>
-          </ProductOption>
-        </div>
-      ))}
-    </div>
-  );
-};
+            Subscribe now
+          </ProductOptionButton>
+        </ProductOption>
+      </div>
+    ))}
+  </div>
+);
 
 export default connect(mapStateToProps)(PaymentSelection);
