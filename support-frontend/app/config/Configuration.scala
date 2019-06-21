@@ -50,4 +50,5 @@ class Configuration(config: TypesafeConfig) {
 
 object Configuration {
   case class GuardianDomain(value: String)
+  case class IdentityUrl(value: String)
 }

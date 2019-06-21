@@ -167,6 +167,7 @@ trait Controllers {
     controllerComponents,
     actionRefiners,
     appConfig.guardianDomain,
+    appConfig.identity.webappUrl,
     () => AwsCloudWatchMetricPut(client)(setupWarningRequest(appConfig.stage))
   )
 

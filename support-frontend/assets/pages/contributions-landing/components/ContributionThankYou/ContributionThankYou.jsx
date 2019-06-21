@@ -17,6 +17,7 @@ import { DirectDebit } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import { trackComponentClick } from 'helpers/tracking/ophan';
+import { routes } from 'helpers/routes';
 
 // ----- Types ----- //
 
@@ -27,6 +28,8 @@ type PropTypes = {|
   hasSeenDirectDebitThankYouCopy: boolean,
   setHasSeenDirectDebitThankYouCopy: () => void,
   isSignedIn: boolean,
+  email: string,
+  csrf: string,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -35,6 +38,8 @@ const mapStateToProps = state => ({
   paymentMethod: state.page.form.paymentMethod,
   hasSeenDirectDebitThankYouCopy: state.page.hasSeenDirectDebitThankYouCopy,
   isSignedIn: state.page.user.isSignedIn,
+  email: state.page.form.formData.email,
+  csrf: state.page.csrf.token,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -44,6 +49,21 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
     },
   };
 }
+
+
+const createSignInLink = (email: string, csrf: string) => {
+  const payload = { email };
+  fetch(routes.createSignInUrl, {
+    method: 'post',
+    headers: {
+      'Csrf-Token': csrf,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(response => response.json())
+    .then((data) => { window.location.href = data.signInLink; });
+};
 
 // ----- Render ----- //
 
@@ -83,7 +103,7 @@ function ContributionThankYou(props: PropTypes) {
               onClick={
                 () => {
                   trackComponentClick(`sign-into-the-guardian-link-${props.contributionType}`);
-                  window.location.href = 'https://profile.theguardian.com/signin';
+                  createSignInLink(props.email, props.csrf);
                 }}
             >
               Sign in now

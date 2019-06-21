@@ -8,9 +8,9 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
-import services.IdentityService
+import services.{CreateSignInLinkResponse, IdentityService}
 import cats.implicits._
-import config.Configuration.GuardianDomain
+import config.Configuration.{GuardianDomain, IdentityUrl}
 import models.identity.responses.SetGuestPasswordResponseCookies
 import codecs.CirceDecoders._
 
@@ -22,6 +22,7 @@ class IdentityController(
     components: ControllerComponents,
     actionRefiners: CustomActionBuilders,
     guardianDomain: GuardianDomain,
+    identityUrl: IdentityUrl,
     warn: () => Try[Unit]
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
@@ -82,7 +83,7 @@ class IdentityController(
     }
   }
 
-  def createSignInToken(): Action[CreateSignInTokenRequest] = PrivateAction.async(circe.json[CreateSignInTokenRequest]) { implicit request =>
+  def createSignInURL(): Action[CreateSignInTokenRequest] = PrivateAction.async(circe.json[CreateSignInTokenRequest]) { implicit request =>
     identityService
       .createSignInToken(request.body.email)
       .fold(
@@ -91,8 +92,9 @@ class IdentityController(
           warnAndReturn()
         },
         response => {
+          val signInUrl = s"${identityUrl.value}/signin?encryptedEmail=${response.encryptedEmail}"
           SafeLogger.info(s"Successfully created a sign in token for ${request.body.email}")
-          Ok(response.asJson)
+          Ok(CreateSignInLinkResponse(signInUrl).asJson)
         }
       )
   }

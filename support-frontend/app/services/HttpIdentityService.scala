@@ -10,6 +10,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
 import io.circe.Encoder
+import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto.deriveEncoder
 import models.identity.UserIdWithGuestAccountToken
 import models.identity.requests.CreateGuestAccountRequestBody
@@ -58,17 +59,21 @@ object IdentityService {
 }
 
 case class GetUserTypeResponse(userType: String)
-
 object GetUserTypeResponse {
   implicit val readsGetUserTypeResponse: Reads[GetUserTypeResponse] = Json.reads[GetUserTypeResponse]
   implicit val getUserTypeEncoder: Encoder[GetUserTypeResponse] = deriveEncoder
 }
 
 case class CreateSignInTokenResponse(encryptedEmail: String)
-
 object CreateSignInTokenResponse {
   implicit val readCreateSignInTokenResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
   implicit val createSignInTokenResponseEncoder: Encoder[CreateSignInTokenResponse] = deriveEncoder
+}
+
+case class CreateSignInLinkResponse(signInLink: String)
+object CreateSignInLinkResponse {
+  implicit val readCreateSignInLinkResponse: Reads[CreateSignInLinkResponse] = Json.reads[CreateSignInLinkResponse]
+  implicit val CreateSignInLinkResponseEncoder: Encoder[CreateSignInLinkResponse] = deriveEncoder
 }
 
 class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {
