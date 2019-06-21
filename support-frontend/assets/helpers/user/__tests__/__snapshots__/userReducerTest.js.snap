@@ -4,6 +4,7 @@ exports[`user reducer tests should return the initial state 1`] = `
 Object {
   "displayName": "",
   "email": "",
+  "emailValidated": false,
   "firstName": "",
   "fullName": "",
   "gnmMarketing": false,
