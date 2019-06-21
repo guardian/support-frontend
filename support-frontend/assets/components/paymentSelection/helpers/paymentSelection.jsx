@@ -40,7 +40,7 @@ export type PaymentOption = {
   salesCopy: Function,
   offer: Option<string>,
   price: Option<string>,
-  onClick?: Option<() => void>,
+  onClick: Function,
 }
 
 // state
