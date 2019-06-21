@@ -60,21 +60,16 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const offer = `${Math.round((1 - (annualCost / annualizedMonthlyCost)) * 100)}%`;
 
   const paymentOptions = Object.keys(productOptions).map((productTitle: BillingPeriod) => {
-    let billingTitle = '';
-    if (productTitle === 'Monthly' || productTitle === 'Annual') {
-      billingTitle = productTitle;
-    } else {
-      billingTitle = 'Monthly';
-    }
+    const billingPeriodTitle = productTitle === 'Monthly' || productTitle === 'Annual' ? productTitle : 'Monthly';
 
-    const displayPrice = currencies[currencyId].glyph + productOptions[billingTitle][currencyId].price.toFixed(2);
+    const displayPrice = currencies[currencyId].glyph + productOptions[billingPeriodTitle][currencyId].price.toFixed(2);
 
     return {
-      ...BILLING_PERIOD[billingTitle],
+      ...BILLING_PERIOD[billingPeriodTitle],
       price: displayPrice,
-      href: getDigitalCheckout(countryGroupId, billingTitle),
-      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingTitle),
-      salesCopy: BILLING_PERIOD[billingTitle].salesCopy(displayPrice, saving),
+      href: getDigitalCheckout(countryGroupId, billingPeriodTitle),
+      onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingPeriodTitle),
+      salesCopy: BILLING_PERIOD[billingPeriodTitle].salesCopy(displayPrice, saving),
       offer,
     };
 

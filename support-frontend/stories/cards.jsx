@@ -11,7 +11,6 @@ import ProductOption, {
   ProductOptionCopy,
   ProductOptionOffer,
   ProductOptionButton,
-  ProductOptionLine,
 } from 'components/productOption/productOption';
 
 // storybook
@@ -48,7 +47,7 @@ stories.add('Product Option', () => (
           £11.99&nbsp;
           <ProductOptionCopy>/month</ProductOptionCopy>
         </ProductOptionPrice>
-        <ProductOptionOffer>Save 22% a month on <br />&nbsp;retail price</ProductOptionOffer>
+        <ProductOptionOffer hidden={false}>Save 22% a month on <br />&nbsp;retail price</ProductOptionOffer>
       </ProductOptionContent>
       <ProductOptionButton href="#" aria-label="Subscribe-button">Subscribe now</ProductOptionButton>
     </ProductOption>
