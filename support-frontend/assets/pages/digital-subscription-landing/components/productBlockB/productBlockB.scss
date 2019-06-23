@@ -21,7 +21,7 @@ $content-padding: 10px;
   display: inline-block;
   font-weight: 600;
   font-size: 32px;
-  padding: $content-padding;
+  padding: 5px;
   background-color: gu-colour(neutral-7);
   font: 600 22px $gu-headline;
   color: gu-colour(neutral-100);
@@ -30,9 +30,9 @@ $content-padding: 10px;
 .product-block__content {
   display: flex;
   flex-wrap: wrap;
-  @include mq($from: tablet) {
-    border-left: 1px solid gu-colour(neutral-86);
-  }
+  // @include mq($from: tablet) {
+  //   border-left: 1px solid gu-colour(neutral-86);
+  // }
 }
 
 .product-block__content:nth-of-type(3) {
@@ -47,9 +47,9 @@ $content-padding: 10px;
 .product-block__content:nth-of-type(4) {
   border-top: 1px solid gu-colour(neutral-86);
 
-  @include mq($from: leftCol) {
-    border-top: none;
-  }
+  // @include mq($from: leftCol) {
+  //   border-top: none;
+  // }
 }
 
 .product-block__content--subtitle {
@@ -83,15 +83,19 @@ $content-padding: 10px;
   @include mq($from: tablet) {
     border-left: 1px solid gu-colour(neutral-86);
   }
+
+  @include mq($from: tablet) {
+    border-left: none;
+  }
 }
 
 .product-block__sub-title-text-container {
   width: 100%;
   padding: 0 $content-padding 30px;
 
-  @include mq($from: tablet) {
-    border-left: 1px solid gu-colour(neutral-86);
-  }
+  // @include mq($from: tablet) {
+  //   border-left: 1px solid gu-colour(neutral-86);
+  // }
 }
 
 .product-block__sub-title-text-container:nth-of-type(1) {
@@ -118,7 +122,7 @@ $content-padding: 10px;
 // }
 
 .product-block__feature-title {
-  font-weight: 600; 
+  font-weight: 600;
 }
 
 .product-block__right-content {
@@ -126,9 +130,8 @@ $content-padding: 10px;
   padding:0 $content-padding 30px $content-padding;
   max-width: 32.5rem;
 
-  @media screen and (min-width: 1140px) {
-    // width: 50%;
-    padding-right: 20px;
+  @include mq($from: tablet) {
+    margin-right: 150px;
   }
 }
 
@@ -138,9 +141,11 @@ $content-padding: 10px;
   width: 32.5rem;
   padding: 0 $content-padding 30px;
 
-  // @media screen and (min-width: 1140px) {
-  //   width: 50%;
-  // }
+  @include mq($from: tablet) {
+    .component-list-ul {
+      margin-right: 140px;
+    }
+  }
 }
 
 .product-block__grey-line-container {
@@ -163,4 +168,22 @@ img.component-grid-image {
 
 .component-left-margin-section__content {
   width: 100px;
+}
+
+// this is a hack to override the left border on the .component-left-margin-section__content because the new design calls this to start at desktop instead of the leftCol breakpoint
+#digital-subscription-landing-page-int,
+#digital-subscription-landing-page-uk,
+#digital-subscription-landing-page-us,
+#digital-subscription-landing-page-au,
+#digital-subscription-landing-page-eu,
+#digital-subscription-landing-page-nz,
+#digital-subscription-landing-page-ca {
+  .product-block.product-block {
+    .component-left-margin-section__content {
+      
+      @include mq($from: tablet) {
+        border-left: 1px solid gu-colour(neutral-86);
+      }
+    } 
+  } 
 }

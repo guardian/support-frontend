@@ -18,14 +18,14 @@
 .payment-selection__card {
   width: 100%;
 
-  margin: 0 10px 20px 10px;
+  margin: 0 20px 20px 10px;
   display: flex;
   @include mq($from: tablet) {
     margin-left: 0;
     max-width: 30rem;
   }
 
-  @include mq($from: leftCol) {
+  @include mq($from: desktop) {
     width: 230px;
   }
 }

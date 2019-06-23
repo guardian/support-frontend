@@ -89,12 +89,25 @@
   
 }
 
-.hidden {
-  visibility: hidden;
+.product-option__sales-copy--hidden {
+  display: none;
+
+  @include mq($from: desktop) {
+    display: block;
+    visibility: hidden;
+  }
 }
 
 .product-option__sales-copy {
   font-family: $gu-text-sans-web;
   font-size: 16px;
-  line-height: 16px;
+  line-height: 1.4rem;
+}
+
+.product-option__full-screen-break {
+  display: none;
+
+  @include mq($from: desktop) {
+    display: block;
+  }
 }

@@ -21,10 +21,16 @@
   align-content: flex-start;
   padding: 10px 10px 0 10px;
   max-width: 32.5rem;
-
+  
   @include mq($from: tablet) {
-    margin-bottom: 40px;
+    max-width: 24rem;
+    margin: 0 60px 40px 0;
   }
+
+  @include mq($from: desktop) {
+    margin: 0 130px 40px 0;
+  }
+
 }
 
 .ad-free-section__content:nth-child(3) {
@@ -59,7 +65,6 @@
 .ad-free-section__copy {
     @include gu-fontset-body;
     width: 100%;
-    padding-right: 15%;
     display: block;
 }
 
@@ -71,7 +76,7 @@
   max-width: 32.5rem;
   padding: 0 10px;
 
-  @include mq($from: tablet) {
+  @include mq($from: mobileLandscape) {
     width: 25%;
   }
 }

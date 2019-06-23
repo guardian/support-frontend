@@ -43,7 +43,7 @@ export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: b
 );
 
 export const ProductOptionOffer = ({ children, hidden }: { children: Node, hidden: boolean }) => (
-  <div className={cx({ 'product-option__offer-container': true, hidden })}>
+  <div className={cx({ 'product-option__offer-container': true, 'product-option__sales-copy--hidden': hidden })}>
     <span className="product-option__offer">{ children }</span>
   </div>
 

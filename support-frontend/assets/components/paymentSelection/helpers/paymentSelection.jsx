@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import type { Node } from 'react';
+import type { Element } from 'react';
 
 // helpers
 import { getDigitalCheckout } from 'helpers/externalLinks';
@@ -17,7 +17,10 @@ const BILLING_PERIOD = {
     title: 'Monthly',
     singlePeriod: 'month',
     salesCopy: (displayPrice: string, saving?: string) => (
-      <span>14 day free trial, then <strong>{displayPrice}</strong> a month for 12 months {saving}</span>
+      <span>14 day free trial, then
+        &nbsp;<strong>{displayPrice}</strong> a month for 12 months {saving}
+        <br className="product-option__full-screen-break" />
+      </span>
     ),
   },
   [Annual]: {
@@ -37,7 +40,7 @@ export type PaymentOption = {
   title: string,
   singlePeriod: string,
   href: string,
-  salesCopy: Function,
+  salesCopy: (displayPrice: string, saving?: string) => any,
   offer: Option<string>,
   price: Option<string>,
   onClick: Function,
