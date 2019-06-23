@@ -5,96 +5,64 @@
 }
 
 .ad-free-section {
-  flex-wrap: wrap;
   width: 100%;
   border-top: 1px solid gu-colour(neutral-86);
-  border-left: 1px solid gu-colour(neutral-86);
-
-  @include mq($from: tablet) {
-    display: flex;
-  }
-}
-
-.ad-free-section__content {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  padding: 10px 10px 0 10px;
-  max-width: 32.5rem;
   
-  @include mq($from: tablet) {
-    max-width: 24rem;
-    margin: 0 60px 40px 0;
-  }
-
-  @include mq($from: desktop) {
-    margin: 0 130px 40px 0;
-  }
-
-}
-
-.ad-free-section__content:nth-child(3) {
-  border-top: 1px solid gu-colour(neutral-86);
-  @include mq($from: leftCol) {
-    border-top: none;
+  @include mq($from: phablet) {
+    display: flex;
+    max-width: gu-span(12);
     border-left: 1px solid gu-colour(neutral-86);
   }
 }
 
-.ad-free-section-b__header {
-  display: block;
-  width: 100%;
+.ad-free-section__content {
   padding: 10px;
-  line-height: 40px;
-  @include gu-fontset-heading-large-alt;
+  
+  @include mq($from: phablet) {
+    width: 190%;
+  }
+
+  @include mq($from: phablet) {
+    padding-bottom: 40px;
+  }
+
+  @include mq($from: desktop) {
+    padding-bottom: 80px;
+    width: 100%;
+  }
+
 }
 
 .ad-free-section-b__sub-header {
-    display: block;
-    width: 100%;
     margin-bottom: 8px;
-    font-size: 24px;
-    @include gu-fontset-heading;
-    
-    @include mq($from: leftCol) {
-        width: 620px;
-        line-height: 1.17;
-    }
+
+    font: 600 32px $gu-headline;
 }
 
 .ad-free-section__copy {
-    @include gu-fontset-body;
-    width: 100%;
-    display: block;
+    font-size: 17px;
 }
 
 .ad-free-section__image-container {
   display: flex;
   flex-direction: column-reverse;
   width: 100%;
-  margin-top: 20px;
-  max-width: 32.5rem;
-  padding: 0 10px;
+  padding-right: 10px;
 
-  @include mq($from: mobileLandscape) {
-    width: 25%;
+  @include mq($from: phablet) {
+    // width: 50%;
+    padding-left: gu-span(1);
   }
 }
 
 .ad-free-section__image-container img {
   width: 100%;
-  vertical-align: bottom;
-}
 
-.ad-free-section__icon {
-  display: inline-block;
-  margin: 0 auto;
-}
+  @include mq($from: phablet) {
+    width: 150px;
+  }
 
-.ad-free-section__icon:nth-of-type(2) {
-  margin-left: 20px;
-
-  @include mq($from: tablet) {
-    margin-left: 0px;
+  @include mq($from: desktop) {
+    width: 205px;
   }
 }
