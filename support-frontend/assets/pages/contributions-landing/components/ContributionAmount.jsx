@@ -7,7 +7,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { config, type AmountsRegions, type Amount, type ContributionType, getAmount } from 'helpers/contributions';
 
-import type { EditorialiseAmountsRoundTwoVariant } from 'helpers/abTests/abtestDefinitions';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
   type IsoCurrency,
@@ -43,7 +42,6 @@ type PropTypes = {|
   updateOtherAmount: (string, CountryGroupId, ContributionType) => void,
   checkoutFormHasBeenSubmitted: boolean,
   stripePaymentRequestButtonClicked: boolean,
-  editorialiseAmountsRoundTwoVariant: EditorialiseAmountsRoundTwoVariant,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -57,7 +55,6 @@ const mapStateToProps = state => ({
   otherAmounts: state.page.form.formData.otherAmounts,
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
   stripePaymentRequestButtonClicked: state.page.form.stripePaymentRequestButtonData.stripePaymentRequestButtonClicked,
-  editorialiseAmountsRoundTwoVariant: state.common.abParticipations.editorialiseAmountsRoundTwo,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -141,9 +138,7 @@ const getAmountPerWeekBreakdown = (
 function ContributionAmount(props: PropTypes) {
   const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
-  const showWeeklyBreakdown: boolean = props.editorialiseAmountsRoundTwoVariant === 'weeklyBreakdownMonthlyAsWell'
-    ? props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL'
-    : props.contributionType === 'ANNUAL';
+  const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
     formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
