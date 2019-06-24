@@ -20,6 +20,7 @@ import ContributionTextInput from './ContributionTextInput';
 import { type ThankYouPageStage } from '../contributionsLandingReducer';
 import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../contributionsLandingActions';
 import Button from 'components/button/button';
+import TrackableButton from 'assets/components/button/trackableButton';
 
 const passwordErrorHeading = 'Account set up failure';
 const passwordErrorMessage = 'Sorry, we are unable to register you at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your registration. Thank you.';
@@ -134,14 +135,19 @@ function SetPasswordForm(props: PropTypes) {
           errorMessage="Please enter a password between 6 and 20 characters long"
           required
         />
-        <Button
+        <TrackableButton
           appearance="secondary"
           modifierClasses={['create-account']}
           aria-label="Create a guardian account"
           type="submit"
+          trackingEvent={
+            () => {
+              trackComponentLoad(`set-password-loaded-${props.contributionType}`);
+            }
+          }
         >
           Create a Guardian account
-        </Button>
+        </TrackableButton>
         <Button
           appearance="greyHollow"
           aria-label="No thank you"
