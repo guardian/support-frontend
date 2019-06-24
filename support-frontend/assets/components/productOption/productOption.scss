@@ -29,6 +29,14 @@
   margin-bottom: 10px;
   position: relative;
   transition: .2s background;
+  
+  @include mq(tablet) {
+    font-size: 20px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 26px;
+  }
 }
 
 .product-option__content {
@@ -92,7 +100,7 @@
 .product-option__sales-copy--hidden {
   display: none;
 
-  @include mq($from: desktop) {
+  @include mq($from: tablet) {
     display: block;
     visibility: hidden;
   }
@@ -107,7 +115,7 @@
 .product-option__full-screen-break {
   display: none;
 
-  @include mq($from: desktop) {
+  @include mq($from: tablet) {
     display: block;
   }
 }

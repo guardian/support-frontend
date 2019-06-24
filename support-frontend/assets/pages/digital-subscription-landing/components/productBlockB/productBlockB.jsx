@@ -82,7 +82,7 @@ function ProductBlockB() {
           <ProductBlockRightContent>
             <GridImage
               gridId="AppPremiumTier"
-              srcSizes={[818, 500, 140]}
+              srcSizes={[3608, 500, 140]}
               sizes="(min-width: 480px) 100%, (max-width: 660px) 100%, 100%"
               imgType="png"
             />

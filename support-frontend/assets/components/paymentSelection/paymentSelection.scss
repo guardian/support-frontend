@@ -25,7 +25,7 @@
     max-width: 30rem;
   }
 
-  @include mq($from: desktop) {
+  @include mq($from: tablet) {
     width: 230px;
   }
 }

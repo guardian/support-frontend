@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import type { Element } from 'react';
 
 // helpers
 import { getDigitalCheckout } from 'helpers/externalLinks';
@@ -10,6 +11,7 @@ import { type State } from 'pages/digital-subscription-landing/digitalSubscripti
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Annual, Monthly } from 'helpers/billingPeriods';
 import { type Option } from 'helpers/types/option';
+
 
 const BILLING_PERIOD = {
   [Monthly]: {
@@ -39,7 +41,7 @@ export type PaymentOption = {
   title: string,
   singlePeriod: string,
   href: string,
-  salesCopy: (displayPrice: string, saving?: string) => any,
+  salesCopy: Element<'span'>,
   offer: Option<string>,
   price: Option<string>,
   onClick: Function,
@@ -61,19 +63,24 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const saving = currencies[currencyId].glyph + (annualizedMonthlyCost - annualCost).toFixed(2);
   const offer = `${Math.round((1 - (annualCost / annualizedMonthlyCost)) * 100)}%`;
 
-  const paymentOptions = Object.keys(productOptions).map((productTitle: BillingPeriod) => {
+  const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map((productTitle: BillingPeriod) => {
+
     const billingPeriodTitle = productTitle === 'Monthly' || productTitle === 'Annual' ? productTitle : 'Monthly';
 
     const displayPrice = currencies[currencyId].glyph + productOptions[billingPeriodTitle][currencyId].price.toFixed(2);
+    const salesCopy: Element<'span'> = BILLING_PERIOD[billingPeriodTitle].salesCopy(displayPrice, saving);
 
-    return {
-      ...BILLING_PERIOD[billingPeriodTitle],
+    const paymentOption: PaymentOption = {
+      title: BILLING_PERIOD[billingPeriodTitle].title,
+      singlePeriod: BILLING_PERIOD[billingPeriodTitle].singlePeriod,
       price: displayPrice,
       href: getDigitalCheckout(countryGroupId, billingPeriodTitle),
       onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingPeriodTitle),
-      salesCopy: BILLING_PERIOD[billingPeriodTitle].salesCopy(displayPrice, saving),
+      salesCopy,
       offer,
     };
+
+    return paymentOption;
 
   });
 
