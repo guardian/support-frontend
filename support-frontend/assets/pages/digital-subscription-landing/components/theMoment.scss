@@ -255,14 +255,11 @@
 }
 
 .payment-selection__title-container {
-  text-align: center;
+  text-align: left;
+  padding: 0 10px;
 
   max-width: 38.5rem;
   margin-bottom: 130px;
-  @include mq($from: mobileLandscape) {
-    padding-left: 10px;
-    text-align: left
-  }
 
   @include mq($from: leftCol) {
     padding-left: 0;
@@ -270,5 +267,11 @@
 }
 
 .payment-selection__title {
-  font: 600 24px $gu-headline;
+  font-family: $gu-headline;
+  font-weight: 600;
+  font-size: 18px;
+
+  @include mq($from: tablet) {
+    font-size: 24px;
+  }
 }

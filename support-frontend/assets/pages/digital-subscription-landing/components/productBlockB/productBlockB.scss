@@ -19,12 +19,14 @@ $content-padding: 10px;
 
 .product-block__header {
   display: inline-block;
-  font-weight: 600;
-  font-size: 32px;
   padding: 5px;
   background-color: gu-colour(neutral-7);
-  font: 600 22px $gu-headline;
+  font: 600 18px $gu-headline;
   color: gu-colour(neutral-100);
+  
+  @include mq($from: mobileLandscape) {
+    font-size: 22px;
+  }
 }
 
 .product-block__content {
@@ -74,18 +76,19 @@ $content-padding: 10px;
 }
 
 .product-block__sub-title {
-  // @include narrow-content;
   width: 100%;
-  padding: 0 $content-padding 30px;
-  font: 600 32px $gu-headline;
+  padding: 0 $content-padding 10px;
+  font: 600 22px $gu-headline;
   line-height: 40px;
 
   @include mq($from: tablet) {
     border-left: 1px solid gu-colour(neutral-86);
+    border-left: none;
+    font-size: 26px;
   }
 
-  @include mq($from: tablet) {
-    border-left: none;
+  @include mq($from: desktop) {
+    font-size: 32px;
   }
 }
 
@@ -107,19 +110,17 @@ $content-padding: 10px;
 .product-block__sub-title-text {
 
   max-width: 32.5rem;
-  font: normal 20px $gu-headline;
+  font: 300 20px $gu-headline;
   line-height: 24px;
 
   @include mq($from: tablet) {
     font-size: 22px;
   }
-}
 
-// .product-block__feature {
-//   @include narrow-content;
-//   width: 100%;
-//   padding: 0 $content-padding 30px;
-// }
+  @include mq($from: desktop) {
+    font-size: 24px;
+  }
+}
 
 .product-block__feature-title {
   font-weight: 600;
