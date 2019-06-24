@@ -34,39 +34,20 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
-  csrf: Csrf,
   paymentComplete: boolean,
-  payPalSwitchStatus: Status,
-  paymentError: ErrorReason | null,
-  currencyId: IsoCurrency,
   countryGroupId: CountryGroupId,
   thankYouRoute: string,
   setPaymentIsWaiting: boolean => void,
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setTickerGoalReached: () => void,
-  openDirectDebitPopUp: () => void,
-  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void,
-  payPalSetHasLoaded: () => void,
-  isTestUser: boolean,
-  paymentMethod: PaymentMethod,
-  contributionType: ContributionType,
-  referrerAcquisitionData: ReferrerAcquisitionData,
   tickerGoalReached: boolean,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
 
 const mapStateToProps = (state: State) => ({
-  csrf: state.page.csrf,
   paymentComplete: state.page.form.paymentComplete,
-  payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
-  paymentError: state.page.form.paymentError,
-  currencyId: state.common.internationalisation.currencyId,
   countryGroupId: state.common.internationalisation.countryGroupId,
-  isTestUser: state.page.user.isTestUser,
-  paymentMethod: state.page.form.paymentMethod,
-  contributionType: state.page.form.contributionType,
-  referrerAcquisitionData: state.common.referrerAcquisitionData,
   tickerGoalReached: state.page.form.tickerGoalReached,
 });
 
@@ -74,8 +55,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setPaymentIsWaiting: (isWaiting) => { dispatch(paymentWaiting(isWaiting)); },
   setTickerGoalReached: () => { dispatch(setTickerGoalReached()); },
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
-  openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
-  createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
 });
 
 // ----- Functions ----- //
