@@ -5,6 +5,7 @@ import java.util.UUID
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.gocardless.GoCardlessWorkersService
 import com.gu.i18n.{Country, CountryGroup}
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
@@ -38,11 +39,13 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         CreateZuoraSubscriptionState(
           requestId = UUID.randomUUID(),
           user = state.user,
+          giftRecipient = state.giftRecipient,
           product = state.product,
           paymentMethod =  paymentMethod,
           firstDeliveryDate = None,
           promoCode = None,
           salesForceContact = sfContact,
+          salesforceContacts = SalesforceContactRecords(sfContact, None),
           acquisitionData = state.acquisitionData
         ),
       requestInfo

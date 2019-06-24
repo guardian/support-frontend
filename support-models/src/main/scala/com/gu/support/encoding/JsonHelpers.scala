@@ -42,6 +42,10 @@ object JsonHelpers {
       else
         jsonObject.add(key, default)
 
+    def wrapObject(key: String) =
+      JsonObject.empty.add(key, Json.fromJsonObject(jsonObject))
+
+
     def mapKeys(f: String => String): JsonObject = {
       //ignore intelliJ, this is needed!
       import cats.implicits._

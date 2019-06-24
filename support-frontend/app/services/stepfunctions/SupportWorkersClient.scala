@@ -8,7 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.acquisition.model.{OphanIds, ReferrerAcquisitionData}
-import com.gu.i18n.Country
+import com.gu.i18n.{Country, Title}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.encoding.Codec
@@ -26,27 +26,37 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
+
   import codecs.CirceDecoders._
+
   implicit val codec: Codec[CreateSupportWorkersRequest] = deriveCodec
 }
+
 case class CreateSupportWorkersRequest(
-    firstName: String,
-    lastName: String,
-    billingAddress: Address,
-    deliveryAddress: Option[Address],
-    product: ProductType,
-    firstDeliveryDate: Option[LocalDate],
-    paymentFields: PaymentFields,
-    promoCode: Option[PromoCode],
-    ophanIds: OphanIds,
-    referrerAcquisitionData: ReferrerAcquisitionData,
-    supportAbTests: Set[AbTest],
-    email: String,
-    telephoneNumber: Option[String]
+  title: Option[Title],
+  firstName: String,
+  lastName: String,
+  billingAddress: Address,
+  deliveryAddress: Option[Address],
+  titleGiftRecipient: Option[Title],
+  firstNameGiftRecipient: Option[String],
+  lastNameGiftRecipient: Option[String],
+  emailGiftRecipient: Option[String],
+  product: ProductType,
+  firstDeliveryDate: Option[LocalDate],
+  paymentFields: PaymentFields,
+  promoCode: Option[PromoCode],
+  ophanIds: OphanIds,
+  referrerAcquisitionData: ReferrerAcquisitionData,
+  supportAbTests: Set[AbTest],
+  email: String,
+  telephoneNumber: Option[String]
 )
 
 object SupportWorkersClient {
+
   sealed trait SupportWorkersError
+
   case object StateMachineFailure extends SupportWorkersError
 
   def apply(
@@ -59,10 +69,10 @@ object SupportWorkersClient {
 }
 
 case class StatusResponse(
-    status: Status,
-    trackingUri: String,
-    failureReason: Option[CheckoutFailureReason] = None,
-    guestAccountCreationToken: Option[String] = None
+  status: Status,
+  trackingUri: String,
+  failureReason: Option[CheckoutFailureReason] = None,
+  guestAccountCreationToken: Option[String] = None
 )
 
 object StatusResponse {
@@ -73,10 +83,10 @@ object StatusResponse {
 }
 
 class SupportWorkersClient(
-    arn: StateMachineArn,
-    stateWrapper: StateWrapper,
-    supportUrl: String,
-    statusCall: String => Call
+  arn: StateMachineArn,
+  stateWrapper: StateWrapper,
+  supportUrl: String,
+  statusCall: String => Call
 )(implicit system: ActorSystem) {
   private implicit val sw = stateWrapper
   private implicit val ec = system.dispatcher
@@ -90,6 +100,18 @@ class SupportWorkersClient(
     request.body.referrerAcquisitionData.copy(hostname = Some(hostname), gaClientId = gaClientId, userAgent = userAgent, ipAddress = Some(ipAddress))
   }
 
+  private def getGiftRecipient(request: CreateSupportWorkersRequest) =
+    for {
+      firstName <- request.firstNameGiftRecipient
+      lastName <- request.lastNameGiftRecipient
+    } yield GiftRecipient(
+      request.titleGiftRecipient,
+      firstName,
+      lastName,
+      request.emailGiftRecipient
+    )
+
+
   def createSubscription(
     request: AnyAuthRequest[CreateSupportWorkersRequest],
     user: User,
@@ -100,6 +122,7 @@ class SupportWorkersClient(
     val createPaymentMethodState = CreatePaymentMethodState(
       requestId = requestId,
       user = user,
+      giftRecipient = getGiftRecipient(request.body),
       product = request.body.product,
       paymentFields = request.body.paymentFields,
       acquisitionData = Some(AcquisitionData(

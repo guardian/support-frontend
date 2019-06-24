@@ -1,10 +1,11 @@
 package com.gu.support.workers.errors
 
 import com.gu.config.Configuration
+import com.gu.i18n.Title
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
-import com.gu.salesforce.Salesforce.{Authentication, SalesforceAuthenticationErrorResponse, SalesforceErrorResponse, UpsertData}
+import com.gu.salesforce.Salesforce.{Authentication, NewContact, SalesforceAuthenticationErrorResponse, SalesforceErrorResponse, UpsertData}
 import com.gu.salesforce.{AuthService, SalesforceConfig, SalesforceService}
 import com.gu.support.workers.AsyncLambdaSpec
 import com.gu.test.tags.annotations.IntegrationTest
@@ -23,25 +24,26 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     }
   }
 
-  val upsertData = UpsertData.create(
-    idId,
-    emailAddress,
-    name,
-    name,
-    None,
-    None,
-    None,
-    None,
-    us,
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
-    allowMail,
-    allowMail,
-    allowMail
+  val upsertData = NewContact(
+    IdentityID__c = idId,
+    Email = emailAddress,
+    Salutation = Some(Title.Ms),
+    FirstName = name,
+    LastName = name,
+    OtherStreet = None,
+    OtherCity = None,
+    OtherState = None,
+    OtherPostalCode = None,
+    OtherCountry = us,
+    MailingStreet = None,
+    MailingCity = None,
+    MailingState = None,
+    MailingPostalCode = None,
+    MailingCountry = None,
+    Phone = None,
+    Allow_Membership_Mail__c = allowMail,
+    Allow_3rd_Party_Mail__c = allowMail,
+    Allow_Guardian_Related_Mail__c = allowMail
   )
 
   it should "throw a SalesforceAuthenticationErrorResponse if the authentication fails" in {

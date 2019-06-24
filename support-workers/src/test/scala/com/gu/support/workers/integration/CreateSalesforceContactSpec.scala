@@ -16,7 +16,7 @@ import io.circe.generic.auto._
 @IntegrationTest
 class CreateSalesforceContactSpec extends LambdaSpec {
 
-  "CreateSalesforceContact lambda" should "retrieve a SalesforceContactRecord" in {
+  "CreateSalesforceContact lambda" should "upsert a SalesforceContactRecord" in {
     val createContact = new CreateSalesforceContact()
 
     val outStream = new ByteArrayOutputStream()
@@ -25,6 +25,9 @@ class CreateSalesforceContactSpec extends LambdaSpec {
 
     val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
     result.isSuccess should be(true)
-    result.get._1.salesForceContact.Id should be(salesforceId)
+    val contacts = result.get._1.salesforceContacts
+    contacts.buyer.Id should be(salesforceId)
+    contacts.giftRecipient shouldBe defined
   }
+
 }

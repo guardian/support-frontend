@@ -115,6 +115,7 @@ object ProductSubscriptionBuilders {
       maybePromoCode: Option[PromoCode],
       firstDeliveryDate: Option[LocalDate],
       promotionService: PromotionService,
+      readerType: ReaderType,
       isTestUser: Boolean
     ): SubscriptionData = {
 
@@ -132,6 +133,7 @@ object ProductSubscriptionBuilders {
         productRatePlanId,
         contractAcceptanceDate = contractAcceptanceDate,
         contractEffectiveDate = contractEffectiveDate,
+        readerType = readerType
       )
 
       applyPromoCode(promotionService, maybePromoCode, country, productRatePlanId, subscriptionData)
@@ -147,7 +149,8 @@ trait ProductSubscriptionBuilder {
     productRatePlanId: ProductRatePlanId,
     ratePlanCharges: List[RatePlanChargeData] = Nil,
     contractEffectiveDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
-    contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC)
+    contractAcceptanceDate: LocalDate = LocalDate.now(DateTimeZone.UTC),
+    readerType: ReaderType = ReaderType.Direct
   ) =
     SubscriptionData(
       List(
@@ -157,7 +160,7 @@ trait ProductSubscriptionBuilder {
           Nil
         )
       ),
-      Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate, createdRequestId.toString)
+      Subscription(contractEffectiveDate, contractAcceptanceDate, contractEffectiveDate, createdRequestId.toString, readerType = readerType)
     )
 
   protected def applyPromoCode(

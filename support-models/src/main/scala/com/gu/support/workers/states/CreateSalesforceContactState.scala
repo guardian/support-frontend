@@ -10,6 +10,7 @@ import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 case class CreateSalesforceContactState(
   requestId: UUID,
   user: User,
+  giftRecipient: Option[GiftRecipient],
   product: ProductType,
   paymentMethod: PaymentMethod,
   firstDeliveryDate: Option[LocalDate],
