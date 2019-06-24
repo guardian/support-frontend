@@ -26,12 +26,6 @@
   }
 
   @include mq($from: tablet) {
-    width: 230px;
-  }
-}
-
-.payment-selection__card:first-child {
-  @include mq($from: mobileLandscape) {
-    // margin-right: 20px;
+    width: 240px;
   }
 }

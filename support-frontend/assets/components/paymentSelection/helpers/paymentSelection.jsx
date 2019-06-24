@@ -51,7 +51,6 @@ export type PaymentOption = {
 const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> } => {
   const { productPrices } = state.page;
   const { countryGroupId, currencyId } = state.common.internationalisation;
-  // console.log({ currencyId });
 
   /*
   * NoFulfilmentOptions - means there this nothing to be delivered
@@ -66,21 +65,17 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
   const paymentOptions: Array<PaymentOption> = Object.keys(productOptions).map((productTitle: BillingPeriod) => {
 
     const billingPeriodTitle = productTitle === 'Monthly' || productTitle === 'Annual' ? productTitle : 'Monthly';
-
     const displayPrice = currencies[currencyId].glyph + productOptions[billingPeriodTitle][currencyId].price.toFixed(2);
-    const salesCopy: Element<'span'> = BILLING_PERIOD[billingPeriodTitle].salesCopy(displayPrice, saving);
 
-    const paymentOption: PaymentOption = {
+    return {
       title: BILLING_PERIOD[billingPeriodTitle].title,
       singlePeriod: BILLING_PERIOD[billingPeriodTitle].singlePeriod,
       price: displayPrice,
       href: getDigitalCheckout(countryGroupId, billingPeriodTitle),
       onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'DigitalPack', null, billingPeriodTitle),
-      salesCopy,
+      salesCopy: BILLING_PERIOD[billingPeriodTitle].salesCopy(displayPrice, saving),
       offer,
     };
-
-    return paymentOption;
 
   });
 
