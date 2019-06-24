@@ -58,12 +58,12 @@ const signOut = () => { window.location.href = getSignoutUrl(); };
 
 const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
 
-const getEmailValidatedFromUserCookie = () => {
-  const guu = cookie.get('GU_U');
-  if (guu) {
-    const tokens = guu.split('.');
+const getEmailValidatedFromUserCookie = (guuCookie: ?string) => {
+  if (guuCookie) {
+    const tokens = guuCookie.split('.');
     try {
-      return JSON.parse(atob(tokens[0]))[7];
+      const parsed = JSON.parse(atob(tokens[0]));
+      return !!parsed[7]
     } catch (e) {
       return false;
     }
@@ -132,7 +132,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
     dispatch(setIsSignedIn(true));
-    dispatch(setEmailValidated(getEmailValidatedFromUserCookie()));
+    dispatch(setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))));
   } else if (userAppearsLoggedIn) {
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
@@ -168,4 +168,5 @@ export {
   isPostDeployUser,
   signOut,
   doesUserAppearToBeSignedIn,
+  getEmailValidatedFromUserCookie,
 };
