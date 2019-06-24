@@ -143,6 +143,23 @@ const trackComponentClick = (componentId: string): void => {
 
 };
 
+const trackComponentLoad = (componentId: string): void => {
+  gaEvent({
+    category: 'component_load',
+    action: componentId,
+    label: componentId,
+  });
+
+  trackComponentEvents({
+    component: {
+      componentType: 'ACQUISITIONS_OTHER',
+      id: componentId,
+    },
+    action: 'VIEW',
+  });
+
+};
+
 function pageView(url: string, referrer: string) {
   try {
     ophan.sendInitialEvent(
@@ -199,4 +216,5 @@ export {
   trackAbTests,
   trackNewOptimizeExperiment,
   trackPaymentMethodSelected,
+  trackComponentLoad
 };

@@ -147,7 +147,7 @@ function SetPasswordForm(props: PropTypes) {
           aria-label="No thank you"
           onClick={
           () => {
-            trackComponentClick('decline-to-set-password');
+            trackComponentClick(`decline-to-set-password-${props.contributionType}`);
             props.setThankYouPageStage('thankYouPasswordDeclinedToSet');
           }}
         >

@@ -16,7 +16,9 @@ import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { DirectDebit } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
-import { trackComponentClick } from 'helpers/tracking/ophan';
+import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/ophan';
+import TrackableButton from 'components/button/trackableButton';
+
 
 // ----- Types ----- //
 
@@ -77,17 +79,22 @@ function ContributionThankYou(props: PropTypes) {
               far fewer requests for support, please sign in on each of the devices you use to access The
               Guardian – mobile, tablet, laptop or desktop. Please make sure you’ve verified your email address.
             </p>
-            <Button
+            <TrackableButton
               aria-label="Sign into The Guardian"
               appearance="secondary"
+              trackingEvent={
+                () => {
+                  trackComponentLoad(`sign-into-the-guardian-link-loaded-${props.contributionType}`)
+                }
+              }
               onClick={
                 () => {
-                  trackComponentClick(`sign-into-the-guardian-link-${props.contributionType}`);
+                  trackComponentClick(`sign-into-the-guardian-link-clicked-${props.contributionType}`);
                   window.location.href = 'https://profile.theguardian.com/signin';
                 }}
             >
               Sign in now
-            </Button>
+            </TrackableButton>
           </section> : null }
         <MarketingConsent />
         <ContributionSurvey isRunning={false} contributionType={props.contributionType} />
