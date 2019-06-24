@@ -35,7 +35,6 @@ import type { PaymentMethod } from 'helpers/paymentMethods';
 /* eslint-disable react/no-unused-prop-types */
 type PropTypes = {|
   csrf: Csrf,
-  payPalHasLoaded: boolean,
   paymentComplete: boolean,
   payPalSwitchStatus: Status,
   paymentError: ErrorReason | null,
@@ -59,7 +58,6 @@ type PropTypes = {|
 
 const mapStateToProps = (state: State) => ({
   csrf: state.page.csrf,
-  payPalHasLoaded: state.page.form.payPalHasLoaded,
   paymentComplete: state.page.form.paymentComplete,
   payPalSwitchStatus: state.common.settings.switches.recurringPaymentMethods.payPal,
   paymentError: state.page.form.paymentError,
@@ -78,7 +76,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   onThirdPartyPaymentAuthorised: (token) => { dispatch(onThirdPartyPaymentAuthorised(token)); },
   openDirectDebitPopUp: () => { dispatch(openDirectDebitPopUp()); },
   createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => { dispatch(createOneOffPayPalPayment(data)); },
-  payPalSetHasLoaded: () => { dispatch(setPayPalHasLoaded()); },
 });
 
 // ----- Functions ----- //
