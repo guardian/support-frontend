@@ -2,34 +2,18 @@
 
 // ----- Imports ----- //
 
-import type { ContributionType } from 'helpers/contributions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
-import type { Status } from 'helpers/settings';
-import { type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { type ErrorReason } from 'helpers/errorReasons';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
-import { type CreatePaypalPaymentData } from 'helpers/paymentIntegrations/oneOffContributions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import ContributionTicker from 'components/ticker/contributionTicker';
-import { setPayPalHasLoaded } from 'helpers/paymentIntegrations/payPalActions';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
 import ContributionForm from './ContributionForm';
 
-import {
-  paymentWaiting,
-  onThirdPartyPaymentAuthorised,
-  setCheckoutFormHasBeenSubmitted,
-  createOneOffPayPalPayment,
-  setTickerGoalReached,
-} from '../contributionsLandingActions';
-import type { PaymentMethod } from 'helpers/paymentMethods';
+import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
