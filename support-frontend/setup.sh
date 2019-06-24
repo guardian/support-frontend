@@ -4,7 +4,7 @@ set -e
 readonly SYSTEM=$(uname -s)
 EXTRA_STEPS=()
 
-NGINX_ROOT=/usr/local/etc/nginx/
+NGINX_ROOT=/usr/local/etc/nginx
 
 linux() {
   [[ ${SYSTEM} == 'Linux' ]]
