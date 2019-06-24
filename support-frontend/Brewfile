@@ -1,2 +1,6 @@
 tap "guardian/devtools"
 brew "guardian/devtools/dev-nginx"
+brew "nginx"
+brew "awscli"
+brew "sbt@1"
+brew "yarn"
