@@ -216,5 +216,5 @@ export {
   trackAbTests,
   trackNewOptimizeExperiment,
   trackPaymentMethodSelected,
-  trackComponentLoad
+  trackComponentLoad,
 };

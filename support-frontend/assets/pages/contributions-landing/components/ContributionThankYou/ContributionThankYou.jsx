@@ -11,7 +11,6 @@ import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributi
 import type { PaymentMethod } from 'helpers/paymentMethods';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import AnchorButton from 'components/button/anchorButton';
-import Button from 'components/button/button';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
 import { DirectDebit } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
@@ -84,7 +83,7 @@ function ContributionThankYou(props: PropTypes) {
               appearance="secondary"
               trackingEvent={
                 () => {
-                  trackComponentLoad(`sign-into-the-guardian-link-loaded-${props.contributionType}`)
+                  trackComponentLoad(`sign-into-the-guardian-link-loaded-${props.contributionType}`);
                 }
               }
               onClick={
