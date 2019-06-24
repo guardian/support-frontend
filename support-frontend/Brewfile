@@ -1,2 +1,5 @@
 tap "guardian/devtools"
 brew "guardian/devtools/dev-nginx"
+cask "gu-scala"
+brew "awscli"
+brew "yarn"
