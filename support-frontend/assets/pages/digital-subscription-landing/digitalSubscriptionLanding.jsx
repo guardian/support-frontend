@@ -71,11 +71,9 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const { optimizeExperiments } = store.getState().common;
 
-// daily editions test experiment ID 'NEPFjv3FSEuGQPfNN17aZg' this can be removed once the test is live
-const dailyEditionsExpermentId = 'NEPFjv3FSEuGQPfNN17aZg';
+const dailyEditionsExperimentId = 'NEPFjv3FSEuGQPfNN17aZg';
 const dailyEditionsVariant = optimizeExperiments
-  .filter(exp => exp.id === dailyEditionsExpermentId && exp.variant === '1') // this variant should be "1", the variant is "2" so this will always return false, thus hiding this experiment until we start the test
-  .length !== 0;
+  .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
 
 // ----- Render ----- //
 
