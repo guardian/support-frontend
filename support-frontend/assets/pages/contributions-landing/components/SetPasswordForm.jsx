@@ -20,7 +20,8 @@ import ContributionTextInput from './ContributionTextInput';
 import { type ThankYouPageStage } from '../contributionsLandingReducer';
 import { setThankYouPageStage, setPasswordHasBeenSubmitted, setPasswordError, updatePassword, type Action } from '../contributionsLandingActions';
 import Button from 'components/button/button';
-import TrackableButton from 'assets/components/button/trackableButton';
+import TrackableButton from 'components/button/trackableButton';
+import { trackComponentLoad } from 'helpers/tracking/ophan';
 
 const passwordErrorHeading = 'Account set up failure';
 const passwordErrorMessage = 'Sorry, we are unable to register you at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your registration. Thank you.';
