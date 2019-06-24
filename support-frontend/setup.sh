@@ -4,8 +4,6 @@ set -e
 readonly SYSTEM=$(uname -s)
 EXTRA_STEPS=()
 
-NGINX_ROOT=/usr/local/etc/nginx
-
 linux() {
   [[ ${SYSTEM} == 'Linux' ]]
 }
@@ -99,7 +97,6 @@ install_node() {
 }
 
 setup_nginx() {
-  DOMAIN=support.thegulocal.com
   DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   SITE_CONFIG=${DIR}/nginx/support.conf
 
@@ -151,7 +148,6 @@ main () {
   install_yarn_if_linux
   install_js_deps
 
-  EXTRA_STEPS+=("nginx is installed. Ensure you have 'include sites-enabled/*' in your nginx configuration ${NGINX_ROOT}/nginx.conf and add '127.0.0.1 support.thegulocal.com' and '127.0.0.1 support-ui.thegulocal.com' to /etc/hosts")
   report
 }
 
