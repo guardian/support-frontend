@@ -1,5 +1,4 @@
 // @flow
-
 import React, { type Node } from 'react';
 
 // components
@@ -61,12 +60,6 @@ const ProductBlockRightContent = ({ children }: ChildProps) => (
     id="product-block__right-content"
     className="product-block__right-content"
   >
-    { children }
-  </div>
-);
-
-const ProductBlockFeature = ({ children }: ChildProps) => (
-  <div className="product-block__feature">
     { children }
   </div>
 );

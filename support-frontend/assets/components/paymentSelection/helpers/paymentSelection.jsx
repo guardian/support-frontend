@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import type { Element } from 'react';
 
 // helpers
 import { getDigitalCheckout } from 'helpers/externalLinks';
