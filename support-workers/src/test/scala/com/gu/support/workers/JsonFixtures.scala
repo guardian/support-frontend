@@ -42,7 +42,7 @@ object JsonFixtures {
     s"""
       "user":{
           "id": "$idId",
-          "primaryEmailAddress": "$emailAddress",
+          "primaryEmailAddress": "rupert.bates@theguardian.com",
           "firstName": "test",
           "lastName": "user",
           "country": "GB",

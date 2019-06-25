@@ -1,8 +1,10 @@
 package com.gu.emailservices
 
 import java.text.DecimalFormat
+
 import com.gu.i18n.Currency
 import com.gu.support.workers._
+import org.joda.time.format.DateTimeFormat
 import org.joda.time.{LocalDate, Months}
 
 object SubscriptionEmailFieldHelpers {
@@ -47,4 +49,9 @@ object SubscriptionEmailFieldHelpers {
     }
   }
 
+  def formatDate(d: LocalDate): String = DateTimeFormat.forPattern("EEEE, d MMMM yyyy").print(d)
+
+  def mask(s: String): String = s.replace(s.substring(0, 6), "******")
+
+  def hyphenate(s: String): String = s"${s.substring(0, 2)}-${s.substring(2, 4)}-${s.substring(4, 6)}"
 }
