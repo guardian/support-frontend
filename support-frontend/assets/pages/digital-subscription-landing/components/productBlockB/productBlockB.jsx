@@ -71,7 +71,7 @@ function ProductBlockB() {
         <ProductBlockHeader>The Digital Pack Subscription</ProductBlockHeader>
         <ProductBlockGreyLines />
 
-        <ProductBlockSubTitle>App premium</ProductBlockSubTitle>
+        <ProductBlockSubTitle>App premium tier</ProductBlockSubTitle>
 
         <ProductBlockSubTitleText>
           Your enhanced experience of The Guardian for mobile and tablet, with exclusive features and ad-free reading
@@ -138,23 +138,23 @@ function ProductBlockB() {
             <Text>
               <UnorderedList items={[(
                 <div>
-                  <h1 className="product-block__feature-title">Live</h1>
-                  <Text>Catch up on every news story as it breaks</Text>
+                  <h1 className="product-block__feature-title">On-the-go reading</h1>
+                  <Text>Your complete daily newspaper, beautifully designed for your iPad</Text>
                 </div>
               ), (
                 <div>
-                  <h1 className="product-block__feature-title">Discover</h1>
-                  <Text>Explore a beautifully curated feed of features, reviews and opinion</Text>
+                  <h1 className="product-block__feature-title">Journalism at your own pace</h1>
+                  <Text>Access a month of issues in your 30-day archive</Text>
                 </div>
               ), (
                 <div>
-                  <h1 className="product-block__feature-title">Enhanced offline reading</h1>
-                  <Text>Quality journalism on your schedule - download the day&apos;s news before you travel</Text>
+                  <h1 className="product-block__feature-title">The news when you need it</h1>
+                  <Text>Downloads automatically every day, ready for you to read offline</Text>
                 </div>
               ), (
                 <div>
-                  <h1 className="product-block__feature-title">Complete the daily crossword</h1>
-                  <Text>Get our daily crossword wherever you are</Text>
+                  <h1 className="product-block__feature-title">Every supplement</h1>
+                  <Text>Including Weekend, Review, Feast and Observer Food Monthly</Text>
                 </div>
               )]}
               />
