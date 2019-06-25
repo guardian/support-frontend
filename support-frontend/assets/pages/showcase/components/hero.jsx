@@ -6,6 +6,21 @@ import GridImage from 'components/gridImage/gridImage';
 import HeroImg from './hero.svg';
 import './hero.scss';
 
+const Caption = (props: { className: string }) => (
+  <div className={props.className}>
+    <caption className="showcase-hero__caption">
+      <strong>Cambridge Analytica</strong>
+      <p>A year-long investigation in which we revealed how the data
+        analytics firm Cambridge Analytica that was behind Trump’s 2016
+        campaign and played a role in Brexit, had used the data harvested
+        from 87 million Facebook users without their consent.
+        This reporting led to a public apology from Facebook’s
+        Mark Zuckerberg who was forced to testify before Congress.
+      </p>
+    </caption>
+  </div>
+);
+
 export default function BreakingHeadlines() {
 
   return (
@@ -17,15 +32,17 @@ export default function BreakingHeadlines() {
           <HeroImg />
         </div>
         <div className="showcase-hero--left">
-          <div className="showcase-hero__image">
+          <div className="showcase-hero__image showcase-hero__image--first">
+            <Caption className="showcase-hero__caption--desktop" />
             <GridImage
               gridId="showcaseChris"
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
+              classModifiers={['col4']}
             />
           </div>
-          <div className="showcase-hero__image">
+          <div className="showcase-hero__image showcase-hero__image--second">
             <GridImage
               gridId="showcaseZuckGlass"
               srcSizes={[1000, 500]}
@@ -35,7 +52,7 @@ export default function BreakingHeadlines() {
           </div>
         </div>
         <div className="showcase-hero--right">
-          <div className="showcase-hero__image">
+          <div className="showcase-hero__image showcase-hero__image--third">
             <GridImage
               gridId="showcaseNix"
               srcSizes={[1000, 500]}
@@ -43,7 +60,7 @@ export default function BreakingHeadlines() {
               imgType="jpg"
             />
           </div>
-          <div className="showcase-hero__image">
+          <div className="showcase-hero__image showcase-hero__image--fourth">
             <GridImage
               gridId="showcaseBrit"
               srcSizes={[1000, 500]}
@@ -52,16 +69,7 @@ export default function BreakingHeadlines() {
             />
           </div>
         </div>
-        <caption className="showcase-hero__caption">
-          <strong>Cambridge Analytica</strong>
-          <p>A year-long investigation in which we revealed how the data
-            analytics firm Cambridge Analytica that was behind Trump’s 2016
-            campaign and played a role in Brexit, had used the data harvested
-            from 87 million Facebook users without their consent.
-            This reporting led to a public apology from Facebook’s
-            Mark Zuckerberg who was forced to testify before Congress.
-          </p>
-        </caption>
+        <Caption className="showcase-hero__caption--mobile" />
       </div>
     </div>
   );
