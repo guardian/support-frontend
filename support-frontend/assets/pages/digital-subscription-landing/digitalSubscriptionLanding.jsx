@@ -71,7 +71,7 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const { optimizeExperiments } = store.getState().common;
 
-const dailyEditionsExperimentId = 'NEPFjv3FSEuGQPfNN17aZg';
+const dailyEditionsExperimentId = 'zFSCLqNKT4yQKFNEraigAQ';
 const dailyEditionsVariant = optimizeExperiments
   .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
 
