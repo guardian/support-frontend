@@ -68,9 +68,8 @@ const mapStateToProps = (state: State): { paymentOptions: Array<PaymentOption> }
 
   /*
   * NoFulfilmentOptions - means there this nothing to be delivered
-  * NoProductOptions ? - means there is only one product to choose
+  * NoProductOptions   - means there is only one product to choose
   */
-  // const productOptions = productPrices[countryGroups[countryGroupId].name].NoFulfilmentOptions.NoProductOptions;
   const productOptions = getProductOptions(productPrices, countryGroupId);
   const annualizedMonthlyCost = getProductPrice(productOptions, 'Monthly', currencyId) * 12;
   const annualCost = getProductPrice(productOptions, 'Annual', currencyId);
