@@ -33,7 +33,7 @@ const BILLING_PERIOD = {
     singlePeriod: 'month',
     salesCopy: (displayPrice: string, saving?: string) => (
       <span>14 day free trial, then
-        &nbsp;<strong>{displayPrice}</strong> a month for 12 months {saving}
+        &nbsp;<strong>{displayPrice}</strong> a month for 12 months {saving && null}
         <br className="product-option__full-screen-break" />
       </span>
     ),
