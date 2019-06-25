@@ -12,20 +12,18 @@ import './productOption.scss';
 type Props = {
   children: Node,
 };
-type WrappedProps = {
-  ...PropTypes,
-  salesCopy: Node,
-}
 
 // hocs
-const withProductOptionsStyle = WrappedComponent => (props: WrappedProps) => (
+const withProductOptionsStyle = WrappedComponent => (props: PropTypes) => (
   <div className="product-option__button">
-    <div className="product-option__sales-copy">{props.salesCopy}</div>
     <WrappedComponent {...props} />
   </div>
 );
 
 // presentation components
+export const ProductOptionLine = ({ showLine, style }: { showLine: boolean, style?: { [string]: string } }) =>
+  (<span style={style} className={cx({ 'product-option__line': true, 'product-option__line--show': showLine })} />);
+
 export const ProductOptionContent = ({ children }: { children: Node}) => (
   <div className="product-option__content">{ children }</div>
 );
@@ -35,23 +33,29 @@ export const ProductOptionTitle = (props: Props) => (
 );
 
 export const ProductOptionPrice = ({ children }: { children: Node}) => (
-  <p className="product-option__price">{ children }</p>
+  <div className="product-option__price">{ children }</div>
 );
 
 export const ProductOptionCopy = ({ children, bold }: { children: Node, bold?: boolean }) => (
-  <span className={cx({ 'product-option__copy': true, 'product-option__copy--bold': bold })}>{ children }</span>
+  <div className={cx({ 'product-option__copy': true, 'product-option__copy--bold': bold })}>{ children }</div>
 );
 
-export const ProductOptionOffer = ({ children, hidden }: { children: Node, hidden: boolean }) => (
-  <div className={cx({ 'product-option__offer-container': true, 'product-option__sales-copy--hidden': hidden })}>
-    <span className="product-option__offer">{ children }</span>
-  </div>
-
+export const ProductOptionOffer = ({ children }: { children: Node }) => (
+  <div className="product-option__offer">{ children }</div>
 );
 
 export const ProductOptionButton = withProductOptionsStyle(AnchorButton);
 
-// default props
+// default component
+const ProductOption = ({ children }: { children: Node }) => (
+  <div className="product-option">{ children }</div>
+);
+
+ProductOptionLine.defaultProps = {
+  showLine: true,
+  style: {},
+};
+
 ProductOptionCopy.defaultProps = {
   bold: false,
 };
@@ -59,10 +63,5 @@ ProductOptionCopy.defaultProps = {
 ProductOptionButton.defaultProps = {
   ...defaultProps,
 };
-
-// default component
-const ProductOption = ({ onClick, href, children }: { children: Node, onClick: Function, href: string }) => (
-  <a href={href} onClick={onClick} className="product-option">{ children }</a>
-);
 
 export default ProductOption;

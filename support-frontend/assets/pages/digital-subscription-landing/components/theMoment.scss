@@ -6,7 +6,7 @@
   box-sizing: border-box;
   height: auto;
   min-height: 200px;
-  border-bottom: 1px solid gu-colour(neutral-86);
+
   & * {
     box-sizing: border-box;
   }
@@ -251,27 +251,5 @@
     .the-moment-hero__badge-lgeCopy {
       font-size: 2.8rem;
     }
-  }
-}
-
-.payment-selection__title-container {
-  text-align: left;
-  padding: 0 10px;
-
-  max-width: 38.5rem;
-  margin-bottom: 130px;
-
-  @include mq($from: leftCol) {
-    padding-left: 0;
-  }
-}
-
-.payment-selection__title {
-  font-family: $gu-headline;
-  font-weight: 600;
-  font-size: 18px;
-
-  @include mq($from: tablet) {
-    font-size: 24px;
   }
 }

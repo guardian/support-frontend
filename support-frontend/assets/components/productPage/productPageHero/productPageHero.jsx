@@ -3,17 +3,12 @@
 // ----- Imports ----- //
 
 import React, { type Node } from 'react';
+import HeadingBlock from 'components/headingBlock/headingBlock';
+import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities';
 import { type Option } from 'helpers/types/option';
 
-// ----- Component Imports ----- //
-import HeadingBlock from 'components/headingBlock/headingBlock';
-import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
-
-import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
-
 import './productPageHero.scss';
-
 
 // ---- Types ----- //
 type WrapperPropTypes = {|
@@ -28,8 +23,7 @@ type PropTypes = {|
   overheading: string,
   heading: string,
   content?: Option<Node>,
-  hasCampaign: boolean,
-  dailyEditionsVariant?: boolean
+  hasCampaign: boolean
 |};
 
 // ----- Render ----- //
@@ -72,32 +66,19 @@ const HeroHeading = ({
   </div>
 );
 
-const PaymentSelectionContainer = () => (
-  <div className="payment-selection-container">
-    <LeftMarginSection>
-      <PaymentSelection />
-    </LeftMarginSection>
-  </div>
-);
-
 const ProductPageHero = ({
-  overheading, heading, content, modifierClasses, children, appearance, hasCampaign, dailyEditionsVariant,
+  overheading, heading, content, modifierClasses, children, appearance, hasCampaign,
 }: PropTypes) => (
   <header>
     <HeroWrapper {...{ modifierClasses, appearance }}>
       {children}
     </HeroWrapper>
-
-    {dailyEditionsVariant ? (
-      <PaymentSelectionContainer />
-      ) : (
-        <div>
-          <HeroHeading {...{ hasCampaign }}>
-            <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
-          </HeroHeading>
-          {content && <HeroHanger>{content}</HeroHanger>}
-        </div>
-      )}
+    <HeroHeading {...{ hasCampaign }}>
+      <HeadingBlock overheading={overheading} >{heading}</HeadingBlock>
+    </HeroHeading>
+    {content &&
+      <HeroHanger>{content}</HeroHanger>
+    }
   </header>
 );
 

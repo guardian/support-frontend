@@ -74,7 +74,6 @@ export const imageCatalogue: {
   checkoutPackshotWeekly: '0fb50b636e09f459470453a54951ac6a7095c9e6/0_0_696_400',
   editionsProductBlock: '6101859a35f6b9657ff6a0a1aecc225aae6b8d43/0_0_3176_2000',
   noMoreAds: 'df9cbdeb0c45bdfcef4edb1466163eed0f020091/0_0_482_304',
-  AppPremiumTier: 'e35c4f2a958cc8886ec5baf8acc2886efd00a881/0_0_3608_2366',
 };
 
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys

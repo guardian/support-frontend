@@ -1,68 +1,99 @@
 @import '~stylesheets/gu-sass/gu-sass';
+@mixin narrow-content {
+  max-width: gu-span(7);
+  @include mq($from: desktop) {
+    max-width: gu-span(8);
+  }
+}
 
 [class^="ad-free-section"] {
   box-sizing: border-box;
 }
-
 .ad-free-section {
+  flex-wrap: wrap;
   width: 100%;
   border-top: 1px solid gu-colour(neutral-86);
-  
-  @include mq($from: phablet) {
+  border-left: 1px solid gu-colour(neutral-86);
+
+  @include mq($from: leftCol) {
     display: flex;
-    max-width: gu-span(12);
-    border-left: 1px solid gu-colour(neutral-86);
   }
 }
 
 .ad-free-section__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
   padding: 10px;
-  
-  @include mq($from: phablet) {
-    width: 190%;
+  max-width: 32.5rem;
+
+  @include mq($from: leftCol) {
+    width: 50%;
   }
 
-  @include mq($from: phablet) {
-    padding-bottom: 40px;
-  }
+}
 
-  @include mq($from: desktop) {
-    padding-bottom: 80px;
-    width: 100%;
+.ad-free-section__content:nth-child(3) {
+  border-top: 1px solid gu-colour(neutral-86);
+  @include mq($from: leftCol) {
+    border-top: none;
+    border-left: 1px solid gu-colour(neutral-86);
   }
+}
 
+.ad-free-section-b__header {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  line-height: 40px;
+  @include gu-fontset-heading-large-alt;
 }
 
 .ad-free-section-b__sub-header {
+    display: block;
+    width: 100%;
     margin-bottom: 8px;
-
-    font: 600 32px $gu-headline;
+    font-size: 24px;
+    @include gu-fontset-heading;
+    
+    @include mq($from: leftCol) {
+        width: 620px;
+        line-height: 1.17;
+    }
 }
 
 .ad-free-section__copy {
-    font-size: 17px;
+    @include gu-fontset-body;
+    width: 100%;
+    padding-right: 15%;
+    display: block;
+    @include mq($from: tablet) {
+      width: 65%
+    }
 }
 
 .ad-free-section__image-container {
-  display: flex;
-  flex-direction: column-reverse;
   width: 100%;
-  padding-right: 10px;
+  margin-top: 20px;
 
-  @include mq($from: phablet) {
-    // width: 50%;
-    padding-left: gu-span(1);
+  @include mq($from: tablet) {
+    width: 35%;
   }
 }
 
 .ad-free-section__image-container img {
   width: 100%;
+}
 
-  @include mq($from: phablet) {
-    width: 150px;
-  }
+.ad-free-section__icon {
+  display: inline-block;
+  margin: 0 auto;
+}
 
-  @include mq($from: desktop) {
-    width: 205px;
+.ad-free-section__icon:nth-of-type(2) {
+  margin-left: 20px;
+
+  @include mq($from: tablet) {
+    margin-left: 0px;
   }
 }
