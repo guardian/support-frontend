@@ -1,3 +1,4 @@
+cask "AdoptOpenJDK/openjdk/adoptopenjdk8"
 tap "guardian/devtools"
 brew "guardian/devtools/dev-nginx"
 cask "gu-scala"
