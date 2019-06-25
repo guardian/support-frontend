@@ -10,7 +10,7 @@ import { type Option } from 'helpers/types/option';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 
-import PaymentSelection from 'pages/digital-subscription-landing/paymentSelection/paymentSelection';
+import PaymentSelection from 'pages/digital-subscription-landing/components/paymentSelection/paymentSelection';
 
 import './productPageHero.scss';
 
