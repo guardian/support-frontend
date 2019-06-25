@@ -2,10 +2,9 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService, PaperEmailFields}
+import com.gu.emailservices._
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.catalog.{Collection, HomeDelivery}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState
@@ -77,7 +76,18 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           directDebitMandateId = directDebitMandateId,
           sfContactId = SfContactId(state.salesForceContact.Id)
         )
-        case g: GuardianWeekly => ??? //TODO: Emails for Guardian Weekly
+        case g: GuardianWeekly => GuardianWeeklyEmailFields(
+          subscriptionNumber = state.subscriptionNumber,
+          fulfilmentOptions = g.fulfilmentOptions,
+          billingPeriod = g.billingPeriod,
+          user = state.user,
+          paymentSchedule = state.paymentSchedule,
+          firstDeliveryDate = state.firstDeliveryDate,
+          currency = g.currency,
+          paymentMethod = state.paymentMethod,
+          directDebitMandateId = directDebitMandateId,
+          sfContactId = SfContactId(state.salesForceContact.Id)
+        )
       }
     )
 

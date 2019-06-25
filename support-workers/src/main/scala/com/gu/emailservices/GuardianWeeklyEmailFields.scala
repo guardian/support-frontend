@@ -7,7 +7,7 @@ import com.gu.support.catalog.FulfilmentOptions
 import com.gu.support.workers.{BillingPeriod, PaymentMethod, PaymentSchedule, User}
 import org.joda.time.LocalDate
 
-class GuardianWeeklyEmailFields(
+case class GuardianWeeklyEmailFields(
   subscriptionNumber: String,
   fulfilmentOptions: FulfilmentOptions,
   billingPeriod: BillingPeriod,
