@@ -51,7 +51,7 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 }
 
 
-const createSignInLink = (email: string, csrf: string) => {
+const createSignInLink = (email: string, csrf: string, contributionType: ContributionType) => {
   const payload = { email };
   fetch(routes.createSignInUrl, {
     method: 'post',
@@ -61,8 +61,27 @@ const createSignInLink = (email: string, csrf: string) => {
     },
     body: JSON.stringify(payload),
   })
-    .then(response => response.json())
-    .then((data) => { window.location.href = data.signInLink; });
+    .then((response) => {
+      if (response.ok) {
+        response.json();
+      } else {
+        throw new Error('Identity encryption service error');
+      }
+    })
+    .then((data) => {
+      if (data && data.signInLink) {
+        trackComponentClick(`sign-into-the-guardian-link-${contributionType}`);
+        window.location.href = data.signInLink;
+      } else {
+        throw new Error('Encrypted sign in link missing from identity service response');
+      }
+
+    })
+    .catch((error) => {
+      console.error(error);
+      trackComponentClick(`sign-into-the-guardian-link-error-${contributionType}`);
+      window.location.href = 'https://profile.theguardian.com/signin';
+    });
 };
 
 // ----- Render ----- //
@@ -102,8 +121,7 @@ function ContributionThankYou(props: PropTypes) {
               appearance="secondary"
               onClick={
                 () => {
-                  trackComponentClick(`sign-into-the-guardian-link-${props.contributionType}`);
-                  createSignInLink(props.email, props.csrf);
+                  createSignInLink(props.email, props.csrf, props.contributionType);
                 }}
             >
               Sign in now
