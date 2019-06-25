@@ -39,7 +39,6 @@ export default function BreakingHeadlines() {
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
-              classModifiers={['col4']}
             />
           </div>
           <div className="showcase-hero__image showcase-hero__image--second">
