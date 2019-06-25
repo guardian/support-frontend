@@ -57,10 +57,10 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   }
 
   private def maybeAddGiftRecipient(contactRecord: SalesforceContactRecord, maybeGiftRecipient: Option[GiftRecipient], deliveryAddress: Address) =
-    maybeGiftRecipient.map(
-      giftRecipient =>
-        upsert(getGiftRecipient(contactRecord.AccountId, deliveryAddress, giftRecipient)).map(Some(_))
-    ).getOrElse(Future.successful(None))
+    maybeGiftRecipient
+      .filter(recipient => recipient.firstName != "" && recipient.lastName != "")
+      .map(giftRecipient => upsert(getGiftRecipient(contactRecord.AccountId, deliveryAddress, giftRecipient)).map(Some(_)))
+      .getOrElse(Future.successful(None))
 
 
   private def getNewContact(user: User, giftRecipient: Option[GiftRecipient]) =

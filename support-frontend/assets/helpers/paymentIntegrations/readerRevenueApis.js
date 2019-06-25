@@ -1,11 +1,19 @@
 // @flow
 import { routes } from 'helpers/routes';
-import { type AcquisitionABTest, type OphanIds, type ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import {
+  type AcquisitionABTest,
+  type OphanIds,
+  type ReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
 import { type ErrorReason } from 'helpers/errorReasons';
 import { type Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { type BillingPeriod } from 'helpers/billingPeriods';
 import { type Participations } from 'helpers/abTests/abtest';
-import { type CaState, type IsoCountry, type UsState } from 'helpers/internationalisation/country';
+import {
+  type CaState,
+  type IsoCountry,
+  type UsState,
+} from 'helpers/internationalisation/country';
 import { type Option } from 'helpers/types/option';
 import { logPromise, pollUntilPromise } from 'helpers/promise';
 import { logException } from 'helpers/logger';
@@ -15,7 +23,13 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 
 import { type ThankYouPageStage } from '../../pages/contributions-landing/contributionsLandingReducer';
-import { DirectDebit, ExistingCard, ExistingDirectDebit, PayPal, Stripe } from 'helpers/paymentMethods';
+import {
+  DirectDebit,
+  ExistingCard,
+  ExistingDirectDebit,
+  PayPal,
+  Stripe,
+} from 'helpers/paymentMethods';
 import type { Title } from 'helpers/user/details';
 
 // ----- Types ----- //
@@ -75,8 +89,8 @@ export type RegularPaymentRequest = {|
   deliveryAddress: Option<RegularPaymentRequestAddress>,
   email: string,
   titleGiftRecipient?: Option<Title>,
-  firstNameGiftRecipient?: string,
-  lastNameGiftRecipient?: string,
+  firstNameGiftRecipient?: Option<string>,
+  lastNameGiftRecipient?: Option<string>,
   emailGiftRecipient?: Option<string>,
   product: ProductFields,
   firstDeliveryDate: Option<string>,

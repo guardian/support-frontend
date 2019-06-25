@@ -9,7 +9,10 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type { AnyCheckoutState, CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type {
+  AnyCheckoutState,
+  CheckoutState,
+} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 
 export type Stage = 'checkout' | 'thankyou' | 'thankyou-pending';
@@ -21,9 +24,9 @@ export type FormFields = {|
   email: string,
   telephone: Option<string>,
   titleGiftRecipient: Option<Title>,
-  firstNameGiftRecipient: string,
-  lastNameGiftRecipient: string,
-  emailGiftRecipient: string,
+  firstNameGiftRecipient: Option<string>,
+  lastNameGiftRecipient: Option<string>,
+  emailGiftRecipient: Option<string>,
   billingPeriod: BillingPeriod,
   paymentMethod: Option<PaymentMethod>,
   startDate: Option<string>,
