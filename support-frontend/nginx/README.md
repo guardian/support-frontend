@@ -1,19 +1,15 @@
 # Support™ NGINX
+#### Installing NGINX
 
-- Install dependencies:
-```bash
-brew tap "guardian/devtools"
-brew install "guardian/devtools/dev-nginx"
-```
-
-Or from the `nginx` directory:
-```bash
-brew bundle
-```
-- Run [setup.sh](setup.sh) script from the root of the `support-frontend` project:
+- nginx will be installed and configured by running [setup.sh](setup.sh) script from the root of the `support-frontend` project:
 
 ```
-./nginx/setup.sh
+./setup.sh
+```
+
+#### Running nginx
+```
+sudo nginx
 ```
 
 #### NGINX error messages

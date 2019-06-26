@@ -36,7 +36,12 @@ import { titles } from 'helpers/user/details';
 import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import GridImage from 'components/gridImage/gridImage';
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
-import type { FormField as PersonalDetailsFormField } from 'helpers/subscriptionsForms/formFields';
+import type {
+  FormField as PersonalDetailsFormField,
+  FormField,
+  FormFields,
+} from 'helpers/subscriptionsForms/formFields';
+import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import PersonalDetailsGift
   from 'components/subscriptionCheckouts/personalDetailsGift';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -45,11 +50,6 @@ import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentM
 import CancellationSection
   from 'components/subscriptionCheckouts/cancellationSection';
 import { GuardianWeekly } from 'helpers/subscriptions';
-import type {
-  FormField,
-  FormFields,
-} from 'helpers/subscriptionsForms/formFields';
-import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { signOut } from 'helpers/user/user';
 import type {
   Action,
@@ -204,11 +204,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   {options(titles)}
                 </SelectWithLabel>
                 <PersonalDetailsGift
-                  firstNameGiftRecipient={props.firstNameGiftRecipient}
+                  firstNameGiftRecipient={props.firstNameGiftRecipient || ''}
                   setFirstNameGift={props.setFirstNameGift}
-                  lastNameGiftRecipient={props.lastNameGiftRecipient}
+                  lastNameGiftRecipient={props.lastNameGiftRecipient || ''}
                   setLastNameGift={props.setLastNameGift}
-                  emailGiftRecipient={props.emailGiftRecipient}
+                  emailGiftRecipient={props.emailGiftRecipient || ''}
                   setEmailGift={props.setEmailGift}
                   formErrors={((props.formErrors: any): FormError<PersonalDetailsFormField>[])}
                   isGiftRecipient

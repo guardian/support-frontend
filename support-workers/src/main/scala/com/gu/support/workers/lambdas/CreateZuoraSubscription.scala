@@ -86,10 +86,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     SendThankYouEmailState(
       state.requestId,
       state.user,
+      state.giftRecipient,
       state.product,
       state.paymentMethod,
       state.firstDeliveryDate,
-      state.salesForceContact,
+      state.salesforceContacts.buyer,
       accountNumber.value,
       subscriptionNumber.value,
       paymentSchedule,
@@ -111,6 +112,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   private def buildSubscriptionData(state: CreateZuoraSubscriptionState, promotionService: PromotionService) = {
     val isTestUser = state.user.isTestUser
     val config = zuoraConfigProvider.get(isTestUser)
+    val readerType: ReaderType = state.giftRecipient match  {
+      case _: Some[GiftRecipient] => ReaderType.Gift
+      case _ => ReaderType.Direct
+    }
+
     state.product match {
       case c: Contribution => c.build(state.requestId, config)
       case d: DigitalPack => d.build(state.requestId, config, state.user.billingAddress.country, state.promoCode, promotionService, isTestUser)
@@ -121,6 +127,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         state.promoCode,
         state.firstDeliveryDate,
         promotionService,
+        readerType,
         isTestUser
       )
     }
@@ -141,12 +148,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   }
 
   private def buildAccount(state: CreateZuoraSubscriptionState) = Account(
-    state.salesForceContact.AccountId, //We store the Salesforce Account id in the name field
-    state.product.currency,
-    state.salesForceContact.AccountId, //Somewhere else we store the Salesforce Account id
-    state.salesForceContact.Id,
-    state.user.id,
-    PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
-    state.requestId.toString
+    name = state.salesforceContacts.recipient.AccountId, //We store the Salesforce Account id in the name field
+    currency = state.product.currency,
+    crmId = state.salesforceContacts.recipient.AccountId, //Somewhere else we store the Salesforce Account id
+    sfContactId__c = state.salesforceContacts.buyer.Id,
+    identityId__c = state.user.id,
+    paymentGateway = PaymentGateway.forPaymentMethod(state.paymentMethod, state.product.currency),
+    createdRequestId__c = state.requestId.toString
   )
 }

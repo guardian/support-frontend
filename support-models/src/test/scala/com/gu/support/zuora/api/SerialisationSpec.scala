@@ -2,7 +2,6 @@ package com.gu.support.zuora.api
 
 import com.gu.i18n.Currency.GBP
 import com.gu.support.SerialisationTestHelpers
-import com.gu.support.SerialisationTestHelpers._
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.PaymentFields
 import com.gu.support.zuora.api.Fixtures._
@@ -11,9 +10,9 @@ import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
 import io.circe.parser._
 import io.circe.syntax._
-import org.joda.time.{DateTime, LocalDate}
+import org.joda.time.LocalDate
 import org.joda.time.Months.months
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.FlatSpec
 
 class SerialisationSpec extends FlatSpec with SerialisationTestHelpers with LazyLogging {
 

@@ -177,7 +177,8 @@ object Fixtures {
         "TermType" : "TERMED",
         "InitialPromotionCode__c": "$promoCode",
         "PromotionCode__c": "$promoCode",
-        "CreatedRequestId__c": "id123"
+        "CreatedRequestId__c": "id123",
+        "ReaderType__c": "Direct"
       }
     """
 

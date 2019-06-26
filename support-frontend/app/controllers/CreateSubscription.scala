@@ -78,6 +78,7 @@ class CreateSubscription(
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
+      title = request.title,
       firstName = request.firstName,
       lastName = request.lastName,
       billingAddress = request.billingAddress,
