@@ -1,16 +1,16 @@
 package controllers
 
 import actions.CustomActionBuilders
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
-import services.IdentityService
+import services.{IdentityService}
 import cats.implicits._
-import config.Configuration.GuardianDomain
+import config.Configuration.{GuardianDomain, IdentityUrl}
 import models.identity.responses.SetGuestPasswordResponseCookies
 import codecs.CirceDecoders._
 
@@ -22,6 +22,7 @@ class IdentityController(
     components: ControllerComponents,
     actionRefiners: CustomActionBuilders,
     guardianDomain: GuardianDomain,
+    identityUrl: IdentityUrl,
     warn: () => Try[Unit]
 )(implicit ec: ExecutionContext)
   extends AbstractController(components) with Circe {
@@ -81,14 +82,40 @@ class IdentityController(
         )
     }
   }
+
+  def createSignInURL(): Action[CreateSignInTokenRequest] = PrivateAction.async(circe.json[CreateSignInTokenRequest]) { implicit request =>
+    identityService
+      .createSignInToken(request.body.email)
+      .fold(
+        err => {
+          SafeLogger.error(scrub"Failed to create a sign in token for ${request.body.email}: ${err.toString}")
+          warnAndReturn()
+        },
+        response => {
+          val signInUrl = s"${identityUrl.value}/signin?encryptedEmail=${response.encryptedEmail}"
+          SafeLogger.info(s"Successfully created a sign in token for ${request.body.email}")
+          Ok(CreateSignInLinkResponse(signInUrl).asJson)
+        }
+      )
+  }
 }
 
+case class SendMarketingRequest(email: String)
 object SendMarketingRequest {
   implicit val decoder: Decoder[SendMarketingRequest] = deriveDecoder
 }
-case class SendMarketingRequest(email: String)
 
+case class SetPasswordRequest(password: String, guestAccountRegistrationToken: String)
 object SetPasswordRequest {
   implicit val decoder: Decoder[SetPasswordRequest] = deriveDecoder
 }
-case class SetPasswordRequest(password: String, guestAccountRegistrationToken: String)
+
+case class CreateSignInTokenRequest(email: String)
+object CreateSignInTokenRequest {
+  implicit val decoder: Decoder[CreateSignInTokenRequest] = deriveDecoder
+}
+
+case class CreateSignInLinkResponse(signInLink: String)
+object CreateSignInLinkResponse {
+  implicit val encoder: Encoder[CreateSignInLinkResponse] = deriveEncoder
+}

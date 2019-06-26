@@ -3,6 +3,7 @@ package actions
 import com.gu.identity.play.AuthenticatedIdUser
 import com.gu.identity.play.AuthenticatedIdUser.Provider
 import com.netaporter.uri.dsl._
+import config.Configuration.IdentityUrl
 import play.api.mvc.Results._
 import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
@@ -19,14 +20,14 @@ object CustomActionBuilders {
 }
 
 class CustomActionBuilders(
-    authenticatedIdUserProvider: Provider,
-    idWebAppUrl: String,
-    supportUrl: String,
-    testUsers: TestUserService,
-    cc: ControllerComponents,
-    addToken: CSRFAddToken,
-    checkToken: CSRFCheck,
-    csrfConfig: CSRFConfig
+  authenticatedIdUserProvider: Provider,
+  idWebAppUrl: IdentityUrl,
+  supportUrl: String,
+  testUsers: TestUserService,
+  cc: ControllerComponents,
+  addToken: CSRFAddToken,
+  checkToken: CSRFCheck,
+  csrfConfig: CSRFConfig
 )(implicit private val ec: ExecutionContext) {
 
   import CustomActionBuilders._
@@ -41,7 +42,7 @@ class CustomActionBuilders(
   private val idSkipValidationReturn: (String, String) = "skipValidationReturn" -> "true"
 
   private def idWebAppRegisterUrl(path: String, clientId: String, idWebAppRegisterPath: String): String =
-    idWebAppUrl / idWebAppRegisterPath ?
+    idWebAppUrl.value / idWebAppRegisterPath ?
       ("returnUrl" -> s"$supportUrl$path") &
       idSkipConfirmation &
       idSkipValidationReturn &

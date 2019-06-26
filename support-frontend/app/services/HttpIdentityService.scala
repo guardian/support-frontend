@@ -10,6 +10,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
 import io.circe.Encoder
+import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto.deriveEncoder
 import models.identity.UserIdWithGuestAccountToken
 import models.identity.requests.CreateGuestAccountRequestBody
@@ -58,10 +59,14 @@ object IdentityService {
 }
 
 case class GetUserTypeResponse(userType: String)
-
 object GetUserTypeResponse {
   implicit val readsGetUserTypeResponse: Reads[GetUserTypeResponse] = Json.reads[GetUserTypeResponse]
   implicit val getUserTypeEncoder: Encoder[GetUserTypeResponse] = deriveEncoder
+}
+
+case class CreateSignInTokenResponse(encryptedEmail: String)
+object CreateSignInTokenResponse {
+  implicit val readCreateSignInTokenResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
 }
 
 class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {
@@ -110,6 +115,17 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
       .attemptT
       .leftMap(_.toString)
       .subflatMap(resp => (resp.json \ "cookies").validate[SetGuestPasswordResponseCookies].asEither.leftMap(_.mkString(",")))
+  }
+
+  def createSignInToken(
+    email: String
+  )(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse] = {
+    val payload = Json.obj("email" -> email)
+    request(s"signin-token/email")
+      .post(payload)
+      .attemptT
+      .leftMap(_.toString)
+      .subflatMap(resp => resp.json.validate[CreateSignInTokenResponse].asEither.leftMap(_.mkString(",")))
   }
 
   private def getHeaders(request: RequestHeader): List[(String, String)] = List(
@@ -201,4 +217,5 @@ trait IdentityService {
     guestAccountRegistrationToken: String
   )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies]
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
+  def createSignInToken(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse]
 }

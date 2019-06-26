@@ -35,6 +35,7 @@ const routes: {
   paperSubscriptionProductChoices: '/subscribe/paper#subscribe',
   guardianWeeklySubscriptionLanding: '/subscribe/weekly',
   postcodeLookup: '/postcode-lookup',
+  createSignInUrl: '/identity/signin-url',
 };
 
 function postcodeLookupUrl(postcode: string): string {

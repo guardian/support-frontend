@@ -14,7 +14,7 @@ import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
 import services.{HttpIdentityService, MembersDataService, PaymentAPIService, TestUserService}
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
-import config.Configuration.GuardianDomain
+import config.Configuration.{GuardianDomain, IdentityUrl}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -26,7 +26,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
 
   val actionRefiner = new CustomActionBuilders(
     authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
-    idWebAppUrl = "",
+    idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
     testUsers = mock[TestUserService],
     cc = stubControllerComponents(),
