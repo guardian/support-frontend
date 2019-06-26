@@ -1,14 +1,14 @@
 package controllers
 
 import actions.CustomActionBuilders
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import play.api.mvc._
 import play.api.libs.circe.Circe
-import services.{CreateSignInLinkResponse, IdentityService}
+import services.{IdentityService}
 import cats.implicits._
 import config.Configuration.{GuardianDomain, IdentityUrl}
 import models.identity.responses.SetGuestPasswordResponseCookies
@@ -113,4 +113,9 @@ object SetPasswordRequest {
 case class CreateSignInTokenRequest(email: String)
 object CreateSignInTokenRequest {
   implicit val decoder: Decoder[CreateSignInTokenRequest] = deriveDecoder
+}
+
+case class CreateSignInLinkResponse(signInLink: String)
+object CreateSignInLinkResponse {
+  implicit val encoder: Encoder[CreateSignInLinkResponse] = deriveEncoder
 }

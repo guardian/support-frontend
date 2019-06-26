@@ -67,13 +67,6 @@ object GetUserTypeResponse {
 case class CreateSignInTokenResponse(encryptedEmail: String)
 object CreateSignInTokenResponse {
   implicit val readCreateSignInTokenResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
-  implicit val createSignInTokenResponseEncoder: Encoder[CreateSignInTokenResponse] = deriveEncoder
-}
-
-case class CreateSignInLinkResponse(signInLink: String)
-object CreateSignInLinkResponse {
-  implicit val readCreateSignInLinkResponse: Reads[CreateSignInLinkResponse] = Json.reads[CreateSignInLinkResponse]
-  implicit val CreateSignInLinkResponseEncoder: Encoder[CreateSignInLinkResponse] = deriveEncoder
 }
 
 class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {

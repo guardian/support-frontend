@@ -63,7 +63,7 @@ const createSignInLink = (email: string, csrf: string, contributionType: Contrib
   })
     .then((response) => {
       if (response.ok) {
-        response.json();
+        return response.json();
       } else {
         throw new Error('Identity encryption service error');
       }
@@ -75,7 +75,6 @@ const createSignInLink = (email: string, csrf: string, contributionType: Contrib
       } else {
         throw new Error('Encrypted sign in link missing from identity service response');
       }
-
     })
     .catch((error) => {
       console.error(error);
