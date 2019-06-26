@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  getNextDaysOfTheWeek,
+  getDeliveryDays,
   numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
 import { formatUserDate } from 'helpers/dateConversions';
@@ -17,7 +17,7 @@ const getWeeklyDays = (today: ?number): Date[] => {
       currentWeekday > extraDelayCutoffWeekday
         ? extraDelayWeeks
         : normalDelayWeeks;
-  return getNextDaysOfTheWeek(
+  return getDeliveryDays(
     now.getTime(),
     5,
     numberOfWeeksWeDeliverTo + weeksToAdd,

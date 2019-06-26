@@ -14,7 +14,7 @@ import {
 } from 'helpers/productPrice/productOptions';
 
 import {
-  getNextDaysOfTheWeek,
+  getDeliveryDays,
   numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
 
@@ -52,15 +52,16 @@ const getVoucherDays = (today: number, product: ProductOptions): Date[] => {
     currentWeekday >= voucherExtraDelayCutoffWeekday && currentHour >= voucherExtraDelayCutoffHour
       ? voucherExtraDelayWeeks
       : voucherNormalDelayWeeks;
-  return getNextDaysOfTheWeek(
+  return getDeliveryDays(
     today,
     getDeliveryDayForProduct(product),
     numberOfWeeksWeDeliverTo + weeksToAdd,
   ).splice(weeksToAdd);
 };
 
-const getDeliveryDays = (today: number, product: ProductOptions): Date[] =>
-  getNextDaysOfTheWeek(today, getDeliveryDayForProduct(product), numberOfWeeksWeDeliverTo);
+// TODO: this needs correcting before home delivery turned back on
+const getHomeDeliveryDays = (today: number, product: ProductOptions): Date[] =>
+  getDeliveryDays(today, getDeliveryDayForProduct(product), numberOfWeeksWeDeliverTo);
 
 
-export { getVoucherDays, getDeliveryDays };
+export { getVoucherDays, getHomeDeliveryDays };
