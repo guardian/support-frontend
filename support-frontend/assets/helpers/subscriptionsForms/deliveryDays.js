@@ -6,7 +6,7 @@ const milsInADay = 1000 * 60 * 60 * 24;
 export const numberOfWeeksWeDeliverTo = 4;
 
 const getDateOfDeliveryDayInCurrentWeek = (today: number, day: Day): Date => {
-  const diff = (day - new Date(today).getDay()) % 7;
+  const diff = day - new Date(today).getDay();
   return new Date(today + (diff * milsInADay));
 };
 
