@@ -10,6 +10,7 @@ import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 case class CreatePaymentMethodState(
   requestId: UUID,
   user: User,
+  giftRecipient: Option[GiftRecipient],
   product: ProductType,
   paymentFields: PaymentFields,
   firstDeliveryDate: Option[LocalDate],

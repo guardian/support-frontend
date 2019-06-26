@@ -13,22 +13,49 @@ $content-padding: 10px;
   box-sizing: border-box;
 }
 
+.product-block {
+  margin-top: 20px;
+}
+
 .product-block__header {
-  width: 100%;
-  font-weight: 600;
-  font-size: 36px;
-  padding: $content-padding;
+  display: inline-block;
+  padding: 5px;
+  background-color: gu-colour(neutral-7);
+  font: 600 18px $gu-headline;
+  color: gu-colour(neutral-100);
+  
+  @include mq($from: mobileLandscape) {
+    font-size: 22px;
+  }
 }
 
 .product-block__content {
   display: flex;
-  flex-wrap: wrap-reverse;
+  flex-wrap: wrap;
+}
+
+.product-block__content:nth-of-type(3) {
+  display: flex;
+  
+  @include mq($from: leftCol) {
+    flex-direction: row-reverse;
+  }
+}
+
+.product-block__content:nth-of-type(4) {
+  border-top: 1px solid gu-colour(neutral-86);
 }
 
 .product-block__content--subtitle {
   display: none;
   @include mq($from: leftCol) {
     display: block;
+  }
+}
+
+.product-block__sub-title:nth-child(1) {
+  @include mq($from: tablet) {
+    border: none;
   }
 }
 
@@ -39,71 +66,85 @@ $content-padding: 10px;
     display: none;
   }
 }
+
 .product-block__sub-title {
-  @include narrow-content;
-  padding: 0 $content-padding 30px;
-  font-size: 24px;
-  line-height: 28px;
+  width: 100%;
+  padding: 0 $content-padding 10px;
+  font: 600 22px $gu-headline;
+  line-height: 40px;
+
+  @include mq($from: tablet) {
+    border-left: 1px solid gu-colour(neutral-86);
+    border-left: none;
+    font-size: 26px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 32px;
+  }
 }
 
-.product-block__feature {
-  @include narrow-content;
+.product-block__sub-title-text-container {
   width: 100%;
   padding: 0 $content-padding 30px;
-  font-size: 17px;
-  line-height: 21px;
-  border-top: 1px solid gu-colour(neutral-86);
-  
-  @media screen and (min-width: 1140px) {
-    padding-bottom: 0;
-    border-top: none;
-    width: 50%;
+}
 
-    &:nth-of-type(2),
-    &:nth-of-type(3) {
-      padding-bottom: 30px;
-    }
+.product-block__sub-title-text-container:nth-of-type(1) {
+  @include mq($from: tablet) {
+    border-left: none;
   }
 }
 
-.product-block__feature:nth-of-type(3),
-.product-block__feature:nth-of-type(5) {
-  @media screen and (min-width: 1140px) {
-    border-left: 1px solid gu-colour(neutral-86);
-  }
-}
+.product-block__sub-title-text {
 
-.product-block__feature:nth-child(4), 
-.product-block__feature:nth-child(5) {
-  @media screen and (min-width: 1140px) {
-    margin-bottom: 50px;
+  max-width: 32.5rem;
+  font: 300 20px $gu-headline;
+  line-height: 24px;
+
+  @include mq($from: tablet) {
+    font-size: 22px;
+  }
+
+  @include mq($from: desktop) {
+    font-size: 24px;
   }
 }
 
 .product-block__feature-title {
-  font-weight: 600; 
+  font-weight: 600;
 }
 
 .product-block__right-content {
-  width: 100%;
-  padding:0 $content-padding 30px;
+  padding:0 $content-padding 30px $content-padding;
   max-width: 32.5rem;
 
-  @media screen and (min-width: 1140px) {
-    width: 50%;
-    padding-right: 20px;
+  @include mq($from: tablet) {
+    margin-right: 150px;
   }
 }
 
 .product-block__left-content {
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
-  max-width: 32.5rem;
-  
-  @media screen and (min-width: 1140px) {
-    width: 50%;
+  width: 32.5rem;
+  padding: 0 $content-padding 30px;
+
+  @include mq($from: tablet) {
+    .component-list-ul {
+      margin-right: 140px;
+    }
   }
+}
+
+.product-block__grey-line-container {
+  width: 100%;
+}
+
+.product-block__grey-line {
+  display: block;
+  width: 100%;
+  border-top: 1px solid gu-colour(neutral-86);
+  margin-top: 2px;
 }
 
 // This is a override for "#digital-subscription-landing-page-int .product-block .component-grid-image"
@@ -111,4 +152,26 @@ $content-padding: 10px;
 .product-block #product-block__right-content
 img.component-grid-image {
   width: 100%;
+}
+
+.component-left-margin-section__content {
+  width: 100px;
+}
+
+// this is a hack to override the left border on the .component-left-margin-section__content because the new design calls this to start at desktop instead of the leftCol breakpoint
+#digital-subscription-landing-page-int,
+#digital-subscription-landing-page-uk,
+#digital-subscription-landing-page-us,
+#digital-subscription-landing-page-au,
+#digital-subscription-landing-page-eu,
+#digital-subscription-landing-page-nz,
+#digital-subscription-landing-page-ca {
+  .product-block.product-block {
+    .component-left-margin-section__content {
+      
+      @include mq($from: tablet) {
+        border-left: 1px solid gu-colour(neutral-86);
+      }
+    } 
+  } 
 }

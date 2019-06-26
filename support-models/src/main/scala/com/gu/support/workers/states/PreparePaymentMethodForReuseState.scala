@@ -9,6 +9,7 @@ case class PreparePaymentMethodForReuseState(
     product: ProductType,
     paymentFields: ExistingPaymentFields,
     user: User,
+    giftRecipient: Option[GiftRecipient],
     acquisitionData: Option[AcquisitionData]
   ) extends StepFunctionUserState
 

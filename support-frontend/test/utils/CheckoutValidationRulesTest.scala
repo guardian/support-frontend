@@ -177,6 +177,7 @@ class PaperValidationTest extends FlatSpec with Matchers {
 object TestData {
 
   val validDigitalPackRequest = CreateSupportWorkersRequest(
+    title = None,
     firstName = "grace",
     lastName = "hopper",
     product = DigitalPack(Currency.USD, Monthly),
@@ -196,7 +197,11 @@ object TestData {
       postCode = Some("111111"),
       country = Country.US,
     ),
-    deliveryAddress = None
+    deliveryAddress = None,
+    titleGiftRecipient = None,
+    firstNameGiftRecipient = None,
+    lastNameGiftRecipient = None,
+    emailGiftRecipient = None
   )
 
   val someDateNextMonth = new LocalDate().plusMonths(1)
@@ -209,6 +214,7 @@ object TestData {
     country = Country.UK
   )
   val validPaperRequest = CreateSupportWorkersRequest(
+    title = None,
     firstName = "grace",
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
@@ -221,7 +227,11 @@ object TestData {
     telephoneNumber = None,
     promoCode = None,
     billingAddress = paperAddress,
-    deliveryAddress = Some(paperAddress)
+    deliveryAddress = Some(paperAddress),
+    titleGiftRecipient = None,
+    firstNameGiftRecipient = None,
+    lastNameGiftRecipient = None,
+    emailGiftRecipient = None
   )
 
 }

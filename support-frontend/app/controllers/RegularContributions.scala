@@ -6,6 +6,7 @@ import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.i18n.Title
 import com.gu.identity.play.{AuthenticatedIdUser, IdMinimalUser, IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.{Address, User}
@@ -114,6 +115,7 @@ class RegularContributions(
     User(
       id = user.id,
       primaryEmailAddress = user.primaryEmailAddress,
+      title = request.title,
       firstName = request.firstName,
       lastName = request.lastName,
       billingAddress = billingAddress(request),

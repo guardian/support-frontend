@@ -1,4 +1,7 @@
-package com.gu.support.workers
+package com.gu.salesforce
+
+import com.gu.salesforce.AddressLineTransformer.combinedAddressLine
+import com.gu.support.workers.Address
 
 import scala.util.matching.Regex
 
@@ -48,6 +51,11 @@ object AddressLineTransformer {
 case class AddressLine(streetNumber: Option[String], streetName: String)
 
 object AddressLine {
+
+  def getAddressLine(address: Address): Option[String] = combinedAddressLine(
+    address.lineOne,
+    address.lineTwo
+  ).map(asFormattedString)
 
   def asFormattedString(addressLine: AddressLine): String = {
     val streetNumberString = addressLine.streetNumber match {
