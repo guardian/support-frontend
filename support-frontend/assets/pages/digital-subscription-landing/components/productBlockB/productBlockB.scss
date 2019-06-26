@@ -13,7 +13,7 @@ $content-padding: 10px;
   box-sizing: border-box;
 }
 
-.product-block {
+.product-block--margin {
   margin-top: 20px;
 }
 
@@ -44,6 +44,7 @@ $content-padding: 10px;
 
 .product-block__content:nth-of-type(4) {
   border-top: 1px solid gu-colour(neutral-86);
+  border-bottom: 1px solid gu-colour(neutral-86);
 }
 
 .product-block__content--subtitle {
@@ -99,7 +100,7 @@ $content-padding: 10px;
 
   max-width: 32.5rem;
   font: 300 20px $gu-headline;
-  line-height: 24px;
+  line-height: 28px;
 
   @include mq($from: tablet) {
     font-size: 22px;
@@ -119,7 +120,7 @@ $content-padding: 10px;
   max-width: 32.5rem;
 
   @include mq($from: tablet) {
-    margin-right: 150px;
+    padding-right: 80px;
   }
 }
 
@@ -131,7 +132,7 @@ $content-padding: 10px;
 
   @include mq($from: tablet) {
     .component-list-ul {
-      margin-right: 140px;
+      padding-right: 80px;
     }
   }
 }

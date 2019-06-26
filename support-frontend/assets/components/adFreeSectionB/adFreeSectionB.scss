@@ -6,7 +6,6 @@
 
 .ad-free-section {
   width: 100%;
-  border-top: 1px solid gu-colour(neutral-86);
   
   @include mq($from: phablet) {
     display: flex;
@@ -35,8 +34,15 @@
 
 .ad-free-section-b__sub-header {
     margin-bottom: 8px;
+    font: 600 22px $gu-headline;
 
-    font: 600 32px $gu-headline;
+    @include mq($from: tablet) {
+      font-size: 26px;
+    }
+
+    @include mq($from: desktop) {
+      font-size: 32px;
+    }
 }
 
 .ad-free-section__copy {
@@ -47,16 +53,16 @@
   display: flex;
   flex-direction: column-reverse;
   width: 100%;
-  padding-right: 10px;
+  padding: 0 10px 0 10px;
 
   @include mq($from: phablet) {
-    // width: 50%;
     padding-left: gu-span(1);
   }
 }
 
 .ad-free-section__image-container img {
   width: 100%;
+  width: 205px;
 
   @include mq($from: phablet) {
     width: 150px;
