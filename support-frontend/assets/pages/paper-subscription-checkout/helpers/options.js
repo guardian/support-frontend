@@ -6,7 +6,7 @@ import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 import type { FulfilmentOptions, PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection, HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { getQueryParameter } from 'helpers/url';
-import { getDeliveryDays, getVoucherDays } from 'pages/paper-subscription-checkout/helpers/deliveryDays';
+import { getHomeDeliveryDays, getVoucherDays } from 'pages/paper-subscription-checkout/helpers/deliveryDays';
 import { formatMachineDate } from 'helpers/dateConversions';
 
 function getProductOption(): PaperProductOptions {
@@ -21,7 +21,7 @@ function getFulfilmentOption(): PaperFulfilmentOptions {
 }
 
 function getDays(fulfilmentOption: FulfilmentOptions, productOption: ProductOptions) {
-  return (fulfilmentOption === HomeDelivery ? getDeliveryDays(Date.now(), productOption)
+  return (fulfilmentOption === HomeDelivery ? getHomeDeliveryDays(Date.now(), productOption)
     : getVoucherDays(Date.now(), productOption));
 }
 

@@ -14,7 +14,7 @@ import {
 } from 'helpers/productPrice/productOptions';
 
 import {
-  getNextDaysOfTheWeek,
+  getDeliveryDays,
   numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
 
@@ -23,8 +23,8 @@ import type { Day } from 'helpers/subscriptionsForms/deliveryDays';
 // The cut off for getting vouchers in two weeks is Wednesday (day #3 in ISO format) at 6 AM GMT
 const voucherExtraDelayCutoffWeekday = 3;
 const voucherExtraDelayCutoffHour = 6;
-const voucherNormalDelayWeeks = 2;
-const voucherExtraDelayWeeks = 3;
+const voucherNormalDelayWeeks = 3;
+const voucherExtraDelayWeeks = 4;
 
 const getDeliveryDayForProduct = (product: ProductOptions): Day => {
   switch (product) {
@@ -52,15 +52,16 @@ const getVoucherDays = (today: number, product: ProductOptions): Date[] => {
     currentWeekday >= voucherExtraDelayCutoffWeekday && currentHour >= voucherExtraDelayCutoffHour
       ? voucherExtraDelayWeeks
       : voucherNormalDelayWeeks;
-  return getNextDaysOfTheWeek(
+  return getDeliveryDays(
     today,
     getDeliveryDayForProduct(product),
     numberOfWeeksWeDeliverTo + weeksToAdd,
   ).splice(weeksToAdd);
 };
 
-const getDeliveryDays = (today: number, product: ProductOptions): Date[] =>
-  getNextDaysOfTheWeek(today, getDeliveryDayForProduct(product), numberOfWeeksWeDeliverTo);
+// TODO: this needs correcting before home delivery turned back on
+const getHomeDeliveryDays = (today: number, product: ProductOptions): Date[] =>
+  getDeliveryDays(today, getDeliveryDayForProduct(product), numberOfWeeksWeDeliverTo);
 
 
-export { getVoucherDays, getDeliveryDays };
+export { getVoucherDays, getHomeDeliveryDays };
