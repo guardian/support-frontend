@@ -64,7 +64,10 @@ describe('deliveryDays', () => {
       const days = getVoucherDays(monday, 'Sixday');
       expect(formatMachineDate(days[0])).toEqual('2019-03-18');
     });
-
+    it('inside the fast delivery window, delivers Sunday on the next Sunday, three weeks after the preceding Monday', () => {
+      const days = getVoucherDays(tuesday, 'Sunday');
+      expect(formatMachineDate(days[0])).toEqual('2019-03-24');
+    });
   });
 
 

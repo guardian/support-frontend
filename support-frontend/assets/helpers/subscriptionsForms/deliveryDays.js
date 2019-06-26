@@ -6,7 +6,12 @@ const milsInADay = 1000 * 60 * 60 * 24;
 export const numberOfWeeksWeDeliverTo = 4;
 
 const getDateOfDeliveryDayInCurrentWeek = (today: number, day: Day): Date => {
-  const diff = day - new Date(today).getDay();
+  // For the purposes of fulfilment delays we consider the week to start on Monday
+  // so Sunday (day 0) should be day 7
+  const todayOffset = new Date(today).getDay() || 7;
+  const dayOffset = day || 7;
+  const diff = dayOffset - todayOffset;
+
   return new Date(today + (diff * milsInADay));
 };
 
