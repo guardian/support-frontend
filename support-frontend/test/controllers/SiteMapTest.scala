@@ -5,10 +5,11 @@ import org.scalatest.MustMatchers
 import fixtures.TestCSRFComponents
 import actions.CustomActionBuilders
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{stubControllerComponents, status}
+import play.api.test.Helpers.{status, stubControllerComponents}
 import akka.util.Timeout
 import org.scalatest.mockito.MockitoSugar.mock
 import com.gu.identity.play.AuthenticatedIdUser
+import config.Configuration.IdentityUrl
 import services.TestUserService
 
 import scala.concurrent.ExecutionContext
@@ -21,7 +22,7 @@ class SiteMapTest extends WordSpec with MustMatchers with TestCSRFComponents {
 
   val actionRefiner = new CustomActionBuilders(
     authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
-    idWebAppUrl = "",
+    idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
     testUsers = mock[TestUserService],
     cc = stubControllerComponents(),

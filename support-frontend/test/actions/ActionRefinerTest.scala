@@ -1,6 +1,7 @@
 package actions
 
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser}
+import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar._
 import org.scalatest.{MustMatchers, WordSpec}
@@ -21,7 +22,8 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
   "PrivateAction" should {
 
     "include Cache-control: no-cache, private" in {
-      val actionRefiner = new CustomActionBuilders(_ => None, "", "", mock[TestUserService], stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig)
+      val actionRefiner =
+        new CustomActionBuilders(_ => None, IdentityUrl(""), "", mock[TestUserService], stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig)
       val result = actionRefiner.PrivateAction(Ok("")).apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
@@ -32,7 +34,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "respond to request if provider authenticates user" in {
       val actionRefiner = new CustomActionBuilders(
-        _ => Some(mock[AuthenticatedIdUser]), "", "", mock[TestUserService], stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig
+        _ => Some(mock[AuthenticatedIdUser]), IdentityUrl(""), "", mock[TestUserService], stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig
       )
       val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
       status(result) mustEqual Status.OK
@@ -43,7 +45,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
       val path = "/test-path"
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => None,
-        idWebAppUrl = idApiUrl,
+        idWebAppUrl = IdentityUrl(idApiUrl),
         supportUrl = supportUrl,
         testUsers = mock[TestUserService],
         cc = stubControllerComponents(),
@@ -66,7 +68,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     "return a private cache header if user is authenticated" in {
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
-        idWebAppUrl = "",
+        idWebAppUrl = IdentityUrl(""),
         supportUrl = "",
         testUsers = mock[TestUserService],
         cc = stubControllerComponents(),
@@ -81,7 +83,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     "return a private cache header if user is not authenticated" in {
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => None,
-        idWebAppUrl = idApiUrl,
+        idWebAppUrl = IdentityUrl(idApiUrl),
         supportUrl = supportUrl,
         testUsers = mock[TestUserService],
         cc = stubControllerComponents(),
@@ -108,7 +110,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     "respond to request if provider authenticates user and they are a test user" in {
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => Some(testUser),
-        idWebAppUrl = "",
+        idWebAppUrl = IdentityUrl(""),
         supportUrl = "",
         testUsers = testUsers,
         cc = stubControllerComponents(),
@@ -125,7 +127,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
       val path = "/test-path"
       val actionRefiner = new CustomActionBuilders(
         authenticatedIdUserProvider = _ => Some(normalUser),
-        idWebAppUrl = idApiUrl,
+        idWebAppUrl = IdentityUrl(idApiUrl),
         supportUrl = supportUrl,
         testUsers = testUsers,
         cc = stubControllerComponents(),
@@ -146,7 +148,8 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     "return a private cache header if user is an authenticated test user" in {
-      val actionRefiner = new CustomActionBuilders(_ => Some(testUser), "", "", testUsers, stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig)
+      val actionRefiner =
+          new CustomActionBuilders(_ => Some(testUser), IdentityUrl(""), "", testUsers, stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig)
       val result = actionRefiner.authenticatedTestUserAction()(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }

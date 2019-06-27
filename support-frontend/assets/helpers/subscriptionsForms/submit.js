@@ -121,10 +121,15 @@ function buildRegularPaymentRequest(
 ): RegularPaymentRequest {
   const { currencyId } = state.common.internationalisation;
   const {
+    title,
     firstName,
     lastName,
     email,
     telephone,
+    titleGiftRecipient,
+    firstNameGiftRecipient,
+    lastNameGiftRecipient,
+    emailGiftRecipient,
     billingPeriod,
     fulfilmentOption,
     productOption,
@@ -149,10 +154,15 @@ function buildRegularPaymentRequest(
   const promotion = getAppliedPromo(price.promotions);
 
   return {
+    title,
     firstName,
     lastName,
     ...getAddresses(state),
     email,
+    titleGiftRecipient,
+    firstNameGiftRecipient,
+    lastNameGiftRecipient,
+    emailGiftRecipient,
     telephoneNumber: telephone,
     product,
     firstDeliveryDate: state.page.checkout.startDate,

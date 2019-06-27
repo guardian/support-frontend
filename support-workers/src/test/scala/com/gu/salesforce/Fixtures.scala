@@ -1,13 +1,16 @@
 package com.gu.salesforce
 
-import com.gu.salesforce.Salesforce.NewContact
+import com.gu.i18n.Title
+import com.gu.salesforce.Salesforce.{DeliveryContact, NewContact}
 
 object Fixtures {
   val idId = "9999999"
-  val salesforceId = "0036E00000Uc1IhQAJ"
-  val emailAddress = "yjcysqxfcqqytuzupjc@gu.com"
+  val salesforceId = "0033E000017rqXsQAI"
+  val salesforceAccountId = "0013E000011gxQuQAI"
+  val emailAddress = "integration-test@gu.com"
   val telephoneNumber = "0123456789"
-  val name = "YJCysqXFCqqYtuzuPJc"
+  val title = Title.Mrs
+  val name = "integration-test"
   val street = "123 trash alley"
   val city = "London"
   val postCode = "n1 9gu"
@@ -16,7 +19,27 @@ object Fixtures {
   val state = "CA"
   val allowMail = false
 
-  val newContactUK = NewContact(idId, emailAddress, name, name, None, None, None, None, uk, None, None, None, None, None, None, allowMail, allowMail, allowMail)
+  val newContactUK = NewContact(
+    IdentityID__c = idId,
+    Email = emailAddress,
+    Salutation= Some(Title.Mrs),
+    FirstName = name,
+    LastName = name,
+    OtherStreet = None,
+    OtherCity = None,
+    OtherState = None,
+    OtherPostalCode = None,
+    OtherCountry = uk,
+    MailingStreet = None,
+    MailingCity = None,
+    MailingState = None,
+    MailingPostalCode = None,
+    MailingCountry = None,
+    Phone = None,
+    Allow_Membership_Mail__c = allowMail,
+    Allow_3rd_Party_Mail__c = allowMail,
+    Allow_Guardian_Related_Mail__c = allowMail
+  )
   val newContactUKWithBillingAddress = newContactUK.copy(
     OtherStreet = Some("123 trash alley"),
     OtherCity = Some("London"),
@@ -34,12 +57,26 @@ object Fixtures {
   )
   val newContactUS = newContactUK.copy(OtherCountry = us, OtherState = Some(state))
 
+  val giftRecipientUpsert = DeliveryContact(
+    AccountId = salesforceId,
+    Email = Some(emailAddress),
+    Salutation = Some(Title.Mr),
+    FirstName = name,
+    LastName = name,
+    MailingStreet = Some(street),
+    MailingCity = Some(city),
+    MailingState = None,
+    MailingPostalCode = Some(postCode),
+    MailingCountry = Some(uk)
+  )
+
 
   val upsertJson =
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherCountry": "$uk",
@@ -53,6 +90,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherState": "$state",
@@ -68,6 +106,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherCountry": "$uk",
@@ -83,6 +122,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherStreet": "$street",
@@ -100,6 +140,7 @@ object Fixtures {
       "newContact": {
         "IdentityID__c": "$idId",
         "Email": "$emailAddress",
+        "Salutation": "Mrs",
         "FirstName": "$name",
         "LastName": "$name",
         "OtherStreet": "$street",
@@ -114,6 +155,22 @@ object Fixtures {
         "Allow_Membership_Mail__c": $allowMail,
         "Allow_3rd_Party_Mail__c": $allowMail,
         "Allow_Guardian_Related_Mail__c": $allowMail
+       }
+      }"""
+
+  val giftRecipientUpsertJson =
+    s"""{
+      "newContact": {
+        "AccountId": "$salesforceId",
+        "Email": "$emailAddress",
+        "Salutation": "Mr",
+        "FirstName": "$name",
+        "LastName": "$name",
+        "MailingStreet": "$street",
+        "MailingCity": "$city",
+        "MailingPostalCode": "$postCode",
+        "MailingCountry": "$uk",
+        "RecordTypeId": "01220000000VB50AAG"
        }
       }"""
 

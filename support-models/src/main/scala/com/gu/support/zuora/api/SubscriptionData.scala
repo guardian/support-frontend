@@ -7,6 +7,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeDateTime, encodeDateTime, monthDecoder, _}
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.promotions.PromoCode
+import com.gu.support.zuora.api.PeriodType.fromString
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 import org.joda.time.{LocalDate, Months}
@@ -99,6 +100,33 @@ object PeriodType {
   }
 }
 
+object ReaderType {
+
+  case object Direct extends ReaderType {
+    val value = "Direct"
+  }
+  case object Gift extends ReaderType {
+    val value = "Gift"
+  }
+  case object Agent extends ReaderType {
+    val value = "Agent"
+  }
+
+  def fromString(s: String): ReaderType =
+    s match {
+      case Gift.value => Gift
+      case Agent.value => Agent
+      case _ => Direct
+    }
+
+  implicit val decode: Decoder[ReaderType] = Decoder.decodeString.map(code => fromString(code))
+  implicit val encod: Encoder[ReaderType] = Encoder.encodeString.contramap[ReaderType](_.toString)
+
+}
+sealed trait ReaderType {
+  def value: String
+}
+
 object RatePlan {
   implicit val codec: Codec[RatePlan] = capitalizingCodec
 }
@@ -114,11 +142,13 @@ case class SubscriptionProductFeature(featureId: String)
 object Subscription {
   implicit val decoder: Decoder[Subscription] = decapitalizingDecoder[Subscription].prepare(
     _.withFocus(_.mapObject(_.renameField("PromotionCode__c", "promoCode")))
+      .withFocus(_.mapObject(_.renameField("ReaderType__c", "readerType")))
   )
 
   implicit val encoder: Encoder[Subscription] = capitalizingEncoder[Subscription].mapJsonObject(_
     .copyField("PromoCode", "PromotionCode__c")
     .renameField("PromoCode", "InitialPromotionCode__c")
+    .renameField("ReaderType", "ReaderType__c")
   )
 }
 
@@ -131,7 +161,8 @@ case class Subscription(
   initialTerm: Int = 12,
   renewalTerm: Int = 12,
   termType: String = "TERMED",
-  promoCode: Option[PromoCode] = None
+  readerType: ReaderType = ReaderType.Direct,
+  promoCode: Option[PromoCode] = None,
 )
 
 object RatePlanChargeData {

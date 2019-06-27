@@ -1,125 +1,125 @@
 # ----- System ----- #
 
-GET /healthcheck                                    controllers.Application.healthcheck
-GET /error500                                       lib.ErrorController.error500
+GET /healthcheck                                                   controllers.Application.healthcheck
+GET /error500                                                      lib.ErrorController.error500
 
 # ----- Unsupported Browsers ----- #
 
-GET /unsupported-browser                            controllers.Application.unsupportedBrowser
+GET /unsupported-browser                                           controllers.Application.unsupportedBrowser
 
 # ----- Remove trailing slashes so that /uk/ redirects to /uk ---- #
 
-GET  /*path/  controllers.Application.removeTrailingSlash(path: String)
+GET  /*path/                                                       controllers.Application.removeTrailingSlash(path: String)
 
 # ----- Sitemap ----- #
 
-GET /sitemap.xml                                    controllers.SiteMap.sitemap
+GET /sitemap.xml                                                   controllers.SiteMap.sitemap
 
 
 # ----- Geo landings ----- #
-GET /us                                             controllers.Application.redirect(location="/us/contribute")
-GET /au                                             controllers.Application.redirect(location="/au/contribute")
-GET /eu                                             controllers.Application.redirect(location="/eu/contribute")
-GET /int                                            controllers.Application.redirect(location="/int/contribute")
-GET /nz                                             controllers.Application.redirect(location="/nz/contribute")
-GET /ca                                             controllers.Application.redirect(location="/ca/contribute")
-GET /uk                                             controllers.Application.redirect(location="/uk/support")
-GET /                                               controllers.Application.geoRedirect()
+GET /us                                                            controllers.Application.redirect(location="/us/contribute")
+GET /au                                                            controllers.Application.redirect(location="/au/contribute")
+GET /eu                                                            controllers.Application.redirect(location="/eu/contribute")
+GET /int                                                           controllers.Application.redirect(location="/int/contribute")
+GET /nz                                                            controllers.Application.redirect(location="/nz/contribute")
+GET /ca                                                            controllers.Application.redirect(location="/ca/contribute")
+GET /uk                                                            controllers.Application.redirect(location="/uk/support")
+GET /                                                              controllers.Application.geoRedirect()
 
 
 # ----- Bundles Landing Page ----- #
 
-GET /support                                        controllers.Application.redirect(location="/uk/support")
-GET /uk/support                                     controllers.Application.showcase()
+GET /support                                                       controllers.Application.redirect(location="/uk/support")
+GET /uk/support                                                    controllers.Application.showcase()
 # redirect from old ab test
-GET /showcase                                       controllers.Application.permanentRedirect(location="/uk/support")
+GET /showcase                                                      controllers.Application.permanentRedirect(location="/uk/support")
 
 
 # ----- Events Redirect ----- #
-GET /events/archive                                 controllers.Application.redirect(location="https://membership.theguardian.com/events/archive")
-GET /masterclasses                                  controllers.Application.redirect(location="https://membership.theguardian.com/masterclasses")
-GET /event/*eventId                                 controllers.Application.redirectPath(location="https://membership.theguardian.com/event/", eventId)
+GET /events/archive                                                controllers.Application.redirect(location="https://membership.theguardian.com/events/archive")
+GET /masterclasses                                                 controllers.Application.redirect(location="https://membership.theguardian.com/masterclasses")
+GET /event/*eventId                                                controllers.Application.redirectPath(location="https://membership.theguardian.com/event/", eventId)
 
 
 # This is a temporary client-side redirect based on geo-location
 # Once we have a separate payment failure email for US and UK we can consider removing it
 
-GET  /monthly-contributions                         controllers.Application.permanentRedirect(location="/contribute")
+GET  /monthly-contributions                                        controllers.Application.permanentRedirect(location="/contribute")
 
 
 # ----- Contributions ----- #
 
-GET  /contribute                                    controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET  /contribute/:campaignCode                      controllers.Application.contributeGeoRedirect(campaignCode: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute  controllers.Application.contributionsLanding(country: String, campaignCode = "")
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode  controllers.Application.contributionsLanding(country: String, campaignCode: String)
+GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET  /contribute/:campaignCode                                     controllers.Application.contributeGeoRedirect(campaignCode: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
 
 
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou    controllers.Application.contributionsLanding(country: String, campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
 
-POST /contribute/recurring/create                   controllers.RegularContributions.create
-GET  /support-workers/status                        controllers.SupportWorkersStatus.status(jobId: String)
+POST /contribute/recurring/create                                  controllers.RegularContributions.create
+GET  /support-workers/status                                       controllers.SupportWorkersStatus.status(jobId: String)
 
 # this endpoint should be removed once identity remove
 # the need for a client token
-POST  /contribute/send-marketing                     controllers.IdentityController.submitMarketing
+POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing
 
 # ------ Identity ------ #
-PUT /identity/set-password-guest                 controllers.IdentityController.setPasswordGuest
-GET /identity/get-user-type                      controllers.IdentityController.getUserType(maybeEmail: Option[String])
-
+PUT /identity/set-password-guest                                   controllers.IdentityController.setPasswordGuest
+GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])
+POST /identity/signin-url                                          controllers.IdentityController.createSignInURL
 
 # ----- Subscriptions ----- #
 
-GET  /subscribe                                    controllers.Subscriptions.geoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe           controllers.Subscriptions.landing(country: String)
+GET  /subscribe                                                    controllers.Subscriptions.geoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.Subscriptions.landing(country: String)
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
-GET  /:country/subscribe                           controllers.Subscriptions.legacyRedirect(country: String)
+GET  /:country/subscribe                                           controllers.Subscriptions.legacyRedirect(country: String)
 
-GET  /digital                                           controllers.DigitalSubscription.digitalGeoRedirect()
-GET  /subscribe/digital                                 controllers.DigitalSubscription.digitalGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital     controllers.DigitalSubscription.digital(country: String)
+GET  /digital                                                      controllers.DigitalSubscription.digitalGeoRedirect()
+GET  /subscribe/digital                                            controllers.DigitalSubscription.digitalGeoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.DigitalSubscription.digital(country: String)
 
 # redirect from old checkout urls
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
-GET  /subscribe/digital/checkout  controllers.DigitalSubscription.displayForm()
-GET  /subscribe/digital/checkout/thankyou-existing  controllers.DigitalSubscription.displayThankYouExisting()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
+GET  /subscribe/digital/checkout                                   controllers.DigitalSubscription.displayForm()
+GET  /subscribe/digital/checkout/thankyou-existing                 controllers.DigitalSubscription.displayThankYouExisting()
 
-GET  /weekly                            controllers.Subscriptions.weeklyGeoRedirect()
-GET  /subscribe/weekly                            controllers.Subscriptions.weeklyGeoRedirect()
-GET  /subscribe/weekly/checkout                            controllers.WeeklySubscription.displayForm()
-GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly   controllers.Subscriptions.weekly(country: String)
+GET  /weekly                                                       controllers.Subscriptions.weeklyGeoRedirect()
+GET  /subscribe/weekly                                             controllers.Subscriptions.weeklyGeoRedirect()
+GET  /subscribe/weekly/checkout                                    controllers.WeeklySubscription.displayForm()
+GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.Subscriptions.weekly(country: String)
 
-GET  /paper          controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper          controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper/delivery          controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = true)
-GET  /uk/subscribe/paper          controllers.PaperSubscription.paper(withDelivery: Boolean = false)
-GET  /uk/subscribe/paper/delivery          controllers.PaperSubscription.paper(withDelivery: Boolean = true)
-GET  /subscribe/paper/checkout  controllers.PaperSubscription.displayForm()
+GET  /paper                                                        controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
+GET  /subscribe/paper                                              controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = false)
+GET  /subscribe/paper/delivery                                     controllers.PaperSubscription.paperMethodRedirect(withDelivery: Boolean = true)
+GET  /uk/subscribe/paper                                           controllers.PaperSubscription.paper(withDelivery: Boolean = false)
+GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscription.paper(withDelivery: Boolean = true)
+GET  /subscribe/paper/checkout                                     controllers.PaperSubscription.displayForm()
 
-GET /postcode-lookup/:postcode            controllers.GetAddress.findAddress(postcode: String)
+GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
 
-POST /subscribe/create  controllers.CreateSubscription.create
+POST /subscribe/create                                             controllers.CreateSubscription.create
 
 # ----- Authentication ----- #
 
-GET  /login                                         controllers.Login.login
-GET  /loginAction                                   controllers.Login.loginAction
-GET  /oauth2callback                                controllers.Login.oauth2Callback
-GET  /logout                                        controllers.Login.logout
-GET  /test-users                                    controllers.TestUsersManagement.createTestUser
+GET  /login                                                        controllers.Login.login
+GET  /loginAction                                                  controllers.Login.loginAction
+GET  /oauth2callback                                               controllers.Login.oauth2Callback
+GET  /logout                                                       controllers.Login.logout
+GET  /test-users                                                   controllers.TestUsersManagement.createTestUser
 
 
 # ----- PayPal (Recurring Endpoints) ----- #
 
-POST /paypal/setup-payment                          controllers.PayPalRegular.setupPayment
-POST /paypal/create-agreement                       controllers.PayPalRegular.createAgreement
-GET  /paypal/return                                 controllers.PayPalRegular.returnUrl
-GET  /paypal/cancel                                 controllers.PayPalRegular.cancelUrl
+POST /paypal/setup-payment                                         controllers.PayPalRegular.setupPayment
+POST /paypal/create-agreement                                      controllers.PayPalRegular.createAgreement
+GET  /paypal/return                                                controllers.PayPalRegular.returnUrl
+GET  /paypal/cancel                                                controllers.PayPalRegular.cancelUrl
 
 # ----- PayPal (One-off Endpoints) ----- #
 
@@ -128,24 +128,24 @@ GET  /paypal/cancel                                 controllers.PayPalRegular.ca
 # https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
 # When creating the payment, we tell PayPal where to redirect back to if payment succeeds.
 # This endpoint is the return URL we supply to PayPal.
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return   controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, email: String, country: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/paypal/rest/return         controllers.PayPalOneOff.returnURL(paymentId: String, PayerID: String, email: String, country: String)
 
 # If we get an error back from the execute-payment request to PayPal,
 # we need to redirect the user to a page that tells them their payment failed.
-GET  /paypal/rest/error                                      controllers.PayPalOneOff.paypalError
+GET  /paypal/rest/error                                            controllers.PayPalOneOff.paypalError
 
 # ----- Direct Debit ----- #
 
-POST /direct-debit/check-account                      controllers.DirectDebit.checkAccount
+POST /direct-debit/check-account                                   controllers.DirectDebit.checkAccount
 
 # ----- Verification ----- #
 
-GET  /.well-known/*file   controllers.Assets.at(path="/public", file)
+GET  /.well-known/*file                                            controllers.Assets.at(path="/public", file)
 
 # ----- Assets ----- #
 # See application.conf for cache time config
 
-GET  /favicon.ico                                   controllers.Favicon.get
+GET  /favicon.ico                                                  controllers.Favicon.get
 
-GET  /assets/*file                                  controllers.Assets.at(path="/public/compiled-assets", file)
-GET  /*file                                         controllers.Assets.at(path="/public", file)
+GET  /assets/*file                                                 controllers.Assets.at(path="/public/compiled-assets", file)
+GET  /*file                                                        controllers.Assets.at(path="/public", file)

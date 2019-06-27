@@ -37,6 +37,10 @@ class StubIdentityService extends IdentityService {
     EitherT.rightT[Future, String](GetUserTypeResponse("guest"))
   }
 
+  def createSignInToken(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse] = {
+    EitherT.rightT[Future, String](CreateSignInTokenResponse("nonsense@gu.com"))
+  }
+
   def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken] = {
     EitherT.rightT[Future, String](UserIdWithGuestAccountToken("123456", None))
   }

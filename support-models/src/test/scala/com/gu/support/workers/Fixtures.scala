@@ -232,6 +232,19 @@ object Fixtures {
         }
       """
 
+  val salesforceContactsJson =
+    """{
+          "buyer": {
+              "Id": "003g000001UnFItAAN",
+              "AccountId": "001g000001gOR06AAG"
+            },
+          "giftRecipient": {
+              "Id": "003g000001UnFItAAN",
+              "AccountId": "001g000001gOR06AAG"
+            }
+       }
+      """
+
   def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
     s"""
           {
@@ -239,7 +252,8 @@ object Fixtures {
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContact": $salesforceContactJson,
+            "salesforceContacts": $salesforceContactsJson
             }
         """
   def createDigiPackZuoraSubscriptionJson: String =
@@ -249,7 +263,8 @@ object Fixtures {
             $userJson,
             "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContact": $salesforceContactJson,
+            "salesforceContacts": $salesforceContactsJson
             }
         """
 

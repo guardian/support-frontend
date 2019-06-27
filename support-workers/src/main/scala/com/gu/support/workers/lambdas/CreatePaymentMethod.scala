@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.i18n.{CountryGroup, Currency}
 import com.gu.monitoring.SafeLogger
 import com.gu.paypal.PayPalService
+import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
 import com.gu.support.encoding.CustomCodecs._
@@ -51,6 +52,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     CreateSalesforceContactState(
       state.requestId,
       state.user,
+      state.giftRecipient,
       state.product,
       paymentMethod,
       state.firstDeliveryDate,

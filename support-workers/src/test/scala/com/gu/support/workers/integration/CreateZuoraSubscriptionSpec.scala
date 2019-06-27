@@ -66,6 +66,10 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     createSubscription(createGuardianWeeklySubscriptionJson(Quarterly, Some(GuardianWeekly.SixForSixPromoCode)))
   }
 
+  it should "create an Guardian Weekly gift subscription" in {
+    createSubscription(guardianWeeklyGiftJson)
+  }
+
   private def createSubscription(json: String) = {
     val createZuora = new CreateZuoraSubscription(mockServiceProvider)
 

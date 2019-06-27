@@ -1,32 +1,16 @@
 # Support™ NGINX
+#### Installing NGINX
 
-## Setup Nginx for `Identity-Platform`
-
-Support™ depends on Identity, so **you'll need to perform the**
-[**Nginx setup for identity-platform**](https://github.com/guardian/identity-platform/blob/master/README.md#setup-nginx-for-local-development)
-**first**, before you do anything else.
-
-## Support-specific setup
-
-#### Update your hosts file
-
-Add the following local development domain to your hosts file in `/etc/hosts`:
+- nginx will be installed and configured by running [setup.sh](setup.sh) script from the root of the `support-frontend` project:
 
 ```
-127.0.0.1   support.thegulocal.com
+./setup.sh
 ```
 
-#### Run Support's Nginx setup script
-
-Run the Support-specific [setup.sh](setup.sh) script from the root
-of the `support-frontend` project:
-
+#### Running nginx
 ```
-./nginx/setup.sh
+sudo nginx
 ```
-
-The script doesn't start Nginx. To manually start it run `sudo nginx` or `sudo systemctl start nginx`
-depending on your system.
 
 #### NGINX error messages
 

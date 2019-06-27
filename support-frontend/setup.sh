@@ -4,8 +4,6 @@ set -e
 readonly SYSTEM=$(uname -s)
 EXTRA_STEPS=()
 
-NGINX_ROOT=/usr/local/etc/nginx/
-
 linux() {
   [[ ${SYSTEM} == 'Linux' ]]
 }
@@ -98,34 +96,27 @@ install_node() {
   fi
 }
 
-install_nginx() {
-  if ! installed nginx; then
-    brew install nginx
-    EXTRA_STEPS+=("nginx has been installed. Ensure you have 'include sites-enabled/*' in your nginx configuration ${NGINX_ROOT}/nginx.conf and add '127.0.0.1 support.thegulocal.com' and '127.0.0.1 support-ui.thegulocal.com' to /etc/hosts")
-  else
-    EXTRA_STEPS+=("nginx is installed. Ensure you have 'include sites-enabled/*' in your nginx configuration ${NGINX_ROOT}/nginx.conf and add '127.0.0.1 support.thegulocal.com' and '127.0.0.1 support-ui.thegulocal.com' to /etc/hosts")
-  fi
+setup_nginx() {
+  DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  SITE_CONFIG=${DIR}/nginx/support.conf
+
+  DOMAINS=(
+    "support.thegulocal.com"
+    "support-ui.thegulocal.com"
+  )
+
+  for domain in ${DOMAINS[@]}; do
+    dev-nginx setup-cert $domain
+  done
+
+  dev-nginx link-config ${SITE_CONFIG}
+  dev-nginx restart-nginx
 }
 
-install_awscli() {
-  if ! installed aws; then
-    brew install awscli
-  fi
-}
-
-install_sbt() {
-  if ! installed sbt; then
-    brew install sbt@1
-  fi
-}
-
-install_yarn() {
-  if ! installed yarn; then
-    if linux; then
-      sudo apt-get install yarn
-    elif mac; then
-      brew install yarn
-    fi
+install_yarn_if_linux() {
+  # This will be installed by 'install_brew_deps' if on mac
+  if linux && ! installed yarn; then
+    sudo apt-get install yarn
   fi
 }
 
@@ -133,14 +124,9 @@ install_js_deps() {
   yarn install
 }
 
-fetch_dev_cert() {
-  aws s3 cp s3://identity-local-ssl/STAR_thegulocal_com_exp2020-01-09.crt ${NGINX_ROOT} --profile membership
-  aws s3 cp s3://identity-local-ssl/STAR_thegulocal_com_exp2020-01-09.key ${NGINX_ROOT} --profile membership
-}
-
-link_nginx_config() {
-  mkdir -p ${NGINX_ROOT}sites-enabled
-  ln -sf ${PWD}/nginx/support.conf ${NGINX_ROOT}sites-enabled/support.conf
+install_brew_deps() {
+  # Installs dependencies defined in Brewfile
+  brew bundle
 }
 
 report() {
@@ -156,14 +142,12 @@ main () {
   create_aws_config
   install_node
   install_homebrew
-  install_nginx
-  install_awscli
-  fetch_dev_cert
-  link_nginx_config
+  install_brew_deps
+  setup_nginx
   install_jdk
-  install_sbt
-  install_yarn
+  install_yarn_if_linux
   install_js_deps
+
   report
 }
 

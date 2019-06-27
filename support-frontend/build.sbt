@@ -10,8 +10,11 @@ testOptions in Test := Seq(Tests.Filter(unitTestFilter))
 
 import LibraryVersions.{circeVersion, awsClientVersion, jacksonVersion}
 
+resolvers += "Guardian Platform Bintray" at "https://dl.bintray.com/guardian/platforms"
+
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2",
+  "com.gu" %% "simple-configuration-ssm" % "1.5.1",
   "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   "org.mockito" % "mockito-core" % "2.11.0" % Test,

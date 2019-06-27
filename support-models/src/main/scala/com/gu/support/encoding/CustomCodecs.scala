@@ -2,7 +2,7 @@ package com.gu.support.encoding
 
 import java.util.UUID
 
-import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.i18n.{Country, CountryGroup, Currency, Title}
 import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
@@ -11,6 +11,9 @@ import scala.util.Try
 object CustomCodecs extends InternationalisationCodecs with HelperCodecs
 
 trait InternationalisationCodecs {
+  implicit val encodeTitle: Encoder[Title] = Encoder.encodeString.contramap(_.title)
+  implicit val decodeTitle: Decoder[Title] = Decoder.decodeString.emap(title => Title.fromString(title).toRight(s"Unrecognised title $title"))
+
   implicit val encodeCurrency: Encoder[Currency] = Encoder.encodeString.contramap[Currency](_.iso)
 
   implicit val decodeCurrency: Decoder[Currency] =
@@ -26,7 +29,8 @@ trait InternationalisationCodecs {
 
   implicit val countryGroupEncoder: Encoder[CountryGroup] = Encoder.encodeString.contramap(_.name)
 
-  implicit val countryGroupDecoder: Decoder[CountryGroup] = Decoder.decodeString.emap(id => CountryGroup.byName(id).toRight(s"Unrecognised country group id '$id'"))
+  implicit val countryGroupDecoder: Decoder[CountryGroup] =
+    Decoder.decodeString.emap(id => CountryGroup.byName(id).toRight(s"Unrecognised country group id '$id'"))
 
   implicit val countryGroupKeyEncoder: KeyEncoder[CountryGroup] = (value: CountryGroup) => value.name.toString
 

@@ -3,13 +3,12 @@ package config
 import admin.settings.SettingsSources
 import cats.syntax.either._
 import com.gu.support.config._
-import com.typesafe.config.ConfigFactory
 import config.ConfigImplicits._
 import config.Configuration.GuardianDomain
 import services.stepfunctions.StateMachineArn
+import com.typesafe.config.{ Config => TypesafeConfig }
 
-class Configuration {
-  val config = ConfigFactory.load()
+class Configuration(config: TypesafeConfig) {
 
   lazy val stage = Stage.fromString(config.getString("stage")).get
 
@@ -51,4 +50,5 @@ class Configuration {
 
 object Configuration {
   case class GuardianDomain(value: String)
+  case class IdentityUrl(value: String)
 }

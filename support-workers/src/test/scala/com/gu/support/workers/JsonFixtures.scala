@@ -218,7 +218,13 @@ object JsonFixtures {
             $requestIdJson,
             ${userJson()},
             "product": ${contribution()},
-            "paymentMethod": $payPalPaymentMethod
+            "paymentMethod": $payPalPaymentMethod,
+            "giftRecipient": {
+              "title": "Mr",
+              "firstName": "Gifty",
+              "lastName": "McRecipent",
+              "email": "gift.recipient@gu.com"
+            }
           }
         """
 
@@ -261,6 +267,20 @@ object JsonFixtures {
         }
       """
 
+  val salesforceContactsJson =
+    """
+       "salesforceContacts": {
+          "buyer": {
+            "Id": "003g000001UnFItAAN",
+            "AccountId": "001g000001gOR06AAG"
+          },
+          "giftRecipient": {
+            "Id": "003g000001UnFItAAN",
+            "AccountId": "001g000001gOR06AAG"
+          }
+        }
+      """
+
   def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
     s"""
           {
@@ -268,7 +288,8 @@ object JsonFixtures {
             ${userJson()},
             "product": ${contribution(billingPeriod = billingPeriod)},
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
             }
         """
   val createDigiPackZuoraSubscriptionJson =
@@ -278,7 +299,8 @@ object JsonFixtures {
             ${userJson()},
             "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
             }
         """
 
@@ -290,7 +312,8 @@ object JsonFixtures {
             "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
             "promoCode": "DJP8L27FY",
-            "salesForceContact": $salesforceContactJson
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
             }
         """
 
@@ -302,7 +325,8 @@ object JsonFixtures {
             "product": $everydayPaperJson,
             "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC)}",
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContact": $salesforceContactJson,
+            $salesforceContactsJson
             }
       """
 
@@ -320,10 +344,33 @@ object JsonFixtures {
         "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC).plusDays(10)}",
         $promoJson
         "paymentMethod": $stripePaymentMethod,
-        "salesForceContact": $salesforceContactJson
+        "salesForceContact": $salesforceContactJson,
+        $salesforceContactsJson
         }
       """
     }
+
+  val guardianWeeklyGiftJson =
+    s"""
+      {
+        $requestIdJson,
+        $userJsonWithDeliveryAddress,
+        "giftRecipient": {
+          "title": "Mr",
+          "firstName": "Harry",
+          "lastName": "Ramsden"
+        },
+        "product": {
+          "currency": "GBP",
+          "billingPeriod" : "Quarterly",
+          "fulfilmentOptions" : "RestOfWorld"
+        },
+        "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC).plusDays(10)}",
+        "paymentMethod": $stripePaymentMethod,
+        "salesForceContact": $salesforceContactJson,
+        $salesforceContactsJson
+        }
+      """
 
   val failureJson =
     """{
