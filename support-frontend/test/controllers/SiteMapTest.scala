@@ -10,7 +10,7 @@ import akka.util.Timeout
 import org.scalatest.mockito.MockitoSugar.mock
 import com.gu.identity.play.AuthenticatedIdUser
 import config.Configuration.IdentityUrl
-import services.TestUserService
+import services.{AuthenticationService, TestUserService}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -21,10 +21,9 @@ class SiteMapTest extends WordSpec with MustMatchers with TestCSRFComponents {
   implicit val timeout = Timeout(2.seconds)
 
   val actionRefiner = new CustomActionBuilders(
-    authenticationService = _ => Some(mock[AuthenticatedIdUser]),
+    authenticationService = mock[AuthenticationService],
     idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
-    testUsers = mock[TestUserService],
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,

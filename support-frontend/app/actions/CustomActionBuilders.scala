@@ -51,7 +51,11 @@ class CustomActionBuilders(
   }
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
-    new AuthenticatedBuilder(authenticationService.authenticatedIdUserProvider.andThen(Some.apply), cc.parsers.defaultBodyParser, onUnauthenticated)
+    new AsyncAuthenticatedBuilder(
+      userinfo = requestHeader => authenticationService.asyncAuthenticatedIdUserProvider(requestHeader).map(Some.apply),
+      cc.parsers.defaultBodyParser,
+      onUnauthenticated
+    )
 
   private def authenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[AuthRequest, AnyContent] =
     new AsyncAuthenticatedBuilder(authenticationService.asyncAuthenticatedIdUserProvider, cc.parsers.defaultBodyParser, onUnauthenticated)
