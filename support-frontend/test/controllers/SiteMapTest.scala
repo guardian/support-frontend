@@ -21,7 +21,7 @@ class SiteMapTest extends WordSpec with MustMatchers with TestCSRFComponents {
   implicit val timeout = Timeout(2.seconds)
 
   val actionRefiner = new CustomActionBuilders(
-    authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
+    authenticationService = _ => Some(mock[AuthenticatedIdUser]),
     idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
     testUsers = mock[TestUserService],

@@ -44,7 +44,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     "redirect to identity if provider does not authenticate" in {
       val path = "/test-path"
       val actionRefiner = new CustomActionBuilders(
-        authenticatedIdUserProvider = _ => None,
+        authenticationService = _ => None,
         idWebAppUrl = IdentityUrl(idApiUrl),
         supportUrl = supportUrl,
         testUsers = mock[TestUserService],
@@ -67,7 +67,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "return a private cache header if user is authenticated" in {
       val actionRefiner = new CustomActionBuilders(
-        authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
+        authenticationService = _ => Some(mock[AuthenticatedIdUser]),
         idWebAppUrl = IdentityUrl(""),
         supportUrl = "",
         testUsers = mock[TestUserService],
@@ -82,7 +82,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "return a private cache header if user is not authenticated" in {
       val actionRefiner = new CustomActionBuilders(
-        authenticatedIdUserProvider = _ => None,
+        authenticationService = _ => None,
         idWebAppUrl = IdentityUrl(idApiUrl),
         supportUrl = supportUrl,
         testUsers = mock[TestUserService],
@@ -109,7 +109,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "respond to request if provider authenticates user and they are a test user" in {
       val actionRefiner = new CustomActionBuilders(
-        authenticatedIdUserProvider = _ => Some(testUser),
+        authenticationService = _ => Some(testUser),
         idWebAppUrl = IdentityUrl(""),
         supportUrl = "",
         testUsers = testUsers,
@@ -126,7 +126,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     "redirect to identity if they are not a test user" in {
       val path = "/test-path"
       val actionRefiner = new CustomActionBuilders(
-        authenticatedIdUserProvider = _ => Some(normalUser),
+        authenticationService = _ => Some(normalUser),
         idWebAppUrl = IdentityUrl(idApiUrl),
         supportUrl = supportUrl,
         testUsers = testUsers,

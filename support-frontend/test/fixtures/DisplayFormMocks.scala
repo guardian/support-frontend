@@ -37,7 +37,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
   val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
   val loggedInActionRefiner = new CustomActionBuilders(
-    authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
+    authenticationService = _ => Some(authenticatedIdUser),
     idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
     testUsers = testUsers,
@@ -48,7 +48,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
   )
 
   val loggedOutActionRefiner = new CustomActionBuilders(
-    authenticatedIdUserProvider = _ => None,
+    authenticationService = _ => None,
     idWebAppUrl = IdentityUrl("https://identity-url.local"),
     supportUrl = "",
     testUsers = testUsers,
