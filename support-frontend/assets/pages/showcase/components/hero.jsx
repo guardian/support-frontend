@@ -2,27 +2,41 @@
 
 import React from 'react';
 
+import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
+import { regionalContent } from './regionalContent';
 import HeroImg from './hero.svg';
 import './hero.scss';
 
-const Caption = (props: { className: string }) => (
+const Caption = (props: { className: string, captionTitle: String, captionText: String }) => (
   <div className={props.className}>
     <caption className="showcase-hero__caption">
-      <strong>Cambridge Analytica</strong>
-      <p>A year-long investigation in which we revealed how the data
-        analytics firm Cambridge Analytica that was behind Trump’s 2016
-        campaign and played a role in Brexit, had used the data harvested
-        from 87 million Facebook users without their consent.
-        This reporting led to a public apology from Facebook’s
-        Mark Zuckerberg who was forced to testify before Congress.
+      <strong>{props.captionTitle}</strong>
+      <p>{props.captionText}
       </p>
     </caption>
   </div>
 );
 
-export default function BreakingHeadlines() {
+const getCountrySelector = (country: String) => {
+  switch (country) {
+    case GBPCountries:
+    case EURCountries:
+    case International:
+      return 'ukContent';
+    case UnitedStates:
+    case Canada:
+      return 'usContent';
+    case AUDCountries:
+    case NZDCountries:
+      return 'auContent';
+    default:
+      return 'ukContent';
+  }
+};
 
+export default function Hero(props: { country: String }) {
+  const countrySelector = getCountrySelector(props.country);
   return (
     <div className="showcase-hero">
       <div className="showcase-hero-wrapper">
@@ -33,7 +47,11 @@ export default function BreakingHeadlines() {
         </div>
         <div className="showcase-hero--left">
           <div className="showcase-hero__image showcase-hero__image--first">
-            <Caption className="showcase-hero__caption--desktop" />
+            <Caption
+              className="showcase-hero__caption--desktop"
+              captionTitle={regionalContent[countrySelector].title}
+              captionText={regionalContent[countrySelector].caption}
+            />
             <GridImage
               gridId="showcaseChrisSquare"
               srcSizes={[1000, 500]}
@@ -68,7 +86,11 @@ export default function BreakingHeadlines() {
             />
           </div>
         </div>
-        <Caption className="showcase-hero__caption--mobile" />
+        <Caption
+          className="showcase-hero__caption--mobile"
+          captionTitle={regionalContent[countrySelector].title}
+          captionText={regionalContent[countrySelector].caption}
+        />
       </div>
     </div>
   );

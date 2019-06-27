@@ -51,13 +51,14 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 // ----- Page Startup ----- //
 
 const store = pageInit();
+const state = store.getState();
 
 // ----- Render ----- //
 
 const content = (
   <Provider store={store}>
     <Page header={<CountrySwitcherHeader />} footer={<Footer />}>
-      <Hero />
+      <Hero country={state.common.internationalisation.countryGroupId} />
       <WhySupportMatters />
       <BreakingHeadlines />
       <NoOneEdits />
