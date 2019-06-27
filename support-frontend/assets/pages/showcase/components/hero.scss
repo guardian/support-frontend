@@ -211,7 +211,7 @@
     }
 
     .showcase-hero__caption {
-      width: gu-span(2.75);
+      width: gu-span(3);
       margin-top: 0;
       margin-left: 0;
     }
@@ -252,7 +252,6 @@
       width: gu-span(7);
       height: $photo-1-height;
       img {
-        height: 100%;
         width: gu-span(4);
         animation: animateInLeft 0.8s 1s ease-out forwards 1;
         margin-bottom: $gu-v-spacing;

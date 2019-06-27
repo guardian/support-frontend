@@ -64,6 +64,7 @@ export const imageCatalogue: {
   showcaseNix: '9a9762f17474b2c58859eb62912ca5b856adafb9/0_517_7360_2594',
   showcaseZuckGlass: 'dcae174dfb72ab54cdc726c464b077a857a1ed9c/0_0_3000_1230',
   showcaseChris: 'a4bdbc721484d1ee3db785b9b469910ba6612112/299_10_4744_2846',
+  showcaseChrisSquare: 'a4bdbc721484d1ee3db785b9b469910ba6612112/878_0_3507_3509',
   showcaseBrit: 'e1134ec267edf4a3bbd18271ee271069bbbcec06/0_151_6350_3809',
   theMomentDigiHero: 'a57b0a878d77c8a89517e0f2be34772cd6327d4c/0_0_486_772',
   theMomentDigiHero2: 'e3d9430189ee850a49edeed8554a11a38761cdff/0_0_486_772',

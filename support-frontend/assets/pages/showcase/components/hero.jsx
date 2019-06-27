@@ -35,7 +35,7 @@ export default function BreakingHeadlines() {
           <div className="showcase-hero__image showcase-hero__image--first">
             <Caption className="showcase-hero__caption--desktop" />
             <GridImage
-              gridId="showcaseChris"
+              gridId="showcaseChrisSquare"
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
