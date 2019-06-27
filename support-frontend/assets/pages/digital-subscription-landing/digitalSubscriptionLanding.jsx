@@ -87,10 +87,9 @@ const content = (
           <SubscriptionFaq subscriptionProduct="DigitalPack" />
         </Footer>}
     >
-
-      <CampaignHeader 
-        countryGroupId={countryGroupId} 
-        dailyEditionsVariant={dailyEditionsVariant} 
+      <CampaignHeader
+        countryGroupId={countryGroupId}
+        dailyEditionsVariant={dailyEditionsVariant}
       />
       {dailyEditionsVariant ?
         (
