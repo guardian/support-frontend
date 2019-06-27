@@ -83,7 +83,6 @@ const countryGroupSpecificDetails: {
   Canada: defaultHeaderCopyAndContributeCopy,
 };
 
-//TODO - breaking here?
 const campaignName = getCampaignName();
 const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignName] : null;
 
