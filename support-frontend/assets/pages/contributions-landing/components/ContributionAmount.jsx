@@ -97,6 +97,18 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
   </li>
 );
 
+const renderEmptyAmount = (id: string) => (
+  <li className="form__radio-group-item amounts__placeholder">
+    <input
+      id={`contributionAmount-${id}`}
+      className="form__radio-group-input"
+      type="radio"
+      name="contributionAmount"
+    />
+    <label htmlFor={`contributionAmount-${id}`} className="form__radio-group-label">&nbsp;</label>
+  </li>
+);
+
 const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> => {
   switch (countryGroupId) {
     case GBPCountries: return <SvgPound />;
@@ -135,15 +147,15 @@ const getAmountPerWeekBreakdown = (
   return '';
 };
 
-function ContributionAmount(props: PropTypes) {
+function withProps(props: PropTypes) {
   const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
   const { min, max } = config[props.countryGroupId][props.contributionType]; // eslint-disable-line react/prop-types
   const minAmount: string =
-    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: min.toString() }, false);
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], {value: min.toString()}, false);
   const maxAmount: string =
-    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], { value: max.toString() }, false);
+    formatAmount(currencies[props.currency], spokenCurrencies[props.currency], {value: max.toString()}, false);
   const otherAmount = props.otherAmounts[props.contributionType].amount;
 
   return (
@@ -198,4 +210,18 @@ function ContributionAmount(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
+function withoutProps() {
+  return (
+    <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
+      <ul className="form__radio-group-list">
+        {
+          ['a','b','c','d'].map(renderEmptyAmount)
+        }
+      </ul>
+    </fieldset>
+  );
+}
+
+export const ContributionAmount = connect(mapStateToProps, mapDispatchToProps)(withProps);
+export const EmptyContributionAmount = withoutProps;

@@ -11,7 +11,7 @@ import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/di
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
-import ContributionForm from './ContributionForm';
+import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
 
@@ -83,12 +83,13 @@ const countryGroupSpecificDetails: {
   Canada: defaultHeaderCopyAndContributeCopy,
 };
 
+//TODO - breaking here?
 const campaignName = getCampaignName();
 const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignName] : null;
 
 // ----- Render ----- //
 
-function ContributionFormContainer(props: PropTypes) {
+function withProps(props: PropTypes) {
 
   const onPaymentAuthorisation = (paymentAuthorisation: PaymentAuthorisation) => {
     props.setPaymentIsWaiting(true);
@@ -145,4 +146,21 @@ function ContributionFormContainer(props: PropTypes) {
     );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionFormContainer);
+function withoutProps() {
+  return (
+    <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
+      <div className="gu-content__blurb">
+        <div className="gu-content__blurb-header-container">
+          <h1 className="gu-content__blurb-header"></h1>
+        </div>
+      </div>
+
+      <div className="gu-content__form">
+        <EmptyContributionForm/>
+      </div>
+    </div>
+  );
+}
+
+export const ContributionFormContainer = connect(mapStateToProps, mapDispatchToProps)(withProps);
+export const EmptyContributionFormContainer = withoutProps;

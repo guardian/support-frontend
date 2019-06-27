@@ -53,7 +53,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Render ----- //
 
-function ContributionTypeTabs(props: PropTypes) {
+function withProps(props: PropTypes) {
   const contributionTypes = props.contributionTypes[props.countryGroupId];
 
   if (contributionTypes.length === 1 && contributionTypes[0].contributionType === 'ONE_OFF') {
@@ -94,4 +94,30 @@ function ContributionTypeTabs(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionTypeTabs);
+function withoutProps() {
+  return (
+    <fieldset className={classNameWithModifiers('form__radio-group', ['tabs', 'contribution-type'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
+      <ul className="form__radio-group-list form__radio-group-list--border">
+        {
+          ['a','b','c'].map(id => {
+            return (
+              <li className="form__radio-group-item">
+                <input
+                  id={`contributionType-${id}`}
+                  className="form__radio-group-input"
+                  type="radio"
+                  name="contributionType"
+                />
+                <label htmlFor={`contributionType-${id}`} className="form__radio-group-label">&nbsp;</label>
+              </li>
+            )
+          })
+        }
+      </ul>
+    </fieldset>
+  )
+}
+
+export const ContributionTypeTabs = connect(mapStateToProps, mapDispatchToProps)(withProps);
+export const EmptyContributionTypeTabs = withoutProps;

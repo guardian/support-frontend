@@ -129,9 +129,12 @@ class Application(
 
     val js = elementForStage(RefPath("contributionsLandingPage.js"))
 
-    views.html.contributions(
+    val mainElement = assets.getSsrCacheContentsAsHtml(s"contributions-landing-page-$countryCode","contributions-landing.html")
+
+    views.html.contributionsSSR(
       title = "Support the Guardian | Make a Contribution",
       id = s"contributions-landing-page-$countryCode",
+      mainElement = mainElement,
       js = js,
       css = css,
       fontLoaderBundle = fontLoaderBundle,
