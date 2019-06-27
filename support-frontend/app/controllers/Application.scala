@@ -151,7 +151,7 @@ class Application(
     )
   }
 
-  def showcase: Action[AnyContent] = CachedAction() { implicit request =>
+  def showcase(country: String): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.main(
       title = "Support the Guardian",

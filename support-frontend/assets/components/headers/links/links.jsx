@@ -29,7 +29,6 @@ const links: HeaderNavLink[] = [
     href: routes.showcase,
     text: 'Support',
     trackAs: 'showcase',
-    include: [GBPCountries],
   },
   {
     href: routes.subscriptionsLanding,

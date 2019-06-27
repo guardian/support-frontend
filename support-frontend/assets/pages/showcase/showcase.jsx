@@ -7,9 +7,12 @@ import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 
 import Page from 'components/page/page';
-import Header from 'components/headers/header/header';
+
 import Footer from 'components/footer/footer';
 import Heading from 'components/heading/heading';
+import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 
 import Content from 'components/content/content';
 
@@ -27,6 +30,24 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 import './showcase.scss';
 import { Provider } from 'react-redux';
 
+// ----- Internationalisation ----- //
+
+const countryGroupId: CountryGroupId = detect();
+
+const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
+  path: '/support',
+  countryGroupId,
+  listOfCountries: [
+    GBPCountries,
+    UnitedStates,
+    AUDCountries,
+    EURCountries,
+    NZDCountries,
+    Canada,
+    International,
+  ],
+});
+
 // ----- Page Startup ----- //
 
 const store = pageInit();
@@ -35,7 +56,7 @@ const store = pageInit();
 
 const content = (
   <Provider store={store}>
-    <Page header={<Header />} footer={<Footer />}>
+    <Page header={<CountrySwitcherHeader />} footer={<Footer />}>
       <Hero />
       <WhySupportMatters />
       <BreakingHeadlines />
