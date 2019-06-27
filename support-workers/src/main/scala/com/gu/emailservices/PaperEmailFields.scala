@@ -30,7 +30,7 @@ case class PaperEmailFields(
   }
 
   override val fields = PaperFieldsGenerator.fieldsFor(
-    subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId
+    subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId, promotion
   ) ++ additionalFields
 
   override def payload: String = super.payload(user.primaryEmailAddress, dataExtension)

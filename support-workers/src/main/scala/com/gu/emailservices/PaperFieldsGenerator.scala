@@ -18,8 +18,8 @@ object PaperFieldsGenerator {
     currency: Currency,
     paymentMethod: PaymentMethod,
     sfContactId: SfContactId,
-    directDebitMandateId: Option[String] = None,
-    promotion: Option[Promotion] = None
+    directDebitMandateId: Option[String],
+    promotion: Option[Promotion]
   ): List[(String, String)] = {
 
     val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date

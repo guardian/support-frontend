@@ -84,7 +84,7 @@ case class DigitalPackEmailFields(
     "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
     "Currency" -> currency.glyph,
     "Trial period" -> "14", //TODO: depends on Promo code
-    "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, None)
+    "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
   ) ++ paymentFields
 
   override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
