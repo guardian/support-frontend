@@ -19,7 +19,7 @@ class AuthenticationService(override val identityKeys: IdentityKeys, testUserSer
     Cookies.authProvider(identityKeys).withDisplayNameProvider(Token.authProvider(identityKeys, "membership"))
 
   def asyncAuthenticatedIdUserProvider(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
-    Future.successful(authenticatedIdUserProvider(requestHeader))
+    Future.successful(authenticatedUserFor(requestHeader))
 
   def asyncAuthenticatedTestIdUserProvider(requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Option[AuthenticatedIdUser]] =
     asyncAuthenticatedIdUserProvider(requestHeader).map(_.filter(user => testUserService.isTestUser(user.user.displayName)))

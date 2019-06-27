@@ -3,7 +3,9 @@ package actions
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser}
 import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
-import org.scalatest.mockito.MockitoSugar._
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito._
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.http.Status
 import play.api.mvc.Results._
@@ -13,12 +15,16 @@ import services.{AuthenticationService, TestUserService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponents {
+class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponents with MockitoSugar {
 
   val idApiUrl = "https://id-api-url.local"
   val supportUrl = "https://support-url.local"
   val path = "/test-path"
   val fakeRequest = FakeRequest("GET", path)
+
+  trait Mocks {
+    val authenticationService = mock[AuthenticationService]
+  }
 
   "PrivateAction" should {
 
@@ -33,19 +39,24 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
   "AuthenticatedAction" should {
 
-    "respond to request if provider authenticates user" in {
+    "respond to request if provider authenticates user" in new Mocks {
+
+      when(authenticationService.authenticatedUserFor(ArgumentMatchers.eq(fakeRequest)))
+        .thenReturn(Some(mock[AuthenticatedIdUser]))
+
       val actionRefiner = new CustomActionBuilders(
-        mock[AuthenticationService], IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig
+        authenticationService, IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig
       )
       val result = actionRefiner.authenticatedAction()(Ok("authentication-test")).apply(fakeRequest)
       status(result) mustEqual Status.OK
       contentAsString(result) mustEqual "authentication-test"
     }
 
-    "redirect to identity if provider does not authenticate" in {
+    "redirect to identity if provider does not authenticate" in new Mocks {
       val path = "/test-path"
+      when(authenticationService.authenticatedUserFor(ArgumentMatchers.eq(fakeRequest))).thenReturn(None)
       val actionRefiner = new CustomActionBuilders(
-        authenticationService = mock[AuthenticationService],
+        authenticationService,
         idWebAppUrl = IdentityUrl(idApiUrl),
         supportUrl = supportUrl,
         cc = stubControllerComponents(),
@@ -65,9 +76,11 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
       }
     }
 
-    "return a private cache header if user is authenticated" in {
+    "return a private cache header if user is authenticated" in new Mocks {
+      when(authenticationService.authenticatedUserFor(ArgumentMatchers.eq(fakeRequest)))
+        .thenReturn(Some(mock[AuthenticatedIdUser]))
       val actionRefiner = new CustomActionBuilders(
-        authenticationService = mock[AuthenticationService],
+        authenticationService,
         idWebAppUrl = IdentityUrl(""),
         supportUrl = "",
         cc = stubControllerComponents(),
@@ -79,9 +92,10 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
       header("Cache-Control", result) mustBe Some("no-cache, private")
     }
 
-    "return a private cache header if user is not authenticated" in {
+    "return a private cache header if user is not authenticated" in new Mocks {
+      when(authenticationService.authenticatedUserFor(ArgumentMatchers.eq(fakeRequest))).thenReturn(None)
       val actionRefiner = new CustomActionBuilders(
-        authenticationService = mock[AuthenticationService],
+        authenticationService,
         idWebAppUrl = IdentityUrl(idApiUrl),
         supportUrl = supportUrl,
         cc = stubControllerComponents(),
