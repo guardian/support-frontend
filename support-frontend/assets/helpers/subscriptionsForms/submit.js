@@ -28,6 +28,7 @@ import {
   getBillingAddressFields,
   getDeliveryAddressFields,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { Promotion } from 'helpers/productPrice/productPrices';
 import {
   finalPrice,
   getAppliedPromo,
@@ -57,6 +58,7 @@ import {
   setupStripeCheckout,
 } from 'helpers/paymentIntegrations/stripeCheckout';
 import { isPostDeployUser } from 'helpers/user/user';
+import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 
 // ----- Functions ----- //
@@ -115,6 +117,16 @@ const getOptions = (
     ...(productOptions !== NoProductOptions ? { productOptions } : {}),
   });
 
+const getPromoCode = (billingPeriod: BillingPeriod, promotions: ?Promotion[]) =>
+{
+  const promotion = getAppliedPromo(promotions);
+  if(!promotion || (promotion.introductoryPrice && billingPeriod === Quarterly)) {
+    return null;
+  }
+
+  return promotion.promoCode;
+};
+
 function buildRegularPaymentRequest(
   state: AnyCheckoutState,
   paymentAuthorisation: PaymentAuthorisation,
@@ -151,7 +163,7 @@ function buildRegularPaymentRequest(
   };
 
   const paymentFields = regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
-  const promotion = getAppliedPromo(price.promotions);
+  const promoCode = getPromoCode(billingPeriod, price.promotions);
 
   return {
     title,
@@ -173,7 +185,7 @@ function buildRegularPaymentRequest(
       state.common.abParticipations,
       state.common.optimizeExperiments,
     ),
-    promoCode: promotion ? promotion.promoCode : null,
+    promoCode,
   };
 }
 
