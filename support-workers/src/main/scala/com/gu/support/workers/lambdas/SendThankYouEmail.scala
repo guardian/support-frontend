@@ -3,13 +3,16 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices._
+import com.gu.i18n.Country
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
+import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.encoding.CustomCodecs._
+import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.threadpools.CustomPool.executionContext
-import com.gu.zuora.ZuoraService
+import com.gu.zuora.{ProductSubscriptionBuilders, ZuoraService}
 import io.circe.generic.auto._
 import org.joda.time.DateTime
 
@@ -38,7 +41,10 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     case _ => Future.successful(None)
   }
 
-  def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] =
+  def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
+    val productRatePlanId = ProductSubscriptionBuilders.getProductRatePlanId(state.product.catalogType, state.product, state.user.isTestUser)
+    val promotion = getAppliedPromotion(servicesProvider.forUser(state.user.isTestUser).promotionService, state.promoCode, state.user.billingAddress.country, productRatePlanId)
+
     thankYouEmailService.send(
       state.product match {
         case c: Contribution => ContributionEmailFields(
@@ -60,8 +66,9 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           paymentSchedule = state.paymentSchedule,
           currency = d.currency,
           paymentMethod = state.paymentMethod,
+          sfContactId = SfContactId(state.salesForceContact.Id),
           directDebitMandateId = directDebitMandateId,
-          sfContactId = SfContactId(state.salesForceContact.Id)
+          promotion = promotion.map(_.promotion)
         )
         case p: Paper => PaperEmailFields(
           subscriptionNumber = state.subscriptionNumber,
@@ -73,22 +80,33 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           firstDeliveryDate = state.firstDeliveryDate,
           currency = p.currency,
           paymentMethod = state.paymentMethod,
+          sfContactId = SfContactId(state.salesForceContact.Id),
           directDebitMandateId = directDebitMandateId,
-          sfContactId = SfContactId(state.salesForceContact.Id)
+          promotion = promotion.map(_.promotion)
         )
-        case g: GuardianWeekly => GuardianWeeklyEmailFields(
-          subscriptionNumber = state.subscriptionNumber,
-          fulfilmentOptions = g.fulfilmentOptions,
-          billingPeriod = g.billingPeriod,
-          user = state.user,
-          paymentSchedule = state.paymentSchedule,
-          firstDeliveryDate = state.firstDeliveryDate,
-          currency = g.currency,
-          paymentMethod = state.paymentMethod,
-          directDebitMandateId = directDebitMandateId,
-          sfContactId = SfContactId(state.salesForceContact.Id)
-        )
+        case g: GuardianWeekly =>
+          GuardianWeeklyEmailFields(
+            subscriptionNumber = state.subscriptionNumber,
+            fulfilmentOptions = g.fulfilmentOptions,
+            billingPeriod = g.billingPeriod,
+            user = state.user,
+            paymentSchedule = state.paymentSchedule,
+            firstDeliveryDate = state.firstDeliveryDate,
+            currency = g.currency,
+            paymentMethod = state.paymentMethod,
+            sfContactId = SfContactId(state.salesForceContact.Id),
+            directDebitMandateId = directDebitMandateId,
+            promotion = promotion.map(_.promotion)
+          )
       }
     )
+  }
+
+  def getAppliedPromotion(promotionService: PromotionService, maybePromoCode: Option[PromoCode], country: Country, productRatePlanId: ProductRatePlanId) =
+    for {
+      promoCode <- maybePromoCode
+      promotionWithCode <- promotionService.findPromotion(promoCode)
+      validPromotion <- promotionService.validatePromotion(promotionWithCode, country, productRatePlanId, isRenewal = false).toOption
+    } yield validPromotion
 
 }

@@ -2,6 +2,7 @@ package com.gu.emailservices
 
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
+import com.gu.support.promotions.Promotion
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 
@@ -17,7 +18,8 @@ object PaperFieldsGenerator {
     currency: Currency,
     paymentMethod: PaymentMethod,
     sfContactId: SfContactId,
-    directDebitMandateId: Option[String] = None
+    directDebitMandateId: Option[String] = None,
+    promotion: Option[Promotion] = None
   ): List[(String, String)] = {
 
     val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date
@@ -35,7 +37,7 @@ object PaperFieldsGenerator {
       "last_name" -> user.lastName,
       "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate.getOrElse(firstPaymentDate)),
       "date_of_first_payment" -> SubscriptionEmailFieldHelpers.formatDate(firstPaymentDate),
-      "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency)
+      "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
     ) ++ paymentFields ++ deliveryAddressFields
 
     fields

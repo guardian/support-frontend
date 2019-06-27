@@ -4,6 +4,7 @@ import com.gu.emailservices.SubscriptionEmailFieldHelpers.formatDate
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.FulfilmentOptions
+import com.gu.support.promotions.Promotion
 import com.gu.support.workers.{BillingPeriod, PaymentMethod, PaymentSchedule, User}
 import org.joda.time.LocalDate
 
@@ -17,7 +18,8 @@ case class GuardianWeeklyEmailFields(
   currency: Currency,
   paymentMethod: PaymentMethod,
   sfContactId: SfContactId,
-  directDebitMandateId: Option[String] = None
+  directDebitMandateId: Option[String] = None,
+  promotion: Option[Promotion] = None
 ) extends EmailFields {
 
   val additionalFields = List(
@@ -25,7 +27,7 @@ case class GuardianWeeklyEmailFields(
   )
 
   override val fields = PaperFieldsGenerator.fieldsFor(
-    subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId
+    subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId, promotion
   ) ++ additionalFields.flatten
 
   override def payload: String = super.payload(user.primaryEmailAddress, "guardian-weekly")
