@@ -131,7 +131,7 @@ class Application(
 
     val mainElement = assets.getSsrCacheContentsAsHtml(s"contributions-landing-page-$countryCode","contributions-landing.html")
 
-    views.html.contributionsSSR(
+    views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
