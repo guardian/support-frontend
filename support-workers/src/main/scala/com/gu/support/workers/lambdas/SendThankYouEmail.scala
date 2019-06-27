@@ -43,7 +43,12 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
 
   def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
     val productRatePlanId = ProductSubscriptionBuilders.getProductRatePlanId(state.product.catalogType, state.product, state.user.isTestUser)
-    val promotion = getAppliedPromotion(servicesProvider.forUser(state.user.isTestUser).promotionService, state.promoCode, state.user.billingAddress.country, productRatePlanId)
+    val maybePromotion = getAppliedPromotion(
+      servicesProvider.forUser(state.user.isTestUser).promotionService,
+      state.promoCode,
+      state.user.billingAddress.country,
+      productRatePlanId
+    )
 
     thankYouEmailService.send(
       state.product match {
@@ -68,7 +73,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           paymentMethod = state.paymentMethod,
           sfContactId = SfContactId(state.salesForceContact.Id),
           directDebitMandateId = directDebitMandateId,
-          promotion = promotion.map(_.promotion)
+          promotion = maybePromotion
         )
         case p: Paper => PaperEmailFields(
           subscriptionNumber = state.subscriptionNumber,
@@ -82,7 +87,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           paymentMethod = state.paymentMethod,
           sfContactId = SfContactId(state.salesForceContact.Id),
           directDebitMandateId = directDebitMandateId,
-          promotion = promotion.map(_.promotion)
+          promotion = maybePromotion
         )
         case g: GuardianWeekly =>
           GuardianWeeklyEmailFields(
@@ -96,17 +101,17 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
             paymentMethod = state.paymentMethod,
             sfContactId = SfContactId(state.salesForceContact.Id),
             directDebitMandateId = directDebitMandateId,
-            promotion = promotion.map(_.promotion)
+            promotion = maybePromotion
           )
       }
     )
   }
 
-  def getAppliedPromotion(promotionService: PromotionService, maybePromoCode: Option[PromoCode], country: Country, productRatePlanId: ProductRatePlanId) =
+   private def getAppliedPromotion(promotionService: PromotionService, maybePromoCode: Option[PromoCode], country: Country, productRatePlanId: ProductRatePlanId) =
     for {
       promoCode <- maybePromoCode
       promotionWithCode <- promotionService.findPromotion(promoCode)
       validPromotion <- promotionService.validatePromotion(promotionWithCode, country, productRatePlanId, isRenewal = false).toOption
-    } yield validPromotion
+    } yield validPromotion.promotion
 
 }
