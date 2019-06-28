@@ -5,6 +5,7 @@ import admin.settings.SwitchState.{Off, On}
 import admin.settings._
 import cats.syntax.either._
 import codecs.CirceDecoders._
+import config.Configuration.MetricUrl
 import io.circe.Json
 import io.circe.parser.{parse, _}
 import io.circe.syntax._
@@ -215,7 +216,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           |       "NZDCountries": [
           |           { "contributionType": "ONE_OFF", "isDefault": true }
           |       ]
-          |  }
+          |  },
+          |  "metricUrl": "http://localhost"
           |}""".stripMargin
 
       val amount = Amount(value = "25", isDefault = Some(true))
@@ -276,7 +278,8 @@ class CirceDecodersTest extends WordSpec with MustMatchers {
           optimize = Off
         ),
         amountsRegions,
-        contributionTypes
+        contributionTypes,
+        metricUrl = MetricUrl("http://localhost")
       )
 
       decode[AllSettings](json).right.value mustBe settings

@@ -11,18 +11,26 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.typesafe.config.Config
 import com.typesafe.scalalogging.LazyLogging
+import config.Configuration.MetricUrl
 import io.circe.parser._
 import io.circe.{Decoder, Encoder}
 
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
 
-case class AllSettings(switches: Switches, amounts: AmountsRegions, contributionTypes: ContributionTypes)
+case class AllSettings(
+  switches: Switches,
+  amounts: AmountsRegions,
+  contributionTypes: ContributionTypes,
+  metricUrl: MetricUrl
+)
 
 object AllSettings {
   import Amounts._  // intellij doesn't think this is needed, but it is
   import ContributionTypes._
 
+  implicit val metricUrlEncoder: Encoder[MetricUrl] = Encoder.encodeString.contramap(_.value)
+  implicit val metricUrlDecoder: Decoder[MetricUrl] = Decoder.decodeString.map(MetricUrl)
   implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec[AllSettings]
 }
 

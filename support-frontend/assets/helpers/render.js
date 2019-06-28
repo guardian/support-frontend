@@ -20,6 +20,8 @@ const getElementOrBody = (id: ?string): HTMLElement => {
 };
 
 const renderError = (e: Error, id: ?string) => {
+  fetch(window.guardian.settings.metricUrl, {'mode': 'no-cors'}); // ignore result, fire and forget
+
   const element = getElementOrBody(id);
 
   logException(`Fatal error rendering page: ${id || ''}. Error message: ${e.message}. Stack trace: ${e.stack ? e.stack : 'none'}`);
@@ -46,6 +48,7 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
       renderError(e, id);
     }
   } else {
+    fetch(window.guardian.settings.metricUrl, {'mode': 'no-cors'}); // ignore result, fire and forget
     logException(`Fatal error trying to render a page. id:${id}`);
   }
 };

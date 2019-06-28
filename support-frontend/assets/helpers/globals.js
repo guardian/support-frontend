@@ -44,6 +44,7 @@ const getSettings = (): Settings => getGlobal('settings') || {
     NZDCountries: [],
     Canada: [],
   },
+  metricUrl: "",
 };
 
 const getProductPrices = (): ?ProductPrices => getGlobal('productPrices');
