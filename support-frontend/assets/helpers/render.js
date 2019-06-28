@@ -48,7 +48,7 @@ const renderPage = (content: Object, id: string, callBack?: () => void) => {
       renderError(e, id);
     }
   } else {
-    fetch("http://metric-push-api-prod.support.guardianapis.com/metric-push-api");
+    fetch(window.guardian.settings.metricUrl, {'mode': 'no-cors'}); // ignore result, fire and forget
     logException(`Fatal error trying to render a page. id:${id}`);
   }
 };
