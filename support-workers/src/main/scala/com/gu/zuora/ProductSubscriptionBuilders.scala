@@ -10,7 +10,7 @@ import com.gu.support.config.TouchPointEnvironments.UAT
 import com.gu.support.config.{TouchPointEnvironments, ZuoraConfig}
 import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
-import com.gu.support.workers.{Contribution, DigitalPack, GuardianWeekly, Paper, ProductType}
+import com.gu.support.workers._
 import com.gu.support.zuora.api._
 import org.joda.time.{DateTimeZone, LocalDate}
 
@@ -24,9 +24,11 @@ object ProductSubscriptionBuilders {
     val ratePlans: Seq[ProductRatePlan[Product]] = product.ratePlans.getOrElse(touchpointEnvironment, Nil)
 
     val maybeProductRatePlanId: Option[ProductRatePlanId] = productType match {
+      case c: Contribution => ratePlans.find(rp => rp.billingPeriod == c.billingPeriod).map(_.id)
       case dp: DigitalPack => ratePlans.find(rp => rp.billingPeriod == dp.billingPeriod).map(_.id)
       case p: Paper => ratePlans.find(rp => rp.fulfilmentOptions == p.fulfilmentOptions && rp.productOptions == p.productOptions).map(_.id)
       case gw: GuardianWeekly => ratePlans.find(rp => rp.billingPeriod == gw.billingPeriod && rp.fulfilmentOptions == gw.fulfilmentOptions).map(_.id)
+      case _ => None
     }
 
     Try(maybeProductRatePlanId.get) match {
