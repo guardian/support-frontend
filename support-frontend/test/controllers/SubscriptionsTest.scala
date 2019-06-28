@@ -28,7 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
 import services.MembersDataService._
 import services.stepfunctions.SupportWorkersClient
-import services.{HttpIdentityService, MembersDataService, TestUserService}
+import services.{IdentityService, MembersDataService, TestUserService}
 
 import scala.concurrent.Future
 
@@ -68,7 +68,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
       val settingsProvider = mock[AllSettingsProvider]
@@ -114,7 +114,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     def fakeRequestAuthenticatedWith(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): Future[Result] = {
       fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm()(FakeRequest())

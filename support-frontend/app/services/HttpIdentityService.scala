@@ -10,7 +10,6 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
 import io.circe.Encoder
-import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto.deriveEncoder
 import models.identity.UserIdWithGuestAccountToken
 import models.identity.requests.CreateGuestAccountRequestBody
@@ -47,17 +46,6 @@ object IdentityServiceEnrichers {
   }
 }
 
-object IdentityService {
-  def apply(config: Identity)(implicit wsClient: WSClient): IdentityService = {
-    if (config.useStub) new StubIdentityService else {
-      new HttpIdentityService(
-        apiUrl = config.apiUrl,
-        apiClientToken = config.apiClientToken
-      )
-    }
-  }
-}
-
 case class GetUserTypeResponse(userType: String)
 object GetUserTypeResponse {
   implicit val readsGetUserTypeResponse: Reads[GetUserTypeResponse] = Json.reads[GetUserTypeResponse]
@@ -69,7 +57,12 @@ object CreateSignInTokenResponse {
   implicit val readCreateSignInTokenResponse: Reads[CreateSignInTokenResponse] = Json.reads[CreateSignInTokenResponse]
 }
 
-class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends IdentityService {
+object IdentityService {
+  def apply(config: Identity)(implicit wsClient: WSClient): IdentityService =
+    new IdentityService(apiUrl = config.apiUrl, apiClientToken = config.apiClientToken)
+}
+
+class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) {
 
   import IdentityServiceEnrichers._
 
@@ -206,16 +199,4 @@ class HttpIdentityService(apiUrl: String, apiClientToken: String)(implicit wsCli
         Left(s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}")
     }
   }
-}
-
-trait IdentityService {
-  def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser]
-  def sendConsentPreferencesEmail(email: String)(implicit ec: ExecutionContext): Future[Boolean]
-  def getUserType(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, GetUserTypeResponse]
-  def setPasswordGuest(
-    password: String,
-    guestAccountRegistrationToken: String
-  )(implicit ec: ExecutionContext): EitherT[Future, String, SetGuestPasswordResponseCookies]
-  def getOrCreateUserIdFromEmail(email: String)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, UserIdWithGuestAccountToken]
-  def createSignInToken(email: String)(implicit ec: ExecutionContext): EitherT[Future, String, CreateSignInTokenResponse]
 }
