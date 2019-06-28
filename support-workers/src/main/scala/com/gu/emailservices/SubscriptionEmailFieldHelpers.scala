@@ -1,9 +1,14 @@
 package com.gu.emailservices
 
 import java.text.DecimalFormat
+
 import com.gu.i18n.Currency
+import com.gu.support.promotions.{IntroductoryPriceBenefit, Promotion}
 import com.gu.support.workers._
+import org.joda.time.format.DateTimeFormat
 import org.joda.time.{LocalDate, Months}
+
+import scala.util.Try
 
 object SubscriptionEmailFieldHelpers {
 
@@ -17,14 +22,29 @@ object SubscriptionEmailFieldHelpers {
 
   def firstPayment(paymentSchedule: PaymentSchedule): Payment = paymentSchedule.payments.minBy(_.date)
 
-  def introductoryPeriod(introductoryBillingPeriods: Int, billingPeriod: BillingPeriod): String = {
-    val pluraliseIfRequired = if (introductoryBillingPeriods > 1) "s" else ""
-    s"$introductoryBillingPeriods ${billingPeriod.noun}$pluraliseIfRequired"
+  def pluralise(num: Int, thing: String) = if(num > 1) s"$num ${thing}s" else s"$num $thing"
+
+  def introductoryPeriod(introductoryBillingPeriods: Int, billingPeriod: BillingPeriod): String =
+    s"${pluralise(introductoryBillingPeriods, billingPeriod.noun)}"
+
+
+  def describe(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency, promotion: Option[Promotion]): String = {
+    promotion.flatMap(_.introductoryPrice)
+      .map(introductoryPrice => introductoryPriceDescription(paymentSchedule, billingPeriod, currency, introductoryPrice))
+      .getOrElse(standardDescription(paymentSchedule, billingPeriod, currency))
   }
 
-  def describe(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency): String = {
+  def introductoryPriceDescription(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency, benefit: IntroductoryPriceBenefit) =
+    Try(paymentSchedule.payments.tail.head).fold(
+      _ => "",
+      payment => s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(benefit.periodLength, benefit.periodType.toString.toLowerCase)}, " +
+        s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}"
+    )
+
+  def standardDescription(paymentSchedule: PaymentSchedule, billingPeriod: BillingPeriod, currency: Currency): String = {
     val initialPrice = firstPayment(paymentSchedule).amount
     val (paymentsWithInitialPrice, paymentsWithDifferentPrice) = paymentSchedule.payments.partition(_.amount == initialPrice)
+
     if (paymentSchedule.payments.size == 1) {
       s"${priceWithCurrency(currency, initialPrice)} for the first ${billingPeriod.noun}"
     }
@@ -45,6 +65,12 @@ object SubscriptionEmailFieldHelpers {
       s"${priceWithCurrency(currency, initialPrice)} for $introductoryTimespan, " +
         s"then ${priceWithCurrency(currency, paymentsWithDifferentPrice.head.amount)} every ${billingPeriod.noun}"
     }
+
   }
 
+  def formatDate(d: LocalDate): String = DateTimeFormat.forPattern("EEEE, d MMMM yyyy").print(d)
+
+  def mask(s: String): String = s.replace(s.substring(0, 6), "******")
+
+  def hyphenate(s: String): String = s"${s.substring(0, 2)}-${s.substring(2, 4)}-${s.substring(4, 6)}"
 }
