@@ -248,16 +248,23 @@
     }
       
     .showcase-hero__image--first {
+      display: inline-flex;
+      justify-content: space-between;
       order: 2;
       width: gu-span(7);
       height: $photo-1-height;
-      img {
+      div {
+        position: relative;
+        height: 100%;
         width: gu-span(4);
-        animation: animateInLeft 0.8s 1s ease-out forwards 1;
         margin-bottom: $gu-v-spacing;
-        top: 0;
+        img {
+          width: 100%;
+          top: 0;
+          left: 0;
+          animation: animateInLeft 0.8s 1s ease-out forwards 1;
+        }
       }
-      
     }
 
     .showcase-hero__image--second {

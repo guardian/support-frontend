@@ -53,12 +53,14 @@ export default function Hero(props: { country: String }) {
               captionTitle={regionalContent[countrySelector].title}
               captionText={regionalContent[countrySelector].caption}
             />
-            <GridImage
-              gridId={regionalContent[countrySelector].images.first}
-              srcSizes={[1000, 500]}
-              sizes="(max-width: 740px) 100vw, 400px"
-              imgType="jpg"
-            />
+            <div>
+              <GridImage
+                gridId={regionalContent[countrySelector].images.first}
+                srcSizes={[1000, 500]}
+                sizes="(max-width: 740px) 100vw, 400px"
+                imgType="jpg"
+              />
+            </div>
           </div>
           <div className="showcase-hero__image showcase-hero__image--second">
             <GridImage
