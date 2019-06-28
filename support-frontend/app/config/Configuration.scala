@@ -4,9 +4,9 @@ import admin.settings.SettingsSources
 import cats.syntax.either._
 import com.gu.support.config._
 import config.ConfigImplicits._
-import config.Configuration.GuardianDomain
+import config.Configuration.{GuardianDomain, MetricUrl}
 import services.stepfunctions.StateMachineArn
-import com.typesafe.config.{ Config => TypesafeConfig }
+import com.typesafe.config.{Config => TypesafeConfig}
 
 class Configuration(config: TypesafeConfig) {
 
@@ -30,6 +30,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
+  lazy val metricUrl = MetricUrl(config.getString("metric.url"))
+
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
 
   lazy val regularPayPalConfigProvider = new PayPalConfigProvider(config, stage)
@@ -51,4 +53,5 @@ class Configuration(config: TypesafeConfig) {
 object Configuration {
   case class GuardianDomain(value: String)
   case class IdentityUrl(value: String)
+  case class MetricUrl(value: String) extends AnyVal
 }

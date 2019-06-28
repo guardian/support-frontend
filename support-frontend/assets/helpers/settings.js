@@ -23,4 +23,5 @@ export type Settings = {
   switches: Switches,
   amounts: AmountsRegions,
   contributionTypes: ContributionTypes,
+  metricUrl: string,
 };
