@@ -4,7 +4,6 @@ import React from 'react';
 import { Fieldset } from 'components/forms/fieldset';
 import { RadioInputWithHelper } from 'components/forms/customFields/radioInputWithHelper';
 import type { BillingPeriod } from 'helpers/billingPeriods';
-import { type Option } from 'helpers/types/option';
 import {
   billingPeriodTitle,
   Quarterly,
@@ -29,7 +28,6 @@ type PropTypes = {|
   billingCountry: IsoCountry,
   selected: BillingPeriod,
   onChange: (BillingPeriod) => Action,
-  orderIsAGift?: Option<boolean>,
 |}
 
 function BillingPeriodSelector(props: PropTypes) {
@@ -43,18 +41,17 @@ function BillingPeriodSelector(props: PropTypes) {
             billingPeriod === SixWeekly ? Quarterly : billingPeriod, // for 6 for 6 we need the quarterly pricing
             props.fulfilmentOption,
           );
-          return props.orderIsAGift && billingPeriod === SixWeekly ? null
-            : <RadioInputWithHelper
-              text={billingPeriodTitle(billingPeriod)}
-              helper={getPriceDescription(
-                productPrice,
-                billingPeriod,
-              )}
-              offer={getAppliedPromoDescription(billingPeriod, productPrice)}
-              name="billingPeriod"
-              checked={billingPeriod === props.selected}
-              onChange={() => props.onChange(billingPeriod)}
-            />;
+          return (<RadioInputWithHelper
+            text={billingPeriodTitle(billingPeriod)}
+            helper={getPriceDescription(
+              productPrice,
+              billingPeriod,
+            )}
+            offer={getAppliedPromoDescription(billingPeriod, productPrice)}
+            name="billingPeriod"
+            checked={billingPeriod === props.selected}
+            onChange={() => props.onChange(billingPeriod)}
+          />);
         })}
       </Fieldset>
     </FormSection>);
@@ -62,7 +59,6 @@ function BillingPeriodSelector(props: PropTypes) {
 
 BillingPeriodSelector.defaultProps = {
   fulfilmentOption: NoFulfilmentOptions,
-  orderIsAGift: false,
 };
 
 export { BillingPeriodSelector };
