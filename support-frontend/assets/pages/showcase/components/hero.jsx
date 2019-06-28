@@ -37,6 +37,7 @@ const getCountrySelector = (country: String) => {
 
 export default function Hero(props: { country: String }) {
   const countrySelector = getCountrySelector(props.country);
+
   return (
     <div className="showcase-hero">
       <div className="showcase-hero-wrapper">
@@ -53,7 +54,7 @@ export default function Hero(props: { country: String }) {
               captionText={regionalContent[countrySelector].caption}
             />
             <GridImage
-              gridId="showcaseChrisSquare"
+              gridId={regionalContent[countrySelector].images.first}
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
@@ -61,7 +62,7 @@ export default function Hero(props: { country: String }) {
           </div>
           <div className="showcase-hero__image showcase-hero__image--second">
             <GridImage
-              gridId="showcaseZuckGlass"
+              gridId={regionalContent[countrySelector].images.second}
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
@@ -71,7 +72,7 @@ export default function Hero(props: { country: String }) {
         <div className="showcase-hero--right">
           <div className="showcase-hero__image showcase-hero__image--third">
             <GridImage
-              gridId="showcaseNix"
+              gridId={regionalContent[countrySelector].images.third}
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 400px"
               imgType="jpg"
@@ -79,7 +80,7 @@ export default function Hero(props: { country: String }) {
           </div>
           <div className="showcase-hero__image showcase-hero__image--fourth">
             <GridImage
-              gridId="showcaseBrit"
+              gridId={regionalContent[countrySelector].images.fourth}
               srcSizes={[1000, 500]}
               sizes="(max-width: 740px) 100vw, 600px"
               imgType="jpg"
