@@ -1,9 +1,7 @@
 package com.gu.emailservices
 
-import com.gu.emailservices.SubscriptionEmailFieldHelpers._
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.promotions.Promotion
 import com.gu.support.workers._
 
 // Output Json should look like this:
@@ -45,8 +43,7 @@ case class DigitalPackEmailFields(
     currency: Currency,
     paymentMethod: PaymentMethod,
     sfContactId: SfContactId,
-    directDebitMandateId: Option[String] = None,
-    promotion: Option[Promotion] = None
+    directDebitMandateId: Option[String] = None
 ) extends EmailFields {
 
   val paymentFields = paymentMethod match {
@@ -84,7 +81,7 @@ case class DigitalPackEmailFields(
     "Date of first payment" -> formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
     "Currency" -> currency.glyph,
     "Trial period" -> "14", //TODO: depends on Promo code
-    "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
+    "Subscription details" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency)
   ) ++ paymentFields
 
   override def payload: String = super.payload(user.primaryEmailAddress, "digipack")
