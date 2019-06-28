@@ -8,19 +8,19 @@ import play.api.mvc.RequestHeader
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object AuthenticationService {
-  def apply(identityKeys: IdentityKeys, testUserService: TestUserService): AuthenticationService =
-    new AuthenticationService(identityKeys, testUserService)
-}
-
-class AuthenticationService(override val identityKeys: IdentityKeys, testUserService: TestUserService) extends com.gu.identity.play.AuthenticationService {
-
+class AuthenticationService(override val identityKeys: IdentityKeys) extends com.gu.identity.play.AuthenticationService {
   override lazy val authenticatedIdUserProvider: Provider =
     Cookies.authProvider(identityKeys).withDisplayNameProvider(Token.authProvider(identityKeys, "membership"))
+}
 
-  def asyncAuthenticatedIdUserProvider(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
-    Future.successful(authenticatedUserFor(requestHeader))
+class AsyncAuthenticationService(
+  authenticationService: AuthenticationService,
+  testUserService: TestUserService
+)(implicit ec: ExecutionContext) {
 
-  def asyncAuthenticatedTestIdUserProvider(requestHeader: RequestHeader)(implicit ec: ExecutionContext): Future[Option[AuthenticatedIdUser]] =
-    asyncAuthenticatedIdUserProvider(requestHeader).map(_.filter(user => testUserService.isTestUser(user.user.displayName)))
+  def authenticateUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
+    Future.successful(authenticationService.authenticatedUserFor(requestHeader))
+
+  def authenticateTestUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
+    authenticateUser(requestHeader).map(_.filter(user => testUserService.isTestUser(user.user.displayName)))
 }

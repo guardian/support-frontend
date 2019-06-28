@@ -7,7 +7,7 @@ import play.api.mvc.Results._
 import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
 import play.api.mvc._
 import play.filters.csrf._
-import services.{AuthenticationService, TestUserService}
+import services.{AsyncAuthenticationService, AuthenticationService, TestUserService}
 import utils.RequestCountry
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -19,7 +19,7 @@ object CustomActionBuilders {
 }
 
 class CustomActionBuilders(
-  authenticationService: AuthenticationService,
+  asyncAuthenticationService: AsyncAuthenticationService,
   idWebAppUrl: IdentityUrl,
   supportUrl: String,
   cc: ControllerComponents,
@@ -52,17 +52,17 @@ class CustomActionBuilders(
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
     new AsyncAuthenticatedBuilder(
-      userinfo = requestHeader => authenticationService.asyncAuthenticatedIdUserProvider(requestHeader).map(Some.apply),
+      userinfo = requestHeader => asyncAuthenticationService.authenticateUser(requestHeader).map(Some.apply),
       cc.parsers.defaultBodyParser,
       onUnauthenticated
     )
 
   private def authenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[AuthRequest, AnyContent] =
-    new AsyncAuthenticatedBuilder(authenticationService.asyncAuthenticatedIdUserProvider, cc.parsers.defaultBodyParser, onUnauthenticated)
+    new AsyncAuthenticatedBuilder(asyncAuthenticationService.authenticateUser, cc.parsers.defaultBodyParser, onUnauthenticated)
 
   private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result): ActionBuilder[AuthRequest, AnyContent] =
     new AsyncAuthenticatedBuilder(
-      userinfo = authenticationService.asyncAuthenticatedTestIdUserProvider,
+      userinfo = asyncAuthenticationService.authenticateTestUser,
       defaultParser = cc.parsers.defaultBodyParser,
       onUnauthorized = onUnauthenticated
     )

@@ -8,7 +8,7 @@ trait ActionBuilders {
   self: Services with BuiltInComponentsFromContext with ApplicationConfiguration with HttpFiltersComponents =>
 
   implicit lazy val actionRefiners = new CustomActionBuilders(
-    authenticationService = authenticationService,
+    asyncAuthenticationService = asyncAuthenticationService,
     idWebAppUrl = appConfig.identity.webappUrl,
     supportUrl = appConfig.supportUrl,
     cc = controllerComponents,

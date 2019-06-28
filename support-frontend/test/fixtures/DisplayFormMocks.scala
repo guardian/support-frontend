@@ -16,7 +16,7 @@ import assets.{AssetsResolver, RefPath}
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import config.Configuration.IdentityUrl
-import services.{AuthenticationService, HttpIdentityService, MembersDataService, TestUserService}
+import services._
 import services.MembersDataService._
 import fixtures.TestCSRFComponents
 
@@ -36,8 +36,10 @@ trait DisplayFormMocks extends TestCSRFComponents {
 
   val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
+  val asyncAuthenticationService = mock[AsyncAuthenticationService]
+
   val loggedInActionRefiner = new CustomActionBuilders(
-    authenticationService = mock[AuthenticationService],
+    asyncAuthenticationService,
     idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
     cc = stubControllerComponents(),
@@ -47,7 +49,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
   )
 
   val loggedOutActionRefiner = new CustomActionBuilders(
-    authenticationService = mock[AuthenticationService],
+    asyncAuthenticationService,
     idWebAppUrl = IdentityUrl("https://identity-url.local"),
     supportUrl = "",
     cc = stubControllerComponents(),

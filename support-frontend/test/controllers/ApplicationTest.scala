@@ -25,7 +25,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
   implicit val timeout = Timeout(2.seconds)
 
   val actionRefiner = new CustomActionBuilders(
-    authenticationService = mock[AuthenticationService],
+    asyncAuthenticationService = mock[AsyncAuthenticationService],
     idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
     cc = stubControllerComponents(),
