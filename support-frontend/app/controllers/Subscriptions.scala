@@ -7,6 +7,7 @@ import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.pricing.PriceSummaryServiceProvider
 import config.StringsConfig
+import lib.RedirectWithEncodedQueryString
 import play.api.mvc._
 import play.twirl.api.Html
 import services.IdentityService
@@ -36,7 +37,7 @@ class Subscriptions(
   def legacyRedirect(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
     // Country code is required here because it's a parameter in the route.
     // But we don't actually use it.
-    Redirect("https://subscribe.theguardian.com", request.queryString, status = FOUND)
+    RedirectWithEncodedQueryString("https://subscribe.theguardian.com", request.queryString, status = FOUND)
   }
 
   def landing(countryCode: String): Action[AnyContent] = CachedAction() { implicit request =>
