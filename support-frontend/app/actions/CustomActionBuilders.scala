@@ -4,13 +4,13 @@ import com.gu.identity.play.AuthenticatedIdUser
 import com.netaporter.uri.dsl._
 import config.Configuration.IdentityUrl
 import play.api.mvc.Results._
-import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
+import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 import play.filters.csrf._
-import services.{AsyncAuthenticationService, AuthenticationService, TestUserService}
+import services.AsyncAuthenticationService
 import utils.RequestCountry
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object CustomActionBuilders {
   type AuthRequest[A] = AuthenticatedRequest[A, AuthenticatedIdUser]
