@@ -8,7 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
-import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser}
+import com.gu.identity.play.AccessCredentials
 import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
 import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}

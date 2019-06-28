@@ -3,7 +3,6 @@ package actions
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser}
 import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -12,7 +11,7 @@ import play.api.http.Status
 import play.api.mvc.Results._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{AsyncAuthenticationService, AuthenticationService, TestUserService}
+import services.{AsyncAuthenticationService, TestUserService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

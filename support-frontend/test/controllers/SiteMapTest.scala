@@ -8,9 +8,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, stubControllerComponents}
 import akka.util.Timeout
 import org.scalatest.mockito.MockitoSugar.mock
-import com.gu.identity.play.AuthenticatedIdUser
 import config.Configuration.IdentityUrl
-import services.{AsyncAuthenticationService, AuthenticationService, TestUserService}
+import services.AsyncAuthenticationService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._

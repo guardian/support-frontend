@@ -8,7 +8,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.identity.play.AuthenticatedIdUser
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
