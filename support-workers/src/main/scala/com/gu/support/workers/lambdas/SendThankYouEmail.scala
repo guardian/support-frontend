@@ -2,17 +2,15 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.emailservices._
-import com.gu.i18n.Country
+import com.gu.emailservices.{ContributionEmailFields, DigitalPackEmailFields, EmailService, PaperEmailFields}
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.catalog.ProductRatePlanId
+import com.gu.support.catalog.{Collection, HomeDelivery}
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.promotions.{PromoCode, PromotionService}
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.threadpools.CustomPool.executionContext
-import com.gu.zuora.{ProductSubscriptionBuilders, ZuoraService}
+import com.gu.zuora.ZuoraService
 import io.circe.generic.auto._
 import org.joda.time.DateTime
 
@@ -41,15 +39,7 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
     case _ => Future.successful(None)
   }
 
-  def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] = {
-    val productRatePlanId = ProductSubscriptionBuilders.getProductRatePlanId(state.product.catalogType, state.product, state.user.isTestUser)
-    val maybePromotion = getAppliedPromotion(
-      servicesProvider.forUser(state.user.isTestUser).promotionService,
-      state.promoCode,
-      state.user.billingAddress.country,
-      productRatePlanId
-    )
-
+  def sendEmail(state: SendThankYouEmailState, directDebitMandateId: Option[String] = None): Future[SendMessageResult] =
     thankYouEmailService.send(
       state.product match {
         case c: Contribution => ContributionEmailFields(
@@ -71,9 +61,8 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           paymentSchedule = state.paymentSchedule,
           currency = d.currency,
           paymentMethod = state.paymentMethod,
-          sfContactId = SfContactId(state.salesForceContact.Id),
           directDebitMandateId = directDebitMandateId,
-          promotion = maybePromotion
+          sfContactId = SfContactId(state.salesForceContact.Id)
         )
         case p: Paper => PaperEmailFields(
           subscriptionNumber = state.subscriptionNumber,
@@ -85,33 +74,11 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           firstDeliveryDate = state.firstDeliveryDate,
           currency = p.currency,
           paymentMethod = state.paymentMethod,
-          sfContactId = SfContactId(state.salesForceContact.Id),
           directDebitMandateId = directDebitMandateId,
-          promotion = maybePromotion
+          sfContactId = SfContactId(state.salesForceContact.Id)
         )
-        case g: GuardianWeekly =>
-          GuardianWeeklyEmailFields(
-            subscriptionNumber = state.subscriptionNumber,
-            fulfilmentOptions = g.fulfilmentOptions,
-            billingPeriod = g.billingPeriod,
-            user = state.user,
-            paymentSchedule = state.paymentSchedule,
-            firstDeliveryDate = state.firstDeliveryDate,
-            currency = g.currency,
-            paymentMethod = state.paymentMethod,
-            sfContactId = SfContactId(state.salesForceContact.Id),
-            directDebitMandateId = directDebitMandateId,
-            promotion = maybePromotion
-          )
+        case g: GuardianWeekly => ??? //TODO: Emails for Guardian Weekly
       }
     )
-  }
-
-   private def getAppliedPromotion(promotionService: PromotionService, maybePromoCode: Option[PromoCode], country: Country, productRatePlanId: ProductRatePlanId) =
-    for {
-      promoCode <- maybePromoCode
-      promotionWithCode <- promotionService.findPromotion(promoCode)
-      validPromotion <- promotionService.validatePromotion(promotionWithCode, country, productRatePlanId, isRenewal = false).toOption
-    } yield validPromotion.promotion
 
 }

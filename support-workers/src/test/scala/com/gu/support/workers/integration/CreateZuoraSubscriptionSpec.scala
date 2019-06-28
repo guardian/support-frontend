@@ -6,14 +6,14 @@ import com.gu.config.Configuration.{promotionsConfigProvider, zuoraConfigProvide
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.promotions.PromotionService
+import com.gu.support.promotions.{PromotionService, Promotions}
 import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
-import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
 import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.{Annual, IdentityId, LambdaSpec, Monthly, Quarterly}
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -62,7 +62,7 @@ class CreateZuoraSubscriptionSpec extends LambdaSpec with MockServicesCreator {
     createSubscription(createGuardianWeeklySubscriptionJson(Quarterly))
   }
 
-  it should "create a 6 for 6 Guardian Weekly subscription" in {
+  it should "create an 6 for 6 Guardian Weekly subscription" in {
     createSubscription(createGuardianWeeklySubscriptionJson(Quarterly, Some(GuardianWeekly.SixForSixPromoCode)))
   }
 
