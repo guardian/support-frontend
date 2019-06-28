@@ -4,19 +4,9 @@
 
 import { renderPage } from 'helpers/render';
 import React from 'react';
-import { Provider } from 'react-redux';
-
-import {
-  AUDCountries,
-  Canada,
-  type CountryGroupId,
-  detect,
-  EURCountries,
-  GBPCountries,
-  International,
-  NZDCountries,
-  UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
+import { Provider, connect } from 'react-redux';
+import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
@@ -81,56 +71,70 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
-const { optimizeExperiments } = store.getState().common;
+const mapStateToProps = (state) => {
+  const { optimizeExperiments } = state.common;
+  const dailyEditionsExperimentId = 'ZVlxqx3wRDGSDw-HYZLiAQ';
+  const dailyEditionsVariant2 = optimizeExperiments
+    .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
 
-const dailyEditionsExperimentId = 'zFSCLqNKT4yQKFNEraigAQ';
-const dailyEditionsVariant = optimizeExperiments
-  .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
+  return {
+    dailyEditionsVariant: dailyEditionsVariant2 != null ? dailyEditionsVariant2 : false,
+  };
+};
+
+type Props = {
+  dailyEditionsVariant: boolean,
+}
 
 // ----- Render ----- //
+const LandingPage = (props: Props) => (
+  <Page
+    header={<CountrySwitcherHeader />}
+    footer={
+      <Footer>
+        <CustomerService selectedCountryGroup={countryGroupId} />
+        <SubscriptionFaq subscriptionProduct="DigitalPack" />
+      </Footer>}
+  >
+    {console.log(store.getState().common.optimizeExperiments)}
+    <CampaignHeader
+      countryGroupId={countryGroupId}
+      dailyEditionsVariant={props.dailyEditionsVariant}
+    />
+    {props.dailyEditionsVariant ?
+      (
+        <div>
+          <ProductBlockB />
+          <AdFreeSectionB />
+        </div>
+      ) : (
+        <div>
+          <ProductBlock countryGroupId={countryGroupId} />
+          <AdFreeSection headingSize={2} />
+
+          <Content appearance="feature" id="subscribe">
+            <Text title="Subscribe to Digital Pack today">
+              <p>Choose how you’d like to pay</p>
+            </Text>
+            <Form />
+            <ProductPageInfoChip >
+                You can cancel your subscription at any time
+            </ProductPageInfoChip>
+          </Content>
+        </div>
+      )
+    }
+    <IndependentJournalismSection />
+    <PromotionPopUp />
+    <ConsentBanner />
+  </Page>
+);
+
+const ConnectedLandingPage = connect(mapStateToProps)(LandingPage);
 
 const content = (
   <Provider store={store}>
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={
-        <Footer>
-          <CustomerService selectedCountryGroup={countryGroupId} />
-          <SubscriptionFaq subscriptionProduct="DigitalPack" />
-        </Footer>}
-    >
-
-      <CampaignHeader
-        countryGroupId={countryGroupId}
-        dailyEditionsVariant={dailyEditionsVariant}
-      />
-      {dailyEditionsVariant ?
-        (
-          <div>
-            <ProductBlockB />
-            <AdFreeSectionB />
-          </div>
-        ) : (
-          <div>
-            <ProductBlock countryGroupId={countryGroupId} />
-            <AdFreeSection headingSize={2} />
-
-            <Content appearance="feature" id="subscribe">
-              <Text title="Subscribe to Digital Pack today">
-                <p>Choose how you’d like to pay</p>
-              </Text>
-              <Form />
-              <ProductPageInfoChip >
-                  You can cancel your subscription at any time
-              </ProductPageInfoChip>
-            </Content>
-          </div>
-        )
-      }
-      <IndependentJournalismSection />
-      <PromotionPopUp />
-      <ConsentBanner />
-    </Page>
+    <ConnectedLandingPage />
   </Provider>
 );
 
