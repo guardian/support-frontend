@@ -7,9 +7,9 @@ import { formatMachineDate, formatUserDate } from 'helpers/dateConversions';
 
 
 // ----- Tests ----- //
-const monday =  1551075752198; /* 2019-02-25 */
+const monday = 1551075752198; /* 2019-02-25 */
 const tuesday = 1551175752198; /* 2019-02-26 */
-const wednesday5amGMT = 1551243600000 /* 2019-02-27 05:00 GMT */
+const wednesday5amGMT = 1551243600000; /* 2019-02-27 05:00 GMT */
 const wednesday = 1551275752198; /* 2019-02-27 */
 const sunday = 1551577952198; /* 2019-03-03 */
 
