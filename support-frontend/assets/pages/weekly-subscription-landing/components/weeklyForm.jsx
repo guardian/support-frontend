@@ -19,22 +19,27 @@ import {
   getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
+import { getOrigin } from 'helpers/url';
 
 // ---- Plans ----- //
 
 const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingPeriod, state: CommonState}): string => {
+  const optimizeExperimentId = "c57s46hkR_iDwL3okpznxg";
   const {
     internationalisation: { countryGroupId }, referrerAcquisitionData, abParticipations, optimizeExperiments,
   } = state;
 
-  return getWeeklyCheckout(
-    referrerAcquisitionData,
-    billingPeriod,
-    countryGroupId,
-    abParticipations,
-    optimizeExperiments,
-    (billingPeriod === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
-  );
+  if(state.optimizeExperiments.includes(exp => exp.id === optimizeExperimentId && exp.variant === 1)){
+    return getWeeklyCheckout(
+      referrerAcquisitionData,
+      billingPeriod,
+      countryGroupId,
+      abParticipations,
+      optimizeExperiments,
+      (billingPeriod === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
+    );
+  }
+  return `${getOrigin()}/subscribe/weekly/checkout?billingPeriod=${billingPeriod.toString()}`;
 };
 
 // ----- State/Props Maps ----- //
