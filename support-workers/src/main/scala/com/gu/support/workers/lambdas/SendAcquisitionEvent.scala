@@ -12,7 +12,7 @@ import com.gu.config.Configuration
 import com.gu.i18n.Country
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _, _}
+import com.gu.support.catalog.{GuardianWeekly, Contribution => _, DigitalPack => _, Paper => _, _}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendAcquisitionEventState
@@ -24,7 +24,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
-    extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
+  extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
 
   import SendAcquisitionEvent._
   import cats.instances.future._
@@ -46,7 +46,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       errors => throw AnalyticsServiceErrorList(errors),
       _ => HandlerResult((), requestInfo)
     )
-    
+
     val cloudwatchEvent = paymentSuccessRequest(Configuration.stage, paymentProviderFromPaymentMethod(state.paymentMethod), state.product)
     AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
@@ -99,8 +99,8 @@ object SendAcquisitionEvent {
       }
 
       def paymentFrequencyFromBillingPeriod(billingPeriod: BillingPeriod): thrift.PaymentFrequency =
-        // object BillingObject extends the BillingObject trait.
-        // Don't match on this as its not a valid billing period.
+      // object BillingObject extends the BillingObject trait.
+      // Don't match on this as its not a valid billing period.
         (billingPeriod: @unchecked) match {
           case Monthly => thrift.PaymentFrequency.Monthly
           case Quarterly => thrift.PaymentFrequency.Quarterly
@@ -162,11 +162,21 @@ object SendAcquisitionEvent {
               platform = Some(ophan.thrift.event.Platform.Support),
               queryParameters = data.referrerAcquisitionData.queryParameters,
               identityId = Some(stateAndInfo.state.user.id),
-              labels = if(stateAndInfo.requestInfo.accountExists) Some(Set("REUSED_EXISTING_PAYMENT_METHOD")) else None
+              labels = buildLabels(stateAndInfo)
             )
           },
           "acquisition data not included"
         )
       }
+
+      def buildLabels(stateAndInfo: SendAcquisitionEventStateAndRequestInfo) =
+        Some(Set(
+          if (stateAndInfo.requestInfo.accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
+          if (isSixForSix(stateAndInfo)) Some("guardian-weekly-six-for-six") else None,
+          stateAndInfo.state.giftRecipient.map(_ => "gift-subscription")
+        ).flatten)
+
+      def isSixForSix(stateAndInfo: SendAcquisitionEventStateAndRequestInfo) =
+        stateAndInfo.state.product.billingPeriod == Quarterly && stateAndInfo.state.promoCode.contains(GuardianWeekly.SixForSixPromoCode)
     }
 }
