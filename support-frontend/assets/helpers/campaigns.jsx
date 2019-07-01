@@ -115,7 +115,7 @@ export const campaigns: Campaigns = {
     goalReachedCopy: null,
     tickerJsonUrl: '/ticker.json',
     tickerType: 'unlimited',
-    cssModifiers: ['campaign-landing', ''],
+    cssModifiers: ['campaign-landing'],
     contributionTypes: generateContributionTypes([
       { contributionType: 'ONE_OFF', isDefault: true },
     ]),
