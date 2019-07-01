@@ -24,22 +24,26 @@ import { getOrigin } from 'helpers/url';
 // ---- Plans ----- //
 
 const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingPeriod, state: CommonState}): string => {
-  const optimizeExperimentId = 'c57s46hkR_iDwL3okpznxg';
+  const optimizeExperimentId = 'buAOTpsxSVucCSSlkwLx6A';
   const {
     internationalisation: { countryGroupId }, referrerAcquisitionData, abParticipations, optimizeExperiments,
   } = state;
 
-  if (state.optimizeExperiments.includes(exp => exp.id === optimizeExperimentId && exp.variant === 1)) {
-    return getWeeklyCheckout(
-      referrerAcquisitionData,
-      billingPeriod,
-      countryGroupId,
-      abParticipations,
-      optimizeExperiments,
-      (billingPeriod === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
-    );
+  const useVariant = state.optimizeExperiments.find(exp => exp.id === optimizeExperimentId && exp.variant === '1');
+
+  if (useVariant) {
+    return `${getOrigin()}/subscribe/weekly/checkout?period=${billingPeriod.toString()}`;
   }
-  return `${getOrigin()}/subscribe/weekly/checkout?billingPeriod=${billingPeriod.toString()}`;
+
+  return getWeeklyCheckout(
+    referrerAcquisitionData,
+    billingPeriod,
+    countryGroupId,
+    abParticipations,
+    optimizeExperiments,
+    (billingPeriod === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
+  );
+
 };
 
 // ----- State/Props Maps ----- //
