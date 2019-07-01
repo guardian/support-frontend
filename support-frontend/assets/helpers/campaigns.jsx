@@ -24,7 +24,7 @@ export type Campaigns = {
   [string]: CampaignSettings,
 };
 
-const currentCampaignName = 'toxicamerica';
+const currentCampaignName = null;
 
 export const campaigns: Campaigns = {
   toxicamerica: {
