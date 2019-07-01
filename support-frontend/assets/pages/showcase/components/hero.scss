@@ -29,6 +29,10 @@
   @include gu-fontset-explainer;
   margin: $gu-h-spacing $gu-h-spacing $gu-h-spacing / 2;
   font-size: 14px;
+
+  .showcase-hero__caption--italics {
+    font-style: italic;
+  }
   
   > strong {
     font-weight: 600;
@@ -176,9 +180,10 @@
   $photo-2-height: 120px;
   $photo-3-height: 120px;
   $photo-4-height: 440px;
+  $caption-height: 600px;
 
   .showcase-hero .component-left-margin-section__content {
-    height: $heading-height + $photo-1-height + $photo-2-height + $gu-v-spacing;
+    height: $heading-height + $caption-height + $photo-2-height + $gu-v-spacing;
   }
 
   .showcase-hero {
