@@ -181,13 +181,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
             />
           </FormSection>
           <FormSection title="Where should we deliver your magazine?">
-            {props.billingPeriod !== 'SixWeekly' ?
-              <CheckboxInput
-                text="This is a gift"
-                checked={props.orderIsAGift}
-                onChange={() => props.setGiftStatus(!props.orderIsAGift)}
-              />
-            : null}
+            <CheckboxInput
+              text="This is a gift"
+              checked={props.orderIsAGift}
+              onChange={() => props.setGiftStatus(!props.orderIsAGift)}
+            />
             {!props.orderIsAGift ? <DeliveryAddress /> : null}
           </FormSection>
           {props.orderIsAGift ? (
@@ -286,7 +284,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
             billingCountry={props.billingCountry}
             productPrices={props.productPrices}
             selected={props.billingPeriod}
-            orderIsAGift={props.orderIsAGift}
           />
           <PaymentMethodSelector
             country={props.billingCountry}
