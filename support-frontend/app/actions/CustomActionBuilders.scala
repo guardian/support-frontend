@@ -52,7 +52,7 @@ class CustomActionBuilders(
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
     new AsyncAuthenticatedBuilder(
-      userinfo = requestHeader => asyncAuthenticationService.authenticateUser(requestHeader).map(Some.apply),
+      requestHeader => asyncAuthenticationService.authenticateUser(requestHeader).map(Some.apply),
       cc.parsers.defaultBodyParser,
       onUnauthenticated
     )
@@ -62,9 +62,9 @@ class CustomActionBuilders(
 
   private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result): ActionBuilder[AuthRequest, AnyContent] =
     new AsyncAuthenticatedBuilder(
-      userinfo = asyncAuthenticationService.authenticateTestUser,
-      defaultParser = cc.parsers.defaultBodyParser,
-      onUnauthorized = onUnauthenticated
+      asyncAuthenticationService.authenticateTestUser,
+      cc.parsers.defaultBodyParser,
+      onUnauthenticated
     )
 
   val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
