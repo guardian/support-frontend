@@ -1,13 +1,13 @@
 package com.gu.support.workers
 
-import com.gu.i18n.Currency
-import com.gu.support.encoding.Codec
-import com.gu.support.encoding.Codec.deriveCodec
-import io.circe.{Decoder, Encoder}
-import io.circe.syntax._
 import cats.syntax.functor._
+import com.gu.i18n.Currency
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{FulfilmentOptions, ProductOptions}
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
+import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
 
 
 sealed trait ProductType {
@@ -16,6 +16,7 @@ sealed trait ProductType {
 
   override def toString: String = this.getClass.getSimpleName
   def describe: String
+  val catalogType: com.gu.support.catalog.Product
 }
 
 case class Contribution(
@@ -23,6 +24,7 @@ case class Contribution(
   currency: Currency,
   billingPeriod: BillingPeriod
 ) extends ProductType {
+  override val catalogType = com.gu.support.catalog.Contribution
   override def describe: String = s"$billingPeriod-Contribution-$currency-$amount"
 }
 
@@ -30,6 +32,7 @@ case class DigitalPack(
   currency: Currency,
   billingPeriod: BillingPeriod
 ) extends ProductType {
+  override val catalogType = com.gu.support.catalog.DigitalPack
   override def describe: String = s"$billingPeriod-DigitalPack-$currency"
 }
 
@@ -39,6 +42,7 @@ case class Paper(
   fulfilmentOptions: FulfilmentOptions,
   productOptions: ProductOptions
 ) extends ProductType {
+  override val catalogType = com.gu.support.catalog.Paper
   override def describe: String = s"Paper-$fulfilmentOptions-$productOptions"
 }
 
@@ -47,6 +51,7 @@ case class GuardianWeekly(
   billingPeriod: BillingPeriod,
   fulfilmentOptions: FulfilmentOptions,
 ) extends ProductType {
+  override val catalogType = com.gu.support.catalog.GuardianWeekly
   override def describe: String = s"$billingPeriod-GuardianWeekly-$fulfilmentOptions-$currency"
 }
 
