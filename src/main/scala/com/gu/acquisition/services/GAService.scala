@@ -86,6 +86,7 @@ private[services] class GAService(implicit client: OkHttpClient)
           "cd17" -> acquisition.paymentProvider.getOrElse(""), // Payment method
           "cd19" -> acquisition.promoCode.getOrElse(""), // Promo code
           "cd25" -> acquisition.labels.exists(_.contains("REUSED_EXISTING_PAYMENT_METHOD")), // usedExistingPaymentMethod
+          "cd26" -> acquisition.labels.exists(_.contains("gift-subscription")), // gift subscription
 
           // Custom metrics
           "cm10" -> getSuccessfulSubscriptionSignUpMetric(conversionCategory),
