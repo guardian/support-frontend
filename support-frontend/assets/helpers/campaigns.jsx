@@ -115,7 +115,7 @@ export const campaigns: Campaigns = {
     goalReachedCopy: null,
     tickerJsonUrl: '/ticker.json',
     tickerType: 'unlimited',
-    cssModifiers: ['campaign-landing', currentCampaignName],
+    cssModifiers: ['campaign-landing', ''],
     contributionTypes: generateContributionTypes([
       { contributionType: 'ONE_OFF', isDefault: true },
     ]),
@@ -127,5 +127,8 @@ export const campaigns: Campaigns = {
 export type CampaignName = $Keys<typeof campaigns>
 
 export function getCampaignName(): ?CampaignName {
-  return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
+  if (currentCampaignName) {
+    return window.location.pathname.endsWith(`/${currentCampaignName}`) ? currentCampaignName : undefined;
+  }
+  return undefined;
 }
