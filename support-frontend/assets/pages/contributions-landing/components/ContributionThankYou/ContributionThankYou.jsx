@@ -7,16 +7,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType, getSpokenType } from 'helpers/contributions';
 import MarketingConsent from '../MarketingConsentContainer';
-import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
+import {
+  type Action,
+  setHasSeenDirectDebitThankYouCopy,
+} from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit } from 'helpers/paymentMethods';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
-import { DirectDebit } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import { routes } from 'helpers/routes';
-import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/ophan';
+import {
+  trackComponentClick,
+  trackComponentLoad,
+} from 'helpers/tracking/ophan';
 import TrackableButton from 'components/button/trackableButton';
 
 // ----- Types ----- //
@@ -64,9 +70,9 @@ const createSignInLink = (email: string, csrf: string, contributionType: Contrib
     .then((response) => {
       if (response.ok) {
         return response.json();
-      } else {
-        throw new Error('Identity encryption service error');
       }
+      throw new Error('Identity encryption service error');
+
     })
     .then((data) => {
       if (data && data.signInLink) {

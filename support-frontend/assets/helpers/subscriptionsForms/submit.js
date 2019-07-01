@@ -117,10 +117,9 @@ const getOptions = (
     ...(productOptions !== NoProductOptions ? { productOptions } : {}),
   });
 
-const getPromoCode = (billingPeriod: BillingPeriod, promotions: ?Promotion[]) =>
-{
+const getPromoCode = (billingPeriod: BillingPeriod, promotions: ?Promotion[]) => {
   const promotion = getAppliedPromo(promotions);
-  if(!promotion || (promotion.introductoryPrice && billingPeriod === Quarterly)) {
+  if (!promotion || (promotion.introductoryPrice && billingPeriod === Quarterly)) {
     return null;
   }
 

@@ -6,12 +6,22 @@ import { renderPage } from 'helpers/render';
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
+import {
+  AUDCountries,
+  Canada,
+  type CountryGroupId,
+  detect,
+  EURCountries,
+  GBPCountries,
+  International,
+  NZDCountries,
+  UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 
 import Page from 'components/page/page';
-import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import headerWithCountrySwitcherContainer
+  from 'components/headers/header/headerWithCountrySwitcher';
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
@@ -19,12 +29,13 @@ import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
-import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
+import ProductPageInfoChip
+  from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import 'stylesheets/skeleton/skeleton.scss';
 
-
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
-import IndependentJournalismSection from './components/independentJournalismSection';
+import IndependentJournalismSection
+  from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import ProductBlockB from './components/productBlockB/productBlockB';
 import PromotionPopUp from './components/promotionPopUp';
@@ -33,7 +44,8 @@ import Form from './components/form';
 import './digitalSubscriptionLanding.scss';
 import './components/theMoment.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
-import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
+import digitalSubscriptionLandingReducer
+  from './digitalSubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
 
@@ -88,9 +100,9 @@ const content = (
         </Footer>}
     >
 
-      <CampaignHeader 
-        countryGroupId={countryGroupId} 
-        dailyEditionsVariant={dailyEditionsVariant} 
+      <CampaignHeader
+        countryGroupId={countryGroupId}
+        dailyEditionsVariant={dailyEditionsVariant}
       />
       {dailyEditionsVariant ?
         (

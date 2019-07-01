@@ -24,12 +24,12 @@ import { getOrigin } from 'helpers/url';
 // ---- Plans ----- //
 
 const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingPeriod, state: CommonState}): string => {
-  const optimizeExperimentId = "c57s46hkR_iDwL3okpznxg";
+  const optimizeExperimentId = 'c57s46hkR_iDwL3okpznxg';
   const {
     internationalisation: { countryGroupId }, referrerAcquisitionData, abParticipations, optimizeExperiments,
   } = state;
 
-  if(state.optimizeExperiments.includes(exp => exp.id === optimizeExperimentId && exp.variant === 1)){
+  if (state.optimizeExperiments.includes(exp => exp.id === optimizeExperimentId && exp.variant === 1)) {
     return getWeeklyCheckout(
       referrerAcquisitionData,
       billingPeriod,
