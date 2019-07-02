@@ -150,7 +150,7 @@ function withoutProps() {
     <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
       <div className="gu-content__blurb">
         <div className="gu-content__blurb-header-container">
-          <h1 className="gu-content__blurb-header"></h1>
+          <h1 className="gu-content__blurb-header">{defaultHeaderCopy}</h1>
         </div>
       </div>
 

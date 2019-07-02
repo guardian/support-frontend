@@ -129,10 +129,14 @@ class Application(
 
     val js = elementForStage(RefPath("contributionsLandingPage.js"))
 
+    val classes = "gu-content--contribution-form--placeholder" +
+      campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
+
     val mainElement = assets.getSsrCacheContentsAsHtml(
       divId = s"contributions-landing-page-$countryCode",
       file = "contributions-landing.html",
-      classes = campaignCode.map(code => s"gu-content--campaign-landing gu-content--$code"))
+      classes = Some(classes)
+    )
 
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
