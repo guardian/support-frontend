@@ -100,23 +100,21 @@ function withoutProps() {
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Recurrence</legend>
       <ul className="form__radio-group-list form__radio-group-list--border">
         {
-          ['a','b','c'].map(id => {
-            return (
-              <li className="form__radio-group-item">
-                <input
-                  id={`contributionType-${id}`}
-                  className="form__radio-group-input"
-                  type="radio"
-                  name="contributionType"
-                />
-                <label htmlFor={`contributionType-${id}`} className="form__radio-group-label">&nbsp;</label>
-              </li>
-            )
-          })
+          ['a', 'b', 'c'].map(id => (
+            <li className="form__radio-group-item">
+              <input
+                id={`contributionType-${id}`}
+                className="form__radio-group-input"
+                type="radio"
+                name="contributionType"
+              />
+              <label htmlFor={`contributionType-${id}`} className="form__radio-group-label">&nbsp;</label>
+            </li>
+            ))
         }
       </ul>
     </fieldset>
-  )
+  );
 }
 
 export const ContributionTypeTabs = connect(mapStateToProps, mapDispatchToProps)(withProps);

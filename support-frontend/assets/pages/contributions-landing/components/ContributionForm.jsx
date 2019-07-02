@@ -264,7 +264,7 @@ function withoutProps() {
     <form className={classNameWithModifiers('form', ['contribution'])}>
       <div>
         <EmptyContributionTypeTabs />
-        <EmptyContributionAmount/>
+        <EmptyContributionAmount />
         <div className={classNameWithModifiers('form', ['content'])}>
           <EmptyContributionFormFields />
           <EmptyPaymentMethodSelector />
@@ -272,10 +272,10 @@ function withoutProps() {
         </div>
       </div>
       <div>
-        <ProgressMessage message={['Loading the page']}/>
+        <ProgressMessage message={['Loading the page']} />
       </div>
     </form>
-  )
+  );
 }
 
 export const ContributionForm = connect(mapStateToProps, mapDispatchToProps)(withProps);

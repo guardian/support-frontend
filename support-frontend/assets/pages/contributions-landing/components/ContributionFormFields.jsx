@@ -168,12 +168,14 @@ function withoutProps() {
     <div className="form-fields">
       <ContributionTextInput
         id="contributionEmail"
+        name="contribution-email"
         label="Email address"
         type="email"
         placeholder="example@domain.com"
         icon={<SvgEnvelope />}
-        disabled={true}
-        showRequiredLabel={true}
+        disabled
+        showRequiredLabel
+        errorMessage={null}
       />
       <div>
         <ContributionTextInput
@@ -181,16 +183,18 @@ function withoutProps() {
           name="contribution-fname"
           label="First name"
           icon={<SvgUser />}
-          disabled={true}
-          showRequiredLabel={true}
+          disabled
+          showRequiredLabel
+          errorMessage={null}
         />
         <ContributionTextInput
           id="contributionLastName"
           name="contribution-lname"
           label="Last name"
           icon={<SvgUser />}
-          disabled={true}
-          showRequiredLabel={true}
+          disabled
+          showRequiredLabel
+          errorMessage={null}
         />
       </div>
     </div>

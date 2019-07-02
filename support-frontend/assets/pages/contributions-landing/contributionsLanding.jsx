@@ -20,7 +20,7 @@ import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { init as formInit } from './contributionsLandingInit';
 import { initReducer } from './contributionsLandingReducer';
-import { ContributionFormContainer}  from './components/ContributionFormContainer';
+import { ContributionFormContainer } from './components/ContributionFormContainer';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouContainer from './components/ContributionThankYou/ContributionThankYouContainer';
 import { setUserStateActions } from './setUserStateActions';

@@ -155,7 +155,7 @@ function withoutProps() {
       </div>
 
       <div className="gu-content__form">
-        <EmptyContributionForm/>
+        <EmptyContributionForm />
       </div>
     </div>
   );

@@ -216,7 +216,7 @@ function withoutProps() {
       <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
       <ul className="form__radio-group-list">
         {
-          ['a','b','c','d'].map(renderEmptyAmount)
+          ['a', 'b', 'c', 'd'].map(renderEmptyAmount)
         }
       </ul>
     </fieldset>

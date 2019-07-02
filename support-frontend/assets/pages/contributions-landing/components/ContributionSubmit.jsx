@@ -138,7 +138,7 @@ function withProps(props: PropTypes) {
 function withoutProps() {
   return (
     <div className="form__submit">
-      <Button type="submit" disabled={true}/>
+      <Button type="submit" aria-label="Submit contribution" disabled>&nbsp;</Button>
     </div>
   );
 }

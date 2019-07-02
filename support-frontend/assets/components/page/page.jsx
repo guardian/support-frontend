@@ -14,7 +14,7 @@ import TimeTravelBanner from 'components/headerBanners/timeTravelBanner';
 type PropTypes = {|
   id: ?string,
   header: Node,
-  footer: Node,
+  footer: Node | null,
   children: Node,
   classModifiers: Array<?string>,
   backgroundImageSrc: ?string,
@@ -49,6 +49,7 @@ export default function Page(props: PropTypes) {
 
 Page.defaultProps = {
   id: null,
+  footer: null,
   classModifiers: [],
   backgroundImageSrc: null,
 };
