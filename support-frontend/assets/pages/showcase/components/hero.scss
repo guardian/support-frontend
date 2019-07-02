@@ -129,7 +129,6 @@
 
   .showcase-hero__image {
     height: 37vw;
-    box-sizing: content-box;
     width: 47%;
     margin-top: -20px;
     margin-bottom: 0;
@@ -140,14 +139,21 @@
     width: 48.5%;
     justify-content: space-between;
 
-    div {
-      .showcase-hero__image--first {
-        width: 100%;
+    .showcase-hero__image--first {
+      div {
+        img {
+          height: 100%;
+          width: auto;
+        }
       }
     }
 
     .showcase-hero__image--second {
       margin-top: -7px;
+      img {
+        height: 100%;
+        width: auto;
+      }
     }
   }
 
@@ -160,6 +166,10 @@
 
     .showcase-hero__image--fourth {
       margin-top: -7px;
+      img {
+        height: 100%;
+        width: auto;
+      }
     }
   }
 
@@ -258,6 +268,8 @@
       order: 2;
       width: gu-span(7);
       height: $photo-1-height;
+      will-change: transform;
+      opacity: 0;
       div {
         position: relative;
         height: 100%;
@@ -313,22 +325,44 @@
 // Everything relating to animations
 
 .showcase-hero__image--first {
-  animation: animateInLeft 0.8s 1s ease-out forwards 1;
+  animation: animateInLeft 0.8s 1.60s ease-out forwards 1;
 }
 .showcase-hero__image--second {
   animation: animateInLeft 0.8s 1.30s ease-out forwards 1;
 }
 .showcase-hero__image--third  {
-  animation: animateInRight 0.8s 1.15s ease-out forwards 1;
+  animation: animateInRight 0.8s 1s ease-out forwards 1;
 }
 .showcase-hero__image--fourth  {
   animation: animateInRight 0.8s 1.45s ease-out forwards 1;
 }
 
-.showcase-hero__image {
+@keyframes animateInLeft {
+  0% {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes animateInRight {
+  0% {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@include mq($until: desktop) {
   @keyframes animateInLeft {
     0% {
-      transform: translateX(-20px);
+      transform: translateY(20px);
       opacity: 0;
     }
     100% {
@@ -339,12 +373,25 @@
 
   @keyframes animateInRight {
     0% {
-      transform: translateX(20px);
+      transform: translateY(20px);
       opacity: 0;
     }
     100% {
-      transform: translateX(0);
+      transform: translateY(0);
       opacity: 1;
     }
+  }
+
+  .showcase-hero__image--first {
+    animation-delay: 1s;
+  }
+  .showcase-hero__image--second {
+    animation-delay: 1.15s;
+  }
+  .showcase-hero__image--third  {
+    animation-delay: 1.30s;
+  }
+  .showcase-hero__image--fourth  {
+    animation-delay: 1.45s;
   }
 }
