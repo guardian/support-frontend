@@ -10,11 +10,10 @@ import './hero.scss';
 
 const Caption = (props: { className: string, captionTitle: String, captionText: String }) => (
   <div className={props.className}>
-    <caption className="showcase-hero__caption">
+    <figcaption className="showcase-hero__caption">
       <strong>{props.captionTitle}</strong>
-      <p>{props.captionText}
-      </p>
-    </caption>
+      <p>{props.captionText}</p>
+    </figcaption>
   </div>
 );
 
@@ -23,12 +22,12 @@ const getCountrySelector = (country: String) => {
     case GBPCountries:
     case EURCountries:
     case International:
+    case Canada:
+    case NZDCountries:
       return 'ukContent';
     case UnitedStates:
-    case Canada:
       return 'usContent';
     case AUDCountries:
-    case NZDCountries:
       return 'auContent';
     default:
       return 'ukContent';
@@ -40,7 +39,7 @@ export default function Hero(props: { country: String }) {
 
   return (
     <div className="showcase-hero">
-      <div className="showcase-hero-wrapper">
+      <figure className="showcase-hero-wrapper">
         <div className="showcase-hero-heading">
           <h1 className="accessibility-hint">Support the guardian</h1>
           <h2 className="accessibility-hint">Help us support investigative independent journalism</h2>
@@ -94,7 +93,7 @@ export default function Hero(props: { country: String }) {
           captionTitle={regionalContent[countrySelector].title}
           captionText={regionalContent[countrySelector].caption}
         />
-      </div>
+      </figure>
     </div>
   );
 }
