@@ -129,7 +129,10 @@ class Application(
 
     val js = elementForStage(RefPath("contributionsLandingPage.js"))
 
-    val mainElement = assets.getSsrCacheContentsAsHtml(s"contributions-landing-page-$countryCode","contributions-landing.html")
+    val mainElement = assets.getSsrCacheContentsAsHtml(
+      divId = s"contributions-landing-page-$countryCode",
+      file = "contributions-landing.html",
+      classes = campaignCode.map(code => s"gu-content--campaign-landing gu-content--$code"))
 
     views.html.contributions(
       title = "Support the Guardian | Make a Contribution",
@@ -149,7 +152,6 @@ class Application(
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       idUser = idUser,
-      campaignCodeModifier = campaignCode.map(code => s"gu-content--$code"),
       guestAccountCreationToken = guestAccountCreationToken
     )
   }
