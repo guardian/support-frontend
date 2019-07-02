@@ -30,6 +30,7 @@ function gtag() {
   if (optimizeIsLoaded()) {
     // eslint-disable-next-line prefer-rest-params
     window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
+  }
 }
 
 function getExperimentsFromApi(callback: (variant: string, id: string) => void) {
@@ -125,7 +126,6 @@ function addOptimizeExperiments(addToStoreCallback: (OptimizeExperiment) => void
     getOptimizeExperiments();
   }
 }
-
 
 // ----- Exports ----- //
 
