@@ -15,7 +15,7 @@ import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummarySe
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.Monthly
 import com.gu.tip.Tip
-import config.Configuration.GuardianDomain
+import config.Configuration.{GuardianDomain, MetricUrl}
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers.any
@@ -63,7 +63,8 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     val allSettings = AllSettings(
       Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty, On),
       AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts),
-      ContributionTypes(Nil,Nil,Nil,Nil,Nil,Nil,Nil)
+      ContributionTypes(Nil,Nil,Nil,Nil,Nil,Nil,Nil),
+      MetricUrl("http://localhost")
     )
 
     def fakeDigitalPack(

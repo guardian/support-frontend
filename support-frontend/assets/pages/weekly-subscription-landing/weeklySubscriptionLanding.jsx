@@ -6,19 +6,32 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import Page from 'components/page/page';
-import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import headerWithCountrySwitcherContainer
+  from 'components/headers/header/headerWithCountrySwitcher';
 import Footer from 'components/footer/footer';
 
-import { detect, countryGroups, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+  AUDCountries,
+  Canada,
+  type CountryGroupId,
+  countryGroups,
+  detect,
+  EURCountries,
+  GBPCountries,
+  International,
+  NZDCountries,
+  UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
 import { renderPage } from 'helpers/render';
 import Content, { Outset } from 'components/content/content';
 import Text, { LargeParagraph } from 'components/text/text';
-import ProductPageFeatures from 'components/productPage/productPageFeatures/productPageFeatures';
-import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
+import ProductPageFeatures
+  from 'components/productPage/productPageFeatures/productPageFeatures';
+import ProductPageInfoChip
+  from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import SvgInformation from 'components/svgs/information';
 import SvgGift from 'components/svgs/gift';
-import { AUDCountries, Canada, EURCountries, GBPCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import 'stylesheets/skeleton/skeleton.scss';
 
 import { CampaignHeader } from './components/hero/hero';
@@ -103,7 +116,7 @@ const content = (
         </Text>
         <WeeklyForm />
         <ProductPageInfoChip icon={<SvgGift />}>
-              Gifting is available for quarterly and annual subscriptions
+              Gifting is available
         </ProductPageInfoChip>
         <ProductPageInfoChip icon={<SvgInformation />}>
               You can cancel your subscription at any time
@@ -111,7 +124,7 @@ const content = (
       </Content>
       <Content>
         <Text title="Gift subscriptions">
-          <LargeParagraph>A quarterly or annual Guardian Weekly subscription makes a great gift.
+          <LargeParagraph>A Guardian Weekly subscription makes a great gift.
             To&nbsp;buy&nbsp;one, just select the gift option at checkout or get in touch with your local customer
             service team:
           </LargeParagraph>

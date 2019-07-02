@@ -1,16 +1,16 @@
 package com.gu.emailservices
 
+import com.gu.emailservices.SubscriptionEmailFieldHelpers.formatDate
 import com.gu.i18n.Currency
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.catalog.{FulfilmentOptions, HomeDelivery, ProductOptions}
+import com.gu.support.catalog.FulfilmentOptions
 import com.gu.support.promotions.Promotion
-import com.gu.support.workers._
+import com.gu.support.workers.{BillingPeriod, PaymentMethod, PaymentSchedule, User}
 import org.joda.time.LocalDate
 
-case class PaperEmailFields(
+case class GuardianWeeklyEmailFields(
   subscriptionNumber: String,
   fulfilmentOptions: FulfilmentOptions,
-  productOptions: ProductOptions,
   billingPeriod: BillingPeriod,
   user: User,
   paymentSchedule: PaymentSchedule,
@@ -22,17 +22,15 @@ case class PaperEmailFields(
   promotion: Option[Promotion] = None
 ) extends EmailFields {
 
-  val additionalFields = List("package" -> productOptions.toString)
-
-  val dataExtension = fulfilmentOptions match {
-    case HomeDelivery => "paper-delivery"
-    case _ => "paper-voucher"
-  }
+  val additionalFields = List(
+    paymentSchedule.payments.lift(1).map(payment => "date_of_second_payment" -> formatDate(payment.date))
+  )
 
   override val fields = PaperFieldsGenerator.fieldsFor(
     subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId, promotion
-  ) ++ additionalFields
+  ) ++ additionalFields.flatten
 
-  override def payload: String = super.payload(user.primaryEmailAddress, dataExtension)
+  override def payload: String = super.payload(user.primaryEmailAddress, "guardian-weekly")
   override def userId: Either[SfContactId, IdentityUserId] = Left(sfContactId)
 }
+

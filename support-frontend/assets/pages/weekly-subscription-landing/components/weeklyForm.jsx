@@ -19,13 +19,21 @@ import {
   getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
+import { getOrigin } from 'helpers/url';
 
 // ---- Plans ----- //
 
 const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingPeriod, state: CommonState}): string => {
+  const optimizeExperimentId = 'bCiv10arQ7OYNMyIyC89MQ';
   const {
     internationalisation: { countryGroupId }, referrerAcquisitionData, abParticipations, optimizeExperiments,
   } = state;
+
+  const useVariant = state.optimizeExperiments.find(exp => exp.id === optimizeExperimentId && exp.variant === '1');
+
+  if (useVariant) {
+    return `${getOrigin()}/subscribe/weekly/checkout?period=${billingPeriod.toString()}`;
+  }
 
   return getWeeklyCheckout(
     referrerAcquisitionData,
@@ -35,6 +43,7 @@ const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingP
     optimizeExperiments,
     (billingPeriod === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
   );
+
 };
 
 // ----- State/Props Maps ----- //
@@ -59,7 +68,7 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
         ),
         offer: getAppliedPromoDescription(billingPeriod, productPrice),
         href: getCheckoutUrl({ billingPeriod, state: state.common }),
-        onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'GuardianWeekly', null, billingPeriod),
+        onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
         price: null,
         saving: null,
       },
