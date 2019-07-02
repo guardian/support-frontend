@@ -117,6 +117,8 @@ class LandingPage extends Component<Props, State> {
         this.wait();
       }, 250);
     }
+    console.log('numOfChecks:', numOfChecks);
+    console.log('optimizeHasLoaded', optimizeHasLoaded);
   }
 
   render() {
