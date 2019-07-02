@@ -24,7 +24,7 @@ import { getOrigin } from 'helpers/url';
 // ---- Plans ----- //
 
 const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingPeriod, state: CommonState}): string => {
-  const optimizeExperimentId = 'buAOTpsxSVucCSSlkwLx6A';
+  const optimizeExperimentId = 'bCiv10arQ7OYNMyIyC89MQ';
   const {
     internationalisation: { countryGroupId }, referrerAcquisitionData, abParticipations, optimizeExperiments,
   } = state;
