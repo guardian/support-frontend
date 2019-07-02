@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { renderPage } from 'helpers/render';
-import React from 'react';
+import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
@@ -79,56 +79,103 @@ const mapStateToProps = (state) => {
 
   return {
     dailyEditionsVariant: dailyEditionsVariant2 != null ? dailyEditionsVariant2 : false,
+    optimizeHasLoaded: optimizeExperiments.length > 0,
   };
 };
 
 type Props = {
   dailyEditionsVariant: boolean,
+  optimizeHasLoaded: boolean,
+}
+
+type State = {
+  showPage: boolean,
+  numOfChecks: number,
 }
 
 // ----- Render ----- //
-const LandingPage = (props: Props) => (
-  <Page
-    header={<CountrySwitcherHeader />}
-    footer={
-      <Footer>
-        <CustomerService selectedCountryGroup={countryGroupId} />
-        <SubscriptionFaq subscriptionProduct="DigitalPack" />
-      </Footer>}
-  >
-    {console.log(store.getState().common.optimizeExperiments)}
-    <CampaignHeader
-      countryGroupId={countryGroupId}
-      dailyEditionsVariant={props.dailyEditionsVariant}
-    />
-    {props.dailyEditionsVariant ?
-      (
-        <div>
-          <ProductBlockB />
-          <AdFreeSectionB />
-        </div>
-      ) : (
-        <div>
-          <ProductBlock countryGroupId={countryGroupId} />
-          <AdFreeSection headingSize={2} />
+class LandingPage extends Component<Props, State> {
+  state = {
+    showPage: this.props.optimizeHasLoaded,
+    numOfChecks: 0,
+  }
 
-          <Content appearance="feature" id="subscribe">
-            <Text title="Subscribe to Digital Pack today">
-              <p>Choose how you’d like to pay</p>
-            </Text>
-            <Form />
-            <ProductPageInfoChip >
-                You can cancel your subscription at any time
-            </ProductPageInfoChip>
-          </Content>
-        </div>
-      )
+  wait = () => {
+    const { numOfChecks } = this.state;
+    const { optimizeHasLoaded } = this.props;
+
+    if (optimizeHasLoaded || numOfChecks > 16) {
+      this.setState(() => ({
+        showPage: true,
+      }));
+    } else {
+      this.setState(prevState => ({
+        numOfChecks: prevState.numOfChecks + 1,
+      }));
+
+      setTimeout(() => {
+        this.wait();
+      }, 250);
     }
-    <IndependentJournalismSection />
-    <PromotionPopUp />
-    <ConsentBanner />
-  </Page>
-);
+  }
+
+  render() {
+    const { dailyEditionsVariant } = this.props;
+    const { numOfChecks, showPage } = this.state;
+
+    if (numOfChecks === 0 && showPage === false) {
+      this.wait();
+    }
+
+    return (
+      <div>
+        {showPage && (
+        <Page
+          header={<CountrySwitcherHeader />}
+          footer={
+            <Footer>
+              <CustomerService selectedCountryGroup={countryGroupId} />
+              <SubscriptionFaq subscriptionProduct="DigitalPack" />
+            </Footer>}
+        >
+          <CampaignHeader
+            countryGroupId={countryGroupId}
+            dailyEditionsVariant={dailyEditionsVariant}
+          />
+          {
+          dailyEditionsVariant ?
+            (
+              <div>
+                <ProductBlockB />
+                <AdFreeSectionB />
+              </div>
+            ) : (
+              <div>
+                <ProductBlock countryGroupId={countryGroupId} />
+                <AdFreeSection headingSize={2} />
+
+                <Content appearance="feature" id="subscribe">
+                  <Text title="Subscribe to Digital Pack today">
+                    <p>Choose how you’d like to pay</p>
+                  </Text>
+                  <Form />
+                  <ProductPageInfoChip >
+                      You can cancel your subscription at any time
+                  </ProductPageInfoChip>
+                </Content>
+              </div>
+            )
+        }
+          <IndependentJournalismSection />
+          <PromotionPopUp />
+          <ConsentBanner />
+        </Page>)
+    }
+      </div>
+    );
+
+  }
+}
 
 const ConnectedLandingPage = connect(mapStateToProps)(LandingPage);
 

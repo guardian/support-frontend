@@ -151,11 +151,16 @@ function init<S, A>(
       combineReducers({ page: pageReducer ? pageReducer(initialState) : null, common: commonReducer }),
       storeEnhancer(thunk),
     );
-
+    // setTimeout(() => {
+    console.log('page js Exp', store.getState().common.optimizeExperiments);
     addOptimizeExperiments((exp: OptimizeExperiment) => {
       trackNewOptimizeExperiment(exp, participations);
+      // const expTest = { id: 'ZVlxqx3wRDGSDw-HYZLiAQ', variant: '1' };
+
       store.dispatch(setExperimentVariant(exp));
+      // console.log({ exp });
     });
+    // }, 5000);
 
     return store;
   } catch (err) {

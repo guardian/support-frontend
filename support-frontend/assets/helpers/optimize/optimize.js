@@ -30,12 +30,15 @@ function gtag() {
   if (optimizeIsLoaded()) {
     // eslint-disable-next-line prefer-rest-params
     window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
-  }
 }
 
 function getExperimentsFromApi(callback: (variant: string, id: string) => void) {
-  // $FlowIgnore
-  gtag('event', 'optimize.callback', { callback });
+  // the Timeout is to delay the callback until the eventListener has been added to the DOM
+  console.log('callback', callback);
+  setTimeout(() => {
+    // $FlowIgnore
+    gtag('event', 'optimize.callback', { callback });
+  }, 100);
 }
 
 function readExperimentsFromSession(): OptimizeExperiments {
@@ -72,9 +75,12 @@ function storeExperimentInSession(experiment: OptimizeExperiment): boolean {
 }
 
 function addExperimentUpdateListener(addToStoreCallback: OptimizeExperiment => void) {
+  console.log('addExperimentUpdateListener');
   window.addEventListener(
     EXPERIMENTS_UPDATED,
-    ev => addToStoreCallback({ id: ev.detail.id, variant: ev.detail.variant }),
+    (ev) => {
+      addToStoreCallback({ id: ev.detail.id, variant: ev.detail.variant });
+    },
   );
 }
 
@@ -91,6 +97,17 @@ function getExperimentsFromUrl(addToStoreCallback: (OptimizeExperiment) => void)
   }
 }
 
+function getOptimizeExperiments() {
+  getExperimentsFromApi((value, name) => {
+    window.dispatchEvent(new CustomEvent(EXPERIMENTS_UPDATED, {
+      detail: {
+        id: name,
+        variant: value,
+      },
+    }));
+  });
+}
+
 function addOptimizeExperiments(addToStoreCallback: (OptimizeExperiment) => void) {
   // Store experiments in the session as well as Redux
   const withSessionStorageCallback = (exp: OptimizeExperiment) => {
@@ -103,21 +120,12 @@ function addOptimizeExperiments(addToStoreCallback: (OptimizeExperiment) => void
   if (optimizeIsLoaded()) {
     getExperimentsFromApi((variant, id) => withSessionStorageCallback({ id, variant }));
   } else {
-    // Add a listener so we can update the store once Optimize loads
+  // Add a listener so we can update the store once Optimize loads
     addExperimentUpdateListener(withSessionStorageCallback);
+    getOptimizeExperiments();
   }
 }
 
-function getOptimizeExperiments() {
-  getExperimentsFromApi((value, name) => {
-    window.dispatchEvent(new CustomEvent(EXPERIMENTS_UPDATED, {
-      detail: {
-        id: name,
-        variant: value,
-      },
-    }));
-  });
-}
 
 // ----- Exports ----- //
 
