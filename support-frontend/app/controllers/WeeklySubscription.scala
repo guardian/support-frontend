@@ -43,9 +43,7 @@ class WeeklySubscription(
   implicit val a: AssetsResolver = assets
 
 
-  //TODO: remove Google Auth from this endpoint before we go live
-  def displayForm(): Action[AnyContent] =
-    (PrivateAction andThen authAction andThen authenticatedAction(subscriptionsClientId)).async { implicit request =>
+  def displayForm(): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user).fold(
         error => {
