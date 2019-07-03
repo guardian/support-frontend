@@ -27,37 +27,24 @@ function optimizeIsLoaded() {
 }
 
 function gtag() {
-  let count = 0;
+  let timeoutCount = 0;
   const checkForDataLayer = setInterval(() => {
+
     if (optimizeIsLoaded()) {
-      console.log('gtag fired');
       clearInterval(checkForDataLayer);
+
       // eslint-disable-next-line prefer-rest-params
       window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
-    } else if (count > 160) {
-      console.log('gtag called again');
+
+    } else if (timeoutCount > 40) {
       clearInterval(checkForDataLayer);
     }
-    count += 1;
+    timeoutCount += 1;
 
-  }, 16);
-
-  // if (optimizeIsLoaded()) {
-  //   console.log('gtag fired');
-  //   // eslint-disable-next-line prefer-rest-params
-  //   window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
-  // } else {
-  //   console.log('gtag called again');
-  //   setTimeout(() => {
-  //     // eslint-disable-next-line prefer-spread
-  //     gtag.apply(null, arguments); // eslint-disable-line prefer-rest-params
-  //   }, 250);
-  // }
+  }, 100);
 }
 
 function getExperimentsFromApi(callback: (variant: string, id: string) => void) {
-  // the Timeout is to delay the callback until the eventListener has been added to the DOM
-  console.log('callback', callback);
   // $FlowIgnore
   gtag('event', 'optimize.callback', { callback });
 }
@@ -96,12 +83,9 @@ function storeExperimentInSession(experiment: OptimizeExperiment): boolean {
 }
 
 function addExperimentUpdateListener(addToStoreCallback: OptimizeExperiment => void) {
-  console.log('addExperimentUpdateListener');
   window.addEventListener(
     EXPERIMENTS_UPDATED,
-    (ev) => {
-      addToStoreCallback({ id: ev.detail.id, variant: ev.detail.variant });
-    },
+    ev => addToStoreCallback({ id: ev.detail.id, variant: ev.detail.variant }),
   );
 }
 

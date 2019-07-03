@@ -90,43 +90,41 @@ type Props = {
 
 type State = {
   showPage: boolean,
-  numOfChecks: number,
+  pageReadyChecks: number,
 }
 
 // ----- Render ----- //
 class LandingPage extends Component<Props, State> {
   state = {
     showPage: this.props.optimizeHasLoaded,
-    numOfChecks: 0,
+    pageReadyChecks: 0,
   }
 
-  wait = () => {
-    const { numOfChecks } = this.state;
+  checkOptimizeIsReady = (interval: number, maxNumberOfChecks: number) => {
+    const { pageReadyChecks } = this.state;
     const { optimizeHasLoaded } = this.props;
 
-    if (optimizeHasLoaded || numOfChecks > 16) {
+    if (optimizeHasLoaded || pageReadyChecks > maxNumberOfChecks) {
       this.setState(() => ({
         showPage: true,
       }));
     } else {
       this.setState(prevState => ({
-        numOfChecks: prevState.numOfChecks + 1,
+        pageReadyChecks: prevState.pageReadyChecks + 1,
       }));
 
       setTimeout(() => {
-        this.wait();
-      }, 250);
+        this.checkOptimizeIsReady(250, 16);
+      }, interval);
     }
-    console.log('numOfChecks:', numOfChecks);
-    console.log('optimizeHasLoaded', optimizeHasLoaded);
   }
 
   render() {
     const { dailyEditionsVariant } = this.props;
-    const { numOfChecks, showPage } = this.state;
+    const { pageReadyChecks, showPage } = this.state;
 
-    if (numOfChecks === 0 && showPage === false) {
-      this.wait();
+    if (pageReadyChecks === 0 && showPage === false) {
+      this.checkOptimizeIsReady(250, 16);
     }
 
     return (
