@@ -20,6 +20,8 @@ const EXPERIMENTS_UPDATED = 'OPTIMIZE_EXPERIMENTS_UPDATED';
 
 const OPTIMIZE_QUERY_PARAMETER = 'utm_expid';
 
+const OPTIMIZE_CHECK_TIMEOUT = 4000; // milliseconds
+
 // ----- Functions ----- //
 
 function optimizeIsLoaded() {
@@ -27,7 +29,10 @@ function optimizeIsLoaded() {
 }
 
 function gtag() {
-  let timeoutCount = 0;
+  let optimizeReadyChecks = 0;
+  const interval = 100;
+  const maxOptimizeReadyChecks = OPTIMIZE_CHECK_TIMEOUT / interval;
+
   const checkForDataLayer = setInterval(() => {
 
     if (optimizeIsLoaded()) {
@@ -36,12 +41,12 @@ function gtag() {
       // eslint-disable-next-line prefer-rest-params
       window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
 
-    } else if (timeoutCount > 40) {
+    } else if (optimizeReadyChecks > maxOptimizeReadyChecks) {
       clearInterval(checkForDataLayer);
     }
-    timeoutCount += 1;
+    optimizeReadyChecks += 1;
 
-  }, 100);
+  }, interval);
 }
 
 function getExperimentsFromApi(callback: (variant: string, id: string) => void) {
@@ -135,6 +140,7 @@ function addOptimizeExperiments(addToStoreCallback: (OptimizeExperiment) => void
 
 export {
   OPTIMIZE_QUERY_PARAMETER,
+  OPTIMIZE_CHECK_TIMEOUT,
   addOptimizeExperiments,
   readExperimentsFromSession,
   getOptimizeExperiments,

@@ -8,6 +8,7 @@ import { Provider, connect } from 'react-redux';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
+import { OPTIMIZE_CHECK_TIMEOUT } from 'helpers/optimize/optimize';
 
 import Page from 'components/page/page';
 import headerWithCountrySwitcherContainer
@@ -74,11 +75,11 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 const mapStateToProps = (state) => {
   const { optimizeExperiments } = state.common;
   const dailyEditionsExperimentId = 'ZVlxqx3wRDGSDw-HYZLiAQ';
-  const dailyEditionsVariant2 = optimizeExperiments
+  const dailyEditionsVariant = optimizeExperiments
     .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
 
   return {
-    dailyEditionsVariant: dailyEditionsVariant2 != null ? dailyEditionsVariant2 : false,
+    dailyEditionsVariant,
     optimizeHasLoaded: optimizeExperiments.length > 0,
   };
 };
@@ -100,7 +101,8 @@ class LandingPage extends Component<Props, State> {
     pageReadyChecks: 0,
   }
 
-  checkOptimizeIsReady = (interval: number, maxNumberOfChecks: number) => {
+  checkOptimizeIsReady = (interval: number) => {
+    const maxNumberOfChecks = OPTIMIZE_CHECK_TIMEOUT / interval;
     const { pageReadyChecks } = this.state;
     const { optimizeHasLoaded } = this.props;
 
@@ -114,7 +116,7 @@ class LandingPage extends Component<Props, State> {
       }));
 
       setTimeout(() => {
-        this.checkOptimizeIsReady(250, 16);
+        this.checkOptimizeIsReady(250);
       }, interval);
     }
   }
@@ -124,7 +126,7 @@ class LandingPage extends Component<Props, State> {
     const { pageReadyChecks, showPage } = this.state;
 
     if (pageReadyChecks === 0 && showPage === false) {
-      this.checkOptimizeIsReady(250, 16);
+      this.checkOptimizeIsReady(250);
     }
 
     return (
