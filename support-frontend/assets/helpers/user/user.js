@@ -90,6 +90,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     setFullName,
     setIsSignedIn,
     setEmail,
+    setStateField,
     setIsRecurringContributor,
     setTestUser,
     setPostDeploymentTestUser,
@@ -139,6 +140,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setFirstName(window.guardian.user.firstName));
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
+    dispatch(setStateField(window.guardian.user.county || window.guardian.geoip.stateCode)); // default value from Identity Billing Address, or Fastly GEO-IP
     dispatch(setIsSignedIn(true));
     dispatch(setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))));
   } else if (userAppearsLoggedIn) {
@@ -157,6 +159,9 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
           }
           if (data.displayName) {
             dispatch(setDisplayName(data.displayName));
+          }
+          if (data.state) {
+            // TODO - will see if I can do this in another PR, leaving as default behaviour for now
           }
         });
       }

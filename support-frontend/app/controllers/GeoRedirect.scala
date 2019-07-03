@@ -4,7 +4,7 @@ import actions.CustomActionBuilders
 import com.gu.i18n.CountryGroup._
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc.{AbstractController, Action, AnyContent}
-import utils.RequestCountry._
+import utils.FastlyGEOIP._
 
 trait GeoRedirect {
   self: AbstractController =>

@@ -19,7 +19,7 @@ import lib.RedirectWithEncodedQueryString
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
-import utils.RequestCountry._
+import utils.FastlyGEOIP._
 import views.{EmptyDiv, Preload}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -103,6 +103,7 @@ class Application(
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
+    val stateCode = request.fastlyRegion
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
 
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
@@ -110,12 +111,12 @@ class Application(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption, guestAccountCreationToken)),
-      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken))
+      _ => Ok(contributionsHtml(countryCode, stateCode, None, campaignCodeOption, guestAccountCreationToken)),
+      user => Ok(contributionsHtml(countryCode, stateCode, user, campaignCodeOption, guestAccountCreationToken))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String], guestAccountCreationToken: Option[String])
+  private def contributionsHtml(countryCode: String, stateCode: Option[String], idUser: Option[IdUser], campaignCode: Option[String])
                                (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
@@ -150,7 +151,9 @@ class Application(
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       idUser = idUser,
-      guestAccountCreationToken = guestAccountCreationToken
+      guestAccountCreationToken = guestAccountCreationToken,
+      countryCode,
+      stateCode
     )
   }
 
