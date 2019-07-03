@@ -27,19 +27,39 @@ function optimizeIsLoaded() {
 }
 
 function gtag() {
-  if (optimizeIsLoaded()) {
-    // eslint-disable-next-line prefer-rest-params
-    window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
-  }
+  let count = 0;
+  const checkForDataLayer = setInterval(() => {
+    if (optimizeIsLoaded()) {
+      console.log('gtag fired');
+      clearInterval(checkForDataLayer);
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
+    } else if (count > 160) {
+      console.log('gtag called again');
+      clearInterval(checkForDataLayer);
+    }
+    count += 1;
+
+  }, 16);
+
+  // if (optimizeIsLoaded()) {
+  //   console.log('gtag fired');
+  //   // eslint-disable-next-line prefer-rest-params
+  //   window.dataLayer.push(arguments); // unfortunately Optimize seems to need the Arguments object, not just an array
+  // } else {
+  //   console.log('gtag called again');
+  //   setTimeout(() => {
+  //     // eslint-disable-next-line prefer-spread
+  //     gtag.apply(null, arguments); // eslint-disable-line prefer-rest-params
+  //   }, 250);
+  // }
 }
 
 function getExperimentsFromApi(callback: (variant: string, id: string) => void) {
   // the Timeout is to delay the callback until the eventListener has been added to the DOM
   console.log('callback', callback);
-  setTimeout(() => {
-    // $FlowIgnore
-    gtag('event', 'optimize.callback', { callback });
-  }, 100);
+  // $FlowIgnore
+  gtag('event', 'optimize.callback', { callback });
 }
 
 function readExperimentsFromSession(): OptimizeExperiments {
