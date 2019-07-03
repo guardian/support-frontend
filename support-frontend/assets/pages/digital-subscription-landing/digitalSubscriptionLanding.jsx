@@ -74,7 +74,7 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const mapStateToProps = (state) => {
   const { optimizeExperiments } = state.common;
-  const dailyEditionsExperimentId = 'ZVlxqx3wRDGSDw-HYZLiAQ';
+  const dailyEditionsExperimentId = 'og2J7w-HQ4aFyiY9HwpAdg';
   const dailyEditionsVariant = optimizeExperiments
     .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
 
@@ -116,7 +116,7 @@ class LandingPage extends Component<Props, State> {
       }));
 
       setTimeout(() => {
-        this.checkOptimizeIsReady(250);
+        this.checkOptimizeIsReady(interval);
       }, interval);
     }
   }
@@ -124,9 +124,9 @@ class LandingPage extends Component<Props, State> {
   render() {
     const { dailyEditionsVariant } = this.props;
     const { pageReadyChecks, showPage } = this.state;
-
+    const interval = 250;
     if (pageReadyChecks === 0 && showPage === false) {
-      this.checkOptimizeIsReady(250);
+      this.checkOptimizeIsReady(interval);
     }
 
     return (
