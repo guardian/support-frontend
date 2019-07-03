@@ -87,7 +87,8 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
           paymentMethod = state.paymentMethod,
           sfContactId = SfContactId(state.salesForceContact.Id),
           directDebitMandateId = directDebitMandateId,
-          promotion = maybePromotion
+          promotion = maybePromotion,
+          state.giftRecipient
         )
         case g: GuardianWeekly =>
           GuardianWeeklyEmailFields(
@@ -101,7 +102,8 @@ class SendThankYouEmail(thankYouEmailService: EmailService, servicesProvider: Se
             paymentMethod = state.paymentMethod,
             sfContactId = SfContactId(state.salesForceContact.Id),
             directDebitMandateId = directDebitMandateId,
-            promotion = maybePromotion
+            promotion = maybePromotion,
+            state.giftRecipient
           )
       }
     )
