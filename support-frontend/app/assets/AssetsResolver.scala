@@ -40,7 +40,7 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
     }
   }
 
-  private val ssrHtmlCache: Map[String,Html] = {
+  protected def loadSsrHtmlCache: Map[String,Html] = {
     val files = env.getFile("conf/ssr-cache").listFiles.filter(_.getName.endsWith(".html"))
     val loadedHtml = for {
       file <- files
@@ -51,6 +51,8 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
 
     loadedHtml.toMap
   }
+
+  private val ssrHtmlCache = loadSsrHtmlCache
 
   def getSsrCacheContentsAsHtml(divId: String, file: String): ReactDiv = {
     ssrHtmlCache.get(file).map(html => SSRContent(divId, html)).getOrElse(EmptyDiv(divId))
