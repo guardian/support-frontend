@@ -46,7 +46,8 @@
 // Media agnostic image styles
 
 .showcase-hero__image {
-  filter: grayscale(1) contrast(120%);
+  // filter: grayscale(1) contrast(120%);
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
   overflow: hidden;
   will-change: transform;
   opacity: 0;
@@ -100,10 +101,8 @@
 
 @include mq($until: desktop) {
   .showcase-hero {
-    min-height: 550px;
-    @include mq($from: mobileLandscape) {
-      padding-bottom: 20px;
-    }
+    min-height: 500px;
+    padding-bottom: 20px;
   }
 
   .showcase-hero-heading {
@@ -347,6 +346,81 @@
     opacity: 1;
   }
 }
+
+// @keyframes animateInLeft {
+
+// 	0% {
+//     transform: translateX(0%);
+//     opacity: 1;
+// 	}
+
+// 	4% {
+//     transform: translateX(-0.04%);
+//     opacity: 1;
+// 	}
+
+// 	8% {
+//     transform: translateX(-0.16%);
+//     opacity: 1;
+// 	}
+
+// 	14% {
+//     transform: translateX(-0.17%);
+//     opacity: 1;
+// 	}
+
+// 	18% {
+//     transform: translateX(0.04%);
+//     opacity: 1;
+// 	}
+
+// 	26% {
+//     transform: translateX(0.58%);
+//     opacity: 1;
+// 	}
+
+// 	28% {
+//     transform: translateX(0.55%);
+//     opacity: 1;
+// 	}
+
+// 	40% {
+//     transform: translateX(-1.56%);
+//     opacity: 1;
+// 	}
+
+// 	42% {
+//     transform: translateX(-1.64%);
+//     opacity: 1;
+// 	}
+
+// 	56% {
+//     transform: translateX(4.63%);
+//     opacity: 1;
+// 	}
+
+// 	58% {
+//     transform: translateX(4.4%);
+//     opacity: 1;
+// 	}
+
+// 	72% {
+//     transform: translateX(-13.12%);
+//     opacity: 1;
+// 	}
+
+// 	86% {
+//     transform: translateX(37.06%);
+//     opacity: 1;
+// 	}
+
+// 	100% {
+//     transform: translateX(0%);
+//     opacity: 1;
+// 	}
+
+// }
+
 
 @keyframes animateInRight {
   0% {
