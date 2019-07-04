@@ -197,7 +197,7 @@ const displayPrice = (
 ));
 
 function getCurrency(country: IsoCountry): IsoCurrency {
-  const {currency} = getCountryGroup(country);
+  const { currency } = getCountryGroup(country);
   return currency;
 }
 
