@@ -19,6 +19,7 @@ import config.Configuration.IdentityUrl
 import services.{HttpIdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import fixtures.TestCSRFComponents
+import play.twirl.api.Html
 
 trait DisplayFormMocks extends TestCSRFComponents {
   val credentials = AccessCredentials.Cookies("", None)
@@ -32,6 +33,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
   val assetResolver = new AssetsResolver("", "", mock[Environment]) {
     override def apply(path: String): String = path
     override def apply(path: RefPath): String = path.value
+    override protected def loadSsrHtmlCache: Map[String,Html] = Map()
   }
 
   val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
