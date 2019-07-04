@@ -97,6 +97,18 @@ const renderAmount = (currency: Currency, spokenCurrency: SpokenCurrency, props:
   </li>
 );
 
+const renderEmptyAmount = (id: string) => (
+  <li className="form__radio-group-item amounts__placeholder">
+    <input
+      id={`contributionAmount-${id}`}
+      className="form__radio-group-input"
+      type="radio"
+      name="contributionAmount"
+    />
+    <label htmlFor={`contributionAmount-${id}`} className="form__radio-group-label">&nbsp;</label>
+  </li>
+);
+
 const iconForCountryGroup = (countryGroupId: CountryGroupId): React$Element<*> => {
   switch (countryGroupId) {
     case GBPCountries: return <SvgPound />;
@@ -135,7 +147,7 @@ const getAmountPerWeekBreakdown = (
   return '';
 };
 
-function ContributionAmount(props: PropTypes) {
+function withProps(props: PropTypes) {
   const validAmounts: Amount[] = props.amounts[props.countryGroupId][props.contributionType];
   const showOther: boolean = props.selectedAmounts[props.contributionType] === 'other';
   const showWeeklyBreakdown: boolean = props.contributionType === 'MONTHLY' || props.contributionType === 'ANNUAL';
@@ -198,4 +210,18 @@ function ContributionAmount(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
+function withoutProps() {
+  return (
+    <fieldset className={classNameWithModifiers('form__radio-group', ['pills', 'contribution-amount'])}>
+      <legend className={classNameWithModifiers('form__legend', ['radio-group'])}>Amount</legend>
+      <ul className="form__radio-group-list">
+        {
+          ['a', 'b', 'c', 'd'].map(renderEmptyAmount)
+        }
+      </ul>
+    </fieldset>
+  );
+}
+
+export const ContributionAmount = connect(mapStateToProps, mapDispatchToProps)(withProps);
+export const EmptyContributionAmount = withoutProps;

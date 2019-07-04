@@ -79,7 +79,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 
 // ----- Render ----- //
 
-function ContributionFormFields(props: PropTypes) {
+function withProps(props: PropTypes) {
   const {
     firstName,
     lastName,
@@ -163,4 +163,43 @@ function ContributionFormFields(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionFormFields);
+function withoutProps() {
+  return (
+    <div className="form-fields">
+      <ContributionTextInput
+        id="contributionEmail"
+        name="contribution-email"
+        label="Email address"
+        type="email"
+        placeholder="example@domain.com"
+        icon={<SvgEnvelope />}
+        disabled
+        showRequiredLabel
+        errorMessage={null}
+      />
+      <div>
+        <ContributionTextInput
+          id="contributionFirstName"
+          name="contribution-fname"
+          label="First name"
+          icon={<SvgUser />}
+          disabled
+          showRequiredLabel
+          errorMessage={null}
+        />
+        <ContributionTextInput
+          id="contributionLastName"
+          name="contribution-lname"
+          label="Last name"
+          icon={<SvgUser />}
+          disabled
+          showRequiredLabel
+          errorMessage={null}
+        />
+      </div>
+    </div>
+  );
+}
+
+export const ContributionFormFields = connect(mapStateToProps, mapDispatchToProps)(withProps);
+export const EmptyContributionFormFields = withoutProps;
