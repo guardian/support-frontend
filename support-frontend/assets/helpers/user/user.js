@@ -58,6 +58,14 @@ const signOut = () => { window.location.href = getSignoutUrl(); };
 
 const doesUserAppearToBeSignedIn = () => !!cookie.get('GU_U');
 
+// JTL: The user cookie is built to have particular values at
+// particular indices by design. Index 7 in the cookie object represents
+// whether a signed in user is validated or not. Though it's not ideal
+// to grab values at unnamed indexes, this is a decision made a long
+// time ago, on which a lot of other code relies, so it's unlikely
+// there will be a breaking change affecting our base without some advance
+// communication to a broader segment of engineering that also uses
+// the user cookie.
 const getEmailValidatedFromUserCookie = (guuCookie: ?string) => {
   if (guuCookie) {
     const tokens = guuCookie.split('.');
