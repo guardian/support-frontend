@@ -31,11 +31,11 @@ import { type UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { OtherAmounts, SelectedAmounts } from 'helpers/contributions';
 import type { StripePaymentRequestButtonMethod } from 'helpers/paymentIntegrations/readerRevenueApis';
 
-import ContributionFormFields from './ContributionFormFields';
-import ContributionTypeTabs from './ContributionTypeTabs';
-import ContributionAmount from './ContributionAmount';
-import PaymentMethodSelector from './PaymentMethodSelector';
-import ContributionSubmit from './ContributionSubmit';
+import { ContributionFormFields, EmptyContributionFormFields } from './ContributionFormFields';
+import { ContributionTypeTabs, EmptyContributionTypeTabs } from './ContributionTypeTabs';
+import { ContributionAmount, EmptyContributionAmount } from './ContributionAmount';
+import { PaymentMethodSelector, EmptyPaymentMethodSelector } from './PaymentMethodSelector';
+import { ContributionSubmit, EmptyContributionSubmit } from './ContributionSubmit';
 
 import { type State } from 'pages/contributions-landing/contributionsLandingReducer';
 
@@ -220,7 +220,7 @@ function onSubmit(props: PropTypes): Event => void {
 
 // ----- Render ----- //
 
-function ContributionForm(props: PropTypes) {
+function withProps(props: PropTypes) {
   const campaignName = getCampaignName();
 
   return (
@@ -259,4 +259,24 @@ function ContributionForm(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
+function withoutProps() {
+  return (
+    <form className={classNameWithModifiers('form', ['contribution'])}>
+      <div>
+        <EmptyContributionTypeTabs />
+        <EmptyContributionAmount />
+        <div className={classNameWithModifiers('form', ['content'])}>
+          <EmptyContributionFormFields />
+          <EmptyPaymentMethodSelector />
+          <EmptyContributionSubmit />
+        </div>
+      </div>
+      <div>
+        <ProgressMessage message={['Loading the page']} />
+      </div>
+    </form>
+  );
+}
+
+export const ContributionForm = connect(mapStateToProps, mapDispatchToProps)(withProps);
+export const EmptyContributionForm = withoutProps;

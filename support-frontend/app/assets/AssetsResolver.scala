@@ -3,8 +3,7 @@ package assets
 import play.api.Environment
 import play.api.libs.json._
 import play.twirl.api.Html
-
-import views.{SSRContent,EmptyDiv,ReactDiv}
+import views.{EmptyDiv, ReactDiv, SSRContent}
 
 case class RefPath(value: String)
 case class StyleContent(value: Html) extends AnyVal
@@ -41,8 +40,22 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
     }
   }
 
-  def getSsrCacheContentsAsHtml(divId: String, file: String): ReactDiv = {
-    loadResource(s"ssr-cache/$file").map(string => SSRContent(divId,Html(string))).getOrElse(EmptyDiv(divId))
+  protected def loadSsrHtmlCache: Map[String,Html] = {
+    val files = env.getFile("conf/ssr-cache").listFiles.filter(_.getName.endsWith(".html"))
+    val loadedHtml = for {
+      file <- files
+      html <- loadResource(s"ssr-cache/${file.getName}")
+    } yield {
+      file.getName -> Html(html)
+    }
+
+    loadedHtml.toMap
+  }
+
+  private val ssrHtmlCache = loadSsrHtmlCache
+
+  def getSsrCacheContentsAsHtml(divId: String, file: String, classes: Option[String] = None): ReactDiv = {
+    ssrHtmlCache.get(file).map(html => SSRContent(divId, html, classes)).getOrElse(EmptyDiv(divId))
   }
 
 }

@@ -19,7 +19,8 @@ object PaperFieldsGenerator {
     paymentMethod: PaymentMethod,
     sfContactId: SfContactId,
     directDebitMandateId: Option[String],
-    promotion: Option[Promotion]
+    promotion: Option[Promotion],
+    giftRecipient: Option[GiftRecipient]
   ): List[(String, String)] = {
 
     val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date
@@ -27,6 +28,14 @@ object PaperFieldsGenerator {
     val paymentFields = getPaymentFields(paymentMethod, directDebitMandateId)
 
     val deliveryAddressFields = getAddressFields(user)
+
+    val giftRecipientFields = giftRecipient.map(
+      recipient =>
+        List(
+          "giftee_first_name" -> recipient.firstName,
+          "giftee_last_name" -> recipient.lastName,
+        )
+    ).getOrElse(Nil)
 
     val fields = List(
       "ZuoraSubscriberId" -> subscriptionNumber,
@@ -38,7 +47,7 @@ object PaperFieldsGenerator {
       "date_of_first_paper" -> SubscriptionEmailFieldHelpers.formatDate(firstDeliveryDate.getOrElse(firstPaymentDate)),
       "date_of_first_payment" -> SubscriptionEmailFieldHelpers.formatDate(firstPaymentDate),
       "subscription_rate" -> SubscriptionEmailFieldHelpers.describe(paymentSchedule, billingPeriod, currency, promotion)
-    ) ++ paymentFields ++ deliveryAddressFields
+    ) ++ paymentFields ++ deliveryAddressFields ++ giftRecipientFields
 
     fields
   }

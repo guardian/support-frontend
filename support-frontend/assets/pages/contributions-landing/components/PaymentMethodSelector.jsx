@@ -99,7 +99,7 @@ function getPaymentMethodLogo(paymentMethod: PaymentMethod) {
   }
 }
 
-function PaymentMethodSelector(props: PropTypes) {
+function withProps(props: PropTypes) {
 
   const paymentMethods: PaymentMethod[] =
     getValidPaymentMethods(props.contributionType, props.switches, props.countryId);
@@ -198,4 +198,31 @@ function PaymentMethodSelector(props: PropTypes) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PaymentMethodSelector);
+function withoutProps() {
+  return (
+    <fieldset className={classNameWithModifiers('form__radio-group', ['buttons', 'contribution-pay'])}>
+      <legend className="form__legend">Payment method</legend>
+      <ul className="form__radio-group-list">
+        {[Stripe, PayPal, DirectDebit].map(paymentMethod => (
+          <li className="form__radio-group-item">
+            <input
+              id={`paymentMethodSelector-${paymentMethod}`}
+              className="form__radio-group-input"
+              name="paymentMethodSelector"
+              type="radio"
+              value={paymentMethod}
+            />
+            <label htmlFor={`paymentMethodSelector-${paymentMethod}`} className="form__radio-group-label">
+              <span className="radio-ui" />
+              <span className="radio-ui__label">{getPaymentLabel(paymentMethod)}</span>
+              {getPaymentMethodLogo(paymentMethod)}
+            </label>
+          </li>
+          ))}
+      </ul>
+    </fieldset>
+  );
+}
+
+export const PaymentMethodSelector = connect(mapStateToProps, mapDispatchToProps)(withProps);
+export const EmptyPaymentMethodSelector = withoutProps;

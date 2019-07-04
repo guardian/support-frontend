@@ -19,7 +19,8 @@ case class PaperEmailFields(
   paymentMethod: PaymentMethod,
   sfContactId: SfContactId,
   directDebitMandateId: Option[String] = None,
-  promotion: Option[Promotion] = None
+  promotion: Option[Promotion] = None,
+  giftRecipient: Option[GiftRecipient] = None
 ) extends EmailFields {
 
   val additionalFields = List("package" -> productOptions.toString)
@@ -30,7 +31,7 @@ case class PaperEmailFields(
   }
 
   override val fields = PaperFieldsGenerator.fieldsFor(
-    subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId, promotion
+    subscriptionNumber, billingPeriod, user, paymentSchedule, firstDeliveryDate, currency, paymentMethod, sfContactId, directDebitMandateId, promotion, giftRecipient
   ) ++ additionalFields
 
   override def payload: String = super.payload(user.primaryEmailAddress, dataExtension)
