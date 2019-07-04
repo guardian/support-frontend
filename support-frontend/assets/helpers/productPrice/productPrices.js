@@ -9,6 +9,7 @@ import {
   GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/billingPeriods';
+import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -22,7 +23,6 @@ import {
 import { fixDecimals } from 'helpers/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/url';
-import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
 
 // ----- Types ----- //
 
@@ -84,10 +84,16 @@ const hasIntroductoryPrice = (promotion: ?Promotion): boolean %checks =>
   !!promotion.introductoryPrice;
 
 function applyDiscount(price: ProductPrice, promotion: ?Promotion) {
-  if (promotion && hasDiscount(promotion)) {
+  if (hasDiscount(promotion)) {
     return {
       ...price,
       price: promotion.discountedPrice,
+    };
+  } else if (hasIntroductoryPrice(promotion)) {
+    return {
+      ...price,
+      // $FlowIgnore - we have checked this above
+      price: promotion.introductoryPrice.price,
     };
   }
   return price;
@@ -191,7 +197,7 @@ const displayPrice = (
 ));
 
 function getCurrency(country: IsoCountry): IsoCurrency {
-  const { currency } = getCountryGroup(country);
+  const {currency} = getCountryGroup(country);
   return currency;
 }
 
