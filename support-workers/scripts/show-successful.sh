@@ -4,7 +4,6 @@ grep executionArn | \
 awk '{print $2;}' | \
 sed 's=^"\(.*\)",$=\1=' | \
 xargs -n1 aws stepfunctions get-execution-history --profile membership --region eu-west-1 --execution-arn | \
-jq '.events[-1].executionSucceededEventDetails.output' | \
-sed 's=\\"="=g' | \
-sed 's=^"\(.*\)"$=\1=' | \
-jq '.[0].requestInfo'
+jq '.events[-1] | { timestamp:(.timestamp | todate), output:(.executionSucceededEventDetails.output | fromjson) }' | \
+jq '{ timestamp, requestInfo: (.output[0].requestInfo) }'
+
