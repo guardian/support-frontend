@@ -30,34 +30,33 @@
 
 @main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css) {
   <script type="text/javascript">
-    window.guardian = window.guardian || {};
-    @idUser.map { user =>
-      window.guardian.user = {
-        id: "@user.id",
-        email: "@user.primaryEmailAddress",
-        @user.publicFields.displayName.map { displayName =>
-          displayName: "@displayName",
-        }
-        @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
-          firstName: "@firstName",
-          lastName: "@lastName",
-        }
-      };
-    };
-    window.guardian.stripeKeyDefaultCurrencies = {
-      ONE_OFF: {
-        default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
-        uat: "@oneOffUatStripeConfig.forCurrency(None).publicKey"
-      },
-      REGULAR: {
-        default: "@regularDefaultStripeConfig.forCurrency(None).publicKey",
-        uat: "@regularUatStripeConfig.forCurrency(None).publicKey"
+  window.guardian = window.guardian || {};
+  @idUser.map { user =>
+    window.guardian.user = {
+      id: "@user.id",
+      email: "@user.primaryEmailAddress",
+      @user.publicFields.displayName.map { displayName =>
+        displayName: "@displayName",
+      }
+      @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
+        firstName: "@firstName",
+        lastName: "@lastName",
       }
     };
-    window.guardian.geoip = {
-      countryCode: "@countryCode.mkString",
-      stateCode: "@stateCode.mkString"
+  };
+  window.guardian.stripeKeyDefaultCurrencies = {
+    ONE_OFF: {
+      default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
+      uat: "@oneOffUatStripeConfig.forCurrency(None).publicKey"
+    },
+    REGULAR: {
+      default: "@regularDefaultStripeConfig.forCurrency(None).publicKey",
+      uat: "@regularUatStripeConfig.forCurrency(None).publicKey"
     }
+  };
+  window.guardian.geoip = {
+    countryCode: "@countryCode.mkString",
+    stateCode: "@stateCode.mkString"
   };
   window.guardian.stripeKeyAustralia = {
     ONE_OFF: {
