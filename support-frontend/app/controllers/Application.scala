@@ -116,7 +116,7 @@ class Application(
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, stateCode: Option[String], idUser: Option[IdUser], campaignCode: Option[String])
+  private def contributionsHtml(countryCode: String, stateCode: Option[String], idUser: Option[IdUser], campaignCode: Option[String], guestAccountCreationToken: Option[String])
                                (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
@@ -152,8 +152,8 @@ class Application(
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       idUser = idUser,
       guestAccountCreationToken = guestAccountCreationToken,
-      countryCode,
-      stateCode
+      countryCode = countryCode,
+      stateCode = stateCode
     )
   }
 
