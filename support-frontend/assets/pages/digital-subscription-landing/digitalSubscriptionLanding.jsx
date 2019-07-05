@@ -35,8 +35,8 @@ import Form from './components/form';
 import './digitalSubscriptionLanding.scss';
 import './components/theMoment.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
-import digitalSubscriptionLandingReducer
-  from './digitalSubscriptionLandingReducer';
+import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
+import { isPostDeployUser } from 'helpers/user/user';
 
 // ----- Redux Store ----- //
 
@@ -74,9 +74,10 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const mapStateToProps = (state) => {
   const { optimizeExperiments } = state.common;
-  const dailyEditionsExperimentId = 'xOzjpaFDQlO5L6_ORotRWA';
+  const dailyEditionsExperimentId = 'ZVlxqx3wRDGSDw-HYZLiAQ';
   const dailyEditionsVariant = optimizeExperiments
-    .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
+    .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0
+    && !isPostDeployUser();
 
   return {
     dailyEditionsVariant,
