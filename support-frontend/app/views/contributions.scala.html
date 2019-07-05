@@ -24,7 +24,7 @@
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent],
-  countryCode: Option[String],
+  countryCode: String,
   stateCode: Option[String]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -43,7 +43,7 @@
         lastName: "@lastName",
       }
     };
-  };
+  }
   window.guardian.stripeKeyDefaultCurrencies = {
     ONE_OFF: {
       default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
