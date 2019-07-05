@@ -43,7 +43,7 @@
           lastName: "@lastName",
         }
       };
-    }
+    };
     window.guardian.stripeKeyDefaultCurrencies = {
       ONE_OFF: {
         default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
@@ -54,18 +54,6 @@
         uat: "@regularUatStripeConfig.forCurrency(None).publicKey"
       }
     };
-    window.guardian.payPalEnvironment = {
-      default: "@regularDefaultPayPalConfig.payPalEnvironment",
-      uat: "@regularUatPayPalConfig.payPalEnvironment"
-    };
-    window.guardian.paymentApiStripeEndpoint = "@paymentApiStripeEndpoint";
-    window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
-    window.guardian.existingPaymentOptionsEndpoint = "@existingPaymentOptionsEndpoint";
-    window.guardian.csrf = { token: "@CSRF.getToken.value" };
-
-    @guestAccountCreationToken.map { guestAccountCreationToken =>
-      window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
-
     window.guardian.geoip = {
       countryCode: "@countryCode.mkString",
       stateCode: "@stateCode.mkString"
