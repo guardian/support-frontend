@@ -5,6 +5,7 @@
 *.sublime-project
 *.sublime-workspace
 .vscode
+.metals
 
 node_modules
 npm-debug.log

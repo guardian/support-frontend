@@ -113,7 +113,10 @@ function getDailyEditionCopy(countryGroupId: CountryGroupId) {
 function ProductBlock(props: PropTypes) {
   const dailyEditionCopy = getDailyEditionCopy(props.countryGroupId);
   return (
-    <div className="product-block">
+    <div
+      id="qa-subscriptions-product-block"
+      className="product-block"
+    >
       <LeftMarginSection>
         <div className="product-block__heading-wrapper">
           <h2 className="product-block__heading">
