@@ -4,6 +4,7 @@ import React from 'react';
 
 import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import GridImage from 'components/gridImage/gridImage';
+import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { regionalContent } from './regionalContent';
 import HeroImg from './hero.svg';
 import './hero.scss';
@@ -17,25 +18,25 @@ const Caption = (props: { className: string, captionTitle: String, captionText: 
   </div>
 );
 
-const getCountrySelector = (country: String) => {
-  switch (country) {
+const getCountrySelector = (countryGroupId: CountryGroupId) => {
+  switch (countryGroupId) {
     case GBPCountries:
     case EURCountries:
     case International:
     case Canada:
     case NZDCountries:
-      return 'ukContent';
+      return GBPCountries;
     case UnitedStates:
-      return 'usContent';
+      return UnitedStates;
     case AUDCountries:
-      return 'auContent';
+      return AUDCountries;
     default:
-      return 'ukContent';
+      return GBPCountries;
   }
 };
 
-export default function Hero(props: { country: String }) {
-  const countrySelector = getCountrySelector(props.country);
+export default function Hero(props: { countryGroupId: CountryGroupId }) {
+  const countrySelector = getCountrySelector(props.countryGroupId);
 
   return (
     <div className="showcase-hero">

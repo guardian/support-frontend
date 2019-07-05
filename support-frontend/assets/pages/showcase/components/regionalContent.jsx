@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const regionalContent = {
-  ukContent: {
+  GBPCountries: {
     title: 'Windrush',
     caption: (
       <span>
@@ -18,7 +18,7 @@ export const regionalContent = {
       fourth: 'showcaseWindrush',
     },
   },
-  auContent: {
+  AUDCountries: {
     title: 'Climate crisis',
     caption: (
       <span>
@@ -34,7 +34,7 @@ export const regionalContent = {
       fourth: 'showcaseIndustry',
     },
   },
-  usContent: {
+  UnitedStates: {
     title: 'Cambridge Analytica',
     caption: 'A year-long investigation in which we revealed that 50 million Facebook profiles had been harvested without their consent by data analytics firm Cambridge Analytica, which worked with Trump\'s election team and the Brexit campaign.',
     images: {

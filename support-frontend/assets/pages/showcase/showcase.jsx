@@ -37,7 +37,7 @@ const countryGroupId: CountryGroupId = detect();
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   path: '/support',
   countryGroupId,
-  listOfCountries: [
+  listOfCountryGroups: [
     GBPCountries,
     UnitedStates,
     AUDCountries,
@@ -58,7 +58,7 @@ const state = store.getState();
 const content = (
   <Provider store={store}>
     <Page header={<CountrySwitcherHeader />} footer={<Footer />}>
-      <Hero country={state.common.internationalisation.countryGroupId} />
+      <Hero countryGroupId={state.common.internationalisation.countryGroupId} />
       <WhySupportMatters />
       <BreakingHeadlines />
       <NoOneEdits />

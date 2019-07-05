@@ -61,7 +61,7 @@ const reactElementId: {
 const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   path: '/subscribe/digital',
   countryGroupId,
-  listOfCountries: [
+  listOfCountryGroups: [
     GBPCountries,
     UnitedStates,
     AUDCountries,
