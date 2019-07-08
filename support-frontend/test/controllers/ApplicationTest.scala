@@ -8,11 +8,10 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import akka.util.Timeout
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.identity.play.AuthenticatedIdUser
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
-import services.{IdentityService, MembersDataService, PaymentAPIService, TestUserService}
+import services._
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import config.Configuration.{GuardianDomain, IdentityUrl}
 
@@ -25,10 +24,9 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
   implicit val timeout = Timeout(2.seconds)
 
   val actionRefiner = new CustomActionBuilders(
-    authenticatedIdUserProvider = _ => Some(mock[AuthenticatedIdUser]),
+    asyncAuthenticationService = mock[AsyncAuthenticationService],
     idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
-    testUsers = mock[TestUserService],
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,

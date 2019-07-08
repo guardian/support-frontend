@@ -16,7 +16,7 @@ import assets.{AssetsResolver, RefPath}
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import config.Configuration.IdentityUrl
-import services.{IdentityService, MembersDataService, TestUserService}
+import services._
 import services.MembersDataService._
 import fixtures.TestCSRFComponents
 import play.twirl.api.Html
@@ -38,11 +38,12 @@ trait DisplayFormMocks extends TestCSRFComponents {
 
   val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
+  val asyncAuthenticationService = mock[AsyncAuthenticationService]
+
   val loggedInActionRefiner = new CustomActionBuilders(
-    authenticatedIdUserProvider = _ => Some(authenticatedIdUser),
+    asyncAuthenticationService,
     idWebAppUrl = IdentityUrl(""),
     supportUrl = "",
-    testUsers = testUsers,
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
@@ -50,10 +51,9 @@ trait DisplayFormMocks extends TestCSRFComponents {
   )
 
   val loggedOutActionRefiner = new CustomActionBuilders(
-    authenticatedIdUserProvider = _ => None,
+    asyncAuthenticationService,
     idWebAppUrl = IdentityUrl("https://identity-url.local"),
     supportUrl = "",
-    testUsers = testUsers,
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,

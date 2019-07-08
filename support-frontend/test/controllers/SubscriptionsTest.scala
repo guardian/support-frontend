@@ -125,12 +125,18 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
   "GET subscribe/digital/checkout" should {
 
     "redirect unauthenticated user to signup page" in new DigitalSubscriptionsDisplayForm {
+
+      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.successful(None))
+
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)
       status(result) mustBe 303
       header("Location", result).value must startWith("https://identity-url.local")
     }
 
     "redirect user with a dp to ty page" in new DigitalSubscriptionsDisplayForm {
+      when(asyncAuthenticationService.authenticateUser(any()))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
+
       val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(hasFailed = false, hasDp = true)
       )
@@ -139,6 +145,9 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     "return a 500 if the call to get additional data from identity fails" in new DigitalSubscriptionsDisplayForm {
+      when(asyncAuthenticationService.authenticateUser(any()))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
+
       val result = fakeRequestAuthenticatedWith(
         identityService = mockedIdentityService(authenticatedIdUser.user -> "not found".asLeft)
       )
@@ -146,6 +155,9 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     "not redirect users if membersDataService errors" in new DigitalSubscriptionsDisplayForm {
+      when(asyncAuthenticationService.authenticateUser(any()))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
+
       val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(hasFailed = true, hasDp = true)
       )
@@ -154,6 +166,9 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     "return form if user is signed in and call to identity is successful" in new DigitalSubscriptionsDisplayForm {
+      when(asyncAuthenticationService.authenticateUser(any()))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
+
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedInActionRefiner)
 
       status(result) mustBe 200

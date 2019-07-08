@@ -37,7 +37,7 @@ trait Services {
 
   lazy val testUsers = TestUserService(appConfig.identity.testUserSecret)
 
-  lazy val authenticationService = AuthenticationService(appConfig.identity.keys).authenticatedIdUserProvider
+  lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity.keys, testUsers)
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 

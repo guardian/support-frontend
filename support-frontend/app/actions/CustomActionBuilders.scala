@@ -1,14 +1,13 @@
 package actions
 
 import com.gu.identity.play.AuthenticatedIdUser
-import com.gu.identity.play.AuthenticatedIdUser.Provider
 import com.netaporter.uri.dsl._
 import config.Configuration.IdentityUrl
 import play.api.mvc.Results._
-import play.api.mvc.Security.{AuthenticatedBuilder, AuthenticatedRequest}
+import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 import play.filters.csrf._
-import services.TestUserService
+import services.AsyncAuthenticationService
 import utils.RequestCountry
 
 import scala.concurrent.ExecutionContext
@@ -20,10 +19,9 @@ object CustomActionBuilders {
 }
 
 class CustomActionBuilders(
-  authenticatedIdUserProvider: Provider,
+  asyncAuthenticationService: AsyncAuthenticationService,
   idWebAppUrl: IdentityUrl,
   supportUrl: String,
-  testUsers: TestUserService,
   cc: ControllerComponents,
   addToken: CSRFAddToken,
   checkToken: CSRFCheck,
@@ -53,16 +51,20 @@ class CustomActionBuilders(
   }
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
-    new AuthenticatedBuilder(authenticatedIdUserProvider.andThen(Some.apply), cc.parsers.defaultBodyParser, onUnauthenticated)
+    new AsyncAuthenticatedBuilder(
+      requestHeader => asyncAuthenticationService.authenticateUser(requestHeader).map(Some.apply),
+      cc.parsers.defaultBodyParser,
+      onUnauthenticated
+    )
 
   private def authenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[AuthRequest, AnyContent] =
-    new AuthenticatedBuilder(authenticatedIdUserProvider, cc.parsers.defaultBodyParser, onUnauthenticated)
+    new AsyncAuthenticatedBuilder(asyncAuthenticationService.authenticateUser, cc.parsers.defaultBodyParser, onUnauthenticated)
 
   private def authenticatedTestUser(onUnauthenticated: RequestHeader => Result): ActionBuilder[AuthRequest, AnyContent] =
-    new AuthenticatedBuilder(
-      userinfo = authenticatedIdUserProvider.andThen(_.filter(user => testUsers.isTestUser(user.user.displayName))),
-      defaultParser = cc.parsers.defaultBodyParser,
-      onUnauthorized = onUnauthenticated
+    new AsyncAuthenticatedBuilder(
+      asyncAuthenticationService.authenticateTestUser,
+      cc.parsers.defaultBodyParser,
+      onUnauthenticated
     )
 
   val PrivateAction = new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
