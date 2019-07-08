@@ -24,6 +24,7 @@ export type User = {
   gnmMarketing: boolean,
   isSignedIn: boolean,
   isRecurringContributor: boolean,
+  emailValidated: boolean,
 };
 
 
@@ -41,6 +42,7 @@ const initialState: User = {
   gnmMarketing: false,
   isSignedIn: false,
   isRecurringContributor: false,
+  emailValidated: false,
 };
 
 
@@ -107,6 +109,9 @@ function createUserReducer(countryGroup: CountryGroupId) {
 
       case 'SET_IS_RECURRING_CONTRIBUTOR':
         return { ...state, isRecurringContributor: true };
+
+      case 'SET_EMAIL_VALIDATED':
+        return { ...state, emailValidated: action.emailValidated };
 
       default:
         return state;

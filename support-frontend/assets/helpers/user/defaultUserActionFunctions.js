@@ -57,6 +57,10 @@ function setGnmMarketing(preference: boolean): Action {
   return { type: 'SET_GNM_MARKETING', preference };
 }
 
+function setEmailValidated(emailValidated: boolean): Action {
+  return { type: 'SET_EMAIL_VALIDATED', emailValidated };
+}
+
 const defaultUserActionFunctions = {
   setId,
   setDisplayName,
@@ -70,6 +74,7 @@ const defaultUserActionFunctions = {
   setTestUser,
   setPostDeploymentTestUser,
   setGnmMarketing,
+  setEmailValidated,
 };
 
 export { defaultUserActionFunctions };
