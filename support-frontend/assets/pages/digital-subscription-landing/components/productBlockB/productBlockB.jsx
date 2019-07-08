@@ -66,10 +66,7 @@ const ProductBlockRightContent = ({ children }: ChildProps) => (
 
 function ProductBlockB() {
   return (
-    <div
-      id="qa-subscriptions-product-block"
-      className="product-block product-block--margin"
-    >
+    <div className="product-block product-block--margin">
       <LeftMarginSection>
         <ProductBlockHeader>The Digital Pack Subscription</ProductBlockHeader>
         <ProductBlockGreyLines />
