@@ -3,15 +3,16 @@
 // ----- Imports ----- //
 
 import { renderPage } from 'helpers/render';
-import React from 'react';
-import { Provider } from 'react-redux';
-
+import React, { Component } from 'react';
+import { Provider, connect } from 'react-redux';
 import { detect, type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries, AUDCountries, Canada, EURCountries, International, NZDCountries, UnitedStates } from 'helpers/internationalisation/countryGroup';
 import { init as pageInit } from 'helpers/page/page';
+import { OPTIMIZE_CHECK_TIMEOUT } from 'helpers/optimize/optimize';
 
 import Page from 'components/page/page';
-import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
+import headerWithCountrySwitcherContainer
+  from 'components/headers/header/headerWithCountrySwitcher';
 import CustomerService from 'components/customerService/customerService';
 import SubscriptionFaq from 'components/subscriptionFaq/subscriptionFaq';
 import Footer from 'components/footer/footer';
@@ -19,12 +20,13 @@ import AdFreeSection from 'components/adFreeSection/adFreeSection';
 import AdFreeSectionB from 'components/adFreeSectionB/adFreeSectionB';
 import Content from 'components/content/content';
 import Text from 'components/text/text';
-import ProductPageInfoChip from 'components/productPage/productPageInfoChip/productPageInfoChip';
+import ProductPageInfoChip
+  from 'components/productPage/productPageInfoChip/productPageInfoChip';
 import 'stylesheets/skeleton/skeleton.scss';
 
-
 import { CampaignHeader } from './components/digitalSubscriptionLandingHeader';
-import IndependentJournalismSection from './components/independentJournalismSection';
+import IndependentJournalismSection
+  from './components/independentJournalismSection';
 import ProductBlock from './components/productBlock';
 import ProductBlockB from './components/productBlockB/productBlockB';
 import PromotionPopUp from './components/promotionPopUp';
@@ -33,7 +35,8 @@ import Form from './components/form';
 import './digitalSubscriptionLanding.scss';
 import './components/theMoment.scss';
 import ConsentBanner from 'components/consentBanner/consentBanner';
-import digitalSubscriptionLandingReducer from './digitalSubscriptionLandingReducer';
+import digitalSubscriptionLandingReducer
+  from './digitalSubscriptionLandingReducer';
 
 // ----- Redux Store ----- //
 
@@ -69,56 +72,118 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
   ],
 });
 
-const { optimizeExperiments } = store.getState().common;
+const mapStateToProps = (state) => {
+  const { optimizeExperiments } = state.common;
+  const dailyEditionsExperimentId = 'xOzjpaFDQlO5L6_ORotRWA';
+  const dailyEditionsVariant = optimizeExperiments
+    .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
 
-const dailyEditionsExperimentId = 'zFSCLqNKT4yQKFNEraigAQ';
-const dailyEditionsVariant = optimizeExperiments
-  .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0;
+  return {
+    dailyEditionsVariant,
+    optimizeHasLoaded: optimizeExperiments.length > 0,
+  };
+};
+
+type Props = {
+  dailyEditionsVariant: boolean,
+  optimizeHasLoaded: boolean,
+}
+
+type State = {
+  showPage: boolean,
+  pageReadyChecks: number,
+}
 
 // ----- Render ----- //
+class LandingPage extends Component<Props, State> {
+  state = {
+    showPage: this.props.optimizeHasLoaded,
+    pageReadyChecks: 0,
+  }
+
+  checkOptimizeIsReady = (interval: number) => {
+    const maxNumberOfChecks = OPTIMIZE_CHECK_TIMEOUT / interval;
+    const { pageReadyChecks } = this.state;
+    const { optimizeHasLoaded } = this.props;
+
+    if (optimizeHasLoaded || pageReadyChecks > maxNumberOfChecks) {
+      this.setState(() => ({
+        showPage: true,
+      }));
+    } else {
+      this.setState(prevState => ({
+        pageReadyChecks: prevState.pageReadyChecks + 1,
+      }));
+
+      setTimeout(() => {
+        this.checkOptimizeIsReady(interval);
+      }, interval);
+    }
+  }
+
+  render() {
+    const { dailyEditionsVariant } = this.props;
+    const { pageReadyChecks, showPage } = this.state;
+    const interval = 250;
+    if (pageReadyChecks === 0 && showPage === false) {
+      this.checkOptimizeIsReady(interval);
+    }
+
+    return (
+      <div>
+        {showPage && (
+        <Page
+          header={<CountrySwitcherHeader />}
+          footer={
+            <Footer>
+              <CustomerService selectedCountryGroup={countryGroupId} />
+              <SubscriptionFaq subscriptionProduct="DigitalPack" />
+            </Footer>}
+        >
+          <CampaignHeader
+            countryGroupId={countryGroupId}
+            dailyEditionsVariant={dailyEditionsVariant}
+          />
+          {
+          dailyEditionsVariant ?
+            (
+              <div>
+                <ProductBlockB />
+                <AdFreeSectionB />
+              </div>
+            ) : (
+              <div>
+                <ProductBlock countryGroupId={countryGroupId} />
+                <AdFreeSection headingSize={2} />
+
+                <Content appearance="feature" id="subscribe">
+                  <Text title="Subscribe to Digital Pack today">
+                    <p>Choose how you’d like to pay</p>
+                  </Text>
+                  <Form />
+                  <ProductPageInfoChip >
+                      You can cancel your subscription at any time
+                  </ProductPageInfoChip>
+                </Content>
+              </div>
+            )
+        }
+          <IndependentJournalismSection />
+          <PromotionPopUp />
+          <ConsentBanner />
+        </Page>)
+    }
+      </div>
+    );
+
+  }
+}
+
+const ConnectedLandingPage = connect(mapStateToProps)(LandingPage);
 
 const content = (
   <Provider store={store}>
-    <Page
-      header={<CountrySwitcherHeader />}
-      footer={
-        <Footer>
-          <CustomerService selectedCountryGroup={countryGroupId} />
-          <SubscriptionFaq subscriptionProduct="DigitalPack" />
-        </Footer>}
-    >
-
-      <CampaignHeader 
-        countryGroupId={countryGroupId} 
-        dailyEditionsVariant={dailyEditionsVariant} 
-      />
-      {dailyEditionsVariant ?
-        (
-          <div>
-            <ProductBlockB />
-            <AdFreeSectionB />
-          </div>
-        ) : (
-          <div>
-            <ProductBlock countryGroupId={countryGroupId} />
-            <AdFreeSection headingSize={2} />
-
-            <Content appearance="feature" id="subscribe">
-              <Text title="Subscribe to Digital Pack today">
-                <p>Choose how you’d like to pay</p>
-              </Text>
-              <Form />
-              <ProductPageInfoChip >
-                  You can cancel your subscription at any time
-              </ProductPageInfoChip>
-            </Content>
-          </div>
-        )
-      }
-      <IndependentJournalismSection />
-      <PromotionPopUp />
-      <ConsentBanner />
-    </Page>
+    <ConnectedLandingPage />
   </Provider>
 );
 

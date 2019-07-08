@@ -1,6 +1,7 @@
 // @flow
 
 // ----- Types ----- //
+
 export type Action =
   | { type: 'SET_USER_ID', id: string }
   | { type: 'SET_DISPLAY_NAME', name: string }
@@ -13,7 +14,8 @@ export type Action =
   | { type: 'SET_IS_RECURRING_CONTRIBUTOR' }
   | { type: 'SET_POST_DEPLOYMENT_TEST_USER', postDeploymentTestUser: boolean }
   | { type: 'SET_GNM_MARKETING', preference: boolean }
-  | { type: 'SET_IS_SIGNED_IN', isSignedIn: boolean };
+  | { type: 'SET_IS_SIGNED_IN', isSignedIn: boolean }
+  | { type: 'SET_EMAIL_VALIDATED', emailValidated: boolean };
 
 export type UserSetStateActions = {|
   setId: string => Action,
@@ -26,6 +28,7 @@ export type UserSetStateActions = {|
   setTestUser: boolean => Action,
   setPostDeploymentTestUser: boolean => Action,
   setGnmMarketing: boolean => Action,
+  setEmailValidated: boolean => Action,
 
   // When we change either of these in the context of the contributions landing page,
   // we need to dispatch some additional actions to update some state in the

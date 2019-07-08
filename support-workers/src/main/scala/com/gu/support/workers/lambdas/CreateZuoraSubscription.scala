@@ -90,6 +90,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       state.product,
       state.paymentMethod,
       state.firstDeliveryDate,
+      state.promoCode,
       state.salesforceContacts.buyer,
       accountNumber.value,
       subscriptionNumber.value,

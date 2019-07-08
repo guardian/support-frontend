@@ -15,7 +15,7 @@ import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummarySe
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.Monthly
 import com.gu.tip.Tip
-import config.Configuration.GuardianDomain
+import config.Configuration.{GuardianDomain, MetricUrl}
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers.any
@@ -28,7 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
 import services.MembersDataService._
 import services.stepfunctions.SupportWorkersClient
-import services.{HttpIdentityService, MembersDataService, TestUserService}
+import services.{IdentityService, MembersDataService, TestUserService}
 
 import scala.concurrent.Future
 
@@ -63,12 +63,13 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     val allSettings = AllSettings(
       Switches(PaymentMethodsSwitch(On, On, None, None, None), PaymentMethodsSwitch(On, On, Some(On), Some(On), Some(On)), Map.empty, On),
       AmountsRegions(amounts,amounts,amounts,amounts,amounts,amounts,amounts),
-      ContributionTypes(Nil,Nil,Nil,Nil,Nil,Nil,Nil)
+      ContributionTypes(Nil,Nil,Nil,Nil,Nil,Nil,Nil),
+      MetricUrl("http://localhost")
     )
 
     def fakeDigitalPack(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
       val settingsProvider = mock[AllSettingsProvider]
@@ -114,7 +115,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     def fakeRequestAuthenticatedWith(
       actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: HttpIdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
       membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): Future[Result] = {
       fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm()(FakeRequest())

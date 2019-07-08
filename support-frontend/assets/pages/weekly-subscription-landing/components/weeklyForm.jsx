@@ -6,10 +6,7 @@ import {
   billingPeriodTitle,
   weeklyBillingPeriods,
 } from 'helpers/billingPeriods';
-import { type CommonState } from 'helpers/page/commonReducer';
-import { getWeeklyCheckout } from 'helpers/externalLinks';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import { getPromoCode } from 'helpers/flashSale';
 import ProductPagePlanForm, { type PropTypes } from 'components/productPage/productPagePlanForm/productPagePlanForm';
 
 import { type State } from '../weeklySubscriptionLandingReducer';
@@ -19,23 +16,12 @@ import {
   getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
+import { getOrigin } from 'helpers/url';
 
 // ---- Plans ----- //
 
-const getCheckoutUrl = ({ billingPeriod, state }: {billingPeriod: WeeklyBillingPeriod, state: CommonState}): string => {
-  const {
-    internationalisation: { countryGroupId }, referrerAcquisitionData, abParticipations, optimizeExperiments,
-  } = state;
-
-  return getWeeklyCheckout(
-    referrerAcquisitionData,
-    billingPeriod,
-    countryGroupId,
-    abParticipations,
-    optimizeExperiments,
-    (billingPeriod === 'Annual' ? getPromoCode('GuardianWeekly', countryGroupId, '10ANNUAL') : null),
-  );
-};
+const getCheckoutUrl = (billingPeriod: WeeklyBillingPeriod): string =>
+  `${getOrigin()}/subscribe/weekly/checkout?period=${billingPeriod.toString()}`;
 
 // ----- State/Props Maps ----- //
 
@@ -58,8 +44,8 @@ const mapStateToProps = (state: State): PropTypes<WeeklyBillingPeriod> => ({
           billingPeriod,
         ),
         offer: getAppliedPromoDescription(billingPeriod, productPrice),
-        href: getCheckoutUrl({ billingPeriod, state: state.common }),
-        onClick: sendTrackingEventsOnClick('subscribe_now_cta', 'GuardianWeekly', null, billingPeriod),
+        href: getCheckoutUrl(billingPeriod),
+        onClick: sendTrackingEventsOnClick(`subscribe_now_cta-${billingPeriod}`, 'GuardianWeekly', null),
         price: null,
         saving: null,
       },

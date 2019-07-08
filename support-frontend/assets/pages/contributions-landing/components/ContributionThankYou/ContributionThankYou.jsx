@@ -7,16 +7,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { type ContributionType, getSpokenType } from 'helpers/contributions';
 import MarketingConsent from '../MarketingConsentContainer';
-import { type Action, setHasSeenDirectDebitThankYouCopy } from '../../contributionsLandingActions';
+import {
+  type Action,
+  setHasSeenDirectDebitThankYouCopy,
+} from '../../contributionsLandingActions';
 import type { PaymentMethod } from 'helpers/paymentMethods';
+import { DirectDebit } from 'helpers/paymentMethods';
 import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
-import { DirectDebit } from 'helpers/paymentMethods';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 import { routes } from 'helpers/routes';
-import { trackComponentClick, trackComponentLoad } from 'helpers/tracking/ophan';
+import {
+  trackComponentClick,
+  trackComponentLoad,
+} from 'helpers/tracking/ophan';
 import TrackableButton from 'components/button/trackableButton';
 
 // ----- Types ----- //
@@ -30,6 +36,7 @@ type PropTypes = {|
   isSignedIn: boolean,
   email: string,
   csrf: string,
+  emailValidated: boolean,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -40,6 +47,7 @@ const mapStateToProps = state => ({
   isSignedIn: state.page.user.isSignedIn,
   email: state.page.form.formData.email,
   csrf: state.page.csrf.token,
+  emailValidated: state.page.user.emailValidated,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -64,9 +72,9 @@ const createSignInLink = (email: string, csrf: string, contributionType: Contrib
     .then((response) => {
       if (response.ok) {
         return response.json();
-      } else {
-        throw new Error('Identity encryption service error');
       }
+      throw new Error('Identity encryption service error');
+
     })
     .then((data) => {
       if (data && data.signInLink) {
@@ -95,6 +103,73 @@ function ContributionThankYou(props: PropTypes) {
     props.setHasSeenDirectDebitThankYouCopy();
   }
 
+  const renderIdentityCTA = () => {
+    // Invite signed out contributors to sign in:
+    if (!props.isSignedIn) {
+      return (
+        <section className="contribution-thank-you-block">
+          <h3 className="contribution-thank-you-block__title">
+            Stay signed in to The Guardian
+          </h3>
+          <p className="contribution-thank-you-block__message">
+            As a valued contributor, we want to ensure you are having the best experience on our site. To see
+            far fewer requests for support, please sign in on each of the devices you use to access The
+            Guardian – mobile, tablet, laptop or desktop. Please make sure you’ve verified your email address.
+          </p>
+          <TrackableButton
+            aria-label="Sign into The Guardian"
+            appearance="secondary"
+            trackingEvent={
+              () => {
+                trackComponentLoad(`sign-into-the-guardian-link-loaded-${props.contributionType}`);
+              }
+            }
+            onClick={
+              () => {
+                createSignInLink(props.email, props.csrf, props.contributionType);
+              }}
+          >
+            Sign in now
+          </TrackableButton>
+        </section>
+      );
+    }
+
+    // Invite signed in, unvalidated contributors to validate their accounts
+    if (props.isSignedIn && !props.emailValidated) {
+      return (
+        <section className="contribution-thank-you-block">
+          <h3 className="contribution-thank-you-block__title">
+            Please verify your email address
+          </h3>
+          <p className="contribution-thank-you-block__message">
+            As a valued contributor, we want to ensure you are having the best experience on our site. To see
+            far fewer requests for support, please verify the email address associated with your account and
+            sign in on each of the devices you use to access The Guardian – mobile, tablet, laptop or desktop.
+          </p>
+          <TrackableButton
+            aria-label="Validate your account"
+            appearance="secondary"
+            trackingEvent={
+              () => {
+                trackComponentLoad(`verify-email-link-loaded-${props.contributionType}`);
+              }
+            }
+            onClick={
+              () => {
+                trackComponentClick(`verify-email-link-${props.contributionType}`);
+                window.location.href = 'https://profile.theguardian.com/verify-email';
+              }}
+          >
+            Verify now
+          </TrackableButton>
+        </section>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you">
@@ -105,32 +180,7 @@ function ContributionThankYou(props: PropTypes) {
             </h3>
           </section>
         ) : null}
-        {!props.isSignedIn ?
-          <section className="contribution-thank-you-block">
-            <h3 className="contribution-thank-you-block__title">
-              Stay signed in to The Guardian
-            </h3>
-            <p className="contribution-thank-you-block__message">
-              As a valued contributor, we want to ensure you are having the best experience on our site. To see
-              far fewer requests for support, please sign in on each of the devices you use to access The
-              Guardian – mobile, tablet, laptop or desktop. Please make sure you’ve verified your email address.
-            </p>
-            <TrackableButton
-              aria-label="Sign into The Guardian"
-              appearance="secondary"
-              trackingEvent={
-                () => {
-                  trackComponentLoad(`sign-into-the-guardian-link-loaded-${props.contributionType}`);
-                }
-              }
-              onClick={
-                () => {
-                  createSignInLink(props.email, props.csrf, props.contributionType);
-                }}
-            >
-              Sign in now
-            </TrackableButton>
-          </section> : null }
+        { renderIdentityCTA() }
         <MarketingConsent />
         <ContributionSurvey isRunning={false} contributionType={props.contributionType} />
         <SpreadTheWord />

@@ -38,7 +38,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
       val result = new Application(
         actionRefiner,
         mock[AssetsResolver],
-        mock[HttpIdentityService],
+        mock[IdentityService],
         stubControllerComponents(),
         mock[StripeConfigProvider],
         mock[StripeConfigProvider],
@@ -59,7 +59,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
       val result = new Application(
         actionRefiner,
         mock[AssetsResolver],
-        mock[HttpIdentityService],
+        mock[IdentityService],
         stubControllerComponents(),
         mock[StripeConfigProvider],
         mock[StripeConfigProvider],

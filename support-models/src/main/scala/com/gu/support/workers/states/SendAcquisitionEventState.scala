@@ -1,11 +1,14 @@
 package com.gu.support.workers.states
 
+import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, User, _}
 
 case class SendAcquisitionEventState(
   user: User,
+  giftRecipient: Option[GiftRecipient],
   product: ProductType,
   paymentMethod: PaymentMethod,
+  promoCode: Option[PromoCode],
   acquisitionData: Option[AcquisitionData]
 ) extends StepFunctionUserState
 

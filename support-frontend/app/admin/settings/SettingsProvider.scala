@@ -12,6 +12,7 @@ import config.{Configuration, FastlyConfig}
 import io.circe.Decoder
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import config.Configuration.MetricUrl
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
 import services.fastly.FastlyService
@@ -30,10 +31,17 @@ abstract class SettingsProvider[T] {
 class AllSettingsProvider private (
   switchesProvider: SettingsProvider[Switches],
   amountsProvider: SettingsProvider[AmountsRegions],
-  contributionTypesProvider: SettingsProvider[ContributionTypes]) {
+  contributionTypesProvider: SettingsProvider[ContributionTypes],
+  metricUrl: MetricUrl
+) {
 
   def getAllSettings(): AllSettings = {
-    AllSettings(switchesProvider.settings(), amountsProvider.settings(), contributionTypesProvider.settings())
+    AllSettings(
+      switchesProvider.settings(),
+      amountsProvider.settings(),
+      contributionTypesProvider.settings(),
+      metricUrl
+    )
   }
 }
 
@@ -46,7 +54,12 @@ object AllSettingsProvider {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
       amountsProvider <- SettingsProvider.fromAppConfig[AmountsRegions](config.settingsSources.amounts, config)
       contributionTypesProvider <- SettingsProvider.fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
-    } yield new AllSettingsProvider(switchesProvider, amountsProvider, contributionTypesProvider)
+    } yield new AllSettingsProvider(
+      switchesProvider,
+      amountsProvider,
+      contributionTypesProvider,
+      config.metricUrl
+    )
   }
 }
 

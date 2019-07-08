@@ -19,6 +19,7 @@ import config.Configuration.IdentityUrl
 import services._
 import services.MembersDataService._
 import fixtures.TestCSRFComponents
+import play.twirl.api.Html
 
 trait DisplayFormMocks extends TestCSRFComponents {
   val credentials = AccessCredentials.Cookies("", None)
@@ -32,6 +33,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
   val assetResolver = new AssetsResolver("", "", mock[Environment]) {
     override def apply(path: String): String = path
     override def apply(path: RefPath): String = path.value
+    override protected def loadSsrHtmlCache: Map[String,Html] = Map()
   }
 
   val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
@@ -66,8 +68,8 @@ trait DisplayFormMocks extends TestCSRFComponents {
     membersDataService
   }
 
-  def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): HttpIdentityService = {
-    val m = mock[HttpIdentityService]
+  def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): IdentityService = {
+    val m = mock[IdentityService]
     when(
       m.getUser(argEq(data._1))(any[RequestHeader], any[ExecutionContext])
     ).thenReturn(EitherT.fromEither[Future](data._2))

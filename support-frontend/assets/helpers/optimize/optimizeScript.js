@@ -11,8 +11,6 @@ try {
     ga('create', 'UA-51507017-5', 'auto', {cookieDomain: 'auto', anonymizeIp: true});
     ga('require', 'GTM-NZGXNBL');
 
-    getOptimizeExperiments();
-
 } catch (e) {
   console.log(`Error initialising Optimize script: ${e.message}`);
 }
