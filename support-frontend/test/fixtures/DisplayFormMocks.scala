@@ -16,7 +16,7 @@ import assets.{AssetsResolver, RefPath}
 import com.gu.identity.play.PublicFields
 import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import config.Configuration.IdentityUrl
-import services.{HttpIdentityService, MembersDataService, TestUserService}
+import services.{IdentityService, MembersDataService, TestUserService}
 import services.MembersDataService._
 import fixtures.TestCSRFComponents
 import play.twirl.api.Html
@@ -68,8 +68,8 @@ trait DisplayFormMocks extends TestCSRFComponents {
     membersDataService
   }
 
-  def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): HttpIdentityService = {
-    val m = mock[HttpIdentityService]
+  def mockedIdentityService(data: (IdMinimalUser, Either[String, IdUser])): IdentityService = {
+    val m = mock[IdentityService]
     when(
       m.getUser(argEq(data._1))(any[RequestHeader], any[ExecutionContext])
     ).thenReturn(EitherT.fromEither[Future](data._2))

@@ -12,7 +12,7 @@ import com.gu.identity.play.AuthenticatedIdUser
 import config.StringsConfig
 import fixtures.TestCSRFComponents
 import org.scalatest.mockito.MockitoSugar.mock
-import services.{HttpIdentityService, MembersDataService, PaymentAPIService, TestUserService}
+import services.{IdentityService, MembersDataService, PaymentAPIService, TestUserService}
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripeConfigProvider}
 import config.Configuration.{GuardianDomain, IdentityUrl}
 
@@ -40,7 +40,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
       val result = new Application(
         actionRefiner,
         mock[AssetsResolver],
-        mock[HttpIdentityService],
+        mock[IdentityService],
         stubControllerComponents(),
         mock[StripeConfigProvider],
         mock[StripeConfigProvider],
@@ -61,7 +61,7 @@ class ApplicationTest extends WordSpec with MustMatchers with TestCSRFComponents
       val result = new Application(
         actionRefiner,
         mock[AssetsResolver],
-        mock[HttpIdentityService],
+        mock[IdentityService],
         stubControllerComponents(),
         mock[StripeConfigProvider],
         mock[StripeConfigProvider],
