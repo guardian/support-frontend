@@ -37,6 +37,7 @@ const initialState: User = {
   firstName: '',
   lastName: '',
   fullName: '',
+  stateField: '',
   isTestUser: null,
   isPostDeploymentTestUser: false,
   gnmMarketing: false,
