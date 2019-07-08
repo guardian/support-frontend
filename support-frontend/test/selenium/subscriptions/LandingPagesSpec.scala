@@ -44,6 +44,7 @@ class LandingPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
   feature("Digital Pack landing page") {
     scenario("Basic loading") {
+      val testUser = new TestUser(driverConfig)
       testPageLoads(new DigitalPackSubs())
     }
   }
