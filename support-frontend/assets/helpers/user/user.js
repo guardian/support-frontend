@@ -141,10 +141,10 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
     // default value from Identity Billing Address, or Fastly GEO-IP
-    dispatch(setStateField(window.guardian.user.county || window.guardian.geoip.stateCode));
+    dispatch(setStateField(window.guardian.user.address4 || window.guardian.geoip.stateCode));
     dispatch(setIsSignedIn(true));
     dispatch(setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))));
-  } else if (userAppearsLoggedIn) {
+  } else if (userAppearsLoggedIn) { // TODO - remove in another PR as this condition is deprecated
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
@@ -161,14 +161,14 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
           if (data.displayName) {
             dispatch(setDisplayName(data.displayName));
           }
-          if (data.state) {
-            // TODO - will see if I can do this in another PR, leaving as default behaviour for now
-          }
         });
       }
     });
   } else if (emailFromBrowser) {
     dispatch(setEmail(emailFromBrowser));
+    dispatch(setStateField(window.guardian.geoip.stateCode));
+  } else {
+    dispatch(setStateField(window.guardian.geoip.stateCode));
   }
 };
 

@@ -39,9 +39,14 @@
       @user.publicFields.displayName.map { displayName =>
         displayName: "@displayName",
       }
-      @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
-        firstName: "@firstName",
-        lastName: "@lastName",
+      @for(fields <- user.privateFields) {
+        @for(firstName <- fields.firstName; lastName <- fields.secondName) {
+          firstName: "@firstName",
+          lastName: "@lastName",
+        }
+        @for(address4 <- fields.address4) {
+          address4: "@address4",
+        }
       }
     };
   }
