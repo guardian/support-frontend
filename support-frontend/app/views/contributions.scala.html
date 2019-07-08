@@ -5,6 +5,8 @@
 @import com.gu.support.config.{PayPalConfig, StripeConfig}
 @import helper.CSRF
 @import views.{Preload, SSRContent, ReactDiv}
+@import models.GeoData
+
 @(
   title: String,
   id: String,
@@ -24,8 +26,7 @@
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
   fontLoaderBundle: Either[RefPath, StyleContent],
-  countryCode: String,
-  stateCode: Option[String]
+  geoData: GeoData
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css) {
@@ -55,8 +56,9 @@
     }
   };
   window.guardian.geoip = {
-    countryCode: "@countryCode.mkString",
-    stateCode: "@stateCode.mkString"
+    countryGroup: "@geoData.countryGroup.map(_.id).mkString",
+    countryCode: "@geoData.country.map(_.alpha2).mkString",
+    stateCode: "@geoData.validatedStateCodeForCountry.mkString",
   };
   window.guardian.stripeKeyAustralia = {
     ONE_OFF: {

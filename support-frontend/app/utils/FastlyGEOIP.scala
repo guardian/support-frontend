@@ -1,6 +1,6 @@
 package utils
 
-import com.gu.i18n.CountryGroup
+import models.GeoData
 import play.api.mvc.Request
 
 object FastlyGEOIP {
@@ -9,8 +9,8 @@ object FastlyGEOIP {
   val fastlyRegionHeader = "X-GU-GeoIP-Region"
 
   implicit class RequestWithFastlyGEOIP(r: Request[_]) {
-    def fastlyCountry: Option[CountryGroup] =
-      r.headers.get(fastlyCountryHeader).flatMap(CountryGroup.byFastlyCountryCode)
+    def fastlyCountry: Option[String] = r.headers.get(fastlyCountryHeader)
     def fastlyRegion: Option[String] = r.headers.get(fastlyRegionHeader)
+    def geoData: GeoData = GeoData(fastlyCountry, fastlyRegion)
   }
 }
