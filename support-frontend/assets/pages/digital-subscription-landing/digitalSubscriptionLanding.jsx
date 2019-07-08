@@ -74,7 +74,7 @@ const CountrySwitcherHeader = headerWithCountrySwitcherContainer({
 
 const mapStateToProps = (state) => {
   const { optimizeExperiments } = state.common;
-  const dailyEditionsExperimentId = 'ZVlxqx3wRDGSDw-HYZLiAQ';
+  const dailyEditionsExperimentId = 'xOzjpaFDQlO5L6_ORotRWA';
   const dailyEditionsVariant = optimizeExperiments
     .filter(exp => exp.id === dailyEditionsExperimentId && exp.variant === '1').length !== 0
     && !isPostDeployUser();
