@@ -1,6 +1,5 @@
 package actions
 
-import cats.implicits._
 import com.netaporter.uri.dsl._
 import config.Configuration.IdentityUrl
 import play.api.mvc.Results._

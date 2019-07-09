@@ -13,7 +13,7 @@ import scala.concurrent.{ExecutionContext, Future}
 // The following classes were previously defined in identity-play-auth,
 // but have been removed as part of the changes to that library:
 // authenticating users via a call to identity API; removing periphery functionality.
-// They have been kept as it to reduce diff across PRs,
+// They have been redefined here to reduce diff across PRs,
 // but these classes could get refactored / simplified / removed in subsequent PRs.
 sealed trait AccessCredentials
 object AccessCredentials {
@@ -37,8 +37,8 @@ class AsyncAuthenticationService(
 
   def authenticateUser(requestHeader: RequestHeader): Future[AuthenticatedIdUser] =
     identityPlayAuthService.getUserFromRequest(requestHeader)
-    .map { case (credentials, user) => buildAuthenticatedUser(credentials, user) }
-    .unsafeToFuture()
+      .map { case (credentials, user) => buildAuthenticatedUser(credentials, user) }
+      .unsafeToFuture()
 
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
     authenticateUser(requestHeader)
