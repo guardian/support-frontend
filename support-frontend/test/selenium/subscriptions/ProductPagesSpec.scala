@@ -38,7 +38,7 @@ class ProductPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
   feature("Subscriptions landing page") {
     scenario("Basic loading") {
-      testPageLoads(new SubsLandingPage()())
+      testPageLoads(new SubsLandingPage())
     }
   }
 
