@@ -48,7 +48,7 @@ const initialState: User = {
 
 // ----- Reducer ----- //
 
-function createUserReducer(countryGroup: CountryGroupId) {
+function createUserReducer() {
 
   return function userReducer(
     state: User = initialState,
