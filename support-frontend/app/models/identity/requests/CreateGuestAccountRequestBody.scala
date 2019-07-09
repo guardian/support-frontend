@@ -23,7 +23,7 @@ object CreateGuestAccountRequestBody {
   def fromEmail(email: String): CreateGuestAccountRequestBody = CreateGuestAccountRequestBody(email, PublicFields(Some(guestDisplayName(email))))
 
   implicit val writesCreateGuestAccountRequestBody: Writes[CreateGuestAccountRequestBody] = {
-    import codecs.UserCodecs.publicFieldsWrites
+    import com.gu.identity.model.play.WritesInstances.publicFieldsWrites
     Json.writes[CreateGuestAccountRequestBody]
   }
   implicit val bodyWriteable: BodyWritable[CreateGuestAccountRequestBody] = BodyWritable[CreateGuestAccountRequestBody](

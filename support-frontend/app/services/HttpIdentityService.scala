@@ -139,7 +139,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   ).flattenValues
 
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
-    import codecs.UserCodecs.userReads
+    import com.gu.identity.model.play.ReadsInstances.userReads
     get(s"user/${user.id}", getHeaders(req), trackingParameters(req)) { resp =>
       (resp.json \ "user").validate[IdUser].asEither.leftMap(_.mkString(","))
     }
