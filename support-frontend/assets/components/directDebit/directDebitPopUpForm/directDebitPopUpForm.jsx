@@ -6,16 +6,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
+import type { Phase } from 'components/directDebit/directDebitActions';
 import {
+  type Action,
   closeDirectDebitPopUp,
   resetDirectDebitFormError,
-  type Action,
 } from 'components/directDebit/directDebitActions';
-import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
+import DirectDebitForm
+  from 'components/directDebit/directDebitForm/directDebitForm';
 import SvgCross from 'components/svgs/cross';
-
-import type { Phase } from 'components/directDebit/directDebitActions';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import './directDebitPopUpForm.scss';
 
 // ---- Types ----- //
 
