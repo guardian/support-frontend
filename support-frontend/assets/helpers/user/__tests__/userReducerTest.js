@@ -12,12 +12,12 @@ describe('user reducer tests', () => {
     expect(createUserReducer(GBPCountries)(undefined, {})).toMatchSnapshot();
   });
 
-  it('should have a default state for the US', () => {
-    expect(createUserReducer(UnitedStates)(undefined, {}).stateField).toBe('AK');
+  it('should have a blank default state for the US', () => {
+    expect(createUserReducer(UnitedStates)(undefined, {}).stateField).toBe('');
   });
 
-  it('should have a default province for Canada', () => {
-    expect(createUserReducer(Canada)(undefined, {}).stateField).toBe('AB');
+  it('should have a blank default province for Canada', () => {
+    expect(createUserReducer(Canada)(undefined, {}).stateField).toBe('');
   });
 
   it('should handle SET_DISPLAY_NAME', () => {

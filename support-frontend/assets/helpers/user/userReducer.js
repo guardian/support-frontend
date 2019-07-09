@@ -20,7 +20,7 @@ export type User = {
   fullName: string,
   isTestUser: ?boolean,
   isPostDeploymentTestUser: boolean,
-  stateField?: string,
+  stateField: string,
   gnmMarketing: boolean,
   isSignedIn: boolean,
   isRecurringContributor: boolean,
@@ -49,28 +49,13 @@ const initialState: User = {
 
 // ----- Functions ----- //
 
-function defaultStateOrProvince(countryGroup: CountryGroupId): string {
-  if (countryGroup === UnitedStates) {
-    return Object.keys(usStates)[0];
-  } else if (countryGroup === Canada) {
-    return Object.keys(caStates)[0];
-  }
-
-  return '';
-}
-
 
 // ----- Reducer ----- //
 
 function createUserReducer(countryGroup: CountryGroupId) {
 
-  const initialStateWithStateOrProvince = {
-    ...initialState,
-    stateField: defaultStateOrProvince(countryGroup),
-  };
-
   return function userReducer(
-    state: User = initialStateWithStateOrProvince,
+    state: User = initialState,
     action: Action,
   ): User {
 
