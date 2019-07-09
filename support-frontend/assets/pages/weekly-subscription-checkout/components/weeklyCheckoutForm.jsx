@@ -179,6 +179,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="Where should we deliver your magazine?">
             <CheckboxInput
+              id="qa-gift-checkbox"
               text="This is a gift"
               checked={props.orderIsAGift}
               onChange={() => props.setGiftStatus(!props.orderIsAGift)}
