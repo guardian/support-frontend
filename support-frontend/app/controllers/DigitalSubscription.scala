@@ -4,7 +4,7 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
-import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdUser}
+import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
@@ -16,7 +16,7 @@ import com.gu.monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc.{request, _}
 import play.twirl.api.Html
-import services.{IdentityService, MembersDataService, TestUserService}
+import services._
 import views.html.subscriptionCheckout
 import views.html.helper.CSRF
 import views.ViewHelpers._
@@ -85,9 +85,9 @@ class DigitalSubscription(
   def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      identityService.getUser(request.user).fold(
+      identityService.getUser(request.user.user).fold(
         error => {
-          SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.id} due to error from identityService: $error")
+          SafeLogger.error(scrub"Failed to display digital subscriptions form for ${request.user.user.id} due to error from identityService: $error")
           Future.successful(InternalServerError)
         },
         user => {

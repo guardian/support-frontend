@@ -5,7 +5,7 @@ import actions.CustomActionBuilders.AuthRequest
 import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.play.IdUser
+import com.gu.identity.model.{User => IdUser}
 import com.gu.support.workers.{Address, BillingPeriod, User}
 import io.circe.syntax._
 import lib.PlayImplicits._
@@ -48,7 +48,7 @@ class CreateSubscription(
     implicit request: AuthRequest[CreateSupportWorkersRequest],
     validator: CreateSupportWorkersRequest => Boolean
   ): Future[Result] = {
-    SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.product} subscription")
+    SafeLogger.info(s"[${request.uuid}] User ${request.user.user.id} is attempting to create a new ${request.body.product} subscription")
 
     val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
 
@@ -61,7 +61,7 @@ class CreateSubscription(
     }
 
     if (validator(createSupportWorkersRequest)) {
-      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user).leftMap(ServerError(_))
+      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user.user).leftMap(ServerError(_))
 
       val result: ApiResponseOrError[StatusResponse] = for {
         user <- userOrError
@@ -85,8 +85,9 @@ class CreateSubscription(
       deliveryAddress = request.deliveryAddress,
       telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
-      allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
-      allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
+      // FIXME
+      allowThirdPartyMail = ???, //user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
+      allowGURelatedMail = ???, //user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
       isTestUser = testUsers.isTestUser(user.publicFields.displayName)
     )
   }

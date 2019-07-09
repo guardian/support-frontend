@@ -1,7 +1,7 @@
 @import admin.settings.AllSettings
 @import assets.{AssetsResolver, RefPath, StyleContent}
 @import com.gu.i18n.Currency.AUD
-@import com.gu.identity.play.IdUser
+@import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.config.{PayPalConfig, StripeConfig}
 @import helper.CSRF
 @import views.{Preload, SSRContent, ReactDiv}
@@ -36,7 +36,7 @@
       @user.publicFields.displayName.map { displayName =>
         displayName: "@displayName",
       }
-    @for(fields <- user.privateFields; firstName <- fields.firstName; lastName <- fields.secondName) {
+    @for(firstName <- user.privateFields.firstName; lastName <- user.privateFields.secondName) {
         firstName: "@firstName",
         lastName: "@lastName",
       }

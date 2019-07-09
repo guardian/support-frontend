@@ -1,6 +1,5 @@
 package actions
 
-import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser}
 import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers._

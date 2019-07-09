@@ -8,7 +8,6 @@ import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.http.Status
 import cats.data.EitherT
 import cats.syntax.either._
-import com.gu.identity.play.AccessCredentials
 
 import scala.util.{Failure, Success, Try}
 

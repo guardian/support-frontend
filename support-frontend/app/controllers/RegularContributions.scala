@@ -7,7 +7,7 @@ import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.Title
-import com.gu.identity.play.{AuthenticatedIdUser, IdMinimalUser, IdUser}
+import com.gu.identity.model.{User => IdUser}
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.workers.{Address, User}
 import com.gu.tip.Tip
@@ -21,7 +21,7 @@ import com.gu.monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdentityService, MembersDataService, TestUserService}
+import services._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -55,9 +55,9 @@ class RegularContributions(
 
   private def createContributorWithUser(fullUser: AuthenticatedIdUser)(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]) = {
     val billingPeriod = request.body.product.billingPeriod
-    SafeLogger.info(s"[${request.uuid}] User ${fullUser.id} is attempting to create a new $billingPeriod contribution")
+    SafeLogger.info(s"[${request.uuid}] User ${fullUser.user.id} is attempting to create a new $billingPeriod contribution")
     val result = for {
-      user <- identityService.getUser(fullUser)
+      user <- identityService.getUser(fullUser.user)
       statusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
     } yield statusResponse
     respondToClient(result, request.body, guestCheckout = false)
@@ -121,8 +121,9 @@ class RegularContributions(
       billingAddress = billingAddress(request),
       deliveryAddress = None,
       allowMembershipMail = false,
-      allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
-      allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
+      // FIXME
+      allowThirdPartyMail = ???, //user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
+      allowGURelatedMail = ???, //user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
       isTestUser = testUsers.isTestUser(user.publicFields.displayName)
     )
   }
