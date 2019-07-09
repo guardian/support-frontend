@@ -23,7 +23,7 @@ object CirceDecoders extends InternationalisationCodecs with HelperCodecs {
 
 object UserCodecs {
 
-  implicit val publicFieldsWrites: Writes[PublicFields] = ???
+  implicit val publicFieldsWrites: Writes[PublicFields] = ??? // FIXME
 
-  implicit val userReads: Reads[User] = ???
+  implicit val userReads: Reads[User] = ??? // FIXME
 }
