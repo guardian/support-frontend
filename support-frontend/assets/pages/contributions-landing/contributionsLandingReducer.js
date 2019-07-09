@@ -30,6 +30,7 @@ export type UserFormData = {
   firstName: string | null,
   lastName: string | null,
   email: string | null,
+  state: string | null,
 }
 
 export type ThankYouPageStageMap<T> = {
