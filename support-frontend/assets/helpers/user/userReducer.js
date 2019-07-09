@@ -3,10 +3,8 @@
 // ----- Imports ----- //
 
 import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { usStates, caStates } from 'helpers/internationalisation/country';
 
 import type { Action } from './userActions';
-import { Canada, UnitedStates } from '../internationalisation/countryGroup';
 
 
 // ----- Types ----- //
