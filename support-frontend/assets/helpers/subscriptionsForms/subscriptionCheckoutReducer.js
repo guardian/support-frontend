@@ -6,7 +6,6 @@ import { combineReducers } from 'redux';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
 import type { SubscriptionProduct } from 'helpers/subscriptions';
 import { createUserReducer } from 'helpers/user/userReducer';
-import { fromCountry, GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type {
   FormFields as AddressFormFields,
@@ -57,7 +56,7 @@ function createReducer(
       product,
       initialBillingPeriod, startDate, productOption, fulfilmentOption,
     ),
-    user: createUserReducer(fromCountry(initialCountry) || GBPCountries),
+    user: createUserReducer(),
     directDebit,
     ...addressReducers,
     csrf,

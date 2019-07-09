@@ -35,7 +35,7 @@ if (!isDetailsSupported) {
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = pageInit(() => initReducer(countryGroupId), true);
+const store = pageInit(() => initReducer(), true);
 
 if (!window.guardian.polyfillScriptLoaded) {
   gaEvent({

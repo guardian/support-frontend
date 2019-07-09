@@ -7,7 +7,6 @@ import { combineReducers } from 'redux';
 import { type ContributionType, type ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import csrf from 'helpers/csrf/csrfReducer';
 import { type CommonState } from 'helpers/page/commonReducer';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { type UsState, type CaState } from 'helpers/internationalisation/country';
 import { createUserReducer, type User as UserState } from 'helpers/user/userReducer';
 import { type DirectDebitState } from 'components/directDebit/directDebitReducer';
@@ -320,11 +319,11 @@ function createFormReducer() {
   };
 }
 
-function initReducer(countryGroupId: CountryGroupId) {
+function initReducer() {
 
   return combineReducers({
     form: createFormReducer(),
-    user: createUserReducer(countryGroupId),
+    user: createUserReducer(),
     directDebit,
     csrf,
     marketingConsent: marketingConsentReducerFor('MARKETING_CONSENT'),
