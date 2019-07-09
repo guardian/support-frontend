@@ -47,7 +47,8 @@ function paperSubsUrl(withDelivery: boolean = false): string {
 }
 
 function paperCheckoutUrl(fulfilmentOption: FulfilmentOptions, productOptions: ProductOptions) {
-  return `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}`;
+  const params = new URLSearchParams(window.location.search);
+  return `${getOrigin()}/subscribe/paper/checkout?fulfilment=${fulfilmentOption}&product=${productOptions}&${params.toString()}`;
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.
