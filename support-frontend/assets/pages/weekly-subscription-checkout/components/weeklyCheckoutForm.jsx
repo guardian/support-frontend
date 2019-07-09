@@ -24,9 +24,6 @@ import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
-import DirectDebitPopUpForm
-  from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
   getProductPrice,
@@ -296,12 +293,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
           />
           <FormSection noBorder>
             <Button aria-label={null} type="submit">Continue to payment</Button>
-            <DirectDebitPopUpForm
-              buttonText="Subscribe with Direct Debit"
-              onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
-                props.onPaymentAuthorised(pa);
-              }}
-            />
           </FormSection>
           <CancellationSection />
         </Form>
