@@ -85,9 +85,15 @@ class CreateSubscription(
       deliveryAddress = request.deliveryAddress,
       telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
-      // FIXME
-      allowThirdPartyMail = ???, //user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
-      allowGURelatedMail = ???, //user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
+      // Previously the values for the fields allowThirdPartyMail and allowGURelatedMail
+      // were derived by looking for the fields: statusFields.receive3rdPartyMarketing and
+      // statusFields.receiveGnmMarketing in the JSON object that models a user.
+      // However, a query of the identity database indicates that these fields aren't defined for any users
+      // (nor are they included in the User class in identity-model).
+      // Therefore, setting them statically to false is not a regression.
+      // TODO: in a subsequent PR set these values based on the respective user.
+      allowThirdPartyMail = false,
+      allowGURelatedMail = false,
       isTestUser = testUsers.isTestUser(user.publicFields.displayName)
     )
   }
