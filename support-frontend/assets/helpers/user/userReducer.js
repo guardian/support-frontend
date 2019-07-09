@@ -2,8 +2,6 @@
 
 // ----- Imports ----- //
 
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
 import type { Action } from './userActions';
 
 

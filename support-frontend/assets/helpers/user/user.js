@@ -71,7 +71,7 @@ const getEmailValidatedFromUserCookie = (guuCookie: ?string) => {
     const tokens = guuCookie.split('.');
     try {
       const parsed = JSON.parse(atob(tokens[0]));
-      return !!parsed[7]
+      return !!parsed[7];
     } catch (e) {
       return false;
     }
