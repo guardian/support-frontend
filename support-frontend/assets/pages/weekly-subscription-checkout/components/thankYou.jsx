@@ -15,12 +15,21 @@ import Content from 'components/content/content';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import HeadingBlock from 'components/headingBlock/headingBlock';
-import { manageSubsUrl, myAccountUrl, homeDeliveryUrl } from 'helpers/externalLinks';
-import typeof MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
-import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
+import {
+  homeDeliveryUrl,
+  manageSubsUrl,
+  myAccountUrl,
+} from 'helpers/externalLinks';
+import typeof MarketingConsent
+  from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
+import styles
+  from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import { formatUserDate } from 'helpers/dateConversions';
 
-import { type FormFields, getFormFields } from 'helpers/subscriptionsForms/formFields';
+import {
+  type FormFields,
+  getFormFields,
+} from 'helpers/subscriptionsForms/formFields';
 
 // ----- Types ----- //
 
@@ -51,7 +60,7 @@ function ThankYouContent({
 }: PropTypes) {
   const packageTitle = getPackageTitle(billingPeriod);
   return (
-    <div>
+    <div className="thank-you-stage">
       <HeroWrapper appearance="custom" className={styles.hero}>
         <HeroImage />
         <HeadingBlock

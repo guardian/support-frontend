@@ -231,6 +231,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   onChange={() => props.setBillingAddressIsSame(true)}
                 />
                 <RadioInput
+                  inputId="qa-billing-address-different"
                   text="No"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
@@ -292,7 +293,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
             submissionError={props.submissionError}
           />
           <FormSection noBorder>
-            <Button aria-label={null} type="submit">Continue to payment</Button>
+            <Button
+              id="qa-submit-button"
+              aria-label={null}
+              type="submit"
+            >
+              Continue to payment
+            </Button>
           </FormSection>
           <CancellationSection />
         </Form>
