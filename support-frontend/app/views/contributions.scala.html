@@ -45,7 +45,7 @@
           lastName: "@lastName",
         }
         @for(address4 <- fields.address4) {
-          address4: "@address4",
+          address4: "@address4"
         }
       }
     };
@@ -63,7 +63,7 @@
   window.guardian.geoip = {
     countryGroup: "@geoData.countryGroup.map(_.id).mkString",
     countryCode: "@geoData.country.map(_.alpha2).mkString",
-    stateCode: "@geoData.validatedStateCodeForCountry.mkString",
+    stateCode: "@geoData.validatedStateCodeForCountry.mkString"
   };
   window.guardian.stripeKeyAustralia = {
     ONE_OFF: {

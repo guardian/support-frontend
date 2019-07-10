@@ -164,10 +164,10 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
         });
       }
     });
-  } else if (emailFromBrowser) {
-    dispatch(setEmail(emailFromBrowser));
-    dispatch(setStateField(window.guardian.geoip.stateCode));
   } else {
+    if (emailFromBrowser) {
+      dispatch(setEmail(emailFromBrowser));
+    }
     dispatch(setStateField(window.guardian.geoip.stateCode));
   }
 };
