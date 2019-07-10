@@ -39,6 +39,7 @@ type SharedButtonPropTypes = {|
   getRef?: (?Element) => void,
   modifierClasses: string[],
   postDeploymentTestID?: string,
+  onClick?: Function,
 |};
 
 type PropTypes = {
@@ -76,6 +77,7 @@ export const defaultProps = {
   appearance: Object.keys(Appearances)[0],
   iconSide: Object.keys(Sides)[0],
   modifierClasses: [],
+  onClick: null,
 };
 
 SharedButton.defaultProps = { ...defaultProps };
