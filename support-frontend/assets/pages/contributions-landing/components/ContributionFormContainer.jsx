@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { type CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { type CountryGroupId, countryGroups } from 'helpers/internationalisation/countryGroup';
 import { type PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import ContributionTicker from 'components/ticker/contributionTicker';
@@ -25,6 +25,7 @@ type PropTypes = {|
   onThirdPartyPaymentAuthorised: PaymentAuthorisation => void,
   setTickerGoalReached: () => void,
   tickerGoalReached: boolean,
+  campaignCodeParameter: ?string,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -100,49 +101,61 @@ function withProps(props: PropTypes) {
     ...campaign || {},
   };
 
-  return props.paymentComplete ?
+  if (props.paymentComplete) {
     // We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
     // This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
     // back to /thankyou given the current state of the redux store.
     // The effect is that clicking back in the browser will take the user to the page before they arrived at /contribute
-    <Redirect to={props.thankYouRoute} push={false} />
-    : (
-      <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
-        <div className="gu-content__blurb">
-          <div className="gu-content__blurb-header-container">
-            <h1 className="gu-content__blurb-header">{countryGroupDetails.headerCopy}</h1>
-          </div>
-          { countryGroupDetails.contributeCopy ?
-            <p className="gu-content__blurb-blurb">{countryGroupDetails.contributeCopy}</p> : null
-          }
-        </div>
+    return (<Redirect to={props.thankYouRoute} push={false} />);
+  }
 
-        <div className="gu-content__form">
-          {campaign && campaign.tickerJsonUrl ?
-            <ContributionTicker
-              tickerJsonUrl={campaign.tickerJsonUrl}
-              onGoalReached={props.setTickerGoalReached}
-              tickerType={campaign.tickerType}
-              currencySymbol={campaign.localCurrencySymbol}
-            /> : null
-          }
-          {props.tickerGoalReached && campaign && campaign.goalReachedCopy ? campaign.goalReachedCopy :
-          <div>
-            {countryGroupDetails.formMessage ?
-              <div className="form-message">{countryGroupDetails.formMessage}</div> : null
-              }
-            <ContributionForm
-              onPaymentAuthorisation={onPaymentAuthorisation}
-            />
-          </div>
-          }
-        </div>
-        <DirectDebitPopUpForm
-          buttonText="Contribute with Direct Debit"
-          onPaymentAuthorisation={onPaymentAuthorisation}
-        />
-      </div>
+  if (props.campaignCodeParameter && !campaign) {
+    // A campaign code was supplied in the url path, but it's not a valid campaign
+    return (
+      <Redirect
+        to={`/${countryGroups[props.countryGroupId].supportInternationalisationId}/contribute`}
+        push={false}
+      />
     );
+  }
+
+  return (
+    <div className="gu-content__content gu-content__content-contributions gu-content__content--flex">
+      <div className="gu-content__blurb">
+        <div className="gu-content__blurb-header-container">
+          <h1 className="gu-content__blurb-header">{countryGroupDetails.headerCopy}</h1>
+        </div>
+        { countryGroupDetails.contributeCopy ?
+          <p className="gu-content__blurb-blurb">{countryGroupDetails.contributeCopy}</p> : null
+        }
+      </div>
+
+      <div className="gu-content__form">
+        {campaign && campaign.tickerJsonUrl ?
+          <ContributionTicker
+            tickerJsonUrl={campaign.tickerJsonUrl}
+            onGoalReached={props.setTickerGoalReached}
+            tickerType={campaign.tickerType}
+            currencySymbol={campaign.localCurrencySymbol}
+          /> : null
+        }
+        {props.tickerGoalReached && campaign && campaign.goalReachedCopy ? campaign.goalReachedCopy :
+        <div>
+          {countryGroupDetails.formMessage ?
+            <div className="form-message">{countryGroupDetails.formMessage}</div> : null
+            }
+          <ContributionForm
+            onPaymentAuthorisation={onPaymentAuthorisation}
+          />
+        </div>
+        }
+      </div>
+      <DirectDebitPopUpForm
+        buttonText="Contribute with Direct Debit"
+        onPaymentAuthorisation={onPaymentAuthorisation}
+      />
+    </div>
+  );
 }
 
 function withoutProps() {

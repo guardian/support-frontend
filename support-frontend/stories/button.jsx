@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { storiesOf } from '@storybook/react';
-import { withKnobs, text, radios } from '@storybook/addon-knobs';
+import { radios, text, withKnobs } from '@storybook/addon-knobs';
 
 import SvgSubscribe from 'components/svgs/subscribe';
 import Button from 'components/button/button';
@@ -25,7 +25,6 @@ const iconSideKnob = () => radios('Icon side', Object.keys(Sides), Object.keys(S
 stories.add('Button button', () => (
   <Button
     appearance={appearanceKnob()}
-    aria-label={null}
     icon={icons[iconsKnob()]}
     iconSide={iconSideKnob()}
   >{text('Label', 'Button label')}
@@ -37,7 +36,6 @@ stories.add('Anchor button', () => (
     href="#"
     onClick={(ev) => { ev.preventDefault(); }}
     appearance={appearanceKnob()}
-    aria-label={null}
     icon={icons[iconsKnob()]}
     iconSide={iconSideKnob()}
   >{text('Label', 'I am a link that looks like a button!')}

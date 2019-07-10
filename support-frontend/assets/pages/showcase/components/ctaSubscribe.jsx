@@ -24,7 +24,6 @@ export default function CtaSubscribe() {
       </Text>
       <NarrowContent>
         <AnchorButton
-          aria-label={null}
           icon={<ArrowRightStraight />}
           href="/subscribe"
           onClick={() => sendClickedEvent('support_page_cta_subscribe')()}

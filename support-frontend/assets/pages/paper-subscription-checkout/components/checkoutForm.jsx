@@ -250,7 +250,6 @@ function CheckoutForm(props: PropTypes) {
           <FormSection noBorder>
             <Button
               id="qa-submit-button"
-              aria-label={null}
               type="submit"
             >
               Continue to payment

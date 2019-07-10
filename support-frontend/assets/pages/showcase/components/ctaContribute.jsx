@@ -41,7 +41,6 @@ export default function CtaContribute() {
           <NarrowContent>
             <AnchorButton
               icon={<ArrowRightStraight />}
-              aria-label={null}
               appearance="secondary"
               href="/contribute"
               onClick={() => sendClickedEvent('support_page_cta_contribute')()}
