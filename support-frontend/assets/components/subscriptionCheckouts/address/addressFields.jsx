@@ -4,7 +4,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { firstError, type FormError } from 'helpers/subscriptionsForms/validation';
+import {
+  firstError,
+  type FormError,
+} from 'helpers/subscriptionsForms/validation';
 
 import { Input } from 'components/forms/input';
 import { Select } from 'components/forms/select';
@@ -31,7 +34,11 @@ import {
 import { canShow } from 'hocs/canShow';
 import type { Option } from 'helpers/types/option';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { auStates, caStates, usStates } from 'helpers/internationalisation/country';
+import {
+  auStates,
+  caStates,
+  usStates,
+} from 'helpers/internationalisation/country';
 
 type StatePropTypes<GlobalState> = {|
   ...FormFields,
@@ -155,7 +162,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           error={firstError('city', props.formErrors)}
         />
         <MaybeSelect
-          id="stateProvince"
+          id={`${scope}-stateProvince`}
           label={props.country === 'CA' ? 'Province/Territory' : 'State'}
           value={props.state}
           setValue={props.setState}
@@ -166,7 +173,7 @@ class AddressFields<GlobalState> extends Component<PropTypes<GlobalState>> {
           {AddressFields.statesForCountry(props.country)}
         </MaybeSelect>
         <MaybeInput
-          id="stateProvince"
+          id={`${scope}-stateProvince`}
           label="State"
           value={props.state}
           setValue={props.setState}

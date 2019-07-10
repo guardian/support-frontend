@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { compose } from 'redux';
@@ -7,11 +8,9 @@ import { asControlled } from 'hocs/asControlled';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
 import { Input } from 'components/forms/input';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import Button from 'components/button/button';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import { type FormField } from 'helpers/subscriptionsForms/formFields';
-
 
 export type PropTypes = {
   firstName: string,
@@ -40,7 +39,6 @@ export default function PersonalDetails(props: PropTypes) {
             appearance="greyHollow"
             icon={null}
             type="button"
-            aria-label={null}
             onClick={() => props.signOut()}
           >
             Sign out

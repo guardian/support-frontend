@@ -40,7 +40,6 @@ export default function CtaContribute() {
           <NarrowContent>
             <AnchorButton
               icon={<ArrowRightStraight />}
-              aria-label={null}
               appearance="secondary"
               href="/contribute"
             >
