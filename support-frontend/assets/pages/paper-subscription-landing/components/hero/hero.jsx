@@ -4,7 +4,11 @@
 
 import React from 'react';
 import GridPicture from 'components/gridPicture/gridPicture';
-import { HeroHanger, HeroWrapper, HeroHeading } from 'components/productPage/productPageHero/productPageHero';
+import ProductPagehero, {
+  HeroHanger,
+  HeroHeading,
+  HeroWrapper,
+} from 'components/productPage/productPageHero/productPageHero';
 import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
 import GridImage from 'components/gridImage/gridImage';
@@ -13,8 +17,11 @@ import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { getQueryParameter } from 'helpers/url';
-import { flashSaleIsActive, getSaleCopy, showCountdownTimer } from 'helpers/flashSale';
-import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
+import {
+  flashSaleIsActive,
+  getSaleCopy,
+  showCountdownTimer,
+} from 'helpers/flashSale';
 import { getDiscountCopy } from '../hero/discountCopy';
 import './joyOfPrint.scss';
 
@@ -69,7 +76,7 @@ const HeroPicture = () => (
 
 const Footer = () => (
   <HeroHanger>
-    <AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
+    <AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>
   </HeroHanger>
 );
 
@@ -99,7 +106,7 @@ const CampaignHeader = () => (
     overheading="The Guardian newspaper subscriptions"
     heading={getHeading()}
     modifierClasses={['paper-sale']}
-    content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+    content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'Paper', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
   >
     <div className="sale-joy-of-print">

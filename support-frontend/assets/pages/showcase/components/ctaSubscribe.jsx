@@ -22,7 +22,7 @@ export default function CtaSubscribe() {
         </p>
       </Text>
       <NarrowContent>
-        <AnchorButton aria-label={null} icon={<ArrowRightStraight />} href="/subscribe">Choose a Subscription</AnchorButton>
+        <AnchorButton icon={<ArrowRightStraight />} href="/subscribe">Choose a Subscription</AnchorButton>
       </NarrowContent>
     </Content>
   );

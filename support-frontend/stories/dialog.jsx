@@ -13,12 +13,10 @@ import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignmen
 import WithState from '../.storybook/util/withState';
 import Menu, { ButtonItem } from 'components/menu/menu';
 
-
 // Teeny helpers
 
 const GreyButton = props => (
   <Button
-    aria-label={null}
     icon={null}
     appearance="greyHollow"
     {...props}
