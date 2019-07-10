@@ -21,6 +21,7 @@ class GuardianWeeklyCheckout(implicit val webDriver: WebDriver) extends Checkout
   private val billingLineOne = id("billing-lineOne")
   private val billingCity = id("billing-city")
   private val billingPostcode = id("billing-postcode")
+  private val billingCountry = id("billing-country")
 
   def fillForm {
     clickOn(giftCheckbox)
@@ -32,6 +33,7 @@ class GuardianWeeklyCheckout(implicit val webDriver: WebDriver) extends Checkout
     setValue(giftFirstName, "Gifty")
     setValue(giftLastName, "McGiftface")
     clickOn(billingAddressIsDifferent)
+    setValue(billingCountry, "United Kingdom")
     setValue(billingLineOne, "Kings Place")
     setValue(billingCity, "London")
     setValue(billingPostcode, "N19GU")
