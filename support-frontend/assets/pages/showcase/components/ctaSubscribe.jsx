@@ -27,7 +27,7 @@ export default function CtaSubscribe() {
           aria-label={null}
           icon={<ArrowRightStraight />}
           href="/subscribe"
-          onClick={() => sendClickedEvent('support_header_page_cta_subscribe')()}
+          onClick={() => sendClickedEvent('support_page_cta_subscribe')()}
         >
           Choose a Subscription
         </AnchorButton>
