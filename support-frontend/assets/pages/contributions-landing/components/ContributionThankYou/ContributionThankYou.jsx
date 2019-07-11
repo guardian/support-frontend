@@ -37,6 +37,7 @@ type PropTypes = {|
   email: string,
   csrf: string,
   emailValidated: boolean,
+  paymentComplete: boolean,
 |};
 /* eslint-enable react/no-unused-prop-types */
 
@@ -48,6 +49,7 @@ const mapStateToProps = state => ({
   email: state.page.form.formData.email,
   csrf: state.page.csrf.token,
   emailValidated: state.page.user.emailValidated,
+  paymentComplete: state.page.form.paymentComplete,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -170,10 +172,12 @@ function ContributionThankYou(props: PropTypes) {
     return null;
   };
 
+  const showRecurringMessage = props.contributionType !== 'ONE_OFF' && props.paymentComplete;
+
   return (
     <div className="thank-you__container">
       <div className="gu-content__form gu-content__form--thank-you">
-        {props.contributionType !== 'ONE_OFF' ? (
+        {showRecurringMessage ? (
           <section className="contribution-thank-you-block">
             <h3 className="contribution-thank-you-block__title">
               {`${directDebitHeaderSuffix}Look out for an email within three business days confirming your ${getSpokenType(props.contributionType)} recurring payment${directDebitMessageSuffix}`}
