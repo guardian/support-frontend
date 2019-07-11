@@ -9,6 +9,7 @@ import ArrowRightStraight from 'components/svgs/arrowRightStraight';
 
 import WithSupport from 'components/svgs/withSupport';
 import OneMillionCircles from 'components/svgs/oneMillionCircles';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
 export default function CtaContribute() {
   return (
@@ -42,6 +43,7 @@ export default function CtaContribute() {
               icon={<ArrowRightStraight />}
               appearance="secondary"
               href="/contribute"
+              onClick={() => sendClickedEvent('support_page_cta_contribute')()}
             >
             Make a Contribution
             </AnchorButton>
