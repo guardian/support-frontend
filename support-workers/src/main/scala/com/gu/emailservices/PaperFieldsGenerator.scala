@@ -39,7 +39,6 @@ object PaperFieldsGenerator {
 
     val fields = List(
       "ZuoraSubscriberId" -> subscriptionNumber,
-      "SubscriberKey" -> user.primaryEmailAddress,
       "EmailAddress" -> user.primaryEmailAddress,
       "subscriber_id" -> subscriptionNumber,
       "first_name" -> user.firstName,
