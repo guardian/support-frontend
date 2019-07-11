@@ -61,7 +61,7 @@ const mapStateToProps = (state: State) => ({
   lastName: getCheckoutFormValue(state.page.form.formData.lastName, state.page.user.lastName),
   email: getCheckoutFormValue(state.page.form.formData.email, state.page.user.email),
   checkoutFormHasBeenSubmitted: state.page.form.formData.checkoutFormHasBeenSubmitted,
-  state: getCheckoutFormValue(state.page.form.formData.state, state.page.user.stateField),
+  state: state.page.form.formData.state,
   isSignedIn: state.page.user.isSignedIn,
   isRecurringContributor: state.page.user.isRecurringContributor,
   userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
