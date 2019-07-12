@@ -7,9 +7,8 @@ import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import AnchorButton from 'components/button/anchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
-import { sendClickedEvent } from 'helpers/tracking/clickTracking';
 
-export default function CtaSubscribe() {
+export default function CtaSubscribe(props: {clickHandler: Function}) {
   return (
     <Content
       appearance="feature"
@@ -26,7 +25,7 @@ export default function CtaSubscribe() {
         <AnchorButton
           icon={<ArrowRightStraight />}
           href="/subscribe"
-          onClick={() => sendClickedEvent('support_page_cta_subscribe')()}
+          onClick={props.clickHandler}
         >
           Choose a Subscription
         </AnchorButton>

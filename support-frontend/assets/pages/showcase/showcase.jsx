@@ -26,6 +26,15 @@ import ConsentBanner from 'components/consentBanner/consentBanner';
 
 import './showcase.scss';
 import { Provider } from 'react-redux';
+import { sendClickedEvent } from 'helpers/tracking/clickTracking';
+import { trackComponentClick } from 'helpers/tracking/ophan';
+
+// ----- Tracking ----- //
+
+const clickHandler = (ctaType) => {
+  sendClickedEvent(`support_page_cta_${ctaType}`)();
+  trackComponentClick(`support-page-cta-${ctaType}`);
+};
 
 // ----- Page Startup ----- //
 
@@ -45,8 +54,8 @@ const content = (
           Ways you can support The Guardian
         </Heading>
       </Content>
-      <CtaSubscribe />
-      <CtaContribute />
+      <CtaSubscribe clickHandler={() => clickHandler('subscribe')} />
+      <CtaContribute clickHandler={() => clickHandler('contribute')} />
       <OtherProducts />
       <ConsentBanner />
     </Page>
