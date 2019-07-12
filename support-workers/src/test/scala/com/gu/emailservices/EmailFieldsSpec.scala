@@ -1,6 +1,5 @@
 package com.gu.emailservices
 
-import io.circe._
 import io.circe.parser._
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -11,7 +10,6 @@ class EmailFieldsSpec extends FlatSpec with Matchers {
          |{
          |  "To": {
          |    "Address": "email@email.com",
-         |    "SubscriberKey": "email@email.com",
          |    "ContactAttributes": {
          |      "SubscriberAttributes": { "attribute1" : "value1" ,  "attribute2" : "value2" }
          |    }
@@ -26,7 +24,6 @@ class EmailFieldsSpec extends FlatSpec with Matchers {
     val Right(serializedJson) = parse(
       EmailPayload(
       EmailPayloadTo(
-        "email@email.com",
         "email@email.com",
         EmailPayloadContactAttributes(
           Map("attribute1" -> "value1", "attribute2" -> "value2")

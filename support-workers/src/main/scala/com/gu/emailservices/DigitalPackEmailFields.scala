@@ -20,8 +20,7 @@ import com.gu.support.workers._
 //        "Trial period": "14",
 //        "First Name": "first_GOW5hckeqZC86QQx4Rc",
 //        "Last Name": "last_GOW5hckeqZC86QQx4Rc",
-//        "Country": "United Kingdom",
-//        "SubscriberKey": "gow5hckeqzc86qqx4rc@gu.com",
+//        "Country": "United Kingdom"
 //        "Default payment method": "Credit/Debit Card",
 //        "Currency": "£",
 //        "Post Code": "N1 9AG",
@@ -70,7 +69,6 @@ case class DigitalPackEmailFields(
 
   override val fields = List(
     "ZuoraSubscriberId" -> subscriptionNumber,
-    "SubscriberKey" -> user.primaryEmailAddress,
     "EmailAddress" -> user.primaryEmailAddress,
     "Subscription term" -> billingPeriod.noun,
     "Payment amount" -> SubscriptionEmailFieldHelpers.formatPrice(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).amount),

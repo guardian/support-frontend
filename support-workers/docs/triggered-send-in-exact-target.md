@@ -61,7 +61,6 @@ The message should have a body similar to the following:
         {
           "To": {
             "Address": "$email",
-            "SubscriberKey": "$email",
             "ContactAttributes": {
               "EmailAddress": "$email",
               "created": "$created",

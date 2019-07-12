@@ -6,7 +6,7 @@ import io.circe.syntax._
 
 // scalastyle:off
 case class EmailPayloadContactAttributes(SubscriberAttributes: Map[String, String])
-case class EmailPayloadTo(Address: String, SubscriberKey: String, ContactAttributes: EmailPayloadContactAttributes)
+case class EmailPayloadTo(Address: String, ContactAttributes: EmailPayloadContactAttributes)
 case class EmailPayload(To: EmailPayloadTo, DataExtensionName: String, SfContactId: Option[String], IdentityUserId: Option[String]) {
   lazy val jsonString: String = this.asJson.toString
 }
@@ -25,7 +25,6 @@ trait EmailFields {
     EmailPayload(
       To = EmailPayloadTo(
         Address = email,
-        SubscriberKey = email,
         ContactAttributes = EmailPayloadContactAttributes(SubscriberAttributes = fields.toMap)
       ),
       DataExtensionName = dataExtensionName,
