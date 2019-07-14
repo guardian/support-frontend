@@ -234,11 +234,13 @@ const init = (store: Store<State, Action, Function>) => {
     firstName,
     lastName,
     email,
-    stateField
+    stateField,
   } = state.page.user;
 
   dispatch(checkIfEmailHasPassword(email));
-  dispatch(updateUserFormData({ firstName, lastName, email, state: stateField }));
+  dispatch(updateUserFormData({
+    firstName, lastName, email, state: stateField,
+  }));
 
 };
 

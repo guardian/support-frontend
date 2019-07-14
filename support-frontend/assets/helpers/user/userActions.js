@@ -24,7 +24,7 @@ export type UserSetStateActions = {|
   setLastName: string => Action,
   setFullName: string => Action,
   setEmail: string => Action,
-  setStateField: string => Action,
+  setStateField: string => (Action | (Function => void)),
   setTestUser: boolean => Action,
   setPostDeploymentTestUser: boolean => Action,
   setGnmMarketing: boolean => Action,
