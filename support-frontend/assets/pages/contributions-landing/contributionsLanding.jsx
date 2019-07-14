@@ -55,7 +55,7 @@ if (typeof Object.values !== 'function') {
 
 // We need to initialise in this order, as
 // formInit depends on the user being populated
-user.init(store.dispatch, setUserStateActions);
+user.init(store.dispatch, setUserStateActions(countryGroupId));
 formInit(store);
 
 

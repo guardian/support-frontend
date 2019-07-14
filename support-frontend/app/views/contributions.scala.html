@@ -44,8 +44,11 @@
           firstName: "@firstName",
           lastName: "@lastName",
         }
-        @for(address4 <- fields.address4) {
-          address4: "@address4"
+        @for(address4 <- fields.billingAddress4 orElse fields.address4) {
+          address4: "@address4",
+        }
+        @for(country <- fields.billingCountry orElse fields.country) {
+          country: "@country"
         }
       }
     };
