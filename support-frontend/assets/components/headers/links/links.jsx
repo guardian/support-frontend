@@ -85,7 +85,7 @@ const Links = ({ location, getRef, countryGroupId }: PropTypes) => (
             }
           >
             <a
-              onClick={() => { console.log(['header-link', trackAs, location].join(' - ')); trackComponentClick(['header-link', trackAs, location].join(' - ')); }}
+              onClick={() => { trackComponentClick(['header-link', trackAs, location].join(' - ')); }}
               className="component-header-links__link"
               href={href}
               target={opensInNewWindow ? '_blank' : null}
