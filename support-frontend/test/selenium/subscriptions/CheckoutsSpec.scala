@@ -45,7 +45,7 @@ class CheckoutsSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfter w
   }
 
   def testCheckout(checkoutName: String, checkoutPage: CheckoutPage, productPage: ProductPage, paymentFunction: CheckoutPage => Unit): Unit = {
-    val testUser = new TestUser(driverConfig)
+    val testUser = new PostDeployTestUser(driverConfig)
 
     Given("that a user goes to the UK product page")
     goTo(productPage)

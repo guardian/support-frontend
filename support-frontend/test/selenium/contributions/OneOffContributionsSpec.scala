@@ -27,7 +27,7 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
     scenario("One-off contribution sign-up with Stripe - AUD") {
 
       val stripePayment = 22.55
-      val testUser = new TestUser(driverConfig)
+      val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("au", testUser)
       val contributionThankYou = new ContributionThankYou("au")
 
@@ -63,6 +63,69 @@ class OneOffContributionsSpec extends FeatureSpec with GivenWhenThen with Before
       }
     }
 
+    scenario("Check Stripe pop-up appears") {
+      val testUser = new TestUser {
+        val username = "test-stripe-pop-up"
+        driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
+      }
+
+      val landingPage = ContributionsLanding("au", testUser)
+
+      Given("that a test user goes to the contributions landing page")
+      goTo(landingPage)
+      assert(landingPage.pageHasLoaded)
+      landingPage.clearForm(hasNameFields = false)
+
+      When("the user selects the one-time option")
+      landingPage.clickOneOff
+
+      Given("The user fills in their details correctly")
+      landingPage.fillInPersonalDetails(hasNameFields = false)
+
+      Given("that the user selects to pay with Stripe")
+      When("they press the Stripe payment button")
+      landingPage.selectStripePayment()
+
+      When("they click contribute")
+      landingPage.clickContribute
+
+      Then("the overlay should appear")
+      eventually {
+        assert(landingPage.hasStripeOverlay)
+      }
+    }
+
+    scenario("Check browser navigates to paypal") {
+      val testUser = new TestUser {
+        val username = "test-stripe-pop-up"
+        driverConfig.addCookie(name = "GU_TK", value = "1.1") //To avoid consent banner, which messes with selenium
+      }
+
+      val landingPage = ContributionsLanding("au", testUser)
+
+      Given("that a test user goes to the contributions landing page")
+      goTo(landingPage)
+      assert(landingPage.pageHasLoaded)
+      landingPage.clearForm(hasNameFields = false)
+
+      When("the user selects the one-time option")
+      landingPage.clickOneOff
+
+      Given("The user fills in their details correctly")
+      landingPage.fillInPersonalDetails(hasNameFields = false)
+
+      Given("that the user selects to pay with Stripe")
+      When("they press the PayPal payment button")
+      landingPage.selectPayPalPayment()
+
+      When("they click contribute")
+      landingPage.clickContribute
+
+      Then("the browser should navigate to *paypal.com*")
+      eventually {
+        assert(webDriver.getCurrentUrl.contains("paypal.com"))
+      }
+    }
   }
 
 }
