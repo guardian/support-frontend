@@ -32,8 +32,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-auth-play" % "2.6-SNAPSHOT", // FIXME: change when new version of library published
-  "com.gu.identity" %% "identity-model-play" % "3.183-SNAPSHOT", // FIXME: change when new version of library published
+  "com.gu.identity" %% "identity-cookie" % "3.183",
+  "com.gu.identity" %% "identity-auth-play" % "3.184-SNAPSHOT", // FIXME: change when new version of library published
   "com.gu" %% "identity-test-users" % "0.6",
   "com.google.guava" % "guava" % "25.0-jre",
   "com.netaporter" %% "scala-uri" % "0.4.16",
