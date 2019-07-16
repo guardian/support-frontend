@@ -10,7 +10,7 @@ class PaymentConfigSpec extends FlatSpec with Matchers with LazyLogging {
   "Config" should "load correctly" in {
     Configuration.stage should be(Stages.DEV)
 
-    val stripeDefault = Configuration.stripeConfigProvider.get().forCurrency()
+    val stripeDefault = Configuration.stripeConfigProvider.get().forCurrency(None)
     stripeDefault.publicKey should be("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")
     stripeDefault.secretKey.length should be > 0
 
