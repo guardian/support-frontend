@@ -44,7 +44,7 @@ class ProductPagesSpec extends FeatureSpec with GivenWhenThen with BeforeAndAfte
 
   feature("Digital Pack product page") {
     scenario("Basic loading") {
-      val testUser = new TestUser(driverConfig)
+      val testUser = new PostDeployTestUser(driverConfig)
       testPageLoads(new DigitalPackProductPage())
     }
   }
