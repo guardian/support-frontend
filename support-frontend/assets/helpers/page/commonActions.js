@@ -14,8 +14,10 @@ import {
 
 // ----- Types ----- //
 
+export type SetCountryAction = { type: 'SET_COUNTRY', country: IsoCountry };
+
 export type Action =
-  | { type: 'SET_COUNTRY', country: IsoCountry }
+  | SetCountryAction
   | { type: 'SET_OPTIMIZE_EXPERIMENT_VARIANT', experiment: OptimizeExperiment }
   | { type: 'SET_EXISTING_PAYMENT_METHODS', existingPaymentMethods: ExistingPaymentMethod[] }
   | { type: 'SET_TRACKING_CONSENT', trackingConsent: ThirdPartyTrackingConsent }
@@ -24,7 +26,7 @@ export type Action =
 
 // ----- Action Creators ----- //
 
-function setCountry(country: IsoCountry): Action {
+function setCountry(country: IsoCountry): SetCountryAction {
   return { type: 'SET_COUNTRY', country };
 }
 

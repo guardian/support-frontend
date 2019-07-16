@@ -65,7 +65,8 @@ import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
-import { addressActionCreatorsFor } from '../../../components/subscriptionCheckouts/address/addressFieldsStore';
+import { addressActionCreatorsFor, type SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { type SetCountryAction } from 'helpers/page/commonActions';
 
 // ----- Types ----- //
 
@@ -105,7 +106,8 @@ function mapDispatchToProps() {
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
       submitWithDeliveryForm(dispatch, getState()),
     signOut,
-    setBillingCountry: country => (dispatch: Dispatch<{ type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<AddressType> }>) => setCountry(country)(dispatch),
+    setBillingCountry: country => (dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) =>
+      setCountry(country)(dispatch),
   };
 }
 

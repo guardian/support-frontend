@@ -4,7 +4,7 @@
 import { combineReducers, type Dispatch } from 'redux';
 
 import { fromString, type IsoCountry } from 'helpers/internationalisation/country';
-import { type Action as CommonAction, setCountry } from 'helpers/page/commonActions';
+import { type SetCountryAction, setCountry } from 'helpers/page/commonActions';
 import {
   formError,
   type FormError,
@@ -42,12 +42,14 @@ export type State = {|
   postcode: PostcodeFinderState
 |};
 
+export type SetCountryChangedAction = { type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<AddressType> };
+
 export type Action =
   | { type: 'SET_ADDRESS_LINE_1', lineOne: string, ...Scoped<AddressType> }
   | { type: 'SET_ADDRESS_LINE_2', lineTwo: string, ...Scoped<AddressType> }
   | { type: 'SET_TOWN_CITY', city: string, ...Scoped<AddressType> }
   | { type: 'SET_STATE', state: string, ...Scoped<AddressType> }
-  | { type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<AddressType> }
+  | SetCountryChangedAction
   | { type: 'SET_ADDRESS_FORM_ERRORS', errors: FormError<FormField>[], ...Scoped<AddressType> }
   | { type: 'SET_POSTCODE', postCode: string, ...Scoped<AddressType> };
 
@@ -109,7 +111,7 @@ const applyAddressRules = (fields: FormFields): FormError<FormField>[] => valida
 // ----- Action Creators ----- //
 
 const addressActionCreatorsFor = (scope: AddressType) => ({
-  setCountry: (countryRaw: string) => (dispatch: Dispatch<{ type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<AddressType> } | CommonAction>) => {
+  setCountry: (countryRaw: string) => (dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) => {
     const country = fromString(countryRaw);
     if (country) {
       dispatch(setCountry(country));
