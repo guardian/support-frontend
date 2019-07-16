@@ -16,10 +16,11 @@ import cookies.ServersideAbTestCookie
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import lib.RedirectWithEncodedQueryString
+import models.GeoData
 import play.api.mvc._
 import services.{IdentityService, MembersDataService, PaymentAPIService}
 import utils.BrowserCheck
-import utils.RequestCountry._
+import utils.FastlyGEOIP._
 import views.{EmptyDiv, Preload}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,7 +52,7 @@ class Application(
   }
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.fastlyCountry match {
+    val redirectUrl = request.geoData.countryGroup match {
       case Some(UK) => buildCanonicalShowcaseLink("uk")
       case Some(US) => "/us/contribute"
       case Some(Australia) => "/au/contribute"
@@ -66,7 +67,7 @@ class Application(
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = List(getRedirectUrl(request.fastlyCountry), campaignCode)
+    val url = List(getRedirectUrl(request.geoData.countryGroup), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
 
@@ -103,6 +104,8 @@ class Application(
   ): Action[AnyContent] = maybeAuthenticatedAction().async { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
+    val geoData = request.geoData
+
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
 
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
@@ -110,12 +113,13 @@ class Application(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
-      _ => Ok(contributionsHtml(countryCode, None, campaignCodeOption, guestAccountCreationToken)),
-      user => Ok(contributionsHtml(countryCode, user, campaignCodeOption, guestAccountCreationToken))
+      _ => Ok(contributionsHtml(countryCode, geoData, None, campaignCodeOption, guestAccountCreationToken)),
+      user => Ok(contributionsHtml(countryCode, geoData, user, campaignCodeOption, guestAccountCreationToken))
     ).map(_.withSettingsSurrogateKey)
   }
 
-  private def contributionsHtml(countryCode: String, idUser: Option[IdUser], campaignCode: Option[String], guestAccountCreationToken: Option[String])
+  private def contributionsHtml(countryCode: String, geoData: GeoData, idUser: Option[IdUser],
+                                campaignCode: Option[String], guestAccountCreationToken: Option[String])
                                (implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
@@ -138,7 +142,6 @@ class Application(
       mainElement = mainElement,
       js = js,
       css = css,
-      fontLoaderBundle = fontLoaderBundle,
       description = stringsConfig.contributionsLandingDescription,
       oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
       oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
@@ -150,7 +153,9 @@ class Application(
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       existingPaymentOptionsEndpoint = membersDataService.existingPaymentOptionsEndpoint,
       idUser = idUser,
-      guestAccountCreationToken = guestAccountCreationToken
+      guestAccountCreationToken = guestAccountCreationToken,
+      fontLoaderBundle = fontLoaderBundle,
+      geoData = geoData
     )
   }
 

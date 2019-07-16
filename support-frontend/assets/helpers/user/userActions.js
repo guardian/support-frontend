@@ -24,7 +24,6 @@ export type UserSetStateActions = {|
   setLastName: string => Action,
   setFullName: string => Action,
   setEmail: string => Action,
-  setStateField: string => Action,
   setTestUser: boolean => Action,
   setPostDeploymentTestUser: boolean => Action,
   setGnmMarketing: boolean => Action,
@@ -35,4 +34,5 @@ export type UserSetStateActions = {|
   // contributions landing page state as well as update the user state, hence the union type.
   setIsSignedIn: boolean => (Action | (Function => void)),
   setIsRecurringContributor: () => (Action | (Function => void)),
+  setStateField: string => (Action | (Function => void)),
 |}

@@ -6,7 +6,7 @@ import org.scalatest.{MustMatchers, WordSpec}
 import play.api.mvc.Results.Ok
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.RequestCountry
+import utils.FastlyGEOIP
 
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,7 +19,7 @@ class CachedActionTest extends WordSpec with MustMatchers {
   val geoCachedAction = new CachedAction(
     cc.parsers.defaultBodyParser,
     cc.executionContext,
-    List("Vary" -> RequestCountry.fastlyCountryHeader)
+    List("Vary" -> FastlyGEOIP.fastlyCountryHeader)
   )
 
   "with no arguments" should {
