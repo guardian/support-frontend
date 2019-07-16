@@ -7,10 +7,16 @@ import com.typesafe.config.Config
 
 case class StripeConfig(defaultAccount: StripeAccountConfig, australiaAccount: StripeAccountConfig, version: Option[String] = None)
   extends TouchpointConfig {
-  def forCurrency(country: Option[Currency] = None) =
+  def forCurrency(country: Option[Currency] = None): StripeAccountConfig =
     country match {
-      case Some(AUD) => australiaAccount
-      case _ => defaultAccount
+      case Some(AUD) => {
+        SafeLogger.info("StripeConfig: using AU stripe account")
+        australiaAccount
+      }
+      case _ => {
+        SafeLogger.info("StripeConfig: using default stripe account")
+        defaultAccount
+      }
     }
 }
 

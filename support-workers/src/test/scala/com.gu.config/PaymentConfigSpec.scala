@@ -5,7 +5,7 @@ import com.gu.support.config.Stages
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.{FlatSpec, Matchers}
 
-class ConfigSpec extends FlatSpec with Matchers with LazyLogging {
+class PaymentConfigSpec extends FlatSpec with Matchers with LazyLogging {
 
   "Config" should "load correctly" in {
     Configuration.stage should be(Stages.DEV)
