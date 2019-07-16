@@ -127,7 +127,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
   const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
 
-  const changeHandler = () => {
+  const setBillingAddressIsSameHandler = () => {
     props.setBillingAddressIsSame(true);
     props.setBillingCountry(props.deliveryCountry);
   };
@@ -240,7 +240,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   text="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
-                  onChange={() => changeHandler()}
+                  onChange={setBillingAddressIsSameHandler}
                 />
                 <RadioInput
                   inputId="qa-billing-address-different"
