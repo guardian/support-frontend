@@ -39,7 +39,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "play-googleauth" % "0.7.6",
   "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
-  "com.squareup.okhttp3" % "okhttp" % "3.9.0",
+  "com.squareup.okhttp3" % "okhttp" % "3.10.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.gu" %% "tip" % "0.5.1",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
