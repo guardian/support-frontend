@@ -55,7 +55,7 @@ object AsyncAuthenticationService {
 
   def apply(config: Identity, testUserService: TestUserService)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
-    val identityPlayAuthService = IdentityPlayAuthService(apiUrl, config.apiClientToken)
+    val identityPlayAuthService = IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken)
     new AsyncAuthenticationService(identityPlayAuthService, testUserService)
   }
 
