@@ -109,7 +109,7 @@ const applyAddressRules = (fields: FormFields): FormError<FormField>[] => valida
 // ----- Action Creators ----- //
 
 const addressActionCreatorsFor = (scope: AddressType) => ({
-  setCountry: (countryRaw: string) => (dispatch: Dispatch<Action | CommonAction>) => {
+  setCountry: (countryRaw: string) => (dispatch: Dispatch<{ type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<AddressType> } | CommonAction>) => {
     const country = fromString(countryRaw);
     if (country) {
       dispatch(setCountry(country));

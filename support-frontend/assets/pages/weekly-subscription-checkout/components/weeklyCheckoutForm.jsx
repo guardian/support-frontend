@@ -65,6 +65,7 @@ import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
+import { addressActionCreatorsFor } from '../../../components/subscriptionCheckouts/address/addressFieldsStore';
 
 // ----- Types ----- //
 
@@ -78,6 +79,7 @@ type PropTypes = {|
   productPrices: ProductPrices,
   ...FormActionCreators,
   submitForm: Function,
+  setBillingCountry: Function,
 |};
 
 
@@ -97,11 +99,13 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 }
 
 function mapDispatchToProps() {
+  const { setCountry } = addressActionCreatorsFor('billing');
   return {
     ...formActionCreators,
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
       submitWithDeliveryForm(dispatch, getState()),
     signOut,
+    setBillingCountry: country => (dispatch: Dispatch<{ type: 'SET_COUNTRY_CHANGED', country: IsoCountry, ...Scoped<AddressType> }>) => setCountry(country)(dispatch),
   };
 }
 
@@ -120,6 +124,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
   const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
   const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
+
+  const changeHandler = () => {
+    props.setBillingAddressIsSame(true);
+    props.setBillingCountry(props.deliveryCountry);
+  };
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -229,7 +238,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   text="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
-                  onChange={() => props.setBillingAddressIsSame(true)}
+                  onChange={() => changeHandler()}
                 />
                 <RadioInput
                   inputId="qa-billing-address-different"
