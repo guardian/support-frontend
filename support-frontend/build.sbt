@@ -65,7 +65,7 @@ maintainer := "Membership <membership.dev@theguardian.com>"
 riffRaffPackageType := (packageBin in Debian).value
 riffRaffManifestProjectName := "support:frontend-mono"
 riffRaffPackageName := "frontend"
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
+riffRaffUploadArtifactBucket := Option("support-code-frontend-static")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-frontend/cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
 
@@ -77,6 +77,7 @@ def getFiles(f: File): Seq[(File, String)] = {
 }
 
 riffRaffArtifactResources ++= getFiles(file("support-frontend/storybook-static"))
+riffRaffArtifactResources ++= getFiles(file("support-frontend/public/compiled-assets"))
 
 javaOptions in Universal ++= Seq(
   "-Dpidfile.path=/dev/null",
