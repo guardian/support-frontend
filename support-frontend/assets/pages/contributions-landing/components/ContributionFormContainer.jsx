@@ -12,8 +12,8 @@ import ContributionTicker from 'components/ticker/contributionTicker';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
-
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
+import type { LandingPageCopyAllContributionsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -26,6 +26,7 @@ type PropTypes = {|
   setTickerGoalReached: () => void,
   tickerGoalReached: boolean,
   campaignCodeParameter: ?string,
+  landingPageCopyAllContributionsTestVariant: LandingPageCopyAllContributionsTestVariants,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -34,6 +35,7 @@ const mapStateToProps = (state: State) => ({
   paymentComplete: state.page.form.paymentComplete,
   countryGroupId: state.common.internationalisation.countryGroupId,
   tickerGoalReached: state.page.form.tickerGoalReached,
+  landingPageCopyAllContributionsTestVariant: state.common.abParticipations.landingPageCopyAllContributions,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -64,9 +66,29 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Your support is critical for the future of Guardian journalism.</span>
   </span>);
 
+// JTL: This const (variantContributeCopy) is part of a hardcoded test for landing page copy:
+// To be removed on completion of the test. The default copy (above) should be replaced by this
+// copy object if the variant (below copy) is successful.
+const variantContributeCopy = (
+  <span>
+    The Guardian is editorially independent, meaning we set our own agenda. Our journalism is free from commercial
+    bias and not influenced by billionaire owners, politicians or shareholders. No one edits our editor. No one
+    steers our opinion. This is important as it enables us to give a voice to those less heard, challenge the
+    powerful and hold them to account. It’s what makes us different to so many others in the media, at a time when
+    factual, honest reporting is crucial.
+    <span className="gu-content__blurb-blurb-last-sentence"> Every contribution from our readers, big or small is is critical for the future of Guardian journalism.</span>
+  </span>);
+
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
+};
+
+// JTL: This const (variantHeaderCopyAndContributeCopy) is part of a hardcoded test for landing page copy.
+// To be removed on completion of the test:
+const variantHeaderCopyAndContributeCopy: CountryMetaData = {
+  headerCopy: defaultHeaderCopy,
+  contributeCopy: variantContributeCopy,
 };
 
 const countryGroupSpecificDetails: {
@@ -84,6 +106,23 @@ const countryGroupSpecificDetails: {
   Canada: defaultHeaderCopyAndContributeCopy,
 };
 
+// JTL: This const (countryGroupSpecificDetailsForVariant) is part of a hardcoded test for landing page copy.
+// To be removed on completion of the test:
+const variantCountryGroupSpecificDetails: {
+  [CountryGroupId]: CountryMetaData
+} = {
+  GBPCountries: variantHeaderCopyAndContributeCopy,
+  EURCountries: variantHeaderCopyAndContributeCopy,
+  UnitedStates: variantHeaderCopyAndContributeCopy,
+  AUDCountries: {
+    ...variantHeaderCopyAndContributeCopy,
+    headerCopy: 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs',
+  },
+  International: variantHeaderCopyAndContributeCopy,
+  NZDCountries: variantHeaderCopyAndContributeCopy,
+  Canada: variantHeaderCopyAndContributeCopy,
+};
+
 const campaignName = getCampaignName();
 const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignName] : null;
 
@@ -96,8 +135,12 @@ function withProps(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
+  // JTL: This const (countryGroupSpecificDetailsForVariant) is part of a hardcoded test for landing page copy.
+  // To be removed and refactored into countryGroupDetails object on completion of the test:
+  const landingPageCopy = props.landingPageCopyAllContributionsTestVariant === 'allContributions' ? variantCountryGroupSpecificDetails[props.countryGroupId] : countryGroupSpecificDetails[props.countryGroupId];
+
   const countryGroupDetails = {
-    ...countryGroupSpecificDetails[props.countryGroupId],
+    ...landingPageCopy,
     ...campaign || {},
   };
 
