@@ -76,7 +76,7 @@ const variantContributeCopy = (
     steers our opinion. This is important as it enables us to give a voice to those less heard, challenge the
     powerful and hold them to account. It’s what makes us different to so many others in the media, at a time when
     factual, honest reporting is crucial.
-    <span className="gu-content__blurb-blurb-last-sentence"> Every contribution from our readers, big or small is is critical for the future of Guardian journalism.</span>
+    <span className="gu-content__blurb-blurb-last-sentence"> Every contribution from our readers, big or small is critical for the future of Guardian journalism.</span>
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
