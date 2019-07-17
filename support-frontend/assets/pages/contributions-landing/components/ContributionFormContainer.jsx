@@ -71,12 +71,10 @@ const defaultContributeCopy = (
 // copy object if the variant (below copy) is successful.
 const variantContributeCopy = (
   <span>
-    The Guardian is editorially independent, meaning we set our own agenda. Our journalism is free from commercial
-    bias and not influenced by billionaire owners, politicians or shareholders. No one edits our editor. No one
-    steers our opinion. This is important as it enables us to give a voice to those less heard, challenge the
-    powerful and hold them to account. It’s what makes us different to so many others in the media, at a time when
-    factual, honest reporting is crucial.
-    <span className="gu-content__blurb-blurb-last-sentence"> Every contribution from our readers, big or small is critical for the future of Guardian journalism.</span>
+    Readers from around the world, like you, make The&nbsp;Guardian’s work possible. We need your support to deliver
+    quality, investigative journalism – and to keep it open for everyone. At a time when factual, honest reporting
+    is critical, your support is essential in protecting our editorial independence.
+    <span className="gu-content__blurb-blurb-last-sentence"> Every reader contribution, however big or small, is so valuable.</span>
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
