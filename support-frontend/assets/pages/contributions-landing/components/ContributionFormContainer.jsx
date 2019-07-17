@@ -12,8 +12,8 @@ import ContributionTicker from 'components/ticker/contributionTicker';
 import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
-
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
+import type { LandingPageCopyAllContributionsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -26,6 +26,7 @@ type PropTypes = {|
   setTickerGoalReached: () => void,
   tickerGoalReached: boolean,
   campaignCodeParameter: ?string,
+  landingPageCopyAllContributionsTestVariant: LandingPageCopyAllContributionsTestVariants,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -34,6 +35,7 @@ const mapStateToProps = (state: State) => ({
   paymentComplete: state.page.form.paymentComplete,
   countryGroupId: state.common.internationalisation.countryGroupId,
   tickerGoalReached: state.page.form.tickerGoalReached,
+  landingPageCopyAllContributionsTestVariant: state.common.abParticipations.landingPageCopyAllContributions,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -64,9 +66,27 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Your support is critical for the future of Guardian journalism.</span>
   </span>);
 
+// JTL: This const (variantContributeCopy) is part of a hardcoded test for landing page copy:
+// To be removed on completion of the test. The default copy (above) should be replaced by this
+// copy object if the variant (below copy) is successful.
+const variantContributeCopy = (
+  <span>
+    Readers from around the world, like you, make The&nbsp;Guardian’s work possible. We need your support to deliver
+    quality, investigative journalism – and to keep it open for everyone. At a time when factual, honest reporting
+    is critical, your support is essential in protecting our editorial independence.
+    <span className="gu-content__blurb-blurb-last-sentence"> Every reader contribution, however big or small, is so valuable.</span>
+  </span>);
+
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
+};
+
+// JTL: This const (variantHeaderCopyAndContributeCopy) is part of a hardcoded test for landing page copy.
+// To be removed on completion of the test:
+const variantHeaderCopyAndContributeCopy: CountryMetaData = {
+  headerCopy: defaultHeaderCopy,
+  contributeCopy: variantContributeCopy,
 };
 
 const countryGroupSpecificDetails: {
@@ -84,6 +104,23 @@ const countryGroupSpecificDetails: {
   Canada: defaultHeaderCopyAndContributeCopy,
 };
 
+// JTL: This const (countryGroupSpecificDetailsForVariant) is part of a hardcoded test for landing page copy.
+// To be removed on completion of the test:
+const variantCountryGroupSpecificDetails: {
+  [CountryGroupId]: CountryMetaData
+} = {
+  GBPCountries: variantHeaderCopyAndContributeCopy,
+  EURCountries: variantHeaderCopyAndContributeCopy,
+  UnitedStates: variantHeaderCopyAndContributeCopy,
+  AUDCountries: {
+    ...variantHeaderCopyAndContributeCopy,
+    headerCopy: 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs',
+  },
+  International: variantHeaderCopyAndContributeCopy,
+  NZDCountries: variantHeaderCopyAndContributeCopy,
+  Canada: variantHeaderCopyAndContributeCopy,
+};
+
 const campaignName = getCampaignName();
 const campaign = campaignName && campaigns[campaignName] ? campaigns[campaignName] : null;
 
@@ -96,8 +133,12 @@ function withProps(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
+  // JTL: This const (countryGroupSpecificDetailsForVariant) is part of a hardcoded test for landing page copy.
+  // To be removed and refactored into countryGroupDetails object on completion of the test:
+  const landingPageCopy = props.landingPageCopyAllContributionsTestVariant === 'allContributions' ? variantCountryGroupSpecificDetails[props.countryGroupId] : countryGroupSpecificDetails[props.countryGroupId];
+
   const countryGroupDetails = {
-    ...countryGroupSpecificDetails[props.countryGroupId],
+    ...landingPageCopy,
     ...campaign || {},
   };
 
