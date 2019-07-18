@@ -15,6 +15,8 @@ describe('actions', () => {
     setPostDeploymentTestUser,
     setGnmMarketing,
     setStateField,
+    setIsReturningContributor,
+    setEmailValidated
   } = defaultUserActionFunctions;
 
   it('should create SET_DISPLAY_NAME action', () => {
@@ -105,5 +107,23 @@ describe('actions', () => {
       isSignedIn,
     };
     expect(setIsSignedIn(isSignedIn)).toEqual(expectedAction);
+  });
+
+  it('should create SET_EMAIL_VALIDATED action', () => {
+    const emailValidated: boolean = true;
+    const expectedAction = {
+      type: 'SET_EMAIL_VALIDATED',
+      emailValidated,
+    };
+    expect(setEmailValidated(emailValidated)).toEqual(expectedAction);
+  });
+
+  it('should create SET_IS_RETURNING_CONTRIBUTOR action', () => {
+    const isReturningContributor: boolean = true;
+    const expectedAction = {
+      type: 'SET_IS_RETURNING_CONTRIBUTOR',
+      isReturningContributor,
+    };
+    expect(setIsReturningContributor(isReturningContributor)).toEqual(expectedAction);
   });
 });

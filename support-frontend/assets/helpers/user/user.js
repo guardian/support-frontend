@@ -95,6 +95,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     setTestUser,
     setPostDeploymentTestUser,
     setEmailValidated,
+    setIsReturningContributor,
   } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
@@ -131,6 +132,10 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
 
   if (getCookie('gu_recurring_contributor') === 'true') {
     dispatch(setIsRecurringContributor());
+  }
+
+  if (!!cookie.get('gu.contributions.contrib-timestamp')) {
+    dispatch(setIsReturningContributor(true));
   }
 
   if (windowHasUser) {
