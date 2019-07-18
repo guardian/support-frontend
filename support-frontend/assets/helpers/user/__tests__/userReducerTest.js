@@ -130,4 +130,16 @@ describe('user reducer tests', () => {
     const newState = createUserReducer(GBPCountries)(undefined, action);
     expect(newState.gnmMarketing).toEqual(preference);
   });
+
+  it('should handle SET_IS_RETURNING_CONTRIBUTOR', () => {
+    const isReturningContributor = true;
+
+    const action = {
+      type: 'SET_IS_RETURNING_CONTRIBUTOR',
+      isReturningContributor,
+    };
+
+    const newState = createUserReducer(GBPCountries)(undefined, action);
+    expect(newState.isReturningContributor).toEqual(isReturningContributor);
+  });
 });

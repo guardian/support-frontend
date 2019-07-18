@@ -61,6 +61,10 @@ function setEmailValidated(emailValidated: boolean): Action {
   return { type: 'SET_EMAIL_VALIDATED', emailValidated };
 }
 
+function setIsReturningContributor(isReturningContributor: boolean): Action {
+  return { type: 'SET_IS_RETURNING_CONTRIBUTOR', isReturningContributor };
+}
+
 const defaultUserActionFunctions = {
   setId,
   setDisplayName,
@@ -75,6 +79,7 @@ const defaultUserActionFunctions = {
   setPostDeploymentTestUser,
   setGnmMarketing,
   setEmailValidated,
+  setIsReturningContributor
 };
 
 export { defaultUserActionFunctions };

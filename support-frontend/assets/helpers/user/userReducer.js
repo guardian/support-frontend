@@ -21,6 +21,7 @@ export type User = {
   isSignedIn: boolean,
   isRecurringContributor: boolean,
   emailValidated: boolean,
+  isReturningContributor: boolean,
 };
 
 
@@ -40,6 +41,7 @@ const initialState: User = {
   isSignedIn: false,
   isRecurringContributor: false,
   emailValidated: false,
+  isReturningContributor: false,
 };
 
 
@@ -94,6 +96,9 @@ function createUserReducer() {
 
       case 'SET_EMAIL_VALIDATED':
         return { ...state, emailValidated: action.emailValidated };
+
+      case 'SET_IS_RETURNING_CONTRIBUTOR':
+        return { ...state, isReturningContributor: action.isReturningContributor };
 
       default:
         return state;
