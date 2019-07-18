@@ -35,7 +35,7 @@ const mapStateToProps = (state: State) => ({
   paymentComplete: state.page.form.paymentComplete,
   countryGroupId: state.common.internationalisation.countryGroupId,
   tickerGoalReached: state.page.form.tickerGoalReached,
-  landingPageCopyAllContributionsTestVariant: state.common.abParticipations.landingPageCopyAllContributions,
+  landingPageCopyAllContributionsTestVariant: state.common.abParticipations.landingPageCopyAllContributionsRevision1,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -58,23 +58,22 @@ export type CountryMetaData = {
 const defaultHeaderCopy = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\xa0the\nworld\xa0needs';
 const defaultContributeCopy = (
   <span>
-    The Guardian is editorially independent, meaning we set our own agenda. Our journalism is free from commercial
-    bias and not influenced by billionaire owners, politicians or shareholders. No one edits our editor. No one
-    steers our opinion. This is important as it enables us to give a voice to those less heard, challenge the
-    powerful and hold them to account. It’s what makes us different to so many others in the media, at a time when
-    factual, honest reporting is crucial.
+    Readers from around the world, like you, make The Guardian’s work possible. We need your support to
+    deliver quality, investigative journalism – and to keep it open for everyone. At a time when factual,
+    honest reporting is critical, your support is essential in protecting our editorial independence.
     <span className="gu-content__blurb-blurb-last-sentence"> Your support is critical for the future of Guardian journalism.</span>
   </span>);
 
-// JTL: This const (variantContributeCopy) is part of a hardcoded test for landing page copy:
+// JTL: These consts (variantHeaderCopy & variantContributeCopy) are part of a hardcoded test for landing page copy:
 // To be removed on completion of the test. The default copy (above) should be replaced by this
 // copy object if the variant (below copy) is successful.
+const variantHeaderCopy = 'Support\xa0our\njournalism\xa0with\na\xa0contribution\nof\xa0any\xa0size';
 const variantContributeCopy = (
   <span>
-    Readers from around the world, like you, make The&nbsp;Guardian’s work possible. We need your support to deliver
-    quality, investigative journalism – and to keep it open for everyone. At a time when factual, honest reporting
-    is critical, your support is essential in protecting our editorial independence.
-    <span className="gu-content__blurb-blurb-last-sentence"> Every reader contribution, however big or small, is so valuable.</span>
+    Readers from around the world, like you, make The Guardian’s work possible. We need your support to
+    deliver quality, investigative journalism – and to keep it open for everyone. At a time when factual,
+    honest reporting is critical, your support is essential in protecting our editorial independence.
+    <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
@@ -85,40 +84,8 @@ const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
 // JTL: This const (variantHeaderCopyAndContributeCopy) is part of a hardcoded test for landing page copy.
 // To be removed on completion of the test:
 const variantHeaderCopyAndContributeCopy: CountryMetaData = {
-  headerCopy: defaultHeaderCopy,
+  headerCopy: variantHeaderCopy,
   contributeCopy: variantContributeCopy,
-};
-
-const countryGroupSpecificDetails: {
-  [CountryGroupId]: CountryMetaData
-} = {
-  GBPCountries: defaultHeaderCopyAndContributeCopy,
-  EURCountries: defaultHeaderCopyAndContributeCopy,
-  UnitedStates: defaultHeaderCopyAndContributeCopy,
-  AUDCountries: {
-    ...defaultHeaderCopyAndContributeCopy,
-    headerCopy: 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs',
-  },
-  International: defaultHeaderCopyAndContributeCopy,
-  NZDCountries: defaultHeaderCopyAndContributeCopy,
-  Canada: defaultHeaderCopyAndContributeCopy,
-};
-
-// JTL: This const (countryGroupSpecificDetailsForVariant) is part of a hardcoded test for landing page copy.
-// To be removed on completion of the test:
-const variantCountryGroupSpecificDetails: {
-  [CountryGroupId]: CountryMetaData
-} = {
-  GBPCountries: variantHeaderCopyAndContributeCopy,
-  EURCountries: variantHeaderCopyAndContributeCopy,
-  UnitedStates: variantHeaderCopyAndContributeCopy,
-  AUDCountries: {
-    ...variantHeaderCopyAndContributeCopy,
-    headerCopy: 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\nAustralia\xa0needs',
-  },
-  International: variantHeaderCopyAndContributeCopy,
-  NZDCountries: variantHeaderCopyAndContributeCopy,
-  Canada: variantHeaderCopyAndContributeCopy,
 };
 
 const campaignName = getCampaignName();
@@ -135,7 +102,9 @@ function withProps(props: PropTypes) {
 
   // JTL: This const (countryGroupSpecificDetailsForVariant) is part of a hardcoded test for landing page copy.
   // To be removed and refactored into countryGroupDetails object on completion of the test:
-  const landingPageCopy = props.landingPageCopyAllContributionsTestVariant === 'allContributions' ? variantCountryGroupSpecificDetails[props.countryGroupId] : countryGroupSpecificDetails[props.countryGroupId];
+  const landingPageCopy = props.landingPageCopyAllContributionsTestVariant === 'allContributions' ? variantHeaderCopyAndContributeCopy : defaultHeaderCopyAndContributeCopy;
+
+  console.log(landingPageCopy)
 
   const countryGroupDetails = {
     ...landingPageCopy,

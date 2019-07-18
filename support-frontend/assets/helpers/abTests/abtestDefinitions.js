@@ -5,7 +5,7 @@ export type LandingPageCopyAllContributionsTestVariants = 'control' | 'allContri
 // ----- Tests ----- //
 
 export const tests: Tests = {
-  landingPageCopyAllContributions: {
+  landingPageCopyAllContributionsRevision1: {
     type: 'OTHER',
     variants: [
       {
