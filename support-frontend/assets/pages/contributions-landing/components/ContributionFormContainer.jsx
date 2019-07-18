@@ -104,8 +104,6 @@ function withProps(props: PropTypes) {
   // To be removed and refactored into countryGroupDetails object on completion of the test:
   const landingPageCopy = props.landingPageCopyAllContributionsTestVariant === 'allContributions' ? variantHeaderCopyAndContributeCopy : defaultHeaderCopyAndContributeCopy;
 
-  console.log(landingPageCopy)
-
   const countryGroupDetails = {
     ...landingPageCopy,
     ...campaign || {},
