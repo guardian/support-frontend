@@ -1,6 +1,6 @@
 // Google Tag Manager
 /* eslint-disable */
-import doNotTrack from 'helpers/tracking/doNotTrack';
+import { doNotTrack } from 'helpers/tracking/doNotTrack';
 
 if(!doNotTrack()) {
   (function (w, d, s, l, i) {

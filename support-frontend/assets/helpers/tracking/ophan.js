@@ -2,12 +2,11 @@
 // ----- Imports ----- //
 
 import * as ophan from 'ophan';
-import { gaEvent } from 'helpers/tracking/googleTagManager';
 import type { Participations, TestId } from 'helpers/abTests/abtest';
 import { optimizeIdToTestName } from 'helpers/tracking/acquisitions';
 import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
 import { readExperimentsFromSession } from 'helpers/optimize/optimize';
-import type { PaymentMethod } from 'helpers/paymentMethods';
+import { doNotTrack, maybeTrack } from 'helpers/tracking/doNotTrack';
 
 // ----- Types ----- //
 
@@ -85,87 +84,12 @@ type OphanABPayload = {
 
 // ----- Functions ----- //
 
-const trackComponentEvents = (componentEvent: OphanComponentEvent) => {
-  ophan.record({
-    componentEvent,
-  });
-};
-
-const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
-  gaEvent({
-    category: 'click',
-    action: 'payment-method-selected',
-    label: paymentMethod,
-  });
-
-  trackComponentEvents({
-    component: {
-      componentType: 'ACQUISITIONS_OTHER',
-      id: 'subscriptions-payment-method-selector',
-    },
-    action: 'CLICK',
-    value: paymentMethod,
-  });
-};
-
-const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): void => {
-  gaEvent({
-    category: 'click',
-    action: eventDetails,
-    label: componentId,
-  });
-
-  trackComponentEvents({
-    component: {
-      componentType: 'ACQUISITIONS_BUTTON',
-      id: componentId,
-      labels: ['checkout-submit'],
-    },
-    action: 'CLICK',
-    value: eventDetails,
-  });
-};
-
-const trackComponentClick = (componentId: string): void => {
-  gaEvent({
-    category: 'click',
-    action: componentId,
-    label: componentId,
-  });
-
-  trackComponentEvents({
-    component: {
-      componentType: 'ACQUISITIONS_OTHER',
-      id: componentId,
-    },
-    action: 'CLICK',
-  });
-
-};
-
-const trackComponentLoad = (componentId: string): void => {
-  gaEvent({
-    category: 'component_load',
-    action: componentId,
-    label: componentId,
-  });
-
-  trackComponentEvents({
-    component: {
-      componentType: 'ACQUISITIONS_OTHER',
-      id: componentId,
-    },
-    action: 'VIEW',
-  });
-
-};
+const trackComponentEvents = (componentEvent: OphanComponentEvent) =>
+  (doNotTrack() ? null : ophan.record({ componentEvent }));
 
 function pageView(url: string, referrer: string) {
   try {
-    ophan.sendInitialEvent(
-      url,
-      referrer,
-    );
+    maybeTrack(() => ophan.sendInitialEvent(url, referrer));
   } catch (e) {
     console.log(`Error in Ophan tracking: ${e}`);
   }
@@ -183,11 +107,10 @@ const buildOphanPayload = (participations: Participations): OphanABPayload =>
       return Object.assign({}, payload, { [participation]: ophanABEvent });
     }, {});
 
-const trackNativeABTests = (participations: Participations): void => {
-  ophan.record({
+const trackNativeABTests = (participations: Participations): void =>
+  maybeTrack(() => ophan.record({
     abTestRegister: buildOphanPayload(participations),
-  });
-};
+  }));
 
 const optimizeExperimentToParticipation = (exp: OptimizeExperiment) =>
   ({ [optimizeIdToTestName(exp.id)]: exp.variant });
@@ -211,10 +134,6 @@ function trackNewOptimizeExperiment(exp: OptimizeExperiment, participations: Par
 export {
   trackComponentEvents,
   pageView,
-  trackComponentClick,
-  trackCheckoutSubmitAttempt,
   trackAbTests,
   trackNewOptimizeExperiment,
-  trackPaymentMethodSelected,
-  trackComponentLoad,
 };

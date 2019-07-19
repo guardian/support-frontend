@@ -2,7 +2,7 @@
 import type { ContributionType } from 'helpers/contributions';
 import { invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { trackCheckoutSubmitAttempt } from 'helpers/tracking/ophan';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 import type { PaymentMethod } from 'helpers/paymentMethods';
 
 type OldFlowOrNewFlow = 'opf' | 'npf';

@@ -5,7 +5,7 @@ import { routes } from 'helpers/routes';
 import { getPatronsLink } from 'helpers/externalLinks';
 import { type Option } from 'helpers/types/option';
 import { classNameWithModifiers } from 'helpers/utilities';
-import { trackComponentClick } from 'helpers/tracking/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { type CountryGroupId, GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 // types

@@ -52,7 +52,7 @@ import {
 } from 'helpers/tracking/ophan';
 import { getTrackingConsent } from '../tracking/thirdPartyTrackingConsent';
 import { getSettings } from 'helpers/globals';
-import doNotTrack from 'helpers/tracking/doNotTrack';
+import { doNotTrack } from 'helpers/tracking/doNotTrack';
 
 if (process.env.NODE_ENV === 'DEV') {
   import('preact/devtools');

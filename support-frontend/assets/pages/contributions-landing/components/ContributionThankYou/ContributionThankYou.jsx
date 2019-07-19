@@ -22,7 +22,7 @@ import { routes } from 'helpers/routes';
 import {
   trackComponentClick,
   trackComponentLoad,
-} from 'helpers/tracking/ophan';
+} from 'helpers/tracking/behaviour';
 import TrackableButton from 'components/button/trackableButton';
 
 // ----- Types ----- //
