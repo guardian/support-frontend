@@ -2,7 +2,7 @@
 
 // ----- Imports ----- //
 
-import 'ophan';
+import * as ophan from 'ophan';
 import type { Store } from 'redux';
 import {
   applyMiddleware,
@@ -74,6 +74,7 @@ function analyticsInitialisation(participations: Participations): void {
     googleTagManager.init(participations);
     storeReferrer();
   }
+  ophan.init();
   trackAbTests(participations);
   // Logging.
   logger.init();
