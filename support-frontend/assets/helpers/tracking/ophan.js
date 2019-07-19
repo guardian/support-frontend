@@ -6,7 +6,7 @@ import type { Participations, TestId } from 'helpers/abTests/abtest';
 import { optimizeIdToTestName } from 'helpers/tracking/acquisitions';
 import type { OptimizeExperiment, OptimizeExperiments } from 'helpers/optimize/optimize';
 import { readExperimentsFromSession } from 'helpers/optimize/optimize';
-import { doNotTrack, maybeTrack } from 'helpers/tracking/doNotTrack';
+import { maybeTrack } from 'helpers/tracking/doNotTrack';
 
 // ----- Types ----- //
 
@@ -85,15 +85,16 @@ type OphanABPayload = {
 // ----- Functions ----- //
 
 const trackComponentEvents = (componentEvent: OphanComponentEvent) =>
-  (doNotTrack() ? null : ophan.record({ componentEvent }));
+  maybeTrack(() => ophan.record({ componentEvent }));
 
-function pageView(url: string, referrer: string) {
-  try {
-    maybeTrack(() => ophan.sendInitialEvent(url, referrer));
-  } catch (e) {
-    console.log(`Error in Ophan tracking: ${e}`);
-  }
-}
+const pageView = (url: string, referrer: string) =>
+  maybeTrack(() => {
+    try {
+      ophan.sendInitialEvent(url, referrer);
+    } catch (e) {
+      console.log(`Error in Ophan tracking: ${e}`);
+    }
+  });
 
 const buildOphanPayload = (participations: Participations): OphanABPayload =>
   Object.keys(participations)
