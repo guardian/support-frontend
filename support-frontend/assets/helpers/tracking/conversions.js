@@ -1,6 +1,5 @@
 // @flow
 
-import { doNotTrack } from 'helpers/page/page';
 import { getAbsoluteURL } from '../url';
 import { pageView } from './ophan';
 import { successfulConversion } from './googleTagManager';
