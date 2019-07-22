@@ -55,14 +55,14 @@ object AsyncAuthenticationService {
 
   def apply(config: Identity, testUserService: TestUserService)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
-    val identityPlayAuthService = IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken)
+    val identityPlayAuthService = IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken, targetClient = "membership")
     new AsyncAuthenticationService(identityPlayAuthService, testUserService)
   }
 
   def buildAuthenticatedUser(credentials: UserCredentials, user: User): AuthenticatedIdUser = {
     val accessCredentials = credentials match {
       case UserCredentials.SCGUUCookie(value) => AccessCredentials.Cookies(scGuU = value)
-      case UserCredentials.CryptoAccessToken(value) => AccessCredentials.Token(tokenText = value)
+      case UserCredentials.CryptoAccessToken(value, _) => AccessCredentials.Token(tokenText = value)
     }
     AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.displayName))
   }
