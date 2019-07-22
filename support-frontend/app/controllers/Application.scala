@@ -112,7 +112,7 @@ class Application(
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    request.user.traverse[Attempt, IdUser](user => identityService.getUser(user.user)).fold(
+    request.user.traverse[Attempt, IdUser](user => identityService.getUser(user.minimalUser)).fold(
       _ => Ok(contributionsHtml(countryCode, geoData, None, campaignCodeOption, guestAccountCreationToken)),
       user => Ok(contributionsHtml(countryCode, geoData, user, campaignCodeOption, guestAccountCreationToken))
     ).map(_.withSettingsSurrogateKey)

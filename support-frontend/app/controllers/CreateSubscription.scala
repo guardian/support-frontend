@@ -48,7 +48,7 @@ class CreateSubscription(
     implicit request: AuthRequest[CreateSupportWorkersRequest],
     validator: CreateSupportWorkersRequest => Boolean
   ): Future[Result] = {
-    SafeLogger.info(s"[${request.uuid}] User ${request.user.user.id} is attempting to create a new ${request.body.product} subscription")
+    SafeLogger.info(s"[${request.uuid}] User ${request.user.minimalUser.id} is attempting to create a new ${request.body.product} subscription")
 
     val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
 
@@ -61,7 +61,7 @@ class CreateSubscription(
     }
 
     if (validator(createSupportWorkersRequest)) {
-      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user.user).leftMap(ServerError(_))
+      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user.minimalUser).leftMap(ServerError(_))
 
       val result: ApiResponseOrError[StatusResponse] = for {
         user <- userOrError

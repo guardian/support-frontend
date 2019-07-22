@@ -67,9 +67,9 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     )
 
     def fakeDigitalPack(
-      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
-      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
+                         actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+                         identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
+                         membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
@@ -113,9 +113,9 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     def fakeRequestAuthenticatedWith(
-      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
-      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
+                                      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+                                      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
+                                      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): Future[Result] = {
       fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm()(FakeRequest())
     }
@@ -148,7 +148,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
         .thenReturn(Future.successful(authenticatedIdUser))
 
       val result = fakeRequestAuthenticatedWith(
-        identityService = mockedIdentityService(authenticatedIdUser.user -> "not found".asLeft)
+        identityService = mockedIdentityService(authenticatedIdUser.minimalUser -> "not found".asLeft)
       )
       status(result) mustBe 500
     }

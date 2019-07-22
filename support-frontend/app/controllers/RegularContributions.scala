@@ -55,9 +55,9 @@ class RegularContributions(
 
   private def createContributorWithUser(fullUser: AuthenticatedIdUser)(implicit request: OptionalAuthRequest[CreateSupportWorkersRequest]) = {
     val billingPeriod = request.body.product.billingPeriod
-    SafeLogger.info(s"[${request.uuid}] User ${fullUser.user.id} is attempting to create a new $billingPeriod contribution")
+    SafeLogger.info(s"[${request.uuid}] User ${fullUser.minimalUser.id} is attempting to create a new $billingPeriod contribution")
     val result = for {
-      user <- identityService.getUser(fullUser.user)
+      user <- identityService.getUser(fullUser.minimalUser)
       statusResponse <- client.createSubscription(request, contributor(user, request.body), request.uuid).leftMap(_.toString)
     } yield statusResponse
     respondToClient(result, request.body, guestCheckout = false)

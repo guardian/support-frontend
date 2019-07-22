@@ -25,7 +25,7 @@ object AccessCredentials {
   case class Token(tokenText: String) extends AccessCredentials
 }
 case class IdMinimalUser(id: String, displayName: Option[String])
-case class AuthenticatedIdUser(credentials: AccessCredentials, user: IdMinimalUser)
+case class AuthenticatedIdUser(credentials: AccessCredentials, minimalUser: IdMinimalUser)
 
 // TODO: consider porting this to identity-play-auth.
 class AsyncAuthenticationService(
@@ -47,7 +47,7 @@ class AsyncAuthenticationService(
 
   def authenticateTestUser(requestHeader: RequestHeader): Future[AuthenticatedIdUser] =
     authenticateUser(requestHeader).ensure(new RuntimeException("user not a test user")) { user =>
-       testUserService.isTestUser(user.user.displayName)
+       testUserService.isTestUser(user.minimalUser.displayName)
     }
 }
 
