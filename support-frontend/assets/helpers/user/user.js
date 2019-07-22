@@ -134,7 +134,7 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setIsRecurringContributor());
   }
 
-  if (!!cookie.get('gu.contributions.contrib-timestamp')) {
+  if (cookie.get('gu.contributions.contrib-timestamp')) {
     dispatch(setIsReturningContributor(true));
   }
 

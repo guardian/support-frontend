@@ -16,7 +16,7 @@ describe('actions', () => {
     setGnmMarketing,
     setStateField,
     setIsReturningContributor,
-    setEmailValidated
+    setEmailValidated,
   } = defaultUserActionFunctions;
 
   it('should create SET_DISPLAY_NAME action', () => {

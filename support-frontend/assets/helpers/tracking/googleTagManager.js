@@ -8,6 +8,7 @@ import { getQueryParameter } from 'helpers/url';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getTrackingConsent } from './thirdPartyTrackingConsent';
+import { maybeTrack } from './doNotTrack';
 
 
 // ----- Types ----- //
@@ -121,51 +122,60 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
   });
 }
 
+function getData(
+  event: EventType,
+  participations: Participations,
+  paymentRequestApiStatus?: PaymentRequestAPIStatus,
+) {
+  const orderId = getOrderId();
+  const value = getContributionValue();
+  const currency = getCurrency();
+  return {
+    event,
+    // orderId anonymously identifies this user in this session.
+    // We need this to prevent page refreshes on conversion pages being
+    // treated as new conversions
+    orderId,
+    currency,
+    value,
+    paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
+    campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
+    campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
+    internalCampaignCode: getQueryParameter('INTCMP') || undefined,
+    experience: getVariantsAsString(participations),
+    paymentRequestApiStatus,
+    thirdPartyTrackingConsent: getTrackingConsent(),
+    ecommerce: {
+      currencyCode: currency,
+      purchase: {
+        actionField: {
+          id: orderId,
+          revenue: value, // Total transaction value (incl. tax and shipping)
+        },
+        products: [{
+          name: `${getContributionType()}_contribution`,
+          category: 'contribution',
+          price: value,
+          quantity: 1,
+        }],
+      },
+    },
+  };
+}
+
 function sendData(
   event: EventType,
   participations: Participations,
   paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ) {
-  try {
-    const orderId = getOrderId();
-    const value = getContributionValue();
-    const currency = getCurrency();
-    window.googleTagManagerDataLayer.push({
-      event,
-      // orderId anonymously identifies this user in this session.
-      // We need this to prevent page refreshes on conversion pages being
-      // treated as new conversions
-      orderId,
-      currency,
-      value,
-      paymentMethod: storage.getSession('selectedPaymentMethod') || undefined,
-      campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
-      campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
-      internalCampaignCode: getQueryParameter('INTCMP') || undefined,
-      experience: getVariantsAsString(participations),
-      paymentRequestApiStatus,
-      thirdPartyTrackingConsent: getTrackingConsent(),
-      ecommerce: {
-        currencyCode: currency,
-        purchase: {
-          actionField: {
-            id: orderId,
-            revenue: value, // Total transaction value (incl. tax and shipping)
-          },
-          products: [{
-            name: `${getContributionType()}_contribution`,
-            category: 'contribution',
-            price: value,
-            quantity: 1,
-          }],
-        },
-      },
-    });
-  } catch (e) {
-    console.log(`Error in GTM tracking ${e}`);
-  }
+  maybeTrack(() => {
+    try {
+      window.googleTagManagerDataLayer.push(getData(event, participations, paymentRequestApiStatus));
+    } catch (e) {
+      console.log(`Error in GTM tracking ${e}`);
+    }
+  });
 }
-
 
 function pushToDataLayer(event: EventType, participations: Participations) {
   window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
@@ -193,14 +203,16 @@ function successfulConversion(participations: Participations) {
 }
 
 function gaEvent(gaEventData: GaEventData) {
-  if (window.googleTagManagerDataLayer) {
-    window.googleTagManagerDataLayer.push({
-      event: 'GAEvent',
-      eventCategory: gaEventData.category,
-      eventAction: gaEventData.action,
-      eventLabel: gaEventData.label,
-    });
-  }
+  maybeTrack(() => {
+    if (window.googleTagManagerDataLayer) {
+      window.googleTagManagerDataLayer.push({
+        event: 'GAEvent',
+        eventCategory: gaEventData.category,
+        eventAction: gaEventData.action,
+        eventLabel: gaEventData.label,
+      });
+    }
+  });
 }
 
 function appStoreCtaClick() {

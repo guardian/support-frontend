@@ -7,7 +7,7 @@ import Text from 'components/text/text';
 import GridImage from 'components/gridImage/gridImage';
 import AnchorButton from 'components/button/anchorButton';
 import ArrowRightStraight from 'components/svgs/arrowRightStraight';
-import { trackComponentClick } from 'helpers/tracking/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 export default function CtaSubscribe() {
   return (

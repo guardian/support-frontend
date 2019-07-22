@@ -10,7 +10,7 @@ import SvgFacebook from 'components/svgs/facebook';
 import SvgTwitter from 'components/svgs/twitter';
 import SvgLinkedin from 'components/svgs/linkedin';
 import SvgEmail from 'components/svgs/email';
-import { trackComponentClick } from 'helpers/tracking/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 // ---- Types ----- //
 

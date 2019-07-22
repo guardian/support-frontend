@@ -79,7 +79,7 @@ const defaultUserActionFunctions = {
   setPostDeploymentTestUser,
   setGnmMarketing,
   setEmailValidated,
-  setIsReturningContributor
+  setIsReturningContributor,
 };
 
 export { defaultUserActionFunctions };
