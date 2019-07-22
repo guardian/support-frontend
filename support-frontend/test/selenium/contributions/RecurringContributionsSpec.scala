@@ -26,7 +26,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
     scenario("Monthly contribution sign-up with Stripe - GBP") {
 
-      val testUser = new TestUser(driverConfig)
+      val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("uk", testUser)
 
       val contributionThankYou = new ContributionThankYou("uk")
@@ -39,7 +39,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       landingPage.clickMonthly
 
       Given("The user fills in their details correctly")
-      landingPage.clearForm()
+      landingPage.clearForm(hasNameFields = true)
       landingPage.fillInPersonalDetails(hasNameFields = true)
 
       Given("that the user selects to pay with Stripe")
@@ -60,7 +60,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
 
     scenario("Annual contribution sign-up with Stripe - USD") {
 
-      val testUser = new TestUser(driverConfig)
+      val testUser = new PostDeployTestUser(driverConfig)
       val landingPage = ContributionsLanding("us", testUser)
       val contributionThankYou = new ContributionThankYou("us")
 
@@ -72,7 +72,7 @@ class RecurringContributionsSpec extends FeatureSpec with GivenWhenThen with Bef
       landingPage.clickAnnual
 
       Given("The user fills in their details correctly")
-      landingPage.clearForm()
+      landingPage.clearForm(hasNameFields = true)
       landingPage.fillInPersonalDetails(hasNameFields = true)
       landingPage.selectState
 

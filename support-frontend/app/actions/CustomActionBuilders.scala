@@ -7,7 +7,7 @@ import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 import play.filters.csrf._
 import services.{AsyncAuthenticationService, AuthenticatedIdUser}
-import utils.RequestCountry
+import utils.FastlyGEOIP
 
 import scala.concurrent.ExecutionContext
 
@@ -85,7 +85,7 @@ class CustomActionBuilders(
   val GeoTargetedCachedAction = new CachedAction(
     cc.parsers.defaultBodyParser,
     cc.executionContext,
-    List("Vary" -> RequestCountry.fastlyCountryHeader)
+    List("Vary" -> FastlyGEOIP.fastlyCountryHeader)
   )
 
 }

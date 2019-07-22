@@ -35,7 +35,7 @@ if (!isDetailsSupported) {
 
 const countryGroupId: CountryGroupId = detect();
 
-const store = pageInit(() => initReducer(countryGroupId), true);
+const store = pageInit(() => initReducer(), true);
 
 if (!window.guardian.polyfillScriptLoaded) {
   gaEvent({
@@ -55,7 +55,7 @@ if (typeof Object.values !== 'function') {
 
 // We need to initialise in this order, as
 // formInit depends on the user being populated
-user.init(store.dispatch, setUserStateActions);
+user.init(store.dispatch, setUserStateActions(countryGroupId));
 formInit(store);
 
 
@@ -83,7 +83,7 @@ const cssModifiers = campaignName && campaigns[campaignName] && campaigns[campai
 const backgroundImageSrc = campaignName && campaigns[campaignName] && campaigns[campaignName].backgroundImage ?
   campaigns[campaignName].backgroundImage : null;
 
-function contributionsLandingPage() {
+function contributionsLandingPage(campaignCodeParameter: ?string) {
   return (
     <Page
       classModifiers={['contribution-form', ...cssModifiers]}
@@ -93,6 +93,7 @@ function contributionsLandingPage() {
     >
       <ContributionFormContainer
         thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+        campaignCodeParameter={campaignCodeParameter}
       />
       <ConsentBanner />
     </Page>
@@ -112,8 +113,8 @@ const router = (
         <Route
           exact
           path="/:countryId(uk|us|au|eu|int|nz|ca)/contribute/:campaignCode"
-          render={() => contributionsLandingPage()
-        }
+          render={props => contributionsLandingPage(props.match.params.campaignCode)
+          }
         />
         <Route
           exact

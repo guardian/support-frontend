@@ -5,6 +5,8 @@
 @import com.gu.support.config.{PayPalConfig, StripeConfig}
 @import helper.CSRF
 @import views.{Preload, SSRContent, ReactDiv}
+@import models.GeoData
+
 @(
   title: String,
   id: String,
@@ -23,7 +25,8 @@
   existingPaymentOptionsEndpoint: String,
   idUser: Option[IdUser],
   guestAccountCreationToken: Option[String],
-  fontLoaderBundle: Either[RefPath, StyleContent]
+  fontLoaderBundle: Either[RefPath, StyleContent],
+  geoData: GeoData
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(title = title, mainJsBundle = js, fontLoaderBundle = fontLoaderBundle, description = description, mainElement = mainElement, mainStyleBundle = css) {
@@ -36,12 +39,18 @@
       @user.publicFields.displayName.map { displayName =>
         displayName: "@displayName",
       }
-    @for(firstName <- user.privateFields.firstName; lastName <- user.privateFields.secondName) {
+      @for(firstName <- user.privateFields.firstName; lastName <- user.privateFields.secondName) {
         firstName: "@firstName",
         lastName: "@lastName",
       }
+      @for(address4 <- user.privateFields.billingAddress4 orElse user.privateFields.address4) {
+        address4: "@address4",
+      }
+      @for(country <- user.privateFields.billingCountry orElse user.privateFields.country) {
+        country: "@country",
+      }
     };
-  };
+  }
   window.guardian.stripeKeyDefaultCurrencies = {
     ONE_OFF: {
       default: "@oneOffDefaultStripeConfig.forCurrency(None).publicKey",
@@ -51,6 +60,11 @@
       default: "@regularDefaultStripeConfig.forCurrency(None).publicKey",
       uat: "@regularUatStripeConfig.forCurrency(None).publicKey"
     }
+  };
+  window.guardian.geoip = {
+    countryGroup: "@geoData.countryGroup.map(_.id).mkString",
+    countryCode: "@geoData.country.map(_.alpha2).mkString",
+    stateCode: "@geoData.validatedStateCodeForCountry.mkString"
   };
   window.guardian.stripeKeyAustralia = {
     ONE_OFF: {

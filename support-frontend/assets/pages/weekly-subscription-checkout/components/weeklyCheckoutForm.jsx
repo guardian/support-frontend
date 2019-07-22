@@ -24,9 +24,6 @@ import { asControlled } from 'hocs/asControlled';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import Summary from 'components/subscriptionCheckouts/summary';
-import DirectDebitPopUpForm
-  from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
 import type { ErrorReason } from 'helpers/errorReasons';
 import {
   getProductPrice,
@@ -68,6 +65,8 @@ import { routes } from 'helpers/routes';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { CheckboxInput } from 'components/forms/customFields/checkbox';
+import { addressActionCreatorsFor, type SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { type SetCountryAction } from 'helpers/page/commonActions';
 
 // ----- Types ----- //
 
@@ -81,6 +80,7 @@ type PropTypes = {|
   productPrices: ProductPrices,
   ...FormActionCreators,
   submitForm: Function,
+  setBillingCountry: Function,
 |};
 
 
@@ -100,11 +100,14 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 }
 
 function mapDispatchToProps() {
+  const { setCountry } = addressActionCreatorsFor('billing');
   return {
     ...formActionCreators,
     submitForm: () => (dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
       submitWithDeliveryForm(dispatch, getState()),
     signOut,
+    setBillingCountry: country => (dispatch: Dispatch<SetCountryChangedAction | SetCountryAction>) =>
+      setCountry(country)(dispatch),
   };
 }
 
@@ -123,6 +126,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
   const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
   const price = getProductPrice(props.productPrices, props.billingCountry, props.billingPeriod, fulfilmentOption);
   const subscriptionStart = `When would you like ${props.orderIsAGift ? 'the' : 'your'} subscription to start?`;
+
+  const setBillingAddressIsSameHandler = () => {
+    props.setBillingAddressIsSame(true);
+    props.setBillingCountry(props.deliveryCountry);
+  };
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -182,6 +190,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
           </FormSection>
           <FormSection title="Where should we deliver your magazine?">
             <CheckboxInput
+              id="qa-gift-checkbox"
               text="This is a gift"
               checked={props.orderIsAGift}
               onChange={() => props.setGiftStatus(!props.orderIsAGift)}
@@ -231,9 +240,10 @@ function WeeklyCheckoutForm(props: PropTypes) {
                   text="Yes"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === true}
-                  onChange={() => props.setBillingAddressIsSame(true)}
+                  onChange={setBillingAddressIsSameHandler}
                 />
                 <RadioInput
+                  inputId="qa-billing-address-different"
                   text="No"
                   name="billingAddressIsSame"
                   checked={props.billingAddressIsSame === false}
@@ -295,13 +305,12 @@ function WeeklyCheckoutForm(props: PropTypes) {
             submissionError={props.submissionError}
           />
           <FormSection noBorder>
-            <Button aria-label={null} type="submit">Continue to payment</Button>
-            <DirectDebitPopUpForm
-              buttonText="Subscribe with Direct Debit"
-              onPaymentAuthorisation={(pa: PaymentAuthorisation) => {
-                props.onPaymentAuthorised(pa);
-              }}
-            />
+            <Button
+              id="qa-submit-button"
+              type="submit"
+            >
+              Continue to payment
+            </Button>
           </FormSection>
           <CancellationSection />
         </Form>

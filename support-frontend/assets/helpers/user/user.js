@@ -71,7 +71,7 @@ const getEmailValidatedFromUserCookie = (guuCookie: ?string) => {
     const tokens = guuCookie.split('.');
     try {
       const parsed = JSON.parse(atob(tokens[0]));
-      return !!parsed[7]
+      return !!parsed[7];
     } catch (e) {
       return false;
     }
@@ -90,10 +90,12 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     setFullName,
     setIsSignedIn,
     setEmail,
+    setStateField,
     setIsRecurringContributor,
     setTestUser,
     setPostDeploymentTestUser,
     setEmailValidated,
+    setIsReturningContributor,
   } = actions;
 
   const windowHasUser = window.guardian && window.guardian.user;
@@ -132,6 +134,10 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setIsRecurringContributor());
   }
 
+  if (!!cookie.get('gu.contributions.contrib-timestamp')) {
+    dispatch(setIsReturningContributor(true));
+  }
+
   if (windowHasUser) {
     dispatch(setId(window.guardian.user.id));
     dispatch(setEmail(window.guardian.user.email));
@@ -139,9 +145,11 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setFirstName(window.guardian.user.firstName));
     dispatch(setLastName(window.guardian.user.lastName));
     dispatch(setFullName(`${window.guardian.user.firstName} ${window.guardian.user.lastName}`));
+    // default value from Identity Billing Address, or Fastly GEO-IP
+    dispatch(setStateField(window.guardian.user.address4 || window.guardian.geoip.stateCode));
     dispatch(setIsSignedIn(true));
     dispatch(setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))));
-  } else if (userAppearsLoggedIn) {
+  } else if (userAppearsLoggedIn) { // TODO - remove in another PR as this condition is deprecated
     fetch(routes.oneOffContribAutofill, { credentials: 'include' }).then((response) => {
       if (response.ok) {
         response.json().then((data) => {
@@ -161,8 +169,11 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
         });
       }
     });
-  } else if (emailFromBrowser) {
-    dispatch(setEmail(emailFromBrowser));
+  } else {
+    if (emailFromBrowser) {
+      dispatch(setEmail(emailFromBrowser));
+    }
+    dispatch(setStateField(window.guardian.geoip.stateCode));
   }
 };
 

@@ -4,7 +4,11 @@ import java.time.Duration.ofDays
 
 import com.gu.identity.testing.usernames.TestUsernames
 
-class TestUser(driverConfig: DriverConfig) {
+trait TestUser {
+  val username: String
+}
+
+class PostDeployTestUser(driverConfig: DriverConfig) extends TestUser {
 
   private val testUsers = TestUsernames(
     com.gu.identity.testing.usernames.Encoder.withSecret(Config.testUsersSecret),

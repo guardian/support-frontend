@@ -2,14 +2,15 @@
 import React from 'react';
 import type { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import type { ThirdPartyTrackingConsent } from '../../helpers/tracking/thirdPartyTrackingConsent';
 import {
-  OptedIn, Unset,
+  OptedIn,
+  Unset,
 } from '../../helpers/tracking/thirdPartyTrackingConsent';
 import {
   type Action,
   setTrackingConsent,
 } from '../../helpers/page/commonActions';
-import type { ThirdPartyTrackingConsent } from '../../helpers/tracking/thirdPartyTrackingConsent';
 import Roundel from './roundel.svg';
 import Tick from './tick.svg';
 import Button from 'components/button/button';
@@ -59,7 +60,7 @@ function ConsentBanner(props: PropTypes) {
             </p>
           </Text>
           <div className={styles.actions}>
-            <Button aria-label={null} icon={<Tick />} iconSide="left" onClick={props.onAccepted}>
+            <Button icon={<Tick />} iconSide="left" onClick={props.onAccepted}>
               I&#39;m OK with that
             </Button>
             <a

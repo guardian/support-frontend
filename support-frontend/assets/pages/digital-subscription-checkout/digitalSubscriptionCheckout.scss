@@ -8,8 +8,6 @@
 @import '~components/progressMessage/progressMessage';
 @import '~components/spinners/animatedDots';
 @import '~components/generalErrorMessage/generalErrorMessage';
-@import '~components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
-@import '~components/directDebit/directDebitForm/directDebitForm';
 @import '~components/promotionSummary/promotionSummary';
 
 
@@ -39,7 +37,7 @@
     margin-top: $gu-v-spacing * 2;
     width: auto;
   }
-  
+
   .component-paypal-button-checkout__container {
     margin: 20px 0;
   }

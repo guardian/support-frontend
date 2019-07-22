@@ -8,7 +8,8 @@ import AnchorButton from 'components/button/anchorButton';
 import SvgChevron from 'components/svgs/chevron';
 import GridImage from 'components/gridImage/gridImage';
 import { sendTrackingEventsOnClick } from 'helpers/subscriptions';
-import ProductPagehero from 'components/productPage/productPageHero/productPageHero';
+import ProductPagehero
+  from 'components/productPage/productPageHero/productPageHero';
 
 import './weeklyCampaign.scss';
 
@@ -44,7 +45,7 @@ const DefaultHeader = () => (
       overheading="Guardian Weekly subscriptions"
       heading="Get a clearer, global perspective on the issues that matter, in one magazine."
       modifierClasses={['weekly']}
-      content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+      content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
       hasCampaign={false}
     >
       <GridPicture
@@ -79,7 +80,7 @@ const CampaignHeader = () => (
     overheading="Guardian Weekly subscriptions"
     heading="The Guardian's essential news magazine"
     modifierClasses={['weekly-campaign']}
-    content={<AnchorButton aria-label={null} onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
+    content={<AnchorButton onClick={sendTrackingEventsOnClick('options_cta_click', 'GuardianWeekly', null)} icon={<SvgChevron />} href="#subscribe">See Subscription options</AnchorButton>}
     hasCampaign
   >
 

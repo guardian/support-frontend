@@ -605,4 +605,5 @@ export {
   findIsoCountry,
   fromString,
   stateProvinceFromString,
+  fromCountryGroup,
 };

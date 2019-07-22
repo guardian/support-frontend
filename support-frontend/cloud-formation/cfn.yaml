@@ -30,7 +30,7 @@ Conditions:
   CreateCodeResources: !Equals [!Ref "Stage", "CODE"]
 Mappings:
   StageVariables:
-    CODE:
+    CODE: 
       MaxInstances: 2
       MinInstances: 1
       InstanceType: t3.small
@@ -39,6 +39,7 @@ Mappings:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      BucketSuffix: code
     PROD:
       MaxInstances: 6
       MinInstances: 3
@@ -49,6 +50,7 @@ Mappings:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
+      BucketSuffix: prod
   Constants:
     Alarm:
       Process: Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit
@@ -503,3 +505,18 @@ Resources:
       TreatMissingData: notBreaching
     DependsOn:
     - StateMachineUnavailableMetric
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Join 
+      - '-'
+      - - !Ref Stack
+        - !FindInMap [ StageVariables, !Ref Stage, BucketSuffix ]
+        - !Ref App
+        - static
+      MetricsConfigurations: 
+        - Id: EntireBucket
+      WebsiteConfiguration:
+        IndexDocument: index.html

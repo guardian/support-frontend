@@ -7,27 +7,35 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 
 import ErrorMessage from 'components/errorMessage/errorMessage';
-import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
-import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
+import SortCodeInput
+  from 'components/directDebit/directDebitForm/sortCodeInput';
+import DirectDebitGuarantee
+  from 'components/directDebit/directDebitForm/directDebitGuarantee';
+import type {
+  Action,
+  Phase,
+  SortCodeIndex,
+} from 'components/directDebit/directDebitActions';
 import {
-  updateSortCode,
-  updateAccountNumber,
-  updateAccountHolderName,
-  updateAccountHolderConfirmation,
+  closeDirectDebitGuarantee,
   confirmDirectDebitClicked,
   openDirectDebitGuarantee,
-  closeDirectDebitGuarantee,
   payDirectDebitClicked,
   setDirectDebitFormPhase,
+  updateAccountHolderConfirmation,
+  updateAccountHolderName,
+  updateAccountNumber,
+  updateSortCode,
 } from 'components/directDebit/directDebitActions';
-import type { SortCodeIndex, Phase, Action } from 'components/directDebit/directDebitActions';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
-import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
+import SvgDirectDebitSymbolAndText
+  from 'components/svgs/directDebitSymbolAndText';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import { contributionsEmail } from 'helpers/legal';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { PaymentAuthorisation } from 'helpers/paymentIntegrations/readerRevenueApis';
+import './directDebitForm.scss';
 
 // ---- Types ----- //
 

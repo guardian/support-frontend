@@ -18,8 +18,8 @@ import {
 import { type AddressType } from 'helpers/subscriptionsForms/addressType';
 import { type PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 
-import styles from 'components/subscriptionCheckouts/address/postcodeFinder.module.scss';
-
+import styles
+  from 'components/subscriptionCheckouts/address/postcodeFinder.module.scss';
 
 // Types
 
@@ -52,7 +52,6 @@ const InputWithButton = ({ onClick, isLoading, ...props }) => (
         appearance="greyHollow"
         icon={null}
         onClick={onClick}
-        aria-label={null}
       >
         Find address
       </Button>
