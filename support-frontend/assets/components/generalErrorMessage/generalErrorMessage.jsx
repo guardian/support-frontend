@@ -7,6 +7,8 @@ import { appropriateErrorMessage, type ErrorReason } from 'helpers/errorReasons'
 import { classNameWithModifiers } from 'helpers/utilities';
 import SvgExclamationAlternate from '../svgs/exclamationAlternate';
 
+import './generalErrorMessage.scss';
+
 
 // ---- Types ----- //
 
