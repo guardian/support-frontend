@@ -66,7 +66,7 @@ riffRaffPackageType := (packageBin in Debian).value
 riffRaffManifestProjectName := "support:frontend-mono"
 riffRaffPackageName := "frontend"
 riffRaffUploadArtifactBucket := Option("support-code-frontend-static")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
+riffRaffUploadManifestBucket := Option("support-code-frontend-static")
 riffRaffArtifactResources += (file("support-frontend/cloud-formation/cfn.yaml"), "cfn/cfn.yaml")
 
 def getFiles(f: File): Seq[(File, String)] = {
