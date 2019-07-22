@@ -32,7 +32,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-auth-play" % "3.184-SNAPSHOT", // FIXME: change when new version of library published
+  "com.gu.identity" %% "identity-auth-play" % "3.184-M5",
   "com.gu" %% "identity-test-users" % "0.6",
   "com.google.guava" % "guava" % "25.0-jre",
   "com.netaporter" %% "scala-uri" % "0.4.16",
@@ -41,7 +41,7 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
   "com.squareup.okhttp3" % "okhttp" % "3.10.0",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
-  "com.gu" %% "tip" % "0.6.1-SNAPSHOT", // FIXME: change when new version of library published
+  "com.gu" %% "tip" % "0.6.1",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
