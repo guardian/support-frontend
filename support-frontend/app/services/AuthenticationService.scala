@@ -4,6 +4,7 @@ import cats.implicits._
 import com.gu.identity.auth.UserCredentials
 import com.gu.identity.model.User
 import com.gu.identity.play.IdentityPlayAuthService
+import com.typesafe.scalalogging.LazyLogging
 import config.Identity
 import org.http4s.Uri
 import play.api.mvc.{Cookie, RequestHeader}
@@ -27,11 +28,10 @@ object AccessCredentials {
 case class IdMinimalUser(id: String, displayName: Option[String])
 case class AuthenticatedIdUser(credentials: AccessCredentials, minimalUser: IdMinimalUser)
 
-// TODO: consider porting this to identity-play-auth.
 class AsyncAuthenticationService(
     identityPlayAuthService: IdentityPlayAuthService,
     testUserService: TestUserService
-)(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext) extends LazyLogging {
 
   import AsyncAuthenticationService._
 
@@ -43,7 +43,11 @@ class AsyncAuthenticationService(
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
     authenticateUser(requestHeader)
       .map(user => Option(user))
-      .handleError(_ => None) // TODO: log error?
+      .handleError { err =>
+        // TODO: inspect errors that this is generating and see if we want log level and/or message to be dependent on error type.
+        logger.info("unable to authenticate user", err)
+        None
+      }
 
   def authenticateTestUser(requestHeader: RequestHeader): Future[AuthenticatedIdUser] =
     authenticateUser(requestHeader).ensure(new RuntimeException("user not a test user")) { user =>
