@@ -47,7 +47,9 @@ class WeeklySubscription(
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
       identityService.getUser(request.user.minimalUser).fold(
         error => {
-          SafeLogger.error(scrub"Failed to display Guardian Weekly subscriptions form for ${request.user.minimalUser.id} due to error from identityService: $error")
+          SafeLogger.error(
+            scrub"Failed to display Guardian Weekly subscriptions form for ${request.user.minimalUser.id} due to error from identityService: $error"
+          )
           Future.successful(InternalServerError)
         },
         user => {
