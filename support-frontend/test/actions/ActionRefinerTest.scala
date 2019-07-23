@@ -1,5 +1,6 @@
 package actions
 
+import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser}
 import config.Configuration.IdentityUrl
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers._
@@ -10,7 +11,7 @@ import play.api.http.Status
 import play.api.mvc.Results._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services._
+import services.{AsyncAuthenticationService, TestUserService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,7 +43,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     "respond to request if provider authenticates user" in new Mocks {
 
       when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(mock[AuthenticatedIdUser]))
+        .thenReturn(Future.successful(Some(mock[AuthenticatedIdUser])))
 
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService, IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig
@@ -54,7 +55,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "redirect to identity if provider does not authenticate" in new Mocks {
       val path = "/test-path"
-      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.failed(new RuntimeException))
+      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.successful(None))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
         idWebAppUrl = IdentityUrl(idApiUrl),
@@ -78,7 +79,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "return a private cache header if user is authenticated" in new Mocks {
       when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(mock[AuthenticatedIdUser]))
+        .thenReturn(Future.successful(Some(mock[AuthenticatedIdUser])))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
         idWebAppUrl = IdentityUrl(""),
@@ -93,7 +94,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     "return a private cache header if user is not authenticated" in new Mocks {
-      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.failed(new RuntimeException))
+      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.successful(None))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
         idWebAppUrl = IdentityUrl(idApiUrl),
@@ -121,7 +122,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "respond to request if provider authenticates user and they are a test user" in new Mocks {
       when(asyncAuthenticationService.authenticateTestUser(any()))
-        .thenReturn(Future.successful(mock[AuthenticatedIdUser]))
+        .thenReturn(Future.successful(Some(mock[AuthenticatedIdUser])))
 
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
@@ -138,7 +139,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     "redirect to identity if they are not a test user" in new Mocks {
-      when(asyncAuthenticationService.authenticateTestUser(any())).thenReturn(Future.failed(new RuntimeException))
+      when(asyncAuthenticationService.authenticateTestUser(any())).thenReturn(Future.successful(None))
 
       val path = "/test-path"
       val actionRefiner = new CustomActionBuilders(
@@ -163,7 +164,7 @@ class ActionRefinerTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     "return a private cache header if user is an authenticated test user" in new Mocks {
-      when(asyncAuthenticationService.authenticateTestUser(any())).thenReturn(Future.failed(new RuntimeException))
+      when(asyncAuthenticationService.authenticateTestUser(any())).thenReturn(Future.successful(None))
 
       val actionRefiner =
           new CustomActionBuilders(asyncAuthenticationService, IdentityUrl(""), "", stubControllerComponents(), csrfAddToken, csrfCheck, csrfConfig)

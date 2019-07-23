@@ -1,10 +1,12 @@
 package config
 
 import com.typesafe.config.Config
+import com.gu.identity.cookie.{PreProductionKeys, ProductionKeys}
 import config.ConfigImplicits._
 import config.Configuration.IdentityUrl
 
 class Identity(config: Config) {
+  lazy val keys = if (config.getBoolean("production.keys")) new ProductionKeys else new PreProductionKeys
 
   lazy val webappUrl = IdentityUrl(config.getString("webapp.url"))
 
