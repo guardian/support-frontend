@@ -7,7 +7,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
-import com.gu.identity.model.{User => IdUser}
+import com.gu.identity.play.IdUser
 import com.gu.support.config.{PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration.GuardianDomain
@@ -112,7 +112,7 @@ class Application(
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    request.user.traverse[Attempt, IdUser](user => identityService.getUser(user.minimalUser)).fold(
+    request.user.traverse[Attempt, IdUser](identityService.getUser(_)).fold(
       _ => Ok(contributionsHtml(countryCode, geoData, None, campaignCodeOption, guestAccountCreationToken)),
       user => Ok(contributionsHtml(countryCode, geoData, user, campaignCodeOption, guestAccountCreationToken))
     ).map(_.withSettingsSurrogateKey)

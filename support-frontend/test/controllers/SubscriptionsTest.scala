@@ -8,6 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
+import com.gu.identity.play.AccessCredentials
 import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
 import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
@@ -27,7 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
 import services.MembersDataService._
 import services.stepfunctions.SupportWorkersClient
-import services.{AccessCredentials, IdentityService, MembersDataService, TestUserService}
+import services.{IdentityService, MembersDataService, TestUserService}
 
 import scala.concurrent.Future
 
@@ -67,9 +68,9 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     )
 
     def fakeDigitalPack(
-                         actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-                         identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
-                         membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
+      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): DigitalSubscription = {
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
@@ -113,9 +114,9 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
     }
 
     def fakeRequestAuthenticatedWith(
-                                      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
-                                      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.minimalUser -> idUser.asRight[String]),
-                                      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
+      actionRefiner: CustomActionBuilders = loggedInActionRefiner,
+      identityService: IdentityService = mockedIdentityService(authenticatedIdUser.user -> idUser.asRight[String]),
+      membersDataService: MembersDataService = mockedMembersDataService(hasFailed = false, hasDp = false)
     ): Future[Result] = {
       fakeDigitalPack(actionRefiner, identityService, membersDataService).displayForm()(FakeRequest())
     }
@@ -125,7 +126,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "redirect unauthenticated user to signup page" in new DigitalSubscriptionsDisplayForm {
 
-      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.failed(new RuntimeException))
+      when(asyncAuthenticationService.authenticateUser(any())).thenReturn(Future.successful(None))
 
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedOutActionRefiner)
       status(result) mustBe 303
@@ -134,7 +135,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "redirect user with a dp to ty page" in new DigitalSubscriptionsDisplayForm {
       when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(authenticatedIdUser))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
 
       val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(hasFailed = false, hasDp = true)
@@ -145,17 +146,17 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "return a 500 if the call to get additional data from identity fails" in new DigitalSubscriptionsDisplayForm {
       when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(authenticatedIdUser))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
 
       val result = fakeRequestAuthenticatedWith(
-        identityService = mockedIdentityService(authenticatedIdUser.minimalUser -> "not found".asLeft)
+        identityService = mockedIdentityService(authenticatedIdUser.user -> "not found".asLeft)
       )
       status(result) mustBe 500
     }
 
     "not redirect users if membersDataService errors" in new DigitalSubscriptionsDisplayForm {
       when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(authenticatedIdUser))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
 
       val result = fakeRequestAuthenticatedWith(
         membersDataService = mockedMembersDataService(hasFailed = true, hasDp = true)
@@ -166,7 +167,7 @@ class SubscriptionsTest extends WordSpec with MustMatchers with TestCSRFComponen
 
     "return form if user is signed in and call to identity is successful" in new DigitalSubscriptionsDisplayForm {
       when(asyncAuthenticationService.authenticateUser(any()))
-        .thenReturn(Future.successful(authenticatedIdUser))
+        .thenReturn(Future.successful(Some(authenticatedIdUser)))
 
       val result = fakeRequestAuthenticatedWith(actionRefiner = loggedInActionRefiner)
 

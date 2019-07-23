@@ -5,7 +5,7 @@ import actions.CustomActionBuilders.AuthRequest
 import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.identity.model.{User => IdUser}
+import com.gu.identity.play.IdUser
 import com.gu.support.workers.{Address, BillingPeriod, User}
 import io.circe.syntax._
 import lib.PlayImplicits._
@@ -48,7 +48,7 @@ class CreateSubscription(
     implicit request: AuthRequest[CreateSupportWorkersRequest],
     validator: CreateSupportWorkersRequest => Boolean
   ): Future[Result] = {
-    SafeLogger.info(s"[${request.uuid}] User ${request.user.minimalUser.id} is attempting to create a new ${request.body.product} subscription")
+    SafeLogger.info(s"[${request.uuid}] User ${request.user.id} is attempting to create a new ${request.body.product} subscription")
 
     val normalisedTelephoneNumber = NormalisedTelephoneNumber.fromStringAndCountry(request.body.telephoneNumber, request.body.billingAddress.country)
 
@@ -61,7 +61,7 @@ class CreateSubscription(
     }
 
     if (validator(createSupportWorkersRequest)) {
-      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user.minimalUser).leftMap(ServerError(_))
+      val userOrError: ApiResponseOrError[IdUser] = identityService.getUser(request.user).leftMap(ServerError(_))
 
       val result: ApiResponseOrError[StatusResponse] = for {
         user <- userOrError
@@ -85,15 +85,8 @@ class CreateSubscription(
       deliveryAddress = request.deliveryAddress,
       telephoneNumber = request.telephoneNumber,
       allowMembershipMail = false,
-      // Previously the values for the fields allowThirdPartyMail and allowGURelatedMail
-      // were derived by looking for the fields: statusFields.receive3rdPartyMarketing and
-      // statusFields.receiveGnmMarketing in the JSON object that models a user.
-      // However, a query of the identity database indicates that these fields aren't defined for any users
-      // (nor are they included in the StatusFields class in identity-model).
-      // Therefore, setting them statically to false is not a regression.
-      // TODO: in a subsequent PR set these values based on the respective user.
-      allowThirdPartyMail = false,
-      allowGURelatedMail = false,
+      allowThirdPartyMail = user.statusFields.flatMap(_.receive3rdPartyMarketing).getOrElse(false),
+      allowGURelatedMail = user.statusFields.flatMap(_.receiveGnmMarketing).getOrElse(false),
       isTestUser = testUsers.isTestUser(user.publicFields.displayName)
     )
   }

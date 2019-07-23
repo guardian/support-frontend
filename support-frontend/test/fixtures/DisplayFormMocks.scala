@@ -13,7 +13,8 @@ import play.api.test.Helpers._
 import play.api.mvc.RequestHeader
 import play.api.Environment
 import assets.{AssetsResolver, RefPath}
-import com.gu.identity.model.{PublicFields, User => IdUser}
+import com.gu.identity.play.PublicFields
+import com.gu.identity.play.{AccessCredentials, AuthenticatedIdUser, IdMinimalUser, IdUser}
 import config.Configuration.IdentityUrl
 import services._
 import services.MembersDataService._
@@ -35,11 +36,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
     override protected def loadSsrHtmlCache: Map[String,Html] = Map()
   }
 
-  val idUser = IdUser(
-    id = "123",
-    primaryEmailAddress = "test@gu.com",
-    publicFields = PublicFields(Some("test-user"))
-  )
+  val idUser = IdUser("123", "test@gu.com", PublicFields(Some("test-user")), None, None)
 
   val asyncAuthenticationService = mock[AsyncAuthenticationService]
 

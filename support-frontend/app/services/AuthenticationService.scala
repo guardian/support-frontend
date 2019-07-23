@@ -1,73 +1,38 @@
 package services
 
-import cats.implicits._
-import com.gu.identity.auth.UserCredentials
-import com.gu.identity.model.User
-import com.gu.identity.play.IdentityPlayAuthService
-import com.typesafe.scalalogging.LazyLogging
-import config.Identity
-import org.http4s.Uri
-import play.api.mvc.{Cookie, RequestHeader}
+import com.gu.identity.cookie.IdentityKeys
+import com.gu.identity.play.AccessCredentials.{Cookies, Token}
+import com.gu.identity.play.AuthenticatedIdUser
+import com.gu.identity.play.AuthenticatedIdUser._
+import play.api.mvc.RequestHeader
 
 import scala.concurrent.{ExecutionContext, Future}
 
-// The following classes were previously defined in identity-play-auth,
-// but have been removed as part of the changes to that library:
-// authenticating users via a call to identity API; removing periphery functionality.
-// They have been redefined here to reduce diff across PRs,
-// but these classes could get refactored / simplified / removed in subsequent PRs.
-sealed trait AccessCredentials
-object AccessCredentials {
-  case class Cookies(scGuU: String, guU: Option[String] = None) extends AccessCredentials {
-    val cookies: Seq[Cookie] = Seq(
-      Cookie(name = "SC_GU_U", scGuU)
-    ) ++ guU.map(c => Cookie(name = "GU_U", c))
-  }
-  case class Token(tokenText: String) extends AccessCredentials
+class AuthenticationService(override val identityKeys: IdentityKeys) extends com.gu.identity.play.AuthenticationService {
+  override lazy val authenticatedIdUserProvider: Provider =
+    Cookies.authProvider(identityKeys).withDisplayNameProvider(Token.authProvider(identityKeys, "membership"))
 }
-case class IdMinimalUser(id: String, displayName: Option[String])
-case class AuthenticatedIdUser(credentials: AccessCredentials, minimalUser: IdMinimalUser)
 
+// TODO: consider porting this to identity-play-auth.
 class AsyncAuthenticationService(
-    identityPlayAuthService: IdentityPlayAuthService,
-    testUserService: TestUserService
-)(implicit ec: ExecutionContext) extends LazyLogging {
+  authenticationService: AuthenticationService,
+  testUserService: TestUserService
+)(implicit ec: ExecutionContext) {
 
-  import AsyncAuthenticationService._
+  // TODO in follow-up PR:
+  // authenticate the user by making a call to identity API rather than using underyling authentication service.
+  def authenticateUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
+    Future.successful(authenticationService.authenticatedUserFor(requestHeader))
 
-  def authenticateUser(requestHeader: RequestHeader): Future[AuthenticatedIdUser] =
-    identityPlayAuthService.getUserFromRequest(requestHeader)
-      .map { case (credentials, user) => buildAuthenticatedUser(credentials, user) }
-      .unsafeToFuture()
-
-  def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
-    authenticateUser(requestHeader)
-      .map(user => Option(user))
-      .handleError { err =>
-        // TODO: inspect errors that this is generating and see if we want log level and/or message to be dependent on error type.
-        logger.info("unable to authenticate user", err)
-        None
-      }
-
-  def authenticateTestUser(requestHeader: RequestHeader): Future[AuthenticatedIdUser] =
-    authenticateUser(requestHeader).ensure(new RuntimeException("user not a test user")) { user =>
-       testUserService.isTestUser(user.minimalUser.displayName)
-    }
+  // TODO in follow-up PR:
+  // authenticate the user by making a call to identity API rather than using underyling authentication service.
+  def authenticateTestUser(requestHeader: RequestHeader): Future[Option[AuthenticatedIdUser]] =
+    authenticateUser(requestHeader).map(_.filter(user => testUserService.isTestUser(user.user.displayName)))
 }
 
 object AsyncAuthenticationService {
-
-  def apply(config: Identity, testUserService: TestUserService)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
-    val apiUrl = Uri.unsafeFromString(config.apiUrl)
-    val identityPlayAuthService = IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken, targetClient = "membership")
-    new AsyncAuthenticationService(identityPlayAuthService, testUserService)
-  }
-
-  def buildAuthenticatedUser(credentials: UserCredentials, user: User): AuthenticatedIdUser = {
-    val accessCredentials = credentials match {
-      case UserCredentials.SCGUUCookie(value) => AccessCredentials.Cookies(scGuU = value)
-      case UserCredentials.CryptoAccessToken(value, _) => AccessCredentials.Token(tokenText = value)
-    }
-    AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.displayName))
+  def apply(identityKeys: IdentityKeys, testUserService: TestUserService)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
+    val authenticationService = new AuthenticationService(identityKeys)
+    new AsyncAuthenticationService(authenticationService, testUserService)
   }
 }

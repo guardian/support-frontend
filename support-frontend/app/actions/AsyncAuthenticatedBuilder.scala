@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 // TODO: considering porting this to identity-play-auth.
 // scalastyle:on
 class AsyncAuthenticatedBuilder[U](
-    userinfo: RequestHeader => Future[U],
+    userinfo: RequestHeader => Future[Option[U]],
     defaultParser: BodyParser[AnyContent],
     onUnauthorized: RequestHeader => Result
 )(implicit val executionContext: ExecutionContext)
@@ -30,11 +30,12 @@ class AsyncAuthenticatedBuilder[U](
     * Authenticate the given block.
     */
   def authenticate[A](request: Request[A], block: AuthenticatedRequest[A, U] => Future[Result]): Future[Result] = {
-    userinfo(request)
-      .flatMap(user => block(new AuthenticatedRequest(user, request)))
-      .recover { case err =>
-        logger.error("unable to authorize user", err)
-        onUnauthorized(request)
-      }
+    userinfo(request).flatMap {
+      case Some(user) => block(new AuthenticatedRequest(user, request))
+      case None => Future.successful(onUnauthorized(request))
+    }.recover { case err =>
+      logger.error("unable to authorize user", err)
+      onUnauthorized(request)
+    }
   }
 }
