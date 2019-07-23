@@ -3,7 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.identity.play.IdUser
+import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.Paper
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.pricing.PriceSummaryServiceProvider
@@ -70,9 +70,9 @@ class PaperSubscription(
   def displayForm(): Action[AnyContent] =
     authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      identityService.getUser(request.user).fold(
+      identityService.getUser(request.user.minimalUser).fold(
         error => {
-          SafeLogger.error(scrub"Failed to display paper subscriptions form for ${request.user.id} due to error from identityService: $error")
+          SafeLogger.error(scrub"Failed to display paper subscriptions form for ${request.user.minimalUser.id} due to error from identityService: $error")
           Future.successful(InternalServerError)
         },
         user => {

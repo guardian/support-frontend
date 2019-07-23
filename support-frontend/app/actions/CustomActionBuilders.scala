@@ -1,13 +1,12 @@
 package actions
 
-import com.gu.identity.play.AuthenticatedIdUser
 import com.netaporter.uri.dsl._
 import config.Configuration.IdentityUrl
 import play.api.mvc.Results._
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 import play.filters.csrf._
-import services.AsyncAuthenticationService
+import services.{AsyncAuthenticationService, AuthenticatedIdUser}
 import utils.FastlyGEOIP
 
 import scala.concurrent.ExecutionContext
@@ -52,7 +51,7 @@ class CustomActionBuilders(
 
   private def maybeAuthenticated(onUnauthenticated: RequestHeader => Result): ActionBuilder[OptionalAuthRequest, AnyContent] =
     new AsyncAuthenticatedBuilder(
-      requestHeader => asyncAuthenticationService.authenticateUser(requestHeader).map(Some.apply),
+      asyncAuthenticationService.tryAuthenticateUser,
       cc.parsers.defaultBodyParser,
       onUnauthenticated
     )

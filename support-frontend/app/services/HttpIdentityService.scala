@@ -5,7 +5,7 @@ import java.net.URI
 import cats.data.EitherT
 import cats.implicits._
 import com.google.common.net.InetAddresses
-import com.gu.identity.play.{IdMinimalUser, IdUser}
+import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
@@ -139,6 +139,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   ).flattenValues
 
   def getUser(user: IdMinimalUser)(implicit req: RequestHeader, ec: ExecutionContext): EitherT[Future, String, IdUser] = {
+    import com.gu.identity.model.play.ReadsInstances.userReads
     get(s"user/${user.id}", getHeaders(req), trackingParameters(req)) { resp =>
       (resp.json \ "user").validate[IdUser].asEither.leftMap(_.mkString(","))
     }
