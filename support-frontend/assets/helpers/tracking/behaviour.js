@@ -8,7 +8,7 @@ const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
     category: 'click',
     action: 'payment-method-selected',
     label: paymentMethod,
-  });
+  }, { paymentMethod });
 
   trackComponentEvents({
     component: {

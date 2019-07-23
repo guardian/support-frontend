@@ -202,7 +202,7 @@ function successfulConversion(participations: Participations) {
   sendData('SuccessfulConversion', participations);
 }
 
-function gaEvent(gaEventData: GaEventData) {
+function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
   maybeTrack(() => {
     if (window.googleTagManagerDataLayer) {
       window.googleTagManagerDataLayer.push({
@@ -210,6 +210,7 @@ function gaEvent(gaEventData: GaEventData) {
         eventCategory: gaEventData.category,
         eventAction: gaEventData.action,
         eventLabel: gaEventData.label,
+        ...additionalFields,
       });
     }
   });
