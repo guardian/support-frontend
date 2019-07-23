@@ -8,7 +8,7 @@ function doNotTrack(): boolean {
 }
 
 const maybeTrack = (trackingFunction: () => void) => {
-  if (!doNotTrack) {
+  if (!doNotTrack()) {
     trackingFunction();
   }
 };
