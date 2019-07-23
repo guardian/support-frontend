@@ -20,12 +20,12 @@ const trackPaymentMethodSelected = (paymentMethod: PaymentMethod): void => {
   });
 };
 
-const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string): void => {
+const trackCheckoutSubmitAttempt = (componentId: string, eventDetails: string, paymentMethod: ?PaymentMethod): void => {
   gaEvent({
     category: 'click',
     action: eventDetails,
     label: componentId,
-  });
+  }, { paymentMethod });
 
   trackComponentEvents({
     component: {
