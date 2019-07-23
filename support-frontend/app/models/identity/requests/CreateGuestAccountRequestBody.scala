@@ -20,7 +20,8 @@ object CreateGuestAccountRequestBody {
 
   def guestDisplayName(email: String): String = email.split("@").headOption.getOrElse("Guest User")
 
-  def fromEmail(email: String): CreateGuestAccountRequestBody = CreateGuestAccountRequestBody(email, PublicFields(Some(guestDisplayName(email))))
+  def fromEmail(email: String): CreateGuestAccountRequestBody =
+    CreateGuestAccountRequestBody(email, PublicFields(displayName = Some(guestDisplayName(email))))
 
   implicit val writesCreateGuestAccountRequestBody: Writes[CreateGuestAccountRequestBody] = {
     import com.gu.identity.model.play.WritesInstances.publicFieldsWrites
