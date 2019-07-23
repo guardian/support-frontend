@@ -241,7 +241,7 @@ function showPaymentMethod(
 
 function trackSubmitAttempt(paymentMethod: ?PaymentMethod, productType: SubscriptionProduct) {
   const componentId = `subs-checkout-submit-${productType}-${paymentMethod || ''}`;
-  trackCheckoutSubmitAttempt(componentId, componentId, paymentMethod);
+  trackCheckoutSubmitAttempt(componentId, productType, paymentMethod);
 }
 
 function submitForm(
