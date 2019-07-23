@@ -38,7 +38,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
   val idUser = IdUser(
     id = "123",
     primaryEmailAddress = "test@gu.com",
-    publicFields = PublicFields(Some("test-user"))
+    publicFields = PublicFields(displayName = Some("test-user"))
   )
 
   val asyncAuthenticationService = mock[AsyncAuthenticationService]
