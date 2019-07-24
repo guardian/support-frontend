@@ -60,6 +60,8 @@ import {
 import { isPostDeployUser } from 'helpers/user/user';
 import type { BillingPeriod } from 'helpers/billingPeriods';
 import { Quarterly, SixWeekly } from 'helpers/billingPeriods';
+import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
+import { type SubscriptionProduct } from 'helpers/subscriptions';
 
 // ----- Functions ----- //
 
@@ -237,11 +239,20 @@ function showPaymentMethod(
   }
 }
 
+function trackSubmitAttempt(paymentMethod: ?PaymentMethod, productType: SubscriptionProduct) {
+  const componentId = `subs-checkout-submit-${productType}-${paymentMethod || ''}`;
+  trackCheckoutSubmitAttempt(componentId, productType, paymentMethod);
+}
+
 function submitForm(
   dispatch: Dispatch<Action>,
   state: AnyCheckoutState,
 ) {
-  const testUser = state.page.checkout.isTestUser;
+  const {
+    paymentMethod, email, product, isTestUser,
+  } = state.page.checkout;
+
+  trackSubmitAttempt(paymentMethod, product);
 
   const { price, currency } = finalPrice(
     state.page.checkout.productPrices,
@@ -259,9 +270,8 @@ function submitForm(
       state.common.abParticipations,
     );
 
-  const { paymentMethod, email } = state.page.checkout;
   showPaymentMethod(
-    dispatch, onAuthorised, testUser, price, currency,
+    dispatch, onAuthorised, isTestUser, price, currency,
     paymentMethod, email,
   );
 }
