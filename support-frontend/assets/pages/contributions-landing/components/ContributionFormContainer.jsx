@@ -13,7 +13,6 @@ import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
-import type { LandingPageCopyAllContributionsTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -26,7 +25,7 @@ type PropTypes = {|
   setTickerGoalReached: () => void,
   tickerGoalReached: boolean,
   campaignCodeParameter: ?string,
-  landingPageCopyAllContributionsTestVariant: LandingPageCopyAllContributionsTestVariants,
+  isReturningContributor: boolean,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -35,7 +34,7 @@ const mapStateToProps = (state: State) => ({
   paymentComplete: state.page.form.paymentComplete,
   countryGroupId: state.common.internationalisation.countryGroupId,
   tickerGoalReached: state.page.form.tickerGoalReached,
-  landingPageCopyAllContributionsTestVariant: state.common.abParticipations.landingPageCopyAllContributionsRevision1,
+  isReturningContributor: state.page.user.isReturningContributor,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -55,20 +54,8 @@ export type CountryMetaData = {
   formMessage?: React$Element<string>,
 };
 
-const defaultHeaderCopy = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\xa0the\nworld\xa0needs';
+const defaultHeaderCopy = 'Support\xa0our\njournalism\xa0with\na\xa0contribution\nof\xa0any\xa0size';
 const defaultContributeCopy = (
-  <span>
-    Readers from around the world, like you, make The Guardian’s work possible. We need your support to
-    deliver quality, investigative journalism – and to keep it open for everyone. At a time when factual,
-    honest reporting is critical, your support is essential in protecting our editorial independence.
-    <span className="gu-content__blurb-blurb-last-sentence"> Your support is critical for the future of Guardian journalism.</span>
-  </span>);
-
-// JTL: These consts (variantHeaderCopy & variantContributeCopy) are part of a hardcoded test for landing page copy:
-// To be removed on completion of the test. The default copy (above) should be replaced by this
-// copy object if the variant (below copy) is successful.
-const variantHeaderCopy = 'Support\xa0our\njournalism\xa0with\na\xa0contribution\nof\xa0any\xa0size';
-const variantContributeCopy = (
   <span>
     Readers from around the world, like you, make The Guardian’s work possible. We need your support to
     deliver quality, investigative journalism – and to keep it open for everyone. At a time when factual,
@@ -76,16 +63,23 @@ const variantContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
+const returningSingleHeaderCopy = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\xa0the\nworld\xa0needs';
+const returningSingleContributeCopy = (
+  <span>
+    Readers from around the world, like you, make The Guardian’s work possible. We need your support to
+    deliver quality, investigative journalism – and to keep it open for everyone. At a time when factual,
+    honest reporting is critical, your support is essential in protecting our editorial independence.
+    <span className="gu-content__blurb-blurb-last-sentence"> Your support is critical for the future of Guardian journalism.</span>
+  </span>);
+
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
   headerCopy: defaultHeaderCopy,
   contributeCopy: defaultContributeCopy,
 };
 
-// JTL: This const (variantHeaderCopyAndContributeCopy) is part of a hardcoded test for landing page copy.
-// To be removed on completion of the test:
-const variantHeaderCopyAndContributeCopy: CountryMetaData = {
-  headerCopy: variantHeaderCopy,
-  contributeCopy: variantContributeCopy,
+const returningSingleHeaderCopyAndContributeCopy: CountryMetaData = {
+  headerCopy: returningSingleHeaderCopy,
+  contributeCopy: returningSingleContributeCopy,
 };
 
 const campaignName = getCampaignName();
@@ -100,9 +94,9 @@ function withProps(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  // JTL: This const (countryGroupSpecificDetailsForVariant) is part of a hardcoded test for landing page copy.
-  // To be removed and refactored into countryGroupDetails object on completion of the test:
-  const landingPageCopy = props.landingPageCopyAllContributionsTestVariant === 'allContributions' ? variantHeaderCopyAndContributeCopy : defaultHeaderCopyAndContributeCopy;
+  const landingPageCopy = props.isReturningContributor ?
+    returningSingleHeaderCopyAndContributeCopy :
+    defaultHeaderCopyAndContributeCopy;
 
   const countryGroupDetails = {
     ...landingPageCopy,
