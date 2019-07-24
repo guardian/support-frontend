@@ -5,7 +5,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.implicits._
 import com.gu.googleauth.AuthAction
-import com.gu.identity.play.IdUser
+import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.GuardianWeekly
@@ -45,9 +45,11 @@ class WeeklySubscription(
 
   def displayForm(): Action[AnyContent] = authenticatedAction(subscriptionsClientId).async { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      identityService.getUser(request.user).fold(
+      identityService.getUser(request.user.minimalUser).fold(
         error => {
-          SafeLogger.error(scrub"Failed to display Guardian Weekly subscriptions form for ${request.user.id} due to error from identityService: $error")
+          SafeLogger.error(
+            scrub"Failed to display Guardian Weekly subscriptions form for ${request.user.minimalUser.id} due to error from identityService: $error"
+          )
           Future.successful(InternalServerError)
         },
         user => {
