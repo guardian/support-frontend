@@ -63,13 +63,12 @@ const defaultContributeCopy = (
     <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
-const returningSingleHeaderCopy = 'Help\xa0us\xa0deliver\nthe\xa0independent\njournalism\xa0the\nworld\xa0needs';
+const returningSingleHeaderCopy = 'Thank you for considering another contribution';
 const returningSingleContributeCopy = (
   <span>
-    Readers from around the world, like you, make The Guardian’s work possible. We need your support to
-    deliver quality, investigative journalism – and to keep it open for everyone. At a time when factual,
-    honest reporting is critical, your support is essential in protecting our editorial independence.
-    <span className="gu-content__blurb-blurb-last-sentence"> Your support is critical for the future of Guardian journalism.</span>
+    Returning contributors, like you, make The Guardian’s work possible. We need your ongoing support to
+    keep delivering quality journalism, to maintain our openness and to safeguard our editorial independence.
+    <span className="gu-content__blurb-blurb-last-sentence"> Every contribution, however big or small, is so valuable for our future.</span>
   </span>);
 
 const defaultHeaderCopyAndContributeCopy: CountryMetaData = {
