@@ -1,8 +1,6 @@
 package actions
 
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
-import services.AsyncAuthenticationService.isUserNotSignedInError
+import services.AsyncAuthenticationService.logUserAuthenticationError
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 
@@ -35,10 +33,7 @@ class AsyncAuthenticatedBuilder[U](
     userinfo(request)
       .flatMap(user => block(new AuthenticatedRequest(user, request)))
       .recover { case err =>
-        // User shouldn't necessarily be signed in,
-        // therefore, don't log failure to authenticate as a result of this with log level ERROR.
-        if (isUserNotSignedInError(err)) SafeLogger.info(s"unable to authorize user - $err")
-        else SafeLogger.error(scrub"unable to authorize user", err)
+        logUserAuthenticationError(err)
         onUnauthorized(request)
       }
   }

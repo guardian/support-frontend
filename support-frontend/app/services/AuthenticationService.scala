@@ -46,10 +46,7 @@ class AsyncAuthenticationService(
     authenticateUser(requestHeader)
       .map(user => Option(user))
       .handleError { err =>
-        // User shouldn't necessarily be signed in,
-        // therefore, don't log failure to authenticate as a result of this with log level ERROR.
-        if (isUserNotSignedInError(err)) SafeLogger.info(s"unable to authorize user - $err")
-        else SafeLogger.error(scrub"unable to authorize user", err)
+        logUserAuthenticationError(err)
         None
       }
 
@@ -75,9 +72,14 @@ object AsyncAuthenticationService {
     AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.displayName))
   }
 
-  // Utilises the custom error introduced in: https://github.com/guardian/identity/pull/1578
-  // This error indicates a user was unable to authenticate because they were missing credentials
-  // i.e. they were not signed in.
-  def isUserNotSignedInError(err: Throwable): Boolean =
-    err.isInstanceOf[UserCredentialsMissingError]
+  // Logs failure to authenticate a user.
+  // User shouldn't necessarily be signed in,
+  // in which case, don't log failure to authenticate as an error.
+  // All other failures are considered errors.
+  def logUserAuthenticationError(error: Throwable): Unit =
+    error match {
+      // Utilises the custom error introduced in: https://github.com/guardian/identity/pull/1578
+      case _: UserCredentialsMissingError => SafeLogger.info(s"unable to authorize user - $error")
+      case _ => SafeLogger.error(scrub"unable to authorize user", error)
+    }
 }
