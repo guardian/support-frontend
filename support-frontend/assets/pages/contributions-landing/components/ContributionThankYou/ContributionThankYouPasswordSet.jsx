@@ -3,8 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { type ContributionType } from 'helpers/contributions';
 import MarketingConsent from '../MarketingConsentContainer';
 import AnchorButton from 'components/button/anchorButton';
 import SvgArrowLeft from 'components/svgs/arrowLeftStraight';
@@ -48,4 +46,4 @@ function ContributionThankYouPasswordSet() {
   );
 }
 
-export default connect(mapStateToProps)(ContributionThankYouPasswordSet);
+export default ContributionThankYouPasswordSet;
