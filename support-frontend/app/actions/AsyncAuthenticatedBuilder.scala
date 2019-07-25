@@ -1,6 +1,7 @@
 package actions
 
-import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
+import services.AsyncAuthenticationService.isUserNotSignedInError
+import com.typesafe.scalalogging.LazyLogging
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 
@@ -33,7 +34,10 @@ class AsyncAuthenticatedBuilder[U](
     userinfo(request)
       .flatMap(user => block(new AuthenticatedRequest(user, request)))
       .recover { case err =>
-        logger.error("unable to authorize user", err)
+        // User shouldn't necessarily be signed in,
+        // therefore, don't log failure to authenticate as a result of this with log level ERROR.
+        if (isUserNotSignedInError(err)) logger.info(s"unable to authorize user - $err")
+        else logger.error(s"unable to authorize user - $err")
         onUnauthorized(request)
       }
   }

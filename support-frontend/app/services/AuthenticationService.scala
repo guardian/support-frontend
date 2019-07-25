@@ -4,6 +4,7 @@ import cats.implicits._
 import com.gu.identity.auth.UserCredentials
 import com.gu.identity.model.User
 import com.gu.identity.play.IdentityPlayAuthService
+import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
 import com.typesafe.scalalogging.LazyLogging
 import config.Identity
 import org.http4s.Uri
@@ -44,8 +45,10 @@ class AsyncAuthenticationService(
     authenticateUser(requestHeader)
       .map(user => Option(user))
       .handleError { err =>
-        // TODO: inspect errors that this is generating and see if we want log level and/or message to be dependent on error type.
-        logger.info("unable to authenticate user", err)
+        // User shouldn't necessarily be signed in,
+        // therefore, don't log failure to authenticate as a result of this with log level ERROR.
+        if (isUserNotSignedInError(err)) logger.info(s"unable to authorize user - $err")
+        else logger.error(s"unable to authorize user - $err")
         None
       }
 
@@ -70,4 +73,10 @@ object AsyncAuthenticationService {
     }
     AuthenticatedIdUser(accessCredentials, IdMinimalUser(user.id, user.publicFields.displayName))
   }
+
+  // Utilises the custom error introduced in: https://github.com/guardian/identity/pull/1578
+  // This error indicates a user was unable to authenticate because they were missing credentials
+  // i.e. they were not signed in.
+  def isUserNotSignedInError(err: Throwable): Boolean =
+    err.isInstanceOf[UserCredentialsMissingError]
 }
