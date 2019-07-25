@@ -63,6 +63,7 @@ import {
   getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { submitWithDeliveryForm } from 'helpers/subscriptionsForms/submit';
+import { paperHasDeliveryEnabled } from 'helpers/subscriptions';
 
 // ----- Types ----- //
 
@@ -112,6 +113,7 @@ function CheckoutForm(props: PropTypes) {
   const days = getDays(props.fulfilmentOption, props.productOption);
   const fulfilmentOptionDescriptor = props.fulfilmentOption === HomeDelivery ? 'Paper' : 'Voucher booklet';
   const fulfilmentOptionName = props.fulfilmentOption === HomeDelivery ? 'Home delivery' : 'Voucher booklet';
+  const deliveryTitle = paperHasDeliveryEnabled() ? 'Where should we deliver your newspaper' : 'Where should we deliver your vouchers';
 
   return (
     <Content modifierClasses={['your-details']}>
@@ -173,9 +175,11 @@ function CheckoutForm(props: PropTypes) {
               signOut={props.signOut}
             />
           </FormSection>
-          <FormSection title="Where should we deliver your vouchers?">
+
+          <FormSection title={deliveryTitle}>
             <DeliveryAddress />
           </FormSection>
+
           <FormSection title="Is the billing address the same as the delivery address?">
             <Rows>
               <FieldsetWithError
