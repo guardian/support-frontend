@@ -9,6 +9,7 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import type { Participations } from 'helpers/abTests/abtest';
 import { getTrackingConsent } from './thirdPartyTrackingConsent';
 import { maybeTrack } from './doNotTrack';
+import { type PaymentMethod, DirectDebit, PayPal } from '../paymentMethods';
 
 
 // ----- Types ----- //
@@ -122,6 +123,33 @@ function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
   });
 }
 
+function ophanPaymentMethod(paymentMethod: ?PaymentMethod) {
+  switch (paymentMethod) {
+    case DirectDebit: return 'Gocardless';
+    case PayPal: return 'Paypal';
+    default: return paymentMethod;
+  }
+
+}
+
+// Perform any conversions on the data being sent
+// for instance we need to convert the payment method
+// from our PaymentMethod type to Ophan's type so that
+// it is consistent with the conversion data from
+// the acquisition-event-producer library
+function mapFields(data: Object) {
+  const { paymentMethod, ...others } = data;
+  return {
+    paymentMethod: ophanPaymentMethod(paymentMethod),
+    ...others,
+  };
+}
+
+function push(data: Object) {
+  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
+  window.googleTagManagerDataLayer.push(mapFields(data));
+}
+
 function getData(
   event: EventType,
   participations: Participations,
@@ -170,7 +198,7 @@ function sendData(
 ) {
   maybeTrack(() => {
     try {
-      window.googleTagManagerDataLayer.push(getData(event, participations, paymentRequestApiStatus));
+      push(getData(event, participations, paymentRequestApiStatus));
     } catch (e) {
       console.log(`Error in GTM tracking ${e}`);
     }
@@ -178,8 +206,6 @@ function sendData(
 }
 
 function pushToDataLayer(event: EventType, participations: Participations) {
-  window.googleTagManagerDataLayer = window.googleTagManagerDataLayer || [];
-
   try {
     getPaymentAPIStatus()
       .then((paymentRequestApiStatus) => {
@@ -204,15 +230,13 @@ function successfulConversion(participations: Participations) {
 
 function gaEvent(gaEventData: GaEventData, additionalFields: ?Object) {
   maybeTrack(() => {
-    if (window.googleTagManagerDataLayer) {
-      window.googleTagManagerDataLayer.push({
-        event: 'GAEvent',
-        eventCategory: gaEventData.category,
-        eventAction: gaEventData.action,
-        eventLabel: gaEventData.label,
-        ...additionalFields,
-      });
-    }
+    push({
+      event: 'GAEvent',
+      eventCategory: gaEventData.category,
+      eventAction: gaEventData.action,
+      eventLabel: gaEventData.label,
+      ...additionalFields,
+    });
   });
 }
 
@@ -228,4 +252,5 @@ export {
   successfulConversion,
   appStoreCtaClick,
   gaPropertyId,
+  mapFields,
 };
