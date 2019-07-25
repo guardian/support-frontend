@@ -124,8 +124,8 @@ const introductoryPrice = promotion =>
   promotion.introductoryPrice !== null && promotion.introductoryPrice !==
   undefined;
 
-function getAppliedPromo(promotions: ?Promotion[]): Option<Promotion> {
-  if (promotions && promotions.length > 0) {
+function getAppliedPromo(promotions: ?Promotion[], billingPeriod: BillingPeriod): Option<Promotion> {
+  if (promotions && promotions.length > 0 && billingPeriod !== Quarterly) {
     if (promotions.length > 1) {
       return promotions.find(introductoryPrice) ||
         promotions.find(matchesQueryParam) ||
@@ -149,7 +149,7 @@ function getPromotion(
     billingPeriod,
     fulfilmentOption,
     productOption,
-  ).promotions);
+  ).promotions, billingPeriod);
 }
 
 function finalPrice(

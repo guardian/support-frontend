@@ -120,7 +120,7 @@ const getOptions = (
   });
 
 const getPromoCode = (billingPeriod: BillingPeriod, promotions: ?Promotion[]) => {
-  const promotion = getAppliedPromo(promotions);
+  const promotion = getAppliedPromo(promotions, billingPeriod);
   if (!promotion || (promotion.introductoryPrice && billingPeriod === Quarterly)) {
     return null;
   }

@@ -22,7 +22,7 @@ function PriceLabel({
 }: PropTypes) {
   const description = getPriceDescription(productPrice, billingPeriod, true);
 
-  const promotion = getAppliedPromo(productPrice.promotions);
+  const promotion = getAppliedPromo(productPrice.promotions, billingPeriod);
 
   if (hasDiscount(promotion)) {
     return (

@@ -105,7 +105,7 @@ const TabletAndDesktop = (props: PropTypes) => (
           productPrice={props.productPrice}
           billingPeriod={props.billingPeriod}
         />
-        <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions)} />
+        <PromotionDiscount promotion={getAppliedPromo(props.productPrice.promotions, props.billingPeriod)} />
         {props.dataList ?
           <DataList dataList={props.dataList} />
         : null}
