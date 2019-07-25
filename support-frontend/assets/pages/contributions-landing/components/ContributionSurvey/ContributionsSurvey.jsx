@@ -3,7 +3,6 @@
 // ----- Imports ----- //
 
 import React from 'react';
-import { type ContributionType } from 'helpers/contributions';
 import AnchorButton from 'components/button/anchorButton';
 
 // ----- Component ----- //

@@ -36,7 +36,7 @@ function ContributionThankYouPasswordSet(props: PropTypes) {
           </p>
         </section>
         <MarketingConsent />
-        <ContributionSurvey isRunning={false} contributionType={props.contributionType} />
+        <ContributionSurvey isRunning />
         <SpreadTheWord />
         <div className="gu-content__return-link">
           <AnchorButton
