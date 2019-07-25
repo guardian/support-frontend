@@ -1,7 +1,8 @@
 package actions
 
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import services.AsyncAuthenticationService.isUserNotSignedInError
-import com.typesafe.scalalogging.LazyLogging
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
 
@@ -20,7 +21,7 @@ class AsyncAuthenticatedBuilder[U](
     defaultParser: BodyParser[AnyContent],
     onUnauthorized: RequestHeader => Result
 )(implicit val executionContext: ExecutionContext)
-  extends ActionBuilder[({ type R[A] = AuthenticatedRequest[A, U] })#R, AnyContent] with LazyLogging { // scalastyle:ignore
+  extends ActionBuilder[({ type R[A] = AuthenticatedRequest[A, U] })#R, AnyContent] { // scalastyle:ignore
 
   lazy val parser = defaultParser
 
@@ -36,8 +37,8 @@ class AsyncAuthenticatedBuilder[U](
       .recover { case err =>
         // User shouldn't necessarily be signed in,
         // therefore, don't log failure to authenticate as a result of this with log level ERROR.
-        if (isUserNotSignedInError(err)) logger.info(s"unable to authorize user - $err")
-        else logger.error(s"unable to authorize user - $err")
+        if (isUserNotSignedInError(err)) SafeLogger.info(s"unable to authorize user - $err")
+        else SafeLogger.error(scrub"unable to authorize user", err)
         onUnauthorized(request)
       }
   }

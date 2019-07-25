@@ -5,7 +5,8 @@ import com.gu.identity.auth.UserCredentials
 import com.gu.identity.model.User
 import com.gu.identity.play.IdentityPlayAuthService
 import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
-import com.typesafe.scalalogging.LazyLogging
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import config.Identity
 import org.http4s.Uri
 import play.api.mvc.{Cookie, RequestHeader}
@@ -32,7 +33,7 @@ case class AuthenticatedIdUser(credentials: AccessCredentials, minimalUser: IdMi
 class AsyncAuthenticationService(
     identityPlayAuthService: IdentityPlayAuthService,
     testUserService: TestUserService
-)(implicit ec: ExecutionContext) extends LazyLogging {
+)(implicit ec: ExecutionContext) {
 
   import AsyncAuthenticationService._
 
@@ -47,8 +48,8 @@ class AsyncAuthenticationService(
       .handleError { err =>
         // User shouldn't necessarily be signed in,
         // therefore, don't log failure to authenticate as a result of this with log level ERROR.
-        if (isUserNotSignedInError(err)) logger.info(s"unable to authorize user - $err")
-        else logger.error(s"unable to authorize user - $err")
+        if (isUserNotSignedInError(err)) SafeLogger.info(s"unable to authorize user - $err")
+        else SafeLogger.error(scrub"unable to authorize user", err)
         None
       }
 
