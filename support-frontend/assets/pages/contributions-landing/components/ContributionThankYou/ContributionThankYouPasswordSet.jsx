@@ -12,17 +12,9 @@ import { ContributionThankYouBlurb } from './ContributionThankYouBlurb';
 import SpreadTheWord from 'components/spreadTheWord/spreadTheWord';
 import ContributionSurvey from '../ContributionSurvey/ContributionsSurvey';
 
-type PropTypes = {|
-  contributionType: ContributionType,
-|};
-
-const mapStateToProps = state => ({
-  contributionType: state.page.form.contributionType,
-});
-
 // ----- Render ----- //
 
-function ContributionThankYouPasswordSet(props: PropTypes) {
+function ContributionThankYouPasswordSet() {
   const title = 'You now have a Guardian account';
   const body = 'Please check your inbox to validate your email address – it only takes a minute. And then sign in on each of the devices you use to access The Guardian.';
 
