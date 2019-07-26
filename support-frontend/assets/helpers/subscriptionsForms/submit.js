@@ -120,7 +120,7 @@ const getOptions = (
   });
 
 const getPromoCode = (billingPeriod: BillingPeriod, promotions: ?Promotion[]) => {
-  const promotion = getAppliedPromo(promotions, billingPeriod);
+  const promotion = getAppliedPromo(promotions);
   if (!promotion || (promotion.introductoryPrice && billingPeriod === Quarterly)) {
     return null;
   }
@@ -254,13 +254,20 @@ function submitForm(
 
   trackSubmitAttempt(paymentMethod, product);
 
-  const { price, currency } = finalPrice(
+  const priceDetails = finalPrice(
     state.page.checkout.productPrices,
     state.page.billingAddress.fields.country,
     state.page.checkout.billingPeriod,
     state.page.checkout.fulfilmentOption,
     state.page.checkout.productOption,
   );
+
+  // This is a hack to make sure we show quarterly pricing correctly until we handle promos better
+  if (state.page.checkout.billingPeriod === Quarterly && priceDetails.price === 6) {
+    priceDetails.price = 37.50;
+  }
+
+  const { price, currency } = priceDetails;
 
   const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
     onPaymentAuthorised(

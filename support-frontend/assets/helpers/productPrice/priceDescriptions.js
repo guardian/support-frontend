@@ -93,7 +93,7 @@ function getPriceDescription(
   compact: boolean = false,
 ): string {
   const glyph = extendedGlyph(productPrice.currency);
-  const promotion = getAppliedPromo(productPrice.promotions, billingPeriod);
+  const promotion = getAppliedPromo(productPrice.promotions);
 
   if (hasIntroductoryPrice(promotion) && billingPeriod === SixWeekly) {
     return getIntroductoryPriceDescription(
@@ -119,7 +119,7 @@ function getPriceDescription(
 }
 
 function getAppliedPromoDescription(billingPeriod: BillingPeriod, productPrice: ProductPrice) {
-  const appliedPromo = getAppliedPromo(productPrice.promotions, billingPeriod);
+  const appliedPromo = getAppliedPromo(productPrice.promotions);
   if (
     appliedPromo === null ||
     billingPeriod === SixWeekly ||
