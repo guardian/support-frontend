@@ -2,6 +2,7 @@
 
 import { setSession } from 'helpers/storage';
 import { type Action } from './userActions';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
 
 // ----- Actions Creators ----- //
 
@@ -62,6 +63,14 @@ function setEmailValidated(emailValidated: boolean): Action {
 }
 
 function setIsReturningContributor(isReturningContributor: boolean): Action {
+  // JTL: We want to send an Ophan event when we recognize a user is a returning contributor and on the landing page
+  const isReturningContributorOnLandingPage = isReturningContributor &&
+    !!document.location.pathname.match(/^https:\/\/support\.\w+\.com\/\w\w\/contribute/);
+
+  if (isReturningContributorOnLandingPage) {
+    trackComponentLoad('returning-single-contributor-landing-page-view')
+  }
+
   return { type: 'SET_IS_RETURNING_CONTRIBUTOR', isReturningContributor };
 }
 
