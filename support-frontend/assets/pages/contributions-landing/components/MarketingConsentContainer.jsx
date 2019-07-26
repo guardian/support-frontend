@@ -3,7 +3,7 @@
 // ----- Imports ----- //
 
 import { connect } from 'react-redux';
-import MarketingConsent from 'components/marketingConsentNew/marketingConsent';
+import MarketingConsent from 'components/marketingConsent/marketingConsent';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { Dispatch } from 'redux';
 import type { Action } from 'helpers/user/userActions';
