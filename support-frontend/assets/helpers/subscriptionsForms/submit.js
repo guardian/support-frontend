@@ -262,7 +262,7 @@ function submitForm(
     state.page.checkout.productOption,
   );
 
-  // This is a hack to make sure we show quarterly pricing until we refactor promos
+  // This is a small hack to make sure we show quarterly pricing until we have promos tooling
   if (state.page.checkout.billingPeriod === Quarterly && priceDetails.price === 6) {
     priceDetails = getProductPrice(
       state.page.checkout.productPrices,
