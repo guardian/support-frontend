@@ -13,6 +13,7 @@ import { campaigns, getCampaignName } from 'helpers/campaigns';
 import { type State } from '../contributionsLandingReducer';
 import { ContributionForm, EmptyContributionForm } from './ContributionForm';
 import { onThirdPartyPaymentAuthorised, paymentWaiting, setTickerGoalReached } from '../contributionsLandingActions';
+import type { LandingPageCopyReturningSinglesTestVariants } from 'helpers/abTests/abtestDefinitions';
 
 // ----- Types ----- //
 /* eslint-disable react/no-unused-prop-types */
@@ -26,6 +27,7 @@ type PropTypes = {|
   tickerGoalReached: boolean,
   campaignCodeParameter: ?string,
   isReturningContributor: boolean,
+  landingPageCopyReturningSinglesTestVariant: LandingPageCopyReturningSinglesTestVariants,
 |};
 
 /* eslint-enable react/no-unused-prop-types */
@@ -35,6 +37,7 @@ const mapStateToProps = (state: State) => ({
   countryGroupId: state.common.internationalisation.countryGroupId,
   tickerGoalReached: state.page.form.tickerGoalReached,
   isReturningContributor: state.page.user.isReturningContributor,
+  landingPageCopyReturningSinglesTestVariant: state.common.abParticipations.landingPageCopyReturningSingles,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -93,7 +96,7 @@ function withProps(props: PropTypes) {
     props.onThirdPartyPaymentAuthorised(paymentAuthorisation);
   };
 
-  const landingPageCopy = props.isReturningContributor ?
+  const landingPageCopy = props.isReturningContributor && props.landingPageCopyReturningSinglesTestVariant === 'returningSingle' ?
     returningSingleHeaderCopyAndContributeCopy :
     defaultHeaderCopyAndContributeCopy;
 
