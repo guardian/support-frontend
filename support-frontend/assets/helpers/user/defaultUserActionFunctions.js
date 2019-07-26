@@ -68,7 +68,7 @@ function setIsReturningContributor(isReturningContributor: boolean): Action {
     !!document.location.pathname.match(/^https:\/\/support\.\w+\.com\/\w\w\/contribute/);
 
   if (isReturningContributorOnLandingPage) {
-    trackComponentLoad('returning-single-contributor-landing-page-view')
+    trackComponentLoad('returning-single-contributor-landing-page-view');
   }
 
   return { type: 'SET_IS_RETURNING_CONTRIBUTOR', isReturningContributor };

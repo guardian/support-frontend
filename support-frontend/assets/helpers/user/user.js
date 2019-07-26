@@ -130,11 +130,11 @@ const init = (dispatch: Function, actions: UserSetStateActions = defaultUserActi
     dispatch(setPostDeploymentTestUser(true));
   }
 
-  if (!!getCookie('gu_recurring_contributor')) {
+  if (getCookie('gu_recurring_contributor')) {
     dispatch(setIsRecurringContributor());
   }
 
-  if (!!getCookie('gu.contributions.contrib-timestamp')) {
+  if (getCookie('gu.contributions.contrib-timestamp')) {
     dispatch(setIsReturningContributor(true));
   }
 
